@@ -440,8 +440,9 @@ void SwRTFWriter::MakeHeader()
             if( LONG_MAX == rSz.GetHeight() || LONG_MAX == rSz.GetWidth() )
             {
                 Strm() << OOO_STRING_SVTOOLS_RTF_PAPERH;
-                OutULong( lA4Height ) << OOO_STRING_SVTOOLS_RTF_PAPERW;
-                OutULong( lA4Width );
+                Size a4 = SvxPaperInfo::GetPaperSize(PAPER_A4);
+                OutULong( a4.Height() ) << OOO_STRING_SVTOOLS_RTF_PAPERW;
+                OutULong( a4.Width() );
             }
             else
             {

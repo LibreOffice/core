@@ -43,6 +43,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
+#include <svx/shapepropertynotifier.hxx>
 // AW, OD 2004-04-30 #i28501#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -59,6 +60,7 @@
 #include <frmfmt.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
+#include <unodraw.hxx>
 #ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
 #endif
@@ -810,6 +812,10 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     // OD 2004-03-29 #i26791#
     pObj->SetUserCall( this );
     maAnchoredDrawObj.SetDrawObj( *pObj );
+
+    // if there already exists an SwXShape for the object, ensure it knows about us, and the SdrObject
+    // FS 2009-04-07 #i99056#
+    SwXShape::AddExistingShapeToFmt( *pObj );
 }
 
 SwDrawContact::~SwDrawContact()
@@ -1578,6 +1584,25 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
     }
 }
 
+namespace
+{
+    static const SwFmtAnchor* lcl_getAnchorFmt( const SfxPoolItem& _rItem )
+    {
+        USHORT nWhich = _rItem.Which();
+        const SwFmtAnchor* pAnchorFmt = NULL;
+        if ( RES_ATTRSET_CHG == nWhich )
+        {
+            static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
+                GetItemState( RES_ANCHOR, FALSE, (const SfxPoolItem**)&pAnchorFmt );
+        }
+        else if ( RES_ANCHOR == nWhich )
+        {
+            pAnchorFmt = &static_cast<const SwFmtAnchor&>(_rItem);
+        }
+        return pAnchorFmt;
+    }
+}
+
 /*************************************************************************
 |*
 |*  SwDrawContact::Modify()
@@ -1587,28 +1612,16 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
 |*
 |*************************************************************************/
 
-void SwDrawContact::Modify( SfxPoolItem *, SfxPoolItem *pNew )
+void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     // OD 10.10.2003 #112299#
     ASSERT( !mbDisconnectInProgress,
             "<SwDrawContact::Modify(..)> called during disconnection.");
 
     USHORT nWhich = pNew ? pNew->Which() : 0;
-    SwFmtAnchor* pAnchorFmt = 0L;
-    if ( RES_ATTRSET_CHG == nWhich )
-    {
-        if ( SFX_ITEM_SET == static_cast<SwAttrSetChg*>(pNew)->GetChgSet()->
-                GetItemState( RES_ANCHOR, FALSE, (const SfxPoolItem**)&pAnchorFmt ) )
-        {
-            // <pAnchorFmt> is set and will be handled below
-        }
-    }
-    else if ( RES_ANCHOR == nWhich )
-    {
-        pAnchorFmt = static_cast<SwFmtAnchor*>(pNew);
-    }
+    const SwFmtAnchor* pNewAnchorFmt = pNew ? lcl_getAnchorFmt( *pNew ) : NULL;
 
-    if ( pAnchorFmt )
+    if ( pNewAnchorFmt )
     {
         // JP 10.04.95: nicht auf ein Reset Anchor reagieren !!!!!
         if ( SFX_ITEM_SET ==
@@ -1630,10 +1643,18 @@ void SwDrawContact::Modify( SfxPoolItem *, SfxPoolItem *pNew )
                     // <--
                 }
                 // re-connect to layout due to anchor format change
-                ConnectToLayout( pAnchorFmt );
+                ConnectToLayout( pNewAnchorFmt );
                 // notify background of drawing objects
                 lcl_NotifyBackgroundOfObj( *this, *GetMaster(), pOldRect );
                 NotifyBackgrdOfAllVirtObjs( pOldRect );
+
+                const SwFmtAnchor* pOldAnchorFmt = pOld ? lcl_getAnchorFmt( *pOld ) : NULL;
+                if ( !pOldAnchorFmt || ( pOldAnchorFmt->GetAnchorId() != pNewAnchorFmt->GetAnchorId() ) )
+                {
+                    ASSERT( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
+                    if ( maAnchoredDrawObj.DrawObj() )
+                        maAnchoredDrawObj.DrawObj()->getShapePropertyChangeNotifier().notifyPropertyChange( ::svx::eTextShapeAnchorType );
+                }
             }
         }
         else
@@ -2553,16 +2574,6 @@ void SwDrawVirtObj::RecalcBoundRect()
 
     const Point aOffset(GetOffset());
     aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    Point aPnt(rPnt - GetOffset());
-    BOOL bRet = rRefObj.CheckHit(aPnt, nTol, pVisiLayer) != NULL;
-
-    return bRet ? (SdrObject*)this : NULL;
 }
 
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const

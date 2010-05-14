@@ -490,8 +490,7 @@ void SwXFootnote::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 uno::Reference< beans::XPropertySetInfo > SwXFootnote::getPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef =
-        new SfxItemPropertySetInfo(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_FOOTNOTE));
+    static uno::Reference< beans::XPropertySetInfo >  xRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_FOOTNOTE)->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.09.00 13:12:04---------------------------------------------------

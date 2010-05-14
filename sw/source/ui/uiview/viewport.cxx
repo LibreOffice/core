@@ -1278,10 +1278,7 @@ Size SwView::GetOptimalSizePixel() const
 {
     Size aPgSize;
     if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
-    {
-        aPgSize.Height() = lA4Height;
-        aPgSize.Width()  = lA4Width;
-    }
+        aPgSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
     else
     {
         aPgSize = GetWrtShell().GetAnyCurRect(RECT_PAGE).SSize();

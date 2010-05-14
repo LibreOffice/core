@@ -63,14 +63,14 @@ class SwConvertTableDlg: public SfxModalDialog
     FixedText           aRepeatHeaderAfterFT;
     TextControlCombo    aRepeatHeaderCombo;
 
+    FixedLine       aOptionsFL;
     CheckBox        aDontSplitCB;
     CheckBox        aBorderCB;
-    FixedLine       aOptionsFL;
+    PushButton      aAutoFmtBtn;
 
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
-    PushButton      aAutoFmtBtn;
 
     String          sConvertTextTable;
     SwTableAutoFmt* pTAutoFmt;

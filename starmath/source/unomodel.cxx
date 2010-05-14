@@ -862,30 +862,6 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
     return 1;
 }
 
-
-static Size lcl_GuessPaperSize()
-{
-    Size aRes;
-    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    LocaleDataWrapper aLocWrp( xMgr, AllSettings().GetLocale() );
-    if( MEASURE_METRIC == aLocWrp.getMeasurementSystemEnum() )
-    {
-        // in Twip
-        aRes.Width()  = lA4Width;
-        aRes.Height() = lA4Height;
-    }
-    else
-    {
-        // in Twip
-        aRes.Width()  = lLetterWidth;
-        aRes.Height() = lLetterHeight;
-    }
-    aRes = OutputDevice::LogicToLogic( aRes, MapMode(MAP_TWIP),
-                                             MapMode(MAP_100TH_MM) );
-    return aRes;
-}
-
-
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& /*rSelection*/,
@@ -909,7 +885,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     // if paper size is 0 (usually if no 'real' printer is found),
     // guess the paper size
     if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
-        aPrtPaperSize = lcl_GuessPaperSize();
+        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MAP_100TH_MM);
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
@@ -978,7 +954,7 @@ void SAL_CALL SmModel::render(
                 // no real printer ??
                 if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
                 {
-                    aPrtPaperSize = lcl_GuessPaperSize();
+                    aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MAP_100TH_MM);
                     // factors from Windows DIN A4
                     aOutputSize    = Size( (long)(aPrtPaperSize.Width()  * 0.941),
                                            (long)(aPrtPaperSize.Height() * 0.961));

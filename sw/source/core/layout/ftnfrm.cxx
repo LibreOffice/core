@@ -854,7 +854,7 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
 
     if ( !pRet )
     {
-        BOOL bEndn = pFtn->GetAttr()->GetFtn().IsEndNote();
+        bool bEndn = pFtn->GetAttr()->GetFtn().IsEndNote();
         SwFrm* pTmpRef = NULL;
         if( bEndn && pFtn->IsInSct() )
         {
@@ -1444,7 +1444,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
     if( IsInSct() )
     {
         SwSectionFrm* pMySect = ImplFindSctFrm();
-        BOOL bEndnt = pNew->GetAttr()->GetFtn().IsEndNote();
+        bool bEndnt = pNew->GetAttr()->GetFtn().IsEndNote();
         if( bEndnt )
         {
             const SwSectionFmt* pEndFmt = pMySect->GetEndSectFmt();

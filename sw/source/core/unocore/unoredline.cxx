@@ -466,7 +466,7 @@ SwXRedline::~SwXRedline()
 uno::Reference< beans::XPropertySetInfo > SwXRedline::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo >  xRef =
-        SfxItemPropertySet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_REDLINE)).getPropertySetInfo();
+        aSwMapProvider.GetPropertySet(PROPERTY_MAP_REDLINE)->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.01.01 17:06:08---------------------------------------------------

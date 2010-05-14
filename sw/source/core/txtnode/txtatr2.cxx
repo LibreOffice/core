@@ -56,10 +56,10 @@ TYPEINIT1(SwTxtRuby,SwClient);
  *************************************************************************/
 
 SwTxtHardBlank::SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStt )
-    : SwTxtAttr( rAttr, nStt ),
-    cChar( rAttr.GetChar() )
+  : SwTxtAttr( rAttr, nStt )
+  , m_Char( rAttr.GetChar() )
 {
-    ASSERT( ' ' != cChar && '-' != cChar,
+    ASSERT( ' ' != m_Char && '-' != m_Char,
             "Invalid character for the HardBlank attribute - "
             "must be a normal unicode character" );
 }
@@ -69,13 +69,13 @@ SwTxtHardBlank::SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStt )
  *                      class SwTxtCharFmt
  *************************************************************************/
 
-SwTxtCharFmt::SwTxtCharFmt( const SwFmtCharFmt& rAttr,
+SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
                     xub_StrLen nStt, xub_StrLen nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde ),
-    pMyTxtNd( 0 ),
-    mnSortNumber( 0 )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde )
+    , m_pTxtNode( 0 )
+    , m_nSortNumber( 0 )
 {
-    ((SwFmtCharFmt&)rAttr).pTxtAttr = this;
+    rAttr.pTxtAttr = this;
     SetCharFmtAttr( TRUE );
 }
 
@@ -86,29 +86,27 @@ SwTxtCharFmt::~SwTxtCharFmt( )
 void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-#ifndef PRODUCT
-    if ( (nWhich<RES_CHRATR_BEGIN || nWhich>RES_CHRATR_END)
-            && (nWhich!=RES_OBJECTDYING)
-            && (nWhich!=RES_ATTRSET_CHG)
-            && (nWhich!=RES_FMT_CHG) )
-        ASSERT(!this, "SwTxtCharFmt::Modify(): unbekanntes Modify!");
-#endif
+    ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+             || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
+        "SwTxtCharFmt::Modify(): unknown Modify");
 
-    if( pMyTxtNd )
+    if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        pMyTxtNd->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
     // erfrage vom Modify Informationen
 BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !pMyTxtNd ||
-        &pMyTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
+        &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
+    {
         return TRUE;
+    }
 
-    ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pMyTxtNd;
+    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
     return FALSE;
 }
 
@@ -116,14 +114,15 @@ BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
  *                      class SwTxtINetFmt
  *************************************************************************/
 
-SwTxtINetFmt::SwTxtINetFmt( const SwFmtINetFmt& rAttr,
+SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
                             xub_StrLen nStt, xub_StrLen nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde ),
-    SwClient( 0 ),
-    pMyTxtNd( 0 )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde )
+    , SwClient( 0 )
+    , m_pTxtNode( 0 )
+    , m_bVisited( false )
+    , m_bVisitedValid( false )
 {
-    bValidVis = FALSE;
-    ((SwFmtINetFmt&)rAttr).pTxtAttr  = this;
+    rAttr.pTxtAttr  = this;
     SetCharFmtAttr( TRUE );
 }
 
@@ -139,10 +138,10 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
     if( rFmt.GetValue().Len() )
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
-        if( !IsValidVis() )
+        if( !IsVisitedValid() )
         {
             SetVisited( pDoc->IsVisitedURL( rFmt.GetValue() ) );
-            SetValidVis( TRUE );
+            SetVisitedValid( true );
         }
         USHORT nId;
         const String& rStr = IsVisited() ? rFmt.GetVisitedFmt()
@@ -184,35 +183,33 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-#ifndef PRODUCT
-    if ( (nWhich<RES_CHRATR_BEGIN || nWhich>RES_CHRATR_END)
-            && (nWhich!=RES_OBJECTDYING)
-            && (nWhich!=RES_ATTRSET_CHG)
-            && (nWhich!=RES_FMT_CHG) )
-        ASSERT(!this, "SwTxtCharFmt::Modify(): unbekanntes Modify!");
-#endif
+    ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+             || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
+        "SwTxtINetFmt::Modify(): unknown Modify");
 
-    if( pMyTxtNd )
+    if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        pMyTxtNd->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
     // erfrage vom Modify Informationen
 BOOL SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !pMyTxtNd ||
-        &pMyTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
+        &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
+    {
         return TRUE;
+    }
 
-    ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pMyTxtNd;
+    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
     return FALSE;
 }
 
 BOOL SwTxtINetFmt::IsProtect( ) const
 {
-    return pMyTxtNd && pMyTxtNd->IsProtect();
+    return m_pTxtNode && m_pTxtNode->IsProtect();
 }
 
 // ATT_XNLCONTAINERITEM ******************************
@@ -224,20 +221,21 @@ SwTxtXMLAttrContainer::SwTxtXMLAttrContainer(
 {}
 
 
+/*************************************************************************
+ *                      class SwTxtRuby
+ *************************************************************************/
 
-// ******************************
-
-SwTxtRuby::SwTxtRuby( const SwFmtRuby& rAttr,
-                        xub_StrLen nStt, xub_StrLen nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde ),
-    SwClient( 0 ),
-    pMyTxtNd( 0 )
+SwTxtRuby::SwTxtRuby( SwFmtRuby& rAttr,
+                      xub_StrLen nStart, xub_StrLen nEnd )
+    : SwTxtAttrEnd( rAttr, nStart, nEnd )
+    , SwClient( 0 )
+    , m_pTxtNode( 0 )
 {
-    ((SwFmtRuby&)rAttr).pTxtAttr  = this;
-    SetDontExpand( TRUE );              // never expand this attribut
-    SetLockExpandFlag( TRUE );
-    SetDontMergeAttr( TRUE );
-    SetDontExpandStartAttr( TRUE );
+    rAttr.pTxtAttr  = this;
+    SetDontExpand( true );  // never expand this attribute
+    SetLockExpandFlag( true );
+    SetDontMergeAttr( true );
+    SetDontExpandStartAttr( true );
 }
 
 SwTxtRuby::~SwTxtRuby()
@@ -247,28 +245,26 @@ SwTxtRuby::~SwTxtRuby()
 void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-#ifndef PRODUCT
-    if ( (nWhich<RES_CHRATR_BEGIN || nWhich>RES_CHRATR_END)
-            && (nWhich!=RES_OBJECTDYING)
-            && (nWhich!=RES_ATTRSET_CHG)
-            && (nWhich!=RES_FMT_CHG) )
-        ASSERT(!this, "SwTxtCharFmt::Modify(): unbekanntes Modify!");
-#endif
+    ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+             || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
+        "SwTxtRuby::Modify(): unknown Modify");
 
-    if( pMyTxtNd )
+    if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        pMyTxtNd->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
 BOOL SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !pMyTxtNd ||
-        &pMyTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
+        &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
+    {
         return TRUE;
+    }
 
-    ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pMyTxtNd;
+    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
     return FALSE;
 }
 

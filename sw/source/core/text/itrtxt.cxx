@@ -454,7 +454,7 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
                 // examine hints in range nEnd - (nEnd + nRangeChar)
                 for( USHORT i = 0; i < pTmpHints->Count(); i++ )
                 {
-                    const SwTxtAttr* pHt = pTmpHints->GetHt( i );
+                    const SwTxtAttr* pHt = pTmpHints->GetTextHint( i );
                     if( RES_TXTATR_FLYCNT == pHt->Which() )
                     {
                         // check, if hint is in our range

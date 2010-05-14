@@ -45,7 +45,7 @@
 /*--------------------------------------------------------------------
    Beschreibung:
  --------------------------------------------------------------------*/
-class SfxDocumentInfoItem;
+
 class SwFldDokInfPage : public SwFldPage
 {
     FixedText           aTypeFT;

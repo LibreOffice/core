@@ -35,44 +35,27 @@
 #endif
 
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
+#include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
 #include <goodies/mailenum.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <dbui.hxx>
 #include <prtopt.hxx>
 #include <swmodule.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <mailmergehelper.hxx>
-#ifndef _ENVELP_HRC
 #include <envelp.hrc>
-#endif
-#ifndef _MAILMRGE_HRC
 #include <mailmrge.hrc>
-#endif
 #include <mailmrge.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -83,9 +66,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/form/XFormController.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -384,7 +365,11 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aPrinterRB.SetClickHdl(aLk);
     aMailingRB.SetClickHdl(aLk);
     aFileRB.SetClickHdl(aLk);
-    OutputTypeHdl(&aPrinterRB);
+
+    //#i63267# printing might be disabled
+    bool bIsPrintable = !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
+    aPrinterRB.Enable(bIsPrintable);
+    OutputTypeHdl(bIsPrintable ? &aPrinterRB : &aFileRB);
 
     aLk = LINK(this, SwMailMergeDlg, FilenameHdl);
     aGenerateFromDataBaseCB.SetClickHdl( aLk );

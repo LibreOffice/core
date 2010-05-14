@@ -647,6 +647,8 @@ void SwDoc::InitDrawModel()
     //Seite.
     pDrawModel = new SwDrawDocument( this );
 
+    pDrawModel->EnableUndo( DoesUndo() );
+
     String sLayerNm;
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Hell" ));
     nHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();

@@ -117,6 +117,14 @@
 #include <ndtxt.hxx>
 #include <langhelper.hxx>
 
+#include <sw_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/primitivetools2d.hxx>
+#include <drawinglayer/attribute/fillattribute.hxx>
+#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+
 using namespace ::com::sun::star;
 
 #define METABUTTON_WIDTH        16
@@ -915,12 +923,17 @@ void SwMarginWin::SetPosAndSize()
                                             basegfx::B2DPoint( mAnkorRect.Left(), mAnkorRect.Bottom()+2*15),
                                             basegfx::B2DPoint( mPageBorder ,mAnkorRect.Bottom()+2*15),
                                             basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
-                                            basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) , mColorAnkor,LineInfo(LINE_DASH,ANKORLINE_WIDTH*15), false);
+                                            basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) ,
+                                            mColorAnkor,
+                                            false,
+                                            false);
                 mpAnkor->SetHeight(mAnkorRect.Height());
                 mpAnkor->setVisible(true);
                 mpAnkor->SetAnkorState(AS_TRI);
                 if (HasChildPathFocus())
-                    mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+                {
+                    mpAnkor->setLineSolid(true);
+                }
                 pOverlayManager->add(*mpAnkor);
             }
         }
@@ -1493,7 +1506,7 @@ void SwMarginWin::SetViewState(ShadowState bState)
                 SwMarginWin* pWin = GetTopReplyNote();
                 if (IsFollow() && pWin)
                     pWin->Ankor()->SetAnkorState(AS_END);
-                mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+                mpAnkor->setLineSolid(true);
             }
             if (mpShadow)
                 mpShadow->SetShadowState(bState);
@@ -1502,7 +1515,7 @@ void SwMarginWin::SetViewState(ShadowState bState)
         case SS_VIEW:
         {
             if (mpAnkor)
-                mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+                mpAnkor->setLineSolid(true);
             if (mpShadow)
                 mpShadow->SetShadowState(bState);
             break;
@@ -1521,11 +1534,11 @@ void SwMarginWin::SetViewState(ShadowState bState)
                     if (pTopWinSelf && (pTopWinSelf!=pTopWinActive))
                     {
                         if (pTopWinSelf!=mpMgr->GetActivePostIt())
-                        pTopWinSelf->Ankor()->SetLineInfo(LineInfo(LINE_DASH,ANKORLINE_WIDTH*15));
+                            pTopWinSelf->Ankor()->setLineSolid(false);
                         pTopWinSelf->Ankor()->SetAnkorState(AS_ALL);
                     }
                 }
-                mpAnkor->SetLineInfo(LineInfo(LINE_DASH,ANKORLINE_WIDTH*15));
+                mpAnkor->setLineSolid(false);
             }
             if (mpShadow)
                 mpShadow->SetShadowState(bState);
@@ -1965,60 +1978,116 @@ bool SwRedComment::IsProtected()
 }
 */
 
-/****** SwPostItShadow  ***********************************************************/
-SwPostItShadow::SwPostItShadow(const basegfx::B2DPoint& rBasePos,const basegfx::B2DPoint& rSecondPosition,
-                                   Color aBaseColor,ShadowState aState)
-        :   OverlayObjectWithBasePosition(rBasePos, aBaseColor),
-            maSecondPosition(rSecondPosition),
-            mShadowState(aState)
+//////////////////////////////////////////////////////////////////////////////
+// helper SwPostItShadowPrimitive
+//
+// Used to allow view-dependent primitive definition. For that purpose, the
+// initially created primitive (this one) always has to be view-independent,
+// but the decomposition is made view-dependent. Very simple primitive which
+// just remembers the discrete data and applies it at decomposition time.
+
+class SwPostItShadowPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
-//  mbAllowsAnimation = sal_True;
-}
+private:
+    basegfx::B2DPoint           maBasePosition;
+    basegfx::B2DPoint           maSecondPosition;
+    ShadowState                 maShadowState;
 
-SwPostItShadow::~SwPostItShadow()
+protected:
+    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+
+public:
+    SwPostItShadowPrimitive(
+        const basegfx::B2DPoint& rBasePosition,
+        const basegfx::B2DPoint& rSecondPosition,
+        ShadowState aShadowState)
+    :   drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D(),
+        maBasePosition(rBasePosition),
+        maSecondPosition(rSecondPosition),
+        maShadowState(aShadowState)
+    {}
+
+    // data access
+    const basegfx::B2DPoint& getBasePosition() const { return maBasePosition; }
+    const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
+    ShadowState getShadowState() const { return maShadowState; }
+
+    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+
+    DeclPrimitrive2DIDBlock()
+};
+
+drawinglayer::primitive2d::Primitive2DSequence SwPostItShadowPrimitive::createLocalDecomposition(
+    const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-}
+    // get logic sizes in object coordinate system
+    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    basegfx::B2DRange aRange(getBasePosition());
 
-void SwPostItShadow::Trigger(sal_uInt32 /*nTime*/)
-{
-}
-
-void SwPostItShadow::drawGeometry(OutputDevice& rOutputDevice)
-{
-    rOutputDevice.SetLineColor();
-    rOutputDevice.SetFillColor();
-
-    const Fraction& f( rOutputDevice.GetMapMode().GetScaleY() );
-    sal_Int32 aBigHeight( 4 * f.GetNumerator() / f.GetDenominator());
-    sal_Int32 aSmallHeight( 2 * f.GetNumerator() / f.GetDenominator());
-
-    const Point aStart(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-    const Point aEndSmall(FRound(GetSecondPosition().getX()), FRound(GetSecondPosition().getY() + rOutputDevice.PixelToLogic(Size(0,aSmallHeight)).Height()));
-    const Point aEndBig(FRound(GetSecondPosition().getX()), FRound(GetSecondPosition().getY() + rOutputDevice.PixelToLogic(Size(0,aBigHeight)).Height()));
-    Rectangle aSmallRectangle(aStart, aEndSmall);
-    Rectangle aBigRectangle(aStart, aEndBig);
-
-    switch(mShadowState)
+    switch(maShadowState)
     {
         case SS_NORMAL:
         {
-            Gradient aGradient(GRADIENT_LINEAR,Color(230,230,230),POSTIT_SHADOW_BRIGHT);
-            aGradient.SetAngle(1800);
-            rOutputDevice.DrawGradient(aSmallRectangle, aGradient);
+            aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (2.0 * getDiscreteUnit())));
+            const drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
+                drawinglayer::attribute::GRADIENTSTYLE_LINEAR,
+                0.0,
+                0.5,
+                0.5,
+                1800.0 * F_PI1800,
+                basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
+                basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0),
+                2);
+
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::FillGradientPrimitive2D(
+                    aRange,
+                    aFillGradientAttribute));
+
+            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             break;
         }
         case SS_VIEW:
         {
-            Gradient aGradient(GRADIENT_LINEAR,Color(230,230,230),POSTIT_SHADOW_BRIGHT);
-            aGradient.SetAngle(1800);
-            rOutputDevice.DrawGradient(aBigRectangle, aGradient);
+            aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
+            const drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
+                drawinglayer::attribute::GRADIENTSTYLE_LINEAR,
+                0.0,
+                0.5,
+                0.5,
+                1800.0 * F_PI1800,
+                basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
+                basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0),
+                4);
+
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::FillGradientPrimitive2D(
+                    aRange,
+                    aFillGradientAttribute));
+
+            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             break;
         }
         case SS_EDIT:
         {
-            Gradient aGradient(GRADIENT_LINEAR,Color(230,230,230),POSTIT_SHADOW_DARK);
-            aGradient.SetAngle(1800);
-            rOutputDevice.DrawGradient(aBigRectangle, aGradient);
+            aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
+            const drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
+                drawinglayer::attribute::GRADIENTSTYLE_LINEAR,
+                0.0,
+                0.5,
+                0.5,
+                1800.0 * F_PI1800,
+                basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
+                basegfx::BColor(83.0/255.0,83.0/255.0,83.0/255.0),
+                4);
+
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::FillGradientPrimitive2D(
+                    aRange,
+                    aFillGradientAttribute));
+
+            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             break;
         }
         default:
@@ -2026,19 +2095,48 @@ void SwPostItShadow::drawGeometry(OutputDevice& rOutputDevice)
             break;
         }
     }
+
+    return xRetval;
 }
 
-void SwPostItShadow::createBaseRange(OutputDevice& rOutputDevice)
+bool SwPostItShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
 {
-    maBaseRange.reset();
+    if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
+    {
+        const SwPostItShadowPrimitive& rCompare = static_cast< const SwPostItShadowPrimitive& >(rPrimitive);
 
-    const Fraction& f( rOutputDevice.GetMapMode().GetScaleY() );
-    sal_Int32 aBigHeight( 4 * f.GetNumerator() / f.GetDenominator());
+        return (getBasePosition() == rCompare.getBasePosition()
+            && getSecondPosition() == rCompare.getSecondPosition()
+            && getShadowState() == rCompare.getShadowState());
+    }
 
-    Rectangle aRect(Point(FRound(getBasePosition().getX()),FRound(getBasePosition().getY())),
-                    Point(FRound(GetSecondPosition().getX()),FRound(GetSecondPosition().getY()+rOutputDevice.PixelToLogic(Size(0,aBigHeight)).Height())));
-    maBaseRange.expand(basegfx::B2DPoint(aRect.Left(), aRect.Top()));
-    maBaseRange.expand(basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
+    return false;
+}
+
+ImplPrimitrive2DIDBlock(SwPostItShadowPrimitive, PRIMITIVE2D_ID_SWPOSTITSHADOWPRIMITIVE)
+
+/****** SwPostItShadow  ***********************************************************/
+SwPostItShadow::SwPostItShadow(const basegfx::B2DPoint& rBasePos,const basegfx::B2DPoint& rSecondPosition,
+                                   Color aBaseColor,ShadowState aState)
+        :   OverlayObjectWithBasePosition(rBasePos, aBaseColor),
+            maSecondPosition(rSecondPosition),
+            mShadowState(aState)
+{
+//  mbAllowsAnimation = false;
+}
+
+SwPostItShadow::~SwPostItShadow()
+{
+}
+
+drawinglayer::primitive2d::Primitive2DSequence SwPostItShadow::createOverlayObjectPrimitive2DSequence()
+{
+    const drawinglayer::primitive2d::Primitive2DReference aReference(
+        new SwPostItShadowPrimitive(
+            getBasePosition(),
+            GetSecondPosition(),
+            GetShadowState()));
+    return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
 }
 
 void SwPostItShadow::SetShadowState(ShadowState aState)
@@ -2046,6 +2144,7 @@ void SwPostItShadow::SetShadowState(ShadowState aState)
     if (mShadowState != aState)
     {
         mShadowState = aState;
+
         objectChange();
     }
 }
@@ -2053,21 +2152,209 @@ void SwPostItShadow::SetShadowState(ShadowState aState)
 void SwPostItShadow::SetPosition(const basegfx::B2DPoint& rPoint1,
                                 const basegfx::B2DPoint& rPoint2)
 {
-    maBasePosition = rPoint1;
-    maSecondPosition = rPoint2;
-
-    objectChange();
-}
-void SwPostItShadow::transform(const basegfx::B2DHomMatrix& rMatrix)
-{
-    if(!rMatrix.isIdentity())
+    if(!rPoint1.equal(getBasePosition()) || !rPoint2.equal(GetSecondPosition()))
     {
-        // transform base position
-        OverlayObjectWithBasePosition::transform(rMatrix);
-        maSecondPosition = rMatrix * GetSecondPosition();
+        maBasePosition = rPoint1;
+        maSecondPosition = rPoint2;
+
         objectChange();
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// helper class: Primitive for discrete visualisation
+
+class SwPostItAnkorPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
+{
+private:
+    basegfx::B2DPolygon             maTriangle;
+    basegfx::B2DPolygon             maLine;
+    basegfx::B2DPolygon             maLineTop;
+    AnkorState                      maAnkorState;
+    basegfx::BColor                 maColor;
+
+    // discrete line width
+    double                          mfLogicLineWidth;
+
+    // bitfield
+    bool                            mbShadow : 1;
+    bool                            mbLineSolid : 1;
+
+protected:
+    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+
+public:
+    SwPostItAnkorPrimitive(
+        const basegfx::B2DPolygon& rTriangle,
+        const basegfx::B2DPolygon& rLine,
+        const basegfx::B2DPolygon& rLineTop,
+        AnkorState aAnkorState,
+        const basegfx::BColor& rColor,
+        double fLogicLineWidth,
+        bool bShadow,
+        bool bLineSolid)
+    :   drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D(),
+        maTriangle(rTriangle),
+        maLine(rLine),
+        maLineTop(rLineTop),
+        maAnkorState(aAnkorState),
+        maColor(rColor),
+        mfLogicLineWidth(fLogicLineWidth),
+        mbShadow(bShadow),
+        mbLineSolid(bLineSolid)
+    {}
+
+    // data access
+    const basegfx::B2DPolygon& getTriangle() const { return maTriangle; }
+    const basegfx::B2DPolygon& getLine() const { return maLine; }
+    const basegfx::B2DPolygon& getLineTop() const { return maLineTop; }
+    AnkorState getAnkorState() const { return maAnkorState; }
+    const basegfx::BColor& getColor() const { return maColor; }
+    double getLogicLineWidth() const { return mfLogicLineWidth; }
+    bool getShadow() const { return mbShadow; }
+    bool getLineSolid() const { return mbLineSolid; }
+
+    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+
+    DeclPrimitrive2DIDBlock()
+};
+
+drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkorPrimitive::createLocalDecomposition(
+    const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
+{
+    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+
+    if(AS_TRI == getAnkorState() || AS_ALL == getAnkorState() || AS_START == getAnkorState())
+    {
+        // create triangle
+        const drawinglayer::primitive2d::Primitive2DReference aTriangle(
+            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                basegfx::B2DPolyPolygon(getTriangle()),
+                getColor()));
+
+        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aTriangle);
+    }
+
+    if(AS_ALL == getAnkorState() || AS_START == getAnkorState())
+    {
+        // create line start
+        const drawinglayer::attribute::LineAttribute aLineAttribute(
+            getColor(),
+            getLogicLineWidth() / (basegfx::fTools::equalZero(getDiscreteUnit()) ? 1.0 : getDiscreteUnit()));
+
+        if(getLineSolid())
+        {
+            const drawinglayer::primitive2d::Primitive2DReference aSolidLine(
+                new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+                    getLine(),
+                    aLineAttribute));
+
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aSolidLine);
+        }
+        else
+        {
+            ::std::vector< double > aDotDashArray;
+            const double fDistance(3.0 * 15.0);
+            const double fDashLen(5.0 * 15.0);
+
+            aDotDashArray.push_back(fDashLen);
+            aDotDashArray.push_back(fDistance);
+
+            const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+                aDotDashArray,
+                fDistance + fDashLen);
+
+            const drawinglayer::primitive2d::Primitive2DReference aStrokedLine(
+                new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+                    getLine(),
+                    aLineAttribute,
+                    aStrokeAttribute));
+
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aStrokedLine);
+        }
+    }
+
+    if(aRetval.hasElements() && getShadow())
+    {
+        // shadow is only for triangle and line start, and in upper left
+        // and lower right direction, in different colors
+        const double fColorChange(20.0 / 255.0);
+        const basegfx::B3DTuple aColorChange(fColorChange, fColorChange, fColorChange);
+        basegfx::BColor aLighterColor(getColor() + aColorChange);
+        basegfx::BColor aDarkerColor(getColor() - aColorChange);
+
+        aLighterColor.clamp();
+        aDarkerColor.clamp();
+
+        // create shadow sequence
+        drawinglayer::primitive2d::Primitive2DSequence aShadows(2);
+        basegfx::B2DHomMatrix aTransform;
+
+        aTransform.set(0, 2, -getDiscreteUnit());
+        aTransform.set(1, 2, -getDiscreteUnit());
+
+        aShadows[0] = drawinglayer::primitive2d::Primitive2DReference(
+            new drawinglayer::primitive2d::ShadowPrimitive2D(
+                aTransform,
+                aLighterColor,
+                aRetval));
+
+        aTransform.set(0, 2, getDiscreteUnit());
+        aTransform.set(1, 2, getDiscreteUnit());
+
+        aShadows[1] = drawinglayer::primitive2d::Primitive2DReference(
+            new drawinglayer::primitive2d::ShadowPrimitive2D(
+                aTransform,
+                aDarkerColor,
+                aRetval));
+
+        // add shadow before geometry to make it be proccessed first
+        const drawinglayer::primitive2d::Primitive2DSequence aTemporary(aRetval);
+
+        aRetval = aShadows;
+        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, aTemporary);
+    }
+
+    if(AS_ALL == getAnkorState() || AS_END == getAnkorState())
+    {
+        // LineTop has to be created, too, but uses no shadow, so add after
+        // the other parts are created
+        const drawinglayer::attribute::LineAttribute aLineAttribute(
+            getColor(),
+            getLogicLineWidth() / (basegfx::fTools::equalZero(getDiscreteUnit()) ? 1.0 : getDiscreteUnit()));
+
+        const drawinglayer::primitive2d::Primitive2DReference aLineTop(
+            new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+                getLineTop(),
+                aLineAttribute));
+
+        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aLineTop);
+    }
+
+    return aRetval;
+}
+
+bool SwPostItAnkorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
+{
+    if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
+    {
+        const SwPostItAnkorPrimitive& rCompare = static_cast< const SwPostItAnkorPrimitive& >(rPrimitive);
+
+        return (getTriangle() == rCompare.getTriangle()
+            && getLine() == rCompare.getLine()
+            && getLineTop() == rCompare.getLineTop()
+            && getAnkorState() == rCompare.getAnkorState()
+            && getColor() == rCompare.getColor()
+            && getLogicLineWidth() == rCompare.getLogicLineWidth()
+            && getShadow() == rCompare.getShadow()
+            && getLineSolid() == rCompare.getLineSolid());
+    }
+
+    return false;
+}
+
+ImplPrimitrive2DIDBlock(SwPostItAnkorPrimitive, PRIMITIVE2D_ID_SWPOSTITANKORPRIMITIVE)
 
 /****** SwPostItAnkor   ***********************************************************/
 
@@ -2102,100 +2389,6 @@ void SwPostItAnkor::implResetGeometry()
     maLineTop.clear();
 }
 
-void SwPostItAnkor::implDrawGeometry(OutputDevice& rOutputDevice, Color aColor, double fOffX, double fOffY)
-{
-    basegfx::B2DPolygon aTri(maTriangle);
-    basegfx::B2DPolygon aLin(maLine);
-    const Polygon aLinTop(maLineTop);
-
-    if(0.0 != fOffX || 0.0 != fOffY)
-    {
-        // transform polygons
-        basegfx::B2DHomMatrix aTranslate;
-        aTranslate.set(0, 2, fOffX);
-        aTranslate.set(1, 2, fOffY);
-
-        aTri.transform(aTranslate);
-        aLin.transform(aTranslate);
-    }
-
-    switch (mAnkorState)
-    {
-        case AS_TRI:
-                {
-                        rOutputDevice.SetLineColor();
-                        rOutputDevice.SetFillColor(aColor);
-                        rOutputDevice.DrawPolygon(Polygon(aTri));
-                        break;
-                }
-        case AS_ALL:
-        {
-            rOutputDevice.SetLineColor();
-            rOutputDevice.SetFillColor(aColor);
-            //rOutputDevice.DrawTransparent(Polygon(aTri), 50);
-            rOutputDevice.DrawPolygon(Polygon(aTri));
-
-            // draw line
-            rOutputDevice.SetLineColor(aColor);
-            rOutputDevice.SetFillColor();
-            rOutputDevice.DrawPolyLine(Polygon(aLin), mLineInfo);
-            rOutputDevice.DrawPolyLine(aLinTop,LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
-            break;
-        }
-        case AS_START:
-        {
-            rOutputDevice.SetLineColor();
-            rOutputDevice.SetFillColor(aColor);
-            rOutputDevice.DrawPolygon(Polygon(aTri));
-            // draw line
-            rOutputDevice.SetLineColor(aColor);
-            rOutputDevice.SetFillColor();
-            rOutputDevice.DrawPolyLine(Polygon(aLin), mLineInfo);
-            break;
-        }
-        case AS_END:
-        {
-            // draw line
-            rOutputDevice.SetLineColor(aColor);
-            rOutputDevice.SetFillColor();
-            rOutputDevice.DrawPolyLine(aLinTop,LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
-            break;
-        }
-    }
-}
-
-Color SwPostItAnkor::implBlendColor(const Color aOriginal, sal_Int16 nChange)
-{
-    if(0 != nChange)
-    {
-        sal_Int16 nR(aOriginal.GetRed() + nChange);
-        sal_Int16 nG(aOriginal.GetGreen() + nChange);
-        sal_Int16 nB(aOriginal.GetBlue() + nChange);
-
-        // truncate R, G and B
-        if(nR > 0xff)
-            nR = 0xff;
-        else if(nR < 0)
-            nR = 0;
-
-        if(nG > 0xff)
-            nG = 0xff;
-        else if(nG < 0)
-            nG = 0;
-
-        if(nB > 0xff)
-            nB = 0xff;
-        else if(nB < 0)
-            nB = 0;
-
-        return Color((sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB);
-    }
-    else
-    {
-        return aOriginal;
-    }
-}
-
 SwPostItAnkor::SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
                         const basegfx::B2DPoint& rSecondPos,
                         const basegfx::B2DPoint& rThirdPos,
@@ -2204,8 +2397,8 @@ SwPostItAnkor::SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
                         const basegfx::B2DPoint& rSixthPos,
                         const basegfx::B2DPoint& rSeventhPos,
                         Color aBaseColor,
-                        const LineInfo &aLineInfo,
-                        bool bShadowedEffect)
+                        bool bShadowedEffect,
+                        bool bLineSolid)
         :   OverlayObjectWithBasePosition(rBasePos, aBaseColor),
             maSecondPosition(rSecondPos),
             maThirdPosition(rThirdPos),
@@ -2216,92 +2409,35 @@ SwPostItAnkor::SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
             maTriangle(),
             maLine(),
             maLineTop(),
-            mLineInfo(aLineInfo),
             mHeight(0),
+            mAnkorState(AS_ALL),
             mbShadowedEffect(bShadowedEffect),
-            mAnkorState(AS_ALL)
+            mbLineSolid(bLineSolid)
 {
-    if (mLineInfo.GetStyle()==LINE_DASH)
-    {
-        mLineInfo.SetDistance( 3 * 15);
-        mLineInfo.SetDashLen(  5 * 15);
-        mLineInfo.SetDashCount(100);
-    }
-    //mbAllowsAnimation = sal_True;
+    //mbAllowsAnimation = true;
 }
 
 SwPostItAnkor::~SwPostItAnkor()
 {
 }
 
-void SwPostItAnkor::Trigger(sal_uInt32 /*nTime*/)
-{
-}
-
-void SwPostItAnkor::drawGeometry(OutputDevice& rOutputDevice)
+drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkor::createOverlayObjectPrimitive2DSequence()
 {
     implEnsureGeometry();
 
-    if(getShadowedEffect())
-    {
-        // calculate one pixel offset
-        const basegfx::B2DVector aOnePixelOffset(rOutputDevice.GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-        const Color aLighterColor(implBlendColor(getBaseColor(), 20));
-        const Color aDarkerColor(implBlendColor(getBaseColor(), -20));
+    const drawinglayer::primitive2d::Primitive2DReference aReference(
+        new SwPostItAnkorPrimitive(
+            maTriangle,
+            maLine,
+            maLineTop,
+            GetAnkorState(),
+            getBaseColor().getBColor(),
+            ANKORLINE_WIDTH * 15.0,
+            getShadowedEffect(),
+            getLineSolid()));
 
-        // draw top-left
-        implDrawGeometry(rOutputDevice, aLighterColor, -aOnePixelOffset.getX(), -aOnePixelOffset.getY());
-
-        // draw bottom-right
-        implDrawGeometry(rOutputDevice, aDarkerColor, aOnePixelOffset.getX(), aOnePixelOffset.getY());
-    }
-
-    // draw original
-    implDrawGeometry(rOutputDevice, getBaseColor(), 0.0, 0.0);
+    return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
 }
-
-void SwPostItAnkor::createBaseRange(OutputDevice& rOutputDevice)
-{
-   // get range from geometry
-    implEnsureGeometry();
-    maBaseRange = basegfx::tools::getRange(maTriangle);
-    maBaseRange.expand(basegfx::tools::getRange(maLine));
-    maBaseRange.expand(basegfx::tools::getRange(maLineTop));
-
-    /*
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.translate(-maTriangle.getB2DPoint(0).getX(),-maTriangle.getB2DPoint(0).getY());
-    aMatrix.scale(1.0,-1.0);
-    aMatrix.translate(maTriangle.getB2DPoint(0).getX(),maTriangle.getB2DPoint(0).getY());
-    aMatrix.translate(0,(mHeight*-1) + 13 * 15 );
-    basegfx::B2DRange MyRange(basegfx::tools::getRange(maTriangle));
-    MyRange.transform(aMatrix);
-    maBaseRange.expand(MyRange);
-    */
-
-    // expand range for thick lines and shadowed geometry
-    double fExpand(0.0);
-
-    // take fat line into account
-    if(0 != mLineInfo.GetWidth())
-    {
-        // expand range for logic half line width
-        fExpand += static_cast< double >(mLineInfo.GetWidth()) / 2.0;
-    }
-
-    // take shadowed into account
-    if(getShadowedEffect())
-    {
-        const basegfx::B2DVector aOnePixelOffset(rOutputDevice.GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-        fExpand += ::std::max(aOnePixelOffset.getX(), aOnePixelOffset.getY());
-    }
-
-    if(0.0 != fExpand)
-    {
-        maBaseRange.grow(fExpand);
-    }
-}
-
 
 void SwPostItAnkor::SetAllPosition(const basegfx::B2DPoint& rPoint1,
             const basegfx::B2DPoint& rPoint2,
@@ -2311,16 +2447,25 @@ void SwPostItAnkor::SetAllPosition(const basegfx::B2DPoint& rPoint1,
             const basegfx::B2DPoint& rPoint6,
             const basegfx::B2DPoint& rPoint7)
 {
-    maBasePosition = rPoint1;
-    maSecondPosition = rPoint2;
-    maThirdPosition = rPoint3;
-    maFourthPosition = rPoint4;
-    maFifthPosition = rPoint5;
-    maSixthPosition = rPoint6;
-    maSeventhPosition = rPoint7;
+    if(rPoint1 != getBasePosition()
+        || rPoint2 != GetSecondPosition()
+        || rPoint3 != GetThirdPosition()
+        || rPoint4 != GetFourthPosition()
+        || rPoint5 != GetFifthPosition()
+        || rPoint6 != GetSixthPosition()
+        || rPoint7 != GetSeventhPosition())
+    {
+        maBasePosition = rPoint1;
+        maSecondPosition = rPoint2;
+        maThirdPosition = rPoint3;
+        maFourthPosition = rPoint4;
+        maFifthPosition = rPoint5;
+        maSixthPosition = rPoint6;
+        maSeventhPosition = rPoint7;
 
-    implResetGeometry();
-    objectChange();
+        implResetGeometry();
+        objectChange();
+    }
 }
 
 void SwPostItAnkor::SetSixthPosition(const basegfx::B2DPoint& rNew)
@@ -2346,54 +2491,28 @@ void SwPostItAnkor::SetSeventhPosition(const basegfx::B2DPoint& rNew)
 void SwPostItAnkor::SetTriPosition(const basegfx::B2DPoint& rPoint1,const basegfx::B2DPoint& rPoint2,const basegfx::B2DPoint& rPoint3,
                                     const basegfx::B2DPoint& rPoint4,const basegfx::B2DPoint& rPoint5)
 {
-    maBasePosition = rPoint1;
-    maSecondPosition = rPoint2;
-    maThirdPosition = rPoint3;
-    maFourthPosition = rPoint4;
-    maFifthPosition = rPoint5;
-
-    implResetGeometry();
-    objectChange();
-}
-
-void SwPostItAnkor::transform(const basegfx::B2DHomMatrix& rMatrix)
-{
-    if(!rMatrix.isIdentity())
+    if(rPoint1 != getBasePosition()
+        || rPoint2 != GetSecondPosition()
+        || rPoint3 != GetThirdPosition()
+        || rPoint4 != GetFourthPosition()
+        || rPoint5 != GetFifthPosition())
     {
-        // transform base position
-        OverlayObjectWithBasePosition::transform(rMatrix);
-
-        maSecondPosition = rMatrix * GetSecondPosition();
-        maThirdPosition = rMatrix * GetThirdPosition();
-        maFourthPosition = rMatrix * GetFourthPosition();
-        maFifthPosition = rMatrix * GetFifthPosition();
-        maSixthPosition = rMatrix * GetSixthPosition();
-        maSeventhPosition = rMatrix * GetSeventhPosition();
+        maBasePosition = rPoint1;
+        maSecondPosition = rPoint2;
+        maThirdPosition = rPoint3;
+        maFourthPosition = rPoint4;
+        maFifthPosition = rPoint5;
 
         implResetGeometry();
         objectChange();
     }
 }
 
-void SwPostItAnkor::SetLineInfo(const LineInfo &aLineInfo)
+void SwPostItAnkor::setLineSolid(bool bNew)
 {
-    if (aLineInfo != mLineInfo)
+    if(bNew != getLineSolid())
     {
-        mLineInfo = aLineInfo;
-        if (mLineInfo.GetStyle()==LINE_DASH)
-        {
-            mLineInfo.SetDistance( 3 * 15);
-            mLineInfo.SetDashLen(  5 * 15);
-            mLineInfo.SetDashCount(100);
-        }
-        //remove and add overlayobject, so it is the last one inside the manager to draw
-        //therefore this line is on top
-        sdr::overlay::OverlayManager* pMgr = getOverlayManager();
-        if (pMgr)
-        {
-            pMgr->remove(*this);
-            pMgr->add(*this);
-        }
+        mbLineSolid = bNew;
         objectChange();
     }
 }

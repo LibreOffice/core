@@ -53,6 +53,10 @@
 #include <vector>
 // <--
 
+#include <boost/shared_ptr.hpp>
+#include <memory>
+
+
 class SwUndoIter;
 class SwHistory;
 class SwIndex;
@@ -68,7 +72,7 @@ class SwTable;
 class SwTableBox;
 struct SwSortOptions;
 class SwFrmFmt;
-class SwHstryBookmark;
+class SwHistoryBookmark;
 class SwSection;
 class SwSectionFmt;
 class SvxTabStopItem;
@@ -101,6 +105,10 @@ class SwRedlineData;
 class SwRedlineSaveData;
 class SwRedline;
 struct SwSaveRowSpan;
+
+namespace sfx2 {
+    class MetadatableUndo;
+}
 
 namespace utl {
     class TransliterationWrapper;
@@ -400,6 +408,8 @@ class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
     String *pSttStr, *pEndStr;
     SwRedlineData* pRedlData;
     SwRedlineSaveDatas* pRedlSaveData;
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
     String sTableName;
 
@@ -557,14 +567,15 @@ public:
 
 class SwUndoAttr : public SwUndo, private SwUndRng
 {
-    SfxItemSet aSet;                // Attribute fuers Redo
-    SwHistory* pHistory;            // History fuers Undo
-    SwRedlineData* pRedlData;       // Redlining
-    SwRedlineSaveDatas* pRedlSaveData;
-    ULONG nNdIdx;                   // fuers Redlining - Offset
-    USHORT nInsFlags;               // Einfuege Flags
+    SfxItemSet m_AttrSet;                           // attributes for Redo
+    const ::std::auto_ptr<SwHistory> m_pHistory;    // History for Undo
+    ::std::auto_ptr<SwRedlineData> m_pRedlineData;  // Redlining
+    ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
+    ULONG m_nNodeIndex;                             // Offset: for Redlining
+    const USHORT m_nInsertFlags;                    // insert flags
 
     void RemoveIdx( SwDoc& rDoc );
+
 public:
     SwUndoAttr( const SwPaM&, const SfxItemSet&, USHORT nFlags = 0  );
     SwUndoAttr( const SwPaM&, const SfxPoolItem&, USHORT nFlags = 0 );
@@ -572,40 +583,44 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    SwHistory* GetHistory() { return pHistory; }
     void SaveRedlineData( const SwPaM& rPam, BOOL bInsCntnt );
+
+    SwHistory& GetHistory() { return *m_pHistory; }
 
     OUT_UNDOBJ( InsAttr )
 };
 
-class SwUndoRstAttr : public SwUndo, private SwUndRng
+class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
-    SwHistory* pHistory;
-    SvUShortsSort aIds;
-    USHORT nFmtId;                  // Format-Id fuer das Redo
+    const ::std::auto_ptr<SwHistory> m_pHistory;
+    SvUShortsSort m_Ids;
+    const USHORT m_nFormatId;             // Format-Id for Redo
+
 public:
-    SwUndoRstAttr( const SwPaM&, USHORT nFmtId );
-    SwUndoRstAttr( const SwDoc&, const SwPosition&, USHORT nWhichId );
-    virtual ~SwUndoRstAttr();
+    SwUndoResetAttr( const SwPaM&, USHORT nFmtId );
+    SwUndoResetAttr( const SwPosition&, USHORT nFmtId );
+    virtual ~SwUndoResetAttr();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
     void SetAttrs( const SvUShortsSort& rArr );
-    SwHistory* GetHistory() { return pHistory; }
+
+    SwHistory& GetHistory() { return *m_pHistory; }
+
     OUT_UNDOBJ( ResetAttr )
 };
 
 class SwUndoFmtAttr : public SwUndo
 {
     friend class SwUndoDefaultAttr;
-    SwFmt* pFmt;
-    SfxItemSet* pOldSet;            // die alten Attribute
-    ULONG nNode;
-    const USHORT nFmtWhich;
-    const BOOL bSaveDrawPt;
+    SwFmt * m_pFmt;
+    ::std::auto_ptr<SfxItemSet> m_pOldSet;    // old attributes
+    ULONG m_nNodeIndex;
+    const USHORT m_nFmtWhich;
+    const bool m_bSaveDrawPt;
 
-    int IsFmtInDoc( SwDoc* );       // ist das Attribut-Format noch im Doc ?
-    void SaveFlyAnchor( BOOL bSaveDrawPt = FALSE );
+    bool IsFmtInDoc( SwDoc* );   //is the attribute format still in the Doc?
+    void SaveFlyAnchor( bool bSaveDrawPt = false );
     // --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
     // Return value indicates, if anchor attribute is restored.
     // Notes: - If anchor attribute is restored, all other existing attributes
@@ -621,15 +636,15 @@ class SwUndoFmtAttr : public SwUndo
     // <--
 
 public:
-    // meldet sich im Format an und sichert sich die alten Attribute
+    // register at the Format and save old attributes
     // --> OD 2008-02-27 #refactorlists# - removed <rNewSet>
     SwUndoFmtAttr( const SfxItemSet& rOldSet,
                    SwFmt& rFmt,
-                   BOOL bSaveDrawPt = TRUE );
+                   bool bSaveDrawPt = true );
     // <--
     SwUndoFmtAttr( const SfxPoolItem& rItem,
                    SwFmt& rFmt,
-                   BOOL bSaveDrawPt = TRUE );
+                   bool bSaveDrawPt = true );
     virtual ~SwUndoFmtAttr();
     virtual void Undo( SwUndoIter& );
     // --> OD 2004-10-26 #i35443# - <Redo(..)> calls <Undo(..)> - nothing else
@@ -641,7 +656,7 @@ public:
     OUT_UNDOBJ( InsFmtAttr )
 
     void PutAttr( const SfxPoolItem& rItem );
-    SwFmt* GetFmt( SwDoc& rDoc );       // prueft, ob es noch im Doc ist!
+    SwFmt* GetFmt( SwDoc& rDoc );   // checks if it is still in the Doc!
 };
 
 // --> OD 2008-02-12 #newlistlevelattrs#
@@ -657,18 +672,19 @@ class SwUndoFmtResetAttr : public SwUndo
 
     private:
         // format at which a certain attribute is reset.
-        SwFmt* mpChangedFormat;
+        SwFmt * const m_pChangedFormat;
         // which ID of the reset attribute
-        USHORT mnWhichId;
+        const USHORT m_nWhichId;
         // old attribute which has been reset - needed for undo.
-        SfxPoolItem* mpOldItem;
+        ::std::auto_ptr<SfxPoolItem> m_pOldItem;
 };
 // <--
 
 class SwUndoDontExpandFmt : public SwUndo
 {
-    ULONG nNode;
-    xub_StrLen nCntnt;
+    const ULONG m_nNodeIndex;
+    const xub_StrLen m_nContentIndex;
+
 public:
     SwUndoDontExpandFmt( const SwPosition& rPos );
     virtual void Undo( SwUndoIter& );
@@ -676,14 +692,20 @@ public:
     virtual void Repeat( SwUndoIter& );
 };
 
-// Hilfs-Klasse, um die geaenderten Sets zu "empfangen"
-struct _UndoFmtAttr : public SwClient
+// helper class to receive changed attribute sets
+class SwUndoFmtAttrHelper : public SwClient
 {
-    SwUndoFmtAttr* pUndo;
-    BOOL bSaveDrawPt;
+    ::std::auto_ptr<SwUndoFmtAttr> m_pUndo;
+    const bool m_bSaveDrawPt;
 
-    _UndoFmtAttr( SwFmt& rFmt, BOOL bSaveDrawPt = TRUE );
+public:
+    SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSaveDrawPt = true );
+
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+
+    SwUndoFmtAttr* GetUndo() const  { return m_pUndo.get(); }
+    // release the undo object (so it is not deleted here), and return it
+    SwUndoFmtAttr* ReleaseUndo()    { return m_pUndo.release(); }
 };
 
 
@@ -735,15 +757,18 @@ public:
 
 class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
 {
-    SwHistory* pHistory;
-    BOOL bModulus;
+    const ::std::auto_ptr<SwHistory> m_pHistory;
+    const bool m_bModulus;
+
 public:
     SwUndoMoveLeftMargin( const SwPaM&, BOOL bRight, BOOL bModulus );
     virtual ~SwUndoMoveLeftMargin();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    SwHistory* GetHistory() { return pHistory; }
+
+    SwHistory& GetHistory() { return *m_pHistory; }
+
     OUT_UNDOBJ( MoveLeftMargin )
 };
 
@@ -1081,7 +1106,8 @@ public:
 
 class SwUndoBookmark : public SwUndo
 {
-    SwHstryBookmark* pHBookmark;
+    const ::std::auto_ptr<SwHistoryBookmark> m_pHistoryBookmark;
+
 protected:
     SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& );
 
@@ -1417,10 +1443,11 @@ public:
 
 class SwUndoDefaultAttr : public SwUndo
 {
-    SfxItemSet* pOldSet;            // die alten Attribute
-    SvxTabStopItem* pTabStop;
+    ::std::auto_ptr<SfxItemSet> m_pOldSet;        // the old attributes
+    ::std::auto_ptr<SvxTabStopItem> m_pTabStop;
+
 public:
-    // meldet sich im Format an und sichert sich die alten Attribute
+    // registers at the format and saves old attributes
     SwUndoDefaultAttr( const SfxItemSet& rOldSet );
     virtual ~SwUndoDefaultAttr();
     virtual void Undo( SwUndoIter& );
@@ -1716,31 +1743,32 @@ public:
 
 //--------------------------------------------------------------------
 
-class SwUndoChgFtn : public SwUndo, private SwUndRng
+class SwUndoChangeFootNote : public SwUndo, private SwUndRng
 {
-    SwHistory* pHistory;
-    String sTxt;
-    USHORT nNo;
-    BOOL bEndNote;
+    const ::std::auto_ptr<SwHistory> m_pHistory;
+    const String m_Text;
+    const USHORT m_nNumber;
+    const bool m_bEndNote;
+
 public:
-    SwUndoChgFtn( const SwPaM& rRange, const String& rTxt,
-                    USHORT nNum, BOOL bIsEndNote );
-    virtual ~SwUndoChgFtn();
+    SwUndoChangeFootNote( const SwPaM& rRange, const String& rTxt,
+                          USHORT nNum, bool bIsEndNote );
+    virtual ~SwUndoChangeFootNote();
 
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
-    SwHistory* GetHistory() { return pHistory; }
+    SwHistory& GetHistory() { return *m_pHistory; }
 };
 
-class SwUndoFtnInfo : public SwUndo
+class SwUndoFootNoteInfo : public SwUndo
 {
-    SwFtnInfo *pFtnInfo;
+    ::std::auto_ptr<SwFtnInfo> m_pFootNoteInfo;
 
 public:
-    SwUndoFtnInfo( const SwFtnInfo &rInfo );
-    virtual ~SwUndoFtnInfo();
+    SwUndoFootNoteInfo( const SwFtnInfo &rInfo );
+    virtual ~SwUndoFootNoteInfo();
 
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -1748,7 +1776,7 @@ public:
 
 class SwUndoEndNoteInfo : public SwUndo
 {
-    SwEndNoteInfo *pEndNoteInfo;
+    ::std::auto_ptr<SwEndNoteInfo> m_pEndNoteInfo;
 
 public:
     SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo );
@@ -1776,7 +1804,7 @@ public:
     virtual void Redo( SwUndoIter& rUndoIter );
     virtual void Repeat( SwUndoIter& rUndoIter );
 
-    void AddChanges( const SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
+    void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
     BOOL HasData() const {return 0 != pData; }
 };

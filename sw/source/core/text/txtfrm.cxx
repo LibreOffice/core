@@ -496,9 +496,9 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
     {
-        const MSHORT nSize = pHints->Count();
+        const USHORT nSize = pHints->Count();
         SwPageFrm *pPage = 0;
-        for( MSHORT i = 0; i < nSize; ++i )
+        for ( USHORT i = 0; i < nSize; ++i )
         {
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
@@ -550,9 +550,9 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
                 const SwTxtAttr* pHint( 0 );
                 if( pHints )
                 {
-                    for( MSHORT i = 0; i < pHints->Count(); ++i )
+                    for ( USHORT i = 0; i < pHints->Count(); ++i )
                     {
-                        SwTxtAttr* pPos = pHints->GetHt(i);
+                        SwTxtAttr* pPos = pHints->GetTextHint(i);
                         xub_StrLen nStart = *pPos->GetStart();
                         if ( _nObjAnchorPos < nStart )
                             break;
@@ -1699,10 +1699,10 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwpHints *pHints = GetTxtNode()->GetpSwpHints();
             if( pHints )
             {
-                const MSHORT nSize = pHints->Count();
+                const USHORT nSize = pHints->Count();
                 const xub_StrLen nEnd = GetFollow() ?
                                     GetFollow()->GetOfst() : STRING_LEN;
-                for( MSHORT i = 0; i < nSize; ++i )
+                for ( USHORT i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
                     const xub_StrLen nStart = *pHt->GetStart();

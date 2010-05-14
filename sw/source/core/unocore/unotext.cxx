@@ -35,9 +35,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
@@ -104,7 +102,7 @@ SwXText::SwXText(SwDoc* pDc, CursorType eType) :
     pDoc(pDc),
     bObjectValid(0 != pDc),
     eCrsrType(eType),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT))
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
 {
 }
 /*-- 09.12.98 12:43:55---------------------------------------------------
@@ -1169,8 +1167,7 @@ sal_Int16 SwXText::compareRegionEnds(
 uno::Reference< beans::XPropertySetInfo > SwXText::getPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo =
-        new SfxItemPropertySetInfo(_pMap);
+    static uno::Reference< beans::XPropertySetInfo > xInfo = m_pPropSet->getPropertySetInfo();
     return xInfo;
 }
 /*-- 15.03.2002 12:30:42---------------------------------------------------
@@ -1194,12 +1191,11 @@ uno::Any SwXText::getPropertyValue(
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw  uno::RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    _pMap, rPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     uno::Any aRet;
-    if(pMap)
+    if(pEntry)
     {
-        switch(pMap->nWID)
+        switch(pEntry->nWID)
         {
 //          no code necessary - the redline is always located at the end node
 //            case FN_UNO_REDLINE_NODE_START:
@@ -1359,26 +1355,22 @@ uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
         if(rProperties.getLength())
         {
             // now set the properties
-            const SfxItemPropertyMap* pParagraphMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH);
-            SfxItemPropertySet aParaPropSet(pParagraphMap);
+            const SfxItemPropertySet* pParaPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
+            const SfxItemPropertyMap* pParagraphMap = pParaPropSet->getPropertyMap();
 
             const beans::PropertyValue* pValues = rProperties.getConstArray();
 
             for( sal_Int32 nProp = 0; nProp < rProperties.getLength(); ++nProp)
             {
-                // no sorting of property names required - results in performance issues as long as SfxItemPropertyMap::GetByName
-                // is not able to hash the maps
-                const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName( pParagraphMap, pValues[nProp].Name );
-                if(pMap)
+                if(pParagraphMap->getByName( pValues[nProp].Name ))
                 {
                     try
                     {
                         SwXTextCursor::SetPropertyValue(
                         aPam,
-                        aParaPropSet,
+                        *pParaPropSet,
                         pValues[nProp].Name,
-                        pValues[nProp].Value,
-                        pMap, 0);
+                        pValues[nProp].Value);
                     }
                     catch( lang::IllegalArgumentException& rIllegal )
                     {
@@ -1417,8 +1409,9 @@ uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
                 throw aEx;
             }
         }
-        SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(*aPam.Start(), sal_False);
-        xRet = new SwXParagraph(this, pUnoCrsr);
+        SwTxtNode * pTxtNode( aPam.Start()->nNode.GetNode().GetTxtNode() );
+        OSL_ENSURE(pTxtNode, "no SwTxtNode?");
+        xRet = new SwXParagraph(this, pTxtNode);
     }
 
     return xRet;
@@ -1464,25 +1457,21 @@ uno::Reference< text::XTextRange > SwXText::appendTextPortion(
 
         if(rCharacterAndParagraphProperties.getLength())
         {
-
+            const SfxItemPropertyMap* pCursorMap = aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)->getPropertyMap();
             const beans::PropertyValue* pValues = rCharacterAndParagraphProperties.getConstArray();
+            const SfxItemPropertySet* pCursorPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR);
             for( sal_Int32 nProp = 0; nProp < rCharacterAndParagraphProperties.getLength(); ++nProp)
             {
-                // no sorting of property names required - results in performance issues as long as SfxItemPropertyMap::GetByName
-                // is not able to hash the maps
-                const SfxItemPropertyMap* pCursorMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR);
-                SfxItemPropertySet aCursorPropSet(pCursorMap);
-                const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName( pCursorMap, pValues[nProp].Name );
-                if(pMap)
+                if( pCursorMap->getByName( pValues[nProp].Name ) )
                 {
                     try
                     {
                         SwXTextCursor::SetPropertyValue(
                         *pCursor,
-                        aCursorPropSet,
+                        *pCursorPropSet,
                         pValues[nProp].Name,
                         pValues[nProp].Value,
-                        pMap, nsSetAttrMode::SETATTR_NOFORMATATTR);
+                        nsSetAttrMode::SETATTR_NOFORMATATTR);
                     }
                     catch( lang::IllegalArgumentException& rIllegal )
                     {

@@ -888,7 +888,7 @@ BOOL SwPaM::Find( const SfxPoolItem& rAttr, BOOL bValue, SwMoveFn fnMove,
 {
     // stelle fest welches Attribut gesucht wird:
     USHORT nWhich = rAttr.Which();
-    int bCharAttr = RES_CHRATR_BEGIN <= nWhich && nWhich < RES_TXTATR_END;
+    int bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
@@ -931,7 +931,7 @@ BOOL SwPaM::Find( const SfxPoolItem& rAttr, BOOL bValue, SwMoveFn fnMove,
                 bFound = TRUE;
                 break;
             }
-            else if( RES_TXTATR_BEGIN < nWhich )   // TextAttribut
+            else if (isTXTATR(nWhich))
                 continue;               // --> also weiter
         }
 

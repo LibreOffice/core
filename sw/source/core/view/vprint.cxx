@@ -36,9 +36,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 
-#ifndef _INTN_HXX //autogen
 // #include <tools/intn.hxx>
-#endif
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/prnmon.hxx>
@@ -770,9 +768,11 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     const Point aSelPoint = pFESh->IsTableMode() ?
@@ -858,9 +858,11 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     // Die Y-Position der ersten Selektion
@@ -1297,7 +1299,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                                             aSize.Width() = aSize.Height();
                                             aSize.Height() = nWidth;
                                     }
-                                    Paper ePaper = SvxPaperInfo::GetSvPaper(aSize,MAP_TWIP,TRUE);
+                                    Paper ePaper = SvxPaperInfo::GetSvxPaper(aSize,MAP_TWIP,TRUE);
                                     if ( PAPER_USER == ePaper )
                                             pPrt->SetPaperSizeUser( aSize );
                                     else

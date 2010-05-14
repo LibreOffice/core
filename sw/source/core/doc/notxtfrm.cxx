@@ -788,7 +788,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
 
     default:
-        if( !pNew || RES_GRFATR_BEGIN > nWhich || nWhich >= RES_GRFATR_END )
+        if ( !pNew || !isGRFATR(nWhich) )
             return;
     }
 

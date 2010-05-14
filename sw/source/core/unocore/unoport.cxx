@@ -51,15 +51,9 @@
 #include <fmtflcnt.hxx>
 #include <fmtfld.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-//#ifndef _COM_SUN_STAR_BEANS_SETPROPERTYTOLERANTFAILED_HPP_
-//#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_BEANS_GETPROPERTYTOLERANTRESULT_HPP_
-//#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
-//#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
-//#endif
+#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
+#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
+#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -92,10 +86,10 @@ SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
 
   -----------------------------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-        uno::Reference< text::XText > & rParent,
+        uno::Reference< text::XText > const& rParent,
         SwTextPortionType eType) :
     aLstnrCntnr( (text::XTextRange*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(
+    m_pPropSet(aSwMapProvider.GetPropertySet(
                 (PORTION_REDLINE_START == eType ||
                  PORTION_REDLINE_END   == eType) ?
                     PROPERTY_MAP_REDLINE_PORTION : PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
@@ -127,10 +121,11 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
 /* -----------------24.03.99 16:30-------------------
  *
  * --------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< text::XText > & rParent,
-                        SwFrmFmt& rFmt ) :
+SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+        uno::Reference< text::XText > const& rParent,
+        SwFrmFmt& rFmt ) :
     aLstnrCntnr( (text::XTextRange*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
     xParentText(rParent),
     pRubyText(0),
     pRubyStyle(0),
@@ -250,12 +245,12 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo(vo
 {
     //! PropertySetInfo for text portion extensions
     static uno::Reference< beans::XPropertySetInfo >
-            xTxtPorExtRef = SfxItemPropertySet( aSwMapProvider.GetPropertyMap(
-                    PROPERTY_MAP_TEXTPORTION_EXTENSIONS) ).getPropertySetInfo();
+            xTxtPorExtRef = aSwMapProvider.GetPropertySet(
+                    PROPERTY_MAP_TEXTPORTION_EXTENSIONS)->getPropertySetInfo();
     //! PropertySetInfo for redline portions
     static uno::Reference< beans::XPropertySetInfo >
-            xRedlPorRef = SfxItemPropertySet( aSwMapProvider.GetPropertyMap(
-                    PROPERTY_MAP_REDLINE_PORTION) ).getPropertySetInfo();
+            xRedlPorRef = aSwMapProvider.GetPropertySet(
+                    PROPERTY_MAP_REDLINE_PORTION)->getPropertySetInfo();
 
     return (PORTION_REDLINE_START == ePortionType ||
             PORTION_REDLINE_END   == ePortionType) ? xRedlPorRef : xTxtPorExtRef;
@@ -272,7 +267,7 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
-        SwXTextCursor::SetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName, aValue);
+        SwXTextCursor::SetPropertyValue(*pUnoCrsr, *m_pPropSet, rPropertyName, aValue);
     }
     else
         throw uno::RuntimeException();
@@ -282,16 +277,16 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
   -----------------------------------------------------------------------*/
 void SwXTextPortion::GetPropertyValue(
         uno::Any &rVal,
-        const SfxItemPropertyMap *pEntry,
+        const SfxItemPropertySimpleEntry& rEntry,
         SwUnoCrsr *pUnoCrsr,
         SfxItemSet *&pSet )
 {
     DBG_ASSERT( pUnoCrsr, "UNO cursor missing" );
     if (!pUnoCrsr)
         return;
-    if (pEntry && pUnoCrsr)
+    if(pUnoCrsr)
     {
-        switch(pEntry->nWID)
+        switch(rEntry.nWID)
         {
             case FN_UNO_TEXT_PORTION_TYPE:
             {
@@ -400,7 +395,7 @@ void SwXTextPortion::GetPropertyValue(
             case RES_TXTATR_CJK_RUBY:
             {
                 uno::Any* pToSet = 0;
-                switch(pEntry->nMemberId)
+                switch(rEntry.nMemberId)
                 {
                     case MID_RUBY_TEXT :    pToSet = pRubyText;     break;
                     case MID_RUBY_ADJUST :  pToSet = pRubyAdjust;   break;
@@ -414,7 +409,7 @@ void SwXTextPortion::GetPropertyValue(
             default:
                 beans::PropertyState eTemp;
                 BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                    pEntry, *pUnoCrsr, &(rVal), eTemp );
+                                    rEntry, *pUnoCrsr, &(rVal), eTemp );
                 if(!bDone)
                 {
                     if(!pSet)
@@ -426,7 +421,7 @@ void SwXTextPortion::GetPropertyValue(
                             0L);
                         SwXTextCursor::GetCrsrAttr(*pUnoCrsr, *pSet);
                     }
-                    rVal = aPropSet.getPropertyValue(*pEntry, *pSet);
+                    m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);
                 }
         }
     }
@@ -447,14 +442,13 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
         SfxItemSet *pSet = 0;
         // get startting pount fo the look-up, either the provided one or else
         // from the beginning of the map
-        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap*   pMap = m_pPropSet->getPropertyMap();
         for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
         {
-            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
-            if(pMap)
+            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName(pPropertyNames[nProp]);
+            if(pEntry)
             {
-                GetPropertyValue( pValues[nProp], pMap, pUnoCrsr, pSet );
-                pMap++;
+                GetPropertyValue( pValues[nProp], *pEntry, pUnoCrsr, pSet );
             }
             else
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
@@ -491,17 +485,16 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
     {
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const uno::Any* pValues = rValues.getConstArray();
-        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
-        OUString sTmp;
+        const SfxItemPropertyMap* pMap = m_pPropSet->getPropertyMap();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
-            if (!pMap)
+            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName(pPropertyNames[nProp]);
+            if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-            if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-            SwXTextCursor::SetPropertyValue( *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
+            SwXTextCursor::SetPropertyValue( *pUnoCrsr, *m_pPropSet, pPropertyNames[nProp], pValues[nProp]);
         }
     }
     else
@@ -560,9 +553,9 @@ uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
 
  ---------------------------------------------------------------------------*/
 
-/* disabled for #i46921#
+/* disabled for #i46921# */
 
-uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyValuesTolerant(
+uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames,
         const uno::Sequence< uno::Any >& rValues )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -578,15 +571,14 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyV
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
 
-    sal_Int32 nVals = rValues.getLength();
+    //sal_Int32 nVals = rValues.getLength();
     const uno::Any *pValue = rValues.getConstArray();
 
     sal_Int32 nFailed = 0;
-    uno::Sequence< SetPropertyTolerantFailed > aFailed( nProps );
-    SetPropertyTolerantFailed *pFailed = aFailed.getArray();
+    uno::Sequence< beans::SetPropertyTolerantFailed > aFailed( nProps );
+    beans::SetPropertyTolerantFailed *pFailed = aFailed.getArray();
 
-    // get entry to start with
-    const SfxItemPropertyMap*   pStartEntry = aPropSet.getPropertyMap();
+    const SfxItemPropertyMap* pPropMap = m_pPropSet->getPropertyMap();
 
     OUString sTmp;
     for (sal_Int32 i = 0;  i < nProps;  ++i)
@@ -595,44 +587,39 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyV
         {
             pFailed[ nFailed ].Name    = pProp[i];
 
-            const SfxItemPropertyMap *pEntry =
-                    SfxItemPropertyMap::GetByName( pStartEntry, pProp[i] );
+            const SfxItemPropertySimpleEntry* pEntry = pPropMap->getByName( pProp[i] );
             if (!pEntry)
-                pFailed[ nFailed++ ].Result  = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             else
             {
                 // set property value
                 // (compare to SwXTextPortion::setPropertyValues)
                 if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                    pFailed[ nFailed++ ].Result  = TolerantPropertySetResultType::PROPERTY_VETO;
+                    pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::PROPERTY_VETO;
                 else
                 {
                     SwXTextCursor::SetPropertyValue(
-                                *pUnoCrsr, aPropSet, sTmp, pValue[i], pEntry );
+                                *pUnoCrsr, *m_pPropSet, pProp[i], pValue[i] );
                 }
-
-                // continue with search for next property after current entry
-                // (property map and sequence of property names are sorted!)
-                pStartEntry = ++pEntry;
             }
         }
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
             DBG_ERROR( "unexpected exception catched" );
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
         {
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
         }
         catch (beans::PropertyVetoException &)
         {
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::PROPERTY_VETO;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
         }
         catch (lang::WrappedTargetException &)
         {
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::WRAPPED_TARGET;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::WRAPPED_TARGET;
         }
     }
 
@@ -641,27 +628,27 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyV
 }
 
 
-uno::Sequence< GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPropertyValuesTolerant(
+uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames )
     throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    uno::Sequence< GetDirectPropertyTolerantResult > aTmpRes(
+    uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
             GetPropertyValuesTolerant_Impl( rPropertyNames, sal_False ) );
-    const GetDirectPropertyTolerantResult *pTmpRes = aTmpRes.getConstArray();
+    const beans::GetDirectPropertyTolerantResult *pTmpRes = aTmpRes.getConstArray();
 
     // copy temporary result to final result type
     sal_Int32 nLen = aTmpRes.getLength();
-    uno::Sequence< GetPropertyTolerantResult > aRes( nLen );
-    GetPropertyTolerantResult *pRes = aRes.getArray();
+    uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
+    beans::GetPropertyTolerantResult *pRes = aRes.getArray();
     for (sal_Int32 i = 0;  i < nLen;  i++)
         *pRes++ = *pTmpRes++;
     return aRes;
 }
 
 
-uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::getDirectPropertyValuesTolerant(
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::getDirectPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames )
     throw (uno::RuntimeException)
 {
@@ -670,7 +657,7 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::getDir
 }
 
 
-uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPropertyValuesTolerant_Impl(
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         sal_Bool bDirectValuesOnly )
     throw (uno::RuntimeException)
@@ -684,91 +671,82 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
 
-    uno::Sequence< GetDirectPropertyTolerantResult > aResult( nProps );
-    GetDirectPropertyTolerantResult *pResult = aResult.getArray();
-    sal_Int32 nIdx = 0;
-
     SfxItemSet *pSet = 0;
 
-    // get entry to start with
-    const SfxItemPropertyMap*   pStartEntry = aPropSet.getPropertyMap();
+    const SfxItemPropertyMap* pPropMap = m_pPropSet->getPropertyMap();
 
+    uno::Sequence< beans::PropertyState > aPropertyStates = SwXTextCursor::GetPropertyStates(
+            *pUnoCrsr, *m_pPropSet,
+            rPropertyNames,
+            SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
+    const beans::PropertyState* pPropertyStates = aPropertyStates.getConstArray();
+
+    std::vector< beans::GetDirectPropertyTolerantResult > aResultVector;
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
-        DBG_ASSERT( nIdx < nProps, "index out ouf bounds" );
-        beans::GetDirectPropertyTolerantResult &rResult = pResult[nIdx];
-
+        beans::GetDirectPropertyTolerantResult aResult;
         try
         {
-            rResult.Name = pProp[i];
-
-            const SfxItemPropertyMap *pEntry =
-                    SfxItemPropertyMap::GetByName( pStartEntry, pProp[i] );
-            if (!pEntry)     // property available?
-                rResult.Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            aResult.Name = pProp[i];
+            if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
+            {
+                if( bDirectValuesOnly )
+                    continue;
+                else
+                    aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            }
             else
             {
-                // get property state
-                // (compare to SwXTextPortion::getPropertyState)
-                beans::PropertyState eState;
-                if (GetTextPortionType() == PORTION_RUBY_START &&
-                    !pProp[i].compareToAscii( RTL_CONSTASCII_STRINGPARAM( "Ruby" ) ))
-                    eState = beans::PropertyState_DIRECT_VALUE;
-                else
-                    eState = SwXTextCursor::GetPropertyState( *pUnoCrsr, aPropSet, pProp[i] );
-                rResult.State  = eState;
+                  const SfxItemPropertySimpleEntry* pEntry = pPropMap->getByName( pProp[i] );
+                aResult.State  = pPropertyStates[i];
 
-//                if (bDirectValuesOnly  &&  beans::PropertyState_DIRECT_VALUE != eState)
-//                    rResult.Result = TolerantPropertySetResultType::NO_DIRECT_VALUE;
-//                else
-                rResult.Result = TolerantPropertySetResultType::UNKNOWN_FAILURE;
-                if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == eState)
+                aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
+                if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == aResult.State)
                 {
                     // get property value
                     // (compare to SwXTextPortion::getPropertyValue(s))
-                    GetPropertyValue( rResult.Value, pEntry, pUnoCrsr, pSet );
-                    rResult.Result = TolerantPropertySetResultType::SUCCESS;
-
-                    nIdx++;
+                    GetPropertyValue( aResult.Value, *pEntry, pUnoCrsr, pSet );
+                    aResult.Result = beans::TolerantPropertySetResultType::SUCCESS;
+                    aResultVector.push_back( aResult );
                 }
                 // this assertion should never occur!
-                DBG_ASSERT( nIdx < 1  ||  pResult[nIdx - 1].Result != TolerantPropertySetResultType::UNKNOWN_FAILURE,
+                DBG_ASSERT( !aResultVector.size() ||  aResult.Result != beans::TolerantPropertySetResultType::UNKNOWN_FAILURE,
                         "unknown failure while retrieving property" );
 
-                // continue with search for next property after current entry
-                // (property map and sequence of property names are sorted!)
-                pStartEntry = ++pEntry;
             }
         }
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
             DBG_ERROR( "unexpected exception catched" );
-            rResult.Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
         {
-            rResult.Result = TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
+            aResult.Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
         }
         catch (beans::PropertyVetoException &)
         {
-            rResult.Result = TolerantPropertySetResultType::PROPERTY_VETO;
+            aResult.Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
         }
         catch (lang::WrappedTargetException &)
         {
-            rResult.Result = TolerantPropertySetResultType::WRAPPED_TARGET;
+            aResult.Result = beans::TolerantPropertySetResultType::WRAPPED_TARGET;
         }
     }
     delete pSet;
 
-    // resize to actually used size
-    aResult.realloc( nIdx );
+    uno::Sequence< beans::GetDirectPropertyTolerantResult > aResult( aResultVector.size() );
+    std::vector< beans::GetDirectPropertyTolerantResult >::const_iterator aIt = aResultVector.begin();
+    beans::GetDirectPropertyTolerantResult *pResult = aResult.getArray();
+    for( sal_Int32 nResult = 0; nResult < aResult.getLength(); ++nResult )
+    {
+        pResult[nResult] = *aIt;
+        ++aIt;
+    }
 
     return aResult;
 }
-
-
-*/
 
 
 /* -----------------------------02.04.01 11:44--------------------------------
@@ -840,7 +818,7 @@ beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyN
            !rPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("Ruby") ))
             eRet = beans::PropertyState_DIRECT_VALUE;
         else
-            eRet = SwXTextCursor::GetPropertyState(*pUnoCrsr, aPropSet, rPropertyName);
+            eRet = SwXTextCursor::GetPropertyState(*pUnoCrsr, *m_pPropSet, rPropertyName);
     }
     else
         throw uno::RuntimeException();
@@ -857,7 +835,7 @@ uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
-    uno::Sequence< beans::PropertyState > aRet = SwXTextCursor::GetPropertyStates(*pUnoCrsr, aPropSet, rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
+    uno::Sequence< beans::PropertyState > aRet = SwXTextCursor::GetPropertyStates(*pUnoCrsr, *m_pPropSet, rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
 
     if(GetTextPortionType() == PORTION_RUBY_START)
     {
@@ -881,7 +859,7 @@ void SwXTextPortion::setPropertyToDefault(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwXTextCursor::SetPropertyToDefault(*pUnoCrsr, aPropSet, rPropertyName);
+        SwXTextCursor::SetPropertyToDefault(*pUnoCrsr, *m_pPropSet, rPropertyName);
     }
     else
         throw uno::RuntimeException();
@@ -896,7 +874,7 @@ uno::Any SwXTextPortion::getPropertyDefault(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
-        aRet = SwXTextCursor::GetPropertyDefault(*pUnoCrsr, aPropSet, rPropertyName);
+        aRet = SwXTextCursor::GetPropertyDefault(*pUnoCrsr, *m_pPropSet, rPropertyName);
     }
     else
         throw uno::RuntimeException();
@@ -1095,7 +1073,7 @@ void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
  ---------------------------------------------------------------------------*/
 SwXRubyPortion::SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby& rAttr,
-                    uno::Reference< text::XText > & rParent,
+                    uno::Reference< text::XText > const& rParent,
                     sal_Bool bEnd   ) :
         SwXTextPortion(pPortionCrsr, rParent, bEnd ? PORTION_RUBY_END : PORTION_RUBY_START  )
 {

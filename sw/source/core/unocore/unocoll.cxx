@@ -71,7 +71,10 @@
 #include <authfld.hxx>
 #include <SwXTextDefaults.hxx>
 #include <unochart.hxx>
-#include <bookmrk.hxx>
+#include <comphelper/makesequence.hxx>
+#include <comphelper/sequence.hxx>
+#include <slist>
+#include <iterator>
 
 #include "docsh.hxx"
 
@@ -796,268 +799,289 @@ XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
         pTbl = new SwXTextTable(rFmt);
     return pTbl ;
 }
+
+
+/******************************************************************
+ *  SwXFrameEnumeration
+ ******************************************************************/
+namespace
+{
+    template<FlyCntType T> struct SwXFrameEnumeration_traits {};
+
+    template<>
+    struct SwXFrameEnumeration_traits<FLYCNTTYPE_FRM>
+    {
+        typedef SwXTextFrame core_frame_t;
+        typedef XTextFrame uno_frame_t;
+        static inline bool filter(const SwNode* const pNode) { return !pNode->IsNoTxtNode(); };
+    };
+
+    template<>
+    struct SwXFrameEnumeration_traits<FLYCNTTYPE_GRF>
+    {
+        typedef SwXTextGraphicObject core_frame_t;
+        typedef XTextContent uno_frame_t;
+        static inline bool filter(const SwNode* const pNode) { return pNode->IsGrfNode(); };
+    };
+
+    template<>
+    struct SwXFrameEnumeration_traits<FLYCNTTYPE_OLE>
+    {
+        typedef SwXTextEmbeddedObject core_frame_t;
+        typedef XEmbeddedObjectSupplier uno_frame_t;
+        static inline bool filter(const SwNode* const pNode) { return pNode->IsOLENode(); };
+    };
+
+    template<FlyCntType T>
+    class SwXFrameEnumeration : public SwSimpleEnumerationBaseClass
+    {
+        private:
+            typedef ::std::slist< Any > frmcontainer_t;
+            frmcontainer_t m_aFrames;
+        protected:
+            virtual ~SwXFrameEnumeration() {};
+        public:
+            SwXFrameEnumeration(const SwDoc* const pDoc);
+
+            //XEnumeration
+            virtual BOOL SAL_CALL hasMoreElements(void) throw( RuntimeException );
+            virtual Any SAL_CALL nextElement(void) throw( NoSuchElementException, WrappedTargetException, RuntimeException );
+
+            //XServiceInfo
+            virtual OUString SAL_CALL getImplementationName(void) throw( RuntimeException );
+            virtual BOOL SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException );
+            virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( RuntimeException );
+    };
+}
+
+template<FlyCntType T>
+SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
+    : m_aFrames()
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    const SwSpzFrmFmts* const pFmts = pDoc->GetSpzFrmFmts();
+    const USHORT nSize = pFmts->Count();
+    ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
+    for( USHORT i=0; i < nSize; ++i )
+    {
+        SwFrmFmt* pFmt = (*pFmts)[i];
+        if(pFmt->Which() != RES_FLYFRMFMT)
+            continue;
+        const SwNodeIndex* pIdx =  pFmt->GetCntnt().GetCntntIdx();
+        if(!pIdx || !pIdx->GetNodes().IsDocNodes())
+            continue;
+        const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
+        if(SwXFrameEnumeration_traits<T>::filter(pNd))
+        {
+            SwXFrame* pFrm = (SwXFrame*)SwClientIter( *pFmt ).First( TYPE( SwXFrame ));
+            if( !pFrm )
+                pFrm = new typename SwXFrameEnumeration_traits<T>::core_frame_t(*pFmt);
+            Reference< typename SwXFrameEnumeration_traits<T>::uno_frame_t > xFrm =
+                static_cast< typename SwXFrameEnumeration_traits<T>::core_frame_t* >(pFrm);
+            *pInserter++ = uno::makeAny(xFrm);
+        }
+    }
+}
+
+template<FlyCntType T>
+BOOL SwXFrameEnumeration<T>::hasMoreElements(void) throw( RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    return !m_aFrames.empty();
+}
+
+template<FlyCntType T>
+Any SwXFrameEnumeration<T>::nextElement(void) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(m_aFrames.empty())
+        throw NoSuchElementException();
+    Any aResult = *m_aFrames.begin();
+    m_aFrames.pop_front();
+    return aResult;
+}
+
+template<FlyCntType T>
+OUString SwXFrameEnumeration<T>::getImplementationName(void) throw( RuntimeException )
+{
+    return C2U("SwXFrameEnumeration");
+}
+
+template<FlyCntType T>
+BOOL SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName) throw( RuntimeException )
+{
+    return C2U("com.sun.star.container.XEnumeration") == ServiceName;
+}
+
+template<FlyCntType T>
+Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames(void) throw( RuntimeException )
+{
+    return ::comphelper::makeSequence(C2U("com.sun.star.container.XEnumeration"));
+}
+
 /******************************************************************
  *  SwXFrames
  ******************************************************************/
-/* -----------------------------06.04.00 12:41--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SwXFrames::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXFrames");
 }
-/* -----------------------------06.04.00 12:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextFrames") == rServiceName;
 }
-/* -----------------------------06.04.00 12:41--------------------------------
 
- ---------------------------------------------------------------------------*/
-Sequence< OUString > SwXFrames::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence<OUString> SwXFrames::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextFrames");
-    return aRet;
+    return ::comphelper::makeSequence(C2U("com.sun.star.text.TextFrames"));
 }
 
-/*-- 14.01.99 08:20:18---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :
     SwUnoCollection(_pDoc),
     eType(eSet)
-{
-}
+{}
 
-/*-- 14.01.99 08:20:18---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXFrames::~SwXFrames()
-{
-}
+{}
 
-/*-- 14.01.99 08:25:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Int32 SwXFrames::getCount(void) throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Int32 nRet = 0;
-    if(IsValid())
-        nRet = GetDoc()->GetFlyCount(eType);
-    else
-        throw uno::RuntimeException();
-    return nRet;
-}
-/*-- 14.01.99 08:25:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
-    throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aRet;
-    if(IsValid())
-    {
-        sal_uInt16 nCount = GetDoc()->GetFlyCount(eType);
-        if( 0 <= nIndex && nIndex < USHRT_MAX && nCount > nIndex)
-        {
-            SwFrmFmt* pFmt = GetDoc()->GetFlyNum((sal_uInt16) nIndex, eType);
-            SwXFrame* pFrm = SwXFrames::GetObject(*pFmt, eType);
-            switch(eType)
-            {
-                case FLYCNTTYPE_FRM:
-                {
-                    uno::Reference< XTextFrame >  xRef = (SwXTextFrame*)pFrm;
-                    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextFrame>*)0));
-                }
-                break;
-                case FLYCNTTYPE_GRF:
-                {
-                    Reference< XTextContent >  xRef = (SwXTextGraphicObject*)pFrm;
-                    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
-                }
-                break;
-                case FLYCNTTYPE_OLE:
-                {
-                    Reference< XEmbeddedObjectSupplier >  xRef = (SwXTextEmbeddedObject*)pFrm;
-                    aRet.setValue(&xRef, ::getCppuType((Reference<XEmbeddedObjectSupplier>*)0));
-                }
-                break;
-
-                default:
-                    ;
-            }
-        }
-        else
-            throw IndexOutOfBoundsException();
-    }
-    else
-        throw uno::RuntimeException();
-    return aRet;
-}
-/*-- 14.01.99 08:25:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Any SwXFrames::getByName(const OUString& rName)
-    throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    SwXFrame* pFrm = 0;
-    if(IsValid())
-    {
-        sal_uInt16 nCount = GetDoc()->GetFlyCount(eType);
-        for( sal_uInt16 i = 0; i < nCount; i++)
-        {
-            String aName(rName);
-            SwFrmFmt* pFmt = GetDoc()->GetFlyNum(i, eType);
-            if(aName == pFmt->GetName() )
-            {
-                pFrm = SwXFrames::GetObject(*pFmt, eType);
-                break;
-            }
-        }
-    }
-    else
-        throw uno::RuntimeException();
-    if(!pFrm)
-        throw NoSuchElementException();
-    uno::Any aRet;
-    switch(eType)
-    {
-        case FLYCNTTYPE_FRM:
-        {
-            uno::Reference< XTextFrame >  xRef = (SwXTextFrame*)pFrm;
-            aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextFrame>*)0));
-        }
-        break;
-        case FLYCNTTYPE_GRF:
-        {
-            uno::Reference< XTextContent >  xRef = (SwXTextGraphicObject*)pFrm;
-            aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
-        }
-        break;
-        case FLYCNTTYPE_OLE:
-        {
-            Reference< XEmbeddedObjectSupplier >  xRef = (SwXTextEmbeddedObject*)pFrm;
-            aRet.setValue(&xRef, ::getCppuType((Reference<XEmbeddedObjectSupplier>*)0));
-        }
-        break;
-
-        default:
-            ;
-    }
-    return aRet;
-}
-/*-- 14.01.99 08:25:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXFrames::getElementNames(void) throw( uno::RuntimeException )
+uno::Reference<container::XEnumeration> SwXFrames::createEnumeration(void) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    sal_uInt16 nCount = IsValid() ? GetDoc()->GetFlyCount(eType) : 0;
-    uno::Sequence<OUString> aSeq(nCount);
-    if(nCount)
+    switch(eType)
     {
-        OUString* pArray = aSeq.getArray();
-        for( sal_uInt16 i = 0; i < nCount; i++)
-        {
-            SwFrmFmt* pFmt = GetDoc()->GetFlyNum(i, eType);
-            pArray[i] = pFmt->GetName();
-        }
+        case FLYCNTTYPE_FRM:
+            return uno::Reference< container::XEnumeration >(
+                new SwXFrameEnumeration<FLYCNTTYPE_FRM>(GetDoc()));
+        case FLYCNTTYPE_GRF:
+            return uno::Reference< container::XEnumeration >(
+                new SwXFrameEnumeration<FLYCNTTYPE_GRF>(GetDoc()));
+        case FLYCNTTYPE_OLE:
+            return uno::Reference< container::XEnumeration >(
+                new SwXFrameEnumeration<FLYCNTTYPE_OLE>(GetDoc()));
+        default:
+            throw uno::RuntimeException();
     }
-    return aSeq;
 }
-/*-- 14.01.99 08:25:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw uno::RuntimeException();
+    const Reference<XEnumeration> xEnum = createEnumeration();
+    sal_Int32 nCount = 0;
+    while(xEnum->hasMoreElements())
+    {
+        xEnum->nextElement();
+        ++nCount;
+    }
+    return nCount;
+}
+
+uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
+    throw(IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid()) throw uno::RuntimeException();
+    if(nIndex < 0 || nIndex >= USHRT_MAX) throw IndexOutOfBoundsException();
+    const Reference<XEnumeration> xEnum = createEnumeration();
+    while(xEnum->hasMoreElements())
+    {
+        uno::Any aCurrent = xEnum->nextElement();
+        if(nIndex-- == 0)
+            return aCurrent;
+    }
+    throw IndexOutOfBoundsException();
+}
+uno::Any SwXFrames::getByName(const OUString& rName)
+    throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid()) throw uno::RuntimeException();
+    const Reference<XEnumeration> xEnum = createEnumeration();
+    while(xEnum->hasMoreElements())
+    {
+        uno::Any aCurrent = xEnum->nextElement();
+        Reference<container::XNamed> xNamed;
+        aCurrent >>= xNamed;
+        if(xNamed.is() && xNamed->getName() == rName)
+            return aCurrent;
+    }
+    throw NoSuchElementException();
+}
+
+uno::Sequence<OUString> SwXFrames::getElementNames(void) throw( uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid()) throw uno::RuntimeException();
+    const Reference<XEnumeration> xEnum = createEnumeration();
+    ::std::vector<OUString> vNames;
+    while(xEnum->hasMoreElements())
+    {
+        Reference<container::XNamed> xNamed;
+        xEnum->nextElement() >>= xNamed;
+        if(xNamed.is())
+            vNames.push_back(xNamed->getName());
+    }
+    return ::comphelper::containerToSequence(vNames);
+}
+
 sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid())
-        throw uno::RuntimeException();
-
-    BYTE nNodeType = ND_TEXTNODE;
-    switch( eType )
+    if(!IsValid()) throw uno::RuntimeException();
+    const Reference<XEnumeration> xEnum = createEnumeration();
+    while(xEnum->hasMoreElements())
     {
-        case FLYCNTTYPE_GRF:    nNodeType = ND_GRFNODE; break;
-        case FLYCNTTYPE_OLE:    nNodeType = ND_OLENODE; break;
-        default:
-            ;
+        Reference<XNamed> xNamed;
+        xEnum->nextElement() >>= xNamed;
+        if(xNamed.is() && xNamed->getName() == rName)
+            return true;
     }
-
-    return 0 != GetDoc()->FindFlyByName( rName, nNodeType );
+    return false;
 }
 
-/*-- 14.01.99 08:25:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Type aRet;
     switch(eType)
     {
         case FLYCNTTYPE_FRM:
-            aRet = ::getCppuType((uno::Reference<XTextFrame>*)0);
-
-        break;
+            return ::getCppuType((uno::Reference<XTextFrame>*)0);
         case FLYCNTTYPE_GRF:
-            aRet = ::getCppuType((uno::Reference<XTextContent>*)0);
-
-        break;
+            return ::getCppuType((uno::Reference<XTextContent>*)0);
         case FLYCNTTYPE_OLE:
-            aRet = ::getCppuType((uno::Reference<XEmbeddedObjectSupplier>*)0);
-        break;
+            return ::getCppuType((uno::Reference<XEmbeddedObjectSupplier>*)0);
         default:
-            ;
+            return uno::Type();
     }
-    return aRet;
 }
-/*-- 14.01.99 08:25:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-sal_Bool SwXFrames::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_uInt16 nRet = 0;
-    if(IsValid())
-        nRet = GetDoc()->GetFlyCount(eType);
-    else
-        throw uno::RuntimeException();
-    return nRet != 0;
+    if(IsValid()) throw uno::RuntimeException();
+    return createEnumeration()->hasMoreElements();
 }
-/*-- 14.01.99 08:25:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXFrame*   SwXFrames::GetObject( SwFrmFmt& rFmt, FlyCntType eType )
+SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
 {
-    SwXFrame* pFrm = (SwXFrame*)SwClientIter( rFmt ).
-                                    First( TYPE( SwXFrame ));
-    if( !pFrm )
+    SwXFrame* pFrm = (SwXFrame*)SwClientIter(rFmt).First(TYPE(SwXFrame));
+    if(pFrm) return pFrm;
+    switch(eType)
     {
-        switch(eType)
-        {
-            case FLYCNTTYPE_FRM:
-                pFrm = new SwXTextFrame(rFmt);
-            break;
-            case FLYCNTTYPE_GRF:
-                pFrm = new SwXTextGraphicObject(rFmt);
-            break;
-            case FLYCNTTYPE_OLE:
-                pFrm = new SwXTextEmbeddedObject(rFmt);
-            break;
-            default:
-                ;
-        }
+        case FLYCNTTYPE_FRM:
+            return new SwXTextFrame(rFmt);
+        case FLYCNTTYPE_GRF:
+            return new SwXTextGraphicObject(rFmt);
+        case FLYCNTTYPE_OLE:
+            return new SwXTextEmbeddedObject(rFmt);
+        default:
+            return NULL;
     }
-    return pFrm;
 }
 
 /******************************************************************
@@ -1626,9 +1650,9 @@ Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( Runtime
 /*-- 14.01.99 09:03:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc) :
-    SwUnoCollection(_pDoc),
-    bEndnote(bEnd)
+SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc)
+    : SwUnoCollection(_pDoc)
+    , m_bEndnote(bEnd)
 {
 }
 /*-- 14.01.99 09:03:52---------------------------------------------------
@@ -1652,7 +1676,7 @@ sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
     {
         pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
         const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-        if ( rFtn.IsEndNote() != bEndnote )
+        if ( rFtn.IsEndNote() != m_bEndnote )
             continue;
         nCount++;
     }
@@ -1676,7 +1700,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
         {
             pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( rFtn.IsEndNote() != bEndnote )
+            if ( rFtn.IsEndNote() != m_bEndnote )
                 continue;
 
             if(nCount == nIndex)

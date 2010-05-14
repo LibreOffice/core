@@ -40,9 +40,7 @@
 #include <svtools/itemiter.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/misccfg.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -53,9 +51,7 @@
 #include <svtools/zforlist.hxx>
 #endif
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 #include <fmtpdsc.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
@@ -367,8 +363,8 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark )
     if( DoesUndo() )
     {
         ClearRedo();
-        SwUndoRstAttr* pUndo = new SwUndoRstAttr( rRg, RES_CHRFMT );
-        pHst = pUndo->GetHistory();
+        SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg, RES_CHRFMT );
+        pHst = &pUndo->GetHistory();
         AppendUndo( pUndo );
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
@@ -452,11 +448,13 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     if( DoesUndo() )
     {
         ClearRedo();
-        SwUndoRstAttr* pUndo = new SwUndoRstAttr( rRg,
+        SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg,
             static_cast<USHORT>(bTxtAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL ));
         if( pAttrs && pAttrs->Count() )
+        {
             pUndo->SetAttrs( *pAttrs );
-        pHst = pUndo->GetHistory();
+        }
+        pHst = &pUndo->GetHistory();
         AppendUndo( pUndo );
     }
 
@@ -505,9 +503,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             {
                 if( IsInRange( aCharFmtSetRange, pItem->Which() ))
                 {
-
-                    if( !pTNd->pSwpHints )
-                        pTNd->pSwpHints = new SwpHints;
+                    pTNd->GetOrCreateSwpHints();
 
                     aCharSet.Put( *pItem );
 
@@ -556,14 +552,13 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
                 {
                     SwTxtAttr* pTAttr = pTNd->MakeTxtAttr( *pItem, 0,
                                                 pTNd->GetTxt().Len() );
-                    if( !pTNd->pSwpHints )
-                        pTNd->pSwpHints = new SwpHints;
-                    pTNd->pSwpHints->SwpHintsArr::Insert( pTAttr );
+                    SwpHints & rHints = pTNd->GetOrCreateSwpHints();
+                    rHints.SwpHintsArray::Insert( pTAttr );
                     if( pHst )
                     {
                         SwRegHistory aRegH( pTNd, *pTNd, pHst );
                         pTNd->ResetAttr( pItem->Which() );
-                        pHst->Add( pTAttr, aTmpEnd.GetIndex(), TRUE );
+                        pHst->Add( pTAttr, aTmpEnd.GetIndex(), true );
                     }
                     else
                         pTNd->ResetAttr( pItem->Which() );
@@ -619,22 +614,22 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         const SfxPoolItem* pItem = aIter.FirstItem();
         const USHORT nWhich = pItem->Which();
 
-        if ( (RES_CHRATR_BEGIN <= nWhich && nWhich < RES_CHRATR_END) ||
-             RES_TXTATR_CHARFMT == nWhich ||
-             RES_TXTATR_INETFMT == nWhich ||
-             RES_TXTATR_AUTOFMT == nWhich ||
-             (RES_UNKNOWNATR_BEGIN <= nWhich && nWhich < RES_UNKNOWNATR_END) )
+        if ( isCHRATR(nWhich) ||
+             (RES_TXTATR_CHARFMT == nWhich) ||
+             (RES_TXTATR_INETFMT == nWhich) ||
+             (RES_TXTATR_AUTOFMT == nWhich) ||
+             isUNKNOWNATR(nWhich) )
         {
             pCharSet  = &rChgSet;
             bCharAttr = true;
         }
 
-        if ( (RES_PARATR_BEGIN <= nWhich && nWhich < RES_PARATR_END) ||
+        if (    isPARATR(nWhich)
              // --> OD 2008-02-25 #refactorlists#
-             (RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END) ||
+             || isPARATR_LIST(nWhich)
              // <--
-             (RES_FRMATR_BEGIN <= nWhich && nWhich < RES_FRMATR_END) ||
-             (RES_GRFATR_BEGIN <= nWhich && nWhich < RES_GRFATR_END) )
+             || isFRMATR(nWhich)
+             || isGRFATR(nWhich) )
         {
             pOtherSet = &rChgSet;
             bOtherAttr = true;
@@ -672,7 +667,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         bDelete = true;
     }
 
-    SwHistory* pHistory = pUndo ? pUndo->GetHistory() : 0;
+    SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : 0;
     BOOL bRet = FALSE;
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     SwCntntNode* pNode = pStt->nNode.GetNode().GetCntntNode();
@@ -1183,13 +1178,17 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
     if( DoesUndo() )
     {
         ClearRedo();
-        _UndoFmtAttr aTmp( rFmt );
+        SwUndoFmtAttrHelper aTmp( rFmt );
         rFmt.SetFmtAttr( rSet );
-        if( aTmp.pUndo )
-            AppendUndo( aTmp.pUndo );
+        if ( aTmp.GetUndo() )
+        {
+            AppendUndo( aTmp.ReleaseUndo() );
+        }
     }
     else
+    {
         rFmt.SetFmtAttr( rSet );
+    }
     SetModified();
 }
 
@@ -1271,30 +1270,34 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         GetAttrPool().SetPoolDefaultItem( *pItem );
         aNew.Put( GetAttrPool().GetDefaultItem( nWhich ) );
 
-        if( RES_CHRATR_BEGIN <= nWhich && RES_TXTATR_END > nWhich )
+        if (isCHRATR(nWhich) || isTXTATR(nWhich))
         {
             aCallMod.Add( pDfltTxtFmtColl );
             aCallMod.Add( pDfltCharFmt );
             bCheckSdrDflt = 0 != pSdrPool;
         }
-        else if ( ( RES_PARATR_BEGIN <= nWhich && RES_PARATR_END > nWhich ) ||
+        else if ( isPARATR(nWhich) ||
                   // --> OD 2008-02-25 #refactorlists#
-                  ( RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END ) )
+                  isPARATR_LIST(nWhich) )
                   // <--
         {
             aCallMod.Add( pDfltTxtFmtColl );
             bCheckSdrDflt = 0 != pSdrPool;
         }
-        else if( RES_GRFATR_BEGIN <= nWhich && RES_GRFATR_END > nWhich )
+        else if (isGRFATR(nWhich))
+        {
             aCallMod.Add( pDfltGrfFmtColl );
-        else if( RES_FRMATR_BEGIN <= nWhich && RES_FRMATR_END > nWhich )
+        }
+        else if (isFRMATR(nWhich))
         {
             aCallMod.Add( pDfltGrfFmtColl );
             aCallMod.Add( pDfltTxtFmtColl );
             aCallMod.Add( pDfltFrmFmt );
         }
-        else if( RES_BOXATR_BEGIN <= nWhich && RES_BOXATR_END > nWhich )
+        else if (isBOXATR(nWhich))
+        {
             aCallMod.Add( pDfltFrmFmt );
+        }
 
         // copy also the defaults
         if( bCheckSdrDflt )
@@ -2332,7 +2335,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, BOOL bRight, BOOL bModulus )
         ClearRedo();
         SwUndoMoveLeftMargin* pUndo = new SwUndoMoveLeftMargin( rPam, bRight,
                                                                 bModulus );
-        pHistory = pUndo->GetHistory();
+        pHistory = &pUndo->GetHistory();
         AppendUndo( pUndo );
     }
 

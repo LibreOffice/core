@@ -368,8 +368,7 @@ void SwXReferenceMark::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 uno::Reference< beans::XPropertySetInfo > SwXReferenceMark::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo >  xRef =
-        SfxItemPropertySet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS)).
-            getPropertySetInfo();
+        aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH_EXTENSIONS)->getPropertySetInfo();
     return xRef;
 }
 /*-- 12.09.00 12:58:20---------------------------------------------------

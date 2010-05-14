@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.src,v $
- * $Revision: 1.52 $
+ * $Revision: 1.52.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,18 +135,6 @@ InfoBox MSG_INDEX_OVERFLOW
 InfoBox MSG_SCAN_NOSOURCE
 {
     Message [ en-US ] = "Source not specified." ;
-};
-String STR_NOGLOS1
-{
-    Text [ en-US ] = "AutoText for Shortcut '" ;
-};
-String STR_NOGLOS2
-{
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
-    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
-    Text [ en-US ] = "' not found." ;
 };
 String STR_NUM_LEVEL
 {

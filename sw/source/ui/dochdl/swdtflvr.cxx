@@ -166,7 +166,7 @@ extern BOOL bDDINetAttr;
 extern BOOL bExecuteDrag;
 
 
-#define OLESIZE lA4Width - 2 * lMinBorder, 6 * MM50
+#define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
 
 #define SWTRANSFER_OBJECTTYPE_DRAWMODEL         0x00000001
 #define SWTRANSFER_OBJECTTYPE_HTML              0x00000002
@@ -561,10 +561,14 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
             break;
 
         case SOT_FORMAT_STRING:
-            bOK = SetObject( pClpDocFac->GetDoc(),
+        {
+            SwDoc* pDoc = pClpDocFac->GetDoc();
+            ASSERT( pDoc, "Document not found" );
+            pDoc->SetClipBoard( true );
+            bOK = SetObject( pDoc,
                                 SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
-            break;
-
+        }
+        break;
         case SOT_FORMAT_RTF:
             bOK = SetObject( pClpDocFac->GetDoc(),
                                 SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
@@ -2893,6 +2897,15 @@ static USHORT aPasteSpecialIds[] =
     SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR,
     0
 };
+
+
+int SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
+{
+    // Plain text == unformatted
+    return SwTransferable::PasteFormat( rSh, rData, SOT_FORMAT_STRING );
+}
+
+// -----------------------------------------------------------------------
 
 int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, ULONG& rFormatUsed )
 {

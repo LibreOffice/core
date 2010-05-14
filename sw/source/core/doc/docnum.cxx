@@ -2094,6 +2094,10 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
     }
     else
     {
+        //Impossible to move to negative index
+        if( ULONG(abs( nOffset )) > nStIdx)
+            return FALSE;
+
         nInEndIdx = nStIdx - 1;
         nStIdx += nOffset;
     }
