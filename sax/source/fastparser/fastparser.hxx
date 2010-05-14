@@ -61,12 +61,27 @@ typedef ::std::hash_map< ::rtl::OUString, sal_Int32,
 
 // --------------------------------------------------------------------
 
+struct ParserData
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler > mxDocumentHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >    mxTokenHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >        mxErrorHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >      mxEntityResolver;
+    ::com::sun::star::lang::Locale          maLocale;
+
+    ParserData();
+    ~ParserData();
+};
+
+// --------------------------------------------------------------------
+
 // Entity binds all information needed for a single file
-struct Entity
+struct Entity : public ParserData
 {
     ::com::sun::star::xml::sax::InputSource maStructSource;
     XML_Parser                              mpParser;
     ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
+    ::rtl::Reference< FastAttributeList >   mxAttributes;
 
     // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
     // therefore the exception must be saved somewhere.
@@ -74,6 +89,9 @@ struct Entity
 
     ::std::stack< SaxContextImplPtr >       maContextStack;
     ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
+
+    explicit Entity( const ParserData& rData );
+    ~Entity();
 };
 
 // --------------------------------------------------------------------
@@ -134,18 +152,11 @@ private:
 private:
     ::osl::Mutex maMutex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler > mxDocumentHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >    mxTokenHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >        mxErrorHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >      mxEntityResolver;
-
     ::rtl::Reference< FastLocatorImpl >     mxDocumentLocator;
-    ::rtl::Reference< FastAttributeList >   mxAttributes;
-    ::com::sun::star::lang::Locale          maLocale;
     NamespaceMap                            maNamespaceMap;
 
-    // External entity stack
-    ::std::stack< Entity > maEntities;
+    ParserData maData;                      /// Cached parser configuration for next call of parseStream().
+    ::std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
 };
 
 }
