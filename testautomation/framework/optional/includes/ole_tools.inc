@@ -71,7 +71,7 @@ sub hOleSelektieren ( xStart%, yStart%, xEnde%, yEnde% )
         DocumentMath.MouseDown xStart%, yStart%
         DocumentMath.MouseMove xEnde%, yEnde%
         DocumentMath.MouseUp xEnde%, yEnde%
-    case "GLOBALDOC":Kontext "DocumentMasterDoc"
+    case "MASTERDOCUMENT":Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDown xStart%, yStart%
         DocumentMasterDoc.MouseMove xEnde%, yEnde%
         DocumentMasterDoc.MouseUp xEnde%, yEnde%
@@ -82,10 +82,12 @@ end sub
 
 sub hSetToStandardView ( DieApp$ )
     select case DieApp$
-    case "WRITER"      : gApplication = "WRITER"
+    case "WRITER"
+    gApplication = "WRITER"
         Call hNewDocument
         Kontext "DocumentWriter"
-    case "GLOBALDOC"   : gApplication = "GLOBALDOC"
+    case "MASTERDOCUMENT"
+    gApplication = "MASTERDOCUMENT"
         Call hNewDocument
         Kontext "DocumentMasterDoc"
     end select
@@ -108,31 +110,38 @@ sub SendEscape(optional iTimes as Integer)
     '///+press [ESCAPE]
     printlog( "    - send <ESCAPE> keystroke to document" )
     select case gApplication
-    case "WRITER"    : Kontext "DocumentWriter"
+    case "WRITER"
+    Kontext "DocumentWriter"
         for i = 1 to iTimes
             sleep( ICWAIT )
             DocumentWriter.TypeKeys( "<ESCAPE>" , 1 , TRUE )
         next i
-    case "CALC"      : Kontext "DocumentCalc"
+    case "CALC"
+    Kontext "DocumentCalc"
         for i = 1 to iTimes
             sleep( ICWAIT )
             DocumentCalc.TypeKeys( "<ESCAPE>" , 1 , TRUE )
         next i
-    case "GLOBALDOC" : Kontext "DocumentMasterDoc"
+    case "MASTERDOCUMENT"
+    Kontext "DocumentMasterDoc"
         for i = 1 to iTimes
             sleep( ICWAIT )
             DocumentMasterDoc.TypeKeys( "<ESCAPE>" , 1 , TRUE )
         next i
-    case "DRAW"      : Kontext "DocumentDraw"
+    case "DRAW"
+    Kontext "DocumentDraw"
         for i = 1 to iTimes
             sleep( ICWAIT )
             DocumentDraw.TypeKeys( "<ESCAPE>" , 1 , TRUE )
         next i
-    case "IMPRESS"   : Kontext "DocumentImpress"
+    case "IMPRESS"
+    Kontext "DocumentImpress"
         for i = 1 to iTimes
             sleep( ICWAIT )
             DocumentImpress.TypeKeys( "<ESCAPE>" , 1 , TRUE )
         next i
+    case else
+    warnlog( "Invalid gApplication: " & gApplication )
     end select
 end sub
 
@@ -141,13 +150,13 @@ end sub
 sub DisableNavigator()
     printlog( "    - disable the navigator in globaldoc/writer" )
     select case gApplication
-    case "GLOBALDOC" : Kontext "NavigatorGlobalDoc"
+    case "MASTERDOCUMENT" : Kontext "NavigatorGlobalDoc"
         if NavigatorGlobalDoc.Exists() then
-            EditNavigator
+            ViewNavigator
         endif
     case "WRITER"    : Kontext "NavigatorWriter"
         if NavigatorWriter.Exists() then
-            EditNavigator
+            ViewNavigator
         endif
     end select
     sleep( 1)
@@ -178,12 +187,20 @@ function getExtension( optional sExtension as string ) as string
     qaerrorlog( "getExtension is outdated. Use hGetSuffix( ... ) instead" )
     printlog("l1_ole_ttols::getExtension:: - define the expected file extension" )
     select case gApplication
-    case "WRITER"       : sExtension = ".sxw"
-    case "DRAW"         : sExtension = ".sxd"
-    case "IMPRESS"      : sExtension = ".sxi"
-    case "CALC"         : sExtension = ".sxc"
-    case "MATH"         : sExtension = ".sxm"
-    case "GLOBALDOC"    : sExtension = ".sgl"
+    case "WRITER"
+    sExtension = ".sxw"
+    case "DRAW"
+    sExtension = ".sxd"
+    case "IMPRESS"
+    sExtension = ".sxi"
+    case "CALC"
+    sExtension = ".sxc"
+    case "MATH"
+    sExtension = ".sxm"
+    case "MASTERDOCUMENT"
+    sExtension = ".sgl"
+    case else
+    warnlog( "Invalid gApplication: " & gApplication )
     end select
     getExtension = sExtension
 end function
@@ -195,7 +212,8 @@ sub OLESetFocus()
     const ICWAIT as Integer = 10
     PrintLog "    - set focus to OLE object (edit mode)"
     select case gApplication
-    case "WRITER" :    printlog "      Select and deselect " + gApplication
+    case "WRITER"
+    printlog "      Select and deselect " + gApplication
         Kontext "DocumentWriter"
         DocumentWriter.TypeKeys("<F6>"           , 4 , TRUE )
         DocumentWriter.TypeKeys("<DOWN>"         , 3 , TRUE )
@@ -206,11 +224,13 @@ sub OLESetFocus()
         'DocumentWriter.MouseDoubleClick ( 50, 50 )
         sleep( ICWAIT )
         call SendEscape( 3 ) '(to close the float as well)
-    case "IMPRESS"   : printlog "      Select and deselect " + gApplication
+    case "IMPRESS"
+    printlog "      Select and deselect " + gApplication
         Kontext "DocumentImpress"
         DocumentImpress.MouseDoubleClick ( 50, 50 )
         sleep( ICWAIT )
-    case "CALC"      : printlog "      Select and deselect " + gApplication
+    case "CALC"
+    printlog "      Select and deselect " + gApplication
         Kontext "DocumentCalc"
         DocumentCalc.TypeKeys( "<F6>"            , 5 , TRUE )
         DocumentCalc.TypeKeys( "<DOWN>"          , 3 , TRUE )
@@ -220,12 +240,16 @@ sub OLESetFocus()
         'DocumentCalc.MouseDoubleClick ( 20, 20 )
         sleep( ICWAIT )
         call SendEscape( 3 ) '(to close the float as well)
-    case "GLOBALDOC" : printlog "      Select and deselect " + gApplication
+    case "MASTERDOCUMENT"
+    printlog "      Select and deselect " + gApplication
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDown( 50 , 50 , 1 )
         DocumentMasterDoc.MouseUp( 50 , 50 , 1 )
         EditObjectEdit
         sleep( ICWAIT )
+            case else
+    warnlog( "Invalid gApplication: " & gApplication )
+
     end select
 end sub
 
@@ -237,7 +261,8 @@ sub OLESetFocus2()
     const ICWAIT as Integer = 1
     PrintLog "    - set focus to OLE object (edit mode)"
     select case gApplication
-    case "WRITER"  : Kontext "DocumentWriter"
+    case "WRITER"
+    Kontext "DocumentWriter"
         try
             FormatObject
             Kontext ' This is by intention, do not change!
@@ -252,7 +277,8 @@ sub OLESetFocus2()
         sleep( ICWAIT * 2 )
         gMouseClick ( 5 , 5 ) 'out of edit mode
         gMouseClick ( 5 , 5 ) 'remove focus
-    case "DRAW"    : Kontext "DocumentDraw"
+    case "DRAW"
+    Kontext "DocumentDraw"
         if OLEApp = "MATH" then
             DocumentDraw.MouseDoubleClick ( 45, 46 )
         else
@@ -260,14 +286,16 @@ sub OLESetFocus2()
         end if
         sleep( ICWAIT * 5 )
         gMouseClick ( 1 , 1 )
-    case "IMPRESS"  : Kontext "DocumentImpress"
+    case "IMPRESS"
+    Kontext "DocumentImpress"
         printlog( "    - using accessibility shortcuts for objecthandling" )
         printlog( "      (select, activate and release object)" )
         DocumentImpress.TypeKeys( "<F6>" , 5 , TRUE )
         DocumentImpress.TypeKeys( "<TAB><RETURN>" )
         sleep( ICWAIT * 2 )
         call SendEscape()
-    case "CALC"     : Kontext "DocumentCalc"
+    case "CALC"
+    Kontext "DocumentCalc"
         printlog( "    - using accessibility shortcuts for objecthandling" )
         printlog( "      (select, activate and release object)" )
         DocumentCalc.TypeKeys( "<F6>"          , 5 , TRUE )
@@ -277,7 +305,8 @@ sub OLESetFocus2()
         DocumentCalc.TypeKeys( "<RETURN>"      , 1 , TRUE )
         sleep( ICWAIT * 2 )
         call sendEscape()
-    case "GLOBALDOC": Kontext "DocumentMasterDoc"
+    case "MASTERDOCUMENT"
+    Kontext "DocumentMasterDoc"
         try
             FormatObject
             sleep( ICWAIT )
@@ -293,6 +322,9 @@ sub OLESetFocus2()
         Sleep( ICWAIT )
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDoubleClick ( 1 , 1 )
+    case else
+    warnlog( "Invalid gApplication: " & gApplication )
+        
     end select
 end sub
 
@@ -304,7 +336,8 @@ sub OLESetFocus3()
     const ICWAIT as Integer = 1
     printlog( "    - set focus to OLE object (edit mode)" )
     select case gApplication
-    case "WRITER" : Kontext "DocumentWriter"
+    case "WRITER"
+    Kontext "DocumentWriter"
         try
             FormatObject
             sleep( ICWAIT )
@@ -319,18 +352,21 @@ sub OLESetFocus3()
         endcatch
         sleep( ICWAIT * 5 )
         gMouseClick ( 1, 1 )
-    case "DRAW" : Kontext "DocumentDraw"
+    case "DRAW"
+    Kontext "DocumentDraw"
         DocumentDraw.TypeKeys ("<Tab>")
         DocumentDraw.MouseDoubleClick ( 50, 50 )
         sleep( ICWAIT * 5 )
         gMouseClick ( 1, 1 )
-    case "IMPRESS" : Kontext "DocumentImpress"
+    case "IMPRESS"
+    Kontext "DocumentImpress"
         printlog( "    - Using accessibility-shortcuts to manipulate object")
         DocumentImpress.TypeKeys( "<TAB>" )
         sleep( ICWAIT )
         DocumentImpress.TypeKeys( "<SHIFT RETURN>" )
         call SendEscape( 3 )
-    case "GLOBALDOC" : Kontext "DocumentMasterDoc"
+    case "MASTERDOCUMENT"
+    Kontext "DocumentMasterDoc"
         try
             FormatObject
             sleep( ICWAIT )
@@ -345,6 +381,9 @@ sub OLESetFocus3()
         endcatch
         sleep( ICWAIT * 5 )
         call SendEscape( 2 )
+    case else
+    warnlog( "Invalid gApplication: " & gApplication )
+        
     end select
 end sub
 
@@ -355,7 +394,7 @@ sub OLERemoveFocus
     printlog( "Remove focus from OLE object for " & gApplication )
     select case gApplication
     case "WRITER"    : call SendEscape( 2 )
-    case "GLOBALDOC" : Kontext "DocumentMasterDoc"
+    case "MASTERDOCUMENT" : Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDoubleClick ( 1, 1 )
     case "IMPRESS"   : gMouseClick ( 5, 99 )
     case "CALC"      : Kontext "DocumentCalc"

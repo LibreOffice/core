@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : selecting charts
 '*
@@ -63,7 +63,7 @@ function fSelectChartByNumber ( iObjectPosition as INTEGER )
         bNavigatorWasVisible = TRUE
     else
         '/// Invoke navigator if not visible
-        EditNavigator
+        ViewNavigator
     end if
     
     try 
@@ -92,7 +92,7 @@ function fSelectChartByNumber ( iObjectPosition as INTEGER )
     if bNavigatorWasVisible = TRUE then
         printlog "Leaving navigator open as initially found"
     else
-        EditNavigator
+        ViewNavigator
         printlog "Closing navigator as initially found"
     end if
 end function

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Chart resource test - Menu FORMAT
 '*
@@ -60,23 +60,22 @@ testcase tFormatObjectProperties
     Dim iCountTabPg as integer
     
     iCountTabPg = 0
-    
-'///<u><b>Dialog test after invoking Format::Object Properties...</b></u>
-    '/// Load simple chart document
+        
+    printlog "Load simple chart document"
     if fLoadVerySimpleChartAndSaveLocal() > 0 then
         warnlog "Loading test document seems to have failed -> Check this out!"
         goto endsub
-    endif
-    '/// Select chart using navigator
-    if fSelectFirstOLE = 0 then
-        '/// Edit / Object / Edit
-        EditObjectEdit
-        '/// Move to third object in Chart using TAB key (data series)
+    endif    
+    printlog "Select chart using navigator"
+    if fSelectFirstOLE = 0 then        
+        printlog "Edit / Object / Edit"
+        EditObjectEdit        
+        printlog "Move to third object in Chart using TAB key (data series)"
         Kontext "DocumentChart"
-        DocumentChart.TypeKeys "<TAB>" , 3
-        '/// Invoke Format::ObjectProperties
-        FormatObjectProperties
-        '/// Select tab page Aligment
+        DocumentChart.TypeKeys "<TAB>" , 3        
+        printlog "Invoke Format::ObjectProperties"
+        FormatObjectProperties        
+        printlog "Select tab page Aligment"
         Kontext
         iCountTabPg = Active.GetPageCount
         if iCountTabPg <> 7 then
@@ -786,179 +785,239 @@ endcase
 '-------------------------------------------------------------------------------
 '
 testcase tFormatAxisXAxis
-'///<u><b>Dialog test after invoking Format::Axis::X Axis</b></u>
-
-
-   '/// Load simple chart document
-   if fLoadVerySimpleChartAndSaveLocal() > 0 then
-       warnlog "Loading test document seems to have failed -> Check this out!"
-       goto endsub
-   endif
-   '/// Select chart using navigator
-   call fSelectFirstOLE
-   '/// Edit / Object / Edit
-   EditObjectEdit
-   sleep(1)
-   '/// Format / Chart Type
-   if fInvokeChartTypeDialog() > 0 then
-       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Change Chart type to XY (to obtain more tabpages)
-   if fSetChartType( "xy" ) > 0 then
-       warnlog "Something went wrong setting chart type to XY -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Close Chart Type dialog
-   if fCloseChartTypeDialogOK() > 0 then
-       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   
-   '/// Invoke Format::Axis::X Axis
-   FormatAxisXAxis
-   '/// Goto tab page Line
-   Kontext
-   Active.SetPage TabFormatChartLine
-   '/// Check if tab page Line exists
-   Kontext "TabFormatChartLine"
-   call DialogTest ( TabFormatChartLine )
-   
-   '/// Goto tab page Characters
-   Kontext
-   Active.SetPage TabFont
-   '/// Check if tab page Characters exists
-   Kontext "TabFont"
-   call DialogTest ( TabFont )
-   
-   '/// Goto tab page Font Effects
-   Kontext
-   Active.SetPage TabFontEffects
-   '/// Check if tab page Font Effects exists
-   Kontext "TabFontEffects"
-   call DialogTest ( TabFontEffects )
-   
-   '/// Goto tab page Label
-   Kontext
-   Active.SetPage TabChartAxisLabel
-   '/// Check if tab page Label exists
-   Kontext "TabChartAxisLabel"
-   call DialogTest ( TabChartAxisLabel )
-   
-   '/// Goto tab page Scale
-   Kontext
-   Active.SetPage TabChartAxisScale
-   '/// Check if tab page Scale exists
-   Kontext "TabChartAxisScale"
-   call DialogTest ( TabChartAxisScale )
-   
-   '/// Goto tab page Numbers
-   Kontext
-   Active.SetPage TabChartAxisNumbers
-   '/// Check if tab page Numbers exists
-   Kontext "TabChartAxisNumbers"
-   call DialogTest ( TabChartAxisNumbers )
-   
-   '/// Close dialog
-   TabChartAxisNumbers.Cancel
-   '/// Close document
-   Kontext "DocumentCalc"
-   DocumentCalc.TypeKeys "<Escape>"
-   Call hCloseDocument
-
-
+    Dim iCountTabPg as integer
+    iCountTabPg = 0
+    
+    printlog "Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif   
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE   
+    printlog "Edit / Object / Edit"
+    EditObjectEdit
+    sleep(1)   
+    printlog "Format / Chart Type"
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Change Chart type to XY (to obtain more tabpages)"
+    if fSetChartType( "xy" ) > 0 then
+        warnlog "Something went wrong setting chart type to XY -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Close Chart Type dialog"
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif       
+    printlog "Invoke Format::Axis::X Axis"
+    FormatAxisXAxis    
+    printlog "Goto tab page Line"
+    Kontext
+    iCountTabPg = Active.GetPageCount
+    if iCountTabPg <> 7 then 
+        warnlog "Format::Axis::XAxis should have 7 tab pages but has " & iCountTabPg & "."            
+    else             
+        printlog "Format::Axis::XAxis has 7 tab pages."
+    endif    
+    Active.SetPage TabFormatChartLine    
+    printlog "Check if tab page Line exists"
+    Kontext "TabFormatChartLine"
+    call DialogTest ( TabFormatChartLine )       
+    printlog "Goto tab page Characters"
+    Kontext
+    Active.SetPage TabFont   
+    printlog "Check if tab page Characters exists"
+    Kontext "TabFont"
+    call DialogTest ( TabFont )     
+    printlog "Goto tab page Font Effects"
+    Kontext
+    Active.SetPage TabFontEffects   
+    printlog "Check if tab page Font Effects exists"
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )       
+    printlog "Goto tab page Label"
+    Kontext
+    Active.SetPage TabChartAxisLabel   
+    printlog "Check if tab page Label exists"
+    Kontext "TabChartAxisLabel"
+    call DialogTest ( TabChartAxisLabel )      
+    printlog "Goto tab page Scale"
+    Kontext
+    Active.SetPage TabChartAxisScale    
+    printlog "Check if tab page Scale exists"
+    Kontext "TabChartAxisScale"
+    call DialogTest ( TabChartAxisScale )   
+    Kontext    
+    Active.SetPage TabChartAxisPositioning
+    printlog "Check if tab page Positiong exists"
+    Kontext "TabChartAxisPositioning"
+    call DialogTest ( TabChartAxisPositioning )      
+    printlog "Goto tab page Numbers"
+    Kontext
+    Active.SetPage TabChartAxisNumbers   
+    printlog "Check if tab page Numbers exists"
+    Kontext "TabChartAxisNumbers"
+    call DialogTest ( TabChartAxisNumbers )   
+    printlog "Close dialog with cancel"
+    TabChartAxisNumbers.Cancel   
+    printlog "File / Close"
+    Call hCloseDocument
 endcase
+'
 '-------------------------------------------------------------
+'
 testcase tFormatAxisYAxis
-'///<u><b>Dialog test after invoking Format::Axis::Y Axis</b></u>
+    Dim iCountTabPg as integer
+    Dim iCrossingEntries as integer
+    Dim iCategoryEntries as integer
+    Dim iPlaceLabels as integer
+    Dim iPlaceMarks as integer
+    
+    iCountTabPg = 0
+    iCrossingEntries = 0
+    iCategoryEntries = 0   
+    iPlaceLabels = 0 
+    iPlaceMarks = 0
 
-
-   '/// Load simple chart document
-   if fLoadVerySimpleChartAndSaveLocal() > 0 then
-       warnlog "Loading test document seems to have failed -> Check this out!"
-       goto endsub
-   endif
-   '/// Select chart using navigator
-   call fSelectFirstOLE
-   '/// Edit / Object / Edit
-   EditObjectEdit
-   sleep(1)
-   '/// Format / Chart Type
-   if fInvokeChartTypeDialog() > 0 then
-       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Change Chart type to BAR (to obtain more tabpages)
-   if fSetChartType( "bar" ) > 0 then
-       warnlog "Something went wrong setting chart type to BAR -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Close Chart Type dialog
-   if fCloseChartTypeDialogOK() > 0 then
-       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   
-   '/// Invoke Format::Axis::Y Axis
-   FormatAxisYAxis
-   '/// Goto tab page Characters
-   Kontext
-   Active.SetPage TabFont
-   '/// Check if tab page Characters exists
-   Kontext "TabFont"
-   call DialogTest ( TabFont )
-   
-   '/// Goto tab page Line
-   Kontext
-   Active.SetPage TabFormatChartLine
-   '/// Check if tab page Line exists
-   Kontext "TabFormatChartLine"
-   call DialogTest ( TabFormatChartLine )
-   
-   '/// Goto tab page Label
-   Kontext
-   Active.SetPage TabChartAxisLabel
-   '/// Check if tab page Label exists
-   Kontext "TabChartAxisLabel"
-   call DialogTest ( TabChartAxisLabel )
-   
-   '/// Goto tab page Font Effects
-   Kontext
-   Active.SetPage TabFontEffects
-   '/// Check if tab page Font Effects exists
-   Kontext "TabFontEffects"
-   call DialogTest ( TabFontEffects )
-   
-   '/// Goto tab page Numbers
-   Kontext
-   Active.SetPage TabChartAxisNumbers
-   '/// Check if tab page Numbers exists
-   Kontext "TabChartAxisNumbers"
-   call DialogTest ( TabChartAxisNumbers )
-   
-   '/// Goto tab page Scale
-   Kontext
-   Active.SetPage TabChartAxisScale
-   '/// Check if tab page Scale exists
-   Kontext "TabChartAxisScale"
-   call DialogTest ( TabChartAxisScale )
-   
-   '/// Close dialog
-   TabChartAxisScale.Cancel
-   '/// Close document
-   Kontext "DocumentCalc"
-   DocumentCalc.TypeKeys "<Escape>"
-   Call hCloseDocument
-
-
+    printlog "Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif   
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE   
+    printlog "Edit / Object / Edit"
+    EditObjectEdit
+    sleep(1)   
+    printlog "Format / Chart Type"
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif   
+    printlog "Change Chart type to BAR (to obtain more tabpages)"
+    if fSetChartType( "bar" ) > 0 then
+        warnlog "Something went wrong setting chart type to BAR -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif   
+    printlog "Close Chart Type dialog"
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif      
+    printlog "Invoke Format::Axis::Y Axis"
+    FormatAxisYAxis   
+    Kontext
+    iCountTabPg = Active.GetPageCount
+    if iCountTabPg <> 7 then 
+        warnlog "Format::Axis::YAxis should have 7 tab pages but has " & iCountTabPg & "."            
+    else             
+        printlog "Format::Axis::YAxis has 7 tab pages."
+    endif          
+    printlog "Goto tab page Characters"
+    Active.SetPage TabFont    
+    printlog "Check if tab page Characters exists"
+    Kontext "TabFont"
+    call DialogTest ( TabFont )       
+    printlog "Goto tab page Line"
+    Kontext
+    Active.SetPage TabFormatChartLine    
+    printlog "Check if tab page Line exists"
+    Kontext "TabFormatChartLine"
+    call DialogTest ( TabFormatChartLine )       
+    printlog "Goto tab page Label"
+    Kontext
+    Active.SetPage TabChartAxisLabel   
+    printlog "Check if tab page Label exists"
+    Kontext "TabChartAxisLabel"
+    call DialogTest ( TabChartAxisLabel )       
+    printlog "Goto tab page Font Effects"
+    Kontext
+    Active.SetPage TabFontEffects    
+    printlog "Check if tab page Font Effects exists"
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )       
+    printlog "Goto tab page Numbers"
+    Kontext
+    Active.SetPage TabChartAxisNumbers    
+    printlog "Check if tab page Numbers exists"
+    Kontext "TabChartAxisNumbers"
+    call DialogTest ( TabChartAxisNumbers )       
+    printlog "Goto tab page Scale"
+    Kontext
+    Active.SetPage TabChartAxisScale    
+    printlog "Check if tab page Scale exists"
+    Kontext "TabChartAxisScale"
+    call DialogTest ( TabChartAxisScale )
+    printlog "Goto tab page Positioning"    
+    Kontext
+    Active.SetPage TabChartAxisPositioning
+    printlog "Check if tab page Positioning exists"
+    Kontext "TabChartAxisPositioning"
+    call DialogTest ( TabChartAxisPositioning )
+    iCrossingEntries = CrossOtherAxisAt.GetItemCount
+    if iCrossingEntries <> 3 then
+        warnlog "'Cross other axis at'-listbox sould have three entries but has " & iCrossingEntries & "."
+    else    
+        printlog "'Cross other axis at'-listbox has three entries."
+    endif    
+    printlog "Check that the first entry in 'Cross other axis at'-listbox is selected."
+    if CrossOtherAxisAt.GetSelIndex <> 1 OR AxisAtCategory.IsVisible then
+        warnlog "The first entry in 'Cross other axis at'-listbox should be selected and the 'Category'-combobox should not be visible."
+    else
+        printlog "Select the third entry (Category) in 'Cross other axis at'-listbox"
+        CrossOtherAxisAt.Select(3)
+        if AxisAtCategory.IsVisible then            
+            printlog "The 'Category'-combobox is visible."
+            iCategoryEntries =  AxisAtCategory.GetItemCount
+            if iCategoryEntries = 2 then
+                printlog "The 'Category'-combobox should have two entries."
+            else
+                warnlog "The 'Category'-combobox should have two entries but has " & iCategoryEntries & "."
+            endif
+        endif
+    endif
+    iPlaceLabels = PlaceLabels.GetItemCount
+    if iPlaceLabels <> 4 then
+        warnlog "'Place labels'-listbox should have four entries but has " & iPlaceLabels & "."
+    else
+        printlog "'Place labels'-listbox has four entries."
+        if PlaceMarks.IsEnabled then
+            warnlog "'Place marks'-listbox should only enabled if 'Place labels'-listbox has been set to 4th entry."
+        else
+            printlog "Select fourth entry in 'Place labels'-listbox."
+            PlaceLabels.Select(4)
+            if PlaceMarks.IsEnabled then
+                printlog "'Place marks'-listbox is enabled if fourth entry of 'Place labels'-listbox has been selected."
+                iPlaceMarks = PlaceMarks.GetItemCount
+                if iPlaceMarks = 3 then
+                    printlog "'Place marks'-listbox has three entries."
+                else
+                    warnlog "'Place marks'-listbox has not three entries. It has " & iPlaceMarks & " entries."
+                endif
+            else
+                warnlog "'Place marks'-listbox is not enabled if fourth entry of 'Place labels'-listbox has been selected." 
+            endif
+        endif        
+    endif
+    Kontext "TabChartAxisPositioning"
+    printlog "Leave dialog with Cancel."
+    TabChartAxisPositioning.Cancel    
+    printlog "File / Close"   
+    Call hCloseDocument
 endcase
-  '-------------------------------------------------------------
+'
+'-------------------------------------------------------------
+'
 testcase tFormatAxisZAxis
 '///<u><b>Dialog test after invoking Format::Axis::Z Axis</b></u>
 
@@ -1037,199 +1096,203 @@ testcase tFormatAxisZAxis
 
 
 endcase
+'
 '-------------------------------------------------------------
+'
 testcase tFormatAxisSecondaryXAxis
-'///<u><b>Dialog test after invoking Format::Axis::Secondary X Axis</b></u>
+    Dim iCountTabPg as integer
+    iCountTabPg = 0
 
-
-   '/// Load simple chart document
-   if fLoadVerySimpleChartAndSaveLocal() > 0 then
-       warnlog "Loading test document seems to have failed -> Check this out!"
-       goto endsub
-   endif
-   '/// Select chart using navigator
-   call fSelectFirstOLE
-   '/// Edit / Object / Edit
-   EditObjectEdit
-   sleep(1)
-   '/// Format / Chart Type
-   if fInvokeChartTypeDialog() > 0 then
-       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Change Chart type to XY (to obtain more tabpages)
-   if fSetChartType( "xy" ) > 0 then
-       warnlog "Something went wrong setting chart type to XY -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Close Chart Type dialog
-   if fCloseChartTypeDialogOK() > 0 then
-       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Invoke Insert::Axes
-   if fInvokeAxesDialog() > 0 then
-       warnlog "Something went wrong trying to invoke the Axes dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   Kontext "InsertAxesDialog"
-   '/// Check Secondary X Axis Title
-   if fSetAxis( SecondaryXAxis , TRUE ) > 0 then
-       warnlog "Something went wrong enabling the Secondary X Axis  -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Close Axes dialog
-   if fCloseAxesDialogOK() > 0 then
-       warnlog "Something went wrong trying to close the Axes dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   
-   '/// Invoke Format::Axis::Secondary X Axis
-   FormatAxisSecondaryXAxis
-   '/// Goto tab page Characters
-   Kontext
-   Active.SetPage TabFont
-   '/// Check if tab page Characters exists
-   Kontext "TabFont"
-   call DialogTest ( TabFont )
-   
-   '/// Goto tab page Font Effects
-   Kontext
-   Active.SetPage TabFontEffects
-   '/// Check if tab page Font Effects exists
-   Kontext "TabFontEffects"
-   call DialogTest ( TabFontEffects )
-   
-   '/// Goto tab page Numbers
-   Kontext
-   Active.SetPage TabChartAxisNumbers
-   '/// Check if tab page Numbers exists
-   Kontext "TabChartAxisNumbers"
-   call DialogTest ( TabChartAxisNumbers )
-   
-   '/// Goto tab page Line
-   Kontext
-   Active.SetPage TabFormatChartLine
-   '/// Check if tab page Line exists
-   Kontext "TabFormatChartLine"
-   call DialogTest ( TabFormatChartLine )
-   
-   '/// Goto tab page Scale
-   Kontext
-   Active.SetPage TabChartAxisScale
-   '/// Check if tab page Scale exists
-   Kontext "TabChartAxisScale"
-   call DialogTest ( TabChartAxisScale )
-   
-   '/// Goto tab page Label
-   Kontext
-   Active.SetPage TabChartAxisLabel
-   '/// Check if tab page Label exists
-   Kontext "TabChartAxisLabel"
-   call DialogTest ( TabChartAxisLabel )
-   
-   '/// Close dialog
-   TabChartAxisLabel.Cancel
-   '/// Close document
-   Kontext "DocumentCalc"
-   DocumentCalc.TypeKeys "<Escape>"
-   Call hCloseDocument
-
-
+    printlog "Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif    
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE   
+    printlog "Edit / Object / Edit"
+    EditObjectEdit
+    sleep(1)    
+    printlog "Format / Chart Type"
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Change Chart type to XY (to obtain more tabpages)"
+    if fSetChartType( "xy" ) > 0 then
+        warnlog "Something went wrong setting chart type to XY -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Close Chart Type dialog"
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Invoke Insert::Axes"
+    if fInvokeAxesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Axes dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    Kontext "InsertAxesDialog"    
+    printlog "Check Secondary X Axis Title"
+    if fSetAxis( SecondaryXAxis , TRUE ) > 0 then
+        warnlog "Something went wrong enabling the Secondary X Axis  -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Close Axes dialog"
+    if fCloseAxesDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Axes dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif       
+    printlog "Invoke Format::Axis::Secondary X Axis"
+    FormatAxisSecondaryXAxis        
+    printlog "Goto tab page Line"
+    Kontext
+    iCountTabPg = Active.GetPageCount
+    if iCountTabPg <> 7 then 
+        warnlog "Format::Axis::XAxis should have 7 tab pages but has " & iCountTabPg & "."            
+    else             
+        printlog "Format::Axis::XAxis has 7 tab pages."
+    endif    
+    Active.SetPage TabFormatChartLine    
+    printlog "Check if tab page Line exists"
+    Kontext "TabFormatChartLine"
+    call DialogTest ( TabFormatChartLine )       
+    printlog "Goto tab page Characters"
+    Kontext
+    Active.SetPage TabFont   
+    printlog "Check if tab page Characters exists"
+    Kontext "TabFont"
+    call DialogTest ( TabFont )     
+    printlog "Goto tab page Font Effects"
+    Kontext
+    Active.SetPage TabFontEffects   
+    printlog "Check if tab page Font Effects exists"
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )       
+    printlog "Goto tab page Label"
+    Kontext
+    Active.SetPage TabChartAxisLabel   
+    printlog "Check if tab page Label exists"
+    Kontext "TabChartAxisLabel"
+    call DialogTest ( TabChartAxisLabel )      
+    printlog "Goto tab page Scale"
+    Kontext
+    Active.SetPage TabChartAxisScale    
+    printlog "Check if tab page Scale exists"
+    Kontext "TabChartAxisScale"
+    call DialogTest ( TabChartAxisScale )   
+    Kontext    
+    Active.SetPage TabChartAxisPositioning
+    printlog "Check if tab page Positiong exists"
+    Kontext "TabChartAxisPositioning"
+    call DialogTest ( TabChartAxisPositioning )      
+    printlog "Goto tab page Numbers"
+    Kontext
+    Active.SetPage TabChartAxisNumbers   
+    printlog "Check if tab page Numbers exists"
+    Kontext "TabChartAxisNumbers"
+    call DialogTest ( TabChartAxisNumbers )   
+    printlog "Close dialog with cancel"
+    TabChartAxisNumbers.Cancel   
+    printlog "File / Close"
+    Call hCloseDocument   
 endcase
+'
 '-------------------------------------------------------------
+'
 testcase tFormatAxisSecondaryYAxis
-'///<u><b>Dialog test after invoking Format::Axis::Secondary Y Axis</b></u>
+    Dim iCountTabPg as integer
+    iCountTabPg = 0
 
-
-   '/// Load simple chart document
-   if fLoadVerySimpleChartAndSaveLocal() > 0 then
-       warnlog "Loading test document seems to have failed -> Check this out!"
-       goto endsub
-   endif
-   '/// Select chart using navigator
-   call fSelectFirstOLE
-   '/// Edit / Object / Edit
-   EditObjectEdit
-   sleep(1)
-   '/// Invoke Insert::Axes
-   if fInvokeAxesDialog() > 0 then
-       warnlog "Something went wrong trying to invoke the Axes dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   Kontext "InsertAxesDialog"
-   '/// Check Secondary Y Axis Title
-   if fSetAxis( SecondaryYAxis , TRUE ) > 0 then
-       warnlog "Something went wrong enabling the Secondary Y Axis  -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '/// Close Axes dialog
-   if fCloseAxesDialogOK() > 0 then
-       warnlog "Something went wrong trying to close the Axes dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   
-   '/// Invoke Format::Axis::Secondary Y Axis
-   FormatAxisSecondaryYAxis
-   '/// Goto tab page Scale
-   Kontext
-   Active.SetPage TabChartAxisScale
-   '/// Check if tab page Scale exists
-   Kontext "TabChartAxisScale"
-   call DialogTest ( TabChartAxisScale )
-   
-   '/// Goto tab page Characters
-   Kontext
-   Active.SetPage TabFont
-   '/// Check if tab page Characters exists
-   Kontext "TabFont"
-   call DialogTest ( TabFont )
-   
-   '/// Goto tab page Numbers
-   Kontext
-   Active.SetPage TabChartAxisNumbers
-   '/// Check if tab page Numbers exists
-   Kontext "TabChartAxisNumbers"
-   call DialogTest ( TabChartAxisNumbers )
-   
-   '/// Goto tab page Line
-   Kontext
-   Active.SetPage TabFormatChartLine
-   '/// Check if tab page Line exists
-   Kontext "TabFormatChartLine"
-   call DialogTest ( TabFormatChartLine )
-   
-   '/// Goto tab page Label
-   Kontext
-   Active.SetPage TabChartAxisLabel
-   '/// Check if tab page Label exists
-   Kontext "TabChartAxisLabel"
-   call DialogTest ( TabChartAxisLabel )
-   
-   '/// Goto tab page Font Effects
-   Kontext
-   Active.SetPage TabFontEffects
-   '/// Check if tab page Font Effects exists
-   Kontext "TabFontEffects"
-   call DialogTest ( TabFontEffects )
-   
-   '/// Close dialog
-   TabFontEffects.Cancel
-   '/// Close document
-   Kontext "DocumentCalc"
-   DocumentCalc.TypeKeys "<Escape>"
-   Call hCloseDocument
-
-
+    printlog "Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif    
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE    
+    printlog "Edit / Object / Edit"
+    EditObjectEdit
+    sleep(1)    
+    printlog "Invoke Insert::Axes"
+    if fInvokeAxesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Axes dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    Kontext "InsertAxesDialog"    
+    printlog "Check Secondary Y Axis"
+    if fSetAxis( SecondaryYAxis , TRUE ) > 0 then
+        warnlog "Something went wrong enabling the Secondary Y Axis  -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif    
+    printlog "Leave Axes dialog with OK"
+    if fCloseAxesDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Axes dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif       
+    printlog "Invoke Format::Axis::Secondary Y Axis"
+    FormatAxisSecondaryYAxis
+    printlog "Goto tab page Line"
+    Kontext
+    iCountTabPg = Active.GetPageCount
+    if iCountTabPg <> 7 then 
+        warnlog "Format::Axis::XAxis should have 7 tab pages but has " & iCountTabPg & "."            
+    else             
+        printlog "Format::Axis::XAxis has 7 tab pages."
+    endif    
+    Active.SetPage TabFormatChartLine    
+    printlog "Check if tab page Line exists"
+    Kontext "TabFormatChartLine"
+    call DialogTest ( TabFormatChartLine )       
+    printlog "Goto tab page Characters"
+    Kontext
+    Active.SetPage TabFont   
+    printlog "Check if tab page Characters exists"
+    Kontext "TabFont"
+    call DialogTest ( TabFont )     
+    printlog "Goto tab page Font Effects"
+    Kontext
+    Active.SetPage TabFontEffects   
+    printlog "Check if tab page Font Effects exists"
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )       
+    printlog "Goto tab page Label"
+    Kontext
+    Active.SetPage TabChartAxisLabel   
+    printlog "Check if tab page Label exists"
+    Kontext "TabChartAxisLabel"
+    call DialogTest ( TabChartAxisLabel )      
+    printlog "Goto tab page Scale"
+    Kontext
+    Active.SetPage TabChartAxisScale    
+    printlog "Check if tab page Scale exists"
+    Kontext "TabChartAxisScale"
+    call DialogTest ( TabChartAxisScale )   
+    Kontext    
+    Active.SetPage TabChartAxisPositioning
+    printlog "Check if tab page Positiong exists"
+    Kontext "TabChartAxisPositioning"
+    call DialogTest ( TabChartAxisPositioning )      
+    printlog "Goto tab page Numbers"
+    Kontext
+    Active.SetPage TabChartAxisNumbers   
+    printlog "Check if tab page Numbers exists"
+    Kontext "TabChartAxisNumbers"
+    call DialogTest ( TabChartAxisNumbers )   
+    printlog "Close dialog with cancel"
+    TabChartAxisNumbers.Cancel   
+    printlog "File / Close"
+    Call hCloseDocument   
 endcase
 
 '-------------------------------------------------------------

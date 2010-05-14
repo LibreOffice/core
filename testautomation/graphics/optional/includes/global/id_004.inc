@@ -307,10 +307,10 @@ testcase tiInsertObjectOLEObjects
     Kontext "OLEObjektEinfuegen"
         '   Call Dialogtest ( OLEObjektEinfuegen )
         '   NeuErstellen.Check ' is default value
-        Call DialogTest2 (OLEObjektEinfuegen, 1)
+        Call DialogTest (OLEObjektEinfuegen, 1)
         '/// check 'Create from file' ///'
         AusDateiErstellen.Check
-        Call DialogTest2 (OLEObjektEinfuegen, 2)
+        Call DialogTest (OLEObjektEinfuegen, 2)
         '/// click 'Search...' ///'
         Durchsuchen.click
         Kontext "OeffnenDlG"

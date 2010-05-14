@@ -6,6 +6,10 @@ PasswortBestaetigen sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
 *PasswordFileOpen HID_DLG_PASSWORD_UUI
 PasswortName uui:Edit:DLG_UUI_PASSWORD:ED_PASSWORD
 
+*PasswordFileSave HID_DLG_PASSWORD_CRT
+Password uui:Edit:DLG_UUI_PASSWORD_CRT:ED_PASSWORD_CRT
+PasswordConfirm uui:Edit:DLG_UUI_PASSWORD_CRT:ED_PASSWORD_REPEAT
+
 *PasswortEingeben SID_CHG_PROTECT
 SchutzAufheben HID_CHG_PROTECT
 PasswortEingabe sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER

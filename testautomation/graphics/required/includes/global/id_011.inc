@@ -158,7 +158,7 @@ testcase tiTextToolbar
         if NOT TextObjectbar.isEnabled AND iWaitIndex = 10 then
             warnlog "Dialogue TextObjectbar didnt work. Ending testcase."
             Call hCloseDocument
-            Exit Sub
+            goto endsub
         end if
         '/// Activate the Font spacing-buttons ///'
         TextObjectbar.OpenContextMenu
@@ -190,11 +190,20 @@ testcase tiTextToolbar
         sleep 2
         '/// click button 'Bullets On/Off' ///'
         BulletsOnOff.Click
-
+        '-----------------------------------------------------------------------
+    Kontext "TextObjectBar"
+        Printlog "- Increase Font /Reduce Font"
+        sleep 2
+        printlog "- Click on Increase Font"
+        IncreaseFont.Click
+        sleep 2
+        printlog "- Click on Reduce Font"
+        ReduceFont.Click
+        '-----------------------------------------------------------------------
     Kontext "TextObjectbar"
         Printlog "- Text direction from left to right"
         sleep 2
-        '/// click button 'Text direction from left to right' ///'
+        Printlog "- click button 'Text direction from left to right'"
         try
             TextdirectionLeftToRight.Click
             printlog "hor does work :-)"
@@ -206,7 +215,7 @@ testcase tiTextToolbar
                 warnlog "hor does NOT work :-("
             end if
         endcatch
-        Printlog "'/// click button 'Text direction from top to bottom' ///'"
+        Printlog "- click button 'Text direction from top to bottom"
         try
             TextdirectionTopToBottom.Click
             printlog "ver does work :-)"
@@ -343,7 +352,7 @@ testcase tiTextToolbar
         if TextObjectbar.isEnabled = FALSE AND iWaitIndex = 10 then
             warnlog "Dialogue TextObjectbar didnt work. Ending testcase."
             Call hCloseDocument
-            Exit Sub
+            goto endsub
         end if
         '/// Reset the original value of the Font spacing-buttons ///'
         sleep 2
@@ -364,7 +373,7 @@ testcase tiTextToolbar
         ViewToolbarsTextFormatting
         WaitSlot (2000)    'sleep 1
     '/// Clear the document from content ///'
-    if (lcase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
         Kontext "DocumentImpressOutlineView"
             DocumentImpressOutlineView.TypeKeys "<ESCAPE>"
             EditSelectAll

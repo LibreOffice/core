@@ -184,22 +184,36 @@ Remove HID_NUM_RESET
  RemoveButton        HID_NUMBERFORMAT_TBI_REMOVE
  Comment             svx:Edit:RID_SVXPAGE_NUMBERFORMAT:ED_COMMENT 
  
-*TabChartAxisScale       HID_SCH_SCALE_Y
- MinimumValue            chart2:SpinField:TP_SCALE_Y:EDT_MIN
- MinimumAutomatic        chart2:CheckBox:TP_SCALE_Y:CBX_AUTO_MIN
- MaximumValue            chart2:SpinField:TP_SCALE_Y:EDT_MAX
- MaximumAutomatic        chart2:CheckBox:TP_SCALE_Y:CBX_AUTO_MAX
- MajorIntervalValue      chart2:SpinField:TP_SCALE_Y:EDT_STEP_MAIN
- MajorIntervalAutomatic  chart2:CheckBox:TP_SCALE_Y:CBX_AUTO_STEP_MAIN
- MinorIntervalValue      chart2:MetricField:TP_SCALE_Y:MT_STEPHELP
- MinorIntervalAutomatic  chart2:CheckBox:TP_SCALE_Y:CBX_AUTO_STEP_HELP
- AxisAtValue             chart2:SpinField:TP_SCALE_Y:EDT_ORIGIN
- AxisAtAutomatic         chart2:CheckBox:TP_SCALE_Y:CBX_AUTO_ORIGIN
- LogarithmicScale        chart2:CheckBox:TP_SCALE_Y:CBX_LOGARITHM
- MajorIntervalMarksInner chart2:CheckBox:TP_SCALE_Y:CBX_TICKS_INNER
- MajorIntervalMarksOuter chart2:CheckBox:TP_SCALE_Y:CBX_TICKS_OUTER
- MinorIntervalMarksInner chart2:CheckBox:TP_SCALE_Y:CBX_HELPTICKS_INNER
- MinorIntervalMarksOuter chart2:CheckBox:TP_SCALE_Y:CBX_HELPTICKS_OUTER
+*TabChartAxisScale          chart2:TabPage:TP_SCALE  
+MinimumValue                chart2:SpinField:TP_SCALE:EDT_MIN
+MinimumAutomatic            chart2:CheckBox:TP_SCALE:CBX_AUTO_MIN
+MaximumValue                chart2:SpinField:TP_SCALE:EDT_MAX
+MaximumAutomatic            chart2:CheckBox:TP_SCALE:CBX_AUTO_MAX         
+MajorIntervalValue          chart2:SpinField:TP_SCALE:EDT_STEP_MAIN      
+MajorIntervalAutomatic      chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_MAIN  
+MinorIntervalCount          chart2:MetricField:TP_SCALE:MT_STEPHELP    
+MinorIntervalCountAutomatic chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_HELP
+ReferenceValue              chart2:SpinField:TP_SCALE:EDT_ORIGIN              
+RreferenceValueAutomatic    chart2:CheckBox:TP_SCALE:CBX_AUTO_ORIGIN
+LogarithmicScale            chart2:CheckBox:TP_SCALE:CBX_LOGARITHM
+ReverseDirection            chart2:CheckBox:TP_SCALE:CBX_REVERSE
+
+*TabChartAxisPositioning    chart2:TabPage:TP_AXIS_POSITIONS
+CrossOtherAxisAt            chart2:ListBox:TP_AXIS_POSITIONS:LB_CROSSES_OTHER_AXIS_AT
+AxisAtValue                 chart2:SpinField:TP_AXIS_POSITIONS:EDT_CROSSES_OTHER_AXIS_AT
+AxisAtCategory              chart2:ComboBox:TP_AXIS_POSITIONS:EDT_CROSSES_OTHER_AXIS_AT_CATEGORY
+Hidden_Checkbox1            chart2:CheckBox:TP_AXIS_POSITIONS:CB_AXIS_BETWEEN_CATEGORIES
+PlaceLabels                 chart2:ListBox:TP_AXIS_POSITIONS:LB_PLACE_LABELS
+Hidden_Spinfield1           chart2:SpinField:TP_AXIS_POSITIONS:EDT_AXIS_LABEL_DISTANCE
+MajorIntervalMarksInner     chart2:CheckBox:TP_AXIS_POSITIONS:CB_TICKS_INNER
+MajorIntervalMarksOuter     chart2:CheckBox:TP_AXIS_POSITIONS:CB_TICKS_OUTER
+MinorIntervalMarksInner     chart2:CheckBox:TP_AXIS_POSITIONS:CB_MINOR_INNER
+MinorIntervalMarksOuter     chart2:CheckBox:TP_AXIS_POSITIONS:CB_MINOR_OUTER
+PlaceMarks                  chart2:ListBox:TP_AXIS_POSITIONS:LB_PLACE_TICKS
+Hidden_Checkbox2            chart2:CheckBox:TP_AXIS_POSITIONS:CB_MAJOR_GRID
+Hidden_MoreBtn              chart2:PushButton:TP_AXIS_POSITIONS:PB_MAJOR_GRID
+Hidden_Checkbox3            chart2:CheckBox:TP_AXIS_POSITIONS:CB_MINOR_GRID
+Hidden_More2                chart2:PushButton:TP_AXIS_POSITIONS:PB_MINOR_GRID
 
 *TabChartTypeDataRange chart2:TabPage:TP_RANGECHOOSER
  DataRange             chart2:Edit:TP_RANGECHOOSER:ED_RANGE

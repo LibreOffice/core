@@ -55,13 +55,8 @@ testcase tUpdtWizardEuroconverter
     dim cTargetDir as string
         cTargetDir = hGetWorkPath()
 
-    '///<h3>Update test for the Euroconverter</h3>
-    '///<ul>
-    
-    '///+<li>Make sure exactly one single writer document is open</li>
     hInitSingleDoc()
     
-    '///+<li>Trigger the Euroconverter</li>
     irc = hOpenWizardWithMenu( "EUROCONV" )
     if ( irc <> 0 ) then
         warnlog( "Failed to open the Euroconverter, aborting test" )
@@ -70,9 +65,8 @@ testcase tUpdtWizardEuroconverter
     endif
     
     kontext "AutopilotEuroKonverter"
-    call dialogtest2( AutopilotEuroKonverter , 1 )
+    call DialogTest( AutopilotEuroKonverter , 1 )
     
-    '///+<li>Change the currency to anything else</li>
     Kontext "AutopilotEuroKonverter"
     iKnownCurrencies = Waehrungen.getItemCount()
     if ( iKnownCurrencies <> KNOWN_CURRENCIES ) then 
@@ -81,13 +75,11 @@ testcase tUpdtWizardEuroconverter
         printlog( "Expected: " & KNOWN_CURRENCIES )
     endif
     
-    '///+<li>Check to convert an entire directory (this should be default anyway)</li>
     if ( not Verzeichnis.isChecked() ) then
         warnlog( "Converting entire directories should be default" )
         Verzeichnis.Check()
     endif
     
-    '///+<li>Open the filepicker for the source directory, enter valid path</li>
     kontext "AutopilotEuroKonverter"
     QuelleSuchen.click()
     
@@ -95,19 +87,17 @@ testcase tUpdtWizardEuroconverter
     EFFilename.setText( cSourceDir )
     PBSelect.click()
     
-    '///+<li>Open the filepicker for the target directory, enter valid path (workdir)</li>
     kontext "AutopilotEuroKonverter"
     ZielSuchen.click()
     
     kontext "FilePicker"
     EFFilename.setText( cTargetDir )
     PBSelect.click()
+    WaitSlot()
     
-    '///+<li>Selecting a currency</li>
     kontext "AutopilotEuroKonverter"
     Waehrungen.Select(1) 'Setting to first entry of listbox
     
-    '///+<li>Convert the file(s)</li>
     Konvertieren.click()
     
     iWait = 0
@@ -138,16 +128,9 @@ testcase tUpdtWizardEuroconverter
     kontext "AutopilotEuroKonverter"
     call DialogTest( AutopilotEuroKonverter , 2 )
 
-    '///+<li>Click finish to close the EuroConverter</li>    
     hFinishWizard( 1 )
-    
-    '///+<li>Close the workdocument</li>
     hDestroyDocument() 
-    
-    '///+<li>Delete the workfile</li>
     hDeleteFile( cTargetDir & TARGET_FILE )
     
-    '///</ul>
-
 endcase
 

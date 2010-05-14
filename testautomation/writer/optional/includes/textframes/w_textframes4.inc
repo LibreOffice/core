@@ -288,7 +288,7 @@ testcase tTextframes_55
     
     '/// Check if the frame is in 2nd page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
@@ -333,7 +333,7 @@ testcase tTextframes_56
     
     '/// Check if the frame is in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -351,6 +351,9 @@ endcase
 testcase tTextframes_57
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
+
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
 
     Dim sTestFile      as String
     Dim iVertical       as Integer
@@ -430,6 +433,9 @@ testcase tTextframes_58
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sTestFile    as String
     Dim iVertical     as Integer
     Dim sVerticalBy as String
@@ -506,6 +512,9 @@ endcase
 testcase tTextframes_59
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
+
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
 
     Dim sTestFile as String
     Dim sPositionY1 as String
@@ -592,6 +601,9 @@ testcase tTextframes_60
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sTestFile as String
     Dim sPositionY1 as String
     Dim sPositionY2 as String
@@ -612,6 +624,10 @@ goto endsub
     Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
 	Call wTypeKeys ( "<Tab>" )
+    
+    printlog "Move the frame into the document-area."
+    Call wTypeKeys "<RIGHT>",10
+    Call wTypeKeys "<DOWN>",7
     
     'Get the pic Y position
     Sleep 1
@@ -676,6 +692,9 @@ endcase
 testcase tTextframes_61
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
+
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
 
     Dim sTestFile                 as String
     Dim iVertical                 as Integer
@@ -754,6 +773,9 @@ testcase tTextframes_62
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sTestFile                 as String
     Dim iVertical                 as Integer
     Dim sVerticalBy               as String
@@ -830,6 +852,9 @@ endcase
 testcase tTextframes_63
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
+
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -920,6 +945,9 @@ testcase tTextframes_64
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
     Dim sHorizontalBy             as String
@@ -1009,6 +1037,9 @@ testcase tTextframes_65
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
     Dim sHorizontalBy             as String
@@ -1087,6 +1118,9 @@ testcase tTextframes_66
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
     Dim sHorizontalBy             as String
@@ -1164,6 +1198,9 @@ endcase
 testcase tTextframes_67
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
+
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -1254,6 +1291,9 @@ testcase tTextframes_68
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+    
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
     Dim sHorizontalBy             as String
@@ -1343,6 +1383,9 @@ testcase tTextframes_69
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
     Dim sHorizontalBy             as String
@@ -1420,6 +1463,9 @@ endcase
 testcase tTextframes_70
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
+
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer

@@ -46,7 +46,7 @@ testcase tCustomshapes
 
    '/// Create new document ///'
    Call hNewDocument
-     if lcase(gApplication) = "draw" then
+     if gApplication = "DRAW" then
         Kontext "Documentdraw"
      else '(Impress)
         Kontext "DocumentImpress"
@@ -254,7 +254,7 @@ testcase tCustomshapes
 
      printlog "Change all objects into 3D."
      '/// Change all objects into 3D. ///'
-     if lcase(gApplication) = "draw" then
+     if gApplication = "DRAW" then
         Kontext "Documentdraw"
      else '(Impress)
         Kontext "DocumentImpress"
@@ -306,7 +306,7 @@ testcase tCustomshapes
      hTypeKeys "<TAB><TAB><TAB>"
 
      hTypeKeys "<MOD1 TAB>" ,9
-     if lcase(gApplication) = "impress" then
+     if gApplication = "IMPRESS" then
         hTypeKeys "<RIGHT>" ,86
         hTypeKeys "<UP>", 48
      else
@@ -638,7 +638,7 @@ testcase tFormatPaintbrush
 
       '/// Create a second rectangle, and use the "Paintbrush-icon" to copy the settings for the first rectangle onto the new one ///'
       hRechteckErstellen ( 70, 70, 90, 90 )
-      if lcase(gApplication) = "draw" then
+      if gApplication = "DRAW" then
          kontext "Documentdraw"
          Documentdraw.Mousedown 20, 20
          Documentdraw.Mouseup 20, 20

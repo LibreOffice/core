@@ -66,6 +66,7 @@ BMSMA_OBJFILES=\
 # ------------------------------------------------------------------
 APP1TARGET= $(TARGET)
 APP1OBJS= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES)
+APP1RPATH=NONE
 
 APP1STDLIBS=$(SALLIB)
 
@@ -74,7 +75,7 @@ APP1STDLIBS=$(SALLIB)
 # 	$(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
 # 	$(SOLARLIBDIR)$/c5t_testresult.lib
 
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
+.IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "GCC"
 APP1STDLIBS+= \
     $(SOLARLIBDIR)$/libc5t_testresult$(DLLPOSTFIX).a \
@@ -86,6 +87,12 @@ APP1LIBS= \
     $(SOLARLIBDIR)$/c5t_testresult.lib
 APP1LIBS += $(SOLARLIBDIR)$/c5t_winstuff.lib
 .ENDIF
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+APP1LIBS= \
+    $(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
+    $(SOLARLIBDIR)$/c5t_testresult.lib
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -113,7 +120,7 @@ APP3STDLIBS=$(SALLIB)
 APP3DEPN= 
 APP3LIBS= 
 
-.IF "$(GUI)"=="WNT" 
+.IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "GCC"
 APP3STDLIBS+= \
     $(SOLARLIBDIR)$/libc5t_winstuff$(DLLPOSTFIX).a

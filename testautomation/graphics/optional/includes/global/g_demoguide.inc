@@ -184,7 +184,7 @@ testcase t_Introduction
     Printlog "Close the document"
     Call hCloseDocument
     
-endcase
+endcase 't_Introduction
 '--------------------------------------------------------------------
 
 testcase t_Interoperability
@@ -202,7 +202,7 @@ testcase t_Interoperability
     'Save the name of the origin background (taken from last slide)
         Kontext "DocumentImpress"
         DocumentImpress.TypeKeys "<END>"
-        sleep (1)
+        sleep (4)
         sTemplatename = DocumentImpress.StatusGetText (6)
         printlog "    Background = " & sTemplatename     'Debugcode
     
@@ -358,23 +358,28 @@ testcase t_Interoperability
     NameDlgPage.OK
     sleep 1
     
-    '///Autoshape support
     printlog "Autoshape support"
     Kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<TAB>"
     try
         Kontext "ExtrusionObjectBar"
+	printlog "Checking if ExtrusionObjectBar is already open."
+        if ExtrusionObjectBar.Exists then
+        	printlog "ExtrusionObjectBar Exists = " & ExtrusionObjectBar.Exists
+        else
+		printlog "ExtrusionObjectBar Exists = " & ExtrusionObjectBar.Exists
+		printlog "Opening ExtrusionObjectBar."
+        	ViewToolbarsThreeDSettings
+        endif	
         ExtrusionTiltRight.Click
         printlog "    An autoshape was found and turned right"
     catch
         warnlog "Turning autoshape was not successfully"
     endcatch
-    
-    '///Close document
     printlog "Close document"
     Call hCloseDocument
         
-endcase
+endcase 't_Interoperability
 '--------------------------------------------------------------------
 
 testcase t_DrawingEngine
@@ -464,4 +469,4 @@ gApplication   = "DRAW"
     printlog "Close document"
     Call hCloseDocument
 
-endcase
+endcase 't_DrawingEngine

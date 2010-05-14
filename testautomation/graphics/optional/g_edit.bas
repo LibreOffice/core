@@ -54,7 +54,7 @@ sub main
         Call tEditLinks
         Call tEditObjectEdit
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tEditDuplicate
         Call tEditFields
@@ -70,5 +70,5 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     Call GetUseFiles
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 end sub

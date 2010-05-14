@@ -124,7 +124,8 @@ testcase tContextSaveAsPicture
 
         '/// Choose the first file-format available in the dialogue ///'
          DateiAuswahl.TypeKeys "<END>"
-         if DateiAuswahl.GetItemCount < 2 then
+         DateiAuswahl.TypeKeys "<SPACE>"
+         if DateiAuswahl.GetItemCount < 1 then
             warnlog "The file with the extension " + Filetype + " does not exist. Please inform FHA."
          else
              printlog "Selected: " + DateiAuswahl.GetSelText
@@ -151,7 +152,7 @@ testcase tContextSaveAsPicture
              Oeffnen.Click
 
             '/// Select all ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"
@@ -162,7 +163,7 @@ testcase tContextSaveAsPicture
             '/// The context menu must contain the "save as picture..." entry at 4th position from bottom. (Check it) ///'
             '/// Use the Context-Menu 'Save As Picture' ///'
              hOpenContextMenu
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
                 DocumentImpress.OpenContextMenu true
                 WaitSlot(1000)
@@ -325,13 +326,15 @@ testcase tContextSaveAsPicture
                 endif
             endif
             '/// Remove all in the Document. (Impress/Draw) ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"
              endif
              hTypeKeys "<DELETE>"
             '/// Open the next file via Insert->Graphics From File ///'
+            call hCloseDocument
+            call hNewDocument
              InsertGraphicsFromFile
              Kontext "GrafikEinfuegenDlg"
              if GrafikEinfuegenDlg.exists(5) then
@@ -449,7 +452,8 @@ testcase tContextSavePictureLinkAsPicture
 
         '/// Choose the first file-format available in the dialogue ///'
          DateiAuswahl.TypeKeys "<END>"
-         if DateiAuswahl.GetItemCount < 2 then
+         DateiAuswahl.TypeKeys "<SPACE>"
+         if DateiAuswahl.GetItemCount < 1 then
             warnlog "The file with the extension " + Filetype + " does not exist. Please inform FHA."
          else
              printlog "   Selected: " + DateiAuswahl.GetSelText
@@ -474,7 +478,7 @@ testcase tContextSavePictureLinkAsPicture
              Oeffnen.Click
 
             '/// Select all ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"
@@ -485,7 +489,7 @@ testcase tContextSavePictureLinkAsPicture
             '/// The context menu must contain the "save as picture..." entry at 4th position from bottom. (Check it) ///'
             '/// Use the Context-Menu 'Save As Picture' ///'
              hOpenContextMenu
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
                 DocumentImpress.OpenContextMenu true
                 if hMenuFindSelect(27353, true, (MenuGetItemCount - 4), true) = false then
@@ -620,7 +624,7 @@ testcase tContextSavePictureLinkAsPicture
                                     else
                                        warnlog "Ras should not have been selected when we opened a '" + Filetype + "'-file."
                                     endif
-                       case "wmf" : if (Filetype = "wmf") then
+                       case "wmf" : if (Filetype = "wmf") or (Filetype = "emf") then
                                        printlog "   " + Filetype + " will be saved as Wmf, correct."
                                        SavedFileType = "wmf"
                                        if Filetype = "wmf" then Testsize = true
@@ -772,12 +776,14 @@ testcase tContextSavePictureLinkAsPicture
              endif
 
              '/// Remove all in the Document. (Impress/Draw) ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"
              endif
              hTypeKeys "<DELETE>"
+            call hCloseDocument
+            call hNewDocument
             '/// Open the next file via Insert->Graphics From File ///'
              InsertGraphicsFromFile
              Kontext "GrafikEinfuegenDlg"

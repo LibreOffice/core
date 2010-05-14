@@ -41,7 +41,6 @@
 ' #1 tiEditCutPasteCopySelectall
 ' #1 tiEditPasteSpecial
 ' #1 tiEditSearchAndReplace
-' #1 tiEditNavigator
 ' #1 tiEditDuplicate
 ' #1 tiEditFields
 ' #1 tdEditDeleteSlide
@@ -106,21 +105,21 @@ testcase tiEditCutPasteCopySelectall
     call hTBOtypeInDoc
 
     EditCut
-    WaitSlot (2000)
+    sleep (1)
     EditPaste
-    WaitSlot (2000)
+    sleep (1)
     EditCopy
-    WaitSlot (2000)
+    sleep (1)
     EditPaste
-    WaitSlot (2000)
+    sleep (1)
     EditSelectAll
-    WaitSlot (2000)
+    sleep (1)
     EditCut
-    WaitSlot (2000)
+    sleep (1)
     EditPaste
-    WaitSlot (2000)
+    sleep (1)
     EditDeleteContents
-    WaitSlot (2000)
+    sleep (1)
     '/// close application ///'
     Call hCloseDocument
 endcase
@@ -177,30 +176,6 @@ testcase tiEditSearchAndReplace
     catch
         Warnlog "EditSearchAndReplace caused an error"
     endcatch
-    '/// close application ///'
-    Call hCloseDocument
-endcase
-
-testcase tiEditNavigator
-    '/// open application ///'
-    Call hNewDocument
-
-    Kontext "NavigatorDraw"
-        '/// if 'Navigator' isn't already open, open it (Edit->Navigator)///'
-        if Not NavigatorDraw.Exists Then
-            EditNavigator
-        end if
-    Kontext "NavigatorDraw"
-        Call DialogTest ( NavigatorDraw )
-
-        try
-            Kontext "Navigator"
-                '/// close 'Navigator' ///'
-                Navigator.Close
-        catch
-            Errorlog "  Navigator wasn't closed, second try with Menu"
-            EditNavigator
-        endcatch
     '/// close application ///'
     Call hCloseDocument
 endcase
@@ -284,7 +259,7 @@ testcase tdEditDeleteSlide
         printlog "Navigator: open :-)"
     else
         printlog "Navigator: NOT available :-( Will be opened now!"
-        EditNavigator
+        ViewNavigator
     end if
     WaitSlot (2000)
     Kontext "NavigatorDraw"
@@ -293,7 +268,7 @@ testcase tdEditDeleteSlide
         Kontext "Navigator"
         Navigator.Close
         Call hCloseDocument
-        exit sub
+        goto endsub
     else
         Liste.Select 2
         Liste.Typekeys "<RETURN>"   '/// Press Return to go to the selected slide ///'

@@ -57,7 +57,7 @@ testcase tSaveLoadLayoutEmpty
     '/// Create a new document, add an empty Layout, Save the document in all available Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an empty Layout. ///'
@@ -101,7 +101,7 @@ testcase tSaveLoadLayoutOLE
     '/// Create a new document, add a Layout with an OLE-field, Save the document in all available Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with an OLE. ///'
@@ -116,7 +116,7 @@ testcase tSaveLoadLayoutOLE
     end if
     kontext "Tasks"
         '/// select the OLE placeholder and activate it with [Return] ///'
-        LayoutsPreview.TypeKeys ("<RIGHT>",12)
+        LayoutsPreview.TypeKeys ("<RIGHT>",13)
         sleep (1)
         LayoutsPreview.TypeKeys ("<Return>")
         sleep (1)
@@ -162,7 +162,7 @@ testcase tSaveLoadLayoutText
     '/// Create a new document, add a Layout with a Textfield, Save the document in all available Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Text-field. ///'
@@ -214,7 +214,7 @@ testcase tSaveLoadLayoutOutline
     '/// Create a new document, add a Layout with an Outline-field, Save the document in all available Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Outline-field. ///'
@@ -265,7 +265,7 @@ testcase tSaveLoadLayoutPicture
     '/// Create a new document, add a Layout with a Graphic-field, Save the document in all available Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Graphic-field. ///'
@@ -316,7 +316,7 @@ testcase tSaveLoadLayoutChart
     '/// Create a new document, add a Layout for a Chart, Save the document in all available formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Chart-field. ///'
@@ -367,7 +367,7 @@ testcase tSaveLoadLayoutSpreadsheet
     '/// Create a new document, add a Layout containing a Spreadsheet, Save the document in all available Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Spreadsheet-field. ///'

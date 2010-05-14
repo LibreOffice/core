@@ -490,10 +490,10 @@ sub TBOhTabelleEinfuegen (optional tName as string, optional tHeader as boolean,
         Case "WRITER"
             Kontext "DocumentWriter"
 
-        Case "GLOBALDOKUMENT"
+        Case "MASTERDOCUMENT"
             Kontext "DocumentMasterDoc"
 
-        Case "HTMLDOKUMENT"
+        Case "HTML"
             Kontext "DocumentWriterWeb"
 
     end select
@@ -590,7 +590,7 @@ function hNavigatorOpenWindows() as Integer
     dim j as integer, WelcherEintrag as integer
     ' Navigator zur├�?cksetzen
     Kontext "NavigatorWriter"
-    if NavigatorWriter.NotExists then EditNavigator
+    if NavigatorWriter.NotExists then ViewNavigator
     sleep (1)
     Kontext
     do while (Active.Exists)
@@ -609,7 +609,7 @@ function hNavigatorOpenWindows() as Integer
 '   printlog " hnow: "+DokumentListe.GetItemCount +" "+DokumentListe.GetSelText
     if (DokumentListe.GetItemCount = 0) then print "waassss o ??!!?!??!?!"
 '   close Navigator
-    EditNavigator
+    ViewNavigator
     Kontext "DocumentWriter"
 ENDE:
 end function

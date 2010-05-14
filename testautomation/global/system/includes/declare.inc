@@ -120,9 +120,6 @@ sub LoadDeclaration
    
    use "global\win\spadmin.win"
    use "global\win\reportdesigner.win"
-   
-
-'   use "win\sop.win"            ' all helpIDs for the SOPlayer
 
 end sub
 '

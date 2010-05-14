@@ -230,7 +230,7 @@ testcase tSVM
       if Filterauswahl.exists then
          Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
          Filterauswahl.Cancel
-         exit sub
+         goto endsub
       endif
       kontext "DocumentDraw"
       DocumentDraw.TypeKeys ("<escape><tab>")
@@ -536,7 +536,7 @@ testcase tPDF_Creator
     End If
 
     sApp = gApplication
-    gApplication = "writer"
+    gApplication = "WRITER"
     sleep 5 ' wait for document to be loaded
     ' /Creator
     bTemp = hFindeImDokument ("<</Creator<",true)
@@ -653,7 +653,7 @@ testcase tSVG
                 endif
                 '-------------------------------/
                 sTemp = gApplication
-                gApplication = "writer"
+                gApplication = "WRITER"
                 sleep 5 ' wait for document to be loaded
                 bTemp = hFindeImDokument ("<!DOCTYPE svg PUBLIC "+chr(34)+ "-//W3C//DTD SVG 1.1//EN"+chr(34)+" "+chr(34)+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"+chr(34)+">",true)
                 '-------------------------------\
@@ -782,7 +782,7 @@ qaerrorlog
    'if Filterauswahl.exists(10) then
    '   Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
    '   Filterauswahl.Cancel
-   '   exit sub
+   '   goto endsub
    'endif
 
     '' check if the document is writable
@@ -850,7 +850,7 @@ qaerrorlog
       if Filterauswahl.exists then
          Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
          Filterauswahl.Cancel
-         exit sub
+         goto endsub
       endif
       kontext "DocumentDraw"
       DocumentDraw.TypeKeys ("<escape><tab>")
@@ -971,7 +971,7 @@ testcase tEMF
    if Filterauswahl.Exists(10) then
       Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
       Filterauswahl.Cancel
-      exit sub
+      goto endsub
    endif
     ' check if the document is writable
     if fIsDocumentWritable = false then

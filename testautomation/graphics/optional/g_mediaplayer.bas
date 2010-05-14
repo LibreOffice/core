@@ -46,7 +46,7 @@ sub main
 
     PrintLog "-------------------------" + gApplication + "-------------------"
     call g_mediaplayer
-    gApplication = "Draw"
+    gApplication = "DRAW"
     
     PrintLog "-------------------------" + gApplication + "-------------------"
     call g_mediaplayer
@@ -57,6 +57,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

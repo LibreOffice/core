@@ -65,7 +65,7 @@ testcase tToolsOptionsWriterView1
 
     '///- Tools/Options/Writer: View
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
 
     option_value(1) = Hilfslinien.IsChecked
     option_value(2) = FarbigeHandles.IsChecked
@@ -127,7 +127,7 @@ testcase tToolsOptionsWriterView1
     '///- Tools/Options/Writer: View
     '/// - checking states
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
     if ( option_value(1) = Hilfslinien.IsChecked               ) then WarnLog "Hilfslinien state changed"
     if ( option_value(2) = FarbigeHandles.IsChecked            ) then WarnLog "FarbigeHandles state changed"
     if ( option_value(3) = GrosseHandles.IsChecked             ) then WarnLog "GrosseHandles state changed"
@@ -171,7 +171,7 @@ testcase tToolsOptionsWriterView2
 
     '///- Tools/Options/Writer: View
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
 
     '/// remember settings
     option_value(1) = Hilfslinien.IsChecked
@@ -223,7 +223,7 @@ testcase tToolsOptionsWriterView2
     '///- Tools/Options/Writer: View
     '/// - checking states
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
     if Hilfslinien.IsChecked = true                 then WarnLog "Hilfslinien x"
     if FarbigeHandles.IsChecked = true              then WarnLog "FarbigeHandles x"
     if GrosseHandles.IsChecked = true               then WarnLog "GrosseHandles x"
@@ -265,7 +265,7 @@ testcase tToolsOptionsWriterView3
 
     '///- Tools/Options/Writer: View
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
 
     '/// remember all settings
     option_value(1) = Hilfslinien.IsChecked
@@ -308,7 +308,7 @@ testcase tToolsOptionsWriterView3
     Call wOfficeRestart
     '///- Tools/Options/Writer: View
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )  
+    Call hToolsOptions ( "WRITER" , "VIEW" )  
     
     '/// - check if all checked
     if Hilfslinien.IsChecked = false     then WarnLog "Hilfslinien o"
@@ -346,7 +346,7 @@ testcase tToolsOptionsWriterView4
 
     '///- Tools/Options/Writer: View
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
 
     '/// remember all values 
     printlog "- remember all values"    
@@ -394,7 +394,7 @@ testcase tToolsOptionsWriterView4
 
     ' see everything
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
 
     '///' Hilfslinien.Check only, when graphic's in motion! ///'
     printlog "- check values"
@@ -404,7 +404,7 @@ testcase tToolsOptionsWriterView4
     ExtrasOptionenDlg.Ok
 
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
     printlog "- uncheck values"
     FarbigeHandles.UnCheck
     GrosseHandles.UnCheck
@@ -433,7 +433,7 @@ testcase tToolsOptionsWriterView5
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","VIEW")
+    Call hToolsOptions ("WRITER","VIEW")
 
     option_value(1) = GrafikenUndObjekte.IsChecked
     option_value(2) = Tabellen.IsChecked
@@ -458,7 +458,7 @@ testcase tToolsOptionsWriterView5
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
 
     if ( option_value(1) = GrafikenUndObjekte.IsChecked ) then WarnLog "GrafikenUndObjekte state changed"
     if ( option_value(2) = Tabellen.IsChecked  ) then WarnLog "Tabellen state changed"
@@ -490,7 +490,7 @@ testcase tToolsOptionsWriterView6
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","VIEW")
+    Call hToolsOptions ("WRITER","VIEW")
 
     option_value(1) = GrafikenUndObjekte.IsChecked
     option_value(2) = Tabellen.IsChecked
@@ -515,7 +515,7 @@ testcase tToolsOptionsWriterView6
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "VIEW" )
+    Call hToolsOptions ( "WRITER" , "VIEW" )
 
     if GrafikenUndObjekte.IsChecked then WarnLog "GrafikenUndObjekte x"
     if Tabellen.IsChecked then WarnLog "Tabellen x"
@@ -547,7 +547,7 @@ testcase tToolsOptionsWriterView7
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","VIEW")
+    Call hToolsOptions ("WRITER","VIEW")
 
     option_value(1) = GrafikenUndObjekte.IsChecked
     option_value(2) = Tabellen.IsChecked
@@ -572,7 +572,7 @@ testcase tToolsOptionsWriterView7
 
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    hToolsOptions ( "TextDocument" , "VIEW" )
+    hToolsOptions ( "WRITER" , "VIEW" )
     
     if true <> GrafikenUndObjekte.IsChecked then WarnLog "GrafikenUndObjekte o"
     if true <> Tabellen.IsChecked then WarnLog "Tabellen."
@@ -607,7 +607,7 @@ testcase tToolsOptionsWriterGrid1
 
     '/// remember values
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
     printlog "- remember values"
     option_value(1) = FangrasterBenutzen.IsChecked
     option_value(2) = RasterSichtbar.IsChecked
@@ -653,7 +653,7 @@ testcase tToolsOptionsWriterGrid1
     '/// - checking states
     printlog "- checking states"
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
 
     if (option_value(1) = FangrasterBenutzen.IsChecked    ) then WarnLog "FangrasterBenutzen state changed BugID: 82944 "
     if (option_value(2) = RasterSichtbar.IsChecked        ) then WarnLog "RasterSichtbar state changed"
@@ -686,7 +686,7 @@ testcase tToolsOptionsWriterGrid2
     Call hNewDocument
     '/// Tools/Options/Writer: Grid    
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
 
     '/// remember values set
     option_value(1) = FangrasterBenutzen.IsChecked
@@ -737,7 +737,7 @@ testcase tToolsOptionsWriterGrid2
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
 
     if FangrasterBenutzen.IsChecked     then WarnLog "FangrasterBenutzen x"
     if RasterSichtbar.IsChecked         then WarnLog "RasterSichtbar x"
@@ -773,7 +773,7 @@ testcase tToolsOptionsWriterGrid3
     '/// remember values    
 
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
     option_value(1) = FangrasterBenutzen.IsChecked
     option_value(2) = RasterSichtbar.IsChecked
     option_value(3) = AchsenSynchronisieren.IsChecked
@@ -809,7 +809,7 @@ testcase tToolsOptionsWriterGrid3
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
 
     if FangrasterBenutzen.IsChecked = false     then WarnLog "FangrasterBenutzen o"
     if RasterSichtbar.IsChecked = false         then WarnLog "RasterSichtbar o"
@@ -846,7 +846,7 @@ testcase tToolsOptionsWriterGrid4
     printlog ("'/// - save states ///")
 
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
 
     printlog ("'///TabRaster all UnCheck ! ///")
 
@@ -873,7 +873,7 @@ testcase tToolsOptionsWriterGrid4
 
     ' check if @ (0,0) Pineapples ;-)
     wait 500
-    EditNavigator
+    ViewNavigator
     wait 500
     FormatGraphics
     wait 500
@@ -888,7 +888,7 @@ testcase tToolsOptionsWriterGrid4
 
     ' change Grid Resolution
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "GRID" )
+    Call hToolsOptions ( "WRITER" , "GRID" )
     AchsenSynchronisieren.Uncheck
     RasterAufloesungXAchse.SetText("2")
     RasterAufloesungYAchse.SetText("3")
@@ -906,7 +906,7 @@ testcase tToolsOptionsWriterGrid4
 
     ' check if @ (1,1) Current-Measure-Unit :-)
     Call wNavigatorAuswahl(4,1)
-    EditNavigator
+    ViewNavigator
     sleep (3)
     try
         FormatGraphics

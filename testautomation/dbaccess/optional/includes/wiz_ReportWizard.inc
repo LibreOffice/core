@@ -49,12 +49,12 @@ testcase tNewReport
 
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
     ViewReports
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
     
     StartReportWizard

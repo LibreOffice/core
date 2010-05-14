@@ -38,16 +38,16 @@
 '\***********************************************************************
 sub db_hsqldb
 
-    'call tGeneral
+    call tGeneral
     call tRenameTable
-    'call tOpenDatabaseWithViews
-    'call tRenameTableWhichUsedInViews
+    call tOpenDatabaseWithViews
+    call tRenameTableWhichUsedInViews
     
-    'call tQueryOpenInSQLMode
+    call tQueryOpenInSQLMode
                     
-    'app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb") , gOfficePath + ConvertPath("user/work/TT_hsqldb.odb")            
-    'call db_Query(gOfficePath + "user/work/TT_hsqldb.odb" ,"hsqldb")
-    
+    app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb") , gOfficePath + ConvertPath("user/work/TT_hsqldb.odb")            
+    call db_Query(gOfficePath + "user/work/TT_hsqldb.odb" ,"hsqldb")
+   
 end sub
 
 testcase tGeneral
@@ -148,8 +148,8 @@ testcase tRenameTable
     fFindTable("TT_1")
     
     printlog "rename the selected table"
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         call hMenuSelectNr(2)
         call hMenuSelectNr(7)
 
@@ -213,8 +213,8 @@ testcase tRenameTableWhichUsedInViews
 
     '/// rename the selcted table
     printlog "rename the selcted table"
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         call hMenuSelectNr(2)
         call hMenuSelectNr(7)
 

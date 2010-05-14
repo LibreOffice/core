@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Settings" oor:package="org.openoffice.Office.OOoImprovement">
+ <node oor:name="Participation">
+  <prop oor:name="ShowedInvitation" oor:type="xs:boolean">
+   <value>true</value>
+  </prop>
+  <prop oor:name="InvitationAccepted" oor:type="xs:boolean">
+   <value>false</value>
+  </prop>
+ </node>
+</oor:component-data>

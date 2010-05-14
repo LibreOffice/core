@@ -55,6 +55,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     
     use "global\tools\includes\optional\t_user_info.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

@@ -49,7 +49,7 @@ sub main
     PrintLog "-------------------------" + gApplication + "-------------------"
         call tFilePrint
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         call tFilePrint
 
@@ -59,6 +59,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

@@ -31,13 +31,12 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Tool library for setting controls and verifying the functionality
 '*
 '**************************************************************************************************
 '*
-' #1 tControlsToolsDocumentation    'Documentation of this library
 ' #0 fSetListBoxByItem              'Function to select item in list box
 ' #0 fSetListBoxByString            'Function to select item by string in list box
 ' #0 fSetSpinFieldByString          'Function to set a string in a spin field control
@@ -52,7 +51,6 @@
 '*
 '\************************************************************************************************
 
-testcase tControlsToolsDocumentation
 '///<u><b>Library for abtracted handling of several control types</b></u>
 '///+Note: This functions are designed to be called by wrapping functions
 '///+All functions are designed to return error codes depending on the behaviour of the action applied.
@@ -70,10 +68,7 @@ testcase tControlsToolsDocumentation
 '///+<li>They only throw QAErrorlogs the give a hint what probably went wrong.</li>
 '///+<li>Expected Errors MUST exclusivly be handled by the calling routine!</li></ul>
 '///+<p><font size=-1><i>The idea and the first implementation of this library has been made by Peter Junge (pj at openoffice.org)</i></font></p> 
-    QAErrorLog "This testcase isn't really meant to be used!!!"
-endcase
 '
-'--------------------------------------------------------------------
 '
 function fSetTextBox ( oThisTextBox as OBJECT , sThisText as STRING ) as INTEGER
          fSetTextBox = 99

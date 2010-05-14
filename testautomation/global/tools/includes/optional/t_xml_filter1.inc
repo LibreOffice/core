@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Tools / XML Filter Settings Resource Test
 '*
@@ -60,7 +60,7 @@ testcase tToolsXMLFilterSettings
     Dim bJavaBroken as boolean
 
     'Not being used for Writer/WEB 
-    if lcase(gApplication) = "htmldokument" then
+    if gApplication = "HTML" then
         goto endsub
     endif
     
@@ -628,6 +628,11 @@ testcase tToolsXMLFilterSettings
     else
         QAErrorLog "#i27370# Normaly there should be a second document but there is none!"
     end if
+    if GetDocumentCount >= 1 then
+        do until GetDocumentCount = 0
+            Call hCloseDocument
+        loop
+    endif
 endcase
 
 '-------------------------------------------------------------------------
@@ -734,9 +739,9 @@ sub sRemoveXSLTFilter
     Dim ia as integer
     Dim sTempReadFilterName as string
     Kontext "XMLFilterSettings"
-    select case lcase(gApplication)
-        case "calc"         : sXMLFilterType = "excel"
-        case "writer"       : sXMLFilterType = "word"
+    select case gApplication
+        case "CALC"         : sXMLFilterType = "excel"
+        case "WRITER"       : sXMLFilterType = "word"
         case else           : sXMLFilterType = "docbook"
     end select
     iCountOfDefaultXSLTStyles = FilterList.GetItemCount

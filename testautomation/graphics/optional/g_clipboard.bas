@@ -61,7 +61,7 @@ sub main
         Call tdEditPasteSpecial_Graphic
         Call tdEditPasteSpecial_Circle
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tiEditPasteSpecial
         Call tiEditUndo
@@ -78,6 +78,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

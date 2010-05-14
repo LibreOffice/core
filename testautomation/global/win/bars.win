@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* Description : Declaration of bars and buttons
 '*               Note: To be in kmost cases compatible with old regresson
@@ -943,6 +943,7 @@ Massstab SID_ATTR_ZOOM
 MassstabVergroessern .uno:ZoomIn
 MassstabVerkleinern .uno:ZoomOut
 NaechsteSeite .uno:NextPage
+ScalingFactor .uno:ScalingFactor
 Schliessen SID_CLOSEWIN
 Seitenansicht .uno:ClosePreview
 Seitenlayout .uno:PageFormatDialog

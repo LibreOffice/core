@@ -47,7 +47,7 @@ sub main
         Call tiFormatLine
         Call tLineConnect
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tiFormatLine
         Call tLineConnect
@@ -59,6 +59,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

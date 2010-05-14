@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@Sun.COM
+'* owner : helge.delfs@Sun.COM
 '*
 '* short description : Load/Save test for chart files - Input: ODS, Output: XLS
 '*
@@ -69,6 +69,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication   = "Calc"
+    gApplication   = "CALC"
     Call GetUseFiles
 end sub

@@ -76,7 +76,7 @@ testcase tOLE_Copy
 
    '/// Close document. Open new Impress-Document. Paste the OLE-Object. ///'
    Call hCloseDocument
-   gApplication = "Impress"
+   gApplication = "IMPRESS"
    Call hNewDocument
    EditPaste
 
@@ -140,7 +140,7 @@ testcase tOLE_Copy
    sleep 1
    Call hCloseDocument
 
-   gApplication = "Impress"
+   gApplication = "IMPRESS"
    Call hNewDocument
    EditPaste
 
@@ -205,7 +205,7 @@ testcase tOLE_Copy
    sleep 1
    Call hCloseDocument
 
-   gApplication = "Impress"
+   gApplication = "IMPRESS"
    Call hNewDocument
    EditPaste
 
@@ -242,7 +242,7 @@ testcase tOLE_SaveLoad
     dim filetype as string
     dim filetype2 as string
    
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -279,7 +279,6 @@ testcase tOLE_SaveLoad
     printlog "Closing Context Menu"
     MenuSelect (0)
     printlog "Save the File."
-    MenuSelect (0)
     FileSaveAs
     sleep 1
     Kontext "SpeichernDlg"

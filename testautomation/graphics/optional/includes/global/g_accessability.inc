@@ -205,7 +205,7 @@ testcase tEis1523
       warnlog "Unexpected error :-("
    endcatch
 
-   if (lcase(gApplication) = "impress") then
+   if (gApplication = "IMPRESS") then
    '/// IMPRESS only ///'
       '///+ check if Layout placeholders are inherited ///'
       '///+ create new page with [ctrl]+[Return]] ///'
@@ -254,7 +254,7 @@ testcase tEis1581
    '/// open application ///'
    call hNewDocument
 
-   if (lcase(gApplication) = "impress") then
+   if (gApplication = "IMPRESS") then
       '/// Format -> Layout ///'
       FormatModifyPage
       '/// choose layout with graphic ///'
@@ -265,7 +265,7 @@ testcase tEis1581
       if Pagelayout_UndoDeleteWarning.exists then
          Pagelayout_UndoDeleteWarning.ok
       endif
-      for i = 1 to 8
+      for i = 1 to 9
          kontext "Tasks"
             LayoutsPreview.TypeKeys "<RIGHT>"
          kontext "Pagelayout_UndoDeleteWarning"
@@ -298,7 +298,7 @@ testcase tEis1581
          Pagelayout_UndoDeleteWarning.ok
       endif
       sleep (1)
-      for i = 1 to 16
+      for i = 1 to 17
          kontext "Tasks"
          LayoutsPreview.TypeKeys "<RIGHT>"
          kontext "Pagelayout_UndoDeleteWarning"

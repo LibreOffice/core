@@ -421,14 +421,14 @@ testcase tFileSave
     '/// Click on SAVE button
     Printlog " Click on SAVE button"
     Speichern.Click
-    Kontext "Passwort"    
-    Call DialogTest (Passwort)
+    Kontext "PasswordFileSave"    
+    Call DialogTest (PasswordFileSave)
     '/// Set password
-    PasswortName.SetText "OpenSource"
+    Password.SetText "OpenSource"
     '/// Now enter wrong confirmation
-    PasswortBestaetigen.SetText "CloseSource"
+    PasswordConfirm.SetText "CloseSource"
     '/// Try to leave dialog with OK
-    Passwort.Ok    
+    PasswordFileSave.Ok    
     '/// MsgBox warning for wrong password confirmation should be visible
     Kontext
     if Active.exists(4) then
@@ -442,9 +442,9 @@ testcase tFileSave
         Call hCloseDocument
         goto endsub        
     end if
-    Kontext "Passwort"
+    Kontext "PasswordFileSave"
     '/// Leave dialog with Cancel
-    Passwort.Cancel
+    PasswordFileSave.Cancel
     Kontext "DocumentCalc"
     '/// Open SAVE dialog via File-Save again
     Printlog " Open SAVE dialog via File-Save again"
@@ -577,13 +577,16 @@ testcase tFilePagePreview
 '    printlog " Disable fullscreen mode"
 '    FullScreen.click
 '    Kontext "Previewbar"
-    '/// Enable and disable Margins (available only since cws_pagemargins)
-    printlog " Enable and disable Margins (available only since cws_pagemargins)"
+    printlog " Enable Margins"
     try
         Margins.Click
-    catch
-        qaErrorLog "Pagemargins does not exists. Maybe version older then cws_pagemargins"
+	catch
+        warnlog "Pagemargins does not exists."
     endcatch
+	printlog " Check availability of the scaling slider"
+	if Not ScalingFactor.IsEnabled then
+		warnlog "Scalingslider is not available"
+	end if
     '/// Close page preview with button in toolbar
     Printlog " Close page preview with button in toolbar"
     Seitenansicht.Click

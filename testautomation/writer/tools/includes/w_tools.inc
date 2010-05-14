@@ -76,11 +76,11 @@ If IsMissing(iLoop) = True then iLoop = 1
         Kontext "DocumentWriter"
         DocumentWriter.TypeKeys OutputText
 
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.TypeKeys OutputText
 
-        Case "HTMLDOKUMENT"
+        Case "HTML"
         Kontext "DocumentWriterWeb"
         DocumentWriterWeb.TypeKeys OutputText
 
@@ -108,11 +108,11 @@ If IsMissing(iLoop) = True then iLoop = 1
         Kontext "DocumentWriter"
         DocumentWriter.TypeKeys OutputText
 
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.TypeKeys OutputText
 
-        Case "HTMLDOKUMENT"
+        Case "HTML"
         Kontext "DocumentWriterWeb"
         DocumentWriterWeb.TypeKeys OutputText
 
@@ -132,10 +132,10 @@ sub wDocSetContext
         Case "WRITER"
         Kontext "DocumentWriter"
 
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
 
-        Case "HTMLDOKUMENT"
+        Case "HTML"
         Kontext "DocumentWriterWeb"
 
         Case "IMPRESS"
@@ -250,7 +250,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
              wait 100
          end if
 
-     Case "MASTERDOC"
+     Case "MASTERDOCUMENT"
          Kontext "DocumentMasterDoc"
          DocumentMasterDoc.MouseDown xStart%, yStart%
          DocumentMasterDoc.MouseMove xEnde%, yEnde%
@@ -282,7 +282,7 @@ sub wObjektSelektieren ( xStart%, yStart%, xEnde%, yEnde% )
         DocumentWriter.MouseDown xStart%, yStart%
         DocumentWriter.MouseMove xEnde%, yEnde%
         DocumentWriter.MouseUp xEnde%, yEnde%
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDown xStart%, yStart%
         DocumentMasterDoc.MouseMove xEnde%, yEnde%
@@ -316,7 +316,7 @@ sub wFindSelectObjectBelow ( xStart%, yStart%, xEnde%, yEnde% )
         if (getMouseStyle <> 0) then i = 80
     wend
     
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDown xStart%, yStart%
         DocumentMasterDoc.MouseMove xEnde%, yEnde%
@@ -422,7 +422,7 @@ sub hLeisteUmschalten(welche as integer)
         catch
         endcatch
         Sleep 1
-        if gApplication = "HTMLDOKUMENT" then
+        if gApplication = "HTML" then
             Kontext "TextObjectbar"
         else
             Kontext "TextObjectbar"
@@ -440,7 +440,7 @@ sub hLeisteUmschalten(welche as integer)
         case 2:
         Select Case gApplication
         ' Numbering-Objectbar
-            Case "HTMLDOKUMENT"
+            Case "HTML"
                 Kontext "TextObjectbar"
                 try
                     TextObjectbar.SetNextToolbox
@@ -537,19 +537,19 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
     Select Case Ucase(gApplication)
         Case "CALC"
             Kontext "NavigatorCalc"
-            if NavigatorCalc.NotExists then EditNavigator
+            if NavigatorCalc.NotExists then ViewNavigator
             wait 500
             Kontext "NavigatorCalc"
             MinEntrys = 8
-        Case "WRITER", "HTMLDOKUMENT", "HTML"
+        Case "WRITER", "HTML", "HTML"
             Kontext "NavigatorWriter"
-            if NavigatorWriter.NotExists then EditNavigator
+            if NavigatorWriter.NotExists then ViewNavigator
             wait 500
             Kontext "NavigatorWriter"
             MinEntrys = 11
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
             Kontext "NavigatorGlobalDoc"
-            if NavigatorGlobalDoc.NotExists then EditNavigator
+            if NavigatorGlobalDoc.NotExists then ViewNavigator
             wait 500
             Kontext "NavigatorGlobalDoc"
             if Liste.IsVisible then
@@ -583,7 +583,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
           Liste.TypeKeys "<Return>"
         end if
 
-        Case "WRITER","HTMLDOKUMENT", "HTML"
+        Case "WRITER","HTML", "HTML"
         if (Auswahlliste.GetItemCount < MinEntrys) then
             try
                 Inhaltsansicht.Click
@@ -605,7 +605,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
             Auswahlliste.TypeKeys "<Return>"
         end if
 
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
         if Liste.IsVisible = True then
             Umschalten.Click
         end if
@@ -630,11 +630,11 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
         Select Case Ucase(gApplication)
             Case "CALC"
                 Kontext "DocumentCalc"
-            Case "HTMLDOKUMENT", "HTML"
+            Case "HTML", "HTML"
                 Kontext "DocumentWriter"
             Case "WRITER"
                 Kontext "DocumentWriter"
-            Case "MASTERDOC"
+            Case "MASTERDOCUMENT"
                 Kontext "DocumentMasterDoc"
         end select
     end if
@@ -668,7 +668,7 @@ sub wClearDocument
     Sleep 3
 
     Kontext "NavigatorWriter"
-    if Not NavigatorWriter.Exists then EditNavigator
+    if Not NavigatorWriter.Exists then ViewNavigator
     wait 500
 
     Kontext "NavigatorWriter"
@@ -700,7 +700,7 @@ sub wClearDocument
         Navigator.Close
     catch
         Errorlog
-        EditNavigator
+        ViewNavigator
     endcatch
 
     try
@@ -722,9 +722,9 @@ sub wMarkObjects(delete as boolean)
     Select Case gApplication
         Case "WRITER"
             Kontext "DocumentWriter"
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
             Kontext "DocumentMasterDoc"
-        Case "HTMLDOKUMENT"
+        Case "HTML"
             Kontext "DocumentWriterWeb"
     end select
 
@@ -736,10 +736,10 @@ sub wMarkObjects(delete as boolean)
         Case "WRITER"
             DocumentWriter.TypeKeys "<Shift F4>"
 
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
             DocumentMasterDoc.TypeKeys "<Shift F4>"
 
-        Case "HTMLDOKUMENT"
+        Case "HTML"
             DocumentWriterWeb.TypeKeys "<Shift F4>"
     end select
 
@@ -753,7 +753,7 @@ end sub
 ' -----------------------------------------------------------------------
 
 sub hExportUmstellung ( WasDenn as Boolean )
-    if Ucase(gApplication) = "HTMLDOKUMENT" then
+    if Ucase(gApplication) = "HTML" then
         ToolsOptions
         Call hToolsOptions("LoadSave","HTMLCompatibility")
         if WasDenn = TRUE then
@@ -845,7 +845,7 @@ sub wRectangleToClipboard
     Select Case gApplication
         Case "WRITER"
             Kontext "DocumentWriter"
-        Case "MASTERDOC"
+        Case "MASTERDOCUMENT"
             Kontext "DocumentMasterDoc"
     end select
     Call gMouseClick 10,10
@@ -860,7 +860,7 @@ sub wRectangleToClipboardHTML
     EditSelectAll
     EditCopy
     Call hCloseDocument
-    gApplication = "HTMLDokument"
+    gApplication = "HTML"
     Kontext "DocumentWriterWeb"
     Call gMouseClick
 end sub
@@ -898,7 +898,7 @@ sub wOptionenUndo ( sOption$ )
         ToolsOptions
     end if
 
-    Call hToolsOptions("Textdocument","General")
+    Call hToolsOptions("WRITER","General")
     if Instr(Tabulatorenabstand.Gettext, ",") then
         sTempSeparator = ","
     else
@@ -926,7 +926,7 @@ sub wOptionenUndo ( sOption$ )
         end select
     end if
 
-    Call hToolsOptions("Textdocument","View")
+    Call hToolsOptions("WRITER","View")
     if sOption$ = "Inhalte" OR sOption$ = "Alle" then
         ' Guides
         Hilfslinien.Uncheck
@@ -948,7 +948,7 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     if sOption$ = "Cursor" OR sOption$ = "Alle" then
-        Call hToolsOptions("Textdocument","FormattingAids")
+        Call hToolsOptions("WRITER","FormattingAids")
         ' Display of
         Absatzenden.UnCheck
         WeicheTrenner.Check
@@ -966,7 +966,7 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     if sOption$ = "Raster" OR sOption$ = "Alle" then
-        Call hToolsOptions("Textdocument","Grid")
+        Call hToolsOptions("WRITER","Grid")
         ' Grid
         FangrasterBenutzen.Uncheck
         RasterSichtbar.Uncheck
@@ -996,13 +996,13 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     if sOption$ = "Grundschriften" OR sOption$ = "Alle" then
-        Call hToolsOptions("Textdocument","BasicFonts")
+        Call hToolsOptions("WRITER","BasicFonts")
         Standard.Click
         AktuellesDokument.Uncheck
     end if
 
     if sOption$ = "Drucken" OR sOption$ = "Alle" then
-        Call hToolsOptions("Textdocument","Print")
+        Call hToolsOptions("WRITER","Print")
         ' Contents
         Grafiken.Check
         Tabellen.Check
@@ -1024,7 +1024,7 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     if sOption$ = "Tabelle" OR sOption$ = "Alle" then
-        Call hToolsOptions("Textdocument","Table")
+        Call hToolsOptions("WRITER","Table")
         ' Default
         Ueberschrift.Check
         Wiederholen.Check
@@ -1069,7 +1069,7 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     if sOption$ = "Aenderung" OR sOption$ = "Alle" then
-        Call hToolsOptions("Textdocument","Changes")
+        Call hToolsOptions("WRITER","Changes")
         ' Text display
         EinfuegenAttribute.Select 4
         EinfuegenFarbe.Select 2
@@ -1083,7 +1083,7 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     if sOption$ = "AutoCaption" OR sOption$ = "Alle" then
-        Call hToolsOptions("Textdocument","Autocaption")
+        Call hToolsOptions("WRITER","Autocaption")
 		for i = 1 to ObjectList.GetItemCount
 			ObjectList.Select i
 			ObjectList.UnCheck

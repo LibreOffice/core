@@ -39,6 +39,7 @@
 
 ' this menue is only in impress availble
 testcase tSlideShowSlideShow
+
 '/// open application ///'
  Call hNewDocument
 '/// Slide Show->Slide Show Settings ///'
@@ -85,9 +86,11 @@ testcase tSlideShowSlideShow
     endcatch
 '/// close application ///'
  Call hCloseDocument
-endcase
 
+ endcase 'tSlideShowSlideShow
+'-------------------------------------------------------------------------------
 testcase tSlideShowRehearseTimings
+
     goto endsub
     '/// open application ///'
     Call hNewDocument
@@ -127,9 +130,11 @@ testcase tSlideShowRehearseTimings
     sleep 3
 '/// close application ///'
  Call hCloseDocument
-endcase
 
+ endcase 'tSlideShowRehearseTimings
+'-------------------------------------------------------------------------------
 testcase tSlideShowSlideShowSettings
+
 '/// open application ///'
  Call hNewDocument
    sleep 2
@@ -173,9 +178,11 @@ testcase tSlideShowSlideShowSettings
    Bildschirmpraesentation.Cancel
 '/// close application ///'
  Call hCloseDocument
-endcase
-
+ 
+endcase 'tSlideShowSlideShowSettings
+'-------------------------------------------------------------------------------
 testcase tSlideShowCustomSlideShow
+
    '/// open application ///'
    Call hNewDocument
    sleep 2
@@ -254,9 +261,11 @@ testcase tSlideShowCustomSlideShow
       endif
    '/// close application ///'
    Call hCloseDocument
-endcase
-
+   
+endcase 'tSlideShowCustomSlideShow
+'------------------------------------------------------------------------------
 testcase tSlideShowSlideTransition
+
     goto endsub '"#149943# - Outcommented tSlideShowSlideTransition due to bug."
     dim i as integer
     dim a as integer
@@ -356,9 +365,11 @@ testcase tSlideShowSlideTransition
         TransitionAutomaticPreview.Check
     '/// close application ///'
     Call hCloseDocument
-endcase
-
+    
+endcase 'tSlideShowSlideTransition
+'-------------------------------------------------------------------------------
 testcase tSlideShowShowHideSlide
+
 '/// open application ///'
  Call hNewDocument
 '/// create rectangle ///'
@@ -457,35 +468,38 @@ testcase tSlideShowAnimation
       Animation.Close
 '/// close application ///'
    Call hCloseDocument
-endcase
-
+   
+endcase 'tSlideShowShowHideSlide
+'-------------------------------------------------------------------------------
 testcase tSlideShowCustomAnimation
+
     dim bError as boolean
 
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// create textbox with text ///'
+    printlog "create textbox with text"
     Call hTextrahmenErstellen ("Test text to test text effects", 10, 10, 20, 40 )
-    '/// Slide Show->Custom Animation... ///'
+    printlog "Slide Show->Custom Animation..."
     SlideShowCustomAnimation
         Kontext "Tasks"
-        '/// click button 'Add...' ///'
+        printlog "click button 'Add...'printlog "
         EffectAdd.click
-        '/// Dialog 'Custom Animation' comes up ///'
+        printlog "Dialog 'Custom Animation' comes up"
         kontext
-        '/// Switch to TabPage: Entrance ///'
+        printlog "Switch to TabPage: Entrance"
         active.setPage(TabEntrance)
         kontext "TabEntrance"
         if TabEntrance.exists(5) then
             DialogTest(TabEntrance)
-            '/// select in the listbox 'Effects' the second entry///'
+            printlog "select in the listbox 'Effects' the second entry"
             Effects.select(2)
             Speed.getItemCount
             AutomaticPreview.unCheck
             sleep 1
             AutomaticPreview.Check
             kontext
-            '/// Switch to TabPage: Emphasis ///'
+            
+            printlog "Switch to TabPage: Emphasis"
             active.setPage(TabEmphasis)
             kontext "TabEmphasis"
             if TabEmphasis.exists(5) then
@@ -495,7 +509,8 @@ testcase tSlideShowCustomAnimation
                 warnlog "Impress:Tasks Pane:Custom Animation:TabEmphasis tabPage doesn't work."
             endif
             kontext
-            '/// Switch to TabPage: Exit ///'
+            
+            printlog "Switch to TabPage: Exit"
             active.setPage(TabExit)
             kontext "TabExit"
             if TabExit.exists(5) then
@@ -505,7 +520,8 @@ testcase tSlideShowCustomAnimation
                 warnlog "Impress:Tasks Pane:Custom Animation:TabExit tabPage doesn't work."
             endif
             kontext
-            '/// Switch to TabPage: Motion Paths ///'
+            
+            printlog "Switch to TabPage: Motion Paths"
             active.setPage(TabMotionPaths)
             kontext "TabMotionPaths"
             if TabMotionPaths.exists(5) then
@@ -515,20 +531,34 @@ testcase tSlideShowCustomAnimation
                 bError = true
                 warnlog "Impress:Tasks Pane:Custom Animation:TabMotionPaths tabPage doesn't work."
             endif
-            '/// Close dialog 'Custom Animation' with 'OK' ///'
+            kontext
+            '-----------------------------------------------------------------------
+            'printlog "Switch to tabpage: Misc Effects"
+            'active.setPage(TabMiscEffects)
+            'kontext "TabMiscEffects"
+            'if TabMiscEffects.exists(5) then
+            '    DialogTest(TabMiscEffects)
+            'else
+            '    bError = true
+            '    warnlog "Impress:TaskPane:CustomAnimation:TabMiscEffects tabPage does not work."
+            'endif
+            'kontext
+            '-----------------------------------------------------------------------
+            printlog "Close dialog 'Custom Animation' with 'OK'"
             TabMotionPaths.OK
             bError = false
         else
             bError = true
             warnlog "Impress:Tasks Pane:Custom Animation:Add... button didn't work."
         endif
+
         Kontext "Tasks"
         if (NOT bError) then
-            '/// click button 'Change...' ///'
+            printlog "click button 'Change...'"
             EffectChange.click
-            '/// Dialog 'Custom Animation' comes up ///'
+            printlog "Dialog 'Custom Animation' comes up"
             kontext
-            '/// Switch to TabPage: Entrance ///'
+            printlog "Switch to TabPage: Entrance"
             active.setPage(TabEntrance)
             kontext "TabEntrance"
             if (NOT TabEntrance.exists(5)) then
@@ -540,14 +570,14 @@ testcase tSlideShowCustomAnimation
             if EffectProperty.isEnabled then
                 EffectProperty.getItemCount
             endif
-            '/// CLick on button '...' (Options) ///'
+            printlog "Click on button '...' (Options)"
             EffectOptions.click
             kontext "TabEffect"
             if TabEffect.exists(5) then
                 dialogTest(TabEffect)
                 Sound.getItemCount
                 AfterAnimation.getItemCount
-                '/// switch to TabPage 'Timing' ///'
+                printlog "switch to TabPage 'Timing'"
                 Kontext
                 active.setPage TabTiming
                 kontext "TabTiming"
@@ -564,7 +594,7 @@ testcase tSlideShowCustomAnimation
                 else
                     warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
                 endif
-                '/// switch to TabPage 'Timing' ///'
+                printlog "switch to TabPage 'Timing'"
                 Kontext
                 active.setPage TabTextAnimation
                 kontext "TabTextAnimation"
@@ -583,7 +613,7 @@ testcase tSlideShowCustomAnimation
             EffectSpeed.getItemCount
             EffectList.getItemCount
             EffectPlay.click
-            '/// Wait five seconds so the Playfunction has ended ///'
+            printlog "Wait five seconds so the Playfunction has ended "
             sleep 5
             EffectSlideShow.click
             sleep 1
@@ -596,14 +626,16 @@ testcase tSlideShowCustomAnimation
             endif
             kontext "Tasks"
             EffectAutomaticPreview.isChecked
-            '/// click button 'Remove' ///'
+            printlog "click button 'Remove'"
             EffectRemove.click
         endif
-    '/// close application ///'
+    printlog "close application"
     Call hCloseDocument
-endcase
-
+    
+endcase 'tSlideShowCustomAnimation
+'-------------------------------------------------------------------------------
 testcase tSlideShowInteraction
+
 '/// open application ///'
  Call hNewDocument
  sleep 2
@@ -613,11 +645,11 @@ testcase tSlideShowInteraction
 '/// Slide Show->Interaction ///'
    SlideShowInteraction
       Kontext "TabInteraktion"
-      Call DialogTest2 (TabInteraktion, 1)
+      Call DialogTest (TabInteraktion, 1)
    '///+ Select 6th entry from top in 'Action at mouse click' : 'Go to page or object' ///'
       AktionBeiMausklick.select 6
       Printlog AktionBeiMausklick.GetSelText + " chosen"
-      Call DialogTest2 (TabInteraktion, 2)
+      Call DialogTest (TabInteraktion, 2)
    '///+ click button 'Find' ///'
       sleep 1
       suchen.click
@@ -628,7 +660,7 @@ testcase tSlideShowInteraction
       sleep 1
       Printlog AktionBeiMausklick.GetSelText + " chosen"
       Kontext "TabInteraktion"
-      Call DialogTest2 (TabInteraktion, 3)
+      Call DialogTest (TabInteraktion, 3)
    '///+ click button 'Browse...' ///'
       Durchsuchen.click
         sleep 1
@@ -641,7 +673,7 @@ testcase tSlideShowInteraction
 '/// Select 9th entry from top in 'Action at mouse click' : 'Play Sound' ///'
       AktionBeiMausklick.select 8
       Printlog AktionBeiMausklick.GetSelText + " chosen"
-      Call DialogTest2 (TabInteraktion, 4)
+      Call DialogTest (TabInteraktion, 4)
    '///+ click button 'Browse...' ///'
       Durchsuchen.click
    sleep 1
@@ -654,7 +686,7 @@ testcase tSlideShowInteraction
 '/// Select 8th entry from top in 'Action at mouse click' : 'Run Program' ///'
          AktionBeiMausklick.select 9
          Printlog AktionBeiMausklick.GetSelText + " chosen"
-            Call DialogTest2 (TabInteraktion, 7)
+            Call DialogTest (TabInteraktion, 7)
             Kontext "TabInteraktion"
    '///+ click button 'Browse...' ///'
             Durchsuchen.Click
@@ -669,7 +701,7 @@ testcase tSlideShowInteraction
       AktionBeiMausklick.select 10
         Printlog AktionBeiMausklick.GetSelText + " chosen"
       sleep 3
-      Call DialogTest2 (TabInteraktion, 6)
+      Call DialogTest (TabInteraktion, 6)
    '///+ click button 'Browse...' ///'
            Durchsuchen.Click
            sleep 1
@@ -684,16 +716,12 @@ testcase tSlideShowInteraction
       Kontext "TabInteraktion"
       AktionBeiMausklick.select 11
       Printlog AktionBeiMausklick.GetSelText + " chosen"
-      Call DialogTest2 (TabInteraktion, 7)
+      Call DialogTest (TabInteraktion, 7)
       Kontext "TabInteraktion"
 '/// close dialog 'Interaction' ///'
       TabInteraktion.Close
       sleep 2
 '/// close application ///'
  Call hCloseDocument
-endcase
-
-
-
-
-
+ 
+endcase 'tSlideShowInteraction

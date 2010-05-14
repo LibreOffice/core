@@ -60,7 +60,7 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
         ClipboardFormat = Auswahl.GetSeltext
         printlog "- Paste as: " + ClipboardFormat
         Select Case CheckWhat
-            Case "ctext", "draw"
+            Case "ctext", "DRAW"
                 if lcase(gPlatform) = "sol" and lcase(ClipboardFormat) = "bitmap" then
                     QAErrorlog "#i49505#Paste drawing object as bitmap crashes office"
                     goto s_next_item
@@ -87,18 +87,18 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
         Call wDocSetContext
         Call wTypeKeys "<Escape>",2
         Select Case gApplication
-            Case "WRITER","MASTERDOC","HTMLDOKUMENT"
+            Case "WRITER","MASTERDOCUMENT","HTML"
                 Select Case CheckWhat
                     Case "text","field","table"
                     Call wTypeKeys "<Down><End><Return>"
                     Call wTypeKeys "(" + Clipboardformat + ")"
                     Call wTypeKeys "<End><Return>",2
-            Case "frame", "draw", "graphicL", "graphicE", "ole", "control", "ctext"
+            Case "frame", "DRAW", "graphicL", "graphicE", "ole", "control", "ctext"
                 'Call gMouseClick (50,100)
                 Call wTypeKeys ("<Escape>")
                 Call wTypeKeys "(" + Clipboardformat + ")"
                 if i < TheNumber Then
-                    if gApplication <> "HTMLDOKUMENT" then
+                    if gApplication <> "HTML" then
                         InsertManualBreak
                         Kontext "UmbruchEinfuegen"
                         Seitenumbruch.Check
@@ -181,7 +181,7 @@ function wSetClipboardtestDefaults(ForWhat as string) as boolean
         Call wTypeKeys ( "<Shift F4>" )
         '"+ Copy selected frame "
         
-        Case "draw"
+        Case "DRAW"
         '"+ Select 'Drawing Object' "
         Call wTypeKeys ( "<Shift F4>" )
         Call wTypeKeys "<Tab>"
@@ -368,7 +368,7 @@ Sub wDisableImpressAutopilot()
     gApplication = "IMPRESS"
     Call hNewDocument
     ToolsOptions
-    Call hToolsOptions ("PRESENTATION","General")
+    Call hToolsOptions ("IMPRESS","General")
     MitAutopilotStarten.UnCheck
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK

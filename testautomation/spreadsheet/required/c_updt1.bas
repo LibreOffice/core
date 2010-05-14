@@ -69,6 +69,6 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_locale_tools.inc"
-    gApplication   = "Calc"
+    gApplication   = "CALC"
     GetUseFiles ()
 end sub

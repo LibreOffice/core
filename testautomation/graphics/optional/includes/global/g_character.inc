@@ -380,7 +380,7 @@ testcase tSetFormatCharacter
     dim sFile as string
     dim sTemp as string
 
-   if (lCase(gApplication) = "impress") then 
+   if (gApplication = "IMPRESS") then 
       ExtensionString = "odp"
    else
       ExtensionString = "odg"
@@ -580,7 +580,7 @@ testcase tGetFormatCharacter
     dim iTemp as integer
     dim sSpellBooks(30) as string
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
        ExtensionString = "odp"
     else
        ExtensionString = "odg"

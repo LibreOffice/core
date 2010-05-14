@@ -39,35 +39,27 @@
 
 testcase tBasicLibraryImport
 
-    '///<h1>Import a basic library (flat)</h1>
-    '///<ul>
-    
+    printlog( "Import a BASIC library" )
+
     dim cMsg as string
     dim iCurrentLib as integer
 
-    '///+<li>Open Basic Organizer</li>
     ToolsMacro_uno
     
-    '///+<li>Select My Macros</li>
     kontext "Makro"
     MakroAus.Select( 1 )
     
-    '///+<li>Open the library Organizer</li>
     Verwalten.click()
     
-    '///+<li>Switch to the libraries-tab</li>
     hSelectBasicObjectOrganizerTab( 3 )    
     
-    '///+<li>Make sure My Macros is selected</li>
     printlog( "Select My macros" )
     kontext "TabBibliotheken"
     Bibliothek.select( 1 )
     
-    '///+<li>Click to import a library</li>
     printlog( "Click to add a library" )
     Hinzufuegen.click()
     
-    '///+<li>Enter the name of the library</li>
     printlog( "Enter the name of the library: " & LIBRARY_NAME )
     kontext "OeffnenDlg"
     DateiName.setText( LIBRARY_NAME )
@@ -75,15 +67,12 @@ testcase tBasicLibraryImport
     printlog( "Step into the directory" )
     OeffnenDlg.typeKeys( "<RETURN>" )
     
-    '///+<li>Enter &quot;dialog.xlb&quot;</li>
     printlog( "Enter &quot;dialog.xlb&quot;" )
     DateiName.setText( "dialog.xlb" )
     
-    '///+<li>Open the file</li>
     printlog( "Open dialog.xlb" )
     Oeffnen.click()
     
-    '///+<li>Handle failing autocompletion</li>
     kontext "active"
     if ( active.exists( 1 ) ) then
         if ( active.getRT() <> 373 ) then
@@ -97,12 +86,10 @@ testcase tBasicLibraryImport
         endif
     endif
     
-    '///+<li>Confirm to append libraries, accept defaults</li>
     printlog( "Confirm to append the library" )
     Kontext "AppendLibraries"
     AppendLibraries.ok()
     
-    '///+<li>Find the new library, select it</li>
     printlog( "Select the new library" )
     kontext "TabBibliotheken"
     for iCurrentLib = 1 to Bibliotheksliste.getItemCount()
@@ -112,12 +99,10 @@ testcase tBasicLibraryImport
         endif
     next iCurrentLib        
     
-    '///+<li>On libraries-tab click delete-button (correct lib must be selected)</li>
     printlog( "Delete the library, confirm with YES" )
     Kontext "TabBibliotheken"
     Loeschen.click()
     
-    '///+<li>Confirm deletion with YES</li>
     Kontext "Active"
     if ( Active.exists( 1 ) ) then
         active.yes()
@@ -125,24 +110,20 @@ testcase tBasicLibraryImport
         warnlog( "Deletion warning for libraries is missing" )
     endif
     
-    '///+<li>Close the macro organizer (Libraries Tab)</li>
     printlog( "Close macro/library organizer" )
     kontext "TabBibliotheken"
     TabBibliotheken.cancel()
     
-    '///+<li>Close OpenOffice.org Basic Macros dialog</li>
     printlog( "Close macro organizer" )
     kontext "Makro"
     Makro.cancel()
     
-    '///+<li>Cleanup: Close the document</li>
     hDestroyDocument()
 
-    '///+<li>Cleanup: Delete the library (directory)</li>    
-    hDeleteFile( hGetWorkPath() & LIBRARY_NAME )
-    
-    '///</ul>
-
-    
+    hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "dialog.xlb"  )
+    hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "Module1.xba" )
+    hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "script.xlb"  )
+    rmdir( hGetWorkPath() & LIBRARY_NAME ) : printlog( "Remove directory" )
+       
 endcase
 

@@ -58,7 +58,7 @@ testcase tFileOpenSaveEtc
       Dokument$ = ConvertPath ( gOfficePath + "user\work\test1")
       Dokument2$ = ConvertPath ( gOfficePath + "user\work\test1_2")
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -187,7 +187,7 @@ testcase tFileProperties
    Call hNewDocument
    Call hTextrahmenErstellen ("This is a document to test the Menupoint in File/Properties",30,30,60,40)
 
-    if (lCase(gApplication) = "Impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -340,7 +340,7 @@ dim q as integer
       warnlog "Documents of Type 'ComputerGraphicsMetafile' can't get loaded :-("
    endcatch
    Call hCloseDocument
-   if (lcase(gApplication)="draw") then
+   if (gApplication="DRAW") then
        Call hCloseDocument
    endif
 endcase
@@ -366,7 +366,7 @@ dim q as integer
       Oeffnen.Click
    Sleep 2
 
-   if lcase(gApplication) = "draw" then
+   if gApplication = "DRAW" then
       Kontext "Documentdraw"
       if Documentdraw.exists(5) then
          Documentdraw.TypeKeys ("<Tab>")
@@ -403,7 +403,7 @@ testcase tDeletedTemplate
     dim SavedActiveMessage as string
     dim found as boolean
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -516,7 +516,7 @@ testcase tSaveLoadLayoutEmpty
     '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an empty Layout. ///'
@@ -562,7 +562,7 @@ testcase tSaveLoadLayoutOLE
     '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with an OLE. ///'
@@ -624,7 +624,7 @@ testcase tSaveLoadLayoutText
     '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Text-field. ///'
@@ -677,7 +677,7 @@ testcase tSaveLoadLayoutOutline
     '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Outline-field. ///'
@@ -729,7 +729,7 @@ testcase tSaveLoadLayoutPicture
     '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Graphic-field. ///'
@@ -781,7 +781,7 @@ testcase tSaveLoadLayoutChart
     '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Chart-field. ///'
@@ -833,7 +833,7 @@ testcase tSaveLoadLayoutSpreadsheet
     '/// Create a new document, add a Layout, Save the document in different Formats, and open the saved files. ///'
 
     '/// Make new Presentation ///'
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call hNewDocument
 
     '/// Choose and Insert an Layout with a Spreadsheet-field. ///'

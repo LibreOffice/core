@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : all global variables
 '*
@@ -171,6 +171,12 @@ Global Const GC_MACRO_SECURITY_LEVEL_MEDIUM   = 1  '///+ GC_MACRO_SECURITY_LEVEL
 Global Const GC_MACRO_SECURITY_LEVEL_HIGH     = 2  '///+ GC_MACRO_SECURITY_LEVEL_HIGH:     Symbolic name for high macro security
 Global Const GC_MACRO_SECURITY_LEVEL_VERYHIGH = 3  '///+ GC_MACRO_SECURITY_LEVEL_VERYHIGH: Symbolic name for very high macro security
 Global Const GC_MACRO_SECURITY_LEVEL_DEFAULT  = 2  '///+ GC_MACRO_SECURITY_LEVEL_DEFAULT:  Symbolic name for default macro security level
+
+'///* OOo Improvement Program
+Global gOOoImprovementIsEnabled as boolean
+
+'///* Performance flags
+Global GLOBAL_USE_NEW_SLEEP as boolean ' keep the old sleep() behavior
 
 sub OnlyForDocuGVariables
 '///<b>System for the installed Office</b>

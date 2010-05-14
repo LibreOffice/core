@@ -481,8 +481,8 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
     '///<u>Description:</u>
     '///<ul>
     '///+<li>Verify that the password dialog is present</li>
-    kontext "PasswordDlg"
-    if ( PasswordDlg.exists( 2 ) ) then
+    kontext "PasswordFileSave"
+    if ( PasswordFileSave.exists( 2 ) ) then
     
         printlog( CFN & "Password dialog is displayed" )
     
@@ -493,7 +493,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
         PasswordConfirm.setText( cPassword & "1" )
         
         '///+<li>Click on OK</li>
-        PasswordDlg.ok()
+        PasswordFileSave.ok()
         
         '///+<li>There should be a warning about a faulty password confirmation</li>
         kontext "Active"
@@ -508,8 +508,8 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
         endif
         
         '///+<li>We should now be back on the password dialog</li>
-        kontext "PasswordDlg"
-        if ( PasswordDlg.exists( 2 ) ) then
+        kontext "PasswordFileSave"
+        if ( PasswordFileSave.exists( 2 ) ) then
         
             printlog( CFN & "Password dialog is displayed" )
     
@@ -520,7 +520,7 @@ function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
             PasswordConfirm.setText( cPassword )
         
             '///+<li>Click on OK</li>
-            PasswordDlg.ok()
+            PasswordFileSave.ok()
             
         else
             

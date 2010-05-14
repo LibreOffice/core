@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -31,32 +31,9 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : general routines to work with lists (arrays)
-'*
-'*******************************************************************
-'* general information :
-'* - entry 0 of the list is the counter
-'* - you have to start loops everytime with 1 .. n
-'*
-' #1 ListCount           ' Returns the number of list entries
-' #1 ListCopy            ' Copies one list to another (OrgList(), CopyList())
-' #1 ListAllDelete       ' Deletes the complete list
-' #1 ListInsert          ' Inserts a string into a list at a special number
-' #1 ListAppend          ' Appends an entry to a list
-' #1 ListDelete          ' Deletes the n'th entry out of the list (lsList(), EntryNumber)
-' #1 ListDeleteString    ' Deletes a string out of the list (the first found string)
-' #1 ListSort            ' Sorts a list with quicksort method, if the 2. parameter is FALSE => downward, else => upward
-' #1 ListRead            ' Reads a file into a list (row for row)
-' #1 ListReadAppend      ' Reads a file into a list and append it onto another existed list
-' #1 ListWrite           ' Writes a list into a file (each entry is a row) => the file will be created new
-' #1 ListWriteAppend     ' Writes a list into a file, but append all entries to the file
-' #1 gCompare2Lists      ' Compare two lists with each other
-' #1 hListPrint          ' print a list to the log with comment
-' #1 hListClearPattern   ' find pattern in list and replace with blanks
-' #1 hListClearBlank     ' find and remove blank listentries, update list
-' #1 hListIntegrityTest  ' extensible function to test array integrity
 '*
 '\******************************************************************
 
@@ -75,14 +52,14 @@ function ListCopy ( lsList1() as String, lsList2() as String ) as Boolean
     '///Copies all entries out of one list into another list.
     '///+<u>Input</u>:<ol><lo>list which should be copied</li><li>An empty list</li></ol>After this function the 2nd list is a copy of the 1st list.
     '///+<u>Return</u>: If copy of the list is correct this function returns TRUE otherweise FALSE
-    
+
     Dim ii as Integer
-    
+
     ListAllDelete ( lsList2() )
     for ii=1 to ListCount ( lsList1() )
         ListAppend ( lsList2(), lsList1(ii) )
     next ii
-    
+
     if ListCount ( lsList1() ) = ListCount ( lsList2 () ) then
         ListCopy = TRUE
     else
@@ -116,23 +93,23 @@ function ListDelete ( lsList() as String, iNr as Integer ) as Boolean
     '///Deletes an entry out of the list on a defined position (iNr).
     '///+<u>Input</u>: <ol><li>The list (only string lists are possible)</li><li>The position of the entry</li></ol>
     '///+<u>Return</u>: TRUE if the entry was deleted otherweise FALSE
-    
-    
+
+
     Dim i%, ListenAnzahl as Integer
-    
+
     ListenAnzahl = listcount( lsList() )
-    
+
     if iNr > ListenAnzahl then
         ListDelete = FALSE
         Exit Function
     end if
-    
+
     for i% = iNr to ListenAnzahl
         lsList( i% ) = lsList( i% + 1 )
     next i%
-    
+
     lsList(0) = ListenAnzahl - 1
-    
+
     ListDelete = TRUE
 end function
 
@@ -144,7 +121,7 @@ function ListDeleteString ( lsList() as String, sText as String ) as Boolean
     '///+<u>Input</u>: <ol><li>The list (only string lists are possible)</li><li>The string</li></ol>
     '///+<u>Return</u>: TRUE if the entry was deleted otherwise FALSE
     Dim i as Integer : Dim EintragsNr as Integer : Dim ListenAnzahl as Integer
-    
+
     ListenAnzahl = Val(lsList(0))
     EintragsNr = 0
     for i = 1 to ListenAnzahl
@@ -168,23 +145,23 @@ function ListInsert ( lsList() as String, ZeileNr%, sWert$ ) as Boolean
     '///+<u>Input</u>: <ol><li>The list (only string lists are possible)</li><li>The position</li><li>The string</li></ol>
     '///+<u>Return</u>: TRUE if the entry was inserted otherwise FALSE
     Dim i% : Dim ListenAnzahl as Integer
-    
+
     ListenAnzahl = Val(lsList(0))
     if ZeileNr% > ListenAnzahl then
         ListInsert = FALSE
         Exit Function
     end if
-    
+
     ' Nach hinten verschieben, hinten beginnend
     for i% = ListenAnzahl to ZeileNr% step -1
         lsList( i%+1 ) = lsList( i% )
     next i%
-    
+
     ' Einfuegen
     lsList( ZeileNr% ) = sWert$
     lsFile(0) = ListenAnzahl + 1
     ListInsert = TRUE
-    
+
 end function
 
 '-------------------------------------------------------------------------
@@ -197,13 +174,13 @@ function ListRead ( lsList() as String, Datei$, optional sEncode as String ) as 
     Dim bUTF8 as Boolean
     Dim i%
     Dim CompareList(15000) as String
-    
+
     if Dir( Datei$ ) = "" then
         Warnlog "ListRead: " + Datei$ + " is missing!"
         ListRead = FALSE
         exit function
     end if
-    
+
     if IsMissing ( sEncode ) = TRUE then
         bUTF8 = FALSE
     else
@@ -214,26 +191,26 @@ function ListRead ( lsList() as String, Datei$, optional sEncode as String ) as 
             bUTF8 = FALSE
         end if
     end if
-    
+
     ListAllDelete ( lsList() )                             ' clean up the list
-    
+
     if bUTF8 =  TRUE then
         Dim textin as object, sfa as object, xInput as object                   ' for UTF-8-input-routines
         Dim iC as Integer
-        
+
         textin = createUnoService( "com.sun.star.io.TextInputStream" )         ' uno-handling to input an UFT-8-File
         textin.setEncoding("utf8")                                             '
         sfa = createUnoService( "com.sun.star.ucb.SimpleFileAccess" )          '
         xInput = sfa.openFileRead( Datei$ )                                    '
         textin.setInputStream( xInput )                                        '
-        
+
         do until textin.isEOF()                                                '
             i% = Val(lsList(0)) + 1
             lsList(0) = i%
             lsList( i% ) = textin.readLine()                                    '
         loop
         xInput.closeInput                                                      ' uno-file-close
-        
+
         'INFO: (TZ) Only to workaround a problem with UNIX-Files...
         if Right ( lsList(i%), 1 ) = Chr(10) then
             lsList(i%) = Left ( lsList(i%), Len ( lsList(i%) ) - 1 )
@@ -244,10 +221,10 @@ function ListRead ( lsList() as String, Datei$, optional sEncode as String ) as 
         end if
     else
         Dim FileNum%
-        
+
         FileNum% = FreeFile
         Open Datei$ for input  as #FileNum%
-        
+
         do until EOF(#FileNum%) ' all from LIS-file
             i% = Val(lsList(0)) + 1
             lsList(0) = i%
@@ -265,14 +242,14 @@ function ListWrite ( lsList() as String, Datei$, optional sEncode as String) as 
     '///+Writes a list into a file (an existing file will be deleted before)
     '///+<u>Input</u>: <ol><li>The list</li><li>The file</li><li><b>optional</b>: The encoding &quot;UTF8&quot;</li></ol>
     '///+<u>return</u>: TRUE or FALSE if this routine can read the file.
-    
+
     Dim bUTF8 as Boolean
     Dim i%
-    
+
     if Dir (Datei$) <> "" then
         Kill(Datei$)  ' the file must be deleted if you use 'UTF8'
     endif
-    
+
     if IsMissing ( sEncode ) = TRUE then
         bUTF8 = FALSE
     else
@@ -283,23 +260,23 @@ function ListWrite ( lsList() as String, Datei$, optional sEncode as String) as 
             bUTF8 = FALSE
         end if
     end if
-    
+
     if bUTF8 =  TRUE then
         Dim textout as object, sfa as object, xOutput as object                  ' for UTF-8-output-routines
-        
+
         textout = createUnoService( "com.sun.star.io.TextOutputStream" )        ' uno-handling to output an UFT-8-File
         textout.setEncoding("utf8")                                             '
         sfa = createUnoService( "com.sun.star.ucb.SimpleFileAccess" )           '
         xOutput = sfa.openFileWrite( Datei$ )                                   '
         textout.setOutputStream( xOutput )                                      '
-        
+
         for i%=1 to ListCount ( lsList() )
             textout.writeString( lsList( i% ) + Chr(13) + Chr(10) )              '
         next i%
         xOutput.closeOutput                                                     ' uno-file-close
     else
         Dim FileNum% : Dim iLast%
-        
+
         FileNum% = FreeFile
         Open Datei$ for Output  as #FileNum%
         iLast% = Val(lsList(0))
@@ -310,7 +287,7 @@ function ListWrite ( lsList() as String, Datei$, optional sEncode as String) as 
         loop
         Close #FileNum%
     endif
-    
+
     ListWrite = TRUE
 end function
 
@@ -321,21 +298,21 @@ function ListReadAppend( lsList() as String , Datei$, optional sEncode as String
     '///+Appends a list into a file (If the file exists the file will be deleted before!).
     '///+<u>Input</u>: <ol><li>The list</li><li>The file</li><li><b>optional</b>: The encoding &quot;UTF8&quot;</li></ol>
     '///+<u>return</u>: TRUE or FALSE if this routine can read the file.
-    
+
     Dim bUTF8 as Boolean
     Dim i%
     Dim CompareList() as String
     Dim isCounter as Integer
     Dim FileNum%
-    
+
     if Dir( Datei$ ) = "" then
         Warnlog "ListReadAppend : " + Datei$ + " is missing!"
         ListReadAppend = FALSE
         exit function
     end if
-    
+
     isCounter = ListCount ( lsList() )
-    
+
     if IsMissing ( sEncode ) = TRUE then
         bUTF8 = FALSE
     else
@@ -346,23 +323,23 @@ function ListReadAppend( lsList() as String , Datei$, optional sEncode as String
             bUTF8 = FALSE
         end if
     end if
-    
+
     if bUTF8 =  TRUE then
         Dim textin as object, sfa as object, xInput as object                  ' for UTF-8-input-routines
-        
+
         textin = createUnoService( "com.sun.star.io.TextInputStream" )         ' uno-handling to input an UFT-8-File
         textin.setEncoding("utf8")                                             '
         sfa = createUnoService( "com.sun.star.ucb.SimpleFileAccess" )          '
         xInput = sfa.openFileRead( Datei$ )                                    '
         textin.setInputStream( xInput )                                        '
-        
+
         do until textin.isEOF()                                                '
             i% = Val(lsList(0)) + 1
             lsList(0) = i%
             lsList( i% ) = textin.readLine()                                    '
         loop
         xInput.closeInput                                                      ' uno-file-close
-        
+
         'INFO: (TZ) Only to workaround a problem with UNIX-Files...
         if Right ( lsList(i%), 1 ) = Chr(10) then
             lsList(i%) = Left ( lsList(i%), Len ( lsList(i%) ) - 1 )
@@ -371,7 +348,7 @@ function ListReadAppend( lsList() as String , Datei$, optional sEncode as String
     else
         FileNum% = FreeFile
         Open Datei$ for input  as #FileNum%
-        
+
         do until EOF(FileNum%)                            ' All from LIST-file
             i% =  Val(lsList(0)) + 1
             lsList(0) = i%
@@ -379,9 +356,9 @@ function ListReadAppend( lsList() as String , Datei$, optional sEncode as String
         loop
         Close #FileNum%
     end if
-    
+
     ListReadAppend = TRUE
-    
+
 end function
 
 '-------------------------------------------------------------------------
@@ -391,11 +368,11 @@ function ListWriteAppend( lsList() as String, Datei$, optional sEncode as String
     '///+Writes a list into a file (If the files exist all entries will be appended).
     '///+<u>Input</u>: <ol><li>The list</li><li>The file</li><li><b>optional</b>: The encoding &quot;UTF8&quot;</li></ol>
     '///+<u>return</u>: TRUE or FALSE if this routine can read the file.
-    
+
     Dim bUTF8 as Boolean
     Dim i%
     Dim DummyList ( 15000 ) as String
-    
+
     if IsMissing ( sEncode ) = TRUE then
         bUTF8 = FALSE
     else
@@ -406,39 +383,39 @@ function ListWriteAppend( lsList() as String, Datei$, optional sEncode as String
             bUTF8 = FALSE
         end if
     end if
-    
+
     if bUTF8 =  TRUE then
         Dim sfa as object, xOutput as object, textout as object                 ' for UTF-8-output-routines
-        
+
         ListRead ( DummyList(), Datei$, "utf8" )                               ' read old file in another list
         for i% = 1 to ListCount ( lsList() )
             ListAppend ( DummyList(), lsList(i%) )                              ' add the new list at the old list
         next i%
-        
+
         textout = createUnoService( "com.sun.star.io.TextOutputStream" )       ' uno-handling to output an UFT-8-File
         textout.setEncoding("utf8")                                            '
         sfa = createUnoService( "com.sun.star.ucb.SimpleFileAccess" )          '
         xOutput = sfa.openFileWrite( Datei$ )                                  '
         textout.setOutputStream( xOutput )                                     '
-        
+
         for i%=1 to ListCount (DummyList())
             textout.writeString( DummyList( i% ) + Chr(13) + Chr(10 )           '
         next i%
         xOutput.closeOutput                                                    ' uno-file-close
     else
         Dim FileNum%
-        
+
         FileNum% = FreeFile
         Open Datei$ for Append  as #FileNum%
-        
+
         for i% = 1 to Val(lsList(0))
             Print #FileNum%, lsList(i%)
         next i%
-        
+
         Close #FileNum%
     end if
     ListWriteAppend = TRUE
-    
+
 end function
 
 '-------------------------------------------------------------------------
@@ -447,10 +424,10 @@ sub ListSort ( lsList() as String, optional UpDown as Boolean )
     'Author: tz
     '///+Sorts a list upward per default or downward if optional parameter is FALSE with quicksort method.
     '///+<u>Input</u>: Unsorted list
-    
+
     Dim Listenanzahl as Integer, i as Integer, j as Integer
     Dim Zwischenspeicher as String
-    
+
     ListenAnzahl = Val(lsList(0))
     for i=ListenAnzahl-1 to 1 step -1
         for j=1 to i
@@ -476,169 +453,169 @@ end sub
 '*******************************************************************************
 
 function gCompare2Lists( aListOne() as String, aListTwo() as String ) as boolean
-    
+
     const CFN = "global::tools::inc::t_list.inc::gCompare2Lists: "
-    
+
     '///<h3>Compare two lists with each other, where <b>list TWO</b> is the reference</h3>
     '///<ul>
-    
+
     dim aOneOnlyList( ubound( aListOne() ) ) as string
     dim aTwoOnlyList( ubound( aListTwo() ) ) as string
-    
+
     dim iListOneIndex as integer
     dim iListTwoIndex as integer
-    
+
     dim bFound as boolean
     dim brc as boolean     ' returncode: true if lists are identical
     brc = true
-    
+
     '///+<li>Create a copy of list two so we do not change the original list</li>
     ListCopy( aListTwo() , aTwoOnlyList() )
-    
+
     '///+<li>Step through each item in list one</li>
     for iListOneIndex = 1 to ListCount( aListOne() )
-        
+
         bFound = false
-        
+
         '///+<li>Compare it to each item in list two</li>
         for iListTwoIndex = 1 to ListCount( aTwoOnlyList() )
-            
+
             '///+<li>If the entries match, delete it from the TwoOnly list</li>
             if ( aListOne( iListOneIndex ) = aTwoOnlyList( iListTwoIndex ) ) then
-                
+
                 bFound = true
                 ListDelete( aTwoOnlyList() , iListTwoIndex )
                 exit for
-                
+
             end if
-            
+
         next iListTwoIndex
-        
+
         '///+<li>If there is no match, the item exists in list one only -> copy</li>
         if ( not bFound ) then
             ListAppend( aOneOnlyList() , aListOne( iListOneIndex ) )
         end if
-        
+
     next iListOneIndex
-    
+
     '///+<li>List all items that exist in List One only</li>
     if ( ListCount( aOneOnlyList() ) > 0 ) then
         warnlog( CFN & "Objects have been added to the list" )
         hListPrint( aOneOnlyList() , "Items found in list ONE only (NEW)" )
         brc = false
     end if
-    
+
     '///+<li>List all items that exist in List Two only</li>
     if ( ListCount( aTwoOnlyList() ) > 0 ) then
         warnlog( CFN & "Objects have been removed from the list" )
         hListPrint( aTwoOnlyList() , "Items found in list TWO only (MISSING)" )
         brc = false
     end if
-    
+
     gCompare2Lists() = brc
     '///</ul>
-    
+
 end function
 
 '*******************************************************************************
 
 function hListPrint( lsList() as string , optional cComment as string ) as integer
-    
+
     const CFN = "global::tools::inc::t_list.inc::hListPrint: "
-    
+
     '///<h3>Print the content of a list to the log with a heading comment</h3>
     '///<ul>
-    
+
     dim iListItem as integer
-    
+
     '///+<li>If no comment is provided we print a qaerrorlog</li>
     if ( ismissing( cComment ) ) then
         qaerrorlog( CFN & "Please provide any string as second parameter." )
         cComment = ""
     end if
-    
+
     '///+<li>Print a comment if desired</li>
     if ( cComment <> "" ) then
         printlog( "" )
         printlog( CFN & cComment )
         printlog( "" )
     end if
-    
+
     '///+<li>Print all items in the list to the log</li>
     for iListItem = 1 to listcount( lsList() )
         printlog( "(" & iListItem & ") :  " & lsList( iListItem ) )
     next iListItem
-    
+
     '///+<li>Return the number of listitems to the calling function</li>
     hListPrint() = listcount( lsList() )
-    
+
     '///</ul>
-    
+
 end function
 
 '*******************************************************************************
 
 function hListClearPattern( lsList() as string, cPattern as string ) as integer
-    
+
     '///<h3>Search a list for the occurrence of a special pattern.</h3>
     '///+ If the pattern is found, the entries are deleted, the new size of the
     '///+ array is returned.
-    
+
     dim iCurItem as integer
     iCurItem = 1
-    
+
     do while ( iCurItem <= listcount( lsList() ) )
-        
+
         if ( instr( lsList( iCurItem ) , cPattern ) <> 0 ) then
             listdelete( lsList() , iCurItem )
         else
             iCurItem = iCurItem + 1
         end if
-        
+
     loop
-    
+
     hListClearPattern() = listcount( lsList() )
-    
+
 end function
 
 '*******************************************************************************
 
 function hListClearBlank( lsList() as string ) as integer
-    
+
     '///<h3>Search a list for blank lines and remove them.</h3>
-    
+
     dim iCurItem as integer
     iCurItem = 1
-    
+
     do while ( iCurItem <= listcount( lsList() ) )
-        
+
         if ( len( lsList( iCurItem ) )  = 0 ) then
             listdelete( lsList() , iCurItem )
         else
             iCurItem = iCurItem + 1
         end if
-        
+
     loop
-    
+
     hListClearBlank() = listcount( lsList() )
-    
+
 end function
 
 '*******************************************************************************
 
 function hListIntegrityTest( sList() as string ) as boolean
-    
+
     const CFN = "global::tools::inc::t_list.inc::hListIntegrityTest:"
-    
+
     '///<h3>Verify that listcount( array ) < ubound( array )</h3>
     ' NOTE: some listfunctions fail if ubound = listcount
-    
+
     dim iListCount as integer
     dim iUbound as integer
-    
+
     iListCount = listcount( sList() )
     iUbound = ubound( sList() )
-    
+
     if ( iListCount >= iUbound ) then
         warnlog( CFN & "ListCount points beyond array boundary" )
         warnlog( CFN & "ListCount: " & iListCount )
@@ -646,9 +623,9 @@ function hListIntegrityTest( sList() as string ) as boolean
         hListIntegrityTest() = false
         exit function
     end if
-    
+
     hListIntegrityTest() = true
-    
+
 end function
 
 

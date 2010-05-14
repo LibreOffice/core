@@ -51,10 +51,10 @@ testcase tdFormatParagraph
    dim iTemp as integer
    dim sApplication as string
 
-   if (lCase(gApplication) = "draw") then
+   if (gApplication = "DRAW") then
       sApplication = "DRAWING"
    else
-      sApplication = "PRESENTATION"
+      sApplication = "IMPRESS"
    endif
 
    iCount = 0

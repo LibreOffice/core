@@ -39,20 +39,18 @@
 sub w_navigator
     printLog Chr(13) + "---------   Navigator Functions -   ----------"
 
-    Call tEditNavigator1                ' alle Methoden am Dockingwindow  - Navigator
-    if gApplication = "WRITER" then
-        Call tEditNavigator2            ' dokument?bergreifenden Methoden am Dockingwindow
-        Call tEditNavigator3            ' Funktionen testen
-        Call tEditNavigator4            ' Inhaltsansicht des Navigators ?berpr?fen
-        Call tEditNavigator5            ' Anspringen von Punkten im Dokument ?ber die Inhaltsansicht
-        Call tEditNavigator6            ' Umbenennen von Objekten aus dem Navigator
-    end if
+    Call tViewNavigator1                ' alle Methoden am Dockingwindow  - Navigator
+    Call tViewNavigator2            ' dokument?bergreifenden Methoden am Dockingwindow
+    Call tViewNavigator3            ' Funktionen testen
+    Call tViewNavigator4            ' Inhaltsansicht des Navigators ?berpr?fen
+    Call tViewNavigator5            ' Anspringen von Punkten im Dokument ?ber die Inhaltsansicht
+    Call tViewNavigator6            ' Umbenennen von Objekten aus dem Navigator
 
 end sub
 
 ' **********************************************************************
 
-testcase tEditNavigator1
+testcase tViewNavigator1
     Dim xPos as long : Dim yPos as long: Dim xSize% : Dim ySize%
 
     '/// Edit / Navigator ( all methods from Navigator as Window ) ///
@@ -66,7 +64,7 @@ testcase tEditNavigator1
     Kontext "Navigator"
     if Navigator.NotExists then
         Warnlog "No Navigator with F5"
-        EditNavigator
+        ViewNavigator
     end if
 
     '/// Move Navigator ///
@@ -105,9 +103,9 @@ testcase tEditNavigator1
     yPos = Navigator.GetPosY
     xSize% = Navigator.GetSizeX
     ySize% = Navigator.GetSizeY
-    EditNavigator
+    ViewNavigator
     Sleep 1
-    EditNavigator
+    ViewNavigator
     if xPos <> Navigator.GetPosX then Warnlog "X-Pos. has been changed : Should -> "+ xPos + "  Is -> "+ Navigator.GetPosX
     if yPos <> Navigator.GetPosY then Warnlog "Y-Pos. has been changed : Should -> "+ yPos + "  Is -> "+ Navigator.GetPosY
     if xSize% <> Navigator.GetSizeX then Warnlog "X-Size has been changed : Should -> "+ xSize% + "  Is -> "+ Navigator.GetSizeX
@@ -125,9 +123,12 @@ endcase
 
 ' **********************************************************************
 
-testcase tEditNavigator2
+testcase tViewNavigator2
     Dim xPos% : Dim yPos% : Dim xSize% : Dim ySize%
     Dim datgeht as boolean
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
     '/// Edit / Navigator ( document-spreading methods with Navigator as Window ) ///
     printlog "- Edit / Navigator : document-spreading methods with Navigator as Window"
     '/// New document ///
@@ -138,7 +139,7 @@ testcase tEditNavigator2
 
 	'///  Edit / Navigator ///
     Kontext "Navigator"
-    if Navigator.NotExists then EditNavigator
+    if Navigator.NotExists then ViewNavigator
     '/// New document ///
     Call hNewDocument
 	'/// Insert some text in second document ///
@@ -215,9 +216,9 @@ endcase
 
 ' **********************************************************************
 
-testcase tEditNavigator3
-QaErrorLog "#i94614# - tEditNavigator3 outcommented"
-exit sub
+testcase tViewNavigator3
+    QaErrorLog "#i94614# - tViewNavigator3 outcommented"
+    goto endsub
 
     Dim NavigationTearOff as boolean
 	'/// Edit / Navigator : check some Navigator-Functions ///
@@ -227,7 +228,7 @@ exit sub
     Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator ///
     Kontext "Navigator"
-    if Navigator.NotExists then EditNavigator
+    if Navigator.NotExists then ViewNavigator
     Kontext "NavigatorWriter"
 	'/// Enter Pagenumber '5' in Navigator
 	Seitennummer.Settext "5"
@@ -361,17 +362,19 @@ endcase
 
 ' **********************************************************************
 
-testcase tEditNavigator4
+testcase tViewNavigator4
     Dim i : Dim j : Dim Ende : Dim k
     Dim AlteGruppe$ : Dim AlterUnterwert$
     Ende=1000
-
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
     printlog "- Edit / Navigator : check entry's in Navigator Index"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"' ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
     Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator through Edit / Navigator ///
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     '/// Check all entrys in Navigator and notice the name ///
     for i= 1 to 12
@@ -422,9 +425,13 @@ endcase
 
 ' **********************************************************************
 
-testcase tEditNavigator5
-QaErrorLog "#i94614# - tEditNavigator5 outcommented"
-exit sub
+testcase tViewNavigator5
+    QaErrorLog "#i94614# - tViewNavigator5 outcommented"
+    goto endsub
+    
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
 
     Dim j as integer
     Dim Dummy as String
@@ -438,7 +445,7 @@ exit sub
     '/// Open Navigator ///
     Kontext "NavigatorWriter"
     if Not NavigatorWriter.Exists then
-        EditNavigator
+        ViewNavigator
         Kontext "NavigatorWriter"
     end if
 
@@ -608,17 +615,21 @@ endcase
 
 ' **********************************************************************
 
-testcase tEditNavigator6
+testcase tViewNavigator6
     Dim j as integer
     Dim datIsderAlte(4) as string
 
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
+    
     printlog "- Edit / Navigator : Rename Objects"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" ' ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" )
     Call sMakeReadOnlyDocumentEditable
     Kontext "Navigator"
     '/// Open Navigator ///
-    if Navigator.NotExists then EditNavigator
+    if Navigator.NotExists then ViewNavigator
     Kontext "NavigatorWriter"
     Call wNavigatorAuswahl(1,0)
 
@@ -676,7 +687,7 @@ testcase tEditNavigator6
     Kontext "Navigator"
     if Navigator.NotExists then
         Warnlog "- The Navigator should have been opened!"
-        EditNavigator
+        ViewNavigator
     end if
     Kontext "NavigatorWriter"
 
@@ -797,7 +808,7 @@ testcase tEditNavigator6
 	TabZusaetze.Cancel
     Kontext
     '/// Close Navigator ///
-    EditNavigator
+    ViewNavigator
     Sleep 1
     '/// Close document ///
     Call hCloseDocument

@@ -267,12 +267,8 @@ testcase tToolsOptionsHTMLLayout
     ExtrasOptionenDlg.OK
     
     ViewTextBoundaries
-    try
-        ViewRuler
-        QaErrorLog "#i94732# - View / Ruler should be disabled!"
-    catch
-    endcatch
-    
+    ViewRuler
+   
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
     Call hToolsOptions ( "HTMLDocument" , "VIEW" ) '*TabLayoutHTML/ (1)
@@ -584,7 +580,7 @@ testcase tToolsOptionsHTMLGrid
     
     ' select grafik element
     Call wNavigatorAuswahl(4,1)
-    EditNavigator
+    ViewNavigator
     sleep (2)
     FormatGraphics
     Kontext
@@ -618,7 +614,7 @@ testcase tToolsOptionsHTMLGrid
     
     ' check if @ (1,1) Current-Measure-Unit :-)
     Call wNavigatorAuswahl(4,1)
-    EditNavigator
+    ViewNavigator
     sleep (2)
     FormatGraphics
     Kontext

@@ -44,9 +44,9 @@
 ' #1 tEditObjectEdit
 '\*************************************************************************************
 
-'   sDatei = gTesttoolPath + "graphics\required\input\leer.sx"+left(lcase(gApplication),1)
+'   sDatei = gTesttoolPath + "graphics\required\input\leer.sx"+left(gApplication,1)
 '  Call hDateiOeffnen ConvertPath (gTesttoolPath + "graphics\required\input\frame1.htm")	'/// Load html document ///'
-'   sDatei = gTesttoolPath + "graphics\required\input\leer.sx"+left(lcase(gApplication),1)
+'   sDatei = gTesttoolPath + "graphics\required\input\leer.sx"+left(gApplication,1)
 '      Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
 
 testcase tEditDuplicate
@@ -262,7 +262,7 @@ testcase tEditObjectEdit
           sleep 3                                 ' Changed from Sleep 1 to Sleep 3
           gMouseMove  10,10,90,90
           sleep 1
-
+          EditSelectAll
 
           try
              EditObjectEdit      'keine ID      '/// try edit-objects ///'

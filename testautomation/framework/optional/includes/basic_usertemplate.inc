@@ -212,6 +212,7 @@ testcase tMacroUsertemplate
     
     '///+<li>Close document</li>
     hDestroyDocument()
+    hDestroyDocument()
     
     '///+<li>Cleanup: Delete the template</li>
     hDeleteFile( sPathOut & FILEOUT & ".ott" )

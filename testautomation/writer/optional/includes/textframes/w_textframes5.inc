@@ -239,7 +239,6 @@ testcase tTextframes_75
     end if
     TabType.Cancel
     
-    
     Call hCloseDocument
 
 endcase
@@ -404,6 +403,9 @@ testcase tTextframes_81
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+    
     Dim sTestFile      as String
     Dim iVertical      as Integer
     Dim iVerticalTo    as Integer

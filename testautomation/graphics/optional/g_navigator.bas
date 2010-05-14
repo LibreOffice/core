@@ -46,17 +46,17 @@ sub main
     Call hStatusIn ( "Graphics","g_navigator.bas")
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-       Call tEditNavigatorZOrder
-       Call tdEditNavigator
-       Call tEditNavigatorGroupedObjects
-       Call tEditNavigatorNameActivated
+       Call tViewNavigatorZOrder
+       Call tdViewNavigator
+       Call tViewNavigatorGroupedObjects
+       Call tViewNavigatorNameActivated
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-       Call tEditNavigatorZOrder
-       Call tdEditNavigator
-       Call tEditNavigatorGroupedObjects
-       Call tEditNavigatorNameActivated
+       Call tViewNavigatorZOrder
+       Call tdViewNavigator
+       Call tViewNavigatorGroupedObjects
+       Call tViewNavigatorNameActivated
 
     Call hStatusOut
 end sub
@@ -65,6 +65,6 @@ sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
     
-   gApplication = "Impress"
+   gApplication = "IMPRESS"
    Call GetUseFiles
 end sub

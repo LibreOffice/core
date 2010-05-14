@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -38,18 +38,19 @@
 '\******************************************************************
 
 sub w_003_
+
     printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
+    gApplication = "WRITER"
 
-
-	Call tViewPrintLayout
-	Call tViewWebLayout
+    Call tViewPrintLayout
+    Call tViewWebLayout
     Call tViewHTMLSource
 
-	Call tViewToolbars
+    Call tViewToolbars
 
-	Call tViewStatusBar	
-	Call tViewInputMethodStatus
-	Call tViewRuler
+    Call tViewStatusBar
+    Call tViewInputMethodStatus
+    Call tViewRuler
 
     Call tViewTextBoundaries
     Call tViewFieldShadings
@@ -59,59 +60,65 @@ sub w_003_
 
     Call tViewDataSources
 
-	Call tViewFullScreen
-	Call tViewZoom
+    Call tViewFullScreen
+    Call tViewZoom
+
+    'Writer Web
+    gApplication = "HTML"
+    Call tHtmlDocViewZoom
+    Call tHtmlDocViewHTMLSource
+    gApplication = "WRITER"
 
 end sub
 
 '------------------------------------------------------
 
 testcase tViewZoom
-   printlog " open application"
-   Call hNewDocument
-   printlog " type something into the document"
-   hTypekeys "<RETURN>", 3
-   UseBindings
-   printlog " View -> Zoom"
-   ViewZoom
-   Kontext "Massstab"
-      DialogTest ( Massstab )
-      select case uCASE(gApplication)
-                  case "HTMLDOKUMENT" :
-                           printlog " check checkbox '100%'"
-                           Vergroesserung100.check
-                           printlog " check checkbox 'Variable'"
-                           VergroesserungStufenlos.check
-                  case else :
-                           printlog " check checkbox 'Optimal'"
-                           Optimal.check
-                           printlog " check checkbox 'Fit height and width'"
-                           GanzeSeite.check
-                           printlog " check checkbox 'Fit Width'"
-                           Seitenbreite.check
-                           printlog " check checkbox '100%'"
-                           Vergroesserung100.check
-                           printlog " check checkbox 'Variable'"
-                           VergroesserungStufenlos.check
-                           printlog " click button MORE on 'Variable'"
-                           Stufenlos.more
-                           printlog " click button 'Automatic'"
-                           Automatic.check
-                           printlog " click button 'Single Page'"
-                           Singlepage.check
-                           printlog " click button 'Columns'"
-                           Columns.check
-                           printlog " click button MORE on 'Columns'"
-                           Columnsfield.more
-                           printlog " click button LESS on 'Columns'"
-                           Columnsfield.less
-                           printlog " Check checkbox 'Book mode'"
-                           Bookmode.check
-                           printlog " cancel dialog 'Zoom'"
-                  end select
-  Massstab.Cancel
-  printlog " close application"
-   Call  hCloseDocument
+    printlog " open application"
+    Call hNewDocument
+    printlog " type something into the document"
+    hTypekeys "<RETURN>", 3
+    UseBindings
+    printlog " View -> Zoom"
+    ViewZoom
+    Kontext "Massstab"
+    DialogTest ( Massstab )
+    select case uCASE(gApplication)
+    case "HTML" :
+        printlog " check checkbox '100%'"
+        Vergroesserung100.check
+        printlog " check checkbox 'Variable'"
+        VergroesserungStufenlos.check
+    case else :
+        printlog " check checkbox 'Optimal'"
+        Optimal.check
+        printlog " check checkbox 'Fit height and width'"
+        GanzeSeite.check
+        printlog " check checkbox 'Fit Width'"
+        Seitenbreite.check
+        printlog " check checkbox '100%'"
+        Vergroesserung100.check
+        printlog " check checkbox 'Variable'"
+        VergroesserungStufenlos.check
+        printlog " click button MORE on 'Variable'"
+        Stufenlos.more
+        printlog " click button 'Automatic'"
+        Automatic.check
+        printlog " click button 'Single Page'"
+        Singlepage.check
+        printlog " click button 'Columns'"
+        Columns.check
+        printlog " click button MORE on 'Columns'"
+        Columnsfield.more
+        printlog " click button LESS on 'Columns'"
+        Columnsfield.less
+        printlog " Check checkbox 'Book mode'"
+        Bookmode.check
+        printlog " cancel dialog 'Zoom'"
+    end select
+    Massstab.Cancel
+    printlog " close application"
+    Call  hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -146,191 +153,191 @@ endcase
 
 testcase tViewToolbars
     PrintLog "- View / Toolbars"
-	Dim i as integer
+    Dim i as integer
 
     printlog " Close all documents until only backing window is opened"
     Do Until GetDocumentCount = 0
         Call hCloseDocument
     Loop
-    
+
     printlog " Open a new writer document"
     Call hNewDocument
 
-	printlog "- Toolbar 'Align'"
-	printlog "-  open"
-	Call hToolbarSelect("Align", true)
-	printlog "-  close"
-	Call hToolbarSelect("Align", false)
-	printlog "-  reset"
-	Call hToolbarSelect("Align", true, true) 
+    printlog "- Toolbar 'Align'"
+    printlog "-  open"
+    Call hToolbarSelect("Align", true)
+    printlog "-  close"
+    Call hToolbarSelect("Align", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Align", true, true)
 
-	printlog "- Toolbar 'Bullets And Numbering'"
-	printlog "-  open"
-	Call hToolbarSelect("BulletsAndNumbering", true)
-	printlog "-  close"
-	Call hToolbarSelect("BulletsAndNumbering", false)
-	printlog "-  reset"
-	Call hToolbarSelect("BulletsAndNumbering", true, true)
+    printlog "- Toolbar 'Bullets And Numbering'"
+    printlog "-  open"
+    Call hToolbarSelect("BulletsAndNumbering", true)
+    printlog "-  close"
+    Call hToolbarSelect("BulletsAndNumbering", false)
+    printlog "-  reset"
+    Call hToolbarSelect("BulletsAndNumbering", true, true)
 
-	printlog "- Toolbar 'Drawing'"
-	printlog "-  open"
-	Call hToolbarSelect("Drawing", true)
-	printlog "-  close"
-	Call hToolbarSelect("Drawing", false)
-	printlog "-  reset"
-	Call hToolbarSelect("Drawing", true, true)
-    
-   	printlog "- Toolbar 'Drawing Object Properties'"
-	printlog "-  open"
-	Call hToolbarSelect("DrawingObjectProperties", true)
-	printlog "-  close"
-	Call hToolbarSelect("DrawingObjectProperties", false)
-	printlog "-  reset"
-	Call hToolbarSelect("DrawingObjectProperties", true, true)
+    printlog "- Toolbar 'Drawing'"
+    printlog "-  open"
+    Call hToolbarSelect("Drawing", true)
+    printlog "-  close"
+    Call hToolbarSelect("Drawing", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Drawing", true, true)
 
-   	printlog "- Toolbar 'Form Controls'"
-	printlog "-  open"
-	Call hToolbarSelect("FormControls", true)
-	printlog "-  close"
-	Call hToolbarSelect("FormControls", false)
-	printlog "-  reset"
-	Call hToolbarSelect("FormControls", true, true)
-    
-   	printlog "- Toolbar 'Form Design'"
-	printlog "-  open"
-	Call hToolbarSelect("FormDesign", true)
-	printlog "-  close"
-	Call hToolbarSelect("FormDesign", false)
-	printlog "-  reset"
-	Call hToolbarSelect("FormDesign", true, true)
-    
-   	printlog "- Toolbar 'Form Navigation'"
-	printlog "-  open"
-	Call hToolbarSelect("FormNavigation", true)
-	printlog "-  close"
-	Call hToolbarSelect("FormNavigation", false)
-	printlog "-  reset"
-	Call hToolbarSelect("FormNavigation", true, true)
-    
-	' The following toolbar is disabled because it will be found in all documents
-	' therefore they can't be reactivated once deactivated
-	 printlog "- Toolbar 'Formatting'"
-	 printlog "-  open"
-	 Call hToolbarSelect("Formatting", true)
-	 printlog "-  close"
-	 Call hToolbarSelect("Formatting", false)
-	 printlog "-  reset"
-	 Call hToolbarSelect("Formatting", true, true)
-    
-	printlog "- Toolbar 'Frame'"
-	printlog "-  open"
-	Call hToolbarSelect("Frame", true)
-	printlog "-  close"
-	Call hToolbarSelect("Frame", false)
-	printlog "-  reset"
-	Call hToolbarSelect("Frame", true, true)
-    
-	printlog "- Toolbar 'Insert'"
-	printlog "-  open"
-	Call hToolbarSelect("Insert", true)
-	printlog "-  close"
-	Call hToolbarSelect("Insert", false)
-	printlog "-  reset"
-	Call hToolbarSelect("Insert", true, true)
+    printlog "- Toolbar 'Drawing Object Properties'"
+    printlog "-  open"
+    Call hToolbarSelect("DrawingObjectProperties", true)
+    printlog "-  close"
+    Call hToolbarSelect("DrawingObjectProperties", false)
+    printlog "-  reset"
+    Call hToolbarSelect("DrawingObjectProperties", true, true)
 
-	printlog "- Toolbar 'Insert Object'"
-	printlog "-  open"
-	Call hToolbarSelect("InsertObject", true)
-	printlog "-  close"
-	Call hToolbarSelect("InsertObject", false)
-	printlog "-  reset"
-	Call hToolbarSelect("InsertObject", true, true)
+    printlog "- Toolbar 'Form Controls'"
+    printlog "-  open"
+    Call hToolbarSelect("FormControls", true)
+    printlog "-  close"
+    Call hToolbarSelect("FormControls", false)
+    printlog "-  reset"
+    Call hToolbarSelect("FormControls", true, true)
 
-	printlog "- Toolbar 'Media Playback'"
-	printlog "-  open"
-	Call hToolbarSelect("MediaPlayback", true)
-	printlog "-  close"
-	Call hToolbarSelect("MediaPlayback", false)
-	printlog "-  reset"
-	Call hToolbarSelect("MediaPlayback", true, true)
+    printlog "- Toolbar 'Form Design'"
+    printlog "-  open"
+    Call hToolbarSelect("FormDesign", true)
+    printlog "-  close"
+    Call hToolbarSelect("FormDesign", false)
+    printlog "-  reset"
+    Call hToolbarSelect("FormDesign", true, true)
 
-	printlog "- Toolbar 'OLE Object'"
-	printlog "-  open"
-	Call hToolbarSelect("OLEObject", true)
-	printlog "-  close"
-	Call hToolbarSelect("OLEObject", false)
-	printlog "-  reset"
-	Call hToolbarSelect("OLEObject", true, true)
+    printlog "- Toolbar 'Form Navigation'"
+    printlog "-  open"
+    Call hToolbarSelect("FormNavigation", true)
+    printlog "-  close"
+    Call hToolbarSelect("FormNavigation", false)
+    printlog "-  reset"
+    Call hToolbarSelect("FormNavigation", true, true)
 
-	printlog "- Toolbar 'Page Preview'"
-	printlog "-  open"
-	Call hToolbarSelect("PagePreview", true)
-	printlog "-  close"
-	Call hToolbarSelect("PagePreview", false)
-	printlog "-  reset"
-	Call hToolbarSelect("PagePreview", true, true)
-    
-	printlog "- Toolbar 'Picture'"
-	printlog "-  open"
-	Call hToolbarSelect("Picture", true)
-	printlog "-  close"
-	Call hToolbarSelect("Picture", false)
-	printlog "-  reset"
-	Call hToolbarSelect("Picture", true, true)
-    
     ' The following toolbar is disabled because it will be found in all documents
     ' therefore they can't be reactivated once deactivated
-	 printlog "- Toolbar 'Standard'"
-	 printlog "-  open"
-	 Call hToolbarSelect("Standard", true)
-	 printlog "-  close"
-	 Call hToolbarSelect("Standard", false)
-	 printlog "-  reset"
-	 Call hToolbarSelect("Standard", true, true)
-    
-	printlog "- Toolbar 'Standard (Viewing Mode)'"
-	printlog "-  open"
-	Call hToolbarSelect("StandardViewingMode", true)
-	printlog "-  close"
-	Call hToolbarSelect("StandardViewingMode", false)
-	printlog "-  reset"
-	Call hToolbarSelect("StandardViewingMode", true, true)
-    
-	printlog "- Toolbar 'Table'"
-	printlog "-  open"
-	Call hToolbarSelect("Table", true)
-	printlog "-  close"
-	Call hToolbarSelect("Table", false)
-	printlog "-  reset"
-	Call hToolbarSelect("Table", true, true)
-    
-	printlog "- Toolbar 'Text Object'"
-	printlog "-  open"
-	Call hToolbarSelect("TextObject", true)
-	printlog "-  close"
-	Call hToolbarSelect("TextObject", false)
-	printlog "-  reset"
-	Call hToolbarSelect("TextObject", true, true)
+    printlog "- Toolbar 'Formatting'"
+    printlog "-  open"
+    Call hToolbarSelect("Formatting", true)
+    printlog "-  close"
+    Call hToolbarSelect("Formatting", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Formatting", true, true)
 
-	printlog "- Toolbar 'Tools'"
-	printlog "-  open"
-	Call hToolbarSelect("Tools", true)
-	printlog "-  close"
-	Call hToolbarSelect("Tools", false)
-	printlog "-  reset"
-	Call hToolbarSelect("Tools", true, true)
-    
-	printlog "- Toolbar 'Hyperlink Bar'"
-	printlog "-  open"
-	Call hToolbarSelect("HyperlinkBar", true)
-	printlog "-  close"
-	Call hToolbarSelect("HyperlinkBar", false)
-	printlog "-  reset"
-	Call hToolbarSelect("HyperlinkBar", true, true)
-    
-	printlog "- Toolbar 'Formula'"
-	printlog "-  open"
-	Call hToolbarSelect("Formula", true)
+    printlog "- Toolbar 'Frame'"
+    printlog "-  open"
+    Call hToolbarSelect("Frame", true)
+    printlog "-  close"
+    Call hToolbarSelect("Frame", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Frame", true, true)
+
+    printlog "- Toolbar 'Insert'"
+    printlog "-  open"
+    Call hToolbarSelect("Insert", true)
+    printlog "-  close"
+    Call hToolbarSelect("Insert", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Insert", true, true)
+
+    printlog "- Toolbar 'Insert Object'"
+    printlog "-  open"
+    Call hToolbarSelect("InsertObject", true)
+    printlog "-  close"
+    Call hToolbarSelect("InsertObject", false)
+    printlog "-  reset"
+    Call hToolbarSelect("InsertObject", true, true)
+
+    printlog "- Toolbar 'Media Playback'"
+    printlog "-  open"
+    Call hToolbarSelect("MediaPlayback", true)
+    printlog "-  close"
+    Call hToolbarSelect("MediaPlayback", false)
+    printlog "-  reset"
+    Call hToolbarSelect("MediaPlayback", true, true)
+
+    printlog "- Toolbar 'OLE Object'"
+    printlog "-  open"
+    Call hToolbarSelect("OLEObject", true)
+    printlog "-  close"
+    Call hToolbarSelect("OLEObject", false)
+    printlog "-  reset"
+    Call hToolbarSelect("OLEObject", true, true)
+
+    printlog "- Toolbar 'Page Preview'"
+    printlog "-  open"
+    Call hToolbarSelect("PagePreview", true)
+    printlog "-  close"
+    Call hToolbarSelect("PagePreview", false)
+    printlog "-  reset"
+    Call hToolbarSelect("PagePreview", true, true)
+
+    printlog "- Toolbar 'Picture'"
+    printlog "-  open"
+    Call hToolbarSelect("Picture", true)
+    printlog "-  close"
+    Call hToolbarSelect("Picture", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Picture", true, true)
+
+    ' The following toolbar is disabled because it will be found in all documents
+    ' therefore they can't be reactivated once deactivated
+    printlog "- Toolbar 'Standard'"
+    printlog "-  open"
+    Call hToolbarSelect("Standard", true)
+    printlog "-  close"
+    Call hToolbarSelect("Standard", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Standard", true, true)
+
+    printlog "- Toolbar 'Standard (Viewing Mode)'"
+    printlog "-  open"
+    Call hToolbarSelect("StandardViewingMode", true)
+    printlog "-  close"
+    Call hToolbarSelect("StandardViewingMode", false)
+    printlog "-  reset"
+    Call hToolbarSelect("StandardViewingMode", true, true)
+
+    printlog "- Toolbar 'Table'"
+    printlog "-  open"
+    Call hToolbarSelect("Table", true)
+    printlog "-  close"
+    Call hToolbarSelect("Table", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Table", true, true)
+
+    printlog "- Toolbar 'Text Object'"
+    printlog "-  open"
+    Call hToolbarSelect("TextObject", true)
+    printlog "-  close"
+    Call hToolbarSelect("TextObject", false)
+    printlog "-  reset"
+    Call hToolbarSelect("TextObject", true, true)
+
+    printlog "- Toolbar 'Tools'"
+    printlog "-  open"
+    Call hToolbarSelect("Tools", true)
+    printlog "-  close"
+    Call hToolbarSelect("Tools", false)
+    printlog "-  reset"
+    Call hToolbarSelect("Tools", true, true)
+
+    printlog "- Toolbar 'Hyperlink Bar'"
+    printlog "-  open"
+    Call hToolbarSelect("HyperlinkBar", true)
+    printlog "-  close"
+    Call hToolbarSelect("HyperlinkBar", false)
+    printlog "-  reset"
+    Call hToolbarSelect("HyperlinkBar", true, true)
+
+    printlog "- Toolbar 'Formula'"
+    printlog "-  open"
+    Call hToolbarSelect("MATH", true)
     OL_SW_Rechenleiste.TypeKeys "<Enter>"
 
     printlog " Close active document"
@@ -360,7 +367,7 @@ testcase tViewFieldShadings
     Call hNewDocument
     printlog " View / Field Shadings"
     ViewFieldShadings
-    WaitSlot (2000) 
+    WaitSlot (2000)
     printlog " View / Field Shadings"
     ViewFieldShadings
     printlog " Close active document"
@@ -380,7 +387,6 @@ testcase tViewFields
     ViewFields
     printlog " Close active document"
     Call hCloseDocument
-
 endcase
 
 '------------------------------------------------------
@@ -498,21 +504,21 @@ endcase
 testcase tViewInputMethodStatus
     PrintLog "- View / Input Method Status (only Solaris)"
     if Ucase(gPlatform) <> "SOLARIS" then goto endsub
-    
-    '/// Open new document ///    
+
+    PrintLog " Open new document"
     Call hNewDocument
-    '/// View / View / Input Method Status  ///
+    PrintLog " View / View / Input Method Status"
     try
-		ViewInputMethodStatus
-	catch
-		Warnlog "Menuentry 'Input Method Status' is disabled!"
-		Call hCloseDocument
-		goto endsub
-	endcatch
+        ViewInputMethodStatus
+    catch
+        Warnlog "Menuentry 'Input Method Status' is disabled!"
+        Call hCloseDocument
+        goto endsub
+    endcatch
     WaitSlot (2000)
-    '/// View / View / Input Method Status  ///
+    PrintLog " View / View / Input Method Status"
     ViewInputMethodStatus
-    '/// Close active document ///
+    PrintLog " Close active document"
     Call hCloseDocument
 endcase
 
@@ -520,7 +526,7 @@ endcase
 
 testcase tViewHTMLSource
     PrintLog "- View / HTML Source (only in HTML-Document)"
-    if gApplication <> "HTMLDOKUMENT" then goto endsub
+    if gApplication <> "HTML" then goto endsub
     printlog "Open new document"
     Call hNewDocument
     printlog "View / HTML-Source"
@@ -542,15 +548,77 @@ testcase tViewHTMLSource
             endcatch
         end if
     end if
-	wait 500
-	Kontext "DocumentHTMLSourceView"
-	DocumentHTMLSourceView.TypeKeys "Check for bug: #116402"
-	wait 500
+    wait 500
+    Kontext "DocumentHTMLSourceView"
+    DocumentHTMLSourceView.TypeKeys "Check for bug: #116402"
+    wait 500
     printlog "View / HTML-Source"
     AnsichtHTMLQuelltext
     WaitSlot (1000)
     printlog "Close active document"
     Call hCloseDocument
 endcase
+
 '-----------------------------------------------------------
 
+testcase tHtmlDocViewZoom
+    gApplication = "HTML"
+    printlog " open application"
+    Call hNewDocument
+    printlog " type something into the document"
+    hTypekeys "<RETURN>", 3
+    UseBindings
+    printlog " View -> Zoom"
+    ViewZoom
+    Kontext "Massstab"
+    DialogTest ( Massstab )
+    printlog " check checkbox '100%'"
+    Vergroesserung100.check
+    printlog " check checkbox 'Variable'"
+    VergroesserungStufenlos.check
+    Massstab.Cancel
+
+    printlog " close application"
+    Call  hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocViewHTMLSource
+    PrintLog "- View / HTML Source (only in HTML-Document)"
+    gApplication = "HTML"
+    printlog "Open new document"
+    Call hNewDocument
+    printlog "View / HTML-Source"
+    AnsichtHTMLQuelltext
+    WaitSlot (1000)
+    printlog "Save-As dialog has to come up"
+    printlog "Save sourcecode"
+    Kontext "SpeichernDlg"
+    Dateiname.Settext Convertpath(gofficepath + "user\work\sourcecode.html")
+    Speichern.Click
+    Kontext "Active"
+    If Active.Exists then
+        if Active.GetRT = 304 then
+            try
+                Active.Yes
+            catch
+                Warnlog Active.Gettext
+                Active.Ok
+            endcatch
+        end if
+    end if
+    wait 500
+    Kontext "DocumentHTMLSourceView"
+    DocumentHTMLSourceView.TypeKeys "Check for bug: #116402"
+    wait 500
+    printlog "View / HTML-Source"
+    AnsichtHTMLQuelltext
+    WaitSlot (1000)
+    printlog "Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------

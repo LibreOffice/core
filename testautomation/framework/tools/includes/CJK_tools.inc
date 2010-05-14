@@ -78,7 +78,7 @@ function fStartupNavigator(navigatorItem as String , subItemNum as Integer)
     Kontext "Navigator"
     if NOT Navigator.Exists then
         ' If you don' t ask for the Navigator and it's open it would be clodes and test fails !
-        EditNavigator
+        ViewNavigator
     end if
     Kontext "NavigatorWriter"
     if Auswahlliste.GetItemCount < 11 then

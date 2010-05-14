@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Creates lists of language dependent filters and OLE objects
 '*

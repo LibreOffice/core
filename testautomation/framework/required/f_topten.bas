@@ -31,7 +31,7 @@
 '*
 '/******************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : joerg.skottke@sun.com
 '*
 '* short description : smoke test for each application
 '*
@@ -67,7 +67,7 @@ sub LoadIncludeFiles
     
     use "global\tools\includes\optional\t_docfuncs.inc"
    
-    gApplication = "DESKTOP"
+    gApplication = "BACKGROUND"
     Call GetUseFiles
     
 end sub

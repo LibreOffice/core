@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Resource Test for chart2 main menus
 '*
@@ -43,6 +43,12 @@
 
 testcase tMainMenu
     dim iCount as integer ' the numbers of the items in the menu.
+
+    dim iMainMenuItemCount as integer
+        iMainMenuItemCount = 21 : if ( gPlatform = "osx" ) then iMainMenuItemCount = 20
+
+    dim iHelpMenuItemCount as integer
+        iHelpMenuItemCount = 5  : if ( gPlatform = "osx" ) then iHelpMenuItemCount = 4
     
     printlog "Close all document windows (File / Close)"
     Do Until GetDocumentCount = 0
@@ -61,8 +67,8 @@ testcase tMainMenu
         printlog "check if there are 21 items in the FILE menu."
         hMenuSelectNr(1) ' FILE        
         iCount = hMenuItemGetCount()        
-        if (iCount <> 21 ) then
-            warnlog "There should be 21 items in the file menu but there are " + iCount + " items."
+        if (iCount <> iMainMenuItemCount ) then
+            warnlog "There should be 20 or 21 items in the file menu but there are " + iCount + " items."
         end if        
         call hMenuClose() ' close the FILE menu
 
@@ -199,7 +205,7 @@ testcase tMainMenu
         DocumentCalc.UseMenu 
         hMenuSelectNr(8)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 6 AND iCount <> 5 ) then
+        if (iCount <> ( iHelpMenuItemCount + 1 ) AND iCount <> iHelpMenuItemCount ) then
             warnlog "There should 5 OR 6 items in the HELP menu but there are " + iCount + " items."
         end if
         call hMenuClose()        

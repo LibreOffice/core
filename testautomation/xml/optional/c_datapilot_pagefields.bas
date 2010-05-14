@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@Sun.COM
+'* owner : oliver.creamer@Sun.COM
 '*
 '* short description  :  Lookup for correct attributes of datapilot pagefields
 '*

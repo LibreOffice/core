@@ -197,20 +197,15 @@ testcase tiToolsSpellcheckError
         qaErrorLog "Can't get into Dictionary lists"
         goto endsub
     end if
-
+    printlog "Setting doc language to english"
+    ToolsOptions
+    Kontext "ExtrasOptionenDlg"
+    hToolsOptions("LANGUAGESETTINGS","Languages")
+    Westlich.Select 32
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
     printlog "Create 1 textbox with 1 spelling error (test replace always)"
     hTextrahmenErstellen (FehlerText$,30,30,90,40)
-    
-    'printlog "Setting Text to english"
-    'sleep 1
-    'EditSelectAll
-    'FormatCharacter
-    'sleep 1
-    'Kontext
-    'Messagebox.SetPage TabFont
-    'Kontext "TabFont"
-    'Language.Select 41
-    'TabFont.OK
     
     hTypeKeys "<HOME>"
     printlog "Call 'Tools->Spellcheck->Check'"

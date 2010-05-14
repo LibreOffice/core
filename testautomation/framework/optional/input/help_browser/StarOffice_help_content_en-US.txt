@@ -1,33 +1,13 @@
-Formulas
+Text Documents
 General Information and User Interface Usage
-Welcome to the StarOffice Math Help
-StarOffice Math Features
-Instructions for Using StarOffice Math
-Shortcuts (StarOffice Math Accessibility)
+Welcome to the StarOffice Writer Help
+StarOffice Writer Features
+Instructions for Using StarOffice Writer
+Docking and Resizing Windows
+Shortcut Keys for StarOffice Writer
+Counting Words
+Using Shortcut Keys (StarOffice Writer Accessibility)
 Command and Menu Reference
-Menus
-Toolbars
-Working with Formulas
-Manually Aligning Formula Parts
-Changing Default Attributes
-Merging Formula Parts in Brackets
-Entering Comments
-Entering Line Breaks
-Inserting Brackets
-Presentations and Drawings
-General Information and User Interface Usage
-Welcome to the StarOffice Impress Help
-Welcome to the StarOffice Draw Help
-StarOffice Impress Features
-StarOffice Draw Features
-Using Shortcut Keys in StarOffice Impress 
-Shortcut Keys for Drawing Objects
-Shortcut Keys for StarOffice Impress
-Shortcut Keys for Drawings
-Instructions for Using StarOffice Impress
-Instructions for Using StarOffice Draw
-Command and Menu Reference
-Presentations (StarOffice Impress)
 Menus
 Menus
 File
@@ -37,103 +17,177 @@ Insert
 Format
 Tools
 Window
-Slide Show
 Toolbars
 Toolbars
-Line and Filling Bar
-Text Formatting Bar
-Slide View Bar
-Status Bar
-Rulers
-Drawing Bar
-Outline Bar
-Slide Sorter Bar
-Options Bar
+Formatting Bar
 Picture Bar
+Table Bar
+Drawing Object Properties Bar
+Bullets and Numbering Bar
+Status Bar
+Page Preview
+Rulers
+Formula Bar
+Frame Bar
+OLE-Object Bar
+Text Object Bar
 Standard Bar
 Hyperlink Bar
+Table Data Bar
 Form Navigation Bar
+Query Design Bar
 Form Design Toolbar
-Edit Points Bar
-Drawings (StarOffice Draw)
-Menus
-Menus
-File
-Edit
-View
-Insert
-Format
-Tools
-Modify
-Toolbars
-Toolbars
-Drawing Bar
-Options Bar
-Standard Bar
-Hyperlink Bar
-Form Navigation Bar
-Form Design Toolbar
-Edit Points Bar
+Creating Text Documents
+Navigating and Selecting With the Keyboard
+Using the Direct Cursor
+Graphics in Text Documents
+Inserting Graphics
+Inserting a Graphic From a File
+Inserting Graphics From the Gallery With Drag-and-Drop
+Inserting a Scanned Image
+Inserting a Calc Chart into a Text Document
+Inserting Graphics From StarOffice Draw or Impress
+Inserting a Horizontal Line
+Tables in Text Documents
+Turning Number Recognition On or Off in Tables
+Modifying Rows and Columns by Keyboard
+Deleting Tables or the Contents of a Table
+Inserting Tables
+Repeating a Table Header on a New Page
+Resizing Rows and Columns in a Text Table 
+Adding or Deleting a Row or Column to a Table Using the Keyboard
+Objects in Text Documents
+Positioning Objects
+Wrapping Text Around Objects
+Sections and Frames in Text Documents
+Using Sections
+Inserting, Editing, and Linking Text Frames
+Editing Sections
+Inserting Sections
+Tables of Content and Indexes
+Outline Numbering
+User-Defined Indexes
+Creating a Table of Contents
+Creating Alphabetical Indexes
+Indexes Covering Several Documents
+Creating a Bibliography
+Editing or Deleting Index and Table Entries
+Updating, Editing and Deleting Indexes and Tables of Contents
+Defining Index or Table of Contents Entries
+Formatting an Index or a Table of Contents
+Fields in Text Documents
+About Fields
+Inserting a Fixed or Variable Date Field
+Converting a Field into Text
+Navigating Text Documents
+Moving and Copying Text in Documents
+Rearranging a Document by Using the Navigator
+Inserting Hyperlinks With the Navigator
+Navigator for Text Documents
+Calculating in Text Documents
+Calculating Across Tables
+Calculating in Text Documents
+Calculating and Pasting the Result of a Formula in a Text Document
+Calculating Cell Totals in Tables
+Calculating Complex Formulas in Text Documents
+Displaying the Result of a Table Calculation in a Different Table
+Formatting Text Documents
+Templates and Styles
+Templates and Styles
+Alternating Page Styles on Odd and Even Pages
+Creating a Page Style Based on the Current Page
+Using Styles From Another Document or Template
+Creating New Styles From Selections
+Updating Styles From Selections
+Creating a Document Template
+Changing the Default Template
+Changing the Case of Text
+Hiding Text
+Defining Different Headers and Footers
+Inserting a Chapter Name and Number in a Header or a Footer
+Applying Text Formatting While You Type
+Resetting Font Attributes
+Applying Styles in Fill Format Mode
+Wrapping Text Around Objects
+Using a Frame to Center Text on a Page
+Emphasizing Text
+Rotating Text
+Inserting and Deleting Page Breaks
+Creating and Applying Page Styles
+Making Text Superscript or Subscript
+Special Text Elements
+Using Captions 
+Conditional Text
+Conditional Text for Page Counts
+Inserting a Fixed or Variable Date Field
+Adding Input Fields
+Inserting Page Numbers of Continuation Pages
+Inserting Page Numbers in Footers
+Hiding Text
+Defining Different Headers and Footers
+Inserting a Chapter Name and Number in a Header or a Footer
+Querying User Data in Fields or Conditions
+Inserting and Editing Footnotes or Endnotes
+Spacing Between Footnotes
+About Headers and Footers
+Formatting Headers or Footers
+Animating Text
+Creating a Form Letter
+Automatic Functions
+Adding Exceptions to the AutoCorrect List
+Using AutoText
+Creating Numbered or Bulleted Lists as You Type
+Turning Off AutoCorrect 
+Automatically Check Spelling
+Turning Number Recognition On or Off in Tables
+Checking Spelling in Other Languages
+Hyphenation
+Numbering and Lists
+Adding Chapter Numbers to Captions
+Creating Numbered or Bulleted Lists as You Type
+Outline Numbering
+Changing the Outline Level of Numbered and Bulleted Lists
+Combining Numbered Lists
+Adding Line Numbers
+Modifying Numbering in a Numbered List
+Defining Number Ranges
+Adding Numbering
+Numbering and Numbering Styles
+Adding Bullets
+Spellchecking, Thesaurus, and Languages
+Automatically Check Spelling
+Removing Words From a User-Defined Dictionary
+Thesaurus
+Checking Spelling in Other Languages
+Checking Spelling Manually
+Troubleshooting Tips
+Inserting Text Before a Table at the Top of Page
+Going to Specific Bookmark
 Loading, Saving, Importing, and Exporting
-Saving a Presentation in HTML Format
-Importing HTML Pages Into Presentations 
-Loading Color, Gradient, and Hatching Lists
-Exporting Animations in GIF Format
-Including Spreadsheets in Slides
-Inserting Graphics
-Copying Slides From Other Presentations
-Formatting
-Loading Color, Gradient, and Hatching Lists
-Loading Line and Arrow Styles
-Defining Custom Colors
-Creating Gradient Fills
-Replacing Colors
-Arranging, Aligning and Distributing Objects
-Changing the Slide Background Fill
-Adding a Header or a Footer to All Slides
-Applying a Slide Design to a Slide Master 
-Moving Objects
+Saving Text Documents in HTML Format
+Inserting an Entire Text Document
+Master Documents
+Master Documents and Subdocuments
+Links and References
+Inserting Cross-References
+Inserting Hyperlinks With the Navigator
 Printing
-Printing Presentations
-Printing a Slide to Fit a Paper Size
-Effects
-Exporting Animations in GIF Format
-Animating Objects in Presentation Slides
-Animating Slide Transitions
-Cross-Fading Two Objects
-Creating Animated GIF Images
-Objects, Graphics, and Bitmaps
-Combining Objects and Constructing Shapes
-Drawing Sectors and Segments
-Duplicating Objects
-Rotating Objects
-Assembling 3D Objects
-Connecting Lines
-Converting Text Characters into Drawing Objects
-Converting Bitmap Images into Vector Graphics
-Converting 2D Objects to Curves, Polygons, and 3D Objects
-Loading Line and Arrow Styles
-Drawing Curves
-Editing Curves
-Inserting Graphics
-Including Spreadsheets in Slides
-Moving Objects
-Selecting Underlying Objects
-Creating a Flowchart
-Groups and Layers
-Grouping Objects
-About Layers
-Inserting Layers
-Working With Layers
-Moving Objects to a Different Layer
-Text in Presentations and Drawings
-Adding Text
-Converting Text Characters into Drawing Objects
-Viewing
-Creating a Custom Slide Show
-Changing the Slide Order
-Zooming With the Keypad
-Rehearse Timings of Slide Changes
+Selecting printer paper trays
+Previewing a Page Before Printing
+Printing Multiple Pages on One Sheet
+Creating and Applying Page Styles
+Searching and Replacing
+Using Wildcards in Text Searches
+List of Regular Expressions
+HTML Documents
+Web Pages
+HTML Filters and Forms
+Saving Text Documents in HTML Format
+Charts and Diagrams
+General Information
+Charts in StarOffice
+StarOffice Chart Features
+Shortcuts for Charts
 Spreadsheets
 General Information and User Interface Usage
 Welcome to the StarOffice Calc Help
@@ -515,21 +569,20 @@ Using Variables
 Using Objects
 Debugging a Basic Program
 Event-Driven Macros
-Charts and Diagrams
-General Information
-Charts in StarOffice
-StarOffice Chart Features
-Shortcuts for Charts
-Text Documents
+Presentations and Drawings
 General Information and User Interface Usage
-Welcome to the StarOffice Writer Help
-StarOffice Writer Features
-Instructions for Using StarOffice Writer
-Docking and Resizing Windows
-Shortcut Keys for StarOffice Writer
-Counting Words
-Using Shortcut Keys (StarOffice Writer Accessibility)
+Welcome to the StarOffice Impress Help
+Welcome to the StarOffice Draw Help
+StarOffice Impress Features
+StarOffice Draw Features
+Using Shortcut Keys in StarOffice Impress 
+Shortcut Keys for Drawing Objects
+Shortcut Keys for StarOffice Impress
+Shortcut Keys for Drawings
+Instructions for Using StarOffice Impress
+Instructions for Using StarOffice Draw
 Command and Menu Reference
+Presentations (StarOffice Impress)
 Menus
 Menus
 File
@@ -539,173 +592,119 @@ Insert
 Format
 Tools
 Window
+Slide Show
 Toolbars
 Toolbars
-Formatting Bar
-Picture Bar
-Table Bar
-Drawing Object Properties Bar
-Bullets and Numbering Bar
+Line and Filling Bar
+Text Formatting Bar
+Slide View Bar
 Status Bar
-Page Preview
 Rulers
-Formula Bar
-Frame Bar
-OLE-Object Bar
-Text Object Bar
+Drawing Bar
+Outline Bar
+Slide Sorter Bar
+Options Bar
+Picture Bar
 Standard Bar
 Hyperlink Bar
-Table Data Bar
 Form Navigation Bar
-Query Design Bar
 Form Design Toolbar
-Creating Text Documents
-Navigating and Selecting With the Keyboard
-Using the Direct Cursor
-Graphics in Text Documents
-Inserting Graphics
-Inserting a Graphic From a File
-Inserting Graphics From the Gallery With Drag-and-Drop
-Inserting a Scanned Image
-Inserting a Calc Chart into a Text Document
-Inserting Graphics From StarOffice Draw or Impress
-Inserting a Horizontal Line
-Tables in Text Documents
-Turning Number Recognition On or Off in Tables
-Modifying Rows and Columns by Keyboard
-Deleting Tables or the Contents of a Table
-Inserting Tables
-Repeating a Table Header on a New Page
-Resizing Rows and Columns in a Text Table 
-Adding or Deleting a Row or Column to a Table Using the Keyboard
-Objects in Text Documents
-Positioning Objects
-Wrapping Text Around Objects
-Sections and Frames in Text Documents
-Using Sections
-Inserting, Editing, and Linking Text Frames
-Editing Sections
-Inserting Sections
-Tables of Content and Indexes
-Outline Numbering
-User-Defined Indexes
-Creating a Table of Contents
-Creating Alphabetical Indexes
-Indexes Covering Several Documents
-Creating a Bibliography
-Editing or Deleting Index and Table Entries
-Updating, Editing and Deleting Indexes and Tables of Contents
-Defining Index or Table of Contents Entries
-Formatting an Index or a Table of Contents
-Fields in Text Documents
-About Fields
-Inserting a Fixed or Variable Date Field
-Converting a Field into Text
-Navigating Text Documents
-Moving and Copying Text in Documents
-Rearranging a Document by Using the Navigator
-Inserting Hyperlinks With the Navigator
-Navigator for Text Documents
-Calculating in Text Documents
-Calculating Across Tables
-Calculating in Text Documents
-Calculating and Pasting the Result of a Formula in a Text Document
-Calculating Cell Totals in Tables
-Calculating Complex Formulas in Text Documents
-Displaying the Result of a Table Calculation in a Different Table
-Formatting Text Documents
-Templates and Styles
-Templates and Styles
-Alternating Page Styles on Odd and Even Pages
-Creating a Page Style Based on the Current Page
-Using Styles From Another Document or Template
-Creating New Styles From Selections
-Updating Styles From Selections
-Creating a Document Template
-Changing the Default Template
-Changing the Case of Text
-Hiding Text
-Defining Different Headers and Footers
-Inserting a Chapter Name and Number in a Header or a Footer
-Quickly Applying Paragraph Styles
-Applying Text Formatting While You Type
-Resetting Font Attributes
-Applying Styles in Fill Format Mode
-Wrapping Text Around Objects
-Using a Frame to Center Text on a Page
-Emphasizing Text
-Rotating Text
-Inserting and Deleting Page Breaks
-Creating and Applying Page Styles
-Making Text Superscript or Subscript
-Special Text Elements
-Using Captions 
-Conditional Text
-Conditional Text for Page Counts
-Inserting a Fixed or Variable Date Field
-Adding Input Fields
-Inserting Page Numbers of Continuation Pages
-Inserting Page Numbers in Footers
-Hiding Text
-Defining Different Headers and Footers
-Inserting a Chapter Name and Number in a Header or a Footer
-Querying User Data in Fields or Conditions
-Inserting and Editing Footnotes or Endnotes
-Spacing Between Footnotes
-About Headers and Footers
-Formatting Headers or Footers
-Animating Text
-Creating a Form Letter
-Automatic Functions
-Adding Exceptions to the AutoCorrect List
-Using AutoText
-Creating Numbered or Bulleted Lists as You Type
-Turning Off AutoFormat and AutoCorrect
-Automatically Check Spelling
-Turning Number Recognition On or Off in Tables
-Checking Spelling in Other Languages
-Hyphenation
-Numbering and Lists
-Adding Chapter Numbers to Captions
-Creating Numbered or Bulleted Lists as You Type
-Outline Numbering
-Changing the Outline Level of Numbered and Bulleted Lists
-Combining Numbered Lists
-Adding Line Numbers
-Modifying Numbering in a Numbered List
-Defining Number Ranges
-Adding Numbering
-Numbering and Numbering Styles
-Adding Bullets
-Spellchecking, Thesaurus, and Languages
-Automatically Check Spelling
-Removing Words From a User-Defined Dictionary
-Thesaurus
-Checking Spelling in Other Languages
-Checking Spelling Manually
-Troubleshooting Tips
-Inserting Text Before a Table at the Top of Page
-Going to Specific Bookmark
+Edit Points Bar
+Drawings (StarOffice Draw)
+Menus
+Menus
+File
+Edit
+View
+Insert
+Format
+Tools
+Modify
+Toolbars
+Toolbars
+Drawing Bar
+Options Bar
+Standard Bar
+Hyperlink Bar
+Form Navigation Bar
+Form Design Toolbar
+Edit Points Bar
 Loading, Saving, Importing, and Exporting
-Saving Text Documents in HTML Format
-Inserting an Entire Text Document
-Master Documents
-Master Documents and Subdocuments
-Links and References
-Inserting Cross-References
-Inserting Hyperlinks With the Navigator
+Saving a Presentation in HTML Format
+Importing HTML Pages Into Presentations 
+Loading Color, Gradient, and Hatching Lists
+Exporting Animations in GIF Format
+Including Spreadsheets in Slides
+Inserting Graphics
+Copying Slides From Other Presentations
+Formatting
+Loading Color, Gradient, and Hatching Lists
+Loading Line and Arrow Styles
+Defining Custom Colors
+Creating Gradient Fills
+Replacing Colors
+Arranging, Aligning and Distributing Objects
+Changing the Slide Background Fill
+Adding a Header or a Footer to All Slides
+Applying a Slide Design to a Slide Master 
+Moving Objects
 Printing
-Selecting printer paper trays
-Previewing a Page Before Printing
-Printing Multiple Pages on One Sheet
-Creating and Applying Page Styles
-Searching and Replacing
-Using Wildcards in Text Searches
-List of Regular Expressions
-HTML Documents
-Web Pages
-HTML Filters and Forms
-Saving Text Documents in HTML Format
+Printing Presentations
+Printing a Slide to Fit a Paper Size
+Effects
+Exporting Animations in GIF Format
+Animating Objects in Presentation Slides
+Animating Slide Transitions
+Cross-Fading Two Objects
+Creating Animated GIF Images
+Objects, Graphics, and Bitmaps
+Combining Objects and Constructing Shapes
+Drawing Sectors and Segments
+Duplicating Objects
+Rotating Objects
+Assembling 3D Objects
+Connecting Lines
+Converting Text Characters into Drawing Objects
+Converting Bitmap Images into Vector Graphics
+Converting 2D Objects to Curves, Polygons, and 3D Objects
+Loading Line and Arrow Styles
+Drawing Curves
+Editing Curves
+Inserting Graphics
+Including Spreadsheets in Slides
+Moving Objects
+Selecting Underlying Objects
+Creating a Flowchart
+Groups and Layers
+Grouping Objects
+About Layers
+Inserting Layers
+Working With Layers
+Moving Objects to a Different Layer
+Text in Presentations and Drawings
+Adding Text
+Converting Text Characters into Drawing Objects
+Viewing
+Creating a Custom Slide Show
+Changing the Slide Order
+Zooming With the Keypad
+Rehearse Timings of Slide Changes
+Formulas
+General Information and User Interface Usage
+Welcome to the StarOffice Math Help
+StarOffice Math Features
+Instructions for Using StarOffice Math
+Shortcuts (StarOffice Math Accessibility)
+Command and Menu Reference
+Menus
+Toolbars
+Working with Formulas
+Manually Aligning Formula Parts
+Changing Default Attributes
+Merging Formula Parts in Brackets
+Entering Comments
+Entering Line Breaks
+Inserting Brackets
 Installation
 Changing the Association of Microsoft Office Document Types
 Common Help Topics

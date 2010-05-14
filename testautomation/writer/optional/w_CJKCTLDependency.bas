@@ -39,42 +39,44 @@
 
 sub main
 
-   Dim StartZeit
+    Dim StartZeit
 
-   StartZeit = Now()
+    StartZeit = Now()
 
-   use "writer\tools\includes\w_tools.inc"
-   use "writer\tools\includes\w_tool3.inc"
-   use "writer\optional\includes\tools\tools1.inc"
-   use "writer\optional\includes\tools\tools2.inc"
-   use "writer\optional\includes\CJKCTLDependency\CJKCTLDependency1.inc"
+    use "writer\tools\includes\w_tools.inc"
+    use "writer\tools\includes\w_tool3.inc"
+    use "writer\optional\includes\tools\tools1.inc"
+    use "writer\optional\includes\tools\tools2.inc"
+    use "writer\optional\includes\CJKCTLDependency\CJKCTLDependency1.inc"
 
-   printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
-   printlog Chr(13) + "******* Writer - Level 1 - Test *******"
+    printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
+    printlog Chr(13) + "******* Writer - Level 1 - Test *******"
 
-   Call hStatusIn ( "writer", "w_CJKCTLDependency.bas" , "CJK Dependency test" )
+    Call hStatusIn ( "writer", "w_CJKCTLDependency.bas" , "CJK Dependency test" )
 
-   printlog Chr(13) + "      - Test CJK support dependency"
+    printlog Chr(13) + "      - Test CJK support dependency"
 
-      Call tCJKDependency_1
-      Call tCJKDependency_2
-      Call tCJKDependency_3
-      Call tCJKDependency_4
-      Call tCJKDependency_5
+    Call tCJKDependency_1
+    Call tCJKDependency_2
+    Call tCJKDependency_3
+    Call tCJKDependency_4
+    Call tCJKDependency_5
 
-   printlog Chr(13) + "      - Test CTL support dependency"
+    printlog Chr(13) + "      - Test CTL support dependency"
 
-      Call tCTLDependency_1
-      Call tCTLDependency_2
-      Call tCTLDependency_3
-      Call tCTLDependency_4
-
-      gApplication = "HTMLDOKUMENT"
-      Call tCTLDependency_5
-      Call tCTLDependency_6
-      Call tCTLDependency_7
-      Call tCTLDependency_8
-
+    Call tCTLDependency_1
+    Call tCTLDependency_2
+    Call tCTLDependency_3
+    Call tCTLDependency_4
+    Call tCTLKashidaCheck
+    
+    gApplication = "HTMLDOKUMENT"
+    Call tCTLDependency_5
+    Call tCTLDependency_6
+    Call tCTLDependency_7
+    Call tCTLDependency_8
+    
+      
    Call hStatusOut
 
    Printlog Chr(13) + "End of Level 1 Test - CJK/CTL Dependency"
@@ -89,5 +91,5 @@ sub LoadIncludeFiles
    use "global\tools\includes\optional\t_toolbar_tools1.inc"
    use "global\tools\includes\optional\t_toolbar_writer.inc"
    Call GetUseFiles
-   gApplication = "Writer"
+   gApplication = "WRITER"
 end Sub

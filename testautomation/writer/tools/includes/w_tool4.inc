@@ -50,7 +50,7 @@ function CountItemsInNavigatorGroup(Group as integer) as Integer
     Dim j as integer,SelectInNavigator as integer
     'First, select the Navigator depending on the application
     Kontext "Navigator"
-    If Not Navigator.Exists then EditNavigator
+    If Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
 
     'In Navigator, close all groups and set focus to first group
@@ -166,8 +166,8 @@ sub wToolsSpellcheckCheckWriter
     '/// This function opens the spellcheck-dialog in all applications
     Select Case Ucase(gApplication)
         Case "WRITER"		: ToolsSpellcheckWriter
-        Case "MASTERDOC"	: ToolsSpellcheckWriter
-        Case "HTMLDOKUMENT" : ToolsSpellcheckWriter
+        Case "MASTERDOCUMENT"	: ToolsSpellcheckWriter
+        Case "HTML" : ToolsSpellcheckWriter
         case "DRAW"         : ToolsSpellcheck
         case "IMPRESS"     	: ToolsSpellcheck
     end select

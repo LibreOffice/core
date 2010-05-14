@@ -71,7 +71,7 @@ testcase tiFileSaveAs
     dim sFileNameLoaded as string 'gets name of fiel from Dateiname that will be loaded
 
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -83,13 +83,13 @@ testcase tiFileSaveAs
     sFileName = "graphics\required\input\tbo_alf_." + ExtensionString    ' this is the file with all features
     printlog "FileName is " + sFileName
     sFile = "isas_"                                ' this is the filename of the export files
-    sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+Lcase(gApplication)+"\"+ gPlatform) ' this is the export path
+    sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+gApplication+"\"+ gPlatform) ' this is the export path
     printlog "sPath is " + sPath
     if dir (sPath) = "" then
         app.mkdir (sPath)
     end if
 
-    Printlog "'/// deleting all files in output directory: \\user\\work\\graphics\\required\\Lcase(gApplication) gPlatform isas_* ///'"
+    Printlog "'/// deleting all files in output directory: \\user\\work\\graphics\\required\\gApplication gPlatform isas_* ///'"
     if gSamePC = TRUE then ' delete export directory
         GetFileList ( sPath, sFile+"*", Exlist() )
         if KillFileList ( Exlist() ) <> TRUE then
@@ -147,11 +147,23 @@ testcase tiFileSaveAs
         sFileNameLoaded = Dateiname.GetSelText
         printlog "File will be loaded: " & sFileNameLoaded
         Oeffnen.Click
-        WaitSlot (5000)
-        hCloseDocument
-        printlog "Closing doc " & sFileNameLoaded
-      WaitSlot (2000)
-        
+        printlog "Closing doc if it gets loaded: " & sFileNameLoaded
+        if gApplication = "IMPRESS" then 
+            Kontext "DocumentImpress"
+            if DocumentImpress.exists(5) then
+                Call hCloseDocument
+            else
+                warnlog "File did not get loaded."
+            endif
+        else
+            Kontext "DocumentDraw"
+            if DocumentDraw.exists(5) then
+                Call hCloseDocument
+            else
+                warnlog "File did not get loaded."
+            endif
+        endif
+        WaitSlot (2000)
     next i
 
 endcase 'tiFileSaveAs
@@ -163,7 +175,7 @@ testcase tiFileReload
   Dim DokumentPfad$
   Dim Datei$
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -221,7 +233,7 @@ testcase tiFileVersion
   Dim DokumentPfad$
   Dim Datei$
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -250,7 +262,7 @@ testcase tiFileVersion
       FileVersions
    catch
       Warnlog "- File / Versions not accessible!"
-      exit sub
+      goto endsub
    endcatch
 
    Kontext "Versionen"
@@ -291,15 +303,15 @@ testcase tiFilePassword
    dim sFile as string ' filename to export
    dim sPath as string ' and path to export
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
     end if
 
-'///  save file to:  "graphics\required\output\"+Lcase(gApplication)+"\"+ gPlatform+"\"isp__" ///'
+'///  save file to:  "graphics\required\output\"+gApplication+"\"+ gPlatform+"\"isp__" ///'
    sFile = "isp__"                                                     ' this is the filename of the export files
-   sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+Lcase(gApplication)+"\"+ gPlatform+"\") ' this is the export path
+   sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+gApplication+"\"+ gPlatform+"\") ' this is the export path
    mkdir (sPath)
    if dir (sPath) = "" then app.mkdir (sPath)
    sFileIn = (sPath + sFile + "." + ExtensionString)
@@ -570,7 +582,7 @@ testcase tmFileNewFromTemplate
   '/// Check if dialog has been opened ///
   if TemplateAndDocuments.NotExists then
      Warnlog "Dialog Templates and Documents are not up!"
-     exit sub
+     goto endsub
   end if
    Call DialogTest (TemplateAndDocuments)
    WaitSlot (5000)

@@ -91,7 +91,6 @@ testcase tDefinePrintRange
     sleep(2)
     printlog " Check if there is only one page as output"
     Kontext "Previewbar"
-    OL_SEITENANSICHT_NaechsteSeiteCalc
     'now all navigation buttons should be deactivated
     'if this is true there's only one page to print
     'that's what we check now
@@ -147,19 +146,10 @@ testcase tDefinePrintRange
     end if
     printlog "+  'Define Print Range' was selected in context menu"
     printlog " Activate Page Preview (File-Page Preview)"
-    try
-        FilePageView
-        sleep(2)
-        '///+ Check if there is only one page as output</li>
-        Kontext "Previewbar"
-    'this try/catch is a work around because page preview doesn't know about number of pages
-    'after being called.
-       OL_SEITENANSICHT_NaechsteSeiteCalc
-    catch
-       warnlog "#i44073# - Invoking 'File::Page Preview' crashes the office"
-       sleep (20)
-       goto endsub
-    endcatch
+    FilePageView
+    sleep(2)
+    '///+ Check if there is only one page as output</li>
+    Kontext "Previewbar"
     'now all navigation buttons should be deactivated
     'if this is true there's only one page to print
     'that's what we check now

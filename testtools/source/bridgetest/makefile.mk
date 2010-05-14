@@ -192,16 +192,16 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
         $(MISC)$/$(TARGET)$/bootstrap.rdb $(SHL3TARGETN)
     - $(MKDIR) $(@:d)
-    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb\
+    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb -wop \
         -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) \
         -c connector.uno$(DLLPOST) \
         -c remotebridge.uno$(DLLPOST) \
         -c uuresolver.uno$(DLLPOST) \
-        -c bridgetest.uno$(DLLPOST) \
-        -c cppobj.uno$(DLLPOST) \
+        -c .$/bridgetest.uno$(DLLPOST) \
+        -c .$/cppobj.uno$(DLLPOST) \
         -c stocservices.uno$(DLLPOST) \
-        -c $(SHL3TARGETN:f)
+        -c .$/$(SHL3TARGETN:f)
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)

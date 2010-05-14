@@ -54,6 +54,10 @@ sub w_fields5
 end sub
 
 testcase tVariables_1
+    if bAsianLan = true then
+        QaErrorLog "No testing with Asian language. Aborting."
+        exit sub
+    end if
 
   Dim sName()   as String
   Dim sValue    as String
@@ -122,6 +126,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariables_2
+    if bAsianLan = true then
+        QaErrorLog "No testing with Asian language. Aborting."
+        exit sub
+    end if
 
   Dim sName()   as String
   Dim sValue    as String
@@ -178,7 +186,7 @@ testcase tVariables_2
    for i = 0 to j
        Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
-           Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
+           QaErrorLog i & "#i94596# - Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
        Call wTypeKeys "<Down><Home>"
    next i
@@ -191,7 +199,7 @@ endcase
 
 testcase tVariables_3
     qaerrorlog "#i94596# - tVariables_3 outcommented due to bug."
-    exit sub
+    goto endsub
 
   Dim sName     as String
   Dim sValue    as String

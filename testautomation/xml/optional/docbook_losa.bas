@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : DocBook XML Import-/Export Test
 '*

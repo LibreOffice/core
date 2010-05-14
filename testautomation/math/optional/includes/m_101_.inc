@@ -52,9 +52,9 @@ sub m_101_
   Call tFilePassword ' check which filtertypes enable saving with password
   Call tFileOpen_1   ' just load all previous saved files in this test
   Call tFileOpen_2   ' load testfiles for filters
-    gApplication = "Writer"
+    gApplication = "WRITER"
     Call tToolsCatalog  ' code is in m_105_.inc, but i want to print he result, so i needed to moove teh call to here
-    gApplication = "Math"
+    gApplication = "MATH"
   Call tFilePrint    ' writer dokument with math ole's
 '   Call tFileSaveAll
 '   Call tFileNewLoad

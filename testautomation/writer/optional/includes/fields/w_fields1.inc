@@ -201,9 +201,7 @@ goto endsub
 
   '/// Check if the page number is correct
    Call wTypeKeys "<Shift Right>"
-   ToolsCalculate
-   EditCopy
-   if GetClipboardText <> sPage1 then
+   if fGetFieldContent( ) <> sPage1 then
        QAErrorLog "#i31214# The 1st page number isn't correct ! should be: '" + sPage1 + "', but was: '" + GetClipboard + "'."
    end if
 
@@ -239,8 +237,8 @@ goto endsub
 
   '/// Check if the 1st page count is correct
    Call wTypeKeys "<Shift Right>"
-   ToolsCalculate
-   if GetClipboardText <> sPage1 then
+   EditCopy
+   if GetClipboard <> sPage1 then
        Warnlog "1-The 1st page count isn't correct !"
    end if
    Call wTypeKeys "<End>"
@@ -259,15 +257,15 @@ goto endsub
 
   '/// Check if the page count is correct
    Call wTypeKeys "<Shift Right>"
-   ToolsCalculate
-   if GetClipboardText <> sPage2 then
+   'EditCopy
+   if fGetFieldContent( ) <> sPage2 then
        Warnlog "2-The 1st page count isn't correct"
    end if
 
    Call wTypeKeys "<MOD1 End>"
    Call wTypeKeys "<Shift Left>"
-   ToolsCalculate
-   if GetClipboardText <> sPage2 then
+   EditCopy
+   if GetClipboard <> sPage2 then
        Warnlog "The 2nd page count isn't correct !"
    end if
 

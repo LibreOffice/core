@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : thorsten.bosbach@sun.com
 '*
 '* short description : XML Math Include File
 '*

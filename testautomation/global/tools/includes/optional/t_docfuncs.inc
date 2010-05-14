@@ -37,6 +37,8 @@
 '*
 '\******************************************************************************
 
+private const VERBOSE = false
+
 function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///<h3>Enable/disable the Impress Autopilot in Tools/Options</h3>
@@ -44,7 +46,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
     '///<ul>
     const CFN = "hUseImpressAutopilot::"
     
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Create a new IMPRESS document</li>
     gApplication = "IMPRESS"
@@ -52,7 +54,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///+<li>Open Tools/Options, go to Presentataion/General page</li>
     ToolsOptions
-    hToolsOptions( "Presentation" , "General" )
+    hToolsOptions( "IMPRESS" , "General" )
 
     '///+<li>Check or uncheck to start with autopilot</li>
     Kontext "TabSonstigesDraw"
@@ -83,7 +85,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
     hDestroyDocument()
 
     '///+<li>Returncode is undefined</li>
-    printlog( CFN & "Exit" )
+    if ( VERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
     
 end function
@@ -97,7 +99,7 @@ function hCloseNavigator() as boolean
     '///<ul>
     const CFN = "hCloseNavigator::"
     
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
     
     '///+<li>close the navigator if found</li>
     Kontext "Navigator"
@@ -117,7 +119,7 @@ function hCloseNavigator() as boolean
         hCloseNavigator() = true
     endif
     
-    printlog( CFN & "Exit" )
+    if ( VERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
 
 end function
@@ -184,10 +186,12 @@ function hChangeDoc() as string
     '///<u>Description</u>:
     '///<ul>
 
+    sleep()
+
     select case gApplication
    
       '///+<li>WRITER: Type some text</li>
-      case "WRITER", "HTML", "MASTERDOC"
+      case "WRITER", "HTML", "MASTERDOCUMENT"
                       Kontext "DocumentWriter"
                       DocumentWriter.TypeKeys "<Return>This doc is changed!"
                       hChangeDoc() = "Changed WRITER/HTML/MASTERDOC" 
@@ -232,7 +236,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     dim cIdentifier as string
     dim irc as integer ' some temporary returnvalue
     
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Test the function parameter</li>
     if ( cString = "" ) then
@@ -289,7 +293,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     endif
     '///+<li>Return TRUE only if the current document is the expected one</li>
     
-    printlog( CFN & "Exit" )
+    if ( VERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
 
 end function
@@ -325,7 +329,7 @@ function hCreateDocument() as boolean
 
     '///+<li>Retrieve the number of open documents</li>
     iDocCountBefore = getDocumentCount
-    printlog( CFN & "Number of open documents before: " & iDocCountBefore )
+    if ( VERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
 
     '///+<li>Special treatment if gApplication = BACKGROUND (virtual gApplication)</li>
     if ( ucase( gApplication ) = "BACKGROUND" ) then
@@ -348,7 +352,7 @@ function hCreateDocument() as boolean
             hCreateDocument() = false
         endif
     endif
-    printlog( CFN & "Number of open documents after.: " & iDocCountAfter )
+    printlog( CFN & "New document created. Open: " & iDocCountAfter )
     '///</ul>
     
 end function
@@ -385,7 +389,7 @@ function hDocumentTypeKeys( cString as string ) as boolean
     dim brc as boolean
         brc = true
         
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
     
     '///+<li>Set focus to the current documenttype determined by gApplication</li>
     '///+<li>Type the string passed as function parameter</li>
@@ -400,7 +404,7 @@ function hDocumentTypeKeys( cString as string ) as boolean
                         DocumentDraw.typeKeys( cString )
     case "MATH"     :   kontext "DocumentMath"
                         DocumentMath.typeKeys( cString )
-    case "MASTERDOC":   kontext "DocumentWriter"
+    case "MASTERDOCUMENT":   kontext "DocumentWriter"
                         DocumentWriter.typeKeys( cString )
     case "HTML"     :   kontext "DocumentWriter"
                         DocumentWriter.typeKeys( cString )
@@ -458,7 +462,7 @@ function hDestroyDocument() as boolean
     '///<ul>
     '///+<li>Get the current number of documents</li>
     iOpenDocsBefore = getDocumentCount
-    printlog( CFN & "Open documents before close: " & iOpenDocsBefore )
+    if ( VERBOSE ) then printlog( CFN & "Open documents before close: " & iOpenDocsBefore )
     
     '///+<li>Handle special case of 0 open documents</li>
     '///<ul>
@@ -547,7 +551,7 @@ function hDestroyDocument() as boolean
         '///+<li>Verify that the document has indeed been closed, exit function if yes</li>
         iOpenDocsAfter = getDocumentCount
         if ( iOpenDocsAfter = ( iOpenDocsBefore - 1 ) ) then
-            printlog( CFN & "Open documents after close.: " & iOpenDocsAfter )
+            printlog( CFN & "Document closed. Currently open: " & iOpenDocsAfter )
             hDestroyDocument() = brc
             exit function
         else
@@ -559,7 +563,7 @@ function hDestroyDocument() as boolean
     '///</ul>
     '///</ul>
 
-    printlog( CFN & "Exit with result: " & brc )
+    if ( VERBOSE ) then printlog( CFN & "Exit with result: " & brc )
 
     hDestroyDocument() = brc
 

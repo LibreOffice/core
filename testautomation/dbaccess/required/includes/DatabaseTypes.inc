@@ -79,8 +79,8 @@ testcase tMySQLODBCProperties
 
     ViewForms
     
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -117,8 +117,8 @@ testcase tMySQLJDBCProperties
 
     ViewForms    
     
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -165,8 +165,8 @@ testcase tAdabasProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -205,8 +205,8 @@ testcase tOracleJDBCProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -241,8 +241,8 @@ testcase tJDBCProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -274,8 +274,8 @@ testcase tLDAPProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -315,8 +315,8 @@ testcase tEvolutionProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -324,16 +324,21 @@ testcase tEvolutionProperties
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
         try
-            DataBaseType.select(getIdForDatabaseType("Evolution"))    
+            if ( DatabaseType.getItemCount() > 12 ) then
+                DataBaseType.select(getIdForDatabaseType("Evolution"))    
+                Kontext "ConnectionType"        
+                ConnectionType.OK
+            else
+                qaerrorlog "Evolution does not appear to be available on this system"
+                Kontext "ConnectionType"
+                ConnectionType.Cancel
+            endif
         catch
             warnlog "failed to select DataBaseType Evolution - maybe not installed or activated in this build"
             TabGeneral.Cancel
             call fCloseDatabase
             goto endsub
         endcatch
-        
-    Kontext "ConnectionType"        
-        ConnectionType.OK
         
     'call fCheckAdvancedDialog("Evolution")
         
@@ -352,8 +357,8 @@ testcase tMozillaProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -383,25 +388,25 @@ testcase tSpreadsheetProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("Spreadsheet"))    
+        DataBaseType.select(getIdForDatabaseType("CALC"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
         sleep(1)        
-        call fCheckConnectionTabPage("Spreadsheet")
+        call fCheckConnectionTabPage("CALC")
     
     Kontext "ConnectionType"        
         ConnectionType.Cancel
         
-    'call fCheckAdvancedDialog("Spreadsheet")
+    'call fCheckAdvancedDialog("CALC")
         
     call fCloseDatabase()  
     
@@ -413,8 +418,8 @@ testcase tTextProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -451,8 +456,8 @@ testcase tdBaseProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -489,8 +494,8 @@ testcase tODBCProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -544,8 +549,8 @@ function fCheckAdvancedDialog(sType as string)
     
     printlog "+Check the Advanced Settings for the datasource type " + sType
     
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(3)    
@@ -585,7 +590,7 @@ function fCheckAdvancedDialog(sType as string)
             'call fcheckControl(BooleanComparison)
             'call fcheckControl(AppendAlias)
         
-        elseif sType = "Spreadsheet" OR sType = "Mozilla" OR sType = "Evolution" OR sType = "LDAP" then            
+        elseif sType = "CALC" OR sType = "Mozilla" OR sType = "Evolution" OR sType = "LDAP" then            
            ' call fcheckControl(BooleanComparison)
            ' call fcheckControl(AppendAlias)    
         
@@ -667,7 +672,7 @@ function fCheckConnectionTabPage(sType as string)
         call fcheckControl(SelectPath)
         call fcheckControl(TestConnection)
     
-    elseif sType = "Spreadsheet" then        
+    elseif sType = "CALC" then        
         call fcheckControl(SpreadsheetPath)
         call fcheckControl(SelectPath)
         call fcheckControl(TestConnection)

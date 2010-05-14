@@ -50,15 +50,8 @@ end sub
 ' ---------------------------------------------------------------------------------
 
 testcase HTMLToWRITERText
-Warnlog "#i91928# - HTMLToWRITERText outcommented due to bug."
-goto endsub
 
-'    if lcase(gPlatform) = "x86" and Val(mid$(gMinor, 2, Len(gMinor))) <= 129  then
-'        QAErrorlog "#125780#Stacktrace ID: 251397"
-'        goto endsub
-'    end if
-
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select first paragraph "
@@ -98,8 +91,18 @@ goto endsub
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_writer_text.odt",true)
         printlog "  Reopen saved document "
+        if hFileOpen (gOfficepath + "user\work\html_to_writer_text.odt",true) = false then
+            Kontext "Active"
+            if Active.Exists then
+                try
+                    Active.Yes
+                catch
+                    Warnlog "Unable to remove checkbox: " + Active.Gettext
+                    Active.ok
+                endcatch
+            endif
+        endif                    
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -115,7 +118,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERField
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select paragraph with 'Date Field' "
@@ -154,7 +157,17 @@ testcase HTMLToWRITERField
             Call hCloseDocument
             wait 500
             printlog "  Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\html_to_writer_field.odt",true)
+            if hFileOpen (gOfficepath + "user\work\html_to_writer_field.odt",true) = false then
+                Kontext "Active"
+                if Active.Exists then
+                    try
+                        Active.Yes
+                    catch
+                        Warnlog "Unable to remove checkbox: " + Active.Gettext
+                        Active.ok
+                    endcatch
+                endif
+            endif            
             Wait 500
             printlog "  Close saved document "
             Call hCloseDocument
@@ -170,7 +183,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERTable
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Table' "
@@ -208,7 +221,17 @@ testcase HTMLToWRITERTable
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_writer_table.odt",true)
+        if hFileOpen (gOfficepath + "user\work\html_to_writer_table.odt",true) = false then
+            Kontext "Active"
+            if Active.Exists then
+                try
+                    Active.Yes
+                catch
+                    Warnlog "Unable to remove checkbox: " + Active.Gettext
+                    Active.ok
+                endcatch
+            endif
+        endif        
         printlog "  Reopen saved document "
         Wait 500
         printlog "  Close saved document "
@@ -225,7 +248,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERGraphicLinked
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
@@ -279,7 +302,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERControl
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
@@ -334,7 +357,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToWRITERFloatingFrame
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "

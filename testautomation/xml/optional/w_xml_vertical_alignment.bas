@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@Sun.COM
+'* owner : fredrik.haegg@Sun.COM
 '*
 '* short description  :  Testing for vertical alignment in writer
 '*
@@ -57,6 +57,6 @@ sub LoadIncludeFiles
     use "global/system/includes/master.inc"
     use "global/system/includes/gvariabl.inc"
     use "global\tools\includes\optional\t_ui_filters.inc"
-    gApplication   = "Writer"
+    gApplication   = "WRITER"
     call getusefiles        
 end sub

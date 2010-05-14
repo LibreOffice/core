@@ -442,7 +442,7 @@ testcase tSlideShowInteraction
       printlog "Navigator: NOT available :-) will be opened now."
       Kontext "DocumentImpress"
       DocumentImpress.TypeKeys "<MOD1 SHIFT F5>"
-'      EditNavigator
+'      ViewNavigator
    endif
    sleep 3
 

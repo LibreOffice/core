@@ -422,7 +422,7 @@ function hWaitForWizard() as integer
         Kontext "AutopilotPraesentation1"
         if ( AutopilotPraesentation1.exists() ) then
             printlog( CFN & "Presentation Wizard is open" )
-            iOpen = hGetWizardParams( "PRESENTATION" , "ID" )
+            iOpen = hGetWizardParams( "IMPRESS" , "ID" )
             exit for
         endif        
         

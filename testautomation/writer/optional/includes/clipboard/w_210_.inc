@@ -75,7 +75,17 @@ testcase WriterToWriterText
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_text.odt",true)
+            if hFileOpen (gOfficepath + "user\work\writer_to_writer_text.odt",true) = false then
+                Kontext "Active"
+                if Active.Exists then
+                    try
+                        Active.Yes
+                    catch
+                        Warnlog "Unable to remove checkbox: " + Active.Gettext
+                        Active.ok
+                    endcatch
+                endif
+            endif
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -117,7 +127,17 @@ testcase WriterToWriterField
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_field.odt",true)
+            if hFileOpen (gOfficepath + "user\work\writer_to_writer_field.odt",true) = false then
+                Kontext "Active"
+                if Active.Exists then
+                    try
+                        Active.Yes
+                    catch
+                        Warnlog "Unable to remove checkbox: " + Active.Gettext
+                        Active.ok
+                    endcatch
+                endif
+            endif            
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -159,7 +179,17 @@ testcase WriterToWriterTable
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_table.odt",true)
+            if hFileOpen (gOfficepath + "user\work\writer_to_writer_table.odt",true) = false then
+                Kontext "Active"
+                if Active.Exists then
+                    try
+                        Active.Yes
+                    catch
+                        Warnlog "Unable to remove checkbox: " + Active.Gettext
+                        Active.ok
+                    endcatch
+                endif
+            endif
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -227,7 +257,7 @@ testcase WriterToWriterDrawingObject
     printlog " + Select 'Drawing Object' "
     printlog " + Copy selected Drawing Object "
     printlog " + Open new document "
-    if wSetClipboardtestDefaults("draw") = True then
+    if wSetClipboardtestDefaults("DRAW") = True then
         Call hNewDocument
         printlog " + Edit / Paste Special "
         EditPasteSpecialWriter
@@ -236,7 +266,7 @@ testcase WriterToWriterDrawingObject
         Kontext "InhaltEinfuegen"
         if InhaltEinfuegen.Exists then
             printlog " + Write Clipboard format under pasted content "
-            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
             printlog " + Save document as ..\user\work\writer_to_writer_draw.odt"
             Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_draw.odt", "writer8")
             WaitSlot (2000)

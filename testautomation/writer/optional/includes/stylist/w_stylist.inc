@@ -43,6 +43,7 @@
 ' #1 tFormatStylist4
 ' #1 tFormatStylist5
 ' #1 tFormatStylist6
+' #1 tFormatStylist7
 ' #1 tAssigningStyles1
 ' #1 tAssigningStyles2
 ' #1 tAssigningStyles3
@@ -63,6 +64,7 @@ sub w_stylist
    Call tFormatStylist4                ' search/create templates
    Call tFormatStylist5                ' select templet in stylist
    Call tFormatStylist6                ' new template from selection
+   Call tFormatStylist7                ' new template from selection, modified via ContextMenu.
    Call tAssigningStyles1
    Call tAssigningStyles2
    Call tAssigningStyles3
@@ -77,7 +79,7 @@ end sub
 ' **********************************************************************
 
 testcase tFormatStylist1
-  	Dim xPos as long
+    Dim xPos as long
     Dim yPos as long
     Dim xSize%
     Dim ySize%
@@ -151,9 +153,9 @@ endcase
 ' **********************************************************************
 
 testcase tFormatStylist2
-	Dim xPos% 
-    Dim yPos% 
-    Dim xSize% 
+    Dim xPos%
+    Dim yPos%
+    Dim xSize%
     Dim ySize%
 
 	printlog "- Format/Stylist : Methods from Stylist as Window between more than one document"
@@ -226,9 +228,9 @@ testcase tFormatStylist3
     printlog "- Format / Stylist : select all Style properties"
 
     Call hNewDocument
-	printlog " New writerdocument"
+    printlog " New writerdocument"
     FormatStylist
-	printlog "Select all style properties in stylist"
+    printlog "Select all style properties in stylist"
     Kontext "Stylist"
     if Stylist.NotExists then FormatStylist
     printlog "   - Paragraph Styles"
@@ -306,10 +308,10 @@ endcase
 ' **********************************************************************
 
 testcase tFormatStylist4
-  	Dim i as Integer 
-    Dim AlterWert$ 
+    Dim i as Integer
+    Dim AlterWert$
     Dim NeuerWert$
-	
+
     printlog "- Format / Stylist : check created Styles"
 	printlog "New writerdocument"
 	Call hNewDocument
@@ -340,21 +342,20 @@ testcase tFormatStylist4
 
     if wStyleSelect ( "ATesttool", "Paragraph" ) = true then Warnlog "Paragraph Style has been found in new document"
     if wStyleSelect ( "BTesttool", "Character" ) = true then Warnlog "Character Style has been found in new document"
-	'if wStyleSelect ( "CTesttool", "Frame" ) = true then Warnlog "Frame Style has been found in new document"
+    'if wStyleSelect ( "CTesttool", "Frame" ) = true then Warnlog "Frame Style has been found in new document"
     if wStyleSelect ( "DTesttool", "Page" ) = true then Warnlog "Page Style has been found in new document"
 
     Call hCloseDocument
-    
-	printlog "Close document"
-	Call hCloseDocument
+    printlog "Close document"
+    Call hCloseDocument
 endcase
 
 ' **********************************************************************
 
 testcase tFormatStylist5
-  	Dim SuchMal as string, i as integer
+    Dim SuchMal as string, i as integer
     Dim bStyleFound as boolean
-	
+
     printlog "- Format / Stylist : select Style"
 	printlog "New writerdocument"
 	if bAsianLan = True then
@@ -383,7 +384,7 @@ testcase tFormatStylist5
 	printlog "Using " & SuchMal & " as 'default'" 
 	Kontext "Stylist"
    
-    Vorlagenliste.TypeKeys "<Home>"       
+    Vorlagenliste.TypeKeys "<Home>"
     bStyleFound = false
     for i=1 to Vorlagenliste.GetItemCount
         Vorlagenliste.Select i
@@ -417,100 +418,208 @@ endcase
 ' **********************************************************************
 
 testcase tFormatStylist6
-  	Dim i as integer
+    Dim i as integer
 
     printlog "- Format / Stylist : new Style from selection"
-	printlog "New writerdocument"
+    printlog "New writerdocument"
+    Call hNewDocument
+    Call wTypeKeys "Creating a style from selection <Return><Up><Shift End>"
+    printlog "create a new style from selection"
+    FormatCharacter
+        Kontext
+        Active.SetPage TabFontEffects
+        Kontext "TabFontEffects"
+            Shadow.Check
+            StrikeThrough.Select 2
+            Overline.Select 2
+            OverlineColor.Select 6
+            Outline.Check
+            Effects.Select 3
+            Blinking.Check
+        Kontext
+        Active.Setpage TabHyperlinkZeichen
+        Kontext "TabHyperlinkZeichen"
+            URLName.SetText "www.mikeportnoy.com"
+    TabHyperlinkZeichen.OK
 
-	Call hNewDocument
-	Call wTypeKeys "Creating a style from selection <Return><Up><Shift End>"
-	printlog "create a new style from selection"
-	FormatCharacter
-	Kontext
-	Active.SetPage TabFontEffects
-	Kontext "TabFontEffects"
-	Shadow.Check
-	StrikeThrough.Select 2
-	Outline.Check
-	Effects.Select 3
-	Blinking.Check
-	Kontext
-	Active.Setpage TabHyperlinkZeichen
-	Kontext "TabHyperlinkZeichen"
-	URLName.SetText "www.mikeportnoy.com"
-	TabHyperlinkZeichen.OK
-
-	printlog "  - Create Character Style from selection"
-   	Kontext "Stylist"
+    printlog "  - Create Character Style from selection"
+    Kontext "Stylist"
     if not Stylist.Exists then FormatStylist
-	Kontext "Stylist"
-	TBGestalter.Click ZeichenVorlagen
-	Sleep 1
+        Kontext "Stylist"
+        TBGestalter.Click ZeichenVorlagen
+        Sleep 1
 
     AusSelektion.OpenMenu
     Sleep 1
     hMenuSelectNr(1)
     Sleep 1
-    
-   	Kontext "VorlageErzeugen"
-	if VorlageErzeugen.Exists then
-		VorlagenName.SetText "Testtool"
-		VorlageErzeugen.OK
-	else
-		Warnlog "Creating Style did not work. Dialog not up!"
-	end if
 
-   	printlog "   - assign new Character Style to a new text"
-	wTypeKeys "<Home><Down>",3
-	wTypeKeys "This is some new text <Return><Up><Up><Shift End>"
-	Kontext "Stylist"
-	TBGestalter.Click ZeichenVorlagen
-	Vorlagenliste.TypeKeys "<Home>"
-	if Vorlagenliste.GetSeltext = "Testtool" then
-     	Vorlagenliste.TypeKeys "<Return>"
-	else	
-		For i = 1 to 100
-			Vorlagenliste.TypeKeys "<Down>"
-			if Vorlagenliste.GetSeltext = "Testtool" then
-				Vorlagenliste.TypeKeys "<Return>"
-				i = 102
-			end if
-		next i
-	end if	
-	Stylist.Close
-	if i = 101 then
-    	Warnlog "Created Style could not be found in Stylist!"
-	else
-    	Printlog "   - check Style"
-		FormatCharacter
-		Kontext
-		Active.SetPage TabFontEffects
-		Kontext "TabFontEffects"
-		if NOT Shadow.IsChecked then Warnlog "Shadow is not checked anymore"
-		if StrikeThrough.GetSelIndex <> 2 then Warnlog "Wrong entry selection in StrikeThrough"
-		if NOT Outline.IsChecked then Warnlog "Outline is not checked anymore"
-		if Effects.GetSelIndex <> 3 then Warnlog "Wrong effect selected"
-		if NOT Blinking.IsChecked then Warnlog "Blinking is not checked anymore"
-		Kontext
-		Active.Setpage TabHyperlinkZeichen
-		Kontext "TabHyperlinkZeichen"
-		if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#TabHyperlink: URL is wrong " + URLName.Gettext
-		TabHyperlinkZeichen.OK
-	end if
+    Kontext "VorlageErzeugen"
+    if VorlageErzeugen.Exists then
+        VorlagenName.SetText "Testtool"
+        VorlageErzeugen.OK
+    else
+        Warnlog "Creating Style did not work. Dialog not up!"
+    end if
 
-	printlog "Close document"
-	Call hCloseDocument
+    printlog "   - assign new Character Style to a new text"
+    wTypeKeys "<Home><Down>",3
+    wTypeKeys "This is some new text <Return><Up><Up><Shift End>"
+    Kontext "Stylist"
+        TBGestalter.Click ZeichenVorlagen
+        if Vorlagenliste.GetSeltext <> "Testtool" then  'Go find the entry.
+            Vorlagenliste.TypeKeys "<Home>"
+	    For i = 1 to 100
+                Vorlagenliste.TypeKeys "<Down>"
+                if Vorlagenliste.GetSeltext = "Testtool" then  'Found it!
+                    i = 102
+                end if
+            next i
+        end if
+        Vorlagenliste.TypeKeys "<Return>"  'Assign to text.
+    Stylist.Close
+    if i = 101 then
+        Warnlog "Created Style could not be found in Stylist!"
+    else
+        Printlog "   - check Style"
+        FormatCharacter
+        Kontext
+        Active.SetPage TabFontEffects
+        Kontext "TabFontEffects"
+            if NOT Shadow.IsChecked then Warnlog "Shadow is not checked anymore"
+            if StrikeThrough.GetSelIndex <> 2 then Warnlog "Wrong entry selection in StrikeThrough"
+            if Overline.GetSelIndex <> 2 then Warnlog "Overline is not checked anymore"
+	    if OverlineColor.GetSelIndex <> 6 then Warnlog "Wrong Overline Color selected"
+            if NOT Outline.IsChecked then Warnlog "Outline is not checked anymore"
+            if Effects.GetSelIndex <> 3 then Warnlog "Wrong effect selected"
+            if NOT Blinking.IsChecked then Warnlog "Blinking is not checked anymore"
+        Kontext
+        Active.Setpage TabHyperlinkZeichen
+        Kontext "TabHyperlinkZeichen"
+            if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#TabHyperlink: URL is wrong " + URLName.Gettext
+        TabHyperlinkZeichen.OK
+    end if
+
+    printlog "Close document"
+    Call hCloseDocument
+endcase
+
+' **********************************************************************
+
+testcase tFormatStylist7
+    Dim i as integer
+
+    printlog "- Format / Stylist : new Style from selection, then modified via the ContextMenu."
+    printlog "New writerdocument"
+    Call hNewDocument
+    Call wTypeKeys "Creating a style from selection <Return><Up><Shift End>"
+    printlog "create a new style from selection"
+
+    printlog "  - Create Character Style from selection"
+    Kontext "Stylist"
+    if not Stylist.Exists then FormatStylist
+        Kontext "Stylist"
+        TBGestalter.Click ZeichenVorlagen
+        Sleep 1
+
+    AusSelektion.OpenMenu
+    Sleep 1
+    hMenuSelectNr(1)
+    Sleep 1
+
+    Kontext "VorlageErzeugen"
+    if VorlageErzeugen.Exists then
+        VorlagenName.SetText "Testtool"
+        VorlageErzeugen.OK
+    else
+        Warnlog "Creating Style did not work. Dialog not up!"
+    end if
+
+    printlog " Open ContextMenu over the 'Testtool' Style."
+    Kontext "Stylist"
+    if not Stylist.Exists then FormatStylist
+    Kontext "Stylist"
+        TBGestalter.Click ZeichenVorlagen
+        if Vorlagenliste.GetSeltext <> "Testtool" then
+            Vorlagenliste.TypeKeys "<Home>"
+            For i = 1 to 100
+                Vorlagenliste.TypeKeys "<Down>"
+                if Vorlagenliste.GetSeltext = "Testtool" then
+                    i = 102
+                end if
+            next i
+	    if i = 101 then
+	       warnlog "No Testtool -Stylist found. Check if new stylists can be created. Test ends."
+	       goto endsub
+	    end if
+        end if
+        Vorlagenliste.TypeKeys "<SHIFT F10>"  'Open ContextMenu
+        Sleep 1
+        printlog "  Select 'Modify'"
+        Call hMenuSelectNr(2)  'Modify
+        Sleep 1
+
+    printlog "  Goto Tabpage 'Font Effects' and change some settings."
+    Kontext
+    Active.SetPage TabFontEffects
+    Kontext "TabFontEffects"
+        Shadow.Check
+        StrikeThrough.Select 2
+        Overline.Select 2
+        OverlineColor.Select 6
+        Outline.Check
+        Effects.Select 3
+        Blinking.Check
+    TabFontEffects.OK
+
+    printlog "   - assign new Character Style to a new text"
+    wTypeKeys "<Home><Down>",3
+    wTypeKeys "This is some new text <Return><Up><Up><Shift End>"
+    Kontext "Stylist"
+        TBGestalter.Click ZeichenVorlagen
+        
+        if Vorlagenliste.GetSeltext <> "Testtool" then
+	    Vorlagenliste.TypeKeys "<Home>"
+            For i = 1 to 100
+                Vorlagenliste.TypeKeys "<Down>"
+                if Vorlagenliste.GetSeltext = "Testtool" then 'Found it!
+                    i = 102
+                end if
+            next i
+        end if
+        Vorlagenliste.TypeKeys "<Return>"  'Assign Style to Text.
+    Stylist.Close
+    if i = 101 then
+        Warnlog "Created Style could not be found in Stylist!"
+    else
+        Printlog "   - check Style"
+        FormatCharacter
+        Kontext
+        Active.SetPage TabFontEffects
+        Kontext "TabFontEffects"
+            if NOT Shadow.IsChecked then Warnlog "Shadow is not checked anymore"
+            if StrikeThrough.GetSelIndex <> 2 then Warnlog "Wrong entry selection in StrikeThrough"
+            if Overline.GetSelIndex <> 2 then Warnlog "Overline is not checked anymore"
+            if OverlineColor.GetSelIndex <> 6 then Warnlog "Wrong Overline Color selected"
+            if NOT Outline.IsChecked then Warnlog "Outline is not checked anymore"
+            if Effects.GetSelIndex <> 3 then Warnlog "Wrong effect selected"
+            if NOT Blinking.IsChecked then Warnlog "Blinking is not checked anymore"
+        TabFontEffects.OK
+    end if
+
+    printlog "Close document"
+    Call hCloseDocument
 endcase
 
 ' **********************************************************************
 
 testcase tAssigningStyles1
-    Dim i as integer 
+    Dim i as integer
     Dim sStyles() as string
     Dim sTemp as string
     Dim j as integer
     Dim bStyleInList as boolean
-    
+
 	printlog "UI and Strings check"
     Call hNewDocument
 	printlog "Open a new writerdocument"
@@ -896,7 +1005,7 @@ testcase tKeyboardShortcutToStyles()
     sTempa = Vorlage.getSelText
 
     printlog "should now be the default from the beginning"
-    if (uCase(gApplication)<>"HTMLDOKUMENT") then
+    if (uCase(gApplication)<>"HTML") then
         if (sTempa = sTempc) then
             printlog "OK: Heading changed to default: '" + sTempa + "'"
         else

@@ -35,13 +35,6 @@
 '*
 '* short description : update and resouce test for all option pages (at tools/options)
 '*
-'************************************************************************
-'*
-' #1  tToolsOptionsStarOffice
-' #1  tToolsOptionsLoadSave
-' #1  tToolsOptionsLanguageSettings
-' #1  tToolsOptionsInternet
-'*
 '\***********************************************************************
 global sErrMes as String
 global iSectionNumber as Integer
@@ -64,7 +57,7 @@ sub tToolsOptionsTest
     ' The test will exist with warnlog, if iSectionNumber is 0
     sErrMes = ""
         select case uCase(gApplication)
-            case "WRITER","MASTERDOC","HTMLDOKUMENT": iSectionNumber = 8
+            case "WRITER","MASTERDOCUMENT","HTML": iSectionNumber = 8
             case "IMPRESS","DRAW","MATH","CALC"     : iSectionNumber = 7
         end select
     ' common testcases are placed in this library
@@ -75,13 +68,14 @@ sub tToolsOptionsTest
     Call tToolsOptionsDataSources
     Call tToolsOptionsChart
     Call tToolsOptionsInternet
+    Call tToolsOptionsImprovementProgram
 
     ' these tabpages only exist in the respective application
     gApplication = "WRITER"
     iSectionNumber = 8
     Call tToolsOptionsTextdocument
     
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tToolsOptionsHTMLDocument
     
     gApplication = "CALC"
@@ -114,12 +108,13 @@ testcase tToolsOptionsStarOffice
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-    if gApplication <> "DESKTOP" then Call hNewDocument
+    if gApplication <> "BACKGROUND" then Call hNewDocument
     ToolsOptions
     ToPosInOptionlist ( 1 )
     Kontext "ExtrasOptionenDlg"
     EchteAnzahl = Optionsliste.GetItemCount - iSectionNumber
-    iMenuShould = 13
+    iMenuShould = 14
+    
     if EchteAnzahl <> iMenuShould then
         if ((gtplatform = "sol") OR (gtplatform = "x86") OR gOOO) AND EchteAnzahl = 12 then
             printLog "One Tabpage is missing. This is ok for a patched Solaris (sparc and x86) or OOo installation." 
@@ -243,8 +238,8 @@ testcase tToolsOptionsStarOffice
                        PasswordDLG.cancel()
                    else
                        select case uCase(gApplication)
-                           case "WRITER","MASTERDOC"                          :WarnLog "Protect-Button is disabled."
-                           case "MATH","IMPRESS","DRAW","HTMLDOKUMENT","CALC" :PrintLog "Protect-Button is disabled."
+                           case "WRITER","MASTERDOCUMENT"                          :WarnLog "Protect-Button is disabled."
+                           case "MATH","IMPRESS","DRAW","HTML","CALC" :PrintLog "Protect-Button is disabled."
                        end select
                    endif
                    sleep(1)
@@ -302,9 +297,15 @@ testcase tToolsOptionsStarOffice
                    Call DialogTest( TabOnlineUpdate )
                 endif
                 'CheckNow.click
+        case 14: Kontext "TabOOoImprovement"
+                 printlog( "  - OpenOffice.org Improvement Program" )
+                 if ( TabOOoImprovement.isVisible() ) then
+                     gefunden = TRUE
+                     Call DialogTest( TabOOoImprovement )
+                 endif
         end select
-        if gefunden=FALSE then
-            Warnlog "Error with the " + i + ".page, perhaps this page is deleted or change the place!"
+        if ( NOT gefunden ) then
+            Warnlog "Error with the " & i & ".page, perhaps this page has been deleted or changed its position"
             EchteAnzahl = EchteAnzahl - 1
             if EchteAnzahl < 13 then
                 i=10
@@ -317,7 +318,7 @@ testcase tToolsOptionsStarOffice
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document 
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase
@@ -332,7 +333,7 @@ testcase tToolsOptionsLoadSave
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-   if gApplication <> "DESKTOP" then Call hNewDocument
+   if gApplication <> "BACKGROUND" then Call hNewDocument
 '/// <i>Tools</i> / <i>Options</i> / <i>Load/Save</i>
    ToolsOptions
    ToPosInOptionlist (2)
@@ -385,7 +386,7 @@ testcase tToolsOptionsLoadSave
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase
@@ -402,7 +403,7 @@ testcase tToolsOptionsLanguageSettings
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-   if gApplication <> "DESKTOP" then Call hNewDocument
+   if gApplication <> "BACKGROUND" then Call hNewDocument
  '/// <i>Tools</i> / <i>Options</i> / <i>Language settings</i>
    ToolsOptions
     ToPosInOptionlist ( 3 )
@@ -487,7 +488,7 @@ testcase tToolsOptionsLanguageSettings
                    Kontext "TabLinguistik"
                    Optionen.TypeKeys "<PageUp>", 3
                    Sleep 1
-                   Optionen.TypeKeys "<Down>", 8
+                   Optionen.TypeKeys "<Down>", 6
                    Sleep 1
                    OptionenBearbeiten.Click
                     Kontext "SilbentrennungOptionen"
@@ -548,7 +549,7 @@ testcase tToolsOptionsLanguageSettings
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document   
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase
@@ -564,7 +565,7 @@ testcase tToolsOptionsInternet
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-   if gApplication <> "DESKTOP" then Call hNewDocument
+   if gApplication <> "BACKGROUND" then Call hNewDocument
  '/// <i>Tools</i> / <i>Options</i> / <i>Internet</i>
    ToolsOptions
    '/// (The last section in Tools / Options is <i>Internet</i>)
@@ -665,10 +666,68 @@ testcase tToolsOptionsInternet
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close document
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase
 
 '-------------------------------------------------------------------------
+
+testcase tToolsOptionsImprovementProgram
+
+    printlog( "Update test for the tools/options dialog of the OOo Improvement Program" )
+    
+    dim cLogFile as string
+        cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
+        cLogFile = convertpath( cLogFile )
+
+    if ( hDeleteFile( cLogFile ) ) then
+        printlog( "Test environment is clean, no logfile present (anymore)" )
+    endif
+
+    ToolsOptions
+    hToolsOptions( "StarOffice", "Improvement" )
+    printlog( "Improvement Program tabpage" )
+
+    call DialogTest( TabOOoImprovement )
+
+    ParticipateNo.check()
+    ParticipateYes.check()
+  
+    if ( ShowData.isEnabled() ) then 
+
+        ShowData.click()
+
+        Kontext "TextImport"
+        if ( TextImport.exists( 1 ) ) then
+            printlog( "Text import dialog" )
+                
+            call DialogTest( TextImport )
+            TextImport.cancel()
+        else
+            qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+        endif
+
+        Kontext "Active"
+        if ( Active.exists( 1 ) ) then
+            printlog( "Messagebox: " & Active.getText() )
+            Active.ok()
+        else
+            warnlog( "No warning for missing file: " & cLogFile )
+        endif
+
+        Kontext "Active"
+        if ( Active.exists( 1 ) ) then
+            warnlog( "#97342# Second message for missing " & cLogFile )
+            Active.ok()
+        endif
+    else
+        printlog( "Show data is disabled" )
+    endif
+
+    Kontext "OptionenDlg"
+    OptionenDlg.cancel()
+
+endcase
+
 

@@ -71,7 +71,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Draw"
+    gApplication = "DRAW"
     Call GetUseFiles
 end sub
 

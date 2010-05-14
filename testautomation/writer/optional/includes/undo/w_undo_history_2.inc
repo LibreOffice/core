@@ -40,22 +40,22 @@
 sub w_undo_history_2
 
 	' a > 20 characters long string
-	Call tUndoHistory6			' Typing & Overwrite
-	Call tUndoHistory7			' Replace
-	Call tUndoHistory8			' Delete a multi-selection
-	Call tUndoHistory9			' Paragraphs
-	Call tUndoHistory10		' Copy/Paste
-	Call tUndoHistory11		' Changes accept an reject
-	Call tUndoHistory12		' Manual breaks - line break
-	Call tUndoHistory13		' Manual breaks - column break
-	Call tUndoHistory14		' Manual breaks - page break
-	Call tUndoHistory15		' Fields (Insert/Modify / Delete)
-	Call tUndoHistory16		' Special Character (Insert/ Delete)
-	Call tUndoHistory17		' Styles (Apply/Modify/Find&Replace/Promote/Demote)
+	Call tUndoOverwriteLong			' Typing & Overwrite
+	Call tUndoFindAndReplaceLong			' Replace
+	Call tUndoDeleteMultiSelection			' Delete a multi-selection
+	Call tUndoParagraph			' Paragraphs
+	Call tUndoClipboard		' Copy/Paste
+	Call tUndoChanges		' Changes accept an reject
+	Call tUndoLineBreak		' Manual breaks - line break
+	Call tUndoColumnBreak		' Manual breaks - column break
+	Call tUndoPageBreak		' Manual breaks - page break
+	Call tUndoFields		' Fields (Insert/Modify / Delete)
+	Call tUndoSpecialCharacter		' Special Character (Insert/ Delete)
+	Call tUndoStyles		' Styles (Apply/Modify/Find&Replace/Promote/Demote)
 
 end sub
 
-testcase tUndoHistory6
+testcase tUndoOverwriteLong
 
 	'/// <B>Typing & overwrite a > 20 characters long string</B>
 	'/// new document
@@ -83,7 +83,7 @@ testcase tUndoHistory6
 endcase
 
 
-testcase tUndoHistory7
+testcase tUndoFindAndReplaceLong
 
 	'/// <B>Replace a > 20 characters long string</B>
 	'/// new Document
@@ -123,7 +123,7 @@ testcase tUndoHistory7
 endcase
 
 
-testcase tUndoHistory8
+testcase tUndoDeleteMultiSelection
 
 	'/// <B>Delete a multi-selection</B>
 	printlog "- Delete a multi-selection"
@@ -152,7 +152,7 @@ testcase tUndoHistory8
 endcase
 
 
-testcase tUndoHistory9
+testcase tUndoParagraph
 
 	'/// <B>Insert and delete a paragraph</B>
 	printlog "- Insert Paragraph"
@@ -173,7 +173,7 @@ testcase tUndoHistory9
 endcase
 
 
-testcase tUndoHistory10
+testcase tUndoClipboard
 	Dim i as integer
 
 	'/// <B>Copy / Paste</B>
@@ -211,7 +211,7 @@ testcase tUndoHistory10
 endcase
 
 
-testcase tUndoHistory11
+testcase tUndoChanges
 	
 	'/// <B>Changes accept and reject</B>
 	printlog "- Changes accept and reject"
@@ -274,7 +274,7 @@ testcase tUndoHistory11
 endcase
 
 
-testcase tUndoHistory12
+testcase tUndoLineBreak
 
 	'/// <B>Manual breaks (line breaks)</B>
 	printlog "Manual breaks (line breaks)"
@@ -297,7 +297,7 @@ testcase tUndoHistory12
 endcase
 
 
-testcase tUndoHistory13
+testcase tUndoColumnBreak
 
 	'/// <B>Column breaks</B>
 	printlog "- Column breaks"
@@ -326,7 +326,7 @@ testcase tUndoHistory13
 endcase
 
 
-testcase tUndoHistory14
+testcase tUndoPageBreak
 
 	'/// <B>Page breaks</B>
 	printlog "- Page breaks"
@@ -356,7 +356,7 @@ testcase tUndoHistory14
 endcase
 
 
-testcase tUndoHistory15
+testcase tUndoFields
 
 	'/// <B>Fields (Insert/Modify / Delete)</B>
 	printlog "- Fields (Insert)"
@@ -389,7 +389,7 @@ testcase tUndoHistory15
 endcase
 
 
-testcase tUndoHistory16
+testcase tUndoSpecialCharacter
 
 	'/// <B>Special Character (Insert / Delete )</B>
 	printlog "- Special Character (Insert)"
@@ -414,7 +414,7 @@ testcase tUndoHistory16
 endcase
 
 
-testcase tUndoHistory17
+testcase tUndoStyles
 	Dim i as integer, StyleText as string, UndoText as string
 	Dim NewStyle as string
 

@@ -50,7 +50,7 @@ end sub
 ' ---------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSText
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog "  Jump to beginning of document "
   printlog "  Select first paragraph "
@@ -87,8 +87,18 @@ testcase HTMLToIMPRESSText
    Call hCloseDocument
    printlog "  Close saved document "
    wait 500
-   Call hFileOpen (gOfficepath + "user\work\html_to_impress_text.odp",false)
    printlog "  Reopen saved document "
+   if hFileOpen (gOfficepath + "user\work\html_to_impress_text.odp",false) = false then
+        Kontext "Active"
+        if Active.Exists then
+            try
+                Active.Yes
+            catch
+                Warnlog "Unable to remove checkbox: " + Active.Gettext
+                Active.ok
+            endcatch
+        endif
+   endif         
    Wait 500
    Call hCloseDocument
    printlog "  Close saved document "
@@ -106,7 +116,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSField
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog "  Jump to beginning of document "
   printlog "  Select paragraph with 'Date Field' "
@@ -163,7 +173,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSTable
-  gApplication = "HTMLDOKUMENT"
+  gApplication = "HTML"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
   printlog "  Jump to beginning of document "
   printlog "  Select 'Table' "
@@ -220,7 +230,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSGraphicLinked
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
@@ -276,7 +286,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSControl
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
@@ -333,7 +343,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToIMPRESSFloatingFrame
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "

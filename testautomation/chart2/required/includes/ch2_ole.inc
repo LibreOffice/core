@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Chart resource test - section FILE
 '*
@@ -85,8 +85,8 @@ testcase tChartOLE ( sCurrentApplication as STRING )
         case ("IMPRESS")        :   sOutputFile = ( gOfficePath & ConvertPath("user\work\") & "tChartOLE_" & sCurrentApplication & ".odp" )
         case ("DRAW")           :   sOutputFile = ( gOfficePath & ConvertPath("user\work\") & "tChartOLE_" & sCurrentApplication & ".odg" )
         case ("WRITER")         :   sOutputFile = ( gOfficePath & ConvertPath("user\work\") & "tChartOLE_" & sCurrentApplication & ".odt" )
-        case ("MASTERDOC")      :   sOutputFile = ( gOfficePath & ConvertPath("user\work\") & "tChartOLE_" & sCurrentApplication & ".odm" )        
-        case ("HTMLDOKUMENT")   :   sOutputFile = ( gOfficePath & ConvertPath("user\work\") & "tChartOLE_" & sCurrentApplication & ".html" )
+        case ("MASTERDOCUMENT")      :   sOutputFile = ( gOfficePath & ConvertPath("user\work\") & "tChartOLE_" & sCurrentApplication & ".odm" )        
+        case ("HTML")   :   sOutputFile = ( gOfficePath & ConvertPath("user\work\") & "tChartOLE_" & sCurrentApplication & ".html" )
         case else               :   warnlog "The modul " & sCurrentApplication & " is not supported in this test case!"
                                     Call hCloseDocument
                                     goto endsub               
@@ -110,8 +110,8 @@ testcase tChartOLE ( sCurrentApplication as STRING )
         case ("WRITER")         :   call gMouseclick (99,99) 
                                     call gMouseclick (50,50)
                                     Call fSelectFirstOLE
-        case ("MASTERDOC")      :   call gMouseclick (99,99)
-        case ("HTMLDOKUMENT")   :   call gMouseclick (99,99) 
+        case ("MASTERDOCUMENT")      :   call gMouseclick (99,99)
+        case ("HTML")   :   call gMouseclick (99,99) 
                                     call gMouseclick (50,50)
                                     Call fSelectFirstOLE
         case else               :   warnlog "The modul " & sCurrentApplication & " is not supported in this test case!"
@@ -138,6 +138,6 @@ testcase tChartOLE ( sCurrentApplication as STRING )
     end if            
     '/// Close document
     Call hCloseDocument
-    gApplication = "Calc"    
+    gApplication = "CALC"    
 endcase
 

@@ -164,7 +164,7 @@ testcase tFunctions_2
   '/// Tools/Options / StarOffice writer / Formatting Aids
   '/// Uncheck 'Fields : Hidden text"
    ToolsOptions
-   Call hToolsOptions("TEXTDOCUMENT","FORMATTINGAIDS")
+   Call hToolsOptions("WRITER","FORMATTINGAIDS")
      bHiddenText = FeldVersteckterText.IsChecked
      if bHiddenText = TRUE then
          FeldVersteckterText.UnCheck
@@ -206,7 +206,7 @@ testcase tFunctions_2
 
   'Recover to default
    ToolsOptions
-   Call hToolsOptions("TEXTDOCUMENT","FORMATTINGAIDS")
+   Call hToolsOptions("WRITER","FORMATTINGAIDS")
      if bHiddenText = TRUE then FeldVersteckterText.Check
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
@@ -248,7 +248,7 @@ testcase tFunctions_3
   '/// Tools/Options / StarOffice writer / Formatting Aids
   '/// Uncheck 'Fields : Hidden paragraph"
    ToolsOptions
-   Call hToolsOptions("TEXTDOCUMENT","FORMATTINGAIDS")
+   Call hToolsOptions("WRITER","FORMATTINGAIDS")
      bHiddenText = VersteckteAbsatze.IsChecked
      if bHiddenText = TRUE then
          VersteckteAbsatze.UnCheck
@@ -293,7 +293,7 @@ testcase tFunctions_3
 
   'Recover to default
    ToolsOptions
-   Call hToolsOptions("TEXTDOCUMENT","FORMATTINGAIDS")
+   Call hToolsOptions("WRITER","FORMATTINGAIDS")
      if bHiddenText = TRUE then VersteckteAbsatze.Check
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK

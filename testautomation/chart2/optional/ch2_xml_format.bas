@@ -31,7 +31,7 @@
 '*
 '/***********************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : General XML file format check
 '*

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : wolfram.garten@sun.com
 '*
 '* short description : OASIS OpenDocument Fileformat Test (Presentation and Drawing)
 '*

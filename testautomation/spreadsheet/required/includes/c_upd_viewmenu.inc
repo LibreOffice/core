@@ -45,6 +45,7 @@
 ' #1 tViewColumnRowHeaders
 ' #1 tViewValueHighlighting
 ' #1 tViewDataSources
+' #1 tViewNavigator
 ' #1 tViewFullScreen
 ' #1 tViewZoom
 '*
@@ -62,6 +63,7 @@ sub c_upd_viewmenu
     call tViewColumnRowHeaders
     call tViewValueHighlighting
     call tViewDataSources
+    call tViewNavigator
     call tViewFullScreen
     call tViewZoom
 
@@ -294,6 +296,58 @@ testcase tViewDataSources
     '/// Close new document
     printlog " Close document"
     call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------
+
+testcase tViewNavigator
+'///<u><b>Edit - Navigator</b></u>
+
+    '/// Open new Spreadsheet document
+    printlog " Open new Spreadsheet document"
+    call hNewDocument
+    '/// Check if Navigator already exists. If not open Navigator by View-Navigator.
+    printlog " Check if Navigator already exists. If not open Navigator by View-Navigator."
+    Kontext "NavigatorCalc"
+    if NavigatorCalc.exists then
+        warnlog "Navigator is already enabled"
+    else
+        ViewNavigator
+    end if
+    Kontext "NavigatorCalc"
+    call DialogTest ( NavigatorCalc )
+    '/// Check functionality of button for content by clicking it twice
+    printlog " Check functionality of button for content by clicking it twice"
+    Inhalte.Click
+    Inhalte.Click
+    '/// Check functionality of toggle button by clicking it twice
+    printlog " Check functionality of toggle button by clicking it twice"
+    Umschalten.Click
+    Umschalten.Click
+    '/// Check functionality of button for scenarios by clicking it twice
+    printlog " Check functionality of button for scenarios by clicking it twice"
+    Szenarien.Click
+    Szenarien.Click
+    '/// Check that the dragmodus has 3 modes
+    printlog " Check that the dragmodus has 3 modes"
+    Dragmodus.OpenMenu
+    if MenuGetItemCount <> 3 then
+        warnlog "Not enough modes for dragmodus"
+    end if
+    MenuSelect (0)
+    '/// Close Navigator
+    printlog " Close Navigator"
+    Kontext "Navigator"
+    Navigator.Close    'Because of #i78307 the navigatorwindow has to be closed by Navigator.close
+    Kontext "NavigatorCalc"
+    if NavigatorCalc.exists then
+        ViewNavigator
+        Warnlog "NavigatorCalc.Close doesn't close the navigator"
+    end if
+    '/// Close document
+    printlog " Close document"
+    hCloseDocument
 
 endcase
 

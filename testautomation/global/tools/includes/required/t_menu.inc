@@ -66,10 +66,10 @@ function hMenuSelectNr ( EintragsNr as Integer ) as String
     '///INPUT : number of entry from the bottom (<=-1)
     '///INPUT : 0 to close menu
     '///+ OUTPUT: text of the entry
-    
+
     Dim i, j, RealEnd, Ende as Integer
     Dim nID as long
-    
+
     sleep( 2 )
 
     Ende = EintragsNr
@@ -121,7 +121,7 @@ function hMenuItemCheck ( EintragsNr as Integer ) as String
 
     Ende = EintragsNr
     RealEnd = hMenuItemGetCount
-        
+
     if Ende > RealEnd then
         Warnlog "hMenuItemCheck canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
         hMenuClose
@@ -300,7 +300,7 @@ function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as
             hMenuClose()
         endif
     endif 'StringType = TRUE
-    wait 200   'Wait 0,2 seconds in case we just have called a Submenu.
+    wait 500   'Wait 0,5 seconds in case we just have called a Submenu.
 
 end function
 
@@ -323,7 +323,7 @@ function hMenuItemIsChecked ( EintragsNr as Integer ) as Boolean
     endif
     j=0
     for i=1 to Ende
-        if MenuIsSeperator ( i+j ) then 
+        if MenuIsSeperator ( i+j ) then
             j = j+1
         endif
     next i
@@ -497,7 +497,7 @@ function hWindowGetIndex () as integer
 
     '///<b> function hWindowGetIndex () as integer </b>///'
     '///+ returns the number of the active window ///'
-    
+
     dim iMenues as integer      ' takes the number of entries in the windows menue
     dim iNotWindows as integer  ' number of open windows
     dim iKandidate as integer
@@ -551,7 +551,7 @@ function hWindowGetText (optional iWindow as integer) as string
 
     iMenues = hMenuItemGetCount
     hMenuSelectNr(iMenues-1)    ' 'windows' ist usually the one before the last
-    
+
     waitslot() 'wait 200
     iMenues = hMenuItemGetCount
     hWindowGetText = hMenuItemGetTextMitTilde (iUseWindow + (iMenues - iNotWindows) + 1)
@@ -597,12 +597,12 @@ function hUseMenu ()
         Kontext "DocumentWriter"
         DocumentWriter.UseMenu
 
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
 
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.UseMenu
 
-    Case "HTMLDOKUMENT"
+    Case "HTML"
 
         Kontext "DocumentWriterWeb"
         DocumentWriterWeb.UseMenu
@@ -627,10 +627,10 @@ function hUseMenu ()
         Kontext "DocumentMath"
         DocumentMath.UseMenu
 
-    case "INSIGHT" :
+    case "DATABASE" :
 
-        Kontext "Insight"
-        Insight.UseMenu
+        Kontext "DATABASE"
+        Database.UseMenu
 
     case "BASIC" :
 
@@ -658,12 +658,12 @@ function hOpenContextMenu()
         Kontext "DocumentWriter"
         DocumentWriter.openContextMenu
 
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
 
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.openContextMenu
 
-    Case "HTMLDOKUMENT"
+    Case "HTML"
 
         Kontext "DocumentWriterWeb"
         DocumentWriterWeb.openContextMenu

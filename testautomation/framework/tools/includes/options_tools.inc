@@ -239,7 +239,7 @@ sub DialogTextForViewOptions_move
     Kontext "NavigatorWriter"
 
     if Not NavigatorWriter.Exists then
-        EditNavigator
+        ViewNavigator
     endif
 
     Kontext "Navigator"

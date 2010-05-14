@@ -69,11 +69,11 @@ DIM WordLanguageTemp    AS string 'variable for checking if Office language is a
         printlog "Autospellcheck is already checked"
     end if
     '----------------------------------------------------------------
-    EditNavigator       'opening navigator and selecting table
+    ViewNavigator       'opening navigator and selecting table
     sleep(1)
     Call wNavigatorAuswahl(2,1)
     DocumentWriter.TypeKeys "<MOD1 UP>"
-    EditNavigator       'closing navigator
+    ViewNavigator       'closing navigator
     printlog "-----------------"
     '----------------------------------------------------------------
     '///Put the cursor in the first wrong word///

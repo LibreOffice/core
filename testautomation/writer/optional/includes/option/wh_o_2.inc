@@ -512,7 +512,7 @@ testcase tToolsOptionsHTMLTable1
     printlog ("'///- Tools/Options/Text document: Table ///")
 
     ToolsOptions
-    Call hToolsOptions ("Textdocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     VerhaltenFix.Check
 
     Kontext "ExtrasOptionenDlg"

@@ -281,14 +281,14 @@ sub hMalZeichnenMitSelektion ( xS, yS, xE, yE )
       DocumentWriter.MouseUp   ( xE, yE )
       Sleep 1
 
-   Case "HTMLDOKUMENT"
+   Case "HTML"
       Kontext "DocumentWriterWeb"
       DocumentWriterWeb.MouseDown ( xS, yS )
       DocumentWriterWeb.MouseMove ( xE, yE )
       DocumentWriterWeb.MouseUp   ( xE, yE )
       Sleep 1
 
-   Case "MASTERDOC"
+   Case "MASTERDOCUMENT"
       Kontext "DocumentMasterDoc"
       DocumentMasterDoc.MouseDown ( xS, yS )
       DocumentMasterDoc.MouseMove ( xE, yE )
@@ -310,7 +310,7 @@ sub hMalZeichnen ( xS, yS, xE, yE )
       Sleep 1
       if DocumentWriter.IsEnabled then Call wTypeKeys "<Escape>"
 
-   Case "HTMLDOKUMENT"
+   Case "HTML"
       Kontext "DocumentWriterWeb"
       DocumentWriterWeb.MouseDown ( xS, yS )
       DocumentWriterWeb.MouseMove ( xE, yE )
@@ -318,7 +318,7 @@ sub hMalZeichnen ( xS, yS, xE, yE )
       Sleep 1
       if DocumentWriterWeb.IsEnabled then DocumentWriterWeb.TypeKeys "<Escape>"
 
-   Case "MASTERDOC"
+   Case "MASTERDOCUMENT"
       Kontext "DocumentMasterDoc"
       DocumentMasterDoc.MouseDown ( xS, yS )
       DocumentMasterDoc.MouseMove ( xE, yE )

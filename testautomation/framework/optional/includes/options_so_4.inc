@@ -142,7 +142,7 @@ testcase func_StarOfficeGeneral_2
  printlog "- working with activated HelpAgent"
  printlog "  - check display duration of 10sec"
  printlog "    new writer-doc"
-  gApplication = "Writer"
+  gApplication = "WRITER"
   hNewDocument
 
 '///+tools / options / staroffice / general -> help agent

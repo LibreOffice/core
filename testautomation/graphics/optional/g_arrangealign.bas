@@ -66,7 +66,7 @@ sub main
         Call tdContextBehindObject
         Call tdContextReverse
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         if (Lcase(gApplication) = "impress") then
             Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odp")
@@ -89,6 +89,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

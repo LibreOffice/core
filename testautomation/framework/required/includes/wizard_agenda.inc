@@ -39,8 +39,6 @@
 
 testcase tUpdtWizardAgenda
 
-    '///<H1>Update test for agenda wizard</H1>
-    '///<ul>
     dim iErr as integer
     dim brc as boolean
     
@@ -52,77 +50,64 @@ testcase tUpdtWizardAgenda
     cTemplatePath = gOfficePath & "user\template\" & cTemplateName
     cTemplatePath = convertpath( cTemplatePath )    
     
-    '///+<li>Make sure exactly one single writer document is open</li>
     hInitSingleDoc()     
 
-    '///+<li>open the Agenda-wizard using the menu, page design opens</li>
-    iErr = hOpenWizardWithMenu( "AGENDA" )
-    if ( iErr = 1 ) then
-        warnlog( "#i46909# Wizard crashes/does not open" )
-        goto endsub
-    endif  
+    FileAutopilotAgenda
+    kontext "AutopilotAgenda"
+    if ( AutopilotAgenda.exists( 2 ) ) then
     
-    '///+<li>First page</li>
-    printlog( " * Page 1 : Page Design" )
-    Kontext "AutopilotAgenda"
-    call dialogtest2( AutopilotAgenda, 1 )
-    PageDesignList.select( 3 )
-    hClickNextButton()
-    
-    '///+<li>Second page</li>
-    Kontext "AutopilotAgenda"
-    call dialogtest2( AutopilotAgenda, 2 )
-    hClickNextButton()
-    
-    '///+<li>Third page</li>
-    Kontext "AutopilotAgenda"
-    call dialogtest2( AutopilotAgenda, 3 )
-    hClickNextButton()
-
-    '///+<li>Fourth page</li>
-    Kontext "AutopilotAgenda"
-    call dialogtest2( AutopilotAgenda, 4 )
-    hClickNextButton()
-
-    '///+<li>Fifth page</li>
-    Kontext "AutopilotAgenda"
-    call dialogtest2( AutopilotAgenda, 5 )
-    hClickNextButton()
-
-    '///+<li>sixth page</li>
-    Kontext "AutopilotAgenda"
-    call dialogtest2( AutopilotAgenda, 6 )
-    
-    '///+<li>name the template for further usage</li>
-    printlog( "   * name the template for further usage" )
-    hWaitForObject( TemplateName, 3000 )
-    TemplateName.setText( cTemplateName )
-    hSetTemplateSavePath( cTemplatePath )    
+        printlog( " * Page 1 : Page Design" )
+        Kontext "AutopilotAgenda"
+        call DialogTest( AutopilotAgenda, 1 )
+        PageDesignList.select( 3 )
+        hClickNextButton()
         
-    '///+<li>Click Finish-Button</li>
-    hFinishWizard( 1 )
-    
-    '///+<li>Handle possible File-Save error</li>
-    iErr = hHandleSaveError()
-    if ( iErr = 1 ) then
-        kontext "AutopilotAgenda"
+        Kontext "AutopilotAgenda"
+        call DialogTest( AutopilotAgenda, 2 )
+        hClickNextButton()
+        
+        Kontext "AutopilotAgenda"
+        call DialogTest( AutopilotAgenda, 3 )
+        hClickNextButton()
+
+        Kontext "AutopilotAgenda"
+        call DialogTest( AutopilotAgenda, 4 )
+        hClickNextButton()
+
+        Kontext "AutopilotAgenda"
+        call DialogTest( AutopilotAgenda, 5 )
+        hClickNextButton()
+
+        Kontext "AutopilotAgenda"
+        call DialogTest( AutopilotAgenda, 6 )
+        
+        printlog( "   * name the template for further usage" )
+        hWaitForObject( TemplateName, 3000 )
+        TemplateName.setText( cTemplateName )
+        hSetTemplateSavePath( cTemplatePath )    
+            
         hFinishWizard( 1 )
-    endif    
-    
-    '///+<li>Close the new template</li>
-    brc = hDestroyDocument()
-    if ( not brc ) then
-        qaerrorlog( "#i59233# The wizard does not display the new template" )
-    endif
-    
-    do while( getDocumentCount() > 0 )
-        call hCloseDocument()
-    loop
-    
         
-    '///+<li>delete the new template</li>
-    hDeleteFile( cTemplatePath )
-    '///</ul>
+        iErr = hHandleSaveError()
+        if ( iErr = 1 ) then
+            kontext "AutopilotAgenda"
+            hFinishWizard( 1 )
+        endif    
+        
+        brc = hDestroyDocument()
+        if ( not brc ) then
+            qaerrorlog( "#i59233# The wizard does not display the new template" )
+        endif
+        
+        do while( getDocumentCount() > 0 )
+            call hCloseDocument()
+        loop
+        
+            
+        hDeleteFile( cTemplatePath )
+    else
+        warnlog ( "The Agenda wizard did not open/timelimit exceeded" )
+    endif
 
 endcase
 

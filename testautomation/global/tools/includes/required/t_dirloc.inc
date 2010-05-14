@@ -1,6 +1,6 @@
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -34,76 +34,63 @@
 '*
 '* short description : functions for directories and files; execution happens in the testtool
 '*
-'*************************************************************************
-' #1 hFileExistsLocal
-' #1 hDirectoryExistsLocal
-' #1 hKillFileLocal
-' #1 DirNameListLocal
-' #1 GetFileNameListLocal
-' #1 GetFileListLocal
-' #1 GetDirListLocal
-' #1 GetAllDirListLocal
-' #1 GetAllFileListLocal
-' #1 KillFileListLocal
-' #1 KillDirListLocal
-' #1 GetFileSizesLocal
 '\************************************************************************
 
 function hFileExistsLocal ( Dat as String ) as Boolean
-'/// Checks if a file exists
-'/// <u>Input</u>: Filename with complete path
-'/// <u>Return</u>: TRUE or FALSE if the file exists.
+    '/// Checks if a file exists
+    '/// <u>Input</u>: Filename with complete path
+    '/// <u>Return</u>: TRUE or FALSE if the file exists.
     if Dir ( Dat ) = "" then
-       hFileExistsLocal = FALSE
+        hFileExistsLocal = FALSE
     else
-       hFileExistsLocal = TRUE
+        hFileExistsLocal = TRUE
     end if
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function hDirectoryExistsLocal ( Verz as String ) as Boolean
-'/// Checks if a directory exists
-'/// <u>Input</u>: Directory with complete path
-'/// <u>Return</u>: TRUE or FALSE if the directory exists.
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    '/// Checks if a directory exists
+    '/// <u>Input</u>: Directory with complete path
+    '/// <u>Return</u>: TRUE or FALSE if the directory exists.
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
     if right ( Verz, 1 ) <> gPathSigne then Verz = Verz + gPathSigne
     if Dir ( Verz, 16 ) = "" then
-       hDirectoryExistsLocal = FALSE
+        hDirectoryExistsLocal = FALSE
     else
-       hDirectoryExistsLocal = TRUE
+        hDirectoryExistsLocal = TRUE
     end if
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function hKillFileLocal ( Dat as String ) as Boolean
-'/// Delete a file
-'/// <u>Input</u>: File with complete path
-'/// <u>Return</u>: TRUE or FALSE success on deleting?
+    '/// Delete a file
+    '/// <u>Input</u>: File with complete path
+    '/// <u>Return</u>: TRUE or FALSE success on deleting?
     if Dir ( Dat ) <> "" then
-       try
-          kill ( Dat )
-       catch
-       endcatch
-       if Dir ( Dat ) <> "" then
-          hKillFileLocal = FALSE
-       else
-          hKillFileLocal = TRUE
-       end if
+        try
+            kill ( Dat )
+        catch
+        endcatch
+        if Dir ( Dat ) <> "" then
+            hKillFileLocal = FALSE
+        else
+            hKillFileLocal = TRUE
+        end if
     else
-       hKillFileLocal = TRUE
+        hKillFileLocal = TRUE
     end if
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function DirNameListLocal (ByVal sPfad$ , lsDirName() as String ) as Integer
-'/// seperate a path in its parts
-'/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;
-'/// <u>Return</u>: Number on entries in the list; list with entries
-   Dim i% 
-   Dim Pos%
+    '/// seperate a path in its parts
+    '/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;
+    '/// <u>Return</u>: Number on entries in the list; list with entries
+    Dim i%
+    Dim Pos%
 
     lsDirName(0) = 0
     do
@@ -120,16 +107,16 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetFileNameListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
-'/// Get files from a directory that match the pattern and append them to a list (without path)
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
-'/// <u>Return</u>: count of appended entries; updated list
-   Dim Count% 
-   Dim Datname as String
+    '/// Get files from a directory that match the pattern and append them to a list (without path)
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
+    '/// <u>Return</u>: count of appended entries; updated list
+    Dim Count%
+    Dim Datname as String
 
     Count% = 0
 
     if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
     Datname = Dir( sPath$ + sMatch$ , 0)
 
     do until Len(Datname) = 0
@@ -145,16 +132,16 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetFileListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
-'/// Get files from a directory that match the pattern and append them to a list (<b>with</b> path)
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
-'/// <u>Return</u>: count of appended entries; updated list
-   Dim Count% 
-   Dim Datname as String
+    '/// Get files from a directory that match the pattern and append them to a list (<b>with</b> path)
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
+    '/// <u>Return</u>: count of appended entries; updated list
+    Dim Count%
+    Dim Datname as String
 
     Count% = 0
 
     if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
     Datname = Dir( sPath$ + sMatch$ , 0)
 
     do until Len(Datname) = 0
@@ -169,36 +156,36 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetDirListLocal ( sPath$, sMatch$ ,lsFile() as String ) as integer
-'/// Get Subdirectories from a directory and append them to a list (<b>with</b> path)
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; List
-'/// <u>Return</u>: count of appended entries; updated list
-   Dim Count%
-   Dim Verzeichnis as String
+    '/// Get Subdirectories from a directory and append them to a list (<b>with</b> path)
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; List
+    '/// <u>Return</u>: count of appended entries; updated list
+    Dim Count%
+    Dim Verzeichnis as String
 
-   if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne        
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-   Verzeichnis = Dir( sPath$ + sMatch$ , 16)
-   Count% = 0
+    if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    Verzeichnis = Dir( sPath$ + sMatch$ , 16)
+    Count% = 0
 
-   do until Len(Verzeichnis) = 0
-      if Verzeichnis <>"." AND Verzeichnis <> ".." then
-         lsFile(0) = Val(lsFile(0)) + 1
-         lsFile( lsFile(0) ) = sPath$  + Verzeichnis + gPathSigne
-         Count% = Count% + 1
-      end if
-      Verzeichnis = Dir
-   loop
+    do until Len(Verzeichnis) = 0
+        if Verzeichnis <>"." AND Verzeichnis <> ".." then
+            lsFile(0) = Val(lsFile(0)) + 1
+            lsFile( lsFile(0) ) = sPath$  + Verzeichnis + gPathSigne
+            Count% = Count% + 1
+        end if
+        Verzeichnis = Dir
+    loop
 
-   GetDirListLocal = Count%
+    GetDirListLocal = Count%
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function GetAllDirListLocal ( byVal sPath$, byVal sMatch$ ,lsFile() as String ) as integer
-'/// Get all directorys recursiv that match the pattern and append them to a list
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; Empty list, because it get's reset in this function!;
-'/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
-   Dim Count% : Dim DirCount%
+    '/// Get all directorys recursiv that match the pattern and append them to a list
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; Empty list, because it get's reset in this function!;
+    '/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
+    Dim Count% : Dim DirCount%
 
     DirCount% = 1   ' dummy
     Count% = 1
@@ -216,11 +203,11 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetAllFileListLocal ( byVal sPath$, byVal sMatch$ ,lsFile() as String ) as integer
-'/// Get all Files recursiv (including in subdirectories) that match the pattern and append them to a list
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; Empty list, because it get's reset in this function!;
-'/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
-   Dim DirCount% : Dim FileCount% : Dim Count%
-   Dim lsDir(1000) as String
+    '/// Get all Files recursiv (including in subdirectories) that match the pattern and append them to a list
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; Empty list, because it get's reset in this function!;
+    '/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
+    Dim DirCount% : Dim FileCount% : Dim Count%
+    Dim lsDir(1000) as String
 
     DirCount% = GetAllDirListLocal ( sPath$, "*", lsDir() ) ' just all directories
     FileCount% = 0
@@ -237,71 +224,71 @@ end function
 '-------------------------------------------------------------------------------
 '
 function KillFileListLocal ( lsList() as String ) as Boolean
-'/// Delete all files in the list
-'/// <u>Input</u>: List with files
-'/// <u>Return</u>: TRUE or FALSE if files are killed; modified list with not deleted files.
-  Dim i as Integer
-  Dim FehlerListe ( 1000 ) as String
+    '/// Delete all files in the list
+    '/// <u>Input</u>: List with files
+    '/// <u>Return</u>: TRUE or FALSE if files are killed; modified list with not deleted files.
+    Dim i as Integer
+    Dim FehlerListe ( 1000 ) as String
 
-   FehlerListe ( 0 ) = 0
-   for i=1 to ListCount ( lsList() )
-      try
-          kill ( lsList(i) )
-      catch
-          ListAppend ( FehlerListe (), lsList(i) )
-      endcatch
-   next i
+    FehlerListe ( 0 ) = 0
+    for i=1 to ListCount ( lsList() )
+        try
+            kill ( lsList(i) )
+        catch
+            ListAppend ( FehlerListe (), lsList(i) )
+        endcatch
+    next i
 
-   lsList(0) = 0               ' delete old list
-   KillFileListLocal = TRUE
-   for i=1 to ListCount ( FehlerListe () )
-      KillFileListLocal = FALSE
-      ListAppend ( lsList(), FehlerListe (i) )
-   next i
+    lsList(0) = 0               ' delete old list
+    KillFileListLocal = TRUE
+    for i=1 to ListCount ( FehlerListe () )
+        KillFileListLocal = FALSE
+        ListAppend ( lsList(), FehlerListe (i) )
+    next i
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function KillDirListLocal ( lsList() as String ) as Boolean
-'/// Delete all directories in the list
-'/// <u>Input</u>: List with directories
-'/// <u>Return</u>: TRUE or FALSE if directories are killed; modified list with not deleted directories.
-  Dim i as Integer
-  Dim FehlerListe ( 1000 ) as String
+    '/// Delete all directories in the list
+    '/// <u>Input</u>: List with directories
+    '/// <u>Return</u>: TRUE or FALSE if directories are killed; modified list with not deleted directories.
+    Dim i as Integer
+    Dim FehlerListe ( 1000 ) as String
 
-   FehlerListe ( 0 ) = 0
-   for i=1 to ListCount ( lsList() )
-      try
-         rmDir ( lsList(i) )
-      catch
-         ListAppend ( FehlerListe (), lsList(i) )
-      endcatch
-   next i
+    FehlerListe ( 0 ) = 0
+    for i=1 to ListCount ( lsList() )
+        try
+            rmDir ( lsList(i) )
+        catch
+            ListAppend ( FehlerListe (), lsList(i) )
+        endcatch
+    next i
 
-   lsList(0) = 0               ' delete old list
-   KillDirListLocal = TRUE
-   for i=1 to ListCount ( FehlerListe () )
-      KillDirListLocal = FALSE
-      ListAppend (  lsList(), FehlerListe (i) )
-   next i
+    lsList(0) = 0               ' delete old list
+    KillDirListLocal = TRUE
+    for i=1 to ListCount ( FehlerListe () )
+        KillDirListLocal = FALSE
+        ListAppend (  lsList(), FehlerListe (i) )
+    next i
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function GetFileSizesLocal ( lsList() as String ) as long
-'/// Computes the total Filesize of the files in the list
-'/// <u>Input</u>: List with files
-'/// <u>Return</u>: Filesize in bytes
-   Dim iSum
-   Dim i as Integer
+    '/// Computes the total Filesize of the files in the list
+    '/// <u>Input</u>: List with files
+    '/// <u>Return</u>: Filesize in bytes
+    Dim iSum
+    Dim i as Integer
 
-   iSum = 0
-   for i=1 to ListCount ( lsList() )
-      try
-        iSum = iSum + FileLen ( lsList(i) )
-      catch
-      endcatch
-   next i
+    iSum = 0
+    for i=1 to ListCount ( lsList() )
+        try
+            iSum = iSum + FileLen ( lsList(i) )
+        catch
+        endcatch
+    next i
 
-   GetFileSizesLocal = iSum
+    GetFileSizesLocal = iSum
 end function

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : get information for startup a test out of important ini-files
 '*
@@ -169,9 +169,9 @@ sub GetOfficeInformation
     Dim sPlatformProgramPath as string
     Dim sPlatformBinExt as string      
    
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
         sPlatformProgramPath = "MacOS"
-        sPlatformBinExt = ".bin"
+        sPlatformBinExt = ""
     else
         sPlatformProgramPath = "program"
         if gPlatGroup <> "unx" then
@@ -192,21 +192,21 @@ sub GetOfficeInformation
       else
          if gNetzInst = TRUE then                              ' wenn es sich um eine Netzwerkinstallation handelt
                select case UCase(gApplication)
-                  case "WRITER",  "TEXTDOKUMENT"    : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "WRITER"        : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-writer"
-                  case "CALC", "TABELLENDOKUMENT"   : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "CALC"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-calc"
-                  case "IMPRESS", "PRAESENTATION"   : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "IMPRESS"       : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "private:factory/simpress"
-                  case "DRAW", "ZEICHNUNG"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "DRAW"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-draw"
-                  case "GLOBALDOC", "GLOBALDOKUMENT": sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MASTERDOCUMENT": sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-global"
-                  case "MATH", "FORMEL"             : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MATH"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-math"
-                  case "HTML", "HTMLDOKUMENT"       : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case "HTML"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                                                       sFactory = "-web"
-                  case else                         : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case else            : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                end select
          'If it's a normal (FAT) office
          else
@@ -219,21 +219,21 @@ sub GetOfficeInformation
               end if
             else
                select case UCase(gApplication)
-                  case "WRITER",  "TEXTDOKUMENT"    : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "WRITER"        : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-writer"
-                  case "CALC", "TABELLENDOKUMENT"   : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "CALC"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-calc"
-                  case "IMPRESS", "PRAESENTATION"   : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "IMPRESS"       : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "private:factory/simpress"
-                  case "DRAW", "ZEICHNUNG"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "DRAW"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-draw"
-                  case "GLOBALDOC", "GLOBALDOKUMENT": sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MASTERDOCUMENT": sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-global"
-                  case "MATH", "FORMEL"             : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
+                  case "MATH"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
                                                       sFactory = "-math"
-                  case "HTML", "HTMLDOKUMENT"       : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case "HTML"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                                                       sFactory = "-web"
-                  case else                         : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                  case else            : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
                end select
             end if
          end if
@@ -328,38 +328,48 @@ sub GetLanguageInformation
 '/// Extracts the language information from <i>Setup.xcu</i>.
 '/// <u>note</u>: It uses the <b>fgetL10Nvalue</b>.
    Dim i as integer
+   Dim iTimeOut as integer
    Dim sLanOutIni as string
    Dim SetupXML as String
    Dim ChildsOfSetupNodes as integer
    Dim ArtOfInst as string
    Dim SetupXMLNet as string
    Dim SetupXMLDefault as string
-
+   dim SetupXcuPath as string
+        
+    SetupXcuPath = ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
+    SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
+    
     if gNetzInst = TRUE then
-        SetupXMLNet = gNetzOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-        SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
+        SetupXMLNet = gNetzOfficePath & SetupXcuPath
         ArtOfInst = "NET- / Workstation Inst."
     else
-        SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
-        SetupXMLDefault = gOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
+        SetupXMLDefault = gOfficePath & SetupXcuPath
         ArtOfInst = "FAT Inst."
     end if
 
-    if app.Dir (SetupXML) = "" then
-        warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
-        iSprache = 01
-        Exit sub
-    else
-        ' function 'fgetL10Nvalue' is also in this library
-        sLanOutIni = fgetL10Nvalue(SetupXML)
-        ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
-        if sLanOutIni = "" and gNetzInst = TRUE then
-            sLanOutIni = fgetL10Nvalue(SetupXMLNet)
-        end if
-        ' It is an English FAT version 645m9s2 or higher.
-        if sLanOutIni = "" and gNetzInst = FALSE then
-            sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
-        end if
+    ' Issue #i97875 (JSK) experimental delay
+    ' If we're too fast we might encounter that the Setup.xcu is not created yet.
+    ' So we retry a couple of times    
+    while( IsMissing( SetupXML ) ) 
+        iTimeOut = iTimeOut + 1
+        if ( iTimeOut = 10 ) then
+            warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
+            iSprache = 01
+            Exit sub
+        endif
+        wait( 100 )
+    wend
+
+    ' function 'fgetL10Nvalue' is also in this library
+    sLanOutIni = fgetL10Nvalue(SetupXML)
+    ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
+    if sLanOutIni = "" and gNetzInst = TRUE then
+        sLanOutIni = fgetL10Nvalue(SetupXMLNet)
+    end if
+    ' It is an English FAT version 645m9s2 or higher.
+    if sLanOutIni = "" and gNetzInst = FALSE then
+        sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
     end if
 
     if sLanOutIni = "" then
@@ -616,7 +626,7 @@ sub GetTheInstallationType
     dim i,x as integer
     dim sPlatformProgramPath as string
     
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
     	sPlatformProgramPath = "MacOS"
     else
     	sPlatformProgramPath = "program"
@@ -928,7 +938,7 @@ function getSofficeNative() as string
                 if fileExists(sCandidates(i)) then
                     '/// cut off program//soffice from link destination ///'
                     y = instr(sCandidates(i), "program/soffice")
-                    if gPlatform = lcase("osx") AND y < 1 then
+                    if ( lcase( gPlatform ) = "osx" AND y < 1 ) then
                         ' Accept also MacOS in link to soffice binary
                         y = instr(sCandidates(i), "MacOS/soffice")
                     end if 
@@ -1124,7 +1134,7 @@ function getSofficeTesttool() as string
         end if
         ' be tolerant to the chosen path
         ' we just need the base directory, cut of possible "program" at end
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             ' to get all possibile directories:
             ' path could be: ...app/Contents/MacOS
             if (right(sTemp,6) = "MacOS"+gPathSigne) then
@@ -1236,7 +1246,7 @@ function getOfficeBasisPath as string
     sFile = gNetzOfficePath + "basis-link"
 
     if fileExists(sFile) then
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             'MacOS X
             sTemp = sFile + gPathSigne
         else

@@ -88,8 +88,7 @@ sub LoadIncludeFiles
     use "global\required\includes\g_option.inc"
     use "global\required\includes\g_customize.inc"
     use "global\required\includes\g_001.inc"
-    use "global\required\includes\g_009.inc"
    Call GetUseFiles
-   gApplication   = "Draw"
+   gApplication   = "DRAW"
 end sub
 
