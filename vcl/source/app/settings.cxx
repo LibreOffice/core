@@ -189,7 +189,7 @@ ImplMouseData::ImplMouseData()
     mnActionDelay               = 250;
     mnMenuDelay                 = 150;
     mnFollow                    = MOUSE_FOLLOW_MENU | MOUSE_FOLLOW_DDLIST;
-    mbNoWheelActionWithoutFocus = FALSE;
+    mnWheelBehavior             = MOUSE_WHEEL_FOCUS_ONLY;
 }
 
 // -----------------------------------------------------------------------
@@ -217,7 +217,7 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
     mnActionDelay               = rData.mnActionDelay;
     mnMenuDelay                 = rData.mnMenuDelay;
     mnFollow                    = rData.mnFollow;
-    mbNoWheelActionWithoutFocus = rData.mbNoWheelActionWithoutFocus;
+    mnWheelBehavior             = rData.mnWheelBehavior;
 }
 
 // -----------------------------------------------------------------------
@@ -308,7 +308,7 @@ BOOL MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mpData->mnActionDelay         == rSet.mpData->mnActionDelay)          &&
          (mpData->mnMenuDelay           == rSet.mpData->mnMenuDelay)            &&
          (mpData->mnFollow              == rSet.mpData->mnFollow)               &&
-         (mpData->mbNoWheelActionWithoutFocus == rSet.mpData->mbNoWheelActionWithoutFocus) )
+         (mpData->mnWheelBehavior       == rSet.mpData->mnWheelBehavior ) )
         return TRUE;
     else
         return FALSE;

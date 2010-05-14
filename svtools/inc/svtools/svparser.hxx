@@ -37,6 +37,7 @@
 #include <tools/string.hxx>
 #include <tools/ref.hxx>
 #include <rtl/textenc.h>
+#include <boost/utility.hpp>
 
 
 struct SvParser_Impl;
@@ -204,6 +205,84 @@ inline USHORT SvParser::GetCharSize() const
 {
     return (RTL_TEXTENCODING_UCS2 == eSrcEnc) ? 2 : 1;
 }
+
+
+/*========================================================================
+ *
+ * SvKeyValue.
+ *
+ *======================================================================*/
+
+SV_DECL_REF(SvKeyValueIterator)
+
+class SvKeyValue
+{
+    /** Representation.
+    */
+    String m_aKey;
+    String m_aValue;
+
+public:
+    /** Construction.
+    */
+    SvKeyValue (void)
+    {}
+
+    SvKeyValue (const String &rKey, const String &rValue)
+        : m_aKey (rKey), m_aValue (rValue)
+    {}
+
+    SvKeyValue (const SvKeyValue &rOther)
+        : m_aKey (rOther.m_aKey), m_aValue (rOther.m_aValue)
+    {}
+
+    /** Assignment.
+    */
+    SvKeyValue& operator= (SvKeyValue &rOther)
+    {
+        m_aKey   = rOther.m_aKey;
+        m_aValue = rOther.m_aValue;
+        return *this;
+    }
+
+    /** Operation.
+    */
+    const String& GetKey   (void) const { return m_aKey; }
+    const String& GetValue (void) const { return m_aValue; }
+
+    void SetKey   (const String &rKey  ) { m_aKey = rKey; }
+    void SetValue (const String &rValue) { m_aValue = rValue; }
+};
+
+/*========================================================================
+ *
+ * SvKeyValueIterator.
+ *
+ *======================================================================*/
+class SvKeyValueList_Impl;
+class SVT_DLLPUBLIC SvKeyValueIterator : public SvRefBase,
+    private boost::noncopyable
+{
+    /** Representation.
+    */
+    SvKeyValueList_Impl* m_pList;
+    USHORT               m_nPos;
+
+public:
+    /** Construction/Destruction.
+    */
+    SvKeyValueIterator (void);
+    virtual ~SvKeyValueIterator (void);
+
+    /** Operation.
+    */
+    virtual BOOL GetFirst (SvKeyValue &rKeyVal);
+    virtual BOOL GetNext  (SvKeyValue &rKeyVal);
+    virtual void Append   (const SvKeyValue &rKeyVal);
+};
+
+SV_IMPL_REF(SvKeyValueIterator);
+
 #endif //_SVPARSER_HXX
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

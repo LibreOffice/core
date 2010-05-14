@@ -70,12 +70,12 @@ public:
     ~OInstanceLocker();
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-            impl_staticGetSupportedServiceNames();
+            getSupportedServiceNames_static();
 
-    static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        impl_staticCreateSelfInstance(
+        Create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
 // XComponent

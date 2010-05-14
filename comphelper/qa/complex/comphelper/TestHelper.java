@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: SequenceOutputStreamUnitTest.java,v $
+ * $RCSfile: TestHelper.java,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -27,44 +27,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.sequenceoutputstream;
+package complex.comphelper;
 
-import complexlib.ComplexTestCase;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
+import share.LogWriter;
 
-/* Document.
- */
+public class TestHelper {
+    LogWriter m_aLogWriter;
+    String m_sTestPrefix;
 
-public class SequenceOutputStreamUnitTest extends ComplexTestCase {
-    private XMultiServiceFactory m_xMSF = null;
-
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "ExecuteTest01"};
+    /** Creates a new instance of TestHelper */
+    public TestHelper ( LogWriter aLogWriter, String sTestPrefix ) {
+        m_aLogWriter = aLogWriter;
+        m_sTestPrefix = sTestPrefix;
     }
 
-    public String getTestObjectName () {
-        return "SequenceOutputStreamUnitTest";
+    public void Error ( String sError ) {
+        m_aLogWriter.println ( m_sTestPrefix + "Error: " + sError );
     }
 
-    public void before() {
-        try {
-            m_xMSF = (XMultiServiceFactory)param.getMSF ();
-        } catch (Exception e) {
-            failed ("Cannot create service factory!");
-        }
-        if (m_xMSF==null) {
-            failed ("Cannot create service factory!");
-        }
-    }
-
-    public void after() {
-        m_xMSF = null;
-    }
-
-    public void ExecuteTest01() {
-        SequenceOutputStreamTest aTest = new Test01 (m_xMSF, log);
-        assure ( "Test01 failed!", aTest.test() );
+    public void Message ( String sMessage ) {
+        m_aLogWriter.println ( m_sTestPrefix + sMessage );
     }
 }
+

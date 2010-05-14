@@ -901,7 +901,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
     INetProtocol    aProtocol   = aURL.GetProtocol();
 
     // All other URLs must checked in combination with referer and internal information about security
-    if ( aProtocol != INET_PROT_MACRO && aProtocol !=  INET_PROT_SLOT ||
+    if ( (aProtocol != INET_PROT_MACRO && aProtocol !=  INET_PROT_SLOT) ||
          aURL.GetMainURL( INetURLObject::NO_DECODE ).matchIgnoreAsciiCaseAsciiL( "macro:///", 9 ) == 0)
     {
         // security check only for "macro" ( without app basic ) or "slot" protocols

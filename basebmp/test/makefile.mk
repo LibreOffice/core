@@ -132,6 +132,6 @@ unittest : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-        $(AUGMENT_LIBRARY_PATH) testshl2 -sf $(mktmp ) $(SHL1TARGETN)
+        $(TESTSHL2) -sf $(mktmp ) $(SHL1TARGETN)
 
 ALLTAR : unittest

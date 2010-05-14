@@ -125,6 +125,7 @@ APP5OBJS=               $(OBJ)$/svpclient.obj
 APP5STDLIBS=    $(CPPULIB)                      \
                                 $(CPPUHELPERLIB)        \
                                 $(COMPHELPERLIB)        \
+                                $(UCBHELPERLIB)        \
                                 $(VCLLIB)                       \
                                 $(TOOLSLIB)             \
                                 $(SALLIB)                       \

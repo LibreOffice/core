@@ -44,6 +44,8 @@
 #include "tools/debug.hxx"
 #include "tools/config.hxx"
 
+#include "i18npool/paper.hxx"
+
 #include "rtl/strbuf.hxx"
 
 #include "osl/thread.hxx"
@@ -154,77 +156,9 @@ void PrinterInfoManager::setCUPSDisabled( bool bDisable )
 
 void PrinterInfoManager::initSystemDefaultPaper()
 {
-    bool bSuccess = false;
-
-    // try libpaper
-
-    // #i78617# workaround missing paperconf command
-    FILE* pPipe = popen( "sh -c paperconf 2>/dev/null", "r" );
-    if( pPipe )
-    {
-        char pBuffer[ 1024 ];
-        *pBuffer = 0;
-        fgets( pBuffer, sizeof(pBuffer)-1, pPipe );
-        pclose( pPipe );
-
-        ByteString aPaper( pBuffer );
-        aPaper = WhitespaceToSpace( aPaper );
-        if( aPaper.Len() )
-        {
-            m_aSystemDefaultPaper = OUString( OStringToOUString( aPaper, osl_getThreadTextEncoding() ) );
-            bSuccess = true;
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "paper from paperconf = %s\n", aPaper.GetBuffer() );
-            #endif
-        }
-        if( bSuccess )
-            return;
-    }
-
-    // default value is Letter for US (en_US), Cannada (en_CA, fr_CA); else A4
-    // en will be interpreted as en_US
-
-    // note: at this point m_aSystemDefaultPaper is set to "A4" from the constructor
-
-    // check for LC_PAPER
-    const char* pPaperLang = getenv( "LC_PAPER" );
-    if( pPaperLang && *pPaperLang )
-    {
-        OString aLang( pPaperLang );
-        if( aLang.getLength() > 5 )
-            aLang = aLang.copy( 0, 5 );
-        if( aLang.getLength() == 5 )
-        {
-            if(    aLang.equalsIgnoreAsciiCase( "en_us" )
-                || aLang.equalsIgnoreAsciiCase( "en_ca" )
-            || aLang.equalsIgnoreAsciiCase( "fr_ca" )
-            )
-                m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
-        }
-        else if( aLang.getLength() == 2 && aLang.equalsIgnoreAsciiCase( "en" ) )
-            m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
-        return;
-    }
-
-    // use process locale to determine paper
-    rtl_Locale* pLoc = NULL;
-    osl_getProcessLocale( &pLoc );
-    if( pLoc )
-    {
-        if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Language->buffer, pLoc->Language->length, "en") )
-        {
-            if(    0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "us")
-                || 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "ca")
-                || pLoc->Country->length == 0
-                )
-                m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
-        }
-        else if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Language->buffer, pLoc->Language->length, "fr") )
-        {
-            if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "ca") )
-                m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
-        }
-    }
+    m_aSystemDefaultPaper = rtl::OStringToOUString(
+        PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
+        RTL_TEXTENCODING_UTF8);
 }
 
 // -----------------------------------------------------------------

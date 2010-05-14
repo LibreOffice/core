@@ -33,6 +33,7 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include "ucbhelper/ucbhelperdllapi.h"
 
 namespace ucbhelper {
@@ -60,6 +61,14 @@ class UCBHELPER_DLLPUBLIC SimpleAuthenticationRequest : public ucbhelper::Intera
 {
     rtl::Reference<
         ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
+
+private:
+    void initialize( ::com::sun::star::ucb::AuthenticationRequest aRequest,
+                const sal_Bool &  bCanSetRealm,
+                const sal_Bool &  bCanSetUserName,
+                const sal_Bool &  bCanSetPassword,
+                const sal_Bool &  bCanSetAccount,
+                 const sal_Bool &  bAllowPersistentStoring );
 
 public:
     /** Specification whether some entity (realm, username, password, account)
@@ -94,6 +103,26 @@ public:
       * Constructor.
       *
       * @param rServerName contains a server name.
+      * @param rRealm contains a realm, if applicable.
+      * @param rUserName contains a username, if available (for instance from
+      *        a previous try).
+      * @param rPassword contains a password, if available (for instance from
+      *        a previous try).
+      * @param rAccount contains an account, if applicable.
+      * @param bAllowPersistentStoring specifies if the credentials should stored in the passowrd container persistently
+      */
+    SimpleAuthenticationRequest( const rtl::OUString & rServerName,
+                                 const rtl::OUString & rRealm,
+                                 const rtl::OUString & rUserName,
+                                 const rtl::OUString & rPassword,
+                                 const rtl::OUString & rAccount,
+                                 const sal_Bool & bAllowPersistentStoring);
+
+
+    /**
+      * Constructor.
+      *
+      * @param rServerName contains a server name.
       * @param eRealmType specifies whether a realm is applicable and
                modifiable.
       * @param rRealm contains a realm, if applicable.
@@ -119,6 +148,37 @@ public:
                                  EntityType eAccountType = ENTITY_NA,
                                  const rtl::OUString & rAccount
                                     = rtl::OUString() );
+
+     /**
+      * Constructor.
+      *
+      * @param rServerName contains a server name.
+      * @param eRealmType specifies whether a realm is applicable and
+               modifiable.
+      * @param rRealm contains a realm, if applicable.
+      * @param eUserNameType specifies whether a username is applicable and
+               modifiable.
+      * @param rUserName contains a username, if available (for instance from
+      *        a previous try).
+      * @param ePasswordType specifies whether a password is applicable and
+               modifiable.
+      * @param rPassword contains a password, if available (for instance from
+      *        a previous try).
+      * @param eAccountType specifies whether an account is applicable and
+               modifiable.
+      * @param rAccount contains an account, if applicable.
+      * @param bAllowPersistentStoring specifies if the credentials should stored in the passowrd container persistently
+      */
+    SimpleAuthenticationRequest( const rtl::OUString & rServerName,
+                                 EntityType eRealmType,
+                                 const rtl::OUString & rRealm,
+                                 EntityType eUserNameType,
+                                 const rtl::OUString & rUserName,
+                                 EntityType ePasswordType,
+                                 const rtl::OUString & rPassword,
+                                 EntityType eAccountType,
+                                 const rtl::OUString & rAccount,
+                                 const sal_Bool & bAllowPersistentStoring);
 
     /**
       * This method returns the supplier for the missing authentication data,

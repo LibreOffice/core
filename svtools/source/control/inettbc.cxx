@@ -374,8 +374,8 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
     sal_Bool bExectMatch = bPureHomePath
                 || aText.CompareToAscii( "." ) == COMPARE_EQUAL
-                || aText.Len() > 1 && aText.Copy( aText.Len() - 2, 2 ).CompareToAscii( "/." ) == COMPARE_EQUAL
-                || aText.Len() > 1 && aText.Copy( aText.Len() - 3, 3 ).CompareToAscii( "/.." ) == COMPARE_EQUAL;
+                || (aText.Len() > 1 && aText.Copy( aText.Len() - 2, 2 ).CompareToAscii( "/." ) == COMPARE_EQUAL)
+                || (aText.Len() > 2 && aText.Copy( aText.Len() - 3, 3 ).CompareToAscii( "/.." ) == COMPARE_EQUAL);
 
     // for pure home pathes ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
@@ -641,7 +641,7 @@ void SvtMatchContext_Impl::run()
     // if the user input is a valid URL, go on with it
     // otherwise it could be parsed smart with a predefined smart protocol
     // ( or if this is not set with the protocol of a predefined base URL )
-    if( eProt == INET_PROT_NOT_VALID || eProt == eSmartProt || eSmartProt == INET_PROT_NOT_VALID && eProt == eBaseProt )
+    if( eProt == INET_PROT_NOT_VALID || eProt == eSmartProt || (eSmartProt == INET_PROT_NOT_VALID && eProt == eBaseProt) )
     {
         // not stopped yet ?
         if( schedule() )

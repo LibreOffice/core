@@ -2123,7 +2123,7 @@ void PrintFontManager::initialize()
     const ::rtl::OUString &rSalPrivatePath = psp::getFontPath();
 
     // search for the fonts in SAL_PRIVATE_FONTPATH first; those are
-    // the TrueType fonts installed with the office
+    // the fonts installed with the office
     if( rSalPrivatePath.getLength() )
     {
         OString aPath = rtl::OUStringToOString( rSalPrivatePath, aEncoding );

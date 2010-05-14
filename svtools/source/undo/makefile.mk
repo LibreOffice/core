@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=undo
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

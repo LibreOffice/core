@@ -98,24 +98,30 @@ Reference< XInterface > createProcessComponentWithArguments( const ::rtl::OUStri
     return xComponent;
 }
 
-} // namesapce comphelper
-
-extern "C" {
-uno::XComponentContext * comphelper_getProcessComponentContext()
+Reference< XComponentContext > getProcessComponentContext()
 {
-    uno::Reference<uno::XComponentContext> xRet;
+    Reference< XComponentContext > xRet;
     uno::Reference<beans::XPropertySet> const xProps(
         comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
     if (xProps.is()) {
         try {
-            xRet.set( xProps->getPropertyValue(
-                          rtl::OUString(
+            xRet.set( xProps->getPropertyValue( rtl::OUString(
                               RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ),
                       uno::UNO_QUERY );
         }
         catch (beans::UnknownPropertyException const&) {
         }
     }
+    return xRet;
+}
+
+} // namespace comphelper
+
+extern "C" {
+uno::XComponentContext * comphelper_getProcessComponentContext()
+{
+    uno::Reference<uno::XComponentContext> xRet;
+    xRet = ::comphelper::getProcessComponentContext();
     if (xRet.is())
         xRet->acquire();
     return xRet.get();

@@ -100,18 +100,12 @@ VisualStylesAPI::VisualStylesAPI()
 
     if ( mhModule )
     {
-        OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "OpenThemeData" ) );
-        lpfnOpenThemeData = (OpenThemeData_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
-        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "CloseThemeData" ) );
-        lpfnCloseThemeData = (CloseThemeData_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
-        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "GetThemeBackgroundContentRect" ) );
-        lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
-        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawThemeBackground" ) );
-        lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
-        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawThemeText" ) );
-        lpfnDrawThemeText = (DrawThemeText_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
-        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "GetThemePartSize" ) );
-        lpfnGetThemePartSize = (GetThemePartSize_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
+        lpfnOpenThemeData = (OpenThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "OpenThemeData" );
+        lpfnCloseThemeData = (CloseThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "CloseThemeData" );
+        lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemeBackgroundContentRect" );
+        lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeBackground" );
+        lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeText" );
+        lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemePartSize" );
     }
     else
     {

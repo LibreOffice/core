@@ -1065,7 +1065,10 @@ BOOL ViewTabListBox_Impl::DoubleClickHdl()
     ::rtl::OUString sRet = SvHeaderTabListBox::GetAccessibleObjectDescription( _eType, _nPos );
     if ( ::svt::BBTYPE_TABLECELL == _eType )
     {
-        sal_Int32 nRow = _nPos / GetColumnCount();
+        sal_Int32 nRow = -1;
+        const sal_uInt16 nColumnCount = GetColumnCount();
+        if (nColumnCount > 0)
+            nRow = _nPos / nColumnCount;
         SvLBoxEntry* pEntry = GetEntry( nRow );
         if ( pEntry )
         {

@@ -283,6 +283,7 @@ void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rParameter, const ByteString &rIso )
 /*****************************************************************************/
 {
+        (void) rIso; // Remove me ;)
         String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
         DirEntry aEntry( sFull );
         ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
@@ -304,37 +305,43 @@ void SourceTreeLocalizer::WorkOnFile(
             DirEntry aTemp( Export::GetTempFile());
             ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-            ByteString sExecutable( rExecutable );
+            ByteString sDel;
 #if defined(WNT) || defined(OS2)
-            sExecutable += ".exe";
-            String sPath( Export::GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );
+            sDel=ByteString("\\");
 #else
-            String sPath( Export::GetEnv( "LD_LIBRARY_PATH" ), RTL_TEXTENCODING_ASCII_US );
+            sDel=ByteString("/");
 #endif
+            ByteString sPath1( Export::GetEnv("SOLARVER") );
+            ByteString sPath2( Export::GetEnv("INPATH") );
+            ByteString sPath3( "bin" );
+            ByteString sPath4( Export::GetEnv("UPDMINOREXT") );
+            ByteString sExecutable( sPath1 );
+            sExecutable += sDel ;
+            sExecutable += sPath2 ;
+            sExecutable += sDel;
+            sExecutable += sPath3 ;
+            sExecutable += sPath4 ;
+            sExecutable += sDel ;
+            sExecutable += rExecutable ;
 
-            DirEntry aExecutable( String( sExecutable, RTL_TEXTENCODING_ASCII_US ));
-            aExecutable.Find( sPath );
 
-            ByteString sCommand( aExecutable.GetFull(), RTL_TEXTENCODING_ASCII_US );
-            sCommand += " ";
-            sCommand += rParameter;
-            sCommand += " -p ";
-            sCommand += sPrj;
-            sCommand += " -r ";
-            sCommand += sRoot;
-            sCommand += " -i ";
-            sCommand += sFileName;
-            sCommand += " -o ";
-            sCommand += sTempFile;
-            if ( sLanguageRestriction.Len()) {
-                sCommand += " -l ";
-                sCommand += getSourceLanguages( sLanguageRestriction , sCommand );
-            }
-            if ( rIso.Equals("iso") && sIsoCode99.Len()) {
-                sCommand += " -ISO99 ";
-                sCommand += sIsoCode99;
-            }
-            if( bQuiet2 ){
+        ByteString sCommand( sExecutable );
+        sCommand += " ";
+        sCommand += rParameter;
+        sCommand += " -p ";
+        sCommand += sPrj;
+        sCommand += " -r ";
+        sCommand += sRoot;
+        sCommand += " -i ";
+        sCommand += sFileName;
+        sCommand += " -o ";
+        sCommand += sTempFile;
+        if ( sLanguageRestriction.Len()) {
+            sCommand += " -l ";
+        sCommand += getSourceLanguages( sLanguageRestriction , sCommand );
+        }
+
+        if( bQuiet2 ){
                 sCommand +=" -QQ ";
             }
             //printf("DBG: %s\n",sCommand.GetBuffer());

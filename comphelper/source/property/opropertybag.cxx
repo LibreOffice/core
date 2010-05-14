@@ -32,6 +32,7 @@
 #include "precompiled_comphelper.hxx"
 
 #include "opropertybag.hxx"
+#include "comphelper_module.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -49,19 +50,9 @@
 //--------------------------------------------------------------------------
 using namespace ::com::sun::star;
 
-uno::Sequence< ::rtl::OUString > SAL_CALL PropertyBag_getSupportedServiceNames() throw()
+void createRegistryInfo_OPropertyBag()
 {
-    return ::comphelper::OPropertyBag::getSupportedServiceNames_static();
-}
-
-::rtl::OUString SAL_CALL PropertyBag_getImplementationName() throw()
-{
-    return ::comphelper::OPropertyBag::getImplementationName_static();
-}
-
-uno::Reference< uno::XInterface > SAL_CALL PropertyBag_createInstance(const uno::Reference< uno::XComponentContext >& rxContext) throw( uno::Exception )
-{
-    return ::comphelper::OPropertyBag::Create( rxContext );
+    static ::comphelper::module::OAutoRegistration< ::comphelper::OPropertyBag > aAutoRegistration;
 }
 
 //........................................................................

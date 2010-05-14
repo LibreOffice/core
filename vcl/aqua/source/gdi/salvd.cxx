@@ -87,7 +87,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
             if( pFrame && AquaSalFrame::isAlive( pFrame ) )
             {
                 mpGraphics->setGraphicsFrame( pFrame );
-                mpGraphics->initResolution( pFrame->mpWindow );
+                mpGraphics->copyResolution( *pGraphic );
             }
         }
 

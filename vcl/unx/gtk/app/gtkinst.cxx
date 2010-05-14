@@ -114,10 +114,9 @@ extern "C"
     static bool hookLocks( oslModule pModule )
     {
         typedef void (*GdkLockFn) (GCallback enter_fn, GCallback leave_fn);
-        rtl::OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM( "gdk_threads_set_lock_functions") );
 
         GdkLockFn gdk_threads_set_lock_functions =
-                (GdkLockFn) osl_getFunctionSymbol( pModule, aSymbolName.pData );
+                (GdkLockFn) osl_getAsciiFunctionSymbol( pModule, "gdk_threads_set_lock_functions" );
         if ( !gdk_threads_set_lock_functions )
         {
 #if OSL_DEBUG_LEVEL > 1

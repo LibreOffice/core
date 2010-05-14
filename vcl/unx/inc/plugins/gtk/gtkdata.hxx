@@ -85,6 +85,7 @@ public:
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
 
     void screenSizeChanged( GdkScreen* );
+    void monitorsChanged( GdkScreen* );
 };
 
 

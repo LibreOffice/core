@@ -1117,7 +1117,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         bSuccess = getPasteData( selection, m_nImageBmpAtom, rData );
         #if OSL_DEBUG_LEVEL > 1
         if( bSuccess )
-            fprintf( stderr, "got %d bytes of image/bmp\n" ), (int)rData.getLength();
+            fprintf( stderr, "got %d bytes of image/bmp\n", (int)rData.getLength() );
         #endif
         if( ! bSuccess )
         {
@@ -1685,7 +1685,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                              XA_INTEGER, 32, PropModeReplace, (const unsigned char*)&nTimeStamp, 1 );
             aNotify.xselection.property = rRequest.property;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "sending timestamp: %d\n", nTimeStamp );
+                fprintf( stderr, "sending timestamp: %d\n", (int)nTimeStamp );
 #endif
         }
         else

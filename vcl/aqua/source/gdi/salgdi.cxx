@@ -346,63 +346,79 @@ void AquaSalGraphics::updateResolution()
 
 void AquaSalGraphics::initResolution( NSWindow* pWin )
 {
-    NSScreen* pScreen = nil;
+    // #i100617# read DPI only once; there is some kind of weird caching going on
+    // if the main screen changes
+    // FIXME: this is really unfortunate and needs to be investigated
 
-    /* #i91301#
-       many woes went into the try to have different resolutions
-       on different screens. The result of these trials is that OOo is not ready
-       for that yet, vcl and applications would need to be adapted.
+    SalData* pSalData = GetSalData();
+    if( pSalData->mnDPIX == 0 || pSalData->mnDPIY == 0 )
+    {
+        NSScreen* pScreen = nil;
 
-       Unfortunately this is not possible in the 3.0 timeframe.
-       So let's stay with one resolution for all Windows and VirtualDevices
-       which is the resolution of the main screen
+        /* #i91301#
+        many woes went into the try to have different resolutions
+        on different screens. The result of these trials is that OOo is not ready
+        for that yet, vcl and applications would need to be adapted.
 
-       This of course also means that measurements are exact only on the main screen.
-       For activating different resolutions again just comment out the two lines below.
+        Unfortunately this is not possible in the 3.0 timeframe.
+        So let's stay with one resolution for all Windows and VirtualDevices
+        which is the resolution of the main screen
 
-    if( pWin )
+        This of course also means that measurements are exact only on the main screen.
+        For activating different resolutions again just comment out the two lines below.
+
+        if( pWin )
         pScreen = [pWin screen];
-    */
-    if( pScreen == nil )
-    {
-        NSArray* pScreens = [NSScreen screens];
-        if( pScreens )
-            pScreen = [pScreens objectAtIndex: 0];
-    }
-
-    mnRealDPIX = mnRealDPIY = 96;
-    if( pScreen )
-    {
-        NSDictionary* pDev = [pScreen deviceDescription];
-        if( pDev )
+        */
+        if( pScreen == nil )
         {
-            NSNumber* pVal = [pDev objectForKey: @"NSScreenNumber"];
-            if( pVal )
+            NSArray* pScreens = [NSScreen screens];
+            if( pScreens )
+                pScreen = [pScreens objectAtIndex: 0];
+        }
+
+        mnRealDPIX = mnRealDPIY = 96;
+        if( pScreen )
+        {
+            NSDictionary* pDev = [pScreen deviceDescription];
+            if( pDev )
             {
-                // FIXME: casting a long to CGDirectDisplayID is evil, but
-                // Apple suggest to do it this way
-                const CGDirectDisplayID nDisplayID = (CGDirectDisplayID)[pVal longValue];
-                const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
-                mnRealDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
-                mnRealDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
+                NSNumber* pVal = [pDev objectForKey: @"NSScreenNumber"];
+                if( pVal )
+                {
+                    // FIXME: casting a long to CGDirectDisplayID is evil, but
+                    // Apple suggest to do it this way
+                    const CGDirectDisplayID nDisplayID = (CGDirectDisplayID)[pVal longValue];
+                    const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
+                    mnRealDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
+                    mnRealDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
+                }
+                else
+                {
+                    DBG_ERROR( "no resolution found in device description" );
+                }
             }
             else
             {
-                DBG_ERROR( "no resolution found in device description" );
+                DBG_ERROR( "no device description" );
             }
         }
         else
         {
-            DBG_ERROR( "no device description" );
+            DBG_ERROR( "no screen found" );
         }
+
+        // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
+        mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
+
+        pSalData->mnDPIX = mnRealDPIX;
+        pSalData->mnDPIY = mnRealDPIY;
     }
     else
     {
-        DBG_ERROR( "no screen found" );
+        mnRealDPIX = pSalData->mnDPIX;
+        mnRealDPIY = pSalData->mnDPIY;
     }
-
-    // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
-    mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
 
     mfFakeDPIScale = 1.0;
 }
@@ -414,6 +430,16 @@ void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
     rDPIX = static_cast<long>(mfFakeDPIScale * mnRealDPIX);
     rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
+}
+
+void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
+{
+    if( !rGraphics.mnRealDPIY && rGraphics.mbWindow && rGraphics.mpFrame )
+        rGraphics.initResolution( rGraphics.mpFrame->mpWindow );
+
+    mnRealDPIX = rGraphics.mnRealDPIX;
+    mnRealDPIY = rGraphics.mnRealDPIY;
+    mfFakeDPIScale = rGraphics.mfFakeDPIScale;
 }
 
 // -----------------------------------------------------------------------

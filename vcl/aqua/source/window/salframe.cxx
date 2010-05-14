@@ -520,8 +520,16 @@ void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
 
 void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    rWidth  = mbShown ? maGeometry.nWidth : 0;
-    rHeight = mbShown ? maGeometry.nHeight : 0;
+    if( mbShown || mbInitShow )
+    {
+        rWidth  = maGeometry.nWidth;
+        rHeight = maGeometry.nHeight;
+    }
+    else
+    {
+        rWidth  = 0;
+        rHeight = 0;
+    }
 }
 
 // -----------------------------------------------------------------------

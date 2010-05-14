@@ -736,4 +736,12 @@ com::sun::star::awt::Point VCLUnoHelper::ConvertToAWTPoint(::Point /* VCLPoint *
     return aAWTPoint;
 }
 
+::Rectangle VCLUnoHelper::ConvertToVCLRect( ::com::sun::star::awt::Rectangle const & _rRect )
+{
+    return ::Rectangle( _rRect.X, _rRect.Y, _rRect.X + _rRect.Width - 1, _rRect.Y + _rRect.Height - 1 );
+}
 
+::com::sun::star::awt::Rectangle VCLUnoHelper::ConvertToAWTRect( ::Rectangle const & _rRect )
+{
+    return ::com::sun::star::awt::Rectangle( _rRect.Left(), _rRect.Top(), _rRect.GetWidth(), _rRect.GetHeight() );
+}

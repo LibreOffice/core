@@ -28,6 +28,7 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
+..\scripts\fast_merge.pl %_DEST%\bin%_EXT%\fast_merge.pl
 
 ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
 ..\inc\transex3\directory.hxx %_DEST%\inc%_EXT%\transex3\directory.hxx

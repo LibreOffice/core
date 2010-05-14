@@ -170,8 +170,9 @@ SHL1STDLIBS+=\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
+            $(I18NPAPERLIB)     \
             $(I18NISOLANGLIB)   \
-            $(I18NUTILLIB)   \
+            $(I18NUTILLIB)      \
             $(COMPHELPERLIB)	\
             $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
@@ -264,6 +265,7 @@ SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 # libs for generic plugin
 SHL2STDLIBS=\
             $(VCLLIB)\
+            $(I18NPAPERLIB)     \
             $(TOOLSLIB)         \
             $(VOSLIB)           \
             $(BASEGFXLIB)	\

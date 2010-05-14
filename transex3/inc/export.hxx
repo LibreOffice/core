@@ -510,7 +510,9 @@ private:
     SvFileStream aErrLog;
     ByteStringSet aLanguageSet;
     MergeDataHashMap aMap;
-    std::vector<ByteString> aLanguages;
+    ByteStringHashMap aLanguageMap;
+    std::vector<ByteString> aLanguageList;
+    ByteStringHashMap aFilenames;
 
 
 public:

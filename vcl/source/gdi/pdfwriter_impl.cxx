@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.132.72.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -795,7 +792,8 @@ static void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer 
 }
 
 // matrix helper class
-namespace vcl
+// TODO: use basegfx matrix class instead or derive from it
+namespace vcl // TODO: use anonymous namespace to keep this class local
 {
 /*  for sparse matrices of the form (2D linear transformations)
  *  f[0] f[1] 0
@@ -815,6 +813,7 @@ public:
     void scale( double sx, double sy );
     void rotate( double angle );
     void translate( double tx, double ty );
+    bool invert();
 
     void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack = NULL );
 
@@ -889,6 +888,36 @@ void Matrix3::translate( double tx, double ty )
 {
     f[4] += tx;
     f[5] += ty;
+}
+
+bool Matrix3::invert()
+{
+    // short circuit trivial cases
+    if( f[1]==f[2] && f[1]==0.0 && f[0]==f[3] && f[0]==1.0 )
+    {
+        f[4] = -f[4];
+        f[5] = -f[5];
+        return true;
+    }
+
+    // check determinant
+    const double fDet = f[0]*f[3]-f[1]*f[2];
+    if( fDet == 0.0 )
+        return false;
+
+    // invert the matrix
+    double fn[6];
+    fn[0] = +f[3] / fDet;
+    fn[1] = -f[1] / fDet;
+    fn[2] = -f[2] / fDet;
+    fn[3] = +f[0] / fDet;
+
+    // apply inversion to translation
+    fn[4] = -(f[4]*fn[0] + f[5]*fn[2]);
+    fn[5] = -(f[4]*fn[1] + f[5]*fn[3]);
+
+    set( fn );
+    return true;
 }
 
 void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack )
@@ -1930,7 +1959,7 @@ static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinF
     aDFA.maName         = String::CreateFromAscii( rBuiltin.m_pName );
     aDFA.maStyleName    = String::CreateFromAscii( rBuiltin.m_pStyleName );
     aDFA.meFamily       = rBuiltin.m_eFamily;
-    aDFA.mbSymbolFlag   = (rBuiltin.m_eCharSet == RTL_TEXTENCODING_SYMBOL);
+    aDFA.mbSymbolFlag   = (rBuiltin.m_eCharSet != RTL_TEXTENCODING_MS_1252 );
     aDFA.mePitch        = rBuiltin.m_ePitch;
     aDFA.meWeight       = rBuiltin.m_eWeight;
     aDFA.meItalic       = rBuiltin.m_eItalic;
@@ -2033,7 +2062,7 @@ PDFSalLayout::PDFSalLayout( PDFWriterImpl& rPDFWriterImpl,
     mrBuiltinFont( rBuiltinFont ),
     mnPixelPerEM( nPixelPerEM )
 {
-    mbIsSymbolFont = (rBuiltinFont.m_eCharSet == RTL_TEXTENCODING_SYMBOL);
+    mbIsSymbolFont = (rBuiltinFont.m_eCharSet != RTL_TEXTENCODING_MS_1252);
     SetOrientation( nOrientation );
 }
 
@@ -2045,41 +2074,35 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
     SetText( aText );
     SetUnitsPerPixel( 1000 );
 
-    rtl_UnicodeToTextConverter aConv = rtl_createTextToUnicodeConverter( RTL_TEXTENCODING_MS_1252 );
+    rtl_UnicodeToTextConverter aConv = rtl_createTextToUnicodeConverter( mrBuiltinFont.m_eCharSet );
 
     Point aNewPos( 0, 0 );
     bool bRightToLeft;
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
         // TODO: handle unicode surrogates
-    // on the other hand builtin fonts don't support them anyway
+        // on the other hand the PDF builtin fonts don't support them anyway
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
             cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
 
-        if( cChar & 0xff00 )
+        if( 1 ) // TODO: shortcut for ASCII?
         {
-            // some characters can be used by conversion
-            if( (cChar >= 0xf000) && mbIsSymbolFont )
-                cChar -= 0xf000;
-            else
-            {
-                sal_Char aBuf[4];
-                sal_uInt32 nInfo;
-                sal_Size nSrcCvtChars;
+            sal_Char aBuf[4];
+            sal_uInt32 nInfo;
+            sal_Size nSrcCvtChars;
 
-                sal_Size nConv = rtl_convertUnicodeToText( aConv,
-                                                           NULL,
-                                                           &cChar, 1,
-                                                           aBuf, 1,
-                                                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
-                                                           &nInfo, &nSrcCvtChars );
-                // check whether conversion was possible
-                // else fallback font is needed as the standard fonts
-                // are handled via WinAnsi encoding
-                if( nConv > 0 )
-                    cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
-            }
+            sal_Size nConv = rtl_convertUnicodeToText( aConv,
+                                                       NULL,
+                                                       &cChar, 1,
+                                                       aBuf, sizeof(aBuf)/sizeof(*aBuf),
+                                                       RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
+                                                       &nInfo, &nSrcCvtChars );
+            // check whether conversion was possible
+            // else fallback font is needed as the standard fonts
+            // are handled via WinAnsi encoding
+            if( nConv > 0 )
+                cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
         }
         if( cChar & 0xff00 )
         {
@@ -2088,7 +2111,7 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 
         long nGlyphWidth = (long)mrBuiltinFont.m_aWidths[cChar] * mnPixelPerEM;
-        long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+        long nGlyphFlags = 0; // builtin fonts don't have diacritic glyphs
         if( bRightToLeft )
             nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
         // TODO: get kerning from builtin fonts
@@ -2782,7 +2805,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplFontData* pFont, sal_Int32 n
                   "<</Type/Font/Subtype/Type1/BaseFont/" );
     appendName( pBuiltinFont->m_pPSName, aLine );
     aLine.append( "\n" );
-    if( pBuiltinFont->m_eCharSet != RTL_TEXTENCODING_SYMBOL )
+    if( pBuiltinFont->m_eCharSet == RTL_TEXTENCODING_MS_1252 )
          aLine.append( "/Encoding/WinAnsiEncoding\n" );
     aLine.append( ">>\nendobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -6644,6 +6667,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         // subsequent use of that operator would move
         // the texline matrix relative to what was set before
         // making use of that would drive us into rounding issues
+        Matrix3 aMat;
         if( nRun == 0 && fAngle == 0.0 && fXScale == 1.0 && fSkew == 0.0 )
         {
             m_aPages.back().appendPoint( aCurPos, rLine, false );
@@ -6651,7 +6675,6 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         }
         else
         {
-            Matrix3 aMat;
             if( fSkew != 0.0 )
                 aMat.skew( 0.0, fSkew );
             aMat.scale( fXScale, 1.0 );
@@ -6674,15 +6697,17 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aKernedLine );
         appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aUnkernedLine );
 
+        aMat.invert();
         bool bNeedKern = false;
         for( sal_uInt32 nPos = nBeginRun+1; nPos < aRunEnds[nRun]; nPos++ )
         {
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
-            // check for adjustment
-            double fTheoreticalGlyphWidth = rGlyphs[nPos].m_aPos.X() - rGlyphs[nPos-1].m_aPos.X();
-            fTheoreticalGlyphWidth = fabs( fTheoreticalGlyphWidth ); // #i100522# workaround until #i87686# gets fixed
-            fTheoreticalGlyphWidth = 1000.0 * fTheoreticalGlyphWidth / fXScale / double(nPixelFontHeight);
-            sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fTheoreticalGlyphWidth+0.5);
+            // check if glyph advance matches with the width of the previous glyph, else adjust
+            const Point aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
+            const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
+            double fAdvance = aThisPos.X() - aPrevPos.X();
+            fAdvance *= 1000.0 / (fXScale * nPixelFontHeight);
+            const sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fAdvance+0.5);
             if( nAdjustment != 0 )
             {
                 bNeedKern = true;

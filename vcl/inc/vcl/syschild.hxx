@@ -46,7 +46,7 @@ class VCL_DLLPUBLIC SystemChildWindow : public Window
 {
 private:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void     ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow = TRUE );
+    SAL_DLLPRIVATE void     ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow = FALSE );
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE          SystemChildWindow (const SystemChildWindow &);

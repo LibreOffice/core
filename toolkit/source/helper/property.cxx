@@ -257,7 +257,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "Complete",               COMPLETE,               sal_Bool,       BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "CurrentItemID",          CURRENTITEMID,          sal_Int16,      BOUND, MAYBEDEFAULT ),
 
-            DECL_PROP_2     ( "WheelWithoutFocus",      WHEELWITHOUTFOCUS,      sal_Bool,       BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "MouseWheelBehavior",     MOUSE_WHEEL_BEHAVIOUR,  sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "StepTime",               STEP_TIME,              sal_Int32,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Decoration",             DECORATION,             sal_Bool,       BOUND, MAYBEDEFAULT ),
 
@@ -272,7 +272,8 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "DialogSourceURL",        DIALOGSOURCEURL,        ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "URL",                    URL,                    ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "WritingMode",            WRITING_MODE,           sal_Int16,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_3     ( "ContextWritingMode",     CONTEXT_WRITING_MODE,   sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT )
+            DECL_PROP_3     ( "ContextWritingMode",     CONTEXT_WRITING_MODE,   sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT ),
+            DECL_PROP_2     ( "EnableVisible",          ENABLEVISIBLE,          sal_Bool,           BOUND, MAYBEDEFAULT )
             };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );

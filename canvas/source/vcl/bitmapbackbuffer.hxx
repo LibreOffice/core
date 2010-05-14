@@ -70,6 +70,7 @@ namespace vclcanvas
             @internal
         */
         BitmapEx&                   getBitmapReference();
+        Size                        getBitmapSizePixel() const;
 
     private:
         void createVDev() const;
@@ -103,3 +104,4 @@ namespace vclcanvas
 }
 
 #endif /* #ifndef _VCLCANVAS_BITMAPBACKBUFFER_HXX_ */
+

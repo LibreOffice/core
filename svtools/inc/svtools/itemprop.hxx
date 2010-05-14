@@ -38,12 +38,13 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
+#include <vector>
 /* -----------------------------21.02.00 11:03--------------------------------
     UNO III - Implementation
  ---------------------------------------------------------------------------*/
 #define MAP_CHAR_LEN(cchar) cchar, sizeof(cchar) - 1
-struct SfxItemPropertyMap
+
+struct SfxItemPropertyMapEntry
 {
     const char*                         pName;
     USHORT                              nNameLen;
@@ -52,34 +53,83 @@ struct SfxItemPropertyMap
     long                                nFlags;
     BYTE                                nMemberId;
 
-    SVL_DLLPUBLIC static const SfxItemPropertyMap*  GetByName(
-        const SfxItemPropertyMap *pMap,
-        const ::rtl::OUString &rName );
-    SVL_DLLPUBLIC static const SfxItemPropertyMap*  GetTolerantByName(
-        const SfxItemPropertyMap *pMap,
-        const ::rtl::OUString &rName );
+};
+
+struct SfxItemPropertySimpleEntry
+{
+    USHORT                              nWID;
+    const com::sun::star::uno::Type*    pType;
+    long                                nFlags;
+    BYTE                                nMemberId;
+
+    SfxItemPropertySimpleEntry() :
+        nWID( 0 ),
+        pType( 0 ),
+        nFlags( 0 ),
+        nMemberId( 0 ){}
+
+    SfxItemPropertySimpleEntry(USHORT _nWID, const com::sun::star::uno::Type* _pType,
+                               long _nFlags, BYTE _nMemberId) :
+        nWID(      _nWID ),
+        pType(     _pType ),
+        nFlags(    _nFlags ),
+        nMemberId( _nMemberId ){}
+
+    SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry* pMapEntry ) :
+        nWID(      pMapEntry->nWID ),
+        pType(     pMapEntry->pType ),
+        nFlags(    pMapEntry->nFlags ),
+        nMemberId( pMapEntry->nMemberId ){}
+
+};
+struct SfxItemPropertyNamedEntry : public SfxItemPropertySimpleEntry
+{
+    ::rtl::OUString sName;
+    SfxItemPropertyNamedEntry( const String& rName, const SfxItemPropertySimpleEntry& rSimpleEntry) :
+        SfxItemPropertySimpleEntry( rSimpleEntry ),
+        sName( rName ){}
+
+};
+typedef std::vector< SfxItemPropertyNamedEntry > PropertyEntryVector_t;
+class SfxItemPropertyMap_Impl;
+class SVL_DLLPUBLIC SfxItemPropertyMap
+{
+    SfxItemPropertyMap_Impl* m_pImpl;
+public:
+    SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries );
+    SfxItemPropertyMap( const SfxItemPropertyMap* pSource );
+    ~SfxItemPropertyMap();
+
+    const SfxItemPropertySimpleEntry*  getByName( const ::rtl::OUString &rName ) const;
+    com::sun::star::uno::Sequence< com::sun::star::beans::Property > getProperties() const;
+    com::sun::star::beans::Property getPropertyByName( const ::rtl::OUString rName ) const
+        throw( ::com::sun::star::beans::UnknownPropertyException );
+    sal_Bool hasPropertyByName( const ::rtl::OUString& rName ) const;
+
+    void mergeProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rPropSeq );
+    PropertyEntryVector_t getPropertyEntries() const;
+    sal_uInt32 getSize() const;
+
 };
 /* -----------------------------21.02.00 11:19--------------------------------
 
  ---------------------------------------------------------------------------*/
 class SVL_DLLPUBLIC SfxItemPropertySet
 {
-    const SfxItemPropertyMap*   _pMap;
+    SfxItemPropertyMap                                                              m_aMap;
+    mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
 protected:
     virtual BOOL            FillItem(SfxItemSet& rSet, USHORT nWhich, BOOL bGetProperty) const;
 
 public:
-                            SfxItemPropertySet( const SfxItemPropertyMap *pMap ) :
-                                _pMap(pMap) {}
+                            SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
+                                m_aMap(pMap) {}
+                            virtual ~SfxItemPropertySet();
 
-    void getPropertyValue( const SfxItemPropertyMap& rMap,
-                                            const SfxItemSet& rSet,
-                                            com::sun::star::uno::Any& rAny) const
-                                            throw(::com::sun::star::uno::RuntimeException);
-    com::sun::star::uno::Any
-        getPropertyValue( const SfxItemPropertyMap& rMap,
-                                            const SfxItemSet& rSet ) const
-                                            throw(::com::sun::star::uno::RuntimeException);
+    void getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
+                                          const SfxItemSet& rSet,
+                                          com::sun::star::uno::Any& rAny) const
+                                          throw(::com::sun::star::uno::RuntimeException);
     void getPropertyValue( const ::rtl::OUString &rName,
                                             const SfxItemSet& rSet,
                                             com::sun::star::uno::Any& rAny) const
@@ -90,11 +140,11 @@ public:
                                             const SfxItemSet& rSet ) const
                                             throw(::com::sun::star::uno::RuntimeException,
                                                     ::com::sun::star::beans::UnknownPropertyException);
-    void                    setPropertyValue( const SfxItemPropertyMap& rMap,
-                                            const com::sun::star::uno::Any& aVal,
-                                            SfxItemSet& rSet ) const
-                                            throw(::com::sun::star::uno::RuntimeException,
-                                                    com::sun::star::lang::IllegalArgumentException);
+    void                    setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
+                                          const com::sun::star::uno::Any& aVal,
+                                          SfxItemSet& rSet ) const
+                                          throw(::com::sun::star::uno::RuntimeException,
+                                                  com::sun::star::lang::IllegalArgumentException);
     void                    setPropertyValue( const ::rtl::OUString& rPropertyName,
                                             const com::sun::star::uno::Any& aVal,
                                             SfxItemSet& rSet ) const
@@ -103,29 +153,31 @@ public:
                                                     ::com::sun::star::beans::UnknownPropertyException);
 
     com::sun::star::beans::PropertyState
-        getPropertyState(const ::rtl::OUString& rName, const SfxItemSet& rSet)
+        getPropertyState(const ::rtl::OUString& rName, const SfxItemSet& rSet)const
                                     throw(com::sun::star::beans::UnknownPropertyException);
     com::sun::star::beans::PropertyState
-        getPropertyState(const SfxItemPropertyMap& rMap, const SfxItemSet& rSet)
+        getPropertyState(const SfxItemPropertySimpleEntry& rEntry, const SfxItemSet& rSet) const
                                     throw();
 
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>
         getPropertySetInfo() const;
     const SfxItemPropertyMap*
-        getPropertyMap() const {return _pMap;}
+        getPropertyMap() const {return &m_aMap;}
 
 };
 /* -----------------------------21.02.00 11:09--------------------------------
 
  ---------------------------------------------------------------------------*/
+struct SfxItemPropertySetInfo_Impl;
 class SVL_DLLPUBLIC SfxItemPropertySetInfo : public
     cppu::WeakImplHelper1<com::sun::star::beans::XPropertySetInfo>
 {
-    const SfxItemPropertyMap*   _pMap;
+    SfxItemPropertySetInfo_Impl* m_pImpl;
 
 public:
-    SfxItemPropertySetInfo(const SfxItemPropertyMap *pMap ) :
-                                _pMap(pMap) {}
+    SfxItemPropertySetInfo(const SfxItemPropertyMap *pMap );
+    SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries );
+    virtual ~SfxItemPropertySetInfo();
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL
         getProperties(  )
@@ -140,19 +192,19 @@ public:
         hasPropertyByName( const ::rtl::OUString& Name )
             throw(::com::sun::star::uno::RuntimeException);
 
-    const SfxItemPropertyMap* getMap() const { return _pMap; }
+    const SfxItemPropertyMap* getMap() const;
 };
 /* -----------------------------21.02.00 12:01--------------------------------
 
  ---------------------------------------------------------------------------*/
 class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySetInfo >
 {
-    const SfxItemPropertyMap*                                           _pExtMap;
-    com::sun::star::uno::Sequence<com::sun::star::beans::Property>      aPropertySeq;
+    SfxItemPropertyMap aExtMap;
 public:
                             SfxExtItemPropertySetInfo(
-                                const SfxItemPropertyMap *pMap,
+                                const SfxItemPropertyMapEntry *pMap,
                                 const com::sun::star::uno::Sequence<com::sun::star::beans::Property>& rPropSeq );
+                            virtual ~SfxExtItemPropertySetInfo();
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL
         getProperties(  )

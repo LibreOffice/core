@@ -97,8 +97,12 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
             try
             {
                 aDestProp = xDestProps->getPropertyByName(pSourceProps->Name);
-                if (0 == (aDestProp.Attributes & PropertyAttribute::READONLY))
-                    _rxDest->setPropertyValue(pSourceProps->Name, _rxSource->getPropertyValue(pSourceProps->Name));
+                if (0 == (aDestProp.Attributes & PropertyAttribute::READONLY) )
+                {
+                    const Any aSourceValue = _rxSource->getPropertyValue(pSourceProps->Name);
+                    if ( 0 != (aDestProp.Attributes & PropertyAttribute::MAYBEVOID) || aSourceValue.hasValue() )
+                        _rxDest->setPropertyValue(pSourceProps->Name, aSourceValue);
+                }
             }
             catch (Exception&)
             {
