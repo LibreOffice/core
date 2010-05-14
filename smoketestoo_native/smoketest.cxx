@@ -53,7 +53,7 @@
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "test/getargument.hxx"
+#include "test/gettestargument.hxx"
 #include "test/officeconnection.hxx"
 #include "test/oustringostreaminserter.hxx"
 #include "test/toabsolutefileurl.hxx"
@@ -121,8 +121,8 @@ void Test::tearDown() {
 void Test::test() {
     rtl::OUString doc;
     CPPUNIT_ASSERT(
-        test::getArgument(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("doc")), &doc));
+        test::getTestArgument(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smoketest.doc")), &doc));
     css::uno::Sequence< css::beans::PropertyValue > args(1);
     args[0].Name = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));

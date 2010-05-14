@@ -49,7 +49,8 @@ ALLTAR : cpptest
 
 cpptest : $(SHL1TARGETN) $(BIN)/smoketestdoc.sxw
 
-OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
+TEST_ARGUMENTS = smoketest.doc=$(BIN)/smoketestdoc.sxw
+CPPTEST_LIBRARY = $(SHL1TARGETN)
 
 $(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
     $(COPY) $< $@

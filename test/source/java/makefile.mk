@@ -30,7 +30,11 @@ TARGET = java
 .IF "$(OOO_JUNIT_JAR)" != ""
 
 PACKAGE = org/openoffice/test
-JAVAFILES = OfficeConnection.java
+JAVAFILES = \
+    Argument.java \
+    OfficeConnection.java \
+    OfficeFileUrl.java \
+    TestArgument.java
 JARFILES = juh.jar ridl.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 

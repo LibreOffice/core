@@ -49,17 +49,17 @@ public final class OfficeConnection {
     /** Start up an OOo instance.
     */
     public void setUp() throws Exception {
-        String sofficeArg = getArgument("soffice");
+        String sofficeArg = Argument.get("soffice");
         if (sofficeArg.startsWith("path:")) {
             description = "pipe,name=oootest" + UUID.randomUUID();
             ProcessBuilder pb = new ProcessBuilder(
                 sofficeArg.substring("path:".length()), "-quickstart=no",
                 "-nofirststartwizard", "-norestore",
                 "-accept=" + description + ";urp",
-                "-env:UserInstallation=" + getArgument("user"),
+                "-env:UserInstallation=" + Argument.get("user"),
                 "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
                 "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
-            String envArg = getArgument("env");
+            String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();
                 int i = envArg.indexOf("=");
@@ -140,10 +140,6 @@ public final class OfficeConnection {
     //TODO: get rid of this hack for legacy qa/unoapi tests
     public String getDescription() {
         return description;
-    }
-
-    private static String getArgument(String name) {
-        return System.getProperty("org.openoffice.test.arg." + name);
     }
 
     private static Integer waitForProcess(Process process, final long millis)

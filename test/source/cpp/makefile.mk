@@ -37,6 +37,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SLOFILES = \
     $(SLO)/getargument.obj \
+    $(SLO)/gettestargument.obj \
     $(SLO)/officeconnection.obj \
     $(SLO)/toabsolutefileurl.obj
 

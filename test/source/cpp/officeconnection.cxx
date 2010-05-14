@@ -37,9 +37,10 @@
 #include "osl/process.h"
 #include "osl/time.h"
 #include "sal/types.h"
-#include "test/getargument.hxx"
 #include "test/officeconnection.hxx"
 #include "test/toabsolutefileurl.hxx"
+
+#include "getargument.hxx"
 
 namespace {
 
@@ -57,7 +58,7 @@ void OfficeConnection::setUp() {
     rtl::OUString desc;
     rtl::OUString argSoffice;
     CPPUNIT_ASSERT(
-        getArgument(
+        detail::getArgument(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")),
             &argSoffice));
     if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("path:"))) {
@@ -78,7 +79,7 @@ void OfficeConnection::setUp() {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
         rtl::OUString argUser;
         CPPUNIT_ASSERT(
-            getArgument(
+            detail::getArgument(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), &argUser));
         rtl::OUString userArg(
             rtl::OUString(
@@ -94,7 +95,7 @@ void OfficeConnection::setUp() {
             acceptArg.pData, userArg.pData, jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
         rtl::OUString argEnv;
-        if (getArgument(
+        if (detail::getArgument(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env")), &argEnv))
         {
             envs = &argEnv.pData;
