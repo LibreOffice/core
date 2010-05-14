@@ -68,7 +68,7 @@
 #include <swunohelper.hxx>
 #include <vcl/waitobj.hxx>
 #include <svtools/pathoptions.hxx>
-
+#include <svtools/urihelper.hxx>
 #include <addresslistdialog.hrc>
 #include <dbui.hrc>
 
@@ -145,6 +145,8 @@ struct AddressUserData_Impl
                 if(!sCharSet.compareToAscii( cUTF8 ))
                 {
                     sURL = String(sDBURL).Copy( 10 );
+                    //#i97577# at this point the 'URL' can also be a file name!
+                    sURL = URIHelper::SmartRel2Abs( INetURLObject(), sURL );
                     sURL += C2U("/");
                     sURL += aFilters[0];
                     sURL += C2U(".");
@@ -269,6 +271,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
                     m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
                     pUserData->sURL = lcl_getFlatURL( xSourceProperties );
                     bEnableEdit = pUserData->sURL.getLength() > 0 &&
+                        SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
                         !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
                 }
                 catch(const uno::Exception& )
@@ -553,6 +556,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
            pThis->m_aListLB.SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
     }
     pThis->m_aEditPB.Enable(pUserData && pUserData->sURL.getLength() &&
+                    SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL ) );
     pThis->m_bInSelectHdl = false;
     pThis->LeaveWait();
@@ -638,11 +642,15 @@ void SwAddressListDialog::DetectTablesAndQueries(
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xSourceProperties;
             pUserData->sURL = lcl_getFlatURL( xSourceProperties );
 
-            m_aListLB.SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
             pUserData->xColumnsSupplier = SwNewDBMgr::GetColumnSupplier(pUserData->xConnection,
                                     m_aDBData.sCommand,
                                     m_aDBData.nCommandType == CommandType::TABLE ?
                                             SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
+            //#i97577#
+            if( pUserData->xColumnsSupplier.is() )
+                m_aListLB.SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
+            else
+                m_aListLB.SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
         }
         String sCommand = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
         m_aOK.Enable(pSelect && sCommand.Len());

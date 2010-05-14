@@ -86,7 +86,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <itrpaint.hxx>
 #include "i18npool/mslangid.hxx"
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <SwNodeNum.hxx>
 
 #include <stack>
@@ -676,8 +676,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             const SwAttrSet& aSet = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetSwAttrSet();
             const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
             if ( SVX_ADJUST_BLOCK == nAdjust || SVX_ADJUST_CENTER == nAdjust ||
-                 (  pFrm->IsRightToLeft() && SVX_ADJUST_LEFT == nAdjust ||
-                   !pFrm->IsRightToLeft() && SVX_ADJUST_RIGHT == nAdjust ) )
+                 (  (pFrm->IsRightToLeft() && SVX_ADJUST_LEFT == nAdjust) ||
+                   (!pFrm->IsRightToLeft() && SVX_ADJUST_RIGHT == nAdjust) ) )
             {
                 eVal = SVX_ADJUST_BLOCK == nAdjust ?
                        vcl::PDFWriter::Justify :
@@ -2053,21 +2053,22 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
         {
-        //---> i56629 the iteration to convert the OOo bookmark (#bookmark)
-        // into PDF named destination, see section 8.2.1 in PDF 1.4 spec
-        // We need:
-        // 1. a name for the destination, formed from the standard OOo bookmark name
-        // 2. the destination, obtained from where the bookmark destination lies
-            const SwBookmarks& rBkmks = mrSh.GetDoc()->getBookmarks();
-            //iterate trhrough bookmarks
-            sal_uInt16 nBkmks = rBkmks.Count(), nCnt;
-            for(nCnt = 0; nCnt < nBkmks; nCnt++)
+            //---> i56629 the iteration to convert the OOo bookmark (#bookmark)
+            // into PDF named destination, see section 8.2.1 in PDF 1.4 spec
+            // We need:
+            // 1. a name for the destination, formed from the standard OOo bookmark name
+            // 2. the destination, obtained from where the bookmark destination lies
+            IDocumentMarkAccess* const pMarkAccess = mrSh.GetDoc()->getIDocumentMarkAccess();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+                ppMark != pMarkAccess->getBookmarksEnd();
+                ppMark++)
             {
-//get the name
-                SwBookmark* pBkmk = rBkmks[ nCnt ];
+                //get the name
+                const ::sw::mark::IMark* pBkmk = ppMark->get();
                 mrSh.SwCrsrShell::ClearMark();
                 rtl::OUString sBkName = pBkmk->GetName();
-//jump to it
+
+                //jump to it
                 JumpToSwMark( &mrSh, sBkName );
 
                 // Destination Rectangle
@@ -2081,8 +2082,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     pPDFExtOutDevData->CreateNamedDest( sBkName, rDestRect.SVRect(), nDestPageNum );
             }
             mrSh.SwCrsrShell::ClearMark();
+            //<--- i56629
         }
-//<--- i56629
     }
     else
     {
@@ -2191,7 +2192,10 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
             SwRect aHFLinkRect( rLinkRect );
             aHFLinkRect.Pos() = pPageFrm->Frm().Pos() + aOffset;
 
-            if ( aHFLinkRect != rLinkRect )
+            // #i97135# the gcc_x64 optimizer gets aHFLinkRect != rLinkRect wrong
+            // fool it by comparing the position only (the width and height are the
+            // same anyway)
+            if ( aHFLinkRect.Pos() != rLinkRect.Pos() )
             {
                 // Link PageNum
                 const sal_Int32 nHFLinkPageNum = CalcOutputPageNum( aHFLinkRect );

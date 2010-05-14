@@ -589,7 +589,7 @@ public:
         xub_StrLen nLen );
     void AppendBookmark( const String& rName, USHORT nOffset = 0 );
     String GetBookmarkName( USHORT nTyp, const String* pNm, USHORT nSeqNo );
-    void MoveFieldBookmarks(ULONG nFrom, ULONG nTo);
+    void MoveFieldMarks(ULONG nFrom, ULONG nTo);
     bool HasRefToObject(USHORT nTyp, const String* pNm, USHORT nSeqNo);
 
     void WriteAsStringTable(const ::std::vector<String>&, INT32& rfcSttbf,
@@ -730,7 +730,7 @@ public:
     void CollectOutlineBookmarks(const SwDoc &rDoc);
     void AddBookmark(String sBkmkName);
 
-    void WriteFormData(SwFieldBookmark &rFieldmark);
+    void WriteFormData(const ::sw::mark::IFieldmark& rFieldmark);
     WW8_WrPlcFld* CurrentFieldPlc() const;
 private:
     //No copying

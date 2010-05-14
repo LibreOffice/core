@@ -167,16 +167,16 @@ extern HTMLOutEvent __FAR_DATA aAnchorEventTable[];
 
 static HTMLOutEvent __FAR_DATA aImageEventTable[] =
 {
-    { sHTML_O_SDonload,         sHTML_O_onload,     SVX_EVENT_IMAGE_LOAD        },
-    { sHTML_O_SDonabort,        sHTML_O_onabort,    SVX_EVENT_IMAGE_ABORT       },
-    { sHTML_O_SDonerror,        sHTML_O_onerror,    SVX_EVENT_IMAGE_ERROR       },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonload,           OOO_STRING_SVTOOLS_HTML_O_onload,       SVX_EVENT_IMAGE_LOAD        },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonabort,      OOO_STRING_SVTOOLS_HTML_O_onabort,  SVX_EVENT_IMAGE_ABORT       },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonerror,      OOO_STRING_SVTOOLS_HTML_O_onerror,  SVX_EVENT_IMAGE_ERROR       },
     { 0,                        0,                  0                       }
 };
 
 static HTMLOutEvent __FAR_DATA aIMapEventTable[] =
 {
-    { sHTML_O_SDonmouseover,    sHTML_O_onmouseover,    SFX_EVENT_MOUSEOVER_OBJECT  },
-    { sHTML_O_SDonmouseout,     sHTML_O_onmouseout,     SFX_EVENT_MOUSEOUT_OBJECT   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,       OOO_STRING_SVTOOLS_HTML_O_onmouseout,       SFX_EVENT_MOUSEOUT_OBJECT   },
     { 0,                        0,                      0                           }
 };
 
@@ -466,10 +466,10 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
 
         ByteString sOut( '<' );
         pCntnrStr = (HTML_CNTNR_DIV == nCntnrMode)
-                            ? sHTML_division
-                            : sHTML_span;
+                            ? OOO_STRING_SVTOOLS_HTML_division
+                            : OOO_STRING_SVTOOLS_HTML_span;
         sOut += pCntnrStr;
-        ((((sOut += ' ') += sHTML_O_class) += "=\"")
+        ((((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_class) += "=\"")
             += sCSS1_class_abs_pos) += '\"';
         Strm() << sOut.GetBuffer();
 
@@ -542,11 +542,11 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
         DecIndentLevel();
         if( bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_division, FALSE );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
         bLFPossible = TRUE;
     }
     else if( HTML_CNTNR_SPAN == nCntnrMode )
-        HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_span, FALSE );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, FALSE );
 }
 
 
@@ -564,7 +564,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         rFrmFmt.GetName().Len() )
     {
         const sal_Char *pStr =
-            (nFrmOpts & HTML_FRMOPT_ID) ? sHTML_O_id : sHTML_O_name;
+            (nFrmOpts & HTML_FRMOPT_ID) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         ((sOut += ' ') += pStr) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), rFrmFmt.GetName(), eDestEnc, &aNonConvertableCharacters );
@@ -584,7 +584,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     // ALT
     if( (nFrmOpts & HTML_FRMOPT_ALT) && rAlternateTxt.Len() )
     {
-        ((sOut += ' ') += sHTML_O_alt) += "=\"";
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_alt) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), rAlternateTxt, eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
@@ -605,8 +605,8 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
             text::RelOrientation::PRINT_AREA == rHoriOri.GetRelationOrient() )
         {
             pStr = text::HoriOrientation::RIGHT == rHoriOri.GetHoriOrient()
-                        ? sHTML_AL_right
-                        : sHTML_AL_left;
+                        ? OOO_STRING_SVTOOLS_HTML_AL_right
+                        : OOO_STRING_SVTOOLS_HTML_AL_left;
         }
     }
     if( (nFrmOpts & HTML_FRMOPT_ALIGN) && !pStr &&
@@ -616,20 +616,20 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     {
         switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
-        case text::VertOrientation::LINE_TOP:     pStr = sHTML_VA_top;        break;
+        case text::VertOrientation::LINE_TOP:     pStr = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
         case text::VertOrientation::CHAR_TOP:
-        case text::VertOrientation::BOTTOM:       pStr = sHTML_VA_texttop;    break;  // geht nicht
+        case text::VertOrientation::BOTTOM:       pStr = OOO_STRING_SVTOOLS_HTML_VA_texttop;    break;  // geht nicht
         case text::VertOrientation::LINE_CENTER:
-        case text::VertOrientation::CHAR_CENTER:  pStr = sHTML_VA_absmiddle;  break;  // geht nicht
-        case text::VertOrientation::CENTER:       pStr = sHTML_VA_middle;     break;
+        case text::VertOrientation::CHAR_CENTER:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absmiddle;  break;  // geht nicht
+        case text::VertOrientation::CENTER:       pStr = OOO_STRING_SVTOOLS_HTML_VA_middle;     break;
         case text::VertOrientation::LINE_BOTTOM:
-        case text::VertOrientation::CHAR_BOTTOM:  pStr = sHTML_VA_absbottom;  break;  // geht nicht
-        case text::VertOrientation::TOP:          pStr = sHTML_VA_bottom;     break;
+        case text::VertOrientation::CHAR_BOTTOM:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absbottom;  break;  // geht nicht
+        case text::VertOrientation::TOP:          pStr = OOO_STRING_SVTOOLS_HTML_VA_bottom;     break;
         case text::VertOrientation::NONE:     break;
         }
     }
     if( pStr )
-        (((sOut += ' ') += sHTML_O_align) += '=') += pStr;
+        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += '=') += pStr;
 
 
     // HSPACE und VSPACE
@@ -665,13 +665,13 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
 
         if( aPixelSpc.Width() )
         {
-            (((sOut += ' ') += sHTML_O_hspace) += '=')
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_hspace) += '=')
                 += ByteString::CreateFromInt32( aPixelSpc.Width() );
         }
 
         if( aPixelSpc.Height() )
         {
-            (((sOut += ' ') += sHTML_O_vspace) += '=')
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_vspace) += '=')
                 += ByteString::CreateFromInt32( aPixelSpc.Height() );
         }
     }
@@ -740,7 +740,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         if( (nFrmOpts & HTML_FRMOPT_WIDTH) &&
             ((nPrcWidth && nPrcWidth!=255) || aPixelSz.Width()) )
         {
-            ((sOut += ' ') += sHTML_O_width) += '=';
+            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += '=';
             if( nPrcWidth )
                 (sOut += ByteString::CreateFromInt32( nPrcWidth )) += '%';
             else
@@ -750,7 +750,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         if( (nFrmOpts & HTML_FRMOPT_HEIGHT) &&
             ((nPrcHeight && nPrcHeight!=255) || aPixelSz.Height()) )
         {
-            ((sOut += ' ') += sHTML_O_height) += '=';
+            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=';
             if( nPrcHeight )
                 (sOut += ByteString::CreateFromInt32( nPrcHeight )) += '%';
             else
@@ -781,7 +781,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                 {
                 case SURROUND_NONE:
                 case SURROUND_RIGHT:
-                    pStr = sHTML_AL_right;
+                    pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
                     break;
                 case SURROUND_LEFT:
                 case SURROUND_PARALLEL:
@@ -802,7 +802,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                 {
                 case SURROUND_NONE:
                 case SURROUND_LEFT:
-                    pStr = sHTML_AL_left;
+                    pStr = OOO_STRING_SVTOOLS_HTML_AL_left;
                     break;
                 case SURROUND_RIGHT:
                 case SURROUND_PARALLEL:
@@ -819,8 +819,8 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
 
         if( pStr )
         {
-            (((((((sOut = '<') += sHTML_linebreak) += ' ')
-                += sHTML_O_clear) += '=') += pStr) += '>') += rEndTags;
+            (((((((sOut = '<') += OOO_STRING_SVTOOLS_HTML_linebreak) += ' ')
+                += OOO_STRING_SVTOOLS_HTML_O_clear) += '=') += pStr) += '>') += rEndTags;
             rEndTags = sOut;
         }
     }
@@ -876,7 +876,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         if( aIMapName.Len() )
             aNameBase = aIMapName;
         else
-            aNameBase.AssignAscii( sHTML_map );
+            aNameBase.AssignAscii( OOO_STRING_SVTOOLS_HTML_map );
         if( !aIMapName.Len() )
             (aIMapName = aNameBase)
                 += String::CreateFromInt32( rHTMLWrt.nImgMapCnt );
@@ -1023,12 +1023,12 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
         if( aMapURL.Len() || aName.Len() || aTarget.Len() || bEvents )
         {
-            (sOut = '<') += sHTML_anchor;
+            (sOut = '<') += OOO_STRING_SVTOOLS_HTML_anchor;
 
             // Ein HREF nur Ausgaben, wenn es einen Link oder Makros gibt
             if( aMapURL.Len() || bEvents )
             {
-                ((sOut += ' ') += sHTML_O_href) += "=\"";
+                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
                 rHTMLWrt.OutHyperlinkHRefValue( aMapURL );
                 sOut = '\"';
@@ -1036,7 +1036,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
             if( aName.Len() )
             {
-                ((sOut += ' ') += sHTML_O_name) += "=\"";
+                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aName,
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -1045,7 +1045,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
             if( aTarget.Len() )
             {
-                ((sOut += ' ') += sHTML_O_target) += "=\"";
+                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_target) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aTarget,
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -1069,7 +1069,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             }
 
             rWrt.Strm() << ">";
-            (((sOut = "</") += sHTML_anchor) += ">") += aEndTags;
+            (((sOut = "</") += OOO_STRING_SVTOOLS_HTML_anchor) += ">") += aEndTags;
             aEndTags = sOut;
         }
     }
@@ -1135,18 +1135,18 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         if( pColBorderLine )
         {
             sOut = '<';
-            (((sOut += sHTML_font) += ' ') += sHTML_O_color) += '=';
+            (((sOut += OOO_STRING_SVTOOLS_HTML_font) += ' ') += OOO_STRING_SVTOOLS_HTML_O_color) += '=';
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_Color( rWrt.Strm(),
                                      pColBorderLine->GetColor(), rHTMLWrt.eDestEnc ) << '>';
 
-            (((sOut = "</" ) += sHTML_font) += '>') += aEndTags;
+            (((sOut = "</" ) += OOO_STRING_SVTOOLS_HTML_font) += '>') += aEndTags;
             aEndTags = sOut;
         }
     }
 
     sOut = '<';
-    (((sOut += sHTML_image) += ' ') += sHTML_O_src) += "=\"";
+    (((sOut += OOO_STRING_SVTOOLS_HTML_image) += ' ') += OOO_STRING_SVTOOLS_HTML_O_src) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), aGrfNm, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
 
@@ -1170,19 +1170,19 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     if( nFrmOpts & HTML_FRMOPT_BORDER )
     {
-        (((sOut = ' ') += sHTML_O_border) += '=')
+        (((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_border) += '=')
             += ByteString::CreateFromInt32( nBorderWidth );
         rWrt.Strm() << sOut.GetBuffer();
     }
 
     if( pURLItem && pURLItem->IsServerMap() )
     {
-        (sOut = ' ') += sHTML_O_ismap;
+        (sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_ismap;
         rWrt.Strm() << sOut.GetBuffer();
     }
     if( aIMapName.Len() )
     {
-        ((sOut = ' ') += sHTML_O_usemap) += "=\"#";
+        ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_usemap) += "=\"#";
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rWrt.Strm(), aIMapName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
     }
@@ -1270,7 +1270,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         String s( *pLink );
         if( !HTMLOutFuncs::PrivateURLToInternalImg(s) )
             s = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), s);
-        (sOut += sHTML_O_src) += "=\"";
+        (sOut += OOO_STRING_SVTOOLS_HTML_O_src) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rWrt.Strm(), s, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
@@ -1289,11 +1289,11 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         }
 
         if( aPixelSz.Width() )
-            (((sOut += ' ') += sHTML_O_width) += '=')
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += '=')
                 += ByteString::CreateFromInt32( aPixelSz.Width() );
 
         if( aPixelSz.Height() )
-            (((sOut += ' ') += sHTML_O_height) += '=')
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=')
                 += ByteString::CreateFromInt32( aPixelSz.Height() );
 
         if( pVertOrient )
@@ -1301,19 +1301,19 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
             const sal_Char *pStr = 0;
             switch( pVertOrient->GetVertOrient() )
             {
-            case text::VertOrientation::LINE_TOP:     pStr = sHTML_VA_top;        break;
+            case text::VertOrientation::LINE_TOP:     pStr = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
             case text::VertOrientation::CHAR_TOP:
-            case text::VertOrientation::BOTTOM:       pStr = sHTML_VA_texttop;    break;  // geht nicht
+            case text::VertOrientation::BOTTOM:       pStr = OOO_STRING_SVTOOLS_HTML_VA_texttop;    break;  // geht nicht
             case text::VertOrientation::LINE_CENTER:
-            case text::VertOrientation::CHAR_CENTER:  pStr = sHTML_VA_absmiddle;  break;  // geht nicht
-            case text::VertOrientation::CENTER:       pStr = sHTML_VA_middle;     break;
+            case text::VertOrientation::CHAR_CENTER:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absmiddle;  break;  // geht nicht
+            case text::VertOrientation::CENTER:       pStr = OOO_STRING_SVTOOLS_HTML_VA_middle;     break;
             case text::VertOrientation::LINE_BOTTOM:
-            case text::VertOrientation::CHAR_BOTTOM:  pStr = sHTML_VA_absbottom;  break;  // geht nicht
-            case text::VertOrientation::TOP:          pStr = sHTML_VA_bottom;     break;
+            case text::VertOrientation::CHAR_BOTTOM:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absbottom;  break;  // geht nicht
+            case text::VertOrientation::TOP:          pStr = OOO_STRING_SVTOOLS_HTML_VA_bottom;     break;
             case text::VertOrientation::NONE:     break;
             }
             if( pStr )
-                (((sOut += ' ') += sHTML_O_align) += '=') += pStr;
+                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += '=') += pStr;
         }
     }
 
@@ -1390,14 +1390,14 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
         rHTMLWrt.OutNewLine();
 
     ByteString sOut( '<' );
-    sOut += sHTML_multicol;
+    sOut += OOO_STRING_SVTOOLS_HTML_multicol;
 
     const SwFmtCol& rFmtCol = rFrmFmt.GetCol();
 
     // die Anzahl der Spalten als COLS ausgeben
     USHORT nCols = rFmtCol.GetNumCols();
     if( nCols )
-        (((sOut += ' ') += sHTML_O_cols) += '=')
+        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=')
             += ByteString::CreateFromInt32( nCols );
 
     // die Gutter-Breite (Minimalwert) als GUTTER
@@ -1410,7 +1410,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
                             ->LogicToPixel( Size(nGutter,0),
                                             MapMode(MAP_TWIP) ).Width();
         }
-        (((sOut += ' ') += sHTML_O_gutter) += '=')
+        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_gutter) += '=')
             += ByteString::CreateFromInt32( nGutter );
     }
 
@@ -1451,7 +1451,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_multicol, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, FALSE );
     rHTMLWrt.bLFPossible = TRUE;
 
     return rWrt;
@@ -1466,8 +1466,8 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
         rHTMLWrt.OutNewLine( TRUE );
 
     ByteString sOut('<');
-    ((((sOut += sHTML_spacer) += ' ') += sHTML_O_type) += '=')
-        += sHTML_SPTYPE_block;
+    ((((sOut += OOO_STRING_SVTOOLS_HTML_spacer) += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=')
+        += OOO_STRING_SVTOOLS_HTML_SPTYPE_block;
     rWrt.Strm() << sOut.GetBuffer();
 
     // ALIGN, WIDTH, HEIGHT
@@ -1494,10 +1494,10 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
 
         // Die aktulle <DL> beenden!
         rHTMLWrt.OutAndSetDefList( 0 );
-        pStr = sHTML_division;
+        pStr = OOO_STRING_SVTOOLS_HTML_division;
     }
     else
-        pStr = sHTML_span;
+        pStr = OOO_STRING_SVTOOLS_HTML_span;
 
     // als DIV ausgeben
     if( rHTMLWrt.bLFPossible )
@@ -1686,8 +1686,8 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     // als Multicol ausgeben
     rHTMLWrt.OutNewLine();
-    ByteString sOut( sHTML_division );
-    ((sOut += ' ') += sHTML_O_type) += '=';
+    ByteString sOut( OOO_STRING_SVTOOLS_HTML_division );
+    ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=';
     sOut += (bHeader ? "HEADER" : "FOOTER" );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.GetBuffer() );
 
@@ -1708,9 +1708,9 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         nSize = (INT16)Application::GetDefaultDevice()
             ->LogicToPixel( Size(nSize,0), MapMode(MAP_TWIP) ).Width();
 
-        ((((((((aSpacer = sHTML_spacer) += ' ')
-            += sHTML_O_type) += '=') += sHTML_SPTYPE_vertical) += ' ')
-            += sHTML_O_size) += '=') += ByteString::CreateFromInt32(nSize);
+        ((((((((aSpacer = OOO_STRING_SVTOOLS_HTML_spacer) += ' ')
+            += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical) += ' ')
+            += OOO_STRING_SVTOOLS_HTML_O_size) += '=') += ByteString::CreateFromInt32(nSize);
     }
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
@@ -1747,7 +1747,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_division, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
 
     rHTMLWrt.nHeaderFooterSpace = 0;
 

@@ -88,9 +88,9 @@ using namespace ::com::sun::star;
 
 static HTMLOptionEnum __FAR_DATA aHTMLTblVAlignTable[] =
 {
-    { sHTML_VA_top,         text::VertOrientation::NONE       },
-    { sHTML_VA_middle,      text::VertOrientation::CENTER     },
-    { sHTML_VA_bottom,      text::VertOrientation::BOTTOM     },
+    { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::NONE       },
+    { OOO_STRING_SVTOOLS_HTML_VA_middle,      text::VertOrientation::CENTER     },
+    { OOO_STRING_SVTOOLS_HTML_VA_bottom,      text::VertOrientation::BOTTOM     },
     { 0,                    0               }
 };
 
@@ -4949,7 +4949,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             const HTMLOption *pOption = (*pHTMLOptions)[--i];
             if( HTML_O_ALIGN == pOption->GetToken() )
             {
-                if( pOption->GetString().EqualsIgnoreCaseAscii(sHTML_VA_bottom))
+                if( pOption->GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_VA_bottom))
                     bTop = sal_False;
             }
         }
@@ -5218,7 +5218,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions *pOptions,
         case HTML_O_BORDER:
             // BORDER und BORDER=BORDER wie BORDER=1 behandeln
             if( pOption->GetString().Len() &&
-                !pOption->GetString().EqualsIgnoreCaseAscii(sHTML_O_border) )
+                !pOption->GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_O_border) )
                 nBorder = (sal_uInt16)pOption->GetNumber();
             else
                 nBorder = 1;

@@ -1855,12 +1855,11 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         {
             BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
 
-            // right now we don't have view options for automatic grammar checking. Thus...
             sal_Bool bIsAutoGrammar = sal_False;
             SvtLinguConfig().GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
             if (bIsOnlineSpell && bIsAutoGrammar)
-                StartGrammarChecking( *this, *GetRootFrm() );
+                StartGrammarChecking( *this );
         }
 
         sal_uInt16 nFldUpdFlag;

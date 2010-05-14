@@ -55,7 +55,7 @@
 // <--
 #include <ndtxt.hxx> // #111827#
 
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 
 // fuer den dummen ?MSC-? Compiler
 inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
@@ -767,12 +767,13 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
             }
         }
     }
-// TODO: Form Protection when Enhanced Fields are enabled
+    //FIXME FieldBk
+    // TODO: Form Protection when Enhanced Fields are enabled
 //  if( !bRet )
 //    {
 //      const SwDoc *pDoc=GetDoc();
-//      SwBookmark *pA = ( pDoc && pPoint ? pDoc->getFieldBookmarkFor( *pPoint ) : NULL );
-//      SwBookmark *pB = ( pDoc && pMark ? pDoc->getFieldBookmarkFor( *pMark ) : pA );
+//      SwBookmark *pA = ( pDoc && pPoint ? pDoc->getFieldmarkFor( *pPoint ) : NULL );
+//      SwBookmark *pB = ( pDoc && pMark ? pDoc->getFieldmarkFor( *pMark ) : pA );
 //      bRet = ( pA != pB );
 //      bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
 //      if( bProtectForm )

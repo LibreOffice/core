@@ -66,7 +66,7 @@
 #include <sfx2/request.hxx>
 #include <frmatr.hxx>
 #include <vos/mutex.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <unotxdoc.hxx>
 #include <unodraw.hxx>
 #include <svx/unoshcol.hxx>
@@ -435,13 +435,12 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     xIfcTunnel->getSomething(SwXBookmark::getUnoTunnelId()));
             if(pBkm && pBkm->GetDoc() == pDoc)
             {
-
-                sal_uInt16 nFndPos = rSh.FindBookmark(pBkm->getName());
-
-                if( USHRT_MAX != nFndPos )
+                IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+                IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(pBkm->getName());
+                if( ppMark != pMarkAccess->getMarksEnd() )
                 {
                     rSh.EnterStdMode();
-                    rSh.GotoBookmark( nFndPos );
+                    rSh.GotoMark( ppMark->get() );
                 }
                 return sal_True;
             }
@@ -1441,8 +1440,8 @@ void SwXTextViewCursor::gotoRange(
         }
         else if(pRange && pRange->GetBookmark())
         {
-            SwBookmark* pBkm = pRange->GetBookmark();
-            pSrcNode = &pBkm->GetBookmarkPos().nNode.GetNode();
+            const ::sw::mark::IMark* const pBkmk = pRange->GetBookmark();
+            pSrcNode = &(pBkmk->GetMarkPos().nNode.GetNode());
         }
         else if (pPara && pPara->GetCrsr())
         {

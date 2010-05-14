@@ -1161,8 +1161,8 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
                     nSttLnPos = SwTableFormula::GetLnPosInTbl( *pTbl, pSttBox );
 
             if( USHRT_MAX != nSttLnPos && USHRT_MAX != nEndLnPos &&
-                rTblUpd.nSplitLine <= nSttLnPos ==
-                rTblUpd.nSplitLine <= nEndLnPos )
+                ((rTblUpd.nSplitLine <= nSttLnPos) ==
+                (rTblUpd.nSplitLine <= nEndLnPos)) )
             {
                 // bleiben in der gleichen Tabelle
                 bInNewTbl = rTblUpd.nSplitLine <= nEndLnPos &&

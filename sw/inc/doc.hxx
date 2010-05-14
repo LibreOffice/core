@@ -39,7 +39,7 @@
 #ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
 #endif
-#include <IDocumentBookmarkAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #ifndef IREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
 #endif
@@ -114,6 +114,8 @@ class SwList;
 #include <svtools/embedhlp.hxx>
 #include <vector>
 
+#include <boost/scoped_ptr.hpp>
+
 class SfxObjectShell;
 class SfxObjectShellRef;
 class SvxForbiddenCharactersTable;
@@ -142,8 +144,6 @@ class SvxMacroTableDtor;
 class SvxBorderLine;
 class SwAutoCompleteWord;
 class SwAutoCorrExceptWord;
-class SwBookmark;
-class SwBookmarks;
 class SwCalc;
 class SwCellFrm;
 class SwCharFmt;
@@ -240,6 +240,9 @@ class SwChartDataProvider;
 class SwChartLockController_Helper;
 class IGrammarContact;
 
+namespace sw { namespace mark {
+    class MarkManager;
+}}
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -265,14 +268,13 @@ SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4, 4 )
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
 // global function to start grammar checking in the document
-void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame );
+void StartGrammarChecking( SwDoc &rDoc );
 
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentSettingAccess,
     public IDocumentDeviceAccess,
     public IDocumentRedlineAccess,
-    public IDocumentBookmarkAccess,
     public IDocumentUndoRedo,
     public IDocumentLinksAdministration,
     public IDocumentFieldsAccess,
@@ -319,6 +321,8 @@ class SW_DLLPUBLIC SwDoc :
         xXForms;                        // container with XForms models
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
 
+    const ::boost::scoped_ptr< ::sw::mark::MarkManager> pMarkManager;
+
     // -------------------------------------------------------------------
     // die Pointer
                                 //Defaultformate
@@ -336,8 +340,6 @@ class SW_DLLPUBLIC SwDoc :
     SwFrmFmts       *pTblFrmFmtTbl;     // spz. fuer Tabellen
     SwTxtFmtColls   *pTxtFmtCollTbl;    // FormatCollections
     SwGrfFmtColls   *pGrfFmtCollTbl;
-
-    SwBookmarks     *pBookmarkTbl;      //Bookmarks
 
     SwTOXTypes      *pTOXTypes;         // Verzeichnisse
     SwDefTOXBase_Impl * pDefTOXBases;   // defaults of SwTOXBase's
@@ -755,10 +757,6 @@ public:
     virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode );
     virtual SwCharCompressType getCharacterCompressionType() const;
     virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType );
-    SwBookmark* getFieldBookmarkFor(const SwPosition &pos) const;
-    SwBookmark* getNextFieldBookmarkFor(const SwPosition &pos) const;
-    SwBookmark* getPrevFieldBookmarkFor(const SwPosition &pos) const;
-    SwFieldBookmark* getFormFieldBookmarkFor(const SwPosition &pos) const;
 
     /** IDocumentDeviceAccess
     */
@@ -773,25 +771,10 @@ public:
     virtual SwPrintData* getPrintData() const;
     virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData);
 
-    /** IDocumentBookmarkAccess
+    /** IDocumentMarkAccess
     */
-    virtual const SwBookmarks& getBookmarks() const;
-    virtual SwBookmark* makeBookmark( /*[in]*/const SwPaM& rPaM, /*[in]*/const KeyCode& rKC,
-                                      /*[in]*/ const String& rName, /*[in]*/const String& rShortName,
-                                      /*[in]*/BookmarkType eMark );
-    virtual void deleteBookmark( /*[in]*/sal_uInt16 nPos );
-    virtual void deleteBookmark( /*[in]*/const String& rName );
-    virtual bool isCrossRefBookmarkName( /*[in]*/const String& rName );
-    virtual sal_uInt16 findBookmark( /*[in]*/const String& rName );
-    virtual void makeUniqueBookmarkName( /*[in/out]*/String& rName );
-    virtual sal_uInt16 getBookmarkCount( /*[in]*/ bool bBkmrk ) const;
-    virtual SwBookmark& getBookmark( /*[in]*/sal_uInt16 nPos, /*[in]*/bool bBkmrk );
-    virtual String getCrossRefBookmarkName(
-            /*[in]*/const SwTxtNode& rTxtNode,
-            /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType ) const;
-    virtual String makeCrossRefBookmark(
-            /*[in]*/const SwTxtNode& rTxtNode,
-            /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType );
+    IDocumentMarkAccess* getIDocumentMarkAccess();
+    const IDocumentMarkAccess* getIDocumentMarkAccess() const;
 
     /** IDocumentRedlineAccess
     */

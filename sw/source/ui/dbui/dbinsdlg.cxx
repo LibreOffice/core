@@ -131,6 +131,7 @@
 #include "swabstdlg.hxx"
 #include "table.hrc"
 #include <unomid.h>
+#include <IDocumentMarkAccess.hxx>
 
 
 namespace swui
@@ -1334,6 +1335,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             BOOL bSetCrsr = TRUE;
             USHORT n = 0, nCols = aColArr.Count();
+            ::sw::mark::IMark* pMark = NULL;
             for( sal_Int32 i = 0 ; ; ++i )
             {
                 BOOL bBreak = FALSE;
@@ -1452,7 +1454,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaStart() );
-                        rSh.SetBookmark( KeyCode(), C2S("DB_Mark"), aEmptyStr, IDocumentBookmarkAccess::MARK );
+                        pMark = rSh.SetBookmark(
+                            KeyCode(),
+                            ::rtl::OUString(),
+                            ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
                         // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaEnd() );
@@ -1479,11 +1484,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), TRUE ));
             }
 
-            if( !bSetCrsr && USHRT_MAX != (n = rSh.FindBookmark( C2S("DB_Mark" ))) )
+            if( !bSetCrsr && pMark != NULL)
             {
                 rSh.SetMark();
-                rSh.GotoBookmark( n );
-                rSh.DelBookmark( n );
+                rSh.GotoMark( pMark );
+                rSh.getIDocumentMarkAccess()->deleteMark( pMark );
+                break;
             }
         }
     }

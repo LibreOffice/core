@@ -78,7 +78,7 @@
 #include <fmthdft.hxx>
 #include <pagedesc.hxx>
 #include <textsh.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <swdtflvr.hxx>
 #include <docstat.hxx>
 #include <outline.hxx>
@@ -399,7 +399,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         }
 
-        case FN_INSERT_SYMBOL:
+        case SID_CHARMAP:
         {
             InsertSymbol( rReq );
         }
@@ -567,8 +567,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                String sName = ((SfxStringItem*)pItem)->GetValue();
-                rWrtSh.MakeUniqueBookmarkName(sName);
+                ::rtl::OUString sName = ((SfxStringItem*)pItem)->GetValue();
                 rWrtSh.SetBookmark( KeyCode(), sName, aEmptyStr );
             }
             else
@@ -587,7 +586,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_DELETE_BOOKMARK:
         {
             if ( pItem )
-                rWrtSh.DelBookmark( ((SfxStringItem*)pItem)->GetValue() );
+            {
+                IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
+                pMarkAccess->deleteMark( pMarkAccess->findMark(((SfxStringItem*)pItem)->GetValue()) );
+            }
             break;
         }
         case FN_AUTOFORMAT_REDLINE_APPLY:
@@ -1376,7 +1378,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSh.IsNumRuleStart()));
         break;
         case FN_EDIT_FORMULA:
-        case FN_INSERT_SYMBOL:
+        case SID_CHARMAP:
             {
                 const int nType = rSh.GetSelectionType();
                 if (!(nType & nsSelectionType::SEL_TXT) &&

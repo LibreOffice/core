@@ -374,7 +374,13 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
                     const bool bSameCharFmt = rOtherCharFmt.GetCharFmt() == rThisCharFmt.GetCharFmt();
                     // <--
 
-                    if ( !( nsSetAttrMode::SETATTR_DONTREPLACE & nMode ) || bNoLengthAttribute || bSameCharFmt )
+                    // --> OD 2009-03-24 #i90311#
+                    // Do not remove existing character format hint during XML import
+                    if ( !rNode.GetDoc()->IsInXMLImport() &&
+                         ( !( nsSetAttrMode::SETATTR_DONTREPLACE & nMode ) ||
+                           bNoLengthAttribute ||
+                           bSameCharFmt ) )
+                    // <--
                     {
                         // Remove old hint
                         Delete( *aIter );

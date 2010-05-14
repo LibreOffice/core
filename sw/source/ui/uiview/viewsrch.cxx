@@ -106,7 +106,7 @@ inline Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
 {
     Window* pWin;
     if( pSrchDlg && pSrchDlg->IsVisible() )
-        pWin = pSrchDlg;
+        pWin = LAYOUT_THIS_WINDOW (pSrchDlg);
     else
         pWin = 0;
     return pWin;
@@ -168,7 +168,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 
             if ( pWrp )
             {
-                pSrchDlg = (SvxSearchDialog*)(pWrp->GetWindow());
+                pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
                 // die Search / Replace -Items merken wir uns
                 const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
                 if( pList && pList->Count() )
@@ -189,7 +189,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                     SwView::SetMoveType(NID_SRCH_REP);
                 if ( pWrp )
                 {
-                    pSrchDlg = (SvxSearchDialog*)(pWrp->GetWindow());
+                    pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
                 }
                 else
                     pSrchDlg = 0;
@@ -493,7 +493,7 @@ BOOL SwView::SearchAndWrap(BOOL bApi)
 
     const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
-    pSrchDlg = pWrp ? (SvxSearchDialog*)(pWrp->GetWindow()) : 0;
+    pSrchDlg = pWrp ? static_cast <SvxSearchDialog*> (pWrp->getDialog ()) : 0;
 
         // falls Startposition am Dokumentende / -anfang
     if (aOpts.bDontWrap)
@@ -728,18 +728,16 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     return nFound;
 }
 
-
-Dialog* SwView::GetSearchDialog()
+LAYOUT_NS Dialog* SwView::GetSearchDialog()
 {
     const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)SfxViewFrame::Current()->GetChildWindow(nId);
     if ( pWrp )
-        pSrchDlg = (SvxSearchDialog*)(pWrp->GetWindow());
+        pSrchDlg = pWrp->getDialog ();
     else
         pSrchDlg = 0;
     return pSrchDlg;
 }
-
 
 void SwView::StateSearch(SfxItemSet &rSet)
 {

@@ -119,7 +119,7 @@ using namespace ::com::sun::star;
 
 IMPL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl);
@@ -198,10 +198,20 @@ BYTE AbstractSwInsertAbstractDlg_Impl::GetPara() const
 //add for SwInsertAbstractDlg end
 
 //add for SwAddrDlg, SwDropCapsDlg ,SwBackgroundDlg, SwNumFmtDlg SwBorderDlg SwWrapDlg  SwFldEditDlg begin
-const SfxItemSet* AbstractSfxSingleTabDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* AbstractSfxDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
+
+void AbstractSfxDialog_Impl::SetText( const XubString& rStr )
+{
+    pDlg->SetText( rStr );
+}
+String AbstractSfxDialog_Impl::GetText() const
+{
+    return pDlg->GetText();
+}
+
 //add for SwAddrDlg, SwDropCapsDlg ,SwBackgroundDlg, SwNumFmtDlg SwBorderDlg SwWrapDlg SwFldEditDlg  end
 
 //add for SwAsciiFilterDlg begin
@@ -664,12 +674,13 @@ AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstra
 }
 //add for SwInsertAbstractDlg end
 
-AbstractSfxSingleTabDialog* SwAbstractDialogFactory_Impl::CreateSfxSingleTabDialog( Window* pParent,
-                                                                                 SfxItemSet& rSet,
-                                                                                int nResId
-                                                                                )
+SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
+                                                                        const SfxItemSet& rSet,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&,
+                                                                        sal_uInt32 nResId
+                                                                )
 {
-    SfxSingleTabDialog* pDlg=NULL;
+    SfxModalDialog* pDlg=NULL;
     switch ( nResId )
     {
         case RC_DLG_ADDR :
@@ -689,7 +700,7 @@ AbstractSfxSingleTabDialog* SwAbstractDialogFactory_Impl::CreateSfxSingleTabDial
     }
 
     if ( pDlg )
-        return new AbstractSfxSingleTabDialog_Impl( pDlg );
+        return new AbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1070,9 +1081,9 @@ AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg( W
 //add for SwAutoFormatDlg end
 
 //add for SwBorderDlg begin
-AbstractSfxSingleTabDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, USHORT nType,int nResId )
+SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, USHORT nType,int nResId )
 {
-    SfxSingleTabDialog* pDlg=NULL;
+    SfxModalDialog* pDlg=NULL;
     switch ( nResId )
     {
         case RC_DLG_SWBORDERDLG :
@@ -1083,15 +1094,15 @@ AbstractSfxSingleTabDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Wi
     }
 
     if ( pDlg )
-        return new AbstractSfxSingleTabDialog_Impl( pDlg );
+        return new AbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 //add for SwBorderDlg end
 
 //add for SwWrapDlg begin
-AbstractSfxSingleTabDialog * SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId )
+SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId )
 {
-    SfxSingleTabDialog* pDlg=NULL;
+    SfxModalDialog* pDlg=NULL;
     switch ( nResId )
     {
         case RC_DLG_SWWRAPDLG :
@@ -1102,7 +1113,7 @@ AbstractSfxSingleTabDialog * SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Win
     }
 
     if ( pDlg )
-        return new AbstractSfxSingleTabDialog_Impl( pDlg );
+        return new AbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 //add for SwWrapDlg end
@@ -1169,9 +1180,9 @@ AbstractSwFldDlg * SwAbstractDialogFactory_Impl::CreateSwFldDlg ( SfxBindings* p
 //add for SwFldDlg end
 
 //add for SwFldEditDlg begin
-AbstractSfxSingleTabDialog*  SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& rVw, int nResId )
+SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& rVw, int nResId )
 {
-    SfxSingleTabDialog* pDlg=NULL;
+    SfxModalDialog* pDlg=NULL;
     switch ( nResId )
     {
         case RC_DLG_SWFLDEDITDLG :
@@ -1182,7 +1193,7 @@ AbstractSfxSingleTabDialog*  SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( 
     }
 
     if ( pDlg )
-        return new AbstractSfxSingleTabDialog_Impl( pDlg );
+        return new AbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 //add for SwFldEditDlg

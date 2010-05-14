@@ -53,7 +53,7 @@
 #include "format.hxx"
 #include "symbol.hxx"
 
-
+class SubsetMap;
 #define CATEGORY_NONE   0xFFFF
 
 /**************************************************************************/

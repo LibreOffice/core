@@ -39,7 +39,7 @@
 #include <pam.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
 #include <edimp.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
 #ifndef _UNOBJ_HXX

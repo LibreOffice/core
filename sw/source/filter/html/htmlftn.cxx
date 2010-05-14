@@ -307,15 +307,15 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
         nPos = rHTMLWrt.pFootEndNotes ? rHTMLWrt.pFootEndNotes->Count() : 0;
         ASSERT( nPos == rHTMLWrt.nFootNote + rHTMLWrt.nEndNote,
                 "OutHTML_SwFmtFtn: Position falsch" );
-        sClass.AssignAscii( sHTML_sdendnote_anc );
-        sFtnName.AssignAscii( sHTML_sdendnote );
+        sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc );
+        sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
         sFtnName += String::CreateFromInt32( (sal_Int32)(++rHTMLWrt.nEndNote) );
     }
     else
     {
         nPos = rHTMLWrt.nFootNote;
-        sClass.AssignAscii( sHTML_sdfootnote_anc );
-        sFtnName.AssignAscii( sHTML_sdfootnote);
+        sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc );
+        sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote);
         sFtnName += String::CreateFromInt32( (sal_Int32)(++rHTMLWrt.nFootNote));
     }
 
@@ -324,26 +324,26 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
     rHTMLWrt.pFootEndNotes->Insert( pTxtFtn, nPos );
 
     ByteString sOut( '<' );
-    (((sOut += sHTML_anchor) += ' ') += sHTML_O_class) += "=\"";
+    (((sOut += OOO_STRING_SVTOOLS_HTML_anchor) += ' ') += OOO_STRING_SVTOOLS_HTML_O_class) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    ((sOut = "\" ") += sHTML_O_name) += "=\"";
+    ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    (((sOut = sHTML_FTN_anchor) += "\" ") += sHTML_O_href) += "=\"#";
+    (((sOut = OOO_STRING_SVTOOLS_HTML_FTN_anchor) += "\" ") += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"#";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    (sOut = sHTML_FTN_symbol)+= '\"';
+    (sOut = OOO_STRING_SVTOOLS_HTML_FTN_symbol)+= '\"';
     if( rFmtFtn.GetNumStr().Len() )
-        (sOut += ' ') += sHTML_O_sdfixed;
+        (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_sdfixed;
     sOut += '>';
     rWrt.Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_superscript, TRUE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, TRUE );
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFmtFtn.GetViewNumStr(*rWrt.pDoc),
                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_superscript, FALSE );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_anchor, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, FALSE );
 
     return rWrt;
 }
@@ -368,21 +368,21 @@ void SwHTMLWriter::OutFootEndNotes()
         String sFtnName, sClass;
         if( pFmtFtn->IsEndNote() )
         {
-            sClass.AssignAscii( sHTML_sdendnote );
-            sFtnName.AssignAscii( sHTML_sdendnote );
+            sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
+            sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
             sFtnName.Append( String::CreateFromInt32((sal_Int32)(++nEndNote)) );
         }
         else
         {
-            sClass.AssignAscii( sHTML_sdfootnote );
-            sFtnName.AssignAscii( sHTML_sdfootnote );
+            sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
+            sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
             sFtnName.Append( String::CreateFromInt32((sal_Int32)(++nFootNote)));
         }
 
         if( bLFPossible )
             OutNewLine();
         ByteString sOut( '<' );
-        (((sOut += sHTML_division) += ' ') += sHTML_O_id) += "=\"";
+        (((sOut += OOO_STRING_SVTOOLS_HTML_division) += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
         Strm() << "\">";
@@ -404,7 +404,7 @@ void SwHTMLWriter::OutFootEndNotes()
         DecIndentLevel();   // Inhalt von <DIV> einruecken
         if( bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_division, FALSE );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
         bLFPossible = TRUE;
 
         ASSERT( !pFmtFtn,
@@ -458,15 +458,15 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
     String sFtnName, sClass, sPrefix, sSuffix;
     if( rFmtFtn.IsEndNote() )
     {
-        sClass.AssignAscii( sHTML_sdendnote_sym );
-        sFtnName.AssignAscii( sHTML_sdendnote );
+        sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym );
+        sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
         sFtnName.Append( String::CreateFromInt32((sal_Int32)nEndNote) );
         pInfo = &pDoc->GetEndNoteInfo();
     }
     else
     {
-        sClass.AssignAscii( sHTML_sdfootnote_sym );
-        sFtnName.AssignAscii( sHTML_sdfootnote );
+        sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym );
+        sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
         sFtnName.Append( String::CreateFromInt32((sal_Int32)nFootNote));
         pInfo = &pDoc->GetFtnInfo();
     }
@@ -489,20 +489,20 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
     }
 
     ByteString sOut( '<' );
-    (((sOut += sHTML_anchor) +=  ' ') += sHTML_O_class) += "=\"";
+    (((sOut += OOO_STRING_SVTOOLS_HTML_anchor) +=  ' ') += OOO_STRING_SVTOOLS_HTML_O_class) += "=\"";
     Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( Strm(), sClass, eDestEnc, &aNonConvertableCharacters );
-    ((sOut = "\" ") += sHTML_O_name) += "=\"";
+    ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
     Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
-    (((sOut = sHTML_FTN_symbol) +="\" ") += sHTML_O_href) += "=\"#";
+    (((sOut = OOO_STRING_SVTOOLS_HTML_FTN_symbol) +="\" ") += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"#";
     Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
-    (sOut = sHTML_FTN_anchor) += "\">";
+    (sOut = OOO_STRING_SVTOOLS_HTML_FTN_anchor) += "\">";
     Strm() << sOut.GetBuffer();
 
     HTMLOutFuncs::Out_String( Strm(), rNum, eDestEnc, &aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_anchor, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, FALSE );
 }
 
 USHORT lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
@@ -565,9 +565,9 @@ void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
 
     rHTMLWrt.OutNewLine();
     ByteString sOut( '<' );
-    (((((((sOut += sHTML_meta) +=  ' ')
-        += sHTML_O_name) += "=\"") += pName) += "\" ")
-        += sHTML_O_content) += "=\"";
+    (((((((sOut += OOO_STRING_SVTOOLS_HTML_meta) +=  ' ')
+        += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"") += pName) += "\" ")
+        += OOO_STRING_SVTOOLS_HTML_O_content) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), aContent, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     rWrt.Strm() << "\">";
@@ -610,7 +610,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         }
         if( nParts > 0 )
             lcl_html_outFootEndNoteInfo( *this, aParts, nParts,
-                                         sHTML_META_sdfootnote );
+                                         OOO_STRING_SVTOOLS_HTML_META_sdfootnote );
     }
 
     {
@@ -619,7 +619,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         USHORT nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, TRUE );
         if( nParts > 0 )
             lcl_html_outFootEndNoteInfo( *this, aParts, nParts,
-                                         sHTML_META_sdendnote );
+                                         OOO_STRING_SVTOOLS_HTML_META_sdendnote );
     }
 }
 

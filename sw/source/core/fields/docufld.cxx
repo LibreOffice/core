@@ -1951,6 +1951,12 @@ BOOL SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_PAR2:
         ::GetString( rAny, sTxt );
+        //#i100374# new string via api, delete complex text object so SwPostItNote picks up the new string
+        if (mpText)
+        {
+            delete mpText;
+            mpText = 0;
+        }
         break;
     case FIELD_PROP_TEXT:
         DBG_ERROR("Not implemented!");

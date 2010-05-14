@@ -101,7 +101,6 @@ class SwNavigationPI : public Window,
 
     long    nDocLBIniHeight;
     long    nWishWidth;
-    USHORT  nActMark;
     USHORT  nAutoMarkIdx;
     USHORT  nRegionMode; // 0 - URL, 1 - Bereich mit Link 2 - B. ohne Link
     short   nZoomIn;

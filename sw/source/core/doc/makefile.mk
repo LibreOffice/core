@@ -46,6 +46,7 @@ EXCEPTIONSFILES = \
     $(SLO)$/acmplwrd.obj \
     $(SLO)$/dbgoutsw.obj \
     $(SLO)$/doc.obj \
+    $(SLO)$/docbm.obj \
     $(SLO)$/doccomp.obj \
     $(SLO)$/docdraw.obj \
     $(SLO)$/docfmt.obj \
@@ -60,35 +61,34 @@ EXCEPTIONSFILES = \
     $(SLO)$/number.obj \
     $(SLO)$/swstylemanager.obj \
     $(SLO)$/tblcpy.obj \
-        $(SLO)$/tblrwcl.obj \
-        $(SLO)$/list.obj
+    $(SLO)$/tblrwcl.obj \
+    $(SLO)$/list.obj
 
 SLOFILES =	$(EXCEPTIONSFILES) \
-        $(SLO)$/docbasic.obj \
-        $(SLO)$/docbm.obj \
-        $(SLO)$/docchart.obj \
-        $(SLO)$/doccorr.obj \
-        $(SLO)$/docdde.obj \
-        $(SLO)$/docdesc.obj \
-        $(SLO)$/docedt.obj \
-        $(SLO)$/docfld.obj \
-        $(SLO)$/docfly.obj \
-        $(SLO)$/docftn.obj \
-        $(SLO)$/docredln.obj \
-        $(SLO)$/docruby.obj \
-        $(SLO)$/docstat.obj \
-        $(SLO)$/extinput.obj \
-        $(SLO)$/fmtcol.obj \
-        $(SLO)$/ftnidx.obj \
-        $(SLO)$/gctable.obj \
-        $(SLO)$/lineinfo.obj \
-        $(SLO)$/notxtfrm.obj \
-        $(SLO)$/poolfmt.obj \
-        $(SLO)$/sortopt.obj \
-        $(SLO)$/swserv.obj \
-        $(SLO)$/tblafmt.obj \
-        $(SLO)$/visiturl.obj \
-        $(SLO)$/htmltbl.obj
+    $(SLO)$/docbasic.obj \
+    $(SLO)$/docchart.obj \
+    $(SLO)$/doccorr.obj \
+    $(SLO)$/docdde.obj \
+    $(SLO)$/docdesc.obj \
+    $(SLO)$/docedt.obj \
+    $(SLO)$/docfld.obj \
+    $(SLO)$/docfly.obj \
+    $(SLO)$/docftn.obj \
+    $(SLO)$/docredln.obj \
+    $(SLO)$/docruby.obj \
+    $(SLO)$/docstat.obj \
+    $(SLO)$/extinput.obj \
+    $(SLO)$/fmtcol.obj \
+    $(SLO)$/ftnidx.obj \
+    $(SLO)$/gctable.obj \
+    $(SLO)$/lineinfo.obj \
+    $(SLO)$/notxtfrm.obj \
+    $(SLO)$/poolfmt.obj \
+    $(SLO)$/sortopt.obj \
+    $(SLO)$/swserv.obj \
+    $(SLO)$/tblafmt.obj \
+    $(SLO)$/visiturl.obj \
+    $(SLO)$/htmltbl.obj
 
 # --- Tagets -------------------------------------------------------
 

@@ -47,7 +47,7 @@ class SfxObjectShellRef;
 class SwDoc;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;
-class IDocumentBookmarkAccess;
+class IDocumentMarkAccess;
 class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
 class IDocumentLayoutAccess;
@@ -305,8 +305,8 @@ public:
 
     /** Provides access to the document bookmark interface
      */
-    const IDocumentBookmarkAccess* getIDocumentBookmarkAccess() const;
-          IDocumentBookmarkAccess* getIDocumentBookmarkAccess();
+    const IDocumentMarkAccess* getIDocumentMarkAccess() const;
+          IDocumentMarkAccess* getIDocumentMarkAccess();
 
     /** Provides access to the document draw model interface
      */

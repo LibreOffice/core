@@ -98,7 +98,7 @@
 #include <ddefld.hxx>
 #include <doc.hxx>
 #include <pagedesc.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <docary.hxx>
 #include <section.hxx>
 #include <ndtxt.hxx>
@@ -159,6 +159,7 @@
 #endif
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <swserv.hxx>
 
 extern BOOL bFrmDrag;
 extern BOOL bDDINetAttr;
@@ -883,11 +884,21 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         pWrtShell->Copy( pTmpDoc );
 
         {
+            IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
+            ::std::vector< ::sw::mark::IMark* > vDdeMarks;
+            // find all DDE-Bookmarks
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+                ppMark != pMarkAccess->getMarksEnd();
+                ppMark++)
+            {
+                if(IDocumentMarkAccess::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
+                    vDdeMarks.push_back(ppMark->get());
+            }
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
-            const SwBookmarks& rBkmk = pTmpDoc->getBookmarks();
-            for( USHORT n = rBkmk.Count(); n; )
-                if( IDocumentBookmarkAccess::DDE_BOOKMARK == rBkmk[ --n ]->GetType() )
-                    pTmpDoc->deleteBookmark( n );
+            for(::std::vector< ::sw::mark::IMark* >::iterator ppMark = vDdeMarks.begin();
+                ppMark != vDdeMarks.end();
+                ppMark++)
+                pMarkAccess->deleteMark(*ppMark);
         }
 
         // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
@@ -3634,24 +3645,25 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     }
     else
     {
-        // wir erzeugen uns eine temp. Bookmark (ohne UNDO!)
+        // creating a temp. bookmark without undo
         BOOL bUndo = rSh.DoesUndo();
         rSh.DoUndo( FALSE );
         BOOL bIsModified = rSh.IsModified();
 
-        sName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE_LINK" ));
-        rSh.MakeUniqueBookmarkName( sName );
-
-        //Ok, den eindeutigen Namen haben wir
-        if( !rSh.SetBookmark( KeyCode(), sName, aEmptyStr, IDocumentBookmarkAccess::DDE_BOOKMARK ) )
-            sName.Erase();
-        else
+        ::sw::mark::IMark* pMark = rSh.SetBookmark(
+            KeyCode(),
+            ::rtl::OUString(),
+            ::rtl::OUString(),
+            IDocumentMarkAccess::DDE_BOOKMARK);
+        if(pMark)
         {
+            sName = pMark->GetName();
             bDelBookmrk = TRUE;
             if( !bIsModified )
                 rSh.ResetModified();
         }
-
+        else
+            sName.Erase();
         rSh.DoUndo( bUndo );
     }
 
@@ -3725,23 +3737,46 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     rStrm.Write( pMem, nLen );
     delete[] pMem;
 
-    if( bDelBookmrk )
+    //if( bDelBookmrk )
+    //{
+    //  // er wird das erstemal abgeholt, also ins Undo mitaufnehmen
+    //  // aber wie??
+    //}
+
+    IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
+    IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
+    if(ppMark != pMarkAccess->getMarksEnd()
+        && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::BOOKMARK)
     {
-        // er wird das erstemal abgeholt, also ins Undo mitaufnehmen
-        // aber wie??
+        // the mark is still a DdeBookmark
+        // we replace it with a Bookmark, so it will get saved etc.
+        ::sw::mark::IMark* const pMark = ppMark->get();
+        SwServerObject* const pServerObject = dynamic_cast<SwServerObject *>(&refObj);
+
+        // collecting state of old mark
+        SwPaM aPaM(pMark->GetMarkStart());
+        *aPaM.GetPoint() = pMark->GetMarkStart();
+        if(pMark->IsExpanded())
+        {
+            aPaM.SetMark();
+            *aPaM.GetMark() = pMark->GetMarkEnd();
+        }
+        ::rtl::OUString sMarkName = pMark->GetName();
+
+        // remove mark
+        pServerObject->SetNoServer(); // this removes the connection between SwServerObject and mark
+        pMarkAccess->deleteMark(ppMark);
+
+        // recreate as Bookmark
+        ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
+            aPaM,
+            sMarkName,
+            IDocumentMarkAccess::BOOKMARK);
+        pServerObject->SetDdeBookmark(*pNewMark);
     }
 
-    SwDoc* pDoc = pDocShell->GetDoc();
-    USHORT nBookPos = pDoc->findBookmark( sName );
-    if( USHRT_MAX != nBookPos )
-    {
-        SwBookmark* pBookMk = pDoc->getBookmarks()[ nBookPos ];
-        pBookMk->SetType( IDocumentBookmarkAccess::BOOKMARK );
-        pDoc->SetModified();
-    }
-
-    bDelBookmrk = FALSE;
-    return TRUE;
+    bDelBookmrk = false;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -3768,7 +3803,8 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
         // <--
         BOOL bIsModified = pDoc->IsModified();
 
-        pDoc->deleteBookmark( sName );
+        IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+        pMarkAccess->deleteMark(pMarkAccess->findMark(sName));
 
         if( !bIsModified )
             pDoc->ResetModified();

@@ -39,7 +39,7 @@ class SwNumFmtDlg : public SfxSingleTabDialog
 {
 public:
 
-     SwNumFmtDlg(Window* pParent, SfxItemSet& rSet);
+     SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet);
     ~SwNumFmtDlg();
 };
 

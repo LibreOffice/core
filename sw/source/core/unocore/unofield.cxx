@@ -1988,12 +1988,25 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             // <- #111840#
         }
         pField->PutValue( rValue, pMap->nWID );
+
+    //#i100374# notify SwPostIt about new field content
+    if (RES_POSTITFLD== nWhich && pFmtFld)
+    {
+        const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
+    }
+
         //#114571# changes of the expanded string have to be notified
         //#to the SwTxtFld
         if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
         {
             pFmtFld->GetTxtFld()->Expand();
         }
+
+    //#i100374# changing a document field should set the modify flag
+    SwDoc* pDoc = GetDoc();
+    if (pDoc)
+        pDoc->SetModified();
+
     }
     else if(m_pProps)
     {

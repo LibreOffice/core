@@ -1785,7 +1785,7 @@ void SwRTFParser::NextToken( int nToken )
                                         aBookmarkEnd.maMkNode, aBookmarkEnd.mnMkCntnt);
                 if (*mpBookmarkStart == aBookmarkEnd)
                     aBookmarkRegion.DeleteMark();
-                pDoc->makeBookmark(aBookmarkRegion, aEmptyKeyCode, sBookmark, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
+                pDoc->getIDocumentMarkAccess()->makeMark(aBookmarkRegion, sBookmark, IDocumentMarkAccess::BOOKMARK);
             }
             delete mpBookmarkStart, mpBookmarkStart = 0;
         }
@@ -4004,11 +4004,13 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     }
 
     if (!rbCollExist)
+    {
         //pColl->SetOutlineLevel( nOutlineLevel );  //#outline level,removed by zhaojianwei
         if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
             pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+    }
 
     return pColl;
 }

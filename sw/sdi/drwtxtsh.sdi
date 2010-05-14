@@ -114,7 +114,7 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_INSERT_SYMBOL // api:
+    SID_CHARMAP // api:
     [
         ExecMethod = ExecDraw ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";

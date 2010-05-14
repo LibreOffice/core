@@ -2112,7 +2112,7 @@ const SwTxtNode   *SwNode::GetTxtNode() const
  */
 const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return GetDoc(); }
 const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return GetDoc(); }
-const IDocumentBookmarkAccess* SwNode::getIDocumentBookmarkAccess() const { return GetDoc(); }
+const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }
 const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return GetDoc(); }
 const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }
 const IDocumentLineNumberAccess* SwNode::getIDocumentLineNumberAccess() const { return GetDoc(); }

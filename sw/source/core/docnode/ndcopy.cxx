@@ -47,7 +47,7 @@
 #include <swtable.hxx>
 #include <ddefld.hxx>
 #include <undobj.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <mvsave.hxx>
 #include <cellatr.hxx>
 #include <swtblfmt.hxx>
@@ -69,6 +69,144 @@
 #endif
 #endif
 
+namespace
+{
+    /*
+        The lcl_CopyBookmarks function has to copy bookmarks from the source to the destination nodes
+        array. It is called after a call of the _CopyNodes(..) function. But this function does not copy
+        every node (at least at the moment: 2/08/2006 ), section start and end nodes will not be copied if the corresponding end/start node is outside the copied pam.
+        The lcl_NonCopyCount function counts the number of these nodes, given the copied pam and a node
+        index inside the pam.
+        rPam is the original source pam, rLastIdx is the last calculated position, rDelCount the number
+        of "non-copy" nodes between rPam.Start() and rLastIdx.
+        nNewIdx is the new position of interest.
+    */
+
+    static void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const ULONG nNewIdx, ULONG& rDelCount )
+    {
+        ULONG nStart = rPam.Start()->nNode.GetIndex();
+        ULONG nEnd = rPam.End()->nNode.GetIndex();
+        if( rLastIdx.GetIndex() < nNewIdx ) // Moving forward?
+        {
+            do // count "non-copy" nodes
+            {
+                SwNode& rNode = rLastIdx.GetNode();
+                if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
+                    || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
+                    ++rDelCount;
+                rLastIdx++;
+            }
+            while( rLastIdx.GetIndex() < nNewIdx );
+        }
+        else if( rDelCount ) // optimization: if there are no "non-copy" nodes until now,
+                             // no move backward needed
+        {
+            while( rLastIdx.GetIndex() > nNewIdx )
+            {
+                SwNode& rNode = rLastIdx.GetNode();
+                if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
+                    || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
+                    --rDelCount;
+                rLastIdx--;
+            }
+        }
+    }
+
+    static void lcl_SetCpyPos( const SwPosition& rOrigPos,
+                        const SwPosition& rOrigStt,
+                        const SwPosition& rCpyStt,
+                        SwPosition& rChgPos,
+                        ULONG nDelCount )
+    {
+        ULONG nNdOff = rOrigPos.nNode.GetIndex();
+        nNdOff -= rOrigStt.nNode.GetIndex();
+        nNdOff -= nDelCount;
+        xub_StrLen nCntntPos = rOrigPos.nContent.GetIndex();
+
+        // --> OD, AMA 2008-07-07 #b6713815#
+        // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
+        rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
+        if( !nNdOff )
+        // <--
+        {
+            // dann nur den Content anpassen
+            if( nCntntPos > rOrigStt.nContent.GetIndex() )
+                nCntntPos = nCntntPos - rOrigStt.nContent.GetIndex();
+            else
+                nCntntPos = 0;
+            nCntntPos = nCntntPos + rCpyStt.nContent.GetIndex();
+        }
+        rChgPos.nContent.Assign( rChgPos.nNode.GetNode().GetCntntNode(), nCntntPos );
+    }
+
+    // TODO: use SaveBookmark (from _DelBookmarks)
+    static void lcl_CopyBookmarks(const SwPaM& rPam, SwPaM& rCpyPam)
+    {
+        const SwDoc* pSrcDoc = rPam.GetDoc();
+        SwDoc* pDestDoc =  rCpyPam.GetDoc();
+        const IDocumentMarkAccess* const pSrcMarkAccess = pSrcDoc->getIDocumentMarkAccess();
+        bool bDoesUndo = pDestDoc->DoesUndo();
+        pDestDoc->DoUndo(false);
+
+        const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
+        SwPosition* pCpyStt = rCpyPam.Start();
+
+        typedef ::std::vector< const ::sw::mark::IMark* > mark_vector_t;
+        mark_vector_t vMarksToCopy;
+        for(IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getMarksBegin();
+            ppMark != pSrcMarkAccess->getMarksEnd();
+            ppMark++)
+        {
+            const ::sw::mark::IMark* const pMark = ppMark->get();
+            const SwPosition& rMarkStart = pMark->GetMarkStart();
+            const SwPosition& rMarkEnd = pMark->GetMarkEnd();
+            // only include marks that are in the range and not touching
+            // both start and end
+            bool bIsNotOnBoundary = pMark->IsExpanded()
+                ? (rMarkStart != rStt || rMarkEnd != rEnd)  // rMarkStart != rMarkEnd
+                : (rMarkStart != rStt && rMarkEnd != rEnd); // rMarkStart == rMarkEnd
+            if(rMarkStart >= rStt && rMarkEnd <= rEnd && bIsNotOnBoundary)
+            {
+                vMarksToCopy.push_back(pMark);
+            }
+        }
+        // We have to count the "non-copied" nodes..
+        SwNodeIndex aCorrIdx(rStt.nNode);
+        ULONG nDelCount = 0;
+        for(mark_vector_t::const_iterator ppMark = vMarksToCopy.begin();
+            ppMark != vMarksToCopy.end();
+            ++ppMark)
+        {
+            const ::sw::mark::IMark* const pMark = *ppMark;
+            SwPaM aTmpPam(*pCpyStt);
+            lcl_NonCopyCount(rPam, aCorrIdx, pMark->GetMarkPos().nNode.GetIndex(), nDelCount);
+            lcl_SetCpyPos( pMark->GetMarkPos(), rStt, *pCpyStt, *aTmpPam.GetPoint(), nDelCount);
+            if(pMark->IsExpanded())
+            {
+                aTmpPam.SetMark();
+                lcl_NonCopyCount(rPam, aCorrIdx, pMark->GetOtherMarkPos().nNode.GetIndex(), nDelCount);
+                lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
+            }
+
+            ::sw::mark::IMark* const pNewMark = pDestDoc->getIDocumentMarkAccess()->makeMark(
+                aTmpPam,
+                pMark->GetName(),
+                IDocumentMarkAccess::GetType(*pMark));
+            // Explicitly try to get exactly the same name as in the source
+            // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
+            pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
+            ::sw::mark::IBookmark* const pNewBookmark =
+                dynamic_cast< ::sw::mark::IBookmark* const >(pNewMark);
+            if(pNewBookmark) /* copying additional attributes for bookmarks */
+            {
+                const ::sw::mark::IBookmark* const pOldBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(pMark);
+                pNewBookmark->SetKeyCode(pOldBookmark->GetKeyCode());
+                pNewBookmark->SetShortName(pOldBookmark->GetShortName());
+            }
+        }
+        pDestDoc->DoUndo(bDoesUndo);
+    }
+}
 
 // Struktur fuer das Mappen von alten und neuen Frame-Formaten an den
 // Boxen und Lines einer Tabelle
@@ -436,133 +574,6 @@ BOOL lcl_ChkFlyFly( SwDoc* pDoc, ULONG nSttNd, ULONG nEndNd,
     }
 
     return FALSE;
-}
-
-/*
-    The lcl_CopyBookmarks function has to copy bookmarks from the source to the destination nodes
-    array. It is called after a call of the _CopyNodes(..) function. But this function does not copy
-    every node (at least at the moment: 2/08/2006 ), section start and end nodes will not be copied if the corresponding end/start node is outside the copied pam.
-    The lcl_NonCopyCount function counts the number of these nodes, given the copied pam and a node
-    index inside the pam.
-    rPam is the original source pam, rLastIdx is the last calculated position, rDelCount the number
-    of "non-copy" nodes between rPam.Start() and rLastIdx.
-    nNewIdx is the new position of interest.
-*/
-
-void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const ULONG nNewIdx, ULONG& rDelCount )
-{
-    ULONG nStart = rPam.Start()->nNode.GetIndex();
-    ULONG nEnd = rPam.End()->nNode.GetIndex();
-    if( rLastIdx.GetIndex() < nNewIdx ) // Moving forward?
-    {
-        do // count "non-copy" nodes
-        {
-            SwNode& rNode = rLastIdx.GetNode();
-            if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
-                || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
-                ++rDelCount;
-            rLastIdx++;
-        }
-        while( rLastIdx.GetIndex() < nNewIdx );
-    }
-    else if( rDelCount ) // optimization: if there are no "non-copy" nodes until now,
-                         // no move backward needed
-    {
-        while( rLastIdx.GetIndex() > nNewIdx )
-        {
-            SwNode& rNode = rLastIdx.GetNode();
-            if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
-                || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
-                --rDelCount;
-            rLastIdx--;
-        }
-    }
-}
-
-void lcl_SetCpyPos( const SwPosition& rOrigPos,
-                    const SwPosition& rOrigStt,
-                    const SwPosition& rCpyStt,
-                    SwPosition& rChgPos,
-                    ULONG nDelCount )
-{
-    ULONG nNdOff = rOrigPos.nNode.GetIndex();
-    nNdOff -= rOrigStt.nNode.GetIndex();
-    nNdOff -= nDelCount;
-    xub_StrLen nCntntPos = rOrigPos.nContent.GetIndex();
-
-    // --> OD, AMA 2008-07-07 #b6713815#
-    // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
-    rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
-    if( !nNdOff )
-    // <--
-    {
-        // dann nur den Content anpassen
-        if( nCntntPos > rOrigStt.nContent.GetIndex() )
-            nCntntPos = nCntntPos - rOrigStt.nContent.GetIndex();
-        else
-            nCntntPos = 0;
-        nCntntPos = nCntntPos + rCpyStt.nContent.GetIndex();
-    }
-    rChgPos.nContent.Assign( rChgPos.nNode.GetNode().GetCntntNode(), nCntntPos );
-}
-
-void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
-{
-    const SwDoc* pSrcDoc = rPam.GetDoc();
-    SwDoc* pDestDoc =  rCpyPam.GetDoc();
-    BOOL bDoesUndo = pDestDoc->DoesUndo();
-    pDestDoc->DoUndo( FALSE );
-
-    const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
-    SwPosition* pCpyStt = rCpyPam.Start();
-
-    const SwBookmark* pBkmk;
-    // We have to count the "non-copied" nodes..
-    ULONG nDelCount = 0;
-    SwNodeIndex aCorrIdx( rStt.nNode );
-    std::vector< const SwBookmark* > aNewBookmarks;
-    for( USHORT nCnt = pSrcDoc->getBookmarks().Count(); nCnt; )
-    {
-        // liegt auf der Position ??
-        if( ( pBkmk = pSrcDoc->getBookmarks()[ --nCnt ])->GetBookmarkPos() < rStt
-            || pBkmk->GetBookmarkPos() > rEnd )
-            continue;
-
-        if( pBkmk->GetOtherBookmarkPos() && ( *pBkmk->GetOtherBookmarkPos() < rStt ||
-            *pBkmk->GetOtherBookmarkPos() > rEnd ) )
-            continue;
-
-        bool bMayBe = !pBkmk->GetOtherBookmarkPos() || *pBkmk->GetOtherBookmarkPos() == rEnd ||
-                      *pBkmk->GetOtherBookmarkPos() == rStt;
-        if( bMayBe && ( pBkmk->GetBookmarkPos() == rEnd || pBkmk->GetBookmarkPos() == rStt ) )
-            continue;
-
-        aNewBookmarks.push_back( pBkmk );
-    }
-    std::vector< const SwBookmark* >::iterator pBookmark = aNewBookmarks.begin();
-    while( pBookmark != aNewBookmarks.end() )
-    {
-        SwPaM aTmpPam( *pCpyStt );
-        pBkmk = *pBookmark;
-        lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetBookmarkPos().nNode.GetIndex(), nDelCount );
-        lcl_SetCpyPos( pBkmk->GetBookmarkPos(), rStt, *pCpyStt, *aTmpPam.GetPoint(), nDelCount );
-        if( pBkmk->GetOtherBookmarkPos() )
-        {
-            aTmpPam.SetMark();
-            lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetOtherBookmarkPos()->nNode.GetIndex(), nDelCount );
-            lcl_SetCpyPos( *pBkmk->GetOtherBookmarkPos(), rStt, *pCpyStt,
-                            *aTmpPam.GetMark(), nDelCount );
-        }
-
-        String sNewNm( pBkmk->GetName() );
-        if( !pDestDoc->IsCopyIsMove() &&
-            USHRT_MAX != pDestDoc->findBookmark( sNewNm ) )
-            pDestDoc->makeUniqueBookmarkName( sNewNm );
-        pDestDoc->makeBookmark( aTmpPam, pBkmk->GetKeyCode(), sNewNm,
-                                pBkmk->GetShortName(), pBkmk->GetType() );
-        ++pBookmark;
-    }
-    pDestDoc->DoUndo( bDoesUndo );
 }
 
 void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
@@ -1138,7 +1149,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     aCpyPam.Exchange();
 
     // dann kopiere noch alle Bookmarks
-    if( bCopyBookmarks && getBookmarks().Count() )
+    if( bCopyBookmarks && getIDocumentMarkAccess()->getMarksCount() )
         lcl_CopyBookmarks( rPam, aCpyPam );
 
     if( nsRedlineMode_t::REDLINE_DELETE_REDLINES & eOld )
@@ -1212,7 +1223,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
     SwNodeRange aCpyRange( aSavePos, rInsPos );
 
     // dann kopiere noch alle Bookmarks
-    if( getBookmarks().Count() )
+    if( getIDocumentMarkAccess()->getMarksCount() )
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
         SwPaM aCpyTmp( aCpyRange.aStart, aCpyRange.aEnd );

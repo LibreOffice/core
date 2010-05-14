@@ -45,11 +45,10 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        SwBitArray.cxx \
         bparr.cxx \
         breakit.cxx \
         calc.cxx \
-                checkit.cxx \
+        checkit.cxx \
         index.cxx \
         init.cxx \
         ring.cxx \
@@ -60,12 +59,11 @@ CXXFILES = \
         tabcol.cxx \
         SwSmartTagMgr.cxx
 
-SLOFILES =  \
-        $(SLO)$/SwBitArray.obj \
+SLOFILES =	\
         $(SLO)$/bparr.obj \
         $(SLO)$/breakit.obj \
         $(SLO)$/calc.obj \
-                $(SLO)$/checkit.obj \
+        $(SLO)$/checkit.obj \
         $(SLO)$/index.obj \
         $(SLO)$/init.obj \
         $(SLO)$/ring.obj \
@@ -77,7 +75,6 @@ SLOFILES =  \
         $(SLO)$/SwSmartTagMgr.obj
 
 EXCEPTIONSFILES = \
-        $(SLO)$/SwBitArray.obj \
         $(SLO)$/tabcol.obj
 
 # --- Tagets -------------------------------------------------------

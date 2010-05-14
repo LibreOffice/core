@@ -630,10 +630,14 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         }
                     }
                     //jetzt nochmal fuer Fonts
-                    if(pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
-                        ((pBulletFontNames[i].Len() && !aFmt.GetBulletFont()) ||
-                        pBulletFontNames[i].Len() &&
-                                aFmt.GetBulletFont()->GetName() != pBulletFontNames[i] ))
+                    if(
+                       pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
+                       (
+                        (pBulletFontNames[i].Len() && !aFmt.GetBulletFont()) ||
+                        (pBulletFontNames[i].Len() &&
+                            aFmt.GetBulletFont()->GetName() != pBulletFontNames[i])
+                       )
+                      )
                     {
                         const SvxFontListItem* pFontListItem =
                                 (const SvxFontListItem* )pDoc->GetDocShell()

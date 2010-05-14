@@ -3588,6 +3588,9 @@ void SwRedline::MoveFromSection()
             }
         }
 
+        // --> OD 2009-03-17 #i95711#
+        const SwNode* pKeptCntntSectNode( &pCntntSect->GetNode() );
+        // <--
         {
             SwPaM aPam( pCntntSect->GetNode(),
                         *pCntntSect->GetNode().EndOfSectionNode(), 1,
@@ -3633,7 +3636,19 @@ void SwRedline::MoveFromSection()
             if( pColl && pCNd )
                 pCNd->ChgFmtColl( pColl );
         }
-        pDoc->DeleteSection( &pCntntSect->GetNode() );
+        // --> OD 2009-03-17 #i95771#
+        // Under certain conditions the previous <SwDoc::Move(..)> has already
+        // remove the change tracking section of this <SwRedline> instance from
+        // the change tracking nodes area.
+        // Thus, check, if <pCntntSect> still points to the change tracking section
+        // by comparing it with the "indexed" <SwNode> instance copied before
+        // perform the intrinsic move.
+        // Note: Such condition is e.g. a "delete" change tracking only containing a table.
+        if ( &pCntntSect->GetNode() == pKeptCntntSectNode )
+        {
+            pDoc->DeleteSection( &pCntntSect->GetNode() );
+        }
+        // <--
         delete pCntntSect, pCntntSect = 0;
 
         // #100611# adjustment of redline table positions must take start and

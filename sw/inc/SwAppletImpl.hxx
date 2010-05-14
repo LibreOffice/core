@@ -40,7 +40,6 @@
 
 
 #include <tools/string.hxx>
-#include <svtools/htmlkywd.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #ifndef _WRKWIN_HXX //autogen
@@ -53,12 +52,7 @@
 
 class SfxItemSet;
 
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_archive, "ARCHIVE" );
-
-extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_Hidden, "HIDDEN" );
-extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_Hidden_False, "FALSE" );
-extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_Archives, "ARCHIVES" );
-extern sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_Object, "OBJECT" );
+#define OOO_STRING_SW_HTML_O_Hidden "HIDDEN"
 
 class SwApplet_Impl
 {

@@ -71,7 +71,7 @@ struct SwPosition;
 class IStyleAccess;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;
-class IDocumentBookmarkAccess;
+class IDocumentMarkAccess;
 class IDocumentRedlineAccess;
 class IDocumentStylePoolAccess;
 class IDocumentLineNumberAccess;
@@ -223,7 +223,7 @@ public:
 
     /** Provides access to the document bookmark interface
      */
-    const IDocumentBookmarkAccess* getIDocumentBookmarkAccess() const;
+    const IDocumentMarkAccess* getIDocumentMarkAccess() const;
 
     /** Provides access to the document redline interface
      */

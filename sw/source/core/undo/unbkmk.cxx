@@ -38,7 +38,7 @@
 #include "pam.hxx"
 
 #include "undobj.hxx"
-#include "bookmrk.hxx"
+#include "IMark.hxx"
 #include "rolbck.hxx"
 
 #include "SwRewriter.hxx"
@@ -46,13 +46,10 @@
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
-SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId, const SwBookmark& rBkmk )
+SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& rBkmk )
     : SwUndo( nUndoId )
 {
-    BYTE nType = SwHstryBookmark::BKMK_POS;
-    if( rBkmk.GetOtherBookmarkPos() )
-        nType |= SwHstryBookmark::BKMK_OTHERPOS;
-    pHBookmark = new SwHstryBookmark( rBkmk, nType );
+    pHBookmark = new SwHstryBookmark(rBkmk, true, rBkmk.IsExpanded());
 }
 
 
@@ -71,11 +68,13 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 
 void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
 {
-    const SwBookmarks& rBkmkTbl = pDoc->getBookmarks();
-    for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
-        if( pHBookmark->IsEqualBookmark( *rBkmkTbl[ n ] ) )
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    for(IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getMarksBegin();
+        ppBkmk != pMarkAccess->getMarksEnd();
+        ppBkmk++)
+        if( pHBookmark->IsEqualBookmark( **ppBkmk ))
         {
-                pDoc->deleteBookmark( n );
+                pMarkAccess->deleteMark( ppBkmk );
                 break;
         }
 }
@@ -89,7 +88,7 @@ SwRewriter SwUndoBookmark::GetRewriter() const
     return aResult;
 }
 
-SwUndoDelBookmark::SwUndoDelBookmark( const SwBookmark& rBkmk )
+SwUndoDelBookmark::SwUndoDelBookmark( const ::sw::mark::IMark& rBkmk )
     : SwUndoBookmark( UNDO_DELBOOKMARK, rBkmk )
 {
 }
@@ -107,7 +106,7 @@ void SwUndoDelBookmark::Redo( SwUndoIter& rUndoIter )
 }
 
 
-SwUndoInsBookmark::SwUndoInsBookmark( const SwBookmark& rBkmk )
+SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
     : SwUndoBookmark( UNDO_INSBOOKMARK, rBkmk )
 {
 }

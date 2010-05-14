@@ -49,6 +49,7 @@
 #include <svx/xoutbmp.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
+#include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <SwAppletImpl.hxx>
 #include <fmtornt.hxx>
@@ -81,6 +82,12 @@ using namespace com::sun::star;
 
 #define HTML_DFLT_APPLET_WIDTH ((MM50*5)/2)
 #define HTML_DFLT_APPLET_HEIGHT ((MM50*5)/2)
+
+namespace {
+
+static char const sHTML_O_Hidden_False[] = "FALSE";
+
+}
 
 const ULONG HTML_FRMOPTS_EMBED_ALL      =
     HTML_FRMOPT_ALT |
@@ -377,7 +384,7 @@ void SwHTMLParser::InsertEmbed()
                 aSpace.Height() = (long)pOption->GetNumber();
             break;
         case HTML_O_UNKNOWN:
-            if( pOption->GetTokenString().EqualsIgnoreCaseAscii( sHTML_O_Hidden ) )
+            if( pOption->GetTokenString().EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden ) )
                 bHidden =
                     !pOption->GetString().EqualsIgnoreCaseAscii( sHTML_O_Hidden_False );
             break;
@@ -992,8 +999,8 @@ static USHORT GetOptionType( const String& rName, BOOL bApplet )
     {
     case 'A':
     case 'a':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_align ) ||
-            rName.EqualsIgnoreCaseAscii( sHTML_O_alt ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
+            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         else if( bApplet &&
                  (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
@@ -1002,31 +1009,31 @@ static USHORT GetOptionType( const String& rName, BOOL bApplet )
         break;
     case 'C':
     case 'c':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_class ) ||
-            (bApplet && (rName.EqualsIgnoreCaseAscii( sHTML_O_code ) ||
-                         rName.EqualsIgnoreCaseAscii( sHTML_O_codebase ))) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
+            (bApplet && (rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
+                         rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'H':
     case 'h':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_height ) ||
-            rName.EqualsIgnoreCaseAscii( sHTML_O_hspace ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Hidden )) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) ||
+            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
+            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'I':
     case 'i':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_id ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'M':
     case 'm':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_mayscript ) )
+        if( bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'N':
     case 'n':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_name ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'O':
@@ -1036,23 +1043,23 @@ static USHORT GetOptionType( const String& rName, BOOL bApplet )
         break;
     case 'S':
     case 's':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_style ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_src )) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
+            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'T':
     case 't':
-        if( !bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_type ) )
+        if( !bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'V':
     case 'v':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_vspace ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'W':
     case 'w':
-        if( rName.EqualsIgnoreCaseAscii( sHTML_O_width ) )
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     }
@@ -1131,7 +1138,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // erstmal das Plug-spezifische
-        sOut += sHTML_embed;
+        sOut += OOO_STRING_SVTOOLS_HTML_embed;
 
         ::rtl::OUString aStr;
         String aURL;
@@ -1144,7 +1151,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         if( aURL.Len() )
         {
-            ((sOut += ' ') += sHTML_O_src) += "=\"";
+            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_src) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
@@ -1154,7 +1161,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType" ) );
         if( (aAny >>= aType) && aType.getLength() )
         {
-            ((sOut += ' ') += sHTML_O_type) += "=\"";
+            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
@@ -1164,7 +1171,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             SURROUND_THROUGHT == rFrmFmt.GetSurround().GetSurround() )
         {
             // Das Plugin ist HIDDEN
-            (sOut += ' ') += sHTML_O_Hidden;
+            (sOut += ' ') += OOO_STRING_SW_HTML_O_Hidden;
             nFrmOpts = HTML_FRMOPTS_HIDDEN_EMBED;
             bHiddenEmbed = TRUE;
         }
@@ -1178,7 +1185,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     {
         // oder das Applet-Spezifische
 
-        sOut += sHTML_applet;
+        sOut += OOO_STRING_SVTOOLS_HTML_applet;
 
         // CODEBASE
         ::rtl::OUString aCd;
@@ -1188,7 +1195,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
             if( sCodeBase.Len() )
             {
-                ((sOut += ' ') += sHTML_O_codebase) += "=\"";
+                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_codebase) += "=\"";
                 rWrt.Strm() << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut = '\"';
@@ -1199,7 +1206,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         ::rtl::OUString aClass;
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode" ) );
         aAny >>= aClass;
-        ((sOut += ' ') += sHTML_O_code) += "=\"";
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_code) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
@@ -1210,7 +1217,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny >>= aAppletName;
         if( aAppletName.getLength() )
         {
-            ((sOut += ' ') += sHTML_O_name) += "=\"";
+            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
@@ -1220,7 +1227,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript" ) );
         aAny >>= bScript;
         if( bScript )
-            (sOut += ' ') += sHTML_O_mayscript;
+            (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_mayscript;
 
         nFrmOpts = bInCntnr ? HTML_FRMOPTS_APPLET_CNTNR
                             : HTML_FRMOPTS_APPLET;
@@ -1229,7 +1236,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     {
         // oder das Flating-Frame spezifische
 
-        sOut += sHTML_iframe;
+        sOut += OOO_STRING_SVTOOLS_HTML_iframe;
         rWrt.Strm() << sOut.GetBuffer();
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
@@ -1295,11 +1302,11 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             const String& rName = rCommand.GetCommand();
             const String& rValue = rCommand.GetArgument();
             rHTMLWrt.OutNewLine();
-            ((((sOut = '<') += sHTML_param) += ' ') += sHTML_O_name)
+            ((((sOut = '<') += OOO_STRING_SVTOOLS_HTML_param) += ' ') += OOO_STRING_SVTOOLS_HTML_O_name)
                 += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-            ((sOut = "\" ") += sHTML_O_value) += "=\"";
+            ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_value) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << "\">";
         }
@@ -1307,7 +1314,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
         if( aCommands.Count() )
             rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_applet, FALSE );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, FALSE );
     }
     else
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
@@ -1342,7 +1349,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // ausgeben
 
         rHTMLWrt.Strm() << '>';
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_iframe, FALSE );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, FALSE );
     }
 
     if( aEndTags.Len() )

@@ -98,7 +98,7 @@
 #include <expfld.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
-#include <bookmrk.hxx>      // fuer SwBookmark ...
+#include <IMark.hxx>        // fuer SwBookmark ...
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -143,21 +143,21 @@ using namespace ::com::sun::star;
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
 HTMLOptionEnum __FAR_DATA aHTMLPAlignTable[] =
 {
-    { sHTML_AL_left,    SVX_ADJUST_LEFT     },
-    { sHTML_AL_center,  SVX_ADJUST_CENTER   },
-    { sHTML_AL_middle,  SVX_ADJUST_CENTER   }, // Netscape
-    { sHTML_AL_right,   SVX_ADJUST_RIGHT    },
-    { sHTML_AL_justify, SVX_ADJUST_BLOCK    },
-    { sHTML_AL_char,    SVX_ADJUST_LEFT     },
+    { OOO_STRING_SVTOOLS_HTML_AL_left,  SVX_ADJUST_LEFT     },
+    { OOO_STRING_SVTOOLS_HTML_AL_center,    SVX_ADJUST_CENTER   },
+    { OOO_STRING_SVTOOLS_HTML_AL_middle,    SVX_ADJUST_CENTER   }, // Netscape
+    { OOO_STRING_SVTOOLS_HTML_AL_right, SVX_ADJUST_RIGHT    },
+    { OOO_STRING_SVTOOLS_HTML_AL_justify,   SVX_ADJUST_BLOCK    },
+    { OOO_STRING_SVTOOLS_HTML_AL_char,  SVX_ADJUST_LEFT     },
     { 0,                0                   }
 };
 
 // <SPACER TYPE=...>
 static HTMLOptionEnum __FAR_DATA aHTMLSpacerTypeTable[] =
 {
-    { sHTML_SPTYPE_block,       HTML_SPTYPE_BLOCK       },
-    { sHTML_SPTYPE_horizontal,  HTML_SPTYPE_HORI        },
-    { sHTML_SPTYPE_vertical,    HTML_SPTYPE_VERT        },
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,     HTML_SPTYPE_BLOCK       },
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal,    HTML_SPTYPE_HORI        },
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical,  HTML_SPTYPE_VERT        },
     { 0,                    0                       }
 };
 
@@ -1090,14 +1090,14 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             {
             case HTML_NOEMBED_OFF:
                 aContents.ConvertLineEnd();
-                InsertComment( aContents, sHTML_noembed );
+                InsertComment( aContents, OOO_STRING_SVTOOLS_HTML_noembed );
                 aContents.Erase();
                 bCallNextToken = FALSE;
                 bInNoEmbed = FALSE;
                 break;
 
             case HTML_RAWDATA:
-                InsertCommentText( sHTML_noembed );
+                InsertCommentText( OOO_STRING_SVTOOLS_HTML_noembed );
                 break;
 
             default:
@@ -1518,7 +1518,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
     case HTML_NOEMBED_ON:
         bInNoEmbed = TRUE;
         bCallNextToken = pTable!=0;
-        ReadRawData( sHTML_noembed );
+        ReadRawData( OOO_STRING_SVTOOLS_HTML_noembed );
         break;
 
     case HTML_DEFLIST_ON:
@@ -2760,26 +2760,22 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
 
                 switch( nWhich )
                 {
-                case RES_FLTR_BOOKMARK:     // dann also ein Bookmark einfuegen
+                case RES_FLTR_BOOKMARK: // insert bookmark
                     {
-                        String aName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
-                        USHORT nBookPos = pDoc->findBookmark( aName );
-                        if( nBookPos != USHRT_MAX )
-                        {
-                            const SwBookmark *pBkMk =
-                                pDoc->getBookmarks()[nBookPos];
-                            if( pBkMk->GetBookmarkPos() != *pAttrPam->GetPoint() )
-                                pDoc->makeUniqueBookmarkName( aName );
-                            else
-                                break; // keine doppelte Bookmark an dieser Pos
-                        }
+                        const String sName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
+                        IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+                        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
+                        if( ppBkmk != pMarkAccess->getMarksEnd() &&
+                            ppBkmk->get()->GetMarkStart() == *pAttrPam->GetPoint() )
+                            break; // do not generate duplicates on this position
                         pAttrPam->DeleteMark();
-                        pDoc->makeBookmark( *pAttrPam, KeyCode(),
-                                            aName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK );
+                        const ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
+                            *pAttrPam,
+                            sName,
+                            IDocumentMarkAccess::BOOKMARK );
 
-                        // ggfs. ein Bookmark anspringen
-                        if( JUMPTO_MARK == eJumpTo &&
-                            aName == sJmpMark )
+                        // jump to bookmark
+                        if( JUMPTO_MARK == eJumpTo && pNewMark->GetName() == ::rtl::OUString(sJmpMark) )
                         {
                             bChkJumpMark = TRUE;
                             eJumpTo = JUMPTO_NONE;
@@ -5050,14 +5046,14 @@ void SwHTMLParser::InsertLineBreak()
             case HTML_O_CLEAR:
                 {
                     const String &aClear = pOption->GetString();
-                    if( aClear.EqualsIgnoreCaseAscii( sHTML_AL_all ) )
+                    if( aClear.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_all ) )
                     {
                         bClearLeft = TRUE;
                         bClearRight = TRUE;
                     }
-                    else if( aClear.EqualsIgnoreCaseAscii( sHTML_AL_left ) )
+                    else if( aClear.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_left ) )
                         bClearLeft = TRUE;
-                    else if( aClear.EqualsIgnoreCaseAscii( sHTML_AL_right ) )
+                    else if( aClear.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) )
                         bClearRight = TRUE;
                 }
                 break;
@@ -5378,22 +5374,22 @@ void SwHTMLParser::ParseMoreMetaOptions()
     // nicht geaendert wurde. Deshalb genuegt es, auf Generator und
     // auf refresh abzufragen, um noch nicht verarbeitete Token zu finden,
     // denn das sind die einzigen, die die Dok-Info nicht modifizieren.
-    if( aName.EqualsIgnoreCaseAscii( sHTML_META_generator ) ||
-        aName.EqualsIgnoreCaseAscii( sHTML_META_refresh ) ||
-        aName.EqualsIgnoreCaseAscii( sHTML_META_content_type ) ||
-        aName.EqualsIgnoreCaseAscii( sHTML_META_content_script_type ) )
+    if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_generator ) ||
+        aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_refresh ) ||
+        aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) ||
+        aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
         return;
 
     aContent.EraseAllChars( _CR );
     aContent.EraseAllChars( _LF );
 
-    if( aName.EqualsIgnoreCaseAscii( sHTML_META_sdendnote ) )
+    if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_sdendnote ) )
     {
         FillEndNoteInfo( aContent );
         return;
     }
 
-    if( aName.EqualsIgnoreCaseAscii( sHTML_META_sdfootnote ) )
+    if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_sdfootnote ) )
     {
         FillFootNoteInfo( aContent );
         return;
@@ -5401,16 +5397,16 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     String sText(
             String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("HTML: <")) );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(sHTML_meta) );
+    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_meta) );
     sText.Append( ' ' );
     if( bHTTPEquiv  )
-        sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(sHTML_O_httpequiv) );
+        sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_httpequiv) );
     else
-        sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(sHTML_O_name) );
+        sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_name) );
     sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("=\"") );
     sText.Append( aName );
     sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("\" ") );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(sHTML_O_content) );
+    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_content) );
     sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("=\"") );
     sText.Append( aContent );
     sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("\">") );

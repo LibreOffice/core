@@ -42,34 +42,22 @@
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/unolingu.hxx>
-#include <svx/charmap.hxx>
 #include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <unotools/collatorwrapper.hxx>
 #include <svtools/collatorres.hxx>
 #include <swwait.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <wrtsh.hxx>
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _SRTDLG_HRC
 #include <srtdlg.hrc>
-#endif
 #include <swtable.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
+#include <sfx2/request.hxx>
 
 // sw/inc/tblsel.hxx
 SV_IMPL_PTRARR( _FndBoxes, _FndBox* )
@@ -405,11 +393,17 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( &aDelimPB,  RID_SVXDLG_CHARMAP);
-        DBG_ASSERT(pMap, "Dialogdiet fail!");
-        pMap->SetChar( GetDelimChar() );
+        SfxAllItemSet aSet( rSh.GetAttrPool() );
+        aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
+        SfxAbstractDialog* pMap = pFact->CreateSfxDialog( &aDelimPB, aSet,
+            rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pMap->Execute() )
-            aDelimEdt.SetText( pMap->GetChar() );
+        {
+            SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );
+            if ( pItem )
+                aDelimEdt.SetText( sal_Unicode ( pItem->GetValue() ) );
+        }
+
         delete pMap;
     }
     return 0;

@@ -1163,8 +1163,30 @@ void SwWW8Writer::WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp)
     if (!pTxtObj)
         return;
 
-    if (const OutlinerParaObject* pParaObj = sw::hack::GetOutlinerParaObject(*pTxtObj))
+    const OutlinerParaObject* pParaObj = 0;
+    bool bOwnParaObj = false;
+
+    /*
+    #i13885#
+    When the object is actively being edited, that text is not set into
+    the objects normal text object, but lives in a seperate object.
+    */
+    if (pTxtObj->IsTextEditActive())
+    {
+        pParaObj = pTxtObj->GetEditOutlinerParaObject();
+        bOwnParaObj = true;
+    }
+    else
+    {
+        pParaObj = pTxtObj->GetOutlinerParaObject();
+    }
+
+    if( pParaObj )
+    {
         WriteOutliner(*pParaObj, nTyp);
+        if( bOwnParaObj )
+            delete pParaObj;
+    }
 }
 
 void SwWW8Writer::WriteOutliner(const OutlinerParaObject& rParaObj, BYTE nTyp)

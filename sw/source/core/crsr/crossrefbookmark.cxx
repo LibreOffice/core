@@ -32,62 +32,79 @@
 #include "precompiled_sw.hxx"
 
 #include <crossrefbookmark.hxx>
-
 #include <ndtxt.hxx>
 
-TYPEINIT1( SwCrossRefBookmark, SwBookmark );  //rtti
+using namespace rtl;
 
-SwCrossRefBookmark::SwCrossRefBookmark( const SwPosition& aPos,
-                                        const KeyCode& rCode,
-                                        const String& rName,
-                                        const String& rShortName )
-    : SwBookmark( SwPosition( aPos ), rCode, rName, rShortName ),
-      // --> OD 2007-11-16 #i83479#
-      mnSubType( bookmarkfunc::isHeadingCrossRefBookmarkName( rName )
-                 ? IDocumentBookmarkAccess::HEADING
-                 : IDocumentBookmarkAccess::NUMITEM )
-      // <--
+namespace sw { namespace mark
 {
-    eMarkType = IDocumentBookmarkAccess::CROSSREF_BOOKMARK;
+    CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
+        const KeyCode& rCode,
+        const OUString& rName,
+        const OUString& rShortName,
+        const OUString& rPrefix)
+        : Bookmark(rPaM, rCode, rName, rShortName)
+    {
+        if(rPaM.HasMark())
+            OSL_ENSURE((rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
+                rPaM.Start()->nContent.GetIndex() == 0 &&
+                rPaM.End()->nContent.GetIndex() == rPaM.GetPoint()->nNode.GetNode().GetTxtNode()->Len()),
+                "<CrossRefBookmark::CrossRefBookmark(..)>"
+                "- creation of cross-reference bookmark with an expanded PaM that does not expand over exactly one whole paragraph.");
+        SetMarkPos(*rPaM.Start());
+        if(!rName.getLength())
+            m_aName = MarkBase::GenerateNewName(rPrefix);
+    }
 
-    ASSERT( GetBookmarkPos().nNode.GetNode().GetTxtNode(),
-            "<SwCrossRefBookmark::SwCrossRefBookmark(..)> - cross-reference bookmark doesn't mark text node." )
-    ASSERT( GetBookmarkPos().nContent.GetIndex() == 0,
-            "<SwCrossRefBookmark::SwCrossRefBookmark(..)> - cross-reference bookmark doesn't mark start of text node." )
-    ASSERT( mnSubType == IDocumentBookmarkAccess::HEADING ||
-            bookmarkfunc::isNumItemCrossRefBookmarkName( rName ),
-            "<SwCrossRefBookmark::SwCrossRefBookmark(..)> - name doesn't fit. Serious issue, please inform OD!" );
-}
+    void CrossRefBookmark::SetMarkPos(const SwPosition& rNewPos)
+    {
+        OSL_PRECOND(rNewPos.nNode.GetNode().GetTxtNode(),
+            "<SwCrossRefBookmark::SetMarkPos(..)>"
+            " - new bookmark position for cross-reference bookmark doesn't mark text node");
+        OSL_PRECOND(rNewPos.nContent.GetIndex() == 0,
+            "<SwCrossRefBookmark::SetMarkPos(..)>"
+            " - new bookmark position for cross-reference bookmark doesn't mark start of text node");
+        MarkBase::SetMarkPos(rNewPos);
+    }
 
-SwCrossRefBookmark::~SwCrossRefBookmark()
-{
-}
+    const SwPosition& CrossRefBookmark::GetOtherMarkPos() const
+    {
+        OSL_PRECOND(false,
+            "<SwCrossRefBookmark::GetOtherMarkPos(..)>"
+            " - this should never be called!");
+        return *static_cast<SwPosition*>(NULL);
+    }
 
-IDocumentBookmarkAccess::CrossReferenceBookmarkSubType SwCrossRefBookmark::GetSubType() const
-{
-    return mnSubType;
-}
+    bool CrossRefBookmark::IsLegalName(const ::rtl::OUString& rName)
+    {
+        return CrossRefNumItemBookmark::IsLegalName(rName) || CrossRefHeadingBookmark::IsLegalName(rName);
+    }
 
-const SwPosition* SwCrossRefBookmark::GetOtherBookmarkPos() const
-{
-    return 0;
-}
+    CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
+        const KeyCode& rCode,
+        const OUString& rName,
+        const OUString& rShortName)
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
+    { }
 
-void SwCrossRefBookmark::SetBookmarkPos( const SwPosition* pNewPos1 )
-{
-    ASSERT( pNewPos1->nNode.GetNode().GetTxtNode(),
-            "<SwCrossRefBookmark::SetBookmarkPos(..)> - new bookmark position for cross-reference bookmark doesn't mark text node" );
-    ASSERT( pNewPos1->nContent.GetIndex() == 0,
-            "<SwCrossRefBookmark::SetBookmarkPos(..)> - new bookmark position for cross-reference bookmark doesn't mark start of text node" );
+    const ::rtl::OUString CrossRefHeadingBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__RefHeading__");
 
-    SwBookmark::SetBookmarkPos( pNewPos1 );
-}
+    bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
+    {
+        return rName.match(our_sNamePrefix);
+    }
 
-void SwCrossRefBookmark::SetOtherBookmarkPos( const SwPosition* /*pNewPos2*/ )
-{
-    // the other bookmark position for a cross-reference bookmark is allowed
-    // to be set.
-    ASSERT( false,
-            "<SwCrossRefBookmark::SetOtherBookmarkPos(..)> - misusage of SwCrossRefBookmark: other bookmark position isn't allowed to be set." );
-}
+    CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
+        const KeyCode& rCode,
+        const OUString& rName,
+        const OUString& rShortName)
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
+    { }
 
+    const ::rtl::OUString CrossRefNumItemBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__RefNumPara__");
+
+    bool CrossRefNumItemBookmark::IsLegalName(const ::rtl::OUString& rName)
+    {
+        return rName.match(our_sNamePrefix);
+    }
+}}

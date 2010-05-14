@@ -2028,24 +2028,34 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
 //      pDest->CopyAttrs( *pSrc, TRUE );            // kopiere Attribute
 //JP 19.02.96: ist so wohl optimaler - loest ggfs. kein Modify aus!
         pDest->DelDiffs( *pSrc );
-        pDest->SetFmtAttr( pSrc->GetAttrSet() );      // kopiere Attribute
-
-        //JP 18.08.98: Bug 55115 - PageDescAttribute in diesem Fall doch
-        //              kopieren
+        // --> OD 2009-03-23 #i94285#
+        // copy existing <SwFmtPageDesc> instance, before copying attributes
+//        pDest->SetFmtAttr( pSrc->GetAttrSet() );      // kopiere Attribute
+        //JP 18.08.98: Bug 55115 - copy PageDescAttribute in this case
         const SfxPoolItem* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
             SFX_ITEM_SET == pSrc->GetAttrSet().GetItemState(
             RES_PAGEDESC, FALSE, &pItem ) &&
             ((SwFmtPageDesc*)pItem)->GetPageDesc() )
         {
-            SwFmtPageDesc aDesc( *(SwFmtPageDesc*)pItem );
-            const String& rNm = aDesc.GetPageDesc()->GetName();
-            SwPageDesc* pDesc = ::lcl_FindPageDesc( aPageDescs, rNm );
-            if( !pDesc )
-                pDesc = aPageDescs[ MakePageDesc( rNm ) ];
-            pDesc->Add( &aDesc );
-            pDest->SetFmtAttr( aDesc );
+            SwFmtPageDesc aPageDesc( *(SwFmtPageDesc*)pItem );
+            const String& rNm = aPageDesc.GetPageDesc()->GetName();
+            SwPageDesc* pPageDesc = ::lcl_FindPageDesc( aPageDescs, rNm );
+            if( !pPageDesc )
+            {
+                pPageDesc = aPageDescs[ MakePageDesc( rNm ) ];
+            }
+            pPageDesc->Add( &aPageDesc );
+//            pDest->SetFmtAttr( aPageDesc );
+            SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
+            aTmpAttrSet.Put( aPageDesc );
+            pDest->SetFmtAttr( aTmpAttrSet );
         }
+        else
+        {
+            pDest->SetFmtAttr( pSrc->GetAttrSet() );
+        }
+        // <--
 
         pDest->SetPoolFmtId( pSrc->GetPoolFmtId() );
         pDest->SetPoolHelpId( pSrc->GetPoolHelpId() );

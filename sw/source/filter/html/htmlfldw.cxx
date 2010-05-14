@@ -34,6 +34,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <tools/string.hxx>
+#include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <fmtfld.hxx>
@@ -49,120 +50,22 @@
 
 using namespace nsSwDocInfoSubType;
 
-//-----------------------------------------------------------------------
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_author, "AUTHOR" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_sender, "SENDER" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_date, "DATE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_time, "TIME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_datetime, "DATETIME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_page, "PAGE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_docinfo, "DOCINFO" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_docstat, "DOCSTAT" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FT_filename, "FILENAME" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_company, "COMPANY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_firstname, "FIRSTNAME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_name, "NAME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_shortcut, "SHORTCUT" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_street, "STREET" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_country, "COUNTRY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_zip, "ZIP" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_city, "CITY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_title, "TITLE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_position, "POSITION" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_pphone, "PPHONE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_cphone, "CPHONE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_fax, "FAX" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_email, "EMAIL" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_state, "STATE" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_random, "RANDOM" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_next, "NEXT" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_prev, "PREV" );
-
-//sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_title, "TITLE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_theme, "THEME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_keys, "KEYS" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_comment, "COMMENT" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info1, "INFO1" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info2, "INFO2" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info3, "INFO3" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info4, "INFO4" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_custom, "CUSTOM" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_create, "CREATE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_change, "CHANGE" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_page, "PAGE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_para, "PARAGRAPH" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_word, "WORD" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_char, "CHAR" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_tbl, "TABLE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_grf, "GRAPHIC" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_ole, "OLE" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_name, "NAME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_shortcut, "SHORTCUT" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ssys, "SSYS" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_lsys, "LSYS" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dmy, "DMY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dmyy, "DMYY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dmmy, "DMMY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dmmyy, "DMMYY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dmmmy, "DMMMY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dmmmyy, "DMMMYY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ddmmy, "DDMMY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ddmmmy, "DDMMMY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ddmmmyy, "DDMMMYY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dddmmmy, "DDDMMMY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_dddmmmyy, "DDDMMMYY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_my, "MY" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_md, "MD" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ymd, "YMD" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_yymd, "YYMD" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_sys, "SYS" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ssmm24, "SSMM24" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ssmm12, "SSMM12" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_uletter, "ULETTER" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_lletter, "LLETTER" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_uroman, "UROMAN" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_lroman, "LROMAN" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_arabic, "ARABIC" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_none, "NONE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_char, "CHAR" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_page, "PAGE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_ulettern, "ULETTERN" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_llettern, "LLETTERN" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_author, "AUTHOR" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_time, "TIME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_date, "DATE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_all, "ALL" );
-
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_pathname, "PATHNAME" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_path, "PATH" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FF_name_noext, "NAME-NOEXT" );
-
-
 const sal_Char *SwHTMLWriter::GetNumFormat( USHORT nFmt )
 {
     const sal_Char *pFmtStr = 0;
 
     switch( (SvxExtNumType)nFmt )
     {
-    case SVX_NUM_CHARS_UPPER_LETTER:    pFmtStr = sHTML_FF_uletter;     break;
-    case SVX_NUM_CHARS_LOWER_LETTER:    pFmtStr = sHTML_FF_lletter;     break;
-    case SVX_NUM_ROMAN_UPPER:           pFmtStr = sHTML_FF_uroman;      break;
-    case SVX_NUM_ROMAN_LOWER:           pFmtStr = sHTML_FF_lroman;      break;
-    case SVX_NUM_ARABIC:                pFmtStr = sHTML_FF_arabic;      break;
-    case SVX_NUM_NUMBER_NONE:           pFmtStr = sHTML_FF_none;        break;
-    case SVX_NUM_CHAR_SPECIAL:          pFmtStr = sHTML_FF_char;        break;
-    case SVX_NUM_PAGEDESC:              pFmtStr = sHTML_FF_page;        break;
-    case SVX_NUM_CHARS_UPPER_LETTER_N:  pFmtStr = sHTML_FF_ulettern;    break;
-    case SVX_NUM_CHARS_LOWER_LETTER_N:  pFmtStr = sHTML_FF_llettern;    break;
+    case SVX_NUM_CHARS_UPPER_LETTER:    pFmtStr = OOO_STRING_SW_HTML_FF_uletter;    break;
+    case SVX_NUM_CHARS_LOWER_LETTER:    pFmtStr = OOO_STRING_SW_HTML_FF_lletter;    break;
+    case SVX_NUM_ROMAN_UPPER:           pFmtStr = OOO_STRING_SW_HTML_FF_uroman;         break;
+    case SVX_NUM_ROMAN_LOWER:           pFmtStr = OOO_STRING_SW_HTML_FF_lroman;         break;
+    case SVX_NUM_ARABIC:                pFmtStr = OOO_STRING_SW_HTML_FF_arabic;     break;
+    case SVX_NUM_NUMBER_NONE:           pFmtStr = OOO_STRING_SW_HTML_FF_none;       break;
+    case SVX_NUM_CHAR_SPECIAL:          pFmtStr = OOO_STRING_SW_HTML_FF_char;       break;
+    case SVX_NUM_PAGEDESC:              pFmtStr = OOO_STRING_SW_HTML_FF_page;       break;
+    case SVX_NUM_CHARS_UPPER_LETTER_N:  pFmtStr = OOO_STRING_SW_HTML_FF_ulettern;   break;
+    case SVX_NUM_CHARS_LOWER_LETTER_N:  pFmtStr = OOO_STRING_SW_HTML_FF_llettern;   break;
     default:
         ;
     }
@@ -193,24 +96,24 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     switch( nField )
     {
         case RES_EXTUSERFLD:
-            pTypeStr = sHTML_FT_sender;
+            pTypeStr = OOO_STRING_SW_HTML_FT_sender;
             switch( (SwExtUserSubType)pFld->GetSubType() )
             {
-                case EU_COMPANY:    pSubStr = sHTML_FS_company;     break;
-                case EU_FIRSTNAME:  pSubStr = sHTML_FS_firstname;   break;
-                case EU_NAME:       pSubStr = sHTML_FS_name;        break;
-                case EU_SHORTCUT:   pSubStr = sHTML_FS_shortcut;    break;
-                case EU_STREET:     pSubStr = sHTML_FS_street;      break;
-                case EU_COUNTRY:    pSubStr = sHTML_FS_country;     break;
-                case EU_ZIP:        pSubStr = sHTML_FS_zip;         break;
-                case EU_CITY:       pSubStr = sHTML_FS_city;        break;
-                case EU_TITLE:      pSubStr = sHTML_FS_title;       break;
-                case EU_POSITION:   pSubStr = sHTML_FS_position;    break;
-                case EU_PHONE_PRIVATE:  pSubStr = sHTML_FS_pphone;      break;
-                case EU_PHONE_COMPANY:  pSubStr = sHTML_FS_cphone;      break;
-                case EU_FAX:        pSubStr = sHTML_FS_fax;         break;
-                case EU_EMAIL:      pSubStr = sHTML_FS_email;       break;
-                case EU_STATE:      pSubStr = sHTML_FS_state;       break;
+                case EU_COMPANY:    pSubStr = OOO_STRING_SW_HTML_FS_company;        break;
+                case EU_FIRSTNAME:  pSubStr = OOO_STRING_SW_HTML_FS_firstname;  break;
+                case EU_NAME:       pSubStr = OOO_STRING_SW_HTML_FS_name;       break;
+                case EU_SHORTCUT:   pSubStr = OOO_STRING_SW_HTML_FS_shortcut;   break;
+                case EU_STREET:     pSubStr = OOO_STRING_SW_HTML_FS_street;     break;
+                case EU_COUNTRY:    pSubStr = OOO_STRING_SW_HTML_FS_country;     break;
+                case EU_ZIP:        pSubStr = OOO_STRING_SW_HTML_FS_zip;         break;
+                case EU_CITY:       pSubStr = OOO_STRING_SW_HTML_FS_city;        break;
+                case EU_TITLE:      pSubStr = OOO_STRING_SW_HTML_FS_title;       break;
+                case EU_POSITION:   pSubStr = OOO_STRING_SW_HTML_FS_position;    break;
+                case EU_PHONE_PRIVATE:  pSubStr = OOO_STRING_SW_HTML_FS_pphone;      break;
+                case EU_PHONE_COMPANY:  pSubStr = OOO_STRING_SW_HTML_FS_cphone;      break;
+                case EU_FAX:        pSubStr = OOO_STRING_SW_HTML_FS_fax;         break;
+                case EU_EMAIL:      pSubStr = OOO_STRING_SW_HTML_FS_email;       break;
+                case EU_STATE:      pSubStr = OOO_STRING_SW_HTML_FS_state;       break;
                 default:
                     ;
             }
@@ -219,18 +122,18 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             break;
 
         case RES_AUTHORFLD:
-            pTypeStr = sHTML_FT_author;
+            pTypeStr = OOO_STRING_SW_HTML_FT_author;
             switch( (SwAuthorFormat)nFmt & 0xff)
             {
-                case AF_NAME:     pFmtStr = sHTML_FF_name;      break;
-                case AF_SHORTCUT:  pFmtStr = sHTML_FF_shortcut; break;
+                case AF_NAME:     pFmtStr = OOO_STRING_SW_HTML_FF_name;     break;
+                case AF_SHORTCUT:  pFmtStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
             }
             ASSERT( pFmtStr, "ubekanntes Format fuer SwAuthorField" );
             bFixed = ((const SwAuthorField*)pFld)->IsFixed();
             break;
 
         case RES_DATETIMEFLD:
-            pTypeStr = sHTML_FT_datetime;
+            pTypeStr = OOO_STRING_SW_HTML_FT_datetime;
             bNumFmt = TRUE;
             if( ((SwDateTimeField*)pFld)->IsFixed() )
             {
@@ -241,13 +144,13 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
         case RES_PAGENUMBERFLD:
             {
-                pTypeStr = sHTML_FT_page;
+                pTypeStr = OOO_STRING_SW_HTML_FT_page;
                 SwPageNumSubType eSubType = (SwPageNumSubType)pFld->GetSubType();
                 switch( eSubType )
                 {
-                    case PG_RANDOM:     pSubStr = sHTML_FS_random;      break;
-                    case PG_NEXT:       pSubStr = sHTML_FS_next;        break;
-                    case PG_PREV:       pSubStr = sHTML_FS_prev;        break;
+                    case PG_RANDOM:     pSubStr = OOO_STRING_SW_HTML_FS_random;     break;
+                    case PG_NEXT:       pSubStr = OOO_STRING_SW_HTML_FS_next;       break;
+                    case PG_PREV:       pSubStr = OOO_STRING_SW_HTML_FS_prev;       break;
                 }
                 ASSERT( pSubStr, "ubekannter Subtyp fuer SwPageNumberField" );
                 pFmtStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFmt) );
@@ -272,19 +175,19 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
         case RES_DOCINFOFLD:
             {
                 USHORT nSubType = pFld->GetSubType();
-                pTypeStr = sHTML_FT_docinfo;
+                pTypeStr = OOO_STRING_SW_HTML_FT_docinfo;
                 USHORT nExtSubType = nSubType & 0x0f00;
                 nSubType &= 0x00ff;
 
                 switch( nSubType )
                 {
-                    case DI_TITEL:      pSubStr = sHTML_FS_title;   break;
-                    case DI_THEMA:      pSubStr = sHTML_FS_theme;   break;
-                    case DI_KEYS:       pSubStr = sHTML_FS_keys;    break;
-                    case DI_COMMENT:    pSubStr = sHTML_FS_comment; break;
-                    case DI_CREATE:     pSubStr = sHTML_FS_create;  break;
-                    case DI_CHANGE:     pSubStr = sHTML_FS_change;  break;
-                    case DI_CUSTOM:     pSubStr = sHTML_FS_custom;  break;
+                    case DI_TITEL:      pSubStr = OOO_STRING_SW_HTML_FS_title;  break;
+                    case DI_THEMA:      pSubStr = OOO_STRING_SW_HTML_FS_theme;  break;
+                    case DI_KEYS:       pSubStr = OOO_STRING_SW_HTML_FS_keys;   break;
+                    case DI_COMMENT:    pSubStr = OOO_STRING_SW_HTML_FS_comment; break;
+                    case DI_CREATE:     pSubStr = OOO_STRING_SW_HTML_FS_create;     break;
+                    case DI_CHANGE:     pSubStr = OOO_STRING_SW_HTML_FS_change;     break;
+                    case DI_CUSTOM:     pSubStr = OOO_STRING_SW_HTML_FS_custom;     break;
                     default:            pTypeStr = 0;               break;
                 }
 
@@ -297,14 +200,14 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     switch( nExtSubType )
                     {
                         case DI_SUB_AUTHOR:
-                            pFmtStr = sHTML_FF_author;
+                            pFmtStr = OOO_STRING_SW_HTML_FF_author;
                             break;
                         case DI_SUB_TIME:
-                            pFmtStr = sHTML_FF_time;
+                            pFmtStr = OOO_STRING_SW_HTML_FF_time;
                             bNumFmt = TRUE;
                             break;
                         case DI_SUB_DATE:
-                            pFmtStr = sHTML_FF_date;
+                            pFmtStr = OOO_STRING_SW_HTML_FF_date;
                             bNumFmt = TRUE;
                             break;
                     }
@@ -332,17 +235,17 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
         case RES_DOCSTATFLD:
             {
-                pTypeStr = sHTML_FT_docstat;
+                pTypeStr = OOO_STRING_SW_HTML_FT_docstat;
                 USHORT nSubType = pFld->GetSubType();
                 switch( nSubType )
                 {
-                    case DS_PAGE:       pSubStr = sHTML_FS_page;    break;
-                    case DS_PARA:       pSubStr = sHTML_FS_para;    break;
-                    case DS_WORD:       pSubStr = sHTML_FS_word;    break;
-                    case DS_CHAR:       pSubStr = sHTML_FS_char;    break;
-                    case DS_TBL:        pSubStr = sHTML_FS_tbl;     break;
-                    case DS_GRF:        pSubStr = sHTML_FS_grf;     break;
-                    case DS_OLE:        pSubStr = sHTML_FS_ole;     break;
+                    case DS_PAGE:       pSubStr = OOO_STRING_SW_HTML_FS_page;   break;
+                    case DS_PARA:       pSubStr = OOO_STRING_SW_HTML_FS_para;   break;
+                    case DS_WORD:       pSubStr = OOO_STRING_SW_HTML_FS_word;   break;
+                    case DS_CHAR:       pSubStr = OOO_STRING_SW_HTML_FS_char;   break;
+                    case DS_TBL:        pSubStr = OOO_STRING_SW_HTML_FS_tbl;    break;
+                    case DS_GRF:        pSubStr = OOO_STRING_SW_HTML_FS_grf;    break;
+                    case DS_OLE:        pSubStr = OOO_STRING_SW_HTML_FS_ole;    break;
                     default:            pTypeStr = 0;               break;
                 }
                 pFmtStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFmt) );
@@ -350,13 +253,13 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             break;
 
         case RES_FILENAMEFLD:
-            pTypeStr = sHTML_FT_filename;
+            pTypeStr = OOO_STRING_SW_HTML_FT_filename;
             switch( (SwFileNameFormat)(nFmt & ~FF_FIXED) )
             {
-                case FF_NAME:       pFmtStr = sHTML_FF_name;        break;
-                case FF_PATHNAME:   pFmtStr = sHTML_FF_pathname;    break;
-                case FF_PATH:       pFmtStr = sHTML_FF_path;        break;
-                case FF_NAME_NOEXT: pFmtStr = sHTML_FF_name_noext;  break;
+                case FF_NAME:       pFmtStr = OOO_STRING_SW_HTML_FF_name;       break;
+                case FF_PATHNAME:   pFmtStr = OOO_STRING_SW_HTML_FF_pathname;   break;
+                case FF_PATH:       pFmtStr = OOO_STRING_SW_HTML_FF_path;       break;
+                case FF_NAME_NOEXT: pFmtStr = OOO_STRING_SW_HTML_FF_name_noext; break;
                 default:
                     ;
             }
@@ -369,22 +272,22 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     if( pTypeStr )
     {
         ByteString sOut( '<' );
-        ((((sOut += sHTML_sdfield) += ' ') += sHTML_O_type) += '=')
+        ((((sOut += OOO_STRING_SVTOOLS_HTML_sdfield) += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=')
             += pTypeStr;
         if( pSubStr )
-            (((sOut += ' ') += sHTML_O_subtype) += '=') += pSubStr;
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_subtype) += '=') += pSubStr;
         if( pFmtStr )
-            (((sOut += ' ') += sHTML_O_format) += '=') += pFmtStr;
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_format) += '=') += pFmtStr;
         if( aName.Len() )
         {
-            (((sOut += ' ') += sHTML_O_name) += "=\"");
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"");
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
         if( aValue.Len() )
         {
-            ((sOut += ' ') += sHTML_O_value) += "=\"";
+            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_value) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
@@ -399,7 +302,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
         }
         if( bFixed )
-            (sOut += ' ') += sHTML_O_sdfixed;
+            (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_sdfixed;
         sOut += '>';
         rWrt.Strm() << sOut.GetBuffer();
     }
@@ -517,7 +420,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
     // Off-Tag ausgeben
     if( pTypeStr )
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_sdfield, FALSE );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_sdfield, FALSE );
 
     return rWrt;
 }
@@ -557,7 +460,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
         if( (rComment.Len() >= 6 && '<' == rComment.GetChar(0) &&
             '>' == rComment.GetChar(rComment.Len()-1) &&
-            rComment.Copy( 1, 4 ).EqualsIgnoreCaseAscii(sHTML_meta)) ||
+            rComment.Copy( 1, 4 ).EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_meta)) ||
               (rComment.Len() >= 7 &&
              rComment.Copy( 0, 4 ).EqualsAscii( "<!--" ) &&
              rComment.Copy( rComment.Len()-3, 3 ).EqualsAscii( "-->" )) )
@@ -597,7 +500,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             String sComment( rComment );
             sComment.ConvertLineEnd( GetSystemLineEnd() );
             // TODO: ???
-            (((sOut += sHTML_comment) += ' ')
+            (((sOut += OOO_STRING_SVTOOLS_HTML_comment) += ' ')
                 += ByteString( sComment, ((SwHTMLWriter&)rWrt).eDestEnc ))
                 += " -->";
             rWrt.Strm() << sOut.GetBuffer();

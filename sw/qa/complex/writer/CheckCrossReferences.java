@@ -267,8 +267,11 @@ public class CheckCrossReferences extends ComplexTestCase {
                 try {
                     xParaTextRange = (com.sun.star.text.XTextRange)UnoRuntime.queryInterface(
                             com.sun.star.text.XTextRange.class, xParaEnum.nextElement());
-                    if ( xParaTextRange.getString().equals( "*i*J" ) ) {
+                    if ( xParaTextRange.getString().equals( "J" ) ) {
                         break;
+                    }
+                    else {
+                        xParaTextRange = null;
                     }
                 } catch (com.sun.star.container.NoSuchElementException e) {
                     System.out.println("Cannot find paragraph to insert cross-reference bookmark.");

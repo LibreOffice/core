@@ -74,10 +74,6 @@
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
-// Enable this to use the helpclass SwRVPMark
-#if OSL_DEBUG_LEVEL > 1
-#include <rvp_mark.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -110,28 +106,6 @@ USHORT GetDefaultFontHeight( SwDrawTextInfo &rInf )
 }
 
 
-#ifdef _RVP_MARK_HXX
-
-void SwRVPMarker::Mark( const OutputDevice* pOut )
-{
-    if( pOut )
-    {
-        Color aOldCol = pOut->GetLineColor();
-        Color aBlack = Color( COL_BLACK );
-        if( aOldCol != aBlack )
-        {
-            ((OutputDevice*)pOut)->SetLineColor( aBlack );
-            ((OutputDevice*)pOut)->DrawChord( Rectangle(0,1,0,1),
-                                              Point(), Point() );
-            ((OutputDevice*)pOut)->SetLineColor( aOldCol );
-        }
-        else
-            ((OutputDevice*)pOut)->DrawChord( Rectangle(0,1,0,1),
-                                              Point(), Point() );
-    }
-}
-
-#endif
 
 /*************************************************************************
 |*
@@ -938,10 +912,10 @@ static void lcl_DrawLineForWrongListData(
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Push();
 
-            const Color aCol( rInf.GetOut().GetLineColor() );
+            const Color aCol( rInf.GetOut().GetTextLineColor() );
             const BOOL bColSave = aCol != aLineColor;
             if (bColSave)
-                rInf.GetOut().SetLineColor( aLineColor );
+                rInf.GetOut().SetTextLineColor( aLineColor );
 
             // iterate over all ranges stored in the respective SwWrongList
             do
@@ -1012,7 +986,7 @@ static void lcl_DrawLineForWrongListData(
             while (nWrLen && pWList->Check( nStart, nWrLen ));
 
             if (bColSave)
-                rInf.GetOut().SetLineColor( aCol );
+                rInf.GetOut().SetTextLineColor( aCol );
 
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Pop();
@@ -1932,10 +1906,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
                             ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
                             WAVE_FLAT );
-                        Color aCol( rInf.GetOut().GetLineColor() );
+                        Color aCol( rInf.GetOut().GetTextLineColor() );
                         BOOL bColSave = aCol != *pWaveCol;
                         if ( bColSave )
-                            rInf.GetOut().SetLineColor( *pWaveCol );
+                            rInf.GetOut().SetTextLineColor( *pWaveCol );
 
                         Point aEnd;
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
@@ -1982,7 +1956,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         rInf.GetOut().DrawWaveLine( aCurrPos, aEnd, nWave );
 
                         if ( bColSave )
-                            rInf.GetOut().SetLineColor( aCol );
+                            rInf.GetOut().SetTextLineColor( aCol );
 
                         if ( rInf.GetOut().GetConnectMetaFile() )
                             rInf.GetOut().Pop();
