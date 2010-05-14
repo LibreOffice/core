@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calendarwrapper.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
+
+
+const double MILLISECONDS_PER_DAY = 1000.0 * 60.0 * 60.0 * 24.0;
 
 
 CalendarWrapper::CalendarWrapper(
@@ -259,6 +262,50 @@ double CalendarWrapper::getDateTime() const
 }
 
 
+sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
+        sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const
+{
+    sal_Int32 nOffset = 0;
+    try
+    {
+        if ( xC.is() )
+        {
+            nOffset = static_cast<sal_Int32>( xC->getValue( nParentFieldIndex )) * 60000;
+            sal_Int16 nSecondMillis = xC->getValue( nChildFieldIndex );
+            if (nOffset < 0)
+                nOffset -= static_cast<sal_uInt16>( nSecondMillis);
+            else
+                nOffset += static_cast<sal_uInt16>( nSecondMillis);
+        }
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "setLocalDateTime: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
+#endif
+    }
+    return nOffset;
+}
+
+
+sal_Int32 CalendarWrapper::getZoneOffsetInMillis() const
+{
+    return getCombinedOffsetInMillis( CalendarFieldIndex::ZONE_OFFSET,
+            CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
+}
+
+
+sal_Int32 CalendarWrapper::getDSTOffsetInMillis() const
+{
+    return getCombinedOffsetInMillis( CalendarFieldIndex::DST_OFFSET,
+            CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
+}
+
+
 void CalendarWrapper::setLocalDateTime( double nTimeInDays )
 {
     try
@@ -270,22 +317,23 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
             // OlsonTimeZone transitions. Since ICU incorporates also
             // historical data even the timezone may differ for different
             // dates! (Which was the cause for #i76623# when the timezone of a
-            // previously set date was used.)
+            // previously set date was used.) Timezone may also include
+            // seconds, so use milliseconds field as well.
             xC->setDateTime( nTimeInDays );
-            sal_Int16 nZone1 = xC->getValue( CalendarFieldIndex::ZONE_OFFSET );
-            sal_Int16 nDST1  = xC->getValue( CalendarFieldIndex::DST_OFFSET );
-            double nLoc = nTimeInDays - (double)(nZone1 + nDST1) / 60.0 / 24.0;
+            sal_Int32 nZone1 = getZoneOffsetInMillis();
+            sal_Int32 nDST1  = getDSTOffsetInMillis();
+            double nLoc = nTimeInDays - (double)(nZone1 + nDST1) / MILLISECONDS_PER_DAY;
             xC->setDateTime( nLoc );
-            sal_Int16 nZone2 = xC->getValue( CalendarFieldIndex::ZONE_OFFSET );
-            sal_Int16 nDST2  = xC->getValue( CalendarFieldIndex::DST_OFFSET );
+            sal_Int32 nZone2 = getZoneOffsetInMillis();
+            sal_Int32 nDST2  = getDSTOffsetInMillis();
             // If DSTs differ after calculation, we crossed boundaries. Do it
             // again, this time using the DST corrected initial value for the
             // real local time.
             // See also localtime/gmtime conversion pitfalls at
             // http://www.erack.de/download/timetest.c
-            if ( nZone1 != nZone2 || nDST1 != nDST2 )
+            if ( nDST1 != nDST2 )
             {
-                nLoc = nTimeInDays - (double)(nZone2 + nDST2) / 60.0 / 24.0;
+                nLoc = nTimeInDays - (double)(nZone2 + nDST2) / MILLISECONDS_PER_DAY;
                 xC->setDateTime( nLoc );
                 // #i17222# If the DST onset rule says to switch from 00:00 to
                 // 01:00 and we tried to set onsetDay 00:00 with DST, the
@@ -293,10 +341,10 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
                 // want. So once again without DST, resulting in onsetDay
                 // 01:00 and DST. Yes, this seems to be weird, but logically
                 // correct.
-                sal_Int16 nDST3 = xC->getValue( CalendarFieldIndex::DST_OFFSET );
+                sal_Int32 nDST3 = getDSTOffsetInMillis();
                 if ( nDST2 != nDST3 && !nDST3 )
                 {
-                    nLoc = nTimeInDays - (double)(nZone2 + nDST3) / 60.0 / 24.0;
+                    nLoc = nTimeInDays - (double)(nZone2 + nDST3) / MILLISECONDS_PER_DAY;
                     xC->setDateTime( nLoc );
                 }
             }
@@ -322,11 +370,9 @@ double CalendarWrapper::getLocalDateTime() const
         if ( xC.is() )
         {
             double nTimeInDays = xC->getDateTime();
-            sal_Int16 nZone = xC->getValue(
-                    com::sun::star::i18n::CalendarFieldIndex::ZONE_OFFSET );
-            sal_Int16 nDST = xC->getValue(
-                    com::sun::star::i18n::CalendarFieldIndex::DST_OFFSET );
-            nTimeInDays += (double)(nZone + nDST) / 60.0 / 24.0;
+            sal_Int32 nZone = getZoneOffsetInMillis();
+            sal_Int32 nDST = getDSTOffsetInMillis();
+            nTimeInDays += (double)(nZone + nDST) / MILLISECONDS_PER_DAY;
             return nTimeInDays;
         }
     }

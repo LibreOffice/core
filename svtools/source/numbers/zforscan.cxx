@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zforscan.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.49.140.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,6 +188,50 @@ void ImpSvNumberformatScan::InitKeywords() const
 }
 
 
+/** Extract the name of General, Standard, Whatever, ignoring leading modifiers
+    such as [NatNum1]. */
+static String lcl_extractStandardGeneralName( const ::rtl::OUString & rCode )
+{
+    String aStr;
+    const sal_Unicode* p = rCode.getStr();
+    const sal_Unicode* const pStop = p + rCode.getLength();
+    const sal_Unicode* pBeg = p;    // name begins here
+    bool bMod = false;
+    bool bDone = false;
+    while (p < pStop && !bDone)
+    {
+        switch (*p)
+        {
+            case '[':
+                bMod = true;
+                break;
+            case ']':
+                if (bMod)
+                {
+                    bMod = false;
+                    pBeg = p+1;
+                }
+                // else: would be a locale data error, easily to be spotted in
+                // UI dialog
+                break;
+            case ';':
+                if (!bMod)
+                {
+                    bDone = true;
+                    --p;    // put back, increment by one follows
+                }
+                break;
+        }
+        ++p;
+        if (bMod)
+            pBeg = p;
+    }
+    if (pBeg < p)
+        aStr = rCode.copy( pBeg - rCode.getStr(), p - pBeg);
+    return aStr;
+}
+
+
 void ImpSvNumberformatScan::SetDependentKeywords()
 {
     using namespace ::com::sun::star;
@@ -202,7 +246,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetServiceManager(), aLoadedLocale );
 
     i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
-    sNameStandardFormat = aFormat.Code;
+    sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code);
     sKeyword[NF_KEY_GENERAL] = pCharClass->upper( sNameStandardFormat );
 
     // preset new calendar keywords
@@ -328,9 +372,9 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                 case LANGUAGE_FRENCH_MONACO     :
                 case LANGUAGE_PORTUGUESE           :
                 case LANGUAGE_PORTUGUESE_BRAZILIAN :
-                case LANGUAGE_SPANISH             :
-                case LANGUAGE_SPANISH_MEXICAN     :
                 case LANGUAGE_SPANISH_MODERN      :
+                case LANGUAGE_SPANISH_DATED       :
+                case LANGUAGE_SPANISH_MEXICAN     :
                 case LANGUAGE_SPANISH_GUATEMALA   :
                 case LANGUAGE_SPANISH_COSTARICA   :
                 case LANGUAGE_SPANISH_PANAMA      :
@@ -1070,6 +1114,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
     USHORT i = 0;
     short eNewType;
     BOOL bMatchBracket = FALSE;
+    bool bHaveGeneral = false;      // if General/Standard encountered
 
     SkipStrings(i, nPos);
     while (i < nAnzStrings)
@@ -1139,6 +1184,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                 break;
                 case NF_KEY_GENERAL:            // Standard
                     eNewType = NUMBERFORMAT_NUMBER;
+                    bHaveGeneral = true;
                 break;
                 default:
                     eNewType = NUMBERFORMAT_UNDEFINED;
@@ -1361,7 +1407,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
     }
 
     if ((eScannedType == NUMBERFORMAT_NUMBER || eScannedType == NUMBERFORMAT_UNDEFINED)
-         && nCurrPos != STRING_NOTFOUND)
+         && nCurrPos != STRING_NOTFOUND && !bHaveGeneral)
         eScannedType = NUMBERFORMAT_CURRENCY;   // old "automatic" currency
     if (eScannedType == NUMBERFORMAT_UNDEFINED)
         eScannedType = NUMBERFORMAT_DEFINED;

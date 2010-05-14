@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdevstate.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,6 +87,7 @@ namespace cppcanvas
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
                                   // and possibly new rendering::TextAlignment
                 textReliefStyle(RELIEF_NONE),
+                textOverlineStyle(UNDERLINE_NONE),
                 textUnderlineStyle(UNDERLINE_NONE),
                 textStrikeoutStyle(STRIKEOUT_NONE),
                 textReferencePoint(ALIGN_BASELINE),
@@ -127,6 +128,7 @@ namespace cppcanvas
             sal_Int8                                                                            textDirection;
             sal_Int8                                                                            textAlignment;
             sal_Int8                                                                            textReliefStyle;
+            sal_Int8                                                                            textOverlineStyle;
             sal_Int8                                                                            textUnderlineStyle;
             sal_Int8                                                                            textStrikeoutStyle;
             TextAlign                                                                           textReferencePoint;

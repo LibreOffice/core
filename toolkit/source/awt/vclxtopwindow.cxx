@@ -187,9 +187,9 @@ Window* VCLXTopWindow::GetWindowImpl()
     return VCLXContainer::GetWindow();
 }
 
-TopWindowListenerMultiplexer& VCLXTopWindow::GetTopWindowListenersImpl()
+::cppu::OInterfaceContainerHelper& VCLXTopWindow::GetTopWindowListenersImpl()
 {
-    return VCLXContainer::GetTopWindowListeners();
+    return GetTopWindowListeners();
 }
 
 // ::com::sun::star::uno::XInterface

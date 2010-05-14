@@ -77,20 +77,19 @@ void FontNameMenu::Highlight()
 
 void FontNameMenu::Fill( const FontList* pList )
 {
-    // Menu loeschen
+    // clear menu
     Clear();
 
-    // Fonts eintragen
-
+    // add fonts
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-
-    USHORT          nFontCount = pList->GetFontNameCount();
+    // more than 100 fonts reduces the speed of opening the menu.
+    // So only the first 100 fonts will be displayed.
+    USHORT nFontCount = ::std::min( pList->GetFontNameCount(), static_cast< USHORT >(100) );
     for ( USHORT i = 0; i < nFontCount; i++ )
     {
         const XubString& rName = pList->GetFontName( i ).GetName();
 
-        // Sortieren, nach der in der Applikation eingestellten
-        // International-Klasse
+        // sort with the I18nHelper
         USHORT j = GetItemCount();
         while ( j )
         {
@@ -99,7 +98,6 @@ void FontNameMenu::Fill( const FontList* pList )
                 break;
             j--;
         }
-
         InsertItem( i+1, rName, MIB_RADIOCHECK | MIB_AUTOCHECK, j );
     }
 

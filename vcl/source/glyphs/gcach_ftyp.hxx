@@ -181,7 +181,7 @@ public:
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
     virtual void*               GetFtFace() const;
-    virtual int                 GetLoadFlags() const { return mnLoadFlags; }
+    virtual int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     virtual bool                NeedsArtificialBold() const { return mbArtBold; }
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
 

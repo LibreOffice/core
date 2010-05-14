@@ -79,6 +79,7 @@ public:
                                  int right_start_y, int right_end_y,
                                  int top_start_x, int top_end_x,
                                  int bottom_start_x, int bottom_end_x ) const;
+    virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -175,11 +176,13 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "SAL_QUITEVENT", WMAdaptor::SAL_QUITEVENT },
     { "SAL_USEREVENT", WMAdaptor::SAL_USEREVENT },
     { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT },
+    { "SAL_GETTIMEEVENT", WMAdaptor::SAL_GETTIMEEVENT },
     { "VCL_SYSTEM_SETTINGS", WMAdaptor::VCL_SYSTEM_SETTINGS },
     { "DTWM_IS_RUNNING", WMAdaptor::DTWM_IS_RUNNING },
     { "_XSETTINGS_SETTINGS", WMAdaptor::XSETTINGS },
     { "_XEMBED", WMAdaptor::XEMBED },
-    { "_XEMBED_INFO", WMAdaptor::XEMBED_INFO }
+    { "_XEMBED_INFO", WMAdaptor::XEMBED_INFO },
+    { "_NET_WM_USER_TIME", WMAdaptor::NET_WM_USER_TIME }
 };
 
 extern "C" {
@@ -402,12 +405,6 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             XFree( pProperty );
         }
     }
-
-#ifdef MACOSX
-        /* Apple's X11 needs NW gravity with OOo 1.1 */
-        m_nWinGravity = NorthWestGravity;
-        m_nInitWinGravity = NorthWestGravity;
-#endif
 }
 
 /*
@@ -2393,3 +2390,28 @@ void NetWMAdaptor::setFrameStruts( X11SalFrame* pFrame,
     }
 }
 
+/*
+ * WMAdaptor::setUserTime
+ */
+void WMAdaptor::setUserTime( X11SalFrame*, long ) const
+{
+}
+
+/*
+ * NetWMAdaptor::setUserTime
+ */
+void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const
+{
+    if( m_aWMAtoms[NET_WM_USER_TIME] )
+    {
+        XChangeProperty( m_pDisplay,
+                         i_pFrame->GetShellWindow(),
+                         m_aWMAtoms[NET_WM_USER_TIME],
+                         XA_CARDINAL,
+                         32,
+                         PropModeReplace,
+                         (unsigned char*)&i_nUserTime,
+                         1
+                         );
+    }
+}

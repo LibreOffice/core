@@ -71,15 +71,15 @@
     AquaSalFrame*       mpFrame;
 
     // for NSTextInput
-    id mpLastEvent;
-    BOOL mbNeedSpecialKeyHandle;
-    BOOL mbInKeyInput;
-    BOOL mbKeyHandled;
-    NSRange mMarkedRange;
-    NSRange mSelectedRange;
-    id mpMouseEventListener;
-    id mDraggingDestinationHandler;
-    id mpLastSuperEvent;
+    NSEvent*        mpLastEvent;
+    BOOL            mbNeedSpecialKeyHandle;
+    BOOL            mbInKeyInput;
+    BOOL            mbKeyHandled;
+    NSRange         mMarkedRange;
+    NSRange         mSelectedRange;
+    id              mpMouseEventListener;
+    id              mDraggingDestinationHandler;
+    NSEvent*        mpLastSuperEvent;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
@@ -100,6 +100,9 @@
 -(void)otherMouseDragged: (NSEvent*)pEvent;
 -(void)otherMouseUp: (NSEvent*)pEvent;
 -(void)scrollWheel: (NSEvent*)pEvent;
+-(void)magnifyWithEvent: (NSEvent*)pEvent;
+-(void)rotateWithEvent: (NSEvent*)pEvent;
+-(void)swipeWithEvent: (NSEvent*)pEvent;
 -(void)keyDown: (NSEvent*)pEvent;
 -(void)flagsChanged: (NSEvent*)pEvent;
 -(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;
@@ -123,12 +126,26 @@
 -(void)moveDown: (id)aSender;
 -(void)moveWordBackward: (id)aSender;
 -(void)moveWordBackwardAndModifySelection: (id)aSender;
+-(void)moveWordLeftAndModifySelection: (id)aSender;
 -(void)moveWordForward: (id)aSender;
 -(void)moveWordForwardAndModifySelection: (id)aSender;
+-(void)moveWordRightAndModifySelection: (id)aSender;
 -(void)moveToEndOfLine: (id)aSender;
+-(void)moveToEndOfLineAndModifySelection: (id)aSender;
 -(void)moveToBeginningOfLine: (id)aSender;
+-(void)moveToBeginningOfLineAndModifySelection: (id)aSender;
 -(void)moveToEndOfParagraph: (id)aSender;
+-(void)moveToEndOfParagraphAndModifySelection: (id)aSender;
 -(void)moveToBeginningOfParagraph: (id)aSender;
+-(void)moveToBeginningOfParagraphAndModifySelection: (id)aSender;
+-(void)moveParagraphForward: (id)aSender;
+-(void)moveParagraphForwardAndModifySelection: (id)aSender;
+-(void)moveParagraphBackward: (id)aSender;
+-(void)moveParagraphBackwardAndModifySelection: (id)aSender;
+-(void)moveToEndOfDocument: (id)aSender;
+-(void)moveToEndOfDocumentAndModifySelection: (id)aSender;
+-(void)moveToBeginningOfDocument: (id)aSender;
+-(void)moveToBeginningOfDocumentAndModifySelection: (id)aSender;
 -(void)insertNewline: (id)aSender;
 -(void)deleteBackward: (id)aSender;
 -(void)deleteForward: (id)aSender;

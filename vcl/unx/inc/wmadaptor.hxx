@@ -73,6 +73,7 @@ public:
         NET_WM_STATE_FULLSCREEN,
         NET_WM_STRUT,
         NET_WM_STRUT_PARTIAL,
+        NET_WM_USER_TIME,
         NET_WM_WINDOW_TYPE,
         NET_WM_WINDOW_TYPE_DESKTOP,
         NET_WM_WINDOW_TYPE_DIALOG,
@@ -117,6 +118,7 @@ public:
         SAL_QUITEVENT,
         SAL_USEREVENT,
         SAL_EXTTEXTEVENT,
+        SAL_GETTIMEEVENT,
         DTWM_IS_RUNNING,
         VCL_SYSTEM_SETTINGS,
         XSETTINGS,
@@ -240,6 +242,11 @@ public:
                                  int right_start_y, int right_end_y,
                                  int top_start_x, int top_end_x,
                                  int bottom_start_x, int bottom_end_x ) const;
+    /*
+     * set _NET_WM_USER_TIME property, if NetWM
+     */
+    virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const;
+
     /*
      *  tells whether fullscreen mode is supported by WM
      */

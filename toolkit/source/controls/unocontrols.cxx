@@ -498,6 +498,8 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
+    ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
@@ -1654,21 +1656,7 @@ void UnoFixedHyperlinkControl::removeActionListener(const uno::Reference< awt::X
 //  ----------------------------------------------------
 UnoControlFixedTextModel::UnoControlFixedTextModel()
 {
-    ImplRegisterProperty( BASEPROPERTY_ALIGN );
-    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
-    ImplRegisterProperty( BASEPROPERTY_BORDER );
-    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
-    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
-    ImplRegisterProperty( BASEPROPERTY_ENABLED );
-    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
-    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
-    ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_LABEL );
-    ImplRegisterProperty( BASEPROPERTY_MULTILINE );
-    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
-    ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
-    ImplRegisterProperty( BASEPROPERTY_NOLABEL );
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedText );
 }
 
 ::rtl::OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -1805,6 +1793,8 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel()
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
+    ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
 }
 
 ::rtl::OUString UnoControlGroupBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)

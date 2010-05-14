@@ -61,7 +61,7 @@ $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
 $B2 = [:LineBreak =  Break_Both:];
 $CB = [:LineBreak =  Contingent_Break:];
-$CL = [[:LineBreak =  Close_Punctuation:] - [\u3001 \u3002]] ;
+$CL = [:LineBreak =  Close_Punctuation:] ;
 $CM = [:LineBreak =  Combining_Mark:];
 $CR = [:LineBreak =  Carriage_Return:];
 $EX = [:LineBreak =  Exclamation:];

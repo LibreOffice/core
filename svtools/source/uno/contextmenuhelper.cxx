@@ -298,10 +298,14 @@ ContextMenuHelper::completeAndExecute(
     if ( pXMenu )
     {
         PopupMenu* pPopupMenu = dynamic_cast< PopupMenu* >( pXMenu->GetMenu() );
-        associateUIConfigurationManagers();
-        completeMenuProperties( pPopupMenu );
-        executePopupMenu( aPos, pPopupMenu );
-        resetAssociations();
+        // as dynamic_cast can return zero check pointer
+        if ( pPopupMenu )
+        {
+            associateUIConfigurationManagers();
+            completeMenuProperties( pPopupMenu );
+            executePopupMenu( aPos, pPopupMenu );
+            resetAssociations();
+        }
     }
 }
 

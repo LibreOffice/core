@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LocaleNode.hxx,v $
- * $Revision: 1.14.22.1 $
+ * $Revision: 1.14.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,6 +148,8 @@ public:
     OUString writeParameterCheckLen( const OFileWriter &of, const char* pNodeName, const char* pParameterName, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
     // ++nError with output to stderr
     void incError( const char* pStr ) const;
+    // ++nError with output to stderr
+    void incError( const ::rtl::OUString& rStr ) const;
     // ++nError with output to stderr, pStr should contain "%d", otherwise appended
     void incErrorInt( const char* pStr, int nVal ) const;
     // ++nError with output to stderr, pStr should contain "%s", otherwise appended

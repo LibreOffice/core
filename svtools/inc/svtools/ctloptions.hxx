@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ctloptions.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.164.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,8 @@ public:
     {
         NUMERALS_ARABIC = 0,
         NUMERALS_HINDI,
-        NUMERALS_SYSTEM
+        NUMERALS_SYSTEM,
+        NUMERALS_CONTEXT
     };
     void            SetCTLTextNumerals( TextNumerals _eNumerals );
     TextNumerals    GetCTLTextNumerals() const;

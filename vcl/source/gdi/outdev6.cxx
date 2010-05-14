@@ -166,7 +166,6 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     DBG_TRACE( "OutputDevice::DrawTransparent(B2D&,transparency)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-fprintf(stderr,"OD::DT( fT=%f, bAA=%d)\n",fTransparency,mnAntialiasing);//##############
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolyPoly.count())
         return;
@@ -186,9 +185,8 @@ fprintf(stderr,"OD::DT( fT=%f, bAA=%d)\n",fTransparency,mnAntialiasing);//######
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
-#ifdef UNX
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
@@ -209,7 +207,6 @@ fprintf(stderr,"OD::DT( fT=%f, bAA=%d)\n",fTransparency,mnAntialiasing);//######
 #endif
             return;
         }
-#endif
     }
 
     // fallback to old polygon drawing if needed
@@ -265,7 +262,12 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
     // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
+#ifdef WIN32
+        // workaround bad dithering on remote displaying when using GDI+ with toolbar buttoin hilighting
+        && !rPolyPoly.IsRect()
+#endif
+        )
     {
         // prepare the graphics device
         if( mbInitClipRegion )
@@ -404,10 +406,17 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                         Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
 
                         if( !mbOutputClipped )
-                            bDrawn = mpGraphics->DrawAlphaRect( aPixelRect.Left(), aPixelRect.Top(),
-                                                                aPixelRect.GetWidth(), aPixelRect.GetHeight(),
-                                                                sal::static_int_cast<sal_uInt8>(nTransparencePercent),
-                                                                this );
+                        {
+                            bDrawn = mpGraphics->DrawAlphaRect(
+                               aPixelRect.Left(), aPixelRect.Top(),
+                               // #i98405# use methods with small g, else one pixel too much will be painted.
+                               // This is because the source is a polygon which when painted would not paint
+                               // the rightmost and lowest pixel line(s), so use one pixel less for the
+                               // rectangle, too.
+                               aPixelRect.getWidth(), aPixelRect.getHeight(),
+                               sal::static_int_cast<sal_uInt8>(nTransparencePercent),
+                               this );
+                        }
                         else
                             bDrawn = true;
                     }

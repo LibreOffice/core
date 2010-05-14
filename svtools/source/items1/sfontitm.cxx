@@ -52,7 +52,7 @@ int SfxFontItem::operator ==(const SfxPoolItem & rItem) const
            && m_bHasFillColor == pFontItem->m_bHasFillColor
            && (!m_bHasColor || m_aColor == pFontItem->m_aColor)
            && (!m_bHasFillColor || m_aFillColor == pFontItem->m_aFillColor)
-           && (!m_bHasFont || m_bKerning == pFontItem->m_bKerning
+           && (!m_bHasFont || (m_bKerning == pFontItem->m_bKerning
                               && m_bShadow == pFontItem->m_bShadow
                               && m_bOutline == pFontItem->m_bOutline
                               && m_bWordLine == pFontItem->m_bWordLine
@@ -70,7 +70,7 @@ int SfxFontItem::operator ==(const SfxPoolItem & rItem) const
                               && m_aColor == pFontItem->m_aColor
                               && m_aSize == pFontItem->m_aSize
                               && m_aStyleName == pFontItem->m_aStyleName
-                              && m_aName == pFontItem->m_aName);
+                              && m_aName == pFontItem->m_aName));
 }
 
 //============================================================================

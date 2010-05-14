@@ -55,7 +55,7 @@ class PushButton;
 class VCL_DLLPUBLIC TabControl : public Control
 {
 private:
-    ImplTabItemList*    mpItemList;
+    void*               mpDummyPtr; // FIXME: remove before integration
     ImplTabCtrlData*    mpTabCtrlData;
     long                mnLastWidth;
     long                mnLastHeight;
@@ -136,6 +136,7 @@ public:
                                     USHORT nPos = TAB_APPEND );
     void                RemovePage( USHORT nPageId );
     void                Clear();
+    void                EnablePage( USHORT nPageId, bool bEnable = true );
 
     USHORT              GetPageCount() const;
     USHORT              GetPageId( USHORT nPos ) const;
@@ -167,6 +168,9 @@ public:
 
     void                SetHelpId( USHORT nPageId, ULONG nHelpId );
     ULONG               GetHelpId( USHORT nPageId ) const;
+
+    void                SetPageImage( USHORT nPageId, const Image& rImage );
+    const Image*        GetPageImage( USHORT nPageId ) const;
 
     void                SetHelpText( const XubString& rText )
                             { Control::SetHelpText( rText ); }

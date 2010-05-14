@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regband.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.158.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,9 @@ ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
 
 // -----------------------------------------------------------------------
 
-ImplRegionBand::ImplRegionBand( const ImplRegionBand& rRegionBand )
+ImplRegionBand::ImplRegionBand(
+    const ImplRegionBand& rRegionBand,
+    const bool bIgnorePoints)
 {
     // copy boundaries
     mnYTop              = rRegionBand.mnYTop;
@@ -103,6 +105,29 @@ ImplRegionBand::ImplRegionBand( const ImplRegionBand& rRegionBand )
 
         pPrevSep = pNewSep;
         pSep = pSep->mpNextSep;
+    }
+
+    if ( ! bIgnorePoints)
+    {
+        // Copy points.
+        ImplRegionBandPoint* pPoint = mpFirstBandPoint;
+        ImplRegionBandPoint* pPrevPointCopy = NULL;
+        while (pPoint != NULL)
+        {
+            ImplRegionBandPoint* pPointCopy = new ImplRegionBandPoint();
+            pPointCopy->mnX = pPoint->mnX;
+            pPointCopy->mnLineId = pPoint->mnLineId;
+            pPointCopy->mbEndPoint = pPoint->mbEndPoint;
+            pPointCopy->meLineType = pPoint->meLineType;
+
+            if (pPrevPointCopy != NULL)
+                pPrevPointCopy->mpNextBandPoint = pPointCopy;
+            else
+                mpFirstBandPoint = pPointCopy;
+
+            pPrevPointCopy = pPointCopy;
+            pPoint = pPoint->mpNextBandPoint;
+        }
     }
 }
 
@@ -919,4 +944,29 @@ BOOL ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
         return FALSE;
 
     return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+ImplRegionBand* ImplRegionBand::SplitBand (const sal_Int32 nY)
+{
+    OSL_ASSERT(nY>mnYTop);
+    OSL_ASSERT(nY<=mnYBottom);
+
+    // Create a copy of the given band (we tell the constructor to copy the points together
+    // with the seps.)
+    ImplRegionBand* pLowerBand = new ImplRegionBand(*this, false);
+
+    // Adapt vertical coordinates.
+    mnYBottom = nY-1;
+    pLowerBand->mnYTop = nY;
+
+    // Insert new band into list of bands.
+    pLowerBand->mpNextBand = mpNextBand;
+    mpNextBand = pLowerBand;
+    pLowerBand->mpPrevBand = this;
+    if (pLowerBand->mpNextBand != NULL)
+        pLowerBand->mpNextBand->mpPrevBand = pLowerBand;
+
+    return pLowerBand;
 }

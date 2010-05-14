@@ -31,35 +31,17 @@
 //#include <stdlib.h>
 //#include <sal/alloca.h>
 
-#include <stack>
-#include <vector>
-#include <hash_map>
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <osl/diagnose.h>
-#include <rtl/ref.hxx>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include "fastparser.hxx"
 
-#include "fastattribs.hxx"
-#include "xml2utf.hxx"
-
-#ifdef SYSTEM_EXPAT
-#include <expat.h>
-#else
-#include "expat/xmlparse.h"
-#endif
 #include <string.h>
 
 using ::rtl::OUString;
@@ -69,17 +51,11 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::xml::sax;
 //using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 namespace sax_fastparser
 {
-
-// --------------------------------------------------------------------
-
-struct SaxContextImpl;
-typedef boost::shared_ptr< SaxContextImpl > SaxContextImplPtr;
 
 // --------------------------------------------------------------------
 
@@ -97,16 +73,6 @@ struct SaxContextImpl
 
 // --------------------------------------------------------------------
 
-// Entity binds all information neede for a single file
-struct Entity
-{
-    InputSource         maStructSource;
-    XML_Parser          mpParser;
-    sax_expatwrap::XMLFile2UTFConverter maConverter;
-};
-
-// --------------------------------------------------------------------
-
 struct NamespaceDefine
 {
     OString     maPrefix;
@@ -115,10 +81,6 @@ struct NamespaceDefine
 
     NamespaceDefine( const OString& rPrefix, sal_Int32 nToken, const OUString& rNamespaceURL ) : maPrefix( rPrefix ), mnToken( nToken ), maNamespaceURL( rNamespaceURL ) {}
 };
-
-typedef ::std::hash_map< ::rtl::OUString, sal_Int32,
-                         ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString >
-                       > NamespaceMap;
 
 // --------------------------------------------------------------------
 // FastLocatorImpl
@@ -147,107 +109,6 @@ private:
 // --------------------------------------------------------------------
 // FastSaxParser
 // --------------------------------------------------------------------
-
-#define IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.FastParser"
-#define SERVICE_NAME        "com.sun.star.xml.sax.FastParser"
-
-
-// This class implements the external Parser interface
-class FastSaxParser : public WeakImplHelper2< XFastParser, XServiceInfo >
-{
-public:
-    FastSaxParser();
-    ~FastSaxParser();
-
-    // The implementation details
-    static Sequence< OUString >     getSupportedServiceNames_Static(void);
-
-    // XFastParser
-    virtual void SAL_CALL parseStream( const InputSource& aInputSource ) throw (SAXException, IOException, RuntimeException);
-    virtual void SAL_CALL setFastDocumentHandler( const Reference< XFastDocumentHandler >& Handler ) throw (RuntimeException);
-    virtual void SAL_CALL setTokenHandler( const Reference< XFastTokenHandler >& Handler ) throw (RuntimeException);
-    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (IllegalArgumentException, RuntimeException);
-    virtual void SAL_CALL setErrorHandler( const Reference< XErrorHandler >& Handler ) throw (RuntimeException);
-    virtual void SAL_CALL setEntityResolver( const Reference< XEntityResolver >& Resolver ) throw (RuntimeException);
-    virtual void SAL_CALL setLocale( const Locale& Locale ) throw (RuntimeException);
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
-
-public:
-    // the C-Callbacks for the expat parser
-    void static callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts);
-    void static callbackEndElement(void *userData, const XML_Char *name);
-    void static callbackCharacters( void *userData , const XML_Char *s , int nLen );
-    int static callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
-
-public:
-    void pushEntity( const struct Entity &entity )  { vecEntity.push_back( entity ); }
-    void popEntity()                                { vecEntity.pop_back( ); }
-    struct Entity &getEntity()                      { return vecEntity.back(); }
-
-private:
-    void parse();
-
-    sal_Int32 GetToken( const OString& rToken );
-    sal_Int32 GetToken( const sal_Char* pToken, sal_Int32 nTokenLen = 0 );
-    sal_Int32 GetTokenWithPrefix( const OString& rPrefix, const OString& rName ) throw (SAXException);
-    sal_Int32 GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (SAXException);
-    OUString  GetNamespaceURL( const OString& rPrefix ) throw (SAXException);
-    OUString  GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw (SAXException);
-    sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
-    sal_Int32 GetTokenWithNamespaceURL( const OUString& rNamespaceURL, const sal_Char* pName, int nNameLen );
-    void DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL );
-    sal_Int32 CreateCustomToken( const sal_Char* pToken, int len = 0 );
-
-    void pushContext();
-    void popContext();
-
-    void splitName( const XML_Char *pwName, const XML_Char *&rpPrefix, sal_Int32 &rPrefixLen, const XML_Char *&rpName, sal_Int32 &rNameLen );
-
-private:
-    Mutex               maMutex;
-
-    Reference< XFastDocumentHandler >       mxDocumentHandler;
-    Reference< XFastTokenHandler >          mxTokenHandler;
-    Reference< XErrorHandler >              mxErrorHandler;
-    Reference< XEntityResolver >            mxEntityResolver;
-    rtl::Reference < FastLocatorImpl >      mxDocumentLocator;
-
-    rtl::Reference < FastAttributeList >    mxAttributes;
-
-    // External entity stack
-    vector<struct Entity>   vecEntity;
-
-    // Exception cannot be thrown through the C-XmlParser (possible resource leaks),
-    // therefor the maSavedException must be saved somewhere.
-    Any                 maSavedException;
-    sal_Bool            mbExceptionWasThrown;
-
-    Locale              maLocale;
-
-    std::stack< SaxContextImplPtr > maContextStack;
-    std::vector< boost::shared_ptr< NamespaceDefine > > maNamespaceDefines;
-    NamespaceMap maNamespaceMap;
-};
-
-//--------------------------------------
-// the extern interface
-//---------------------------------------
-Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance( const Reference< XMultiServiceFactory  >  & ) throw(Exception)
-{
-    FastSaxParser *p = new FastSaxParser;
-    return Reference< XInterface > ( (OWeakObject * ) p );
-}
-
-Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
-{
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME) );
-    return aRet;
-}
 
 //---------------------------------------------
 // the implementation part
@@ -670,10 +531,17 @@ void FastSaxParser::setLocale( const Locale & Locale ) throw (RuntimeException)
     maLocale = Locale;
 }
 
+Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(PARSER_SERVICE_NAME) );
+    return aRet;
+}
+
 // XServiceInfo
 OUString FastSaxParser::getImplementationName() throw (RuntimeException)
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return OUString::createFromAscii( PARSER_IMPLEMENTATION_NAME );
 }
 
 // XServiceInfo
@@ -694,7 +562,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames(void) throw (Runtim
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+    seq.getArray()[0] = OUString::createFromAscii( PARSER_SERVICE_NAME );
     return seq;
 }
 
@@ -1134,71 +1002,5 @@ int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
 
     return bOK;
 }
-
-}
-
-using namespace sax_fastparser;
-
-extern "C"
-{
-
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-
-sal_Bool SAL_CALL component_writeInfo(
-    void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
-
-            Reference< XRegistryKey > xNewKey( xKey->createKey(
-                OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-            xNewKey->createKey( OUString::createFromAscii( SERVICE_NAME ) );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-
-void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void * pRet = 0;
-
-    if (pServiceManager )
-    {
-        Reference< XSingleServiceFactory > xRet;
-        Reference< XMultiServiceFactory > xSMgr( reinterpret_cast< XMultiServiceFactory * > ( pServiceManager ) );
-
-        OUString aImplementationName( OUString::createFromAscii( pImplName ) );
-
-        if (aImplementationName == OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME  ) ) )
-        {
-            xRet = createSingleFactory( xSMgr, aImplementationName,
-                                        FastSaxParser_CreateInstance,
-                                        FastSaxParser::getSupportedServiceNames_Static() );
-        }
-
-        if (xRet.is())
-        {
-            xRet->acquire();
-            pRet = xRet.get();
-        }
-    }
-
-    return pRet;
-}
-
 
 }

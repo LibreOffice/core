@@ -52,7 +52,7 @@ protected:
 
     virtual ::vos::IMutex& GetMutexImpl() = 0;
     virtual Window* GetWindowImpl() = 0;
-    virtual TopWindowListenerMultiplexer& GetTopWindowListenersImpl() = 0;
+    virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl() = 0;
 
 public:
     virtual ~VCLXTopWindow_Base();
@@ -81,7 +81,7 @@ private:
 protected:
     virtual vos::IMutex& GetMutexImpl();
     virtual Window* GetWindowImpl();
-    virtual TopWindowListenerMultiplexer& GetTopWindowListenersImpl();
+    virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl();
 
 public:
     VCLXTopWindow(bool bWHWND = false);

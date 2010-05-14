@@ -59,7 +59,7 @@ private:
 protected:
     vos::IMutex& GetMutexImpl();
     Window* GetWindowImpl();
-    TopWindowListenerMultiplexer& GetTopWindowListenersImpl();
+    ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl();
 
     ~VCLXDialog();
 

@@ -87,10 +87,12 @@ namespace toolkit
         mnStepCount = maImageList.getLength();
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
         if ( pImage )
+        {
             if ( mnStepCount )
                 pImage->SetImage( maImageList[ 0 ] );
             else
                 pImage->SetImage( Image() );
+        }
     }
 
     //--------------------------------------------------------------------

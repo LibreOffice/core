@@ -42,6 +42,7 @@
 
 #include <list>
 #include <vector>
+#include <map>
 #include <hash_set>
 
 #include <cstdio>
@@ -99,6 +100,7 @@ struct SalData
 
     std::vector< NSCursor* >                      maCursors;
     std::vector< NSMenuItem* >                    maFallbackMenu;
+    std::map< NSEvent*, bool >                    maKeyEventAnswer;
 
     static oslThreadKey                           s_aAutoReleaseKey;
 
@@ -106,6 +108,8 @@ struct SalData
     SInt32                                        mnSystemVersion;          // Store System Version
     MainController*                               mpMainController;         // Apple Remote
     bool                                          mbIsTestTool;
+
+    NSObject*                                     mpDockIconClickHandler;
 
     SalData();
     ~SalData();

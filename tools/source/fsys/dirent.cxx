@@ -2735,8 +2735,10 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
                 HACK(redirection missing)
     ByteString aThis(GUI2FSYS(GetFull()), osl_getThreadTextEncoding());
     ByteString aDest(GUI2FSYS(rDest.GetFull()), osl_getThreadTextEncoding());
-        link( aThis.GetBuffer(), aDest.GetBuffer() );
-        return Sys2SolarError_Impl(  errno );
+        if (link( aThis.GetBuffer(), aDest.GetBuffer() ) == -1)
+            return Sys2SolarError_Impl(  errno );
+        else
+            return FSYS_ERR_OK;
     }
 #else
         return FSYS_ERR_NOTSUPPORTED;

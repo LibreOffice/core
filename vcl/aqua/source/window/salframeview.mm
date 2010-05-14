@@ -626,6 +626,121 @@ private:
         [self sendMouseEventToFrame:pEvent button:MOUSE_MIDDLE eventtype:SALEVENT_MOUSEBUTTONUP];
 }
 
+- (void)magnifyWithEvent: (NSEvent*)pEvent
+{
+    YIELD_GUARD;
+    
+    // TODO: ??  -(float)magnification;
+    if( AquaSalFrame::isAlive( mpFrame ) )
+    {
+        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
+        
+        float dZ = 0.0;
+        for(;;)
+        {
+            dZ += [pEvent deltaZ];
+            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSScrollWheelMask
+            untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
+            if( !pNextEvent )
+                break;
+            pEvent = pNextEvent;
+        }
+        
+        NSPoint aPt = [NSEvent mouseLocation];
+        mpFrame->CocoaToVCL( aPt );
+        
+        SalWheelMouseEvent aEvent;
+        aEvent.mnTime   = mpFrame->mnLastEventTime;
+        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mnCode   |= KEY_MOD1; // we want zooming, no scrolling
+        
+        // --- RTL --- (mirror mouse pos)
+        if( Application::GetSettings().GetLayoutRTL() )
+            aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
+        
+        if( dZ != 0.0 )
+        {
+            aEvent.mnDelta = static_cast<long>(floor(dZ));
+            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
+            if( aEvent.mnNotchDelta == 0 )
+                aEvent.mnNotchDelta = dZ < 0.0 ? -1 : 1;
+            aEvent.mbHorz = FALSE;
+            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
+            if( aEvent.mnScrollLines == 0 )
+                aEvent.mnScrollLines = 1;
+            mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
+        }
+    }
+}
+
+- (void)rotateWithEvent: (NSEvent*)pEvent
+{
+    //Rotation : -(float)rotation;
+    // TODO: create new CommandType so rotation is available to the applications
+}
+
+- (void)swipeWithEvent: (NSEvent*)pEvent
+{
+    YIELD_GUARD;
+    
+    if( AquaSalFrame::isAlive( mpFrame ) )
+    {
+        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
+        
+        // merge pending scroll wheel events
+        float dX = 0.0;
+        float dY = 0.0;
+        for(;;)
+        {
+            dX += [pEvent deltaX];
+            dY += [pEvent deltaY];
+            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSScrollWheelMask
+            untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
+            if( !pNextEvent )
+                break;
+            pEvent = pNextEvent;
+        }
+        
+        NSPoint aPt = [NSEvent mouseLocation];
+        mpFrame->CocoaToVCL( aPt );
+        
+        SalWheelMouseEvent aEvent;
+        aEvent.mnTime   = mpFrame->mnLastEventTime;
+        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        
+        // --- RTL --- (mirror mouse pos)
+        if( Application::GetSettings().GetLayoutRTL() )
+            aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
+        
+        if( dX != 0.0 )
+        {
+            aEvent.mnDelta = static_cast<long>(floor(dX));
+            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
+            if( aEvent.mnNotchDelta == 0 )
+                aEvent.mnNotchDelta = dX < 0.0 ? -1 : 1;
+            aEvent.mbHorz = TRUE;
+            aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+            mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
+        }
+        if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ))
+        {
+            aEvent.mnDelta = static_cast<long>(floor(dY));
+            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
+            if( aEvent.mnNotchDelta == 0 )
+                aEvent.mnNotchDelta = dY < 0.0 ? -1 : 1;
+            aEvent.mbHorz = FALSE;
+            aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+            mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
+        }
+    }
+}
+
 -(void)scrollWheel: (NSEvent*)pEvent
 {
     YIELD_GUARD;
@@ -693,6 +808,7 @@ private:
         }
     }
 }
+
 
 -(void)keyDown: (NSEvent*)pEvent
 {
@@ -773,18 +889,45 @@ private:
         if( pInsert && ( nLen = [pInsert length] ) > 0 )
         {
             OUString aInsertString( GetOUString( pInsert ) );
-            USHORT nKeyCode = 0;
              // aCharCode initializer is safe since aInsertString will at least contain '\0'
             sal_Unicode aCharCode = *aInsertString.getStr();
-            // FIXME: will probably break somehow in less than trivial text input mode
+            
             if( nLen == 1 &&
                 aCharCode < 0x80 &&
                 aCharCode > 0x1f &&
-                ( nKeyCode = ImplMapCharCode( aCharCode ) ) != 0
-            && ! [self hasMarkedText ]
+				! [self hasMarkedText ]
                 )
             {
-                [self sendKeyInputAndReleaseToFrame: nKeyCode character: aCharCode];
+                USHORT nKeyCode = ImplMapCharCode( aCharCode );
+                unsigned int nLastModifiers = mpFrame->mnLastModifierFlags;
+
+                // #i99567#
+                // find out the unmodified key code
+    
+                // sanity check
+                if( mpLastEvent && ( [mpLastEvent type] == NSKeyDown || [mpLastEvent type] == NSKeyUp ) )
+                {
+                    // get unmodified string
+                    NSString* pUnmodifiedString = [mpLastEvent charactersIgnoringModifiers]; 
+                    if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
+                    {
+                        // map the unmodified key code
+                        unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
+                        nKeyCode = ImplMapCharCode( keyChar );
+                    }
+                    nLastModifiers = [mpLastEvent modifierFlags];
+
+                }
+                // #i99567#
+                // applications and vcl's edit fields ignore key events with ALT
+                // however we're at a place where we know text should be inserted
+                // so it seems we need to strip the Alt modifier here
+                if( (nLastModifiers & (NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask))
+                    == NSAlternateKeyMask )
+                {
+                    nLastModifiers = 0;
+                }
+                [self sendKeyInputAndReleaseToFrame: nKeyCode character: aCharCode modifiers: nLastModifiers];
             }
             else
             {
@@ -876,6 +1019,11 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
+-(void)moveWordLeftAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
+}
+
 -(void)moveWordRight: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
@@ -891,9 +1039,19 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
 }
 
+-(void)moveWordRightAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfLine: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfLine: (id)aSender
@@ -901,14 +1059,69 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToBeginningOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfParagraph: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
+-(void)moveToEndOfParagraphAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphForward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphForwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
 -(void)moveToBeginningOfParagraph: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphBackward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfParagraphAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphBackwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfDocument: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfDocumentAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfDocument: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfDocumentAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveUp: (id)aSender
@@ -1043,6 +1256,9 @@ private:
         aEvent.mnCharCode       = aChar;
         aEvent.mnRepeat         = FALSE;
         nRet = mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
+        std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
+        if( it != GetSalData()->maKeyEventAnswer.end() )
+            it->second = nRet ? true : false;
         if( AquaSalFrame::isAlive( mpFrame ) )
             mpFrame->CallCallback( SALEVENT_KEYUP, &aEvent );
     }

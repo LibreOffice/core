@@ -756,18 +756,18 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
         // MapMode is integer-based, and suffers from roundoffs,
         // especially if maPrefSize is small. Trying to circumvent
         // that by performing part of the math in floating point.
-        const Size aScale10000(
+        const Size aScale100000(
             OutputDevice::LogicToLogic( Size(100000L,
                                              100000L),
-                                        maPrefMapMode,
-                                        MAP_100TH_MM ) );
-        const double fScaleX((double)aScale10000.Width() * maPrefSize.Width());
-        const double fScaleY((double)aScale10000.Height() * maPrefSize.Height());
-        if( fabs(fScaleX) > 0.000000001 &&
-            fabs(fScaleY) > 0.000000001 )
+                                        MAP_100TH_MM,
+                                        maPrefMapMode ) );
+        const double fBmpWidthM((double)maPrefSize.Width() / aScale100000.Width() );
+        const double fBmpHeightM((double)maPrefSize.Height() / aScale100000.Height() );
+        if( fabs(fBmpWidthM) > 0.000000001 &&
+            fabs(fBmpHeightM) > 0.000000001 )
         {
-            aHeader.nXPelsPerMeter = (UINT32)(rAcc.Width() / fScaleX + .5);
-            aHeader.nYPelsPerMeter = (UINT32)(rAcc.Height() / fScaleY + .5);
+            aHeader.nXPelsPerMeter = (UINT32)(rAcc.Width() / fBmpWidthM + .5);
+            aHeader.nYPelsPerMeter = (UINT32)(rAcc.Height() / fBmpHeightM + .5);
         }
     }
 

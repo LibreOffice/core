@@ -81,7 +81,7 @@ DEPOBJFILES= \
 .INCLUDE :  target.mk
 
 $(MISC)$/dict_%.cxx : %.dic
-    $(BIN)$/gendict $< $@
+    $(AUGMENT_LIBRARY_PATH) $(BIN)$/gendict $< $@
 
 # ugly - is this dependency really required here?
 $(foreach,i,$(shell @$(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gendict$(EXECPOST)

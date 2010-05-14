@@ -45,6 +45,13 @@ typedef void* (*TypeId)();
         virtual TypeId Type() const; \
         virtual BOOL   IsA( TypeId aSameOrSuperType ) const
 
+#define TYPEINFO_VISIBILITY(visibility) \
+        visibility static  void*  CreateType(); \
+        visibility static  TypeId StaticType(); \
+        visibility static  BOOL   IsOf( TypeId aSameOrSuperType ); \
+        visibility virtual TypeId Type() const; \
+        visibility virtual BOOL   IsA( TypeId aSameOrSuperType ) const
+
 #define TYPEINIT_FACTORY(sType, Factory ) \
         void*  sType::CreateType() { return Factory; } \
         TypeId sType::StaticType() { return &CreateType; } \

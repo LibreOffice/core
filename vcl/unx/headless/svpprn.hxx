@@ -31,10 +31,10 @@
 #ifndef _SVP_SVPPRN_HXX
 #define _SVP_SVPPRN_HXX
 
-#include <psprint/jobdata.hxx>
-#include <psprint/printergfx.hxx>
-#include <psprint/printerjob.hxx>
-#include <vcl/salprn.hxx>
+#include "vcl/jobdata.hxx"
+#include "vcl/printergfx.hxx"
+#include "vcl/printerjob.hxx"
+#include "vcl/salprn.hxx"
 
 class PspGraphics;
 

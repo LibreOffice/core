@@ -618,6 +618,23 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
     case com::sun::star::util::MeasureUnit::PERCENT:
         break;
 */
+    case com::sun::star::util::MeasureUnit::APPFONT:
+        eMode = MAP_APPFONT;
+        break;
+
+    case com::sun::star::util::MeasureUnit::SYSFONT:
+        eMode = MAP_SYSFONT;
+        break;
+
+/*
+    case com::sun::star::util::MeasureUnit::RELATIVE:
+        eMode = MAP_RELATIVE;
+        break;
+    case com::sun::star::util::MeasureUnit::REALAPPFONT:
+        eMode = MAP_REALAPPFONT;
+        break;
+*/
+
     default:
         throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Unsupported measure unit."), NULL, 1 );
     }
@@ -673,20 +690,19 @@ sal_Int16 /* com.sun.star.util.MeasureUnit.* */ VCLUnoHelper::ConvertToMeasureme
         nMeasureUnit = com::sun::star::util::MeasureUnit::PIXEL;
         break;
 
-/*
-    case MAP_SYSFONT:
-        break;
-
     case MAP_APPFONT:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::APPFONT;
         break;
 
+    case MAP_SYSFONT:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::SYSFONT;
+        break;
+
+/*
     case MAP_RELATIVE:
         break;
 
     case MAP_REALAPPFONT:
-        break;
-
-    case MAP_LASTENUMDUMMY:
         break;
 */
     default:

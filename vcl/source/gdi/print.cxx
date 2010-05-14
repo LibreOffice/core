@@ -674,11 +674,11 @@ Printer::~Printer()
 }
 
 // -----------------------------------------------------------------------
-void Printer::SetNextJobIsQuick()
+void Printer::SetNextJobIsQuick( bool bQuick )
 {
-    mpPrinterData->mbNextJobIsQuick = true;
+    mpPrinterData->mbNextJobIsQuick = bQuick;
     if( mpQPrinter )
-        mpQPrinter->SetNextJobIsQuick();
+        mpQPrinter->SetNextJobIsQuick( bQuick );
 }
 
 // -----------------------------------------------------------------------

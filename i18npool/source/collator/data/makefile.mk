@@ -61,7 +61,7 @@ SHL1OBJS=$(SLOFILES)
 .INCLUDE :  target.mk
 
 $(MISC)$/collator_%.cxx : %.txt
-    $(BIN)$/gencoll_rule $< $@ $*
+    $(AUGMENT_LIBRARY_PATH) $(BIN)$/gencoll_rule $< $@ $*
 
 # ugly - is this dependency really required here?
 $(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gencoll_rule$(EXECPOST)

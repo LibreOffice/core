@@ -45,10 +45,7 @@ struct XIMArg
 #include <sal/alloca.h>
 
 #include <string.h>
-#if !defined(MACOSX)
-/* MacOS X doesn't yet support XIM... FIXME */
 #include <dlfcn.h>
-#endif
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 #include "XIM.h"
@@ -66,10 +63,8 @@ typedef XIM (*OpenFunction)(Display*, XrmDatabase, char*, char*, XIMArg*);
 }
 
 /* global variables */
-#if !defined(MACOSX)
 static void *g_dlmodule = 0;
 static OpenFunction g_open_im = (OpenFunction)NULL;
-#endif
 
 /* utility function to transform vararg list into an array of XIMArg */
 
@@ -213,8 +208,6 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         XvaGetArgs( variable, args );
         va_end(variable);
 
-    /* MacOS X doesn't yet support XIM... FIXME */
-#if !defined(MACOSX)
         if (!g_dlmodule)
         {
             g_dlmodule = dlopen(XIIIMP_LIB, RTLD_LAZY);
@@ -235,13 +228,10 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         {
               goto legacy_XIM;
         }
-#endif
       }
 
 // in #if to prevent warning "warning: label 'legacy_XIM' defined but not used"
-#if !defined(MACOSX)
      legacy_XIM:
-#endif
 
     if (!xim)
         xim = XOpenIM(display, rdb, res_name, res_class);
@@ -257,8 +247,6 @@ Status XvaCloseIM(XIM)
 {
       Status s = False;
 
-    /* MacOS X doesn't yet support XIM... FIXME */
-#if !defined(MACOSX)
     if (!g_dlmodule)
     {
         /* assuming one XvaOpenIM call */
@@ -267,7 +255,6 @@ Status XvaCloseIM(XIM)
         g_open_im = (OpenFunction)NULL;
         s = True;
       }
-#endif
     return (s);
 }
 

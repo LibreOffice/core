@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.60.30.1 $
+ * $Revision: 1.59.74.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/ctrl.hxx>
 #ifndef _POLY_HXX
 #include <tools/poly.hxx>
 #endif
@@ -66,6 +67,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -116,6 +118,7 @@ struct ImplObjStack
     Color*          mpTextColor;
     Color*          mpTextFillColor;
     Color*          mpTextLineColor;
+    Color*          mpOverlineColor;
     Point*          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
@@ -152,6 +155,11 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
         if ( pObjStack->mpTextLineColor )
             delete pObjStack->mpTextLineColor;
     }
+    if ( pObjStack->mnFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( pObjStack->mpOverlineColor )
+            delete pObjStack->mpOverlineColor;
+    }
     if ( pObjStack->mnFlags & PUSH_MAPMODE )
     {
         if ( pObjStack->mpMapMode )
@@ -169,6 +177,22 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
     }
 
     delete pObjStack;
+}
+
+// -----------------------------------------------------------------------
+
+bool OutputDevice::ImplIsAntiparallel() const
+{
+    bool bRet = false;
+    if( ImplGetGraphics() )
+    {
+        if( ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && ! IsRTLEnabled() ) ||
+            ( ! (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && IsRTLEnabled() ) )
+        {
+            bRet = true;
+        }
+    }
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -447,6 +471,7 @@ OutputDevice::OutputDevice() :
     mbDevOutput         = FALSE;
     mbOutputClipped     = FALSE;
     maTextColor         = Color( COL_BLACK );
+    maOverlineColor     = Color( COL_TRANSPARENT );
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
@@ -564,10 +589,17 @@ void OutputDevice::EnableRTL( BOOL bEnable )
         // under rare circumstances in the UI, eg the valueset control
         // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
         // ...hopefully
-        if( Application::GetSettings().GetLayoutRTL() ) // allow mirroring only in BiDi Office
-            if( ImplGetGraphics() )
-                mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
+        if( ImplGetGraphics() )
+            mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
     }
+
+    // convenience: for controls also switch layout mode
+    if( dynamic_cast<Control*>(this) != 0 )
+        SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT : TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT);
+
+    Window* pWin = dynamic_cast<Window*>(this);
+    if( pWin )
+        pWin->StateChanged( STATE_CHANGE_MIRRORING );
 
     if( mpAlphaVDev )
         mpAlphaVDev->EnableRTL( bEnable );
@@ -767,6 +799,7 @@ int OutputDevice::ImplGetGraphics() const
     if ( mpGraphics )
     {
         mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
+        mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
         return TRUE;
     }
 
@@ -1019,7 +1052,7 @@ void OutputDevice::ImplInitClipRegion()
             aRegion = *(pWindow->ImplGetWinChildClipRegion());
             // --- RTL -- only this region is in frame coordinates, so re-mirror it
             // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
-            if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+            if( ImplIsAntiparallel() )
                 ImplReMirror ( aRegion );
         }
         if ( mbClipRegion )
@@ -2412,13 +2445,19 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         ImplInitLineColor();
 
     // use b2dpolygon drawing if possible
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         ::basegfx::B2DPolygon aB2DPolyLine = rPoly.getB2DPolygon();
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyLine.transform( aTransform );
         const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+        if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && (mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE))
+        {
+            // #i98289#
+            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+        }
+
         if( mpGraphics->DrawPolyLine( aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_ROUND, this ) )
             return;
     }
@@ -2559,8 +2598,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         ::basegfx::B2DPolyPolygon aB2DPolyPolygon( rPoly.getB2DPolygon() );
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -2623,8 +2661,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -2711,15 +2748,13 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
-#ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
         aB2DPP.transform( aTransform );
         if( mpGraphics->DrawPolyPolygon( aB2DPP, 0.0, this ) )
             return;
-#endif
     }
 
     // fallback to old polygon drawing if needed
@@ -2773,23 +2808,29 @@ void OutputDevice::DrawPolyLine(
     if( mbInitLineColor )
         ImplInitLineColor();
 
-    if(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    // #i98289# use b2dpolygon drawing if possible
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
-#ifdef UNX // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        // transform the line width
-        ::basegfx::B2DVector aB2DLineWidth;
-        if( fLineWidth == 0.0 ) // hairline?
-            aB2DLineWidth = ::basegfx::B2DVector( 1.0, 1.0 );
-        else
+        ::basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
+
+        // transform the line width if used
+        if( fLineWidth != 0.0 )
             aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
+
         // transform the polygon
         ::basegfx::B2DPolygon aB2DPL = rB2DPolygon;
         aB2DPL.transform( aTransform );
+
+        if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && (mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE))
+        {
+            // #i98289#
+            aB2DPL = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPL);
+        }
+
         // draw the polyline
         if( mpGraphics->DrawPolyLine( aB2DPL, aB2DLineWidth, eLineJoin, this ) )
             return;
-#endif
     }
 
     // fallback to old polygon drawing if needed
@@ -2847,6 +2888,13 @@ void OutputDevice::Push( USHORT nFlags )
             pData->mpTextLineColor = new Color( GetTextLineColor() );
         else
             pData->mpTextLineColor = NULL;
+    }
+    if ( nFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( IsOverlineColor() )
+            pData->mpOverlineColor = new Color( GetOverlineColor() );
+        else
+            pData->mpOverlineColor = NULL;
     }
     if ( nFlags & PUSH_TEXTALIGN )
         pData->meTextAlign = GetTextAlign();
@@ -2938,6 +2986,13 @@ void OutputDevice::Pop()
             SetTextLineColor( *pData->mpTextLineColor );
         else
             SetTextLineColor();
+    }
+    if ( pData->mnFlags & PUSH_OVERLINECOLOR )
+    {
+        if ( pData->mpOverlineColor )
+            SetOverlineColor( *pData->mpOverlineColor );
+        else
+            SetOverlineColor();
     }
     if ( pData->mnFlags & PUSH_TEXTALIGN )
         SetTextAlign( pData->meTextAlign );

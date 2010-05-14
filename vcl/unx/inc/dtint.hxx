@@ -49,8 +49,7 @@ struct XEvent;
 
 enum DtType {
     DtGeneric,
-    DtCDE,
-    DtMACOSX
+    DtCDE
 };
 
 class DtIntegrator

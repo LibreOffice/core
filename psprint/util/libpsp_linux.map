@@ -1,9 +1,0 @@
-LIBPSPRINT_1_0 {
-    global:
-        *psp*;
-        OpenTTFontBuffer;
-        CloseTTFont;
-        GetTTGlobalFontInfo;
-    local:
-        *;
-};

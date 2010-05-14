@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtftoken.h,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -694,6 +694,11 @@ enum RTF_TOKEN_IDS {
     RTF_ULDB,
     RTF_ULNONE,
     RTF_ULW,
+    RTF_OL,
+    RTF_OLD,
+    RTF_OLDB,
+    RTF_OLNONE,
+    RTF_OLW,
     RTF_UP,
     RTF_SUPER,
     RTF_V,
@@ -726,6 +731,12 @@ enum RTF_TOKEN_IDS {
     RTF_ULWAVE,
     RTF_ULC,
     RTF_ULTH,
+    RTF_OLDASHD,
+    RTF_OLDASH,
+    RTF_OLDASHDD,
+    RTF_OLWAVE,
+    RTF_OLC,
+    RTF_OLTH,
     RTF_EMBO,
     RTF_IMPR,
     RTF_STRIKED,
@@ -751,6 +762,14 @@ enum RTF_TOKEN_IDS {
     RTF_ULTHDASHDD,
     RTF_ULHWAVE,
     RTF_ULULDBWAVE,
+    RTF_OLTHD,
+    RTF_OLTHDASH,
+    RTF_OLLDASH,
+    RTF_OLTHLDASH,
+    RTF_OLTHDASHD,
+    RTF_OLTHDASHDD,
+    RTF_OLHWAVE,
+    RTF_OLOLDBWAVE,
 
     // association control words
     RTF_AB,

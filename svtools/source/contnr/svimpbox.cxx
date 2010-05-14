@@ -1865,6 +1865,11 @@ void SvImpLBox::EntryMoved( SvLBoxEntry* pEntry )
     // #97680# --------------
     UpdateContextBmpWidthVectorFromMovedEntry( pEntry );
 
+    if ( !pStartEntry )
+        // this might happen if the only entry in the view is moved to its very same position
+        // #i97346#
+        pStartEntry = pView->First();
+
     aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1));
     USHORT nFirstPos = (USHORT)pTree->GetAbsPos( pStartEntry );
     USHORT nNewPos = (USHORT)pTree->GetAbsPos( pEntry );

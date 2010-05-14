@@ -42,7 +42,18 @@ namespace vclcanvas
                                    bMonochromeBuffer ) )
     {
         if( !bMonochromeBuffer )
+        {
+            // #i95645#
+#if defined( QUARTZ )
+            // use AA on VCLCanvas for Mac
             maVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | maVDev->GetAntialiasing() );
+#else
+            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
+            // is not required to do AA. It would need to be adapted to use it correctly
+            // (especially gradient painting). This will need extra work.
+            maVDev->SetAntialiasing( maVDev->GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
+#endif
+        }
     }
 
     OutputDevice& BackBuffer::getOutDev()

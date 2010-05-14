@@ -49,8 +49,15 @@
 /** this flag disables a selection of an entry completly. It is not
     possible to select such entries either from the user interface
     nor from the ListBox methods. Cursor traveling is handled correctly.
-    This flag can be used to at titles to a ListBox.
+    This flag can be used to add titles to a ListBox.
 */
 #define LISTBOX_ENTRY_FLAG_DISABLE_SELECTION        0x0000001
+
+/** this flag can be used to make an entry multine capable
+    A normal entry is single line and will therefore be clipped
+    at the right listbox border. Setting this flag enables
+    word breaks for the entry text.
+*/
+#define LISTBOX_ENTRY_FLAG_MULTILINE                0x0000002
 
 #endif  // _SV_LSTBOX_H

@@ -171,6 +171,6 @@ class SVL_DLLPUBLIC SvtCacheOptions
         static SvtCacheOptions_Impl*    m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
         static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
 
-};      // class SvtOptions3D
+};
 
 #endif // #ifndef INCLUDED_SVTOOLS_CACHEOPTIONS_HXX

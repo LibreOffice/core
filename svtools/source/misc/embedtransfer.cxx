@@ -58,6 +58,13 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
 , m_pGraphic( pGraphic ? new Graphic( *pGraphic ) : NULL )
 , m_nAspect( nAspect )
 {
+    if( xObj.is() )
+    {
+        TransferableObjectDescriptor aObjDesc;
+
+        FillTransferableObjectDescriptor( aObjDesc, m_xObj, NULL, m_nAspect );
+        PrepareOLE( aObjDesc );
+    }
 }
 
 // -----------------------------------------------------------------------------

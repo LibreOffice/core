@@ -105,6 +105,7 @@ namespace svt
         ,m_pFilter               ( NULL            )
         ,m_pTranslator           ( _pTranslator    )
         ,m_bCancelled            ( false           )
+        ,m_rBlackList            ( ::com::sun::star::uno::Sequence< ::rtl::OUString >() )
     {
     }
 
@@ -126,13 +127,17 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync( const FolderDescriptor& _rFolder, const IUrlFilter* _pFilter )
+    EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
+        const FolderDescriptor& _rFolder,
+        const IUrlFilter* _pFilter,
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             m_aFolder = _rFolder;
             m_pFilter = _pFilter;
             m_pResultHandler = NULL;
+            m_rBlackList = rBlackList;
         }
         return enumerateFolderContent();
     }
@@ -273,6 +278,9 @@ namespace svt
                                 ::osl::MutexGuard aGuard( m_aMutex );
                                 if ( m_pFilter && !m_pFilter->isUrlAllowed( sRealURL ) )
                                     continue;
+
+                                if ( /* m_rBlackList.hasElements() && */ URLOnBlackList ( sRealURL ) )
+                                    continue;
                             }
 
                             pData = new SortingData_Impl;
@@ -384,6 +392,21 @@ namespace svt
         if ( pHandler )
             pHandler->enumerationDone( eResult );
         return eResult;
+    }
+
+    //--------------------------------------------------------------------
+
+    sal_Bool FileViewContentEnumerator::URLOnBlackList ( const ::rtl::OUString& sRealURL )
+    {
+        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( rtl::OUString::createFromAscii("/")) +1 );
+
+        for (int i = 0; i < m_rBlackList.getLength() ; i++)
+        {
+            if ( entryName.equals(  m_rBlackList[i] ) )
+                return true;
+        }
+
+        return false;
     }
 
     //--------------------------------------------------------------------

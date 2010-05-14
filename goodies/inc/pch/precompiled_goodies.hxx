@@ -100,7 +100,6 @@
 #include "svtools/fltcall.hxx"
 #include "svtools/itemprop.hxx"
 #include "svtools/lstner.hxx"
-#include "svtools/options3d.hxx"
 #include "svtools/solar.hrc"
 #include "svtools/stdctrl.hxx"
 #include "svtools/svarray.hxx"

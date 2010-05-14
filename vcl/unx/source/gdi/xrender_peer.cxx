@@ -82,11 +82,7 @@ void XRenderPeer::InitRenderLib()
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
-#ifdef MACOSX
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.dylib" ));
-#else
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.so.1" ));
-#endif
     mpRenderLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpRenderLib ) {
 #ifdef DEBUG

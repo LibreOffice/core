@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cvtsvm.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -397,51 +397,56 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, ULONG nConvertMod
 
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
-    LineInfo            aLineInfo( LINE_NONE, 0 );
-    Stack               aLIStack;
-    ULONG               nPos = rIStm.Tell();
+    const ULONG         nPos = rIStm.Tell();
     const USHORT        nOldFormat = rIStm.GetNumberFormatInt();
-    rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
-    BOOL                bFatLine = FALSE;
-    VirtualDevice       aFontVDev;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     char    aCode[ 5 ];
-    MapMode aMapMode;
     Size    aPrefSz;
-    INT32   nActions;
     INT16   nSize;
     INT16   nVersion;
 
-    // Header lesen
+    // read header
     rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Kennung
     rIStm >> nSize;                                 // Size
     rIStm >> nVersion;                              // Version
     rIStm >> aPrefSz.Width();                       // PrefSize.Width()
     rIStm >> aPrefSz.Height();                      // PrefSize.Height()
-    ImplReadMapMode( rIStm, aMapMode );             // MapMode
-    rIStm >> nActions;                              // Action count
 
-    // Header-Kennung und Versionsnummer pruefen
-    if( ( memcmp( aCode, "SVGDI", sizeof( aCode ) ) != 0 ) || ( nVersion != 200 ) )
+    // check header-magic and version
+    if( rIStm.GetError()
+        || ( memcmp( aCode, "SVGDI", sizeof( aCode ) ) != 0 )
+        || ( nVersion != 200 ) )
     {
         rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
         rIStm.SetNumberFormatInt( nOldFormat );
         rIStm.Seek( nPos );
+        return;
     }
-    else
-    {
+
+    LineInfo            aLineInfo( LINE_NONE, 0 );
+    Stack               aLIStack;
+    VirtualDevice       aFontVDev;
+    rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
+    BOOL                bFatLine = FALSE;
+
+    // TODO: fix reindentation below if you can accept being blamed by the SCM
+        MapMode     aMapMode;
         Polygon     aActionPoly;
         Rectangle   aRect;
         Point       aPt, aPt1;
         Size        aSz;
         Color       aActionColor;
         INT32       nTmp, nTmp1, nActionSize;
+        INT32       nActions;
         INT16       nType;
 
         sal_uInt32  nUnicodeCommentStreamPos = 0;
         INT32       nUnicodeCommentActionNumber = 0;
+
+        ImplReadMapMode( rIStm, aMapMode );             // MapMode
+        rIStm >> nActions;                              // Action count
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
@@ -1084,7 +1089,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
                                                             (FontStrikeout) nStrikeout,
-                                                            (FontUnderline) nUnderline ) );
+                                                            (FontUnderline) nUnderline,
+                                                            UNDERLINE_NONE ) );
 
 #ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
@@ -1153,7 +1159,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         // cleanup push-pop stack if neccessary
         for( void* pLineInfo = aLIStack.Pop(); pLineInfo; pLineInfo = aLIStack.Pop() )
             delete (LineInfo*) pLineInfo;
-    }
 
     rIStm.SetNumberFormatInt( nOldFormat );
 }
@@ -2058,6 +2063,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 nCount++;
             }
             break;
+
+#if 0
+            case( META_OVERLINECOLOR_ACTION ):
+            break;
+#endif
 
             case( META_TEXTLINE_ACTION ):
             {

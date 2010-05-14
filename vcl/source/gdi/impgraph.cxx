@@ -1504,92 +1504,99 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
         // read Id
         rIStm >> nTmp;
 
-        if( NATIVE_FORMAT_50 == nTmp )
+        // if there is no more data, avoid further expensive
+        // reading which will create VDevs and other stuff, just to
+        // read nothing. CAUTION: Eof is only true AFTER reading another
+        // byte, a speciality of SvMemoryStream (!)
+        if(!rIStm.GetError() && !rIStm.IsEof())
         {
-            Graphic         aGraphic;
-            GfxLink         aLink;
-            VersionCompat*  pCompat;
-
-            // read compat info
-            pCompat = new VersionCompat( rIStm, STREAM_READ );
-            delete pCompat;
-
-            rIStm >> aLink;
-
-            // set dummy link to avoid creation of additional link after filtering;
-            // we set a default link to avoid unnecessary swapping of native data
-            aGraphic.SetLink( GfxLink() );
-
-            if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
+            if( NATIVE_FORMAT_50 == nTmp )
             {
-                // set link only, if no other link was set
-                const BOOL bSetLink = ( rImpGraphic.mpGfxLink == NULL );
+                Graphic         aGraphic;
+                GfxLink         aLink;
+                VersionCompat*  pCompat;
 
-                // assign graphic
-                rImpGraphic = *aGraphic.ImplGetImpGraphic();
+                // read compat info
+                pCompat = new VersionCompat( rIStm, STREAM_READ );
+                delete pCompat;
 
-                if( aLink.IsPrefMapModeValid() )
-                    rImpGraphic.ImplSetPrefMapMode( aLink.GetPrefMapMode() );
+                rIStm >> aLink;
 
-                if( aLink.IsPrefSizeValid() )
-                    rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
+                // set dummy link to avoid creation of additional link after filtering;
+                // we set a default link to avoid unnecessary swapping of native data
+                aGraphic.SetLink( GfxLink() );
 
-                if( bSetLink )
-                    rImpGraphic.ImplSetLink( aLink );
-            }
-            else
-            {
-                rIStm.Seek( nStmPos1 );
-                rIStm.SetError( ERRCODE_IO_WRONGFORMAT );
-            }
-        }
-        else
-        {
-            BitmapEx        aBmpEx;
-            const USHORT    nOldFormat = rIStm.GetNumberFormatInt();
-
-            rIStm.SeekRel( -4 );
-            rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-            rIStm >> aBmpEx;
-
-            if( !rIStm.GetError() )
-            {
-                UINT32  nMagic1(0), nMagic2(0);
-                ULONG   nActPos = rIStm.Tell();
-
-                rIStm >> nMagic1 >> nMagic2;
-                rIStm.Seek( nActPos );
-
-                rImpGraphic = ImpGraphic( aBmpEx );
-
-                if( !rIStm.GetError() && ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) )
+                if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
                 {
-                    delete rImpGraphic.mpAnimation;
-                    rImpGraphic.mpAnimation = new Animation;
-                    rIStm >> *rImpGraphic.mpAnimation;
+                    // set link only, if no other link was set
+                    const BOOL bSetLink = ( rImpGraphic.mpGfxLink == NULL );
 
-                    // #108077# manually set loaded BmpEx to Animation
-                    // (which skips loading its BmpEx if already done)
-                    rImpGraphic.mpAnimation->SetBitmapEx(aBmpEx);
+                    // assign graphic
+                    rImpGraphic = *aGraphic.ImplGetImpGraphic();
+
+                    if( aLink.IsPrefMapModeValid() )
+                        rImpGraphic.ImplSetPrefMapMode( aLink.GetPrefMapMode() );
+
+                    if( aLink.IsPrefSizeValid() )
+                        rImpGraphic.ImplSetPrefSize( aLink.GetPrefSize() );
+
+                    if( bSetLink )
+                        rImpGraphic.ImplSetLink( aLink );
                 }
                 else
-                    rIStm.ResetError();
+                {
+                    rIStm.Seek( nStmPos1 );
+                    rIStm.SetError( ERRCODE_IO_WRONGFORMAT );
+                }
             }
             else
             {
-                GDIMetaFile aMtf;
+                BitmapEx        aBmpEx;
+                const USHORT    nOldFormat = rIStm.GetNumberFormatInt();
 
-                rIStm.Seek( nStmPos1 );
-                rIStm.ResetError();
-                rIStm >> aMtf;
+                rIStm.SeekRel( -4 );
+                rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+                rIStm >> aBmpEx;
 
                 if( !rIStm.GetError() )
-                    rImpGraphic = aMtf;
-                else
-                    rIStm.Seek( nStmPos1 );
-            }
+                {
+                    UINT32  nMagic1(0), nMagic2(0);
+                    ULONG   nActPos = rIStm.Tell();
 
-            rIStm.SetNumberFormatInt( nOldFormat );
+                    rIStm >> nMagic1 >> nMagic2;
+                    rIStm.Seek( nActPos );
+
+                    rImpGraphic = ImpGraphic( aBmpEx );
+
+                    if( !rIStm.GetError() && ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) )
+                    {
+                        delete rImpGraphic.mpAnimation;
+                        rImpGraphic.mpAnimation = new Animation;
+                        rIStm >> *rImpGraphic.mpAnimation;
+
+                        // #108077# manually set loaded BmpEx to Animation
+                        // (which skips loading its BmpEx if already done)
+                        rImpGraphic.mpAnimation->SetBitmapEx(aBmpEx);
+                    }
+                    else
+                        rIStm.ResetError();
+                }
+                else
+                {
+                    GDIMetaFile aMtf;
+
+                    rIStm.Seek( nStmPos1 );
+                    rIStm.ResetError();
+                    rIStm >> aMtf;
+
+                    if( !rIStm.GetError() )
+                        rImpGraphic = aMtf;
+                    else
+                        rIStm.Seek( nStmPos1 );
+                }
+
+                rIStm.SetNumberFormatInt( nOldFormat );
+            }
         }
     }
 

@@ -406,8 +406,16 @@ void GtkData::initNWF( void )
     // open first menu on F10
     pSVData->maNWFData.mbOpenMenuOnF10 = true;
 
+    int nScreens = GetX11SalData()->GetDisplay()->GetScreenCount();
+    gWidgetData = std::vector<NWFWidgetData>( nScreens );
+    for( int i = 0; i < nScreens; i++ )
+        gWidgetData[i].gNWPixmapCacheList = new NWPixmapCacheList;
+
+
     if( SalGetDesktopEnvironment().equalsAscii( "KDE" ) )
     {
+        // #i97196# ensure a widget exists and the style engine was loaded
+        NWEnsureGTKButton( 0 );
         if( g_type_from_name( "QtEngineStyle" ) )
         {
             // KDE 3.3 invented a bug in the qt<->gtk theme engine
@@ -419,12 +427,6 @@ void GtkData::initNWF( void )
     static const char* pEnv = getenv( "SAL_GTK_USE_PIXMAPPAINT" );
     if( pEnv && *pEnv )
         GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
-
-    int nScreens = GetX11SalData()->GetDisplay()->GetScreenCount();
-    gWidgetData = std::vector<NWFWidgetData>( nScreens );
-    for( int i = 0; i < nScreens; i++ )
-        gWidgetData[i].gNWPixmapCacheList = new NWPixmapCacheList;
-
 
     #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "GtkPlugin: using %s NWF\n",
@@ -3356,7 +3358,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     static gboolean(*pAbso)(const PangoFontDescription*) =
         (gboolean(*)(const PangoFontDescription*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "pango_font_description_get_size_is_absolute" );
 
-    if( ! pAbso || pAbso( pStyle->font_desc ) )
+    if( pAbso && pAbso( pStyle->font_desc ) )
         nPointHeight = (nPangoHeight * 72 + nDispDPIY*PANGO_SCALE/2) / (nDispDPIY * PANGO_SCALE);
     else
         nPointHeight = nPangoHeight/PANGO_SCALE;

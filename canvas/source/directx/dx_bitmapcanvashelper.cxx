@@ -180,6 +180,7 @@ namespace dxcanvas
         if( !mpTarget )
             return uno::Sequence< sal_Int8 >();
 
+        bitmapLayout = getMemoryLayout();
         return mpTarget->getData(bitmapLayout,rect);
     }
 
@@ -224,6 +225,7 @@ namespace dxcanvas
         if( !mpTarget )
             return uno::Sequence< sal_Int8 >();
 
+        bitmapLayout = getMemoryLayout();
         return mpTarget->getPixel(bitmapLayout,pos);
     }
 

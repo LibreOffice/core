@@ -108,8 +108,11 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(USHORT aKey)
     {
         for (long aPara =nStartPara; aPara>=0;--aPara)
         {
+            if ( aStartPos == 0 )
+                continue;
+
             String aLine( GetTextEngine()->GetText( aPara ) );
-            for (USHORT i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (USHORT)(GetTextEngine()->GetTextLen()-1); i>0; --i)
+            for (USHORT i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (USHORT)(aLine.Len()-1); i>0; --i)
             {
                 if (aLine.GetChar(i)==aChar)
                 {

@@ -258,6 +258,7 @@ typedef USHORT StateChangedType;
 #define STATE_CHANGE_READONLY           ((StateChangedType)16)
 #define STATE_CHANGE_FORMAT             ((StateChangedType)17)
 #define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)18)
+#define STATE_CHANGE_MIRRORING          ((StateChangedType)19)
 #define STATE_CHANGE_USER               ((StateChangedType)10000)
 
 // GetFocusFlags
@@ -557,7 +558,7 @@ public:
 
     SAL_DLLPRIVATE static void ImplInitAppFontData( Window* pWindow );
     SAL_DLLPRIVATE void        ImplInitSalControlHandle();
-    SAL_DLLPRIVATE void        ImplPaintToMetaFile( GDIMetaFile* pMtf, OutputDevice* pTargetOutDev, const Region* pOuterClip = NULL );
+    SAL_DLLPRIVATE void        ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
 
     SAL_DLLPRIVATE BOOL        ImplIsInTaskPaneList();
     SAL_DLLPRIVATE void        ImplIsInTaskPaneList( BOOL mbIsInTaskList );

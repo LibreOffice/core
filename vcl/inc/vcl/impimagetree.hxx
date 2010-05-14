@@ -1,116 +1,92 @@
 /*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impimagetree.hxx,v $
- * $Revision: 1.4 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2008 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: code,v $
+*
+* $Revision: 1.4 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
 
-#ifndef _SV_IMPIMAGETREE_HXX
-#define _SV_IMPIMAGETREE_HXX
+#ifndef INCLUDED_VCL_IMPIMAGETREE_HXX
+#define INCLUDED_VCL_IMPIMAGETREE_HXX
 
-#include <memory>
+#include "sal/config.h"
 
-#ifndef _COMPHELPER_SINGLETONREF_HXX_
-#include <salhelper/singletonref.hxx>
-#endif
-#include <com/sun/star/uno/Reference.hxx>
+#include <list>
+#include <utility>
+#include <vector>
 
-// ----------------
-// -ImplImageTree -
-// ----------------
+#include <hash_map>
 
+#include "boost/noncopyable.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "rtl/ustring.hxx"
+#include "salhelper/singletonref.hxx"
+
+namespace com { namespace sun { namespace star { namespace container {
+    class XNameAccess;
+} } } }
 class BitmapEx;
-namespace com { namespace sun { namespace star { namespace packages { namespace zip { class XZipFileAccess; } } } } }
-namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace ucb { class XSimpleFileAccess; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
 
-// -------------------
-// - ImplZipAccessor -
-// -------------------
-
-class ImplZipAccessor
-{
-private:
-
-    ::std::vector< ::rtl::OUString >                                                                     maURLVector;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >                         mxFileAccess;
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::packages::zip::XZipFileAccess > > maZipAccVector;
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > >        maNameAccVector;
-
+class ImplImageTree: private boost::noncopyable {
 public:
+    ImplImageTree();
 
-                                ImplZipAccessor();
-                                ~ImplZipAccessor();
+    ~ImplImageTree();
 
-    void                        Update( const ::rtl::OUString& rSymbolsStyle );
-    void                        Clear();
-    bool                        HasEntries() const;
+    bool loadImage(
+        rtl::OUString const & name, rtl::OUString const & style,
+        BitmapEx & bitmap, bool localized = false);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetByName( const ::rtl::OUString& rName ) const;
-};
-
-// -----------------
-// - ImplImageTree -
-// -----------------
-
-class ImplImageTree
-{
-public:
-
-                    ImplImageTree();
-                    ~ImplImageTree();
-
-    bool            loadImage( const ::rtl::OUString& rName,
-                               const ::rtl::OUString& rSymbolsStyle,
-                               BitmapEx& rReturn,
-                               bool bSearchLanguageDependent = false );
-    void            addUserImage( const ::rtl::OUString& rName, const BitmapEx& rReturn );
-
-    static void     cleanup();
+    void shutDown();
+        // a crude form of life cycle control (called from DeInitVCL; otherwise,
+        // if the ImplImageTree singleton were destroyed during exit that would
+        // be too late for the destructors of the bitmaps in m_cache)
 
 private:
+    typedef std::list<
+        std::pair<
+            rtl::OUString,
+            com::sun::star::uno::Reference<
+                com::sun::star::container::XNameAccess > > > Zips;
 
-    ImplZipAccessor                                                                     maZipAcc;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mxPathSettings;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >        mxFileAccess;
-    bool                                                                                mbInit;
-    ::rtl::OUString                                                                     maSymbolsStyle;
+    typedef std::hash_map<
+        rtl::OUString, std::pair< bool, BitmapEx >, rtl::OUStringHash > Cache;
 
-    bool                    implInit();
-    const ::rtl::OUString&  implGetUserDirURL() const;
-    ::rtl::OUString         implGetUserFileURL( const ::rtl::OUString& rName ) const;
-    void                    implCheckUserCache();
-    bool                    implLoadFromStream( SvStream& rIStm, const ::rtl::OUString& rFileName, BitmapEx& rReturn );
-    ::std::auto_ptr< SvStream > implGetStream( const ::com::sun::star::uno::Reference<
-                                                        ::com::sun::star::io::XInputStream >& rxIStm ) const;
-    void                    implUpdateSymbolsStyle( const ::rtl::OUString& rSymbolsStyle );
+    rtl::OUString m_style;
+    Zips m_zips;
+    Cache m_cache;
+
+    void setStyle(rtl::OUString const & style);
+
+    void resetZips();
+
+    bool cacheLookup(
+        rtl::OUString const & name, bool localized, BitmapEx & bitmap);
+
+    bool find(std::vector< rtl::OUString > const & paths, BitmapEx & bitmap);
 };
 
-typedef ::salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;
+typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;
 
-#endif // _SV_IMPIMAGETREE_HXX
+#endif

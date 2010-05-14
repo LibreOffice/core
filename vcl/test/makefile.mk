@@ -46,13 +46,12 @@ TARGETTYPE=GUI
 
 # --- Files --------------------------------------------------------
 
-OBJFILES= \
+APP1OBJS= \
     $(OBJ)$/dndtest.obj
 
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
-APP1OBJS=	    $(OBJFILES)	$(OBJ)$/salmain.obj
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(TOOLSLIB) 		\
@@ -67,12 +66,6 @@ APP1STDLIBS=	$(CPPULIB)			\
 APP2TARGET= canvasbitmaptest
 APP2OBJS=	\
     $(OBJ)$/canvasbitmaptest.obj
-
-.IF "$(GUI)"!="UNX"
-    APP2OBJS += $(OBJ)$/salmain.obj
-.ELSE
-    APP2OBJS += $(SLO)$/salmain.obj
-.ENDIF
 
 APP2NOSAL=		TRUE
 APP2STDLIBS=$(TOOLSLIB) 		\

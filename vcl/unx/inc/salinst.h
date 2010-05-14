@@ -113,7 +113,8 @@ public:
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
     virtual void            DestroyMenuItem( SalMenuItem* pItem );
 
-    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    void                    FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
 
 
     bool isPrinterInit() const

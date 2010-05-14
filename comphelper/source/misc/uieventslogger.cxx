@@ -31,32 +31,39 @@
 #include "precompiled_comphelper.hxx"
 
 #include <comphelper/uieventslogger.hxx>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
+#include <com/sun/star/logging/XCsvLogFormatter.hpp>
 #include <com/sun/star/logging/XLogHandler.hpp>
+#include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/logging/XLoggerPool.hpp>
 #include <com/sun/star/oooimprovement/XCoreController.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <map>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/ustrbuf.hxx>
-#include <map>
 
 
 using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
+using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::logging;
 using namespace com::sun::star::oooimprovement;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
 using namespace std;
 
 
@@ -90,6 +97,7 @@ namespace
         abbrs[OUString::createFromAscii("ToolbarsMenuController")] = OUString::createFromAscii("15");
         abbrs[OUString::createFromAscii("SfxToolBoxControl")] = OUString::createFromAscii("16");
         abbrs[OUString::createFromAscii("SfxAsyncExec")] = OUString::createFromAscii("17");
+        abbrs[OUString::createFromAscii("AcceleratorExecute")] = OUString::createFromAscii("18");
     };
 }
 
@@ -102,7 +110,7 @@ namespace comphelper
         private:
             //typedefs and friends
             friend class UiEventsLogger;
-            typedef ::boost::shared_ptr<UiEventsLogger_Impl> ptr;
+            typedef UiEventsLogger_Impl* ptr;
 
             // instance methods and data
             UiEventsLogger_Impl();
@@ -121,10 +129,10 @@ namespace comphelper
             void checkIdleTimeout();
             OUString getCurrentPath();
             OUString getRotatedPath();
+            void disposing();
 
             bool m_Active;
             TimeValue m_LastLogEventTime;
-            Mutex m_LogMutex;
             const OUString m_LogPath;
             const TimeValue m_IdleTimeout;
             sal_Int32 m_SessionLogEventCount;
@@ -137,6 +145,7 @@ namespace comphelper
 
             // static methods and data
             static ptr getInstance();
+            static void prepareMutex();
             static bool shouldActivate();
             static bool getEnabledFromCoreController();
             static bool getEnabledFromCfg();
@@ -210,17 +219,19 @@ namespace comphelper
     sal_Bool UiEventsLogger::isEnabled()
     {
         try {
-            UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-            if(inst==UiEventsLogger_Impl::ptr()) return false;
-            return inst->m_Active;
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            return UiEventsLogger_Impl::getInstance()->m_Active;
         } catch(...) { return false; } // never throws
     }
 
     sal_Int32 UiEventsLogger::getSessionLogEventCount()
     {
-        UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-        if(inst==UiEventsLogger_Impl::ptr()) return 0;
-        return inst->m_SessionLogEventCount;
+        try {
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            return UiEventsLogger_Impl::getInstance()->m_SessionLogEventCount;
+        } catch(...) { return 0; } // never throws
     }
 
     void UiEventsLogger::appendDispatchOrigin(
@@ -254,8 +265,9 @@ namespace comphelper
         const Sequence<PropertyValue>& args)
     {
         try {
-            UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-            if(inst!=UiEventsLogger_Impl::ptr()) inst->logDispatch(url, args);
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            UiEventsLogger_Impl::getInstance()->logDispatch(url, args);
         } catch(...) { } // never throws
     }
 
@@ -267,8 +279,9 @@ namespace comphelper
         const OUString& param)
     {
         try {
-            UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-            if(inst!=UiEventsLogger_Impl::ptr()) inst->logVcl(parent_id, window_type, id, method, param);
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            UiEventsLogger_Impl::getInstance()->logVcl(parent_id, window_type, id, method, param);
         } catch(...) { } // never throws
     }
 
@@ -293,6 +306,27 @@ namespace comphelper
         UiEventsLogger::logVcl(parent_id, window_type, id, method, empty);
     }
 
+    void UiEventsLogger::disposing()
+    {
+        // we dont want to create an instance just to dispose it
+        UiEventsLogger_Impl::prepareMutex();
+        Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+        if(UiEventsLogger_Impl::instance!=UiEventsLogger_Impl::ptr())
+            UiEventsLogger_Impl::getInstance()->disposing();
+    }
+
+    void UiEventsLogger::reinit()
+    {
+        UiEventsLogger_Impl::prepareMutex();
+        Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+        if(UiEventsLogger_Impl::instance)
+        {
+            UiEventsLogger_Impl::instance->disposing();
+            delete UiEventsLogger_Impl::instance;
+            UiEventsLogger_Impl::instance = NULL;
+        }
+    }
+
     // private UiEventsLogger_Impl methods
     UiEventsLogger_Impl::UiEventsLogger_Impl()
         : m_Active(UiEventsLogger_Impl::shouldActivate())
@@ -313,7 +347,6 @@ namespace comphelper
     {
         if(!m_Active) return;
         if(!url.Complete.match(URL_UNO) && !url.Complete.match(URL_FILE)) return;
-        Guard<Mutex> log_guard(m_LogMutex);
         checkIdleTimeout();
 
         Sequence<OUString> logdata = Sequence<OUString>(COLUMNS);
@@ -364,7 +397,6 @@ namespace comphelper
         const OUString& param)
     {
         if(!m_Active) return;
-        Guard<Mutex> log_guard(m_LogMutex);
         checkIdleTimeout();
 
         OUStringBuffer buf;
@@ -463,6 +495,22 @@ namespace comphelper
     {
         Reference<XMultiServiceFactory> sm = getProcessServiceFactory();
 
+        // getting the Core Uno proxy object
+        // It will call disposing and make sure we clear all our references
+        {
+            Reference<XTerminateListener> xCore(
+                sm->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.Core")),
+                UNO_QUERY);
+            Reference<XDesktop> xDesktop(
+                sm->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")),
+                UNO_QUERY);
+            if(!(xCore.is() && xDesktop.is()))
+            {
+                m_Active = false;
+                return;
+            }
+            xDesktop->addTerminateListener(xCore);
+        }
         // getting the LoggerPool
         Reference<XLoggerPool> pool;
         {
@@ -570,19 +618,22 @@ namespace comphelper
     }
 
     UiEventsLogger_Impl::ptr UiEventsLogger_Impl::instance = UiEventsLogger_Impl::ptr();
-    Mutex * UiEventsLogger_Impl::singleton_mutex = NULL;
     UiEventsLogger_Impl::ptr UiEventsLogger_Impl::getInstance()
     {
-        if(singleton_mutex==NULL)
-        {
-            Guard<Mutex> global_guard(Mutex::getGlobalMutex());
-            if(singleton_mutex==NULL)
-                singleton_mutex = new Mutex();
-        }
-        Guard<Mutex> singleton_guard(singleton_mutex);
-        if(instance == 0)
+        if(instance == NULL)
             instance = UiEventsLogger_Impl::ptr(new UiEventsLogger_Impl());
         return instance;
+    }
+
+    Mutex * UiEventsLogger_Impl::singleton_mutex = NULL;
+    void UiEventsLogger_Impl::prepareMutex()
+    {
+        if(singleton_mutex == NULL)
+        {
+            Guard<Mutex> global_guard(Mutex::getGlobalMutex());
+            if(singleton_mutex == NULL)
+                singleton_mutex = new Mutex();
+        }
     }
 
     sal_Int32 UiEventsLogger_Impl::findIdx(const Sequence<PropertyValue>& args, const OUString& key)
@@ -591,5 +642,13 @@ namespace comphelper
             if(args[i].Name == key)
                 return i;
         return -1;
+    }
+
+    void UiEventsLogger_Impl::disposing()
+    {
+        m_Active = false;
+        m_Logger.clear() ;
+        m_LogHandler.clear();
+        m_Formatter.clear();
     }
 }

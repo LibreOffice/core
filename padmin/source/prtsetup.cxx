@@ -28,14 +28,14 @@
  *
  ************************************************************************/
 
-#include <psprint/fontmanager.hxx>
-#include <prtsetup.hxx>
-#include <helper.hxx> // for PaResId
-#ifndef _PAD_RTSETUP_HRC_
-#include <rtsetup.hrc>
-#endif
-#include <cmddlg.hxx>
-#include <osl/thread.h>
+#include "prtsetup.hxx"
+#include "helper.hxx" // for PaResId
+#include "rtsetup.hrc"
+#include "cmddlg.hxx"
+
+#include "vcl/fontmanager.hxx"
+
+#include "osl/thread.h"
 
 #define LSCAPE_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Landscape" ) )
 #define PORTRAIT_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Portrait" ) )

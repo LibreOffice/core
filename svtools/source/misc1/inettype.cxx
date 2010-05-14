@@ -1008,6 +1008,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(UniString const &
     INetContentType eTypeID = CONTENT_TYPE_UNKNOWN;
     UniString aToken = rURL.GetToken(0, ':');
     if (aToken.Len() != 0)
+    {
         if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_FILE))
             if (rURL.GetChar(rURL.Len() - 1) == '/') // folder
                 if (rURL.Len() > RTL_CONSTASCII_LENGTH("file:///"))
@@ -1094,6 +1095,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(UniString const &
             aToken = aSecondPart.GetToken(0, ',');
             eTypeID = GetContentType(aToken);
         }
+    }
     if (eTypeID == CONTENT_TYPE_UNKNOWN)
     {
         UniString aExtension;

@@ -35,42 +35,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sal/alloca.h>
 
-#include <prex.h>
+#include "prex.h"
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
-#include <FWS.hxx>
+#include "FWS.hxx"
 #include <X11/extensions/shape.h>
 #ifndef SOLARIS
 #include <X11/extensions/dpms.h>
 #endif
-#include <postx.h>
+#include "postx.h"
 
-#include <salunx.h>
-#include <tools/debug.hxx>
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#include <vcl/salinst.hxx>
-#include <salgdi.h>
-#include <salframe.h>
-#ifndef _SV_KEYCOES_HXX
-#include <vcl/keycodes.hxx>
-#endif
-#include <soicon.hxx>
-#include <dtint.hxx>
-#include <sm.hxx>
-#include <vcl/settings.hxx>
-#include <wmadaptor.hxx>
-#include <psprint/printerinfomanager.hxx>
-#include <salprn.h>
-#include <vcl/floatwin.hxx>
-#include <vcl/sallayout.hxx>
-#include <vcl/svapp.hxx>
-#include <salbmp.h>
-#include <i18n_ic.hxx>
-#include <i18n_keysym.hxx>
-#include <i18n_status.hxx>
+#include "salunx.h"
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salgdi.h"
+#include "salframe.h"
+#include "soicon.hxx"
+#include "dtint.hxx"
+#include "sm.hxx"
+#include "wmadaptor.hxx"
+#include "salprn.h"
+#include "salbmp.h"
+#include "i18n_ic.hxx"
+#include "i18n_keysym.hxx"
+#include "i18n_status.hxx"
+
+#include "vcl/salinst.hxx"
+#include "vcl/floatwin.hxx"
+#include "vcl/sallayout.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/keycodes.hxx"
+#include "vcl/printerinfomanager.hxx"
+#include "vcl/settings.hxx"
+
+#include "tools/debug.hxx"
+
+#include "sal/alloca.h"
 
 #include <algorithm>
 
@@ -424,7 +425,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         if( IsOverrideRedirect() )
             Attributes.override_redirect = True;
         // default icon
-        if( SelectAppIconPixmap( pDisplay_, m_nScreen,
+        if( (nStyle_ & SAL_FRAME_STYLE_INTRO) == 0 &&
+            SelectAppIconPixmap( pDisplay_, m_nScreen,
                                  mnIconID != 1 ? mnIconID :
                                  (mpParent ? mpParent->mnIconID : 1), 32,
                                  Hints.icon_pixmap, Hints.icon_mask ))
@@ -505,6 +507,10 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
 
     XSync( GetXDisplay(), False );
     setXEmbedInfo();
+
+    XLIB_Time nUserTime = (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_TOOLWINDOW) ) == 0 ?
+        pDisplay_->GetLastUserEventTime() : 0;
+    pDisplay_->getWMAdaptor()->setUserTime( this, nUserTime );
 
     if( ! pParentData && ! IsChildWindow() && ! Attributes.override_redirect )
     {
@@ -1104,7 +1110,7 @@ void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 // Show + Pos (x,y,z) + Size (width,height)
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
+void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( ( bVisible && bMapped_ )
         || ( !bVisible && !bMapped_ ) )
@@ -1191,6 +1197,11 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                           CurrentTime
                           );
         }
+
+        XLIB_Time nUserTime = 0;
+        if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
+            nUserTime = pDisplay_->GetLastUserEventTime();
+        GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
 
         // actually map the window
         if( m_bXEmbed )
@@ -1324,6 +1335,9 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                 XUngrabPointer( GetXDisplay(),
                                 CurrentTime );
         }
+        // flush here; there may be a very seldom race between
+        // the display connection used for clipboard and our connection
+        Flush();
     }
 }
 
@@ -2780,11 +2794,7 @@ static USHORT sal_GetCode( int state )
 
     if( state & ShiftMask )
         nCode |= KEY_SHIFT;
-    if( (state & ControlMask )
-#ifdef MACOSX
-     || (state & Mod2Mask) // map Meta (aka Command key) to Ctrl
-#endif
-      )
+    if( state & ControlMask )
         nCode |= KEY_MOD1;
     if( state & Mod1Mask )
         nCode |= KEY_MOD2;
@@ -3147,27 +3157,13 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     USHORT nModCode = 0;
     char        aDummy;
 
-#ifdef MACOSX
-    // map Meta (aka Command key) to Ctrl
-    if( pEvent->state & Mod2Mask )
-        nModCode |= KEY_MOD1;
-    if( nKeySym == XK_Meta_L )
-        nKeySym = XK_Control_L;
-    else if( nKeySym == XK_Meta_R )
-        nKeySym = XK_Control_R;
-#endif
-
     if( pEvent->state & ShiftMask )
         nModCode |= KEY_SHIFT;
     if( pEvent->state & ControlMask )
         nModCode |= KEY_MOD1;
-#ifdef MACOSX
-    if( pEvent->state & Mod2Mask )
-        nModCode |= KEY_MOD3;
-#else
     if( pEvent->state & Mod1Mask )
         nModCode |= KEY_MOD2;
-#endif
+
     if(     nKeySym == XK_Shift_L   || nKeySym == XK_Shift_R
         ||  nKeySym == XK_Control_L || nKeySym == XK_Control_R
         ||  nKeySym == XK_Alt_L     || nKeySym == XK_Alt_R
@@ -3201,19 +3197,11 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                 break;
             case XK_Alt_L:
                 nExtModMask = MODKEY_LMOD2;
-#ifdef MACOSX
-                nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_MOD3 : 0 );
-#else
                 nModMask = KEY_MOD2;
-#endif
                 break;
             case XK_Alt_R:
                 nExtModMask = MODKEY_RMOD2;
-#ifdef MACOSX
-                nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_MOD3 : 0 );
-#else
                 nModMask = KEY_MOD2;
-#endif
                 break;
             case XK_Shift_L:
                 nExtModMask = MODKEY_LSHIFT;
@@ -3616,37 +3604,6 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     {
         if( maGeometry.nX != pEvent->x || maGeometry.nY != pEvent->y )
         {
-#ifdef MACOSX
-            // #i68019#: Apple X11 doesn't draw offscreen...
-            // Better would be to test if the X server we are running on is Apple X11, but ...
-
-            Size aScreenSize = GetDisplay()->GetScreenSize( m_nScreen );
-            unsigned int nScreenWidth  = aScreenSize.Width();
-            unsigned int nScreenHeight = aScreenSize.Height();
-
-            // Repaint the window if it was possible to draw outside of the screen (in theory)
-            // 1. the window was below the screen and the window was moved up
-            // 2. the window was above the screen and the window was moved down
-            // 3. the window was out of the screen on the right side and the window was moved left
-            // 4. the window's left part was out of the screen and the window was moved right
-            if ( ( maGeometry.nY+maGeometry.nHeight > nScreenHeight &&
-                   pEvent->y < maGeometry.nY ) ||
-                 ( maGeometry.nY < 0 && pEvent->y > maGeometry.nY ) ||
-                 ( maGeometry.nX+maGeometry.nWidth  > nScreenWidth  &&
-                   pEvent->x < maGeometry.nX ) ||
-                 ( maGeometry.nX < 0 && pEvent->x > maGeometry.nX) )
-                {
-                    XEvent aEvent;
-                    aEvent.xexpose.type     = Expose;
-                    aEvent.xexpose.display  = pDisplay_->GetDisplay();
-                    aEvent.xexpose.x        = 0;
-                    aEvent.xexpose.y        = 0;
-                    aEvent.xexpose.width    = maGeometry.nWidth;
-                    aEvent.xexpose.height   = maGeometry.nHeight;
-                    aEvent.xexpose.count    = 0;
-                    HandleExposeEvent(&aEvent);
-                }
-#endif
             maGeometry.nX = pEvent->x;
             maGeometry.nY = pEvent->y;
             CallCallback( SALEVENT_MOVE, NULL );

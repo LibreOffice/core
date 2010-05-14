@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gdimtf.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -759,6 +759,8 @@ BOOL GDIMetaFile::SaveStatus()
                                                 pOutDev->IsTextFillColor() ) );
         AddAction( new MetaTextLineColorAction( pOutDev->GetTextLineColor(),
                                                 pOutDev->IsTextLineColor() ) );
+        AddAction( new MetaOverlineColorAction( pOutDev->GetOverlineColor(),
+                                                pOutDev->IsOverlineColor() ) );
         AddAction( new MetaTextAlignAction( pOutDev->GetTextAlign() ) );
         AddAction( new MetaRasterOpAction( pOutDev->GetRasterOp() ) );
         AddAction( new MetaMapModeAction( pOutDev->GetMapMode() ) );
@@ -1097,7 +1099,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 {
                     MetaTextLineAction* pAct = (MetaTextLineAction*) pAction;
                     aMtf.AddAction( new MetaTextLineAction( ImplGetRotatedPoint( pAct->GetStartPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                                 pAct->GetWidth(), pAct->GetStrikeout(), pAct->GetUnderline() ) );
+                                                                                 pAct->GetWidth(), pAct->GetStrikeout(), pAct->GetUnderline(), pAct->GetOverline() ) );
                 }
                 break;
 
@@ -1586,6 +1588,19 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                     pAct->Duplicate();
                 else
                     pAct = new MetaTextLineColorAction( pFncCol( pAct->GetColor(), pColParam ), TRUE );
+
+                aMtf.Insert( pAct, LIST_APPEND );
+            }
+            break;
+
+            case( META_OVERLINECOLOR_ACTION ):
+            {
+                MetaOverlineColorAction* pAct = (MetaOverlineColorAction*) pAction;
+
+                if( !pAct->IsSetting() )
+                    pAct->Duplicate();
+                else
+                    pAct = new MetaOverlineColorAction( pFncCol( pAct->GetColor(), pColParam ), TRUE );
 
                 aMtf.Insert( pAct, LIST_APPEND );
             }

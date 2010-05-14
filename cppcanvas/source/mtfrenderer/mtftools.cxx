@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mtftools.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -308,7 +308,7 @@ namespace cppcanvas
             return true;
         }
 
-        // create underline/strikeout line info struct
+        // create overline/underline/strikeout line info struct
         TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
                                          const ::cppcanvas::internal::OutDevState&  rState )
         {
@@ -325,8 +325,11 @@ namespace cppcanvas
 
             TextLineInfo aTextInfo(
                 (aMetric.GetDescent() + 2) / 4.0,
+                ((aMetric.GetIntLeading() + 1.5) / 3.0),
+                (aMetric.GetIntLeading() / 2.0) - aMetric.GetAscent(),
                 aMetric.GetDescent() / 2.0,
                 (aMetric.GetIntLeading() - aMetric.GetAscent()) / 3.0,
+                rState.textOverlineStyle,
                 rState.textUnderlineStyle,
                 rState.textStrikeoutStyle );
 
@@ -396,6 +399,111 @@ namespace cppcanvas
         {
             // fill the polypolygon with all text lines
             ::basegfx::B2DPolyPolygon aTextLinesPolyPoly;
+
+            switch( rTextLineInfo.mnOverlineStyle )
+            {
+                case UNDERLINE_NONE:          // nothing to do
+                    // FALLTHROUGH intended
+                case UNDERLINE_DONTKNOW:
+                    break;
+
+                case UNDERLINE_SMALLWAVE:     // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_WAVE:          // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_SINGLE:
+                    appendRect(
+                        aTextLinesPolyPoly,
+                        rStartPos,
+                        0,
+                        rTextLineInfo.mnOverlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight );
+                    break;
+
+                case UNDERLINE_BOLDDOTTED:    // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_BOLDDASH:      // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_BOLDLONGDASH:  // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_BOLDDASHDOT:   // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_BOLDDASHDOTDOT:// TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_BOLDWAVE:      // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_BOLD:
+                    appendRect(
+                        aTextLinesPolyPoly,
+                        rStartPos,
+                        0,
+                        rTextLineInfo.mnOverlineOffset - rTextLineInfo.mnOverlineHeight,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight );
+                    break;
+
+                case UNDERLINE_DOUBLEWAVE:    // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_DOUBLE:
+                    appendRect(
+                        aTextLinesPolyPoly,
+                        rStartPos,
+                        0,
+                        rTextLineInfo.mnOverlineOffset - rTextLineInfo.mnOverlineHeight * 2.0 ,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineOffset - rTextLineInfo.mnOverlineHeight );
+
+                    appendRect(
+                        aTextLinesPolyPoly,
+                        rStartPos,
+                        0,
+                        rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight * 2.0 );
+                    break;
+
+                case UNDERLINE_DASHDOTDOT:    // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_DOTTED:
+                    appendDashes(
+                        aTextLinesPolyPoly,
+                        rStartPos.getX(),
+                        rStartPos.getY() + rTextLineInfo.mnOverlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineHeight,
+                        rTextLineInfo.mnOverlineHeight,
+                        2*rTextLineInfo.mnOverlineHeight );
+                    break;
+
+                case UNDERLINE_DASHDOT:       // TODO(F3): NYI
+                    // FALLTHROUGH intended
+                case UNDERLINE_DASH:
+                    appendDashes(
+                        aTextLinesPolyPoly,
+                        rStartPos.getX(),
+                        rStartPos.getY() + rTextLineInfo.mnOverlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineHeight,
+                        3*rTextLineInfo.mnOverlineHeight,
+                        6*rTextLineInfo.mnOverlineHeight );
+                    break;
+
+                case UNDERLINE_LONGDASH:
+                    appendDashes(
+                        aTextLinesPolyPoly,
+                        rStartPos.getX(),
+                        rStartPos.getY() + rTextLineInfo.mnOverlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineHeight,
+                        6*rTextLineInfo.mnOverlineHeight,
+                        12*rTextLineInfo.mnOverlineHeight );
+                    break;
+
+                default:
+                    ENSURE_OR_THROW( false,
+                                      "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected overline case" );
+            }
 
             switch( rTextLineInfo.mnUnderlineStyle )
             {

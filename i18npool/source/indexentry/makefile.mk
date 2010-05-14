@@ -54,13 +54,15 @@ SLOFILES=   \
 OBJFILES   = $(OBJ)$/genindex_data.obj
 
 APP1TARGET = genindex_data
+APP1RPATH = NONE
 
 DEPOBJFILES   = $(OBJ)$/genindex_data.obj
 APP1OBJS   = $(DEPOBJFILES)
 
 APP1STDLIBS = $(SALLIB) \
         $(ICUINLIB) \
-        $(ICUUCLIB)
+        $(ICUUCLIB) \
+        $(ICUDATALIB)
 
 # --- Targets ------------------------------------------------------
 

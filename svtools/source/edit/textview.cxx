@@ -630,6 +630,22 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             case KEY_END:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
+            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                       && !( rKeyEvent.GetKeyCode().IsMod1() && ( nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN ) ) )
@@ -649,6 +665,10 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             break;
             case KEY_BACKSPACE:
             case KEY_DELETE:
+            case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
             {
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
@@ -656,6 +676,27 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                     BYTE nMode = rKeyEvent.GetKeyCode().IsMod1() ? DELMODE_RESTOFWORD : DELMODE_SIMPLE;
                     if ( ( nMode == DELMODE_RESTOFWORD ) && rKeyEvent.GetKeyCode().IsShift() )
                         nMode = DELMODE_RESTOFCONTENT;
+
+                    switch( nCode )
+                    {
+                    case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+                        nDel = DEL_LEFT;
+                        nMode = DELMODE_RESTOFWORD;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+                        nDel = DEL_RIGHT;
+                        nMode = DELMODE_RESTOFWORD;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+                        nDel = DEL_LEFT;
+                        nMode = DELMODE_RESTOFCONTENT;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+                        nDel = DEL_RIGHT;
+                        nMode = DELMODE_RESTOFCONTENT;
+                        break;
+                    default: break;
+                    }
 
                     mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_DELETE );
                     if(mpImpl->mbSupportProtectAttribute)
@@ -1236,6 +1277,7 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     BOOL bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
     USHORT nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
 
+    bool bSelect = aTranslatedKeyEvent.GetKeyCode().IsShift();
     switch ( nCode )
     {
         case KEY_UP:        aPaM = CursorUp( aPaM );
@@ -1254,10 +1296,50 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
+        case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+                            aPaM = CursorWordRight( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+                            aPaM = CursorWordLeft( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+                            aPaM = CursorStartOfLine( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+                            aPaM = CursorEndOfLine( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+                            aPaM = CursorStartOfParagraph( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+                            aPaM = CursorEndOfParagraph( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+                            aPaM = CursorStartOfDoc();
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+                            aPaM = CursorEndOfDoc();
+                            break;
     }
 
     // Bewirkt evtl. ein CreateAnchor oder Deselection all
-    mpImpl->mpSelEngine->CursorPosChanging( aTranslatedKeyEvent.GetKeyCode().IsShift(), aTranslatedKeyEvent.GetKeyCode().IsMod1() );
+    mpImpl->mpSelEngine->CursorPosChanging( bSelect, aTranslatedKeyEvent.GetKeyCode().IsMod1() );
 
     if ( aOldEnd != aPaM )
     {
@@ -1267,7 +1349,7 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
         TextSelection aOldSelection( mpImpl->maSelection );
         TextSelection aNewSelection( mpImpl->maSelection );
         aNewSelection.GetEnd() = aPaM;
-        if ( aTranslatedKeyEvent.GetKeyCode().IsShift() )
+        if ( bSelect )
         {
             // Dann wird die Selektion erweitert...
             ImpSetSelection( aNewSelection );

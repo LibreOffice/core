@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter.hxx,v $
- * $Revision: 1.8.86.1 $
+ * $Revision: 1.8.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -693,6 +693,8 @@ The following structure describes the permissions used in PDF security
 
     void               SetTextLineColor();
     void               SetTextLineColor( const Color& rColor );
+    void               SetOverlineColor();
+    void               SetOverlineColor( const Color& rColor );
     void               SetTextAlign( ::TextAlign eAlign );
 
     void               SetMapMode();
@@ -705,6 +707,7 @@ The following structure describes the permissions used in PDF security
     void                DrawTextLine( const Point& rPos, long nWidth,
                                       FontStrikeout eStrikeout,
                                       FontUnderline eUnderline,
+                                      FontUnderline eOverline,
                                       BOOL bUnderlineAbove = FALSE );
     void                DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,

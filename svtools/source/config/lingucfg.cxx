@@ -148,7 +148,6 @@ SvtLinguOptions::SvtLinguOptions()
     nDefaultLanguage_CTL = LANGUAGE_NONE;
 
     // general options
-    bIsGermanPreReform      = FALSE;
     bIsUseDictionaryList    =
     bIsIgnoreControlCharacters  = TRUE;
 
@@ -156,8 +155,6 @@ SvtLinguOptions::SvtLinguOptions()
     bIsSpellCapitalization  =
     bIsSpellSpecial         = TRUE;
     bIsSpellAuto            =
-    bIsSpellInAllLanguages  =
-    bIsSpellHideMarkings    =
     bIsSpellReverse         =
     bIsSpellWithDigits      =
     bIsSpellUpperCase       = FALSE;
@@ -284,7 +281,6 @@ static struct NamesToHdl
 {/*  1 */    "General/DictionaryList/ActiveDictionaries",     UPN_ACTIVE_DICTIONARIES,               UPH_ACTIVE_DICTIONARIES},
 {/*  2 */    "General/DictionaryList/IsUseDictionaryList",    UPN_IS_USE_DICTIONARY_LIST,            UPH_IS_USE_DICTIONARY_LIST},
 {/*  3 */    "General/IsIgnoreControlCharacters",             UPN_IS_IGNORE_CONTROL_CHARACTERS,      UPH_IS_IGNORE_CONTROL_CHARACTERS},
-{/*  4 */    "General/IsGermanPreReform",                     UPN_IS_GERMAN_PRE_REFORM,              UPH_IS_GERMAN_PRE_REFORM},
 {/*  5 */    "General/DefaultLocale_CJK",                     UPN_DEFAULT_LOCALE_CJK,                UPH_DEFAULT_LOCALE_CJK},
 {/*  6 */    "General/DefaultLocale_CTL",                     UPN_DEFAULT_LOCALE_CTL,                UPH_DEFAULT_LOCALE_CTL},
 
@@ -293,8 +289,6 @@ static struct NamesToHdl
 {/*  9 */    "SpellChecking/IsSpellCapitalization",           UPN_IS_SPELL_CAPITALIZATION,           UPH_IS_SPELL_CAPITALIZATION},
 {/* 10 */    "SpellChecking/IsSpellAuto",                     UPN_IS_SPELL_AUTO,                     UPH_IS_SPELL_AUTO},
 {/* 11 */    "SpellChecking/IsSpellSpecial",                  UPN_IS_SPELL_SPECIAL,                  UPH_IS_SPELL_SPECIAL},
-{/* 12 */    "SpellChecking/IsSpellInAllLocales",             UPN_IS_SPELL_IN_ALL_LANGUAGES,         UPH_IS_SPELL_IN_ALL_LANGUAGES},
-{/* 13 */    "SpellChecking/IsHideMarkings",                  UPN_IS_SPELL_HIDE,                     UPH_IS_SPELL_HIDE},
 {/* 14 */    "SpellChecking/IsReverseDirection",              UPN_IS_WRAP_REVERSE,                   UPH_IS_WRAP_REVERSE},
 
 {/* 15 */    "Hyphenation/MinLeading",                        UPN_HYPH_MIN_LEADING,                  UPH_HYPH_MIN_LEADING},
@@ -408,14 +402,11 @@ uno::Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
     const SvtLinguOptions &rOpt = const_cast< SvtLinguConfigItem * >(this)->aOpt;
     switch (nPropertyHandle)
     {
-        case UPH_IS_GERMAN_PRE_REFORM :     pbVal = &rOpt.bIsGermanPreReform;   break;
         case UPH_IS_USE_DICTIONARY_LIST :   pbVal = &rOpt.bIsUseDictionaryList; break;
         case UPH_IS_IGNORE_CONTROL_CHARACTERS : pbVal = &rOpt.bIsIgnoreControlCharacters;   break;
         case UPH_IS_HYPH_AUTO :             pbVal = &rOpt.bIsHyphAuto;  break;
         case UPH_IS_HYPH_SPECIAL :          pbVal = &rOpt.bIsHyphSpecial;   break;
         case UPH_IS_SPELL_AUTO :            pbVal = &rOpt.bIsSpellAuto; break;
-        case UPH_IS_SPELL_HIDE :            pbVal = &rOpt.bIsSpellHideMarkings; break;
-        case UPH_IS_SPELL_IN_ALL_LANGUAGES :pbVal = &rOpt.bIsSpellInAllLanguages;   break;
         case UPH_IS_SPELL_SPECIAL :         pbVal = &rOpt.bIsSpellSpecial;  break;
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse;  break;
         case UPH_DEFAULT_LANGUAGE :         pnVal = &rOpt.nDefaultLanguage; break;
@@ -467,7 +458,7 @@ uno::Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            DBG_ERROR( "unexpected property handle" );
+            DBG_ASSERT( 0, "unexpected property handle" );
     }
 
     if (pbVal)
@@ -510,14 +501,11 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rVa
     SvtLinguOptions &rOpt = aOpt;
     switch (nPropertyHandle)
     {
-        case UPH_IS_GERMAN_PRE_REFORM :     pbVal = &rOpt.bIsGermanPreReform;  break;
         case UPH_IS_USE_DICTIONARY_LIST :   pbVal = &rOpt.bIsUseDictionaryList;    break;
         case UPH_IS_IGNORE_CONTROL_CHARACTERS : pbVal = &rOpt.bIsIgnoreControlCharacters;  break;
         case UPH_IS_HYPH_AUTO :             pbVal = &rOpt.bIsHyphAuto; break;
         case UPH_IS_HYPH_SPECIAL :          pbVal = &rOpt.bIsHyphSpecial;  break;
         case UPH_IS_SPELL_AUTO :            pbVal = &rOpt.bIsSpellAuto;    break;
-        case UPH_IS_SPELL_HIDE :            pbVal = &rOpt.bIsSpellHideMarkings;    break;
-        case UPH_IS_SPELL_IN_ALL_LANGUAGES :pbVal = &rOpt.bIsSpellInAllLanguages;  break;
         case UPH_IS_SPELL_SPECIAL :         pbVal = &rOpt.bIsSpellSpecial; break;
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse; break;
         case UPH_DEFAULT_LANGUAGE :         pnVal = &rOpt.nDefaultLanguage;    break;
@@ -571,7 +559,7 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rVa
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            DBG_ERROR( "unexpected property handle" );
+            DBG_ASSERT( 0, "unexpected property handle" );
     }
 
     if (pbVal)
@@ -673,8 +661,6 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                     { rOpt.bROIsUseDictionaryList = pROStates[i]; rVal >>= rOpt.bIsUseDictionaryList;  } break;
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS :
                     { rOpt.bROIsIgnoreControlCharacters = pROStates[i]; rVal >>= rOpt.bIsIgnoreControlCharacters;    } break;
-                case UPH_IS_GERMAN_PRE_REFORM :
-                    { rOpt.bROIsGermanPreReform = pROStates[i]; rVal >>= rOpt.bIsGermanPreReform;    } break;
                 case UPH_DEFAULT_LOCALE_CJK :
                     { rOpt.bRODefaultLanguage_CJK = pROStates[i]; lcl_CfgAnyToLanguage( rVal, rOpt.nDefaultLanguage_CJK );    } break;
                 case UPH_DEFAULT_LOCALE_CTL :
@@ -690,10 +676,6 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                     { rOpt.bROIsSpellAuto = pROStates[i]; rVal >>= rOpt.bIsSpellAuto;  } break;
                 case UPH_IS_SPELL_SPECIAL :
                     { rOpt.bROIsSpellSpecial = pROStates[i]; rVal >>= rOpt.bIsSpellSpecial;   } break;
-                case UPH_IS_SPELL_IN_ALL_LANGUAGES :
-                    { rOpt.bROIsSpellInAllLanguages = pROStates[i]; rVal >>= rOpt.bIsSpellInAllLanguages;    } break;
-                case UPH_IS_SPELL_HIDE :
-                    { rOpt.bROIsSpellHideMarkings = pROStates[i]; rVal >>= rOpt.bIsSpellHideMarkings;  } break;
                 case UPH_IS_WRAP_REVERSE :
                     { rOpt.bROIsSpellReverse = pROStates[i]; rVal >>= rOpt.bIsSpellReverse;   } break;
 
@@ -754,7 +736,7 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                 break;
 
                 default:
-                    DBG_ERROR( "unexpected case" );
+                    DBG_ASSERT( 0, "unexpected case" );
             }
         }
 
@@ -791,7 +773,6 @@ BOOL SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         *pValue++ = uno::makeAny( rOpt.aActiveDics );                   //   1
         pValue++->setValue( &rOpt.bIsUseDictionaryList, rBOOL );        //   2
         pValue++->setValue( &rOpt.bIsIgnoreControlCharacters, rBOOL );  //   3
-        pValue++->setValue( &rOpt.bIsGermanPreReform, rBOOL );          //   4
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CJK );
         *pValue++ = uno::makeAny( aTmp );                               //   5
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CTL );
@@ -802,8 +783,6 @@ BOOL SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         pValue++->setValue( &rOpt.bIsSpellCapitalization, rBOOL );     //   9
         pValue++->setValue( &rOpt.bIsSpellAuto, rBOOL );               //  10
         pValue++->setValue( &rOpt.bIsSpellSpecial, rBOOL );            //  11
-        pValue++->setValue( &rOpt.bIsSpellInAllLanguages, rBOOL );     //  12
-        pValue++->setValue( &rOpt.bIsSpellHideMarkings, rBOOL );       //  13
         pValue++->setValue( &rOpt.bIsSpellReverse, rBOOL );            //  14
 
         pValue++->setValue( &rOpt.nHyphMinLeading, rINT16 );           //  15
@@ -857,14 +836,11 @@ BOOL SvtLinguConfigItem::IsReadOnly( INT32 nPropertyHandle ) const
     const SvtLinguOptions &rOpt = const_cast< SvtLinguConfigItem * >(this)->aOpt;
     switch(nPropertyHandle)
     {
-        case UPH_IS_GERMAN_PRE_REFORM           : bReadOnly = rOpt.bROIsGermanPreReform        ; break;
         case UPH_IS_USE_DICTIONARY_LIST         : bReadOnly = rOpt.bROIsUseDictionaryList      ; break;
         case UPH_IS_IGNORE_CONTROL_CHARACTERS   : bReadOnly = rOpt.bROIsIgnoreControlCharacters; break;
         case UPH_IS_HYPH_AUTO                   : bReadOnly = rOpt.bROIsHyphAuto               ; break;
         case UPH_IS_HYPH_SPECIAL                : bReadOnly = rOpt.bROIsHyphSpecial            ; break;
         case UPH_IS_SPELL_AUTO                  : bReadOnly = rOpt.bROIsSpellAuto              ; break;
-        case UPH_IS_SPELL_HIDE                  : bReadOnly = rOpt.bROIsSpellHideMarkings      ; break;
-        case UPH_IS_SPELL_IN_ALL_LANGUAGES      : bReadOnly = rOpt.bROIsSpellInAllLanguages    ; break;
         case UPH_IS_SPELL_SPECIAL               : bReadOnly = rOpt.bROIsSpellSpecial           ; break;
         case UPH_IS_WRAP_REVERSE                : bReadOnly = rOpt.bROIsSpellReverse           ; break;
         case UPH_DEFAULT_LANGUAGE               : bReadOnly = rOpt.bRODefaultLanguage          ; break;
@@ -891,7 +867,7 @@ BOOL SvtLinguConfigItem::IsReadOnly( INT32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       bReadOnly = rOpt.bROIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                bReadOnly = rOpt.bROIsGrammarInteractive; break;
         default :
-            DBG_ERROR( "unexpected property handle" );
+            DBG_ASSERT( 0, "unexpected property handle" );
     }
     return bReadOnly;
 }
@@ -1106,7 +1082,7 @@ void SvtLinguConfig::SetOrCreateSupportedDictionaryFormatsFor(
 
 static uno::WeakReference< util::XMacroExpander > aG_xMacroExpander;
 
-static uno::Reference< util::XMacroExpander > GetMacroExpander()
+static uno::Reference< util::XMacroExpander > lcl_GetMacroExpander()
 {
     uno::Reference< util::XMacroExpander > xMacroExpander( aG_xMacroExpander );
     if ( !xMacroExpander.is() )
@@ -1129,6 +1105,45 @@ static uno::Reference< util::XMacroExpander > GetMacroExpander()
     }
 
     return xMacroExpander;
+}
+
+
+static bool lcl_GetFileUrlFromOrigin(
+    OUString /*out*/ &rFileUrl,
+    const OUString &rOrigin,
+    uno::Reference< util::XMacroExpander > &rxMacroExpander )
+{
+    bool bSuccess = false;
+    if (rOrigin.getLength() > 0 && rxMacroExpander.is())
+    {
+        rtl::OUString aURL( rOrigin );
+        if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
+            rxMacroExpander.is() )
+        {
+            // cut protocol
+            OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+            // decode uric class chars
+            aMacro = Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+            // expand macro string
+            aURL = rxMacroExpander->expandMacros( aMacro );
+
+            bool bIsFileUrl = aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( FILE_PROTOCOL )) == 0;
+            if (bIsFileUrl)
+            {
+                rFileUrl = aURL;
+                bSuccess = true;
+            }
+            else
+            {
+                DBG_ASSERT( bIsFileUrl, "not a file URL");
+            }
+        }
+        else
+        {
+            DBG_ASSERT( 0, "failed to get file URL" );
+        }
+    }
+    return bSuccess;
 }
 
 
@@ -1161,34 +1176,12 @@ BOOL SvtLinguConfig::GetDictionaryEntry(
         if (bSuccess)
         {
             // get file URL's for the locations
-            uno::Reference< util::XMacroExpander > xMacroExpander( GetMacroExpander() );
+            uno::Reference< util::XMacroExpander > xMacroExpander( lcl_GetMacroExpander() );
             for (sal_Int32 i = 0;  i < aLocations.getLength();  ++i)
             {
-                rtl::OUString aURL( aLocations[i] );
-                if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
-                    xMacroExpander.is() )
-                {
-                    // cut protocol
-                    OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-                    // decode uric class chars
-                    aMacro = Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                    // expand macro string
-                    aURL = xMacroExpander->expandMacros( aMacro );
-
-                    bool bIsFileUrl = aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( FILE_PROTOCOL )) == 0;
-                    if (!bIsFileUrl)
-                    {
-                        bSuccess = false;
-                        DBG_ASSERT( bIsFileUrl, "not a file URL");
-                    }
-
-                    aLocations[i] = aURL;
-                }
-                else
-                {
+                rtl::OUString &rLocation = aLocations[i];
+                if (!lcl_GetFileUrlFromOrigin( rLocation, rLocation, xMacroExpander ))
                     bSuccess = false;
-                    DBG_ERROR( "failed to get file URL" );
-                }
             }
 
             // if everything was fine return the result
@@ -1324,16 +1317,6 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     {
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    {
-        // just for testing...
-        LanguageType nLang = LANGUAGE_GERMAN;
-        HasAnySpellAndGrammarDialogImage();
-        HasAnySpellAndGrammarContextImage();
-        GetSpellAndGrammarDialogImage( nLang );
-        GetSpellAndGrammarContextImage( nLang );
-    }
-#endif
     return aRes;
 }
 
@@ -1374,93 +1357,104 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
     return m_xMainUpdateAccess;
 }
 
-rtl::OUString SvtLinguConfig::GetSpellAndGrammarDialogImage( LanguageType nLang ) const
-{
-    rtl::OUString   aRes;
 
-    rtl::OUString   aLangIsoName( lcl_LanguageToCfgLocaleStr( nLang ) );
+rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
+    const rtl::OUString &rServiceImplName,
+    const rtl::OUString &rImageName ) const
+{
+    rtl::OUString aRes;
     try
     {
-        uno::Reference< container::XNameAccess > xBitmapsNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xBitmapsNA.set( xBitmapsNA->getByName( A2OU("Bitmaps") ), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xImagesNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xImagesNA.set( xImagesNA->getByName( A2OU("Images") ), uno::UNO_QUERY_THROW );
 
-        uno::Reference< container::XNameAccess > xNA( xBitmapsNA->getByName( A2OU("SpellAndGrammarDialog") ), uno::UNO_QUERY_THROW );
-        uno::Any aAny( xNA->getByName( aLangIsoName ) );
-        rtl::OUString aVendorImplName;
-        if (aAny >>= aVendorImplName)
+        uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName( A2OU("ServiceNameEntries") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rServiceImplName ), uno::UNO_QUERY_THROW );
+        uno::Any aAny( xNA->getByName( A2OU("VendorImagesNode") ) );
+        rtl::OUString aVendorImagesNode;
+        if (aAny >>= aVendorImagesNode)
         {
-            xNA = xBitmapsNA;
+            xNA = xImagesNA;
             xNA.set( xNA->getByName( A2OU("VendorImages") ), uno::UNO_QUERY_THROW );
-            xNA.set( xNA->getByName( aVendorImplName ), uno::UNO_QUERY_THROW );
-            aAny = xNA->getByName( A2OU("SpellAndGrammarDialogImage") );
+            xNA.set( xNA->getByName( aVendorImagesNode ), uno::UNO_QUERY_THROW );
+            aAny = xNA->getByName( rImageName );
             rtl::OUString aTmp;
             if (aAny >>= aTmp)
             {
-                aRes = aTmp;
+                uno::Reference< util::XMacroExpander > xMacroExpander( lcl_GetMacroExpander() );
+                if (lcl_GetFileUrlFromOrigin( aTmp, aTmp, xMacroExpander ))
+                    aRes = aTmp;
             }
         }
     }
     catch (uno::Exception &)
     {
-        DBG_ASSERT( 0, "exception caught. GetSpellAndGrammarDialogImage failed" );
+        DBG_ASSERT( 0, "exception caught. GetVendorImageUrl_Impl failed" );
     }
-
     return aRes;
 }
 
 
-rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextImage( LanguageType nLang ) const
+rtl::OUString SvtLinguConfig::GetSpellAndGrammarDialogImage(
+    const rtl::OUString &rServiceImplName,
+    bool bHighContrast ) const
 {
     rtl::OUString   aRes;
-
-    rtl::OUString   aLangIsoName( lcl_LanguageToCfgLocaleStr( nLang ) );
-    try
+    if (rServiceImplName.getLength() > 0)
     {
-        (void) aLangIsoName;
-    }
-    catch (uno::Exception &)
-    {
-        DBG_ASSERT( 0, "exception caught. GetSpellAndGrammarContextImage failed" );
+        rtl::OUString aImageName( A2OU( bHighContrast ? "SpellAndGrammarDialogImage_HC" : "SpellAndGrammarDialogImage" ));
+        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        aRes = aPath;
     }
     return aRes;
 }
 
 
-bool SvtLinguConfig::HasAnySpellAndGrammarDialogImage() const
+rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
+    const rtl::OUString &rServiceImplName,
+    bool bHighContrast ) const
 {
-    bool bRes = false;
-    try
+    rtl::OUString   aRes;
+    if (rServiceImplName.getLength() > 0)
     {
-        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("Bitmaps") ), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("SpellAndGrammarDialog") ), uno::UNO_QUERY_THROW );
-
-        uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
-        bRes = aElementNames.getLength() > 0;
+        rtl::OUString aImageName( A2OU( bHighContrast ? "SpellAndGrammarContextMenuSuggestionImage_HC" : "SpellAndGrammarContextMenuSuggestionImage" ));
+        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        aRes = aPath;
     }
-    catch (uno::Exception &)
-    {
-        DBG_ASSERT( 0, "exception caught. HasAnySpellAndGrammarDialogImage failed" );
-    }
-    return bRes;
+    return aRes;
 }
 
 
-bool SvtLinguConfig::HasAnySpellAndGrammarContextImage() const
+rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
+    const rtl::OUString &rServiceImplName,
+    bool bHighContrast ) const
+{
+    rtl::OUString   aRes;
+    if (rServiceImplName.getLength() > 0)
+    {
+        rtl::OUString aImageName( A2OU( bHighContrast ? "SpellAndGrammarContextMenuDictionaryImage_HC" : "SpellAndGrammarContextMenuDictionaryImage" ));
+        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        aRes = aPath;
+    }
+    return aRes;
+}
+
+
+bool SvtLinguConfig::HasAnyVendorImages() const
 {
     bool bRes = false;
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("Bitmaps") ), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("SpellAndGrammarContextMenu") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("Images") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("VendorImages") ), uno::UNO_QUERY_THROW );
 
         uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
         bRes = aElementNames.getLength() > 0;
     }
     catch (uno::Exception &)
     {
-        DBG_ASSERT( 0, "exception caught. HasAnySpellAndGrammarContextImage failed" );
+        DBG_ASSERT( 0, "exception caught. HasAnyVendorImages failed" );
     }
     return bRes;
 }
@@ -1468,27 +1462,22 @@ bool SvtLinguConfig::HasAnySpellAndGrammarContextImage() const
 
 bool SvtLinguConfig::HasGrammarChecker() const
 {
-    static bool bGrammarCheckerChecked  = false;
-    static bool bFound      = false;
+    bool bRes = false;
 
-    if (!bGrammarCheckerChecked)
+    try
     {
-        try
-        {
-            uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-            xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
-            xNA.set( xNA->getByName( A2OU("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
 
-            uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
-            bFound = aElementNames.getLength() > 0;
-        }
-        catch (uno::Exception &)
-        {
-        }
-        bGrammarCheckerChecked = true;
+        uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
+        bRes = aElementNames.getLength() > 0;
+    }
+    catch (uno::Exception &)
+    {
     }
 
-    return bFound;
+    return bRes;
 }
 
 //////////////////////////////////////////////////////////////////////

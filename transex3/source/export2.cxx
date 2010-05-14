@@ -165,15 +165,15 @@ void Export::QuotHTMLXRM( ByteString &rString )
             switch ( rString.GetChar( i )) {
                 case '<':
                     if( i+2 < rString.Len() &&
-                        rString.GetChar( i+1 ) == 'b' || rString.GetChar( i+1 ) == 'B' &&
-                        rString.GetChar( +2 ) == '>' )
+                        (rString.GetChar( i+1 ) == 'b' || rString.GetChar( i+1 ) == 'B') &&
+                        rString.GetChar( i+2 ) == '>' )
                     {
                            sReturn +="<b>";
                            i += 2;
                     }
                     else if( i+3 < rString.Len() &&
                              rString.GetChar( i+1 ) == '/' &&
-                             rString.GetChar( i+2 ) == 'b' || rString.GetChar( i+2 ) == 'B' &&
+                             (rString.GetChar( i+2 ) == 'b' || rString.GetChar( i+2 ) == 'B') &&
                              rString.GetChar( i+3 ) == '>' )
                     {
                            sReturn +="</b>";

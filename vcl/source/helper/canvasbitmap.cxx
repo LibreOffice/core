@@ -150,9 +150,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         m_aLayout.ScanLineStride = m_pBmpAcc->GetScanlineSize();
         m_aLayout.PlaneStride    = 0;
 
-        if( !(m_pBmpAcc->GetScanlineFormat() & BMP_FORMAT_TOP_DOWN) )
-            m_aLayout.ScanLineStride *= -1;
-
         switch( m_pBmpAcc->GetScanlineFormat() )
         {
             case BMP_FORMAT_1BIT_MSB_PAL:
@@ -436,8 +433,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             const Size aSize = m_aBitmap.GetSizePixel();
             m_aLayout.ScanLineBytes  =
             m_aLayout.ScanLineStride = (aSize.Width()*m_nBitsPerOutputPixel + 7)/8;
-            if( !(m_pBmpAcc->GetScanlineFormat() & BMP_FORMAT_TOP_DOWN) )
-                m_aLayout.ScanLineStride *= -1;
         }
     }
 }
@@ -515,8 +510,12 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     bitmapLayout.ScanLineBytes =
     bitmapLayout.ScanLineStride= aRequestedBytes.getWidth();
 
+    sal_Int32 nScanlineStride=bitmapLayout.ScanLineStride;
     if( !(m_pBmpAcc->GetScanlineFormat() & BMP_FORMAT_TOP_DOWN) )
-        bitmapLayout.ScanLineStride *= -1;
+    {
+        pOutBuf += bitmapLayout.ScanLineStride*(aRequestedBytes.getHeight()-1);
+        nScanlineStride *= -1;
+    }
 
     if( !m_aBmpEx.IsTransparent() )
     {
@@ -527,7 +526,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
         {
             Scanline pScan = m_pBmpAcc->GetScanline(y);
             rtl_copyMemory(pOutBuf, pScan+aRequestedBytes.Left(), aRequestedBytes.getWidth());
-            pOutBuf += bitmapLayout.ScanLineStride;
+            pOutBuf += nScanlineStride;
         }
     }
     else
@@ -568,7 +567,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
                 }
             }
 
-            pOutBuf += bitmapLayout.ScanLineStride;
+            pOutBuf += nScanlineStride;
         }
     }
 
@@ -870,6 +869,59 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( con
     return aRes;
 }
 
+uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( const uno::Sequence< double >& deviceColor ) throw (lang::IllegalArgumentException,uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    const sal_Size  nLen( deviceColor.getLength() );
+    const sal_Int32 nComponentsPerPixel(m_aComponentTags.getLength());
+    ENSURE_ARG_OR_THROW2(nLen%nComponentsPerPixel==0,
+                         "number of channels no multiple of pixel element count",
+                         static_cast<rendering::XBitmapPalette*>(this), 01);
+
+    uno::Sequence< rendering::ARGBColor > aRes(nLen/nComponentsPerPixel);
+    rendering::ARGBColor* pOut( aRes.getArray() );
+
+    if( m_bPalette )
+    {
+        OSL_ENSURE(m_nIndexIndex != -1,
+                   "Invalid color channel indices");
+        ENSURE_OR_THROW(m_pBmpAcc,
+                        "Unable to get BitmapAccess");
+
+        for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
+        {
+            const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
+                sal::static_int_cast<USHORT>(deviceColor[i+m_nIndexIndex]));
+
+            // TODO(F3): Convert result to sRGB color space
+            const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
+            *pOut++ = rendering::ARGBColor(nAlpha,
+                                           nAlpha*toDoubleColor(aCol.GetRed()),
+                                           nAlpha*toDoubleColor(aCol.GetGreen()),
+                                           nAlpha*toDoubleColor(aCol.GetBlue()));
+        }
+    }
+    else
+    {
+        OSL_ENSURE(m_nRedIndex != -1 && m_nGreenIndex != -1 && m_nBlueIndex != -1,
+                   "Invalid color channel indices");
+
+        for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
+        {
+            // TODO(F3): Convert result to sRGB color space
+            const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
+            *pOut++ = rendering::ARGBColor(
+                nAlpha,
+                nAlpha*deviceColor[i+m_nRedIndex],
+                nAlpha*deviceColor[i+m_nGreenIndex],
+                nAlpha*deviceColor[i+m_nBlueIndex]);
+        }
+    }
+
+    return aRes;
+}
+
 uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromRGB( const uno::Sequence<rendering::RGBColor>& rgbColor ) throw (lang::IllegalArgumentException,uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -943,6 +995,48 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromARGB( const uno::Se
             pColors[m_nBlueIndex]  = rgbColor[i].Blue;
             if( m_nAlphaIndex != -1 )
                 pColors[m_nAlphaIndex] = rgbColor[i].Alpha;
+
+            pColors += nComponentsPerPixel;
+        }
+    }
+    return aRes;
+}
+
+uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromPARGB( const uno::Sequence<rendering::ARGBColor>& rgbColor ) throw (lang::IllegalArgumentException,uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    const sal_Size  nLen( rgbColor.getLength() );
+    const sal_Int32 nComponentsPerPixel(m_aComponentTags.getLength());
+
+    uno::Sequence< double > aRes(nLen*nComponentsPerPixel);
+    double* pColors=aRes.getArray();
+
+    if( m_bPalette )
+    {
+        for( sal_Size i=0; i<nLen; ++i )
+        {
+            const double nAlpha( rgbColor[i].Alpha );
+            pColors[m_nIndexIndex] = m_pBmpAcc->GetBestPaletteIndex(
+                    BitmapColor(toByteColor(rgbColor[i].Red / nAlpha),
+                                toByteColor(rgbColor[i].Green / nAlpha),
+                                toByteColor(rgbColor[i].Blue / nAlpha)));
+            if( m_nAlphaIndex != -1 )
+                pColors[m_nAlphaIndex] = nAlpha;
+
+            pColors += nComponentsPerPixel;
+        }
+    }
+    else
+    {
+        for( sal_Size i=0; i<nLen; ++i )
+        {
+            const double nAlpha( rgbColor[i].Alpha );
+            pColors[m_nRedIndex]   = rgbColor[i].Red / nAlpha;
+            pColors[m_nGreenIndex] = rgbColor[i].Green / nAlpha;
+            pColors[m_nBlueIndex]  = rgbColor[i].Blue / nAlpha;
+            if( m_nAlphaIndex != -1 )
+                pColors[m_nAlphaIndex] = nAlpha;
 
             pColors += nComponentsPerPixel;
         }
@@ -1163,6 +1257,65 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
     return aRes;
 }
 
+uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException,uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    const BYTE*     pIn( reinterpret_cast<const BYTE*>(deviceColor.getConstArray()) );
+    const sal_Size  nLen( deviceColor.getLength() );
+    const sal_Int32 nNumColors((nLen*8 + m_nBitsPerOutputPixel-1)/m_nBitsPerOutputPixel);
+
+    uno::Sequence< rendering::ARGBColor > aRes(nNumColors);
+    rendering::ARGBColor* pOut( aRes.getArray() );
+
+    ENSURE_OR_THROW(m_pBmpAcc,
+                    "Unable to get BitmapAccess");
+
+    if( m_aBmpEx.IsTransparent() )
+    {
+        const long      nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
+        const sal_Int32 nBytesPerPixel((m_nBitsPerOutputPixel+7)/8);
+        const sal_uInt8 nAlphaFactor( m_aBmpEx.IsAlpha() ? 1 : 255 );
+        for( sal_Size i=0; i<nLen; i+=nBytesPerPixel )
+        {
+            // if palette, index is guaranteed to be 8 bit
+            const BitmapColor aCol =
+                m_bPalette ?
+                m_pBmpAcc->GetPaletteColor(*pIn) :
+                m_pBmpAcc->GetPixelFromData(pIn,0);
+
+            // TODO(F3): Convert result to sRGB color space
+            const double nAlpha( 1.0 - toDoubleColor(nAlphaFactor*pIn[nNonAlphaBytes]) );
+            *pOut++ = rendering::ARGBColor(nAlpha,
+                                           nAlpha*toDoubleColor(aCol.GetRed()),
+                                           nAlpha*toDoubleColor(aCol.GetGreen()),
+                                           nAlpha*toDoubleColor(aCol.GetBlue()));
+            pIn += nBytesPerPixel;
+        }
+    }
+    else
+    {
+        for( sal_Int32 i=0; i<nNumColors; ++i )
+        {
+            const BitmapColor aCol =
+                m_bPalette ?
+                m_pBmpAcc->GetPaletteColor(
+                    sal::static_int_cast<USHORT>(
+                        m_pBmpAcc->GetPixelFromData(
+                            pIn, i ))) :
+                m_pBmpAcc->GetPixelFromData(pIn, i);
+
+            // TODO(F3): Convert result to sRGB color space
+            *pOut++ = rendering::ARGBColor(1.0,
+                                           toDoubleColor(aCol.GetRed()),
+                                           toDoubleColor(aCol.GetGreen()),
+                                           toDoubleColor(aCol.GetBlue()));
+        }
+    }
+
+    return aRes;
+}
+
 uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( const uno::Sequence<rendering::RGBColor>& rgbColor ) throw (lang::IllegalArgumentException,uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -1239,6 +1392,56 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
             m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
             pColors   += nNonAlphaBytes;
             *pColors++ = 255 - toByteColor(rgbColor[i].Alpha);
+        }
+    }
+    else
+    {
+        for( sal_Size i=0; i<nLen; ++i )
+        {
+            const BitmapColor aCol(toByteColor(rgbColor[i].Red),
+                                   toByteColor(rgbColor[i].Green),
+                                   toByteColor(rgbColor[i].Blue));
+            const BitmapColor aCol2 =
+                m_bPalette ?
+                BitmapColor(
+                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                aCol;
+
+            m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
+        }
+    }
+
+    return aRes;
+}
+
+uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( const uno::Sequence<rendering::ARGBColor>& rgbColor ) throw (lang::IllegalArgumentException,uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    const sal_Size  nLen( rgbColor.getLength() );
+    const sal_Int32 nNumBytes((nLen*m_nBitsPerOutputPixel+7)/8);
+
+    uno::Sequence< sal_Int8 > aRes(nNumBytes);
+    BYTE* pColors=reinterpret_cast<BYTE*>(aRes.getArray());
+
+    if( m_aBmpEx.IsTransparent() )
+    {
+        const long nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
+        for( sal_Size i=0; i<nLen; ++i )
+        {
+            const double nAlpha( rgbColor[i].Alpha );
+            const BitmapColor aCol(toByteColor(rgbColor[i].Red / nAlpha),
+                                   toByteColor(rgbColor[i].Green / nAlpha),
+                                   toByteColor(rgbColor[i].Blue / nAlpha));
+            const BitmapColor aCol2 =
+                m_bPalette ?
+                BitmapColor(
+                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                aCol;
+
+            m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
+            pColors   += nNonAlphaBytes;
+            *pColors++ = 255 - toByteColor(nAlpha);
         }
     }
     else

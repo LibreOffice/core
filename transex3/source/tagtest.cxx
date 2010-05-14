@@ -440,12 +440,12 @@ BOOL TokenInfo::IsPropertyInvariant( const ByteString &aName, const String &aVal
 BOOL TokenInfo::IsPropertyFixable( const ByteString &aName ) const
 {
     // name everything that is allowed to be fixed automatically here
-    if ( aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" )
-      || aTagName.EqualsAscii( "link" ) && aName.Equals( "href" )
-      || aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" )
-      || aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" )
-      || aTagName.EqualsAscii( "image" ) && aName.Equals( "src" )
-      || aTagName.EqualsAscii( "image" ) && aName.Equals( "id" ) )
+    if ( (aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" ))
+      || (aTagName.EqualsAscii( "link" ) && aName.Equals( "href" ))
+      || (aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" ))
+      || (aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" ))
+      || (aTagName.EqualsAscii( "image" ) && aName.Equals( "src" ))
+      || (aTagName.EqualsAscii( "image" ) && aName.Equals( "id" ) ))
         return TRUE;
     return FALSE;
 }

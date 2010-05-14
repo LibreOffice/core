@@ -40,42 +40,44 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sal/alloca.h>
 
-#include <gcach_xpeer.hxx>
-#include <xrender_peer.hxx>
-#include <sal/types.h>
-
-#include <salunx.h>
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#include <salgdi.h>
-#include <pspgraphics.h>
-#include <vcl/salframe.hxx>
-#include <salvd.h>
-#include <vcl/outdev.h>
-#include <tools/string.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <rtl/tencinfo.h>
-#include <osl/file.hxx>
+#include "gcach_xpeer.hxx"
+#include "xrender_peer.hxx"
+#include "salunx.h"
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salgdi.h"
+#include "pspgraphics.h"
+#include "salvd.h"
 #include "xfont.hxx"
-#include <vcl/impfont.hxx>
-
-
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
-
-#include <psprint/printergfx.hxx>
-#include <psprint/fontmanager.hxx>
-#include <psprint/jobdata.hxx>
-#include <psprint/printerinfomanager.hxx>
-#include <vcl/svapp.hxx>
 #include "xlfd_attr.hxx"
 #include "xlfd_smpl.hxx"
 #include "xlfd_extd.hxx"
 #include "salcvt.hxx"
 
-#include <i18npool/mslangid.hxx>
+#include "vcl/printergfx.hxx"
+#include "vcl/fontmanager.hxx"
+#include "vcl/jobdata.hxx"
+#include "vcl/printerinfomanager.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/impfont.hxx"
+#include "vcl/salframe.hxx"
+#include "vcl/outdev.h"
+
+#include "sal/alloca.h"
+#include "sal/types.h"
+
+#include "rtl/tencinfo.h"
+
+#include "osl/file.hxx"
+
+#include "tools/string.hxx"
+#include "tools/debug.hxx"
+#include "tools/stream.hxx"
+
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+
+#include "i18npool/mslangid.hxx"
 
 #include <hash_set>
 
@@ -795,20 +797,17 @@ CairoWrapper::CairoWrapper()
     if( !XQueryExtension( GetX11SalData()->GetDisplay()->GetDisplay(), "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
-#ifdef MACOSX
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.2.dylib" ));
-#else
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
-#endif
     mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpCairoLib )
         return;
 
-#if 0
+#ifdef DEBUG
     // check cairo version
     int (*p_version)();
     p_version = (int(*)()) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_version" );
     const int nVersion = p_version ? (*p_version)() : 0;
+    fprintf( stderr, "CAIRO version=%d\n", nVersion );
 #endif
 
     mp_xlib_surface_create_with_xrender_format = (cairo_surface_t* (*)(Display *, Drawable , Screen *, XRenderPictFormat *, int , int ))
@@ -1391,10 +1390,8 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
         X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
         if( rGlyphPeer.GetGlyphSet( rFont, m_nScreen ) )
             DrawServerAAFontString( rLayout );
-#ifndef MACOSX        /* ignore X11 fonts on MACOSX */
         else if( !rGlyphPeer.ForcedAntialiasing( rFont, m_nScreen ) )
             DrawServerSimpleFontString( rLayout );
-#endif // MACOSX
         else
             DrawServerAAForcedString( rLayout );
     }
@@ -1545,13 +1542,13 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 // ----------------------------------------------------------------------------
 
-static void RegisterFontSubstitutors( ImplDevFontList* );
+void RegisterFontSubstitutors( ImplDevFontList* );
 
 void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     // allow disabling of native X11 fonts
     static const char* pEnableX11FontStr = getenv( "SAL_ENABLE_NATIVE_XFONTS" );
-    if( !pEnableX11FontStr || (pEnableX11FontStr[0] != '0') )
+    if( pEnableX11FontStr && (pEnableX11FontStr[0] != '0') )
     {
         // announce X11 fonts
         XlfdStorage* pX11FontList = GetDisplay()->GetXlfdList();
@@ -1806,21 +1803,36 @@ public:
     bool FindFontSubstitute( ImplFontSelectData&, OUString& rMissingCodes ) const;
 };
 
-static void RegisterFontSubstitutors( ImplDevFontList* pList )
+void RegisterFontSubstitutors( ImplDevFontList* pList )
 {
-    bool bDisableFC = false;
+    // init font substitution defaults
+    int nDisableBits = 0;
 #ifdef SOLARIS
-    bDisableFC = true;
+    nDisableBits = 1; // disable "font fallback" here on default
 #endif
+    // apply the environment variable if any
     const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
     if( pEnvStr )
-        bDisableFC = (*pEnvStr == '\0') || (*pEnvStr != '0');
-    if( bDisableFC )
-        return;
-    static FcPreMatchSubstititution aSubstPreMatch;
-    static FcGlyphFallbackSubstititution aSubstFallback;
-    pList->SetPreMatchHook( &aSubstPreMatch );
-    pList->SetFallbackHook( &aSubstFallback );
+    {
+        if( (*pEnvStr >= '0') && (*pEnvStr <= '9') )
+            nDisableBits = (*pEnvStr - '0');
+        else
+            nDisableBits = ~0U; // no specific bits set: disable all
+    }
+
+    // register font fallback substitutions (unless disabled by bit0)
+    if( (nDisableBits & 1) == 0 )
+    {
+        static FcPreMatchSubstititution aSubstPreMatch;
+        pList->SetPreMatchHook( &aSubstPreMatch );
+    }
+
+    // register glyph fallback substitutions (unless disabled by bit1)
+    if( (nDisableBits & 2) == 0 )
+    {
+        static FcGlyphFallbackSubstititution aSubstFallback;
+        pList->SetFallbackHook( &aSubstFallback );
+    }
 }
 
 // -----------------------------------------------------------------------

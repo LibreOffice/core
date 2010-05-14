@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mtftools.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,21 +208,30 @@ namespace cppcanvas
         struct TextLineInfo
         {
             TextLineInfo( const double& rLineHeight,
+                          const double& rOverlineHeight,
+                          const double& rOverlineOffset,
                           const double& rUnderlineOffset,
                           const double& rStrikeoutOffset,
+                          sal_Int8      nOverlineStyle,
                           sal_Int8      nUnderlineStyle,
                           sal_Int8      nStrikeoutStyle ) :
                 mnLineHeight( rLineHeight ),
+                mnOverlineHeight( rOverlineHeight ),
+                mnOverlineOffset( rOverlineOffset ),
                 mnUnderlineOffset( rUnderlineOffset ),
                 mnStrikeoutOffset( rStrikeoutOffset ),
+                mnOverlineStyle( nOverlineStyle ),
                 mnUnderlineStyle( nUnderlineStyle ),
                 mnStrikeoutStyle( nStrikeoutStyle )
             {
             }
 
             double      mnLineHeight;
+            double      mnOverlineHeight;
+            double      mnOverlineOffset;
             double      mnUnderlineOffset;
             double      mnStrikeoutOffset;
+            sal_Int8    mnOverlineStyle;
             sal_Int8    mnUnderlineStyle;
             sal_Int8    mnStrikeoutStyle;
         };
@@ -240,16 +249,16 @@ namespace cppcanvas
                                          const ::cppcanvas::internal::OutDevState&  rState );
 
         /** Create a poly-polygon representing the given combination
-            of strikeout and underline.
+            of overline, strikeout and underline.
 
             @param rStartOffset
             Offset in X direction, where the underline starts
 
             @param rLineWidth
-            Width of the line of text to underline/strikeout
+            Width of the line of text to overline/strikeout/underline
 
             @param rTextLineInfo
-            Common info needed for strikeout/underline generation
+            Common info needed for overline/strikeout/underline generation
          */
         ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const double&         rStartOffset,
                                                               const double&         rLineWidth,

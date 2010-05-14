@@ -36,6 +36,11 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#if OSL_DEBUG_LEVEL > 0
+#include <typeinfo>
+#include <rtl/strbuf.hxx>
+#endif
+
 #include <algorithm>
 #include <set>
 
@@ -708,7 +713,26 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
     if (!m_xAggregateSet.is())
         OPropertySetHelper::setPropertyValues(_rPropertyNames, _rValues);
     else if (_rPropertyNames.getLength() == 1) // use the more efficient way
-        setPropertyValue(_rPropertyNames.getConstArray()[0], _rValues.getConstArray()[0]);
+    {
+        try
+        {
+            setPropertyValue( _rPropertyNames[0], _rValues[0] );
+        }
+        catch( const UnknownPropertyException& )
+        {
+            // by definition of XMultiPropertySet::setPropertyValues, unknown properties are to be ignored
+        #if OSL_DEBUG_LEVEL > 0
+            ::rtl::OStringBuffer aMessage;
+            aMessage.append( "OPropertySetAggregationHelper::setPropertyValues: unknown property '" );
+            aMessage.append( ::rtl::OUStringToOString( _rPropertyNames[0], RTL_TEXTENCODING_ASCII_US ) );
+            aMessage.append( "'" );
+            aMessage.append( "\n(implementation " );
+            aMessage.append( typeid( *this ).name() );
+            aMessage.append( ")" );
+            OSL_ENSURE( false, aMessage.getStr() );
+        #endif
+        }
+    }
     else
     {
         OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );

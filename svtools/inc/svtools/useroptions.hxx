@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: useroptions.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.2.312.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,51 +77,50 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // get the address token
-    const String&   GetCompany() const;
-    const String&   GetFirstName() const;
-    const String&   GetLastName() const;
-    const String&   GetID() const;
-    const String&   GetStreet() const;
-    const String&   GetCity() const;
-    const String&   GetState() const;
-    const String&   GetZip() const;
-    const String&   GetCountry() const;
-    const String&   GetPosition() const;
-    const String&   GetTitle() const;
-    const String&   GetTelephoneHome() const;
-    const String&   GetTelephoneWork() const;
-    const String&   GetFax() const;
-    const String&   GetEmail() const;
-    const String&   GetCustomerNumber() const;
-    const String&   GetFathersName() const;
-    const String&   GetApartment() const;
+     ::rtl::OUString    GetCompany() const;
+     ::rtl::OUString    GetFirstName() const;
+     ::rtl::OUString    GetLastName() const;
+     ::rtl::OUString    GetID() const;
+     ::rtl::OUString    GetStreet() const;
+     ::rtl::OUString    GetCity() const;
+     ::rtl::OUString    GetState() const;
+     ::rtl::OUString    GetZip() const;
+     ::rtl::OUString    GetCountry() const;
+     ::rtl::OUString    GetPosition() const;
+     ::rtl::OUString    GetTitle() const;
+     ::rtl::OUString    GetTelephoneHome() const;
+     ::rtl::OUString    GetTelephoneWork() const;
+     ::rtl::OUString    GetFax() const;
+     ::rtl::OUString    GetEmail() const;
+     ::rtl::OUString    GetCustomerNumber() const;
+     ::rtl::OUString    GetFathersName() const;
+     ::rtl::OUString    GetApartment() const;
 
-    const String&   GetFullName() const;
-    const String&   GetLocale() const;
+     ::rtl::OUString    GetFullName() const;
+     ::rtl::OUString    GetLocale() const;
 
     // set the address token
-    void            SetCompany( const String& rNewToken );
-    void            SetFirstName( const String& rNewToken );
-    void            SetLastName( const String& rNewToken );
-    void            SetID( const String& rNewToken );
-    void            SetStreet( const String& rNewToken );
-    void            SetCity( const String& rNewToken );
-    void            SetState( const String& rNewToken );
-    void            SetZip( const String& rNewToken );
-    void            SetCountry( const String& rNewToken );
-    void            SetPosition( const String& rNewToken );
-    void            SetTitle( const String& rNewToken );
-    void            SetTelephoneHome( const String& rNewToken );
-    void            SetTelephoneWork( const String& rNewToken );
-    void            SetFax( const String& rNewToken );
-    void            SetEmail( const String& rNewToken );
-    void            SetCustomerNumber( const String& rNewToken );
-    void            SetFathersName( const String& rNewToken );
-    void            SetApartment( const String& rNewToken );
+    void            SetCompany( const ::rtl::OUString& rNewToken );
+    void            SetFirstName( const ::rtl::OUString& rNewToken );
+    void            SetLastName( const ::rtl::OUString& rNewToken );
+    void            SetID( const ::rtl::OUString& rNewToken );
+    void            SetStreet( const ::rtl::OUString& rNewToken );
+    void            SetCity( const ::rtl::OUString& rNewToken );
+    void            SetState( const ::rtl::OUString& rNewToken );
+    void            SetZip( const ::rtl::OUString& rNewToken );
+    void            SetCountry( const ::rtl::OUString& rNewToken );
+    void            SetPosition( const ::rtl::OUString& rNewToken );
+    void            SetTitle( const ::rtl::OUString& rNewToken );
+    void            SetTelephoneHome( const ::rtl::OUString& rNewToken );
+    void            SetTelephoneWork( const ::rtl::OUString& rNewToken );
+    void            SetFax( const ::rtl::OUString& rNewToken );
+    void            SetEmail( const ::rtl::OUString& rNewToken );
+    void            SetCustomerNumber( const ::rtl::OUString& rNewToken );
+    void            SetFathersName( const ::rtl::OUString& rNewToken );
+    void            SetApartment( const ::rtl::OUString& rNewToken );
 
     sal_Bool        IsTokenReadonly( USHORT nToken ) const;
-    const String&   GetToken(USHORT nToken) const;
+    ::rtl::OUString GetToken(USHORT nToken) const;
 };
 
 #endif // #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
-

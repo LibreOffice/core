@@ -113,7 +113,7 @@ class DockingManager;
 
 namespace vos { class OMutex; }
 namespace vos { class OCondition; }
-namespace vcl { class DisplayConnection; class FontSubstConfiguration; class SettingsConfigItem; class DefaultFontConfiguration; }
+namespace vcl { class DisplayConnection; class FontSubstConfiguration; class SettingsConfigItem; class DefaultFontConfiguration; class DeleteOnDeinitBase; }
 
 // -----------------
 // - ImplSVAppData -
@@ -346,6 +346,7 @@ struct ImplSVData
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
     com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
+    std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
 };
 
 void        ImplInitSVData();

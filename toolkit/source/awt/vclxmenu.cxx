@@ -34,6 +34,7 @@
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/macros.hxx>
+#include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -41,22 +42,62 @@
 #include <rtl/uuid.h>
 
 #include <vcl/menu.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/image.hxx>
+#include <vcl/mnemonic.hxx>
+
+#include <com/sun/star/awt/KeyModifier.hpp>
+
+
+#ifdef DBG_UTIL
+    #define THROW_MENUITEM_NOT_FOUND( Func, nItemId ) \
+        if ( MENU_ITEM_NOTFOUND == mpMenu->GetItemPos( nItemId ) ) \
+            throw  ::com::sun::star::container::NoSuchElementException( \
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( Func ) ) \
+                += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": There is no menu item with " ) ) \
+                += ::rtl::OUString::valueOf( sal_Int32( nItemId ) ) \
+                += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " as identifier" ) ), \
+                *this \
+            );
+    #define THROW_MENUPOS_NOT_FOUND( Func, nPos ) \
+        if ( MENU_ITEM_NOTFOUND == sal_uInt16( nPos ) ) \
+            throw  ::com::sun::star::container::NoSuchElementException( \
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( Func ) ) \
+                += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": There is no menu item at position " ) ) \
+                += ::rtl::OUString::valueOf( sal_Int32( nPos ) ), \
+                *this \
+            );
+#else
+    #define THROW_MENUITEM_NOT_FOUND( Func, nItemId ) \
+        if ( MENU_ITEM_NOTFOUND == mpMenu->GetItemPos( nItemId ) ) \
+            throw  ::com::sun::star::container::NoSuchElementException();
+    #define THROW_MENUPOS_NOT_FOUND( Func, nPos ) \
+        if ( MENU_ITEM_NOTFOUND == sal_uInt16( nPos ) ) \
+            throw  ::com::sun::star::container::NoSuchElementException();
+#endif
+
 
 //  ----------------------------------------------------
 //  class VCLXMenu
 //  ----------------------------------------------------
+
+DBG_NAME(VCLXMenu)
+
 VCLXMenu::VCLXMenu() : maMenuListeners( *this )
 {
+    DBG_CTOR( VCLXMenu, 0 );
     mpMenu = NULL;
 }
 
 VCLXMenu::VCLXMenu( Menu* pMenu ) : maMenuListeners( *this )
 {
+    DBG_CTOR( VCLXMenu, 0 );
     mpMenu = pMenu;
 }
 
 VCLXMenu::~VCLXMenu()
 {
+    DBG_DTOR( VCLXMenu, 0 );
     for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
@@ -172,16 +213,89 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
 }
 
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXMenu::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+//=============================================================================
+//=============================================================================
+//=============================================================================
+
+
+// ::com::sun::star::lang::XServiceInfo
+::rtl::OUString SAL_CALL VCLXMenu::getImplementationName(  )
+throw (::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    aGuard.clear();
+
+    ::rtl::OUString implName( RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." ) );
+    if ( bIsPopupMenu )
+        implName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VCLXPopupMenu" ) );
+    else
+        implName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VCLXMenuBar" ) );
+
+    return implName;
+}
+
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    aGuard.clear();
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( 1 );
+    if ( bIsPopupMenu )
+        aNames[ 0 ] = ::rtl::OUString::createFromAscii( szServiceName2_PopupMenu );
+    else
+        aNames[ 0 ] = ::rtl::OUString::createFromAscii( szServiceName2_MenuBar );
+
+    return aNames;
+}
+
+
+::sal_Bool SAL_CALL VCLXMenu::supportsService( const ::rtl::OUString& rServiceName )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
+
+    if ( aServiceNames[ 0 ] == rServiceName )
+        return sal_True;
+
+    return sal_False;
+}
+
+
+// ::com::sun::star::uno::XInterface
+::com::sun::star::uno::Any VCLXMenu::queryInterface( const ::com::sun::star::uno::Type & rType )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    aGuard.clear();
+
+    ::com::sun::star::uno::Any aRet;
+
+    if ( bIsPopupMenu )
+        aRet = ::cppu::queryInterface(  rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenu*, (::com::sun::star::awt::XMenuBar*) this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPopupMenu*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPopupMenuExtended*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended*, (::com::sun::star::awt::XPopupMenuExtended*) this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended2*, (::com::sun::star::awt::XPopupMenuExtended*) this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
+    else
+        aRet = ::cppu::queryInterface(  rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XMenu*, (::com::sun::star::awt::XMenuBar*) this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XMenuBar*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPopupMenu*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuBarExtended*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended*, (::com::sun::star::awt::XMenuBarExtended*) this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended2*, (::com::sun::star::awt::XMenuBarExtended*) this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
+
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
@@ -189,12 +303,104 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
 IMPL_XUNOTUNNEL( VCLXMenu )
 
 // ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXMenu )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenu>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended>* ) NULL )
-IMPL_XTYPEPROVIDER_END
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > VCLXMenu::getTypes()
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    aGuard.clear();
+
+    static ::cppu::OTypeCollection* pCollectionMenuBar = NULL;
+    static ::cppu::OTypeCollection* pCollectionPopupMenu = NULL;
+
+    if ( bIsPopupMenu )
+    {
+        if( !pCollectionPopupMenu )
+        {
+            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pCollectionPopupMenu )
+            {
+                static ::cppu::OTypeCollection collectionPopupMenu(
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenu>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenuExtended>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended2>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ) );
+                pCollectionPopupMenu = &collectionPopupMenu;
+            }
+        }
+
+        return (*pCollectionPopupMenu).getTypes();
+    }
+    else
+    {
+        if( !pCollectionMenuBar )
+        {
+            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pCollectionMenuBar )
+            {
+                static ::cppu::OTypeCollection collectionMenuBar(
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenu>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBarExtended>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended2>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ) );
+                pCollectionMenuBar = &collectionMenuBar;
+            }
+        }
+        return (*pCollectionMenuBar).getTypes();
+    }
+}
+
+
+::com::sun::star::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    const sal_Bool bIsPopupMenu = IsPopupMenu();
+    aGuard.clear();
+
+    static ::cppu::OImplementationId* pIdMenuBar = NULL;
+    static ::cppu::OImplementationId* pIdPopupMenu = NULL;
+
+    if ( bIsPopupMenu )
+    {
+        if( !pIdPopupMenu )
+        {
+            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pIdPopupMenu )
+            {
+                static ::cppu::OImplementationId idPopupMenu( sal_False );
+                pIdPopupMenu = &idPopupMenu;
+            }
+        }
+
+        return (*pIdPopupMenu).getImplementationId();
+    }
+    else
+    {
+        if( !pIdMenuBar )
+        {
+            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pIdMenuBar )
+            {
+                static ::cppu::OImplementationId idMenuBar( sal_False );
+                pIdMenuBar = &idMenuBar;
+            }
+        }
+
+        return (*pIdMenuBar).getImplementationId();
+    }
+}
+
+
+//=============================================================================
+//=============================================================================
+//=============================================================================
 
 
 void VCLXMenu::addMenuListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
@@ -413,24 +619,441 @@ void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const ::rtl::OUString
     return aHelpCommand;
 }
 
+
+// ============================================================================
+// ============================================================================
+// ============================================================================
+
+
+// BEGIN ANONYMOUS NAMESPACE
+namespace
+{
+    namespace css = ::com::sun::star;
+
+    Image lcl_XGraphic2VCLImage(
+                                const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
+                                sal_Bool bResize )
+    {
+        Image aImage;
+        if ( !xGraphic.is() )
+            return aImage;
+
+        aImage = Image( xGraphic );
+        const ::Size aCurSize = aImage.GetSizePixel();
+        const sal_Int32 nCurWidth = aCurSize.Width();
+        const sal_Int32 nCurHeight = aCurSize.Height();
+        const sal_Int32 nIdeal( 16 );
+
+        if ( nCurWidth > 0 && nCurHeight > 0 )
+        {
+            if ( bResize && ( nCurWidth > nIdeal || nCurHeight > nIdeal ) )
+            {
+                sal_Int32 nIdealWidth  = nCurWidth  > nIdeal ? nIdeal : nCurWidth;
+                sal_Int32 nIdealHeight = nCurHeight > nIdeal ? nIdeal : nCurHeight;
+
+                ::Size aNewSize( nIdealWidth, nIdealHeight );
+
+                sal_Bool bModified( sal_False );
+                BitmapEx aBitmapEx = aImage.GetBitmapEx();
+                bModified = aBitmapEx.Scale( aNewSize, BMP_SCALE_INTERPOLATE );
+
+                if ( bModified )
+                    aImage = Image( aBitmapEx );
+            }
+        }
+        return aImage;
+    }
+
+    /**
+        As svtools builds after toolkit, we can not include/use
+        svtools/inc/acceleratorexecute.hxx
+        So I just copy here svt::AcceleratorExecute::st_AWTKey2VCLKey
+        and svt::AcceleratorExecute::st_VCLKey2AWTKey
+    */
+    css::awt::KeyEvent lcl_VCLKey2AWTKey(const KeyCode& aVCLKey)
+    {
+        css::awt::KeyEvent aAWTKey;
+        aAWTKey.Modifiers = 0;
+        aAWTKey.KeyCode   = (sal_Int16)aVCLKey.GetCode();
+
+        if (aVCLKey.IsShift())
+            aAWTKey.Modifiers |= css::awt::KeyModifier::SHIFT;
+        if (aVCLKey.IsMod1())
+            aAWTKey.Modifiers |= css::awt::KeyModifier::MOD1;
+        if (aVCLKey.IsMod2())
+            aAWTKey.Modifiers |= css::awt::KeyModifier::MOD2;
+
+        return aAWTKey;
+    }
+
+    KeyCode lcl_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
+    {
+        sal_Bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
+        sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
+        sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+        USHORT   nKey   = (USHORT)aAWTKey.KeyCode;
+
+        return KeyCode(nKey, bShift, bMod1, bMod2);
+    }
+
+} // END ANONYMOUS NAMESPACE
+
+
+// ============================================================================
+// ============================================================================
+// ============================================================================
+
+
+// XMenuExtended2 Methods
+
+::sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    return IsPopupMenu();
+}
+
+void SAL_CALL VCLXMenu::clear(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    if ( mpMenu )
+        mpMenu->Clear();
+}
+
+
+::com::sun::star::awt::MenuItemType SAL_CALL VCLXMenu::getItemType( ::sal_Int16 nItemPos )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::com::sun::star::awt::MenuItemType aMenuItemType =
+        ::com::sun::star::awt::MenuItemType_DONTKNOW;
+    if ( mpMenu )
+    {
+        THROW_MENUPOS_NOT_FOUND( "VCLXMenu::getItemType()", nItemPos )
+        aMenuItemType = ( (::com::sun::star::awt::MenuItemType) mpMenu->GetItemType( nItemPos ) );
+    }
+
+    return aMenuItemType;
+}
+
+void SAL_CALL VCLXMenu::hideDisabledEntries( ::sal_Bool bHide )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    if ( mpMenu )
+    {
+        if ( bHide )
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
+        else
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() & ~MENU_FLAG_HIDEDISABLEDENTRIES );
+    }
+}
+
+
+// ============================================================================
+// ============================================================================
+// ============================================================================
+
+
+// XPopupMenuExtended Methods
+
+::sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+        return ( (PopupMenu*) mpMenu )->IsInExecute();
+    else
+        return sal_False;
+}
+
+
+void SAL_CALL VCLXMenu::endExecute()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+        ( (PopupMenu*) mpMenu )->EndExecute();
+}
+
+
+void SAL_CALL VCLXMenu::setLogo( const ::com::sun::star::awt::MenuLogo& aMenuLogo )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu )
+    {
+        if ( aMenuLogo.Graphic.is() )
+        {
+            Image aImage = lcl_XGraphic2VCLImage( aMenuLogo.Graphic, sal_False );
+            MenuLogo aVCLMenuLogo;
+
+            aVCLMenuLogo.aBitmap        = aImage.GetBitmapEx();
+            aVCLMenuLogo.aStartColor    = Color( (sal_uInt32)(aMenuLogo.StartColor) );
+            aVCLMenuLogo.aEndColor      = Color( (sal_uInt32)(aMenuLogo.EndColor) );
+
+            mpMenu->SetLogo( aVCLMenuLogo );
+        }
+        else
+            mpMenu->SetLogo();
+    }
+}
+
+
+::com::sun::star::awt::MenuLogo SAL_CALL VCLXMenu::getLogo(  )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::com::sun::star::awt::MenuLogo aAWTMenuLogo;
+    if ( mpMenu )
+    {
+        if ( mpMenu->HasLogo() )
+        {
+            MenuLogo aVCLMenuLogo      = mpMenu->GetLogo();
+            aAWTMenuLogo.Graphic       = Image(aVCLMenuLogo.aBitmap).GetXGraphic();
+            aAWTMenuLogo.StartColor    = aVCLMenuLogo.aStartColor.GetColor();
+            aAWTMenuLogo.EndColor      = aVCLMenuLogo.aEndColor.GetColor();
+        }
+    }
+    return aAWTMenuLogo;
+}
+
+
+void SAL_CALL VCLXMenu::enableAutoMnemonics( ::sal_Bool bEnable )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    if ( mpMenu )
+    {
+        if ( !bEnable )
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+        else
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() & ~MENU_FLAG_NOAUTOMNEMONICS );
+    }
+}
+
+
+void SAL_CALL VCLXMenu::setAcceleratorKeyEvent( ::sal_Int16 nItemId,
+                                                const ::com::sun::star::awt::KeyEvent& aKeyEvent )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setAcceleratorKeyEvent()", nItemId )
+        KeyCode aVCLKeyCode = lcl_AWTKey2VCLKey( aKeyEvent );
+        mpMenu->SetAccelKey( nItemId, aVCLKeyCode );
+    }
+}
+
+
+::com::sun::star::awt::KeyEvent SAL_CALL VCLXMenu::getAcceleratorKeyEvent( ::sal_Int16 nItemId )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::com::sun::star::awt::KeyEvent aKeyEvent;
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getAcceleratorKeyEvent()", nItemId )
+        KeyCode nKeyCode = mpMenu->GetAccelKey( nItemId );
+        aKeyEvent = lcl_VCLKey2AWTKey( nKeyCode );
+    }
+
+    return aKeyEvent;
+}
+
+
+void SAL_CALL VCLXMenu::setHelpText( ::sal_Int16 nItemId, const ::rtl::OUString& sHelpText )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setHelpText()", nItemId )
+        mpMenu->SetHelpText( nItemId, sHelpText );
+    }
+}
+
+
+::rtl::OUString SAL_CALL VCLXMenu::getHelpText( ::sal_Int16 nItemId )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    rtl::OUString sHelpText;
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getHelpText()", nItemId )
+        sHelpText = mpMenu->GetHelpText( nItemId );
+    }
+
+    return sHelpText;
+}
+
+
+void SAL_CALL VCLXMenu::setTipHelpText( ::sal_Int16 nItemId, const ::rtl::OUString& sTipHelpText )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setTipHelpText()", nItemId )
+        mpMenu->SetTipHelpText( nItemId, sTipHelpText );
+    }
+}
+
+
+::rtl::OUString SAL_CALL VCLXMenu::getTipHelpText( ::sal_Int16 nItemId )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    rtl::OUString sTipHelpText;
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getTipHelpText()", nItemId )
+        sTipHelpText = mpMenu->GetTipHelpText( nItemId );
+    }
+    return sTipHelpText;
+}
+
+
+void SAL_CALL VCLXMenu::setItemImage(
+                                            ::sal_Int16 nItemId,
+                                            const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& xGraphic, ::sal_Bool bScale )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setItemImage()", nItemId )
+        Image aImage = lcl_XGraphic2VCLImage( xGraphic, bScale );
+        mpMenu->SetItemImage( nItemId, aImage );
+    }
+}
+
+
+::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL VCLXMenu::getItemImage( ::sal_Int16 nItemId )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > rxGraphic;
+
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getItemImage()", nItemId )
+        Image aImage = mpMenu->GetItemImage( nItemId );
+        if ( !!aImage )
+            rxGraphic = aImage.GetXGraphic();
+    }
+    return rxGraphic;
+}
+
+
+void SAL_CALL VCLXMenu::setItemImageAngle( ::sal_Int16 nItemId, ::sal_Int32 nAngle )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setItemImageAngle()", nItemId )
+        mpMenu->SetItemImageAngle( nItemId, nAngle );
+    }
+}
+
+
+::sal_Int32 SAL_CALL VCLXMenu::getItemImageAngle( ::sal_Int16 nItemId )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::sal_Int32 nItemImageAngle( 0 );
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getItemImageAngle()", nItemId )
+        nItemImageAngle = mpMenu->GetItemImageAngle( nItemId );
+    }
+    return nItemImageAngle;
+}
+
+
+void SAL_CALL VCLXMenu::setItemImageMirrorMode( ::sal_Int16 nItemId, ::sal_Bool bMirror )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::setItemImageMirrorMode()", nItemId )
+        mpMenu->SetItemImageMirrorMode( nItemId, bMirror );
+    }
+}
+
+
+::sal_Bool SAL_CALL VCLXMenu::isItemImageInMirrorMode( ::sal_Int16 nItemId )
+throw ( ::com::sun::star::container::NoSuchElementException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    sal_Bool bMirrorMode( sal_False );
+    if ( mpMenu && IsPopupMenu() )
+    {
+        THROW_MENUITEM_NOT_FOUND( "VCLXMenu::isItemImageInMirrorMode()", nItemId )
+        bMirrorMode = mpMenu->GetItemImageMirrorMode( nItemId );
+    }
+    return bMirrorMode;
+}
+
+
 //  ----------------------------------------------------
 //  class VCLXMenuBar
 //  ----------------------------------------------------
 
+DBG_NAME(VCLXMenuBar);
+
 VCLXMenuBar::VCLXMenuBar()
 {
+    DBG_CTOR( VCLXMenuBar, 0 );
     ImplCreateMenu( FALSE );
 }
 
 VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
 {
+    DBG_CTOR( VCLXMenuBar, 0 );
 }
 
 //  ----------------------------------------------------
 //  class VCLXPopupMenu
 //  ----------------------------------------------------
 
+DBG_NAME(VCLXPopupMenu);
+
 VCLXPopupMenu::VCLXPopupMenu()
 {
+    DBG_CTOR( VCLXPopupMenu, 0 );
     ImplCreateMenu( TRUE );
 }

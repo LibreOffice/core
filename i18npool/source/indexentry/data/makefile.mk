@@ -64,7 +64,7 @@ LIB1OBJFILES=$(SHL1OBJS)
 .INCLUDE :  target.mk
 
 $(MISC)$/%.cxx : %.txt
-    $(BIN)$/genindex_data $< $@ $*
+    $(AUGMENT_LIBRARY_PATH) $(BIN)$/genindex_data $< $@ $*
 
 # ugly - is this dependency really required here?
 $(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genindex_data$(EXECPOST)

@@ -42,6 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES= $(SLO)$/canvastools.obj	\
+          $(SLO)$/gradienttools.obj	\
           $(SLO)$/debugplotter.obj	\
           $(SLO)$/liangbarsky.obj	\
           $(SLO)$/tools.obj		    \

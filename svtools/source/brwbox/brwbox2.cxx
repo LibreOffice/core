@@ -164,7 +164,21 @@ bool BrowseBox::IsInCommandEvent() const
 
 void BrowseBox::StateChanged( StateChangedType nStateChange )
 {
-    if ( STATE_CHANGE_INITSHOW == nStateChange )
+    Control::StateChanged( nStateChange );
+
+    if ( STATE_CHANGE_MIRRORING == nStateChange )
+    {
+        getDataWindow()->EnableRTL( IsRTLEnabled() );
+
+        HeaderBar* pHeaderBar = getDataWindow()->pHeaderBar;
+        if ( pHeaderBar )
+            pHeaderBar->EnableRTL( IsRTLEnabled() );
+        aHScroll.EnableRTL( IsRTLEnabled() );
+        if( pVScroll )
+            pVScroll->EnableRTL( IsRTLEnabled() );
+        Resize();
+    }
+    else if ( STATE_CHANGE_INITSHOW == nStateChange )
     {
         bBootstrapped = TRUE; // muss zuerst gesetzt werden!
 
@@ -661,8 +675,7 @@ void BrowseBox::Resize()
         // Handle-Column beruecksichtigen
         BrowserColumn *pFirstCol = pCols->GetObject(0);
         long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
-        pHeaderBar->SetPosPixel( Point( nOfsX, 0 ) );
-        pHeaderBar->SetSizePixel( Size( GetOutputSizePixel().Width() - nOfsX, GetTitleHeight() ) );
+        pHeaderBar->SetPosSizePixel( Point( nOfsX, 0 ), Size( GetOutputSizePixel().Width() - nOfsX, GetTitleHeight() ) );
     }
 
     AutoSizeLastColumn(); // adjust last column width
@@ -1306,7 +1319,9 @@ void BrowseBox::UpdateScrollbars()
     if ( bNeedsVScroll && !pVScroll->IsVisible() )
         pVScroll->Show();
 
-    pDataWin->SetSizePixel( aDataWinSize );
+    pDataWin->SetPosSizePixel(
+        Point( 0, GetTitleHeight() ),
+        aDataWinSize );
 
     // needs corner-window?
     // (do that AFTER positioning BOTH scrollbars)

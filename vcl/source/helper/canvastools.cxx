@@ -250,28 +250,61 @@ namespace vcl
                     {
                         // read ARGB color
                         aARGBColors = rLayout.ColorSpace->convertIntegerToARGB(aPixelData);
-                        for( sal_Int32 x=0; x<nWidth; ++x )
+
+                        if( rWriteAcc->HasPalette() )
                         {
-                            const rendering::ARGBColor& rColor=aARGBColors[x];
-                            rWriteAcc->SetPixel( aRect.Y1, x,
-                                                 BitmapColor( toByteColor(rColor.Red),
-                                                              toByteColor(rColor.Green),
-                                                              toByteColor(rColor.Blue) ));
-                            rAlphaAcc->SetPixel( aRect.Y1, x,
-                                                 BitmapColor( 255 - toByteColor(rColor.Alpha) ));
+                            for( sal_Int32 x=0; x<nWidth; ++x )
+                            {
+                                const rendering::ARGBColor& rColor=aARGBColors[x];
+                                rWriteAcc->SetPixel( aRect.Y1, x,
+                                                     (BYTE)rWriteAcc->GetBestPaletteIndex(
+                                                         BitmapColor( toByteColor(rColor.Red),
+                                                                      toByteColor(rColor.Green),
+                                                                      toByteColor(rColor.Blue))) );
+                                rAlphaAcc->SetPixel( aRect.Y1, x,
+                                                     BitmapColor( 255 - toByteColor(rColor.Alpha) ));
+                            }
+                        }
+                        else
+                        {
+                            for( sal_Int32 x=0; x<nWidth; ++x )
+                            {
+                                const rendering::ARGBColor& rColor=aARGBColors[x];
+                                rWriteAcc->SetPixel( aRect.Y1, x,
+                                                     BitmapColor( toByteColor(rColor.Red),
+                                                                  toByteColor(rColor.Green),
+                                                                  toByteColor(rColor.Blue) ));
+                                rAlphaAcc->SetPixel( aRect.Y1, x,
+                                                     BitmapColor( 255 - toByteColor(rColor.Alpha) ));
+                            }
                         }
                     }
                     else
                     {
                         // read RGB color
                         aRGBColors = rLayout.ColorSpace->convertIntegerToRGB(aPixelData);
-                        for( sal_Int32 x=0; x<nWidth; ++x )
+                        if( rWriteAcc->HasPalette() )
                         {
-                            const rendering::RGBColor& rColor=aRGBColors[x];
-                            rWriteAcc->SetPixel( aRect.Y1, x,
-                                                 BitmapColor( toByteColor(rColor.Red),
-                                                              toByteColor(rColor.Green),
-                                                              toByteColor(rColor.Blue) ));
+                            for( sal_Int32 x=0; x<nWidth; ++x )
+                            {
+                                const rendering::RGBColor& rColor=aRGBColors[x];
+                                rWriteAcc->SetPixel( aRect.Y1, x,
+                                                     (BYTE)rWriteAcc->GetBestPaletteIndex(
+                                                         BitmapColor( toByteColor(rColor.Red),
+                                                                      toByteColor(rColor.Green),
+                                                                      toByteColor(rColor.Blue))) );
+                            }
+                        }
+                        else
+                        {
+                            for( sal_Int32 x=0; x<nWidth; ++x )
+                            {
+                                const rendering::RGBColor& rColor=aRGBColors[x];
+                                rWriteAcc->SetPixel( aRect.Y1, x,
+                                                     BitmapColor( toByteColor(rColor.Red),
+                                                                  toByteColor(rColor.Green),
+                                                                  toByteColor(rColor.Blue) ));
+                            }
                         }
                     }
                 }
@@ -404,7 +437,7 @@ namespace vcl
                 { // limit scoped access
                     ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
                                                           aBitmap );
-                    ScopedBitmapWriteAccess pAlphaWriteAccess( aAlpha.AcquireWriteAccess(),
+                    ScopedBitmapWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : NULL,
                                                                aAlpha );
 
                     ENSURE_OR_THROW(pWriteAccess.get() != NULL,
@@ -652,6 +685,23 @@ namespace vcl
                     }
                     return aRes;
                 }
+                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const double*  pIn( deviceColor.getConstArray() );
+                    const sal_Size nLen( deviceColor.getLength() );
+                    ENSURE_ARG_OR_THROW2(nLen%4==0,
+                                         "number of channels no multiple of 4",
+                                         static_cast<rendering::XColorSpace*>(this), 0);
+
+                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    rendering::ARGBColor* pOut( aRes.getArray() );
+                    for( sal_Size i=0; i<nLen; i+=4 )
+                    {
+                        *pOut++ = rendering::ARGBColor(pIn[3],pIn[3]*pIn[0],pIn[3]*pIn[1],pIn[3]*pIn[2]);
+                        pIn += 4;
+                    }
+                    return aRes;
+                }
                 virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
                 {
                     const rendering::RGBColor* pIn( rgbColor.getConstArray() );
@@ -681,6 +731,23 @@ namespace vcl
                         *pColors++ = pIn->Red;
                         *pColors++ = pIn->Green;
                         *pColors++ = pIn->Blue;
+                        *pColors++ = pIn->Alpha;
+                        ++pIn;
+                    }
+                    return aRes;
+                }
+                virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
+                    const sal_Size              nLen( rgbColor.getLength() );
+
+                    uno::Sequence< double > aRes(nLen*4);
+                    double* pColors=aRes.getArray();
+                    for( sal_Size i=0; i<nLen; ++i )
+                    {
+                        *pColors++ = pIn->Red/pIn->Alpha;
+                        *pColors++ = pIn->Green/pIn->Alpha;
+                        *pColors++ = pIn->Blue/pIn->Alpha;
                         *pColors++ = pIn->Alpha;
                         ++pIn;
                     }

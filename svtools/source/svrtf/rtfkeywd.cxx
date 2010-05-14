@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfkeywd.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1162,7 +1162,28 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
         {{sRTF_SHPRIGHT},       RTF_SHPRIGHT}
         */
         {{sRTF_SN},       RTF_SN},
-        {{sRTF_SV},       RTF_SV}
+        {{sRTF_SV},       RTF_SV},
+
+// Support for overline attributes
+        {{sRTF_OL},             RTF_OL},
+        {{sRTF_OLW},            RTF_OLW},
+        {{sRTF_OLD},            RTF_OLD},
+        {{sRTF_OLDB},           RTF_OLDB},
+        {{sRTF_OLNONE},         RTF_OLNONE},
+        {{sRTF_OLDASH},         RTF_OLDASH},
+        {{sRTF_OLDASHD},        RTF_OLDASHD},
+        {{sRTF_OLDASHDD},       RTF_OLDASHDD},
+        {{sRTF_OLTH},           RTF_OLTH},
+        {{sRTF_OLWAVE},         RTF_OLWAVE},
+        {{sRTF_OLC},            RTF_OLC},
+        {{sRTF_OLTHD},          RTF_OLTHD},
+        {{sRTF_OLTHDASH},       RTF_OLTHDASH},
+        {{sRTF_OLLDASH},        RTF_OLLDASH},
+        {{sRTF_OLTHLDASH},      RTF_OLTHLDASH},
+        {{sRTF_OLTHDASHD},      RTF_OLTHDASHD},
+        {{sRTF_OLTHDASHDD},     RTF_OLTHDASHDD},
+        {{sRTF_OLHWAVE},        RTF_OLHWAVE},
+        {{sRTF_OLOLDBWAVE},     RTF_OLOLDBWAVE}
 };
 
 

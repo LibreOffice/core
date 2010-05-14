@@ -107,6 +107,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_SILENT();
         static const ::rtl::OUString& PROP_STATUSINDICATOR();
         static const ::rtl::OUString& PROP_STREAM();
+        static const ::rtl::OUString& PROP_STREAMFOROUTPUT();
         static const ::rtl::OUString& PROP_TEMPLATENAME();
         static const ::rtl::OUString& PROP_TEMPLATEREGIONNAME();
         static const ::rtl::OUString& PROP_TITLE();
@@ -150,16 +151,31 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     A might existing InteractionHandler will be used automaticly,
                     to solve problems!
 
-            @param  bLockFile
-                    specifies whether the file should be locked
+                    In case of local file the system file locking is used.
 
             @return TRUE, if the stream was already part of the descriptor or could
                     be created as new item. FALSE otherwhise.
          */
-        // HACK: IT SHOULD BE ONLY ONE METHOD, THE TEMPORARY SOLUTION ALLOWS TO AVOID INCOMPATIBLE BUILD
-        sal_Bool addInputStream_Impl( sal_Bool bLockFile );
         sal_Bool addInputStream();
-        sal_Bool addInputStreamNoLock();
+
+        //---------------------------------------
+        /** @short  it checks if the descriptor already has a valid
+                    InputStream item and creates a new one, if not.
+
+            @descr  This method uses the current items of this MediaDescriptor,
+                    to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
+                    It creates a seekable stream and put it into the descriptor.
+
+                    A might existing InteractionHandler will be used automaticly,
+                    to solve problems!
+
+                    In case of local file the system file locking is used based on
+                    configuration settings.
+
+            @return TRUE, if the stream was already part of the descriptor or could
+                    be created as new item. FALSE otherwhise.
+         */
+        sal_Bool addInputStreamOwnLock();
 
         //---------------------------------------
         /** @short  it checks if the descriptor describes a readonly stream.
@@ -247,6 +263,25 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     the "normalized" URL (e.g. without jumpmark)
          */
         COMPHELPER_DLLPRIVATE ::rtl::OUString impl_normalizeURL(const ::rtl::OUString& sURL);
+
+        //---------------------------------------
+        /** @short  it checks if the descriptor already has a valid
+                    InputStream item and creates a new one, if not.
+
+            @descr  This method uses the current items of this MediaDescriptor,
+                    to open the stream (as e.g. URL, ReadOnly, PostData etcpp.).
+                    It creates a seekable stream and put it into the descriptor.
+
+                    A might existing InteractionHandler will be used automaticly,
+                    to solve problems!
+
+            @param  bLockFile
+                    specifies whether the file should be locked
+
+            @return TRUE, if the stream was already part of the descriptor or could
+                    be created as new item. FALSE otherwhise.
+         */
+        COMPHELPER_DLLPRIVATE sal_Bool impl_addInputStream( sal_Bool bLockFile );
 };
 
 } // namespace comphelper

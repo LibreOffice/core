@@ -67,7 +67,6 @@ class VCLXMultiLineEdit :   public ::com::sun::star::awt::XTextComponent,
 {
 private:
     TextListenerMultiplexer maTextListeners;
-    bool                    mbJavaCompatibleTextNotifications;
     LineEnd                 meLineEndType;
 
 protected:

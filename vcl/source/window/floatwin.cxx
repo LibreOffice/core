@@ -424,6 +424,11 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 {
                     if( devRectRTL.Right()-aSize.Width()+1 < aScreenRect.Left() )
                         aPos.X() -= aScreenRect.Left() - devRectRTL.Right() + aSize.Width() - 1;
+                    else if( aPos.X() + aSize.Width() > aScreenRect.Right() )
+                    {
+                        aPos.X() -= aSize.Width()-2; // popup to left instead
+                        aPos.Y() -= 2;
+                    }
                 }
                 else if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
                 {

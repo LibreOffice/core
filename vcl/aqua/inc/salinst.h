@@ -169,6 +169,7 @@ public:
     static const short AppExecuteSVMain   = 0x7fff;
     static const short AppEndLoopEvent    = 1;
     static const short AppStartTimerEvent = 10;
+    static const short AppleRemoteEvent   = 15;
     static const short YieldWakeupEvent   = 20;
 
     static NSMenu* GetDynamicDockMenu();

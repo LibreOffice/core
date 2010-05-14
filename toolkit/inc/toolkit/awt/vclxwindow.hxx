@@ -32,23 +32,22 @@
 #define _TOOLKIT_AWT_VCLXWINDOW_HXX_
 
 #include <toolkit/dllapi.h>
-#include <com/sun/star/awt/XWindow.hpp>
+#include <toolkit/awt/vclxdevice.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
+
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XView.hpp>
-#include <com/sun/star/awt/XPointer.hpp>
-#include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
-#include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 
-#include <toolkit/awt/vclxdevice.hxx>
-#include <toolkit/helper/listenermultiplexer.hxx>
+#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase8.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/gen.hxx>    // Size
 #include <tools/link.hxx>
@@ -74,44 +73,21 @@ namespace toolkit
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
-class TOOLKIT_DLLPUBLIC VCLXWindow :    public ::com::sun::star::awt::XWindow2,
-                    public ::com::sun::star::awt::XVclWindowPeer,
-                    public ::com::sun::star::awt::XLayoutConstrains,
-                    public ::com::sun::star::awt::XView,
-                    public ::com::sun::star::awt::XDockableWindow,
-                    public ::com::sun::star::accessibility::XAccessible,
-                    public ::com::sun::star::lang::XEventListener,
-                    public ::com::sun::star::beans::XPropertySetInfo,
-                    public VCLXDevice
+typedef ::cppu::ImplInheritanceHelper8  <   VCLXDevice
+                                        ,   ::com::sun::star::awt::XWindow2
+                                        ,   ::com::sun::star::awt::XVclWindowPeer
+                                        ,   ::com::sun::star::awt::XLayoutConstrains
+                                        ,   ::com::sun::star::awt::XView
+                                        ,   ::com::sun::star::awt::XDockableWindow
+                                        ,   ::com::sun::star::accessibility::XAccessible
+                                        ,   ::com::sun::star::lang::XEventListener
+                                        ,   ::com::sun::star::beans::XPropertySetInfo
+                                        >   VCLXWindow_Base;
+
+class TOOLKIT_DLLPUBLIC VCLXWindow : public VCLXWindow_Base
 {
 private:
-    EventListenerMultiplexer        maEventListeners;
-    FocusListenerMultiplexer        maFocusListeners;
-    WindowListenerMultiplexer       maWindowListeners;
-    KeyListenerMultiplexer          maKeyListeners;
-    MouseListenerMultiplexer        maMouseListeners;
-    MouseMotionListenerMultiplexer  maMouseMotionListeners;
-    PaintListenerMultiplexer        maPaintListeners;
-    VclContainerListenerMultiplexer maContainerListeners;
-    TopWindowListenerMultiplexer    maTopWindowListeners;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer>  mxPointer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> mxViewGraphics;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener> mxDockableWindowListener;
-
-    ULONG                           mnListenerLockLevel;
-    ULONG                           nDummy2;
     VCLXWindowImpl*                 mpImpl;
-    UnoPropertyArrayHelper         *mpPropHelper;
-
-
-    sal_Bool                        mbDisposing : 1;
-    sal_Bool                        mbDesignMode : 1;
-    sal_Bool                        mbSynthesizingVCLEvent : 1;
-    sal_Bool                        mbWithDefaultProps : 1;
-    sal_Bool                        mbDrawingOntoParent;
 
     UnoPropertyArrayHelper *GetPropHelper();
 
@@ -123,8 +99,9 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
 
-    void            SetSynthesizingVCLEvent( sal_Bool b )   { mbSynthesizingVCLEvent = b; }
-    BOOL            IsSynthesizingVCLEvent() const          { return mbSynthesizingVCLEvent; }
+    void            SetSynthesizingVCLEvent( sal_Bool b );
+    BOOL            IsSynthesizingVCLEvent() const;
+
     void        SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle );
 
     ::toolkit::IAccessibleFactory&  getAccessibleFactory();
@@ -134,8 +111,10 @@ protected:
     // for use in controls/
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds,
                                         bool bWithDefaults = false );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds )
-        { return ImplGetPropertyIds( aIds, mbWithDefaultProps ); }
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds );
+
+    ::cppu::OInterfaceContainerHelper&  GetContainerListeners();
+    ::cppu::OInterfaceContainerHelper&  GetTopWindowListeners();
 
 public:
     VCLXWindow( bool bWithDefaultProps = false );
@@ -143,35 +122,16 @@ public:
 
     virtual void    SetWindow( Window* pWindow );
     Window*         GetWindow() const                                   { return (Window*)GetOutputDevice(); }
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> GetViewGraphics() const { return mxViewGraphics; }
 
     void    suspendVclEventListening( );
     void    resumeVclEventListening( );
 
-    EventListenerMultiplexer&       GetEventListeners()     { return maEventListeners; }
-    FocusListenerMultiplexer&       GetFocusListeners()     { return maFocusListeners; }
-    WindowListenerMultiplexer&      GetWindowListeners()    { return maWindowListeners; }
-    KeyListenerMultiplexer&         GetKeyListeners()       { return maKeyListeners; }
-    MouseListenerMultiplexer&       GetMouseListeners()     { return maMouseListeners; }
-    MouseMotionListenerMultiplexer& GetMouseMotionListeners() { return maMouseMotionListeners; }
-    PaintListenerMultiplexer&       GetPaintListeners()     { return maPaintListeners; }
-    VclContainerListenerMultiplexer& GetContainerListeners() { return maContainerListeners; }
-    TopWindowListenerMultiplexer&   GetTopWindowListeners() { return maTopWindowListeners; }
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    void    notifyWindowRemoved( Window& _rWindow );
 
     // ::com::sun::star::lang::XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
     static VCLXWindow*                                          GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
     sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
 
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);

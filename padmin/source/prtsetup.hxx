@@ -31,22 +31,20 @@
 #ifndef _PAD_PRTSETUP_HXX_
 #define _PAD_PRTSETUP_HXX_
 
-#include <tools/link.hxx>
-#include <vcl/tabdlg.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/combobox.hxx>
-#ifndef _PSPPRINT_PPDPARSER_HXX_
-#include <psprint/ppdparser.hxx>
-#endif
-#include <psprint/printerinfomanager.hxx>
-#include <helper.hxx>
+#include "helper.hxx"
+
+#include "tools/link.hxx"
+
+#include "vcl/tabdlg.hxx"
+#include "vcl/tabpage.hxx"
+#include "vcl/tabctrl.hxx"
+#include "vcl/button.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/field.hxx"
+#include "vcl/combobox.hxx"
+#include "vcl/ppdparser.hxx"
+#include "vcl/printerinfomanager.hxx"
 
 namespace padmin {
 

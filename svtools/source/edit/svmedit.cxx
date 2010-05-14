@@ -794,7 +794,9 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
 {
     BOOL bDone = FALSE;
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
-    if ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
+    if ( nCode == com::sun::star::awt::Key::SELECT_ALL ||
+         ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
+       )
     {
         mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
         bDone = TRUE;

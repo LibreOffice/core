@@ -37,13 +37,17 @@
 #include <salsys.h>
 #include <salframe.h>
 #include <salinst.h>
+#include "saldata.hxx"
 #include <tools/debug.hxx>
 #include <vcl/svdata.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "vcl/window.hxx"
 
 #ifndef _SV_SALGTYPE_HXX
 //#include <salgtype.hxx>
 #endif
+
+#define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 
 class Os2SalSystem : public SalSystem
 {
@@ -145,16 +149,14 @@ int Os2SalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMess
         nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
 
     //#107209 hide the splash screen if active
-#if 0
     ImplSVData* pSVData = ImplGetSVData();
     if (pSVData->mpIntroWindow)
         pSVData->mpIntroWindow->Hide();
-#endif
 
     return WinMessageBox(
         HWND_DESKTOP, HWND_DESKTOP,
-        (PSZ)rMessage.GetBuffer(),
-        (PSZ)rTitle.GetBuffer(),
+        (PSZ)CHAR_POINTER(rMessage),
+        (PSZ)CHAR_POINTER(rTitle),
         0, nFlags);
 }
 

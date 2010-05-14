@@ -400,5 +400,39 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
     return xTempStorage;
 }
 
+// ----------------------------------------------------------------------
+sal_Bool OStorageHelper::IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed )
+{
+    return IsValidZipEntryFileName( aName.getStr(), aName.getLength(), bSlashAllowed );
+}
+
+// ----------------------------------------------------------------------
+sal_Bool OStorageHelper::IsValidZipEntryFileName(
+    const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed )
+{
+    for ( sal_Int32 i = 0; i < nLength; i++ )
+    {
+        switch ( pChar[i] )
+        {
+            case '\\':
+            case '?':
+            case '<':
+            case '>':
+            case '\"':
+            case '|':
+            case ':':
+                return sal_False;
+            case '/':
+                if ( !bSlashAllowed )
+                    return sal_False;
+                break;
+            default:
+                if ( pChar[i] < 32  || pChar[i] >= 0xD800 && pChar[i] <= 0xDFFF )
+                    return sal_False;
+        }
+    }
+    return sal_True;
+}
+
 }
 

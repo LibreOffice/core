@@ -32,11 +32,9 @@
 #define _SVP_PSPGRAPHICS_HXX
 
 
-#ifndef _PSPRINT_FONTMANAGER_HXX
-#include <psprint/fontmanager.hxx>
-#endif
-#include <vcl/sallayout.hxx>
-#include <vcl/salgdi.hxx>
+#include "vcl/fontmanager.hxx"
+#include "vcl/sallayout.hxx"
+#include "vcl/salgdi.hxx"
 
 namespace psp { struct JobData; class PrinterGfx; }
 

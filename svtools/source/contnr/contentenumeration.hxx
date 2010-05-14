@@ -58,6 +58,7 @@ namespace svt
         ::rtl::OUString maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
         ::rtl::OUString maLowerTitle;
 
+
     public:
         ::rtl::OUString maType;
         ::rtl::OUString maTargetURL;
@@ -209,6 +210,10 @@ namespace svt
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::document::XStandaloneDocumentInfo >
                                         m_xDocInfo;
 
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > m_rBlackList;
+
+        sal_Bool URLOnBlackList ( const ::rtl::OUString& sRealURL );
+
     public:
         /** constructs an enumerator instance
 
@@ -245,7 +250,8 @@ namespace svt
         */
         EnumerationResult   enumerateFolderContentSync(
                     const FolderDescriptor& _rFolder,
-                    const IUrlFilter* _pFilter
+                    const IUrlFilter* _pFilter,
+                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >()
                 );
 
         /** cancels the running operation.

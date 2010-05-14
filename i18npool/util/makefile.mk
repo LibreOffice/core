@@ -76,7 +76,8 @@ SHL1STDLIBS= \
         $(CPPULIB) \
         $(SALLIB) \
         $(ICUINLIB) \
-        $(ICUUCLIB)
+        $(ICUUCLIB) \
+        $(ICUDATALIB)
 
 # --- Targets ------------------------------------------------------------
 

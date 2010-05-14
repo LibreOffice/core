@@ -309,9 +309,13 @@ INT32 StgDirEntry::GetSize()
 
 BOOL StgDirEntry::SetSize( INT32 nNewSize )
 {
-    if ( !( nMode & STREAM_WRITE )
-      || !bDirect && !pTmpStrm && !Strm2Tmp() )
+    if (
+         !( nMode & STREAM_WRITE ) ||
+         (!bDirect && !pTmpStrm && !Strm2Tmp())
+       )
+    {
         return FALSE;
+    }
 
     if( nNewSize < nPos )
         nPos = nNewSize;

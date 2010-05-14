@@ -88,11 +88,18 @@ class CanvasFactory
 
     mutable ::osl::Mutex              m_mutex;
     Reference<XComponentContext>      m_xContext;
-    Reference<container::XNameAccess> m_xForceFlagNameAccess;
+    Reference<container::XNameAccess> m_xCanvasConfigNameAccess;
     AvailVector                       m_aAvailableImplementations;
+    AvailVector                       m_aAcceleratedImplementations;
+    AvailVector                       m_aAAImplementations;
     mutable CacheVector               m_aCachedImplementations;
     mutable bool                      m_bCacheHasForcedLastImpl;
+    mutable bool                      m_bCacheHasUseAcceleratedEntry;
+    mutable bool                      m_bCacheHasUseAAEntry;
 
+    void checkConfigFlag( bool& r_bFlag,
+                          bool& r_CacheFlag,
+                          const OUString& nodeName ) const;
     Reference<XInterface> use(
         OUString const & serviceName,
         Sequence<Any> const & args,
@@ -136,10 +143,14 @@ public:
 CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     m_mutex(),
     m_xContext(xContext),
-    m_xForceFlagNameAccess(),
+    m_xCanvasConfigNameAccess(),
     m_aAvailableImplementations(),
+    m_aAcceleratedImplementations(),
+    m_aAAImplementations(),
     m_aCachedImplementations(),
-    m_bCacheHasForcedLastImpl()
+    m_bCacheHasForcedLastImpl(),
+    m_bCacheHasUseAcceleratedEntry(),
+    m_bCacheHasUseAAEntry()
 {
     try
     {
@@ -155,7 +166,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                          makeAny( OUSTR("/org.openoffice.Office.Canvas") ),
                          beans::PropertyState_DIRECT_VALUE ) ) );
 
-        m_xForceFlagNameAccess.set(
+        m_xCanvasConfigNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
                 OUSTR("com.sun.star.configuration.ConfigurationAccess"),
                 Sequence<Any>( &propValue, 1 ) ),
@@ -185,9 +196,13 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
             if( xEntryNameAccess.is() )
             {
-                Sequence<OUString> preferredImplementations;
-                if( (xEntryNameAccess->getByName( OUSTR("PreferredImplementations") ) >>= preferredImplementations) )
-                    m_aAvailableImplementations.push_back( std::make_pair(*pCurr,preferredImplementations) );
+                Sequence<OUString> implementationList;
+                if( (xEntryNameAccess->getByName( OUSTR("PreferredImplementations") ) >>= implementationList) )
+                    m_aAvailableImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                if( (xEntryNameAccess->getByName( OUSTR("AcceleratedImplementations") ) >>= implementationList) )
+                    m_aAcceleratedImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                if( (xEntryNameAccess->getByName( OUSTR("AntialiasingImplementations") ) >>= implementationList) )
+                    m_aAAImplementations.push_back( std::make_pair(*pCurr,implementationList) );
             }
 
             ++pCurr;
@@ -291,6 +306,25 @@ Reference<XInterface> CanvasFactory::use(
 }
 
 //______________________________________________________________________________
+void CanvasFactory::checkConfigFlag( bool& r_bFlag,
+                                     bool& r_CacheFlag,
+                                     const OUString& nodeName ) const
+{
+    if( m_xCanvasConfigNameAccess.is() )
+    {
+        m_xCanvasConfigNameAccess->getByName( nodeName ) >>= r_bFlag;
+
+        if( r_CacheFlag != r_bFlag )
+        {
+            // cache is invalid, because of different order of
+            // elements
+            r_CacheFlag = r_bFlag;
+            m_aCachedImplementations.clear();
+        }
+    }
+}
+
+//______________________________________________________________________________
 Reference<XInterface> CanvasFactory::lookupAndUse(
     OUString const & serviceName, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) const
@@ -299,18 +333,21 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     // forcing last entry from impl list, if config flag set
     bool bForceLastEntry(false);
-    if( m_xForceFlagNameAccess.is() )
-    {
-        m_xForceFlagNameAccess->getByName( OUSTR("ForceSafeServiceImpl") ) >>= bForceLastEntry;
+    checkConfigFlag( bForceLastEntry,
+                     m_bCacheHasForcedLastImpl,
+                     OUSTR("ForceSafeServiceImpl") );
 
-        if( m_bCacheHasForcedLastImpl != bForceLastEntry )
-        {
-            // cache is invalid, because of different order of
-            // elements
-            m_bCacheHasForcedLastImpl = bForceLastEntry;
-            m_aCachedImplementations.clear();
-        }
-    }
+    // use anti-aliasing canvas, if config flag set (or not existing)
+    bool bUseAAEntry(true);
+    checkConfigFlag( bUseAAEntry,
+                     m_bCacheHasUseAAEntry,
+                     OUSTR("UseAntialiasingCanvas") );
+
+    // use accelerated canvas, if config flag set (or not existing)
+    bool bUseAcceleratedEntry(true);
+    checkConfigFlag( bUseAcceleratedEntry,
+                     m_bCacheHasUseAcceleratedEntry,
+                     OUSTR("UseAcceleratedCanvas") );
 
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
@@ -330,27 +367,97 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     // lookup in available service list
     const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
-    AvailVector::const_iterator aAvailMatch;
-    if( (aAvailMatch=std::find_if(m_aAvailableImplementations.begin(),
-                                  aAvailEnd,
-                                  boost::bind(&OUString::equals,
-                                              boost::cref(serviceName),
-                                              boost::bind(
-                                                  std::select1st<AvailPair>(),
-                                                  _1)))) != aAvailEnd )
+    AvailVector::const_iterator aAvailImplsMatch;
+    if( (aAvailImplsMatch=std::find_if(m_aAvailableImplementations.begin(),
+                                       aAvailEnd,
+                                       boost::bind(&OUString::equals,
+                                                   boost::cref(serviceName),
+                                                   boost::bind(
+                                                       std::select1st<AvailPair>(),
+                                                       _1)))) == aAvailEnd )
     {
-        const Sequence<OUString> aPreferredImpls( aAvailMatch->second );
-        const OUString* pCurrImpl = aPreferredImpls.getConstArray();
-        const OUString* const pEndImpl = pCurrImpl + aPreferredImpls.getLength();
+        return Reference<XInterface>();
+    }
 
-        // force last entry from impl list, if config flag set
-        if( bForceLastEntry )
-            pCurrImpl = pEndImpl-1;
+    const AvailVector::const_iterator aAAEnd(m_aAAImplementations.end());
+    AvailVector::const_iterator aAAImplsMatch;
+    if( (aAAImplsMatch=std::find_if(m_aAAImplementations.begin(),
+                                    aAAEnd,
+                                    boost::bind(&OUString::equals,
+                                                boost::cref(serviceName),
+                                                boost::bind(
+                                                    std::select1st<AvailPair>(),
+                                                    _1)))) == aAAEnd )
+    {
+        return Reference<XInterface>();
+    }
 
-        while( pCurrImpl != pEndImpl )
+    const AvailVector::const_iterator aAccelEnd(m_aAcceleratedImplementations.end());
+    AvailVector::const_iterator aAccelImplsMatch;
+    if( (aAccelImplsMatch=std::find_if(m_aAcceleratedImplementations.begin(),
+                                       aAccelEnd,
+                                       boost::bind(&OUString::equals,
+                                                   boost::cref(serviceName),
+                                                   boost::bind(
+                                                       std::select1st<AvailPair>(),
+                                                       _1)))) == aAccelEnd )
+    {
+        return Reference<XInterface>();
+    }
+
+    const Sequence<OUString> aPreferredImpls( aAvailImplsMatch->second );
+    const OUString* pCurrImpl = aPreferredImpls.getConstArray();
+    const OUString* const pEndImpl = pCurrImpl + aPreferredImpls.getLength();
+
+    const Sequence<OUString> aAAImpls( aAAImplsMatch->second );
+    const OUString* const pFirstAAImpl = aAAImpls.getConstArray();
+    const OUString* const pEndAAImpl = pFirstAAImpl + aAAImpls.getLength();
+
+    const Sequence<OUString> aAccelImpls( aAccelImplsMatch->second );
+    const OUString* const pFirstAccelImpl = aAccelImpls.getConstArray();
+    const OUString* const pEndAccelImpl = pFirstAccelImpl + aAccelImpls.getLength();
+
+    // force last entry from impl list, if config flag set
+    if( bForceLastEntry )
+        pCurrImpl = pEndImpl-1;
+
+    while( pCurrImpl != pEndImpl )
+    {
+        const OUString aCurrName(pCurrImpl->trim());
+
+        // check whether given canvas service is listed in the
+        // sequence of "accelerated canvas implementations"
+        const bool bIsAcceleratedImpl(
+            std::find_if(pFirstAccelImpl,
+                         pEndAccelImpl,
+                         boost::bind(&OUString::equals,
+                                     boost::cref(aCurrName),
+                                     boost::bind(
+                                         &OUString::trim,
+                                         _1))) != pEndAccelImpl );
+
+        // check whether given canvas service is listed in the
+        // sequence of "antialiasing canvas implementations"
+        const bool bIsAAImpl(
+            std::find_if(pFirstAAImpl,
+                         pEndAAImpl,
+                         boost::bind(&OUString::equals,
+                                     boost::cref(aCurrName),
+                                     boost::bind(
+                                         &OUString::trim,
+                                         _1))) != pEndAAImpl );
+
+        // try to instantiate canvas *only* if either accel and AA
+        // property match preference, *or*, if there's a mismatch, only
+        // go for a less capable canvas (that effectively let those
+        // pour canvas impls still work as fallbacks, should an
+        // accelerated/AA one fail). Property implies configuration:
+        // http://en.wikipedia.org/wiki/Truth_table#Logical_implication
+        if( (!bIsAAImpl || bUseAAEntry) && (!bIsAcceleratedImpl || bUseAcceleratedEntry) )
         {
             Reference<XInterface> xCanvas(
                 use( pCurrImpl->trim(), args, xContext ) );
+
             if(xCanvas.is())
             {
                 if( aMatch != aEnd )
@@ -368,9 +475,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
                 return xCanvas;
             }
-
-            ++pCurrImpl;
         }
+
+        ++pCurrImpl;
     }
 
     return Reference<XInterface>();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.95.14.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,53 +33,47 @@
 
 #include <string.h>
 #include <malloc.h>
-#include <tools/svwin.h>
-#include <rtl/logfile.hxx>
-#include <rtl/tencinfo.h>
-#ifndef _OSL_FILE_HXX
-#include <osl/file.hxx>
-#endif
-#ifndef _OSL_THREAD_HXX
-#include <osl/thread.hxx>
-#endif
-#ifndef _OSL_PROCESS_HXX
-#include <osl/process.h>
-#endif
-#include <vcl/svapp.hxx>
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salgdi.h>
-#include <vcl/outfont.hxx>
-#include <vcl/font.hxx>
-#include <vcl/sallayout.hxx>
-#include <tools/poly.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include "tools/svwin.h"
+
+#include "wincomp.hxx"
+#include "saldata.hxx"
+#include "salgdi.h"
+
+#include "vcl/svapp.hxx"
+#include "vcl/outfont.hxx"
+#include "vcl/font.hxx"
+#include "vcl/sallayout.hxx"
+
+#include "rtl/logfile.hxx"
+#include "rtl/tencinfo.h"
+#include "rtl/textcvt.h"
+#include "rtl/bootstrap.hxx"
 
 
-#include <tools/debug.hxx>
-#ifndef __SUBFONT_H
-#include <psprint/list.h>
-#include <psprint/sft.h>
-#endif
-#include <rtl/textcvt.h>
+#include "osl/module.h"
+#include "osl/file.hxx"
+#include "osl/thread.hxx"
+#include "osl/process.h"
+
+#include "tools/poly.hxx"
+#include "tools/debug.hxx"
+#include "tools/stream.hxx"
+
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+
+#include <list.h>
+#include <sft.h>
 
 #ifdef GCP_KERN_HACK
 #include <algorithm>
 #endif
 
-#include <tools/stream.hxx>
-#include <rtl/bootstrap.hxx>
-
-
 #include <vector>
 #include <set>
-
-#ifndef INCLUDED_MAP
 #include <map>
-#define INCLUDED_MAP
-#endif
 
 
 static const int MAXFONTHEIGHT = 2048;
@@ -110,6 +104,8 @@ static bool bImplSalCourierNew = false;
 
 
 // =======================================================================
+
+// -----------------------------------------------------------------------
 
 // TODO: also support temporary TTC font files
 typedef std::map< String, ImplDevFontAttributes > FontAttrMap;
@@ -806,6 +802,7 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
+    mbHasArabicSupport ( false ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
     mnId( 0 ),
@@ -936,7 +933,8 @@ void ImplWinFontData::ReadOs2Table( HDC hDC ) const
         mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
         mbHasKoreanRange= (ulUnicodeRange1 & 0x10000000)
                         | (ulUnicodeRange2 & 0x01100000);
-    }
+        mbHasArabicSupport = (ulUnicodeRange1 & 0x00002000);
+   }
 }
 
 // -----------------------------------------------------------------------
@@ -1521,6 +1519,8 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             if( mpWinFontData[0]->SupportsKorean() )
                 pMetric->mnDescent += pMetric->mnExtLeading;
     }
+
+    pMetric->mnMinKashida = GetMinKashidaWidth();
 }
 
 // -----------------------------------------------------------------------

@@ -43,67 +43,59 @@
 // building X11 graphics layers.
 
 #if defined UNX && ! defined QUARTZ
-#include <svunx.h>
+#include "svunx.h"
 #endif
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salinst.hxx>
-#include <vcl/salwtype.hxx>
-#ifndef _VOS_SIGNAL_HXX
-#include <vos/signal.hxx>
-#endif
-#ifndef _VOS_SOCKET_HXX
-#include <vos/socket.hxx>
-#endif
-#include <tools/tools.h>
-#include <tools/debug.hxx>
-#ifndef _UNIQID_HXX
-#include <tools/unqid.hxx>
-#endif
-#include <vcl/svdata.hxx>
-#include <vcl/dbggui.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <vcl/image.hxx>
-#ifndef _SV_RESMGR_HXX
-#include <tools/resmgr.hxx>
-#endif
-#include <vcl/accmgr.hxx>
-#include <vcl/idlemgr.hxx>
-#include <vcl/outdev.h>
-#include <vcl/outfont.hxx>
-#include <vcl/print.h>
-#include <vcl/settings.hxx>
-#include <vcl/unowrap.hxx>
-#include <vcl/salsys.hxx>
-#include <vcl/saltimer.hxx>
-#include <vcl/salimestatus.hxx>
-#include <vcl/impimagetree.hxx>
-#include <vcl/xconnection.hxx>
+#include "svsys.h"
+#include "vcl/salinst.hxx"
+#include "vcl/salwtype.hxx"
+#include "vos/signal.hxx"
+#include "tools/tools.h"
+#include "tools/debug.hxx"
+#include "tools/unqid.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/dbggui.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/cvtgrf.hxx"
+#include "vcl/image.hxx"
+#include "tools/resmgr.hxx"
+#include "vcl/accmgr.hxx"
+#include "vcl/idlemgr.hxx"
+#include "vcl/outdev.h"
+#include "vcl/outfont.hxx"
+#include "vcl/print.h"
+#include "vcl/settings.hxx"
+#include "vcl/unowrap.hxx"
+#include "vcl/salsys.hxx"
+#include "vcl/saltimer.hxx"
+#include "vcl/salimestatus.hxx"
+#include "vcl/impimagetree.hxx"
+#include "vcl/xconnection.hxx"
 
-#include <vos/process.hxx>
-#include <osl/file.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/logfile.hxx>
+#include "vos/process.hxx"
+#include "osl/file.hxx"
+#include "comphelper/processfactory.hxx"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "rtl/logfile.hxx"
+
+#include "vcl/fontcfg.hxx"
+#include "vcl/configsettings.hxx"
+#include "vcl/lazydelete.hxx"
+
+#include "cppuhelper/implbase1.hxx"
+#include "uno/current_context.hxx"
 
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
-#include <rtl/strbuf.hxx>
+#include "rtl/strbuf.hxx"
 #endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-#include <vcl/fontcfg.hxx>
-#include <vcl/configsettings.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <uno/current_context.hxx>
 
 
 // =======================================================================
@@ -355,6 +347,8 @@ void DeInitVCL()
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mbDeInit = TRUE;
 
+    vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
+
     // give ime status a chance to destroy its own windows
     delete pSVData->mpImeStatus;
     pSVData->mpImeStatus = NULL;
@@ -383,7 +377,7 @@ void DeInitVCL()
     DBG_ASSERT( nBadTopWindows==0, aBuf.getStr() );
     #endif
 
-    ImplImageTree::cleanup();
+    ImplImageTreeSingletonRef()->shutDown();
 
     delete pExceptionHandler;
     pExceptionHandler = NULL;

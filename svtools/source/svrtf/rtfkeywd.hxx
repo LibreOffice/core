@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfkeywd.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1150,5 +1150,25 @@ extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBOTTOM, "\\
 extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPRIGHT, "\\shpright" );
 */
 
+// Support for overline attributes
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OL, "\\ol" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLD, "\\old" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDB, "\\oldb" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLNONE, "\\olnone" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLW, "\\olw" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDASH, "\\oldash" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDASHD, "\\oldashd" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDASHDD, "\\oldashdd" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTH, "\\olth" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLWAVE, "\\olwave" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLC, "\\olc" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHD, "\\olthd" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHDASH, "\\olthdash" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLLDASH, "\\olldash" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHLDASH, "\\olthldash" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHDASHD, "\\olthdashd" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHDASHDD, "\\olthdashdd" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLHWAVE, "\\olhwave" );
+extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLOLDBWAVE, "\\ololdbwave" );
 
 #endif // _RTFKEYWD_HXX

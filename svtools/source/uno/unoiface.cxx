@@ -175,7 +175,6 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
 //  ----------------------------------------------------
 VCLXMultiLineEdit::VCLXMultiLineEdit()
     :maTextListeners( *this )
-    ,mbJavaCompatibleTextNotifications( true )
     ,meLineEndType( LINEEND_LF )    // default behavior before introducing this property: LF (unix-like)
 {
 }
@@ -221,17 +220,11 @@ void VCLXMultiLineEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun
     {
         pEdit->SetText( aText );
 
-        if ( mbJavaCompatibleTextNotifications )
-        {
-            // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
-            // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
-            if ( maTextListeners.getLength() )
-            {
-                ::com::sun::star::awt::TextEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                maTextListeners.textChanged( aEvent );
-            }
-        }
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pEdit->SetModifyFlag();
+        pEdit->Modify();
+        SetSynthesizingVCLEvent( sal_False );
     }
 }
 
@@ -422,12 +415,6 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
     MultiLineEdit* pMultiLineEdit = (MultiLineEdit*)GetWindow();
     if ( pMultiLineEdit )
     {
-        if ( PropertyName.equalsAscii( "JavaCompatibleTextNotifications" ) )
-        {
-            Value >>= mbJavaCompatibleTextNotifications;
-            return;
-        }
-
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {

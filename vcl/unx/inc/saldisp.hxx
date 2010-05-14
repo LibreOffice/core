@@ -283,6 +283,7 @@ DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
 extern "C" {
     struct SnDisplay;
     struct SnLauncheeContext;
+    typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
 
 class VCL_DLLPUBLIC SalDisplay
@@ -384,9 +385,6 @@ protected:
     KeySym          nShiftKeySym_;      // first shift modifier
     KeySym          nCtrlKeySym_;       // first control modifier
     KeySym          nMod1KeySym_;       // first mod1 modifier
-#ifdef MACOSX
-    KeySym          nMod2KeySym_;       //first mod2 modifier
-#endif
     ByteString      m_aKeyboardName;
 
     vcl_sal::WMAdaptor* m_pWMAdaptor;
@@ -398,6 +396,8 @@ protected:
     std::list<SalObject*> m_aSalObjects;
 
     bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
+
+    mutable XLIB_Time  m_nLastUserEventTime; // mutable because changed on first access
 
     void            DestroyFontCache();
     virtual long    Dispatch( XEvent *pEvent ) = 0;
@@ -495,6 +495,9 @@ public:
     bool            GetExactResolution() const { return mbExactResolution; }
     ULONG           GetProperties() const { return nProperties_; }
     ULONG           GetMaxRequestSize() const { return nMaxRequestSize_; }
+    XLIB_Time       GetLastUserEventTime( bool bAlwaysReget = false ) const;
+
+    bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate, long i_nTimeout = 1000 ) const;
 
     BOOL            MouseCaptured( const SalFrame *pFrameData ) const
     { return m_pCapture == pFrameData; }

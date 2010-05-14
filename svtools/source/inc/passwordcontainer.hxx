@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/task/XMasterPasswordHandling.hpp>
+#include <com/sun/star/task/XMasterPasswordHandling2.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -225,7 +225,7 @@ public:
     void clear();
 
     sal_Bool getEncodedMP( ::rtl::OUString& aResult );
-    void setEncodedMP( const ::rtl::OUString& aResult );
+    void setEncodedMP( const ::rtl::OUString& aResult, sal_Bool bAcceptEnmpty = sal_False );
     void setUseStorage( sal_Bool bUse );
     sal_Bool useStorage();
 
@@ -243,7 +243,7 @@ enum PasswordState {
 
 class PasswordContainer : public ::cppu::WeakImplHelper4<
         ::com::sun::star::task::XPasswordContainer,
-        ::com::sun::star::task::XMasterPasswordHandling,
+        ::com::sun::star::task::XMasterPasswordHandling2,
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XEventListener >
 {
@@ -269,6 +269,8 @@ private:
                                         const ::rtl::OUString& name,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
+
+    ::rtl::OUString GetDefaultMasterPassword();
 
     ::rtl::OUString RequestPasswordFromUser(
                     ::com::sun::star::task::PasswordRequestMode aRMode,
@@ -362,6 +364,10 @@ public:
     virtual ::sal_Bool SAL_CALL hasMasterPassword(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL allowPersistentStoring( ::sal_Bool bAllow ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isPersistentStoringAllowed(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XMasterPasswordHandling2
+    virtual ::sal_Bool SAL_CALL useDefaultMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isDefaultMasterPasswordUsed(  ) throw (::com::sun::star::uno::RuntimeException);
 
     void            Notify();
 };

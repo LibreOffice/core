@@ -51,6 +51,7 @@ SLOFILES=   \
 OBJFILES   = $(OBJ)$/genconv_dict.obj
 
 APP1TARGET = genconv_dict
+APP1RPATH = NONE
 
 APP1OBJS   = $(OBJ)$/genconv_dict.obj
 

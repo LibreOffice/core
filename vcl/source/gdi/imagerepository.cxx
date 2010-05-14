@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+#include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/svapp.hxx>
 #ifndef _SV_IMPIMAGETREE_H

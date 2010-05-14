@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: isolang.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.24.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,8 +97,8 @@ struct IsoLangOtherEntry
  * only" usage and locale fall back should be cleaned up and made consistent. I
  * strongly doubt that most callers exactly expect the behavior described.
  * Currently these primary LangIDs are used literally in OOo code:
- * LANGUAGE_ENGLISH LANGUAGE_CHINESE LANGUAGE_ARABIC LANGUAGE_MALAY
- * LANGUAGE_AZERI LANGUAGE_UZBEK LANGUAGE_URDU LANGUAGE_KASHMIRI
+ * LANGUAGE_ENGLISH LANGUAGE_CHINESE LANGUAGE_MALAY
+ * LANGUAGE_AZERI LANGUAGE_URDU LANGUAGE_KASHMIRI
  */
 
 static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
@@ -114,9 +114,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_GERMAN,                      "de", "DE" },
     { LANGUAGE_ITALIAN,                     "it", "IT" },
     { LANGUAGE_DUTCH,                       "nl", "NL" },
-    { LANGUAGE_SPANISH,                     "es", "ES" },
-    { LANGUAGE_SPANISH,                     "es", ""   },
     { LANGUAGE_SPANISH_MODERN,              "es", "ES" },
+    { LANGUAGE_SPANISH_DATED,               "es", "ES" },
     { LANGUAGE_PORTUGUESE,                  "pt", "PT" },
     { LANGUAGE_PORTUGUESE_BRAZILIAN,        "pt", "BR" },
     { LANGUAGE_DANISH,                      "da", "DK" },
@@ -147,19 +146,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_GERMAN_AUSTRIAN,             "de", "AT" },
     { LANGUAGE_ITALIAN_SWISS,               "it", "CH" },
     { LANGUAGE_ALBANIAN,                    "sq", "AL" },
-    // #i93555# moved entry below { LANGUAGE_ARABIC,                      "ar", ""   },
-    { LANGUAGE_ARABIC_EGYPT,                "ar", "EG" },
-    // #i93555# HACK: language-only entry moved here to have a match on locale
-    // present in language list box to not display "Unknown" for an Arabic 'ar'
-    // language pack. This may have some side effect on code dealing with
-    // LANGUAGE_ARABIC if it converts to/from strings. On the other hand, usage
-    // of language-only usually is done wrong anyway..
-    /* FIXME: fix all "primary language only" usage, see also comment above
-     * this table, and then add a few language-only entries to the language
-     * list box if really necessary, but do not make them available for
-     * language attribution and so on, only for UI language selection! */
-    { LANGUAGE_ARABIC,                      "ar", ""   },
     { LANGUAGE_ARABIC_SAUDI_ARABIA,         "ar", "SA" },
+    { LANGUAGE_ARABIC_EGYPT,                "ar", "EG" },
     { LANGUAGE_ARABIC_UAE,                  "ar", "AE" },
     { LANGUAGE_ARABIC_IRAQ,                 "ar", "IQ" },
     { LANGUAGE_ARABIC_LIBYA,                "ar", "LY" },
@@ -174,6 +162,16 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ARABIC_KUWAIT,               "ar", "KW" },
     { LANGUAGE_ARABIC_BAHRAIN,              "ar", "BH" },
     { LANGUAGE_ARABIC_QATAR,                "ar", "QA" },
+    { LANGUAGE_USER_ARABIC_CHAD,            "ar", "TD" },
+    { LANGUAGE_USER_ARABIC_COMOROS,         "ar", "KM" },
+    { LANGUAGE_USER_ARABIC_DJIBOUTI,        "ar", "DJ" },
+    { LANGUAGE_USER_ARABIC_ERITREA,         "ar", "ER" },
+    { LANGUAGE_USER_ARABIC_ISRAEL,          "ar", "IL" },
+    { LANGUAGE_USER_ARABIC_MAURITANIA,      "ar", "MR" },
+    { LANGUAGE_USER_ARABIC_PALESTINE,       "ar", "PS" },
+    { LANGUAGE_USER_ARABIC_SOMALIA,         "ar", "SO" },
+    { LANGUAGE_USER_ARABIC_SUDAN,           "ar", "SD" },
+    { LANGUAGE_ARABIC_PRIMARY_ONLY,         "ar", ""   },
     { LANGUAGE_BASQUE,                      "eu", ""   },
     { LANGUAGE_BULGARIAN,                   "bg", "BG" },
     { LANGUAGE_CZECH,                       "cs", "CZ" },
@@ -201,7 +199,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_NORWEGIAN_BOKMAL,            "nb", "NO" },
     { LANGUAGE_NORWEGIAN_NYNORSK,           "nn", "NO" },
     { LANGUAGE_POLISH,                      "pl", "PL" },
-    { LANGUAGE_RHAETO_ROMAN,                "rm", ""   },
+    { LANGUAGE_RHAETO_ROMAN,                "rm", "CH" },
     { LANGUAGE_ROMANIAN,                    "ro", "RO" },
     { LANGUAGE_ROMANIAN_MOLDOVA,            "ro", "MD" },
     { LANGUAGE_SLOVAK,                      "sk", "SK" },
@@ -258,7 +256,6 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_AZERI,                       "az", ""   },
     { LANGUAGE_AZERI_LATIN,                 "az", "AZ" },
 //  { LANGUAGE_AZERI_CYRILLIC,              "az", "AZ" },   // script codes not supported yet
-    { LANGUAGE_UZBEK,                       "uz", ""   },
     { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ" },
 //  { LANGUAGE_UZBEK_CYRILLIC,              "uz", "UZ" },   // script codes not supported yet
     { LANGUAGE_BENGALI_BANGLADESH,          "bn", "BD" },
@@ -363,7 +360,6 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_CHEROKEE_UNITED_STATES,     "chr", "US" },
     { LANGUAGE_INUKTITUT_LATIN_CANADA,      "iu", "CA" },
 //  { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,  "iu", "CA" },   // script codes not supported yet
-//  { LANGUAGE_ARABIC_SUDAN,                "ar", "SD" },   // unknown MS-LCID
     { LANGUAGE_SAMI_NORTHERN_NORWAY,        "se", "NO" },
     { LANGUAGE_SAMI_INARI,                 "smn", "FI" },
     { LANGUAGE_SAMI_LULE_NORWAY,           "smj", "NO" },
@@ -448,6 +444,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_SANTALI_INDIA,         "sat", "IN" },
     { LANGUAGE_USER_TETUN,                 "tet", "ID" },
     { LANGUAGE_USER_TETUN_TIMOR_LESTE,     "tet", "TL" },
+    { LANGUAGE_USER_TOK_PISIN,             "tpi", "PG" },
+    { LANGUAGE_USER_SHUSWAP,               "shs", "CA" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
@@ -670,7 +668,6 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry( LanguageType nLan
             {
                 // These are known to have no country assigned.
                 case LANGUAGE_BASQUE:
-                case LANGUAGE_RHAETO_ROMAN:
                 case LANGUAGE_USER_ESPERANTO:
                 case LANGUAGE_USER_INTERLINGUA:
                     return *pEntry;
@@ -751,7 +748,6 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
                 {
                     // These are known to have no country assigned.
                     case LANGUAGE_BASQUE:
-                    case LANGUAGE_RHAETO_ROMAN:
                     case LANGUAGE_USER_ESPERANTO:
                     case LANGUAGE_USER_INTERLINGUA:
                         return *pEntry;

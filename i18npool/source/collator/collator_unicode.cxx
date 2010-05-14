@@ -65,13 +65,13 @@ sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(RuntimeException)
 {
-    return collator->compare(str1.getStr() + off1, len1, str2.getStr() + off2, len2);
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2); // UChar != sal_Unicode in MinGW
 }
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareString( const OUString& str1, const OUString& str2) throw(RuntimeException)
 {
-    return collator->compare(str1.getStr(), str2.getStr());
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));   // UChar != sal_Unicode in MinGW
 }
 
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -84,7 +84,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         UErrorCode status = U_ZERO_ERROR;
         OUString rule = LocaleData().getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (rule.getLength() > 0) {
-            collator = new RuleBasedCollator(rule.getStr(), status);
+            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);   // UChar != sal_Unicode in MinGW
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
         if (!collator && OUString::createFromAscii(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
@@ -120,7 +120,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 }
                 if (func) {
                     const sal_uInt8* ruleImage=func();
-                    uca_base = new RuleBasedCollator((sal_Unicode*)NULL, status);
+                    uca_base = new RuleBasedCollator(static_cast<UChar*>(NULL), status);
                     if (! U_SUCCESS(status)) throw RuntimeException();
                     collator = new RuleBasedCollator(reinterpret_cast<const uint8_t*>(ruleImage), -1, uca_base, status);
                     if (! U_SUCCESS(status)) throw RuntimeException();

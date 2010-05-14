@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: region.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,247 @@ DBG_NAME( Region )
 DBG_NAMEEX( Polygon )
 DBG_NAMEEX( PolyPolygon )
 
+namespace {
+
+/** Return <TRUE/> when the given polygon is rectiliner and oriented so that
+    all sides are either horizontal or vertical.
+*/
+bool ImplIsPolygonRectilinear (const PolyPolygon& rPolyPoly)
+{
+    // Iterate over all polygons.
+    const USHORT nPolyCount = rPolyPoly.Count();
+    for (USHORT nPoly = 0; nPoly < nPolyCount; ++nPoly)
+    {
+        const Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
+
+        // Iterate over all edges of the current polygon.
+        const USHORT nSize = aPoly.GetSize();
+
+        if (nSize < 2)
+            continue;
+        Point aPoint (aPoly.GetPoint(0));
+        const Point aLastPoint (aPoint);
+        for (USHORT nPoint = 1; nPoint < nSize; ++nPoint)
+        {
+            const Point aNextPoint (aPoly.GetPoint(nPoint));
+            // When there is at least one edge that is neither vertical nor
+            // horizontal then the entire polygon is not rectilinear (and
+            // oriented along primary axes.)
+            if (aPoint.X() != aNextPoint.X() && aPoint.Y() != aNextPoint.Y())
+                return false;
+
+            aPoint = aNextPoint;
+        }
+        // Compare closing edge.
+        if (aLastPoint.X() != aPoint.X() && aLastPoint.Y() != aPoint.Y())
+            return false;
+    }
+    return true;
+}
+
+
+
+/** This function is similar to the ImplRegion::InsertBands() method.
+    It creates a minimal set of missing bands so that the entire vertical
+    interval from nTop to nBottom is covered by bands.
+*/
+void ImplAddMissingBands (
+    ImplRegion* pImplRegion,
+    const long nTop,
+    const long nBottom)
+{
+    // Iterate over already existing bands and add missing bands atop the
+    // first and between two bands.
+    ImplRegionBand* pPreviousBand = NULL;
+    ImplRegionBand* pBand = pImplRegion->ImplGetFirstRegionBand();
+    long nCurrentTop (nTop);
+    while (pBand != NULL && nCurrentTop<nBottom)
+    {
+        if (nCurrentTop < pBand->mnYTop)
+        {
+            // Create new band above the current band.
+            ImplRegionBand* pAboveBand = new ImplRegionBand(
+                nCurrentTop,
+                ::std::min(nBottom,pBand->mnYTop-1));
+            pImplRegion->InsertBand(pPreviousBand, pAboveBand);
+        }
+
+        // Adapt the top of the interval to prevent overlapping bands.
+        nCurrentTop = ::std::max(nTop, pBand->mnYBottom+1);
+
+        // Advance to next band.
+        pPreviousBand = pBand;
+        pBand = pBand->mpNextBand;
+    }
+
+    // We still have to cover two cases:
+    // 1. The region does not yet contain any bands.
+    // 2. The intervall nTop->nBottom extends past the bottom most band.
+    if (nCurrentTop < nBottom && (pBand==NULL || nBottom>pBand->mnYBottom))
+    {
+        // When there is no previous band then the new one will be the
+        // first.  Otherwise the new band is inserted behind the last band.
+        pImplRegion->InsertBand(
+            pPreviousBand,
+            new ImplRegionBand(
+                nCurrentTop,
+                nBottom));
+    }
+}
+
+
+
+/** Convert a rectilinear polygon (that is oriented along the primary axes)
+    to a list of bands.  For this special form of polygon we can use an
+    optimization that prevents the creation of one band per y value.
+    However, it still is possible that some temporary bands are created that
+    later can be optimized away.
+    @param rPolyPolygon
+        A set of zero, one, or more polygons, nested or not, that are
+        converted into a list of bands.
+    @return
+        A new ImplRegion object is returned that contains the bands that
+        represent the given poly-polygon.
+*/
+ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
+{
+    OSL_ASSERT(ImplIsPolygonRectilinear (rPolyPoly));
+
+    // Create a new ImplRegion object as container of the bands.
+    ImplRegion* pImplRegion = new ImplRegion();
+    long nLineId = 0L;
+
+    // Iterate over all polygons.
+    const USHORT nPolyCount = rPolyPoly.Count();
+    for (USHORT nPoly = 0; nPoly < nPolyCount; ++nPoly)
+    {
+        const Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
+
+        // Iterate over all edges of the current polygon.
+        const USHORT nSize = aPoly.GetSize();
+        if (nSize < 2)
+            continue;
+        // Avoid fetching every point twice (each point is the start point
+        // of one and the end point of another edge.)
+        Point aStart (aPoly.GetPoint(0));
+        Point aEnd;
+        for (USHORT nPoint = 1; nPoint <= nSize; ++nPoint, aStart=aEnd)
+        {
+            // We take the implicit closing edge into account by mapping
+            // index nSize to 0.
+            aEnd = aPoly.GetPoint(nPoint%nSize);
+            if (aStart.Y() == aEnd.Y())
+            {
+                // Horizontal lines are ignored.
+                continue;
+            }
+
+            // At this point the line has to be vertical.
+            OSL_ASSERT(aStart.X() == aEnd.X());
+
+            // Sort y-coordinates to simplify the algorithm and store the
+            // direction seperately.  The direction is calculated as it is
+            // in other places (but seems to be the wrong way.)
+            const long nTop (::std::min(aStart.Y(), aEnd.Y()));
+            const long nBottom (::std::max(aStart.Y(), aEnd.Y()));
+            const LineType eLineType (aStart.Y() > aEnd.Y() ? LINE_DESCENDING : LINE_ASCENDING);
+
+            // Make sure that the current line is covered by bands.
+            ImplAddMissingBands(pImplRegion, nTop,nBottom);
+
+            // Find top-most band that may contain nTop.
+            ImplRegionBand* pBand = pImplRegion->ImplGetFirstRegionBand();
+            while (pBand!=NULL && pBand->mnYBottom < nTop)
+                pBand = pBand->mpNextBand;
+            ImplRegionBand* pTopBand = pBand;
+            // If necessary split the band at nTop so that nTop is contained
+            // in the lower band.
+            if (   // Prevent the current band from becoming 0 pixel high
+                pBand->mnYTop<nTop
+                   // this allows the lowest pixel of the band to be split off
+                && pBand->mnYBottom>=nTop
+                   // do not split a band that is just one pixel high
+                && pBand->mnYTop<pBand->mnYBottom)
+            {
+                // Split the top band.
+                pTopBand = pBand->SplitBand(nTop);
+            }
+
+            // Advance to band that may contain nBottom.
+            while (pBand!=NULL && pBand->mnYBottom < nBottom)
+                pBand = pBand->mpNextBand;
+            // The lowest band may have to be split at nBottom so that
+            // nBottom itself remains in the upper band.
+            if (   // allow the current band becoming 1 pixel high
+                pBand->mnYTop<=nBottom
+                   // prevent splitting off a band that is 0 pixel high
+                && pBand->mnYBottom>nBottom
+                   // do not split a band that is just one pixel high
+                && pBand->mnYTop<pBand->mnYBottom)
+            {
+                // Split the bottom band.
+                pBand->SplitBand(nBottom+1);
+            }
+
+            // Note that we remember the top band (in pTopBand) but not the
+            // bottom band.  The later can be determined by comparing y
+            // coordinates.
+
+            // Add the x-value as point to all bands in the nTop->nBottom range.
+            for (pBand=pTopBand; pBand!=NULL&&pBand->mnYTop<=nBottom; pBand=pBand->mpNextBand)
+                pBand->InsertPoint(aStart.X(), nLineId++, TRUE, eLineType);
+        }
+    }
+
+    return pImplRegion;
+}
+
+
+
+
+/** Convert a general polygon (one for which ImplIsPolygonRectilinear()
+    returns <FALSE/>) to bands.
+*/
+ImplRegion* ImplGeneralPolygonToBands (
+    const PolyPolygon& rPolyPoly,
+    const Rectangle& rPolygonBoundingBox)
+{
+    long nLineID = 0L;
+
+    // initialisation and creation of Bands
+    ImplRegion* pImplRegion = new ImplRegion();
+    pImplRegion->CreateBandRange( rPolygonBoundingBox.Top(), rPolygonBoundingBox.Bottom() );
+
+    // insert polygons
+    const USHORT nPolyCount = rPolyPoly.Count();
+    for ( USHORT nPoly = 0; nPoly < nPolyCount; nPoly++ )
+    {
+        // get reference to current polygon
+        const Polygon&  aPoly = rPolyPoly.GetObject( nPoly );
+        const USHORT    nSize = aPoly.GetSize();
+
+        // not enough points ( <= 2 )? -> nothing to do!
+        if ( nSize <= 2 )
+            continue;
+
+        // band the polygon
+        for ( USHORT nPoint = 1; nPoint < nSize; nPoint++ )
+            pImplRegion->InsertLine( aPoly.GetPoint(nPoint-1), aPoly.GetPoint(nPoint), nLineID++ );
+
+        // close polygon with line from first point to last point, if neccesary
+        const Point rLastPoint = aPoly.GetPoint(nSize-1);
+        const Point rFirstPoint = aPoly.GetPoint(0);
+        if ( rLastPoint != rFirstPoint )
+            pImplRegion->InsertLine( rLastPoint, rFirstPoint, nLineID++ );
+    }
+
+    return pImplRegion;
+}
+
+
+} // end of anonymous namespace
+
+
 // -----------------------------------------------------------------------
 
 #ifdef DBG_UTIL
@@ -139,6 +380,35 @@ const char* ImplDbgTestRegion( const void* pObj )
     }
 
     return NULL;
+}
+
+void TraceBands (const ImplRegionBand* pFirstBand)
+{
+    int nBandIndex  (0);
+    const ImplRegionBand* pBand = pFirstBand;
+    while (pBand != NULL)
+    {
+        OSL_TRACE("            band %d  %d->%d : ", nBandIndex++,
+            pBand->mnYTop, pBand->mnYBottom);
+
+        ImplRegionBandPoint* pPoint = pBand->mpFirstBandPoint;
+        while (pPoint != NULL)
+        {
+            OSL_TRACE(" %d ", pPoint->mnX);
+            pPoint = pPoint->mpNextBandPoint;
+        }
+        OSL_TRACE("  |  ");
+
+        ImplRegionBandSep* pSep = pBand->mpFirstSep;
+        while (pSep != NULL)
+        {
+            OSL_TRACE(" %d->%d ", pSep->mnXLeft, pSep->mnXRight);
+            pSep = pSep->mpNextSep;
+        }
+        OSL_TRACE("\n");
+
+        pBand = pBand->mpNextBand;
+    }
 }
 #endif
 
@@ -577,6 +847,29 @@ BOOL ImplRegion::InsertSingleBand( ImplRegionBand* pBand,
 
 // ------------------------------------------------------------------------
 
+void ImplRegion::InsertBand (ImplRegionBand* pPreviousBand, ImplRegionBand* pBandToInsert)
+{
+    OSL_ASSERT(pBandToInsert!=NULL);
+
+    if (pPreviousBand == NULL)
+    {
+        // Insert band before all others.
+        if (mpFirstBand != NULL)
+            mpFirstBand->mpPrevBand = pBandToInsert;
+        pBandToInsert->mpNextBand = mpFirstBand;
+        mpFirstBand = pBandToInsert;
+    }
+    else
+    {
+        // Insert band directly after pPreviousBand.
+        pBandToInsert->mpNextBand = pPreviousBand->mpNextBand;
+        pPreviousBand->mpNextBand = pBandToInsert;
+        pBandToInsert->mpPrevBand = pPreviousBand;
+    }
+}
+
+// ------------------------------------------------------------------------
+
 void ImplRegion::Union( long nLeft, long nTop, long nRight, long nBottom )
 {
     DBG_ASSERT( nLeft <= nRight, "ImplRegion::Union() - nLeft > nRight" );
@@ -918,8 +1211,12 @@ void Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
         if ( !aRect.IsEmpty() )
         {
             // width OR height == 1 ? => Rectangular region
-            if ( (aRect.GetWidth() == 1) || (aRect.GetHeight() == 1) )
+            if ( (aRect.GetWidth() == 1)
+                || (aRect.GetHeight() == 1)
+                || rPolyPoly.IsRect() )
+            {
                 ImplCreateRectRegion( aRect );
+            }
             else
                 mpImplRegion = new ImplRegion( rPolyPoly );
         }
@@ -944,43 +1241,24 @@ void Region::ImplPolyPolyRegionToBandRegionFunc()
     else
         delete mpImplRegion;
 
-    const USHORT nPolyCount = aPolyPoly.Count();
-    if ( nPolyCount )
+    if ( aPolyPoly.Count() )
     {
         // polypolygon empty? -> empty region
         const Rectangle aRect( aPolyPoly.GetBoundRect() );
 
         if ( !aRect.IsEmpty() )
         {
-            long nLineID = 0L;
-
-            // initialisation and creation of Bands
-            mpImplRegion = new ImplRegion();
-            mpImplRegion->CreateBandRange( aRect.Top(), aRect.Bottom() );
-
-            // insert polygons
-            for ( USHORT nPoly = 0; nPoly < nPolyCount; nPoly++ )
+            if (ImplIsPolygonRectilinear(aPolyPoly))
             {
-                // get reference to current polygon
-                const Polygon&  aPoly = aPolyPoly.GetObject( nPoly );
-                const USHORT    nSize = aPoly.GetSize();
-
-                // not enough points ( <= 2 )? -> nothing to do!
-                if ( nSize <= 2 )
-                    continue;
-
-                // band the polygon
-                for ( USHORT nPoint = 1; nPoint < nSize; nPoint++ )
-                    mpImplRegion->InsertLine( aPoly.GetPoint(nPoint-1), aPoly.GetPoint(nPoint), nLineID++ );
-
-                // close polygon with line from first point to last point, if neccesary
-                const Point rLastPoint = aPoly.GetPoint(nSize-1);
-                const Point rFirstPoint = aPoly.GetPoint(0);
-                if ( rLastPoint != rFirstPoint )
-                    mpImplRegion->InsertLine( rLastPoint, rFirstPoint, nLineID++ );
+                // For rectilinear polygons there is an optimized band conversion.
+                mpImplRegion = ImplRectilinearPolygonToBands(aPolyPoly);
+            }
+            else
+            {
+                mpImplRegion = ImplGeneralPolygonToBands(aPolyPoly, aRect);
             }
 
-            // process bands with lines
+            // Convert points into seps.
             ImplRegionBand* pRegionBand = mpImplRegion->mpFirstBand;
             while ( pRegionBand )
             {
@@ -989,7 +1267,8 @@ void Region::ImplPolyPolyRegionToBandRegionFunc()
                 pRegionBand = pRegionBand->mpNextBand;
             }
 
-            // cleanup
+            // Optimize list of bands.  Adjacent bands with identical lists
+            // of seps are joined.
             if ( !mpImplRegion->OptimizeBandList() )
             {
                 delete mpImplRegion;

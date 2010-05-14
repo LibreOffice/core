@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mslangid.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.24.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,10 +209,12 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
 {
     switch( nLang & LANGUAGE_MASK_PRIMARY )
     {
-        case LANGUAGE_ARABIC & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_HEBREW & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_URDU   & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_FARSI  & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_HEBREW              & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_URDU                & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_FARSI               & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_KASHMIRI            & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY :
             return true;
 
         default:
@@ -230,6 +232,23 @@ bool MsLangId::hasForbiddenCharacters( LanguageType nLang )
         case LANGUAGE_CHINESE  & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_KOREAN   & LANGUAGE_MASK_PRIMARY:
+            return true;
+        default:
+            break;
+    }
+    return false;
+}
+
+
+// static
+bool MsLangId::needsSequenceChecking( LanguageType nLang )
+{
+    switch (nLang & LANGUAGE_MASK_PRIMARY)
+    {
+        case LANGUAGE_BURMESE & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_KHMER   & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_LAO     & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_THAI    & LANGUAGE_MASK_PRIMARY:
             return true;
         default:
             break;
@@ -259,6 +278,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_ASSAMESE:
         case LANGUAGE_BENGALI:
         case LANGUAGE_BENGALI_BANGLADESH:
+        case LANGUAGE_BURMESE:
         case LANGUAGE_FARSI:
         case LANGUAGE_HEBREW:
         case LANGUAGE_MARATHI:
@@ -291,6 +311,10 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_URDU_INDIA:
         case LANGUAGE_USER_KURDISH_IRAQ:
         case LANGUAGE_USER_KURDISH_IRAN:
+        case LANGUAGE_DHIVEHI:
+        case LANGUAGE_USER_BODO_INDIA:
+        case LANGUAGE_USER_DOGRI_INDIA:
+        case LANGUAGE_USER_MAITHILI_INDIA:
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
 
@@ -312,7 +336,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                 nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
                 break;
             // CTL catcher
-            case LANGUAGE_ARABIC & LANGUAGE_MASK_PRIMARY:
+            case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY:
                 nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
                 break;
             // Western (actually not necessarily Latin but also Cyrillic, for example)
@@ -330,26 +354,49 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
 {
     switch (nLang)
     {
+        default:
+            break;  // nothing
         case LANGUAGE_OBSOLETE_USER_LATIN:
             nLang = LANGUAGE_LATIN;
+            break;
         case LANGUAGE_OBSOLETE_USER_MAORI:
             nLang = LANGUAGE_MAORI_NEW_ZEALAND;
+            break;
         case LANGUAGE_OBSOLETE_USER_KINYARWANDA:
             nLang = LANGUAGE_KINYARWANDA_RWANDA;
+            break;
         case LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN:
             nLang = LANGUAGE_UPPER_SORBIAN_GERMANY;
+            break;
         case LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN:
             nLang = LANGUAGE_LOWER_SORBIAN_GERMANY;
+            break;
         case LANGUAGE_OBSOLETE_USER_OCCITAN:
             nLang = LANGUAGE_OCCITAN_FRANCE;
+            break;
         case LANGUAGE_OBSOLETE_USER_BRETON:
             nLang = LANGUAGE_BRETON_FRANCE;
+            break;
         case LANGUAGE_OBSOLETE_USER_KALAALLISUT:
             nLang = LANGUAGE_KALAALLISUT_GREENLAND;
+            break;
         case LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH:
             nLang = LANGUAGE_LUXEMBOURGISH_LUXEMBOURG;
-        default:
-            ;   // nothing
+            break;
+
+        // The following are not strictly obsolete but should be mapped to a
+        // replacement locale when encountered.
+
+        // no_NO is an alias for nb_NO
+        case LANGUAGE_NORWEGIAN:
+            nLang = LANGUAGE_NORWEGIAN_BOKMAL;
+            break;
+
+        // #i94435# A Spanish variant that differs only in collation details we
+        // do not support.
+        case LANGUAGE_SPANISH_DATED:
+            nLang = LANGUAGE_SPANISH_MODERN;
+            break;
     }
     return nLang;
 }

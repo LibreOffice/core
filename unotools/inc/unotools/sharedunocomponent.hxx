@@ -180,6 +180,21 @@ namespace utl
         }
 
 #ifndef EXCEPTIONS_OFF
+        inline SharedUNOComponent( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+        {
+            set( _pInterface, _queryThrow );
+        }
+
+        inline SharedUNOComponent( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+        {
+            set( _rRef, _queryThrow );
+        }
+
+        inline SharedUNOComponent( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+        {
+            set( _rAny, _queryThrow );
+        }
+
         inline  SharedUNOComponent( const SharedUNOComponent& _rxComponent, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
         {
             set( _rxComponent, _setThrow );

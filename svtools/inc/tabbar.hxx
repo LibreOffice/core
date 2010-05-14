@@ -478,9 +478,21 @@ public:
     BOOL            IsEditModeCanceled() const { return mbEditCanceled; }
     USHORT          GetEditPageId() const { return mnEditId; }
 
-    /** Mirrors the entire control. It will draw RTL in LTR GUI, and vice versa. */
+    /** Mirrors the entire control including position of buttons and splitter.
+        Mirroring is done relative to the current direction of the GUI.
+        @param bMirrored  TRUE = the control will draw itself RTL in LTR GUI,
+            and vice versa; FALSE = the control behaves according to the
+            current direction of the GUI. */
     void            SetMirrored( BOOL bMirrored = TRUE );
+    /** Returns TRUE, if the control is set to mirrored mode (see SetMirrored()). */
     BOOL            IsMirrored() const { return mbMirrored; }
+
+    /** Sets the control to LTR or RTL mode regardless of the GUI direction.
+        @param bRTL  FALSE = the control will draw from left to right;
+            TRUE = the control will draw from right to left. */
+    void            SetEffectiveRTL( BOOL bRTL );
+    /** Returns TRUE, if the control draws from right to left (see SetEffectiveRTL()). */
+    BOOL            IsEffectiveRTL() const;
 
     BOOL            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
     USHORT          ShowDropPos( const Point& rPos );

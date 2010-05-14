@@ -164,6 +164,9 @@
 
 #define RID_RPT_START                           (RID_OBJ_START+768)
 #define RID_RPT_END                             (RID_OBJ_START+1000)
+
+#define RID_FORMULA_START                       (RID_OBJ_START+1001)
+#define RID_FORMULA_END                         (RID_OBJ_START+1200)
 // Help-Ids --------------------------------------------------------------
 
 #define HID_OK_BUTTON               0
@@ -301,6 +304,9 @@
 
 #define HID_RPT_START               (HID_OBJ_START+1681)
 #define HID_RPT_END                 (HID_OBJ_START+2080)
+
+#define HID_FORMULA_START           (HID_OBJ_START+2081)
+#define HID_FORMULA_END             (HID_OBJ_START+2280)
 
 #endif
 

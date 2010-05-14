@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calendar_gregorian.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,8 @@ struct Era {
     sal_Int32 day;
 };
 
+const sal_Int16 FIELD_INDEX_COUNT = CalendarFieldIndex::FIELD_COUNT2;
+
 class Calendar_gregorian : public CalendarImpl
 {
 public:
@@ -61,7 +63,7 @@ public:
     */
     ~Calendar_gregorian();
 
-    // Methods
+    // Methods in XCalendar
     virtual void SAL_CALL loadCalendar(const rtl::OUString& uniqueID, const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDateTime(double nTimeInDays) throw(com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getDateTime() throw(com::sun::star::uno::RuntimeException);
@@ -96,18 +98,33 @@ protected:
     const sal_Char* cCalendar;
     com::sun::star::lang::Locale aLocale;
     sal_uInt32 fieldSet;
-    sal_Int16 fieldValue[CalendarFieldIndex::FIELD_COUNT];
-    sal_Int16 fieldSetValue[CalendarFieldIndex::FIELD_COUNT];
-    virtual void SAL_CALL mapToGregorian() throw(com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
-    void SAL_CALL getValue() throw(com::sun::star::uno::RuntimeException);
+    sal_Int16 fieldValue[FIELD_INDEX_COUNT];
+    sal_Int16 fieldSetValue[FIELD_INDEX_COUNT];
+
+    virtual void mapToGregorian() throw(com::sun::star::uno::RuntimeException);
+    virtual void mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
+    void getValue() throw(com::sun::star::uno::RuntimeException);
+
 private:
-    // submit fieldSetValue array according to fieldSet
-    void SAL_CALL submitFields() throw(com::sun::star::uno::RuntimeException);
-    // submit fieldSetValue array according to fieldSet, plus YMDhms if >=0
-    void SAL_CALL submitValues( sal_Int32 nYear, sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute, sal_Int32 nSecond, sal_Int32 nMilliSecond) throw(com::sun::star::uno::RuntimeException);
-    void SAL_CALL setValue() throw(com::sun::star::uno::RuntimeException);
     Calendar aCalendar;
+
+    /** Submit fieldSetValue array according to fieldSet. */
+    void submitFields() throw(com::sun::star::uno::RuntimeException);
+    /** Submit fieldSetValue array according to fieldSet, plus YMDhms if >=0,
+        plus zone and DST if != 0 */
+    void submitValues( sal_Int32 nYear, sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute, sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST) throw(com::sun::star::uno::RuntimeException);
+    /** Set fields internally. */
+    void setValue() throw(com::sun::star::uno::RuntimeException);
+    /** Obtain combined field values for timezone offset (minutes+secondmillis)
+        in milliseconds and whether fields were set. */
+    bool getZoneOffset( sal_Int32 & o_nOffset ) const;
+    /** Obtain combined field values for DST offset (minutes+secondmillis) in
+        milliseconds and whether fields were set. */
+    bool getDSTOffset( sal_Int32 & o_nOffset ) const;
+    /** Used by getZoneOffset() and getDSTOffset(). Parent is
+        CalendarFieldIndex for offset in minutes, child is CalendarFieldIndex
+        for offset in milliseconds. */
+    bool getCombinedOffset( sal_Int32 & o_nOffset, sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const;
 };
 
 //  ----------------------------------------------------

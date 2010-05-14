@@ -31,18 +31,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <pspgraphics.h>
-#include <psprint/jobdata.hxx>
-#include <psprint/printergfx.hxx>
-#include <psprint/printerinfomanager.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/salbmp.hxx>
-#include <vcl/glyphcache.hxx>
-#include <vcl/impfont.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/salprn.hxx>
-#include <vcl/sysdata.hxx>
+#include "pspgraphics.h"
+#include "vcl/jobdata.hxx"
+#include "vcl/printergfx.hxx"
+#include "vcl/printerinfomanager.hxx"
+#include "vcl/bmpacc.hxx"
+#include "vcl/salbmp.hxx"
+#include "vcl/glyphcache.hxx"
+#include "vcl/impfont.hxx"
+#include "vcl/outfont.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/salprn.hxx"
+#include "vcl/sysdata.hxx"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -835,6 +835,8 @@ bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& 
     return false;
 }
 
+void RegisterFontSubstitutors( ImplDevFontList* );
+
 void PspGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     ::std::list< psp::fontID > aList;
@@ -846,6 +848,10 @@ void PspGraphics::GetDevFontList( ImplDevFontList *pList )
     for (it = aList.begin(); it != aList.end(); ++it)
         if (rMgr.getFontFastInfo (*it, aInfo))
             AnnounceFonts( pList, aInfo );
+
+   // register platform specific font substitutions if available
+   if( rMgr.hasFontconfig() )
+    RegisterFontSubstitutors( pList );
 }
 
 void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )

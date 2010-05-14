@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LocaleNode.cxx,v $
- * $Revision: 1.29.16.1 $
+ * $Revision: 1.29.24.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -307,6 +307,11 @@ void LocaleNode::incError( const char* pStr ) const
     fprintf( stderr, "Error: %s\n", pStr);
 }
 
+void LocaleNode::incError( const ::rtl::OUString& rStr ) const
+{
+    incError( OUStringToOString( rStr, RTL_TEXTENCODING_UTF8).getStr());
+}
+
 char* LocaleNode::prepareErrorFormat( const char* pFormat, const char* pDefaultConversion ) const
 {
     static char buf[2048];
@@ -521,10 +526,15 @@ sal_Int16 LCFormatNode::mnFormats = 0;
 
 void LCFormatNode::generateCode (const OFileWriter &of) const
 {
+    OUString str;
     if (mnSection >= 2)
         incError("more than 2 LC_FORMAT sections");
     of.writeParameter("replaceFrom", getAttr() -> getValueByName("replaceFrom"), mnSection);
-    of.writeParameter("replaceTo", getAttr() -> getValueByName("replaceTo"), mnSection);
+    str = getAttr() -> getValueByName("replaceTo");
+    // Locale data generator inserts FFFF for LangID, we need to adapt that.
+    if (str.endsWithIgnoreAsciiCaseAsciiL( "-FFFF]", 6))
+        incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.", str);
+    of.writeParameter("replaceTo", str, mnSection);
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         switch (mnSection)
@@ -539,31 +549,57 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         return;
     }
     sal_Int16 formatCount = mnFormats;
-    NameSet aMsgId;
-    ValueSet aFormatIndex;
+    NameSet  aMsgIdSet;
+    ValueSet aFormatIndexSet;
+    NameSet  aDefaultsSet;
     bool bCtypeIsRef = false;
 
     for (sal_Int16 i = 0; i< getNumberOfChildren() ; i++,formatCount++) {
         LocaleNode * currNode = getChildAt (i);
-        ::rtl::OUString str;
+        OUString aUsage;
+        OUString aType;
+        OUString aFormatIndex;
         //      currNode -> print();
         const Attr *  currNodeAttr = currNode->getAttr();
         //printf ("getLen() = %d\n", currNode->getAttr()->getLength());
+
         str = currNodeAttr -> getValueByName("msgid");
-        if (!aMsgId.insert( str).second)
+        if (!aMsgIdSet.insert( str).second)
             incErrorStr( "Duplicated msgid=\"%s\" in FormatElement.", str);
         of.writeParameter("FormatKey", str, formatCount);
+
         str = currNodeAttr -> getValueByName("default");
+        bool bDefault = str.equalsAscii( "true");
         of.writeDefaultParameter("FormatElement", str, formatCount);
-        str = currNodeAttr -> getValueByName("type");
-        of.writeParameter("FormatType", str, formatCount);
-        str = currNodeAttr -> getValueByName("usage");
-        of.writeParameter("FormatUsage", str, formatCount);
-        str = currNodeAttr -> getValueByName("formatindex");
-        sal_Int16 formatindex = (sal_Int16)str.toInt32();
-        if (!aFormatIndex.insert( formatindex).second)
+
+        aType = currNodeAttr -> getValueByName("type");
+        of.writeParameter("FormatType", aType, formatCount);
+
+        aUsage = currNodeAttr -> getValueByName("usage");
+        of.writeParameter("FormatUsage", aUsage, formatCount);
+
+        aFormatIndex = currNodeAttr -> getValueByName("formatindex");
+        sal_Int16 formatindex = (sal_Int16)aFormatIndex.toInt32();
+        if (!aFormatIndexSet.insert( formatindex).second)
             incErrorInt( "Duplicated formatindex=\"%d\" in FormatElement.", formatindex);
         of.writeIntParameter("Formatindex", formatCount, formatindex);
+
+        // Ensure only one default per usage and type.
+        if (bDefault)
+        {
+            OUString aKey( aUsage + OUString( sal_Unicode(',')) + aType);
+            if (!aDefaultsSet.insert( aKey).second)
+            {
+                OUString aStr( RTL_CONSTASCII_USTRINGPARAM( "Duplicated default for usage=\""));
+                aStr += aUsage;
+                aStr += OUString( RTL_CONSTASCII_USTRINGPARAM( "\" type=\""));
+                aStr += aType;
+                aStr += OUString( RTL_CONSTASCII_USTRINGPARAM( "\": formatindex=\""));
+                aStr += aFormatIndex;
+                aStr += OUString( RTL_CONSTASCII_USTRINGPARAM( "\"."));
+                incError( aStr);
+            }
+        }
 
         const LocaleNode * n = currNode -> findNode("FormatCode");
         if (n)
@@ -712,14 +748,14 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if (mnSection == 0)
     {
         // 0..47 MUST be present, 48,49 MUST NOT be present
-        ValueSet::const_iterator aIter( aFormatIndex.begin());
+        ValueSet::const_iterator aIter( aFormatIndexSet.begin());
         for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
                 nNext < cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES; ++nNext)
         {
-            sal_Int16 nHere = ::std::min( ((aIter != aFormatIndex.end() ? *aIter :
+            sal_Int16 nHere = ::std::min( ((aIter != aFormatIndexSet.end() ? *aIter :
                     cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES)),
                     cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES);
-            if (aIter != aFormatIndex.end()) ++aIter;
+            if (aIter != aFormatIndexSet.end()) ++aIter;
             for ( ; nNext < nHere; ++nNext)
             {
                 switch (nNext)
@@ -1415,6 +1451,8 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     const LocaleNode * forbidNode = findNode("ForbiddenCharacters");
     const LocaleNode * breakNode = findNode("BreakIteratorRules");
 
+    bool bEnglishLocale = (strncmp( of.getLocale(), "en_", 3) == 0);
+
     sal_Int16 nbOfWords = 0;
     ::rtl::OUString str;
     sal_Int16 i;
@@ -1433,6 +1471,14 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
             fprintf( stderr, "Error: No content for ReservedWords %s.\n", ReserveWord[i].name);
         }
         of.writeParameter("ReservedWord", str, nbOfWords);
+        // "true", ..., "below" trigger untranslated warning.
+        if (!bEnglishLocale && curNode && (0 <= i && i <= 7) &&
+                str.equalsIgnoreAsciiCaseAscii( ReserveWord[i].value))
+        {
+            fprintf( stderr,
+                    "Warning: ReservedWord %s seems to be untranslated \"%s\".\n",
+                    ReserveWord[i].name, ReserveWord[i].value);
+        }
     }
     of.writeAsciiString("static const sal_Int16 nbOfReservedWords = ");
     of.writeInt(nbOfWords);

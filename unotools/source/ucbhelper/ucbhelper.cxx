@@ -694,7 +694,7 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
 // -----------------------------------------------------------------------
 sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, String& rFile, BOOL bAllowWildCards )
 {
-    BOOL bWild = bAllowWildCards && rName.Search( '*' ) != STRING_NOTFOUND || rName.Search( '?' ) != STRING_NOTFOUND;
+    BOOL bWild = bAllowWildCards && ( rName.Search( '*' ) != STRING_NOTFOUND || rName.Search( '?' ) != STRING_NOTFOUND );
 
     sal_Bool bRet = sal_False;
 
@@ -709,7 +709,7 @@ sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, Str
         INetURLObject aFileObject( pFiles[i] );
         String aFile = aFileObject.getName(
             INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).toAsciiLowerCase();
-        if ( bWild && WildCard( rName ).Matches( aFile ) || aFile == rName )
+        if ( (bWild && WildCard( rName ).Matches( aFile )) || aFile == rName )
         {
             // names match
             rFile = aFileObject.GetMainURL( INetURLObject::NO_DECODE );

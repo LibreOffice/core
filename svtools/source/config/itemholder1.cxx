@@ -57,7 +57,6 @@
 #include <svtools/localisationoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/moduleoptions.hxx>
-#include <svtools/options3d.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/printwarningoptions.hxx>
 #include <regoptions.hxx>
@@ -251,10 +250,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_OPTIONSDLGOPTIONS :
             rItem.pItem = new SvtOptionsDialogOptions();
-            break;
-
-        case E_OPTIONS3D :
-            rItem.pItem = new SvtOptions3D();
             break;
 
         case E_PATHOPTIONS :

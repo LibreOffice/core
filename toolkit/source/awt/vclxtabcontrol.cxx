@@ -239,7 +239,7 @@ void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::su
         ::Point aPos( nX, nY );
         ::Size  aSize = pTabPage->GetSizePixel();
 
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( GetViewGraphics() );
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
         aPos  = pDev->PixelToLogic( aPos );
         aSize = pDev->PixelToLogic( aSize );
 

@@ -180,11 +180,12 @@ SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
 static SfxStyleSheetBasePool& implGetStaticPool()
 {
     static SfxStyleSheetBasePool* pSheetPool = 0;
+    static SfxItemPool* pBasePool = 0;
     if( !pSheetPool )
     {
         UniString aName;
-        static SfxItemPool aPool( aName, 0, 0, 0 );
-        pSheetPool = new SfxStyleSheetBasePool( aPool );
+        pBasePool = new SfxItemPool( aName, 0, 0, 0 );
+        pSheetPool = new SfxStyleSheetBasePool(*pBasePool);
     }
     return *pSheetPool;
 }

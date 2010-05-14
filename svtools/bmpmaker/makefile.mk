@@ -54,6 +54,10 @@ APP1TARGET= $(TARGET)
 APP1STDLIBS =		\
     $(VCLLIB)		\
     $(TOOLSLIB)		\
+    $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
+    $(UNOTOOLSLIB) \
+    $(ICUDATALIB) $(ICUUCLIB) $(ICULELIB) \
+    $(SOTLIB) $(I18NUTILLIB) $(JVMACCESSLIB) \
     $(VOSLIB) 		\
     $(SALLIB)
 
@@ -70,7 +74,11 @@ APP2OBJS	=   $(OBJ)$/bmpsum.obj
 
 APP2STDLIBS	=	$(VCLLIB)		\
                 $(TOOLSLIB)		\
+                $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
                 $(VOSLIB) 		\
+                $(UNOTOOLSLIB) \
+                $(ICUDATALIB) $(ICUUCLIB) $(ICULELIB) \
+                $(SOTLIB) $(I18NUTILLIB) $(JVMACCESSLIB) \
                 $(SALLIB)
 
 # --- Targets ------------------------------------------------------

@@ -71,6 +71,7 @@ SLOFILES=\
 EXCEPTIONSFILES=\
             $(SLO)$/wmadaptor.obj		\
             $(SLO)$/saldata.obj			\
+            $(SLO)$/salinst.obj			\
             $(SLO)$/saldisp.obj			\
             $(SLO)$/i18n_status.obj		\
             $(SLO)$/i18n_cb.obj				\

@@ -35,6 +35,8 @@
 #include "salatsuifontutils.hxx"
 #include "tools/debug.hxx"
 
+#include <math.h>
+
 // =======================================================================
 
 class ATSLayout : public SalLayout
@@ -86,6 +88,7 @@ private:
     // mutable members since these details are all lazy initialized
     mutable int         mnGlyphCount;           // glyph count
     mutable Fixed       mnCachedWidth;          // cached value of resulting typographical width
+    int                 mnTrailingSpaceWidth;   // in Pixels
 
     mutable ATSGlyphRef*    mpGlyphIds;         // ATSU glyph ids
     mutable Fixed*          mpCharWidths;       // map relative charpos to charwidth
@@ -104,8 +107,8 @@ private:
     mutable class FallbackInfo* mpFallbackInfo;
 
     // x-offset relative to layout origin
-    // currently always zero since we use native glyph fallback
-    static const Fixed mnBaseAdv = 0;
+    // currently only used in RTL-layouts
+    mutable Fixed           mnBaseAdv;
 };
 
 class FallbackInfo
@@ -130,6 +133,7 @@ ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
     mfFontScale( fFontScale ),
     mnGlyphCount( -1 ),
     mnCachedWidth( 0 ),
+    mnTrailingSpaceWidth( 0 ),
     mpGlyphIds( NULL ),
     mpCharWidths( NULL ),
     mpChars2Glyphs( NULL ),
@@ -138,7 +142,8 @@ ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
     mpGlyphAdvances( NULL ),
     mpGlyphOrigAdvs( NULL ),
     mpDeltaY( NULL ),
-    mpFallbackInfo( NULL )
+    mpFallbackInfo( NULL ),
+    mnBaseAdv( 0 )
 {}
 
 // -----------------------------------------------------------------------
@@ -240,19 +245,42 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( eStatus != noErr )
         return false;
 
+    // prepare setting of layout controls
+    static const int nMaxTagCount = 1;
+    ATSUAttributeTag aTagAttrs[ nMaxTagCount ];
+    ByteCount aTagSizes[ nMaxTagCount ];
+    ATSUAttributeValuePtr aTagValues[ nMaxTagCount ];
+
+    // prepare control of "glyph fallback"
+    const SalData* pSalData = GetSalData();
+    ATSUFontFallbacks aFontFallbacks = pSalData->mpFontList->maFontFallbacks;
+    aTagAttrs[0]  = kATSULineFontFallbacksTag;
+    aTagSizes[0]  = sizeof( ATSUFontFallbacks );
+    aTagValues[0] = &aFontFallbacks;
+
+    // set paragraph layout controls
+    ATSUSetLayoutControls( maATSULayout, 1, aTagAttrs, aTagSizes, aTagValues );
+
     // enable "glyph fallback"
-    ATSUAttributeTag theTags[1];
-    ByteCount theSizes[1];
-    ATSUAttributeValuePtr theValues[1];
-
-    SalData* pSalData = GetSalData();
-    ATSUFontFallbacks theFontFallbacks = pSalData->mpFontList->maFontFallbacks;
-    theTags[0] = kATSULineFontFallbacksTag;
-    theSizes[0] = sizeof( ATSUFontFallbacks );
-    theValues[0] = &theFontFallbacks;
-
-    ATSUSetLayoutControls( maATSULayout, 1, theTags, theSizes, theValues );
     ATSUSetTransientFontMatching( maATSULayout, true );
+
+    // control run-specific layout controls
+    if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) != 0 )
+    {
+        // control BiDi defaults
+        MacOSBOOL nLineDirTag = kATSULeftToRightBaseDirection;
+        if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) != 0 )
+            nLineDirTag = kATSURightToLeftBaseDirection;
+        aTagAttrs[0] = kATSULineDirectionTag;
+        aTagSizes[0] = sizeof( nLineDirTag );
+        aTagValues[0] = &nLineDirTag;
+        // set run-specific layout controls
+#if 0 // why don't line-controls work as reliably as layout-controls???
+        ATSUSetLineControls( maATSULayout, rArgs.mnMinCharPos, 1, aTagAttrs, aTagSizes, aTagValues );
+#else
+        ATSUSetLayoutControls( maATSULayout, 1, aTagAttrs, aTagSizes, aTagValues );
+#endif
+    }
 
     return true;
 }
@@ -277,12 +305,16 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
 
         // workaround for ATSUI not using trailing spaces for justification
-        int nTrailingSpaceWidth = 0;
+        mnTrailingSpaceWidth = 0;
         int i = mnCharCount;
         while( (--i > 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) )
-            nTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
-        nOrigWidth -= nTrailingSpaceWidth;
-        nPixelWidth -= nTrailingSpaceWidth;
+            mnTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
+        nOrigWidth -= mnTrailingSpaceWidth;
+        nPixelWidth -= mnTrailingSpaceWidth;
+        // trailing spaces can be leftmost spaces in RTL-layouts
+        // TODO: use BiDi-algorithm to thoroughly check this assumption
+        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+            mnBaseAdv = mnTrailingSpaceWidth;
 
         // TODO: use all mpDXArray elements for layouting
     }
@@ -387,9 +419,19 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
         for(; it != maSubPortions.end(); ++it )
         {
             const SubPortion& rSubPortion = *it;
+            // calculate sub-portion offset for rotated text
+            Fixed nXOfsFixed = 0, nYOfsFixed = 0;
+            if( rAquaGraphics.mnATSUIRotation != 0 )
+            {
+                const double fRadians = rAquaGraphics.mnATSUIRotation * (M_PI/0xB40000);
+                nXOfsFixed = +rSubPortion.mnXOffset * cos( fRadians );
+                nYOfsFixed = +rSubPortion.mnXOffset * sin( fRadians );
+            }
+
+            // draw sub-portions
             ATSUDrawText( maATSULayout,
                 rSubPortion.mnMinCharPos, rSubPortion.mnEndCharPos - rSubPortion.mnMinCharPos,
-                nFixedX + rSubPortion.mnXOffset, nFixedY );
+                nFixedX + nXOfsFixed, nFixedY + nYOfsFixed );
         }
     }
 
@@ -564,7 +606,9 @@ long ATSLayout::GetTextWidth() const
     if( mnCharCount <= 0 )
         return 0;
 
-    DBG_ASSERT( (maATSULayout != NULL), "ATSLayout::GetTextWidth() with maATSULayout==NULL !\n");
+    DBG_ASSERT( (maATSULayout!=NULL), "ATSLayout::GetTextWidth() with maATSULayout==NULL !\n");
+    if( !maATSULayout )
+        return 0;
 
     if( !mnCachedWidth )
     {
@@ -604,9 +648,11 @@ long ATSLayout::GetTextWidth() const
 
         // measure the bound extremas
         mnCachedWidth = nRightBound - nLeftBound;
+        // adjust for eliminated trailing space widths
     }
 
-    const int nScaledWidth = Fixed2Vcl( mnCachedWidth );
+    int nScaledWidth = Fixed2Vcl( mnCachedWidth );
+    nScaledWidth += mnTrailingSpaceWidth;
     return nScaledWidth;
 }
 
@@ -625,6 +671,9 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
     // short circuit requests which don't need full details
     if( !pDXArray )
         return GetTextWidth();
+
+    // check assumptions
+    DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::FillDXArray() with nTSW!=0" );
 
     // initialize details about the resulting layout
     InitGIA();
@@ -659,9 +708,16 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
 **/
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
+    if( !maATSULayout )
+        return STRING_LEN;
+
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
 
+    // check assumptions
+    DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );
+
+    // initial measurement of text break position
     UniCharArrayOffset nBreakPos = mnMinCharPos;
     const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
     OSStatus nStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
@@ -889,7 +945,8 @@ bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
     if( pArgs && pArgs->mpDXArray )
     {
         // TODO: non-strong-LTR case cases should be handled too
-        if( 0 == (~pArgs->mnFlags & (TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_BIDI_LTR)) )
+        if( (pArgs->mnFlags & TEXT_LAYOUT_BIDI_STRONG)
+        && !(pArgs->mnFlags & TEXT_LAYOUT_BIDI_RTL) )
         {
             Fixed nSumCharWidths = 0;
             SubPortion aSubPortion = { mnMinCharPos, 0, 0 };
@@ -973,6 +1030,9 @@ bool ATSLayout::GetDeltaY() const
         return true;
 
 #if 1
+    if( !maATSULayout )
+        return false;
+
     // get and keep the y-deltas in the mpDeltaY member variable
     // => release it in the destructor
     ItemCount nDeltaCount = 0;

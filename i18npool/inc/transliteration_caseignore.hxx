@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: transliteration_caseignore.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,12 +72,6 @@ private:
         const rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const rtl::OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)
     throw(com::sun::star::uno::RuntimeException);
-};
-
-class Transliteration_simplecaseignore: public Transliteration_caseignore
-{
-public:
-    Transliteration_simplecaseignore();
 };
 
 } } } }

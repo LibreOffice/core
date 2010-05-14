@@ -36,20 +36,22 @@
 #include "salbmp.h"
 #include "salframe.h"
 #include "salcolorutils.hxx"
+#include "list.h"
+#include "sft.h"
+#include "salatsuifontutils.hxx"
+
 #include "vcl/impfont.hxx"
-#include "psprint/list.h"
-#include "psprint/sft.h"
+#include "vcl/sysdata.hxx"
+#include "vcl/sallayout.hxx"
+#include "vcl/svapp.hxx"
+
 #include "osl/file.hxx"
-#include "vos/mutex.hxx"
 #include "osl/process.h"
+
+#include "vos/mutex.hxx"
+
 #include "rtl/bootstrap.h"
 #include "rtl/strbuf.hxx"
-
-#include "vcl/sysdata.hxx"
-
-#include "vcl/sallayout.hxx"
-#include "salatsuifontutils.hxx"
-#include "vcl/svapp.hxx"
 
 #include "basegfx/range/b2drectangle.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
@@ -404,6 +406,14 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
     {
         mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
     }
+    else // #i89650# workaround bogus device resolutions
+    {
+        if( mnRealDPIY < 72 )
+            mnRealDPIY = 72;
+        if( mnRealDPIX < mnRealDPIY ) // e.g. for TripleHead2Go only mnRealDPIX is off
+            mnRealDPIX = mnRealDPIY;
+    }
+
     mfFakeDPIScale = 1.0;
 }
 
@@ -454,6 +464,14 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         }
 
         ::basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
+
+        if(bPixelSnap)
+        {
+            // snap device coordinates to full pixels
+            aPoint.setX( basegfx::fround( aPoint.getX() ) );
+            aPoint.setY( basegfx::fround( aPoint.getY() ) );
+        }
+
         if( bLineDraw )
             aPoint += aHalfPointOfs;
 
@@ -546,7 +564,7 @@ bool AquaSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPol
 
     if( !mxClipPath )
         mxClipPath = CGPathCreateMutable();
-    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, false, false );
+    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, !getAntiAliasB2DDraw(), false );
     return true;
 }
 
@@ -898,13 +916,21 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
-        AddPolygonToPath( xPath, rPolygon, true, false, IsPenVisible() );
+        AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
+
+    // use the path to prepare the graphics context
     CGContextSaveGState( mrContext );
     CGContextBeginPath( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     CGPathRelease( xPath );
+
+#ifndef NO_I97317_WORKAROUND
+    // #i97317# workaround for Quartz having problems with drawing small polygons
+    if( (aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125) )
+        return true;
+#endif
 
     // draw path with antialiased polygon
     CGContextSetShouldAntialias( mrContext, true );
@@ -944,11 +970,19 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
-    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), false, true );
+    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
+
+    // use the path to prepare the graphics context
     CGContextSaveGState( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     CGPathRelease( xPath );
+
+#ifndef NO_I97317_WORKAROUND
+    // #i97317# workaround for Quartz having problems with drawing small polygons
+    if( (aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125) )
+        return true;
+#endif
 
     // draw path with antialiased line
     CGContextSetShouldAntialias( mrContext, true );
@@ -1211,7 +1245,37 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
 
 SalColor AquaSalGraphics::getPixel( long nX, long nY )
 {
-    SalColor  nSalColor = 0;
+    // return default value on printers or when out of bounds
+    if( !mxLayer
+    || (nX < 0) || (nX >= mnWidth)
+    || (nY < 0) || (nY >= mnHeight))
+        return COL_BLACK;
+
+    // prepare creation of matching a CGBitmapContext
+    CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+    CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big;
+#if __BIG_ENDIAN__
+    struct{ unsigned char b, g, r, a; } aPixel;
+#else
+    struct{ unsigned char a, r, g, b; } aPixel;
+#endif
+
+    // create a one-pixel bitmap context
+    // TODO: is it worth to cache it?
+    CGContextRef xOnePixelContext = ::CGBitmapContextCreate( &aPixel,
+        1, 1, 8, sizeof(aPixel), aCGColorSpace, aCGBmpInfo );
+
+    // update this graphics layer
+    ApplyXorContext();
+
+    // copy the requested pixel into the bitmap context
+    if( IsFlipped() )
+        nY = mnHeight - nY;
+    const CGPoint aCGPoint = {-nX, -nY};
+    CGContextDrawLayerAtPoint( xOnePixelContext, aCGPoint, mxLayer );
+    CGContextRelease( xOnePixelContext );
+
+    SalColor nSalColor = MAKE_SALCOLOR( aPixel.r, aPixel.g, aPixel.b );
     return nSalColor;
 }
 
@@ -1487,12 +1551,7 @@ static bool AddTempFontDir( const char* pDir )
     FSRef aPathFSRef;
     Boolean bIsDirectory = true;
     OSStatus eStatus = FSPathMakeRef( reinterpret_cast<const UInt8*>(pDir), &aPathFSRef, &bIsDirectory );
-    if( eStatus != noErr )
-        return false;
-
-    FSSpec aPathFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aPathFSRef, kFSCatInfoNone,
-        NULL, NULL, &aPathFSSpec, NULL );
+    DBG_ASSERTWARNING( (eStatus==noErr) && bIsDirectory, "vcl AddTempFontDir() with invalid directory name!" );
     if( eStatus != noErr )
         return false;
 
@@ -1500,16 +1559,28 @@ static bool AddTempFontDir( const char* pDir )
     ATSFontContainerRef aATSFontContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+    eStatus = ::ATSFontActivateFromFileReference( &aPathFSRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &aATSFontContainer );
+#else
+    FSSpec aPathFSSpec;
+    eStatus = ::FSGetCatalogInfo( &aPathFSRef, kFSCatInfoNone,
+        NULL, NULL, &aPathFSSpec, NULL );
+    if( eStatus != noErr )
+        return false;
+
     eStatus = ::ATSFontActivateFromFileSpecification( &aPathFSSpec,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &aATSFontContainer );
+#endif
     if( eStatus != noErr )
         return false;
 
     return true;
 }
 
-static bool AddTempFontDir( void )
+static bool AddLocalTempFontDirs( void )
 {
     static bool bFirst = true;
     if( !bFirst )
@@ -1545,7 +1616,7 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 {
     DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
 
-    AddTempFontDir();
+    AddLocalTempFontDirs();
 
     // The idea is to cache the list of system fonts once it has been generated.
     // SalData seems to be a good place for this caching. However we have to
@@ -1575,21 +1646,28 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     Boolean bIsDirectory = true;
     ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
     OSStatus eStatus = FSPathMakeRef( (UInt8*)aCFileName.getStr(), &aNewRef, &bIsDirectory );
-    if( eStatus != noErr )
-        return false;
-
-    FSSpec aFontFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
-        NULL, NULL, &aFontFSSpec, NULL );
+    DBG_ASSERT( (eStatus==noErr) && !bIsDirectory, "vcl AddTempDevFont() with invalid fontfile name!" );
     if( eStatus != noErr )
         return false;
 
     ATSFontContainerRef oContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+    eStatus = ::ATSFontActivateFromFileReference( &aNewRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &oContainer );
+#else
+    FSSpec aFontFSSpec;
+    eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
+        NULL, NULL, &aFontFSSpec, NULL );
+    if( eStatus != noErr )
+        return false;
+
     eStatus = ::ATSFontActivateFromFileSpecification( &aFontFSSpec,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &oContainer );
+#endif
     if( eStatus != noErr )
         return false;
 
@@ -1669,19 +1747,39 @@ BOOL AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& r
 
 long AquaSalGraphics::GetGraphicsWidth() const
 {
+    long w = 0;
     if( mrContext && (mbWindow || mbVirDev) )
     {
-        return mnWidth; //CGBitmapContextGetWidth( mrContext );
+        w = mnWidth;
     }
-    else
-        return 0;
+
+    if( w == 0 )
+    {
+        if( mbWindow && mpFrame )
+            w = mpFrame->maGeometry.nWidth;
+    }
+
+    return w;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& )
+BOOL AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
 {
-    return sal_False;
+    ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
+    GlyphID aGlyphId = nGlyphId;
+    ATSGlyphScreenMetrics aGlyphMetrics;
+    OSStatus eStatus = ATSUGlyphGetScreenMetrics( rATSUStyle,
+        1, &aGlyphId, 0, FALSE, !mbNonAntialiasedText, &aGlyphMetrics );
+    if( eStatus != noErr )
+        return false;
+
+    const long nMinX = (long)(+aGlyphMetrics.topLeft.x * mfFontScale - 0.5);
+    const long nMaxX = (long)(aGlyphMetrics.width * mfFontScale + 0.5) + nMinX;
+    const long nMinY = (long)(-aGlyphMetrics.topLeft.y * mfFontScale - 0.5);
+    const long nMaxY = (long)(aGlyphMetrics.height * mfFontScale + 0.5) + nMinY;
+    rRect = Rectangle( nMinX, nMinY, nMaxX, nMaxY );
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1785,7 +1883,14 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     static const int nTagCount = sizeof(aTag) / sizeof(*aTag);
     OSStatus eStatus = ATSUSetAttributes( maATSUStyle, nTagCount,
                              aTag, aValueSize, aValue );
-    DBG_ASSERT( (eStatus==noErr), "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
+    // reset ATSUstyle if there was an error
+    if( eStatus != noErr )
+    {
+        DBG_WARNING( "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
+        ATSUClearStyle( maATSUStyle );
+        mpMacFontData = NULL;
+        return 0;
+    }
 
     // prepare font stretching
     const ATSUAttributeTag aMatrixTag = kATSUFontMatrixTag;
@@ -2424,3 +2529,4 @@ bool XorEmulation::UpdateTarget()
 }
 
 // =======================================================================
+

@@ -33,7 +33,7 @@
 
 
 // UNO property names for general options
-#define UPN_IS_GERMAN_PRE_REFORM            "IsGermanPreReform"
+#define UPN_IS_GERMAN_PRE_REFORM            "IsGermanPreReform"     /*! deprecated #i91949 !*/
 #define UPN_IS_USE_DICTIONARY_LIST          "IsUseDictionaryList"
 #define UPN_IS_IGNORE_CONTROL_CHARACTERS    "IsIgnoreControlCharacters"
 #define UPN_ACTIVE_DICTIONARIES             "ActiveDictionaries"
@@ -58,8 +58,8 @@
 #define UPN_IS_HYPH_AUTO                    "IsHyphAuto"
 #define UPN_IS_HYPH_SPECIAL                 "IsHyphSpecial"
 #define UPN_IS_SPELL_AUTO                   "IsSpellAuto"
-#define UPN_IS_SPELL_HIDE                   "IsSpellHide"
-#define UPN_IS_SPELL_IN_ALL_LANGUAGES       "IsSpellInAllLanguages"
+#define UPN_IS_SPELL_HIDE                   "IsSpellHide"           /*! deprecated #i91949 !*/
+#define UPN_IS_SPELL_IN_ALL_LANGUAGES       "IsSpellInAllLanguages" /*! deprecated #i91949 !*/
 #define UPN_IS_SPELL_SPECIAL                "IsSpellSpecial"
 #define UPN_IS_WRAP_REVERSE                 "IsWrapReverse"
 #define UPN_DATA_FILES_CHANGED_CHECK_VALUE  "DataFilesChangedCheckValue"

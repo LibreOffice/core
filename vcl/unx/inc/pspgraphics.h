@@ -32,16 +32,12 @@
 #define _VCL_PSPGRAPHICS_H
 
 
-#include <vcl/salgdi.hxx>
-#ifndef _PSPRINT_FONTMANAGER_HXX
-#include <psprint/fontmanager.hxx>
-#endif
-#include <vcl/sallayout.hxx>
-#include <vcl/dllapi.h>
+#include "vcl/fontmanager.hxx"
+#include "vcl/salgdi.hxx"
+#include "vcl/sallayout.hxx"
+#include "vcl/dllapi.h"
 
-#ifndef _USE_PRINT_EXTENSION_
 namespace psp { struct JobData; class PrinterGfx; }
-#endif
 
 class ServerFont;
 class ImplDevFontAttributes;

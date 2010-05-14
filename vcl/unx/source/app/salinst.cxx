@@ -35,20 +35,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <salunx.h>
+#include "salunx.h"
 
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#include <salinst.h>
-#include <salframe.h>
-#include <vcl/salwtype.hxx>
-#include <vcl/salatype.hxx>
-#include <dtint.hxx>
-#include <salprn.h>
-#include <sm.hxx>
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salinst.h"
+#include "salframe.h"
+#include "dtint.hxx"
+#include "salprn.h"
+#include "sm.hxx"
+
+#include "vcl/salwtype.hxx"
+#include "vcl/salatype.hxx"
+#include "vcl/helper.hxx"
+
+#include "vos/mutex.hxx"
 
 // -------------------------------------------------------------------------
 //
@@ -276,3 +277,129 @@ void X11SalInstance::DestroyFrame( SalFrame* pFrame )
 {
     delete pFrame;
 }
+
+static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
+{
+#ifdef LINUX
+    /*
+     *  chkfontpath exists on some (RH derived) Linux distributions
+     */
+    static const char* pCommands[] = {
+        "/usr/sbin/chkfontpath 2>/dev/null", "chkfontpath 2>/dev/null"
+    };
+    ::std::list< ByteString > aLines;
+
+    for( unsigned int i = 0; i < sizeof(pCommands)/sizeof(pCommands[0]); i++ )
+    {
+        FILE* pPipe = popen( pCommands[i], "r" );
+        aLines.clear();
+        if( pPipe )
+        {
+            char line[1024];
+            char* pSearch;
+            while( fgets( line, sizeof(line), pPipe ) )
+            {
+                int nLen = strlen( line );
+                if( line[nLen-1] == '\n' )
+                    line[nLen-1] = 0;
+                pSearch = strstr( line, ": " );
+                if( pSearch )
+                    aLines.push_back( pSearch+2 );
+            }
+            if( ! pclose( pPipe ) )
+                break;
+        }
+    }
+
+    for( ::std::list< ByteString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
+    {
+        if( ! access( it->GetBuffer(), F_OK ) )
+        {
+            o_rFontPaths.push_back( *it );
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "adding fs dir %s\n", it->GetBuffer() );
+#endif
+        }
+    }
+#else
+    (void)o_rFontPaths;
+#endif
+}
+
+
+
+void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
+{
+    Display *pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
+
+    DBG_ASSERT( pDisplay, "No Display !" );
+    if( pDisplay )
+    {
+        // get font paths to look for fonts
+        int nPaths = 0, i;
+        char** pPaths = XGetFontPath( pDisplay, &nPaths );
+
+        bool bServerDirs = false;
+        for( i = 0; i < nPaths; i++ )
+        {
+            OString aPath( pPaths[i] );
+            sal_Int32 nPos = 0;
+            if( ! bServerDirs
+                && ( nPos = aPath.indexOf( ':' ) ) > 0
+                && ( !aPath.copy(nPos).equals( ":unscaled" ) ) )
+            {
+                bServerDirs = true;
+                getServerDirectories( o_rFontPaths );
+            }
+            else
+            {
+                psp::normPath( aPath );
+                o_rFontPaths.push_back( aPath );
+            }
+        }
+
+        if( nPaths )
+            XFreeFontPath( pPaths );
+    }
+
+    // insert some standard directories
+    o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/TrueType" );
+    o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
+    o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
+    o_rFontPaths.push_back( "/usr/X11R6/lib/X11/fonts/truetype" );
+    o_rFontPaths.push_back( "/usr/X11R6/lib/X11/fonts/Type1" );
+
+    #ifdef SOLARIS
+    /* cde specials, from /usr/dt/bin/Xsession: here are the good fonts,
+    the OWfontpath file may contain as well multiple lines as a comma
+    separated list of fonts in each line. to make it even more weird
+    environment variables are allowed as well */
+
+    const char* lang = getenv("LANG");
+    if ( lang != NULL )
+    {
+        String aOpenWinDir( String::CreateFromAscii( "/usr/openwin/lib/locale/" ) );
+        aOpenWinDir.AppendAscii( lang );
+        aOpenWinDir.AppendAscii( "/OWfontpath" );
+
+        SvFileStream aStream( aOpenWinDir, STREAM_READ );
+
+        // TODO: replace environment variables
+        while( aStream.IsOpen() && ! aStream.IsEof() )
+        {
+            ByteString aLine;
+            aStream.ReadLine( aLine );
+            // need an OString for normpath
+            OString aNLine( aLine );
+            psp::normPath( aNLine );
+            aLine = aNLine;
+            // try to avoid bad fonts in some cases
+            static bool bAvoid = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "he", 2 ) == 0) || strncasecmp( lang, "iw", 2 ) == 0 || (strncasecmp( lang, "hi", 2 ) == 0);
+            if( bAvoid && aLine.Search( "iso_8859" ) != STRING_NOTFOUND )
+                continue;
+            o_rFontPaths.push_back( aLine );
+        }
+    }
+    #endif /* SOLARIS */
+}
+

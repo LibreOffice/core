@@ -33,31 +33,28 @@
 
 #include "Xproto.h"
 
-#include <salunx.h>
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.h>
-#endif
-#include <salframe.h>
-#include <salvd.h>
-#include <tools/debug.hxx>
-
-#ifndef _USE_PRINT_EXTENSION_
-#include <psprint/printergfx.hxx>
-#include <psprint/jobdata.hxx>
-#endif
-
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-
+#include "salunx.h"
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salgdi.h"
+#include "salframe.h"
+#include "salvd.h"
 #include "xrender_peer.hxx"
+
+#include "vcl/printergfx.hxx"
+#include "vcl/jobdata.hxx"
+
+#include "tools/debug.hxx"
+
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygontools.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
+#include "basegfx/polygon/b2dpolygonclipper.hxx"
+#include "basegfx/polygon/b2dlinegeometry.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+#include "basegfx/polygon/b2dpolypolygoncutter.hxx"
+
 #include <vector>
 #include <queue>
 #include <set>
@@ -1183,9 +1180,18 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             {
                 const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
                 const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
+
                 // convert the B2DPoint into XRENDER units
-                aNewXPF.x = XDoubleToFixed( aPoint.getX() );
-                aNewXPF.y = XDoubleToFixed( aPoint.getY() );
+                if(getAntiAliasB2DDraw())
+                {
+                    aNewXPF.x = XDoubleToFixed( aPoint.getX() );
+                    aNewXPF.y = XDoubleToFixed( aPoint.getY() );
+                }
+                else
+                {
+                    aNewXPF.x = XDoubleToFixed( basegfx::fround( aPoint.getX() ) );
+                    aNewXPF.y = XDoubleToFixed( basegfx::fround( aPoint.getY() ) );
+                }
 
                 // check if enough data is available for a new HalfTrapezoid
                 if( nPointIdx == 0 )

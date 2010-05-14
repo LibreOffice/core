@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zforlist.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@
 #include <svtools/ondemand.hxx>
 #include <tools/link.hxx>
 #include <svtools/nfkeytab.hxx>
+
+#include <map>
 
 class Date;
 class SvStream;
@@ -223,6 +225,8 @@ DECLARE_TABLE (SvNumberFormatterIndexTable, sal_uInt32*)
 typedef Table SvNumberFormatTable;
 typedef Table SvNumberFormatterIndexTable;
 #endif
+
+typedef ::std::map< sal_uInt32, sal_uInt32 > SvNumberFormatterMergeMap;
 
 
 /** Language/country dependent currency entries
@@ -598,6 +602,11 @@ public:
     inline BOOL HasMergeFmtTbl() const;
     /// Return the new format index for an old format index, if a merge table exists
     inline sal_uInt32 GetMergeFmtIndex( sal_uInt32 nOldFmt ) const;
+
+    /** Convert the ugly old tools' Table type bloated with new'ed sal_uInt32
+        entries merge table to ::std::map with old index key and new index key.
+        @ATTENTION! Also clears the old table using ClearMergeTable() */
+    SvNumberFormatterMergeMap ConvertMergeTableToMap();
 
     /// Return the last used position ever of a language/country combination
     USHORT GetLastInsertKey(sal_uInt32 CLOffset);

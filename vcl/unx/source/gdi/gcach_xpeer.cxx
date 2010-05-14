@@ -647,9 +647,6 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
 :   GlyphCache( rPeer )
 {
-#ifdef MACOSX
-    LoadFonts();
-#endif
 }
 
 // ---------------------------------------------------------------------------

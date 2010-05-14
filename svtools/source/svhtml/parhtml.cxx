@@ -1928,9 +1928,14 @@ FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
             eEnc = RTL_TEXTENCODING_UCS2;
         }
     }
-    if( RTL_TEXTENCODING_UCS2 == eEnc &&
-        (0xfe == (sal_uChar)pHeader[0] && 0xff == (sal_uChar)pHeader[1]) ||
-        (0xff == (sal_uChar)pHeader[0] && 0xfe == (sal_uChar)pHeader[1]) )
+    if
+       (
+        RTL_TEXTENCODING_UCS2 == eEnc &&
+        (
+         (0xfe == (sal_uChar)pHeader[0] && 0xff == (sal_uChar)pHeader[1]) ||
+         (0xff == (sal_uChar)pHeader[0] && 0xfe == (sal_uChar)pHeader[1])
+        )
+       )
     {
         if( 0xfe == (sal_uChar)pHeader[0] )
             bUCS2B = TRUE;

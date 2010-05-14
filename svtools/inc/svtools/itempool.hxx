@@ -41,6 +41,7 @@
 #include <tools/string.hxx>
 #include <svtools/svarray.hxx>
 #include <svtools/poolitem.hxx>
+#include <vector>
 
 class SvStream;
 class SfxBroadcaster;
@@ -80,6 +81,15 @@ struct SfxItemInfo
 
 class SfxStyleSheetIterator;
 struct SfxPoolItemArray_Impl;
+class SfxItemPool;
+
+class SVL_DLLPUBLIC SfxItemPoolUser
+{
+public:
+    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) = 0;
+};
+
+typedef ::std::vector< SfxItemPoolUser* > SfxItemPoolUserVector;
 
 class SVL_DLLPUBLIC SfxItemPool
 
@@ -115,6 +125,14 @@ class SVL_DLLPUBLIC SfxItemPool
     SfxItemPool*                    pMaster;
     USHORT*                         _pPoolRanges;
     FASTBOOL                        bPersistentRefCounts;
+
+private:
+    // ObjectUser section
+    SfxItemPoolUserVector           maSfxItemPoolUsers;
+
+public:
+    void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
+    void RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser);
 
     //---------------------------------------------------------------------
 #ifndef _SFXITEMS_HXX
@@ -156,7 +174,10 @@ public:
                                                  USHORT *pSlotIds = 0,
 #endif
                                                  FASTBOOL bLoadRefCounts = TRUE );
+protected:
     virtual                         ~SfxItemPool();
+public:
+    static void Free(SfxItemPool* pPool);
 
     SfxBroadcaster&                 BC();
 

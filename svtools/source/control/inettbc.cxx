@@ -472,8 +472,11 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                     // matching is always done case insensitive, but completion will be case sensitive and case preserving
                     aTitle.ToLowerAscii();
 
-                    if( !nMatchLen || bExectMatch && aMatchName.Equals( aTitle )
-                     || !bExectMatch && aMatchName.CompareTo( aTitle, nMatchLen ) == COMPARE_EQUAL )
+                    if (
+                        !nMatchLen ||
+                        (bExectMatch && aMatchName.Equals(aTitle)) ||
+                        (!bExectMatch && aMatchName.CompareTo(aTitle, nMatchLen) == COMPARE_EQUAL)
+                       )
                     {
                         // all names fit if matchstring is empty
                         INetURLObject aObj( aURL );
@@ -490,8 +493,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                         String aInput( aText );
                         if ( nMatchLen )
                         {
-                            if ( aText.Len() && aText.GetChar( aText.Len() - 1 ) == '.'
-                              || bPureHomePath )
+                            if ((aText.Len() && aText.GetChar(aText.Len() - 1) == '.') || bPureHomePath)
                             {
                                 // if a "special folder" URL was typed, don't touch the user input
                                 aMatch.Erase( 0, nMatchLen );
@@ -1225,8 +1227,8 @@ String SvtURLBox::GetURL()
 
             if( success &&
                 ( aTitle.Len() > 1 ||
-                  aTitle.CompareToAscii("/") != 0 &&
-                  aTitle.CompareToAscii(".") != 0 ) )
+                  (aTitle.CompareToAscii("/") != 0 &&
+                  aTitle.CompareToAscii(".") != 0) ) )
             {
                     aObj.SetName( aTitle );
                     if ( bSlash )

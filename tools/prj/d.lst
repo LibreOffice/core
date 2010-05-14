@@ -73,6 +73,7 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\ref.hxx %_DEST%\inc%_EXT%\tools\ref.hxx
 ..\inc\tools\resid.hxx %_DEST%\inc%_EXT%\tools\resid.hxx
 ..\inc\tools\resmgr.hxx %_DEST%\inc%_EXT%\tools\resmgr.hxx
+..\inc\tools\StringListResource.hxx %_DEST%\inc%_EXT%\tools\StringListResource.hxx
 ..\inc\tools\isofallback.hxx %_DEST%\inc%_EXT%\tools\isofallback.hxx
 ..\inc\tools\rtti.hxx %_DEST%\inc%_EXT%\tools\rtti.hxx
 ..\inc\tools\shl.hxx %_DEST%\inc%_EXT%\tools\shl.hxx

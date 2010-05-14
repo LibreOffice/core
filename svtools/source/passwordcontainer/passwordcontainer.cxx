@@ -342,7 +342,7 @@ sal_Bool StorageItem::getEncodedMP( ::rtl::OUString& aResult )
 
 //-------------------------------------------------------------------------
 
-void StorageItem::setEncodedMP( const ::rtl::OUString& aEncoded )
+void StorageItem::setEncodedMP( const ::rtl::OUString& aEncoded, sal_Bool bAcceptEmpty )
 {
     Sequence< ::rtl::OUString > sendNames(2);
     Sequence< uno::Any > sendVals(2);
@@ -350,7 +350,7 @@ void StorageItem::setEncodedMP( const ::rtl::OUString& aEncoded )
     sendNames[0] = ::rtl::OUString::createFromAscii( "HasMaster" );
     sendNames[1] = ::rtl::OUString::createFromAscii( "Master" );
 
-    sal_Bool bHasMaster = ( aEncoded.getLength() > 0 );
+    sal_Bool bHasMaster = ( aEncoded.getLength() > 0 || bAcceptEmpty );
     sendVals[0] <<= bHasMaster;
     sendVals[1] <<= aEncoded;
 
@@ -858,6 +858,16 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& aURL, 
 }
 
 //-------------------------------------------------------------------------
+::rtl::OUString PasswordContainer::GetDefaultMasterPassword()
+{
+    ::rtl::OUString aResult;
+    for ( sal_Int32 nInd = 0; nInd < RTL_DIGEST_LENGTH_MD5; nInd++ )
+        aResult += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "aa" ) );
+
+    return aResult;
+}
+
+//-------------------------------------------------------------------------
 ::rtl::OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode, const uno::Reference< task::XInteractionHandler >& xHandler )
 {
     // empty string means that the call was cancelled or just failed
@@ -898,38 +908,47 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& aURL, 
     if( !m_aMasterPasswd.getLength() && aHandler.is() )
     {
         ::rtl::OUString aEncodedMP;
-        sal_Bool bAskAgain;
+        sal_Bool bAskAgain = sal_False;
+        sal_Bool bDefaultPassword = sal_False;
 
         if( !m_pStorageFile->getEncodedMP( aEncodedMP ) )
             aRMode = PasswordRequestMode_PASSWORD_CREATE;
+        else if ( !aEncodedMP.getLength() )
+        {
+            m_aMasterPasswd = GetDefaultMasterPassword();
+            bDefaultPassword = sal_True;
+        }
 
-        do {
-            bAskAgain = sal_False;
+        if ( !bDefaultPassword )
+        {
+            do {
+                bAskAgain = sal_False;
 
-            ::rtl::OUString aPass = RequestPasswordFromUser( aRMode, aHandler );
-            if ( aPass.getLength() )
-            {
-                if( aRMode == PasswordRequestMode_PASSWORD_CREATE )
+                ::rtl::OUString aPass = RequestPasswordFromUser( aRMode, aHandler );
+                if ( aPass.getLength() )
                 {
-                    m_aMasterPasswd = aPass;
-                    vector< ::rtl::OUString > aMaster( 1, m_aMasterPasswd );
-
-                    m_pStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
-                }
-                else
-                {
-                    vector< ::rtl::OUString > aRM( DecodePasswords( aEncodedMP, aPass ) );
-                    if( !aRM.size() || !aPass.equals( aRM[0] ) )
+                    if( aRMode == PasswordRequestMode_PASSWORD_CREATE )
                     {
-                        bAskAgain = sal_True;
-                        aRMode = PasswordRequestMode_PASSWORD_REENTER;
+                        m_aMasterPasswd = aPass;
+                        vector< ::rtl::OUString > aMaster( 1, m_aMasterPasswd );
+
+                        m_pStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
                     }
                     else
-                        m_aMasterPasswd = aPass;
+                    {
+                        vector< ::rtl::OUString > aRM( DecodePasswords( aEncodedMP, aPass ) );
+                        if( !aRM.size() || !aPass.equals( aRM[0] ) )
+                        {
+                            bAskAgain = sal_True;
+                            aRMode = PasswordRequestMode_PASSWORD_REENTER;
+                        }
+                        else
+                            m_aMasterPasswd = aPass;
+                    }
                 }
-            }
 
-        } while( bAskAgain );
+            } while( bAskAgain );
+        }
     }
 
     if ( !m_aMasterPasswd.getLength() )
@@ -1110,33 +1129,42 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
     // the method should fail if there is no master password
     if( m_pStorageFile && m_pStorageFile->useStorage() && m_pStorageFile->getEncodedMP( aEncodedMP ) )
     {
-        if ( !xTmpHandler.is() )
+        if ( !aEncodedMP.getLength() )
         {
-            uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), uno::UNO_QUERY_THROW );
-        }
-
-        if ( m_aMasterPasswd.getLength() )
-        {
-            // there is a password, it should be just rechecked
-            PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
-            ::rtl::OUString aPass;
-
-            do {
-                aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
-                bResult = ( aPass.getLength() && aPass.equals( m_aMasterPasswd ) );
-                aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
-            } while( !bResult && aPass.getLength() );
+            // this is a default master password
+            // no UI is necessary
+            bResult = sal_True;
         }
         else
         {
-            try
+            if ( !xTmpHandler.is() )
             {
-                // ask for the password, if user provide no correct password an exception will be thrown
-                bResult = ( GetMasterPassword( xTmpHandler ).getLength() > 0 );
+                uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
+                xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), uno::UNO_QUERY_THROW );
             }
-            catch( uno::Exception& )
-            {}
+
+            if ( m_aMasterPasswd.getLength() )
+            {
+                // there is a password, it should be just rechecked
+                PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
+                ::rtl::OUString aPass;
+
+                do {
+                    aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
+                    bResult = ( aPass.getLength() && aPass.equals( m_aMasterPasswd ) );
+                    aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
+                } while( !bResult && aPass.getLength() );
+            }
+            else
+            {
+                try
+                {
+                    // ask for the password, if user provide no correct password an exception will be thrown
+                    bResult = ( GetMasterPassword( xTmpHandler ).getLength() > 0 );
+                }
+                catch( uno::Exception& )
+                {}
+            }
         }
     }
 
@@ -1257,6 +1285,74 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
         throw uno::RuntimeException();
 
     return m_pStorageFile->useStorage();
+}
+
+//-------------------------------------------------------------------------
+::sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
+    throw ( uno::RuntimeException )
+{
+    sal_Bool bResult = sal_False;
+    uno::Reference< task::XInteractionHandler > xTmpHandler = xHandler;
+    ::osl::MutexGuard aGuard( mMutex );
+
+    if ( m_pStorageFile && m_pStorageFile->useStorage() )
+    {
+        if ( !xTmpHandler.is() )
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
+            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), uno::UNO_QUERY_THROW );
+        }
+
+        sal_Bool bCanChangePassword = sal_True;
+        // if there is already a stored nondefault master password it should be entered by the user before the change happen
+        ::rtl::OUString aEncodedMP;
+        if( m_pStorageFile->getEncodedMP( aEncodedMP ) && aEncodedMP.getLength() )
+            bCanChangePassword = authorizateWithMasterPassword( xTmpHandler );
+
+        if ( bCanChangePassword )
+        {
+            // generate the default password
+            ::rtl::OUString aPass = GetDefaultMasterPassword();
+            if ( aPass.getLength() )
+            {
+                // get all the persistent entries if it is possible
+                Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
+
+                // remove the master password and the entries persistence
+                removeMasterPassword();
+
+                // store the empty string to flag the default master password
+                m_aMasterPasswd = aPass;
+                m_pStorageFile->setEncodedMP( ::rtl::OUString(), sal_True );
+
+                // store all the entries with the new password
+                for ( int nURLInd = 0; nURLInd < aPersistent.getLength(); nURLInd++ )
+                    for ( int nNameInd = 0; nNameInd< aPersistent[nURLInd].UserList.getLength(); nNameInd++ )
+                        addPersistent( aPersistent[nURLInd].Url,
+                                       aPersistent[nURLInd].UserList[nNameInd].UserName,
+                                       aPersistent[nURLInd].UserList[nNameInd].Passwords,
+                                       uno::Reference< task::XInteractionHandler >() );
+
+                bResult = sal_True;
+            }
+        }
+    }
+
+    return bResult;
+
+}
+
+//-------------------------------------------------------------------------
+::sal_Bool SAL_CALL PasswordContainer::isDefaultMasterPasswordUsed()
+    throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( mMutex );
+
+    if ( !m_pStorageFile )
+        throw uno::RuntimeException();
+
+    ::rtl::OUString aEncodedMP;
+    return ( m_pStorageFile->useStorage() && m_pStorageFile->getEncodedMP( aEncodedMP ) && !aEncodedMP.getLength() );
 }
 
 //-------------------------------------------------------------------------

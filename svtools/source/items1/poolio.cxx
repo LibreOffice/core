@@ -715,10 +715,12 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     // ggf. Secondary-Pool laden
     aPoolRec.Skip();
     if ( pSecondary )
+    {
         if ( !bSecondaryLoaded )
             pSecondary->Load( rStream );
         else
             rStream.Seek( nSecondaryEnd );
+    }
 
     // wenn nicht own-Pool, dann kein Name
     if ( aExternName != aName )
@@ -1011,10 +1013,12 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ENDPOOL );
 
     if ( pSecondary )
+    {
         if ( !bSecondaryLoaded )
             pSecondary->Load1_Impl( rStream );
         else
             rStream.Seek( nSecondaryEnd );
+    }
 
     if ( aExternName != aName )
         aName.Erase();
