@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: css1atr.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,8 +163,9 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
 static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
                                     const SwFmtDrop& rDrop,
                                      const SfxItemSet *pCharFmtItemSet=0 );
-static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
+static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
                     const SvxUnderlineItem *pUItem,
+                    const SvxOverlineItem *pOItem,
                     const SvxCrossedOutItem *pCOItem,
                     const SvxBlinkItem *pBItem );
 static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt );
@@ -545,13 +546,17 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
     // ein par Attribute benoetigen eine Spezial-Behandlung
     const SfxPoolItem *pItem = 0;
 
-    // Underline, CrossedOut und Blink bilden zusammen eine CSS1-Property
+    // Underline, Overline, CrossedOut und Blink bilden zusammen eine CSS1-Property
     // (geht natuerlich nicht bei Hints)
     if( !IsCSS1Source(CSS1_OUTMODE_HINT) )
     {
         const SvxUnderlineItem *pUnderlineItem = 0;
         if( SFX_ITEM_SET==rItemSet.GetItemState( RES_CHRATR_UNDERLINE, bDeep, &pItem ))
             pUnderlineItem = (const SvxUnderlineItem *)pItem;
+
+        const SvxOverlineItem *pOverlineItem = 0;
+        if( SFX_ITEM_SET==rItemSet.GetItemState( RES_CHRATR_OVERLINE, bDeep, &pItem ))
+            pOverlineItem = (const SvxOverlineItem *)pItem;
 
         const SvxCrossedOutItem *pCrossedOutItem = 0;
         if( SFX_ITEM_SET==rItemSet.GetItemState( RES_CHRATR_CROSSEDOUT, bDeep, &pItem ))
@@ -561,8 +566,9 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
         if( SFX_ITEM_SET==rItemSet.GetItemState( RES_CHRATR_BLINK, bDeep, &pItem ))
             pBlinkItem = (const SvxBlinkItem *)pItem;
 
-        if( pUnderlineItem || pCrossedOutItem || pBlinkItem )
-            OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( *this, pUnderlineItem,
+        if( pUnderlineItem || pOverlineItem || pCrossedOutItem || pBlinkItem )
+            OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( *this, pUnderlineItem,
+                                                 pOverlineItem,
                                                  pCrossedOutItem,
                                                  pBlinkItem );
 
@@ -2453,20 +2459,22 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 
 //-----------------------------------------------------------------------
 
-static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
+static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
                     const SvxUnderlineItem *pUItem,
+                    const SvxOverlineItem *pOItem,
                     const SvxCrossedOutItem *pCOItem,
                     const SvxBlinkItem *pBItem )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    BOOL bNone = FALSE;
 
     const sal_Char *pUStr = 0;
     if( pUItem )
     {
-        switch( pUItem->GetUnderline() )
+        switch( pUItem->GetLineStyle() )
         {
         case UNDERLINE_NONE:
-            pUStr = sCSS1_PV_none;
+            bNone = TRUE;
             break;
         case UNDERLINE_DONTKNOW:
             break;
@@ -2483,16 +2491,38 @@ static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
         }
     }
 
+    const sal_Char *pOStr = 0;
+    if( pOItem )
+    {
+        switch( pOItem->GetLineStyle() )
+        {
+        case UNDERLINE_NONE:
+            bNone = TRUE;
+            break;
+        case UNDERLINE_DONTKNOW:
+            break;
+        default:
+            if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
+            {
+                // das geht auch in HTML und muss nicht als STYLE-Option
+                // und darf nicht als Hint geschrieben werden
+                ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                        "Overline als Hint schreiben?" );
+                pOStr = sCSS1_PV_overline;
+            }
+            break;
+        }
+    }
+
     const sal_Char *pCOStr = 0;
     if( pCOItem )
     {
         switch( pCOItem->GetStrikeout() )
         {
-        case STRIKEOUT_DONTKNOW:
-            break;
         case STRIKEOUT_NONE:
-            if( !pUStr )
-                pUStr = sCSS1_PV_none;
+            bNone = TRUE;
+            break;
+        case STRIKEOUT_DONTKNOW:
             break;
         default:
             if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
@@ -2502,8 +2532,6 @@ static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
                 ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "CrossedOut als Hint schreiben?" );
                 pCOStr = sCSS1_PV_line_through;
-                if( pUStr && sCSS1_PV_none == pUStr )
-                    pUStr = 0;
             }
             break;
         }
@@ -2514,8 +2542,7 @@ static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
     {
         if( !pBItem->GetValue() )
         {
-            if( !pUStr && !pCOStr )
-                pBStr = sCSS1_PV_none;
+            bNone = TRUE;
         }
         else if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
@@ -2524,16 +2551,20 @@ static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
             ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "Blink als Hint schreiben?" );
             pBStr = sCSS1_PV_blink;
-            if( pUStr && sCSS1_PV_none == pUStr )
-                pUStr = 0;
-            if( pCOStr && sCSS1_PV_none == pCOStr )
-                pCOStr = 0;
         }
     }
 
     ByteString sOut;
     if( pUStr )
         sOut.Append( pUStr );
+
+    if( pOStr )
+    {
+        if( sOut.Len() )
+            sOut += ' ';
+
+        sOut.Append( pOStr );
+    }
 
     if( pCOStr )
     {
@@ -2553,6 +2584,8 @@ static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
 
     if( sOut.Len() )
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sOut );
+    else if( bNone )
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sCSS1_PV_none );
 
     return rWrt;
 }
@@ -2608,11 +2641,11 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutCSS1_SvxCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 {
     // Mit dieser Methode werden nur Hints ausgegeben!
-    // Sonst wird OutCSS1_SvxUnderl_SvxCrOut_SvxBlink() direkt aufgerufen.
+    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
 
     if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
-        OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( rWrt, 0,
-                (const SvxCrossedOutItem *)&rHt, 0 );
+        OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
+                0, 0, (const SvxCrossedOutItem *)&rHt, 0 );
 
     return rWrt;
 }
@@ -2793,11 +2826,24 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutCSS1_SvxUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 {
     // Mit dieser Methode werden nur Hints ausgegeben!
-    // Sonst wird OutCSS1_SvxUnderl_SvxCrOut_SvxBlink() direkt aufgerufen.
+    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
 
     if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
-        OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( rWrt,
-                (const SvxUnderlineItem *)&rHt, 0, 0 );
+        OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
+                (const SvxUnderlineItem *)&rHt, 0, 0, 0 );
+
+    return rWrt;
+}
+
+
+static Writer& OutCSS1_SvxOverline( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    // Mit dieser Methode werden nur Hints ausgegeben!
+    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
+
+    if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
+        OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
+                0, (const SvxOverlineItem *)&rHt, 0, 0 );
 
     return rWrt;
 }
@@ -2848,11 +2894,11 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutCSS1_SvxBlink( Writer& rWrt, const SfxPoolItem& rHt )
 {
     // Mit dieser Methode werden nur Hints ausgegeben!
-    // Sonst wird OutCSS1_SvxUnderl_SvxCrOut_SvxBlink() direkt aufgerufen.
+    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
 
     if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
-        OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( rWrt,
-                0, 0, (const SvxBlinkItem *)&rHt );
+        OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
+                0, 0, 0, (const SvxBlinkItem *)&rHt );
 
     return rWrt;
 }
@@ -3699,12 +3745,15 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_CTL_LANGUAGE */       OutCSS1_SvxLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutCSS1_SvxPosture,
 /* RES_CHRATR_CTL_WEIGHT */         OutCSS1_SvxFontWeight,
-/* RES_CHRATR_WRITING_DIRECTION */  0,
+/* RES_CHRATR_ROTATE */             0,
+/* RES_CHRATR_EMPHASIS_MARK */      0,
+/* RES_CHRATR_TWO_LINES */          0,
+/* RES_CHRATR_SCALEW */             0,
+/* RES_CHRATR_RELIEF */             0,
+/* RES_CHRATR_HIDDEN */             0,
+/* RES_CHRATR_OVERLINE */           OutCSS1_SvxOverline,
+/* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
-/* RES_CHRATR_DUMMY3 */             0,
-/* RES_CHRATR_DUMMY4 */             0,
-/* RES_CHRATR_DUMMY5 */             0,
-/* RES_CHRATR_HIDDEN */             0, // Dummy:
 
 /* RES_TXTATR_NOLINEBREAK   */      0,
 /* RES_TXTATR_NOHYPHEN  */          0,
@@ -3741,6 +3790,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_VERTALIGN */          0, // new
 /* RES_PARATR_SNAPTOGRID*/          0, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+/* RES_PARATR_OUTLINELEVEL */       0, // new since cws outlinelevel
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new

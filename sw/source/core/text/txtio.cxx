@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtio.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,6 +297,8 @@ SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
             rOs << "FONTSIZE" << ' ' << GetFontSize(pHint)->nSize;
         else if(0 != GetUnderline(pHint))
             rOs << "UNDERLINE" << ' ' << (MSHORT)(GetUnderline(pHint)->nState);
+        else if(0 != GetOverline(pHint))
+            rOs << "OVERLINE" << ' ' << (MSHORT)(GetOverline(pHint)->nState);
         else if(0 != GetWeight(pHint))
             rOs << "WEIGHT" << ' ' << GetWeight(pHint)->nWeight;
         else if(0 != GetContour(pHint))

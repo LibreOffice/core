@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: init.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.66.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -315,6 +315,9 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },    // RES_CHRATR_SCALEW
     { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },        // RES_CHRATR_RELIEF
     { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },        // RES_CHRATR_HIDDEN
+    { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },      // RES_CHRATR_OVERLINE
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
     { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
@@ -355,6 +358,9 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_PARA_VERTALIGN, SFX_ITEM_POOLABLE },          // RES_PARATR_VERTALIGN
     { SID_ATTR_PARA_SNAPTOGRID, SFX_ITEM_POOLABLE },    // RES_PARATR_SNAPTOGRID
     { SID_ATTR_BORDER_CONNECT, SFX_ITEM_POOLABLE },     // RES_PARATR_CONNECT_BORDER
+
+    { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level,zhaojianwei
+
     // --> OD 2008-02-19 #refactorlists#
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
@@ -444,6 +450,7 @@ USHORT* SwAttrPool::pVersionMap3 = 0;
 USHORT* SwAttrPool::pVersionMap4 = 0;
 // OD 2004-01-21 #i18732#
 USHORT* SwAttrPool::pVersionMap5 = 0;
+USHORT* SwAttrPool::pVersionMap6 = 0;
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
 const sal_Char* __FAR_DATA pMarkToTable     = "table";
@@ -519,9 +526,11 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW );
     aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] = new SvxCharReliefItem( RELIEF_NONE, RES_CHRATR_RELIEF );
     aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] = new SvxCharHiddenItem( FALSE, RES_CHRATR_HIDDEN );
+    aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] = new SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
 
 // CharakterAttr - Dummies
-    //no dummy available
+    aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
+    aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY2 );
 // CharakterAttr - Dummies
 
     aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] = new SwFmtAutoFmt;
@@ -567,6 +576,9 @@ void _InitCore()
     aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =             new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
     aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =            new SvxParaGridItem( sal_True, RES_PARATR_SNAPTOGRID );
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
+
+    aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] = new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );//#outline level,zhaojianwei
+
     // --> OD 2008-02-19 #refactorlists#
     aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] = new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
     aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
@@ -715,6 +727,13 @@ void _InitCore()
     for ( i = 110; i <= 130; ++i )
         SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
 
+    // 6. Version - new character attribute for overlining plus 2 dummies
+    SwAttrPool::pVersionMap6 = new USHORT[ 136 ];
+    for( i = 1; i <= 37; i++ )
+        SwAttrPool::pVersionMap6[ i-1 ] = i;
+    for ( i = 38; i <= 136; ++i )
+        SwAttrPool::pVersionMap6[ i-1 ] = i + 3;
+
     uno::Reference<
             lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
@@ -827,6 +846,7 @@ void _FinitCore()
     delete[] SwAttrPool::pVersionMap4;
     // OD 2004-01-21 #i18732#
     delete[] SwAttrPool::pVersionMap5;
+    delete[] SwAttrPool::pVersionMap6;
 
     for ( USHORT i = 0; i < pGlobalOLEExcludeList->Count(); ++i )
         delete (SvGlobalName*)(*pGlobalOLEExcludeList)[i];

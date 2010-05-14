@@ -807,20 +807,6 @@ public:
 };
 
 /*************************************************************************
- *                      class SwFtnSave
- *************************************************************************/
-
-class SwFtnSave
-{
-    SwTxtSizeInfo *pInf;
-    SwFont       *pFnt;
-    SwFont       *pOld;
-public:
-    SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn *pTxtFtn );
-   ~SwFtnSave();
-};
-
-/*************************************************************************
  *                       Inline-Implementierungen SwTxtSizeInfo
  *************************************************************************/
 

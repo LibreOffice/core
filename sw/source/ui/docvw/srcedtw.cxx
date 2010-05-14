@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: srcedtw.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.252.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,19 +67,11 @@
 #endif
 
 
-enum SwHtmlTextType {
-    TT_SGML     = svtools::HTMLSGML   ,
-    TT_COMMENT  = svtools::HTMLCOMMENT,
-    TT_KEYWORD  = svtools::HTMLKEYWORD,
-    TT_UNKNOWN  = svtools::HTMLUNKNOWN
-};
-
-
 struct SwTextPortion
 {
     USHORT nLine;
     USHORT nStart, nEnd;
-    SwHtmlTextType eType;
+    svtools::ColorConfigEntry eType;
 };
 
 #define MAX_SYNTAX_HIGHLIGHT 20
@@ -120,7 +112,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
-        SwHtmlTextType eFoundType = TT_UNKNOWN;
+        svtools::ColorConfigEntry eFoundType = svtools::HTMLUNKNOWN;
         if(rSource.GetChar(nActPos) == cOpenBracket && nActPos < nStrLen - 2 )
         {
             // 'leere' Portion einfuegen
@@ -132,7 +124,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 if(nInsert)
                     aText.nStart += 1;
                 aText.nEnd = nActPos - 1;
-                aText.eType = TT_UNKNOWN;
+                aText.eType = svtools::HTMLUNKNOWN;
                 aPortionList.Insert(aText, nInsert++);
             }
             sal_Unicode cFollowFirst = rSource.GetChar((xub_StrLen)(nActPos + 1));
@@ -143,10 +135,10 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 if(cMinus == cFollowNext &&
                     nActPos < nStrLen - 3 && cMinus == rSource.GetChar((xub_StrLen)(nActPos + 3)))
                 {
-                    eFoundType = TT_COMMENT;
+                    eFoundType = svtools::HTMLCOMMENT;
                 }
                 else
-                    eFoundType = TT_SGML;
+                    eFoundType = svtools::HTMLSGML;
                 nPortStart = nActPos;
                 nPortEnd = nActPos + 1;
             }
@@ -157,7 +149,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 nActPos++;
                 nOffset++;
             }
-            if(TT_UNKNOWN == eFoundType)
+            if(svtools::HTMLUNKNOWN == eFoundType)
             {
                 //jetzt koennte hier ein keyword folgen
                 USHORT nSrchPos = nActPos;
@@ -183,7 +175,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     if(nToken)
                     {
                         //Token gefunden
-                        eFoundType = TT_KEYWORD;
+                        eFoundType = svtools::HTMLKEYWORD;
                         nPortEnd = nSrchPos;
                         nPortStart = nActPos;
                     }
@@ -191,15 +183,15 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     {
                         //was war das denn?
 #if OSL_DEBUG_LEVEL > 1
-                        DBG_ERROR("Token nicht erkannt!")
-                        DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer())
+                        DBG_ERROR("Token nicht erkannt!");
+                        DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer());
 #endif
                     }
 
                 }
             }
             // jetzt muss noch '>' gesucht werden
-            if(TT_UNKNOWN != eFoundType)
+            if(svtools::HTMLUNKNOWN != eFoundType)
             {
                 BOOL bFound = FALSE;
                 for(USHORT i = nPortEnd; i < nStrLen; i++)
@@ -209,14 +201,14 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                         nPortEnd = i;
                         break;
                     }
-                if(!bFound && (eFoundType == TT_COMMENT))
+                if(!bFound && (eFoundType == svtools::HTMLCOMMENT))
                 {
                     // Kommentar ohne Ende in dieser Zeile
                     bFound  = TRUE;
                     nPortEnd = nStrLen - 1;
                 }
 
-                if(bFound ||(eFoundType == TT_COMMENT))
+                if(bFound ||(eFoundType == svtools::HTMLCOMMENT))
                 {
                     SwTextPortion aTextPortion;
                     aTextPortion.nLine = 0;
@@ -224,7 +216,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     aTextPortion.nEnd = nPortEnd;
                     aTextPortion.eType = eFoundType;
                     aPortionList.Insert(aTextPortion, nInsert++);
-                    eFoundType = TT_UNKNOWN;
+                    eFoundType = svtools::HTMLUNKNOWN;
                 }
 
             }
@@ -236,7 +228,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
         aText.nLine = 0;
         aText.nStart = nPortEnd + 1;
         aText.nEnd = nActPos - 1;
-        aText.eType = TT_UNKNOWN;
+        aText.eType = svtools::HTMLUNKNOWN;
         aPortionList.Insert(aText, nInsert++);
     }
 }
@@ -806,11 +798,11 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
-        if(r.eType !=  (SwHtmlTextType)svtools::HTMLSGML    &&
-            r.eType != (SwHtmlTextType)svtools::HTMLCOMMENT &&
-            r.eType != (SwHtmlTextType)svtools::HTMLKEYWORD &&
-            r.eType != (SwHtmlTextType)svtools::HTMLUNKNOWN)
-                r.eType = (SwHtmlTextType)svtools::HTMLUNKNOWN;
+        if(r.eType !=  svtools::HTMLSGML    &&
+            r.eType != svtools::HTMLCOMMENT &&
+            r.eType != svtools::HTMLKEYWORD &&
+            r.eType != svtools::HTMLUNKNOWN)
+                r.eType = svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
         USHORT nLine = nLineOff+r.nLine; //
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, TRUE );
@@ -1007,7 +999,7 @@ BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages
         case RTL_TEXTENCODING_MS_1256          :
         case RTL_TEXTENCODING_ISO_8859_6  :
         case RTL_TEXTENCODING_APPLE_ARABIC :
-            aLanguages[0] = LANGUAGE_ARABIC;
+            aLanguages[0] = LANGUAGE_ARABIC_SAUDI_ARABIA;
          break;
 
         case RTL_TEXTENCODING_APPLE_CHINTRAD   :

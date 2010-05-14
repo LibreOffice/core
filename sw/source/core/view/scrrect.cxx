@@ -830,7 +830,7 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
         delete pVout;
 
         // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
-        GetShell()->DLPostPaint2();
+        GetShell()->DLPostPaint2(true);
     }
     // <--
 

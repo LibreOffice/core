@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.82.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,8 @@
 #include <svx/svdoutl.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/cjkoptions.hxx>
+#include <svtools/ctloptions.hxx>
+#include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/flditem.hxx>
 #include <svx/editstat.hxx>
@@ -88,6 +90,8 @@
 #include <swmodule.hxx>
 #include <initui.hxx>
 #include <edtwin.hxx>
+#include <swwait.hxx>
+#include <docstat.hxx>
 
 #include <cmdid.h>
 #include <globals.hrc>
@@ -118,6 +122,10 @@
 #include <svtools/undo.hxx>
 #include "swabstdlg.hxx" //CHINA001
 #include "chrdlg.hrc" //CHINA001
+#include "misc.hrc"
+#include <app.hrc>
+
+#include <comphelper/processfactory.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -133,10 +141,8 @@ using namespace ::com::sun::star::i18n;
 #include <itemdef.hxx>
 #include <swslots.hxx>
 
-
 SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
-    //SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_DRAW_TEXT_TOOLBOX));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_ANNOTATION_POPUPMENU));
 }
@@ -199,8 +205,14 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
         case SID_ATTR_CHAR_UNDERLINE:
         {
-             FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetUnderline();
+             FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
             aNewAttr.Put(SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE));
+            break;
+        }
+        case SID_ATTR_CHAR_OVERLINE:
+        {
+             FontUnderline eFO = ((const SvxOverlineItem&)aEditAttr.Get(EE_CHAR_OVERLINE)).GetLineStyle();
+            aNewAttr.Put(SvxOverlineItem(eFO == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_OVERLINE));
             break;
         }
         case SID_ATTR_CHAR_CONTOUR:     nEEWhich = EE_CHAR_OUTLINE; break;
@@ -316,12 +328,106 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
             break;
         }
+        case FN_INSERT_SOFT_HYPHEN:
+        case FN_INSERT_HARDHYPHEN:
+        case FN_INSERT_HARD_SPACE:
+        case SID_INSERT_RLM :
+        case SID_INSERT_LRM :
+        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_ZWSP:
+        {
+            sal_Unicode cIns = 0;
+            switch(rReq.GetSlot())
+            {
+                case FN_INSERT_SOFT_HYPHEN: cIns = CHAR_SOFTHYPHEN; break;
+                case FN_INSERT_HARDHYPHEN: cIns = CHAR_HARDHYPHEN; break;
+                case FN_INSERT_HARD_SPACE: cIns = CHAR_HARDBLANK; break;
+                case SID_INSERT_RLM : cIns = CHAR_RLM ; break;
+                case SID_INSERT_LRM : cIns = CHAR_LRM ; break;
+                case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
+                case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
+            }
+            pOLV->InsertText( String(cIns), TRUE );
+            rReq.Done();
+            break;
+        }
         case FN_INSERT_SYMBOL:
         {
             if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
                 InsertSymbol(rReq);
             break;
         }
+            case FN_INSERT_STRING:
+                {
+            const SfxPoolItem* pItem = 0;
+            if(pNewAttrs)
+                pNewAttrs->GetItemState(nSlot, FALSE, &pItem );
+                        if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
+                                pOLV->InsertText(((const SfxStringItem *)pItem)->GetValue());
+                        break;
+                }
+
+        case FN_FORMAT_FOOTNOTE_DLG:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
+            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( rView.GetWindow(), rView.GetWrtShell(), DLG_DOC_FOOTNOTE );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            break;
+        }
+        case FN_NUMBERING_OUTLINE_DLG:
+        {
+            SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        rView.GetWindow(), &aTmp, rView.GetWrtShell());
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            rReq.Done();
+        }
+        break;
+        case SID_OPEN_XML_FILTERSETTINGS:
+        {
+            try
+            {
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                if( xDialog.is() )
+                {
+                    xDialog->execute();
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+            rReq.Ignore ();
+        }
+        break;
+        case FN_WORDCOUNT_DIALOG:
+        {
+            SwWrtShell &rSh = rView.GetWrtShell();
+            SwDocStat aCurr;
+            SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
+            {
+                SwWait aWait( *rView.GetDocShell(), TRUE );
+                rSh.StartAction();
+                rSh.CountWords( aCurr );
+                rSh.UpdateDocStat( aDocStat );
+                rSh.EndAction();
+            }
+
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( rView.GetWindow() );
+            pDialog->SetValues(aCurr, aDocStat );
+            pDialog->Execute();
+            delete pDialog;
+        }
+        break;
         case SID_CHAR_DLG:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -410,7 +516,6 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             break;
         }
 
-        case SID_AUTOSPELL_MARKOFF:
         case SID_AUTOSPELL_CHECK:
         {
             rView.ExecuteSlot(rReq);
@@ -514,6 +619,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 break;
             case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
             case SID_ATTR_CHAR_UNDERLINE: nEEWhich = EE_CHAR_UNDERLINE;break;
+            case SID_ATTR_CHAR_OVERLINE: nEEWhich = EE_CHAR_OVERLINE;break;
             case SID_ATTR_CHAR_CONTOUR: nEEWhich = EE_CHAR_OUTLINE; break;
             case SID_ATTR_CHAR_SHADOWED:  nEEWhich = EE_CHAR_SHADOW;break;
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
@@ -601,7 +707,6 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     }
                     break;
                 }
-            case SID_AUTOSPELL_MARKOFF:
             case SID_AUTOSPELL_CHECK:
             {
                 const SfxPoolItem* pState = rView.GetSlotState(nWhich);
@@ -642,6 +747,18 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 }
             }
             break;
+            case SID_INSERT_RLM :
+            case SID_INSERT_LRM :
+            case SID_INSERT_ZWNBSP :
+            case SID_INSERT_ZWSP:
+            {
+                SvtCTLOptions aCTLOptions;
+                sal_Bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+                rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
+                if(!bEnabled)
+                    rSet.DisableItem(nWhich);
+            }
+            break;
             default:
                 rSet.InvalidateItem( nWhich );
                 break;
@@ -655,6 +772,16 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
 
         nWhich = aIter.NextWhich();
     }
+}
+
+void SwAnnotationShell::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
+{
+    rView.ExecSearch(rReq,bNoMessage);
+}
+
+void SwAnnotationShell::StateSearch(SfxItemSet &rSet)
+{
+    rView.StateSearch(rSet);
 }
 
 void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
@@ -876,9 +1003,12 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
+        case FN_REPLY:
+        case FN_POSTIT:
+        case FN_DELETE_COMMENT:
         case FN_DELETE_NOTE:
             if ( pPostItMgr->GetActivePostIt() )
-                pPostItMgr->GetActivePostIt()->Delete();
+                pPostItMgr->GetActivePostIt()->ExecuteCommand(nSlot);
             break;
         case FN_DELETE_ALL_NOTES:
             pPostItMgr->Delete();
@@ -891,8 +1021,15 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         }
         case FN_HIDE_NOTE:
-            if ( pPostItMgr->GetActivePostIt() )
-                pPostItMgr->GetActivePostIt()->Hide();
+            /*
+            if ( Mgr()->GetActivePostIt() == this )
+            {
+                Mgr()->SetActivePostIt(0);
+                // put the cursor back into the document
+                SwitchToFieldPos();
+            }
+            Mgr()->Hide(mpFld);
+            */
             break;
         case FN_HIDE_ALL_NOTES:
             pPostItMgr->Hide();
@@ -916,25 +1053,51 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
         USHORT nSlotId = GetPool().GetSlotId( nWhich );
         switch( nSlotId )
         {
+            case FN_POSTIT:
             case FN_DELETE_NOTE:
             case FN_DELETE_NOTE_AUTHOR:
             case FN_DELETE_ALL_NOTES:
             case FN_HIDE_NOTE:
             case FN_HIDE_NOTE_AUTHOR:
             case FN_HIDE_ALL_NOTES:
+            {
+                if ( !pPostItMgr || !pPostItMgr->GetActivePostIt()  || !pPostItMgr->GetActivePostIt()->ISA(SwPostIt))
+                    rSet.DisableItem(nWhich);
+                break;
+            }
+            case FN_DELETE_COMMENT:
+            {
+                if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() ) //|| !pPostItMgr->GetActivePostIt()->ISA(SwRedComment))
+                    rSet.DisableItem(nWhich);
+                break;
+            }
+            case FN_REPLY:
+            {
+                if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() || !pPostItMgr->GetActivePostIt()->ISA(SwPostIt))
+                    rSet.DisableItem(nWhich);
+                else
                 {
-                    if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() )
-                        rSet.InvalidateItem( nWhich );
+                    SvtUserOptions aUserOpt;
+                    String sAuthor;
+                    if( !(sAuthor = aUserOpt.GetFullName()).Len())
+                            if( !(sAuthor = aUserOpt.GetID()).Len() )
+                        sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+                    if (sAuthor == pPostItMgr->GetActivePostIt()->GetAuthor())
+                        rSet.DisableItem(nWhich);
                 }
                 break;
+            }
             default:
                 rSet.InvalidateItem( nWhich );
                 break;
         }
 
-        if ( (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED) && (nSlotId==FN_DELETE_NOTE) )
-            rSet.DisableItem( nWhich );
-
+        if (pPostItMgr->GetActivePostIt())
+        {
+            if ( (pPostItMgr->GetActivePostIt()->IsProtected()) &&
+                    ( (nSlotId==FN_DELETE_NOTE) || (nSlotId==FN_REPLY) ) )
+                rSet.DisableItem( nWhich );
+        }
         nWhich = aIter.NextWhich();
     }
 }

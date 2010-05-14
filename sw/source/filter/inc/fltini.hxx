@@ -56,16 +56,6 @@ class WW1Reader : public Reader
     virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
-class WW8Reader : public StgReader
-{
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-public:
-    virtual int GetReaderType();
-
-    virtual BOOL HasGlossaries() const;
-    virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
-};
-
 class XMLReader : public Reader
 {
     virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
@@ -91,7 +81,7 @@ void GetWW8Writer( const String&, const String&, WriterRef& );
 // verarbeiten jetzt aber relative Werte bezogen auf das LR-Space-Item.
 // Das hat zur Folge, das bei allen Absaetzen die EInzuege der NumRule vom
 // Absatz-Einzug abgezogen werden muss.
-class SwRelNumRuleSpaces
+class SW_DLLPUBLIC SwRelNumRuleSpaces
 {
     SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
     BOOL bNewDoc;
@@ -115,7 +105,7 @@ public:
 #define SW_SV_BRUSH_INVALID     5
 
 // Get size of fly (if 'automatic' in WW) and check if not too small
-void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
+SW_DLLPUBLIC void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     SwTwips nPageWidth);
 
 #endif

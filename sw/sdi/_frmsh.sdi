@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _frmsh.sdi,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.190.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,6 +231,27 @@ interface BaseTextFrame
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+    FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Execute;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Execute;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+    ]
+
 
     /*****************************************************
 

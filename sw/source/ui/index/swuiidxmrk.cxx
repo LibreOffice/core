@@ -116,7 +116,7 @@ using namespace ::com::sun::star;
 SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
                                sal_Bool bNewDlg,
                                const ResId& rResId,
-                               sal_Int32 _nOptionsId ) :
+                               sal_Int32 _nOptionsId, SwWrtShell& rWrtShell ) :
       Window(pParent, rResId),
     aTypeFT (this,  SW_RES(LBL_INDEX    )),
     aTypeDCB(this,  SW_RES(DCB_INDEX    )),
@@ -168,7 +168,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     bIsPhoneticReadingEnabled(FALSE),
     xExtendedIndexEntrySupplier(NULL),
     pTOXMgr(0),
-    pSh(0)
+    pSh(&rWrtShell)
 {
     if( SvtCJKOptions().IsCJKFontEnabled() )
     {
@@ -536,7 +536,10 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSen
 
     rSh.ClearMark();
     BOOL bCancel;
-    rSh.Find( aSearchOpt,  DOCPOS_START, DOCPOS_END, bCancel,
+
+    //todo/mba: assuming that notes should not be searched
+    BOOL bSearchInNotes = FALSE;
+    rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
                         (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
 }
 
@@ -1121,12 +1124,10 @@ SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
                                 SfxChildWinInfo* pInfo,
                                    sal_Bool bNew) :
 SfxModelessDialog(_pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_INSIDXMARK_CJK):SW_RES(DLG_INSIDXMARK)),
-    aDlg(this, bNew, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_INSIDXMARK_CJK:DLG_INSIDXMARK)
+    aDlg(this, bNew, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_INSIDXMARK_CJK:DLG_INSIDXMARK, *::GetActiveWrtShell())
 {
     FreeResource();
-      SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-      DBG_ASSERT(pWrtShell, "No shell?");
-      aDlg.ReInitDlg(*pWrtShell);
+    aDlg.ReInitDlg(*::GetActiveWrtShell());
     Initialize(pInfo);
 }
 /* -----------------06.10.99 10:27-------------------
@@ -1148,7 +1149,7 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
  --------------------------------------------------*/
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) :
 SvxStandardDialog(pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_EDIT_IDXMARK_CJK):SW_RES(DLG_EDIT_IDXMARK)),
-    aDlg(this, sal_False, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_EDIT_IDXMARK_CJK:DLG_EDIT_IDXMARK)
+    aDlg(this, sal_False, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_EDIT_IDXMARK_CJK:DLG_EDIT_IDXMARK, rSh)
 {
     FreeResource();
     aDlg.ReInitDlg(rSh, pCurTOXMark);

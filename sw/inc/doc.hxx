@@ -106,7 +106,7 @@ class SwList;
 #include <svx/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
+#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 
 #include <hash_map>
 #include <stringhash.hxx>
@@ -267,7 +267,7 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 // global function to start grammar checking in the document
 void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame );
 
-class SwDoc :
+class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentSettingAccess,
     public IDocumentDeviceAccess,
@@ -303,7 +303,7 @@ class SwDoc :
     // die Objecte
     SwNodes     aNodes;                 // Inhalt des Dokumentes
     SwNodes     aUndoNodes;             // Inhalt fuer das Undo
-    SwAttrPool  aAttrPool;              // der Attribut Pool
+    SwAttrPool* mpAttrPool;             // der Attribut Pool
     SwPageDescs aPageDescs;             // PageDescriptoren
     Link        aOle2Link;              // OLE 2.0-Benachrichtigung
     /* @@@MAINTAINABILITY-HORROR@@@
@@ -317,7 +317,7 @@ class SwDoc :
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         xXForms;                        // container with XForms models
-    mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XGrammarCheckingIterator > m_xGCIterator;
+    mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -701,6 +701,8 @@ private:
     // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
     sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath,
                         const SwTxtFmtColl* pSplitColl );
+    sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel = 0 ); //#outline level,add by zhaijianwei.
+
 
     // Charts der angegebenen Tabelle updaten
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
@@ -966,7 +968,7 @@ public:
     virtual void DocInfoChgd();
     virtual const SwDocStat &GetDocStat() const;
     virtual void SetDocStat(const SwDocStat& rStat);
-    SW_DLLPUBLIC virtual void UpdateDocStat(SwDocStat& rStat);
+    virtual void UpdateDocStat(SwDocStat& rStat);
 
     /** IDocumentState
     */
@@ -1121,7 +1123,7 @@ public:
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
 
-    SW_DLLPUBLIC sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
+    sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
     sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
                         SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
@@ -1211,8 +1213,14 @@ public:
 
         //Zuruecksetzen der Attribute; es werden alle TxtHints und bei
         //vollstaendiger Selektion harte Formatierung (AUTO-Formate) entfernt
-    void ResetAttrs(const SwPaM &rRg, sal_Bool bTxtAttr = sal_True,
-                        const SvUShortsSort* = 0 );
+    // --> OD 2008-11-28 #i96644#
+    // introduce new optional parameter <bSendDataChangedEvents> in order to
+    // control, if the side effect "send data changed events" is triggered or not.
+    void ResetAttrs( const SwPaM &rRg,
+                     sal_Bool bTxtAttr = sal_True,
+                     const SvUShortsSort* = 0,
+                     const bool bSendDataChangedEvents = true );
+    // <--
     void RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark = FALSE );
 
         // Setze das Attribut im angegebenen Format. Ist Undo aktiv, wird
@@ -1232,7 +1240,7 @@ public:
     void SetDefault( const SfxItemSet& );
 
     // Erfrage das Default Attribut in diesem Dokument.
-    SW_DLLPUBLIC const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
+    const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
     // TextAttribute nicht mehr aufspannen lassen
     sal_Bool DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag = sal_True );
 
@@ -1774,8 +1782,8 @@ public:
         const sal_uInt16 nId, const String& rCharacterStyle, SdrObject& rObj );
 
     // erfrage den Attribut Pool
-    const SwAttrPool& GetAttrPool() const   { return aAttrPool; }
-          SwAttrPool& GetAttrPool()         { return aAttrPool; }
+    const SwAttrPool& GetAttrPool() const   { return *mpAttrPool; }
+          SwAttrPool& GetAttrPool()         { return *mpAttrPool; }
 
     // suche ueber das Layout eine EditShell und ggfs. eine ViewShell
     SwEditShell* GetEditShell( ViewShell** ppSh = 0 ) const;
@@ -1884,8 +1892,11 @@ public:
     // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
     sal_Bool GenerateGlobalDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
+    sal_Bool GenerateGlobalDoc( const String& rPath, int nOutlineLevel = 0 );   //#outline level,add by zhaojianwei
     sal_Bool GenerateHTMLDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
+    sal_Bool GenerateHTMLDoc( const String& rPath, int nOutlineLevel = 0 ); //#outline level,add by zhaojianwei
+
     //  vergleiche zwei Dokument miteinander
     long CompareDoc( const SwDoc& rDoc );
     // merge zweier Dokumente
@@ -2068,7 +2079,7 @@ public:
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         getXForms() const;
 
-    com::sun::star::uno::Reference< com::sun::star::linguistic2::XGrammarCheckingIterator > GetGCIterator() const;
+    com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > GetGCIterator() const;
 
     /// is this an XForms document?
     bool isXForms() const;
@@ -2086,8 +2097,8 @@ public:
     // <--
 
     //Update all the page masters
-    SW_DLLPUBLIC void SetDefaultPageMode(bool bSquaredPageMode);
-    SW_DLLPUBLIC sal_Bool IsSquaredPageMode() const;
+    void SetDefaultPageMode(bool bSquaredPageMode);
+    sal_Bool IsSquaredPageMode() const;
 
     // i#78591#
     void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )

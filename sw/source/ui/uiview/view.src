@@ -152,13 +152,19 @@ String STR_NUM_LEVEL
 {
     Text [ en-US ] = "Level " ;
 };
+//#outline level,zhaojianwei
+String STR_NUM_OUTLINE
+{
+    Text [ en-US ] = "Outline ";
+};//<-end,zhaojianwei
+// <--
 String STR_ERROR_NOLANG
 {
     Text [ en-US ] = "No language is selected in the proofed section." ;
 };
 String STR_EDIT_FOOTNOTE
 {
-    Text [ en-US ] = "Edit Footnote" ;
+    Text [ en-US ] = "Edit Footnote/Endnote" ;
 };
 String STR_NB_REPLACED
 {

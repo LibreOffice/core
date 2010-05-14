@@ -1187,7 +1187,7 @@ Menu RID_COMMANDMENU
                     {
                         Identifier = RID_SLRPARENTX;
                         HelpId = HID_SMA_SLRPARENTX;
-                        Text = "left ( x rigth )";
+                        Text = "left ( x right )";
                     };
                     MenuItem
                     {

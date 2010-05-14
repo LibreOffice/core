@@ -1266,7 +1266,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     }
 
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
-    if ( bLockInput || pObjSh && pObjSh->GetProgress() )
+    if ( bLockInput || (pObjSh && pObjSh->GetProgress()) )
         // Wenn die Rechenleiste aktiv ist oder
         // auf dem Document ein Progress laeuft wird keine
         // Bestellungen angenommen.
@@ -1443,6 +1443,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_NumIndentInc, KS_NumIndentDec,
                        // <- #i23725#
 
+                       KS_OutlineLvOff,
                        KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
                        KS_GlossaryExpand, KS_NextPrevGlossary,
                        KS_AutoFmtByInput,
@@ -1764,7 +1765,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                  !rSh.GetCurNumRule()->IsOutlineRule() &&
                                  !rSh.HasSelection() &&
                                 rSh.IsSttPara() && rSh.IsEndPara() )
-                            eKeyState = KS_NumOff;
+                            eKeyState = KS_NumOff, eNextKeyState = KS_OutlineLvOff;
 
                         //RETURN fuer neuen Absatz mit AutoFormatierung
                         else if( pACfg && pACfg->IsAutoFmtByInput() &&
@@ -1934,7 +1935,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
                             if( pColl &&
                                 //0 <= pColl->GetOutlineLevel() && #i24560#
-                                MAXLEVEL - 1 > pColl->GetOutlineLevel() )
+                                //MAXLEVEL - 1 > pColl->GetOutlineLevel() )//#outline level,zhaojianwei
+                                pColl->IsAssignedToListLevelOfOutlineStyle()
+                                && MAXLEVEL-1 > pColl->GetAssignedOutlineStyleLevel() )//<-end,zhaojianwei
                                 eKeyState = KS_OutlineDown;
                         }
                     }
@@ -1984,8 +1987,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-                            if( pColl && 0 < pColl->GetOutlineLevel() &&
-                                MAXLEVEL - 1 >= pColl->GetOutlineLevel() )
+                            //if( pColl && 0 < pColl->GetOutlineLevel() &&  //#outline level,zhaojianwei
+                            //  MAXLEVEL - 1 >= pColl->GetOutlineLevel() )
+                            if( pColl &&
+                                pColl->IsAssignedToListLevelOfOutlineStyle() &&
+                                0 < pColl->GetAssignedOutlineStyleLevel())
                                 eKeyState = KS_OutlineUp;
                         }
                     }
@@ -2331,6 +2337,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_NumOff:
                 // Shellwechsel - also vorher aufzeichnen
                 rSh.DelNumRules();
+                eKeyState = eNextKeyState;
+                break;
+            case KS_OutlineLvOff: // delete autofmt outlinelevel later
                 break;
 
             case KS_NumDown:
@@ -3779,6 +3788,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                                 break;
                         }
             //#i6193#, change ui if mouse is over SwPostItField
+            // TODO: do the same thing for redlines SW_REDLINE
             SwRect aFldRect;
             SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
             if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, FALSE, &aFldRect ) )
@@ -4758,7 +4768,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         Menu* pMenu = 0;
-                        if( GetView().TryContextMenuInterception( *pROPopup, pMenu, aEvent ) )
+                        ::rtl::OUString sMenuName =
+                            ::rtl::OUString::createFromAscii( "private:resource/ReadonlyContextMenu");
+                        if( GetView().TryContextMenuInterception( *pROPopup, sMenuName, pMenu, aEvent ) )
                         {
                             if ( pMenu )
                             {
@@ -4929,8 +4941,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
                     if(pACorr &&
-                        ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
-                        ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh)))
+                        (( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
+                        ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
                     {
                         rSh.DelLeft();
                         rSh.AutoCorrect( *pACorr, aCh );
@@ -5054,7 +5066,55 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             bInputLanguageSwitched = true;
             SetUseInputLanguage( sal_True );
         break;
+        case COMMAND_SELECTIONCHANGE:
+        {
+            const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
+            rSh.HideCrsr();
+            rSh.GoStartSentence();
+            rSh.GetCrsr()->GetPoint()->nContent += sal::static_int_cast<sal_uInt16, ULONG>(pData->GetStart());
+            rSh.SetMark();
+            rSh.GetCrsr()->GetMark()->nContent += sal::static_int_cast<sal_uInt16, ULONG>( pData->GetEnd() - pData->GetStart() );
+            rSh.ShowCrsr();
+        }
+        break;
+        case COMMAND_PREPARERECONVERSION:
+        if( rSh.HasSelection() )
+        {
+            if ( rSh.IsMultiSelection() )
+            {
+                // Save the last selected area.
+                SwPaM *pCrsr = (SwPaM*)rSh.GetCrsr()->GetPrev();
+                xub_StrLen nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
+                ULONG nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
+                xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
+                ULONG nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
 
+                // ToDo: Deselect the text behind the first paragraph break,
+                //       if the last selected area ranges from one paragraph
+                //       to another.
+                if( nPosNodeIdx != nMarkNodeIdx )
+                break;
+
+                // Cancel all selection.
+                while( rSh._GetCrsr()->GetNext() != rSh._GetCrsr() )
+                delete rSh._GetCrsr()->GetNext();
+
+                // Restore the last selected area.
+                rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
+                rSh.GetCrsr()->GetPoint()->nNode = nPosNodeIdx;
+                rSh.SetMark();
+                rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
+                rSh.GetCrsr()->GetMark()->nNode = nMarkNodeIdx;
+                rSh.ShowCrsr();
+            }
+            else
+            {
+                // Deselect the text behind the first paragraph break.
+                rSh.NormalizePam( FALSE );
+                while( !rSh.IsSelOnePara() && rSh.MovePara( fnParaPrev, fnParaEnd ));
+            }
+        }
+        break;
 #ifdef DBG_UTIL
         default:
             ASSERT( !this, "unknown command." );
@@ -5576,4 +5636,63 @@ void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
         rBind.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
     }
     bUseInputLanguage = bNew;
+}
+
+/*-- 13.11.2008 10:18:17---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+XubString SwEditWin::GetSurroundingText() const
+{
+    String sReturn;
+    SwWrtShell& rSh = rView.GetWrtShell();
+    if( rSh.HasSelection() && !rSh.IsMultiSelection() && rSh.IsSelOnePara() )
+        rSh.GetSelectedText( sReturn );
+    else if( !rSh.HasSelection() )
+    {
+        SwPosition *pPos = rSh.GetCrsr()->GetPoint();
+        xub_StrLen nPos = pPos->nContent.GetIndex();
+
+        // get the sentence around the cursor
+        rSh.HideCrsr();
+        rSh.GoStartSentence();
+        rSh.SetMark();
+        rSh.GoEndSentence();
+        rSh.GetSelectedText( sReturn );
+
+        pPos->nContent = nPos;
+        rSh.ClearMark();
+        rSh.HideCrsr();
+    }
+
+    return sReturn;
+}
+/*-- 13.11.2008 10:18:17---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Selection SwEditWin::GetSurroundingTextSelection() const
+{
+    SwWrtShell& rSh = rView.GetWrtShell();
+    if( rSh.HasSelection() )
+    {
+        String sReturn;
+        rSh.GetSelectedText( sReturn );
+        return Selection( 0, sReturn.Len() );
+    }
+    else
+    {
+        // Return the position of the visible cursor in the sentence
+        // around the visible cursor.
+        SwPosition *pPos = rSh.GetCrsr()->GetPoint();
+        xub_StrLen nPos = pPos->nContent.GetIndex();
+
+        rSh.HideCrsr();
+        rSh.GoStartSentence();
+        xub_StrLen nStartPos = rSh.GetCrsr()->GetPoint()->nContent.GetIndex();
+
+        pPos->nContent = nPos;
+        rSh.ClearMark();
+        rSh.ShowCrsr();
+
+        return Selection( nPos - nStartPos, nPos - nStartPos );
+    }
 }

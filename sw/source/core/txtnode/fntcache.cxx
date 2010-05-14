@@ -175,8 +175,9 @@ SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
     nPrtAscent = USHRT_MAX;
     nPrtHeight = USHRT_MAX;
     bPaintBlank = ( UNDERLINE_NONE != aFont.GetUnderline()
-                  || STRIKEOUT_NONE != aFont.GetStrikeout() )
-                  && !aFont.IsWordLineMode();
+                 || UNDERLINE_NONE != aFont.GetOverline()
+                 || STRIKEOUT_NONE != aFont.GetStrikeout() )
+                 && !aFont.IsWordLineMode();
 }
 
 SwFntObj::~SwFntObj()
@@ -1512,10 +1513,24 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     }
                 }
 
+                // Kashida Justification
+                if ( SW_CTL == nActual && nSpaceAdd )
+                {
+                    if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+                    {
+                        if ( pSI && pSI->CountKashida() &&
+                            pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
+                                                 rInf.GetLen(), nSpaceAdd ) != STRING_LEN )
+                        {
+                            bSpecialJust = sal_True;
+                            nSpaceAdd = 0;
+                        }
+                    }
+                }
+
                 // Thai Justification
                 if ( SW_CTL == nActual && nSpaceAdd )
                 {
-
                     LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
 
                     if ( LANGUAGE_THAI == aLang )
@@ -1528,21 +1543,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                    rInf.GetSpace() );
 
                         // adding space to blanks is already done
-                        bSpecialJust = sal_True;
-                        nSpaceAdd = 0;
-                    }
-                }
-
-                // Kashida Justification
-                if ( SW_CTL == nActual && nSpaceAdd )
-                {
-                    if ( SwScriptInfo::IsArabicLanguage( rInf.GetFont()->
-                                                         GetLanguage( SW_CTL ) ) )
-                    {
-                        if ( pSI && pSI->CountKashida() )
-                            pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
-                                                rInf.GetLen(), nSpaceAdd );
-
                         bSpecialJust = sal_True;
                         nSpaceAdd = 0;
                     }
@@ -1698,6 +1698,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Modify Printer and ScreenArrays for special justifications
         //
         long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+        bool bNoHalfSpace = false;
 
         if ( rInf.GetFont() && rInf.GetLen() )
         {
@@ -1737,6 +1738,20 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
+            // Kashida Justification
+            if ( SW_CTL == nActual && nSpaceAdd )
+            {
+                if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+                {
+                    if ( pSI && pSI->CountKashida() &&
+                         pSI->KashidaJustify( pKernArray, pScrArray, rInf.GetIdx(),
+                                              rInf.GetLen(), nSpaceAdd ) != STRING_LEN )
+                        nSpaceAdd = 0;
+                    else
+                        bNoHalfSpace = true;
+                }
+            }
+
             // Thai Justification
             if ( SW_CTL == nActual && nSpaceAdd )
             {
@@ -1751,19 +1766,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                rInf.GetSpace() );
 
                     // adding space to blanks is already done
-                    nSpaceAdd = 0;
-                }
-            }
-
-            // Kashida Justification
-            if ( SW_CTL == nActual && nSpaceAdd )
-            {
-                if ( SwScriptInfo::IsArabicLanguage( rInf.GetFont()->
-                                                        GetLanguage( SW_CTL ) ) )
-                {
-                    if ( pSI && pSI->CountKashida() )
-                        pSI->KashidaJustify( pKernArray, pScrArray, rInf.GetIdx(),
-                                             rInf.GetLen(), nSpaceAdd );
                     nSpaceAdd = 0;
                 }
             }
@@ -1843,8 +1845,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // vor bzw. hinter den kompletten Zwischenraum gesetzt werden,
             // sonst wuerde das Durch-/Unterstreichen Luecken aufweisen.
             long nSpaceSum = 0;
-            long nHalfSpace = pPrtFont->IsWordLineMode() ? 0 : nSpaceAdd / 2;
-            long nOtherHalf = nSpaceAdd - nHalfSpace;
+            // in word line mode and for Arabic, we disable the half space trick:
+            const long nHalfSpace = pPrtFont->IsWordLineMode() || bNoHalfSpace ? 0 : nSpaceAdd / 2;
+            const long nOtherHalf = nSpaceAdd - nHalfSpace;
             if ( nSpaceAdd && ( cChPrev == CH_BLANK ) )
                 nSpaceSum = nHalfSpace;
             for ( xub_StrLen i=1; i<nCnt; ++i,nKernSum += rInf.GetKern() )
@@ -1903,6 +1906,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
                 cChPrev = nCh;
                 pKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
+                // In word line mode and for Arabic, we disabled the half space trick. If a portion
+                // ends with a blank, the full nSpaceAdd value has been added to the character in
+                // front of the blank. This leads to painting artifacts, therefore we remove the
+                // nSpaceAdd value again:
+                if ( (bNoHalfSpace || pPrtFont->IsWordLineMode()) && i+1 == nCnt && nCh == CH_BLANK )
+                    pKernArray[i-1] = pKernArray[i-1] - nSpaceAdd;
             }
 
             // the layout engine requires the total width of the output
@@ -2292,6 +2301,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
 
+    // be sure to have the correct layout mode at the printer
     if ( pPrinter )
     {
         pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
@@ -2337,6 +2347,18 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
         }
 
+        // Kashida Justification
+        if ( SW_CTL == nActual && rInf.GetSpace() )
+        {
+            if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+            {
+                if ( pSI && pSI->CountKashida() &&
+                    pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
+                                         nSpaceAdd ) != STRING_LEN )
+                    nSpaceAdd = 0;
+            }
+        }
+
         // Thai Justification
         if ( SW_CTL == nActual && nSpaceAdd )
         {
@@ -2350,20 +2372,6 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
                                            rInf.GetSpace() );
 
                 // adding space to blanks is already done
-                nSpaceAdd = 0;
-            }
-        }
-
-        // Kashida Justification
-        if ( SW_CTL == nActual && rInf.GetSpace() )
-        {
-            if ( SwScriptInfo::IsArabicLanguage( rInf.GetFont()->
-                                                    GetLanguage( SW_CTL ) ) )
-            {
-                if ( pSI && pSI->CountKashida() )
-                    pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
-                                         nSpaceAdd );
-
                 nSpaceAdd = 0;
             }
         }
@@ -2808,27 +2816,28 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
     sal_Bool bPrt = GetShell() && ! GetShell()->GetWin();
     ColorData nNewColor = COL_BLACK;
     sal_Bool bChgFntColor = sal_False;
-    sal_Bool bChgUnderColor = sal_False;
+    sal_Bool bChgLineColor = sal_False;
 
     if( bPrt && GetShell() && GetShell()->GetViewOptions()->IsBlackFont() )
     {
         if ( COL_BLACK != rFnt.GetColor().GetColor() )
             bChgFntColor = sal_True;
 
-        if ( COL_BLACK != GetOut().GetTextLineColor().GetColor() )
-            bChgUnderColor = sal_True;
+        if ( (COL_BLACK != GetOut().GetTextLineColor().GetColor()) ||
+             (COL_BLACK != GetOut().GetOverlineColor().GetColor()) )
+            bChgLineColor = sal_True;
     }
     else
     {
         // FontColor has to be changed if:
         // 1. FontColor = AUTO or 2. IsAlwaysAutoColor is set
-        // UnderLineColor has to be changed if:
+        // LineColor has to be changed if:
         // 1. IsAlwaysAutoColor is set
 
-        bChgUnderColor = ! bPrt && GetShell() &&
+        bChgLineColor = ! bPrt && GetShell() &&
                 GetShell()->GetAccessibilityOptions()->IsAlwaysAutoColor();
 
-        bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgUnderColor;
+        bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgLineColor;
 
         if ( bChgFntColor )
         {
@@ -2886,7 +2895,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
         }
     }
 
-    if ( bChgFntColor || bChgUnderColor )
+    if ( bChgFntColor || bChgLineColor )
     {
         Color aNewColor( nNewColor );
 
@@ -2906,13 +2915,15 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
             }
         }
 
-        // the underline color has to be set separately
-        if ( bChgUnderColor )
+        // the underline and overline colors have to be set separately
+        if ( bChgLineColor )
         {
             // get current font color or color set at output device
             aNewColor = pFont ? pFont->GetColor() : GetOut().GetFont().GetColor();
             if ( aNewColor != GetOut().GetTextLineColor() )
                 GetOut().SetTextLineColor( aNewColor );
+            if ( aNewColor != GetOut().GetOverlineColor() )
+                GetOut().SetOverlineColor( aNewColor );
         }
 
         return sal_True;

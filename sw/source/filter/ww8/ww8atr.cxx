@@ -781,9 +781,11 @@ bool SwWW8Writer::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
     {
         if (const SwFmt *pParent = rFmt.DerivedFrom())
         {
-            BYTE nLvl = ((const SwTxtFmtColl*)pParent)->GetOutlineLevel();
-            if (MAXLEVEL > nLvl)
-            {
+            //BYTE nLvl = ((const SwTxtFmtColl*)pParent)->GetOutlineLevel();    //#outline level,removed by zhaojianwei
+            //if (MAXLEVEL > nLvl)
+            //{                                                                 //<-end, ->add by zhaojianwei
+            if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
+            {                                                                   //<-end,zhaojianwei
                 if (bWrtWW8)
                 {
                     SwWW8Writer::InsUInt16(*pO, 0x2640);
@@ -815,14 +817,18 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
     case RES_TXTFMTCOLL:
         if( bPapFmt )
         {
-            BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();
-            if (MAXLEVEL > nLvl)
+            //BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();    //#outline level,removed by zhaojianwei
+            //if (MAXLEVEL > nLvl)
+            //{                                                             //<-end, ->add by zhaojianwei
+            if (((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
             {
+                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();  //<-end,zhaojianwei
+
                 //if outline numbered
                 // if Write StyleDefinition then write the OutlineRule
-                const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get(nLvl);
+                const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get(static_cast<USHORT>(nLvl));
                 if (bStyDef)
-                    ExportOutlineNumbering(nLvl, rNFmt, rFmt);
+                    ExportOutlineNumbering(static_cast<BYTE>(nLvl), rNFmt, rFmt);
 
                 // --> OD 2008-06-03 #i86652#
 //                if (rNFmt.GetAbsLSpace())
@@ -1206,7 +1212,7 @@ static Writer& OutWW8_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
                             //  6 = thick,   7 = dash,       8 = dot(not used)
                             //  9 = dotdash 10 = dotdotdash, 11 = wave
     BYTE b = 0;
-    switch (rAttr.GetUnderline())
+    switch (rAttr.GetLineStyle())
     {
         case UNDERLINE_SINGLE:
             b = ( bWord ) ? 2 : 1;
@@ -1261,7 +1267,7 @@ static Writer& OutWW8_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
             b = 0;
             break;
         default:
-            ASSERT(rAttr.GetUnderline() == UNDERLINE_NONE, "Unhandled underline type");
+            ASSERT(rAttr.GetLineStyle() == UNDERLINE_NONE, "Unhandled underline type");
             break;
     }
 
@@ -1709,20 +1715,29 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c,
         rStrm.Seek( nCurrPos );
 
         // write attributes of hyperlink character 0x01
-        SwWW8Writer::InsUInt16( aItems, 0x0802 );
+        SwWW8Writer::InsUInt16( aItems, 0x0802 ); //sprmCFFldVanish
         aItems.Insert( (BYTE)0x81, aItems.Count() );
         SwWW8Writer::InsUInt16( aItems, 0x6a03 );
         SwWW8Writer::InsUInt32( aItems, nLinkPosInDataStrm );
         SwWW8Writer::InsUInt16( aItems, 0x0806 );
         aItems.Insert( (BYTE)0x01, aItems.Count() );
     }
-    // <--
-    // fSpec-Attribut true
+
+    //Technically we should probably Remove all attribs
+    //here for the 0x13, 0x14, 0x15, but our import
+    //is slightly lacking
+    //aItems.Remove(0, aItems.Count());
+    // fSpec-Attribute true
     if( rWrt.bWrtWW8 )
-        SwWW8Writer::InsUInt16( aItems, 0x855 );
+    {
+        SwWW8Writer::InsUInt16( aItems, 0x855 ); //sprmCFSpec
+        aItems.Insert( 1, aItems.Count() );
+    }
     else
-        aItems.Insert( 117, aItems.Count() );
-    aItems.Insert( 1, aItems.Count() );
+    {
+        aItems.Insert( 117, aItems.Count() ); //sprmCFSpec
+        aItems.Insert( 1, aItems.Count() );
+    }
 
     rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.Count(),
         aItems.GetData());
@@ -1738,11 +1753,9 @@ String lcl_GetExpandedField(const SwField &rFld)
     return sRet;
 }
 
-void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
-    const String& rFldCmd, BYTE nMode)
+WW8_WrPlcFld* SwWW8Writer::CurrentFieldPlc() const
 {
-    bool bUnicode = IsUnicode();
-    WW8_WrPlcFld* pFldP;
+    WW8_WrPlcFld* pFldP = NULL;
     switch (nTxtTyp)
     {
         case TXT_MAINTEXT:
@@ -1765,8 +1778,15 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
             break;
         default:
             ASSERT( !this, "was ist das fuer ein SubDoc-Type?" );
-            return;
     }
+    return pFldP;
+}
+
+void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
+    const String& rFldCmd, BYTE nMode)
+{
+    bool bUnicode = IsUnicode();
+    WW8_WrPlcFld* pFldP = CurrentFieldPlc();
 
     // --> OD 2008-08-14 #158418#
     const bool bIncludeEmptyPicLocation = ( eFldType == ww::ePAGE );
@@ -1839,6 +1859,7 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     {
         static const BYTE aFld14[2] = { 0x14, 0xff };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
+        pFldP->ResultAdded();
         // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x14, 0, bIncludeEmptyPicLocation );
         // <--
@@ -1868,16 +1889,25 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
                     BYTE aArr[12];
                     BYTE *pArr = aArr;
 
-                    Set_UInt16(pArr, 0x6a03);
-                    Set_UInt32(pArr, 0x0);
-
                     if( bWrtWW8 )
-                        Set_UInt16( pArr, 0x855 );
+                    {
+                        Set_UInt16(pArr, 0x6a03); //sprmCPicLocation
+                        Set_UInt32(pArr, 0x0);
+
+                        Set_UInt16( pArr, 0x855 );//sprmCFSpec
+                        Set_UInt8( pArr, 1 );
+
+                        Set_UInt16( pArr, 0x875 );//sprmCFNoProof
+                        Set_UInt8(pArr, 1);
+                    }
                     else
-                        Set_UInt8( pArr, 117 );
-                    Set_UInt8( pArr, 1 );
-                    Set_UInt16( pArr, 0x875 );
-                    Set_UInt8(pArr, 1);
+                    {
+                        Set_UInt8(pArr, 0x68); //sprmCPicLocation
+                        Set_UInt32(pArr, 0x0);
+
+                        Set_UInt8( pArr, 117 ); //sprmCFSpec
+                        Set_UInt8( pArr, 1 );
+                    }
                     pChpPlc->AppendFkpEntry( pStrm->Tell(), static_cast< short >(pArr - aArr), aArr );
                 }
             }
@@ -2111,35 +2141,42 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 
                 if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                 {
-                    // Search over all the outline styles used and figure out
-                    // what is the minimum outline level we need to display
-                    // (ignoring headline styles 1-9)
-                    BYTE nLvl = 0, nMinLvl = 0;
-                    const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-                    const SwTxtFmtColl* pColl;
-                    for( n = rColls.Count(); n; )
+                    // --> OD 2009-02-27 #i99641#
+                    // The following code does not determine the minimum outline
+                    // level for the TOC
+//                    // Search over all the outline styles used and figure out
+//                    // what is the minimum outline level we need to display
+//                    // (ignoring headline styles 1-9)
+//                    //BYTE nLvl = 0, nMinLvl = 0; //#outline level, removed by zhaojianwei
+//                    int nLvl = 0, nMinLvl = 0;      //<-end,add by zhaojianwei
+//                    const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+//                    const SwTxtFmtColl* pColl;
+//                    for( n = rColls.Count(); n; )
+//                    {
+//                        pColl = rColls[ --n ];
+//                        //nLvl = pColl->GetOutlineLevel();    //#outline level,zhaojianwei
+//                        //USHORT nPoolId = pColl->GetPoolFmtId();
+//                        //if( MAXLEVEL > nLvl && nMinLvl < nLvl &&        //<-end, ->add by zhaojianwei
+//                        USHORT nPoolId = pColl->GetPoolFmtId();
+//                        if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
+//                          nMinLvl < (nLvl = pColl->GetAssignedOutlineStyleLevel()) && //<-end,zhaojianwei
+//                            ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
+//                              RES_POOLCOLL_HEADLINE9 < nPoolId ))
+//                        {
+//                            // If we are using the default heading styles then use nTOXLvl
+//                            if(!nMinLvl)
+//                                nLvl = nTOXLvl;
+//                            else
+//                                nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
+//                            nMinLvl = nLvl;
+//                        }
+//                    }
+                    const int nMinLvl = nTOXLvl;
+
+//                    if( nLvl )
+                    if ( nMinLvl > 0 )
                     {
-                        pColl = rColls[ --n ];
-                        nLvl = pColl->GetOutlineLevel();
-                        USHORT nPoolId = pColl->GetPoolFmtId();
-                        if( MAXLEVEL > nLvl && nMinLvl < nLvl &&
-                            ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
-                              RES_POOLCOLL_HEADLINE9 < nPoolId ))
-                        {
-
-
-                    // If we are using the default heading styles then use nTOXLvl
-                    if(!nMinLvl)
-                        nLvl = static_cast< BYTE >(nTOXLvl);
-                    else
-                        nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
-                            nMinLvl = nLvl;
-                        }
-                    }
-
-                    if( nLvl )
-                    {
-                        USHORT nTmpLvl = nLvl + 1;
+                        int nTmpLvl = nMinLvl;
                         if (nTmpLvl > WW8ListManager::nMaxLevel)
                             nTmpLvl = WW8ListManager::nMaxLevel;
 
@@ -2148,27 +2185,41 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                         sStr.AppendAscii(sEntryEnd);
 
                     }
+                    // <--
 
-                    if( nLvl != nMinLvl )
-                    {
-                        // collect this templates into the \t otion
-                        for( n = rColls.Count(); n;)
-                        {
-                            pColl = rColls[--n];
-                            nLvl =  pColl->GetOutlineLevel();
-                            if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
-                            {
-                                if( sTOption.Len() )
-                                    sTOption += ';';
-                                (( sTOption += pColl->GetName() ) += ';' )
-                                        += String::CreateFromInt32( nLvl + 1 );
-                            }
-                        }
-                    }
+                    // --> OD 2009-02-27 #i99641#
+                    // not needed to additional export paragraph style with
+                    // an outline level to the /t option
+//                    if( nMinLvl > 0 )
+//                    // <--
+//                    {
+//                        // collect this templates into the \t otion
+//                        const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+//                        const SwTxtFmtColl* pColl;
+//                        int nLvl = 0;
+//                        for( n = rColls.Count(); n;)
+//                        {
+//                            pColl = rColls[--n];
+//                            //nLvl =  pColl->GetOutlineLevel();         //#outline level, removed by zhaojianwei
+//                            //if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
+//                            //{                                         //<-end, ->add by zhaojianwei
+//                            if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
+//                                nMinLvl <= ( nLvl = pColl->GetAssignedOutlineStyleLevel()))
+//                            {                                           //<-end,zhaojianwei
+//                                if( sTOption.Len() )
+//                                    sTOption += ';';
+//                                (( sTOption += pColl->GetName() ) += ';' )
+//                                        += String::CreateFromInt32( nLvl + 1 );
+//                            }
+//                        }
+//                    }
                 }
 
                 if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
-                    for( n = 0; n < nTOXLvl; ++n )
+                    // --> OD 2009-02-27 #i99641#
+                    // Consider additional styles regardless of TOX-outlinelevel
+                    for( n = 0; n < MAXLEVEL; ++n )
+                    // <--
                     {
                         const String& rStyles = pTOX->GetStyleNames( n );
                         if( rStyles.Len() )
@@ -2345,9 +2396,9 @@ void SwWW8Writer::WritePostItBegin( WW8Bytes* pOut )
 
     // sprmCFSpec true
     if( bWrtWW8 )
-        Set_UInt16( pArr, 0x855 );
+        Set_UInt16( pArr, 0x855 ); //sprmCFSpec
     else
-        Set_UInt8( pArr, 117 );
+        Set_UInt8( pArr, 117 ); //sprmCFSpec
     Set_UInt8( pArr, 1 );
 
     pChpPlc->AppendFkpEntry( Strm().Tell() );
@@ -2549,28 +2600,51 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                     eFld = ww::eREVNUM;
                     break;
                 case DI_CREATE:
-                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_AUTHOR))
+                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
                         eFld = ww::eAUTHOR;
                     else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::eCREATEDATE;
                     break;
 
                 case DI_CHANGE:
-                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_AUTHOR))
+                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
                         eFld = ww::eLASTSAVEDBY;
                     else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::eSAVEDATE;
                     break;
 
                 case DI_PRINT:
-                    if (DI_SUB_AUTHOR != (nSubType & DI_SUB_AUTHOR) &&
+                    if (DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK) &&
                         rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::ePRINTDATE;
                     break;
                 case DI_EDIT:
-                    if( DI_SUB_AUTHOR != (nSubType & DI_SUB_AUTHOR ) &&
+                    if( DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK ) &&
                         rWW8Wrt.GetNumberFmt( *pFld, sStr ))
                         eFld = ww::eSAVEDATE;
+                    break;
+                case DI_CUSTOM:
+                    eFld = ww::eDOCPROPERTY;
+                    {
+                        static String sQuotes('\"');
+                        const SwDocInfoField * pDocInfoField =
+                        dynamic_cast<const SwDocInfoField *> (pFld);
+
+                        if (pDocInfoField != NULL)
+                        {
+                            String sFieldname = pDocInfoField->GetCntnt(TRUE);
+                            xub_StrLen nIndex = sFieldname.Search(':');
+
+                            if (nIndex != sFieldname.Len())
+                                sFieldname = sFieldname.Copy(nIndex + 1);
+
+                            sStr.Insert(sQuotes);
+                            sStr.Insert(sFieldname);
+                            sStr.Insert(sQuotes);
+                        }
+                    }
+                    break;
+                default:
                     break;
             }
 
@@ -3260,8 +3334,10 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
                 else if( rWW8Wrt.pOutFmtNode->ISA( SwTxtFmtColl ))
                 {
                     const SwTxtFmtColl* pC = (SwTxtFmtColl*)rWW8Wrt.pOutFmtNode;
-                    if( pC && MAXLEVEL > pC->GetOutlineLevel() )
-                        nLvl = pC->GetOutlineLevel();
+                    //if( pC && MAXLEVEL > pC->GetOutlineLevel() )  //#outline level,removed by zhaojianwei
+                    //    nLvl = pC->GetOutlineLevel();             //<-end, ->add by zhaojianwei
+                    if( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
+                        nLvl = static_cast<BYTE>(pC->GetAssignedOutlineStyleLevel()); //<-end,zhaojianwei
                 }
             }
         }
@@ -3447,16 +3523,6 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
     }
 #endif
     return nRetPos;
-}
-
-void SwWW8Writer::WriteCellEnd()
-{
-    //Technically in a word document this is a different value for a
-    //cell without a graphic. But it doesn't seem to make a difference
-    ULONG nOffset = ReplaceCr( (BYTE)0x07 );
-    ASSERT(nOffset, "Eek!, no para end mark to replace with row end mark");
-    if (nOffset)
-        pMagicTable->Append(Fc2Cp(nOffset),0x122);
 }
 
 void SwWW8Writer::WriteRowEnd(sal_uInt32 nDepth)
@@ -3748,8 +3814,6 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
         // sprmPDxaLeft
         if( rWW8Wrt.bWrtWW8 )
         {
-            rWW8Wrt.InsUInt16( 0x840F );
-            rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
             rWW8Wrt.InsUInt16( 0x845E );        //asian version ?
             rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
 
@@ -3762,8 +3826,6 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
         // sprmPDxaRight
         if( rWW8Wrt.bWrtWW8 )
         {
-            rWW8Wrt.InsUInt16( 0x840E );
-            rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
             rWW8Wrt.InsUInt16( 0x845D );        //asian version ?
             rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
         }
@@ -3775,8 +3837,6 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
         // sprmPDxaLeft1
         if( rWW8Wrt.bWrtWW8 )
         {
-            rWW8Wrt.InsUInt16( 0x8411 );
-            rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
             rWW8Wrt.InsUInt16( 0x8460 );        //asian version ?
             rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
         }
@@ -4969,6 +5029,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_DUMMY4 */             OutWW8_ScaleWidth,
 /* RES_CHRATR_RELIEF*/              OutWW8_Relief,
 /* RES_CHRATR_HIDDEN */             OutWW8_SvxCharHidden,
+/* RES_CHRATR_OVERLINE */           0,
+/* RES_CHRATR_DUMMY1 */             0,
+/* RES_CHRATR_DUMMY2 */             0,
 
 /* RES_TXTATR_DUMMY4 */             0,
 /* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,
@@ -5005,6 +5068,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_PARATR_VERTALIGN */          OutWW8_SvxParaVertAlignItem,
 /* RES_PARATR_SNAPTOGRID*/          OutWW8_SvxParaGridItem,
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+/* RES_PARATR_OUTLINELEVEL */       0, // new - outlinelevel
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new

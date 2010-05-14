@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PostItMgr.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.84.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +35,14 @@
 
 #include <list>
 #include <vector>
-
+#include <svx/outlobj.hxx>
+#include <tools/string.hxx>
 #include <tools/link.hxx>
+#include <tools/debug.hxx>
 #include <swrect.hxx>
+#include <unotools/configitem.hxx>
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 class SwWrtShell;
 class SwDoc;
@@ -47,11 +52,13 @@ class SwFmtFld;
 class SwField;
 class SfxBroadcaster;
 class SfxHint;
-class SwPostIt;
 class SwEditWin;
 class Color;
 class SvxSearchItem;
 class SvxLanguageItem;
+class SwPostIt;
+class SwMarginWin;
+class SwMarginItem;
 
 #define SORT_POS    1
 #define SORT_AUTHOR 2
@@ -60,9 +67,12 @@ class SvxLanguageItem;
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
 
-struct SwPostItItem;
+typedef std::list<SwMarginItem*> SwMarginItem_list;
+typedef std::list<SwMarginItem*>::iterator SwMarginItem_iterator;
 
-typedef std::list<SwPostItItem*> SwPostItItem_list;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
 
 struct SwPostItPageItem
 {
@@ -70,10 +80,10 @@ struct SwPostItPageItem
     bool bMarginSide;
     long lOffset;
     SwRect mPageRect;
-    SwPostItItem_list* mList;
+    SwMarginItem_list* mList;
     SwPostItPageItem(): bScrollbar(false),lOffset(0)
     {
-        mList = new SwPostItItem_list;
+        mList = new SwMarginItem_list;
     }
     ~SwPostItPageItem()
     {
@@ -93,44 +103,79 @@ struct FieldShadowState
     }
 };
 
+class SwNoteProps: public utl::ConfigItem
+{
+    private:
+        bool bIsShowAnkor;
+    public:
+            SwNoteProps() : ConfigItem(::rtl::OUString::createFromAscii("Office.Writer/Notes")), bIsShowAnkor(false)
+        {
+            const Sequence<OUString>& rNames = GetPropertyNames();
+                   Sequence<Any> aValues = GetProperties(rNames);
+                   const Any* pValues = aValues.getConstArray();
+               DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+                if (aValues.getLength())
+                pValues[0]>>=bIsShowAnkor;
+        }
+
+        bool IsShowAnkor()
+        {
+            return bIsShowAnkor;
+        }
+            Sequence<OUString>& GetPropertyNames()
+            {
+            static Sequence<OUString> aNames;
+                 if(!aNames.getLength())
+                 {
+                         static const char* aPropNames[] =
+                         {
+                            "ShowAnkor"
+                           };
+                         const int nCount = sizeof(aPropNames)/sizeof(const char*);
+                         aNames.realloc(nCount);
+                         OUString* pNames = aNames.getArray();
+                     for(int i = 0; i < nCount; i++)
+                             pNames[i] = OUString::createFromAscii(aPropNames[i]);
+                 }
+                 return aNames;
+            }
+};
+
 class SwPostItMgr: public SfxListener
 {
     private:
         SwView*                         mpView;
         SwWrtShell*                     mpWrtShell;
         SwEditWin*                      mpEditWin;
-        std::list< SwPostItItem*>       mvPostItFlds;
+        std::list< SwMarginItem*>       mvPostItFlds;
         std::vector<SwPostItPageItem*>  mPages;
         ULONG                           mnEventId;
         bool                            mbWaitingForCalcRects;
-        SwPostIt*                       mpActivePostIt;
+        SwMarginWin*                    mpActivePostIt;
         bool                            mbLayout;
         long                            mbLayoutHeight;
         long                            mbLayouting;
         bool                            mbReadOnly;
         bool                            mbDeleteNote;
         FieldShadowState                mShadowState;
+        OutlinerParaObject*             mpAnswer;
+        bool                        mpIsShowAnkor;
 
-        typedef std::list<SwPostItItem*>::iterator  SwPostItItem_iterator;
-        typedef std::list<SwPostIt*>::iterator      SwPostIt_iterator;
+        typedef std::list<SwMarginWin*>::iterator   SwMarginWin_iterator;
 
         void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
-        void            RemovePostIts();
+        //void          AddRedlineComments(bool bCheckExistance, bool bFocus);
+        void            RemoveMarginWin();
         void            PreparePageContainer();
         void            Scroll(const long lScroll,const unsigned long aPage );
-        void            AutoScroll(const SwPostIt* pPostIt,const unsigned long aPage );
+        void            AutoScroll(const SwMarginWin* pPostIt,const unsigned long aPage );
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
-        bool            LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Rectangle aBorder,long lNeededHeight);
+        bool            LayoutByPage(std::list<SwMarginWin*> &aVisiblePostItList,const Rectangle aBorder,long lNeededHeight);
         void            CheckForRemovedPostIts();
-        bool            ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
-        bool            BorderOverPageBorder(unsigned long aPage) const;
-        bool            HasScrollbars() const;
-
-        void            SetColors(SwPostIt* pPostIt, SwPostItField* pFld);
-
-        Color           GetColorDark(sal_uInt16 aAuthorIndex);
-        Color           GetColorLight(sal_uInt16 aAuthorIndex);
-        Color           GetColorAnkor(sal_uInt16 aAuthorIndex);
+            bool                ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
+            bool                BorderOverPageBorder(unsigned long aPage) const;
+            bool                HasScrollbars() const;
+        void            Focus(SfxBroadcaster& rBC);
 
         sal_Int32       GetInitialAnchorDistance() const;
         sal_Int32       GetScrollSize() const;
@@ -144,22 +189,23 @@ class SwPostItMgr: public SfxListener
             SwPostItMgr(SwView* aDoc);
             ~SwPostItMgr();
 
-            typedef std::list< SwPostItItem* >::const_iterator const_iterator;
+            typedef std::list< SwMarginItem* >::const_iterator const_iterator;
             const_iterator begin()  const { return mvPostItFlds.begin(); }
             const_iterator end()    const { return mvPostItFlds.end();  }
 
-            void InsertFld( SwFmtFld* aField, bool bCheckExistance, bool bFocus);
-            void RemoveFld( SfxBroadcaster* pFld );
+            void InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
+            void RemoveItem( SfxBroadcaster* pBroadcast );
             void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
             void LayoutPostIts();
             bool CalcRects();
 
-            void MakeVisible(const SwPostIt* pPostIt,long aPage = -1);
+            void MakeVisible(const SwMarginWin* pPostIt,long aPage = -1);
 
             bool ShowScrollbar(const unsigned long aPage) const;
             bool HasNotes() const ;
             bool ShowNotes() const;
+        bool IsShowAnkor() { return mpIsShowAnkor;}
             unsigned long GetSidebarWidth(bool bPx = false) const;
             unsigned long GetSidebarBorderWidth(bool bPx = false) const;
             unsigned long GetNoteWidth();
@@ -187,24 +233,36 @@ class SwPostItMgr: public SfxListener
             bool IsHit(const Point &aPointPixel);
             Color GetArrowColor(USHORT aDirection,unsigned long aPage) const;
 
-            SwPostIt* GetNextPostIt(USHORT aDirection, SwPostIt* aPostIt);
+            SwMarginWin* GetNextPostIt(USHORT aDirection, SwMarginWin* aPostIt);
             long GetNextBorder();
-            SwPostIt* GetActivePostIt() { return mpActivePostIt; }
-            void      SetActivePostIt( SwPostIt* p);
+            SwMarginWin* GetActivePostIt() { return mpActivePostIt; }
+            void      SetActivePostIt( SwMarginWin* p);
             sal_Int32 GetMinimumSizeWithMeta() const;
             sal_Int32 GetSidebarScrollerHeight() const;
 
-            SwFmtFld* GetFmtFld(SwPostIt* mpPostIt) const;
-            SwPostIt* GetPostIt(const SwFmtFld* pFld) const;
+            SwMarginWin* GetPostIt(const SfxBroadcaster* pBroadcaster) const;
+            SwMarginWin* GetPostIt(SfxBroadcaster* pBroadcaster) const;
             SwPostIt* GetPostIt(const SwPostItField* pFld) const;
-            SwPostIt* GetPostIt(SwFmtFld* pFld) const;
             SwPostIt* GetPostIt(SwPostItField* pFld) const;
 
             void SetShadowState(const SwPostItField* pFld,bool bCursor = true);
 
             void SetSpellChecking();
 
-            bool ShowPreview(const SwField* pFld,SwFmtFld*& pFmtFld) const;
+            Color           GetColorDark(sal_uInt16 aAuthorIndex);
+            Color           GetColorLight(sal_uInt16 aAuthorIndex);
+            Color           GetColorAnkor(sal_uInt16 aAuthorIndex);
+
+            bool                ShowPreview(const SwField* pFld,SwFmtFld*& pFmtFld) const;
+
+            void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
+            OutlinerParaObject* IsAnswer() {return mpAnswer;}
+            void CheckMetaText();
+            void StartSpelling();
+
+            sal_uInt16 Replace(SvxSearchItem* pItem);
+            sal_uInt16 SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
+            sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
 };
 
 #endif

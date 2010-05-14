@@ -53,6 +53,9 @@
 #include <fmtline.hxx>
 #include <numpara.hxx>
 #include <numpara.hrc>
+// --> OD 2008-04-14 #outlinelevel#
+#include <app.hrc>
+// <--
 
 // Globals ******************************************************************
 
@@ -66,6 +69,9 @@ static USHORT __FAR_DATA aPageRg[] = {
 SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                                                 const SfxItemSet& rAttr ) :
     SfxTabPage(pParent, SW_RES(TP_NUMPARA), rAttr),
+    aOutlineStartFL         ( this, SW_RES( FL_OUTLINE_START )),
+    aOutlineLvFT            ( this, SW_RES( FT_OUTLINE_LEVEL )),
+    aOutlineLvLB            ( this, SW_RES( LB_OUTLINE_LEVEL )),
     aNumberStyleFT          ( this, SW_RES( FT_NUMBER_STYLE ) ),
     aNumberStyleLB          ( this, SW_RES( LB_NUMBER_STYLE ) ),
     aNewStartFL             ( this, SW_RES( FL_NEW_START ) ),
@@ -77,6 +83,9 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
     aRestartParaCountCB     ( this, SW_RES( CB_RESTART_PARACOUNT ) ),
     aRestartFT              ( this, SW_RES( FT_RESTART_NO        ) ),
     aRestartNF              ( this, SW_RES( NF_RESTART_PARA      ) ),
+    // --> OD 2008-04-14 #outlinelevel#
+    msOutlineNumbering( SW_RES( STR_OUTLINE_NUMBERING ) ),
+    // <--
     bModified(FALSE),
     bCurNumrule(FALSE)
 {
@@ -135,6 +144,18 @@ USHORT* SwParagraphNumTabPage::GetRanges()
 --------------------------------------------------*/
 BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
+    //<-#outline level, added by zhaojianwei
+    if( aOutlineLvLB.GetSelectEntryPos() != aOutlineLvLB.GetSavedValue())
+    {
+        USHORT aOutlineLv = aOutlineLvLB.GetSelectEntryPos();
+        const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
+        SfxUInt16Item* pOutlineLv = (SfxUInt16Item*)pOldOutlineLv->Clone();
+        pOutlineLv->SetValue( aOutlineLv );
+        rSet.Put(*pOutlineLv);
+        delete pOutlineLv;
+        bModified = TRUE;
+    }
+    //<-end
     if( aNumberStyleLB.GetSelectEntryPos() != aNumberStyleLB.GetSavedValue())
     {
         String aStyle;
@@ -178,16 +199,41 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 --------------------------------------------------*/
 void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 {
-    SfxItemState eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
+    BOOL bHasNumberStyle = FALSE;
+
+    SfxItemState eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
+
+    sal_Int16 nOutlineLv;
+    if( eItemState >= SFX_ITEM_AVAILABLE )
+    {
+        nOutlineLv = ((const SfxUInt16Item &)rSet.Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
+        aOutlineLvLB.SelectEntryPos( nOutlineLv ) ;
+    }
+    else
+    {
+        aOutlineLvLB.SetNoSelection();
+    }
+    aOutlineLvLB.SaveValue();
+
+    eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
 
     String aStyle;
-    BOOL bHasNumberStyle = FALSE;
     if( eItemState >= SFX_ITEM_AVAILABLE )
     {
         aStyle = ((const SfxStringItem &)rSet.Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
         if(!aStyle.Len())
             aStyle = aNumberStyleLB.GetEntry(0);
-        aNumberStyleLB.SelectEntry( aStyle );
+
+        if( aStyle.EqualsAscii("Outline"))// == String::CreateFromAscii("Outline")) //maybe need modify,zhaojianwei
+        {
+            aNumberStyleLB.InsertEntry( msOutlineNumbering );
+            aNumberStyleLB.SelectEntry( msOutlineNumbering );
+            aNumberStyleLB.RemoveEntry(msOutlineNumbering);
+            aNumberStyleLB.SaveValue();
+        }
+        else
+            aNumberStyleLB.SelectEntry( aStyle );
+
         bHasNumberStyle = TRUE;
     }
     else
@@ -196,7 +242,6 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     }
 
     aNumberStyleLB.SaveValue();
-
 
     eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART );
     if(eItemState > SFX_ITEM_AVAILABLE )
@@ -256,9 +301,22 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 /*-----------------31.01.98 08:38-------------------
 
 --------------------------------------------------*/
+void SwParagraphNumTabPage::DisableOutline()
+{
+    aOutlineLvFT.Disable();
+    aOutlineLvLB.Disable();
+}
+void SwParagraphNumTabPage::DisableNumbering()
+{
+    aNumberStyleFT.Disable();
+    aNumberStyleLB.Disable();
+}
+
+/*-----------------31.01.98 08:38-------------------
+
+--------------------------------------------------*/
 void SwParagraphNumTabPage::EnableNewStart()
 {
-    aNewStartFL.Show();
     aNewStartCB.Show();
     aNewStartNumberCB.Show();
     aNewStartNF.Show();
@@ -295,9 +353,14 @@ IMPL_LINK( SwParagraphNumTabPage, LineCountHdl_Impl, CheckBox* , EMPTYARG)
 --------------------------------------------------*/
 IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
 {
+//  String dd=aNumberStyleLB.GetSavedValue();
+//  if( msOutlineNumbering == dd)
+    {
+    }
     BOOL bEnable = bCurNumrule || pBox->GetSelectEntryPos() > 0;
     aNewStartCB.Enable(bEnable);
     NewStartHdl_Impl(&aNewStartCB);
+
     return 0;
 }
 

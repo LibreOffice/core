@@ -54,6 +54,7 @@
 #endif
 #include <svtools/stritem.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/lingucfg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 
@@ -112,9 +113,6 @@
 #endif
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
-
-// #107253#
-#include <swlinguconfig.hxx>
 
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
@@ -284,11 +282,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
     pSh           (pWrtShell)
 {
-    // #107253# Hold one local SwLinguConfig here. This creates one incarnation
-    // of a SvtLinguConfig which is then used as long as this local incarnation
-    // exists. Other dialogs may be equipped with the same startup-mechanism
-    // when required.
-    SwLinguConfig aLocalLinguConfig;
+    SvtLinguConfig aLocalLinguConfig;
 
     // Static-Pointer initialisieren
     if( !::GetCurrGlosGroup() )
@@ -686,7 +680,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             SvtPathOptions aPathOpt;
             xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
-            String sWW8( C2S(GetFILTER_WW8()) );
+            String sWW8( C2S( FILTER_WW8 ) );
 
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
             SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );

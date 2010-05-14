@@ -643,7 +643,7 @@ SwLayNotify::~SwLayNotify()
             pLay->InvalidateNextPos();
     }
     if ( !IsLowersComplete() &&
-         !((pLay->GetType()&FRM_FLY|FRM_SECTION) &&
+         !(pLay->GetType()&(FRM_FLY|FRM_SECTION) &&
             pLay->Lower() && pLay->Lower()->IsColumnFrm()) &&
          (bPos || bNotify) && !(pLay->GetType() & 0x1823) )  //Tab, Row, FtnCont, Root, Page
     {
@@ -1936,11 +1936,21 @@ SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) 
                     ? ((SwCntntFrm*)pConstructor)->GetNode()->GetSwAttrSet()
                     : ((SwLayoutFrm*)pConstructor)->GetFmt()->GetAttrSet() ),
     rUL     ( rAttrSet.GetULSpace() ),
+    // --> OD 2008-12-04 #i96772#
+    // LRSpaceItem is copied due to the possibility that it is adjusted - see below
     rLR     ( rAttrSet.GetLRSpace() ),
+    // <--
     rBox    ( rAttrSet.GetBox()     ),
     rShadow ( rAttrSet.GetShadow()  ),
     aFrmSize( rAttrSet.GetFrmSize().GetSize() )
 {
+    // --> OD 2008-12-02 #i96772#
+    const SwTxtFrm* pTxtFrm = dynamic_cast<const SwTxtFrm*>(pConstructor);
+    if ( pTxtFrm )
+    {
+        pTxtFrm->GetTxtNode()->ClearLRSpaceItemDueToListLevelIndents( rLR );
+    }
+
     //Achtung: Die USHORTs fuer die gecache'ten Werte werden absichtlich
     //nicht initialisiert!
 

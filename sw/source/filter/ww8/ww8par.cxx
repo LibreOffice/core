@@ -49,13 +49,9 @@
 #include <svtools/docpasswdrequest.hxx>
 #include <hintids.hxx>
 
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/cscoitem.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
@@ -98,15 +94,11 @@
 #include <section.hxx>
 #include <docsh.hxx>
 #include <docufld.hxx>
-#ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
-#endif
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <mdiexp.hxx>           // Progress
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <swerror.h>            // ERR_WW8_...
 #include <swunodef.hxx>
 #include <unodraw.hxx>
@@ -747,10 +739,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         }
         // <--
         pImpRec->eLineStyle = (nLineFlags & 8)
-                            ? (MSO_LineStyle)GetPropertyValue(
-                                                DFF_Prop_lineStyle,
-                                                mso_lineSimple )
-                            : (MSO_LineStyle)USHRT_MAX;
+                              ? (MSO_LineStyle)GetPropertyValue(
+                                                    DFF_Prop_lineStyle,
+                                                    mso_lineSimple )
+                              : (MSO_LineStyle)USHRT_MAX;
         pTextImpRec->eLineStyle = pImpRec->eLineStyle;
 
         pImpRec->nFlags = rObjData.nSpFlags;
@@ -1058,92 +1050,6 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
         }
     }
     return 0;
-}
-
-void SwFltControlStack::Delete(const SwPaM &rPam)
-{
-    const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
-
-    if( !rPam.HasMark() || *pStt >= *pEnd )
-        return;
-
-    SwNodeIndex aStartNode(pStt->nNode, -1);
-    USHORT nStartIdx = pStt->nContent.GetIndex();
-    SwNodeIndex aEndNode(pEnd->nNode, -1);
-    USHORT nEndIdx = pEnd->nContent.GetIndex();
-
-    //We don't support deleting content that is over one node, or removing a node.
-    ASSERT(aEndNode == aStartNode, "nodes must be the same, or this method extended");
-    if (aEndNode != aStartNode)
-        return;
-
-    for (USHORT nSize = static_cast< USHORT >(Count()); nSize > 0;)
-    {
-        SwFltStackEntry* pEntry = (*this)[--nSize];
-
-        bool bEntryStartAfterSelStart =
-            (pEntry->nMkNode == aStartNode && pEntry->nMkCntnt >= nStartIdx);
-
-        bool bEntryStartBeforeSelEnd =
-            (pEntry->nMkNode == aEndNode && pEntry->nMkCntnt <= nEndIdx);
-
-        bool bEntryEndAfterSelStart = false;
-        bool bEntryEndBeforeSelEnd = false;
-        if (!pEntry->bLocked)
-        {
-            bEntryEndAfterSelStart =
-                (pEntry->nPtNode == aStartNode && pEntry->nPtCntnt >= nStartIdx);
-
-            bEntryEndBeforeSelEnd =
-                (pEntry->nPtNode == aEndNode && pEntry->nPtCntnt <= nEndIdx);
-        }
-
-        bool bTotallyContained = false;
-        if (
-             bEntryStartAfterSelStart && bEntryStartBeforeSelEnd &&
-             bEntryEndAfterSelStart && bEntryEndBeforeSelEnd
-           )
-        {
-           bTotallyContained = true;
-        }
-
-        if (bTotallyContained)
-        {
-            //after start, before end, delete
-            DeleteAndDestroy(nSize);
-            continue;
-        }
-
-        xub_StrLen nCntntDiff = nEndIdx - nStartIdx;
-
-        //to be adjusted
-        if (bEntryStartAfterSelStart)
-        {
-            if (bEntryStartBeforeSelEnd)
-            {
-                //move start to new start
-                pEntry->nMkNode = aStartNode;
-                pEntry->nMkCntnt = nStartIdx;
-            }
-            else
-                pEntry->nMkCntnt = pEntry->nMkCntnt - nCntntDiff;
-        }
-
-        if (bEntryEndAfterSelStart)
-        {
-            if (bEntryEndBeforeSelEnd)
-            {
-                pEntry->nPtNode = aStartNode;
-                pEntry->nPtCntnt = nStartIdx;
-            }
-            else
-                pEntry->nPtCntnt = pEntry->nPtCntnt - nCntntDiff;
-        }
-
-        //That's what locked is, end equal to start, and nPtCntnt is invalid
-        if (pEntry->bLocked)
-            pEntry->nPtNode = pEntry->nMkNode;
-    }
 }
 
 bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo)
@@ -1979,7 +1885,10 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
 {
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
 
-    const SwNumRule* pRule = sw::util::GetNumRuleFromTxtNode(*pTxt);
+    const SwNumRule* pRule = NULL;
+
+    if (pTxt != NULL)
+        pRule = sw::util::GetNumRuleFromTxtNode(*pTxt);
 
     if (
          pRule && !pWDop->fDontUseHTMLAutoSpacing &&
@@ -3502,8 +3411,14 @@ void wwSectionManager::InsertSegments()
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
     {
         mySegIter aNext = aIter+1;
+        mySegIter aPrev = (aIter == aStart) ? aIter : aIter-1;
 
-        bool bInsertSection = aIter != aStart ? aIter->IsContinous() : false;
+        // If two following sections are different in following properties, Word will interprete a continuous
+        // section break between them as if it was a section break next page.
+        bool bThisAndPreviousAreCompatible = ((aIter->GetPageWidth() == aPrev->GetPageWidth()) &&
+            (aIter->GetPageHeight() == aPrev->GetPageHeight()) && (aIter->IsLandScape() == aPrev->IsLandScape()));
+
+        bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
         bool bProtected = !bUseEnhFields && SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
         if (bInsertPageDesc)
@@ -3518,7 +3433,10 @@ void wwSectionManager::InsertSegments()
             */
 
             bool bIgnoreCols = false;
-            if ((aNext != aEnd && aNext->IsContinous() || bProtected))
+            bool bThisAndNextAreCompatible = (aNext != aEnd) ? ((aIter->GetPageWidth() == aNext->GetPageWidth()) &&
+                (aIter->GetPageHeight() == aNext->GetPageHeight()) && (aIter->IsLandScape() == aNext->IsLandScape())) : true;
+
+            if ((aNext != aEnd && aNext->IsContinous() && bThisAndNextAreCompatible || bProtected))
             {
                 bIgnoreCols = true;
                 if ((aIter->NoCols() > 1) || bProtected)
@@ -4452,7 +4370,8 @@ public:
     outlineeq(BYTE nNum) : mnNum(nNum) {}
     bool operator()(const SwTxtFmtColl *pTest) const
     {
-        return pTest->GetOutlineLevel() == mnNum;
+        //return pTest->GetOutlineLevel() == mnNum; //#outline level,zhaojianwei
+        return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;  //<-end,zhaojianwei
     }
 };
 
@@ -4472,9 +4391,11 @@ void SwWW8ImplReader::SetOutLineStyles()
     // <--
 
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
-    sw::util::SortByOutline(aOutLined);
+    // --> OD 2009-02-04 #i98791# - sorting algorithm adjusted
+    sw::util::SortByAssignedOutlineStyleListLevel(aOutLined);
+    // <--
 
-    typedef sw::ParaStyleIter myiter;
+    typedef sw::ParaStyleIter myParaStyleIter;
     /*
     If we are inserted into a document then don't clobber existing existing
     levels.
@@ -4482,11 +4403,16 @@ void SwWW8ImplReader::SetOutLineStyles()
     USHORT nFlagsStyleOutlLevel = 0;
     if (!mbNewDoc)
     {
-        myiter aEnd = aOutLined.end();
-        for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter)
+        // --> OD 2008-12-16 #i70748#
+        // backward iteration needed due to the outline level attribute
+        sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
+        for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
+        // <--
         {
-            if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
-                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
+            //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)   //#outline level,zhaojianwei,
+            //nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
+            if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
+                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
             else
                 break;
         }
@@ -4548,11 +4474,17 @@ void SwWW8ImplReader::SetOutLineStyles()
 
         if (mpChosenOutlineNumRule != &aOutlineRule)
         {
-            myiter aEnd = aOutLined.end();
-            for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter)
+            // --> OD 2008-12-16 #i70748#
+            // backward iteration needed due to the outline level attribute
+            sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
+            for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
+            // <--
             {
-                if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
-                    (*aIter)->SetOutlineLevel(NO_NUMBERING);
+                //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)//#outline level,zhaojianwei
+                //    (*aIter)->SetOutlineLevel(NO_NUMBERING);
+                if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
+                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end
+
                 else
                     break;
             }
@@ -4579,7 +4511,8 @@ void SwWW8ImplReader::SetOutLineStyles()
                 */
                 rSI.pFmt->SetFmtAttr(
                         SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
-                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
+                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
+                ((SwTxtFmtColl*)rSI.pFmt)->DeleteAssignmentToListLevelOfOutlineStyle();//#outline level,zhaojianwei
             }
             else
             {
@@ -4594,13 +4527,14 @@ void SwWW8ImplReader::SetOutLineStyles()
                 the list of level in nFlagsStyleOutlLevel to ignore.
                 */
                 outlineeq aCmp(rSI.nOutlineLevel);
-                myiter aResult = std::find_if(aOutLined.begin(),
+                myParaStyleIter aResult = std::find_if(aOutLined.begin(),
                     aOutLined.end(), aCmp);
 
-                myiter aEnd = aOutLined.end();
+                myParaStyleIter aEnd = aOutLined.end();
                 while (aResult != aEnd  && aCmp(*aResult))
                 {
-                    (*aResult)->SetOutlineLevel(NO_NUMBERING);
+                    //(*aResult)->SetOutlineLevel(NO_NUMBERING);//#outline level,zhaojianwei
+                    (*aResult)->DeleteAssignmentToListLevelOfOutlineStyle();
                     ++aResult;
                 }
 
@@ -4620,7 +4554,8 @@ void SwWW8ImplReader::SetOutLineStyles()
                 const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
                 aOutlineRule.Set(nToLevel, rRule);
                 // Set my outline level
-                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);
+                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);//#outline level,zhaojianwei
+                ((SwTxtFmtColl*)rSI.pFmt)->AssignToListLevelOfOutlineStyle(nToLevel);   //<-end,zhaojianwei
                 // If there are more styles on this level ignore them
                 nFlagsStyleOutlLevel |= nAktFlags;
             }
@@ -4750,6 +4685,11 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     rDoc.PropagateOutlineRule();
 
     return nErrRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
+{
+    return new WW8Reader();
 }
 
 ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String & /* FileName */)

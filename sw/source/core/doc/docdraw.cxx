@@ -632,7 +632,7 @@ void SwDoc::InitDrawModel()
     //zerstoert.
     // 17.2.99: for Bug 73110 - for loading the drawing items. This must
     //                          be loaded without RefCounts!
-    SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool );
+    SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
     if(pSdrPool)
@@ -650,13 +650,13 @@ void SwDoc::InitDrawModel()
     }
     SfxItemPool *pEEgPool = EditEngine::CreatePool( FALSE );
     pSdrPool->SetSecondaryPool( pEEgPool );
-     if ( !aAttrPool.GetFrozenIdRanges () )
-        aAttrPool.FreezeIdRanges();
+     if ( !GetAttrPool().GetFrozenIdRanges () )
+        GetAttrPool().FreezeIdRanges();
     else
         pSdrPool->FreezeIdRanges();
 
     // SJ: #95129# set FontHeight pool defaults without changing static SdrEngineDefaults
-     aAttrPool.SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
+     GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
     //Das SdrModel gehoert dem Dokument, wir haben immer zwei Layer und eine
@@ -859,17 +859,17 @@ void SwDoc::ReleaseDrawModel()
         //!!Den code im sw3io fuer Einfuegen Dokument mitpflegen!!
 
         delete pDrawModel; pDrawModel = 0;
-        SfxItemPool *pSdrPool = aAttrPool.GetSecondaryPool();
+        SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
 
         ASSERT( pSdrPool, "missing Pool" );
         SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
         ASSERT( !pEEgPool->GetSecondaryPool(), "i don't accept additional pools");
         pSdrPool->Delete();                 //Erst die Items vernichten lassen,
                                             //dann erst die Verkettung loesen
-        aAttrPool.SetSecondaryPool( 0 );    //Der ist ein muss!
+        GetAttrPool().SetSecondaryPool( 0 );    //Der ist ein muss!
         pSdrPool->SetSecondaryPool( 0 );    //Der ist sicherer
-        delete pSdrPool;
-        delete pEEgPool;
+        SfxItemPool::Free(pSdrPool);
+        SfxItemPool::Free(pEEgPool);
     }
 }
 

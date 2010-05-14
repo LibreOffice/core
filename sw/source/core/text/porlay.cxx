@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: porlay.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.67.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,9 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
+#ifndef _COM_SUN_STAR_I18N_CTLSCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/CTLScriptType.hdl>
+#endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
@@ -58,6 +61,8 @@
 #include <vcl/outdev.hxx>
 #include <svx/blnkitem.hxx>
 #include <tools/multisel.hxx>
+#include <unotools/charclass.hxx>
+#include <i18npool/mslangid.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
 #include <docary.hxx>       // SwRedlineTbl
@@ -76,6 +81,7 @@ using namespace i18n::ScriptType;
 
 //#ifdef BIDI
 #include <unicode/ubidi.h>
+#include <i18nutil/unicode.hxx>  //unicode::getUnicodeScriptType
 
 sal_Bool isAlefChar ( xub_Unicode cCh )
 {
@@ -161,6 +167,16 @@ sal_Bool isFeChar ( xub_Unicode cCh )
 {
    return ( cCh == 0x641 || ( cCh >= 0x6A1 && cCh <= 0x6A6 ) );
 }
+sal_Bool isTransparentChar ( xub_Unicode cCh )
+{
+    return ( ( cCh >= 0x610 && cCh <= 0x61A ) ||
+            ( cCh >= 0x64B && cCh <= 0x65E ) ||
+            ( cCh == 0x670 ) ||
+            ( cCh >= 0x6D6 && cCh <= 0x6DC ) ||
+            ( cCh >= 0x6DF && cCh <= 0x6E4 ) ||
+            ( cCh >= 0x6E7 && cCh <= 0x6E8 ) ||
+            ( cCh >= 0x6EA && cCh <= 0x6ED ));
+}
 
 /*************************************************************************
  *                 lcl_IsLigature
@@ -171,9 +187,7 @@ sal_Bool isFeChar ( xub_Unicode cCh )
 sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
 {
             // Lam + Alef
-    return ( 0x644 == cCh && 0x627 == cNextCh ) ||
-            // Beh + Reh
-           ( 0x628 == cCh && 0x631 == cNextCh );
+    return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
 }
 
 /*************************************************************************
@@ -188,27 +202,42 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
     // Uh, there seem to be some more characters that are not connectable
     // to the left. So we look for the characters that are actually connectable
     // to the left. Here is the complete list of WH:
+
+    // (hennerdrewes):
+    // added lam forms 0x06B5..0x06B8
+    // added 0x6FA..0x6FC, according to unicode documentation, although not present in my fonts
+    // added heh goal 0x6C1
     sal_Bool bRet = 0x628 == cPrevCh ||
                     ( 0x62A <= cPrevCh && cPrevCh <= 0x62E ) ||
-                    ( 0x633 <= cPrevCh && cPrevCh <= 0x643 ) ||
-                      0x644 == cPrevCh || // Lam does connect !!!
-                    ( 0x645 <= cPrevCh && cPrevCh <= 0x647 ) ||
+                  ( 0x633 <= cPrevCh && cPrevCh <= 0x647 ) ||
                       0x649 == cPrevCh || // Alef Maksura does connect !!!
                       0x64A == cPrevCh ||
                     ( 0x678 <= cPrevCh && cPrevCh <= 0x687 ) ||
-                    ( 0x69A <= cPrevCh && cPrevCh <= 0x6B4 ) ||
-                    ( 0x6B9 <= cPrevCh && cPrevCh <= 0x6C0 ) ||
-                    ( 0x6C3 <= cPrevCh && cPrevCh <= 0x6D3 );
+                  ( 0x69A <= cPrevCh && cPrevCh <= 0x6C1 ) ||
+                  ( 0x6C3 <= cPrevCh && cPrevCh <= 0x6D3 ) ||
+                  ( 0x6FA <= cPrevCh && cPrevCh <= 0x6FC )  ;
 
     // check for ligatures cPrevChar + cChar
-    if ( bRet )
-        bRet = ! lcl_IsLigature( cPrevCh, cCh );
-
+    if( bRet )
+        bRet = !lcl_IsLigature( cPrevCh, cCh );
     return bRet;
 }
 
-//#endif
-
+/*************************************************************************
+ *                 lcl_HasStrongLTR
+ *************************************************************************/
+ bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
+ {
+     for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
+     {
+         const UCharDirection nCharDir = u_charDirection ( rTxt.GetChar ( nCharIdx ));
+         if ( nCharDir == U_LEFT_TO_RIGHT ||
+              nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
+              nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
+             return true;
+     }
+     return false;
+ }
 
 /*************************************************************************
  *                 SwLineLayout::~SwLineLayout()
@@ -981,10 +1010,31 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 "Inserting WEAK into SwScriptInfo structure" );
         ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
 
-        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        xub_StrLen nSearchStt = nChg;
+        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nSearchStt, nScript );
 
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
+
+        // --> FME 2008-09-17 #i28203#
+        // for 'complex' portions, we make sure that a portion does not contain more
+        // than one script:
+        if( pBreakIt->xCTLDetect.is() && i18n::ScriptType::COMPLEX == nScript )
+        {
+            const short nScriptType = pBreakIt->xCTLDetect->getCTLScriptType( rTxt, nSearchStt );
+            xub_StrLen nNextCTLScriptStart = nSearchStt;
+            short nCurrentScriptType = nScriptType;
+            while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
+            {
+                nNextCTLScriptStart = (xub_StrLen)pBreakIt->xCTLDetect->endOfCTLScriptType( rTxt, nNextCTLScriptStart );
+                if( nNextCTLScriptStart < rTxt.Len() && nNextCTLScriptStart < nChg )
+                    nCurrentScriptType = pBreakIt->xCTLDetect->getCTLScriptType( rTxt, nNextCTLScriptStart );
+                else
+                    break;
+            }
+            nChg = Min( nChg, nNextCTLScriptStart );
+        }
+        // <--
 
         aScriptChg.Insert( nChg, nCnt );
         aScriptType.Insert( nScript, nCnt++ );
@@ -1079,7 +1129,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
                 USHORT nPriorityLevel = 7; // 0..6 = level found
                                            // 7 not found
-                while (nIdx < rWord.Len())
+
+                xub_StrLen nWordLen = rWord.Len();
+
+                // ignore trailing vowel chars
+                while( nWordLen && isTransparentChar( rWord.GetChar( nWordLen - 1 )))
+                    --nWordLen;
+
+                while (nIdx < nWordLen)
                 {
                     cCh = rWord.GetChar( nIdx );
 
@@ -1093,9 +1150,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
                     // 2. Priority:
                     // after a Seen or Sad
-                    if (nPriorityLevel >= 1 && nIdx < rWord.Len() - 1)
+                    if (nPriorityLevel >= 1 && nIdx < nWordLen - 1)
                     {
-                        if ( isSeenOrSadChar ( cCh ) )
+                        if( isSeenOrSadChar( cCh )
+                         && (rWord.GetChar( nIdx+1 ) != 0x200C) ) // #i98410#: prevent ZWNJ expansion
                         {
                             nKashidaPos  = aScanner.GetBegin() + nIdx;
                             nPriorityLevel = 1;
@@ -1108,7 +1166,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                     {
                         if ( isTehMarbutaChar ( cCh ) || // Teh Marbuta (right joining)
                              isDalChar ( cCh ) ||        // Dal (right joining) final form may appear in the middle of word
-                             ( isHahChar ( cCh ) && nIdx == rWord.Len() - 1))  // Hah (dual joining) only at end of word
+                             ( isHahChar ( cCh ) && nIdx == nWordLen - 1))  // Hah (dual joining) only at end of word
                         {
 
                             ASSERT( 0 != cPrevCh, "No previous character" )
@@ -1129,7 +1187,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                              (( isLamChar ( cCh ) || // Lam
                               isKafChar ( cCh )   || // Kaf (both dual joining)
                               isGafChar ( cCh ) )
-                              && nIdx == rWord.Len() - 1))  // only at end of word
+                              && nIdx == nWordLen - 1))  // only at end of word
                         {
                             ASSERT( 0 != cPrevCh, "No previous character" )
                             // check if character is connectable to previous character,
@@ -1143,7 +1201,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
                     // 5. Priority:
                     // before media Bah
-                    if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < rWord.Len() - 1 )
+                    if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < nWordLen - 1 )
                     {
                         if ( isBaaChar ( cCh )) // Bah
                         {
@@ -1171,7 +1229,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                              (( isAinChar ( cCh ) ||  // Ain (dual joining)
                                 isQafChar ( cCh ) ||  // Qaf (dual joining)
                                 isFeChar  ( cCh ) )   // Feh (dual joining)
-                                && nIdx == rWord.Len() - 1))  // only at end of word
+                                && nIdx == nWordLen - 1))  // only at end of word
                         {
                             ASSERT( 0 != cPrevCh, "No previous character" )
                             // check if character is connectable to previous character,
@@ -1191,7 +1249,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         if ( isRehChar ( cCh ) ||   // Reh Zain (right joining)
                                                     // final form may appear in the middle of word
                              ( 0x60C <= cCh && 0x6FE >= cCh // all others
-                              && nIdx == rWord.Len() - 1))   // only at end of word
+                              && nIdx == nWordLen - 1))   // only at end of word
                         {
                             ASSERT( 0 != cPrevCh, "No previous character" )
                             // check if character is connectable to previous character,
@@ -1206,7 +1264,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                     // Do not consider Fathatan, Dammatan, Kasratan, Fatha,
                     // Damma, Kasra, Shadda and Sukun when checking if
                     // a character can be connected to previous character.
-                    if ( cCh < 0x64B || cCh > 0x652 )
+                    if ( !isTransparentChar ( cCh) )
                         cPrevCh = cCh;
 
                    ++nIdx;
@@ -1260,15 +1318,21 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     {
         UpdateBidiInfo( rTxt );
 
-        // #i16354# Change script type for RTL text to CTL.
+        // #i16354# Change script type for RTL text to CTL:
+        // 1. All text in RTL runs will use the CTL font
+        // #i89825# change the script type also to CTL (hennerdrewes)
+        // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
         for ( USHORT nDirIdx = 0; nDirIdx < aDirChg.Count(); ++nDirIdx )
         {
-            if ( GetDirType( nDirIdx ) == UBIDI_RTL )
-            {
+            const BYTE nCurrDirType = GetDirType( nDirIdx );
                 // nStart ist start of RTL run:
                 const xub_StrLen nStart = nDirIdx > 0 ? GetDirChg( nDirIdx - 1 ) : 0;
                 // nEnd is end of RTL run:
                 const xub_StrLen nEnd = GetDirChg( nDirIdx );
+
+            if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
+                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rTxt, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
+            {
                 // nScriptIdx points into the ScriptArrays:
                 USHORT nScriptIdx = 0;
 
@@ -1279,8 +1343,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 while ( GetScriptChg( nScriptIdx ) <= nStart )
                     ++nScriptIdx;
 
-                xub_StrLen nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
-                BYTE nScriptTypeOfGroup = GetScriptType( nScriptIdx );
+                const xub_StrLen nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
+                const BYTE nScriptTypeOfGroup = GetScriptType( nScriptIdx );
 
                 ASSERT( nStartPosOfGroup <= nStart && GetScriptChg( nScriptIdx ) > nStart,
                         "Script override with CTL font trouble" )
@@ -1342,7 +1406,7 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
     nError = U_ZERO_ERROR;
 
-    ubidi_setPara( pBidi, rTxt.GetBuffer(), rTxt.Len(),
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),    // UChar != sal_Unicode in MinGW
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     long nCount = ubidi_countRuns( pBidi, &nError );
@@ -1804,11 +1868,21 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
  *                      SwScriptInfo::KashidaJustify()
  *************************************************************************/
 
-USHORT SwScriptInfo::KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
-                                     xub_StrLen nStt, xub_StrLen nLen,
-                                     long nSpaceAdd ) const
+// Note on calling KashidaJustify():
+// Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
+// total number of kashida positions, or the number of kashida positions after some positions
+// have been dropped, depending on the state of the aKashidaInvalid array.
+
+USHORT SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
+                                    sal_Int32* pScrArray,
+                                    xub_StrLen nStt,
+                                    xub_StrLen nLen,
+                                    long nSpaceAdd ) const
 {
     ASSERT( nLen, "Kashida justification without text?!" )
+
+    if( !IsKashidaLine(nStt))
+        return STRING_LEN;
 
     // evaluate kashida informatin in collected in SwScriptInfo
 
@@ -1823,23 +1897,32 @@ USHORT SwScriptInfo::KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray
 
     const xub_StrLen nEnd = nStt + nLen;
 
-    if ( ! pKernArray )
+    USHORT nCntKashEnd = nCntKash;
+    while ( nCntKashEnd < CountKashida() )
     {
-        USHORT nCntKashEnd = nCntKash;
-        while ( nCntKashEnd < CountKashida() )
-        {
-            if ( nEnd <= GetKashida( nCntKashEnd ) )
-                break;
-            else
-                nCntKashEnd++;
-        }
-
-        return nCntKashEnd - nCntKash;
+       if ( nEnd <= GetKashida( nCntKashEnd ) )
+            break;
+        else
+            nCntKashEnd++;
     }
+
+    USHORT nActualKashCount = nCntKashEnd - nCntKash;
+    for ( USHORT i = nCntKash; i < nCntKashEnd; ++i )
+    {
+        if ( nActualKashCount && !IsKashidaValid ( i ) )
+            --nActualKashCount;
+    }
+
+    if ( !pKernArray )
+        return nActualKashCount;
 
     // do nothing if there is no more kashida
     if ( nCntKash < CountKashida() )
     {
+        // skip any invalid kashidas
+        while ( ! IsKashidaValid ( nCntKash ) && nCntKash < nCntKashEnd )
+            ++nCntKash;
+
         xub_StrLen nKashidaPos = GetKashida( nCntKash );
         xub_StrLen nIdx = nKashidaPos;
         long nKashAdd = nSpaceAdd;
@@ -1849,7 +1932,11 @@ USHORT SwScriptInfo::KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray
             USHORT nArrayPos = nIdx - nStt;
 
             // next kashida position
-            nIdx = ++nCntKash  < CountKashida() ? GetKashida( nCntKash ) : nEnd;
+            ++nCntKash;
+            while ( ! IsKashidaValid ( nCntKash ) && nCntKash < nCntKashEnd )
+                ++nCntKash;
+
+            nIdx = nCntKash < CountKashida() && IsKashidaValid ( nCntKash ) ? GetKashida( nCntKash ) : nEnd;
             if ( nIdx > nEnd )
                 nIdx = nEnd;
 
@@ -1859,10 +1946,9 @@ USHORT SwScriptInfo::KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray
             {
                 pKernArray[ nArrayPos ] += nKashAdd;
                 if ( pScrArray )
-                   pScrArray[ nArrayPos ] += nKashAdd;
+                    pScrArray[ nArrayPos ] += nKashAdd;
                 ++nArrayPos;
             }
-
             nKashAdd += nSpaceAdd;
         }
     }
@@ -1871,20 +1957,230 @@ USHORT SwScriptInfo::KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray
 }
 
 /*************************************************************************
- *                      SwScriptInfo::IsArabicLanguage()
+ *                      SwScriptInfo::IsArabicText()
+ *
+ * Checks if the current text is 'Arabic' text. Note that only the first
+ * character has to be checked because a ctl portion only contains one
+ * script, see NewTxtPortion
+ *************************************************************************/
+sal_Bool SwScriptInfo::IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nLen )
+{
+    using namespace ::com::sun::star::i18n;
+    static ScriptTypeList typeList[] = {
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, UnicodeScript_kArabic },        // 11,
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, UnicodeScript_kScriptCount }    // 88
+    };
+
+    // go forward if current position does not hold a regular character:
+    const CharClass& rCC = GetAppCharClass();
+    sal_Int32 nIdx = nStt;
+    const xub_StrLen nEnd = nStt + nLen;
+    while ( nIdx < nEnd && !rCC.isLetterNumeric( rTxt, (xub_StrLen)nIdx ) )
+    {
+        ++nIdx;
+    }
+
+    if( nIdx == nEnd )
+    {
+        // no regular character found in this portion. Go backward:
+        --nIdx;
+        while ( nIdx >= 0 && !rCC.isLetterNumeric( rTxt, (xub_StrLen)nIdx ) )
+        {
+            --nIdx;
+        }
+    }
+
+    if( nIdx >= 0 )
+    {
+        const xub_Unicode cCh = rTxt.GetChar( (xub_StrLen)nIdx );
+        const sal_Int16 type = unicode::getUnicodeScriptType( cCh, typeList, UnicodeScript_kScriptCount );
+        return type == UnicodeScript_kArabic;
+    }
+    return sal_False;
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::IsKashidaValid()
  *************************************************************************/
 
-sal_Bool SwScriptInfo::IsArabicLanguage( LanguageType aLang )
+sal_Bool SwScriptInfo::IsKashidaValid ( xub_StrLen nKashPos ) const
 {
-    return LANGUAGE_ARABIC == aLang || LANGUAGE_ARABIC_SAUDI_ARABIA == aLang ||
-           LANGUAGE_ARABIC_IRAQ == aLang || LANGUAGE_ARABIC_EGYPT == aLang ||
-           LANGUAGE_ARABIC_LIBYA == aLang || LANGUAGE_ARABIC_ALGERIA == aLang ||
-           LANGUAGE_ARABIC_MOROCCO == aLang || LANGUAGE_ARABIC_TUNISIA == aLang ||
-           LANGUAGE_ARABIC_OMAN == aLang || LANGUAGE_ARABIC_YEMEN == aLang ||
-           LANGUAGE_ARABIC_SYRIA == aLang || LANGUAGE_ARABIC_JORDAN == aLang ||
-           LANGUAGE_ARABIC_LEBANON == aLang || LANGUAGE_ARABIC_KUWAIT == aLang ||
-           LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
-           LANGUAGE_ARABIC_QATAR == aLang;
+    for ( xub_StrLen i = 0; i < aKashidaInvalid.Count(); ++i )
+    {
+        if ( aKashidaInvalid [ i ] == nKashPos )
+            return false;
+    }
+    return true;
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::ClearKashidaInvalid()
+ *************************************************************************/
+
+void SwScriptInfo::ClearKashidaInvalid (  xub_StrLen nKashPos )
+{
+    for ( xub_StrLen i = 0; i < aKashidaInvalid.Count(); ++i )
+    {
+        if ( aKashidaInvalid [ i ] == nKashPos )
+        {
+           aKashidaInvalid.Remove (i, 1);
+           return;
+        }
+    }
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::MarkOrClearKashidaInvalid()
+ *************************************************************************/
+// bMark == true:
+// marks the first valid kashida in the given text range as invalid
+
+// bMark == false:
+// clears all kashida invalid flags in the given text range
+
+bool SwScriptInfo::MarkOrClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen, bool bMark, xub_StrLen nMarkCount )
+{
+    USHORT nCntKash = 0;
+    while( nCntKash < CountKashida() )
+    {
+        if ( nStt <= GetKashida( nCntKash ) )
+            break;
+        else
+            nCntKash++;
+    }
+
+    const xub_StrLen nEnd = nStt + nLen;
+
+    while ( nCntKash < CountKashida() )
+    {
+        if ( nEnd <= GetKashida( nCntKash ) )
+            break;
+        else
+        {
+            if(bMark)
+            {
+                if ( IsKashidaValid ( nCntKash ) )
+                {
+                    MarkKashidaInvalid ( nCntKash );
+                    --nMarkCount;
+                    if(!nMarkCount)
+                       return true;
+                }
+            }
+            else
+            {
+                ClearKashidaInvalid ( nCntKash );
+            }
+            nCntKash++;
+        }
+    }
+    return false;
+}
+
+void SwScriptInfo::MarkKashidaInvalid ( xub_StrLen nKashPos )
+{
+    aKashidaInvalid.Insert( nKashPos, aKashidaInvalid.Count() );
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::GetKashidaPositions()
+ *************************************************************************/
+// retrieve the kashida positions in the given text range
+USHORT SwScriptInfo::GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
+                                           xub_StrLen* pKashidaPosition )
+{
+    USHORT nCntKash = 0;
+    while( nCntKash < CountKashida() )
+    {
+        if ( nStt <= GetKashida( nCntKash ) )
+            break;
+        else
+            nCntKash++;
+    }
+
+    const xub_StrLen nEnd = nStt + nLen;
+
+    USHORT nCntKashEnd = nCntKash;
+    while ( nCntKashEnd < CountKashida() )
+    {
+       if ( nEnd <= GetKashida( nCntKashEnd ) )
+            break;
+        else
+        {
+            pKashidaPosition [ nCntKashEnd - nCntKash ] = GetKashida ( nCntKashEnd );
+            nCntKashEnd++;
+        }
+    }
+    return nCntKashEnd - nCntKash;
+}
+
+void SwScriptInfo::SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
+{
+    aNoKashidaLine.Insert( nStt, aNoKashidaLine.Count());
+    aNoKashidaLineEnd.Insert( nStt+nLen, aNoKashidaLineEnd.Count());
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::IsKashidaLine()
+ *************************************************************************/
+// determines if the line uses kashida justification
+
+bool SwScriptInfo::IsKashidaLine ( xub_StrLen nCharIdx ) const
+{
+   for( xub_StrLen i = 0; i < aNoKashidaLine.Count(); ++i )
+    {
+       if( nCharIdx >= aNoKashidaLine[ i ] && nCharIdx < aNoKashidaLineEnd[ i ])
+           return false;
+    }
+   return true;
+}
+/*************************************************************************
+ *                      SwScriptInfo::ClearKashidaLine()
+ *************************************************************************/
+
+void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
+{
+   xub_StrLen i = 0;
+   while( i < aNoKashidaLine.Count())
+   {
+       if( nStt + nLen >= aNoKashidaLine[ i ] && nStt < aNoKashidaLineEnd [ i ] )
+       {
+           aNoKashidaLine.Remove(i, 1);
+           aNoKashidaLineEnd.Remove(i, 1);
+       }
+       else
+           ++i;
+   }
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::MarkKashidasInvalid()
+ *************************************************************************/
+// mark the given character indices as invalid kashida positions
+bool SwScriptInfo::MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPositions )
+{
+   ASSERT( pKashidaPositions && nCnt > 0, "Where are kashidas?" )
+
+   USHORT nCntKash = 0;
+   xub_StrLen nKashidaPosIdx = 0;
+
+    while ( nCntKash < CountKashida() && nKashidaPosIdx < nCnt )
+    {
+       if ( pKashidaPositions [nKashidaPosIdx] > GetKashida( nCntKash ) )
+       {
+           nCntKash++;
+           continue;
+       }
+
+        if ( pKashidaPositions [nKashidaPosIdx] == GetKashida( nCntKash ) && IsKashidaValid ( nCntKash ) )
+       {
+            MarkKashidaInvalid ( nCntKash );
+       }
+       else
+           return false; // something is wrong
+       nKashidaPosIdx++;
+   }
+   return true;
 }
 
 /*************************************************************************

@@ -156,6 +156,16 @@ SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16,16)
 // SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,16,16)
 SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 
+class WW8Reader : public StgReader
+{
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+public:
+    virtual int GetReaderType();
+
+    virtual BOOL HasGlossaries() const;
+    virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
+};
+
 struct WW8OleMap
 {
     sal_uInt32 mnWWid;
@@ -188,7 +198,7 @@ public:
     //the rParaSprms returns back the original word paragraph indent
     //sprms which were attached to the original numbering format
     SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, const BYTE nLevel,
-        std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0) const;
+        std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0);
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
 private:
@@ -220,6 +230,7 @@ private:
     //No copying
     WW8ListManager(const WW8ListManager&);
     WW8ListManager& operator=(const WW8ListManager&);
+    sal_uInt16 nLastLFOPosition;
 };
 
 //-----------------------------------------

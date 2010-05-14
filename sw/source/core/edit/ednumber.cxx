@@ -392,6 +392,19 @@ BOOL SwEditShell::MoveParagraph( long nOffset )
     return bRet;
 }
 
+//#outline level add by zhaojianwei
+int SwEditShell::GetCurrentParaOutlineLevel( ) const
+{
+    int nLevel = 0;
+
+    SwPaM* pCrsr = GetCrsr();
+    const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
+    if( pTxtNd )
+        nLevel = pTxtNd->GetAttrOutlineLevel();
+    return nLevel;
+}
+//<-end,zhaojianwei
+
 void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower )
 {
     SwPaM* pCrsr = GetCrsr();
@@ -547,11 +560,14 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
         for( ; nPos < rOutlNd.Count(); ++nPos )
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
+
             // --> OD 2008-04-02 #refactorlists#
 //            BYTE nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
 //                                    GetTxtColl()->GetOutlineLevel() );
-            int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();
-            ASSERT( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
+ //           int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();//#outline level,zhaojianwei
+            int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
+ //           ASSERT( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
+            ASSERT( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,            //<-end,zhaojianwei
                     "<SwEditShell::IsProtectedOutlinePara()>" );
             // <--
             if( bFirst )
@@ -644,7 +660,8 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
 BYTE SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
-    BYTE nLevel = NO_NUMBERING;
+    //BYTE nLevel = NO_NUMBERING;   //#outline level,zhaojianwei
+    BYTE nLevel = MAXLEVEL;     //end,zhaojianwei
 
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();

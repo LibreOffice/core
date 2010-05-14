@@ -3001,7 +3001,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 // #i68597#
                 // moved paint post-process for DrawingLayer overlay here, see above
                 {
-                    pSh->DLPostPaint2();
+                    pSh->DLPostPaint2(true);
                 }
             }
         }
@@ -3058,7 +3058,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 SwPageFrm::PaintNotesSidebar( aEmptyPageRect, pSh, pPage->GetPhyPageNum(), bRightSidebar);
 
                 {
-                    pSh->DLPostPaint2();
+                    pSh->DLPostPaint2(true);
                 }
             }
         }
@@ -6709,7 +6709,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         ::SetOutDevAndWin( pSh, pOld, pWin, nZoom );
 
         // #i92711# end Pre/PostPaint encapsulation when pOut is back and content is painted
-           pSh->DLPostPaint2();
+           pSh->DLPostPaint2(true);
 
         aMet.Stop();
         aMet.Move( -pFly->Frm().Left(), -pFly->Frm().Top() );

@@ -643,12 +643,14 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
 sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
-    if(pColl && pColl->GetOutlineLevel() == NO_NUMBERING)
+    //if(pColl && pColl->GetOutlineLevel() == NO_NUMBERING)     //#outline level,zhaojianwei
+    if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle()) //<-end,zhaojianwei
         return sal_True;
 
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
-       rSh.GetTxtCollFromPool(nId)->GetOutlineLevel() == NO_NUMBERING)
+        //rSh.GetTxtCollFromPool(nId)->GetOutlineLevel() == NO_NUMBERING)       //#outline level,zhaojianwei
+        ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())   //<-end,zhaojianwei
         return sal_True;
 
     return sal_False;
@@ -966,7 +968,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
 
     aCreateFromFL(      this, SW_RES(FL_CREATEFROM       )),
     aFromHeadingsCB(    this, SW_RES(CB_FROMHEADINGS     )),
-    aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),
+//   aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),//#outline level,removed by zhaojianwei
     aAddStylesCB(       this, SW_RES(CB_ADDSTYLES       )),
     aAddStylesPB(       this, SW_RES(PB_ADDSTYLES       )),
 
@@ -1043,7 +1045,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aTypeLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
 
     aAddStylesPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, AddStylesHdl));
-    aChapterDlgPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, ChapterHdl));
+    //aChapterDlgPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, ChapterHdl));//#outline level,removed by zhaojianwei
 
     PopupMenu*  pMenu = aAutoMarkPB.GetPopupMenu();
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
@@ -1221,7 +1223,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     if(TOX_CONTENT == aCurType.eType)
     {
         aFromHeadingsCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
-        aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());
+        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
         aAddStylesCB.SetText(sAddStyleContent);
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
     }
@@ -1485,7 +1487,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aAreaFL.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
 
     aFromHeadingsCB.Show( 0 != (nType & (TO_CONTENT)) );
-    aChapterDlgPB.Show( 0 != (nType & (TO_CONTENT)) );
+   // aChapterDlgPB.Show( 0 != (nType & (TO_CONTENT)) );//#outline level,removed by zhaojianwei
     aAddStylesCB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
     aAddStylesPB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
@@ -1517,13 +1519,14 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aSortAlgorithmFT.Show(bEnableSortLanguage);
     aSortAlgorithmLB.Show(bEnableSortLanguage);
 
-    if(nType & TO_CONTENT)
-    {
-         Point aPos(aAddStylesPB.GetPosPixel());
-        aPos.X() = aChapterDlgPB.GetPosPixel().X();
-        aAddStylesPB.SetPosPixel(aPos);
-    }
-    else if( nType & TO_ILLUSTRATION )
+    //if(nType & TO_CONTENT)            //#outline level,removed by zhaojianwei
+    //{
+         //Point aPos(aAddStylesPB.GetPosPixel());
+        //aPos.X() = aChapterDlgPB.GetPosPixel().X();
+        //aAddStylesPB.SetPosPixel(aPos);
+    //}
+    //else if( nType & TO_ILLUSTRATION )//<-removed end.
+    if( nType & TO_ILLUSTRATION )       //add by zhaojianwei
         aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
                                     RES_POOLCOLL_LABEL_ABB, aEmptyStr ));
     else if( nType & TO_TABLE )
@@ -1534,7 +1537,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
         aAddStylesCB.SetText(sAddStyleUser);
         // move left!
          Point aPos(aAddStylesPB.GetPosPixel());
-        aPos.X() = aChapterDlgPB.GetPosPixel().X();
+    //  aPos.X() = aChapterDlgPB.GetPosPixel().X();
         aPos.X() -= 2 * aAddStylesPB.GetSizePixel().Width();
         aAddStylesPB.SetPosPixel(aPos);
     }
@@ -1598,7 +1601,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
             pBox->Check(sal_True);
         }
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
-        aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());
+        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
     }
     if(TOX_USER == aCurType.eType)
     {
@@ -1681,42 +1684,45 @@ IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
     }
     return 0;
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
-IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,   PushButton*, pButton)
-{
-    SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
-    SwWrtShell& rSh = pTOXDlg->GetWrtShell();
-
-    SfxItemSet aTmp(rSh.GetView().GetPool(), FN_PARAM_1, FN_PARAM_1);
-    SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(pButton, &aTmp, rSh);
-
-    if(RET_OK == pDlg->Execute())
-    {
-        CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
-        SwForm* pForm = ((SwMultiTOXTabDialog*)GetTabDialog())->GetForm(aCurType);
-        // jetzt muss ueberprueft werden, ob dem sdbcx::Index Ueberschriftenvorlagen
-        // zugewiesen wurden
-        String sStr;
-        for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-        {
-            sal_Bool bNum = !SwMultiTOXTabDialog::IsNoNum(rSh, pForm->GetTemplate( i + 1 ));
-            if(bNum)
-            {
-                //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
-                if(i < 5)
-                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT1 + i), sStr );
-                else
-                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT6 + i - 5), sStr );
-                pForm->SetTemplate( i + 1, sStr );
-            }
-        }
-
-    }
-    delete pDlg;
-    return 0;
-}
+//#outline level, removed by zhaojianwei
+//It is no longer used!
+///* -----------------14.06.99 13:10-------------------
+//
+// --------------------------------------------------*/
+//IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,     PushButton*, pButton)
+//{
+//  SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
+//  SwWrtShell& rSh = pTOXDlg->GetWrtShell();
+//
+//  SfxItemSet aTmp(rSh.GetView().GetPool(), FN_PARAM_1, FN_PARAM_1);
+//  SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(pButton, &aTmp, rSh);
+//
+//  if(RET_OK == pDlg->Execute())
+//  {
+//      CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
+//      SwForm* pForm = ((SwMultiTOXTabDialog*)GetTabDialog())->GetForm(aCurType);
+//      // jetzt muss ueberprueft werden, ob dem sdbcx::Index Ueberschriftenvorlagen
+//      // zugewiesen wurden
+//      String sStr;
+//      for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
+//      {
+//          sal_Bool bNum = !SwMultiTOXTabDialog::IsNoNum(rSh, pForm->GetTemplate( i + 1 ));
+//          if(bNum)
+//          {
+//              //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
+//              if(i < 5)
+//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT1 + i), sStr );
+//              else
+//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT6 + i - 5), sStr );
+//              pForm->SetTemplate( i + 1, sStr );
+//          }
+//      }
+//
+//  }
+//  delete pDlg;
+//  return 0;
+//}
 /* -----------------14.06.99 13:10-------------------
 
  --------------------------------------------------*/

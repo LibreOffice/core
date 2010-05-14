@@ -39,7 +39,7 @@ class SwDoc;
 
 // ATT_FTN **********************************************************
 
-class SwTxtFtn : public SwTxtAttr
+class SW_DLLPUBLIC SwTxtFtn : public SwTxtAttr
 {
     SwNodeIndex *pStartNode;
     SwTxtNode* pMyTxtNd;

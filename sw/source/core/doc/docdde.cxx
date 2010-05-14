@@ -340,7 +340,8 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             if( GotoOutline( aPos, sName ))
             {
                 SwNode* pNd = &aPos.nNode.GetNode();
-                BYTE nLvl = pNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();
+                //BYTE nLvl = pNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+                const int nLvl = pNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
 
                 const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
                 USHORT nTmpPos;
@@ -351,7 +352,8 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 for( ++nTmpPos;
                         nTmpPos < rOutlNds.Count() &&
                         nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
-                                GetTxtColl()->GetOutlineLevel();
+                                //GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+                                GetAttrOutlineLevel()-1;//<-end,zhaojianwei
                     ++nTmpPos )
                     ;       // es gibt keinen Block
 

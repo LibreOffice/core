@@ -48,6 +48,8 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
 {
     SwView*                 m_pSwView;
     String                  sDocumentURL;
+    bool                    m_bDocumentLoad;
+
     SwMailMergeConfigItem&  m_rConfigItem;
 
     String                  m_sStarting;
@@ -82,6 +84,9 @@ public:
 
     void                    SetReloadDocument(const String& rURL){sDocumentURL = rURL;}
     const String&           GetReloadDocument() const {return sDocumentURL;}
+
+    //next step requires loading of document
+    void                    SetDocumentLoad(bool bSet) {m_bDocumentLoad = bSet;}
 
     void                    UpdateRoadmap();
     void                    CreateTargetDocument();

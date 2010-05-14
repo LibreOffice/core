@@ -77,7 +77,7 @@ namespace com{ namespace sun{ namespace star{ namespace scanner{
     class XScannerManager;
 }}}}
 
-class SwModule: public SfxModule, public SfxListener
+class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener
 {
     String              sActAuthor;
 
@@ -157,29 +157,30 @@ public:
     void                ExecOther(SfxRequest &);    // Felder, Formel ..
 
     // Benutzereinstellungen modifizieren
-    SW_DLLPUBLIC const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
+    const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
     const SwViewOption* GetViewOption(sal_Bool bWeb);
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
     void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
-    SW_DLLPUBLIC void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
-    SW_DLLPUBLIC void ApplyLinkMode(sal_Int32 nNewLinkMode);
+    void ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb );
+    void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
+    void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     //default page mode for text grid
-    SW_DLLPUBLIC void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
+    void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
 
     // ConfigItems erzeugen
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
-    SW_DLLPUBLIC SwPrintOptions*    GetPrtOptions(sal_Bool bWeb);
-    SW_DLLPUBLIC SwChapterNumRules* GetChapterNumRules();
+    SwPrintOptions*     GetPrtOptions(sal_Bool bWeb);
+    SwChapterNumRules*  GetChapterNumRules();
     SwStdFontConfig*    GetStdFontConfig()      { return pStdFontConfig; }
     SwNavigationConfig* GetNavigationConfig();
     SwToolbarConfigItem*GetToolbarConfig()      { return pToolbarConfig;    }
     SwToolbarConfigItem*GetWebToolbarConfig()   { return pWebToolbarConfig; }
-    SW_DLLPUBLIC SwDBConfig*            GetDBConfig();
+    SwDBConfig*         GetDBConfig();
     svtools::ColorConfig&   GetColorConfig();
-    SW_DLLPUBLIC SvtAccessibilityOptions&    GetAccessibilityOptions();
-    SW_DLLPUBLIC SvtCTLOptions&      GetCTLOptions();
+    SvtAccessibilityOptions&    GetAccessibilityOptions();
+    SvtCTLOptions&      GetCTLOptions();
     SvtUserOptions&     GetUserOptions();
     SvtUndoOptions&     GetUndoOptions();
 

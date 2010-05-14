@@ -39,14 +39,14 @@ Menu MN_ANCHOR_POPUP
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_PAGE ;
-            Text [ en-US ] = "Page" ;
+            Text [ en-US ] = "To Page" ;
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_PARAGRAPH ;
-            Text [ en-US ] = "Paragraph" ;
+            Text [ en-US ] = "To Paragraph" ;
         };
         MenuItem
         {
@@ -67,7 +67,7 @@ Menu MN_ANCHOR_POPUP
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_FRAME ;
-            Text [ en-US ] = "Frame" ;
+            Text [ en-US ] = "To Frame" ;
         };
     };
 };

@@ -40,14 +40,18 @@
 #define STR_PARAGRAPH   (RC_LINGU_BEGIN + 5)
 #define STR_LANGSTATUS_NONE     (RC_LINGU_BEGIN + 6)
 #define STR_LANGSTATUS_MORE     (RC_LINGU_BEGIN + 7)
+#define STR_IGNORE_SELECTION    (RC_LINGU_BEGIN + 8)
 
-#define MN_SPELLING     100
-#define MN_IGNORE       102
-#define MN_INSERT       103
-#define MN_AUTOCORR     104
-#define MN_LANGUAGE_WORD 105
-#define MN_LANGUAGE_PARA 106
+#define IMG_INFO_16     (RC_LINGU_BEGIN + 8)
 
+//! Don't change these values. You may break context menu modifying extensions!
+#define MN_SPELLING             100
+#define MN_IGNORE_SELECTION     101
+#define MN_IGNORE               102
+#define MN_INSERT               103
+#define MN_AUTOCORR             104
+#define MN_LANGUAGE_WORD        105
+#define MN_LANGUAGE_PARA        106
 #define MN_LANGUAGE_SELECTION   107
 #define MN_LANGUAGE_PARAGRAPH   108
 #define MN_LANGUAGE_ALL_TEXT    109

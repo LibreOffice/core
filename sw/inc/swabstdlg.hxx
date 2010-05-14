@@ -228,6 +228,12 @@ public:
 
 };
 
+class AbstractSplitTableDialog : public VclAbstractDialog // add for
+{
+public:
+    virtual sal_uInt16 GetSplitMode() = 0;
+};
+
 class AbstractSwConvertTableDlg :  public VclAbstractDialog // add for SwConvertTableDlg
 {
 public:
@@ -381,7 +387,8 @@ public:
 
     virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
 
-    virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) = 0; //add for  SwTableHeightDlg SwSortDlg ,SwSplitTblDlg
+    virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) = 0; //add for  SwTableHeightDlg SwSortDlg
+    virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ) = 0; //add for  SwSplitTblDlg
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
                                                             int nResId,

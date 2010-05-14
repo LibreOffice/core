@@ -160,7 +160,8 @@ SHL2STDLIBS= \
 
 SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/swdet2.obj \
-        $(SLO)$/detreg.obj
+        $(SLO)$/detreg.obj \
+        $(SLO)$/iodetect.obj
 
 .IF "$(product)"==""
 SHL2OBJS+=  \
@@ -309,5 +310,34 @@ SHL3OBJS += $(SLO)$/pchname.obj \
             $(SLO)$/pchname_ex.obj
 .ENDIF # "$(ENABLE_PCH)" != ""
 .ENDIF # "$(GUI)$(COM)" == "WNTMSC"
+
+SHL4TARGET=msword$(DLLPOSTFIX)
+SHL4VERSIONMAP=msword.map
+SHL4LIBS=$(SLB)$/rtf.lib $(SLB)$/ww8.lib
+SHL4DEPN=$(SHL1TARGETN)
+SHL4DEF=$(MISC)$/$(SHL4TARGET).def
+DEF4NAME=$(SHL4TARGET)
+
+SHL4STDLIBS= \
+    $(ISWLIB) \
+    $(SVXLIB) \
+    $(SFXLIB) \
+    $(GOODIESLIB) \
+    $(BASEGFXLIB) \
+    $(SVTOOLLIB) \
+    $(TKLIB) \
+    $(VCLLIB) \
+    $(SVLLIB)	\
+    $(SOTLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB) \
+    $(I18NISOLANGLIB) \
+    $(COMPHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(CPPULIB) \
+    $(CPPUHELPERLIB) \
+    $(SALLIB) \
+    $(ICUUCLIB) \
+    $(I18NUTILLIB)
 
 .INCLUDE :  target.mk

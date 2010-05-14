@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.94.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,7 +340,7 @@ void SetEditEngineDefaultFonts(
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
                 DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
             // info to get CTL font to be used
-            {   LANGUAGE_ARABIC,        LANGUAGE_NONE,
+            {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
         aTable[0].nLang = aOpt.nDefaultLanguage;
@@ -729,7 +729,7 @@ SmDocShell::~SmDocShell()
     EndListening(*pp->GetConfig());
 
     delete pEditEngine;
-    delete pEditEngineItemPool;
+    SfxItemPool::Free(pEditEngineItemPool);
     delete pTree;
     delete pPrinter;
 }
@@ -822,8 +822,16 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
     {
         uno::Reference < embed::XStorage > xStorage = pMedium->GetStorage();
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
-        if ( xAccess->hasByName( C2S( "content.xml" ) ) && xStorage->isStreamElement( C2S( "content.xml" ) ) ||
-             xAccess->hasByName( C2S( "Content.xml" ) ) && xStorage->isStreamElement( C2S( "Content.xml" ) ) )
+        if (
+            (
+             xAccess->hasByName( C2S( "content.xml" ) ) &&
+             xStorage->isStreamElement( C2S( "content.xml" ) )
+            ) ||
+            (
+             xAccess->hasByName( C2S( "Content.xml" ) ) &&
+             xStorage->isStreamElement( C2S( "Content.xml" ) )
+            )
+           )
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
@@ -1351,7 +1359,8 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
                            String* /*pAppName*/,
                            String* pFullTypeName,
                            String* pShortTypeName,
-                           sal_Int32 nFileFormat ) const
+                           sal_Int32 nFileFormat,
+                           sal_Bool bTemplate /* = sal_False */) const
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::FillClass" );
 
@@ -1365,7 +1374,7 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
-        *pFormat        = SOT_FORMATSTR_ID_STARMATH_8;
+        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }

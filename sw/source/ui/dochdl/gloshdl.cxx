@@ -920,7 +920,7 @@ BOOL SwGlossaryHdl::ImportGlossaries( const String& rName )
         {
             SwTextBlocks *pGlossary;
             pMed->SetFilter( pFilter );
-            Reader* pR = SwIoSystem::GetReader( pFilter->GetUserData() );
+            Reader* pR = SwReaderWriter::GetReader( pFilter->GetUserData() );
             if( pR && 0 != ( pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp)) )
             {

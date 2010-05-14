@@ -367,7 +367,7 @@ private:
 // --------------------
 // SwCntntNode
 // --------------------
-class SwCntntNode: public SwModify, public SwNode, public SwIndexReg
+class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 {
     // Der Reader darf NewAttrSet() aufrufen!
 //  friend class SwSwgReader;
@@ -510,7 +510,7 @@ private:
 //---------
 // SwTableNode
 //---------
-class SwTableNode : public SwStartNode
+class SW_DLLPUBLIC SwTableNode : public SwStartNode, public SwModify
 {
     friend class SwNodes;
     SwTable* pTable;

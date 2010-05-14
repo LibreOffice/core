@@ -40,7 +40,7 @@ class SwOLENode;
 
 class SwOLEListener_Impl;
 class SwEmbedObjectLink;
-class SwOLEObj
+class SW_DLLPUBLIC SwOLEObj
 {
     friend class SwOLENode;
 
@@ -82,7 +82,7 @@ public:
 // SwOLENode
 // --------------------
 
-class SwOLENode: public SwNoTxtNode
+class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
 {
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
@@ -148,6 +148,10 @@ public:
     void DisconnectFileLink_Impl();
 
     void CheckFileLink_Impl();
+
+    // --> OD 2009-03-05 #i99665#
+    bool IsChart() const;
+    // <--
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     const String& GetChartTblName() const       { return sChartTblName; }

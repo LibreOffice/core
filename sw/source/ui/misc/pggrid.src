@@ -115,7 +115,7 @@ TabPage TP_TEXTGRID_PAGE
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = 1 ;
+        Minimum = 100 ;
         Maximum = 5600 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_POINT ;
@@ -161,7 +161,7 @@ TabPage TP_TEXTGRID_PAGE
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = 0 ;
+        Minimum = 100 ;
         Maximum = 5600 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_POINT;
@@ -184,7 +184,7 @@ TabPage TP_TEXTGRID_PAGE
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = 0 ;
+        Minimum = 100 ;
         Maximum = 5600 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_POINT;

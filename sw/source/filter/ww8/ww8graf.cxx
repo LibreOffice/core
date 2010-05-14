@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8graf.cxx,v $
- * $Revision: 1.154 $
+ * $Revision: 1.154.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,6 +105,7 @@
 #include "writerwordglue.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/editobj.hxx>
 
 #include <math.h>
 
@@ -951,7 +952,10 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
             mpDrawEditEngine->QuickDelete(aFirstChar);
         }
 
-        pRet = new OutlinerParaObject(*mpDrawEditEngine->CreateTextObject());
+        EditTextObject* pTemporaryText = mpDrawEditEngine->CreateTextObject();
+        pRet = new OutlinerParaObject(*pTemporaryText);
+        pRet->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+        delete pTemporaryText;
 
         mpDrawEditEngine->SetText( aEmptyStr );
         mpDrawEditEngine->SetParaAttribs(0, mpDrawEditEngine->GetEmptyItemSet());
@@ -1163,10 +1167,11 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         }
 
         bool bVertical = pTextObj->IsVerticalWriting() ? true : false;
-        OutlinerParaObject* pOp = new OutlinerParaObject(
-            *mpDrawEditEngine->CreateTextObject());
+        EditTextObject* pTemporaryText = mpDrawEditEngine->CreateTextObject();
+        OutlinerParaObject* pOp = new OutlinerParaObject(*pTemporaryText);
         pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
         pOp->SetVertical( bVertical );
+        delete pTemporaryText;
         pTextObj->NbcSetOutlinerParaObject( pOp );
         pTextObj->SetVerticalWriting(bVertical);
 
@@ -2280,11 +2285,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         // values, if it differs from the one in the FSPA.
         if ( pRecord->nXRelTo == 2 && pRecord->nYRelTo == 2 )
         {
-            // if <nXRelTo> differs from <FSPA.nbx> overwrite <nXRelTo>
-            if ( pFSPA->nbx != pRecord->nXRelTo )
-            {
-                pRecord->nXRelTo = pFSPA->nbx;
-            }
             // if <nYRelTo> differs from <FSPA.nby> overwrite <nYRelTo>
             if ( pFSPA->nby != pRecord->nYRelTo )
             {
@@ -2494,8 +2494,14 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell
             case 0x6000: // version 11 aka Microsoft Word 2003
             case 0x8000: // version 12 aka Microsoft Word 2007
             {
+                // --> OD 2009-01-13 #i98037#
+                // adjustment of conditions needed after deeper analysis of
+                // certain test cases.
                 if ( nLayoutInTableCell == 0xFFFFFFFF || // no explicit attribute value given
-                     nLayoutInTableCell & 0x00008000 )
+                     nLayoutInTableCell & 0x80008000 ||
+                     ( nLayoutInTableCell & 0x02000000 &&
+                       !(nLayoutInTableCell & 0x80000000 ) ) )
+                // <--
                 {
                     bIsObjectLayoutInTableCell = true;
                 }

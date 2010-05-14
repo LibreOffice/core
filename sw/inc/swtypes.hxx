@@ -103,9 +103,9 @@ const SwTwips lMinBorder = 1134;
 #define UNDO_ACTION_COUNT 20
 
 // Konstante Strings
-extern UniString aEmptyStr;         // ""
+SW_DLLPUBLIC extern UniString aEmptyStr;            // ""
 extern ByteString aEmptyByteStr;    // ""
-extern UniString aDotStr;           // '.'
+SW_DLLPUBLIC extern UniString aDotStr;          // '.'
 
 //Zum Einfuegen von Beschriftungen (wie bzw. wo soll eingefuegt werden).
 //Hier weil ein eigenes hxx nicht lohnt und es sonst nirgendwo so recht
@@ -122,7 +122,7 @@ enum SwLabelType
 const BYTE OLD_MAXLEVEL = 5;
 const BYTE MAXLEVEL = 10;       //Ehemals numrule.hxx
 const BYTE NO_NUM       = 200;  //Ehemals numrule.hxx
-const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx
+//const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx //#outline level,removed by zhaojianwei
 //const BYTE NO_INIT        = 202;  //Ehemals numrule.hxx
 
 // fuer Absaetze mit NO_NUM aber auf unterschiedlichen Leveln
@@ -187,9 +187,6 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
 #define SW_RES(i)       ResId(i,*pSwResMgr)
 #define SW_RESSTR(i)    UniString(ResId(i,*pSwResMgr))
 
-#define DDE_AVAILABLE
-
-
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
 ::com::sun::star::uno::Reference<
@@ -208,7 +205,7 @@ const sal_Unicode cMarkSeperator = '|';
 extern const sal_Char* __FAR_DATA pMarkToTable;             // Strings stehen
 extern const sal_Char* __FAR_DATA pMarkToFrame;             // im Init.cxx
 extern const sal_Char* __FAR_DATA pMarkToRegion;
-extern const sal_Char* __FAR_DATA pMarkToOutline;
+SW_DLLPUBLIC extern const sal_Char* __FAR_DATA pMarkToOutline;
 extern const sal_Char* __FAR_DATA pMarkToText;
 extern const sal_Char* __FAR_DATA pMarkToGraphic;
 extern const sal_Char* __FAR_DATA pMarkToOLE;

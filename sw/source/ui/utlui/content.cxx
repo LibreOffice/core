@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.55.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,15 +104,15 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/scrbar.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <PostItMgr.hxx>
+#include <postit.hxx>
 #include <postithelper.hxx>
-
+#include <redline.hxx>
+#include <docary.hxx>
 
 #include "swabstdlg.hxx"
 #include "globals.hrc"
@@ -129,7 +129,6 @@ using namespace ::com::sun::star::container;
 
 
 #define NAVI_BOOKMARK_DELIM     (sal_Unicode)1
-
 
 /***************************************************************************
 
@@ -206,7 +205,10 @@ sal_Bool SwContent::IsProtect() const
 
 sal_Bool SwPostItContent::IsProtect() const
 {
-    return pFld->IsProtect();
+    if (mbPostIt)
+        return pFld->IsProtect();
+    else
+        return false;
 }
 
 sal_Bool SwURLFieldContent::IsProtect() const
@@ -423,22 +425,45 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->pFmtFld->GetTxtFld() &&
-                        (*i)->pFmtFld->IsFldInDoc() &&
-                        (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
+                    if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
                     {
-                        String sEntry = (*i)->pFmtFld->GetFld()->GetPar2();
-                        RemoveNewline(sEntry);
-                        SwPostItContent* pCnt = new SwPostItContent(
-                                            this,
-                                            sEntry, // hier steht der Text
-                                            (const SwFmtFld*)(*i)->pFmtFld,
-                                            nMemberCount);
-                        pMember->Insert(pCnt);
-                        nMemberCount++;
+                        SwFmtFld* aFmtFld = static_cast<SwFmtFld*>((*i)->GetBroadCaster());
+                        if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
+                            (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
+                        {
+                            String sEntry = aFmtFld->GetFld()->GetPar2();
+                            RemoveNewline(sEntry);
+                            SwPostItContent* pCnt = new SwPostItContent(
+                                                this,
+                                                sEntry,
+                                                (const SwFmtFld*)aFmtFld,
+                                                nMemberCount);
+                            pMember->Insert(pCnt);
+                            nMemberCount++;
+                        }
                     }
+                    /*
+                    //  this code can be used once we want redline comments in the margin
+                    else    // redcomment
+                    {
+                        SwRedline* pRedline = static_cast<SwRedline*>((*i)->GetBroadCaster());
+                        if ( pRedline->GetComment() != String(::rtl::OUString::createFromAscii("")) )
+                        {
+                            String sEntry = pRedline->GetComment();
+                            RemoveNewline(sEntry);
+                            SwPostItContent* pCnt = new SwPostItContent(
+                                                this,
+                                                sEntry, // hier steht der Text
+                                                pRedline,
+                                                nMemberCount);
+                            pMember->Insert(pCnt);
+                            nMemberCount++;
+                        }
+                    }
+                    */
                 }
             }
+            //
             sTypeToken = aEmptyStr;
             bEdit = sal_True;
             nOldMemberCount = nMemberCount;
@@ -763,18 +788,44 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->pFmtFld->GetTxtFld() &&
-                        (*i)->pFmtFld->IsFldInDoc() &&
-                        (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
+                    if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
                     {
-                        String sEntry = (*i)->pFmtFld->GetFld()->GetPar2();
-                        RemoveNewline(sEntry);
-                        SwPostItContent* pCnt = new SwPostItContent(this,sEntry, (*i)->pFmtFld,nMemberCount);
-                        pMember->Insert(pCnt);
-                        nMemberCount++;
+                        SwFmtFld* aFmtFld = static_cast<SwFmtFld*>((*i)->GetBroadCaster());
+                        if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
+                            (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
+                        {
+                            String sEntry = aFmtFld->GetFld()->GetPar2();
+                            RemoveNewline(sEntry);
+                            SwPostItContent* pCnt = new SwPostItContent(
+                                                this,
+                                                sEntry,
+                                                (const SwFmtFld*)aFmtFld,
+                                                nMemberCount);
+                            pMember->Insert(pCnt);
+                            nMemberCount++;
+                        }
                     }
+                    /*  this code can be used once we want redline comments in the margin
+                    else    // redcomment
+                    {
+                        SwRedline* pRedline = static_cast<SwRedline*>((*i)->GetBroadCaster());
+                        if ( pRedline->GetComment() != String(::rtl::OUString::createFromAscii("")) )
+                        {
+                            String sEntry = pRedline->GetComment();
+                            RemoveNewline(sEntry);
+                            SwPostItContent* pCnt = new SwPostItContent(
+                                                this,
+                                                sEntry,
+                                                pRedline,
+                                                nMemberCount);
+                            pMember->Insert(pCnt);
+                            nMemberCount++;
+                        }
+                    }
+                    */
                 }
             }
+            //
         }
         break;
         case CONTENT_TYPE_DRAWOBJECT:
@@ -2012,7 +2063,9 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                 if(bIsRoot && nRootType == CONTENT_TYPE_OUTLINE ||
                     ((SwContent*)pFirstEntry->GetUserData())->GetParent()->GetType()
                                                 ==  CONTENT_TYPE_OUTLINE)
+                {
                     nActPos = ((SwOutlineContent*)pFirstEntry->GetUserData())->GetPos();
+                }
             }
             if ( nActPos < USHRT_MAX &&
                     ( !nMove || pShell->IsOutlineMovable( nActPos )) )
@@ -2865,11 +2918,28 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         case CONTENT_TYPE_POSTIT:
             if(nMode == EDIT_MODE_DELETE)
             {
-                pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
-                pActiveShell->DelRight();
+                if (((SwPostItContent*)pCnt)->IsPostIt())
+                {
+                    pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
+                    pActiveShell->DelRight();
+                }
+                /*
+                //  this code can be used once we want redline comments in the margin
+                else
+                {
+                    SwMarginWin* pComment = pActiveShell->GetView().GetPostItMgr()->GetPostIt(((SwPostItContent*)pCnt)->GetRedline());
+                    if (pComment)
+                        pComment->Delete();
+                }
+                */
             }
             else
-                nSlot = FN_POSTIT;
+            {
+                if (((SwPostItContent*)pCnt)->IsPostIt())
+                    nSlot = FN_POSTIT;
+                else
+                    nSlot = FN_REDLINE_COMMENT;
+            }
         break;
         case CONTENT_TYPE_INDEX:
         {
@@ -3014,7 +3084,12 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         }
         break;
         case CONTENT_TYPE_POSTIT:
-            pActiveShell->GotoFld(*((SwPostItContent*)pCnt)->GetPostIt());
+            if (((SwPostItContent*)pCnt)->IsPostIt())
+                pActiveShell->GotoFld(*((SwPostItContent*)pCnt)->GetPostIt());
+            else
+                pActiveShell->GetView().GetDocShell()->GetWrtShell()->GotoRedline(
+                        pActiveShell->GetView().GetDocShell()->GetWrtShell()->FindRedlineOfData(((SwPostItContent*)pCnt)->GetRedline()->GetRedlineData()));
+
         break;
         case CONTENT_TYPE_DRAWOBJECT:
         {

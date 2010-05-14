@@ -42,7 +42,7 @@ class IntlWrapper;
 //Kopfzeile, fuer Seitenformate
 //Client von FrmFmt das den Header beschreibt.
 
-class SwFmtHeader: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {
     BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
 
@@ -74,7 +74,7 @@ public:
 //Fusszeile, fuer Seitenformate
 //Client von FrmFmt das den Footer beschreibt.
 
-class SwFmtFooter: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
 {
     BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
 

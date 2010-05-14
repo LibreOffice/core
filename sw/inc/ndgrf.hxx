@@ -48,7 +48,7 @@ class SvStorage;
 // --------------------
 // SwGrfNode
 // --------------------
-class SwGrfNode: public SwNoTxtNode
+class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 {
     friend class SwNodes;
 

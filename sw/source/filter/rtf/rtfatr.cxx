@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfatr.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.75.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -427,14 +427,17 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
             rWrt.Strm() << sRTF_S;
             rWrt.OutULong( nId );
             rWrt.bOutFmtAttr = TRUE;
-            BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();
-            if( MAXLEVEL > nLvl )
+//          BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();      //#outline level,zhaojianwei
+//          if( MAXLEVEL > nLvl )
+//          {
+            if(((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
             {
+                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();  //<-end,zhaojianwei
                 USHORT nNumId = rWrt.GetNumRuleId(
                                         *rWrt.pDoc->GetOutlineNumRule() );
                 if( USHRT_MAX != nNumId )
                 {
-                    BYTE nWWLvl = 8 >= nLvl ? nLvl : 8;
+                    BYTE nWWLvl = 8 >= nLvl ? static_cast<BYTE>(nLvl) : 8;
                     rWrt.Strm() << sRTF_LS;
                     rWrt.OutULong( nNumId );
                     rWrt.Strm() << sRTF_ILVL; rWrt.OutULong( nWWLvl );
@@ -446,7 +449,7 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
                     }
                 }
 
-                const SwNumFmt* pNFmt = &rWrt.pDoc->GetOutlineNumRule()->Get( nLvl );
+                const SwNumFmt* pNFmt = &rWrt.pDoc->GetOutlineNumRule()->Get( static_cast<USHORT>(nLvl) );
                 if( pNFmt->GetAbsLSpace() )
                 {
                     SfxItemSet aSet( *rFmt.GetAttrSet().GetPool(),
@@ -2442,7 +2445,7 @@ static Writer& OutRTF_SwCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const char* pStr = 0;
-    switch( ((const SvxUnderlineItem&)rHt).GetUnderline() )
+    switch( ((const SvxUnderlineItem&)rHt).GetLineStyle() )
     {
         case UNDERLINE_SINGLE:
             pStr = sRTF_UL;
@@ -2503,7 +2506,7 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     {
         SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
 
-        if( UNDERLINE_SINGLE == ((const SvxUnderlineItem&)rHt).GetUnderline()
+        if( UNDERLINE_SINGLE == ((const SvxUnderlineItem&)rHt).GetLineStyle()
             && ((SvxWordLineModeItem&)rRTFWrt.GetItem(
                 RES_CHRATR_WORDLINEMODE )).GetValue() )
             pStr = sRTF_ULW;
@@ -2513,6 +2516,90 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
         rWrt.Strm() << sRTF_ULC;
         rWrt.OutULong( rRTFWrt.GetId(((const SvxUnderlineItem&)rHt).GetColor()) );
+
+    }
+
+    return rWrt;
+}
+
+
+
+static Writer& OutRTF_SwOverline( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    const char* pStr = 0;
+    switch( ((const SvxOverlineItem&)rHt).GetLineStyle() )
+    {
+        case UNDERLINE_SINGLE:
+            pStr = sRTF_OL;
+            break;
+        case UNDERLINE_DOUBLE:
+            pStr = sRTF_OLDB;
+            break;
+        case UNDERLINE_NONE:
+            pStr = sRTF_OLNONE;
+            break;
+        case UNDERLINE_DOTTED:
+            pStr = sRTF_OLD;
+            break;
+        case UNDERLINE_DASH:
+            pStr = sRTF_OLDASH;
+            break;
+        case UNDERLINE_DASHDOT:
+            pStr = sRTF_OLDASHD;
+            break;
+        case UNDERLINE_DASHDOTDOT:
+            pStr = sRTF_OLDASHDD;
+            break;
+        case UNDERLINE_BOLD:
+            pStr = sRTF_OLTH;
+            break;
+        case UNDERLINE_WAVE:
+            pStr = sRTF_OLWAVE;
+            break;
+        case UNDERLINE_BOLDDOTTED:
+            pStr = sRTF_OLTHD;
+            break;
+        case UNDERLINE_BOLDDASH:
+            pStr = sRTF_OLTHDASH;
+            break;
+        case UNDERLINE_LONGDASH:
+            pStr = sRTF_OLLDASH;
+            break;
+        case UNDERLINE_BOLDLONGDASH:
+            pStr = sRTF_OLTHLDASH;
+            break;
+        case UNDERLINE_BOLDDASHDOT:
+            pStr = sRTF_OLTHDASHD;
+            break;
+        case UNDERLINE_BOLDDASHDOTDOT:
+            pStr = sRTF_OLTHDASHDD;
+            break;
+        case UNDERLINE_BOLDWAVE:
+            pStr = sRTF_OLHWAVE;
+            break;
+        case UNDERLINE_DOUBLEWAVE:
+            pStr = sRTF_OLOLDBWAVE;
+            break;
+        default:
+            break;
+    }
+
+    if( pStr )
+    {
+        SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+        if ( rRTFWrt.bNonStandard )
+        {
+            if( UNDERLINE_SINGLE == ((const SvxOverlineItem&)rHt).GetLineStyle()
+                && ((SvxWordLineModeItem&)rRTFWrt.GetItem(
+                    RES_CHRATR_WORDLINEMODE )).GetValue() )
+                pStr = sRTF_OLW;
+
+            rRTFWrt.Strm() << pStr;
+            rRTFWrt.bOutFmtAttr = TRUE;
+
+            rWrt.Strm() << sRTF_OLC;
+            rWrt.OutULong( rRTFWrt.GetId(((const SvxOverlineItem&)rHt).GetColor()) );
+        }
 
     }
 
@@ -4144,6 +4231,9 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_SCALEW */             OutRTF_SwCharScaleW,
 /* RES_CHRATR_RELIEF */             OutRTF_SwCharRelief,
 /* RES_CHRATR_HIDDEN */             OutRTF_SvxCharHiddenItem,
+/* RES_CHRATR_OVERLINE */           OutRTF_SwOverline,
+/* RES_CHRATR_DUMMY1 */             0,
+/* RES_CHRATR_DUMMY2 */             0,
 
 /* RES_TXTATR_AUTOFMT   */          OutRTF_SwTxtAutoFmt,
 /* RES_TXTATR_INETFMT   */          OutRTF_SwTxtINetFmt, // Dummy
@@ -4180,6 +4270,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_PARATR_VERTALIGN */          OutRTF_SwFontAlign,
 /* RES_PARATR_SNAPTOGRID*/          0, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+/* RES_PARATR_OUTLINELEVEL */       0, // new - outlinelevel
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new

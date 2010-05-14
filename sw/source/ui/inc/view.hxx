@@ -251,6 +251,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     String          aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
+    USHORT          nPageCnt;
+
     // Aktueller Drawmode
     USHORT          nDrawSfxId;
     String          sDrawCustom; //some drawing types are marked with strings!
@@ -518,14 +520,14 @@ public:
 
     int             StatVLineal() const { return ((Window*)pVRuler)->IsVisible(); }
     void            ChangeVLinealMetric(FieldUnit eUnit);
-    BOOL            GetVLinealMetric(FieldUnit& rToFill) const;
+    void            GetVLinealMetric(FieldUnit& rToFill) const;
 
     int             StatTab() const { return ((Window*)pHRuler)->IsVisible(); }
     SvxRuler&       GetHLineal()    { return *pHRuler; }
     SvxRuler&       GetVLineal()    { return *pVRuler; }
     void            InvalidateRulerPos();
     void            ChangeTabMetric(FieldUnit eUnit);
-    BOOL            GetHLinealMetric(FieldUnit& rToFill) const;
+    void            GetHLinealMetric(FieldUnit& rToFill) const;
 
         // Handler
     void            Execute(SfxRequest&);
@@ -658,6 +660,8 @@ public:
                             BOOL bLink = TRUE, GraphicFilter *pFlt = 0,
                             Graphic* pPreviewGrf = 0,
                             BOOL bRule = FALSE );
+
+    void ExecuteScan( SfxRequest& rReq );
 
     SwPostItMgr* GetPostItMgr() { return mpPostItMgr;}
     const SwPostItMgr* GetPostItMgr() const { return mpPostItMgr;}

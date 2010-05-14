@@ -204,7 +204,7 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
         if (!bDrawParaDlg)
         {
             aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000E));
-            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/2));
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/10));
 
         }
         rPage.PageCreated(aSet);
@@ -244,6 +244,13 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     }
     else if( TP_NUMPARA == nId)
     {
+        //-->#outline level,added by zhaojianwei
+        SwTxtFmtColl* pTmpColl = rSh.GetCurTxtFmtColl();
+        if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
+        }//<-end
+
         ((SwParagraphNumTabPage&)rPage).EnableNewStart();
         ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();

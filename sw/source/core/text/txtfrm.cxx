@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfrm.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.108.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <svtools/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svx/langitem.hxx>
@@ -40,6 +41,7 @@
 #include <svx/ulspitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/pgrditem.hxx>
+#include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()
 #include <pagefrm.hxx>  // InvalidateSpelling
@@ -359,6 +361,27 @@ void SwLayoutModeModifier::SetAuto()
 {
     const ULONG nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
     ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
+}
+
+SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang ) :
+        rOut( rOutp ), nOldLanguageType( rOutp.GetDigitLanguage() )
+{
+    LanguageType eLang = eCurLang;
+    const SvtCTLOptions::TextNumerals nTextNumerals = SW_MOD()->GetCTLOptions().GetCTLTextNumerals();
+
+    if ( SvtCTLOptions::NUMERALS_HINDI == nTextNumerals )
+        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == nTextNumerals )
+        eLang = LANGUAGE_ENGLISH;
+    else if ( SvtCTLOptions::NUMERALS_SYSTEM == nTextNumerals )
+        eLang = (LanguageType)::GetAppLanguage();
+
+    ((OutputDevice&)rOut).SetDigitLanguage( eLang );
+}
+
+SwDigitModeModifier::~SwDigitModeModifier()
+{
+    ((OutputDevice&)rOut).SetDigitLanguage( nOldLanguageType );
 }
 
 /*************************************************************************
@@ -885,11 +908,9 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
             if( pTxtNode->GetWrong() )
                 pTxtNode->GetWrong()->Move( nPos, nCnt );
             if( pWrongGrammar )
-            {
                 pWrongGrammar->MoveGrammar( nPos, nCnt );
-                if( bGrammarProxy && pTxtNode->GetGrammarCheck() )
-                    pTxtNode->GetGrammarCheck()->MoveGrammar( nPos, nCnt );
-            }
+            if( bGrammarProxy && pTxtNode->GetGrammarCheck() )
+                pTxtNode->GetGrammarCheck()->MoveGrammar( nPos, nCnt );
             if( pTxtNode->GetSmartTags() )
                 pTxtNode->GetSmartTags()->Move( nPos, nCnt );
         }
@@ -1348,6 +1369,13 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 else
                     SwCntntFrm::Modify( pOld, pNew );
             }
+
+            // --> OD 2009-01-06 #i88069#
+            if ( GetShell() )
+            {
+                GetShell()->InvalidateAccessibleParaAttrs( *this );
+            }
+            // <--
         }
         break;
 

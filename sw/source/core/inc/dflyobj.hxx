@@ -126,6 +126,10 @@ public:
     virtual FASTBOOL HasMacro() const;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const;
+
+    // FullDrag support
+    virtual bool supportsFullDrag() const;
+    virtual SdrObject* getFullDragClone() const;
 };
 
 

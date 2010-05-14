@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.51.16.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1831,7 +1831,7 @@ SwField* SwPostItField::Copy() const
     SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor,
                                 sTxt, aDateTime);
     if (mpText)
-        pRet->SetTextObject( mpText->Clone() );
+        pRet->SetTextObject( new OutlinerParaObject(*mpText) );
     return pRet;
 }
 /*--------------------------------------------------------------------
@@ -1861,7 +1861,7 @@ void SwPostItField::SetPar2(const String& rStr)
  ---------------------------------------------------------------------------*/
 String SwPostItField::GetPar2() const
 {
-    return sTxt;
+        return sTxt;
 }
 
 const OutlinerParaObject* SwPostItField::GetTextObject() const

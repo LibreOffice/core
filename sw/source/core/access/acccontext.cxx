@@ -1332,6 +1332,20 @@ void SwAccessibleContext::InvalidateTextSelection()
     FireAccessibleEvent( aEvent );
 }
 
+/** attributes has changed
+
+    OD 2009-01-06 #i88069#
+
+    @author OD
+*/
+void SwAccessibleContext::InvalidateAttr()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::TEXT_ATTRIBUTE_CHANGED;
+
+    FireAccessibleEvent( aEvent );
+}
+
 sal_Bool SwAccessibleContext::HasCursor()
 {
     return sal_False;

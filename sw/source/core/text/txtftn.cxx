@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtftn.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.51.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1028,10 +1028,12 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 
     // --> FME 2005-02-17 #i37142#
     // Underline style of paragraph font should not be considered
+    // Overline style of paragraph font should not be considered
     // Weight style of paragraph font should not be considered
     // Posture style of paragraph font should not be considered
     // See also #i18463# and SwTxtFormatter::NewNumberPortion()
     pNumFnt->SetUnderline( UNDERLINE_NONE );
+    pNumFnt->SetOverline( UNDERLINE_NONE );
     pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
     pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
     pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );
@@ -1320,11 +1322,32 @@ void SwTxtFormatter::MakeDummyLine()
 }
 
 /*************************************************************************
+ *                      class SwFtnSave
+  *************************************************************************/
+class SwFtnSave
+{
+    SwTxtSizeInfo *pInf;
+    SwFont       *pFnt;
+    SwFont       *pOld;
+public:
+    SwFtnSave( const SwTxtSizeInfo &rInf,
+               const SwTxtFtn *pTxtFtn,
+               const bool bApplyGivenScriptType,
+               const BYTE nGivenScriptType );
+   ~SwFtnSave();
+};
+
+/*************************************************************************
  *                     SwFtnSave::SwFtnSave()
  *************************************************************************/
 
-SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
+SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
+                      const SwTxtFtn* pTxtFtn,
+                      const bool bApplyGivenScriptType,
+                      const BYTE nGivenScriptType )
     : pInf( &((SwTxtSizeInfo&)rInf) )
+    , pFnt( 0 )
+    , pOld( 0 )
 {
     if( pTxtFtn && rInf.GetTxtFrm() )
     {
@@ -1335,9 +1358,18 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
         SwFmtFtn& rFtn = (SwFmtFtn&)pTxtFtn->GetFtn();
         const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
 
-        // examine text and set script
-        String aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
-        pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, 0 ) );
+        // --> OD 2009-01-29 #i98418#
+        if ( bApplyGivenScriptType )
+        {
+            pFnt->SetActual( nGivenScriptType );
+        }
+        else
+        {
+            // examine text and set script
+            String aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
+            pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, 0 ) );
+        }
+        // <--
 
         const SwEndNoteInfo* pInfo;
         if( rFtn.IsEndNote() )
@@ -1395,7 +1427,14 @@ SwFtnSave::~SwFtnSave()
 
 SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrame,
                             SwTxtFtn *pFootn, KSHORT nReal )
-        : SwFldPortion( rExpand, 0 ), pFrm(pFrame), pFtn(pFootn), nOrigHeight( nReal )
+        : SwFldPortion( rExpand, 0 )
+        , pFrm(pFrame)
+        , pFtn(pFootn)
+        , nOrigHeight( nReal )
+        // --> OD 2009-01-29 #i98418#
+        , mbPreferredScriptTypeSet( false )
+        , mnPreferredScriptType( SW_LATIN )
+        // <--
 {
     SetLen(1);
     SetWhichPor( POR_FTN );
@@ -1417,7 +1456,10 @@ sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
 
 sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 {
-    SwFtnSave aFtnSave( rInf, pFtn );
+    // --> OD 2009-01-29 #i98418#
+//    SwFtnSave aFtnSave( rInf, pFtn );
+    SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
+    // <--
     // the idx is manipulated in SwExpandPortion::Format
     // this flag indicates, that a footnote is allowed to trigger
     // an underflow during SwTxtGuess::Guess
@@ -1438,7 +1480,10 @@ sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    SwFtnSave aFtnSave( rInf, pFtn );
+    // --> OD 2009-01-29 #i98418#
+//    SwFtnSave aFtnSave( rInf, pFtn );
+    SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
+    // <--
     rInf.DrawViewOpt( *this, POR_FTN );
     SwExpandPortion::Paint( rInf );
 }
@@ -1449,9 +1494,20 @@ void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwPosSize SwFtnPortion::GetTxtSize( const SwTxtSizeInfo &rInfo ) const
 {
-    SwFtnSave aFtnSave( rInfo, pFtn );
+    // --> OD 2009-01-29 #i98418#
+//    SwFtnSave aFtnSave( rInfo, pFtn );
+    SwFtnSave aFtnSave( rInfo, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
+    // <--
     return SwExpandPortion::GetTxtSize( rInfo );
 }
+
+// --> OD 2009-01-29 #i98418#
+void SwFtnPortion::SetPreferredScriptType( BYTE nPreferredScriptType )
+{
+    mbPreferredScriptTypeSet = true;
+    mnPreferredScriptType = nPreferredScriptType;
+}
+// <--
 
 /*************************************************************************
  *                      class SwQuoVadisPortion

@@ -216,7 +216,7 @@ static OldFormats aOldGetSetExpFmt30[] =
     { NF_NUMERIC_START,                 0  }                // Tabellenende
 };
 
-void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
+SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                                 USHORT& rSubType, ULONG &rFmt,
                                 USHORT nVersion )
 {
@@ -323,7 +323,7 @@ void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
         }
     }
 }
-void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
+SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
                               ULONG& rFmt, ULONG nFFVersion )
 {
     const OldFormats *pOldFmt = 0L;

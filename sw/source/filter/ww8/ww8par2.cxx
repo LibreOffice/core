@@ -203,6 +203,8 @@ class WW8TabDesc
     short nConvertedLeft;
     short nMaxRight;
     short nSwWidth;
+    short nPreferredWidth;
+    short nOrgDxaLeft;
 
     bool bOk;
     bool bClaimLineFmt;
@@ -831,7 +833,8 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
-                    ((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );
+                    //((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );    //#outline level,zhaojianwei
+                    ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel ); //<-end,zhaojianwei
                     // Bei WW-NoNumbering koennte auch NO_NUMBERING gesetzt
                     // werden. ( Bei normaler Nummerierung muss NO_NUM gesetzt
                     // werden: NO_NUM : Nummerierungs-Pause,
@@ -1628,7 +1631,7 @@ enum wwTableSprm
 {
     sprmNil,
 
-    sprmTTextFlow, sprmTFCantSplit, sprmTFCantSplit90,sprmTJc, sprmTFBiDi, sprmTDefTable,
+    sprmTTableWidth,sprmTTextFlow, sprmTFCantSplit, sprmTFCantSplit90,sprmTJc, sprmTFBiDi, sprmTDefTable,
     sprmTDyaRowHeight, sprmTDefTableShd, sprmTDxaLeft, sprmTSetBrc,
     sprmTDxaCol, sprmTInsert, sprmTDelete, sprmTTableHeader,
     sprmTDxaGapHalf, sprmTTableBorders,
@@ -1643,6 +1646,8 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
         case ww::eWW8:
             switch (nId)
             {
+                case 0xF614:
+                    return sprmTTableWidth;
                 case 0x7629:
                     return sprmTTextFlow;
                 case 0x3403:
@@ -1762,6 +1767,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     nConvertedLeft(0),
     nMaxRight(0),
     nSwWidth(0),
+    nPreferredWidth(0),
+    nOrgDxaLeft(0),
     bOk(true),
     bClaimLineFmt(false),
     eOri(text::HoriOrientation::NONE),
@@ -1828,6 +1835,15 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                 wwTableSprm eSprm = GetTableSprm(nId, pIo->GetFib().GetFIBVersion());
                 switch (eSprm)
                 {
+                    case sprmTTableWidth:
+                        {
+                        const BYTE b0 = pParams[0];
+                        const BYTE b1 = pParams[1];
+                        const BYTE b2 = pParams[2];
+                        if (b0 == 3) // Twips
+                            nPreferredWidth = b2 * 0x100 + b1;
+                        }
+                        break;
                     case sprmTTextFlow:
                         pNewBand->ProcessDirection(pParams);
                         break;
@@ -1881,6 +1897,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         // shift the whole table to that margin (see below)
                         {
                             short nDxaNew = (INT16)SVBT16ToShort( pParams );
+                            nOrgDxaLeft = nDxaNew;
                             if( nDxaNew < nTabeDxaNew )
                                 nTabeDxaNew = nDxaNew;
                         }
@@ -2326,7 +2343,7 @@ void WW8TabDesc::CalcDefaults()
         }
     } */
 
-    if (nMinLeft && (text::HoriOrientation::LEFT == eOri))
+    if (nMinLeft && ((!bIsBiDi && text::HoriOrientation::LEFT == eOri) || (bIsBiDi && text::HoriOrientation::RIGHT == eOri)))
         eOri = text::HoriOrientation::LEFT_AND_WIDTH; //  absolutely positioned
 
     nDefaultSwCols = nMinCols;  // da Zellen einfuegen billiger ist als Mergen
@@ -2491,7 +2508,8 @@ void WW8TabDesc::CreateSwTable()
             //inside the frame, in word the dialog involved greys out the
             //ability to set the margin.
             SvxLRSpaceItem aL( RES_LR_SPACE );
-            aL.SetLeft( GetMinLeft() );
+            // set right to original DxaLeft (i28656)
+            aL.SetLeft( !bIsBiDi ?  GetMinLeft() : pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft);
             aItemSet.Put(aL);
         }
     }
@@ -3514,8 +3532,11 @@ void SwWW8ImplReader::TabCellEnd()
     {
         pTableDesc->TableCellEnd();
 
-        if (bReadTable &&  pWFlyPara == NULL && mpTableEndPaM.get() != NULL &&
-            ! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
+        if (bReadTable
+            && pWFlyPara == NULL
+            && mpTableEndPaM.get() != NULL
+            && (! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
+            && SwPaM::LessThan(*mpTableEndPaM, *pPaM))
         {
             if (mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode())
             {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.93.92.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -573,7 +573,10 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             return false;
         // "sprmPDxaLeft"  pap.dxaLeft;dxa;word;
         sal_uInt8* pSprm;
-        if (0 != (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
+        if (
+            (0 != (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx))) ||
+            (0 != (pSprm = GrpprlHasSprm(0x845E,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
+            )
         {
             sal_uInt8 *pBegin = pSprm-2;
             for(int i=0;i<4;++i)
@@ -584,7 +587,10 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         }
 
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
-        if(0 != (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        if (
+            (0 != (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) ) ||
+            (0 != (pSprm = GrpprlHasSprm(0x8460,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+            )
         {
             sal_uInt8 *pBegin = pSprm-2;
             for(int i=0;i<4;++i)
@@ -1072,6 +1078,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     bool bLVLOk = true;
     sal_uInt8  aBits1;
 
+    nLastLFOPosition = USHRT_MAX;
     long nOriginalPos = rSt.Tell();
     //
     // 1. PLCF LST auslesen und die Listen Vorlagen im Writer anlegen
@@ -1480,7 +1487,6 @@ bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
 
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     const BYTE nLevel, std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode)
-    const
 {
     sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
     if( nLFOInfos <= nLFOPosition )
@@ -1497,6 +1503,19 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     if( !pLFOInfo->pNumRule )
         return 0;
 
+    // #i25545#
+    // --> OD 2009-03-12 #i100132# - a number format does not have to exist on given list level
+//    SwNumFmt pFmt(*(pLFOInfo->pNumRule->GetNumFmt(nLevel)));
+    SwNumFmt pFmt(pLFOInfo->pNumRule->Get(nLevel));
+    // <--
+    if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
+        if ( pFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
+            pFmt.SetNumAdjust(SVX_ADJUST_LEFT);
+        else if ( pFmt.GetNumAdjust() == SVX_ADJUST_LEFT)
+            pFmt.SetNumAdjust(SVX_ADJUST_RIGHT);
+        pLFOInfo->pNumRule->Set(nLevel, pFmt);
+    }
+    nLastLFOPosition = nLFOPosition;
     /*
     #i1869#
     If this list has had its bits set in word 2000 to pretend that it is a
@@ -1804,12 +1823,9 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                     {
                         pTxtNd->SetAttr
                             (SwNumRuleItem(pRule->GetName()));
-
                     }
                 }
-
             }
-
             // --> OD 2005-10-17 #126238#
             // - re-introduce fix for issue #i49037#, which got lost by
             // accident on a re-synchronisation on the master.
@@ -1826,43 +1842,61 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             }
             // <--
 
-            SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
-                    RES_LR_SPACE);
-            const SvxLRSpaceItem *pItem = (const SvxLRSpaceItem*)(
-                GetFmtAttr(RES_LR_SPACE));
-            ASSERT(pItem, "impossible");
-            if (pItem)
-                aListIndent.Put(*pItem);
-
-            /*
-             Take the original paragraph sprms attached to this list level
-             formatting and apply them to the paragraph. I'm convinced that
-             this is exactly what word does.
-            */
-            if (short nLen = static_cast< short >(aParaSprms.size()))
+            // --> OD 2009-03-04 #i99822#
+            // Direct application of the list level formatting no longer
+            // needed for list levels of mode LABEL_ALIGNMENT
+            bool bApplyListLevelIndentDirectlyAtPara( true );
+            if ( pTxtNd->GetNumRule() && nActLevel < MAXLEVEL )
             {
-                SfxItemSet* pOldAktItemSet = pAktItemSet;
-                SetAktItemSet(&aListIndent);
-
-                sal_uInt8* pSprms1  = &aParaSprms[0];
-                while (0 < nLen)
+                const SwNumFmt& rFmt = pTxtNd->GetNumRule()->Get( nActLevel );
+                if ( rFmt.GetPositionAndSpaceMode() ==
+                                            SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    sal_uInt16 nL1 = ImportSprm(pSprms1);
-                    nLen = nLen - nL1;
-                    pSprms1 += nL1;
+                    bApplyListLevelIndentDirectlyAtPara = false;
+                }
+            }
+
+            if ( bApplyListLevelIndentDirectlyAtPara )
+            {
+                SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
+                        RES_LR_SPACE);
+                const SvxLRSpaceItem *pItem = (const SvxLRSpaceItem*)(
+                    GetFmtAttr(RES_LR_SPACE));
+                ASSERT(pItem, "impossible");
+                if (pItem)
+                    aListIndent.Put(*pItem);
+
+                /*
+                 Take the original paragraph sprms attached to this list level
+                 formatting and apply them to the paragraph. I'm convinced that
+                 this is exactly what word does.
+                */
+                if (short nLen = static_cast< short >(aParaSprms.size()))
+                {
+                    SfxItemSet* pOldAktItemSet = pAktItemSet;
+                    SetAktItemSet(&aListIndent);
+
+                    sal_uInt8* pSprms1  = &aParaSprms[0];
+                    while (0 < nLen)
+                    {
+                        sal_uInt16 nL1 = ImportSprm(pSprms1);
+                        nLen = nLen - nL1;
+                        pSprms1 += nL1;
+                    }
+
+                    SetAktItemSet(pOldAktItemSet);
                 }
 
-                SetAktItemSet(pOldAktItemSet);
+                const SvxLRSpaceItem *pLR =
+                    HasItem<SvxLRSpaceItem>(aListIndent, RES_LR_SPACE);
+                ASSERT(pLR, "Impossible");
+                if (pLR)
+                {
+                    pCtrlStck->NewAttr(*pPaM->GetPoint(), *pLR);
+                    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
+                }
             }
-
-            const SvxLRSpaceItem *pLR =
-                HasItem<SvxLRSpaceItem>(aListIndent, RES_LR_SPACE);
-            ASSERT(pLR, "Impossible");
-            if (pLR)
-            {
-                pCtrlStck->NewAttr(*pPaM->GetPoint(), *pLR);
-                pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
-            }
+            // <--
         }
     }
 }
@@ -2363,8 +2397,8 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
             break;
 
         case RES_CHRATR_UNDERLINE:
-            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetUnderline());
-            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetUnderline());
+            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetLineStyle());
+            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetLineStyle());
             break;
 
         case RES_CHRATR_CROSSEDOUT:

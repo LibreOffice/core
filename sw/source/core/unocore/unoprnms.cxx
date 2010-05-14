@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.cxx,v $
- * $Revision: 1.139 $
+ * $Revision: 1.139.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -718,7 +718,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0673 UNO_NAME_TRANSFORMATION_IN_HORI_L2R*/ {MAP_CHAR_LEN("TransformationInHoriL2R")},
 /* 0674 UNO_NAME_POSITION_LAYOUT_DIR*/ {MAP_CHAR_LEN("PositionLayoutDir")},
 /* 0675 UNO_NAME_NUMBERING_IS_OUTLINE*/ {MAP_CHAR_LEN("NumberingIsOutline")},
-/* 0676 UNO_NAME_DEFAULT_OUTLINE_LEVEL*/ {MAP_CHAR_LEN("DefaultOutlineLevel")},
+///* 0676 UNO_NAME_DEFAULT_OUTLINE_LEVEL*/ {MAP_CHAR_LEN("DefaultOutlineLevel")},   //#outline level,removed by zhaojianwei
 /* 0677 UNO_NAME_STARTPOSITION_IN_HORI_L2R*/ {MAP_CHAR_LEN("StartPositionInHoriL2R")},
 /* 0678 UNO_NAME_ENDPOSITION_IN_HORI_L2R*/ {MAP_CHAR_LEN("EndPositionInHoriL2R")},
 /* 0679 UNO_NAME_SUBJECT             */  {MAP_CHAR_LEN("Subject")},
@@ -741,7 +741,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0696 UNO_NAME_PAGE_COUNT*/               {MAP_CHAR_LEN("PageCount")},
 /* 0697 UNO_NAME_LINE_COUNT*/               {MAP_CHAR_LEN("LineCount")},
 /* 0698 UNO_NAME_IS_CONSTANT_SPELLCHECK*/   {MAP_CHAR_LEN("IsConstantSpellcheck")},
-/* 0699 UNO_NAME_IS_HIDE_SPELL_MARKS*/      {MAP_CHAR_LEN("IsHideSpellMarks")},
+/* 0699 UNO_NAME_IS_HIDE_SPELL_MARKS*/      {MAP_CHAR_LEN("IsHideSpellMarks")},     /* deprecated #i91949 */
 /* 0700 UNO_NAME_IS_FIELD_USED */       {MAP_CHAR_LEN("IsFieldUsed")},
 /* 0701 UNO_NAME_IS_FIELD_DISPLAYED */  {MAP_CHAR_LEN("IsFieldDisplayed")},
 /* 0702 UNO_NAME_BUILDID */             {MAP_CHAR_LEN("BuildId")},
@@ -772,7 +772,13 @@ const SwPropNameTab aPropNameTab = {
 /* 0727 UNO_NAME_TABLE_BORDER_DISTANCES */ {MAP_CHAR_LEN("TableBorderDistances")},
 /* 0728 UNO_NAME_LIST_ID*/ {MAP_CHAR_LEN("ListId")},
 /* 0729 UNO_NAME_DEFAULT_LIST_ID*/ {MAP_CHAR_LEN("DefaultListId")},
-/* 0730 UNO_NAME_STREAM_NAME */ {MAP_CHAR_LEN("StreamName")}
+/* 0730 UNO_NAME_STREAM_NAME */ {MAP_CHAR_LEN("StreamName")},
+/* 0731 UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE */  {MAP_CHAR_LEN("ContinueingPreviousSubTree")},
+/* 0732 UNO_NAME_PARA_LIST_LABEL_STRING */  {MAP_CHAR_LEN("ListLabelString")},
+/* 0733 CHAR_OVERLINE */               {MAP_CHAR_LEN("CharOverline")},
+/* 0734 CHAR_OVERLINE_COLOR */         {MAP_CHAR_LEN("CharOverlineColor")},
+/* 0735 CHAR_OVERLINE_HAS_COLOR */     {MAP_CHAR_LEN("CharOverlineHasColor")},
+/* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")}//#outline level,add<-zhaojianwei Outlinelevel
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )

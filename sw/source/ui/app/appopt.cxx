@@ -91,8 +91,6 @@
 #include <globals.hrc>
 #endif
 #include <globals.h>        // globale Konstanten z.B.
-// #107253#
-#include <swlinguconfig.hxx>
 #include <svtools/slstitm.hxx>
 #include "swabstdlg.hxx"
 #include <swwrtshitem.hxx>
@@ -192,8 +190,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pPrt = new SfxPrinter(pSet);
         pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));*/
 
-        // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-        SwLinguConfig aLinguCfg;
+        SvtLinguConfig aLinguCfg;
 
         Any aLang = aLinguCfg.GetProperty(C2U("DefaultLocale"));
         Locale aLocale;
@@ -335,10 +332,10 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
         if(!aViewOpt.IsViewMetaChars())
         {
-            if(     !aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab ||
-                    !aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace ||
-                    !aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd ||
-                    !aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak )
+            if(     (!aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab) ||
+                    (!aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace) ||
+                    (!aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd) ||
+                    (!aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak) )
             {
                 aViewOpt.SetViewMetaChars(TRUE);
                 if(pBindings)

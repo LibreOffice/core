@@ -2365,6 +2365,7 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
         case RES_CHRATR_SHADOWED:
         case RES_CHRATR_AUTOKERN:
         case RES_CHRATR_UNDERLINE:
+        case RES_CHRATR_OVERLINE:
         case RES_CHRATR_KERNING:
         case RES_CHRATR_FONT:
         case RES_CHRATR_FONTSIZE:

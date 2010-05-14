@@ -156,13 +156,18 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                 if( pONd && pONd->GetTxtColl() )
                 {
                     BYTE nPrevLvl = nLevel;
+
                     // --> OD 2008-04-02 #refactorlists#
 //                    nLevel = GetRealLevel( pONd->GetTxtColl()->
 //                                            GetOutlineLevel() );
-                    ASSERT( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,
+                    //ASSERT( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,   //#outline level,zhaojianwei
+                    //        "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
+                    //nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
+                    ASSERT( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
+                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());                            //<-end,zhaojianwei
                     // <--
+
                     if( nPrevLvl < nLevel )
                         nLevel = nPrevLvl;
                     else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()

@@ -28,161 +28,61 @@
  *
  ************************************************************************/
 
-#ifndef _IODETECT_CXX
-#define _IODETECT_CXX
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <svtools/parhtml.hxx>
+#include <iodetect.hxx>
+
+#include <errhdl.hxx>
 #include <osl/endian.h>
-#include <errhdl.hxx>       // for ASSERT
-#include <tools/string.hxx>
+#include <sot/storage.hxx>
+#include <svtools/parhtml.hxx>
 #include <tools/urlobj.hxx>
 
-#ifdef _DLL_
-#include <shellio.hxx>
-#endif
-
-using namespace com::sun::star;
-
-class Reader;
-USHORT AutoDetec(const String& FileName, USHORT & rVersion);
 bool IsDocShellRegistered();
-void GetWW8Writer( const String&, const String&, WriterRef& );
 
-typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
-
-struct SwIoDetect
+SwIoDetect aFilterDetect[] =
 {
-// eigentlich privat, aber der Compiler kann sonst die
-// Tabelle nicht initialisieren
-    const sal_Char* pName;
-    USHORT nLen;
-
-    inline int IsFilter( const String& rNm )
-    {
-        return pName && rNm.EqualsAscii( pName, 0, nLen );
-    }
-
-#ifdef _DLL_
-    Reader* pReader;
-    FnGetWriter fnGetWriter;
-    BOOL bDelReader;
-
-    inline Reader* GetReader() const { return pReader; }
-    inline void GetWriter( const String& rNm, const String& rBaseURL, WriterRef& xWrt ) const
-        { if( fnGetWriter ) (*fnGetWriter)(rNm,rBaseURL,xWrt); else xWrt = WriterRef(0); }
-#endif
-
-    const sal_Char* IsReader(const sal_Char* pHeader, ULONG nLen_,
-        const String &rFileName, const String& rUserData ) const;
-};
-
-
-#ifdef _DLL_
-#define SwIoEntry(sNm, cCharLen, pWrt, bDel)    { sNm, cCharLen, 0, pWrt, bDel }
-#else
-#define SwIoEntry(sNm, cCharLen, pWrt, bDel)    { sNm, cCharLen }
-#endif
-
-#ifdef DEBUG_SH
-
-#define DEB_SH_SwIoEntry(sNm, cCharLen, pWrt, bDel) , SwIoEntry(sNm, cCharLen, pWrt, bDel)
-#else
-#define DEB_SH_SwIoEntry(sNm, cCharLen, pWrt, bDel)
-#endif
-
-const USHORT MAXFILTER =
-#ifdef DEBUG_SH
-        1 +
-#endif
-        11;
-
-const sal_Char __FAR_DATA FILTER_BAS[]  = "BAS";
-const sal_Char __FAR_DATA FILTER_RTF[]  = "RTF";
-const sal_Char __FAR_DATA FILTER_SWW4V[]    = "CSW4VWEB";
-const sal_Char __FAR_DATA FILTER_SWW5V[]    = "CSW5VWEB";
-const sal_Char __FAR_DATA sRtfWH[]      = "WH_RTF";
-const sal_Char __FAR_DATA sHTML[]       = "HTML";
-const sal_Char __FAR_DATA sWW1[]            = "WW1";
-const sal_Char __FAR_DATA sWW5[]            = "WW6";
-const sal_Char __FAR_DATA sWW6[]            = "CWW6";
-const sal_Char __FAR_DATA FILTER_WW8[]  = "CWW8";
-const sal_Char __FAR_DATA FILTER_TEXT_DLG[] = "TEXT_DLG";
-const sal_Char __FAR_DATA FILTER_TEXT[]     = "TEXT";
-const sal_Char __FAR_DATA sDebug[]      = "DEBUG";
-const sal_Char __FAR_DATA sUndo[]       = "UNDO";
-const sal_Char __FAR_DATA FILTER_XML[]  = "CXML";
-const sal_Char __FAR_DATA FILTER_XMLV[]     = "CXMLV";
-const sal_Char __FAR_DATA FILTER_XMLVW[]    = "CXMLVWEB";
-
-#ifdef _DLL_
-const sal_Char* GetFILTER_XML()
-{
-    return FILTER_XML;
-}
-const sal_Char* GetFILTER_WW8()
-{
-    return FILTER_WW8;
-}
-#endif
-
-SwIoDetect aReaderWriter[ MAXFILTER ] =
-{
-///*  0*/ SwIoEntry(FILTER_SW5,       4,          &::GetSw3Writer,    TRUE),
-///*  1*/ SwIoEntry(FILTER_SW4,       4,          &::GetSw3Writer,    FALSE),
-///*  2*/ SwIoEntry(FILTER_SW3,       4,          &::GetSw3Writer,    FALSE),
-///*  3*/ SwIoEntry(FILTER_SWG,       STRING_LEN, 0,                  TRUE),
-///*  4*/ SwIoEntry(FILTER_SWGV,      4,          0,                  FALSE),
-/*  5*/ SwIoEntry(FILTER_RTF,       STRING_LEN, &::GetRTFWriter,    TRUE),
-///*  6*/ SwIoEntry(sSwDos,           STRING_LEN,   0,                  TRUE),
-/*  7*/ SwIoEntry(FILTER_BAS,       STRING_LEN, &::GetASCWriter,    FALSE),
-/*  8*/ SwIoEntry(sWW6,             STRING_LEN, &::GetWW8Writer,    TRUE),
-/*  9*/ SwIoEntry(FILTER_WW8,       STRING_LEN, &::GetWW8Writer,    FALSE),
-///* 10*/ SwIoEntry(FILTER_W4W,         3,          &::GetW4WWriter,    TRUE),
-/* 11*/ SwIoEntry(sRtfWH,           STRING_LEN, &::GetRTFWriter,    FALSE),
-///* 12*/ SwIoEntry(sCExcel,            5,          0,                  TRUE),
-///* 13*/ SwIoEntry(sExcel,         4,          0,                  FALSE),
-///* 14*/ SwIoEntry(sLotusD,            5,          0,                  TRUE),
-/* 15*/ SwIoEntry(sHTML,            4,          &::GetHTMLWriter,   TRUE),
-/* 16*/ SwIoEntry(sWW1,             STRING_LEN, 0,                  TRUE),
-/* 17*/ SwIoEntry(sWW5,             STRING_LEN, 0,                  FALSE),
-///* 18*/ SwIoEntry(sSwg1,            4,          0,                 FALSE),
-/* 19*/ SwIoEntry(FILTER_XML,       4,          &::GetXMLWriter,    TRUE),
-/*20*/ SwIoEntry(FILTER_TEXT_DLG, 8,          &::GetASCWriter,    TRUE),
-/*last*/ SwIoEntry(FILTER_TEXT,     4,          &::GetASCWriter,    TRUE)
-};
-
-const char* pSw = "swriter";
-const char* pSwWeb = "swriter/web";
-
-// Filter erkennung
-struct W1_FIB
-{
-    SVBT16 wIdent;      // 0x0 int magic number
-    SVBT16 nFib;        // 0x2 FIB version written
-    SVBT16 nProduct;    // 0x4 product version written by
-    SVBT16 nlocale;     // 0x6 language stamp---localized version;
-    SVBT16 pnNext;      // 0x8
-    SVBT16 fFlags;
-
-    USHORT nFibGet()    { return SVBT16ToShort(nFib); }
-    USHORT wIdentGet()  { return SVBT16ToShort(wIdent); }
-    USHORT fFlagsGet()  { return SVBT16ToShort(fFlags); }
-    // SVBT16 fComplex :1;//        0004 when 1, file is in complex, fast-saved format.
-    BOOL fComplexGet() { return static_cast< BOOL >((fFlagsGet() >> 2) & 1); }
+    SwIoDetect( FILTER_RTF,      STRING_LEN ),
+    SwIoDetect( FILTER_BAS,      STRING_LEN ),
+    SwIoDetect( sWW6,            STRING_LEN ),
+    SwIoDetect( FILTER_WW8,      STRING_LEN ),
+    SwIoDetect( sRtfWH,          STRING_LEN ),
+    SwIoDetect( sHTML,           4 ),
+    SwIoDetect( sWW1,            STRING_LEN ),
+    SwIoDetect( sWW5,            STRING_LEN ),
+    SwIoDetect( FILTER_XML,      4 ),
+    SwIoDetect( FILTER_TEXT_DLG, 8 ),
+    SwIoDetect( FILTER_TEXT,     4 )
 };
 
 const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
     const String & /*rFileName*/, const String& /*rUserData*/) const
 {
+    // Filter erkennung
+    struct W1_FIB
+    {
+        SVBT16 wIdent;      // 0x0 int magic number
+        SVBT16 nFib;        // 0x2 FIB version written
+        SVBT16 nProduct;    // 0x4 product version written by
+        SVBT16 nlocale;     // 0x6 language stamp---localized version;
+        SVBT16 pnNext;      // 0x8
+        SVBT16 fFlags;
+
+        USHORT nFibGet()    { return SVBT16ToShort(nFib); }
+        USHORT wIdentGet()  { return SVBT16ToShort(wIdent); }
+        USHORT fFlagsGet()  { return SVBT16ToShort(fFlags); }
+        // SVBT16 fComplex :1;// 0004 when 1, file is in complex, fast-saved format.
+        BOOL fComplexGet()  { return static_cast< BOOL >((fFlagsGet() >> 2) & 1); }
+    };
+
     int bRet = FALSE;
-    if( sHTML == pName )
+    rtl::OString aName( pName );
+    if ( sHTML == aName )
         bRet = HTMLParser::IsHTMLFormat( pHeader, TRUE, RTL_TEXTENCODING_DONTKNOW );
-    else if( FILTER_RTF == pName )
+    else if ( FILTER_RTF == aName )
         bRet = 0 == strncmp( "{\\rtf", pHeader, 5 );
-    else if( sWW5 == pName )
+    else if ( sWW5 == aName )
     {
         W1_FIB *pW1Header = (W1_FIB*)pHeader;
         if (pW1Header->wIdentGet() == 0xA5DC && pW1Header->nFibGet() == 0x65)
@@ -190,15 +90,15 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
         else if (pW1Header->wIdentGet() == 0xA5DB && pW1Header->nFibGet() == 0x2D)
             bRet = true; /*WW2*/
     }
-    else if( sWW1 == pName )
+    else if ( sWW1 == aName )
     {
         bRet = (( ((W1_FIB*)pHeader)->wIdentGet() == 0xA59C
-                 && ((W1_FIB*)pHeader)->nFibGet() == 0x21)
+                    && ((W1_FIB*)pHeader)->nFibGet() == 0x21)
                 && ((W1_FIB*)pHeader)->fComplexGet() == 0);
     }
-    else if (FILTER_TEXT == pName)
+    else if ( FILTER_TEXT == aName )
         bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
-    else if( FILTER_TEXT_DLG == pName)
+    else if ( FILTER_TEXT_DLG == aName)
         bRet = SwIoSystem::IsDetectableText( pHeader, nLen_, 0, 0, 0, true);
     return bRet ? pName : 0;
 }
@@ -217,11 +117,12 @@ const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
                 RTL_CONSTASCII_STRINGPARAM( "WordDocument" ));
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "" ));
 }
+
 const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
     const SfxFilterContainer* pCnt)
 {
-    SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
-    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
+    SfxFilterContainer aCntSw( String::CreateFromAscii( sSWRITER ) );
+    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( sSWRITERWEB ) );
     const SfxFilterContainer* pFltCnt = pCnt ? pCnt : ( IsDocShellRegistered() ? &aCntSw : &aCntSwWeb );
 
     do {
@@ -244,7 +145,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
     return 0;
 }
 
-BOOL SwIoSystem::IsValidStgFilter( const uno::Reference < embed::XStorage >& rStg, const SfxFilter& rFilter)
+BOOL SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter)
 {
     BOOL bRet = FALSE;
     try
@@ -254,7 +155,7 @@ BOOL SwIoSystem::IsValidStgFilter( const uno::Reference < embed::XStorage >& rSt
         if ( bRet )
             bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
     }
-    catch ( uno::Exception& )
+    catch ( com::sun::star::uno::Exception& )
     {
     }
 
@@ -266,37 +167,37 @@ BOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
     ULONG nStgFmtId = rStg.GetFormat();
     /*#i8409# We cannot trust the clipboard id anymore :-(*/
     if( rFilter.GetUserData().EqualsAscii(FILTER_WW8) ||
-        rFilter.GetUserData().EqualsAscii(sWW6) )
+            rFilter.GetUserData().EqualsAscii(sWW6) )
     {
         nStgFmtId = 0;
     }
 
     BOOL bRet = SVSTREAM_OK == rStg.GetError() &&
-                ( !nStgFmtId || rFilter.GetFormat() == nStgFmtId ) &&
-                ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
+        ( !nStgFmtId || rFilter.GetFormat() == nStgFmtId ) &&
+        ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
     if( bRet )
     {
         /* Bug 53445 - es gibt Excel Docs ohne ClipBoardId! */
         /* Bug 62703 - und auch WinWord Docs ohne ClipBoardId! */
         if( rFilter.GetUserData().EqualsAscii(FILTER_WW8) ||
-            rFilter.GetUserData().EqualsAscii(sWW6) )
+                rFilter.GetUserData().EqualsAscii(sWW6) )
         {
             bRet = !((rStg.IsContained( String::CreateFromAscii("0Table" )) ||
-                    rStg.IsContained( String::CreateFromAscii("1Table" ))) ^
-                       rFilter.GetUserData().EqualsAscii(FILTER_WW8));
+                        rStg.IsContained( String::CreateFromAscii("1Table" ))) ^
+                    rFilter.GetUserData().EqualsAscii(FILTER_WW8));
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
                 SotStorageStreamRef xRef =
                     rStg.OpenSotStream(String::CreateFromAscii("WordDocument"),
-                    STREAM_STD_READ | STREAM_NOCREATE );
+                            STREAM_STD_READ | STREAM_NOCREATE );
                 xRef->Seek(10);
                 BYTE nByte;
                 *xRef >> nByte;
                 bRet = !(nByte & 1);
             }
         }
-//      else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
-//          bRet = rFilter.GetFormat() == nStgFmtId;
+        //      else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
+        //          bRet = rFilter.GetFormat() == nStgFmtId;
     }
     return bRet;
 }
@@ -304,7 +205,7 @@ BOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 void TerminateBuffer(sal_Char *pBuffer, ULONG nBytesRead, ULONG nBufferLen)
 {
     ASSERT(nBytesRead <= nBufferLen - 2,
-        "what you read must be less than the max + null termination");
+            "what you read must be less than the max + null termination");
     ASSERT(!(nBufferLen & 0x00000001), "nMaxReadBuf must be an even number");
     if (nBytesRead <= nBufferLen - 2)
     {
@@ -315,18 +216,18 @@ void TerminateBuffer(sal_Char *pBuffer, ULONG nBytesRead, ULONG nBufferLen)
     }
 }
 
-    /* Feststellen ob das File in dem entsprechenden Format vorliegt. */
-    /* Z.z werden nur unsere eigene Filter unterstuetzt               */
+/* Feststellen ob das File in dem entsprechenden Format vorliegt. */
+/* Z.z werden nur unsere eigene Filter unterstuetzt               */
 BOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
-                                    const SfxFilter** ppFilter )
+        const SfxFilter** ppFilter )
 {
     BOOL bRet = FALSE;
 
-    SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
-    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
+    SfxFilterContainer aCntSw( String::CreateFromAscii( sSWRITER ) );
+    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( sSWRITERWEB ) );
     const SfxFilterContainer& rFltContainer = IsDocShellRegistered() ? aCntSw : aCntSwWeb;
 
-    uno::Reference < embed::XStorage > xStor;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStor;
     SotStorageRef xStg;
     if (rMedium.IsStorage())
         xStor = rMedium.GetStorage();
@@ -365,10 +266,10 @@ BOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
                     for (USHORT i = 0; i < MAXFILTER; ++i)
                     {
-                        if (aReaderWriter[i].IsFilter(rFmtName))
+                        if (aFilterDetect[i].IsFilter(rFmtName))
                         {
-                            bRet = 0 != aReaderWriter[i].IsReader( aBuffer, nBytesRead,
-                                                    rMedium.GetPhysicalName(), rUserData );
+                            bRet = 0 != aFilterDetect[i].IsReader( aBuffer, nBytesRead,
+                                    rMedium.GetPhysicalName(), rUserData );
                             break;
                         }
                     }
@@ -394,8 +295,8 @@ BOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
 const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     const String& rPrefFltName, SfxMedium* pMedium)
 {
-    SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
-    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
+    SfxFilterContainer aCntSw( String::CreateFromAscii( sSWRITER ) );
+    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( sSWRITERWEB ) );
     const SfxFilterContainer* pFCntnr = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
     if( !pFCntnr )
@@ -427,7 +328,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         BOOL bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
         if ( pMedium->IsStorage() )
         {
-            uno::Reference < embed::XStorage > xStor = pMedium->GetStorage();
+            com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStor = pMedium->GetStorage();
             if ( xStor.is() )
             {
                 while ( pFilter )
@@ -494,16 +395,16 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         pIStrm->Seek( nCurrPos );
     }
     /*
-    else
-    {
-        SvFileStream aStrm( rFileName, STREAM_READ );
+       else
+       {
+       SvFileStream aStrm( rFileName, STREAM_READ );
 
-        // ohne FileName oder ohne Stream gibts nur den ANSI-Filter
-        if( !rFileName.Len() || SVSTREAM_OK != aStrm.GetError() )
-            return 0;
+    // ohne FileName oder ohne Stream gibts nur den ANSI-Filter
+    if( !rFileName.Len() || SVSTREAM_OK != aStrm.GetError() )
+    return 0;
 
-        nBytesRead = aStrm.Read(aBuffer, nMaxRead);
-        aStrm.Close();
+    nBytesRead = aStrm.Read(aBuffer, nMaxRead);
+    aStrm.Close();
     }*/
 
     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
@@ -521,7 +422,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         for( USHORT n = 0; n < MAXFILTER; ++n )
         {
             String sEmptyUserData;
-            pNm = aReaderWriter[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData);
+            pNm = aFilterDetect[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData);
             pFilterTmp = pNm ? SwIoSystem::GetFilterOfFormat(String::CreateFromAscii(pNm), pFCntnr) : 0;
             if (pNm && pFilterTmp)
             {
@@ -692,6 +593,3 @@ const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, ULONG nLen)
     const sal_Char* pNm = bAuto ? FILTER_TEXT : FILTER_TEXT_DLG;
     return SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(pNm), 0 );
 }
-
-
-#endif

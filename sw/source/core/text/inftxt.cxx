@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.123 $
+ * $Revision: 1.123.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,8 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <svtools/linguprops.hxx>
+#include <svtools/lingucfg.hxx>
 #include <hintids.hxx>
-#include <svtools/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/hyznitem.hxx>
 #include <svx/escpitem.hxx>
@@ -343,17 +343,17 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         nDirection = DIR_LEFT2RIGHT;
     }
 
-    LanguageType eLang;
+/*    LanguageType eLang;
     const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
     if ( SvtCTLOptions::NUMERALS_HINDI == rCTLOptions.GetCTLTextNumerals() )
-        eLang = LANGUAGE_ARABIC;
+        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
     else if ( SvtCTLOptions::NUMERALS_ARABIC == rCTLOptions.GetCTLTextNumerals() )
         eLang = LANGUAGE_ENGLISH;
     else
         eLang = (LanguageType)::GetAppLanguage();
 
     pOut->SetDigitLanguage( eLang );
-    pRef->SetDigitLanguage( eLang );
+    pRef->SetDigitLanguage( eLang );*/
 
     //
     // The Options
@@ -703,11 +703,11 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if ( ! IsMulti() )
         nComp = GetKanaComp();
 
+    sal_Bool bCfgIsAutoGrammar = sal_False;
+    SvtLinguConfig().GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bCfgIsAutoGrammar;
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
-    const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell() &&
-                               !GetOpt().IsHideSpell();
-    const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && GetOpt().IsOnlineSpell() &&
-                               !GetOpt().IsHideSpell();
+    const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
+    const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
     const sal_Bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
     ASSERT( GetParaPortion(), "No paragraph!");

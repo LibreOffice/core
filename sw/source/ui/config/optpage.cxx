@@ -941,15 +941,19 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         bDeletePrinter = TRUE;
     }
     pFontList = new FontList( pPrt );
-    const USHORT nCount = pPrt->GetFontCount();
-    for (USHORT i = 0; i < nCount; ++i)
+    // #i94536# prevent duplication of font entries when 'reset' button is pressed
+    if( !aStandardBox.GetEntryCount() )
     {
-        const String &rString = pPrt->GetFont(i)->GetName();
-        aStandardBox.InsertEntry( rString );
-        aTitleBox   .InsertEntry( rString );
-        aListBox    .InsertEntry( rString );
-        aLabelBox   .InsertEntry( rString );
-        aIdxBox     .InsertEntry( rString );
+        const USHORT nCount = pPrt->GetFontCount();
+        for (USHORT i = 0; i < nCount; ++i)
+        {
+            const String &rString = pPrt->GetFont(i)->GetName();
+            aStandardBox.InsertEntry( rString );
+            aTitleBox   .InsertEntry( rString );
+            aListBox    .InsertEntry( rString );
+            aLabelBox   .InsertEntry( rString );
+            aIdxBox     .InsertEntry( rString );
+        }
     }
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_STDFONTS, FALSE, &pItem))
     {

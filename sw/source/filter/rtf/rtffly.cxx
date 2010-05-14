@@ -774,7 +774,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 else if( RTF_APOCTL ==
                     ((nToken = GetNextToken() ) & ~(0xff | RTF_SWGDEFS)) )
                 {
-                    bReadSwFly = TRUE;      // alles kommt in den akt. Fly
+                    bReadSwFly = true;      // alles kommt in den akt. Fly
                     SvxLRSpaceItem aLR( RES_LR_SPACE );
                     SvxULSpaceItem aUL( RES_UL_SPACE );
                     nCols = USHRT_MAX;      // neu aufsetzen
@@ -1031,6 +1031,9 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 }
             }
             aFlyArr.Insert(  pFlySave, nFlyArrCnt++ );
+            // --> OD 2008-12-22 #i83368# - reset
+            mbReadCellWhileReadSwFly = false;
+            // <--
         }
     }
 
@@ -1047,7 +1050,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         if( !IsPardTokenRead() )
         {
             // #102781#. Added support for transparent frames.
-            if (nToken == RTF_CBPAT)
+            if (nToken == RTF_CBPAT && nFlyArrCnt > 0)
             {
                 USHORT _index=USHORT(nTokenValue);
                 const Color& rColor = GetColor(_index);
@@ -1089,7 +1092,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     */
     if (!nAppliedProps)
     {
-        bReadSwFly = FALSE;
+        bReadSwFly = false;
         SkipToken( -1 );
         return;
     }
@@ -1232,7 +1235,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         }
     }
 
-    bReadSwFly = FALSE;
+    bReadSwFly = false;
     SkipToken( -1 );
 }
 
@@ -1243,7 +1246,11 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     // kennzeichen fuer Swg-Dokumente:
     // (dann ist das FlyFmt fuer die Grafik!)
     SwGrfNode * pGrfNd;
-    if( bReadSwFly )
+    // --> OD 2008-12-22 #i83368#
+    // Assure that graphic node is enclosed by fly frame node.
+//    if( bReadSwFly )
+    if ( bReadSwFly && !mbReadCellWhileReadSwFly )
+    // <--
     {
         // erzeuge nur einen normalen GrafikNode und ersetze diesen gegen
         // den vorhandenen Textnode

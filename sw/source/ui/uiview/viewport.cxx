@@ -739,8 +739,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
 //              S F X_BINDINGS().Update(FN_STAT_PAGE);
 
             //QuickHelp:
-            USHORT nPageCnt = pWrtShell->GetPageCnt();
-            if( nPageCnt > 1 && Help::IsQuickHelpEnabled() )
+            if( pWrtShell->GetPageCnt() > 1 && Help::IsQuickHelpEnabled() )
             {
                 if( !nPgNum || nPgNum != nPhNum )
                 {
@@ -1228,9 +1227,9 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
         //Nicht endlosschleifen. Moeglichst dann stoppen wenn die
         //(Auto-)Scrollbars sichtbar sind.
-        if ( bRepeat && nCnt > 10 ||
-             (nCnt > 3 && bHAuto && bAuto &&
-              bAuto  && bHAuto) )
+        if ( bRepeat &&
+             ( nCnt > 10 || ( nCnt > 3 && bHAuto && bAuto ) )
+           )
         {
             bRepeat = FALSE;
         }
@@ -1372,8 +1371,19 @@ BOOL SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         bOk = TRUE;
     }
     else
-        bOk = pEditWin->HandleScrollCommand( rCEvt,
-                    pHScrollbar, pVScrollbar);
+    {
+        if (pWData && (COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((ULONG)0xFFFFFFFF) == pWData->GetScrollLines()))
+            {
+                        if (pWData->GetDelta()<0)
+                                PhyPageDown();
+                        else
+                                PhyPageUp();
+                        bOk = TRUE;
+                }
+        else
+            bOk = pEditWin->HandleScrollCommand( rCEvt,
+                            pHScrollbar, pVScrollbar);
+    }
     return bOk;
 }
 

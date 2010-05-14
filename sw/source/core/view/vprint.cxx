@@ -277,7 +277,7 @@ USHORT _PostItFld::GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
             pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
     {
         if( pFrm->GetOfst() > nPos ||
-            pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos )
+            (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
             continue;
         USHORT nPgNo = pFrm->GetPhyPageNum();
         BOOL bRight = pFrm->OnRightPage();

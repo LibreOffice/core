@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrpaint.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -564,7 +564,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             if ( pItem )
             {
                 bUnder = sal_True;
-                bUnderSelect = pFnt->GetUnderline() == pItem->GetUnderline();
+                bUnderSelect = pFnt->GetUnderline() == pItem->GetLineStyle();
             }
 
             if( bUnder )
@@ -709,6 +709,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         pUnderlineFnt->SetProportion( 100 );
         pUnderlineFnt->SetEscapement( 0 );
         pUnderlineFnt->SetStrikeout( STRIKEOUT_NONE );
+        pUnderlineFnt->SetOverline( UNDERLINE_NONE );
         const Color aFillColor( COL_TRANSPARENT );
         pUnderlineFnt->SetFillColor( aFillColor );
 

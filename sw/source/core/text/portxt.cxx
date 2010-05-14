@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: portxt.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.51.112.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,6 +131,19 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         }
     }
 
+    // Kashida Justification: Insert Kashidas
+    if ( nEnd > nPos && pSI && COMPLEX == nScript )
+    {
+        if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) && pSI->CountKashida() )
+        {
+            const USHORT nKashRes = pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
+            // i60591: need to check result of KashidaJustify
+            // determine if kashida justification is applicable
+            if( nKashRes != STRING_LEN )
+                return nKashRes;
+        }
+    }
+
     // Thai Justification: Each character cell gets some extra space
     if ( nEnd > nPos && COMPLEX == nScript )
     {
@@ -152,16 +165,6 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
 
             return nCnt;
         }
-    }
-
-    // Kashida Justification: Insert Kashidas
-    if ( nEnd > nPos && pSI && COMPLEX == nScript )
-    {
-        LanguageType aLang =
-            rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript );
-
-        if ( SwScriptInfo::IsArabicLanguage( aLang ) )
-            return pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
     }
 
     // Here starts the good old "Look for blanks and add space to them" part.

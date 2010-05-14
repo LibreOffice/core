@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrstck.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,16 +129,19 @@ const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
     32, // RES_CHRATR_SCALEW,                    // 35
     33, // RES_CHRATR_RELIEF,                    // 36
     34, // RES_CHRATR_HIDDEN,                    // 37
-     0, // RES_TXTATR_AUTOFMT,                   // 39
-     0, // RES_TXTATR_INETFMT                    // 38
-    35, // RES_TXTATR_REFMARK,                   // 40
-    36, // RES_TXTATR_TOXMARK,                   // 41
-     0, // RES_TXTATR_CHARFMT,                   // 42
-     0, // RES_TXTATR_DUMMY5                     // 43
-    37, // RES_TXTATR_CJK_RUBY,                  // 44
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 45
-     0, // RES_TXTATR_DUMMY6,                    // 46
-     0  // RES_TXTATR_DUMMY7,                    // 47
+    35, // RES_CHRATR_OVERLINE,                  // 38
+     0, // RES_CHRATR_DUMMY1,                    // 39
+     0, // RES_CHRATR_DUMMY2,                    // 40
+     0, // RES_TXTATR_AUTOFMT,                   // 41
+     0, // RES_TXTATR_INETFMT                    // 42
+    36, // RES_TXTATR_REFMARK,                   // 43
+    37, // RES_TXTATR_TOXMARK,                   // 44
+     0, // RES_TXTATR_CHARFMT,                   // 45
+     0, // RES_TXTATR_DUMMY5                     // 46
+    38, // RES_TXTATR_CJK_RUBY,                  // 47
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 48
+     0, // RES_TXTATR_DUMMY6,                    // 49
+     0  // RES_TXTATR_DUMMY7,                    // 50
 };
 
 /*************************************************************************
@@ -748,11 +751,15 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             if( (mpShell && !mpShell->GetWin()) ||
                 pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue() )
             {
-                rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetUnderline() );
+                rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetLineStyle() );
                 rFnt.SetUnderColor( ((SvxUnderlineItem&)rItem).GetColor() );
             }
             break;
         }
+        case RES_CHRATR_OVERLINE :
+            rFnt.SetOverline( ((SvxOverlineItem&)rItem).GetLineStyle() );
+            rFnt.SetOverColor( ((SvxOverlineItem&)rItem).GetColor() );
+            break;
         case RES_CHRATR_WEIGHT :
             rFnt.SetWeight( ((SvxWeightItem&)rItem).GetWeight(), SW_LATIN );
             break;

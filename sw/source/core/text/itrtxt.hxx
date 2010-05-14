@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrtxt.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.21.40.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,7 +230,7 @@ protected:
     inline SwTxtAdjuster(SwTxtNode* pTxtNode) : SwTxtMargin(pTxtNode) { }
     // spannt beim Blocksatz die Glues auf.
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
-        SwTwips nReal = 0 );
+        SwTwips nReal = 0, bool bSkipKashida = false );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
 public:
     inline SwTxtAdjuster( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtMargin(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)

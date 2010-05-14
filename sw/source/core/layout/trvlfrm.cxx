@@ -316,8 +316,23 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     // search for page containing rPoint. The borders around the pages are considerd
     const SwPageFrm* pPage = GetPageAtPos( rPoint, 0, true );
 
+    // --> OD 2008-12-23 #i95626#
+    // special handling for <rPoint> beyond root frames area
+    if ( !pPage &&
+         rPoint.X() > Frm().Right() &&
+         rPoint.Y() > Frm().Bottom() )
+    {
+        pPage = dynamic_cast<const SwPageFrm*>(Lower());
+        while ( pPage && pPage->GetNext() )
+        {
+            pPage = dynamic_cast<const SwPageFrm*>(pPage->GetNext());
+        }
+    }
+    // <--
     if ( pPage )
+    {
         pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS );
+    }
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
     if( pCMS )
@@ -719,7 +734,8 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         //Fussnotenbereich zu erreichen.
         else if ( pStart->IsInFtn() )
         {
-            while ( pCnt && !pCnt->IsInFtn() )
+            while ( pCnt && (!pCnt->IsInFtn() ||
+                            (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
@@ -754,6 +770,11 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             }
             if ( !bSame )
                 pCnt = 0;
+            else if ( pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow() ) // i73332
+            {
+                pCnt = (*fnNxtPrv)( pCnt );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+            }
         }
 
         if ( bTab )

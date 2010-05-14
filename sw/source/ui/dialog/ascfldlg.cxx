@@ -59,8 +59,6 @@
 #include <ascfldlg.hrc>
 #endif
 
-// #107253#
-#include <swlinguconfig.hxx>
 
 using namespace ::com::sun::star;
 
@@ -232,9 +230,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 else
                 {
                     SvtLinguOptions aLinguOpt;
-
-                    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-                    SwLinguConfig().GetOptions( aLinguOpt );
+                    SvtLinguConfig().GetOptions( aLinguOpt );
                     switch(nAppScriptType)
                     {
                         case SCRIPTTYPE_ASIAN:

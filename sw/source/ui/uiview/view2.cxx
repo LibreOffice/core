@@ -101,30 +101,20 @@
 #include <svx/svdview.hxx>
 #include <swtypes.hxx>
 #include <swwait.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <uivwimp.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <uitool.hxx>
 #include <shellio.hxx>
 #include <fmtinfmt.hxx>
 #include <mdiexp.hxx>
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
 #include <frmmgr.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
@@ -135,53 +125,25 @@
 #include <workctrl.hxx>
 #include <scroll.hxx>
 #include <edtwin.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
-#ifndef _TABSH_HXX
 #include <tabsh.hxx>
-#endif
-#ifndef _LISTSH_HXX
 #include <listsh.hxx>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <swerror.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _WEB_HRC
 #include <web.hrc>
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include <fmtclds.hxx>
 #include <helpid.h>
 #include <svtools/templdlg.hxx>
 #include <dbconfig.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 
 #include <PostItMgr.hxx>
 #include <postit.hxx>
@@ -190,6 +152,7 @@
 // #include <frmmgr.hxx>
 // #endif
 
+#include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
 #include <comphelper/processfactory.hxx>
 
@@ -202,11 +165,8 @@
 #include <svx/ofaitem.hxx>
 #include <unomid.h>
 
-
-//Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
-static String sLstPg;
-static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
+const char __FAR_DATA sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
 
 using ::rtl::OUString;
 using namespace sfx2;
@@ -688,7 +648,29 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_ACCEPT:
             GetViewFrame()->ToggleChildWindow(nSlot);
         break;
-
+        case FN_REDLINE_ACCEPT_DIRECT:
+        case FN_REDLINE_REJECT_DIRECT:
+        {
+            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_REDLINE );
+            Point aCrsrPos = pWrtShell->GetCrsrDocPos( sal_True );
+            if( pWrtShell->GetContentAtPos( aCrsrPos, aCntntAtPos ) )
+            {
+                USHORT nCount = pWrtShell->GetRedlineCount();
+                for( USHORT nRedline = 0; nRedline < nCount; ++nRedline )
+                {
+                    const SwRedline& rRedline = pWrtShell->GetRedline( nRedline );
+                    if( *aCntntAtPos.aFnd.pRedl == rRedline )
+                    {
+                        if( FN_REDLINE_ACCEPT_DIRECT == nSlot )
+                            pWrtShell->AcceptRedline( nRedline );
+                        else
+                            pWrtShell->RejectRedline( nRedline );
+                        break;
+                    }
+                }
+            }
+        }
+        break;
         case SID_DOCUMENT_COMPARE:
         case SID_DOCUMENT_MERGE:
             {
@@ -1084,21 +1066,39 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             GenerateFormLetter(bUseCurrentDocument);
         }
         break;
+        case SID_RECHECK_DOCUMENT:
+        {
+            SwDocShell* pDocShell = GetDocShell();
+            SwDoc* pDoc = pDocShell->GetDoc();
+            uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( pDoc->GetGCIterator() );
+            if( xGCIterator.is() )
+            {
+                xGCIterator->resetIgnoreRules();
+            }
+            // reset ignore lists
+            pDoc->SpellItAgainSam( sal_True, sal_False, sal_False );
+            // clear ignore dictionary
+            uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
+            if( xDictionary.is() )
+                xDictionary->clear();
+            // put cursor to the start of the document
+            pWrtShell->SttDoc();
+        }
+        // no break; - but call spell/grammar dialog
         case FN_SPELL_GRAMMAR_DIALOG:
         {
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != NULL)
-                pViewFrame->SetChildWindow (nSlot,
+                pViewFrame->SetChildWindow (FN_SPELL_GRAMMAR_DIALOG,
                     ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(nSlot))).GetValue());
+                        Get(FN_SPELL_GRAMMAR_DIALOG))).GetValue());
             else
-                pViewFrame->ToggleChildWindow(nSlot);
+                pViewFrame->ToggleChildWindow(FN_SPELL_GRAMMAR_DIALOG);
 
-            pViewFrame->GetBindings().Invalidate(nSlot);
+            pViewFrame->GetBindings().Invalidate(FN_SPELL_GRAMMAR_DIALOG);
             rReq.Ignore ();
         }
         break;
-
         case SID_ALIGN_ANY_LEFT :
         case SID_ALIGN_ANY_HCENTER  :
         case SID_ALIGN_ANY_RIGHT    :
@@ -1186,15 +1186,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgStr)
 {
     String sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
-    if ( sLstPg != sTemp )
-    {
-        sLstPg = sTemp;
-        const SfxStringItem aTmp( FN_STAT_PAGE,
-                                 sLstPg);
-        SfxBindings &rBnd = GetViewFrame()->GetBindings();
-        rBnd.SetState( aTmp );
-        rBnd.Update( FN_STAT_PAGE );
-    }
+    const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
+    SfxBindings &rBnd = GetViewFrame()->GetBindings();
+    rBnd.SetState( aTmp );
+    rBnd.Update( FN_STAT_PAGE );
 }
 
 /*--------------------------------------------------------------------
@@ -1409,8 +1404,51 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         }
                     }
                 }
+
+                //#outline level, removed by zhaojianwei
+                //const SwNumRule* pNumRule = rShell.GetCurNumRule();
+                //if (pNumRule) // Cursor in Numerierung
+                //{
+                //  BYTE nNumLevel = rShell.GetNumLevel();
+                //  if( IsShowNum(nNumLevel) && MAXLEVEL >
+                //      ( nNumLevel = GetRealLevel( nNumLevel )) )
+                //  {
+                //      if( sStr.Len() )
+                //          sStr.AppendAscii(sStatusDelim);
+                //      sStr += SW_RESSTR(STR_NUM_LEVEL);
+                //      sStr += String::CreateFromInt32( nNumLevel + 1 );
+                //      if(!pNumRule->IsAutoRule())
+                //      {
+                //          SfxItemSet aSet(GetPool(),
+                //              RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
+                //          rShell.GetCurAttr(aSet);
+                //          /* const SfxPoolItem* pItem; */
+                //          if(SFX_ITEM_AVAILABLE <=
+                //              aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
+                //              /*, &pItem */ ))
+                //          {
+                //              const String& rNumStyle =
+                //                  ((const SfxStringItem &)
+                //                  aSet.Get(RES_PARATR_NUMRULE)).GetValue();
+                //              /* #i5116# GetItemState does not necessarily
+                //              change pItem */
+                //              // ((const SfxStringItem*)pItem)->GetValue();
+                //              if(rNumStyle.Len())
+                //              {
+                //                  sStr.AppendAscii(sStatusDelim);
+                //                  sStr += rNumStyle;
+                //              }
+                //          }
+                //      }
+                //  }
+                //}//<-removed end ,zhaojianwei
+
+                //-->#outline level,added by zhaojianwei
                 const SwNumRule* pNumRule = rShell.GetCurNumRule();
-                if (pNumRule)   // Cursor in Numerierung
+                const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
+                       //((SwTxtFmtColl*)rShell.GetCrsr()->GetNode()->GetTxtNode()->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle();
+
+                if (pNumRule && !bOutlineNum )  // Cursor in Numerierung
                 {
                     BYTE nNumLevel = rShell.GetNumLevel();
                     // --> OD 2008-04-02 #refactorlists#
@@ -1419,10 +1457,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     if ( nNumLevel < MAXLEVEL )
                     // <--
                     {
-                        if( sStr.Len() )
-                            sStr.AppendAscii(sStatusDelim);
-                        sStr += SW_RESSTR(STR_NUM_LEVEL);
-                        sStr += String::CreateFromInt32( nNumLevel + 1 );
                         if(!pNumRule->IsAutoRule())
                         {
                             SfxItemSet aSet(GetPool(),
@@ -1441,13 +1475,35 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 // ((const SfxStringItem*)pItem)->GetValue();
                                 if(rNumStyle.Len())
                                 {
-                                    sStr.AppendAscii(sStatusDelim);
+                                    if( sStr.Len() )
+                                        sStr.AppendAscii(sStatusDelim);
                                     sStr += rNumStyle;
                                 }
                             }
                         }
+                        if( sStr.Len() )
+                            sStr.AppendAscii(sStatusDelim);
+                        sStr += SW_RESSTR(STR_NUM_LEVEL);
+                        sStr += String::CreateFromInt32( nNumLevel + 1 );
+
                     }
                 }
+                const int nOutlineLevel = rShell.GetCurrentParaOutlineLevel();
+                if( nOutlineLevel != 0 )
+                {
+                    if( sStr.Len() )
+                        sStr.AppendAscii(sStatusComma);
+                    if( bOutlineNum )
+                    {
+                        sStr += SW_RESSTR(STR_OUTLINE_NUMBERING);
+                        sStr.AppendAscii(sStatusDelim);
+                        sStr += SW_RESSTR(STR_NUM_LEVEL);
+                    }
+                    else
+                        sStr += SW_RESSTR(STR_NUM_OUTLINE);
+                    sStr += String::CreateFromInt32( nOutlineLevel);
+                }
+                //<-end ,zhaojianwei
 
                 if( rShell.HasReadonlySel() )
                 {
@@ -1855,7 +1911,9 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                                     0,0,0,
                                     TransliterationModules_IGNORE_CASE );
 
-                if( pWrtShell->SearchPattern( aSearchOpt, DOCPOS_START, DOCPOS_END ))
+                //todo/mba: assuming that notes shouldn't be searched
+                BOOL bSearchInNotes = FALSE;
+                if( pWrtShell->SearchPattern( aSearchOpt, bSearchInNotes, DOCPOS_START, DOCPOS_END ))
                 {
                     pWrtShell->EnterStdMode();      // Selektion wieder aufheben
                     bRet = TRUE;
@@ -2398,5 +2456,11 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         }
     }
     return 0;
+}
+
+void SwView::ExecuteScan( SfxRequest& rReq )
+{
+    if (pViewImpl)
+        pViewImpl->ExecuteScan(rReq) ;
 }
 

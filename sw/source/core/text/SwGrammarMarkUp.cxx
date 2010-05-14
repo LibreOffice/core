@@ -33,6 +33,24 @@
 
 #include "SwGrammarMarkUp.hxx"
 
+SwGrammarMarkUp::~SwGrammarMarkUp()
+{
+}
+
+SwWrongList* SwGrammarMarkUp::Clone()
+{
+    SwWrongList* pClone = new SwGrammarMarkUp();
+    pClone->CopyFrom( *this );
+    return pClone;
+}
+
+void SwGrammarMarkUp::CopyFrom( const SwWrongList& rCopy )
+{
+    maSentence = ((const SwGrammarMarkUp&)rCopy).maSentence;
+    SwWrongList::CopyFrom( rCopy );
+}
+
+
 void SwGrammarMarkUp::MoveGrammar( xub_StrLen nPos, long nDiff )
 {
     Move( nPos, nDiff );
@@ -62,6 +80,10 @@ SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( xub_StrLen nSplitPos )
         ++pIter;
     if( pIter != maSentence.begin() )
     {
+        if( !pNew ) {
+            pNew = new SwGrammarMarkUp();
+            pNew->SetInvalid( 0, STRING_LEN );
+        }
         pNew->maSentence.insert( pNew->maSentence.begin(), maSentence.begin(), pIter );
         maSentence.erase( maSentence.begin(), pIter );
     }
@@ -85,10 +107,27 @@ void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, xub_StrLen nInser
     }
 }
 
-void SwGrammarMarkUp::ClearGrammarList()
+void SwGrammarMarkUp::ClearGrammarList( xub_StrLen nSentenceEnd )
 {
-    ClearList();
-    maSentence.clear();
+    if( STRING_LEN == nSentenceEnd ) {
+        ClearList();
+        maSentence.clear();
+        Validate();
+    } else if( GetBeginInv() <= nSentenceEnd ) {
+        std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
+        xub_StrLen nStart = 0;
+        while( pIter != maSentence.end() && *pIter < GetBeginInv() )
+        {
+            nStart = *pIter;
+            ++pIter;
+        }
+        std::vector< xub_StrLen >::iterator pLast = pIter;
+        while( pLast != maSentence.end() && *pLast <= nSentenceEnd )
+            ++pLast;
+        maSentence.erase( pIter, pLast );
+        RemoveEntry( nStart, nSentenceEnd );
+        SetInvalid( nSentenceEnd + 1, STRING_LEN );
+    }
 }
 
 void SwGrammarMarkUp::setSentence( xub_StrLen nStart )

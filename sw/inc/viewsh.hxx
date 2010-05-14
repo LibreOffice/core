@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.hxx,v $
- * $Revision: 1.64.210.2 $
+ * $Revision: 1.65.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,7 +231,7 @@ public:
 
     inline sal_Bool HasInvalidRect() const { return aInvalidRect.HasArea(); }
     void ChgHyphenation() { Reformat(); }
-    void ChgNumberDigits() { Reformat(); }
+    void ChgNumberDigits();
 
     //Methoden fuer Paint- und Scrollrects, die auf allen Shells im
     //Ring arbeiten.
@@ -250,7 +250,7 @@ protected:
 public:
     void PrePaint();
     void DLPrePaint2(const Region& rRegion);
-    void DLPostPaint2();
+    void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
     //////////////////////////////////////////////////////////////////////////////
 
@@ -563,6 +563,17 @@ public:
         @author OD
     */
     void InvalidateAccessibleParaTextSelection();
+
+    /** invalidate attributes for paragraphs
+
+        OD 2009-01-06 #i88069#
+
+        @author OD
+
+        @param rTxtFrm
+        input parameter - paragraph frame, whose attributes have changed
+    */
+    void InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
 
     ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );

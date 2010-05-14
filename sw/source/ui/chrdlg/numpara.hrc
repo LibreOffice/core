@@ -44,7 +44,9 @@
 #define CB_RESTART_PARACOUNT        9
 #define FT_RESTART_NO              10
 #define NF_RESTART_PARA            11
-
+#define FL_OUTLINE_START       12
+#define LB_OUTLINE_LEVEL       13
+#define FT_OUTLINE_LEVEL       14
 // **********************************************************************
 
 #endif

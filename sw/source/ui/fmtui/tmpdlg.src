@@ -105,7 +105,7 @@ TabDialog DLG_TEMPLATE_2
             PageItem
             {
                 Identifier = TP_PARA_EXT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Textfluﬂ : Textfluò */
+                /* ### ACHTUNG: Neuer Text in Resource? Textflu?: Textflu?*/
                 Text [ en-US ] = "Text Flow" ;
                 PageResID = TP_PARA_EXT ;
             };
@@ -141,7 +141,7 @@ TabDialog DLG_TEMPLATE_2
             PageItem
             {
                 Identifier = TP_NUMPARA ;
-                Text [ en-US ] = "Numbering" ;
+                Text [ en-US ] = "Outline & Numbering" ;
             };
             PageItem
             {

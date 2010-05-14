@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txatbase.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@ class SvxFontItem;
 class SvxPostureItem;
 class SvxWeightItem;
 class SvxUnderlineItem;
+class SvxOverlineItem;
 class SvxFontHeightItem;
 class SvxPropSizeItem;
 class SvxShadowedItem;
@@ -133,6 +134,7 @@ public:
     inline const SvxPostureItem         &GetPosture() const;
     inline const SvxWeightItem          &GetWeight() const;
     inline const SvxUnderlineItem       &GetUnderline() const;
+    inline const SvxOverlineItem        &GetOverline() const;
     inline const SvxFontHeightItem      &GetFontSize() const;
     inline const SvxPropSizeItem        &GetPropSize() const;
     inline const SvxShadowedItem        &GetShadowed() const;
@@ -234,6 +236,12 @@ inline const SvxUnderlineItem& SwTxtAttr::GetUnderline() const
 {
     ASSERT( pAttr && pAttr->Which() == RES_CHRATR_UNDERLINE, "Falsche Abfrage" );
     return (const SvxUnderlineItem&)*pAttr;
+}
+
+inline const SvxOverlineItem& SwTxtAttr::GetOverline() const
+{
+    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_OVERLINE, "Falsche Abfrage" );
+    return (const SvxOverlineItem&)*pAttr;
 }
 
 inline const SvxFontHeightItem& SwTxtAttr::GetFontSize() const

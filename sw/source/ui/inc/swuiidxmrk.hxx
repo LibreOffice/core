@@ -166,7 +166,8 @@ public:
     SwIndexMarkDlg( Window *pParent,
                        sal_Bool bNewDlg,
                     const ResId& rResId,
-                    sal_Int32 _nOptionsId );
+                    sal_Int32 _nOptionsId,
+                    SwWrtShell& rWrtShell );
 
 
     ~SwIndexMarkDlg();

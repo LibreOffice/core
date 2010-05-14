@@ -47,6 +47,8 @@
 #include <svx/svxacorr.hxx>
 
 #include <svx/acorrcfg.hxx>
+#include <sfx2/docfile.hxx>
+#include <docsh.hxx>
 
 #include <vector>
 /* -----------------------------05.08.2002 12:43------------------------------
@@ -284,6 +286,16 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 
 BOOL SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
 {
+    SwDocShell* pDocShell = rDoc.GetDocShell();
+    SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : 0;
+    // strings from help module should not be added
+    if( pMedium )
+    {
+        const INetURLObject& rURL = pMedium->GetURLObject();
+        if ( rURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+            return sal_False;
+    }
+
     String aNewWord(rWord);
     aNewWord.EraseAllChars( CH_TXTATR_INWORD );
     aNewWord.EraseAllChars( CH_TXTATR_BREAKWORD );

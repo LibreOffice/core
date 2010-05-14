@@ -67,10 +67,12 @@ class SwIndex;
 //Anderfalls ist es eben ein einfaches Zeichenobjekt. Diese hat einen
 //UserCall und der ist Client vom gesuchten Format.
 //Implementierung in dcontact.cxx
-SwFrmFmt *FindFrmFmt( SdrObject *pObj );
+SW_DLLPUBLIC SwFrmFmt *FindFrmFmt( SdrObject *pObj );
 inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
 {   return ::FindFrmFmt( (SdrObject*)pObj ); }
 sal_Bool HasWrap( const SdrObject* pObj );
+
+void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
 
 //Bei Aenderungen das Objekt aus dem ContourCache entfernen.
 //Implementierung in TxtFly.Cxx
@@ -235,7 +237,7 @@ public:
 //KontactObjekt fuer die Verbindung zwischen Rahmen bzw. deren Formaten
 //im StarWriter (SwClient) und den Zeichenobjekten des Drawing (SdrObjUserCall)
 
-class SwFlyDrawContact : public SwContact
+class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
 {
 private:
     // OD 2004-04-01 #i26791#
@@ -377,6 +379,15 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual SdrLayerID GetLayer() const;
         virtual void NbcSetLayer(SdrLayerID nLayer);
         virtual void SetLayer(SdrLayerID nLayer);
+
+        // FullDrag support
+        virtual bool supportsFullDrag() const;
+        virtual SdrObject* getFullDragClone() const;
+
+        // #i97197#
+        virtual void SetBoundRectDirty();
+        virtual const Rectangle& GetCurrentBoundRect() const;
+        virtual const Rectangle& GetLastBoundRect() const;
 };
 
 // OD 26.06.2003 #108784#

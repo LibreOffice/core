@@ -313,6 +313,7 @@ void SwFrm::CheckDirChange()
                 // --> OD 2004-07-27 #i31698# - update layout direction of
                 // anchored object
                 {
+                    ::setContextWritingMode( pAnchoredObj->DrawObj(), pAnchoredObj->GetAnchorFrmContainingAnchPos() );
                     pAnchoredObj->UpdateLayoutDir();
                 }
                 // <--

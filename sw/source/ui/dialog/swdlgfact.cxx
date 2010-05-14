@@ -77,7 +77,6 @@
 #include "rowht.hxx" //add for SwTableHeightDlg
 #include "selglos.hxx" //add for SwSelGlossaryDlg
 #include "splittbl.hxx" //add for SwSplitTblDlg
-#include "splittbl.hxx" //add for SwSplitTblDlg
 #include "srtdlg.hxx" //add for SwSortDlg
 #include "tautofmt.hxx" //add for SwAutoFormatDlg
 #include "tblnumfm.hxx" //add for SwNumFmtDlg
@@ -123,6 +122,7 @@ IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwBreakDlg_Impl); //add for SwBreakDlg
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for SwCharDlg, SwFootNoteOptionDlg, SwEnvDlg  SwParaDlg SwTableTabDlg
 IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl); //add for SwConvertTableDlg
@@ -211,7 +211,11 @@ void AbstractSwAsciiFilterDlg_Impl::FillOptions( SwAsciiOptions& rOptions )
 }
 //add for SwAsciiFilterDlg end
 
-
+//add for SwSplitTblDlg
+sal_uInt16 AbstractSplitTableDialog_Impl::GetSplitMode()
+{
+    return pDlg->GetSplitMode();
+}
 //add for SwBreakDlg begin
 String AbstractSwBreakDlg_Impl::GetTemplateName()
 {
@@ -986,7 +990,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( Window *pP
 }
 //add for SwParaDlg end
 
-//add for SwTableHeightDlg SwSortDlg ,SwSplitTblDlg  begin
+//add for SwTableHeightDlg SwSortDlg   begin
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( Window *pParent, SwWrtShell &rSh, int nResId )
 {
     Dialog* pDlg=NULL;
@@ -996,9 +1000,6 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( Wind
             pDlg = new SwTableHeightDlg( pParent, rSh);
             break;
 
-        case DLG_SPLIT_TABLE :
-            pDlg = new SwSplitTblDlg( pParent, rSh);
-            break;
         case DLG_SORTING :
             pDlg = new SwSortDlg( pParent, rSh);
             break;
@@ -1016,7 +1017,13 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( Wind
         return new VclAbstractDialog_Impl( pDlg );
     return 0;
 }
-//add for SwTableHeightDlg SwSortDlg ,SwSplitTblDlg end
+//add for SwTableHeightDlg SwSortDlg ,end
+//add for SwSplitTblDlg  begin
+AbstractSplitTableDialog * SwAbstractDialogFactory_Impl::CreateSplitTblDialog ( Window *pParent, SwWrtShell &rSh )
+{
+    return new AbstractSplitTableDialog_Impl( new SwSplitTblDlg( pParent, rSh) );
+}
+//add SwSplitTblDlg end
 
 //add for SwSelGlossaryDlg begin
 AbstarctSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId )

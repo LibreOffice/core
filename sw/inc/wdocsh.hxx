@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wdocsh.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,8 @@ public:
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   sal_Int32 nFileFormat ) const;
+                                   sal_Int32 nFileFormat,
+                                   sal_Bool bTemplate = sal_False ) const;
     USHORT      GetSourcePara()const
                             {return nSourcePara;}
     void        SetSourcePara(USHORT nSet) {nSourcePara = nSet;}

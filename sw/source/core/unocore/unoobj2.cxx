@@ -780,6 +780,17 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAtt
 //              UpdateAttr();
         pDoc->Insert( *pCrsr, rSet, nFlags );
     }
+    //#outline level,add by zhaojianwei
+    if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_AVAILABLE )
+    {
+        SwTxtNode * pTmpNode = rPam.GetNode()->GetTxtNode();
+        if ( pTmpNode )
+        {
+            rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
+        }
+
+    }
+    //<-end,zhaojianwei
 }
 /*-- 09.12.98 14:19:04---------------------------------------------------
 

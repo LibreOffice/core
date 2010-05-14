@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pormulti.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.112.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,15 +226,13 @@ public:
 class SwBidiPortion : public SwMultiPortion
 {
     BYTE nLevel;
-    xub_StrLen nBlanks;     // Number of blanks
 
 public:
     SwBidiPortion( xub_StrLen nEnd, BYTE nLv );
 
     inline BYTE GetLevel() const { return nLevel; }
-    // Set/Get number of blanks for justified alignment
-    inline void SetSpaceCnt( xub_StrLen nNew ) { nBlanks = nNew; }
-    inline xub_StrLen GetSpaceCnt() const { return nBlanks; }
+    // Get number of blanks for justified alignment
+    xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf ) const;
     // Calculates extra spacing based on number of blanks
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
     // Manipulate the spacing array at pCurr

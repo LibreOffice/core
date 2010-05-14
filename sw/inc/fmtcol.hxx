@@ -69,8 +69,11 @@ class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
     // --> OD 2007-01-24 #i73790#
     bool mbStayAssignedToListLevelOfOutlineStyle;
     // <--
+
 protected:
-    BYTE nOutlineLevel;
+    //BYTE nOutlineLevel;        //<-#outline level, removed by zhaojianwei
+    bool mbAssignedToOutlineStyle;//<-#outline level added by zhaojianwei
+
     SwTxtFmtColl *pNextTxtFmtColl;
 
     SwTxtFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
@@ -81,7 +84,8 @@ protected:
           // --> OD 2007-01-24 #i73790#
           mbStayAssignedToListLevelOfOutlineStyle( false ),
           // <--
-          nOutlineLevel( NO_NUMBERING )
+          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
+          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
     { pNextTxtFmtColl = this; }
 
     SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
@@ -92,9 +96,9 @@ protected:
           // --> OD 2007-01-24 #i73790#
           mbStayAssignedToListLevelOfOutlineStyle( false ),
           // <--
-          nOutlineLevel( NO_NUMBERING )
+          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
+          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
     { pNextTxtFmtColl = this; }
-
 public:
 
     // zum "abfischen" von UL-/LR-/FontHeight Aenderungen
@@ -102,24 +106,23 @@ public:
 
     TYPEINFO();     //Bereits in Basisklasse Client drin.
 
-    void SetOutlineLevel( BYTE );
-    inline BYTE GetOutlineLevel() const { return nOutlineLevel; }
-
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
 
     BOOL IsAtDocNodeSet() const;
 
     // --> OD 2006-11-22 #i71574#
-    inline bool AssignedToListLevelOfOutlineStyle() const
+   //<-#outline level,zhaojianwei
+    void SetAttrOutlineLevel( int );
+    int  GetAttrOutlineLevel() const;
+    int  GetAssignedOutlineStyleLevel() const;
+    inline const bool IsAssignedToListLevelOfOutlineStyle() const
     {
-        return ( /*0 <= GetOutlineLevel() &&*/ GetOutlineLevel() < MAXLEVEL );
+        return mbAssignedToOutlineStyle;
     }
-
-    inline void DeleteAssignmentToListLevelOfOutlineStyle()
-    {
-        SetOutlineLevel( NO_NUMBERING );
-    }
+    void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
+    void DeleteAssignmentToListLevelOfOutlineStyle();
+    //<-end
     // <--
 
     // --> OD 2008-03-04 #refactorlists#

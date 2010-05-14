@@ -94,6 +94,11 @@
 #include <SwStyleNameMapper.hxx>
 #include <numrule.hxx>
 
+//--> #outlinelevel added by zhaojianwei
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+//<--end
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
@@ -133,11 +138,15 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     // call method <UpdateOutlineNode(..)> only for the document nodes array
     if ( IsDocNodes() )
     {
-        if ( pColl && NO_NUMBERING != pColl->GetOutlineLevel() )
-        {
-            UpdateOutlineNode( *pNode, NO_NUMBERING, pColl->GetOutlineLevel() );
-        }
-        else
+        //if ( pColl && NO_NUMBERING != pColl->GetOutlineLevel() )  //#outline level,removed by zhaojianwei
+        //{
+        //  UpdateOutlineNode( *pNode, NO_NUMBERING, pColl->GetOutlineLevel() );
+        //}
+//        if ( pColl && 0 != pColl->GetAttrOutlineLevel() )//#outline level,added by zhaojianwei
+//        {
+//            UpdateOutlineNode( *pNode, 0, pColl->GetAttrOutlineLevel() );
+//        }//<--end
+//        else
         {
             UpdateOutlineNode(*pNode);
         }
@@ -230,7 +239,10 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
       mpNodeNum( 0 ),
       bNotifiable( false ),
       bLastOutlineState( FALSE ),
-      nOutlineLevel( pTxtColl->GetOutlineLevel() ),
+      //nOutlineLevel( pTxtColl->GetOutlineLevel() )//#outline level, removed by zhaojianwei.
+      // --> OD 2008-11-19 #i70748#
+      mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
+      // <--
       // --> OD 2008-05-06 #refactorlists#
       mbInSetOrResetAttr( false ),
       mpList( 0 )
@@ -436,6 +448,8 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             pNode->SetGrammarCheck( GetGrammarCheck()->SplitGrammarList( nSplitPos ) );
         SetGrammarCheckDirty( true );
 
+        SetWordCountDirty( true );
+
         // SMARTTAGS
         if( GetSmartTags() )
             pNode->SetSmartTags( GetSmartTags()->SplitList( nSplitPos ) );
@@ -531,6 +545,8 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         SwGrammarMarkUp *pList3 = GetGrammarCheck();
         SetGrammarCheck( 0, false );
         SetGrammarCheckDirty( true );
+
+        SetWordCountDirty( true );
 
         // SMARTTAGS
         SwWrongList *pList2 = GetSmartTags();
@@ -1050,10 +1066,15 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     ASSERT( pDoc, "Kein Doc?" );
     // erfrage die OutlineLevel und update gegebenenfalls das Nodes-Array,
     // falls sich die Level geaendert haben !
-    const BYTE nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;
-    const BYTE nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;
+    //const BYTE nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;//#outline level,removed by zhaojianwei
+    //const BYTE nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;//<-end,zhaojianwei
+    const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle() ?
+                     pOldColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
+    const int nNewLevel = pNewColl && pNewColl->IsAssignedToListLevelOfOutlineStyle() ?
+                     pNewColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
 
-    if ( NO_NUMBERING != nNewLevel )
+//  if ( NO_NUMBERING != nNewLevel )    //#outline level,zhaojianwei
+    if ( MAXLEVEL != nNewLevel )    //<-end,zhaojianwei
     {
         SetAttrListLevel(nNewLevel);
     }
@@ -1063,9 +1084,10 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
             pDoc->GetNodes().UpdateOutlineNode(*this);
     }
 
+
     SwNodes& rNds = GetNodes();
     // Update beim Level 0 noch die Fussnoten !!
-    if( (!nNewLevel || !nOldLevel) && pDoc->GetFtnIdxs().Count() &&
+    if( ( !nNewLevel || !nOldLevel) && pDoc->GetFtnIdxs().Count() &&
         FTNNUM_CHAPTER == pDoc->GetFtnInfo().eNum &&
         rNds.IsDocNodes() )
     {
@@ -1353,14 +1375,26 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
 |*                      wird angehaengt
 *************************************************************************/
 
-void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rStart, xub_StrLen nLen )
+// --> OD 2008-11-18 #i96213#
+// introduction of new optional parameter to control, if all attributes have to be copied.
+void SwTxtNode::Copy( SwTxtNode *pDest,
+                      const SwIndex &rStart,
+                      xub_StrLen nLen,
+                      const bool bForceCopyOfAllAttrs )
 {
     SwIndex aIdx( pDest, pDest->aText.Len() );
-    Copy( pDest, aIdx, rStart, nLen );
+    Copy( pDest, aIdx, rStart, nLen, bForceCopyOfAllAttrs );
 }
+// <--
 
-void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rDestStart,
-                      const SwIndex &rStart, xub_StrLen nLen)
+// --> OD 2008-11-18 #i96213#
+// introduction of new optional parameter to control, if all attributes have to be copied.
+void SwTxtNode::Copy( SwTxtNode *pDest,
+                      const SwIndex &rDestStart,
+                      const SwIndex &rStart,
+                      xub_StrLen nLen,
+                      const bool bForceCopyOfAllAttrs )
+// <--
 {
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
     xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
@@ -1375,8 +1409,12 @@ void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rDestStart,
         if( HasSwAttrSet() )
         {
             // alle, oder nur die CharAttribute ?
-            if( nDestStart || pDest->HasSwAttrSet() ||
-                nLen != pDest->GetTxt().Len() )
+            // --> OD 2008-11-18 #i96213#
+            if ( !bForceCopyOfAllAttrs &&
+                 ( nDestStart ||
+                   pDest->HasSwAttrSet() ||
+                   nLen != pDest->GetTxt().Len() ) )
+            // <--
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1421,8 +1459,12 @@ void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rDestStart,
     if( HasSwAttrSet() )
     {
         // alle, oder nur die CharAttribute ?
-        if( nDestStart || pDest->HasSwAttrSet() ||
-            nLen != pDest->GetTxt().Len() )
+        // --> OD 2008-11-18 #i96213#
+        if ( !bForceCopyOfAllAttrs &&
+             ( nDestStart ||
+               pDest->HasSwAttrSet() ||
+               nLen != pDest->GetTxt().Len() ) )
+        // <--
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -2705,13 +2747,32 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     return bRet;
 }
 
+// --> OD 2008-12-02 #i96772#
+void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const
+{
+    if ( AreListLevelIndentsApplicable() )
+    {
+        const SwNumRule* pRule = GetNumRule();
+        if ( pRule && GetActualListLevel() >= 0 )
+        {
+            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+            if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                o_rLRSpaceItem = aLR;
+            }
+        }
+    }
+}
+// <--
+
 // --> OD 2008-07-01 #i91133#
 long SwTxtNode::GetLeftMarginForTabCalculation() const
 {
     long nLeftMarginForTabCalc = 0;
 
     bool bLeftMarginForTabCalcSetToListLevelIndent( false );
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0;
     if( pRule )
     {
         const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
@@ -3021,7 +3082,7 @@ const ModelToViewHelper::ConversionMap*
     if ( pConversionMap && pConversionMap->size() )
         pConversionMap->push_back(
             ModelToViewHelper::ConversionMapEntry(
-                rNodeText.getLength(), rRetText.getLength() ) );
+                rNodeText.getLength()+1, rRetText.getLength()+1 ) );
 
     return pConversionMap;
 }
@@ -3206,46 +3267,114 @@ namespace {
                 bParagraphStyleChanged = true;
                 if( rTxtNode.GetNodes().IsDocNodes() )
                 {
+                    // --> OD 2008-12-17 #i70748#
+                    // The former list style set at the paragraph can not be
+                    // retrieved from the change set.
+//                    sOldNumRule =
+//                        dynamic_cast<const SwFmtChg*>(pOldValue)->pChangedFmt->GetNumRule().GetValue();
+                    const SwNumRule* pFormerNumRuleAtTxtNode =
+                        rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
+                    if ( pFormerNumRuleAtTxtNode )
+                    {
+                        sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
+                    }
+                    // <--
+                    // --> OD 2008-11-19 #i70748#
+                    if ( rTxtNode.IsEmptyListStyleDueToSetOutlineLevelAttr() )
+                    {
+                        const SwNumRuleItem& rNumRuleItem = rTxtNode.GetTxtColl()->GetNumRule();
+                        if ( rNumRuleItem.GetValue().Len() > 0 )
+                        {
+                            rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                        }
+                    }
+                    // <--
                     const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
                     if ( pNumRuleAtTxtNode )
                     {
                         bNumRuleSet = true;
                         sNumRule = pNumRuleAtTxtNode->GetName();
                     }
-                    sOldNumRule =
-                        dynamic_cast<const SwFmtChg*>(pOldValue)->pChangedFmt->GetNumRule().GetValue();
                 }
                 break;
             }
             case RES_ATTRSET_CHG:
             {
                 const SfxPoolItem* pItem = 0;
+                // --> OD 2008-12-19 #i70748#
+                // The former list style set at the paragraph can not be
+                // retrieved from the change set.
+//                if ( dynamic_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) ==
+//                        SFX_ITEM_SET )
+//                {
+//                    sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
+//                }
+                const SwNumRule* pFormerNumRuleAtTxtNode =
+                    rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
+                if ( pFormerNumRuleAtTxtNode )
+                {
+                    sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
+                }
+                // <--
                 if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) ==
                         SFX_ITEM_SET )
                 {
+                    // --> OD 2008-11-19 #i70748#
+                    rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                    // <--
                     bNumRuleSet = true;
-                    sNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
+                    // The new list style set at the paragraph can not be
+                    // retrieved from the change set.
+//                    sNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
+                    // <--
                 }
-                if ( dynamic_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) ==
-                        SFX_ITEM_SET )
+                // --> OD 2008-12-17 #i70748#
+                // The new list style set at the paragraph.
+                const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
+                if ( pNumRuleAtTxtNode )
                 {
-                    sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
+                    sNumRule = pNumRuleAtTxtNode->GetName();
                 }
+                // <--
                 break;
             }
             case RES_PARATR_NUMRULE:
             {
                 if ( rTxtNode.GetNodes().IsDocNodes() )
                 {
+                    // The former list style set at the paragraph can not be
+                    // retrieved from the change set.
+//                    if ( pOldValue )
+//                    {
+//                        sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pOldValue)->GetValue();
+//                    }
+                    const SwNumRule* pFormerNumRuleAtTxtNode =
+                        rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
+                    if ( pFormerNumRuleAtTxtNode )
+                    {
+                        sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
+                    }
+                    // <--
                     if ( pNewValue )
                     {
+                        // --> OD 2008-11-19 #i70748#
+                        rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                        // <--
                         bNumRuleSet = true;
-                        sNumRule = dynamic_cast<const SwNumRuleItem*>(pNewValue)->GetValue();
+                        // --> OD 2008-12-17 #i70748#
+                        // The new list style set at the paragraph can not be
+                        // retrieved from the change set.
+//                        sNumRule = dynamic_cast<const SwNumRuleItem*>(pNewValue)->GetValue();
+                        // <--
                     }
-                    if ( pOldValue )
+                    // --> OD 2008-12-17 #i70748#
+                    // The new list style set at the paragraph.
+                    const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
+                    if ( pNumRuleAtTxtNode )
                     {
-                        sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pOldValue)->GetValue();
+                        sNumRule = pNumRuleAtTxtNode->GetName();
                     }
+                    // <--
                 }
                 break;
             }
@@ -3266,7 +3395,12 @@ namespace {
                         aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
                         aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
                         SwPaM aPam( rTxtNode );
-                        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_True, &aResetAttrsArray );
+                        // --> OD 2008-11-28 #i96644#
+                        // suppress side effect "send data changed events"
+                        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
+                                                       &aResetAttrsArray,
+                                                       false );
+                        // <--
                     }
                 }
                 else
@@ -3277,8 +3411,12 @@ namespace {
                     if ( sNumRule ==
                             String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ) )
                     {
+                        // --> OD 2008-09-10 #i70748#
+                        ASSERT( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
+                                "<HandleModifyAtTxtNode()> - text node with outline style, but its paragraph style is not assigned to outline style." );
                         int nNewListLevel =
-                                    rTxtNode.GetTxtColl()->GetOutlineLevel();
+                            rTxtNode.GetTxtColl()->GetAssignedOutlineStyleLevel();
+                        // <--
                         if ( 0 <= nNewListLevel && nNewListLevel < MAXLEVEL )
                         {
                             rTxtNode.SetAttrListLevel( nNewListLevel );
@@ -3299,7 +3437,18 @@ namespace {
                     aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
                     aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
                     SwPaM aPam( rTxtNode );
-                    rTxtNode.GetDoc()->ResetAttrs( aPam, sal_True, &aResetAttrsArray );
+                    // --> OD 2008-11-28 #i96644#
+                    // suppress side effect "send data changed events"
+                    rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
+                                                   &aResetAttrsArray,
+                                                   false );
+                    // <--
+                    // --> OD 2008-11-19 #i70748#
+                    if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
+                    {
+                        rTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
+                    }
+                    // <--
                 }
             }
         }
@@ -3435,7 +3584,8 @@ BOOL SwTxtNode::IsOutline() const
 {
     BOOL bResult = FALSE;
 
-    if ( GetOutlineLevel() != NO_NUMBERING )
+    //if ( GetOutlineLevel() != NO_NUMBERING )//#outline level,removed by zhaojianwei
+    if ( GetAttrOutlineLevel() > 0 )            //<-end,zhaojianwei
     {
         bResult = !IsInRedlines();
     }
@@ -3461,21 +3611,47 @@ void SwTxtNode::UpdateOutlineState()
     bLastOutlineState = IsOutline();
 }
 
-int SwTxtNode::GetOutlineLevel() const
+//#outline level, zhaojianwei
+int SwTxtNode::GetAttrOutlineLevel() const
 {
-#if 1
-    int aResult = NO_NUMBERING;
-
-    SwFmtColl * pFmtColl = GetFmtColl();
-
-    if (pFmtColl)
-        aResult = ((SwTxtFmtColl *) pFmtColl)->GetOutlineLevel();
-
-    return aResult;
-#else // for OOo3
-    return nOutlineLevel
-#endif
+    return ((const SfxUInt16Item &)GetAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
 }
+void SwTxtNode::SetAttrOutlineLevel(int nLevel)
+{
+    ASSERT( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtNode: Level Out Of Range" );//#outline level,zhaojianwei
+    if ( 0 <= nLevel && nLevel <= MAXLEVEL )
+    {
+        SetAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
+                                static_cast<UINT16>(nLevel) ) );
+    }
+}
+//<-end
+
+// --> OD 2008-11-19 #i70748#
+bool SwTxtNode::IsEmptyListStyleDueToSetOutlineLevelAttr()
+{
+    return mbEmptyListStyleSetDueToSetOutlineLevelAttr;
+}
+
+void SwTxtNode::SetEmptyListStyleDueToSetOutlineLevelAttr()
+{
+    if ( !mbEmptyListStyleSetDueToSetOutlineLevelAttr )
+    {
+        SetAttr( SwNumRuleItem() );
+        mbEmptyListStyleSetDueToSetOutlineLevelAttr = true;
+    }
+}
+
+void SwTxtNode::ResetEmptyListStyleDueToResetOutlineLevelAttr()
+{
+    if ( mbEmptyListStyleSetDueToSetOutlineLevelAttr )
+    {
+        ResetAttr( RES_PARATR_NUMRULE );
+        mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
+    }
+}
+// <--
+
 
 // --> OD 2008-02-27 #refactorlists#
 void SwTxtNode::SetAttrListLevel( int nLevel )
@@ -4012,6 +4188,7 @@ namespace {
     //     is set and changed after the attributes have been set
     // (6) Notify list tree, if count in list - RES_PARATR_LIST_ISCOUNTED - is set
     //     and changed after the attributes have been set
+    // (7) Set or Reset emtpy list style due to changed outline level - RES_PARATR_OUTLINELEVEL.
     class HandleSetAttrAtTxtNode
     {
         public:
@@ -4027,6 +4204,9 @@ namespace {
             bool mbUpdateListLevel;
             bool mbUpdateListRestart;
             bool mbUpdateListCount;
+            // --> OD 2008-11-19 #i70748#
+            bool mbOutlineLevelSet;
+            // <--
     };
 
     HandleSetAttrAtTxtNode::HandleSetAttrAtTxtNode( SwTxtNode& rTxtNode,
@@ -4035,7 +4215,10 @@ namespace {
           mbAddTxtNodeToList( false ),
           mbUpdateListLevel( false ),
           mbUpdateListRestart( false ),
-          mbUpdateListCount( false )
+          mbUpdateListCount( false ),
+          // --> OD 2008-11-19 #i70748#
+          mbOutlineLevelSet( false )
+          // <--
     {
         switch ( pItem.Which() )
         {
@@ -4126,6 +4309,20 @@ namespace {
                 }
             }
             break;
+
+            // --> OD 2008-11-19 #i70748#
+            // handle RES_PARATR_OUTLINELEVEL
+            case RES_PARATR_OUTLINELEVEL:
+            {
+                const SfxUInt16Item& aOutlineLevelItem =
+                                    dynamic_cast<const SfxUInt16Item&>(pItem);
+                if ( aOutlineLevelItem.GetValue() != mrTxtNode.GetAttrOutlineLevel() )
+                {
+                    mbOutlineLevelSet = true;
+                }
+            }
+            break;
+            // <--
         }
 
     }
@@ -4136,7 +4333,10 @@ namespace {
           mbAddTxtNodeToList( false ),
           mbUpdateListLevel( false ),
           mbUpdateListRestart( false ),
-          mbUpdateListCount( false )
+          mbUpdateListCount( false ),
+          // --> OD 2008-11-19 #i70748#
+          mbOutlineLevelSet( false )
+          // <--
     {
         const SfxPoolItem* pItem = 0;
         // handle RES_PARATR_NUMRULE
@@ -4149,6 +4349,9 @@ namespace {
             if ( pNumRuleItem->GetValue().Len() > 0 )
             {
                 mbAddTxtNodeToList = true;
+                // --> OD 2008-11-19 #i70748#
+                mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                // <--
             }
         }
 
@@ -4220,6 +4423,19 @@ namespace {
                 mbUpdateListCount = true;
             }
         }
+
+        // --> OD 2008-11-19 #i70748#
+        // handle RES_PARATR_OUTLINELEVEL
+        if ( rItemSet.GetItemState( RES_PARATR_OUTLINELEVEL, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SfxUInt16Item* pOutlineLevelItem =
+                                dynamic_cast<const SfxUInt16Item*>(pItem);
+            if ( pOutlineLevelItem->GetValue() != mrTxtNode.GetAttrOutlineLevel() )
+            {
+                mbOutlineLevelSet = true;
+            }
+        }
+        // <--
     }
 
     HandleSetAttrAtTxtNode::~HandleSetAttrAtTxtNode()
@@ -4252,6 +4468,26 @@ namespace {
                 const_cast<SwNodeNum*>(mrTxtNode.GetNum())->InvalidateAndNotifyTree();
             }
         }
+
+        // --> OD 2008-11-19 #i70748#
+        if ( mbOutlineLevelSet )
+        {
+            if ( mrTxtNode.GetAttrOutlineLevel() == 0 )
+            {
+                mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+            }
+            else
+            {
+                const SfxPoolItem* pItem = 0;
+                if ( mrTxtNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
+                                                            TRUE, &pItem )
+                                                                != SFX_ITEM_SET )
+                {
+                    mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
+                }
+            }
+        }
+        // <--
     }
     // End of class <HandleSetAttrAtTxtNode>
 }
@@ -4300,6 +4536,7 @@ namespace {
     // (4) Notify list tree, if list restart - RES_PARATR_LIST_ISRESTART - is reset.
     // (5) Notify list tree, if list restart value - RES_PARATR_LIST_RESTARTVALUE - is reset.
     // (6) Notify list tree, if count in list - RES_PARATR_LIST_ISCOUNTED - is reset.
+    // (7) Reset empty list style, if outline level attribute - RES_PARATR_OUTLINELEVEL - is reset.
     class HandleResetAttrAtTxtNode
     {
         public:
@@ -4366,6 +4603,14 @@ namespace {
                     ( nWhich1 <= RES_PARATR_LIST_ISCOUNTED && RES_PARATR_LIST_ISCOUNTED <= nWhich2 &&
                       !mrTxtNode.IsCountedInList() );
             }
+
+            // --> OD 2008-11-19 #i70748#
+            // RES_PARATR_OUTLINELEVEL
+            if ( nWhich1 <= RES_PARATR_OUTLINELEVEL && RES_PARATR_OUTLINELEVEL <= nWhich2 )
+            {
+                mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+            }
+            // <--
         }
         else
         {
@@ -4383,6 +4628,13 @@ namespace {
                 mbListStyleOrIdReset = true;
                 // <--
             }
+            // --> OD 2008-11-19 #i70748#
+            // RES_PARATR_OUTLINELEVEL
+            else if ( nWhich1 == RES_PARATR_OUTLINELEVEL )
+            {
+                mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+            }
+            // <--
 
             if ( !bRemoveFromList )
             {
@@ -4437,6 +4689,13 @@ namespace {
                     mbListStyleOrIdReset = true;
                     // <--
                 }
+                // --> OD 2008-11-19 #i70748#
+                // RES_PARATR_OUTLINELEVEL
+                else if ( rWhichArr[ n ] == RES_PARATR_OUTLINELEVEL )
+                {
+                    mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                }
+                // <--
 
                 if ( !bRemoveFromList )
                 {
@@ -4478,6 +4737,9 @@ namespace {
         {
             rTxtNode.RemoveFromList();
         }
+        // --> OD 2008-11-19 #i70748#
+        mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+        // <--
     }
 
     HandleResetAttrAtTxtNode::~HandleResetAttrAtTxtNode()
@@ -4489,8 +4751,29 @@ namespace {
             if ( mrTxtNode.GetNumRule() &&
                  mrTxtNode.GetListId().Len() > 0 )
             {
+                // --> OD 2009-01-14 #i96062#
+                // If paragraph has no list level attribute set and list style
+                // is the outline style, apply outline level as the list level.
+                if ( !mrTxtNode.HasAttrListLevel() &&
+                     mrTxtNode.GetNumRule()->GetName() ==
+                        String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ) &&
+                     mrTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle() )
+                {
+                    int nNewListLevel = mrTxtNode.GetTxtColl()->GetAssignedOutlineStyleLevel();
+                    if ( 0 <= nNewListLevel && nNewListLevel < MAXLEVEL )
+                    {
+                        mrTxtNode.SetAttrListLevel( nNewListLevel );
+                    }
+                }
+                // <--
                 mrTxtNode.AddToList();
             }
+            // --> OD 2008-11-19 #i70748#
+            else if ( dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
+            {
+                mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
+            }
+            // <--
         }
 
         if ( mrTxtNode.IsInList() )

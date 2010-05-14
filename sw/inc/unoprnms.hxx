@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.hxx,v $
- * $Revision: 1.129 $
+ * $Revision: 1.129.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -722,7 +722,7 @@ enum SwPropNameIds
 /* 0674 */  UNO_NAME_POSITION_LAYOUT_DIR,
 // <--
 /* 0675 */  UNO_NAME_NUMBERING_IS_OUTLINE,
-/* 0676 */  UNO_NAME_DEFAULT_OUTLINE_LEVEL,
+///* 0676 */  UNO_NAME_DEFAULT_OUTLINE_LEVEL,   //#outline level, removed by zhaojianwei
 // --> OD 2004-10-28 #i36248#
 /* 0677 */  UNO_NAME_STARTPOSITION_IN_HORI_L2R,
 /* 0678 */  UNO_NAME_ENDPOSITION_IN_HORI_L2R,
@@ -750,7 +750,7 @@ enum SwPropNameIds
 /* 0696 */  UNO_NAME_PAGE_COUNT,
 /* 0697 */  UNO_NAME_LINE_COUNT,
 /* 0698 */  UNO_NAME_IS_CONSTANT_SPELLCHECK,
-/* 0699 */  UNO_NAME_IS_HIDE_SPELL_MARKS,
+/* 0699 */  UNO_NAME_IS_HIDE_SPELL_MARKS,       // deprecated #i91949
 // <--
 /* 0700 */  UNO_NAME_IS_FIELD_USED,
 /* 0701 */  UNO_NAME_IS_FIELD_DISPLAYED,
@@ -796,7 +796,15 @@ enum SwPropNameIds
 /* 0729 */  UNO_NAME_DEFAULT_LIST_ID,
 // <--
 /* 0730 */  UNO_NAME_STREAM_NAME,
-/* 0731 */  SW_PROPNAME_END
+// --> OD 2008-11-26 #158694#
+/* 0731 */  UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
+/* 0732 */  UNO_NAME_PARA_LIST_LABEL_STRING,
+// <--
+/* 0733 */  UNO_NAME_CHAR_OVERLINE,
+/* 0734 */  UNO_NAME_CHAR_OVERLINE_COLOR,
+/* 0735 */  UNO_NAME_CHAR_OVERLINE_HAS_COLOR,
+/* 0736 */  UNO_NAME_OUTLINE_LEVEL,  //#outline level,add<-zhaojianwei outlinelevel
+/* 0737 */  SW_PROPNAME_END
 };
 
 

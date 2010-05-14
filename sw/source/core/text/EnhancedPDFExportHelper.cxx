@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedPDFExportHelper.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -780,10 +780,14 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             case vcl::PDFWriter::Span :
             case vcl::PDFWriter::Quote :
             case vcl::PDFWriter::Code :
-                bActualText =
-                bBaselineShift =
-                bTextDecorationType =
-                bLanguage = true;
+                if( POR_HYPHSTR == pPor->GetWhichPor() || POR_SOFTHYPHSTR == pPor->GetWhichPor() )
+                    bActualText = true;
+                else
+                {
+                    bBaselineShift =
+                    bTextDecorationType =
+                    bLanguage = true;
+                }
                 break;
 
             case vcl::PDFWriter::Link :
@@ -821,6 +825,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         {
             if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Underline );
+            if ( UNDERLINE_NONE    != rInf.GetFont()->GetOverline() )
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Overline );
             if ( STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::LineThrough );
             if ( EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() )
@@ -1159,8 +1165,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 if ( pTxtNd->IsOutline() )
                 {
-                    int nRealLevel = pTxtNd->GetOutlineLevel();
-                    nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
+                    //int nRealLevel = pTxtNd->GetOutlineLevel();   //#outline level,zhaojianwei
+                    int nRealLevel = pTxtNd->GetAttrOutlineLevel()-1;       //<-end,zhaojianwei
+                   nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
                     nPDFType =  static_cast<USHORT>(vcl::PDFWriter::H1 + nRealLevel);
                     switch(nRealLevel)
@@ -1428,6 +1435,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
 
                     if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() ||
+                         UNDERLINE_NONE    != rInf.GetFont()->GetOverline()  ||
                          STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() ||
                          EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() ||
                          0                 != rInf.GetFont()->GetEscapement() ||

@@ -1563,6 +1563,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                         pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
                                 }
 
+                                //convert fields to text if we are exporting to PDF
+                                //this prevents a second merge while updating the fields in SwXTextDocument::getRendererCount()
+                                if( pStoreToFilter && pStoreToFilter->GetFilterName().EqualsAscii("writer_pdf_Export"))
+                                    rWorkShell.ConvertFieldsToText();
                                 xWorkDocSh->DoSaveAs(*pDstMed);
                                 xWorkDocSh->DoSaveCompleted(pDstMed);
                                 if( xWorkDocSh->GetError() )

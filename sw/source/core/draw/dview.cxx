@@ -146,6 +146,13 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Writer());
 }
 
+// --> OD 2009-03-05 #i99665#
+sal_Bool SwDrawView::IsAntiAliasing() const
+{
+    return getOptionsDrawinglayer().IsAntiAliasing();
+}
+// <--
+
 /*************************************************************************
 |*
 |*  SwDrawView::AddCustomHdl()

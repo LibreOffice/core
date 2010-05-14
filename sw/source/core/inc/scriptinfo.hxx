@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptinfo.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.112.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,9 @@ private:
     SvXub_StrLens aDirChg;
     SvBytes aDirType;
     SvXub_StrLens aKashida;
+    SvXub_StrLens aKashidaInvalid;
+    SvXub_StrLens aNoKashidaLine;
+    SvXub_StrLens aNoKashidaLineEnd;
     SvXub_StrLens aCompChg;
     SvXub_StrLens aCompLen;
     SvXub_StrLens aHiddenChg;
@@ -114,6 +117,12 @@ private:
     BYTE nDefaultDir;
 
     void UpdateBidiInfo( const String& rTxt );
+
+    sal_Bool IsKashidaValid ( xub_StrLen nKashPos ) const;
+    void MarkKashidaInvalid ( xub_StrLen nKashPos );
+    void ClearKashidaInvalid ( xub_StrLen nKashPos );
+    bool MarkOrClearKashidaInvalid( xub_StrLen nStt, xub_StrLen nLen, bool bMark, xub_StrLen nMarkCount );
+    bool IsKashidaLine ( xub_StrLen nCharIdx ) const;
 
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
@@ -254,7 +263,7 @@ public:
                 The printers kerning array. Optional.
     @param  pScrArray
                 The screen kerning array. Optional.
-    @param  nIdx
+    @param  nStt
                 Start referring to the paragraph.
     @param  nLen
                 The number of characters to be considered.
@@ -262,18 +271,59 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    USHORT KashidaJustify( sal_Int32* pKernArray ,sal_Int32* pScrArray,
-                           xub_StrLen nIdx, xub_StrLen nLen,
-                           long nSpaceAdd = 0 ) const;
+    USHORT KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
+                           xub_StrLen nStt, xub_StrLen nLen,
+                           long nSpaceAdd = 0) const;
 
-/** Checks if language is one of the 16 Arabic languages
+/** Clears array of kashidas marked as invalid
+ */
+    inline void ClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen ) { MarkOrClearKashidaInvalid( nStt, nLen, false, 0 ); }
 
-    @descr  Checks if language is one of the 16 Arabic languages
-    @param  aLang
-                The language which has to be checked.
-    @return Returns if the language is an Arabic language
+/** Marks nCnt kashida positions as invalid
+   pKashidaPositions: array of char indices relative to the paragraph
 */
-    static BOOL IsArabicLanguage( LanguageType aLang );
+   bool MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPositions );
+
+/** Marks nCnt kashida positions as invalid
+    in the given text range
+ */
+   inline bool MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen nStt, xub_StrLen nLen )
+       { return MarkOrClearKashidaInvalid( nStt, nLen, true, nCnt ); }
+
+/** retrieves kashida opportunities for a given text range.
+   returns the number of kashida positions in the given text range
+
+   pKashidaPositions: buffer to reveive the char indices of the
+                      kashida opportunties relative to the paragraph
+*/
+   USHORT GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
+                             xub_StrLen* pKashidaPosition );
+
+
+
+
+/** Use regular blank justification instead of kashdida justification for the given line of text.
+   nStt Start char index of the line referring to the paragraph.
+   nLen Number of characters in the line
+*/
+   void SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen );
+
+/** Clear forced blank justification for a given line.
+   nStt Start char index of the line referring to the paragraph.
+   nLen Number of characters in the line
+*/
+   void ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen );
+
+/** Checks if text is Arabic text.
+
+     @descr  Checks if text is Arabic text.
+     @param  rTxt
+                 The text to check
+     @param  nStt
+                 Start index of the text
+     @return Returns if the language is an Arabic language
+ */
+    static sal_Bool IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nLen );
 
 /** Performes a thai justification on the kerning array
 

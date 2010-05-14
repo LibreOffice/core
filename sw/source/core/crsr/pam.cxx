@@ -647,7 +647,7 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
         const SwSectionNode* pSNd = pNd->GetSectionNode();
         if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
                       // --> FME 2004-06-29 #114856# Formular view
-                      bFormView && !pSNd->GetSection().IsEditInReadonlyFlag() ) )
+                      (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
                       // <--
             bRet = TRUE;
     }
@@ -670,7 +670,7 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
             const SwSectionNode* pSNd = pNd->GetSectionNode();
             if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
                           // --> FME 2004-06-29 #114856# Formular view
-                          bFormView && !pSNd->GetSection().IsEditInReadonlyFlag() ) )
+                          (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
                           // <--
                 bRet = TRUE;
         }
@@ -1153,4 +1153,9 @@ String SwPaM::GetTxt() const
 BOOL SwPaM::Overlap(const SwPaM & a, const SwPaM & b)
 {
     return !(*b.End() <= *a.Start() || *a.End() <= *b.End());
+}
+
+BOOL SwPaM::LessThan(const SwPaM & a, const SwPaM & b)
+{
+    return (*a.Start() < *b.Start()) || (*a.Start() == *b.Start() && *a.End() < *b.End());
 }

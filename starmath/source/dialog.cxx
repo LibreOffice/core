@@ -1874,7 +1874,7 @@ IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
     sal_UCS4 cChar = aCharsetDisplay.GetSelectCharacter();
 
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( pSubsetMap, "SubsetMap missing" )
+    DBG_ASSERT( pSubsetMap, "SubsetMap missing" );
 #endif
     if (pSubsetMap)
     {
@@ -2082,7 +2082,7 @@ void SmSymDefineDialog::UpdateButtons()
         // oder wenn es noch kein Symbol des neuen Namens gibt (wuerde implizites
         // loeschen des bereits vorhandenen Symbols erfordern)
         BOOL  bEqualName = pOrigSymbol && aTmpSymbolName == pOrigSymbol->GetName();
-        bChange = pOrigSymbol && (bEqualName && !bEqual || !bEqualName && bAdd);
+        bChange = pOrigSymbol && ( (bEqualName && !bEqual) || (!bEqualName && bAdd) );
     }
 
     aAddBtn   .Enable(bAdd);

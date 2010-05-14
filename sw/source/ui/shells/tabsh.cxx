@@ -1040,13 +1040,32 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_SPLIT_TABLE:
         {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            SFX_REQUEST_ARG( rReq, pType, SfxUInt16Item, FN_PARAM_1, sal_False );
+            if( pType )
+            {
+                switch( pType->GetValue() )
+                {
+                    case HEADLINE_NONE    :
+                    case HEADLINE_BORDERCOPY:
+                    case HEADLINE_CNTNTCOPY:
+                    case HEADLINE_BOXATTRCOPY:
+                    case HEADLINE_BOXATRCOLLCOPY:
+                        rSh.SplitTable(pType->GetValue()) ;
+                    default: ;//wrong parameter, do nothing
+                }
+            }
+            else
+            {
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh ,DLG_SPLIT_TABLE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            pDlg->Execute();
-            delete pDlg;
+                AbstractSplitTableDialog* pDlg = pFact->CreateSplitTblDialog( GetView().GetWindow(), rSh );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                pDlg->Execute();
+                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, pDlg->GetSplitMode() ) );
+                delete pDlg;
+                bCallDone = sal_True;
+            }
         }
         break;
 

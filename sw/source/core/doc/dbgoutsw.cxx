@@ -141,6 +141,7 @@ map<USHORT,String,CompareUShort> & GetItemWhichMap()
         aItemWhichMap[RES_CHRATR_PROPORTIONALFONTSIZE] = String("CHRATR_PROPORTIONALFONTSIZE", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_CHRATR_SHADOWED] = String("CHRATR_SHADOWED", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_CHRATR_UNDERLINE] = String("CHRATR_UNDERLINE", RTL_TEXTENCODING_ASCII_US);
+        aItemWhichMap[RES_CHRATR_OVERLINE] = String("CHRATR_OVERLINE", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_CHRATR_WEIGHT] = String("CHRATR_WEIGHT", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_CHRATR_WORDLINEMODE] = String("CHRATR_WORDLINEMODE", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_CHRATR_AUTOKERN] = String("CHRATR_AUTOKERN", RTL_TEXTENCODING_ASCII_US);
@@ -573,7 +574,7 @@ String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += String("<tbl/>", RTL_TEXTENCODING_ASCII_US);
 
         aTmpStr += String("<outlinelevel>", RTL_TEXTENCODING_ASCII_US);
-        aTmpStr += String::CreateFromInt32(pTxtNode->GetOutlineLevel());
+        aTmpStr += String::CreateFromInt32(pTxtNode->GetAttrOutlineLevel()-1);
         aTmpStr += String("</outlinelevel>", RTL_TEXTENCODING_ASCII_US);
 
         const SwNumRule * pNumRule = pTxtNode->GetNumRule();
@@ -629,7 +630,8 @@ String lcl_dbg_out(const SwNode & rNode)
 
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += String::CreateFromInt32
-                (static_cast<SwTxtFmtColl *>(pColl)->GetOutlineLevel());
+                //(static_cast<SwTxtFmtColl *>(pColl)->GetOutlineLevel());//#outline level,zhaojianwei
+                (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>
@@ -905,7 +907,7 @@ String lcl_dbg_out(const SwTxtFmtColl & rFmt)
     String aResult(rFmt.GetName());
 
     aResult += String("(", RTL_TEXTENCODING_ASCII_US);
-    aResult += String::CreateFromInt32(rFmt.GetOutlineLevel());
+    aResult += String::CreateFromInt32(rFmt.GetAttrOutlineLevel());
     aResult += String(")", RTL_TEXTENCODING_ASCII_US);
 
     return aResult;

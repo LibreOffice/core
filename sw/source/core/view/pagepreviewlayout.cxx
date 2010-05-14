@@ -1176,7 +1176,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                     const Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
                     SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, true );
-                    mrParentViewShell.DLPostPaint2();
+                    mrParentViewShell.DLPostPaint2(true);
                 }
                 // <--
             }

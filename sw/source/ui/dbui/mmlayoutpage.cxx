@@ -72,11 +72,9 @@
 #include <osl/file.hxx>
 #include <unoprnms.hxx>
 
-
 #include <mmlayoutpage.hrc>
 #include <dbui.hrc>
 #include <unomid.h>
-
 
 using namespace osl;
 using namespace svt;
@@ -132,7 +130,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
 
 
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            String::CreateFromAscii( GetFILTER_XML() ),
+            String::CreateFromAscii( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
     //save the current document into a temporary file
     {

@@ -47,6 +47,10 @@
  ---------------------------------------------------------------------------*/
 class SwParagraphNumTabPage : public SfxTabPage
 {
+    FixedLine               aOutlineStartFL;
+    FixedText               aOutlineLvFT;
+    ListBox                 aOutlineLvLB;
+
     FixedText               aNumberStyleFT;
     ListBox                 aNumberStyleLB;
 
@@ -60,6 +64,10 @@ class SwParagraphNumTabPage : public SfxTabPage
     TriStateBox             aRestartParaCountCB;
     FixedText               aRestartFT;
     NumericField            aRestartNF;
+
+    // --> OD 2008-04-14 #outlinelevel#
+    const String msOutlineNumbering;
+    // <--
 
     BOOL                    bModified : 1;
     BOOL                    bCurNumrule : 1;
@@ -82,9 +90,10 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                EnableNewStart();
+    void                DisableOutline();
+    void                DisableNumbering();
 
     ListBox&            GetStyleBox() {return aNumberStyleLB;};
-
 };
 
 

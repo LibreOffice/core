@@ -823,8 +823,8 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
     while( nPos < rTxt.Len() && nDigitLvl < MAXLEVEL - 1)
     {
         const sal_Unicode cCurrentChar = rTxt.GetChar( nPos );
-        if( '0' <= cCurrentChar &&  '9' >= cCurrentChar ||
-            0xff10 <= cCurrentChar &&  0xff19 >= cCurrentChar)
+        if( ('0' <= cCurrentChar &&  '9' >= cCurrentChar) ||
+            (0xff10 <= cCurrentChar &&  0xff19 >= cCurrentChar) )
         {
             if( eScan & DELIM )
             {

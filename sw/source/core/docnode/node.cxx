@@ -880,8 +880,10 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( BYTE nLvl ) const
         else
         {
             // oder ans Feld und von dort holen !!
-            while( nPos && nLvl < ( pRet = rONds[nPos]->GetTxtNode() )
-                    ->GetTxtColl()->GetOutlineLevel() )
+            while( nPos &&
+                   nLvl < ( pRet = rONds[nPos]->GetTxtNode() )
+                    //->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
+                    ->GetAttrOutlineLevel() - 1 )  //<-end,zhaojianwei
                 --nPos;
 
             if( !nPos )     // bei 0 gesondert holen !!
@@ -1998,7 +2000,7 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
 
                 if( pOutlNd->IsOutline())
                 {
-                    rTmp.SetCondition( PARA_IN_OUTLINE, pOutlNd->GetOutlineLevel() );
+                    rTmp.SetCondition( PARA_IN_OUTLINE, pOutlNd->GetAttrOutlineLevel() - 1 );
                     return TRUE;
                 }
             }

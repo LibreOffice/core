@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawsh.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,10 +47,14 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <uitool.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <swmodule.hxx>
+#include <swwait.hxx>
+#include <docstat.hxx>
+#include <IDocumentStatistics.hxx>
+
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <svx/xtable.hxx>
 
@@ -67,7 +71,11 @@
 #define SwDrawShell
 #include "itemdef.hxx"
 #include "swslots.hxx"
+#include "swabstdlg.hxx" //CHINA001
+#include "misc.hrc"
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
 {
@@ -189,7 +197,66 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             pVFrame->GetBindings().Invalidate(SID_FONTWORK);
         }
         break;
+        case FN_FORMAT_FOOTNOTE_DLG:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
+            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), GetView().GetWrtShell(), DLG_DOC_FOOTNOTE );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            break;
+        }
+        case FN_NUMBERING_OUTLINE_DLG:
+        {
+            SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            rReq.Done();
+        }
+        break;
+        case SID_OPEN_XML_FILTERSETTINGS:
+        {
+            try
+            {
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                if( xDialog.is() )
+                {
+                    xDialog->execute();
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+            rReq.Ignore ();
+        }
+        break;
+        case FN_WORDCOUNT_DIALOG:
+        {
+            SwDocStat aCurr;
+            SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
+            {
+                SwWait aWait( *GetView().GetDocShell(), TRUE );
+                rSh.StartAction();
+                rSh.CountWords( aCurr );
+                rSh.UpdateDocStat( aDocStat );
+                rSh.EndAction();
+            }
+
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
+            pDialog->SetValues(aCurr, aDocStat );
+            pDialog->Execute();
+            delete pDialog;
+        }
+        break;
         case SID_EXTRUSION_TOOGLE:
         case SID_EXTRUSION_TILT_DOWN:
         case SID_EXTRUSION_TILT_UP:
@@ -273,7 +340,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
             case SID_OBJECT_ROTATE:
             {
                 const BOOL bIsRotate = GetView().IsDrawRotate();
-                if ( !bIsRotate && !pSdrView->IsRotateAllowed() || bProtected )
+                if ( (!bIsRotate && !pSdrView->IsRotateAllowed()) || bProtected )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem( nWhich, bIsRotate ) );

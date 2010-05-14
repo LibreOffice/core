@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtfld.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,17 +31,16 @@
 #define _FMTFLD_HXX
 
 #include <svtools/poolitem.hxx>
-
+#include <svtools/brdcst.hxx>
 #include <svtools/smplhint.hxx>
+
 #include "swdllapi.h"
 #include <calbck.hxx>
 
-#include <svtools/brdcst.hxx>
-
 class SwField;
 class SwTxtFld;
-// ATT_FLD ***********************************
 
+// ATT_FLD ***********************************
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
 {
     friend class SwTxtFld;
@@ -117,4 +116,3 @@ public:
 };
 
 #endif
-

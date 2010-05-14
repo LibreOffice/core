@@ -228,14 +228,12 @@ String SectRepr::GetFile() const
     String sLinkFile( aSection.GetLinkFileName() );
     if( sLinkFile.Len() )
     {
-#ifdef DDE_AVAILABLE
         if( DDE_LINK_SECTION == aSection.GetType() )
         {
             USHORT n = sLinkFile.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
             sLinkFile.SearchAndReplace( sfx2::cTokenSeperator, ' ',  n );
         }
         else
-#endif
             sLinkFile = INetURLObject::decode( sLinkFile.GetToken( 0,
                                                sfx2::cTokenSeperator ),
                                         INET_HEX_ESCAPE,
@@ -270,13 +268,9 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aTree               ( this, SW_RES( TLB_SECTION )),
     aLinkFL             ( this, SW_RES( FL_LINK ) ),
     aFileCB             ( this, SW_RES( CB_FILE ) ),
-#ifdef DDE_AVAILABLE
     aDDECB              ( this, SW_RES( CB_DDE ) ) ,
-#endif
     aFileNameFT         ( this, SW_RES( FT_FILE ) ) ,
-#ifdef DDE_AVAILABLE
     aDDECommandFT       ( this, SW_RES( FT_DDE ) ) ,
-#endif
     aFileNameED         ( this, SW_RES( ED_FILE ) ),
     aFilePB             ( this, SW_RES( PB_FILE ) ),
     aSubRegionFT        ( this, SW_RES( FT_SUBREG ) ) ,
@@ -349,15 +343,11 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
         aPasswdCB       .Hide();
         aHideCB         .Hide();
 
-#ifdef DDE_AVAILABLE
-    aDDECB              .Hide();
-    aDDECommandFT       .Hide();
-#endif
+        aDDECB              .Hide();
+        aDDECommandFT       .Hide();
     }
 
-#ifdef DDE_AVAILABLE
     aDDECB.SetClickHdl      ( LINK( this, SwEditRegionDlg, DDEHdl ));
-#endif
 
     //Ermitteln der vorhandenen Bereiche
     pCurrSect = rSh.GetCurrSection();
@@ -640,10 +630,8 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 //        aNameFT     .Enable(FALSE);
         aCurName    .Enable(FALSE);
         aOptionsPB  .Enable(FALSE);
-#ifdef DDE_AVAILABLE
-    aDDECB              .Enable(FALSE);
-    aDDECommandFT       .Enable(FALSE);
-#endif
+        aDDECB              .Enable(FALSE);
+        aDDECommandFT       .Enable(FALSE);
         BOOL bPasswdEnabled = aProtectCB.GetState() == STATE_CHECK;
         aPasswdCB.Enable(bPasswdEnabled);
         aPasswdPB.Enable(bPasswdEnabled);
@@ -684,23 +672,17 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             aFileCB.Check(TRUE);
             aFileNameED.SetText(aFile);
             aSubRegionED.SetText(sSub);
-#ifdef DDE_AVAILABLE
             aDDECB.Check(pRepr->GetSectionType() == DDE_LINK_SECTION );
-#endif
         }
         else
         {
             aFileCB.Check(FALSE);
             aFileNameED.SetText(aFile);
-#ifdef DDE_AVAILABLE
             aDDECB.Enable(FALSE);
             aDDECB.Check(FALSE);
-#endif
         }
         UseFileHdl(&aFileCB);
-#ifdef DDE_AVAILABLE
         DDEHdl( &aDDECB );
-#endif
         aProtectCB.SetState(pRepr->IsProtect() ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.Enable();
 
@@ -740,15 +722,11 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
         aSubRegionED .Enable(FALSE);
 //        aNameFT      .Enable(FALSE);
         aCurName     .Enable(FALSE);
-#ifdef DDE_AVAILABLE
-    aDDECB              .Enable(FALSE);
-    aDDECommandFT       .Enable(FALSE);
-#endif
+        aDDECB              .Enable(FALSE);
+        aDDECommandFT       .Enable(FALSE);
 
         UseFileHdl(&aFileCB);
-#ifdef DDE_AVAILABLE
         DDEHdl( &aDDECB );
-#endif
     }
     return 0;
 }
@@ -1025,10 +1003,8 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
         aFilePB.Enable(bFile && ! bMulti);
         aSubRegionED.Enable(bFile && ! bMulti);
         aSubRegionFT.Enable(bFile && ! bMulti);
-#ifdef DDE_AVAILABLE
         aDDECommandFT.Enable(bFile && ! bMulti);
         aDDECB.Enable(bFile && ! bMulti);
-#endif
         if( bFile )
         {
             aProtectCB.SetState(STATE_CHECK);
@@ -1037,10 +1013,8 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
         }
         else
         {
-#ifdef DDE_AVAILABLE
             aDDECB.Check(FALSE);
             DDEHdl(&aDDECB);
-#endif
 //          aFileNameED.SetText(aEmptyStr);
             aSubRegionED.SetText(aEmptyStr);
         }
@@ -1054,11 +1028,9 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
         aFileNameFT.Enable(FALSE);
         aSubRegionED.Enable(FALSE);
         aSubRegionFT.Enable(FALSE);
-#ifdef DDE_AVAILABLE
         aDDECB.Check(FALSE);
         aDDECB.Enable(FALSE);
         aDDECommandFT.Enable(FALSE);
-#endif
     }
     return 0;
 }
@@ -1202,11 +1174,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
     if(pEdit == &aFileNameED)
     {
-        BOOL bDDe = FALSE;
-#ifdef DDE_AVAILABLE
-        bDDe = aDDECB.IsChecked();
-#endif
-        if( bDDe )
+        if( aDDECB.IsChecked() )
         {
             String sLink( pEdit->GetText() );
             USHORT nPos = 0;
@@ -1244,7 +1212,6 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
 /*---------------------------------------------------------------------
     Beschreibung:
 ---------------------------------------------------------------------*/
-#ifdef DDE_AVAILABLE
 
 IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
 {
@@ -1293,7 +1260,6 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
     }
     return 0;
 }
-#endif
 /*---------------------------------------------------------------------
 
 ---------------------------------------------------------------------*/
@@ -1574,10 +1540,8 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aCurName            ( this, SW_RES( ED_RNAME ) ),
     aLinkFL             ( this, SW_RES( FL_LINK ) ),
     aFileCB             ( this, SW_RES( CB_FILE ) ),
-#ifdef DDE_AVAILABLE
     aDDECB              ( this, SW_RES( CB_DDE ) ) ,
     aDDECommandFT       ( this, SW_RES( FT_DDE ) ) ,
-#endif
     aFileNameFT         ( this, SW_RES( FT_FILE ) ) ,
     aFileNameED         ( this, SW_RES( ED_FILE ) ),
     aFilePB             ( this, SW_RES( PB_FILE ) ),
@@ -1614,9 +1578,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aFileCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
     aFilePB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
     aCurName.SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
-#ifdef DDE_AVAILABLE
     aDDECB.SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
-#endif
     ChangeProtectHdl(&aProtectCB);
 }
 /* -----------------21.05.99 10:31-------------------
@@ -1639,10 +1601,8 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
         aHideCB         .Hide();
         aConditionED    .Hide();
         aConditionFT    .Hide();
-#ifdef DDE_AVAILABLE
         aDDECB           .Hide();
         aDDECommandFT    .Hide();
-#endif
     }
 
     FillList();
@@ -1687,10 +1647,7 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
         aSection.SetPasswd(m_aNewPasswd);
     String sFileName = aFileNameED.GetText();
     String sSubRegion = aSubRegionED.GetText();
-    BOOL bDDe = FALSE;
-#ifdef DDE_AVAILABLE
-    bDDe = aDDECB.IsChecked();
-#endif
+    BOOL bDDe = aDDECB.IsChecked();
     if(aFileCB.IsChecked() && (sFileName.Len() || sSubRegion.Len() || bDDe))
     {
         String aLinkFile;
@@ -1727,13 +1684,9 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
         aSection.SetLinkFileName(aLinkFile);
         if(aLinkFile.Len())
         {
-#ifdef DDE_AVAILABLE
             aSection.SetType( aDDECB.IsChecked() ?
                                     DDE_LINK_SECTION :
                                         FILE_LINK_SECTION);
-#else
-            aSection.SetType( FILE_LINK_SECTION);
-#endif
         }
     }
     ((SwInsertSectionTabDialog*)GetTabDialog())->SetSection(aSection);
@@ -1847,10 +1800,8 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     aFilePB.Enable(bFile);
     aSubRegionFT.Enable(bFile);
     aSubRegionED.Enable(bFile);
-#ifdef DDE_AVAILABLE
     aDDECommandFT.Enable(bFile);
     aDDECB.Enable(bFile);
-#endif
     if( bFile )
     {
 //      aFileNameED.SetText( aFileName );
@@ -1859,10 +1810,8 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     }
     else
     {
-#ifdef DDE_AVAILABLE
         aDDECB.Check(FALSE);
         DDEHdl(&aDDECB);
-#endif
 //      aFileNameED.SetText(aEmptyStr);
     }
     return 0;
@@ -1886,7 +1835,6 @@ IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
 /*---------------------------------------------------------------------
 
 ---------------------------------------------------------------------*/
-#ifdef DDE_AVAILABLE
 
 IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
 {
@@ -1912,7 +1860,6 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
     }
     return 0;
 }
-#endif
 
 IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
 {

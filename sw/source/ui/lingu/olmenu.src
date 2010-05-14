@@ -31,16 +31,19 @@
 
 #include "olmenu.hrc"
 #include "helpid.h"
-#define SEPARATOR       MenuItem { Separator = TRUE; };
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+#define SEPARATOR   MenuItem { Separator = TRUE; };
+
 Menu MN_SPELL_POPUP
 {
     ItemList =
     {
         MenuItem
         {
-            Identifier = MN_SPELLING ;
-            HelpID = HID_LINGU_SPELLING_DLG ;
-            Text [ en-US ] = "~Spellcheck..." ;
+            Identifier = MN_IGNORE ;
+            HelpID = HID_LINGU_IGNORE_WORD ;
+            Text [ en-US ] = "Ignore All" ;
         };
         MenuItem
         {
@@ -53,20 +56,18 @@ Menu MN_SPELL_POPUP
         };
         MenuItem
         {
-            Identifier = MN_IGNORE ;
-            HelpID = HID_LINGU_IGNORE_WORD ;
-            /* ### ACHTUNG: Neuer Text in Resource? Alle i~gnorieren : ~Ignorieren */
-            /* ### ACHTUNG: Neuer Text in Resource? Alle i~gnorieren : ~Ignorieren */
-            Text [ en-US ] = "Ignore All" ;
-        };
-        MenuItem
-        {
             Identifier = MN_AUTOCORR ;
             HelpID = HID_LINGU_AUTOCORR ;
             SubMenu = Menu
             {
             };
             Text [ en-US ] = "AutoCorrect" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_SPELLING ;
+            HelpID = HID_LINGU_SPELLING_DLG ;
+            Text [ en-US ] = "~Spellcheck..." ;
         };
         SEPARATOR
         MenuItem
@@ -120,5 +121,15 @@ String STR_LANGSTATUS_NONE
 String STR_LANGSTATUS_MORE
 {
     Text [ en-US ] = "More..." ;
+};
+String STR_IGNORE_SELECTION
+{
+    Text [ en-US ] = "Ignore" ;
+};
+
+Image IMG_INFO_16
+{
+    ImageBitmap = Bitmap { File = "info_16.png" ; };
+    MASKCOLOR
 };
 

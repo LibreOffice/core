@@ -35,7 +35,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
+#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 
 #include <unotools/processfactory.hxx>
@@ -149,7 +149,7 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
  * global functions...
  */
 
- uno::Reference< linguistic2::XGrammarCheckingIterator > SwDoc::GetGCIterator() const
+ uno::Reference< linguistic2::XProofreadingIterator > SwDoc::GetGCIterator() const
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
     {
@@ -158,8 +158,8 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
         {
             try
             {
-                rtl::OUString aServiceName( rtl::OUString::createFromAscii("com.sun.star.lingu2.GrammarCheckingIterator") );
-                m_xGCIterator = uno::Reference< linguistic2::XGrammarCheckingIterator >
+                rtl::OUString aServiceName( rtl::OUString::createFromAscii("com.sun.star.linguistic2.ProofreadingIterator") );
+                m_xGCIterator = uno::Reference< linguistic2::XProofreadingIterator >
                     ( xMgr->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
             }
             catch (uno::Exception &)
@@ -177,18 +177,18 @@ void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame )
 //    if (rRootFrame.IsGrammarCheckActive())
 //        return;
 
-    uno::Reference< linguistic2::XGrammarCheckingIterator > xGCIterator( rDoc.GetGCIterator() );
+    uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
     if ( xGCIterator.is() )
     {
         uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
         uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
 
         // start automatic background checking
-        if ( xFPIP.is() && !xGCIterator->isGrammarChecking( xDoc, sal_True ) )
+        if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
         {
-            rRootFrame.SetNeedGrammarCheck( false );
+            // rRootFrame.SetNeedGrammarCheck( false );
             rRootFrame.SetGrammarCheckActive( true );
-            xGCIterator->startGrammarChecking( xDoc, xFPIP, true /*bAutomatic*/ );
+            xGCIterator->startProofreading( xDoc, xFPIP );
         }
     }
 }
@@ -217,13 +217,13 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 SwDoc::SwDoc() :
     aNodes( this ),
     aUndoNodes( this ),
-    aAttrPool( this ),
-    pDfltFrmFmt( new SwFrmFmt( aAttrPool, sFrmFmtStr, 0 ) ),
-    pEmptyPageFmt( new SwFrmFmt( aAttrPool, sEmptyPageStr, pDfltFrmFmt ) ),
-    pColumnContFmt( new SwFrmFmt( aAttrPool, sColumnCntStr, pDfltFrmFmt ) ),
-    pDfltCharFmt( new SwCharFmt( aAttrPool, sCharFmtStr, 0 ) ),
-    pDfltTxtFmtColl( new SwTxtFmtColl( aAttrPool, sTxtCollStr ) ),
-    pDfltGrfFmtColl( new SwGrfFmtColl( aAttrPool, sGrfCollStr ) ),
+    mpAttrPool(new SwAttrPool(this)),
+    pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
+    pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
+    pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
+    pDfltCharFmt( new SwCharFmt( GetAttrPool(), sCharFmtStr, 0 ) ),
+    pDfltTxtFmtColl( new SwTxtFmtColl( GetAttrPool(), sTxtCollStr ) ),
+    pDfltGrfFmtColl( new SwGrfFmtColl( GetAttrPool(), sGrfCollStr ) ),
     pFrmFmtTbl( new SwFrmFmts() ),
     pCharFmtTbl( new SwCharFmts() ),
     pSpzFrmFmtTbl( new SwSpzFrmFmts() ),
@@ -296,6 +296,7 @@ SwDoc::SwDoc() :
     mbClipBoard( false ),
     mbColumnSelection( false ),
     // i#78591#
+    mbProtectForm(false),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
     mbStartIdleTimer(sal_False)
@@ -711,6 +712,7 @@ SwDoc::~SwDoc()
     delete pLayoutCache;
     delete pVirDev;
 
+    SfxItemPool::Free(mpAttrPool);
 }
 
 //---------------------------------------------------

@@ -113,7 +113,7 @@ public:
     Beschreibung: Datum/Uhrzeitfeld
  --------------------------------------------------------------------*/
 
-class SwDateTimeField : public SwValueField
+class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {
         USHORT              nSubType;
         long                nOffset;    // Offset in Minuten

@@ -40,6 +40,7 @@
 #include <SwSpellDialogChildWindow.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/linguprops.hxx>
+#include <svtools/lingucfg.hxx>
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/app.hxx>
@@ -51,7 +52,6 @@
 #ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
 #endif
-#include <swlinguconfig.hxx>
 #include <swmodule.hxx>
 
 #include <sfx2/objface.hxx>
@@ -312,9 +312,6 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case SID_AUTOSPELL_CHECK:
                 aBool.SetValue( pOpt->IsOnlineSpell() );
             break;
-            case SID_AUTOSPELL_MARKOFF:
-                aBool.SetValue( pOpt->IsHideSpell() );
-            break;
             case FN_SHADOWCURSOR:
                 if (pIDSA == 0 || pIDSA->get( IDocumentSettingAccess::BROWSE_MODE ))
                 {
@@ -402,13 +399,15 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 pOpt->SetCrossHair( bFlag );
                 break;
 
-         case FN_VIEW_NOTES:
+    case FN_VIEW_NOTES:
                 if ( STATE_TOGGLE == eState )
                     bFlag = !pOpt->IsPostIts();
 
                 GetPostItMgr()->SetLayout();
                 pOpt->SetPostIts( bFlag );
-                break;
+                   if (pOpt->IsPostIts())
+            GetPostItMgr()->CheckMetaText();
+         break;
 
         case FN_VIEW_HIDDEN_PARA:
                 if ( STATE_TOGGLE == eState )
@@ -486,8 +485,8 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 uno::Any aVal( &bSet, ::getCppuBooleanType() );
                 String aPropName( C2S(UPN_IS_SPELL_AUTO) );
 
-                // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-                SwLinguConfig().SetProperty( aPropName, aVal );
+                SvtLinguConfig  aCfg;
+                aCfg.SetProperty( aPropName, aVal );
 
                 if (xLngProp.is())
                     xLngProp->setPropertyValue( aPropName, aVal );
@@ -499,28 +498,16 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                     SwDocShell *pDocSh = GetDocShell();
                     SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
                     SwRootFrm *pRootFrm = pDoc ? pDoc->GetRootFrm() : NULL;
-                    if (pDoc && pRootFrm)
+
+                    // right now we don't have view options for automatic grammar checking. Thus...
+                    sal_Bool bIsAutoGrammar = sal_False;
+                    aCfg.GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
+
+                    if (pDoc && pRootFrm && bIsAutoGrammar)
                         StartGrammarChecking( *pDoc, *pRootFrm );
                 }
             }
-            if (!(STATE_TOGGLE == eState && bSet && ( pOpt->IsHideSpell() )))
-                break;
-        case SID_AUTOSPELL_MARKOFF:
-            if( STATE_TOGGLE == eState )
-                bFlag = bSet = !pOpt->IsHideSpell();
-
-            pOpt->SetHideSpell(bSet);
-            {
-                uno::Any aVal( &bSet, ::getCppuBooleanType() );
-                String aPropName( C2S(UPN_IS_SPELL_HIDE) );
-
-                // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-                SwLinguConfig().SetProperty( aPropName, aVal );
-
-                if (xLngProp.is())
-                    xLngProp->setPropertyValue( aPropName, aVal );
-            }
-            break;
+        break;
         case FN_SHADOWCURSOR:
             if( STATE_TOGGLE == eState )
                 bFlag = bSet = !pOpt->IsShadowCursor();
@@ -555,7 +542,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     pModule->ApplyUsrPref( *pOpt, this, bWebView ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
 
     //mod #i6193# let postits know about new spellcheck setting
-    if ( (nSlot==SID_AUTOSPELL_CHECK) || nSlot==SID_AUTOSPELL_MARKOFF)
+    if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
 
     const BOOL bLockedView = rSh.IsViewLocked();

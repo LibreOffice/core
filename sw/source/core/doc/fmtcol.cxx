@@ -46,6 +46,12 @@
 #include <numrule.hxx>
 #include <paratr.hxx>
 
+//--> #outlinelevel added by zhaojianwei
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+//<--end
+
 TYPEINIT1( SwTxtFmtColl, SwFmtColl );
 TYPEINIT1( SwGrfFmtColl, SwFmtColl );
 TYPEINIT1( SwConditionTxtFmtColl, SwTxtFmtColl );
@@ -75,7 +81,7 @@ namespace TxtFmtCollFunc
         // --> OD 2007-01-24 #i73790#
     //    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
         if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
-             pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
+             pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         // <--
         {
             if ( !pNewNumRuleItem )
@@ -153,7 +159,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
     SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
     // --> OD 2006-10-17 #i70223#
-    const bool bAssignedToListLevelOfOutlineStyle( AssignedToListLevelOfOutlineStyle() );
+    const bool bAssignedToListLevelOfOutlineStyle(IsAssignedToListLevelOfOutlineStyle());//#outline level ,zhaojianwei
     const SwNumRuleItem* pNewNumRuleItem( 0L );
     // <--
 
@@ -428,8 +434,23 @@ USHORT SwTxtFmtColl::ResetAllFmtAttr()
 {
     const bool bOldState( mbStayAssignedToListLevelOfOutlineStyle );
     mbStayAssignedToListLevelOfOutlineStyle = true;
+    // --> OD 2008-12-16 #i70748#
+    // Outline level is no longer a member, it is a attribute now.
+    // Thus, it needs to be restored, if the paragraph style is assigned
+    // to the outline style
+    const int nAssignedOutlineStyleLevel = IsAssignedToListLevelOfOutlineStyle()
+                                     ? GetAssignedOutlineStyleLevel()
+                                     : -1;
+    // <--
 
     USHORT nRet = SwFmtColl::ResetAllFmtAttr();
+
+    // --> OD 2008-12-16 #i70748#
+    if ( nAssignedOutlineStyleLevel != -1 )
+    {
+        AssignToListLevelOfOutlineStyle( nAssignedOutlineStyleLevel );
+    }
+    // <--
 
     mbStayAssignedToListLevelOfOutlineStyle = bOldState;
 
@@ -640,18 +661,60 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
         aCondColls.Insert( pNew, n );
     }
 }
-
-void SwTxtFmtColl::SetOutlineLevel( BYTE nLevel )
+//#outline level, zhaojianwei
+void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
 {
-    ASSERT( nLevel < MAXLEVEL || nLevel == NO_NUMBERING ,
-                            "SwTxtFmtColl: Level too low" );
-    if (!(nLevel < MAXLEVEL || nLevel == NO_NUMBERING))
-        // take care of out-of-bounds values that may occasionally crash the office
-        // such values may for example occur directly from some bad used API calls
-        nOutlineLevel = NO_NUMBERING;
-    else
-        nOutlineLevel = nLevel;
+    ASSERT( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
+    SetFmtAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
+                            static_cast<UINT16>(nLevel) ) );
 }
 
+int SwTxtFmtColl::GetAttrOutlineLevel() const
+{
+    return ((const SfxUInt16Item &)GetFmtAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
+}
+
+int SwTxtFmtColl::GetAssignedOutlineStyleLevel() const
+{
+    ASSERT( IsAssignedToListLevelOfOutlineStyle(),
+        "<SwTxtFmtColl::GetAssignedOutlineStyleLevel()> - misuse of method");
+    return GetAttrOutlineLevel() - 1;
+}
+
+void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
+{
+    mbAssignedToOutlineStyle = true;
+    SetAttrOutlineLevel(nAssignedListLevel+1);
+
+    // --> OD 2009-03-18 #i100277#
+    SwClientIter aIter( *this );
+    SwTxtFmtColl* pDerivedTxtFmtColl =
+                dynamic_cast<SwTxtFmtColl*>(aIter.First( TYPE( SwTxtFmtColl ) ));
+    while ( pDerivedTxtFmtColl != 0 )
+    {
+        if ( !pDerivedTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_DEFAULT )
+            {
+                SwNumRuleItem aItem(aEmptyStr);
+                pDerivedTxtFmtColl->SetFmtAttr( aItem );
+            }
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, FALSE ) == SFX_ITEM_DEFAULT )
+            {
+                pDerivedTxtFmtColl->SetAttrOutlineLevel( 0 );
+            }
+        }
+
+        pDerivedTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(aIter.Next());
+    }
+    // <--
+}
+
+void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle()
+{
+    mbAssignedToOutlineStyle = false;
+    ResetFmtAttr(RES_PARATR_OUTLINELEVEL);
+}
+//<-end,zhaojianwei
 
 //FEATURE::CONDCOLL

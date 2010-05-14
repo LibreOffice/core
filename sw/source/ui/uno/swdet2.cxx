@@ -38,17 +38,12 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/sfxecode.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/parhtml.hxx>
 #include <sot/clsids.hxx>
-#include <shellio.hxx>
-
-#undef _DLL_
+#include <iodetect.hxx>
 
 #include <swdetect.hxx>
-#include "iodetect.cxx"
 
 #include <app.hrc>
 #include <web.hrc>
@@ -58,15 +53,10 @@
 
 #include <unomid.h>
 
-
-USHORT AutoDetec( const String& FileName, USHORT & rVersion );
-
 bool IsDocShellRegistered()
 {
     return SvtModuleOptions().IsWriter();
 }
-
-extern const char __FAR_DATA sHTML[];
 
 //-------------------------------------------------------------------------
 

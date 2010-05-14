@@ -125,6 +125,19 @@ interface BaseTextEditView : View
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
     ]
+    FN_REDLINE_ACCEPT_DIRECT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_REDLINE_REJECT_DIRECT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+
     SID_DOCUMENT_COMPARE // status(play)
     [
         ExecMethod = Execute ;
@@ -249,6 +262,11 @@ interface BaseTextEditView : View
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_SPELL_GRAMMAR_DIALOG
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RECHECK_DOCUMENT
     [
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
@@ -602,12 +620,6 @@ interface BaseTextEditView : View
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
     SID_AUTOSPELL_CHECK
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-    ]
-
-    SID_AUTOSPELL_MARKOFF
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;

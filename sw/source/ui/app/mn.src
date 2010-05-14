@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mn.src,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -432,6 +432,13 @@
 #define MN_ANNOTATIONS \
     MenuItem\
     {\
+        Identifier = FN_REPLY ;\
+        HelpID = FN_DELETE_NOTE ;\
+        Text [ en-US ] = "Reply" ;\
+    };\
+    SEPARATOR ; \
+    MenuItem\
+    {\
         Identifier = FN_DELETE_NOTE ;\
         HelpID = FN_DELETE_NOTE ;\
         Text [ en-US ] = "Delete ~Note" ;\
@@ -805,6 +812,14 @@ Menu MN_DRWTXT_POPUPMENU
     };
 };
 
+#define MN_REDCOMMENT \
+    MenuItem\
+    {\
+        Identifier = FN_DELETE_COMMENT ;\
+        HelpID = FN_DELETE_COMMENT ;\
+        Text [ en-US ] = "Delete ~Changes Note" ;\
+    };\
+
 Menu MN_ANNOTATION_POPUPMENU
 {
     ItemList =
@@ -835,6 +850,7 @@ Menu MN_ANNOTATION_POPUPMENU
         //MN_FRM_CAPTION_ITEM
         SEPARATOR ;
         MN_ANNOTATIONS
+        //MN_REDCOMMENT
     };
 };
 
@@ -846,6 +862,13 @@ Menu MN_ANNOTATION_BUTTON
     };
 };
 
+Menu MN_REDCOMMENT_BUTTON
+{
+    ItemList =
+    {
+        MN_REDCOMMENT
+    };
+};
 
 String MN_GRF_POPUPMENU
 {

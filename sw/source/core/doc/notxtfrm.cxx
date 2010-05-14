@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notxtfrm.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.43.54.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,9 @@
 
 #include <svtools/embedhlp.hxx>
 #include <svtools/chartprettypainter.hxx>
+// --> OD 2009-03-05 #i99665#
+#include <dview.hxx>
+// <--
 
 using namespace com::sun::star;
 
@@ -140,7 +143,7 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
         SwFmt *pFmt = rSh.GetDoc()->GetFmtFromPool( static_cast<sal_uInt16>
             (bVisited ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL ) );
         aCol = pFmt->GetColor().GetValue();
-        eUnderline = pFmt->GetUnderline().GetUnderline();
+        eUnderline = pFmt->GetUnderline().GetLineStyle();
     }
 
     pFont->SetUnderline( eUnderline );
@@ -955,6 +958,18 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
     else if( pOLENd )
     {
+        // --> OD 2009-03-05 #i99665#
+        // Adjust AntiAliasing mode at output device for chart OLE
+        const USHORT nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
+        if ( pOLENd->IsChart() &&
+             pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+        {
+            const USHORT nAntialiasingForChartOLE =
+                    nFormerAntialiasingAtOutput | ANTIALIASING_PIXELSNAPHAIRLINE;
+            pOut->SetAntialiasing( nAntialiasingForChartOLE );
+        }
+        // <--
+
         Point aPosition(aAlignedGrfArea.Pos());
         Size aSize(aAlignedGrfArea.SSize());
 
@@ -1003,6 +1018,14 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             ASSERT( pFly, "OLE not in FlyFrm" );
             ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
+
+        // --> OD 2009-03-05 #i99665#
+        if ( pOLENd->IsChart() &&
+             pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+        {
+            pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
+        }
+        // <--
     }
 }
 

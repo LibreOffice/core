@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewmdi.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -491,7 +491,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_POSTIT:
         {
-            SwPostIt* pPostIt = pThis->GetPostItMgr()->GetActivePostIt();
+            SwMarginWin* pPostIt = pThis->GetPostItMgr()->GetActivePostIt();
             if (pPostIt)
                 pThis->GetPostItMgr()->SetActivePostIt(0);
             SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
@@ -587,18 +587,16 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
 /* -----------------------------07.04.01 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwView::GetVLinealMetric(FieldUnit& eToFill) const
+void SwView::GetVLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pVRuler->GetUnit();
-    return pVRuler != 0;
 }
 /* -----------------------------07.04.01 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwView::GetHLinealMetric(FieldUnit& eToFill) const
+void SwView::GetHLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pHRuler->GetUnit();
-    return pHRuler != 0;
 }
 /*************************************************************************
 |*

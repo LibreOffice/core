@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtattr.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,7 +169,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
         case FN_UNDERLINE_DOUBLE:
         {
             FontUnderline eUnderline =  ((const SvxUnderlineItem&)
-                            aSet.Get(RES_CHRATR_UNDERLINE)).GetUnderline();
+                            aSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
             switch( eState )
             {
                 case STATE_TOGGLE:
@@ -737,7 +737,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 if( eState >= SFX_ITEM_DEFAULT )
                 {
                     FontUnderline eUnderline =  ((const SvxUnderlineItem&)
-                            aCoreSet.Get(RES_CHRATR_UNDERLINE)).GetUnderline();
+                            aCoreSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
                     rSet.Put(SfxBoolItem(nSlot, eUnderline == UNDERLINE_DOUBLE));
                 }
                 else

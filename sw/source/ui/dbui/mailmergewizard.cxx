@@ -72,6 +72,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
                         SW_RES(DLG_MAILMERGEWIZARD),
                         WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP),
         m_pSwView(&rView),
+        m_bDocumentLoad( false ),
         m_rConfigItem(rItem),
         m_sStarting(        SW_RES( ST_STARTING      )),
         m_sDocumentType(    SW_RES( ST_DOCUMETNTYPE   )),
@@ -259,6 +260,8 @@ void SwMailMergeWizard::UpdateRoadmap()
     bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(sal_False) ||
             !m_rConfigItem.IsIndividualGreeting(sal_False)||
                     m_rConfigItem.IsGreetingFieldsAssigned();
+    //#i97436# if a document has to be loaded then enable output type page only
+    m_bDocumentLoad = false;
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
             static_cast<svt::OWizardPage*>(pCurPage)->commitPage( eValidate );
 
@@ -270,11 +273,13 @@ void SwMailMergeWizard::UpdateRoadmap()
                 bEnable = sal_True;
             break;
             case MM_OUTPUTTYPETPAGE :
-            case MM_ADDRESSBLOCKPAGE  :
                 bEnable = bEnableOutputTypePage;
             break;
+            case MM_ADDRESSBLOCKPAGE  :
+                bEnable = !m_bDocumentLoad && bEnableOutputTypePage;
+            break;
             case MM_GREETINGSPAGE     :
-                bEnable = bEnableOutputTypePage &&
+                bEnable = !m_bDocumentLoad && bEnableOutputTypePage &&
                     m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured;
             break;
@@ -282,7 +287,7 @@ void SwMailMergeWizard::UpdateRoadmap()
             case MM_MERGEPAGE         :
             case MM_OUTPUTPAGE       :
             case MM_LAYOUTPAGE        :
-                bEnable = bEnableOutputTypePage &&
+                bEnable = !m_bDocumentLoad && bEnableOutputTypePage &&
                             m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured &&
                             bGreetingFieldsConfigured;

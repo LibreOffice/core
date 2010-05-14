@@ -81,7 +81,11 @@ EXCEPTIONSFILES =  \
         $(SLO)$/drwtxtsh.obj \
         $(SLO)$/textsh.obj \
         $(SLO)$/textsh2.obj \
-        $(SLO)$/grfshex.obj	\
+        $(SLO)$/grfshex.obj \
+        $(SLO)$/drawsh.obj \
+        $(SLO)$/drwtxtsh.obj \
+        $(SLO)$/frmsh.obj \
+        $(SLO)$/drwtxtex.obj \
         $(SLO)$/textsh1.obj
 
 # --- Tagets -------------------------------------------------------

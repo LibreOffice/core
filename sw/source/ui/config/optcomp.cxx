@@ -157,7 +157,6 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
     }
     m_aOptionsLB.SetWindowBits( m_aOptionsLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_aOptionsLB.SetHighlightRange();
-    m_aOptionsLB.SelectEntryPos( 0 );
 
     FreeResource();
 
@@ -623,6 +622,8 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 
 void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
 {
+    m_aOptionsLB.SelectEntryPos( 0 );
+
     ULONG nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;

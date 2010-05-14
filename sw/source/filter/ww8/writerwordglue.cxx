@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: writerwordglue.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -632,7 +632,7 @@ namespace sw
             UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
-            ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(),
+            ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),
                     static_cast< UBiDiLevel >(eDefaultDir), 0, &nError);
 
             sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
@@ -776,15 +776,18 @@ namespace sw
         {
             sal_uInt8 nRet =
                 rtl_getBestWindowsCharsetFromTextEncoding(eTextEncoding);
-            if (eTextEncoding == RTL_TEXTENCODING_UCS2)
+            switch (eTextEncoding)
             {
-                ASSERT(nRet != 0x80, "This method may be redundant");
-                nRet = 0x80;
-            }
-            else if (eTextEncoding == RTL_TEXTENCODING_DONTKNOW)
-            {
-                ASSERT(nRet != 0x80, "This method may be redundant");
-                nRet = 0x80;
+                case RTL_TEXTENCODING_DONTKNOW:
+                case RTL_TEXTENCODING_UCS2:
+                case RTL_TEXTENCODING_UTF7:
+                case RTL_TEXTENCODING_UTF8:
+                case RTL_TEXTENCODING_JAVA_UTF8:
+                    ASSERT(nRet != 0x80, "This method may be redundant");
+                    nRet = 0x80;
+                    break;
+                default:
+                    break;
             }
             return nRet;
         }
@@ -963,9 +966,9 @@ namespace sw
                         break;
                     case LANGUAGE_PORTUGUESE:
                     case LANGUAGE_PORTUGUESE_BRAZILIAN:
-                    case LANGUAGE_SPANISH:
-                    case LANGUAGE_SPANISH_MEXICAN:
                     case LANGUAGE_SPANISH_MODERN:
+                    case LANGUAGE_SPANISH_DATED:
+                    case LANGUAGE_SPANISH_MEXICAN:
                     case LANGUAGE_SPANISH_GUATEMALA:
                     case LANGUAGE_SPANISH_COSTARICA:
                     case LANGUAGE_SPANISH_PANAMA:

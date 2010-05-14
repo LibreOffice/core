@@ -53,12 +53,8 @@
 #include <pam.hxx>
 #include <shellio.hxx>
 #include <errhdl.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <fltini.hxx>
 #include <hints.hxx>
 #include <frmatr.hxx>
@@ -70,21 +66,56 @@
 #include <frmfmt.hxx>
 #include <numrule.hxx>
 #include <ndtxt.hxx>
-#ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
-#endif
 #include <swerror.h>
-
-#ifndef _IODETECT_CXX
-#include <iodetect.cxx>
-#endif
+#include <osl/module.hxx>
 
 using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
 
-SwRead ReadRtf = 0, ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
+SwRead ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
         ReadHTML = 0, ReadXML = 0;
+
+Reader* GetRTFReader();
+Reader* GetWW8Reader();
+
+// Note: if editing, please don't forget to modify also the enum
+// ReaderWriterEnum and aFilterDetect in shellio.hxx
+SwReaderWriterEntry aReaderWriter[] =
+{
+    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  TRUE  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  FALSE ),
+    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  TRUE  ),
+    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  TRUE  ),
+    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  TRUE  ),
+    SwReaderWriterEntry( 0,               &::GetHTMLWriter, TRUE  ),
+    SwReaderWriterEntry( 0,               0,                TRUE  ),
+    SwReaderWriterEntry( &::GetWW8Reader, 0,                TRUE  ),
+    SwReaderWriterEntry( 0,               &::GetXMLWriter,  TRUE  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  TRUE  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  TRUE  )
+};
+
+Reader* SwReaderWriterEntry::GetReader()
+{
+    if ( pReader )
+        return pReader;
+    else if ( fnGetReader )
+    {
+        pReader = (*fnGetReader)();
+        return pReader;
+    }
+    return NULL;
+}
+
+void SwReaderWriterEntry::GetWriter( const String& rNm, const String& rBaseURL, WriterRef& xWrt ) const
+{
+    if ( fnGetWriter )
+        (*fnGetWriter)( rNm, rBaseURL, xWrt );
+    else
+        xWrt = WriterRef(0);
+}
 
 /*SwRead SwGetReaderSw3() // SW_DLLPUBLIC
 {
@@ -101,88 +132,74 @@ bool IsDocShellRegistered()
     return 0 != SwDocShell::_GetInterface();
 }
 
-inline void _SetFltPtr( USHORT& rPos, SwRead pReader
-                        , const sal_Char*
-#if OSL_DEBUG_LEVEL > 1
-                            pNm
-#endif
-    /* pNm optimiert der Compiler weg, wird nur in der nicht PRODUCT benoetigt! */
-                        )
+inline void _SetFltPtr( USHORT rPos, SwRead pReader )
 {
-#if OSL_DEBUG_LEVEL > 1
-    ASSERT( !strcmp( aReaderWriter[ rPos ].pName, pNm ), "falscher Filter" );
-    (void) pNm;
-#endif
-    aReaderWriter[ rPos++ ].pReader = pReader;
+    aReaderWriter[ rPos ].pReader = pReader;
 }
 
 void _InitFilter()
 {
-    SwRead pWW8Rd = new WW8Reader;
-
-    USHORT nCnt = 0;
-    _SetFltPtr( nCnt, (ReadRtf = new RtfReader), FILTER_RTF );
-    _SetFltPtr( nCnt, (ReadAscii = new AsciiReader), FILTER_BAS );
-    _SetFltPtr( nCnt, pWW8Rd, sWW6 );
-    _SetFltPtr( nCnt, pWW8Rd, FILTER_WW8 );
-    _SetFltPtr( nCnt, ReadRtf, sRtfWH );
-    _SetFltPtr( nCnt, (ReadHTML = new HTMLReader), sHTML);
-    _SetFltPtr( nCnt, new WW1Reader, sWW1 );
-    _SetFltPtr( nCnt, pWW8Rd, sWW5 );
-    _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_XML );
+    _SetFltPtr( READER_WRITER_BAS, (ReadAscii = new AsciiReader) );
+    _SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
+    _SetFltPtr( READER_WRITER_WW1, new WW1Reader );
+    _SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
 
 #ifdef NEW_WW97_EXPORT
-    aReaderWriter[ 8-3 ].fnGetWriter =  &::GetWW8Writer;
-    aReaderWriter[ 9-3 ].fnGetWriter = &::GetWW8Writer;
+    aReaderWriter[ READER_WRITER_WW1 ].fnGetWriter =  &::GetWW8Writer;
+    aReaderWriter[ READER_WRITER_WW5 ].fnGetWriter = &::GetWW8Writer;
 #endif
 
-    _SetFltPtr( nCnt, ReadAscii, FILTER_TEXT_DLG );
-    _SetFltPtr( nCnt, ReadAscii, FILTER_TEXT );
-
-    ASSERT( MAXFILTER == nCnt, "Anzahl Filter ungleich der Definierten" );
+    _SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
+    _SetFltPtr( READER_WRITER_TEXT, ReadAscii );
 }
-
-
-
 
 void _FinitFilter()
 {
     // die Reader vernichten
     for( USHORT n = 0; n < MAXFILTER; ++n )
     {
-        SwIoDetect& rIo = aReaderWriter[n];
-        if( rIo.bDelReader && rIo.pReader )
-            delete rIo.pReader;
+        SwReaderWriterEntry& rEntry = aReaderWriter[n];
+        if( rEntry.bDelReader && rEntry.pReader )
+            delete rEntry.pReader, rEntry.pReader = NULL;
     }
 }
 
 
 /*  */
 
-void SwIoSystem::GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+namespace SwReaderWriter {
+
+Reader* GetReader( ReaderWriterEnum eReader )
+{
+    return aReaderWriter[eReader].GetReader();
+}
+
+void GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     for( USHORT n = 0; n < MAXFILTER; ++n )
-        if( aReaderWriter[n].IsFilter( rFltName ) )
+        if( aFilterDetect[n].IsFilter( rFltName ) )
         {
             aReaderWriter[n].GetWriter( rFltName, rBaseURL, xRet );
             break;
         }
 }
 
-
-SwRead SwIoSystem::GetReader( const String& rFltName )
+SwRead GetReader( const String& rFltName )
 {
     SwRead pRead = 0;
     for( USHORT n = 0; n < MAXFILTER; ++n )
-        if( aReaderWriter[n].IsFilter( rFltName ) )
+        if( aFilterDetect[n].IsFilter( rFltName ) )
         {
             pRead = aReaderWriter[n].GetReader();
             // fuer einige Reader noch eine Sonderbehandlung:
-            pRead->SetFltName( rFltName );
+            if ( pRead )
+                pRead->SetFltName( rFltName );
             break;
         }
     return pRead;
 }
+
+} // namespace SwReaderWriter
 
 /*  */
 
@@ -937,4 +954,57 @@ void SwAsciiOptions::WriteUserData( String& rStr )
     rStr += ',';
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
 
+static oslGenericFunction GetMswordLibSymbol( const char *pSymbol )
+{
+    static ::osl::Module aModule;
+    if ( aModule.is() ||
+         aModule.loadRelative( &thisModule,
+             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) ) ) )
+    {
+        return aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
+    }
+
+    return NULL;
+}
+
+Reader* GetRTFReader()
+{
+    FnGetReader pFunction = reinterpret_cast<FnGetReader>( GetMswordLibSymbol( "ImportRTF" ) );
+
+    if ( pFunction )
+        return (*pFunction)();
+
+    return NULL;
+}
+
+void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+{
+    FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( GetMswordLibSymbol( "ExportRTF" ) );
+
+    if ( pFunction )
+        (*pFunction)( rFltName, rBaseURL, xRet );
+    else
+        xRet = WriterRef(0);
+}
+
+Reader* GetWW8Reader()
+{
+    FnGetReader pFunction = reinterpret_cast<FnGetReader>( GetMswordLibSymbol( "ImportDOC" ) );
+
+    if ( pFunction )
+        return (*pFunction)();
+
+    return NULL;
+}
+
+void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+{
+    FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( GetMswordLibSymbol( "ExportDOC" ) );
+
+    if ( pFunction )
+        (*pFunction)( rFltName, rBaseURL, xRet );
+    else
+        xRet = WriterRef(0);
+}

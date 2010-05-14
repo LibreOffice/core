@@ -38,7 +38,7 @@
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
+#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 
 #include <svtools/lingucfg.hxx>
@@ -87,8 +87,8 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
 
             if (SvtLinguConfig().HasGrammarChecker())
             {
-                aSvcName = A2OU( "com.sun.star.lingu2.GrammarCheckingIterator" );
-                xGCIterator = Reference< XGrammarCheckingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
+                aSvcName = A2OU( "com.sun.star.linguistic2.ProofreadingIterator" );
+                xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
                 Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
                 if (xBC.is())
                     xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
@@ -143,34 +143,26 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if (rLngSvcEvent.nEvent == GRAMMAR_CHECK_AGAIN)
+    sal_Bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
+    sal_Bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
+    if (0 != (rLngSvcEvent.nEvent & PROOFREAD_AGAIN))
+        bIsSpellWrong = bIsSpellAll = sal_True;     // have all spelling and grammar checked...
+    if (bIsSpellWrong || bIsSpellAll)
     {
-        // have all text spell and grammar checked again
-        SW_MOD()->CheckSpellChanges( sal_False, sal_True, sal_True, sal_False );
+        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
     }
-    if (rLngSvcEvent.Source == xLngSvcMgr)
+    if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
     {
-        sal_Bool bIsSpellWrong =
-                0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
-        sal_Bool bIsSpellAll   =
-                0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
-        if (bIsSpellWrong || bIsSpellAll)
-        {
-            SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
-        }
-        if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
-        {
-            SwView *pSwView = SW_MOD()->GetFirstView();
+        SwView *pSwView = SW_MOD()->GetFirstView();
 
-            //!! since this function may be called within the ctor of
-            //!! SwView (during formatting) where the WrtShell is not yet
-            //!! created, we have to check for the WrtShellPtr to see
-            //!! if it is already availbale
-            while (pSwView && pSwView->GetWrtShellPtr())
-            {
-                pSwView->GetWrtShell().ChgHyphenation();
-                pSwView = SW_MOD()->GetNextView( pSwView );
-            }
+        //!! since this function may be called within the ctor of
+        //!! SwView (during formatting) where the WrtShell is not yet
+        //!! created, we have to check for the WrtShellPtr to see
+        //!! if it is already availbale
+        while (pSwView && pSwView->GetWrtShellPtr())
+        {
+            pSwView->GetWrtShell().ChgHyphenation();
+            pSwView = SW_MOD()->GetNextView( pSwView );
         }
     }
 }

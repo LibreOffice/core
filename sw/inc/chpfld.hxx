@@ -65,7 +65,7 @@ public:
 /*--------------------------------------------------------------------
     Beschreibung: Kapitelnummer
  --------------------------------------------------------------------*/
-class SwChapterField : public SwField
+class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
     BYTE nLevel;
