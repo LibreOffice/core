@@ -28,13 +28,11 @@
 package complex.writer;
 
 import java.io.File;
+import org.openoffice.test.OfficeFileUrl;
 
 final class TestDocument {
     public static String getUrl(String name) {
-        return new File("testdocuments", name).
-            getAbsoluteFile().toURI().toString().replaceFirst(
-                "\\A[Ff][Ii][Ll][Ee]:/(?=[^/]|\\z)", "file:///");
-            // file:/path -> file:///path
+        return OfficeFileUrl.getAbsolute(new File("testdocuments", name));
     }
 
     private TestDocument() {}
