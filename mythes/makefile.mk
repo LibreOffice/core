@@ -41,7 +41,7 @@ TARFILE_MD5=067201ea8b126597670b5eff72e1f66c
 
 ADDITIONAL_FILES += makefile.mk
 
-#PATCH_FILES=mythes-1.2.0.patch
+PATCH_FILES=mythes-1.2.0-vanilla-th-gen-idx.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
