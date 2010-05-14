@@ -96,6 +96,7 @@ struct NWFWidgetData
     GtkWidget *  gMenuItemMenuWidget;
     GtkWidget *  gMenuItemCheckMenuWidget;
     GtkWidget *  gMenuItemRadioMenuWidget;
+    GtkWidget *  gImageMenuItem;
     GtkWidget *  gTooltipPopup;
     GtkWidget *  gProgressBar;
     GtkWidget *  gTreeView;
@@ -131,6 +132,7 @@ struct NWFWidgetData
         gMenuItemMenuWidget( NULL ),
         gMenuItemCheckMenuWidget( NULL ),
         gMenuItemRadioMenuWidget( NULL ),
+    gImageMenuItem( NULL ),
         gTooltipPopup( NULL ),
         gProgressBar( NULL ),
         gTreeView( NULL ),
@@ -3404,6 +3406,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     else
         aStyleSet.SetCursorBlinkTime( STYLE_CURSOR_NOBLINKTIME );
 
+    gboolean showmenuicons = true;
+    pSettings = gtk_widget_get_settings( gWidgetData[m_nScreen].gImageMenuItem );
+    g_object_get( pSettings, "gtk-menu-images", &showmenuicons, (char *)NULL );
+    aStyleSet.SetUseImagesInMenus( showmenuicons );
+
     // set scrollbar settings
     gint slider_width = 14;
     gint trough_border = 1;
@@ -3843,10 +3850,12 @@ static void NWEnsureGTKMenu( int nScreen )
         gWidgetData[nScreen].gMenuItemMenuWidget      = gtk_menu_item_new_with_label( "b" );
         gWidgetData[nScreen].gMenuItemCheckMenuWidget = gtk_check_menu_item_new_with_label( "b" );
         gWidgetData[nScreen].gMenuItemRadioMenuWidget = gtk_radio_menu_item_new_with_label( NULL, "b" );
+        gWidgetData[nScreen].gImageMenuItem           = gtk_image_menu_item_new();
 
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemMenuWidget );
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemCheckMenuWidget );
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+        gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gImageMenuItem );
 
         // do what NWAddWidgetToCacheWindow does except adding to def container
         gtk_widget_realize( gWidgetData[nScreen].gMenuWidget );
@@ -3861,10 +3870,14 @@ static void NWEnsureGTKMenu( int nScreen )
         gtk_widget_realize( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
         gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
 
+        gtk_widget_realize( gWidgetData[nScreen].gImageMenuItem );
+        gtk_widget_ensure_style( gWidgetData[nScreen].gImageMenuItem );
+
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuWidget );
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenuWidget );
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemCheckMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
         gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemRadioMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gImageMenuItem ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gImageMenuItem );
     }
 }
 

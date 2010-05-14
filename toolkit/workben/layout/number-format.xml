@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated XML files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<tabpage help-id="HID_NUMBERFORMAT" show="false" id="RID_SVXPAGE_NUMBERFORMAT" _title="Number Format" _text="Number Format" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container" sizeable="true">
+    <!--
+    <imagelist prefix="nu" id="IL_ICON">
+            <maskcolor blue="0xFFFF" green="0x0000" red="0xFFFF" type="Color"/>
+            <idlist none="IID_INFO"/>
+            <idcount none="3"/>
+    </imagelist>
+    <imagelist prefix="nuh" id="IL_ICON_HC">
+            <maskcolor blue="0xFFFF" green="0x0000" red="0xFFFF" type="Color"/>
+            <idlist none="IID_INFO"/>
+            <idcount none="3"/>
+    </imagelist>
+    !-->
+    <vbox spacing="5" border="5">
+    <string id="STR_EUROPE" _text="Europe"/>
+    <string id="STR_AUTO_ENTRY" _text="Automatic"/>
+        <hbox spacing="5">
+        <vbox spacing="5" cnt:fill="true" cnt:expand="true">
+        <fixedtext id="FT_CATEGORY" _label="~Category"/>
+        <listbox line-count="8" auto-hscroll="true" has_border="true" id="LB_CATEGORY" _string-item-list="All:User-defined:Number:Percent:Currency:Date:Time:Scientific:Fraction:Boolean Value:Text"/>
+        <flow/>
+        </vbox>
+        <vbox spacing="5" cnt:fill="true" cnt:expand="true">
+        <fixedtext id="FT_FORMAT" _label="F~ormat"/>
+        <listbox has_border="true" line-count="7" dropdown="true" id="LB_CURRENCY" tabstop="true" _string-item-list="Automatically" cnt:expand="false" cnt:fill="false"/>
+        <svxfontlistbox line-count="7" dropdown="false" has_border="true" help-id="HID_NUMBERFORMAT_LB_FORMAT" id="LB_FORMAT" tabstop="true" string-item-list=" : : : : : : : : : : : : : : : "/>
+        </vbox>
+        <vbox spacing="5" cnt:fill="true" cnt:expand="true">
+        <fixedtext id="FT_LANGUAGE" _label="~Language" cnt:expand="false" cnt:fill="false"/>
+        <svxlanguagebox has_border="true" dropdown="true" id="LB_LANGUAGE" sort="true" string-item-list="Dutch:" cnt:expand="false" cnt:fill="false"/>
+        <checkbox id="CB_SOURCEFORMAT" show="false" _label="So~urce format" cnt:expand="false" cnt:fill="false"/>
+        <flow cnt:expand="true" cnt:fill="true"/>
+        <window has_border="true" help-id="HID_NUMBERFORMAT_WND_NUMBER_PREVIEW" id="WND_NUMBER_PREVIEW" sv-look="true"/>
+        </vbox>
+        </hbox>
+        <fixedline id="FL_OPTIONS" _text="Options"/>
+    <hbox>
+        <vbox cnt:padding="13" spacing="5">
+        <hbox spacing="5">
+            <vbox spacing="5" cnt:fill="false" cnt:expand="false">
+            <fixedtext id="FT_DECIMALS" _label="~Decimal places"/>
+            <fixedtext id="FT_LEADZEROES" _label="Leading ~zeroes"/>
+            </vbox>
+            <vbox spacing="5" cnt:fill="false" cnt:expand="false">
+            <numericfield has_border="true" first="0" last="15" minimum="0" value="2" maximum="20" repeat="true" id="ED_DECIMALS" spin="true" spin-size="1" strict-format="true" cnt:expand="false"/>
+            <numericfield has_border="true" first="0" last="15" minimum="0" value="1" maximum="20" repeat="true" id="ED_LEADZEROES" spin="true" spin-size="1" strict-format="true" cnt:fill="false"/>
+            </vbox>
+            <vbox spacing="5" cnt:fill="false" cnt:expand="false">
+            <checkbox id="BTN_NEGRED" _label="~Negative numbers red"/>
+            <checkbox id="BTN_THOUSAND" _label="~Thousands separator"/>
+            </vbox>
+        </hbox>
+        </vbox>
+        </hbox>
+        <fixedtext id="FT_EDFORMAT" _label="~Format code"/>
+        <hbox spacing="5" cnt:expand="false">
+            <edit has_border="true" id="ED_FORMAT"/>
+            <imagebutton cnt:expand="false" cnt:fill="false" help-id="HID_NUMBERFORMAT_TBI_ADD" quick-help-text="Add" id="IB_ADD" sv-look="true" graphic="svx/res/nu01.png"/>
+            <imagebutton cnt:expand="false" help-id="HID_NUMBERFORMAT_TBI_INFO" quick-help-text="Edit Comment" id="IB_INFO" sv-look="true" graphic="svx/res/nu03.png"/>
+            <imagebutton cnt:expand="false" help-id="HID_NUMBERFORMAT_TBI_REMOVE" quick-help-text="Remove" id="IB_REMOVE" sv-look="true" graphic="svx/res/nu02.png"/>
+        </hbox>
+        <fixedtext no-label="true" show="false" id="FT_COMMENT" word-break="true" cnt:expand="false"/>
+        <edit has_border="true" show="false" id="ED_COMMENT" cnt:expand="false"/>
+    </vbox>
+</tabpage>

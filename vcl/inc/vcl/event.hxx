@@ -176,6 +176,8 @@ public:
                         { return ((mnCode & KEY_MOD1) != 0); }
     BOOL            IsMod2() const
                         { return ((mnCode & KEY_MOD2) != 0); }
+    BOOL            IsMod3() const
+                        { return ((mnCode & KEY_MOD3) != 0); }
 };
 
 inline MouseEvent::MouseEvent()

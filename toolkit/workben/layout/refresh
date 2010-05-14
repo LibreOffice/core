@@ -1,3 +1,7 @@
 echo "source me ..."
 test -n "${INPATH}" && rm -Rf ../../${INPATH}
-build debug=true && cp ../../${INPATH}/lib/*.so ../../../solver/680/${INPATH}/lib && dmake debug=true && ../../${INPATH}/bin/test "$@"
+build debug=true\
+  && cp ../../${INPATH}/lib/*.so ../../../solver/300/${INPATH}/lib \
+  && cp -f ../..$INPATH/lib/libtkx.so $OOO_INSTALL_PREFIX/openoffice.org/basis3.0/program \
+  && dmake debug=true \
+  && ../../${INPATH}/bin/test "$@"

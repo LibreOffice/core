@@ -1176,6 +1176,9 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     // set scrollbar size
     aStyleSettings.SetScrollBarSize( [NSScroller scrollerWidth] );
 
+    // images in menus false for MacOSX
+    aStyleSettings.SetUseImagesInMenus( false );
+
     rSettings.SetStyleSettings( aStyleSettings );
 
     [mpView unlockFocus];

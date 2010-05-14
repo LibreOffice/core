@@ -190,8 +190,6 @@ SHL1STDLIBS+= \
     $(BASEBMPLIB) \
     -lAppleRemote$(DLLPOSTFIX)
 
-SHL1STDLIBS+= \
-             -framework QTKit
 LIB1FILES+= \
             $(SLB)$/sala11y.lib
 .ENDIF
@@ -266,13 +264,7 @@ SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 # libs for generic plugin
 SHL2STDLIBS=\
             $(VCLLIB)\
-            $(SOTLIB)           \
-            $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
-            $(COMPHELPERLIB)	\
-            $(UCBHELPERLIB)     \
-            $(CPPUHELPERLIB)    \
-            $(CPPULIB)          \
             $(VOSLIB)           \
             $(BASEGFXLIB)	\
             $(SALLIB)
@@ -346,11 +338,7 @@ SHL4NOCHECK=TRUE
 SHL4STDLIBS+=-l$(SHL2TARGET)
 SHL4STDLIBS+=\
             $(VCLLIB)		\
-            $(SOTLIB)           \
-            $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
-            $(COMPHELPERLIB)	\
-            $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
             $(VOSLIB)           \

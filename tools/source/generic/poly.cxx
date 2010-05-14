@@ -1004,8 +1004,8 @@ void Polygon::GetSimple( Polygon& rResult ) const
         rResult = Polygon( (USHORT)aPointVector.size() );
         ::std::vector< Point >::iterator aIter( aPointVector.begin() ), aEnd( aPointVector.end() );
         Point* pPointArray = rResult.mpImplPolygon->mpPointAry;
-
-        while( aIter != aEnd  )
+        USHORT nPoints = rResult.mpImplPolygon->mnPoints;
+        while( nPoints-- && aIter != aEnd )
             *pPointArray++ = *aIter++;
     }
 }

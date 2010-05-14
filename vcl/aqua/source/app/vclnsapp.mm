@@ -86,7 +86,25 @@
                     return;
                 }
             }
-            
+          
+            /*
+             * #i98949# - Cmd-M miniaturize window, Cmd-Option-M miniaturize all windows
+             */ 
+            if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"m"] )
+            {
+                if ( nModMask == NSCommandKeyMask && ([pFrame->getWindow() styleMask] & NSMiniaturizableWindowMask) )
+                {
+                    [pFrame->getWindow() performMiniaturize: nil];
+                    return;
+                }
+
+                if ( nModMask == ( NSCommandKeyMask | NSAlternateKeyMask ) )
+                {
+                    [NSApp miniaturizeAll: nil];
+                    return;
+                }
+            }
+ 
             /* #i89611#
                Cmd-Option-Space is for some reason not consumed by the menubar,
                but also not by the input method (like e.g. Cmd-Space) and stays

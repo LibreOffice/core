@@ -31,9 +31,9 @@
 #ifndef _SV_XRENDER_PEER_HXX
 #define _SV_XRENDER_PEER_HXX
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/extensions/Xrender.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <vcl/salgtype.hxx>
 #include <osl/module.h>

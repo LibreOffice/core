@@ -228,7 +228,9 @@ private:
 
     void                    ImplConstruct();
     void                    ImplAssignGraphicData();
-    void                    ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID = NULL );
+    void                    ImplSetGraphicManager( const GraphicManager* pMgr,
+                                                   const ByteString* pID = NULL,
+                                                   const GraphicObject* pCopyObj = NULL );
     void                    ImplAutoSwapIn();
     BOOL                    ImplIsAutoSwapped() const { return mbAutoSwapped; }
     BOOL                    ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
@@ -524,7 +526,9 @@ private:
                               const GDIMetaFile& rMtf, const GraphicAttr& rAttr );
 
                     // Only used by GraphicObject's Ctor's and Dtor's
-    void            ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute, const ByteString* pID );
+    void            ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
+                                     const ByteString* pID = NULL,
+                                     const GraphicObject* pCopyObj = NULL );
     void            ImplUnregisterObj( const GraphicObject& rObj );
     inline BOOL     ImplHasObjects() const { return( maObjList.Count() > 0UL ); }
 

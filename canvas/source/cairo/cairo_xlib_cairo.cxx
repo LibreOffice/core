@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include "cairo_xlib_cairo.hxx"
 
@@ -71,23 +71,23 @@ namespace cairo
         pRenderFormat(NULL)
     {}
 
-    X11SysData::X11SysData( const SystemGraphicsData* pSysDat ) :
-        pDisplay(pSysDat->pDisplay),
-        hDrawable(pSysDat->hDrawable),
-        pVisual(pSysDat->pVisual),
-        nScreen(pSysDat->nScreen),
-        nDepth(pSysDat->nDepth),
-        aColormap(pSysDat->aColormap),
-        pRenderFormat(pSysDat->pRenderFormat)
+    X11SysData::X11SysData( const SystemGraphicsData& pSysDat ) :
+        pDisplay(pSysDat.pDisplay),
+        hDrawable(pSysDat.hDrawable),
+        pVisual(pSysDat.pVisual),
+        nScreen(pSysDat.nScreen),
+        nDepth(pSysDat.nDepth),
+        aColormap(pSysDat.aColormap),
+        pRenderFormat(pSysDat.pRenderFormat)
     {}
 
-    X11SysData::X11SysData( const SystemEnvData* pSysDat ) :
-        pDisplay(pSysDat->pDisplay),
-        hDrawable(pSysDat->aWindow),
-        pVisual(pSysDat->pVisual),
-        nScreen(pSysDat->nScreen),
-        nDepth(pSysDat->nDepth),
-        aColormap(pSysDat->aColormap),
+    X11SysData::X11SysData( const SystemEnvData& pSysDat ) :
+        pDisplay(pSysDat.pDisplay),
+        hDrawable(pSysDat.aWindow),
+        pVisual(pSysDat.pVisual),
+        nScreen(pSysDat.nScreen),
+        nDepth(pSysDat.nDepth),
+        aColormap(pSysDat.aColormap),
         pRenderFormat(NULL)
     {}
 
@@ -315,12 +315,12 @@ namespace cairo
         if( !pSysData )
             return X11SysData();
         else
-            return X11SysData(pSysData);
+            return X11SysData(*pSysData);
     }
 
     static X11SysData getSysData( const VirtualDevice& rVirDev )
     {
-        return X11SysData( &rVirDev.GetSystemGfxData() );
+        return X11SysData( rVirDev.GetSystemGfxData() );
     }
 
     SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,

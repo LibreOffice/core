@@ -43,9 +43,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-# FIXME: This is bad, hmkay
-CFLAGS+= -I$(PRJ)/source
-
 .IF "$(GUIBASE)"=="aqua"
 OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
@@ -75,9 +72,11 @@ SLOFILES=   \
             $(SLO)/vclxbutton.obj\
             $(SLO)/vclxdialog.obj\
             $(SLO)/vclxfixedline.obj\
+            $(SLO)/vclxplugin.obj\
             $(SLO)/vclxscroller.obj\
             $(SLO)/vclxsplitter.obj\
-            $(SLO)/vclxtabcontrol.obj
+            $(SLO)/vclxtabcontrol.obj\
+            $(SLO)/vclxtabpage.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\

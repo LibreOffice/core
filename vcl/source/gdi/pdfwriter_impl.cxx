@@ -6680,6 +6680,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
             // check for adjustment
             double fTheoreticalGlyphWidth = rGlyphs[nPos].m_aPos.X() - rGlyphs[nPos-1].m_aPos.X();
+            fTheoreticalGlyphWidth = fabs( fTheoreticalGlyphWidth ); // #i100522# workaround until #i87686# gets fixed
             fTheoreticalGlyphWidth = 1000.0 * fTheoreticalGlyphWidth / fXScale / double(nPixelFontHeight);
             sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fTheoreticalGlyphWidth+0.5);
             if( nAdjustment != 0 )
@@ -6902,10 +6903,16 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     if( aAlignOffset.X() || aAlignOffset.Y() )
         aAlignOffset = aRotScale.transform( aAlignOffset );
 
-    if( bVertical )
-        drawVerticalGlyphs( aGlyphs, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight );
-    else
-        drawHorizontalGlyphs( aGlyphs, aLine, aAlignOffset, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight );
+    /* #159153# do not emit an empty glyph vector; this can happen if e.g. the original
+       string contained only on of the UTF16 BOMs
+    */
+    if( ! aGlyphs.empty() )
+    {
+        if( bVertical )
+            drawVerticalGlyphs( aGlyphs, aLine, aAlignOffset, aRotScale, fAngle, fXScale, fSkew, nFontHeight );
+        else
+            drawHorizontalGlyphs( aGlyphs, aLine, aAlignOffset, fAngle, fXScale, fSkew, nFontHeight, nPixelFontHeight );
+    }
 
     // end textobject
     aLine.append( "ET\n" );
@@ -9297,14 +9304,24 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         delete pStream;
 
     aLine.append( "q " );
-    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetWidth(), aLine, false );
+    sal_Int32 nCheckWidth = 0;
+    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetWidth(), aLine, false, &nCheckWidth );
     aLine.append( " 0 0 " );
-    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetHeight(), aLine, true );
+    sal_Int32 nCheckHeight = 0;
+    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetHeight(), aLine, true, &nCheckHeight );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rTargetArea.BottomLeft(), aLine );
     aLine.append( " cm\n/Im" );
     aLine.append( it->m_nObject );
     aLine.append( " Do Q\n" );
+    if( nCheckWidth == 0 || nCheckHeight == 0 )
+    {
+        // #i97512# avoid invalid current matrix
+        aLine.setLength( 0 );
+        aLine.append( "\n%jpeg image /Im" );
+        aLine.append( it->m_nObject );
+        aLine.append( " scaled to zero size, omitted\n" );
+    }
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
     OStringBuffer aObjName( 16 );
@@ -9325,14 +9342,24 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
         appendNonStrokingColor( rFillColor, aLine );
         aLine.append( ' ' );
     }
-    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Width(), aLine, false );
+    sal_Int32 nCheckWidth = 0;
+    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Width(), aLine, false, &nCheckWidth );
     aLine.append( " 0 0 " );
-    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Height(), aLine, true );
+    sal_Int32 nCheckHeight = 0;
+    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Height(), aLine, true, &nCheckHeight );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
     aLine.append( " cm\n/Im" );
     aLine.append( rBitmap.m_nObject );
     aLine.append( " Do Q\n" );
+    if( nCheckWidth == 0 || nCheckHeight == 0 )
+    {
+        // #i97512# avoid invalid current matrix
+        aLine.setLength( 0 );
+        aLine.append( "\n%bitmap image /Im" );
+        aLine.append( rBitmap.m_nObject );
+        aLine.append( " scaled to zero size, omitted\n" );
+    }
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 

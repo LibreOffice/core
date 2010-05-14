@@ -36,7 +36,7 @@
 #include "salgdi.h"
 #include "saldata.hxx"
 // for GetMirroredChar
-#include "sft.h"
+#include "sft.hxx"
 
 #include "vcl/sallayout.hxx"
 #include "vcl/svapp.hxx"
@@ -2441,9 +2441,9 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         if( rVisualItem.IsRTL() )
         {
             for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
-                if ( (1U << mpVisualAttrs[i].uJustification) & 0xFF89 )  //  any Arabic justification ?
-                {                                                        //  the last SCRIPT_JUSTIFY_xxx
-                    // yes                                               //  == 15 (usp 1.6)
+                if ( (1U << mpVisualAttrs[i].uJustification) & 0xFF82 )  //  any Arabic justification
+                {                                                        //  excluding SCRIPT_JUSTIFY_NONE
+                    // yes
                     rVisualItem.mbHasKashidas = true;
                     // so prepare for kashida handling
                     InitKashidaHandling();
@@ -2509,10 +2509,14 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
             for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
             {
                 const int nXOffsetAdjust = mpJustifications[i] - mpGlyphAdvances[i];
-                if( i == nMinGlyphPos )
+                // #i99862# skip diacritics, we mustn't add extra justification to diacritics
+                int nIdxAdd = i - 1;
+                while( (nIdxAdd >= nMinGlyphPos) && !mpGlyphAdvances[nIdxAdd] )
+                    --nIdxAdd;
+                if( nIdxAdd < nMinGlyphPos )
                     rVisualItem.mnXOffset += nXOffsetAdjust;
                 else
-                    mpJustifications[i-1] += nXOffsetAdjust;
+                    mpJustifications[nIdxAdd] += nXOffsetAdjust;
                 mpJustifications[i] -= nXOffsetAdjust;
             }
         }
@@ -2540,8 +2544,8 @@ void UniscribeLayout::KashidaItemFix( int nMinGlyphPos, int nEndGlyphPos )
     {
         // check for vowels
         if( (i > nMinGlyphPos && !mpGlyphAdvances[ i-1 ])
-        &&  (1U << mpVisualAttrs[i].uJustification) & 0xFF89 )
-        {
+        &&  (1U << mpVisualAttrs[i].uJustification) & 0xFF83 )  // all Arabic justifiction types
+        {                                                       // including SCRIPT_JUSTIFY_NONE
             // vowel, we do it like ScriptJustify does
             // the vowel gets the extra width
             long nSpaceAdded =  mpJustifications[ i ] - mpGlyphAdvances[ i ];

@@ -43,11 +43,11 @@
 #include <rtl/locale.h>
 #include <osl/process.h>
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/X.h>
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>

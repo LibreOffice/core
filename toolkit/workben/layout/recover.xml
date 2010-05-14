@@ -58,7 +58,7 @@ LINE TEST"/>
     <checkbox id="CH_LOGFILE" _label="Open additional text document to display the restore logfile"/>
     <dialogbuttonhbox border="5" spacing="5">
         <flow/>
-        <okbutton id="BTN_OK" _label="Restore"/>
+        <okbutton defbutton="true" id="BTN_OK" _label="Restore"/>
         <cancelbutton id="BTN_CANCEL" />
         <helpbutton id="BTN_HELP"/>
     </dialogbuttonhbox>

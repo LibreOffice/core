@@ -103,13 +103,28 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
         //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
+    if ( !*pBitmap )
+    {
+        String  sText( GetText() );
+        if ( !sText.Len() )
+            return;
+
+        WinBits nWinStyle = GetStyle();
+        USHORT nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+        if ( !IsEnabled() )
+            nTextStyle |= TEXT_DRAW_DISABLE;
+
+        DrawText( rUDEvt.GetRect(), sText, nTextStyle );
+        return;
+    }
+
     const Rectangle& rPaintRect = rUDEvt.GetRect();
     const Size&      rBitmapSize = maBmp.GetSizePixel();
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
     {
         // only images support IMAGE_DRAW_COLORTRANSFORM
-        Image aImage( maBmp );
+        Image aImage( *pBitmap );
         if ( !!aImage )
         {
             switch ( mnScaleMode )
@@ -153,29 +168,29 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
         {
         case ImageScaleMode::None:
         {
-            maBmp.Draw( rUDEvt.GetDevice(), lcl_centerWithin( rPaintRect, rBitmapSize ) );
+            pBitmap->Draw( rUDEvt.GetDevice(), lcl_centerWithin( rPaintRect, rBitmapSize ) );
         }
         break;
 
         case ImageScaleMode::Isotropic:
         {
             const Size aPaintSize = lcl_calcPaintSize( rPaintRect, rBitmapSize );
-            maBmp.Draw( rUDEvt.GetDevice(),
-                        lcl_centerWithin( rPaintRect, aPaintSize ),
-                        aPaintSize );
+            pBitmap->Draw( rUDEvt.GetDevice(),
+                           lcl_centerWithin( rPaintRect, aPaintSize ),
+                           aPaintSize );
         }
         break;
 
         case ImageScaleMode::Anisotropic:
         {
-            maBmp.Draw( rUDEvt.GetDevice(),
-                        rPaintRect.TopLeft(),
-                        rPaintRect.GetSize() );
+            pBitmap->Draw( rUDEvt.GetDevice(),
+                           rPaintRect.TopLeft(),
+                           rPaintRect.GetSize() );
         }
         break;
 
         default:
-                OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
+            OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
             break;
 
         }   // switch ( mnScaleMode )

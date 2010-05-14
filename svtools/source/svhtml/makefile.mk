@@ -42,7 +42,6 @@ TARGET=svhtml
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-    $(SLO)$/htmlkey2.obj	\
     $(SLO)$/htmlkywd.obj	\
     $(SLO)$/htmlsupp.obj	\
     $(SLO)$/htmlout.obj		\

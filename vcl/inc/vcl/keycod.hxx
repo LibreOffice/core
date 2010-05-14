@@ -73,7 +73,7 @@ public:
                 KeyCode( const ResId& rResId );
                 KeyCode( USHORT nKey, USHORT nModifier = 0 )
                     { nCode = nKey | nModifier; eFunc = KEYFUNC_DONTKNOW; }
-                KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2 );
+                KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2, BOOL bMod3 );
                 KeyCode( KeyFuncType eFunction );
 
     USHORT      GetFullCode() const { return nCode; }
@@ -112,7 +112,7 @@ public:
     BOOL        operator !=( const KeyCode& rKeyCode ) const;
 };
 
-inline KeyCode::KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2 )
+inline KeyCode::KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2, BOOL bMod3 )
 {
     nCode = nKey;
     if( bShift )
@@ -121,6 +121,8 @@ inline KeyCode::KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2 )
         nCode |= KEY_MOD1;
     if( bMod2 )
         nCode |= KEY_MOD2;
+        if( bMod3 )
+                nCode |= KEY_MOD3;
     eFunc = KEYFUNC_DONTKNOW;
 }
 

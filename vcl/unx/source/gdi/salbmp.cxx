@@ -37,9 +37,9 @@
 #ifdef FREEBSD
 #include <sys/types.h>
 #endif
-#include <prex.h>
+#include <tools/prex.h>
 #include "Xproto.h"
-#include <postx.h>
+#include <tools/postx.h>
 #include <salunx.h>
 #include <osl/endian.h>
 #include <rtl/memory.h>

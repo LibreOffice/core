@@ -31,812 +31,774 @@
 #ifndef _HTMLKYWD_HXX
 #define _HTMLKYWD_HXX
 
-#include "svtools/svtdllapi.h"
-#include "sal/types.h"
+#include "sal/config.h"
 
-#ifndef SVTOOLS_CONSTASCII_DECL
-#define SVTOOLS_CONSTASCII_DECL( n, s ) n[sizeof(s)]
-#endif
-#ifndef SVTOOLS_CONSTASCII_DEF
-#define SVTOOLS_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
-#endif
-
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_doctype32,
-    "HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\"" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_doctype40,
-    "HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"" );
-
+#define OOO_STRING_SVTOOLS_HTML_doctype32 \
+    "HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\""
+#define OOO_STRING_SVTOOLS_HTML_doctype40 \
+    "HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\""
 
 // diese werden nur eingeschaltet
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_area, "AREA" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_base, "BASE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_comment, "!--" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_doctype, "!DOCTYPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_embed, "EMBED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_figureoverlay, "OVERLAY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_horzrule, "HR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_horztab, "TAB" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_image, "IMG" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_image2, "IMAGE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_input, "INPUT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_isindex, "ISINDEX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_linebreak, "BR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_li, "LI" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_link, "LINK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_meta, "META" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_nextid, "NEXTID" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_nobr, "NOBR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_object, "OBJECT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_of, "OF" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_option, "OPTION" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_param, "PARAM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_range, "RANGE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_spacer, "SPACER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_wbr, "WBR" );
+#define OOO_STRING_SVTOOLS_HTML_area "AREA"
+#define OOO_STRING_SVTOOLS_HTML_base "BASE"
+#define OOO_STRING_SVTOOLS_HTML_comment "!--"
+#define OOO_STRING_SVTOOLS_HTML_doctype "!DOCTYPE"
+#define OOO_STRING_SVTOOLS_HTML_embed "EMBED"
+#define OOO_STRING_SVTOOLS_HTML_figureoverlay "OVERLAY"
+#define OOO_STRING_SVTOOLS_HTML_horzrule "HR"
+#define OOO_STRING_SVTOOLS_HTML_horztab "TAB"
+#define OOO_STRING_SVTOOLS_HTML_image "IMG"
+#define OOO_STRING_SVTOOLS_HTML_image2 "IMAGE"
+#define OOO_STRING_SVTOOLS_HTML_input "INPUT"
+#define OOO_STRING_SVTOOLS_HTML_isindex "ISINDEX"
+#define OOO_STRING_SVTOOLS_HTML_linebreak "BR"
+#define OOO_STRING_SVTOOLS_HTML_li "LI"
+#define OOO_STRING_SVTOOLS_HTML_link "LINK"
+#define OOO_STRING_SVTOOLS_HTML_meta "META"
+#define OOO_STRING_SVTOOLS_HTML_nextid "NEXTID"
+#define OOO_STRING_SVTOOLS_HTML_nobr "NOBR"
+#define OOO_STRING_SVTOOLS_HTML_of "OF"
+#define OOO_STRING_SVTOOLS_HTML_option "OPTION"
+#define OOO_STRING_SVTOOLS_HTML_param "PARAM"
+#define OOO_STRING_SVTOOLS_HTML_range "RANGE"
+#define OOO_STRING_SVTOOLS_HTML_spacer "SPACER"
+#define OOO_STRING_SVTOOLS_HTML_wbr "WBR"
 
 // diese werden wieder abgeschaltet
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_abbreviation, "ABBREV" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_above, "ABOVE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_acronym, "ACRONYM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_address, "ADDRESS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_anchor, "A" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_applet, "APPLET" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_array, "ARRAY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_author, "AU" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_banner, "BANNER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_bar, "BAR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_basefont, "BASEFONT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_below, "BELOW" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_bigprint, "BIG" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_blink, "BLINK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_blockquote, "BLOCKQUOTE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_blockquote30, "BQ" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_body, "BODY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_bold, "B" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_boldtext, "BT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_box, "BOX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_caption, "CAPTION" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_center, "CENTER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_citiation, "CITE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_code, "CODE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_col, "COL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_colgroup, "COLGROUP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_credit, "CREDIT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_dd, "DD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_deflist, "DL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_deletedtext, "DEL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_dirlist, "DIR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_division, "DIV" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_dot, "DOT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_doubledot, "DDOT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_dt, "DT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_emphasis, "EM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_figure, "FIG" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_font, "FONT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_footnote, "FN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_form, "FORM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_frame, "FRAME" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_frameset, "FRAMESET" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_hat, "HAT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_head1, "H1" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_head2, "H2" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_head3, "H3" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_head4, "H4" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_head5, "H5" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_head6, "H6" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_head, "HEAD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_html, "HTML" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_iframe, "IFRAME" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_ilayer, "ILAYER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_insertedtext, "INS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_italic, "I" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_item, "ITEM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_keyboard, "KBD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_language, "LANG" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_layer, "LAYER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_listheader, "LH" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_map, "MAP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_math, "MATH" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_menulist, "MENU" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_multicol, "MULTICOL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_noembed, "NOEMBED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_noframe, "NOFRAME" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_noframes, "NOFRAMES" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_noscript, "NOSCRIPT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_note, "NOTE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_orderlist, "OL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_parabreak, "P" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_person, "PERSON" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_plaintext, "T" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_preformtxt, "PRE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_root, "ROOT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_row, "ROW" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sample, "SAMP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_script, "SCRIPT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_select, "SELECT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_shortquote, "Q" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_smallprint, "SMALL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_span, "SPAN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_squareroot, "AQRT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_strikethrough, "S" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_strong, "STRONG" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_style, "STYLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_subscript, "SUB" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_superscript, "SUP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_table, "TABLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_tablerow, "TR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_tabledata, "TD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_tableheader, "TH" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_tbody, "TBODY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_teletype, "TT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_text, "TEXT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_textarea, "TEXTAREA" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_textflow, "TEXTFLOW" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_tfoot, "TFOOT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_thead, "THEAD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_tilde, "TILDE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_title, "TITLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_underline, "U" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_unorderlist, "UL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_variable, "VAR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_vector, "VEC" );
+#define OOO_STRING_SVTOOLS_HTML_abbreviation "ABBREV"
+#define OOO_STRING_SVTOOLS_HTML_above "ABOVE"
+#define OOO_STRING_SVTOOLS_HTML_acronym "ACRONYM"
+#define OOO_STRING_SVTOOLS_HTML_address "ADDRESS"
+#define OOO_STRING_SVTOOLS_HTML_anchor "A"
+#define OOO_STRING_SVTOOLS_HTML_applet "APPLET"
+#define OOO_STRING_SVTOOLS_HTML_array "ARRAY"
+#define OOO_STRING_SVTOOLS_HTML_author "AU"
+#define OOO_STRING_SVTOOLS_HTML_banner "BANNER"
+#define OOO_STRING_SVTOOLS_HTML_bar "BAR"
+#define OOO_STRING_SVTOOLS_HTML_basefont "BASEFONT"
+#define OOO_STRING_SVTOOLS_HTML_below "BELOW"
+#define OOO_STRING_SVTOOLS_HTML_bigprint "BIG"
+#define OOO_STRING_SVTOOLS_HTML_blink "BLINK"
+#define OOO_STRING_SVTOOLS_HTML_blockquote "BLOCKQUOTE"
+#define OOO_STRING_SVTOOLS_HTML_blockquote30 "BQ"
+#define OOO_STRING_SVTOOLS_HTML_body "BODY"
+#define OOO_STRING_SVTOOLS_HTML_bold "B"
+#define OOO_STRING_SVTOOLS_HTML_boldtext "BT"
+#define OOO_STRING_SVTOOLS_HTML_box "BOX"
+#define OOO_STRING_SVTOOLS_HTML_caption "CAPTION"
+#define OOO_STRING_SVTOOLS_HTML_center "CENTER"
+#define OOO_STRING_SVTOOLS_HTML_citiation "CITE"
+#define OOO_STRING_SVTOOLS_HTML_code "CODE"
+#define OOO_STRING_SVTOOLS_HTML_col "COL"
+#define OOO_STRING_SVTOOLS_HTML_colgroup "COLGROUP"
+#define OOO_STRING_SVTOOLS_HTML_credit "CREDIT"
+#define OOO_STRING_SVTOOLS_HTML_dd "DD"
+#define OOO_STRING_SVTOOLS_HTML_deflist "DL"
+#define OOO_STRING_SVTOOLS_HTML_deletedtext "DEL"
+#define OOO_STRING_SVTOOLS_HTML_dirlist "DIR"
+#define OOO_STRING_SVTOOLS_HTML_division "DIV"
+#define OOO_STRING_SVTOOLS_HTML_dot "DOT"
+#define OOO_STRING_SVTOOLS_HTML_doubledot "DDOT"
+#define OOO_STRING_SVTOOLS_HTML_dt "DT"
+#define OOO_STRING_SVTOOLS_HTML_emphasis "EM"
+#define OOO_STRING_SVTOOLS_HTML_figure "FIG"
+#define OOO_STRING_SVTOOLS_HTML_font "FONT"
+#define OOO_STRING_SVTOOLS_HTML_footnote "FN"
+#define OOO_STRING_SVTOOLS_HTML_form "FORM"
+#define OOO_STRING_SVTOOLS_HTML_frame "FRAME"
+#define OOO_STRING_SVTOOLS_HTML_frameset "FRAMESET"
+#define OOO_STRING_SVTOOLS_HTML_hat "HAT"
+#define OOO_STRING_SVTOOLS_HTML_head1 "H1"
+#define OOO_STRING_SVTOOLS_HTML_head2 "H2"
+#define OOO_STRING_SVTOOLS_HTML_head3 "H3"
+#define OOO_STRING_SVTOOLS_HTML_head4 "H4"
+#define OOO_STRING_SVTOOLS_HTML_head5 "H5"
+#define OOO_STRING_SVTOOLS_HTML_head6 "H6"
+#define OOO_STRING_SVTOOLS_HTML_head "HEAD"
+#define OOO_STRING_SVTOOLS_HTML_html "HTML"
+#define OOO_STRING_SVTOOLS_HTML_iframe "IFRAME"
+#define OOO_STRING_SVTOOLS_HTML_ilayer "ILAYER"
+#define OOO_STRING_SVTOOLS_HTML_insertedtext "INS"
+#define OOO_STRING_SVTOOLS_HTML_italic "I"
+#define OOO_STRING_SVTOOLS_HTML_item "ITEM"
+#define OOO_STRING_SVTOOLS_HTML_keyboard "KBD"
+#define OOO_STRING_SVTOOLS_HTML_language "LANG"
+#define OOO_STRING_SVTOOLS_HTML_layer "LAYER"
+#define OOO_STRING_SVTOOLS_HTML_listheader "LH"
+#define OOO_STRING_SVTOOLS_HTML_map "MAP"
+#define OOO_STRING_SVTOOLS_HTML_math "MATH"
+#define OOO_STRING_SVTOOLS_HTML_menulist "MENU"
+#define OOO_STRING_SVTOOLS_HTML_multicol "MULTICOL"
+#define OOO_STRING_SVTOOLS_HTML_noembed "NOEMBED"
+#define OOO_STRING_SVTOOLS_HTML_noframe "NOFRAME"
+#define OOO_STRING_SVTOOLS_HTML_noframes "NOFRAMES"
+#define OOO_STRING_SVTOOLS_HTML_noscript "NOSCRIPT"
+#define OOO_STRING_SVTOOLS_HTML_note "NOTE"
+#define OOO_STRING_SVTOOLS_HTML_object "OBJECT"
+#define OOO_STRING_SVTOOLS_HTML_orderlist "OL"
+#define OOO_STRING_SVTOOLS_HTML_parabreak "P"
+#define OOO_STRING_SVTOOLS_HTML_person "PERSON"
+#define OOO_STRING_SVTOOLS_HTML_plaintext "T"
+#define OOO_STRING_SVTOOLS_HTML_preformtxt "PRE"
+#define OOO_STRING_SVTOOLS_HTML_root "ROOT"
+#define OOO_STRING_SVTOOLS_HTML_row "ROW"
+#define OOO_STRING_SVTOOLS_HTML_sample "SAMP"
+#define OOO_STRING_SVTOOLS_HTML_script "SCRIPT"
+#define OOO_STRING_SVTOOLS_HTML_select "SELECT"
+#define OOO_STRING_SVTOOLS_HTML_shortquote "Q"
+#define OOO_STRING_SVTOOLS_HTML_smallprint "SMALL"
+#define OOO_STRING_SVTOOLS_HTML_span "SPAN"
+#define OOO_STRING_SVTOOLS_HTML_squareroot "AQRT"
+#define OOO_STRING_SVTOOLS_HTML_strikethrough "S"
+#define OOO_STRING_SVTOOLS_HTML_strong "STRONG"
+#define OOO_STRING_SVTOOLS_HTML_style "STYLE"
+#define OOO_STRING_SVTOOLS_HTML_subscript "SUB"
+#define OOO_STRING_SVTOOLS_HTML_superscript "SUP"
+#define OOO_STRING_SVTOOLS_HTML_table "TABLE"
+#define OOO_STRING_SVTOOLS_HTML_tablerow "TR"
+#define OOO_STRING_SVTOOLS_HTML_tabledata "TD"
+#define OOO_STRING_SVTOOLS_HTML_tableheader "TH"
+#define OOO_STRING_SVTOOLS_HTML_tbody "TBODY"
+#define OOO_STRING_SVTOOLS_HTML_teletype "TT"
+#define OOO_STRING_SVTOOLS_HTML_text "TEXT"
+#define OOO_STRING_SVTOOLS_HTML_textarea "TEXTAREA"
+#define OOO_STRING_SVTOOLS_HTML_textflow "TEXTFLOW"
+#define OOO_STRING_SVTOOLS_HTML_tfoot "TFOOT"
+#define OOO_STRING_SVTOOLS_HTML_thead "THEAD"
+#define OOO_STRING_SVTOOLS_HTML_tilde "TILDE"
+#define OOO_STRING_SVTOOLS_HTML_title "TITLE"
+#define OOO_STRING_SVTOOLS_HTML_underline "U"
+#define OOO_STRING_SVTOOLS_HTML_unorderlist "UL"
+#define OOO_STRING_SVTOOLS_HTML_variable "VAR"
+#define OOO_STRING_SVTOOLS_HTML_vector "VEC"
 
 // obsolete features
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_xmp, "XMP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_listing, "LISTING" );
+#define OOO_STRING_SVTOOLS_HTML_xmp "XMP"
+#define OOO_STRING_SVTOOLS_HTML_listing "LISTING"
 
 // proposed features
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_definstance, "DFN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_strike, "STRIKE" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_bgsound, "BGSOUND" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_comment2, "COMMENT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_marquee, "MARQUEE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_plaintext2, "PLAINTEXT" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sdfield, "SDFIELD" );
+#define OOO_STRING_SVTOOLS_HTML_definstance "DFN"
+#define OOO_STRING_SVTOOLS_HTML_strike "STRIKE"
+#define OOO_STRING_SVTOOLS_HTML_bgsound "BGSOUND"
+#define OOO_STRING_SVTOOLS_HTML_comment2 "COMMENT"
+#define OOO_STRING_SVTOOLS_HTML_marquee "MARQUEE"
+#define OOO_STRING_SVTOOLS_HTML_plaintext2 "PLAINTEXT"
+#define OOO_STRING_SVTOOLS_HTML_sdfield "SDFIELD"
 
 // die Namen fuer alle Zeichen
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_lt, "lt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_gt, "gt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_amp, "amp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_quot, "quot" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Aacute, "Aacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Agrave, "Agrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Acirc, "Acirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Atilde, "Atilde" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Aring, "Aring" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Auml, "Auml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_AElig, "AElig" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ccedil, "Ccedil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Eacute, "Eacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Egrave, "Egrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ecirc, "Ecirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Euml, "Euml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Iacute, "Iacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Igrave, "Igrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Icirc, "Icirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Iuml, "Iuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_ETH, "ETH" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ntilde, "Ntilde" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Oacute, "Oacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ograve, "Ograve" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ocirc, "Ocirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Otilde, "Otilde" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ouml, "Ouml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Oslash, "Oslash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Uacute, "Uacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ugrave, "Ugrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Ucirc, "Ucirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Uuml, "Uuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_Yacute, "Yacute" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_THORN, "THORN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_szlig, "szlig" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_aacute, "aacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_agrave, "agrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_acirc, "acirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_atilde, "atilde" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_aring, "aring" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_auml, "auml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_aelig, "aelig" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ccedil, "ccedil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_eacute, "eacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_egrave, "egrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ecirc, "ecirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_euml, "euml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_iacute, "iacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_igrave, "igrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_icirc, "icirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_iuml, "iuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_eth, "eth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ntilde, "ntilde" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_oacute, "oacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ograve, "ograve" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ocirc, "ocirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_otilde, "otilde" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ouml, "ouml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_oslash, "oslash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_uacute, "uacute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ugrave, "ugrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ucirc, "ucirc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_uuml, "uuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_yacute, "yacute" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_thorn, "thorn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_yuml, "yuml" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_acute, "acute" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_brvbar, "brvbar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_cedil, "cedil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_cent, "cent" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_copy, "copy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_curren, "curren" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_deg, "deg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_divide, "divide" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_frac12, "frac12" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_frac14, "frac14" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_frac34, "frac34" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_iexcl, "iexcl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_iquest, "iquest" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_laquo, "laquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_macr, "macr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_micro, "micro" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_middot, "middot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_nbsp, "nbsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_not, "not" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ordf, "ordf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ordm, "ordm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_para, "para" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_plusmn, "plusmn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_pound, "pound" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_raquo, "raquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_reg, "reg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sect, "sect" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_shy, "shy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sup1, "sup1" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sup2, "sup2" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sup3, "sup3" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_times, "times" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_uml, "uml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_yen, "yen" );
+#define OOO_STRING_SVTOOLS_HTML_C_lt "lt"
+#define OOO_STRING_SVTOOLS_HTML_C_gt "gt"
+#define OOO_STRING_SVTOOLS_HTML_C_amp "amp"
+#define OOO_STRING_SVTOOLS_HTML_C_quot "quot"
+#define OOO_STRING_SVTOOLS_HTML_C_Aacute "Aacute"
+#define OOO_STRING_SVTOOLS_HTML_C_Agrave "Agrave"
+#define OOO_STRING_SVTOOLS_HTML_C_Acirc "Acirc"
+#define OOO_STRING_SVTOOLS_HTML_C_Atilde "Atilde"
+#define OOO_STRING_SVTOOLS_HTML_C_Aring "Aring"
+#define OOO_STRING_SVTOOLS_HTML_C_Auml "Auml"
+#define OOO_STRING_SVTOOLS_HTML_C_AElig "AElig"
+#define OOO_STRING_SVTOOLS_HTML_C_Ccedil "Ccedil"
+#define OOO_STRING_SVTOOLS_HTML_C_Eacute "Eacute"
+#define OOO_STRING_SVTOOLS_HTML_C_Egrave "Egrave"
+#define OOO_STRING_SVTOOLS_HTML_C_Ecirc "Ecirc"
+#define OOO_STRING_SVTOOLS_HTML_C_Euml "Euml"
+#define OOO_STRING_SVTOOLS_HTML_C_Iacute "Iacute"
+#define OOO_STRING_SVTOOLS_HTML_C_Igrave "Igrave"
+#define OOO_STRING_SVTOOLS_HTML_C_Icirc "Icirc"
+#define OOO_STRING_SVTOOLS_HTML_C_Iuml "Iuml"
+#define OOO_STRING_SVTOOLS_HTML_C_ETH "ETH"
+#define OOO_STRING_SVTOOLS_HTML_C_Ntilde "Ntilde"
+#define OOO_STRING_SVTOOLS_HTML_C_Oacute "Oacute"
+#define OOO_STRING_SVTOOLS_HTML_C_Ograve "Ograve"
+#define OOO_STRING_SVTOOLS_HTML_C_Ocirc "Ocirc"
+#define OOO_STRING_SVTOOLS_HTML_C_Otilde "Otilde"
+#define OOO_STRING_SVTOOLS_HTML_C_Ouml "Ouml"
+#define OOO_STRING_SVTOOLS_HTML_C_Oslash "Oslash"
+#define OOO_STRING_SVTOOLS_HTML_C_Uacute "Uacute"
+#define OOO_STRING_SVTOOLS_HTML_C_Ugrave "Ugrave"
+#define OOO_STRING_SVTOOLS_HTML_C_Ucirc "Ucirc"
+#define OOO_STRING_SVTOOLS_HTML_C_Uuml "Uuml"
+#define OOO_STRING_SVTOOLS_HTML_C_Yacute "Yacute"
+#define OOO_STRING_SVTOOLS_HTML_C_THORN "THORN"
+#define OOO_STRING_SVTOOLS_HTML_C_szlig "szlig"
+#define OOO_STRING_SVTOOLS_HTML_S_aacute "aacute"
+#define OOO_STRING_SVTOOLS_HTML_S_agrave "agrave"
+#define OOO_STRING_SVTOOLS_HTML_S_acirc "acirc"
+#define OOO_STRING_SVTOOLS_HTML_S_atilde "atilde"
+#define OOO_STRING_SVTOOLS_HTML_S_aring "aring"
+#define OOO_STRING_SVTOOLS_HTML_S_auml "auml"
+#define OOO_STRING_SVTOOLS_HTML_S_aelig "aelig"
+#define OOO_STRING_SVTOOLS_HTML_S_ccedil "ccedil"
+#define OOO_STRING_SVTOOLS_HTML_S_eacute "eacute"
+#define OOO_STRING_SVTOOLS_HTML_S_egrave "egrave"
+#define OOO_STRING_SVTOOLS_HTML_S_ecirc "ecirc"
+#define OOO_STRING_SVTOOLS_HTML_S_euml "euml"
+#define OOO_STRING_SVTOOLS_HTML_S_iacute "iacute"
+#define OOO_STRING_SVTOOLS_HTML_S_igrave "igrave"
+#define OOO_STRING_SVTOOLS_HTML_S_icirc "icirc"
+#define OOO_STRING_SVTOOLS_HTML_S_iuml "iuml"
+#define OOO_STRING_SVTOOLS_HTML_S_eth "eth"
+#define OOO_STRING_SVTOOLS_HTML_S_ntilde "ntilde"
+#define OOO_STRING_SVTOOLS_HTML_S_oacute "oacute"
+#define OOO_STRING_SVTOOLS_HTML_S_ograve "ograve"
+#define OOO_STRING_SVTOOLS_HTML_S_ocirc "ocirc"
+#define OOO_STRING_SVTOOLS_HTML_S_otilde "otilde"
+#define OOO_STRING_SVTOOLS_HTML_S_ouml "ouml"
+#define OOO_STRING_SVTOOLS_HTML_S_oslash "oslash"
+#define OOO_STRING_SVTOOLS_HTML_S_uacute "uacute"
+#define OOO_STRING_SVTOOLS_HTML_S_ugrave "ugrave"
+#define OOO_STRING_SVTOOLS_HTML_S_ucirc "ucirc"
+#define OOO_STRING_SVTOOLS_HTML_S_uuml "uuml"
+#define OOO_STRING_SVTOOLS_HTML_S_yacute "yacute"
+#define OOO_STRING_SVTOOLS_HTML_S_thorn "thorn"
+#define OOO_STRING_SVTOOLS_HTML_S_yuml "yuml"
+#define OOO_STRING_SVTOOLS_HTML_S_acute "acute"
+#define OOO_STRING_SVTOOLS_HTML_S_brvbar "brvbar"
+#define OOO_STRING_SVTOOLS_HTML_S_cedil "cedil"
+#define OOO_STRING_SVTOOLS_HTML_S_cent "cent"
+#define OOO_STRING_SVTOOLS_HTML_S_copy "copy"
+#define OOO_STRING_SVTOOLS_HTML_S_curren "curren"
+#define OOO_STRING_SVTOOLS_HTML_S_deg "deg"
+#define OOO_STRING_SVTOOLS_HTML_S_divide "divide"
+#define OOO_STRING_SVTOOLS_HTML_S_frac12 "frac12"
+#define OOO_STRING_SVTOOLS_HTML_S_frac14 "frac14"
+#define OOO_STRING_SVTOOLS_HTML_S_frac34 "frac34"
+#define OOO_STRING_SVTOOLS_HTML_S_iexcl "iexcl"
+#define OOO_STRING_SVTOOLS_HTML_S_iquest "iquest"
+#define OOO_STRING_SVTOOLS_HTML_S_laquo "laquo"
+#define OOO_STRING_SVTOOLS_HTML_S_macr "macr"
+#define OOO_STRING_SVTOOLS_HTML_S_micro "micro"
+#define OOO_STRING_SVTOOLS_HTML_S_middot "middot"
+#define OOO_STRING_SVTOOLS_HTML_S_nbsp "nbsp"
+#define OOO_STRING_SVTOOLS_HTML_S_not "not"
+#define OOO_STRING_SVTOOLS_HTML_S_ordf "ordf"
+#define OOO_STRING_SVTOOLS_HTML_S_ordm "ordm"
+#define OOO_STRING_SVTOOLS_HTML_S_para "para"
+#define OOO_STRING_SVTOOLS_HTML_S_plusmn "plusmn"
+#define OOO_STRING_SVTOOLS_HTML_S_pound "pound"
+#define OOO_STRING_SVTOOLS_HTML_S_raquo "raquo"
+#define OOO_STRING_SVTOOLS_HTML_S_reg "reg"
+#define OOO_STRING_SVTOOLS_HTML_S_sect "sect"
+#define OOO_STRING_SVTOOLS_HTML_S_shy "shy"
+#define OOO_STRING_SVTOOLS_HTML_S_sup1 "sup1"
+#define OOO_STRING_SVTOOLS_HTML_S_sup2 "sup2"
+#define OOO_STRING_SVTOOLS_HTML_S_sup3 "sup3"
+#define OOO_STRING_SVTOOLS_HTML_S_times "times"
+#define OOO_STRING_SVTOOLS_HTML_S_uml "uml"
+#define OOO_STRING_SVTOOLS_HTML_S_yen "yen"
 
 // Netscape kennt noch ein paar in Grossbuchstaben ...
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_LT, "LT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_GT, "GT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_AMP, "AMP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_C_QUOT, "QUOT" );
+#define OOO_STRING_SVTOOLS_HTML_C_LT "LT"
+#define OOO_STRING_SVTOOLS_HTML_C_GT "GT"
+#define OOO_STRING_SVTOOLS_HTML_C_AMP "AMP"
+#define OOO_STRING_SVTOOLS_HTML_C_QUOT "QUOT"
+#define OOO_STRING_SVTOOLS_HTML_S_COPY "COPY"
+#define OOO_STRING_SVTOOLS_HTML_S_REG "REG"
 
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_COPY, "COPY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_REG, "REG" );
-
-//HTML4
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_alefsym, "alefsym" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Alpha, "Alpha" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_alpha, "alpha" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_and, "and" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ang, "ang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_asymp, "asymp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_bdquo, "bdquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Beta, "Beta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_beta, "beta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_bull, "bull" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_cap, "cap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_chi, "chi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Chi, "Chi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_circ, "circ" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_clubs, "clubs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_cong, "cong" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_crarr, "crarr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_cup, "cup" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_dagger, "dagger" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Dagger, "Dagger" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_darr, "darr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_dArr, "dArr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Delta, "Delta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_delta, "delta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_diams, "diams" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_empty, "empty" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_emsp, "emsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ensp, "ensp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Epsilon, "Epsilon" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_epsilon, "epsilon" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_equiv, "equiv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Eta, "Eta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_eta, "eta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_euro, "euro" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_exist, "exist" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_fnof, "fnof" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_forall, "forall" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_frasl, "frasl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Gamma, "Gamma" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_gamma, "gamma" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ge, "ge" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_harr, "harr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_hArr, "hArr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_hearts, "hearts" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_hellip, "hellip" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_image, "image" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_infin, "infin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_int, "int" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Iota, "Iota" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_iota, "iota" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_isin, "isin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Kappa, "Kappa" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_kappa, "kappa" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Lambda, "Lambda" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lambda, "lambda" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lang, "lang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_larr, "larr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lArr, "lArr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lceil, "lceil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ldquo, "ldquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_le, "le" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lfloor, "lfloor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lowast, "lowast" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_loz, "loz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lrm, "lrm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lsaquo, "lsaquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_lsquo, "lsquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_mdash, "mdash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_minus, "minus" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Mu, "Mu" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_mu, "mu" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_nabla, "nabla" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ndash, "ndash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ne, "ne" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_ni, "ni" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_notin, "notin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_nsub, "nsub" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Nu, "Nu" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_nu, "nu" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_OElig, "OElig" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_oelig, "oelig" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_oline, "oline" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Omega, "Omega" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_omega, "omega" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Omicron, "Omicron" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_omicron, "omicron" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_oplus, "oplus" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_or, "or" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_otimes, "otimes" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_part, "part" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_permil, "permil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_perp, "perp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Phi, "Phi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_phi, "phi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Pi, "Pi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_pi, "pi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_piv, "piv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_prime, "prime" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Prime, "Prime" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_prod, "prod" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_prop, "prop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Psi, "Psi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_psi, "psi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_radic, "radic" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rang, "rang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rarr, "rarr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rArr, "rArr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rceil, "rceil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rdquo, "rdquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_real, "real" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rfloor, "rfloor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Rho, "Rho" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rho, "rho" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rlm, "rlm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rsaquo, "rsaquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_rsquo, "rsquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sbquo, "sbquo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Scaron, "Scaron" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_scaron, "scaron" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sdot, "sdot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Sigma, "Sigma" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sigma, "sigma" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sigmaf, "sigmaf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sim, "sim" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_spades, "spades" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sub, "sub" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sube, "sube" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sum, "sum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_sup, "sup" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_supe, "supe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Tau, "Tau" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_tau, "tau" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_there4, "there4" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Theta, "Theta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_theta, "theta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_thetasym, "thetasym" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_thinsp, "thinsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_tilde, "tilde" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_trade, "trade" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_uarr, "uarr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_uArr, "uArr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_upsih, "upsih" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Upsilon, "Upsilon" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_upsilon, "upsilon" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_weierp, "weierp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Xi, "Xi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_xi, "xi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Yuml, "Yuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_Zeta, "Zeta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_zeta, "zeta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_zwj, "zwj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_S_zwnj, "zwnj" );
+// HTML4
+#define OOO_STRING_SVTOOLS_HTML_S_alefsym "alefsym"
+#define OOO_STRING_SVTOOLS_HTML_S_Alpha "Alpha"
+#define OOO_STRING_SVTOOLS_HTML_S_alpha "alpha"
+#define OOO_STRING_SVTOOLS_HTML_S_and "and"
+#define OOO_STRING_SVTOOLS_HTML_S_ang "ang"
+#define OOO_STRING_SVTOOLS_HTML_S_asymp "asymp"
+#define OOO_STRING_SVTOOLS_HTML_S_bdquo "bdquo"
+#define OOO_STRING_SVTOOLS_HTML_S_Beta "Beta"
+#define OOO_STRING_SVTOOLS_HTML_S_beta "beta"
+#define OOO_STRING_SVTOOLS_HTML_S_bull "bull"
+#define OOO_STRING_SVTOOLS_HTML_S_cap "cap"
+#define OOO_STRING_SVTOOLS_HTML_S_chi "chi"
+#define OOO_STRING_SVTOOLS_HTML_S_Chi "Chi"
+#define OOO_STRING_SVTOOLS_HTML_S_circ "circ"
+#define OOO_STRING_SVTOOLS_HTML_S_clubs "clubs"
+#define OOO_STRING_SVTOOLS_HTML_S_cong "cong"
+#define OOO_STRING_SVTOOLS_HTML_S_crarr "crarr"
+#define OOO_STRING_SVTOOLS_HTML_S_cup "cup"
+#define OOO_STRING_SVTOOLS_HTML_S_dagger "dagger"
+#define OOO_STRING_SVTOOLS_HTML_S_Dagger "Dagger"
+#define OOO_STRING_SVTOOLS_HTML_S_darr "darr"
+#define OOO_STRING_SVTOOLS_HTML_S_dArr "dArr"
+#define OOO_STRING_SVTOOLS_HTML_S_Delta "Delta"
+#define OOO_STRING_SVTOOLS_HTML_S_delta "delta"
+#define OOO_STRING_SVTOOLS_HTML_S_diams "diams"
+#define OOO_STRING_SVTOOLS_HTML_S_empty "empty"
+#define OOO_STRING_SVTOOLS_HTML_S_emsp "emsp"
+#define OOO_STRING_SVTOOLS_HTML_S_ensp "ensp"
+#define OOO_STRING_SVTOOLS_HTML_S_Epsilon "Epsilon"
+#define OOO_STRING_SVTOOLS_HTML_S_epsilon "epsilon"
+#define OOO_STRING_SVTOOLS_HTML_S_equiv "equiv"
+#define OOO_STRING_SVTOOLS_HTML_S_Eta "Eta"
+#define OOO_STRING_SVTOOLS_HTML_S_eta "eta"
+#define OOO_STRING_SVTOOLS_HTML_S_euro "euro"
+#define OOO_STRING_SVTOOLS_HTML_S_exist "exist"
+#define OOO_STRING_SVTOOLS_HTML_S_fnof "fnof"
+#define OOO_STRING_SVTOOLS_HTML_S_forall "forall"
+#define OOO_STRING_SVTOOLS_HTML_S_frasl "frasl"
+#define OOO_STRING_SVTOOLS_HTML_S_Gamma "Gamma"
+#define OOO_STRING_SVTOOLS_HTML_S_gamma "gamma"
+#define OOO_STRING_SVTOOLS_HTML_S_ge "ge"
+#define OOO_STRING_SVTOOLS_HTML_S_harr "harr"
+#define OOO_STRING_SVTOOLS_HTML_S_hArr "hArr"
+#define OOO_STRING_SVTOOLS_HTML_S_hearts "hearts"
+#define OOO_STRING_SVTOOLS_HTML_S_hellip "hellip"
+#define OOO_STRING_SVTOOLS_HTML_S_image "image"
+#define OOO_STRING_SVTOOLS_HTML_S_infin "infin"
+#define OOO_STRING_SVTOOLS_HTML_S_int "int"
+#define OOO_STRING_SVTOOLS_HTML_S_Iota "Iota"
+#define OOO_STRING_SVTOOLS_HTML_S_iota "iota"
+#define OOO_STRING_SVTOOLS_HTML_S_isin "isin"
+#define OOO_STRING_SVTOOLS_HTML_S_Kappa "Kappa"
+#define OOO_STRING_SVTOOLS_HTML_S_kappa "kappa"
+#define OOO_STRING_SVTOOLS_HTML_S_Lambda "Lambda"
+#define OOO_STRING_SVTOOLS_HTML_S_lambda "lambda"
+#define OOO_STRING_SVTOOLS_HTML_S_lang "lang"
+#define OOO_STRING_SVTOOLS_HTML_S_larr "larr"
+#define OOO_STRING_SVTOOLS_HTML_S_lArr "lArr"
+#define OOO_STRING_SVTOOLS_HTML_S_lceil "lceil"
+#define OOO_STRING_SVTOOLS_HTML_S_ldquo "ldquo"
+#define OOO_STRING_SVTOOLS_HTML_S_le "le"
+#define OOO_STRING_SVTOOLS_HTML_S_lfloor "lfloor"
+#define OOO_STRING_SVTOOLS_HTML_S_lowast "lowast"
+#define OOO_STRING_SVTOOLS_HTML_S_loz "loz"
+#define OOO_STRING_SVTOOLS_HTML_S_lrm "lrm"
+#define OOO_STRING_SVTOOLS_HTML_S_lsaquo "lsaquo"
+#define OOO_STRING_SVTOOLS_HTML_S_lsquo "lsquo"
+#define OOO_STRING_SVTOOLS_HTML_S_mdash "mdash"
+#define OOO_STRING_SVTOOLS_HTML_S_minus "minus"
+#define OOO_STRING_SVTOOLS_HTML_S_Mu "Mu"
+#define OOO_STRING_SVTOOLS_HTML_S_mu "mu"
+#define OOO_STRING_SVTOOLS_HTML_S_nabla "nabla"
+#define OOO_STRING_SVTOOLS_HTML_S_ndash "ndash"
+#define OOO_STRING_SVTOOLS_HTML_S_ne "ne"
+#define OOO_STRING_SVTOOLS_HTML_S_ni "ni"
+#define OOO_STRING_SVTOOLS_HTML_S_notin "notin"
+#define OOO_STRING_SVTOOLS_HTML_S_nsub "nsub"
+#define OOO_STRING_SVTOOLS_HTML_S_Nu "Nu"
+#define OOO_STRING_SVTOOLS_HTML_S_nu "nu"
+#define OOO_STRING_SVTOOLS_HTML_S_OElig "OElig"
+#define OOO_STRING_SVTOOLS_HTML_S_oelig "oelig"
+#define OOO_STRING_SVTOOLS_HTML_S_oline "oline"
+#define OOO_STRING_SVTOOLS_HTML_S_Omega "Omega"
+#define OOO_STRING_SVTOOLS_HTML_S_omega "omega"
+#define OOO_STRING_SVTOOLS_HTML_S_Omicron "Omicron"
+#define OOO_STRING_SVTOOLS_HTML_S_omicron "omicron"
+#define OOO_STRING_SVTOOLS_HTML_S_oplus "oplus"
+#define OOO_STRING_SVTOOLS_HTML_S_or "or"
+#define OOO_STRING_SVTOOLS_HTML_S_otimes "otimes"
+#define OOO_STRING_SVTOOLS_HTML_S_part "part"
+#define OOO_STRING_SVTOOLS_HTML_S_permil "permil"
+#define OOO_STRING_SVTOOLS_HTML_S_perp "perp"
+#define OOO_STRING_SVTOOLS_HTML_S_Phi "Phi"
+#define OOO_STRING_SVTOOLS_HTML_S_phi "phi"
+#define OOO_STRING_SVTOOLS_HTML_S_Pi "Pi"
+#define OOO_STRING_SVTOOLS_HTML_S_pi "pi"
+#define OOO_STRING_SVTOOLS_HTML_S_piv "piv"
+#define OOO_STRING_SVTOOLS_HTML_S_prime "prime"
+#define OOO_STRING_SVTOOLS_HTML_S_Prime "Prime"
+#define OOO_STRING_SVTOOLS_HTML_S_prod "prod"
+#define OOO_STRING_SVTOOLS_HTML_S_prop "prop"
+#define OOO_STRING_SVTOOLS_HTML_S_Psi "Psi"
+#define OOO_STRING_SVTOOLS_HTML_S_psi "psi"
+#define OOO_STRING_SVTOOLS_HTML_S_radic "radic"
+#define OOO_STRING_SVTOOLS_HTML_S_rang "rang"
+#define OOO_STRING_SVTOOLS_HTML_S_rarr "rarr"
+#define OOO_STRING_SVTOOLS_HTML_S_rArr "rArr"
+#define OOO_STRING_SVTOOLS_HTML_S_rceil "rceil"
+#define OOO_STRING_SVTOOLS_HTML_S_rdquo "rdquo"
+#define OOO_STRING_SVTOOLS_HTML_S_real "real"
+#define OOO_STRING_SVTOOLS_HTML_S_rfloor "rfloor"
+#define OOO_STRING_SVTOOLS_HTML_S_Rho "Rho"
+#define OOO_STRING_SVTOOLS_HTML_S_rho "rho"
+#define OOO_STRING_SVTOOLS_HTML_S_rlm "rlm"
+#define OOO_STRING_SVTOOLS_HTML_S_rsaquo "rsaquo"
+#define OOO_STRING_SVTOOLS_HTML_S_rsquo "rsquo"
+#define OOO_STRING_SVTOOLS_HTML_S_sbquo "sbquo"
+#define OOO_STRING_SVTOOLS_HTML_S_Scaron "Scaron"
+#define OOO_STRING_SVTOOLS_HTML_S_scaron "scaron"
+#define OOO_STRING_SVTOOLS_HTML_S_sdot "sdot"
+#define OOO_STRING_SVTOOLS_HTML_S_Sigma "Sigma"
+#define OOO_STRING_SVTOOLS_HTML_S_sigma "sigma"
+#define OOO_STRING_SVTOOLS_HTML_S_sigmaf "sigmaf"
+#define OOO_STRING_SVTOOLS_HTML_S_sim "sim"
+#define OOO_STRING_SVTOOLS_HTML_S_spades "spades"
+#define OOO_STRING_SVTOOLS_HTML_S_sub "sub"
+#define OOO_STRING_SVTOOLS_HTML_S_sube "sube"
+#define OOO_STRING_SVTOOLS_HTML_S_sum "sum"
+#define OOO_STRING_SVTOOLS_HTML_S_sup "sup"
+#define OOO_STRING_SVTOOLS_HTML_S_supe "supe"
+#define OOO_STRING_SVTOOLS_HTML_S_Tau "Tau"
+#define OOO_STRING_SVTOOLS_HTML_S_tau "tau"
+#define OOO_STRING_SVTOOLS_HTML_S_there4 "there4"
+#define OOO_STRING_SVTOOLS_HTML_S_Theta "Theta"
+#define OOO_STRING_SVTOOLS_HTML_S_theta "theta"
+#define OOO_STRING_SVTOOLS_HTML_S_thetasym "thetasym"
+#define OOO_STRING_SVTOOLS_HTML_S_thinsp "thinsp"
+#define OOO_STRING_SVTOOLS_HTML_S_tilde "tilde"
+#define OOO_STRING_SVTOOLS_HTML_S_trade "trade"
+#define OOO_STRING_SVTOOLS_HTML_S_uarr "uarr"
+#define OOO_STRING_SVTOOLS_HTML_S_uArr "uArr"
+#define OOO_STRING_SVTOOLS_HTML_S_upsih "upsih"
+#define OOO_STRING_SVTOOLS_HTML_S_Upsilon "Upsilon"
+#define OOO_STRING_SVTOOLS_HTML_S_upsilon "upsilon"
+#define OOO_STRING_SVTOOLS_HTML_S_weierp "weierp"
+#define OOO_STRING_SVTOOLS_HTML_S_Xi "Xi"
+#define OOO_STRING_SVTOOLS_HTML_S_xi "xi"
+#define OOO_STRING_SVTOOLS_HTML_S_Yuml "Yuml"
+#define OOO_STRING_SVTOOLS_HTML_S_Zeta "Zeta"
+#define OOO_STRING_SVTOOLS_HTML_S_zeta "zeta"
+#define OOO_STRING_SVTOOLS_HTML_S_zwj "zwj"
+#define OOO_STRING_SVTOOLS_HTML_S_zwnj "zwnj"
 
 // HTML Attribut-Token (=Optionen)
 
 // Attribute ohne Wert
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_box, "BOX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_checked, "CHECKED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_compact, "COMPACT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_continue, "CONTINUE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_controls, "CONTROLS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_declare, "DECLARE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_disabled, "DISABLED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_folded, "FOLDED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_ismap, "ISMAP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_mayscript, "MAYSCRIPT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_multiple, "MULTIPLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_noflow, "NOFLOW" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_nohref, "NOHREF" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_noresize, "NORESIZE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_noshade, "NOSHADE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_nowrap, "NOWRAP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_plain, "PLAIN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_sdfixed, "SDFIXED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_selected, "SELECTED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_shapes, "SHAPES" );
+#define OOO_STRING_SVTOOLS_HTML_O_box "BOX"
+#define OOO_STRING_SVTOOLS_HTML_O_checked "CHECKED"
+#define OOO_STRING_SVTOOLS_HTML_O_compact "COMPACT"
+#define OOO_STRING_SVTOOLS_HTML_O_continue "CONTINUE"
+#define OOO_STRING_SVTOOLS_HTML_O_controls "CONTROLS"
+#define OOO_STRING_SVTOOLS_HTML_O_declare "DECLARE"
+#define OOO_STRING_SVTOOLS_HTML_O_disabled "DISABLED"
+#define OOO_STRING_SVTOOLS_HTML_O_folded "FOLDED"
+#define OOO_STRING_SVTOOLS_HTML_O_ismap "ISMAP"
+#define OOO_STRING_SVTOOLS_HTML_O_mayscript "MAYSCRIPT"
+#define OOO_STRING_SVTOOLS_HTML_O_multiple "MULTIPLE"
+#define OOO_STRING_SVTOOLS_HTML_O_noflow "NOFLOW"
+#define OOO_STRING_SVTOOLS_HTML_O_nohref "NOHREF"
+#define OOO_STRING_SVTOOLS_HTML_O_noresize "NORESIZE"
+#define OOO_STRING_SVTOOLS_HTML_O_noshade "NOSHADE"
+#define OOO_STRING_SVTOOLS_HTML_O_nowrap "NOWRAP"
+#define OOO_STRING_SVTOOLS_HTML_O_plain "PLAIN"
+#define OOO_STRING_SVTOOLS_HTML_O_sdfixed "SDFIXED"
+#define OOO_STRING_SVTOOLS_HTML_O_selected "SELECTED"
+#define OOO_STRING_SVTOOLS_HTML_O_shapes "SHAPES"
 
 // Attribute mit einem String als Wert
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_above, "ABOVE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_accesskey, "ACCESSKEY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_accept, "ACCEPT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_add_date, "ADD_DATE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_alt, "ALT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_axes, "AXES" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_axis, "AXIS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_below, "BELOW" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_char, "CHAR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_class, "CLASS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_clip, "CLIP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_code, "CODE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_codetype, "CODETYPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_colspec, "COLSPEC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_content, "CONTENT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_coords, "COORDS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_dp, "DP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_enctype, "ENCTYPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_error, "ERROR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_face, "FACE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_frameborder, "FRAMEBORDER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_httpequiv, "HTTP-EQUIV" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_language, "LANGUAGE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_last_modified, "LAST_MODIFIED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_last_visit, "LAST_VISIT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_md, "MD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_n, "N" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_name, "NAME" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_notation, "NOTATION" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_prompt, "PROMPT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_shape, "SHAPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_standby, "STANDBY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_style, "STYLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_title, "TITLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_value, "VALUE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDval, "SDVAL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDnum, "SDNUM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_sdlibrary, "SDLIBRARY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_sdmodule, "SDMODULE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_sdevent, "SDEVENT-" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_sdaddparam, "SDADDPARAM-" );
+#define OOO_STRING_SVTOOLS_HTML_O_above "ABOVE"
+#define OOO_STRING_SVTOOLS_HTML_O_accesskey "ACCESSKEY"
+#define OOO_STRING_SVTOOLS_HTML_O_accept "ACCEPT"
+#define OOO_STRING_SVTOOLS_HTML_O_add_date "ADD_DATE"
+#define OOO_STRING_SVTOOLS_HTML_O_alt "ALT"
+#define OOO_STRING_SVTOOLS_HTML_O_axes "AXES"
+#define OOO_STRING_SVTOOLS_HTML_O_axis "AXIS"
+#define OOO_STRING_SVTOOLS_HTML_O_below "BELOW"
+#define OOO_STRING_SVTOOLS_HTML_O_char "CHAR"
+#define OOO_STRING_SVTOOLS_HTML_O_class "CLASS"
+#define OOO_STRING_SVTOOLS_HTML_O_clip "CLIP"
+#define OOO_STRING_SVTOOLS_HTML_O_code "CODE"
+#define OOO_STRING_SVTOOLS_HTML_O_codetype "CODETYPE"
+#define OOO_STRING_SVTOOLS_HTML_O_colspec "COLSPEC"
+#define OOO_STRING_SVTOOLS_HTML_O_content "CONTENT"
+#define OOO_STRING_SVTOOLS_HTML_O_coords "COORDS"
+#define OOO_STRING_SVTOOLS_HTML_O_dp "DP"
+#define OOO_STRING_SVTOOLS_HTML_O_enctype "ENCTYPE"
+#define OOO_STRING_SVTOOLS_HTML_O_error "ERROR"
+#define OOO_STRING_SVTOOLS_HTML_O_face "FACE"
+#define OOO_STRING_SVTOOLS_HTML_O_frameborder "FRAMEBORDER"
+#define OOO_STRING_SVTOOLS_HTML_O_httpequiv "HTTP-EQUIV"
+#define OOO_STRING_SVTOOLS_HTML_O_language "LANGUAGE"
+#define OOO_STRING_SVTOOLS_HTML_O_last_modified "LAST_MODIFIED"
+#define OOO_STRING_SVTOOLS_HTML_O_last_visit "LAST_VISIT"
+#define OOO_STRING_SVTOOLS_HTML_O_md "MD"
+#define OOO_STRING_SVTOOLS_HTML_O_n "N"
+#define OOO_STRING_SVTOOLS_HTML_O_name "NAME"
+#define OOO_STRING_SVTOOLS_HTML_O_notation "NOTATION"
+#define OOO_STRING_SVTOOLS_HTML_O_prompt "PROMPT"
+#define OOO_STRING_SVTOOLS_HTML_O_shape "SHAPE"
+#define OOO_STRING_SVTOOLS_HTML_O_standby "STANDBY"
+#define OOO_STRING_SVTOOLS_HTML_O_style "STYLE"
+#define OOO_STRING_SVTOOLS_HTML_O_title "TITLE"
+#define OOO_STRING_SVTOOLS_HTML_O_value "VALUE"
+#define OOO_STRING_SVTOOLS_HTML_O_SDval "SDVAL"
+#define OOO_STRING_SVTOOLS_HTML_O_SDnum "SDNUM"
+#define OOO_STRING_SVTOOLS_HTML_O_sdlibrary "SDLIBRARY"
+#define OOO_STRING_SVTOOLS_HTML_O_sdmodule "SDMODULE"
+#define OOO_STRING_SVTOOLS_HTML_O_sdevent "SDEVENT-"
+#define OOO_STRING_SVTOOLS_HTML_O_sdaddparam "SDADDPARAM-"
 
 // Attribute mit einem SGML-Identifier als Wert
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_from, "FROM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_id, "ID" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_target, "TARGET" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_to, "TO" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_until, "UNTIL" );
+#define OOO_STRING_SVTOOLS_HTML_O_from "FROM"
+#define OOO_STRING_SVTOOLS_HTML_O_id "ID"
+#define OOO_STRING_SVTOOLS_HTML_O_target "TARGET"
+#define OOO_STRING_SVTOOLS_HTML_O_to "TO"
+#define OOO_STRING_SVTOOLS_HTML_O_until "UNTIL"
 
 // Attribute mit einem URI als Wert
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_action, "ACTION" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_archive, "ARCHIVE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_background, "BACKGROUND" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_classid, "CLASSID" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_codebase, "CODEBASE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_data, "DATA" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_dynsrc, "DYNSRC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_dynsync, "DYNSYNC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_imagemap, "IMAGEMAP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_href, "HREF" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_lowsrc, "LOWSRC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_script, "SCRIPT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_src, "SRC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_usemap, "USEMAP" );
+#define OOO_STRING_SVTOOLS_HTML_O_action "ACTION"
+#define OOO_STRING_SVTOOLS_HTML_O_archive "ARCHIVE"
+#define OOO_STRING_SVTOOLS_HTML_O_background "BACKGROUND"
+#define OOO_STRING_SVTOOLS_HTML_O_classid "CLASSID"
+#define OOO_STRING_SVTOOLS_HTML_O_codebase "CODEBASE"
+#define OOO_STRING_SVTOOLS_HTML_O_data "DATA"
+#define OOO_STRING_SVTOOLS_HTML_O_dynsrc "DYNSRC"
+#define OOO_STRING_SVTOOLS_HTML_O_dynsync "DYNSYNC"
+#define OOO_STRING_SVTOOLS_HTML_O_imagemap "IMAGEMAP"
+#define OOO_STRING_SVTOOLS_HTML_O_href "HREF"
+#define OOO_STRING_SVTOOLS_HTML_O_lowsrc "LOWSRC"
+#define OOO_STRING_SVTOOLS_HTML_O_script "SCRIPT"
+#define OOO_STRING_SVTOOLS_HTML_O_src "SRC"
+#define OOO_STRING_SVTOOLS_HTML_O_usemap "USEMAP"
 
 // Attribute mit Entity-Namen als Wert
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_dingbat, "DINGBAT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_sym, "SYM" );
+#define OOO_STRING_SVTOOLS_HTML_O_dingbat "DINGBAT"
+#define OOO_STRING_SVTOOLS_HTML_O_sym "SYM"
 
 // Attribute mit einer Farbe als Wert (alle Netscape)
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_alink, "ALINK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_bgcolor, "BGCOLOR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_bordercolor, "BORDERCOLOR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_bordercolorlight, "BORDERCOLORLIGHT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_bordercolordark, "BORDERCOLORDARK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_color, "COLOR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_link, "LINK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_text, "TEXT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_vlink, "VLINK" );
+#define OOO_STRING_SVTOOLS_HTML_O_alink "ALINK"
+#define OOO_STRING_SVTOOLS_HTML_O_bgcolor "BGCOLOR"
+#define OOO_STRING_SVTOOLS_HTML_O_bordercolor "BORDERCOLOR"
+#define OOO_STRING_SVTOOLS_HTML_O_bordercolorlight "BORDERCOLORLIGHT"
+#define OOO_STRING_SVTOOLS_HTML_O_bordercolordark "BORDERCOLORDARK"
+#define OOO_STRING_SVTOOLS_HTML_O_color "COLOR"
+#define OOO_STRING_SVTOOLS_HTML_O_link "LINK"
+#define OOO_STRING_SVTOOLS_HTML_O_text "TEXT"
+#define OOO_STRING_SVTOOLS_HTML_O_vlink "VLINK"
 
 // Attribute mit einem numerischen Wert
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_border, "BORDER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_cellspacing, "CELLSPACING" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_cellpadding, "CELLPADDING" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_charoff, "CHAROFF" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_colspan, "COLSPAN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_framespacing, "FRAMESPACING" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_gutter, "GUTTER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_indent, "INDENT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_height, "HEIGHT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_hspace, "HSPACE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_left, "LEFT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_leftmargin, "LEFTMARGIN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_loop, "LOOP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_marginheight, "MARGINHEIGHT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_marginwidth, "MARGINWIDTH" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_max, "MAX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_maxlength, "MAXLENGTH" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_min, "MIN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_pagex, "PAGEX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_pagey, "PAGEY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_pointsize, "POINT-SIZE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_rowspan, "ROWSPAN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_scrollamount, "SCROLLAMOUNT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_scrolldelay, "SCROLLDELAY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_seqnum, "SEQNUM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_skip, "SKIP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_span, "SPAN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_tabindex, "TABINDEX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_top, "TOP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_topmargin, "TOPMARGIN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_vspace, "VSPACE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_weight, "WEIGHT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_width, "WIDTH" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_x, "X" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_y, "Y" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_zindex, "Z-INDEX" );
+#define OOO_STRING_SVTOOLS_HTML_O_border "BORDER"
+#define OOO_STRING_SVTOOLS_HTML_O_cellspacing "CELLSPACING"
+#define OOO_STRING_SVTOOLS_HTML_O_cellpadding "CELLPADDING"
+#define OOO_STRING_SVTOOLS_HTML_O_charoff "CHAROFF"
+#define OOO_STRING_SVTOOLS_HTML_O_colspan "COLSPAN"
+#define OOO_STRING_SVTOOLS_HTML_O_framespacing "FRAMESPACING"
+#define OOO_STRING_SVTOOLS_HTML_O_gutter "GUTTER"
+#define OOO_STRING_SVTOOLS_HTML_O_indent "INDENT"
+#define OOO_STRING_SVTOOLS_HTML_O_height "HEIGHT"
+#define OOO_STRING_SVTOOLS_HTML_O_hspace "HSPACE"
+#define OOO_STRING_SVTOOLS_HTML_O_left "LEFT"
+#define OOO_STRING_SVTOOLS_HTML_O_leftmargin "LEFTMARGIN"
+#define OOO_STRING_SVTOOLS_HTML_O_loop "LOOP"
+#define OOO_STRING_SVTOOLS_HTML_O_marginheight "MARGINHEIGHT"
+#define OOO_STRING_SVTOOLS_HTML_O_marginwidth "MARGINWIDTH"
+#define OOO_STRING_SVTOOLS_HTML_O_max "MAX"
+#define OOO_STRING_SVTOOLS_HTML_O_maxlength "MAXLENGTH"
+#define OOO_STRING_SVTOOLS_HTML_O_min "MIN"
+#define OOO_STRING_SVTOOLS_HTML_O_pagex "PAGEX"
+#define OOO_STRING_SVTOOLS_HTML_O_pagey "PAGEY"
+#define OOO_STRING_SVTOOLS_HTML_O_pointsize "POINT-SIZE"
+#define OOO_STRING_SVTOOLS_HTML_O_rowspan "ROWSPAN"
+#define OOO_STRING_SVTOOLS_HTML_O_scrollamount "SCROLLAMOUNT"
+#define OOO_STRING_SVTOOLS_HTML_O_scrolldelay "SCROLLDELAY"
+#define OOO_STRING_SVTOOLS_HTML_O_seqnum "SEQNUM"
+#define OOO_STRING_SVTOOLS_HTML_O_skip "SKIP"
+#define OOO_STRING_SVTOOLS_HTML_O_span "SPAN"
+#define OOO_STRING_SVTOOLS_HTML_O_tabindex "TABINDEX"
+#define OOO_STRING_SVTOOLS_HTML_O_top "TOP"
+#define OOO_STRING_SVTOOLS_HTML_O_topmargin "TOPMARGIN"
+#define OOO_STRING_SVTOOLS_HTML_O_vspace "VSPACE"
+#define OOO_STRING_SVTOOLS_HTML_O_weight "WEIGHT"
+#define OOO_STRING_SVTOOLS_HTML_O_width "WIDTH"
+#define OOO_STRING_SVTOOLS_HTML_O_x "X"
+#define OOO_STRING_SVTOOLS_HTML_O_y "Y"
+#define OOO_STRING_SVTOOLS_HTML_O_zindex "Z-INDEX"
 
 // Attribute mit Enum-Werten
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_behavior, "BEHAVIOR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_bgproperties, "BGPROPERTIES" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_clear, "CLEAR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_dir, "DIR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_direction, "DIRECTION" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_format, "FORMAT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_frame, "FRAME" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_lang, "LANG" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_method, "METHOD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_palette, "PALETTE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_rel, "REL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_rev, "REV" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_rules, "RULES" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_scrolling, "SCROLLING" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_sdreadonly, "READONLY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_subtype, "SUBTYPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_type, "TYPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_valign, "VALIGN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_valuetype, "VALUETYPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_visibility, "VISIBILITY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_wrap, "WRAP" );
+#define OOO_STRING_SVTOOLS_HTML_O_behavior "BEHAVIOR"
+#define OOO_STRING_SVTOOLS_HTML_O_bgproperties "BGPROPERTIES"
+#define OOO_STRING_SVTOOLS_HTML_O_clear "CLEAR"
+#define OOO_STRING_SVTOOLS_HTML_O_dir "DIR"
+#define OOO_STRING_SVTOOLS_HTML_O_direction "DIRECTION"
+#define OOO_STRING_SVTOOLS_HTML_O_format "FORMAT"
+#define OOO_STRING_SVTOOLS_HTML_O_frame "FRAME"
+#define OOO_STRING_SVTOOLS_HTML_O_lang "LANG"
+#define OOO_STRING_SVTOOLS_HTML_O_method "METHOD"
+#define OOO_STRING_SVTOOLS_HTML_O_palette "PALETTE"
+#define OOO_STRING_SVTOOLS_HTML_O_rel "REL"
+#define OOO_STRING_SVTOOLS_HTML_O_rev "REV"
+#define OOO_STRING_SVTOOLS_HTML_O_rules "RULES"
+#define OOO_STRING_SVTOOLS_HTML_O_scrolling "SCROLLING"
+#define OOO_STRING_SVTOOLS_HTML_O_sdreadonly "READONLY"
+#define OOO_STRING_SVTOOLS_HTML_O_subtype "SUBTYPE"
+#define OOO_STRING_SVTOOLS_HTML_O_type "TYPE"
+#define OOO_STRING_SVTOOLS_HTML_O_valign "VALIGN"
+#define OOO_STRING_SVTOOLS_HTML_O_valuetype "VALUETYPE"
+#define OOO_STRING_SVTOOLS_HTML_O_visibility "VISIBILITY"
+#define OOO_STRING_SVTOOLS_HTML_O_wrap "WRAP"
 
 // Attribute mit Script-Code als Wert
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onblur, "ONBLUR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onchange, "ONCHANGE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onclick, "ONCLICK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onfocus, "ONFOCUS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onload, "ONLOAD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onmouseover, "ONMOUSEOVER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onreset, "ONRESET" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onselect, "ONSELECT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onsubmit, "ONSUBMIT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onunload, "ONUNLOAD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onabort, "ONABORT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onerror, "ONERROR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_onmouseout, "ONMOUSEOUT" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonblur, "SDONBLUR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonchange, "SDONCHANGE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonclick, "SDONCLICK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonfocus, "SDONFOCUS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonload, "SDONLOAD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonmouseover, "SDONMOUSEOVER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonreset, "SDONRESET" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonselect, "SDONSELECT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonsubmit, "SDONSUBMIT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonunload, "SDONUNLOAD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonabort, "SDONABORT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonerror, "SDONERROR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_SDonmouseout, "SDONMOUSEOUT" );
+#define OOO_STRING_SVTOOLS_HTML_O_onblur "ONBLUR"
+#define OOO_STRING_SVTOOLS_HTML_O_onchange "ONCHANGE"
+#define OOO_STRING_SVTOOLS_HTML_O_onclick "ONCLICK"
+#define OOO_STRING_SVTOOLS_HTML_O_onfocus "ONFOCUS"
+#define OOO_STRING_SVTOOLS_HTML_O_onload "ONLOAD"
+#define OOO_STRING_SVTOOLS_HTML_O_onmouseover "ONMOUSEOVER"
+#define OOO_STRING_SVTOOLS_HTML_O_onreset "ONRESET"
+#define OOO_STRING_SVTOOLS_HTML_O_onselect "ONSELECT"
+#define OOO_STRING_SVTOOLS_HTML_O_onsubmit "ONSUBMIT"
+#define OOO_STRING_SVTOOLS_HTML_O_onunload "ONUNLOAD"
+#define OOO_STRING_SVTOOLS_HTML_O_onabort "ONABORT"
+#define OOO_STRING_SVTOOLS_HTML_O_onerror "ONERROR"
+#define OOO_STRING_SVTOOLS_HTML_O_onmouseout "ONMOUSEOUT"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonblur "SDONBLUR"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonchange "SDONCHANGE"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonclick "SDONCLICK"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonfocus "SDONFOCUS"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonload "SDONLOAD"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonmouseover "SDONMOUSEOVER"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonreset "SDONRESET"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonselect "SDONSELECT"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonsubmit "SDONSUBMIT"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonunload "SDONUNLOAD"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonabort "SDONABORT"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonerror "SDONERROR"
+#define OOO_STRING_SVTOOLS_HTML_O_SDonmouseout "SDONMOUSEOUT"
 
 // Attribute mit Kontext-abhaengigen Werten
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_align, "ALIGN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_cols, "COLS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_rows, "ROWS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_start, "START" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_size, "SIZE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_O_units, "UNITS" );
-
+#define OOO_STRING_SVTOOLS_HTML_O_align "ALIGN"
+#define OOO_STRING_SVTOOLS_HTML_O_cols "COLS"
+#define OOO_STRING_SVTOOLS_HTML_O_rows "ROWS"
+#define OOO_STRING_SVTOOLS_HTML_O_start "START"
+#define OOO_STRING_SVTOOLS_HTML_O_size "SIZE"
+#define OOO_STRING_SVTOOLS_HTML_O_units "UNITS"
 
 // Werte von <INPUT TYPE=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_text, "TEXT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_password, "PASSWORD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_checkbox, "CHECKBOX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_radio, "RADIO" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_range, "RANGE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_scribble, "SCRIBBLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_file, "FILE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_hidden, "HIDDEN" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_submit, "SUBMIT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_image, "IMAGE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_reset, "RESET" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_IT_button, "BUTTON" );
+#define OOO_STRING_SVTOOLS_HTML_IT_text "TEXT"
+#define OOO_STRING_SVTOOLS_HTML_IT_password "PASSWORD"
+#define OOO_STRING_SVTOOLS_HTML_IT_checkbox "CHECKBOX"
+#define OOO_STRING_SVTOOLS_HTML_IT_radio "RADIO"
+#define OOO_STRING_SVTOOLS_HTML_IT_range "RANGE"
+#define OOO_STRING_SVTOOLS_HTML_IT_scribble "SCRIBBLE"
+#define OOO_STRING_SVTOOLS_HTML_IT_file "FILE"
+#define OOO_STRING_SVTOOLS_HTML_IT_hidden "HIDDEN"
+#define OOO_STRING_SVTOOLS_HTML_IT_submit "SUBMIT"
+#define OOO_STRING_SVTOOLS_HTML_IT_image "IMAGE"
+#define OOO_STRING_SVTOOLS_HTML_IT_reset "RESET"
+#define OOO_STRING_SVTOOLS_HTML_IT_button "BUTTON"
 
 // Werte von <TABLE FRAME=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_void, "VOID" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_above, "ABOVE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_below, "BELOW" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_hsides, "HSIDES" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_lhs, "LHS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_rhs, "RHS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_vsides, "VSIDES" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_box, "BOX" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TF_border, "BORDER" );
+#define OOO_STRING_SVTOOLS_HTML_TF_void "VOID"
+#define OOO_STRING_SVTOOLS_HTML_TF_above "ABOVE"
+#define OOO_STRING_SVTOOLS_HTML_TF_below "BELOW"
+#define OOO_STRING_SVTOOLS_HTML_TF_hsides "HSIDES"
+#define OOO_STRING_SVTOOLS_HTML_TF_lhs "LHS"
+#define OOO_STRING_SVTOOLS_HTML_TF_rhs "RHS"
+#define OOO_STRING_SVTOOLS_HTML_TF_vsides "VSIDES"
+#define OOO_STRING_SVTOOLS_HTML_TF_box "BOX"
+#define OOO_STRING_SVTOOLS_HTML_TF_border "BORDER"
 
 // Werte von <TABLE RULES=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TR_none, "NONE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TR_groups, "GROUPS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TR_rows, "ROWS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TR_cols, "COLS" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_TR_all, "ALL" );
+#define OOO_STRING_SVTOOLS_HTML_TR_none "NONE"
+#define OOO_STRING_SVTOOLS_HTML_TR_groups "GROUPS"
+#define OOO_STRING_SVTOOLS_HTML_TR_rows "ROWS"
+#define OOO_STRING_SVTOOLS_HTML_TR_cols "COLS"
+#define OOO_STRING_SVTOOLS_HTML_TR_all "ALL"
 
 // Werte von <P, H?, TR, TH, TD ALIGN=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_left, "LEFT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_center, "CENTER" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_middle, "MIDDLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_right, "RIGHT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_justify, "JUSTIFY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_char, "CHAR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_all, "ALL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_AL_none, "NONE" );
+#define OOO_STRING_SVTOOLS_HTML_AL_left "LEFT"
+#define OOO_STRING_SVTOOLS_HTML_AL_center "CENTER"
+#define OOO_STRING_SVTOOLS_HTML_AL_middle "MIDDLE"
+#define OOO_STRING_SVTOOLS_HTML_AL_right "RIGHT"
+#define OOO_STRING_SVTOOLS_HTML_AL_justify "JUSTIFY"
+#define OOO_STRING_SVTOOLS_HTML_AL_char "CHAR"
+#define OOO_STRING_SVTOOLS_HTML_AL_all "ALL"
+#define OOO_STRING_SVTOOLS_HTML_AL_none "NONE"
 
 // Werte von <TR VALIGN=...>, <IMG ALIGN=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_VA_top, "TOP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_VA_middle, "MIDDLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_VA_bottom, "BOTTOM" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_VA_baseline, "BASELINE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_VA_texttop, "TEXTTOP" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_VA_absmiddle, "ABSMIDDLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_VA_absbottom, "ABSBOTTOM" );
+#define OOO_STRING_SVTOOLS_HTML_VA_top "TOP"
+#define OOO_STRING_SVTOOLS_HTML_VA_middle "MIDDLE"
+#define OOO_STRING_SVTOOLS_HTML_VA_bottom "BOTTOM"
+#define OOO_STRING_SVTOOLS_HTML_VA_baseline "BASELINE"
+#define OOO_STRING_SVTOOLS_HTML_VA_texttop "TEXTTOP"
+#define OOO_STRING_SVTOOLS_HTML_VA_absmiddle "ABSMIDDLE"
+#define OOO_STRING_SVTOOLS_HTML_VA_absbottom "ABSBOTTOM"
 
 // Werte von <AREA SHAPE=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SH_rect, "RECT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SH_rectangle, "RECTANGLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SH_circ, "CIRC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SH_circle, "CIRCLE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SH_poly, "POLY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SH_polygon, "POLYGON" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SH_default, "DEFAULT" );
+#define OOO_STRING_SVTOOLS_HTML_SH_rect "RECT"
+#define OOO_STRING_SVTOOLS_HTML_SH_rectangle "RECTANGLE"
+#define OOO_STRING_SVTOOLS_HTML_SH_circ "CIRC"
+#define OOO_STRING_SVTOOLS_HTML_SH_circle "CIRCLE"
+#define OOO_STRING_SVTOOLS_HTML_SH_poly "POLY"
+#define OOO_STRING_SVTOOLS_HTML_SH_polygon "POLYGON"
+#define OOO_STRING_SVTOOLS_HTML_SH_default "DEFAULT"
 
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LG_starbasic, "STARBASIC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LG_javascript, "JAVASCRIPT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LG_javascript11, "JAVASCRIPT1.1" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LG_livescript, "LIVESCRIPT" );
-//extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LG_vbscript, "VBSCRIPT" );
-//extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LG_unused_javascript, "UNUSED JAVASCRIPT" );
-//extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LG_starone, "StarScript" );
+#define OOO_STRING_SVTOOLS_HTML_LG_starbasic "STARBASIC"
+#define OOO_STRING_SVTOOLS_HTML_LG_javascript "JAVASCRIPT"
+#define OOO_STRING_SVTOOLS_HTML_LG_javascript11 "JAVASCRIPT1.1"
+#define OOO_STRING_SVTOOLS_HTML_LG_livescript "LIVESCRIPT"
 
 // ein par Werte fuer unser StarBASIC-Support
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SB_library, "$LIBRARY:" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SB_module, "$MODULE:" );
-
+#define OOO_STRING_SVTOOLS_HTML_SB_library "$LIBRARY:"
+#define OOO_STRING_SVTOOLS_HTML_SB_module "$MODULE:"
 
 // Werte von <FORM METHOD=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_METHOD_get, "GET" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_METHOD_post, "POST" );
+#define OOO_STRING_SVTOOLS_HTML_METHOD_get "GET"
+#define OOO_STRING_SVTOOLS_HTML_METHOD_post "POST"
 
 // Werte von <META CONTENT/HTTP-EQUIV=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_refresh, "REFRESH" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_generator, "GENERATOR" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_author, "AUTHOR" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_classification, "CLASSIFICATION" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_description, "DESCRIPTION" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_keywords, "KEYWORDS" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_changed, "CHANGED" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_changedby, "CHANGEDBY" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_created, "CREATED" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_content_type, "CONTENT-TYPE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_content_script_type, "CONTENT-SCRIPT-TYPE" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_sdendnote, "SDENDNOTE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_META_sdfootnote, "SDFOOTNOTE" );
+#define OOO_STRING_SVTOOLS_HTML_META_refresh "REFRESH"
+#define OOO_STRING_SVTOOLS_HTML_META_generator "GENERATOR"
+#define OOO_STRING_SVTOOLS_HTML_META_author "AUTHOR"
+#define OOO_STRING_SVTOOLS_HTML_META_classification "CLASSIFICATION"
+#define OOO_STRING_SVTOOLS_HTML_META_description "DESCRIPTION"
+#define OOO_STRING_SVTOOLS_HTML_META_keywords "KEYWORDS"
+#define OOO_STRING_SVTOOLS_HTML_META_changed "CHANGED"
+#define OOO_STRING_SVTOOLS_HTML_META_changedby "CHANGEDBY"
+#define OOO_STRING_SVTOOLS_HTML_META_created "CREATED"
+#define OOO_STRING_SVTOOLS_HTML_META_content_type "CONTENT-TYPE"
+#define OOO_STRING_SVTOOLS_HTML_META_content_script_type "CONTENT-SCRIPT-TYPE"
+#define OOO_STRING_SVTOOLS_HTML_META_sdendnote "SDENDNOTE"
+#define OOO_STRING_SVTOOLS_HTML_META_sdfootnote "SDFOOTNOTE"
 
 // Werte von <UL TYPE=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_ULTYPE_disc, "DISC" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_ULTYPE_square, "SQUARE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_ULTYPE_circle, "CIRCLE" );
+#define OOO_STRING_SVTOOLS_HTML_ULTYPE_disc "DISC"
+#define OOO_STRING_SVTOOLS_HTML_ULTYPE_square "SQUARE"
+#define OOO_STRING_SVTOOLS_HTML_ULTYPE_circle "CIRCLE"
 
 // Werte von <FRAMESET SCROLLING=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SCROLL_yes, "YES" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SCROLL_no, "NO" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SCROLL_auto, "AUTO" );
+#define OOO_STRING_SVTOOLS_HTML_SCROLL_yes "YES"
+#define OOO_STRING_SVTOOLS_HTML_SCROLL_no "NO"
+#define OOO_STRING_SVTOOLS_HTML_SCROLL_auto "AUTO"
 
 // Werte von <MULTICOL TYPE=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_MCTYPE_horizontal, "HORIZONTAL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_MCTYPE_vertical, "VERTICAL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_MCTYPE_box, "BOX" );
+#define OOO_STRING_SVTOOLS_HTML_MCTYPE_horizontal "HORIZONTAL"
+#define OOO_STRING_SVTOOLS_HTML_MCTYPE_vertical "VERTICAL"
+#define OOO_STRING_SVTOOLS_HTML_MCTYPE_box "BOX"
 
 // Werte von <MARQUEE BEHAVIOUR=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_BEHAV_scroll, "SCROLL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_BEHAV_slide, "SLIDE" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_BEHAV_alternate, "ALTERNATE" );
+#define OOO_STRING_SVTOOLS_HTML_BEHAV_scroll "SCROLL"
+#define OOO_STRING_SVTOOLS_HTML_BEHAV_slide "SLIDE"
+#define OOO_STRING_SVTOOLS_HTML_BEHAV_alternate "ALTERNATE"
 
 // Werte von <MARQUEE LOOP=...>
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_LOOP_infinite, "INFINITE" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SPTYPE_block, "BLOCK" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SPTYPE_horizontal, "HORIZONTAL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_SPTYPE_vertical, "VERTICAL" );
-
+#define OOO_STRING_SVTOOLS_HTML_LOOP_infinite "INFINITE"
+#define OOO_STRING_SVTOOLS_HTML_SPTYPE_block "BLOCK"
+#define OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal "HORIZONTAL"
+#define OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical "VERTICAL"
 
 // interne Grafik-Namen
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_private_image, "private:image/" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_internal_gopher, "internal-gopher-" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_internal_icon, "internal-icon-" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_binary, "binary" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_image, "image" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_index, "index" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_menu, "menu" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_movie, "movie" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_sound, "sound" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_telnet, "telnet" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_text, "text" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_GOPHER_unknown, "unknown" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_ICON_baddata, "baddata" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_ICON_delayed, "delayed" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_ICON_embed, "embed" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_ICON_insecure, "insecure" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_INT_ICON_notfound, "notfound" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sdendnote, "sdendnote" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sdendnote_anc, "sdendnoteanc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sdendnote_sym, "sdendnotesym" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sdfootnote, "sdfootnote" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sdfootnote_anc, "sdfootnoteanc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_sdfootnote_sym, "sdfootnotesym" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_FTN_anchor, "anc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_FTN_symbol, "sym" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_WW_off, "OFF" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_WW_hard, "HARD" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_WW_soft, "SOFT" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_WW_virtual, "VIRTUAL" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_WW_physical, "PHYSICAL" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_on, "on" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_ET_url, "application/x-www-form-urlencoded" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_ET_multipart, "multipart/form-data" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sHTML_ET_text, "text/plain" );
-
+#define OOO_STRING_SVTOOLS_HTML_private_image "private:image/"
+#define OOO_STRING_SVTOOLS_HTML_internal_gopher "internal-gopher-"
+#define OOO_STRING_SVTOOLS_HTML_internal_icon "internal-icon-"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary "binary"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image "image"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index "index"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu "menu"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie "movie"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound "sound"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet "telnet"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text "text"
+#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown "unknown"
+#define OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata "baddata"
+#define OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed "delayed"
+#define OOO_STRING_SVTOOLS_HTML_INT_ICON_embed "embed"
+#define OOO_STRING_SVTOOLS_HTML_INT_ICON_insecure "insecure"
+#define OOO_STRING_SVTOOLS_HTML_INT_ICON_notfound "notfound"
+#define OOO_STRING_SVTOOLS_HTML_sdendnote "sdendnote"
+#define OOO_STRING_SVTOOLS_HTML_sdendnote_anc "sdendnoteanc"
+#define OOO_STRING_SVTOOLS_HTML_sdendnote_sym "sdendnotesym"
+#define OOO_STRING_SVTOOLS_HTML_sdfootnote "sdfootnote"
+#define OOO_STRING_SVTOOLS_HTML_sdfootnote_anc "sdfootnoteanc"
+#define OOO_STRING_SVTOOLS_HTML_sdfootnote_sym "sdfootnotesym"
+#define OOO_STRING_SVTOOLS_HTML_FTN_anchor "anc"
+#define OOO_STRING_SVTOOLS_HTML_FTN_symbol "sym"
+#define OOO_STRING_SVTOOLS_HTML_WW_off "OFF"
+#define OOO_STRING_SVTOOLS_HTML_WW_hard "HARD"
+#define OOO_STRING_SVTOOLS_HTML_WW_soft "SOFT"
+#define OOO_STRING_SVTOOLS_HTML_WW_virtual "VIRTUAL"
+#define OOO_STRING_SVTOOLS_HTML_WW_physical "PHYSICAL"
+#define OOO_STRING_SVTOOLS_HTML_on "on"
+#define OOO_STRING_SVTOOLS_HTML_ET_url "application/x-www-form-urlencoded"
+#define OOO_STRING_SVTOOLS_HTML_ET_multipart "multipart/form-data"
+#define OOO_STRING_SVTOOLS_HTML_ET_text "text/plain"
 
 #endif

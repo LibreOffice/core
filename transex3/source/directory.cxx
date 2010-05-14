@@ -186,13 +186,15 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     if( sFullpath.getLength() < 1 ) return;
 
     rtl::OString   sFullpathext = rtl::OUStringToOString( sFullpath , RTL_TEXTENCODING_UTF8 , sFullpath.getLength() ).getStr();
+    //printf("%s\n",sFullpathext.getStr());
     const char*    path         = sFullpathext.getStr();
 
     // stat
-    if( lstat( path  , &statbuf ) < 0 ){   printf("readerror 1 in Directory::readDirectory"); return; }// error }
+    if( stat( path  , &statbuf ) < 0 ){   printf("warning: Can not stat %s" , path ); return; }// error }
 
-    //if( S_ISDIR(statbuf.st_mode ) == 0 && S_ISLNK(statbuf.st_mode )){  printf("readerror 2 in Directory::readDirectory"); return; }// error }   return; // not dir
-    if( (dir = opendir( path ) ) == NULL  ) {printf("readerror in %s \n",path); return; } // error } return; // error
+    if( S_ISDIR(statbuf.st_mode ) == 0 ) {  return; }// error }   return; // not dir
+
+    if( (dir = opendir( path ) ) == NULL  ) {printf("readerror 2 in %s \n",path); return; } // error } return; // error
 
     sFullpathext += rtl::OString( "/" );
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated XML files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<tabpage help-id="HID_SCPAGE_SORT_OPTIONS"
+     id="RID_SCPAGE_SORT_OPTIONS"
+     sv-look="true" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container"
+     optimumsize="true"
+         sizeable="true" moveable="true">
+    <vbox spacing="4" border="5">
+    <string id="STR_COL_LABEL" _text="Range contains column la~bels"/>
+    <string id="STR_ROW_LABEL" _text="Range contains ~row labels"/>
+    <string id="SCSTR_UNDEFINED" _text="- undefined -"/>
+    <vbox spacing="4" border="5">
+            <checkbox id="BTN_CASESENSITIVE" tabstop="true" _label="Case ~sensitive"/>
+            <checkbox id="BTN_LABEL" tabstop="true"/>
+            <checkbox id="BTN_FORMATS" tabstop="true" _label="Include ~formats"/>
+            <checkbox id="BTN_NATURALSORT" tabstop="true" _label="Enable ~natural sort"/>
+            <checkbox id="BTN_COPYRESULT" tabstop="true" _label="~Copy sort results to:"/>
+            <hbox>
+        <listbox has_border="true" dropdown="true" id="LB_OUTAREA" tabstop="true"/>
+        <edit has_border="true" disable="true" id="ED_OUTAREA" tabstop="true"/>
+            </hbox>
+            <checkbox id="BTN_SORT_USER" tabstop="true" _label="Custom sort ~order"/>
+            <listbox has_border="true" disable="true" dropdown="true" id="LB_SORT_USER" tabstop="true"/>
+            <hbox>
+        <fixedtext id="FT_LANGUAGE" _label="~Language"/>
+        <fixedtext id="FT_ALGORITHM" _label="O~ptions"/>
+            </hbox>
+            <hbox>
+        <svxlanguagebox has_border="true" dropdown="true" id="LB_LANGUAGE" sort="true" tabstop="true" _string-item-list="Default"/>
+        <listbox has_border="true" dropdown="true" id="LB_ALGORITHM" tabstop="true"/>
+            </hbox>
+            <fixedline id="FL_DIRECTION" _text="Direction"/>
+            <radiobutton id="BTN_TOP_DOWN" radiogroup="sort-options" tabstop="true" _label="~Top to bottom (sort rows)"/>
+            <radiobutton id="BTN_LEFT_RIGHT" radiogroup="sort-options" tabstop="true" _label="L~eft to right (sort columns)"/>
+    </vbox>
+    </vbox>
+</tabpage>

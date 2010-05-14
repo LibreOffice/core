@@ -51,6 +51,7 @@ extern "C"
  */
 
     typedef struct _list *list;
+    typedef void (*list_destructor)(void *);
 
 /*- constructors and a destructor */
     list listNewEmpty(void);
@@ -58,7 +59,7 @@ extern "C"
     list listNewCopy(list);
 #endif
     void listDispose(list);
-    void listSetElementDtor(list, void (*f)(void *));                     /*- this function will be executed when the element is removed via listRemove() or listClear() */
+    void listSetElementDtor(list, list_destructor);                     /*- this function will be executed when the element is removed via listRemove() or listClear() */
 
 /*- queries */
     void * listCurrent(list);

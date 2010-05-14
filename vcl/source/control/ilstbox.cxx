@@ -1124,7 +1124,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
             mpEntryList->SetSelectionAnchor( nSelect );
         }
         // MultiListBox nur mit CTRL/SHIFT oder nicht im SimpleMode
-        else if( ( !mbSimpleMode /* && !bShift */ ) || ( mbSimpleMode && ( bCtrl || bShift ) || mbStackMode ) )
+        else if( ( !mbSimpleMode /* && !bShift */ ) || ( (mbSimpleMode && ( bCtrl || bShift )) || mbStackMode ) )
         {
             // Space fuer Selektionswechsel
             if( !bShift && ( ( eLET == LET_KEYSPACE ) || ( eLET == LET_MBDOWN ) ) )

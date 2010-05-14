@@ -83,6 +83,8 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         if ( pParent )
         {
             pWindow = new MultiLineEdit( pParent, nWinBits|WB_IGNORETAB);
+            static_cast< MultiLineEdit* >( pWindow )->DisableSelectionOnFocus();
+                // #i89821# / 2008-12-17 / frank.schoenheit@sun.com
             *ppNewComp = new VCLXMultiLineEdit;
         }
         else

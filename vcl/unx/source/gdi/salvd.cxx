@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/extensions/Xrender.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <salunx.h>
 #include <saldata.hxx>

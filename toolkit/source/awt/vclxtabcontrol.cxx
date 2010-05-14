@@ -43,8 +43,6 @@
 namespace layoutimpl
 {
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
@@ -76,12 +74,20 @@ VCLXTabControl::createChildProps( Box_Base::ChildData *pData )
 
 DBG_NAME( VCLXTabControl );
 
+#if !defined (__GNUC__)
+#define __PRETTY_FUNCTION__ __FUNCTION__
+#endif /* !__GNUC__ */
+
 VCLXTabControl::VCLXTabControl()
   : VCLXWindow()
   , VCLXTabControl_Base()
   , Box_Base()
-  , mnNextTabId( 1 )
+  , mTabId (1)
+  , bRealized (false)
 {
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("\n********%s:%x", __PRETTY_FUNCTION__, this);
+#endif
     DBG_CTOR( VCLXTabControl, NULL );
 }
 
@@ -94,7 +100,7 @@ IMPLEMENT_2_FORWARD_XINTERFACE2( VCLXTabControl, VCLXWindow, Container, VCLXTabC
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXTabControl, VCLXWindow, VCLXTabControl_Base );
 
-void SAL_CALL VCLXTabControl::dispose( ) throw(RuntimeException)
+void SAL_CALL VCLXTabControl::dispose( ) throw(uno::RuntimeException)
 {
     {
         ::vos::OGuard aGuard( GetMutex() );
@@ -108,38 +114,38 @@ void SAL_CALL VCLXTabControl::dispose( ) throw(RuntimeException)
 }
 
 #if 0
-void SAL_CALL VCLXTabControl::addTabListener( const Reference< XTabListener >& listener ) throw (RuntimeException)
+void SAL_CALL VCLXTabControl::addTabListener( const Reference< XTabListener >& listener ) throw (uno::RuntimeException)
 {
     if ( listener.is() )
         maTabListeners.addInterface( listener );
 }
 
-void SAL_CALL VCLXTabControl::removeTabListener( const Reference< XTabListener >& listener ) throw (RuntimeException)
+void SAL_CALL VCLXTabControl::removeTabListener( const Reference< XTabListener >& listener ) throw (uno::RuntimeException)
 {
     if ( listener.is() )
         maTabListeners.removeInterface( listener );
 }
 #endif
 
-TabControl *VCLXTabControl::getTabControl() const throw (RuntimeException)
+TabControl *VCLXTabControl::getTabControl() const throw (uno::RuntimeException)
 {
     TabControl *pTabControl = static_cast< TabControl* >( GetWindow() );
     if ( pTabControl )
         return pTabControl;
-    throw RuntimeException();
+    throw uno::RuntimeException();
 }
 
-sal_Int32 SAL_CALL VCLXTabControl::insertTab() throw (RuntimeException)
+sal_Int32 SAL_CALL VCLXTabControl::insertTab() throw (uno::RuntimeException)
 {
     TabControl *pTabControl = getTabControl();
-    USHORT id = sal::static_int_cast< USHORT >( mnNextTabId++ );
+    USHORT id = sal::static_int_cast< USHORT >( mTabId++ );
     rtl::OUString title (RTL_CONSTASCII_USTRINGPARAM( "" ) );
     pTabControl->InsertPage( id, title.getStr(), TAB_APPEND );
     pTabControl->SetTabPage( id, new TabPage( pTabControl ) );
     return id;
 }
 
-void SAL_CALL VCLXTabControl::removeTab( sal_Int32 ID ) throw (RuntimeException, IndexOutOfBoundsException)
+void SAL_CALL VCLXTabControl::removeTab( sal_Int32 ID ) throw (uno::RuntimeException, IndexOutOfBoundsException)
 {
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
@@ -147,7 +153,7 @@ void SAL_CALL VCLXTabControl::removeTab( sal_Int32 ID ) throw (RuntimeException,
     pTabControl->RemovePage( sal::static_int_cast< USHORT >( ID ) );
 }
 
-void SAL_CALL VCLXTabControl::activateTab( sal_Int32 ID ) throw (RuntimeException, IndexOutOfBoundsException)
+void SAL_CALL VCLXTabControl::activateTab( sal_Int32 ID ) throw (uno::RuntimeException, IndexOutOfBoundsException)
 {
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
@@ -155,15 +161,15 @@ void SAL_CALL VCLXTabControl::activateTab( sal_Int32 ID ) throw (RuntimeExceptio
     pTabControl->SelectTabPage( sal::static_int_cast< USHORT >( ID ) );
 }
 
-sal_Int32 SAL_CALL VCLXTabControl::getActiveTabID() throw (RuntimeException)
+sal_Int32 SAL_CALL VCLXTabControl::getActiveTabID() throw (uno::RuntimeException)
 {
     return getTabControl()->GetCurPageId( );
 }
 
-void SAL_CALL VCLXTabControl::addTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabControl::addTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
 {
-    for ( std::list< ::com::sun::star::uno::Reference
-              < ::com::sun::star::awt::XTabListener > >::const_iterator it
+    for ( std::list< uno::Reference
+              < awt::XTabListener > >::const_iterator it
               = mxTabListeners.begin(); it != mxTabListeners.end(); it++ )
     {
         if ( *it == xListener )
@@ -173,10 +179,10 @@ void SAL_CALL VCLXTabControl::addTabListener( const ::com::sun::star::uno::Refer
     mxTabListeners.push_back( xListener );
 }
 
-void SAL_CALL VCLXTabControl::removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabControl::removeTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
 {
-    for ( std::list< ::com::sun::star::uno::Reference
-              < ::com::sun::star::awt::XTabListener > >::iterator it
+    for ( std::list< uno::Reference
+              < awt::XTabListener > >::iterator it
               = mxTabListeners.begin(); it != mxTabListeners.end(); it++ )
     {
         if ( *it == xListener )
@@ -187,7 +193,7 @@ void SAL_CALL VCLXTabControl::removeTabListener( const ::com::sun::star::uno::Re
     }
 }
 
-void SAL_CALL VCLXTabControl::setTabProps( sal_Int32 ID, const Sequence< NamedValue >& Properties ) throw (RuntimeException, IndexOutOfBoundsException)
+void SAL_CALL VCLXTabControl::setTabProps( sal_Int32 ID, const uno::Sequence< NamedValue >& Properties ) throw (uno::RuntimeException, IndexOutOfBoundsException)
 {
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
@@ -196,7 +202,7 @@ void SAL_CALL VCLXTabControl::setTabProps( sal_Int32 ID, const Sequence< NamedVa
     for ( int i = 0; i < Properties.getLength(); i++ )
     {
         const rtl::OUString &name = Properties[i].Name;
-        const Any &value = Properties[i].Value;
+        const uno::Any &value = Properties[i].Value;
 
         if ( name  == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) )
         {
@@ -206,8 +212,8 @@ void SAL_CALL VCLXTabControl::setTabProps( sal_Int32 ID, const Sequence< NamedVa
     }
 }
 
-Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
-    throw (IndexOutOfBoundsException, RuntimeException)
+uno::Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
@@ -216,11 +222,11 @@ Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
 #define ADD_PROP( seq, i, name, val ) {                                \
         NamedValue value;                                                  \
         value.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( name ) ); \
-        value.Value = makeAny( val );                                      \
+        value.Value = uno::makeAny( val );                                      \
         seq[i] = value;                                                    \
     }
 
-    Sequence< NamedValue > props( 2 );
+    uno::Sequence< NamedValue > props( 2 );
     ADD_PROP( props, 0, "Title", rtl::OUString( pTabControl->GetPageText( sal::static_int_cast< USHORT >( ID ) ) ) );
     ADD_PROP( props, 1, "Position", pTabControl->GetPagePos( sal::static_int_cast< USHORT >( ID ) ) );
 #undef ADD_PROP
@@ -228,7 +234,7 @@ Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
 }
 
 // TODO: draw tab border here
-void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -249,16 +255,29 @@ void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::su
     VCLXWindow::draw( nX, nY );
 }
 
+void VCLXTabControl::AddChild (uno::Reference< awt::XLayoutConstrains > const& xChild)
+
+{
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s: children: %d", __PRETTY_FUNCTION__, maChildren.size ());
+#endif
+    mIdMap[ xChild ] = mTabId++;
+    Box_Base::AddChild( xChild );
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s: children: %d", __PRETTY_FUNCTION__, maChildren.size ());
+#endif
+}
+
 void SAL_CALL VCLXTabControl::addChild(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains > &xChild )
-    throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::awt::MaxChildrenException)
+    const uno::Reference< awt::XLayoutConstrains > &xChild )
+    throw (uno::RuntimeException, awt::MaxChildrenException)
 {
     mIdMap[ xChild ] = insertTab();
     Box_Base::addChild( xChild );
 }
 
-void SAL_CALL VCLXTabControl::removeChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains > &xChild )
-    throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabControl::removeChild( const uno::Reference< awt::XLayoutConstrains > &xChild )
+    throw (uno::RuntimeException)
 {
     removeTab( mIdMap[xChild] );
     mIdMap[ xChild ] = -1;
@@ -284,21 +303,90 @@ static void setChildrenVisible( uno::Reference < awt::XLayoutConstrains > xChild
     }
 }
 
-void SAL_CALL VCLXTabControl::allocateArea(
-    const ::com::sun::star::awt::Rectangle &rArea )
-    throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
+    throw (uno::RuntimeException)
 {
-    maAllocation = rArea;
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("\n%s", __PRETTY_FUNCTION__);
+#endif
+    maAllocation = area;
 
     TabControl *pTabControl = getTabControl();
 
-// FIXME: this is wrong. We just want to set tab controls pos/size for the tabs menu,
-// otherwise, it gets events that should go to children (I guess we could solve this
-// by making the tabcontrol as the actual XWindow parent of its children, when importing...)
-// Not sure about TabPage drawing... That doesn't work on gtk+; just ignoring that.
-// LATER: Nah, the proper fix is to get the XWindow hierarchy straight.
+// FIXME: this is wrong. We just want to set tab controls pos/size for
+// the tabs menu, otherwise, it gets events that should go to children
+// (I guess we could solve this by making the tabcontrol as the actual
+// XWindow parent of its children, when importing...)  Not sure about
+// TabPage drawing... That doesn't work on gtk+; just ignoring that.
+// LATER: Nah, the proper fix is to get the XWindow hierarchy
+// straight.
 
-    setPosSize( rArea.X, rArea.Y, rArea.Width, rArea.Height, PosSize::POSSIZE );
+#if 0
+    setPosSize( area.X, area.Y, area.Width, area.Height, awt::PosSize::POSSIZE );
+#else
+    awt::Size currentSize = getSize();
+    awt::Size requestedSize (area.Width, area.Height);
+//    requestedSize.Height = getHeightForWidth( area.Width );
+
+    awt::Size minimumSize = getMinimumSize();
+    if (requestedSize.Width < minimumSize.Width)
+        requestedSize.Width = minimumSize.Width;
+    if (requestedSize.Height < minimumSize.Height)
+        requestedSize.Height = minimumSize.Height;
+
+    Size pageSize = static_cast<TabControl*> (GetWindow ())->GetTabPageSizePixel ();
+    awt::Size pageBasedSize (0, 0);
+    pageBasedSize.Width = pageSize.Width ();
+    pageBasedSize.Height = pageSize.Height ();
+
+    const int wc = 0;
+    const int hc = 20;
+    static int pwc = 0;
+    static int phc = 40;
+
+    if (requestedSize.Width < pageBasedSize.Width)
+        requestedSize.Width = pageBasedSize.Width + wc;
+    if (requestedSize.Height < pageBasedSize.Height)
+        requestedSize.Height = pageBasedSize.Height + hc;
+
+    Size windowSize = GetWindow()->GetSizePixel();
+    Window *parent = GetWindow()->GetParent();
+    Size parentSize = parent->GetSizePixel();
+
+#ifndef __SUNPRO_CC
+#ifdef GCC_MAJOR
+    OSL_TRACE ("\n%s", __PRETTY_FUNCTION__);
+#endif /* GCC_MAJOR */
+    OSL_TRACE ("%s: cursize: %d ,%d", __FUNCTION__, currentSize.Width, currentSize.Height );
+    OSL_TRACE ("%s: area: %d, %d", __FUNCTION__, area.Width, area.Height );
+    OSL_TRACE ("%s: minimum: %d, %d", __FUNCTION__, minimumSize.Width, minimumSize.Height );
+    OSL_TRACE ("%s: requestedSize: %d, %d", __FUNCTION__, requestedSize.Width, requestedSize.Height );
+    OSL_TRACE ("%s: pageBasedSize: %d, %d", __FUNCTION__, pageBasedSize.Width, pageBasedSize.Height );
+
+    //OSL_TRACE ("%s: parent: %d, %d", __FUNCTION__, parentSize.Width(), parentSize.Height() );
+    //OSL_TRACE ("%s: window: %d, %d", __FUNCTION__, windowSize.Width(), windowSize.Height() );
+#endif
+
+    //bRealized = false;
+    if (!bRealized)
+    {
+        setPosSize( area.X, area.Y, requestedSize.Width, requestedSize.Height, awt::PosSize::POSSIZE );
+        bRealized = true;
+    }
+    else
+    {
+        if ( requestedSize.Width > currentSize.Width + 10)
+            setPosSize( 0, 0, requestedSize.Width, 0, awt::PosSize::WIDTH );
+        if ( requestedSize.Height > currentSize.Height + 10)
+            setPosSize( 0, 0, 0, requestedSize.Height, awt::PosSize::HEIGHT );
+    }
+#endif
+
+    if (pageBasedSize.Width > parentSize.Width ()
+        || pageBasedSize.Height > parentSize.Height ())
+        //parent->SetSizePixel ( Size (pageBasedSize.Width, pageBasedSize.Height));
+        //parent->SetSizePixel ( Size (pageBasedSize.Width + pwc, pageBasedSize.Height + phc));
+        parent->SetSizePixel ( Size (requestedSize.Width + pwc, requestedSize.Height + phc));
 
     // FIXME: we can save cycles by setting visibility more sensibly. Having
     // it here does makes it easier when changing tabs (just needs a recalc())
@@ -307,8 +395,8 @@ void SAL_CALL VCLXTabControl::allocateArea(
               = maChildren.begin(); it != maChildren.end(); it++, i++ )
     {
         ChildData *child = static_cast<VCLXTabControl::ChildData*> ( *it );
-        ::com::sun::star::uno::Reference
-              < ::com::sun::star::awt::XLayoutConstrains > xChild( child->mxChild );
+        uno::Reference
+              < awt::XLayoutConstrains > xChild( child->mxChild );
         if ( xChild.is() )
         {
             uno::Reference< awt::XWindow > xWin( xChild, uno::UNO_QUERY );
@@ -340,15 +428,15 @@ void SAL_CALL VCLXTabControl::allocateArea(
     }
 }
 
-::com::sun::star::awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
-    throw(::com::sun::star::uno::RuntimeException)
+awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
+    throw(uno::RuntimeException)
 {
-    awt::Size size = VCLXWindow::getMinimumSize();
+    awt::Size requestedSize = VCLXWindow::getMinimumSize();
     awt::Size childrenSize( 0, 0 );
 
     TabControl* pTabControl = static_cast< TabControl* >( GetWindow() );
     if ( !pTabControl )
-        return size;
+        return requestedSize;
 
     // calculate size to accomodate all children
     unsigned i = 0;
@@ -367,10 +455,19 @@ void SAL_CALL VCLXTabControl::allocateArea(
         }
     }
 
-    size.Width += childrenSize.Width;
-    size.Height += childrenSize.Height + 20;
-    maRequisition = size;
-    return size;
+#ifndef __SUNPRO_CC
+#ifdef GCC_MAJOR
+    OSL_TRACE ("\n%s", __PRETTY_FUNCTION__);
+#endif /* GCC_MAJOR */
+    OSL_TRACE ("%s: children: %d", __FUNCTION__, i);
+    OSL_TRACE ("%s: childrenSize: %d, %d", __FUNCTION__, childrenSize.Width, childrenSize.Height );
+#endif
+
+    requestedSize.Width += childrenSize.Width;
+    requestedSize.Height += childrenSize.Height + 20;
+
+    maRequisition = requestedSize;
+    return requestedSize;
 }
 
 void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
@@ -391,12 +488,12 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
         case VCLEVENT_TABPAGE_PAGETEXTCHANGED:
         {
             ULONG page = (ULONG) _rVclWindowEvent.GetData();
-            for ( std::list< ::com::sun::star::uno::Reference
-                      < ::com::sun::star::awt::XTabListener > >::iterator it
+            for ( std::list< uno::Reference
+                      < awt::XTabListener > >::iterator it
                       = mxTabListeners.begin(); it != mxTabListeners.end(); it++)
             {
-                ::com::sun::star::uno::Reference
-                    < ::com::sun::star::awt::XTabListener > listener = *it;
+                uno::Reference
+                    < awt::XTabListener > listener = *it;
 
                 switch ( _rVclWindowEvent.GetId() )
                 {
@@ -414,7 +511,7 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
                         listener->removed( page );
                         break;
                     case VCLEVENT_TABPAGE_REMOVEDALL:
-                        for ( int i = 1; i < mnNextTabId; i++)
+                        for ( int i = 1; i < mTabId; i++)
                         {
                             if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( i ) ) )
                                 listener->removed( i );
@@ -434,12 +531,12 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
     }
 }
 
-void SAL_CALL VCLXTabControl::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
+void SAL_CALL VCLXTabControl::setProperty( const ::rtl::OUString& PropertyName, const uno::Any &Value ) throw(uno::RuntimeException)
 {
     VCLXWindow::setProperty( PropertyName, Value );
 }
 
-Any SAL_CALL VCLXTabControl::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
+uno::Any SAL_CALL VCLXTabControl::getProperty( const ::rtl::OUString& PropertyName ) throw(uno::RuntimeException)
 {
     return VCLXWindow::getProperty( PropertyName );
 }

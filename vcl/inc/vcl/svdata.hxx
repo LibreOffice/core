@@ -338,6 +338,7 @@ struct ImplSVData
     UnoWrapperBase*         mpUnoWrapper;
     Window*                 mpIntroWindow;      // the splash screen
     DockingManager*         mpDockingManager;
+    BOOL                    mbIsTestTool;
 
     vos::OThread::TThreadIdentifier                     mnMainThreadId;
     ::com::sun::star::uno::Reference<

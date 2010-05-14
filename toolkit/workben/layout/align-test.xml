@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated xml files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="Align Test" optimumsize="true" has_border="true" sizeable="true" moveable="true">
+    <vbox spacing="5" border="5">
+    <fixedline/>
+    <hbox spacing="0" border="0">
+        <vbox spacing="5" border="5">
+        <fixedline _text="X" cnt:expand="false"/>
+        <pushbutton label="foo"/>
+        <pushbutton label="foo"/>
+        <pushbutton label="foo"/>
+        <pushbutton label="foo"/>
+        <pushbutton label="foo"/>
+        <pushbutton label="foo"/>
+        <pushbutton label="foo"/>
+        </vbox>
+        <vbox spacing="5" border="5">
+        <fixedline _text="X" cnt:expand="false"/>
+        <pushbutton label="bar"/>
+        </vbox>
+    </hbox>
+        <fixedline/>
+    <min-size cnt:spacing="0" min-width="200"/>
+    </vbox>
+</dialog>

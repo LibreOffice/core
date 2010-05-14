@@ -181,6 +181,7 @@ protected:
 
 public:
                     VCLXButton();
+    ~VCLXButton();
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -346,6 +347,8 @@ public:
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getFirstActionListener ();
 };
 
 //  ----------------------------------------------------
@@ -764,6 +767,7 @@ protected:
 
 public:
                         VCLXComboBox();
+    ~VCLXComboBox();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

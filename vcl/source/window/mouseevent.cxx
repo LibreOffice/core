@@ -52,6 +52,8 @@ MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
             mnCode |= KEY_MOD1;
         if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD2) != 0 )
             mnCode |= KEY_MOD2;
+                if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD3) != 0 )
+                        mnCode |= KEY_MOD3;
     }
 
     if( rEvent.Buttons )
@@ -75,6 +77,8 @@ void MouseEvent::InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent ) con
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
     if ( IsMod2() )
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+        if ( IsMod3() )
+                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
 
     rEvent.Buttons = 0;
     if ( IsLeft() )

@@ -43,6 +43,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <vcl/svapp.hxx>
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -63,17 +64,19 @@ using namespace ::com::sun::star::uno   ;
 #define ROOTNODE_MENU                           OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Menu"  ))
 #define DEFAULT_DONTHIDEDISABLEDENTRIES         sal_False
 #define DEFAULT_FOLLOWMOUSE                     sal_True
-#define DEFAULT_MENUICONS                       sal_True
+#define DEFAULT_MENUICONS                       2
 
 #define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString(RTL_CONSTASCII_USTRINGPARAM("DontHideDisabledEntry"    ))
 #define PROPERTYNAME_FOLLOWMOUSE                OUString(RTL_CONSTASCII_USTRINGPARAM("FollowMouse"              ))
 #define PROPERTYNAME_SHOWICONSINMENUES          OUString(RTL_CONSTASCII_USTRINGPARAM("ShowIconsInMenues"        ))
+#define PROPERTYNAME_SYSTEMICONSINMENUES        OUString(RTL_CONSTASCII_USTRINGPARAM("IsSystemIconsInMenus"     ))
 
 #define PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES  0
 #define PROPERTYHANDLE_FOLLOWMOUSE              1
 #define PROPERTYHANDLE_SHOWICONSINMENUES        2
+#define PROPERTYHANDLE_SYSTEMICONSINMENUES      3
 
-#define PROPERTYCOUNT                           3
+#define PROPERTYCOUNT                           4
 
 #include <tools/link.hxx>
 #include <tools/list.hxx>
@@ -93,7 +96,7 @@ class SvtMenuOptions_Impl : public ConfigItem
         LinkList    aList;
         sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
-        sal_Bool    m_bMenuIcons                        ;   /// cache "MenuIcons" of Menu section
+        sal_Int16   m_nMenuIcons                        ;   /// cache "MenuIcons" of Menu section
 
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -169,8 +172,8 @@ class SvtMenuOptions_Impl : public ConfigItem
         sal_Bool    IsFollowMouseEnabled() const
                     { return m_bFollowMouse; }
 
-        sal_Bool    IsMenuIconsEnabled() const
-                    { return m_bMenuIcons; }
+        sal_Int16   GetMenuIconsState() const
+                    { return m_nMenuIcons; }
 
         void        SetEntryHidingState ( sal_Bool bState )
                     {
@@ -190,9 +193,9 @@ class SvtMenuOptions_Impl : public ConfigItem
                         Commit();
                     }
 
-        void        SetMenuIconsState ( sal_Bool bState )
+        void        SetMenuIconsState ( sal_Int16 bState    )
                     {
-                        m_bMenuIcons = bState;
+                        m_nMenuIcons = bState;
                         SetModified();
                         for ( USHORT n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
@@ -234,7 +237,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // Init member then.
     ,   m_bDontHideDisabledEntries  ( DEFAULT_DONTHIDEDISABLEDENTRIES   )
     ,   m_bFollowMouse              ( DEFAULT_FOLLOWMOUSE               )
-    ,   m_bMenuIcons                ( DEFAULT_MENUICONS                 )
+    ,   m_nMenuIcons                ( DEFAULT_MENUICONS                 )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = impl_GetPropertyNames();
@@ -244,6 +247,9 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // We need values from ALL configuration keys.
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nI miss some values of configuration keys!\n" );
+
+    sal_Bool bMenuIcons = true;
+    sal_Bool bSystemMenuIcons = true;
 
     // Copy values from list in right order to ouer internal member.
     sal_Int32 nPropertyCount    =   seqValues.getLength()   ;
@@ -268,11 +274,18 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
                                                             break;
             case PROPERTYHANDLE_SHOWICONSINMENUES       :   {
                                                                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\ShowIconsInMenues\"?" );
-                                                                seqValues[nProperty] >>= m_bMenuIcons;
+                                                                seqValues[nProperty] >>= bMenuIcons;
+                                                            }
+                                                            break;
+            case PROPERTYHANDLE_SYSTEMICONSINMENUES     :   {
+                                                                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\IsSystemIconsInMenus\"?" );
+                                                                seqValues[nProperty] >>= bSystemMenuIcons;
                                                             }
                                                             break;
         }
     }
+
+    m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
 
     EnableNotification( seqNames );
 }
@@ -303,6 +316,10 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     // Safe impossible cases.
     // We need values from ALL notified configuration keys.
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtMenuOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
+
+    sal_Bool bMenuIcons = true;
+    sal_Bool bSystemMenuIcons = true;
+
     // Step over list of property names and get right value from coreesponding value list to set it on internal members!
     sal_Int32 nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
@@ -312,21 +329,28 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\View\\Menu\\DontHideDisabledEntry\"?" );
             seqValues[nProperty] >>= m_bDontHideDisabledEntries;
         }
-        else
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_FOLLOWMOUSE )
+        else if( seqPropertyNames[nProperty] == PROPERTYNAME_FOLLOWMOUSE )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\View\\Menu\\FollowMouse\"?" );
             seqValues[nProperty] >>= m_bFollowMouse;
         }
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_SHOWICONSINMENUES )
+        else if( seqPropertyNames[nProperty] == PROPERTYNAME_SHOWICONSINMENUES )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\ShowIconsInMenues\"?" );
-            seqValues[nProperty] >>= m_bMenuIcons;
+            seqValues[nProperty] >>= bMenuIcons;
         }
+        else if( seqPropertyNames[nProperty] == PROPERTYNAME_SYSTEMICONSINMENUES )
+        {
+            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\IsSystemIconsInMenus\"?" );
+            seqValues[nProperty] >>= bSystemMenuIcons;
+        }
+
         #if OSL_DEBUG_LEVEL > 1
         else DBG_ASSERT( sal_False, "SvtMenuOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
+
+    m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
 
     for ( USHORT n=0; n<aList.Count(); n++ )
         aList.GetObject(n)->Call( this );
@@ -354,8 +378,13 @@ void SvtMenuOptions_Impl::Commit()
                                                                 seqValues[nProperty] <<= m_bFollowMouse;
                                                             }
                                                             break;
+            //Output cache of current setting as possibly modified by System Theme for older version
             case PROPERTYHANDLE_SHOWICONSINMENUES       :   {
-                                                                seqValues[nProperty] <<= m_bMenuIcons;
+                                                                seqValues[nProperty] <<=(sal_Bool)(Application::GetSettings().GetStyleSettings().GetUseImagesInMenus());
+                                                            }
+                                                            break;
+            case PROPERTYHANDLE_SYSTEMICONSINMENUES     :   {
+                                                                seqValues[nProperty] <<= (m_nMenuIcons == 2 ? sal_True : sal_False) ;
                                                             }
                                                             break;
         }
@@ -374,7 +403,8 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     {
         PROPERTYNAME_DONTHIDEDISABLEDENTRIES    ,
         PROPERTYNAME_FOLLOWMOUSE                ,
-        PROPERTYNAME_SHOWICONSINMENUES
+        PROPERTYNAME_SHOWICONSINMENUES          ,
+        PROPERTYNAME_SYSTEMICONSINMENUES
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -483,16 +513,16 @@ void SvtMenuOptions::SetFollowMouseState( sal_Bool bState )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtMenuOptions::IsMenuIconsEnabled() const
+sal_Int16 SvtMenuOptions::GetMenuIconsState() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsMenuIconsEnabled();
+    return m_pDataContainer->GetMenuIconsState();
 }
 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtMenuOptions::SetMenuIconsState( sal_Bool bState )
+void SvtMenuOptions::SetMenuIconsState( sal_Int16 bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetMenuIconsState( bState );

@@ -343,10 +343,12 @@ namespace cairocanvas
 
             // TODO(F2): alpha
             mpVirtualDevice->SetLayoutMode( nLayoutMode );
-            mpVirtualDevice->DrawText( aOutpos,
-                                            text.Text,
-                                            ::canvas::tools::numeric_cast<USHORT>(text.StartPosition),
-                                            ::canvas::tools::numeric_cast<USHORT>(text.Length) );
+
+            OSL_TRACE(":cairocanvas::CanvasHelper::drawText(O,t,f,v,r,d): %s", ::rtl::OUStringToOString( text.Text.copy( text.StartPosition, text.Length ),
+                                                                                                         RTL_TEXTENCODING_UTF8 ).getStr());
+
+            TextLayout* pTextLayout = new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider);
+            pTextLayout->draw( mpSurface, *mpVirtualDevice, aOutpos, viewState, renderState );
         }
 
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -384,7 +386,7 @@ namespace cairocanvas
                     return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
                 // TODO(F2): What about the offset scalings?
-                pTextLayout->draw( *mpVirtualDevice, aOutpos, viewState, renderState );
+                pTextLayout->draw( mpSurface, *mpVirtualDevice, aOutpos, viewState, renderState );
             }
         }
         else

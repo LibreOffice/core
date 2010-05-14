@@ -31,7 +31,7 @@
 
 #include "vclxbutton.hxx"
 
-#include "layout/layoutcore.hxx"
+#include <layout/core/helper.hxx>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <vcl/button.hxx>
 

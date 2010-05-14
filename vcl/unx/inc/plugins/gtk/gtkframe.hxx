@@ -31,12 +31,12 @@
 #ifndef _VCL_GTKFRAME_HXX
 #define _VCL_GTKFRAME_HXX
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <vcl/salframe.hxx>
 #include <vcl/sysdata.hxx>

@@ -40,9 +40,10 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/container/XSet.hpp>
 /** === end UNO includes === **/
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertybag.hxx>
@@ -75,11 +76,12 @@ namespace comphelper
     //====================================================================
     //= OPropertyBag
     //====================================================================
-    typedef ::cppu::WeakAggImplHelper5  <   ::com::sun::star::beans::XPropertyContainer
+    typedef ::cppu::WeakAggImplHelper6  <   ::com::sun::star::beans::XPropertyContainer
                                         ,   ::com::sun::star::beans::XPropertyAccess
                                         ,   ::com::sun::star::util::XModifiable
                                         ,   ::com::sun::star::lang::XServiceInfo
                                         ,   ::com::sun::star::lang::XInitialization
+                                        ,   ::com::sun::star::container::XSet
                                         >   OPropertyBag_Base;
     typedef ::comphelper::OPropertyStateHelper  OPropertyBag_PBase;
 
@@ -157,6 +159,18 @@ namespace comphelper
 
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+        // XSet
+        virtual ::sal_Bool SAL_CALL has( const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL insert( const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL remove( const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+
+        // XEnumerationAccess (base of XSet)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XElementAccess (basf of XEnumerationAccess
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
         /** === UNO interface implementations == **/
 
         // XPropertyState

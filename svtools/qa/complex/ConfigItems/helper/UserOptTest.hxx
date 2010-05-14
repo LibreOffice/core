@@ -72,7 +72,7 @@ private:
 private:
     SvtUserOptions m_aConfigItem;
 
-    css::uno::Reference< css::container::XNameAccess > m_xCfg;  
+    css::uno::Reference< css::container::XNameAccess > m_xCfg;
 };
 
 #endif // #ifndef  SVTOOLS_USEROPTTEST_HXX

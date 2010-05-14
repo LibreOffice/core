@@ -1,10 +1,6 @@
 package transex3.view;
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.*;
-//import java.awt.Event.*;
 
 public class Editor extends JFrame{
     Object[]    columnnames     = { "File" , "GID" , "LID" , "String" };

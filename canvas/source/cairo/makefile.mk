@@ -99,12 +99,14 @@ SHL1STDLIBS+= -lcairo
 SLOFILES+= $(SLO)$/cairo_quartz_cairo.obj
 OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
-SHL1STDLIBS+= -lpixman-1
-.ELSE
+.ELSE    # "$(GUIBASE)"=="aqua"
+
 # Xlib
 SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj
-SHL1STDLIBS+= -lfontconfig $(FREETYPELIB) -lX11 -lXrender
-.ENDIF
+SHL1STDLIBS+= -lfontconfig -lX11 -lXrender -lpixman-1 $(FREETYPE_LIBS)
+CFLAGS+=$(FREETYPE_CFLAGS)
+
+.ENDIF   # "$(GUIBASE)"=="aqua"
 
 .ELSE    # "$(GUI)"=="UNX" 
 

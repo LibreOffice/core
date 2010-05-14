@@ -33,9 +33,9 @@
 
 #include <vcl/glyphcache.hxx>
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/extensions/Xrender.h>
-#include <postx.h>
+#include <tools/postx.h>
 #include <vcl/dllapi.h>
 
 

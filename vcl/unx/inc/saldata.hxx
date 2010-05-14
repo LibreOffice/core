@@ -65,7 +65,6 @@ protected:
             SalXLib            *pXLib_;
             SalDisplay         *m_pSalDisplay;
             pthread_t           hMainThread_;
-            bool                m_bIsTesttool;
 
 public:
     X11SalData();
@@ -90,7 +89,6 @@ public:
     void                    StartTimer( ULONG nMS );
     inline  void            StopTimer();
     void                    Timeout() const;
-    bool                    isTestTool() const { return m_bIsTesttool; }
 
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );

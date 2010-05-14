@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zoom.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,9 +51,9 @@
 #define _SVX_ZOOM_CXX
 
 #include <svx/dialogs.hrc>
-#if !ENABLE_LAYOUT
+#if !TEST_LAYOUT
 #include "zoom.hrc"
-#endif /* !ENABLE_LAYOUT */
+#endif /* !TEST_LAYOUT */
 
 #include "zoom.hxx"
 #if TEST_LAYOUT
@@ -113,6 +113,13 @@ struct SvxViewLayoutItem : public LAYOUT_SfxPoolItem
 #include "zoom_def.hxx"
 
 #include <layout/layout-pre.hxx>
+
+#if ENABLE_LAYOUT
+#undef SVX_RES
+#define SVX_RES(x) #x
+#undef SfxModalDialog
+#define SfxModalDialog( parent, id ) Dialog( parent, "zoom.xml", id )
+#endif /* ENABLE_LAYOUT */
 
 // static ----------------------------------------------------------------
 
@@ -284,6 +291,9 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     bModified   ( FALSE )
 
 {
+#if ENABLE_LAYOUT
+    SetHelpId (SID_ATTR_ZOOM);
+#endif /* ENABLE_LAYOUT */
     Link aLink = LINK( this, SvxZoomDialog, UserHdl );
     a100Btn.SetClickHdl( aLink );
     aOptimalBtn.SetClickHdl( aLink );

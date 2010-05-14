@@ -284,6 +284,43 @@ namespace cairo
             return SurfaceSharedPtr();
     }
 
+
+    /**
+     * cairo::ucs4toindex: Convert ucs4 char to glyph index
+     * @param ucs4 an ucs4 char
+     * @param hfont current font
+     *
+     * @return true if successful
+     **/
+    unsigned long ucs4toindex(unsigned int ucs4, HFONT hfont)
+    {
+        wchar_t unicode[2];
+        WORD glyph_index;
+        HDC hdc = NULL;
+        int i = 0;
+
+        hdc = CreateCompatibleDC (NULL);
+
+        if (!hdc) return 0;
+        if (!SetGraphicsMode (hdc, GM_ADVANCED)) {
+            DeleteDC (hdc);
+            return 0;
+        }
+
+        SelectObject (hdc, hfont);
+        SetMapMode (hdc, MM_TEXT);
+
+        unicode[0] = ucs4;
+        unicode[1] = 0;
+        if (GetGlyphIndicesW (hdc, unicode, 1, &glyph_index, 0) == GDI_ERROR) {
+            glyph_index = 0;
+        }
+
+        DeleteDC (hdc);
+        return glyph_index;
+    }
+
+
 }  // namespace cairo
 
 #endif   // CAIRO_HAS_WIN32_SURFACE

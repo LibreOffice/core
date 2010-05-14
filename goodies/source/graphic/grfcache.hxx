@@ -70,7 +70,8 @@ public:
 
 public:
 
-    void                        AddGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute, const ByteString* pID );
+    void                        AddGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute,
+                                                  const ByteString* pID, const GraphicObject* pCopyObj );
     void                        ReleaseGraphicObject( const GraphicObject& rObj );
 
     void                        GraphicObjectWasSwappedOut( const GraphicObject& rObj );

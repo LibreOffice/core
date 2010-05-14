@@ -194,7 +194,9 @@ public:
 
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
     virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
+
     virtual SystemGraphicsData      GetGraphicsData() const;
+    virtual SystemFontData          GetSysFontData( int nFallbacklevel ) const;
 };
 
 #endif // _SVP_PSPGRAPHICS_HXX

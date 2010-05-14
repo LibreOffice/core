@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated xml files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="RID_DLG_PLUGIN" _title="Plugin Test" optimumsize="true"
+         help-id="SID_ATTR_PLUGIN"
+             has_border="true" sizeable="true" moveable="true">
+    <vbox spacing="5" border="5">
+        <hbox spacing="5" cnt:expand="false">
+        <fixedimage id="FI_HEADER" cnt:expand="false" graphic="res/commandimagelist/sc_apply.png" />
+        <fixedtext id="FT_HEADER" _label="Plugin Test"/>
+    </hbox>
+    <fixedline id="FL_HEADER"/>
+    <hbox>
+      <flow cnt:padding="80"/>
+      <plugin id="PL_DIAL" width="80" height="80"/>
+    </hbox>
+    <dialogbuttonhbox border="5" spacing="5">
+        <flow/>
+        <okbutton defbutton="true" id="BTN_OK"/>
+        <cancelbutton id="BTN_CANCEL" />
+        <helpbutton id="BTN_HELP"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>
+

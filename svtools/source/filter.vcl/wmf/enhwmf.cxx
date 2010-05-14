@@ -390,10 +390,10 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             pnPoints[ i ] = (UINT16)nPoints;
                         }
 
-                        if ( ( nGesPoints * sizeof(Point) ) <= ( nEndPos - pWMF->Tell() ) )
+                        if ( ( nGesPoints * (sizeof(sal_uInt32)+sizeof(sal_uInt32)) ) <= ( nEndPos - pWMF->Tell() ) )
                         {
                             // Polygonpunkte holen:
-                            pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
+                            pPtAry  = new Point[ nGesPoints ];
 
                             for ( i = 0; i < nGesPoints; i++ )
                             {
@@ -403,7 +403,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             // PolyPolygon Actions erzeugen
                             PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
                             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                            delete[] (char*) pPtAry;
+                            delete[] pPtAry;
                         }
                         delete[] pnPoints;
                     }
@@ -1157,10 +1157,10 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             *pWMF >> nPoints;
                             pnPoints[ i ] = (UINT16)nPoints;
                         }
-                        if ( ( nGesPoints * sizeof(Point) ) <= ( nEndPos - pWMF->Tell() ) )
+                        if ( ( nGesPoints * (sizeof(sal_uInt16)+sizeof(sal_uInt16)) ) <= ( nEndPos - pWMF->Tell() ) )
                         {
                             // Polygonpunkte holen:
-                            pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
+                            pPtAry  = new Point[ nGesPoints ];
                             for ( i = 0; i < nGesPoints; i++ )
                             {
                                 *pWMF >> nX16 >> nY16;
@@ -1170,7 +1170,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             // PolyPolygon Actions erzeugen
                             PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
                             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                            delete[] (char*) pPtAry;
+                            delete[] pPtAry;
                         }
                         delete[] pnPoints;
                     }

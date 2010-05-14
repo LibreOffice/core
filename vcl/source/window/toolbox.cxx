@@ -1703,6 +1703,8 @@ void ToolBox::ImplInitSettings( BOOL bFont,
                 SetBackground( aColor );
                 SetPaintTransparent( FALSE );
                 SetParentClipMode( 0 );
+
+                ImplUpdateImageList();
             }
         }
     }
@@ -5053,7 +5055,7 @@ void ToolBox::StateChanged( StateChangedType nType )
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( FALSE, FALSE, TRUE );
+        ImplInitSettings( FALSE, FALSE, TRUE ); // font, foreground, background
         Invalidate();
     }
 }

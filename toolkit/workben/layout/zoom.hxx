@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zoom.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *

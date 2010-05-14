@@ -33,7 +33,7 @@
         </hbox>
     </vbox>
     <vbox border="6" spacing="4">
-        <okbutton     id="OkButton"     cnt:expand="false" default="true"/>
+        <okbutton     id="OkButton"     cnt:expand="false" defbutton="true"/>
         <cancelbutton id="CancelButton" cnt:expand="false"/>
         <helpbutton   id="HelpButton"   cnt:expand="false"/>
     </vbox>

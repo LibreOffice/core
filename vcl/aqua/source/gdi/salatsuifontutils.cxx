@@ -46,17 +46,17 @@
 // and SFNT fonts on Mac usually do not contain an OS/2 table.
 static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttributes& rDFA )
 {
-    // TODO: use a multi-string ignore-case matcher once it becomes available
-    String aPSName = rPSName;
+    ByteString aPSName( rPSName, RTL_TEXTENCODING_UTF8 );
     aPSName.ToLowerAscii();
 
-    if( (aPSName.SearchAscii("regular") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("normal") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("roman") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("medium") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("plain") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("standard") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("std") != STRING_NOTFOUND) )
+    // TODO: use a multi-string ignore-case matcher once it becomes available
+    if( (aPSName.Search("regular") != STRING_NOTFOUND)
+    ||  (aPSName.Search("normal") != STRING_NOTFOUND)
+    ||  (aPSName.Search("roman") != STRING_NOTFOUND)
+    ||  (aPSName.Search("medium") != STRING_NOTFOUND)
+    ||  (aPSName.Search("plain") != STRING_NOTFOUND)
+    ||  (aPSName.Search("standard") != STRING_NOTFOUND)
+    ||  (aPSName.Search("std") != STRING_NOTFOUND) )
     {
        rDFA.meWidthType = WIDTH_NORMAL;
        rDFA.meWeight    = WEIGHT_NORMAL;
@@ -64,110 +64,133 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
     }
 
     // heuristics for font weight
-    if (aPSName.SearchAscii("extrablack") != STRING_NOTFOUND)
+    if (aPSName.Search("extrablack") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_BLACK;
-    else if (aPSName.SearchAscii("black") != STRING_NOTFOUND)
+    else if (aPSName.Search("black") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_BLACK;
-    //else if (aPSName.SearchAscii("book") != STRING_NOTFOUND)
+    //else if (aPSName.Search("book") != STRING_NOTFOUND)
     //    rDFA.meWeight = WEIGHT_SEMIBOLD;
-    else if( (aPSName.SearchAscii("semibold") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("smbd") != STRING_NOTFOUND))
+    else if( (aPSName.Search("semibold") != STRING_NOTFOUND)
+    ||  (aPSName.Search("smbd") != STRING_NOTFOUND))
         rDFA.meWeight = WEIGHT_SEMIBOLD;
-    else if (aPSName.SearchAscii("ultrabold") != STRING_NOTFOUND)
+    else if (aPSName.Search("ultrabold") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_ULTRABOLD;
-    else if (aPSName.SearchAscii("extrabold") != STRING_NOTFOUND)
+    else if (aPSName.Search("extrabold") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_BLACK;
-    else if( (aPSName.SearchAscii("bold") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("-bd") != STRING_NOTFOUND))
+    else if( (aPSName.Search("bold") != STRING_NOTFOUND)
+    ||  (aPSName.Search("-bd") != STRING_NOTFOUND))
         rDFA.meWeight = WEIGHT_BOLD;
-    else if (aPSName.SearchAscii("extralight") != STRING_NOTFOUND)
+    else if (aPSName.Search("extralight") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_ULTRALIGHT;
-    else if (aPSName.SearchAscii("ultralight") != STRING_NOTFOUND)
+    else if (aPSName.Search("ultralight") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_ULTRALIGHT;
-    else if (aPSName.SearchAscii("light") != STRING_NOTFOUND)
+    else if (aPSName.Search("light") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_LIGHT;
-    else if (aPSName.SearchAscii("thin") != STRING_NOTFOUND)
+    else if (aPSName.Search("thin") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_THIN;
-    else if (aPSName.SearchAscii("-w3") != STRING_NOTFOUND)
+    else if (aPSName.Search("-w3") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_LIGHT;
-    else if (aPSName.SearchAscii("-w4") != STRING_NOTFOUND)
+    else if (aPSName.Search("-w4") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_SEMILIGHT;
-    else if (aPSName.SearchAscii("-w5") != STRING_NOTFOUND)
+    else if (aPSName.Search("-w5") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_NORMAL;
-    else if (aPSName.SearchAscii("-w6") != STRING_NOTFOUND)
+    else if (aPSName.Search("-w6") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_SEMIBOLD;
-    else if (aPSName.SearchAscii("-w7") != STRING_NOTFOUND)
+    else if (aPSName.Search("-w7") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_BOLD;
-    else if (aPSName.SearchAscii("-w8") != STRING_NOTFOUND)
+    else if (aPSName.Search("-w8") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_ULTRABOLD;
-    else if (aPSName.SearchAscii("-w9") != STRING_NOTFOUND)
+    else if (aPSName.Search("-w9") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_BLACK;
 
     // heuristics for font slant
-    if( (aPSName.SearchAscii("italic") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii(" ital") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("cursive") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("-it") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("lightit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("mediumit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("boldit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("cnit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("bdcn") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("bdit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("condit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("bookit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("blackit") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("libertineio") != STRING_NOTFOUND) )
+    if( (aPSName.Search("italic") != STRING_NOTFOUND)
+    ||  (aPSName.Search(" ital") != STRING_NOTFOUND)
+    ||  (aPSName.Search("cursive") != STRING_NOTFOUND)
+    ||  (aPSName.Search("-it") != STRING_NOTFOUND)
+    ||  (aPSName.Search("lightit") != STRING_NOTFOUND)
+    ||  (aPSName.Search("mediumit") != STRING_NOTFOUND)
+    ||  (aPSName.Search("boldit") != STRING_NOTFOUND)
+    ||  (aPSName.Search("cnit") != STRING_NOTFOUND)
+    ||  (aPSName.Search("bdcn") != STRING_NOTFOUND)
+    ||  (aPSName.Search("bdit") != STRING_NOTFOUND)
+    ||  (aPSName.Search("condit") != STRING_NOTFOUND)
+    ||  (aPSName.Search("bookit") != STRING_NOTFOUND)
+    ||  (aPSName.Search("blackit") != STRING_NOTFOUND) )
         rDFA.meItalic = ITALIC_NORMAL;
-    if( (aPSName.SearchAscii("oblique") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("inclined") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("slanted") != STRING_NOTFOUND) )
+    if( (aPSName.Search("oblique") != STRING_NOTFOUND)
+    ||  (aPSName.Search("inclined") != STRING_NOTFOUND)
+    ||  (aPSName.Search("slanted") != STRING_NOTFOUND) )
         rDFA.meItalic = ITALIC_OBLIQUE;
 
     // heuristics for font width
-    if( (aPSName.SearchAscii("condensed") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("-cond") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("boldcond") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("boldcn") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("cnit") != STRING_NOTFOUND) )
+    if( (aPSName.Search("condensed") != STRING_NOTFOUND)
+    ||  (aPSName.Search("-cond") != STRING_NOTFOUND)
+    ||  (aPSName.Search("boldcond") != STRING_NOTFOUND)
+    ||  (aPSName.Search("boldcn") != STRING_NOTFOUND)
+    ||  (aPSName.Search("cnit") != STRING_NOTFOUND) )
         rDFA.meWidthType = WIDTH_CONDENSED;
-    else if (aPSName.SearchAscii("narrow") != STRING_NOTFOUND)
+    else if (aPSName.Search("narrow") != STRING_NOTFOUND)
         rDFA.meWidthType = WIDTH_SEMI_CONDENSED;
-    else if (aPSName.SearchAscii("expanded") != STRING_NOTFOUND)
+    else if (aPSName.Search("expanded") != STRING_NOTFOUND)
         rDFA.meWidthType = WIDTH_EXPANDED;
-    else if (aPSName.SearchAscii("wide") != STRING_NOTFOUND)
+    else if (aPSName.Search("wide") != STRING_NOTFOUND)
         rDFA.meWidthType = WIDTH_EXPANDED;
 
     // heuristics for font pitch
-    if( (aPSName.SearchAscii("mono") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("courier") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("monaco") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("typewriter") != STRING_NOTFOUND) )
+    if( (aPSName.Search("mono") != STRING_NOTFOUND)
+    ||  (aPSName.Search("courier") != STRING_NOTFOUND)
+    ||  (aPSName.Search("monaco") != STRING_NOTFOUND)
+    ||  (aPSName.Search("typewriter") != STRING_NOTFOUND) )
         rDFA.mePitch = PITCH_FIXED;
 
     // heuristics for font family type
-    if( (aPSName.SearchAscii("script") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("chancery") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("zapfino") != STRING_NOTFOUND))
+    if( (aPSName.Search("script") != STRING_NOTFOUND)
+    ||  (aPSName.Search("chancery") != STRING_NOTFOUND)
+    ||  (aPSName.Search("zapfino") != STRING_NOTFOUND))
         rDFA.meFamily = FAMILY_SCRIPT;
-    else if( (aPSName.SearchAscii("comic") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("outline") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("pinpoint") != STRING_NOTFOUND) )
+    else if( (aPSName.Search("comic") != STRING_NOTFOUND)
+    ||  (aPSName.Search("outline") != STRING_NOTFOUND)
+    ||  (aPSName.Search("pinpoint") != STRING_NOTFOUND) )
         rDFA.meFamily = FAMILY_DECORATIVE;
-    else if( (aPSName.SearchAscii("sans") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("arial") != STRING_NOTFOUND) )
+    else if( (aPSName.Search("sans") != STRING_NOTFOUND)
+    ||  (aPSName.Search("arial") != STRING_NOTFOUND) )
         rDFA.meFamily = FAMILY_SWISS;
-    else if( (aPSName.SearchAscii("roman") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("times") != STRING_NOTFOUND) )
+    else if( (aPSName.Search("roman") != STRING_NOTFOUND)
+    ||  (aPSName.Search("times") != STRING_NOTFOUND) )
         rDFA.meFamily = FAMILY_ROMAN;
 
     // heuristics for codepoint semantic
-    if( (aPSName.SearchAscii("symbol") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("dings") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("dingbats") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("ornaments") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("embellishments") != STRING_NOTFOUND) )
+    if( (aPSName.Search("symbol") != STRING_NOTFOUND)
+    ||  (aPSName.Search("dings") != STRING_NOTFOUND)
+    ||  (aPSName.Search("dingbats") != STRING_NOTFOUND)
+    ||  (aPSName.Search("ornaments") != STRING_NOTFOUND)
+    ||  (aPSName.Search("embellishments") != STRING_NOTFOUND) )
         rDFA.mbSymbolFlag  = true;
+
+   // #i100020# special heuristic for names with single-char styles
+   // NOTE: we are checking name that hasn't been lower-cased
+   if( rPSName.Len() > 3 )
+   {
+        int i = rPSName.Len();
+        sal_Unicode c = rPSName.GetChar( --i );
+        if( c == 'C' ) { // "capitals"
+            rDFA.meFamily = FAMILY_DECORATIVE;
+            c = rPSName.GetChar( --i );
+        }
+        if( c == 'O' ) { // CFF-based OpenType
+            c = rPSName.GetChar( --i );
+        }
+        if( c == 'I' ) { // "italic"
+            rDFA.meItalic = ITALIC_NORMAL;
+            c = rPSName.GetChar( --i );
+        }
+        if( c == 'B' )   // "bold"
+            rDFA.meWeight = WEIGHT_BOLD;
+        if( c == 'C' )   // "capitals"
+            rDFA.meFamily = FAMILY_DECORATIVE;
+        // TODO: check that all single-char styles have been resolved?
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -231,9 +254,9 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             continue;
 
         // heuristic to find the most common font name
-    // prefering default language names or even better the names matching to the UI language
+        // prefering default language names or even better the names matching to the UI language
         int nNameValue = (eFontNameLanguage==eUILangCode) ? 0 : ((eFontNameLanguage==0) ? -10 : -20);
-    rtl_TextEncoding eEncoding = RTL_TEXTENCODING_UNICODE;
+        rtl_TextEncoding eEncoding = RTL_TEXTENCODING_UNICODE;
         const int nPlatformEncoding = ((int)eFontNamePlatform << 8) + (int)eFontNameScript;
         switch( nPlatformEncoding )
         {
@@ -258,6 +281,8 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 
         // ignore name entries with no useful encoding
         if( nNameValue <= 0 )
+            continue;
+        if( nNameLength >= aNameBuffer.size() )
             continue;
 
         // get the encoded name
@@ -306,7 +331,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             case kFontStyleName:
                 // get a style name matching to the family name
                 if( nBestStyleValue < nNameValue )
-        {
+                {
                     nBestStyleValue = nNameValue;
                     rDFA.maStyleName = aUtf16Name;
                 }

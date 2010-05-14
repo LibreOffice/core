@@ -322,9 +322,11 @@ text_wrapper_get_text_at_offset (AtkText          *text,
              * which is the same index as the first character of the next line. In atk the magic offset
              * '-2' is used to cover this special case.
              */
-            if( -2 == offset &&
-                (ATK_TEXT_BOUNDARY_LINE_START == boundary_type) ||
-                (ATK_TEXT_BOUNDARY_LINE_END == boundary_type) )
+            if (
+                 -2 == offset &&
+                     (ATK_TEXT_BOUNDARY_LINE_START == boundary_type ||
+                      ATK_TEXT_BOUNDARY_LINE_END == boundary_type)
+               )
             {
                 accessibility::XAccessibleMultiLineText* pMultiLineText = getMultiLineText( text );
                 if( pMultiLineText )

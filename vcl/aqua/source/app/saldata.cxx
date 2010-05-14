@@ -61,8 +61,9 @@ SalData::SalData()
     mbIsScrollbarDoubleMax( false ),
     mnSystemVersion( VER_TIGER ),
     mpMainController( NULL ),
-    mbIsTestTool( false ),
-    mpDockIconClickHandler( nil )
+    mpDockIconClickHandler( nil ),
+    mnDPIX( 0 ),
+    mnDPIY( 0 )
 {
     if( s_aAutoReleaseKey == 0 )
         s_aAutoReleaseKey = osl_createThreadKey( releasePool );

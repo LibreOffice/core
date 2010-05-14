@@ -49,7 +49,8 @@ KeyEvent::KeyEvent( const ::com::sun::star::awt::KeyEvent& rEvent )
         rEvent.KeyCode,
         (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::SHIFT) != 0,
         (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD1) != 0,
-        (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD2) != 0 );
+        (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD2) != 0,
+                (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD3) != 0);
     mnRepeat = 0;
     mnCharCode = rEvent.KeyChar;
 }
@@ -64,6 +65,8 @@ void KeyEvent::InitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent ) const
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
     if( GetKeyCode().IsMod2() )
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+        if( GetKeyCode().IsMod3() )
+                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
 
     rEvent.KeyCode = GetKeyCode().GetCode();
     rEvent.KeyChar = GetCharCode();

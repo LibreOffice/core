@@ -40,9 +40,9 @@
 #include <osl/process.h>
 #include <osl/security.h>
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xatom.h>
-#include <postx.h>
+#include <tools/postx.h>
 #include <sm.hxx>
 #include <saldata.hxx>
 #include <saldisp.hxx>

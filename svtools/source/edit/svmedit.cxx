@@ -218,7 +218,7 @@ void ImpSvMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
             bNeedVScroll = true;
     }
 
-    const BOOL bNeedScrollBox = bNeedVScroll || bNeedHScroll;
+    const BOOL bNeedScrollBox = bNeedVScroll && bNeedHScroll;
 
     BOOL bScrollbarsChanged = false;
     if ( bHaveVScroll != bNeedVScroll )

@@ -31,8 +31,8 @@
 #ifndef _SVUNX_H
 #define _SVUNX_H
 
-#include <prex.h>
-#include <postx.h>
+#include <tools/prex.h>
+#include <tools/postx.h>
 
 #endif
 

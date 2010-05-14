@@ -98,6 +98,34 @@ namespace comphelper
                     const ::com::sun::star::uno::Any& _rInitialValue
                 );
 
+        /** adds a property to the bag
+
+            The initial value of the property is <NULL/>.
+
+            @param _rName
+                the name of the new property. Must not be empty unless
+                explicitly allowed with setAllowEmptyPropertyName.
+            @param _rType
+                the type of the new property
+            @param _nHandle
+                the handle of the new property
+            @param _nAttributes
+                the attributes of the property
+
+            @throws ::com::sun::star::beans::IllegalTypeException
+                if the initial value is <NULL/>
+            @throws ::com::sun::star::beans::PropertyExistException
+                if the name or the handle are already used
+            @throws ::com::sun::star::beans::IllegalArgumentException
+                if the name is empty
+        */
+        void    addVoidProperty(
+                    const ::rtl::OUString& _rName,
+                    const ::com::sun::star::uno::Type& _rType,
+                    sal_Int32 _nHandle,
+                    sal_Int32 _nAttributes
+                );
+
         /** removes a property from the bag
             @param _rName
                 the name of the to-be-removed property.
