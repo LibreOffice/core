@@ -141,10 +141,12 @@ void Test::test() {
             css::uno::Reference< css::frame::XController >(
                 css::uno::Reference< css::frame::XModel >(
                     css::uno::Reference< css::frame::XComponentLoader >(
-                        connection_.getFactory()->createInstance(
-                            rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.frame.Desktop"))),
+                        (connection_.getComponentContext()->
+                         getServiceManager()->createInstanceWithContext(
+                             rtl::OUString(
+                                 RTL_CONSTASCII_USTRINGPARAM(
+                                     "com.sun.star.frame.Desktop")),
+                             connection_.getComponentContext())),
                         css::uno::UNO_QUERY_THROW)->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
                             rtl::OUString(

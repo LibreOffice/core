@@ -31,8 +31,8 @@ import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.connection.NoConnectException;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.DisposedException;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -85,11 +85,11 @@ public final class OfficeConnection {
             Bootstrap.createInitialComponentContext(null));
         for (;;) {
             try {
-                factory = UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class,
+                context = UnoRuntime.queryInterface(
+                    XComponentContext.class,
                     resolver.resolve(
                         "uno:" + description +
-                        ";urp;StarOffice.ServiceManager"));
+                        ";urp;StarOffice.ComponentContext"));
                 break;
             } catch (NoConnectException e) {}
             if (process != null) {
@@ -104,11 +104,12 @@ public final class OfficeConnection {
         throws InterruptedException, com.sun.star.uno.Exception
     {
         boolean desktopTerminated = true;
-        if (factory != null) {
+        if (context != null) {
             XDesktop desktop = UnoRuntime.queryInterface(
                 XDesktop.class,
-                factory.createInstance("com.sun.star.frame.Desktop"));
-            factory = null;
+                context.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", context));
+            context = null;
             try {
                 desktopTerminated = desktop.terminate();
             } catch (DisposedException e) {}
@@ -130,10 +131,10 @@ public final class OfficeConnection {
         assertTrue(errTerminated);
     }
 
-    /** Obtain the service factory of the running OOo instance.
+    /** Obtain the component context of the running OOo instance.
     */
-    public XMultiServiceFactory getFactory() {
-        return factory;
+    public XComponentContext getComponentContext() {
+        return context;
     }
 
     //TODO: get rid of this hack for legacy qa/unoapi tests
@@ -217,5 +218,5 @@ public final class OfficeConnection {
     private Process process = null;
     private Forward outForward = null;
     private Forward errForward = null;
-    private XMultiServiceFactory factory = null;
+    private XComponentContext context = null;
 }
