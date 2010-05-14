@@ -218,6 +218,10 @@ public:
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
         &member, ::getCppuType( &member ) );
 
+#define REGISTER_PROP_3( prop, member, attrib1, attrib2, attrib3 ) \
+    registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2 | PropertyAttribute::attrib3, \
+        &member, ::getCppuType( &member ) );
+
 //------------------------------------------------------------------------------
 #define REGISTER_VOID_PROP_1( prop, memberAny, type, attrib1 ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1, \

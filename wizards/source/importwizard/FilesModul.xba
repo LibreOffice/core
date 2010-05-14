@@ -41,7 +41,6 @@ Dim NewContentList() as String
 Dim XMLTemplateContentString as String
 Dim ApplIndex as Integer
 Dim bAssignFileName as Boolean
-	oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
 	bInterruptSearch = False
 	For i = 0 To MaxCollectIndex
 		SearchDir = PathCollection(i,0)
@@ -71,7 +70,7 @@ Dim bAssignFileName as Boolean
 						CurFileContent = &quot;&quot;
 						CurFileName = NewList(n,0)													
 						If (FieldInList(NewList(n,1), XMLTemplateList())) Then
-							CurFileContent = GetRealFileContent(oDocInfo, CurFileName)
+							CurFileContent = GetRealFileContent(CurFileName)
 							t = SearchArrayforPartString(CurFileContent, XMLTemplateContentList())
 						 	bAssignFileName = (t &gt; -1)
 						 	If bAssignFileName Then

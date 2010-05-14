@@ -108,9 +108,11 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
 
     virtual SdrObject*  Clone() const;                                          // not working yet
-    virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;          // not working yet
     virtual void        operator= (const SdrObject& rObj);                      // not working yet
     virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
+
+    // FullDrag support
+    virtual SdrObject* getFullDragClone() const;
 
     virtual sal_Bool        supportsService( const sal_Char* _pServiceName ) const;
     virtual ::rtl::OUString GetDefaultName() const;

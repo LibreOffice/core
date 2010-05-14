@@ -218,7 +218,7 @@ en-US = "The Installation Wizard has successfully installed ${PRODUCT_FULLNAME} 
 en-US = "The Installation Wizard was aborted. ${PRODUCT_NAME} is not installed on your computer."
 
 [STRING_INSTALLATIONCOMPLETED2_ERROR]
-en-US = "An error has occured. Thus the Installation Wizard could not install ${PRODUCT_NAME} on your computer successfully. Click 'Details...' for more information."
+en-US = "An error has occurred. Thus the Installation Wizard could not install ${PRODUCT_NAME} on your computer successfully. Click 'Details...' for more information."
 
 [STRING_INSTALLATIONCOMPLETED3]
 en-US = "Click 'Finish' to exit the Wizard."
@@ -284,7 +284,7 @@ en-US = "The Uninstallation Wizard has successfully removed the selected compone
 en-US = "The Uninstallation Wizard was aborted before completely removing ${PRODUCT_NAME} from your computer."
 
 [STRING_UNINSTALLATIONCOMPLETED2_ERROR]
-en-US = "An error has occured. Thus the Uninstallation Wizard could not remove ${PRODUCT_NAME} from your computer successfully. Click 'Details...' for more information."
+en-US = "An error has occurred. Thus the Uninstallation Wizard could not remove ${PRODUCT_NAME} from your computer successfully. Click 'Details...' for more information."
 
 [STRING_INSTALLERFACTORY_OS_NOT_SUPPORTED]
 en-US = "Sorry, this Operating System is not supported yet."

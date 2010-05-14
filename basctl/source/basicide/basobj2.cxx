@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 //----------------------------------------------------------------------------
 
 extern "C" {
-    rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, BOOL bChooseOnly, rtl_uString* pMacroDesc )
+    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, BOOL bChooseOnly, rtl_uString* pMacroDesc )
     {
         ::rtl::OUString aMacroDesc( pMacroDesc );
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
@@ -69,7 +69,7 @@ extern "C" {
 
         return pScriptURL;
     }
-    void basicide_macro_organizer( INT16 nTabId )
+    SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer( INT16 nTabId )
     {
         OSL_TRACE("in basicide_macro_organizer");
         BasicIDE::Organize( nTabId );

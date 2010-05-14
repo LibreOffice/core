@@ -29,6 +29,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\linux\*.dat %_DEST%\bin%_EXT%\*.dat
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
+..\source\java\javaversion2.dat %_DEST%\bin%_EXT%\javaversion2.dat
 ..\source\packinfo\solariscopyrightfile %_DEST%\bin%_EXT%\solariscopyrightfile
 ..\source\packinfo\*.txt %_DEST%\bin%_EXT%\*.txt
 ..\source\packinfo\*.pcp %_DEST%\bin%_EXT%\*.pcp

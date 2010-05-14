@@ -41,6 +41,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.i18n.NumberFormatIndex;
@@ -189,7 +190,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     /**
      * used to set the document title property (step 6).
      */
-    private Object docInfo;
+    private XDocumentProperties m_xDocProps;
 
     /**
      * loads the given template, and analyze its structure.
@@ -282,7 +283,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     synchronized void setTemplateTitle(String newTitle)
     {
-        Helper.setUnoPropertyValue(docInfo, "Title", newTitle);
+        m_xDocProps.setTitle(newTitle);
     }
 
     /**
@@ -476,9 +477,9 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         }
 
         /*
-         * get the document info object.
+         * get the document properties object.
          */
-        docInfo = OfficeDocument.getDocumentInfo(document);
+        m_xDocProps = OfficeDocument.getDocumentProperties(document);
 
         initItemsCache();
         initializeItems();

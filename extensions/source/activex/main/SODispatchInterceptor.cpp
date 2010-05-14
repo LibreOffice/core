@@ -48,9 +48,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
     if( aTargetUrl.vt != VT_BSTR  ) return E_FAIL;
 
     USES_CONVERSION;
-    if( !strncmp( OLE2T( aTargetUrl.bstrVal ), "ftp://", 6 )
-     || !strncmp( OLE2T( aTargetUrl.bstrVal ), "http://", 7 )
-     || !strncmp( OLE2T( aTargetUrl.bstrVal ), "file://", 7 ) )
+    if( !strncmp( OLE2T( aTargetUrl.bstrVal ), ".uno:OpenHyperlink", 18 ) )
     {
         CComQIPtr< IDispatch, &IID_IDispatch > pIDisp( this );
         if( pIDisp )
@@ -62,7 +60,10 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
     else
     {
         if( !m_xSlave )
-            return E_FAIL;
+        {
+            *retVal = NULL;
+            return S_OK;
+        }
 
         CComVariant aResult;
         CComVariant aArgs[3];
@@ -71,14 +72,17 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
         aArgs[2] = CComVariant( aURL );
 
         hr = ExecuteFunc( m_xSlave, L"queryDispatch", aArgs, 3, &aResult );
-        if( !SUCCEEDED( hr ) || aResult.vt != VT_DISPATCH || aResult.pdispVal == NULL ) return E_FAIL;
+        if( !SUCCEEDED( hr ) || aResult.vt != VT_DISPATCH || aResult.pdispVal == NULL )
+        {
+            *retVal = NULL;
+            return S_OK;
+        }
 
         *retVal = aResult.pdispVal;
-        /* following code is workaround for UNO bug
+
         CComQIPtr< IUnknown, &IID_IUnknown > pIUnk( *retVal );
         if( pIUnk )
             (*retVal)->AddRef();
-        */
     }
 
     return S_OK;
@@ -96,11 +100,11 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
 
     hr = SafeArrayGetUBound( aDescripts, 1, &nUB );
     if( !SUCCEEDED( hr ) ) return hr;
-    if( nUB <= nLB ) return E_FAIL;
+    if( nUB < nLB ) return E_FAIL;
 
     *retVal = SafeArrayCreateVector( VT_DISPATCH, 0, nUB - nLB );
 
-    for ( long ind = nLB; ind < nUB; ind ++ )
+    for ( long ind = nLB; ind <= nUB; ind ++ )
     {
         CComPtr<IDispatch> pElem;
         SafeArrayGetElement( aDescripts, &ind, pElem );
@@ -124,7 +128,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
 }
 
 
-STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* /*aArgs*/)
+STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* aArgs)
 {
     // get url from aURL
     OLECHAR* pUrlName = L"Complete";
@@ -134,13 +138,49 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
     if( pValue.vt != VT_BSTR || pValue.bstrVal == NULL )
         return E_FAIL;
 
-    EnterCriticalSection( &mMutex );
-    if( m_xParentControl )
+    USES_CONVERSION;
+    if( !strncmp( OLE2T( pValue.bstrVal ), ".uno:OpenHyperlink", 18 ) )
     {
-        // call GetUrl to the browser instance
-        m_xParentControl->GetURL( pValue.bstrVal, L"_blank" );
+        long nLB = 0, nUB = 0;
+        // long nDim = SafeArrayGetDim( aArgs );
+
+        hr = SafeArrayGetLBound( aArgs, 1, &nLB );
+        if( !SUCCEEDED( hr ) ) return hr;
+
+        hr = SafeArrayGetUBound( aArgs, 1, &nUB );
+        if( !SUCCEEDED( hr ) ) return hr;
+        if( nUB < nLB ) return E_FAIL;
+
+        for ( long ind = nLB; ind <= nUB; ind ++ )
+        {
+            CComVariant pVarElem;
+            SafeArrayGetElement( aArgs, &ind, &pVarElem );
+            if( pVarElem.vt == VT_DISPATCH && pVarElem.pdispVal != NULL )
+            {
+                OLECHAR* pMemberNames[2] = { L"Name", L"Value" };
+                CComVariant pValues[2];
+                hr = GetPropertiesFromIDisp( pVarElem.pdispVal, pMemberNames, pValues, 2 );
+                if( !SUCCEEDED( hr ) ) return hr;
+
+                if( pValues[0].vt == VT_BSTR && pValues[1].vt == VT_BSTR )
+                {
+                    USES_CONVERSION;
+                    if( !strncmp( OLE2T( pValues[0].bstrVal ), "URL", 3 ) )
+                    {
+                        EnterCriticalSection( &mMutex );
+                        if( m_xParentControl )
+                        {
+                            // call GetUrl to the browser instance
+                            m_xParentControl->GetURL( pValues[1].bstrVal, L"_self" );
+                        }
+                        LeaveCriticalSection( &mMutex );
+
+                        break;
+                    }
+                }
+            }
+        }
     }
-    LeaveCriticalSection( &mMutex );
 
     return S_OK;
 }

@@ -114,7 +114,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
     {
         pSequence = aSequence.getConstArray();
         rInt16 = static_cast <sal_Int16>
-               ( pSequence[0] & 0xFF
+               ( (pSequence[0] & 0xFF)
               | (pSequence[1] & 0xFF) << 8);
     }
     return *this;
@@ -127,7 +127,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
     {
         pSequence = aSequence.getConstArray();
         rInt32 = static_cast < sal_Int32 >
-                ( pSequence[0] & 0xFF
+                ( (pSequence[0] & 0xFF)
               | ( pSequence[1] & 0xFF ) << 8
               | ( pSequence[2] & 0xFF ) << 16
               | ( pSequence[3] & 0xFF ) << 24 );
@@ -151,7 +151,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt16& rInt16)
     {
         pSequence = aSequence.getConstArray();
         rInt16 = static_cast <sal_uInt16>
-               ( pSequence[0] & 0xFF
+               ( (pSequence[0] & 0xFF)
               | (pSequence[1] & 0xFF) << 8);
     }
     return *this;
@@ -164,7 +164,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
     {
         pSequence = aSequence.getConstArray();
         ruInt32 = static_cast < sal_uInt32 >
-                ( pSequence[0] & 0xFF
+                ( (pSequence[0] & 0xFF)
               | ( pSequence[1] & 0xFF ) << 8
               | ( pSequence[2] & 0xFF ) << 16
               | ( pSequence[3] & 0xFF ) << 24 );

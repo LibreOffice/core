@@ -34,6 +34,7 @@ PRJINC=..$/inc
 PRJNAME=extensions
 TARGET=preload
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------

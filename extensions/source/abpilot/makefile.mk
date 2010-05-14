@@ -34,6 +34,7 @@ PRJINC=..$/inc
 PRJNAME=extensions
 TARGET=abp
 USE_DEFFILE=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

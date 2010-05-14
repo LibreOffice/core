@@ -858,10 +858,12 @@ namespace pcr
             {
                 Reference< XComponent > xComp( *loop, UNO_QUERY );
                 if ( xComp.is() )
+                {
                     if ( _bOn )
                         xComp->addEventListener( static_cast< XPropertyChangeListener* >( this ) );
                     else
                         xComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
+                }
             }
             catch( const Exception& )
             {

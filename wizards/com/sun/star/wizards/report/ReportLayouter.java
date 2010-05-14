@@ -61,7 +61,8 @@ public class ReportLayouter
     public String[][] LayoutFiles;
     public String[][] ContentFiles;
     // private Desktop.OfficePathRetriever curofficepath;
-    Object aOrientationImage;    // boolean m_bLandscape = true;
+    Object aOrientationImage;
+    // boolean m_bLandscape = true;
     private XMultiServiceFactory m_xMSF;
 
     public ReportLayouter(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, UnoDialog _CurUnoDialog)

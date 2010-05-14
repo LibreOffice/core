@@ -85,6 +85,14 @@ public class InstallationOngoingCtrl extends PanelController {
         PackageCollector.sortPackages(installPackages, sortedPackages, "install");
         installData.setInstallPackages(sortedPackages);
 
+        if ( installData.isMajorUpgrade() ) {
+            // PackageCollector.findOldPackages(installData);
+            // Sorting for correct order of uninstallation
+            Vector sortedUninstallPackages = new Vector();
+            PackageCollector.sortPackages(installData.getOldPackages(), sortedUninstallPackages, "uninstall");
+            installData.setOldPackages(sortedUninstallPackages);
+        }
+
         Installer installer = InstallerFactory.getInstance();
         installer.preInstallationOngoing();
     }
@@ -96,6 +104,7 @@ public class InstallationOngoingCtrl extends PanelController {
             InstallData installData = InstallData.getInstance();
             InstallationOngoing panel = (InstallationOngoing)getPanel();
             Vector installPackages = installData.getInstallPackages();
+            Vector removePackages = installData.getOldPackages();
             private Vector installedPackages = new Vector();
 
             public void run() {
@@ -110,11 +119,30 @@ public class InstallationOngoingCtrl extends PanelController {
                     panel.setProgressValue(progress);
                     panel.setProgressText(packageData.getPackageName());
 
+                    // Creating an upgrade process for Solaris packages
+                    if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
+                        if ( installer.isPackageInstalled(packageData, installData) ) {
+                            if ( installer.isInstalledPackageOlder(packageData, installData) ) {
+                                packageData.setIgnoreDependsForUninstall(true);
+                                installer.uninstallPackage(packageData);
+                            } else {
+                                continue;  // no downgrading
+                            }
+                        }
+                    }
+
                     installer.installPackage(packageData);
                     installedPackages.add(packageData);
 
                     if ( installData.isAbortedInstallation() ) {
                         break;
+                    }
+                }
+
+                if ( installData.isMajorUpgrade() ) {
+                    for (int i = 0; i < removePackages.size(); i++) {
+                        PackageDescription packageData = (PackageDescription) removePackages.get(i);
+                        installer.uninstallPackage(packageData);
                     }
                 }
 

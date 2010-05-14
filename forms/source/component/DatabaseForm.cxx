@@ -319,7 +319,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
     }
 
     {
-        m_aFilterManager.initialize( this, m_xAggregateSet );
+        m_aFilterManager.initialize( m_xAggregateSet );
         m_aParameterManager.initialize( this, m_xAggregate );
 
         declareForwardedProperty( PROPERTY_ID_ACTIVE_CONNECTION );

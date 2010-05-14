@@ -79,18 +79,21 @@ inline BOOL operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com
             rL1.Variant  ==  rL2.Variant;
 }
 
+#if 0
 ///////////////////////////////////////////////////////////////////////////
 
 String GetDirectoryPathFromFileURL( const String &rFileURL );
+#endif
 
+#if defined(WNT)
 ///////////////////////////////////////////////////////////////////////////
-
 // to be use to get a short path name under Windows that still can be used with
 // the 'fopen' call. This is necessary since under Windows there seems to be
 // a restriction of only about 110-130 characters length to a path name in order
 // for it to work with 'fopen'. And that length is usually easily exceeded
 // when using extensions...
 rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName );
+#endif
 
 ///////////////////////////////////////////////////////////////////////////
 

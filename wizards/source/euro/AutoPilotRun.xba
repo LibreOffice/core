@@ -17,7 +17,6 @@ Public DoUnprotect as Integer
 Public Password as String
 Public DocIndex as Integer
 Public oPathSettings as Object
-Public oDocInfo as Object
 Public oUcb as Object
 Public TotDocCount as Integer
 Public sTotDocCount as String
@@ -30,7 +29,6 @@ Dim oFactoryKey as Object
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;ImportWizard&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
-		oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
 		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 		oLocale = GetStarOfficeLocale()
 		InitializeConverter(oLocale, 2)
@@ -303,7 +301,7 @@ Dim sNoDirMessage as String
 	If bIsValid Then
 		If DialogModel.optSingleFile.State = 1 Then
 			If bCheckFileType Then
-				sLocMimeType = GetRealFileContent(oDocInfo, sPath)
+				sLocMimeType = GetRealFileContent(sPath)
 				If DialogModel.chkTextDocuments.State = 1 Then
 					If (Instr(1, sLocMimeType, &quot;text&quot;) = 0) And (Instr(1, sLocMimeType, &quot;calc&quot;) = 0) Then
 						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)

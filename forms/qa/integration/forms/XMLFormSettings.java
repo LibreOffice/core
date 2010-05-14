@@ -125,7 +125,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     public void after() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        //impl_closeDocument();
+        impl_closeDocument();
     }
 
     /* ------------------------------------------------------------------ */

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheckui.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -595,6 +595,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
                                          XubString( maBubbleTitle ),
                                        XubString( maBubbleText ),
                                        maBubbleImage );
+        mbBubbleChanged = false;
     }
     else if ( mbBubbleChanged ) {
         pBubbleWin->SetTitleAndText( XubString( maBubbleTitle ),
@@ -709,13 +710,22 @@ IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
     Window *pActiveWin = Application::GetActiveTopWindow();
     SystemWindow *pActiveSysWin = NULL;
 
-    if ( pActiveWin && pActiveWin->IsTopWindow() )
+    Window *pBubbleWin = NULL;
+    if ( mpBubbleWin )
+        pBubbleWin = mpBubbleWin;
+
+    if ( pActiveWin && ( pActiveWin != pBubbleWin ) && pActiveWin->IsTopWindow() )
         pActiveSysWin = pActiveWin->GetSystemWindow();
 
-    while ( !pActiveSysWin && pTopWin ) {
-        if ( pTopWin->IsTopWindow() )
+    if ( pActiveWin == pBubbleWin )
+        pActiveSysWin = NULL;
+
+    while ( !pActiveSysWin && pTopWin )
+    {
+        if ( ( pTopWin != pBubbleWin ) && pTopWin->IsTopWindow() )
             pActiveSysWin = pTopWin->GetSystemWindow();
-        pTopWin = Application::GetNextTopLevelWindow( pTopWin );
+        if ( !pActiveSysWin )
+            pTopWin = Application::GetNextTopLevelWindow( pTopWin );
     }
 
     if ( pActiveSysWin )

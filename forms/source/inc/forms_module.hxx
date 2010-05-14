@@ -309,6 +309,27 @@ namespace FORMS_MODULE_NAMESPACE
             ); \
            } \
 
+    #define IMPLEMENT_SERVICE_REGISTRATION_8( classname, baseclass, service1, service2, service3, service4 , service5, service6, service7, service8 ) \
+        IMPLEMENT_SERVICE_REGISTRATION_BASE( classname, baseclass ) \
+        \
+           Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
+           { \
+                   Sequence< ::rtl::OUString > aOwnNames( 8 ); \
+                   aOwnNames[ 0 ] = service1; \
+                   aOwnNames[ 1 ] = service2; \
+                   aOwnNames[ 2 ] = service3; \
+                   aOwnNames[ 3 ] = service4; \
+                   aOwnNames[ 4 ] = service5; \
+                   aOwnNames[ 5 ] = service6; \
+                   aOwnNames[ 6 ] = service7; \
+                   aOwnNames[ 6 ] = service8; \
+            \
+            return ::comphelper::concatSequences( \
+                baseclass::getSupportedServiceNames_Static(), \
+                aOwnNames \
+            ); \
+           } \
+
 //.........................................................................
 }   // namespace FORMS_MODULE_NAMESPACE
 //.........................................................................

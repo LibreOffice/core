@@ -44,7 +44,9 @@ MINGW_NODLL=YES
 
 .INCLUDE : settings.mk
 
+.IF "$(USE_SYSTEM_STL)" != "YES"
 CFLAGS+=-D_STLP_USE_STATIC_LIB
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -59,8 +61,11 @@ SHL1OBJS = $(SLOFILES)
 
 STDSHL+=	\
     $(ADVAPI32LIB)\
-    $(MSILIB)\
-    $(LIBSTLPORTST)								
+    $(MSILIB)
+
+.IF "$(USE_SYSTEM_STL)" != "YES"
+STDSHL+=$(LIBSTLPORTST)								
+.ENDIF
 
 #SHL1LIBS = $(SLB)$/$(TARGET).lib 
 

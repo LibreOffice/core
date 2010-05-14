@@ -650,7 +650,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     if(pPgView)
     {
         // paint of control layer is done in EndDrawLayers anyway...
-        pPgView->GetView().EndDrawLayers(*pTargetPaintWindow);
+        pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
     }
 
     mnPaintGuard--;

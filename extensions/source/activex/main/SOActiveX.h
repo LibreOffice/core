@@ -162,6 +162,7 @@ public:
     HRESULT CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL sArgVal );
     HRESULT GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl );
     HRESULT Cleanup();
+    HRESULT TerminateOffice();
     HRESULT CSOActiveX::GetURL( const OLECHAR* url,
                                 const OLECHAR* target );
 

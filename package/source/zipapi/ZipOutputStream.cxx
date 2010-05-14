@@ -40,9 +40,8 @@
 #include <vos/ref.hxx>
 #endif
 #include <com/sun/star/io/XOutputStream.hpp>
-#if OSL_DEBUG_LEVEL > 0
-#include <ImplValidCharacters.hxx>
-#endif
+
+#include <comphelper/storagehelper.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::io;
@@ -96,12 +95,10 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     if (rEntry.nMethod == -1)
         rEntry.nMethod = nMethod;
     rEntry.nVersion = 20;
+    rEntry.nFlag = 1 << 11;
     if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
         rEntry.nCrc == -1)
-        rEntry.nFlag = 8;
-    else if (rEntry.nSize != -1 && rEntry.nCompressedSize != -1 &&
-        rEntry.nCrc != -1)
-        rEntry.nFlag = 0;
+        rEntry.nFlag |= 8;
 
     if (bEncrypt)
     {
@@ -121,7 +118,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
         pCurrentEncryptData = xEncryptData.getBodyPtr();
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
-    rEntry.nOffset = static_cast < sal_Int32 > (aChucker.getPosition()) - nLOCLength;
+    rEntry.nOffset = static_cast < sal_Int32 > (aChucker.GetPosition()) - nLOCLength;
     aZipList.push_back( &rEntry );
     pCurrentEntry = &rEntry;
 }
@@ -212,7 +209,7 @@ void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_I
         case STORED:
             {
                 Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
-                aChucker.writeBytes( aTmpBuffer );
+                aChucker.WriteBytes( aTmpBuffer );
             }
             break;
     }
@@ -222,7 +219,7 @@ void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int3
     throw(IOException, RuntimeException)
 {
     Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
-    aChucker.writeBytes( aTmpBuffer );
+    aChucker.WriteBytes( aTmpBuffer );
 }
 
 void SAL_CALL ZipOutputStream::rawCloseEntry(  )
@@ -245,10 +242,10 @@ void SAL_CALL ZipOutputStream::finish(  )
     if (aZipList.size() < 1)
         OSL_ENSURE(false,"Zip file must have at least one entry!\n");
 
-    sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.getPosition());
+    sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.GetPosition());
     for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
         writeCEN( *aZipList[i] );
-    writeEND( nOffset, static_cast < sal_Int32 > (aChucker.getPosition()) - nOffset);
+    writeEND( nOffset, static_cast < sal_Int32 > (aChucker.GetPosition()) - nOffset);
     bFinished = sal_True;
     xStream->flush();
 }
@@ -282,12 +279,12 @@ void ZipOutputStream::doDeflate()
                                             nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
             OSL_ASSERT( aCipherResult == rtl_Cipher_E_None );
 
-            aChucker.writeBytes ( aEncryptionBuffer );
+            aChucker.WriteBytes( aEncryptionBuffer );
             aCRC.update ( aEncryptionBuffer );
             aEncryptionBuffer.realloc ( nOldLength );
         }
         else
-            aChucker.writeBytes ( aTmpBuffer );
+            aChucker.WriteBytes ( aTmpBuffer );
     }
 }
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
@@ -305,7 +302,11 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
 void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
-    sal_Int16 nNameLength       = static_cast < sal_Int16 > ( rEntry.sName.getLength() );
+    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sName, sal_True ) )
+        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+
+    ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sName, RTL_TEXTENCODING_UTF8 );
+    sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
     aChucker << CENSIG;
     aChucker << rEntry.nVersion;
@@ -335,15 +336,8 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     aChucker << static_cast < sal_Int32> (0);
     aChucker << rEntry.nOffset;
 
-    const sal_Unicode *pChar = rEntry.sName.getStr();
-    Sequence < sal_Int8 > aSequence (nNameLength);
-    sal_Int8 *pArray = aSequence.getArray();
-
-    OSL_ENSURE ( Impl_IsValidChar ( pChar, nNameLength, sal_True ), "Non US ASCII character in zipentry name!");
-    for ( sal_Int16 i = 0; i < nNameLength; i++)
-        pArray[i] = static_cast < const sal_Int8 > (pChar[i]);
-
-    aChucker.writeBytes( aSequence, nNameLength, pArray );
+    Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
+    aChucker.WriteBytes( aSequence );
 }
 void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
@@ -357,9 +351,11 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
 sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
-    sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());
-    Sequence < sal_Int8 > aSequence(nNameLength);
-    sal_Int8 *pArray = aSequence.getArray();
+    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sName, sal_True ) )
+        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+
+    ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sName, RTL_TEXTENCODING_UTF8 );
+    sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
     aChucker << LOCSIG;
     aChucker << rEntry.nVersion;
@@ -394,11 +390,9 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     aChucker << nNameLength;
     aChucker << static_cast < sal_Int16 > (0);
 
-    const sal_Unicode *pChar = rEntry.sName.getStr();
-    OSL_ENSURE ( Impl_IsValidChar ( pChar, nNameLength, sal_True ), "Non US ASCII character in zipentry name!");
-    for ( sal_Int16 i = 0; i < nNameLength; i++)
-        pArray[i] = static_cast < const sal_Int8 > (pChar[i]);
-    aChucker.writeBytes( aSequence, nNameLength, pArray );
+    Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
+    aChucker.WriteBytes( aSequence );
+
     return LOCHDR + nNameLength;
 }
 sal_uInt32 ZipOutputStream::getCurrentDosTime( )

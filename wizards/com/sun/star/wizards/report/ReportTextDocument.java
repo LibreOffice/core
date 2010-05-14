@@ -223,7 +223,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
 
     public void updateReportTitle(String _sTitleName)
     {
-        Helper.setUnoPropertyValue(xDocInfo, "Title", _sTitleName);
+        m_xDocProps.setTitle(_sTitleName);
     }
 
     public void getReportPageStyles()

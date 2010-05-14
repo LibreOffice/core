@@ -31,9 +31,11 @@
 package org.openoffice.setup.PanelHelper;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import org.openoffice.setup.InstallData;
 
 public class PanelLabel extends JTextArea {
 
@@ -65,6 +67,9 @@ public class PanelLabel extends JTextArea {
         setForeground(TextColor);
         setFont(TextFont);
         setFocusable(false);
+
+        InstallData data = InstallData.getInstance();
+        if ( data.useRtl() ) { setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         if (multiline) {
             setLineWrap(true);

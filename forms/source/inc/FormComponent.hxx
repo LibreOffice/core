@@ -160,9 +160,14 @@ public:
         const sal_Bool _bSetDelegator = sal_True
     );
 
-    virtual ~OControl();
+    /** initializes the given peer with various settings necessary for form controls
+    */
+    static  void    initFormControlPeer(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rxPeer );
 
 protected:
+    virtual ~OControl();
+
     /** sets the control as delegator at the aggregate
 
         This has to be called from within your derived class' constructor, if and only

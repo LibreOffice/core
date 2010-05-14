@@ -37,6 +37,7 @@ TARGET=resource
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 

@@ -9,6 +9,7 @@ Dim sDirArray(SBMAXDIRCOUNT-1) as String
 Dim DirIndex As Integer
 Dim iDirCount as Integer
 Public bInterruptSearch as Boolean
+Public NoArgs()as New com.sun.star.beans.PropertyValue
 
 Sub Main()
 Dim LocsfileContent(0) as String
@@ -64,7 +65,7 @@ Dim sFileArray(StartUbound,1) as String
 						End If
 					Else
 						If bcheckFileType Then
-							RealFileContent  = GetRealFileContent(oDocInfo, FileName)
+							RealFileContent = GetRealFileContent(FileName)
 						Else
 							RealFileContent = GetFileNameExtension(FileName)
 						End If
@@ -143,14 +144,14 @@ Dim FileCount As Integer
 End Sub
 
 
-Function RetrieveDocTitle(oDocInfo as Object, sFileName as String) As String
+Function RetrieveDocTitle(oDocProps as Object, sFileName as String) As String
 Dim sDocTitle as String
 	On Local Error Goto NOFILE
-	oDocInfo.Read(sFileName)
-	sDocTitle = oDocInfo.Title
+	oDocProps.loadFromMedium(sFileName, NoArgs())
+	sDocTitle = oDocProps.Title
 	NOFILE:
 	If Err &lt;&gt; 0 Then
-		GetRealFileContent = &quot;&quot;
+		RetrieveDocTitle = &quot;&quot;
 		RESUME CLR_ERROR
 	End If
 	CLR_ERROR:
@@ -163,10 +164,10 @@ End Function
 
 &apos; Retrieves The Filecontent of a Document by extracting the content
 &apos; from the Header of the document
-Function GetRealFileContent(oDocInfo as Object, FileName as String) As String
+Function GetRealFileContent(FileName as String) As String
 	On Local Error Goto NOFILE
-	oDocInfo.Read(FileName)
-	GetRealFileContent = oDocInfo.MIMEType
+	oTypeDetect = createUnoService(&quot;com.sun.star.document.TypeDetection&quot;)
+	GetRealFileContent = oTypeDetect.queryTypeByURL(FileName)
 	NOFILE:
 	If Err &lt;&gt; 0 Then
 		GetRealFileContent = &quot;&quot;

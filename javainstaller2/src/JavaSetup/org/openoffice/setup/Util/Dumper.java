@@ -179,7 +179,9 @@ public class Dumper {
         InstallData data = InstallData.getInstance();
         System.err.println("PackagePath: " + data.getPackagePath());
         System.err.println("AdminFileReloc: " + data.getAdminFileNameReloc());
+        System.err.println("AdminFileRelocNoDepends: " + data.getAdminFileNameRelocNoDepends());
         System.err.println("AdminFileNoReloc: " + data.getAdminFileNameNoReloc());
+        System.err.println("AdminFileNoRelocNoDepends: " + data.getAdminFileNameNoRelocNoDepends());
         System.err.println("DatabasePath: " + data.getDatabasePath());
         System.err.println("InstallDir: " + data.getInstallDir());
         System.err.println("Original privileges: " + data.getStoredInstallationPrivileges());

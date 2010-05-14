@@ -60,6 +60,7 @@ import com.sun.star.util.XURLTransformer;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.FieldColumn;
 // import java.io.File;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -201,6 +202,8 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
         catch (com.sun.star.uno.Exception e)
         {
+            ReportWizard.getLogger().log(com.sun.star.logging.LogLevel.SEVERE, "Problems with initialize the ReportDefinition" + e.getMessage());
+
         }
         m_xReportDefinition = xReportDefinition;
 
@@ -876,6 +879,28 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         getReportDefinition().setCommandType(_nCommand);
     }
+
+
+    public void checkInvariants() throws java.lang.Exception
+    {
+        final String sDefaultHeaderLayoutPath = getDefaultHeaderLayout();
+        if (sDefaultHeaderLayoutPath == null)
+        {
+            throw new java.io.IOException("default.otr");
+        }
+
+        final String sName = FileAccess.getFilename(sDefaultHeaderLayoutPath);
+        // if (sName.toLowerCase().equals("default.otr_") ||
+        //         LayoutTemplatePath.equals("DefaultLayoutOfHeaders"))
+        // File aFile = new File(sDefaultHeaderLayoutPath);
+        // File aFile = new File(sName);
+        FileAccess aAccess = new FileAccess(getGlobalMSF());
+        if (! aAccess.exists(sDefaultHeaderLayoutPath, true))
+        {
+            throw new java.io.IOException("default.otr");
+        }
+    }
+
 }
 
 

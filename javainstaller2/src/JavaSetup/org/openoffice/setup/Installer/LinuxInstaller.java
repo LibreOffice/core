@@ -409,12 +409,17 @@ public class LinuxInstaller extends Installer {
                 log = rpmCommand + "<br><b>Returns: " + returnValue + " Successful uninstallation</b><br>";
                 LogManager.addCommandsLogfileComment(log);
             } else {    // an error occured during installation
-                log = rpmCommand + "<br><b>Returns: " + returnValue + " Error during uninstallation</b><br>";
-                LogManager.addCommandsLogfileComment(log);
-                for (int i = 0; i < returnErrorVector.size(); i++) {
-                    LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
+                if ( packageData.uninstallCanFail() ) {
+                    log = rpmCommand + "<br><b>Returns: " + returnValue + " Problem during uninstallation. Can be ignored.</b><br>";
+                    LogManager.addCommandsLogfileComment(log);
+                } else {
+                    log = rpmCommand + "<br><b>Returns: " + returnValue + " Error during uninstallation</b><br>";
+                    LogManager.addCommandsLogfileComment(log);
+                    for (int i = 0; i < returnErrorVector.size(); i++) {
+                        LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
+                    }
+                    data.setIsErrorInstallation(true);
                 }
-                data.setIsErrorInstallation(true);
             }
         }
     }
@@ -538,7 +543,8 @@ public class LinuxInstaller extends Installer {
                 String onePackage = (String)returnVector.get(i);
                 int pos1 = onePackage.lastIndexOf("-");
                 int pos2 = onePackage.substring(0, pos1).lastIndexOf("-");
-                map.put(onePackage.substring(0, pos2), value);
+                String key = onePackage.substring(0, pos2);
+                map.put(key, value);
             }
         }
 
@@ -666,6 +672,12 @@ public class LinuxInstaller extends Installer {
                 String version = (String) versionVector.lastElement();
                 log = rpmCommand + "<br><b>Returns: " + version + "</b><br>";
                 LogManager.addCommandsLogfileComment(log);
+
+                if ( ! installData.installedProductMinorSet() ) {
+                    int productMinor = helper.getInstalledMinor(version);
+                    installData.setInstalledProductMinor(productMinor);
+                    installData.setInstalledProductMinorSet(true);
+                }
 
                 if (useLocalDatabase) {
                     rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " -q --queryformat %{RELEASE}\\n " + packageName;

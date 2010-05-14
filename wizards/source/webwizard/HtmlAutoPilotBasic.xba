@@ -153,11 +153,11 @@ Dim OldWebPageIndex as Integer
 		CurrentNext$ = GraphicsDir + Style(CurWebPageIndex, 3)
 		CurrentHome$ = GraphicsDir + Style(CurWebPageIndex, 4)
 		CurrentTop$ = GraphicsDir + Style(CurWebPageIndex, 5)
-		With oBaseDocument.DocumentInfo
-			.GetUserFieldValue(0) = ExtractGraphicNames(CurWebPageIndex,2)
-			.GetUserFieldValue(1) = ExtractGraphicNames(CurWebPageIndex, 4)
-			.GetUserFieldValue(2) = Style(CurWebPageIndex, 6)       &apos; Bullet
-			.GetUserFieldValue(3) = Style(CurWebPageIndex, 7)       &apos; Background
+		With oBaseDocument.DocumentProperties.UserDefinedProperties
+            .AutoPilotName1 = ExtractGraphicNames(CurWebPageIndex,2)
+            .AutoPilotName2 = ExtractGraphicNames(CurWebPageIndex, 4)
+            .AutoPilotBullet = Style(CurWebPageIndex, 6)
+            .AutoPilotBackground =  Style(CurWebPageIndex, 7)
 		End With
 		SetBulletAndGraphics()
 		CheckControls(oBaseDocument.DrawPage)
@@ -235,6 +235,7 @@ Sub CopyGraphics
 Dim oGraphicObjects as Object
 Dim oGraphic as Object
 Dim i as Integer
+Dim udProps as Object
 Dim SavePath as String
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
@@ -255,12 +256,12 @@ Dim SavePath as String
 
 	BulletUrlsToSavePath(SavePath)
 
-	With oBaseDocument.DocumentInfo
-		.GetUserFieldValue(0) = &quot;&quot;
-		.GetUserFieldValue(1) = &quot;&quot;
-		.GetUserFieldValue(2) = &quot;&quot;
-		.GetUserFieldValue(3) = &quot;&quot;
-	End With
+    udProps = oBaseDocument.DocumentProperties.UserDefinedProperties
+    udProps.addProperty(&quot;AutoPilotName1&quot;, 0, &quot;&quot;)
+    udProps.addProperty(&quot;AutoPilotName2&quot;, 0, &quot;&quot;)
+    udProps.addProperty(&quot;AutoPilotBullet&quot;, 0, &quot;&quot;)
+    udProps.addProperty(&quot;AutoPilotBackground&quot;, 0, &quot;&quot;)
+
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveAsDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;&quot;)
@@ -284,7 +285,7 @@ End Function
 
 
 Function getListBoxArrays(oUcb as Object, sFileFilter as String)
-Dim oDocInfo as Object
+Dim oDocProps as Object
 Dim oListboxControl as Object
 Dim Description as String
 Dim sField as String
@@ -301,10 +302,10 @@ Dim n as Integer
 Dim s as Integer
 Dim a as Integer
 Dim LocMaxIndex as Integer
-Dim InfoNames()
+Dim Properties()
 Dim DimCount as Integer
 Dim sExtension as String
-	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
+	oDocProps = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
 	&apos; It has to be made sure that the TemplatePath &lt;&gt; &quot;&quot;
@@ -325,7 +326,7 @@ Dim sExtension as String
 	Dim SortList(LocMaxIndex,1)
 	For i = 0 to LocMaxIndex
 		SortList(i,0) = DirContent(i)
-		SortList(i,1) = RetrieveDocTitle(oDocInfo, DirContent(i))
+		SortList(i,1) = RetrieveDocTitle(oDocProps, DirContent(i))
 	Next i
 	SortList() = BubbleSortList(SortList(),True)
 	For i = 0 to LocMaxIndex
@@ -337,16 +338,15 @@ Dim sExtension as String
 		sExtension = Ucase(GetFileNameExtension(FileName))
 		If Instr(1,Filename, sFileFilter) And sExtension = &quot;STW&quot; Then
 			bItemFound = True
-			Description = RetrieveDocTitle(oDocInfo, FileName)
-			oDocInfo.Read(FileName)
-			InfoNames = oDocInfo.ElementNames()
+			Description = RetrieveDocTitle(oDocProps, FileName)
+			Properties = oDocProps.UserDefinedProperties.PropertyValues
 			List(a,1) = Description
 			If sFileFilter = &quot;/cnt&quot; Then
 				List(a,2) = Filename
 			Else
 				m = 2
 				For n = 0 To 3
-					sField = oDocInfo.GetByName(InfoNames(n))
+					sField = Properties(n).Value
 					sFieldList() = ArrayoutofString(sField, &quot; &quot;, MaxIndex)
 					For s = 0 To MaxIndex
 						If m &lt; 6 Then

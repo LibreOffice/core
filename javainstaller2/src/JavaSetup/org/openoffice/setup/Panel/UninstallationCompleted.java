@@ -35,11 +35,13 @@ import org.openoffice.setup.PanelHelper.PanelTitle;
 import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupActionListener;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import org.openoffice.setup.InstallData;
 
 public class UninstallationCompleted extends JPanel {
 
@@ -51,6 +53,8 @@ public class UninstallationCompleted extends JPanel {
 
     public UninstallationCompleted() {
 
+        InstallData data = InstallData.getInstance();
+
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
@@ -60,22 +64,26 @@ public class UninstallationCompleted extends JPanel {
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new java.awt.BorderLayout());
+        if ( data.useRtl() ) { contentPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         String dialogText = ResourceManager.getString("String_UninstallationCompleted2");
         varLabel = new PanelLabel(dialogText, true);
         String text2 = ResourceManager.getString("String_InstallationCompleted3");
         PanelLabel label2 = new PanelLabel(text2);
+        if ( data.useRtl() ) { label2.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         mDetailsButton = new JButton();
         String buttonText = ResourceManager.getString("String_InstallationCompleted_Button");
         mDetailsButton.setText(buttonText);
         mDetailsButton.setEnabled(true);
+        if ( data.useRtl() ) { mDetailsButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         JPanel ButtonPanel = new JPanel();
         ButtonPanel.setLayout(new BorderLayout());
         ButtonPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
         ButtonPanel.setPreferredSize(new Dimension(120, 44));
         ButtonPanel.add(mDetailsButton, BorderLayout.NORTH);
+        if ( data.useRtl() ) { ButtonPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         contentPanel.add(varLabel, BorderLayout.NORTH);
         contentPanel.add(ButtonPanel, BorderLayout.EAST);

@@ -86,6 +86,11 @@ using namespace linguistic;
 #define CAPTYPE_ALLCAP  3
 #define CAPTYPE_MIXED   4
 
+// min, max
+
+//#define Min(a,b) (a < b ? a : b)
+#define Max(a,b) (a > b ? a : b)
+
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -395,7 +400,9 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
         while((n >=0) && (lcword[n] == '.')) n--;
             n++;
             if (n > 0) {
-           if (hnj_hyphen_hyphenate2(dict, lcword, n, hyphens, NULL, &rep, &pos, &cut))
+           if (hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL, &rep, &pos, &cut,
+            minLead, minTrail, Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
+            Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2)))))
            {
               //whoops something did not work
               delete[] hyphens;

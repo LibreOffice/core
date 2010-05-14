@@ -39,8 +39,8 @@ Sub LoadTutorialDialog(exampleToUse, documentTYP)
 		
 		SetTutorialDocumentPosSize()
 		
-		documentInfo =  ThisComponent.getDocumentInfo()
-		myDialog.Title = &quot;Tutorials - &quot; &amp; documentInfo.Title
+		documentProps =  ThisComponent.getDocumentProperties()
+		myDialog.Title = &quot;Tutorials - &quot; &amp; documentProps.Title
 		oTextField = myDialog.GetControl(&quot;myTextField&quot;)
 		oTextField.setVisible(False)
 		
@@ -143,18 +143,16 @@ Sub Init
 End Sub
 
 Sub InitStep
-	userFieldName = ThisComponent.getDocumentInfo.getUserFieldName(0)
-	ResultString = InStr (userFieldName, &quot;CurrentStep:&quot;)
-	If ResultString &lt;&gt; 0 Then
-		TutorStep = Val(ThisComponent.getDocumentInfo.getUserFieldValue(0))
-	Else
-		ThisComponent.getDocumentInfo.setUserFieldName(0, &quot;CurrentStep:&quot;)
-		ThisComponent.getDocumentInfo.setUserFieldValue(0, TutorStep)
-	End If 
+    udProps = ThisComponent.DocumentProperties.UserDefinedProperties
+    If udProps.PropertySetInfo.hasPropertyByName(&quot;CurrentStep&quot;) Then
+        TutorStep = udProps.CurrentStep
+    Else
+        udProps.addProperty(&quot;CurrentStep&quot;, 0, TutorStep)
+    End If
 End Sub
 
 Sub setStep
-	ThisComponent.getDocumentInfo.setUserFieldValue(0, TutorStep)
+    ThisComponent.DocumentProperties.UserDefinedProperties.CurrentStep = TutorStep
 End Sub
 
 Sub InitAction()

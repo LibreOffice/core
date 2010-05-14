@@ -55,11 +55,6 @@ OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ENDIF  # "$(GUIBASE)"=="aqua"
 
-.IF "$(GUIBASE)" == "unx" && "$(ENABLE_GTK)" == "TRUE"
-PKGCONFIG_MODULES=gtk+-2.0
-.INCLUDE : pkg_config.mk
-.ENDIF
-
 SLOFILES=		\
                 $(SLO)$/plctrl.obj		\
                 $(SLO)$/service.obj		\

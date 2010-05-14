@@ -158,6 +158,15 @@ public class InfoDir {
             sourceFile.delete();
         }
 
+        if ( data.getAdminFileNameRelocNoDepends() != null ) {
+            File sourceFile = new File(data.getAdminFileNameRelocNoDepends());
+            String fileName = sourceFile.getName();
+            File destFile = new File(dir, fileName);
+            boolean success = SystemManager.copy(sourceFile.getPath(), destFile.getPath());
+            data.setAdminFileNameRelocNoDepends(destFile.getPath());
+            sourceFile.delete();
+        }
+
         if ( data.getAdminFileNameNoReloc() != null ) {
             File sourceFile = new File(data.getAdminFileNameNoReloc());
             String fileName = sourceFile.getName();
@@ -167,6 +176,14 @@ public class InfoDir {
             sourceFile.delete();
         }
 
+        if ( data.getAdminFileNameNoRelocNoDepends() != null ) {
+            File sourceFile = new File(data.getAdminFileNameNoRelocNoDepends());
+            String fileName = sourceFile.getName();
+            File destFile = new File(dir, fileName);
+            boolean success = SystemManager.copy(sourceFile.getPath(), destFile.getPath());
+            data.setAdminFileNameNoRelocNoDepends(destFile.getPath());
+            sourceFile.delete();
+        }
     }
 
     static private void createInfoFile(File dir) {
@@ -180,7 +197,11 @@ public class InfoDir {
         fileContent.add(line);
         line = "AdminFileReloc=" + data.getAdminFileNameReloc();
         fileContent.add(line);
+        line = "AdminFileRelocNoDepends=" + data.getAdminFileNameRelocNoDepends();
+        fileContent.add(line);
         line = "AdminFileNoReloc=" + data.getAdminFileNameNoReloc();
+        fileContent.add(line);
+        line = "AdminFileNoRelocNoDepends=" + data.getAdminFileNameNoRelocNoDepends();
         fileContent.add(line);
         line = "InstallationDir=" + data.getInstallDir();
         fileContent.add(line);
@@ -207,8 +228,16 @@ public class InfoDir {
             SystemManager.deleteFile(new File(data.getAdminFileNameReloc()));
         }
 
+        if ( ! data.getAdminFileNameRelocNoDepends().equals("null") ) {
+            SystemManager.deleteFile(new File(data.getAdminFileNameRelocNoDepends()));
+        }
+
         if ( ! data.getAdminFileNameNoReloc().equals("null") ) {
             SystemManager.deleteFile(new File(data.getAdminFileNameNoReloc()));
+        }
+
+        if ( ! data.getAdminFileNameNoRelocNoDepends().equals("null") ) {
+            SystemManager.deleteFile(new File(data.getAdminFileNameNoRelocNoDepends()));
         }
 
         if ( ! data.getGetUidPath().equals("null") ) {

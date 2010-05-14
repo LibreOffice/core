@@ -37,9 +37,7 @@
 #endif
 #include "services.hxx"
 
-#ifndef FORMS_SOURCE_RICHTEXT_RICHTEXTMODEL_CXX
 #include "richtextmodel.hxx"
-#endif
 #include "richtextvclcontrol.hxx"
 #include "clipboarddispatcher.hxx"
 #include "parametrizedattributedispatcher.hxx"
@@ -48,12 +46,10 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
 /** === end UNO includes === **/
-#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/editview.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/itempool.hxx>
@@ -203,7 +199,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "::getWinBits: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
             return nBits;
         }
@@ -215,18 +211,18 @@ namespace frm
         sal_Bool bReallyActAsRichText = sal_False;
         try
         {
-            Reference< XPropertySet > xModelProps( getModel(), UNO_QUERY );
-            if ( xModelProps.is() )
-                xModelProps->getPropertyValue( PROPERTY_RICH_TEXT ) >>= bReallyActAsRichText;
+            Reference< XPropertySet > xModelProps( getModel(), UNO_QUERY_THROW );
+            xModelProps->getPropertyValue( PROPERTY_RICH_TEXT ) >>= bReallyActAsRichText;
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ORichTextControl::createPeer: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if ( !bReallyActAsRichText )
         {
             UnoEditControl::createPeer( _rToolkit, _rParentPeer );
+            OControl::initFormControlPeer( getPeer() );
             return;
         }
 
@@ -279,6 +275,8 @@ namespace frm
             }
 
             mbCreatingPeer = sal_False;
+
+            OControl::initFormControlPeer( getPeer() );
         }
     }
 

@@ -34,8 +34,8 @@ import java.util.GregorianCalendar;
 
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XDocumentProperties;
+import com.sun.star.document.XDocumentPropertiesSupplier;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
@@ -87,7 +87,7 @@ public class TextDocument
     public XComponent xComponent;
     public com.sun.star.text.XTextDocument xTextDocument;
     public com.sun.star.util.XNumberFormats NumberFormats;
-    public com.sun.star.document.XDocumentInfo xDocInfo;
+    public com.sun.star.document.XDocumentProperties m_xDocProps;
     public com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
     public XText xText;
@@ -222,8 +222,8 @@ public class TextDocument
         xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
         xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 
-        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
-        xDocInfo = xDocInfoSuppl.getDocumentInfo();
+        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        m_xDocProps = xDocPropsSuppl.getDocumentProperties();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
         xText = xTextDocument.getText();
     }
@@ -233,8 +233,8 @@ public class TextDocument
         xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
         xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
         xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
-        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
-        xDocInfo = xDocInfoSuppl.getDocumentInfo();
+        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        m_xDocProps = xDocPropsSuppl.getDocumentProperties();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
         xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDocument);
         xText = xTextDocument.getText();
@@ -333,8 +333,8 @@ public class TextDocument
         xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
         xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 
-        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
-        xDocInfo = xDocInfoSuppl.getDocumentInfo();
+        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        m_xDocProps = xDocPropsSuppl.getDocumentProperties();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
     }
 
@@ -418,15 +418,15 @@ public class TextDocument
             int ff = du.getFormat(NumberFormatIndex.DATE_SYS_DDMMYY);
             String myDate = du.format(ff, currentDate);
 
-            XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
-            XDocumentInfo xDocInfo2 = xDocInfoSuppl.getDocumentInfo();
-            Helper.setUnoPropertyValue(xDocInfo2, "Author", fullname);
-            Helper.setUnoPropertyValue(xDocInfo2, "ModifiedBy", fullname);
-            String description = (String) Helper.getUnoPropertyValue(xDocInfo2, "Description");
+            XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+            XDocumentProperties xDocProps2 = xDocPropsSuppl.getDocumentProperties();
+            xDocProps2.setAuthor(fullname);
+            xDocProps2.setModifiedBy(fullname);
+            String description = xDocProps2.getDescription();
             description = description + " " + TemplateDescription;
             description = JavaTools.replaceSubString(description, WizardName, "<wizard_name>");
             description = JavaTools.replaceSubString(description, myDate, "<current_date>");
-            Helper.setUnoPropertyValue(xDocInfo2, "Description", description);
+            xDocProps2.setDescription(description);
         }
         catch (NoSuchElementException e)
         {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nthesimp.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,8 @@
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <tools/table.hxx>
 
@@ -96,8 +98,10 @@ class Thesaurus :
     OUString *                              aTNames;
     sal_Int32                               numthes;
 
-
-
+    // cache for the Thesaurus dialog
+    Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > prevMeanings;
+    OUString  prevTerm;
+    INT16 prevLocale;
 
     // disallow copy-constructor and assignment-operator for now
     Thesaurus(const Thesaurus &);
@@ -176,6 +180,14 @@ private:
         OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
         OUString SAL_CALL makeUpperCase(const OUString&, CharClass *);
         OUString SAL_CALL makeInitCap(const OUString&, CharClass *);
+
+/*  static ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;
+    static ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
+*/
+    static ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XLinguServiceManager > GetLngSvcMgr();
 
 };
 

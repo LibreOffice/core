@@ -29,9 +29,6 @@
  ************************************************************************/
 package com.sun.star.wizards.common;
 
-import java.util.Date;
-
-import com.sun.star.awt.XToolkit;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;

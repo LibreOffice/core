@@ -74,6 +74,8 @@ namespace frm
         sal_Bool                            m_bShowNavigation;
         sal_Bool                            m_bShowActions;
         sal_Bool                            m_bShowFilterSort;
+        sal_Int16                           m_nWritingMode;
+        sal_Int16                           m_nContextWritingMode;
         // </properties>
 
     public:

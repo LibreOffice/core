@@ -52,16 +52,6 @@ class SfxBindings;
 class Window;
 struct BasicIDE_Impl;
 
-extern "C" {
-    rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, BOOL bChooseOnly, rtl_uString* pMacroDesc );
-    void basicide_macro_organizer( INT16 nTabId );
-}
-
-extern "C" {
-    long basicide_handle_basic_error( void* pPtr );
-}
-
-
 namespace BasicIDE
 {
     SfxMacro*   CreateMacro();

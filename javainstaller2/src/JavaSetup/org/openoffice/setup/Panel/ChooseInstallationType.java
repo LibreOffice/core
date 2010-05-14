@@ -35,6 +35,7 @@ import org.openoffice.setup.PanelHelper.PanelLabel;
 import org.openoffice.setup.PanelHelper.PanelTitle;
 import org.openoffice.setup.ResourceManager;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -45,6 +46,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import org.openoffice.setup.InstallData;
 
 public class ChooseInstallationType extends JPanel {
 
@@ -53,6 +55,8 @@ public class ChooseInstallationType extends JPanel {
 
     public ChooseInstallationType() {
 
+        InstallData data = InstallData.getInstance();
+
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
@@ -60,6 +64,9 @@ public class ChooseInstallationType extends JPanel {
         String subtitleText = ResourceManager.getString("String_ChooseInstallationType2");
         PanelTitle titleBox = new PanelTitle(titleText, subtitleText);
         titleBox.addVerticalStrut(20);
+
+        if ( data.useRtl() ) { titleBox.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
+
         add(titleBox, BorderLayout.NORTH);
 
         String borderTitle = ResourceManager.getString("String_ChooseInstallationType3");
@@ -68,6 +75,7 @@ public class ChooseInstallationType extends JPanel {
         JPanel contentPanel = new JPanel();
         contentPanel.setBorder(PanelBorder);
         contentPanel.setLayout(new GridBagLayout());
+        if ( data.useRtl() ) { contentPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.insets = new Insets(0, 0, 0, 10);
@@ -75,17 +83,22 @@ public class ChooseInstallationType extends JPanel {
 
             String typicalText = ResourceManager.getString("String_ChooseInstallationType4");
             PanelLabel typicalComment = new PanelLabel(typicalText, true);
+            if ( data.useRtl() ) { typicalComment.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
             String customText  = ResourceManager.getString("String_ChooseInstallationType5");
             PanelLabel customComment  = new PanelLabel(customText, true);
+            if ( data.useRtl() ) { customComment.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
             ButtonGroup group = new ButtonGroup();
 
             String typicalButtonText = ResourceManager.getString("String_ChooseInstallationType6");
             typical = new JRadioButton(typicalButtonText, true);
             typical.setMnemonic(KeyEvent.VK_C);
+            if ( data.useRtl() ) { typical.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
+
             String customButtonText  = ResourceManager.getString("String_ChooseInstallationType7");
             custom  = new JRadioButton(customButtonText,  false);
             custom.setMnemonic(KeyEvent.VK_U);
+            if ( data.useRtl() ) { custom.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
             group.add(typical);
             group.add(custom);

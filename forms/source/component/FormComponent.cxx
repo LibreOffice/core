@@ -182,6 +182,25 @@ Sequence<Type> OControl::_getTypes()
     return TypeBag( OComponentHelper::getTypes(), OControl_BASE::getTypes() ).getTypes();
 }
 
+//------------------------------------------------------------------------------
+void OControl::initFormControlPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rxPeer )
+{
+    try
+    {
+        Reference< XVclWindowPeer > xVclWindowPeer( _rxPeer, UNO_QUERY_THROW );
+
+        // #i63103# - form controls should only react on the mouse wheel when they're focused
+        xVclWindowPeer->setProperty(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WheelWithoutFocus" ) ),
+            makeAny( sal_Bool( sal_False ) )
+        );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
 // OComponentHelper
 //------------------------------------------------------------------------------
 void OControl::disposing()
@@ -287,13 +306,7 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
     {
         m_xControl->createPeer( _rxToolkit, _rxParent );
 
-        // #i63103# - form controls should only react on the mouse wheel when they're focused
-        Reference< XVclWindowPeer > xVclWindowPeer( getPeer(), UNO_QUERY );
-        if ( xVclWindowPeer.is() )
-            xVclWindowPeer->setProperty(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WheelWithoutFocus" ) ),
-                makeAny( (sal_Bool)sal_False )
-            );
+        initFormControlPeer( getPeer() );
 
         impl_resetStateGuard_nothrow();
     }

@@ -35,6 +35,7 @@ package com.sun.star.wizards.report;
 // import com.sun.star.wizards.reportbuilder.ReportBuilderImplementation;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.TextEvent;
+import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XFixedText;
@@ -49,6 +50,8 @@ import com.sun.star.deployment.XPackageInformationProvider;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.logging.XLogger;
+import com.sun.star.logging.XLoggerPool;
 import com.sun.star.sdb.CommandType;
 
 import com.sun.star.uno.AnyConverter;
@@ -92,7 +95,9 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     public static final int SOGROUPPAGE = 3;
     public static final int SOSORTPAGE = 4;
     public static final int SOTEMPLATEPAGE = 5;
-    public static final int SOSTOREPAGE = 6;    // ReportTextDocument CurReportDocument;
+    public static final int SOSTOREPAGE = 6;
+
+    // ReportTextDocument CurReportDocument;
     // ReportTextImplementation CurReportDocument;
     IReportDocument CurReportDocument;
     static String sMsgWizardName;
@@ -564,6 +569,26 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         return sLocation;
     }
 
+private static XLogger m_xLogger;
+
+private static void initializeLogger(XMultiServiceFactory _xMSF)
+{
+    XComponentContext xContext = Helper.getComponentContext(_xMSF);
+
+    Object aLoggerPool = xContext.getValueByName("/singletons/com.sun.star.logging.LoggerPool");
+    if (aLoggerPool == null)
+    {
+        System.out.println("Can't get singleton from logging");
+    }
+    final XLoggerPool xLoggerPool = (XLoggerPool)UnoRuntime.queryInterface(XLoggerPool.class, aLoggerPool);
+    m_xLogger = xLoggerPool.getNamedLogger("com.sun.star.wizards.ReportBuilder");
+}
+
+public static XLogger getLogger()
+{
+    return m_xLogger;
+}
+
     public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue)
     {
         return startReportWizard(_xMSF, CurPropertyValue, false);
@@ -571,9 +596,13 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
     public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue, boolean _bDebug)
     {
+            initializeLogger(_xMSF);
+            getLogger().log(com.sun.star.logging.LogLevel.SEVERE, "Start Report Wizard");
+
         XComponent[] ret = null;
         this.xMSF = _xMSF;
         DBGPROPERTYVALUE = CurPropertyValue;
+
         // CurReportDocument = new ReportTextDocument(xMSF, ReportPath + "/stl-default.ott", m_oResource );
         // if (isReportBuilderInstalled())
         // {
@@ -655,11 +684,15 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
             //        CurDBMetaData = CurReportDocument.getRecordParser();
 //                tests();
+
             if (CurReportDocument.getRecordParser().getConnection(CurPropertyValue))
             {
                 // CurReportDocument.getDoc().xProgressBar.setValue(20);
                 CurReportDocument.getRecordParser().oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.getRecordParser());
                 buildSteps();
+
+                CurReportDocument.checkInvariants();
+
                 this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
 
                 createWindowPeer(CurReportDocument.getWizardParent());
@@ -670,6 +703,19 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 ret = dialogFinish(RetValue);
             }
             CurReportDocument.getRecordParser().dispose();
+        }
+        catch (java.io.IOException e)
+        {
+            String sMessage = e.getMessage();
+            if (sMessage.equals("default.otr"))
+            {
+                sMessage = m_oResource.getResText(UIConsts.RID_REPORT + 92);
+            }
+            else
+            {
+            }
+            // show a dialog with the error message
+            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMessage);
         }
         catch (java.lang.Exception jexception)
         {

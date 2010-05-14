@@ -58,12 +58,6 @@ CDEFS+=-DOJI
 CDEFS+=-DDISABLE_XAW
 .ENDIF
 
-.IF "$(ENABLE_GTK)" == "TRUE"
-CDEFS+=-DENABLE_GTK
-PKGCONFIG_MODULES=gtk+-2.0 gthread-2.0
-.INCLUDE : pkg_config.mk
-.ENDIF
-
 SLOFILES=\
     $(SLO)$/nppapi.obj		\
     $(SLO)$/sysplug.obj		\

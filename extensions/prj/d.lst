@@ -29,11 +29,12 @@ mkdir: %_DEST%\bin%_EXT%\so
 mkdir: %_DEST%\xml%_EXT%\registry\spool
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice
-mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Addons
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Logging
 
 ..\%__SRC%\misc\registry\spool\org\openoffice\Office\Addons\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Addons
 ..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\Logging\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Logging
 
 ..\%__SRC%\bin\*.oxt %_DEST%\pck%_EXT%\*

@@ -61,9 +61,8 @@ public class LocaleCodes extends Resource
         return LS;
     }
 
-    public String[] getIDs()
-    {
-        String[] Ids = new String[134];
+    public String[] getIDs() {
+        String []Ids = new String [135];
 
         Ids[0] = "Afrikaans;af;1078";
         Ids[1] = "Albanian;sq;1052";
@@ -199,6 +198,7 @@ public class LocaleCodes extends Resource
         Ids[131] = "Yiddish;yi;1085";
         Ids[132] = "Zulu;zu;1077";
         Ids[133] = "Khmer;km-kh;1107";
+        Ids[134] = "Burmese;my-mm;1109";
 
         return Ids;
     }

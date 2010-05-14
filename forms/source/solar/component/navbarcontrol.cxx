@@ -30,17 +30,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
+
 #include "navbarcontrol.hxx"
 #include "frm_strings.hxx"
 #include "frm_module.hxx"
-#include <tools/debug.hxx>
+#include "navtoolbar.hxx"
+#include "FormComponent.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+/** === end UNO includes === **/
+
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include "navtoolbar.hxx"
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()
@@ -200,6 +204,8 @@ namespace frm
             peerCreated();
 
             mbCreatingPeer = sal_False;
+
+            OControl::initFormControlPeer( getPeer() );
         }
     }
 

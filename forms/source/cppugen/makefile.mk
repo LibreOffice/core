@@ -37,6 +37,7 @@ TARGET=fm_cppugen
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE: $(PRJ)$/makefile.pmk
 
 # --- Types -------------------------------------
 

@@ -59,33 +59,33 @@ inline sal_uInt8 lcl_getCharClass( sal_Unicode c )
     sal_uInt8 nClass = 0;
 
     // NameStartChar
-    if( c >= 'A' && c <= 'Z'
+    if( (c >= 'A' && c <= 'Z')
         || c == '_'
-        || c >=    'a' && c <=    'z'
-        || c >= 0x00C0 && c <= 0x00D6
-        || c >= 0x00D8 && c <= 0x00F6
-        || c >= 0x00F8 && c <= 0x02FF
-        || c >= 0x0370 && c <= 0x037D
-        || c >= 0x037F && c <= 0x1FFF
-        || c >= 0x200C && c <= 0x200D
-        || c >= 0x2070 && c <= 0x218F
-        || c >= 0x2C00 && c <= 0x2FEF
-        || c >= 0x3001 && c <= 0xD7FF
-        || c >= 0xF900 && c <= 0xFDCF
-        || c >= 0xFDF0 && c <= 0xFFFD
+        || (c >=    'a' && c <=    'z')
+        || (c >= 0x00C0 && c <= 0x00D6)
+        || (c >= 0x00D8 && c <= 0x00F6)
+        || (c >= 0x00F8 && c <= 0x02FF)
+        || (c >= 0x0370 && c <= 0x037D)
+        || (c >= 0x037F && c <= 0x1FFF)
+        || (c >= 0x200C && c <= 0x200D)
+        || (c >= 0x2070 && c <= 0x218F)
+        || (c >= 0x2C00 && c <= 0x2FEF)
+        || (c >= 0x3001 && c <= 0xD7FF)
+        || (c >= 0xF900 && c <= 0xFDCF)
+        || (c >= 0xFDF0 && c <= 0xFFFD)
 
         // surrogates
-        || c >= 0xD800 && c <= 0xDBFF
-        || c >= 0xDC00 && c <= 0xDFFF )
+        || (c >= 0xD800 && c <= 0xDBFF)
+        || (c >= 0xDC00 && c <= 0xDFFF) )
     {
         nClass = 15;
     }
     else if( c == '-'
              || c == '.'
-             || c >= '0' && c <= '9'
-             || c == 0x00B7
-             || c >= 0x0300 && c <= 0x036F
-             || c >= 0x203F && c <= 0x2040 )
+             || (c >= '0' && c <= '9')
+             || (c == 0x00B7)
+             || (c >= 0x0300 && c <= 0x036F)
+             || (c >= 0x203F && c <= 0x2040) )
     {
         nClass = 10;
     }

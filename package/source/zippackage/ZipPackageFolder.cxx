@@ -271,7 +271,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
         ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
-        pTempEntry->nNameLen = (sal_Int16)rPath.getLength();
+        pTempEntry->nNameLen = (sal_Int16)( ::rtl::OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
         pTempEntry->nExtraLen = -1;
         pTempEntry->sName = rPath;
 
@@ -333,7 +333,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pStream->aEntry );
             pTempEntry->sName = rPath + rShortName;
-            pTempEntry->nNameLen = (sal_Int16)( pTempEntry->sName.getLength() );
+            pTempEntry->nNameLen = (sal_Int16)( ::rtl::OUStringToOString( pTempEntry->sName, RTL_TEXTENCODING_UTF8 ).getLength() );
 
             sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && (bHaveEncryptionKey || pStream->HasOwnKey());
             sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : pStream->IsToBeCompressed();

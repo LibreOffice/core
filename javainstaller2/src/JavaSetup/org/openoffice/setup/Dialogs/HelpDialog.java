@@ -35,6 +35,7 @@ import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupFrame;
 import org.openoffice.setup.Util.DialogFocusTraversalPolicy;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
@@ -60,6 +61,8 @@ public class HelpDialog extends JDialog implements ActionListener {
 
         super(setupFrame.getDialog());
 
+        InstallData data = InstallData.getInstance();
+
         helpFileString = setupFrame.getCurrentPanel().getHelpFileName();
         helpFileName = ResourceManager.getFileName(helpFileString);
         // String dialogName = setupFrame.getCurrentPanel().getName();
@@ -72,16 +75,19 @@ public class HelpDialog extends JDialog implements ActionListener {
         JPanel toppanel = new JPanel();
         toppanel.setLayout(new java.awt.BorderLayout());
         toppanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+        if ( data.useRtl() ) { toppanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         JPanel buttonpanel = new JPanel();
         buttonpanel.setLayout(new java.awt.FlowLayout());
         buttonpanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+        if ( data.useRtl() ) { buttonpanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         //Create an editor pane.
         editorPane = createEditorPane();
         editorScrollPane = new JScrollPane(editorPane);
         editorScrollPane.setPreferredSize(new Dimension(250, 145));
         editorScrollPane.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+        if ( data.useRtl() ) { editorScrollPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         // String helpTitle1 = null;
         // InstallData data = InstallData.getInstance();
@@ -99,6 +105,7 @@ public class HelpDialog extends JDialog implements ActionListener {
         okButton = new JButton(okString);
         okButton.setEnabled(true);
         okButton.addActionListener(this);
+        if ( data.useRtl() ) { okButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         JSeparator separator = new JSeparator();
 

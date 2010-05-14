@@ -44,7 +44,6 @@ use_shl_versions=
 
 .IF "$(GUI)" == "WNT"
 
-VERSIONOBJ=
 LIBTARGET=NO
 USE_DEFFILE=YES
 
@@ -57,10 +56,10 @@ SLOFILES=\
 
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=\
-    uuid.lib\
-    ole32.lib\
-    gdi32.lib\
-    advapi32.lib
+    $(UUIDLIB)\
+    $(OLE32LIB)\
+    $(GDI32LIB)\
+    $(ADVAPI32LIB)
 
 SHL1OBJS=$(SLOFILES)
 

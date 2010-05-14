@@ -217,7 +217,7 @@ namespace xforms
         static void lcl_initializePatternMatcher( ::std::auto_ptr< RegexMatcher >& _rpMatcher, const ::rtl::OUString& _rPattern )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
-            UnicodeString aIcuPattern( _rPattern.getStr(), _rPattern.getLength() );
+            UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(_rPattern.getStr()), _rPattern.getLength() );    // UChar != sal_Unicode in MinGW
             _rpMatcher.reset( new RegexMatcher( aIcuPattern, 0, nMatchStatus ) );
             OSL_ENSURE( U_SUCCESS( nMatchStatus ), "lcl_initializePatternMatcher: invalid pattern property!" );
                 // if asserts, then something changed our pattern without going to convertFastPropertyValue/checkPropertySanity
@@ -226,7 +226,7 @@ namespace xforms
         static bool lcl_matchString( RegexMatcher& _rMatcher, const ::rtl::OUString& _rText )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
-            UnicodeString aInput( _rText.getStr(), _rText.getLength() );
+            UnicodeString aInput( reinterpret_cast<const UChar *>(_rText.getStr()), _rText.getLength() );   // UChar != sal_Unicode in MinGW
             _rMatcher.reset( aInput );
             if ( _rMatcher.matches( nMatchStatus ) )
             {
@@ -300,7 +300,7 @@ namespace xforms
             ::rtl::OUString sPattern;
             OSL_VERIFY( _rNewValue >>= sPattern );
 
-            UnicodeString aIcuPattern( sPattern.getStr(), sPattern.getLength() );
+            UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(sPattern.getStr()), sPattern.getLength() );  // UChar != sal_Unicode in MinGW
             UErrorCode nMatchStatus = U_ZERO_ERROR;
             RegexMatcher aMatcher( aIcuPattern, 0, nMatchStatus );
             if ( U_FAILURE( nMatchStatus ) )

@@ -36,10 +36,10 @@ TARGET	= hyphen_lib
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="OS2"
+HNJLIB=hyphen.lib
+.ELIF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 HNJLIB=-lhyphen
-.ELIF  "$(GUI)"=="OS2"
-HNJLIB=$(SLB)\hyphen.lib
 .ELSE
 HNJLIB=hyphen.lib
 .ENDIF

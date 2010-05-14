@@ -44,7 +44,9 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 { // extends ReportWizard
 
     // ReportTextDocument CurReportDocument;
-    IReportDocument CurReportDocument;//    PropertyValue[] CurProperties;
+    IReportDocument CurReportDocument;
+
+//    PropertyValue[] CurProperties;
     static boolean bStopProcess;
     static String sProgressDBConnection;
     static String sProgressDataImport;

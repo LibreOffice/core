@@ -1069,6 +1069,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                             xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
                         }
                         if ( aRec.UserList[0].Passwords.getLength() > 1 )
+                        {
                             if ( aAuthenticationRequest.HasRealm )
                             {
                                 if ( xSupplyAuthentication->canSetRealm() )
@@ -1076,6 +1077,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                             }
                             else if ( xSupplyAuthentication->canSetAccount() )
                                 xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
+                        }
                         xSupplyAuthentication->select();
                         return;
                     }
@@ -1096,6 +1098,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                             if ( xSupplyAuthentication->canSetPassword() )
                                 xSupplyAuthentication->setPassword(aRec.UserList[0].Passwords[0].getStr());
                             if ( aRec.UserList[0].Passwords.getLength() > 1 )
+                            {
                                 if ( aAuthenticationRequest.HasRealm )
                                 {
                                     if ( xSupplyAuthentication->canSetRealm() )
@@ -1103,6 +1106,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                                 }
                                 else if ( xSupplyAuthentication->canSetAccount() )
                                     xSupplyAuthentication->setAccount(aRec.UserList[0].Passwords[1].getStr());
+                            }
                             xSupplyAuthentication->select();
                             return;
                         }

@@ -35,6 +35,9 @@
 
 #include <stdio.h>
 #include <inprocembobj.h>
+#ifdef __MINGW32__
+#define INITGUID
+#endif
 #include <embservconst.h>
 
 static const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {

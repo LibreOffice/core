@@ -241,6 +241,23 @@ import java.util.Vector;public class LinuxHelper {
         return hashRpm;
     }
 
+    public int getInstalledMinor(String version) {
+
+        int minor = 0;
+        int pos = version.indexOf(".");
+        if ( pos > -1 ) {
+            String reduced = version.substring(pos + 1, version.length());
+
+            pos = reduced.indexOf(".");
+            if ( pos > -1 ) {
+                reduced = reduced.substring(0, pos);
+                minor = Integer.parseInt(reduced);
+            }
+        }
+
+        return minor;
+    }
+
     private boolean compareTwoRpms(HashMap hash1, HashMap hash2) {
         boolean hash1IsOlder = false;
 

@@ -2535,7 +2535,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 long aMS = long( aDiff.GetMSFromTime() );
                                 if ( Abs( aMS - nWait ) > 100 )
                                 {
-                                    DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait )
+                                    DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait );
                                 }
 #endif
                             }
@@ -4146,7 +4146,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
         if ( !Controls::pClasses )                        // Ist static, wird also nur einmal geladen
             ReadFlatArray( Controls::arClasses, Controls::pClasses );
 
-        if ( Controls::pClasses && Controls::pClasses->Seek_Entry( &WhatName )
+        if ( (Controls::pClasses && Controls::pClasses->Seek_Entry( &WhatName ))
             || rSymbol.EqualsIgnoreCaseAscii( "ID" )
             || rSymbol.EqualsIgnoreCaseAscii( "Name" ) )
             return TT_METHOD;

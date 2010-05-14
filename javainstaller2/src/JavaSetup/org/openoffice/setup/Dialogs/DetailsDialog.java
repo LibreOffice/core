@@ -34,6 +34,7 @@ import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupFrame;
 import org.openoffice.setup.Util.DialogFocusTraversalPolicy;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
@@ -47,6 +48,7 @@ import javax.swing.JSeparator;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
+import org.openoffice.setup.InstallData;
 
 public class DetailsDialog extends JDialog implements ActionListener {
 
@@ -57,6 +59,8 @@ public class DetailsDialog extends JDialog implements ActionListener {
     public DetailsDialog(SetupFrame setupFrame) {
 
         super(setupFrame.getDialog());
+
+        InstallData data = InstallData.getInstance();
 
         String dialogTitle = ResourceManager.getString("String_InstallationCompleted_Button");
         String dialogText = setupFrame.getCurrentPanel().getDialogText();
@@ -71,18 +75,22 @@ public class DetailsDialog extends JDialog implements ActionListener {
         JPanel buttonpanel = new JPanel();
         buttonpanel.setLayout(new java.awt.FlowLayout());
         buttonpanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+        if ( data.useRtl() ) { buttonpanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         //Create an editor pane.
         JEditorPane editorPane = createEditorPane(dialogText);
         editorPane.setCaretPosition(0);
+        if ( data.useRtl() ) { editorPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
         JScrollPane editorScrollPane = new JScrollPane(editorPane,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         editorScrollPane.setPreferredSize(new Dimension(250, 145));
         editorScrollPane.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+        if ( data.useRtl() ) { editorScrollPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         JViewport port = editorScrollPane.getViewport();
         port.getVisibleRect().setLocation(0,0);
+        if ( data.useRtl() ) { port.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
         editorScrollPane.setViewport(port);
 
         // String helpTitle1 = ResourceManager.getString("String_Details_Title_1");

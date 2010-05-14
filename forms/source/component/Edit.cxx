@@ -283,10 +283,6 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
 void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, const Reference< XWindowPeer>& _rxParent ) throw ( RuntimeException )
 {
     OBoundControl::createPeer(_rxToolkit, _rxParent);
-
-    Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
-    if ( xVclWindowPeer.is() )
-        xVclWindowPeer->setProperty( ::rtl::OUString::createFromAscii("JavaCompatibleTextNotifications"), ::cppu::bool2any( sal_False ) );
 }
 
 /*************************************************************************/

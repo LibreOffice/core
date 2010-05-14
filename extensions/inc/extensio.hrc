@@ -456,10 +456,11 @@
 #define HID_PROP_BORDERCOLOR                    (HID_FORMS_START + 337)
 #define UID_PROP_DLG_BORDERCOLOR                (HID_FORMS_START + 338)
 #define HID_PROP_IMAGEPOSITION                  (HID_FORMS_START + 339)
-#define HID_PROP_NOLABEL                       (HID_FORMS_START + 340)
+#define HID_PROP_NOLABEL                        (HID_FORMS_START + 340)
+#define HID_PROP_WRITING_MODE                   (HID_FORMS_START + 341)
     // please adjust HID_LAST_FORMS_ID if you add new ids here!
 
-#define HID_LAST_FORMS_ID   HID_PROP_NOLABEL
+#define HID_LAST_FORMS_ID   HID_PROP_WRITING_MODE
 
 #if HID_LAST_FORMS_ID > HID_FORMS_END
     #error id overflow

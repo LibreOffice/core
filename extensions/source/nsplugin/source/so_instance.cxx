@@ -39,6 +39,8 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/presentation/XPresentation.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <vcl/window.hxx>
@@ -69,15 +71,9 @@ using namespace com::sun::star;
 
 char SoPluginInstance::sSO_Dir[] = {0};
 Reference< XMultiServiceFactory > SoPluginInstance::mxRemoteMSF = Reference< XMultiServiceFactory >(NULL);
-Reference< XMultiServiceFactory > SoPluginInstance::mxLocalMSF  = Reference< XMultiServiceFactory >(NULL);
 
 
-extern "C"{
-    sal_Bool restart_office(void);
-}
-
-
-SoPluginInstance::SoPluginInstance(long pParent):
+SoPluginInstance::SoPluginInstance(long pParent, Reference< XMultiServiceFactory > xMSF):
     m_xUnoWin(NULL),
     m_xComponent(NULL),
     m_xFrame(NULL),
@@ -96,132 +92,11 @@ SoPluginInstance::SoPluginInstance(long pParent):
     m_hParent = 0;
     m_pParent = pParent;
     m_dParentStyl = 0;
+    mxRemoteMSF = xMSF;
 }
 
 SoPluginInstance::~SoPluginInstance()
 {
-}
-
-// Start listening staroffice and connect to it
-sal_Bool SoPluginInstance::Connect()
-{
-    Reference< XComponentContext > xComponentContext;
-    sal_Bool bRetval(sal_False);
-
-    if(mxRemoteMSF.is())
-    {
-        debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, remote ServiceManager has been created. no need to create it again.\n");
-        return sal_True;
-    }
-    debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create defaultBootstrap_InitialComponentContext.\n");
-/*
-#ifdef UNIX
-    debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  HOME:%s; LANG:%s; LC_ALL:%s; LC_COLLATE:%s; PATH:%s; current dir:%s \n",
-        getenv("HOME"), getenv("LANG"), getenv("LC_ALL"), getenv("LC_COLLATE"), getenv("PATH"), get_current_dir_name());
-#endif // end of UNIX
-*/
-    //create local service manager
-    if(!mxLocalMSF.is())
-    {
-        xComponentContext = defaultBootstrap_InitialComponentContext();
-        if (xComponentContext.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create mxLocalMSF.\n");
-            mxLocalMSF = Reference< XMultiServiceFactory >::query(xComponentContext->getServiceManager());
-            bRetval = sal_True;
-            if(!mxLocalMSF.is())
-            {
-                debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  create mxLocalMSF failure.\n");
-                return sal_False;
-            }
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  create mxLocalMSF success.\n");
-        }
-        else
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create mxLocalMSF false.\n");
-            return bRetval;
-        }
-    }
-
-    //then try to connect to the remote StarOffice process
-    bRetval = sal_True;
-    try
-    {
-        const OUString sUnoUrlResolver(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver"));
-        char para[128] = {0};
-        sprintf(para, "uno:socket,host=localhost,port=%d;urp;StarOffice.ServiceManager", SO_SERVER_PORT);
-        const OUString sResolverArguments(OUString::createFromAscii(para));
-
-        // Create UnoUrlResolver
-        Reference < XInterface > rInterface = mxLocalMSF->createInstance(sUnoUrlResolver);
-        if (!rInterface.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, create sUnoUrlResolver, failure.\n");
-            return sal_False;
-        }
-
-        // Create XUnoUrlResolver by querying Interface of UnoUrlResolver
-        Reference < com::sun::star::bridge::XUnoUrlResolver > rResolver(rInterface, UNO_QUERY);
-        if(!rResolver.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, create XUnoUrlResolver, failure.\n");
-            return sal_False;
-        }
-
-        // Resolve the arguments
-        rInterface = rResolver->resolve(sResolverArguments);
-        if(!rInterface.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, rResolver->resolve(sResolverArguments), failure\n");
-            return sal_False;
-        }
-
-        // Create XPropertySet
-        Reference< ::com::sun::star::beans::XPropertySet > xPropSet( rInterface, UNO_QUERY );
-        if(!xPropSet.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, xPropSet( rInterface, UNO_QUERY ), failure\n");
-            return sal_False;
-        }
-
-        // Get remote xComponentContext
-        xPropSet->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xComponentContext;
-
-        // Get the service manager from the remote context
-        mxRemoteMSF =  Reference< XMultiServiceFactory >( xComponentContext->getServiceManager(), UNO_QUERY);
-        if(!mxRemoteMSF.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, create mcRemoteMSF, failure.\n");
-            bRetval = sal_False;
-        }
-    }
-    catch (ConnectionSetupException& )
-    {
-        debug_fprintf(NSP_LOG_APPEND, "couldn't access local resource (possible security resons)\n");
-        bRetval = sal_False;
-    }
-    catch (NoConnectException& )
-    {
-        debug_fprintf(NSP_LOG_APPEND, "no server listening on the resource\n");
-        bRetval = sal_False;
-    }
-    catch (IllegalArgumentException& )
-    {
-        debug_fprintf(NSP_LOG_APPEND, "uno url invalid\n");
-        bRetval = sal_False;
-    }
-    catch (RuntimeException& )
-    {
-        debug_fprintf(NSP_LOG_APPEND, "a remote call was aborted\n");
-        bRetval = sal_False;
-    }
-    catch (uno::Exception&)
-    {
-        debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  unknown error while connect to remote Office.\n");
-        bRetval = sal_False;
-    }
-    debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  connect over.\n");
-    return bRetval;
 }
 
 sal_Bool SoPluginInstance::SetURL(char* aURL)
@@ -240,7 +115,7 @@ sal_Bool SoPluginInstance::SetURL(char* aURL)
 }
 
 // plugin window UI part: create window, load document
-bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
+sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 {
     // If doc has been loaded, we just resize the window and return
     if(m_bInit)
@@ -249,24 +124,14 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         m_xUnoWin->setPosSize( m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag );
         debug_fprintf(NSP_LOG_APPEND, "set windows to x:%d y:%d w:%d h%d falg:%d\n",
             m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag);
-        return true;
+        return sal_True;
     }
 
     // If mxRemoteMSF is not initialized, we assert and return sal_False
     if(!mxRemoteMSF.is())
     {
         debug_fprintf(NSP_LOG_APPEND, "Remote StarOfiice ServiceManager is not initilzed correctly!\n");
-
-        // first, try restar office and reconnect
-        if(!restart_office()){
-            debug_fprintf(NSP_LOG_APPEND, "restar office error!\n");
-            return false;
-        }
-        if(!Connect()){
-            debug_fprintf(NSP_LOG_APPEND, "reconnect office error!\n");
-            return false;
-        }
-        debug_fprintf(NSP_LOG_APPEND, "Restore StarOfiice ServiceManager is not initilzed correctly!\n");
+        return sal_False;
     }
 
     try
@@ -278,7 +143,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if( !xToolkit.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "Can not create Toolkit!\n");
-            return false;
+            return sal_False;
         }
 
         // prepare parameters for plugin window
@@ -294,7 +159,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if (!xToolkitSystemChildFactory.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, get xToolkitSystemChildFactory failure.\n");
-            return false;
+            return sal_False;
         }
 
         debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create plugin container window HWIN:%ld.\n", hParent);
@@ -306,7 +171,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !xNewWinPeer.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create first window\n", hParent);
-            return false;
+            return sal_False;
         }
 
         // get interface of first window
@@ -314,7 +179,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if( !m_xUnoWin.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get interface of first window\n", hParent);
-            return false;
+            return sal_False;
         }
 
         // initialize window
@@ -331,7 +196,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if (!m_xFrame.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create frame\n");
-            return false;
+            return sal_False;
         }
 
         // initialize frame
@@ -356,7 +221,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !m_xFramesSupplier.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get desktop\n");
-            return false;
+            return sal_False;
         }
 
         // get frames
@@ -364,7 +229,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !m_xFrames.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get frames from FramesSupplier\n");
-            return false;
+            return sal_False;
         }
 
         // append m_xFrame to m_xFrames
@@ -375,7 +240,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !xLoader.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get ComponentLoader to load URL\n");
-            return false;
+            return sal_False;
         }
 
         //create stream for the document
@@ -385,14 +250,14 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if(!xSimpleFileAccess.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create SimpleFileAccess to load URL\n");
-            return false;
+            return sal_False;
         }
         Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );
 
         if(!xInputStream.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create XInputStream for URL\n");
-            return false;
+            return sal_False;
         }
 
         // prepare to load document
@@ -434,7 +299,7 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !m_xComponent.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, Load Componment error\n");
-            return false;
+            return sal_False;
         }
 
          // register the closelistener that will prevent closing of the component
@@ -458,13 +323,13 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if(!m_xDispatcher.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "m_xDispatcher can not be getten\n");
-            return false;
+            return sal_False;
         }
         m_xDispatchProvider = Reference< frame::XDispatchProvider >(m_xFrame, uno::UNO_QUERY);
         if(!m_xDispatchProvider.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "m_xDispatchProvider can not be getten\n");
-            return false;
+            return sal_False;
         }
 
         //try to enable toolbar and tool windows
@@ -481,15 +346,27 @@ bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         m_dParentStyl = ::NSP_ResetWinStyl (m_hParent);
 #endif
         m_bInit = sal_True;
+
+        try
+        {
+            // in case of presentation try to set the mode of slide-show, and start it
+            uno::Reference< presentation::XPresentationSupplier > xPresSuppl( m_xComponent, uno::UNO_QUERY_THROW );
+            uno::Reference< presentation::XPresentation > xPres( xPresSuppl->getPresentation(), uno::UNO_SET_THROW );
+            uno::Reference< beans::XPropertySet > xProps( xPresSuppl->getPresentation(), uno::UNO_QUERY_THROW );
+            xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ), uno::makeAny( sal_False ) );
+            xPres->start();
+        }
+        catch( uno::Exception& )
+        {}
     }
     catch( uno::Exception& e )
     {
         debug_fprintf(NSP_LOG_APPEND, "Unknown exception while loading document in netscape plugin windows\n");
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
         debug_fprintf(NSP_LOG_APPEND, "error: %s \n", o.pData->buffer );
-        return false;
+        return sal_False;
     }
-    return true;
+    return sal_True;
 }
 
 sal_Bool SoPluginInstance::SetSODir(char * sDir)
@@ -528,12 +405,8 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
 
         if(!mxRemoteMSF.is())
         {
-            bRetval = Connect();  // Connect to listening so and get mxRemoteMSF
-            if(!bRetval)
-            {
-                debug_fprintf(NSP_LOG_APPEND, "can not connect to remote service manager\n");
-                return sal_False;
-            }
+            debug_fprintf(NSP_LOG_APPEND, "Remote StarOfiice ServiceManager is not initilzed correctly!\n");
+            return sal_False;
         }
         debug_fprintf(NSP_LOG_APPEND, "in SoPluginInstance::SetWindow, begin LoadDocument(hParent)\n");
         bRetval = LoadDocument(hParent);  // Load document into current window

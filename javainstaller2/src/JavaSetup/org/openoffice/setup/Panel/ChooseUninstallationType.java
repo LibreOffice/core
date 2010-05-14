@@ -35,6 +35,7 @@ import org.openoffice.setup.PanelHelper.PanelLabel;
 import org.openoffice.setup.PanelHelper.PanelTitle;
 import org.openoffice.setup.ResourceManager;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -45,6 +46,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import org.openoffice.setup.InstallData;
 
 public class ChooseUninstallationType extends JPanel {
 
@@ -52,6 +54,8 @@ public class ChooseUninstallationType extends JPanel {
     private JRadioButton complete;
 
     public ChooseUninstallationType() {
+
+        InstallData data = InstallData.getInstance();
 
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
@@ -68,6 +72,7 @@ public class ChooseUninstallationType extends JPanel {
         JPanel contentPanel = new JPanel();
         contentPanel.setBorder(PanelBorder);
         contentPanel.setLayout(new GridBagLayout());
+        if ( data.useRtl() ) { contentPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.insets = new Insets(0, 0, 0, 10);
@@ -75,17 +80,21 @@ public class ChooseUninstallationType extends JPanel {
 
             String completeText = ResourceManager.getString("String_ChooseUninstallationType4");
             PanelLabel completeComment = new PanelLabel(completeText, true);
+            if ( data.useRtl() ) { completeComment.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
             String customText  = ResourceManager.getString("String_ChooseUninstallationType5");
             PanelLabel customComment  = new PanelLabel(customText, true);
+            if ( data.useRtl() ) { customComment.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
             ButtonGroup group = new ButtonGroup();
 
             String completeButtonText = ResourceManager.getString("String_ChooseUninstallationType6");
             complete = new JRadioButton(completeButtonText, true);
             complete.setMnemonic(KeyEvent.VK_C);
+            if ( data.useRtl() ) { complete.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
             String customButtonText  = ResourceManager.getString("String_ChooseUninstallationType3");
             custom  = new JRadioButton(customButtonText,  false);
             custom.setMnemonic(KeyEvent.VK_U);
+            if ( data.useRtl() ) { custom.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
             group.add(complete);
             group.add(custom);

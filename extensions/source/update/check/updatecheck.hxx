@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheck.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,7 @@ class UpdateCheck :
     public salhelper::ReferenceObject,
     public rtl::StaticWithInit< rtl::Reference< UpdateCheck >, UpdateCheckInitData >
 {
-    UpdateCheck() : m_eState(NOT_INITIALIZED), m_pThread(NULL) {};
+    UpdateCheck() : m_eState(NOT_INITIALIZED), m_eUpdateState(UPDATESTATES_COUNT), m_pThread(NULL) {};
 
 public:
     inline SAL_CALL operator rtl::Reference< UpdateCheckConfigListener > ()
@@ -170,6 +170,7 @@ private:
     };
 
     State m_eState;
+    UpdateState m_eUpdateState;
 
     mutable osl::Mutex m_aMutex;
     WorkerThread *m_pThread;

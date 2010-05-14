@@ -54,6 +54,8 @@
 #include <string.h> // for memcpy
 #include <vector>
 
+#include <comphelper/storagehelper.hxx>
+
 using namespace vos;
 using namespace rtl;
 using namespace com::sun::star;
@@ -753,9 +755,13 @@ sal_Int32 ZipFile::readCEN()
             if ( aEntry.nExtraLen < 0 || aEntry.nExtraLen > ZIP_MAXEXTRA )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds ZIP_MAXEXTRA bytes") ), Reference < XInterface > () );
 
+            // read always in UTF8, some tools seem not to set UTF8 bit
             aEntry.sName = rtl::OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
                                                    aEntry.nNameLen,
-                                                   RTL_TEXTENCODING_ASCII_US);
+                                                   RTL_TEXTENCODING_UTF8 );
+
+            if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sName, sal_True ) )
+                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip entry has an invalid name.") ), Reference < XInterface > () );
 
             aMemGrabber.skipBytes( aEntry.nNameLen + aEntry.nExtraLen + nCommentLen );
             aEntries[aEntry.sName] = aEntry;
@@ -833,10 +839,11 @@ sal_Int32 ZipFile::recover()
                             if ( aEntry.nNameLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {
+                                // read always in UTF8, some tools seem not to set UTF8 bit
                                 if( nPos + 30 + aEntry.nNameLen <= nBufSize )
                                     aEntry.sName = OUString ( (sal_Char *) &pBuffer[nPos + 30],
                                                                   aEntry.nNameLen,
-                                                                RTL_TEXTENCODING_ASCII_US);
+                                                                RTL_TEXTENCODING_UTF8 );
                                 else
                                 {
                                     Sequence < sal_Int8 > aFileName;
@@ -844,7 +851,7 @@ sal_Int32 ZipFile::recover()
                                     aGrabber.readBytes( aFileName, aEntry.nNameLen );
                                     aEntry.sName = OUString ( (sal_Char *) aFileName.getArray(),
                                                                 aFileName.getLength(),
-                                                                RTL_TEXTENCODING_ASCII_US);
+                                                                RTL_TEXTENCODING_UTF8 );
                                     aEntry.nNameLen = static_cast< sal_Int16 >(aFileName.getLength());
                                 }
 

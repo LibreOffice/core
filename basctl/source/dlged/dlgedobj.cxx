@@ -1007,19 +1007,14 @@ SdrObject* DlgEdObj::Clone() const
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const // not working yet
+SdrObject* DlgEdObj::getFullDragClone() const
 {
-    // #116235#
-    //SdrObject* pReturn = SdrUnoObj::Clone(_pPage, _pModel);
-    SdrObject* pReturn = SdrUnoObj::Clone();
+    // no need to really add the clone for dragging, it's a temporary
+    // object
+    SdrObject* pObj = new SdrUnoObj(String());
+    *pObj = *((const SdrUnoObj*)this);
 
-    if(pReturn)
-    {
-        pReturn->SetModel(_pModel);
-        pReturn->SetPage(_pPage);
-    }
-
-    return pReturn;
+    return pObj;
 }
 
 //----------------------------------------------------------------------------

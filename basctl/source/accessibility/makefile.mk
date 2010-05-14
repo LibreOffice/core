@@ -34,6 +34,7 @@ PRJ=..$/..
 PRJNAME=basctl
 TARGET=accessibility
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

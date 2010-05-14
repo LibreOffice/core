@@ -103,9 +103,12 @@ public class PackageDescription implements TreeNode {
     private boolean isApplicationPackage = false;
     private boolean isJavaPackage = false;
     private boolean installCanFail = false;
+    private boolean uninstallCanFail = false;
+    private boolean forceIntoUpdate = false;
     private boolean useForce = false;
     private boolean isNewInstalled = false;
     private boolean wasAlreadyInstalled = false;
+    private boolean ignoreDependsForUninstall = false;
 
     /* Saving the default selection state. This is necessary, if the user chooses
      * the custom installation type, makes changes, and then changes into
@@ -117,6 +120,8 @@ public class PackageDescription implements TreeNode {
     private int     typicalSelectionState = DONT_KNOW;  // Saving settings for typical installation
     private int     customSelectionState = DONT_KNOW;   // Saving settings for custom installation
     private int     startSelectionState = DONT_KNOW;    // Saving settings at start of installation
+
+    public PackageDescription() {}
 
     /**
      * construct only with package information to wrap
@@ -143,6 +148,10 @@ public class PackageDescription implements TreeNode {
         return dpyName;
     }
 
+    public void setName(String name) {
+        dpyName = name;
+    }
+
     public String getDescription() {
         return dpyDescription;
     }
@@ -161,6 +170,10 @@ public class PackageDescription implements TreeNode {
 
     public int getOrder() {
         return pkgOrder;
+    }
+
+    public void setOrder(int order) {
+        pkgOrder = order;
     }
 
     // public int getAccumulatedSize() {
@@ -215,6 +228,18 @@ public class PackageDescription implements TreeNode {
         return installCanFail;
     }
 
+    public boolean uninstallCanFail() {
+        return uninstallCanFail;
+    }
+
+    public void setUninstallCanFail(boolean canFail) {
+        uninstallCanFail = canFail;
+    }
+
+    public boolean forceIntoUpdate() {
+        return forceIntoUpdate;
+    }
+
     public boolean useForce() {
         return useForce;
     }
@@ -235,6 +260,14 @@ public class PackageDescription implements TreeNode {
         return wasAlreadyInstalled;
     }
 
+    public void setIgnoreDependsForUninstall(boolean ignore) {
+        ignoreDependsForUninstall = ignore;
+    }
+
+    public boolean ignoreDependsForUninstall() {
+        return ignoreDependsForUninstall;
+    }
+
     public boolean isDefault() {
         return isDefault;
     }
@@ -247,9 +280,18 @@ public class PackageDescription implements TreeNode {
         return isRelocatable;
     }
 
+    public void setIsRelocatable(boolean relocatable) {
+        isRelocatable = relocatable;
+    }
+
     public String getPackageName() {
         return pkgFileName;
     }
+
+    public void setPackageName(String name) {
+        pkgFileName = name;
+    }
+
 
     public String getFullPackageName() {
         return pkgFullName;
@@ -466,6 +508,12 @@ public class PackageDescription implements TreeNode {
             if (subSection != null) {
                 String installCanFailValue = subSection.getValue();
                 installCanFail = Parser.parseBoolean(installCanFailValue);
+            }
+
+            subSection = section.getElement("forceintoupdate");
+            if (subSection != null) {
+                String forceIntoUpdateValue = subSection.getValue();
+                forceIntoUpdate = Parser.parseBoolean(forceIntoUpdateValue);
             }
 
             subSection = section.getElement("useforce");

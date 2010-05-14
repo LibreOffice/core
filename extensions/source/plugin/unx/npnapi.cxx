@@ -51,13 +51,14 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
+    UINT32 nFileID = pConnector->GetStreamID( stream );
     MediatorMessage* pMes=
         pConnector->
         Transact( eNPN_DestroyStream,
                   &nInstance, sizeof( nInstance ),
-                  pConnector->GetStreamID( stream ), sizeof( int ),
+                  &nFileID, sizeof( nFileID ),
                   POST_STRING( stream->url ),
-                  reason, sizeof( reason ),
+                  &reason, sizeof( reason ),
                   NULL );
 
     if( ! pMes )

@@ -37,6 +37,7 @@ import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupData.DisplayPackageDescription;
 import org.openoffice.setup.SetupData.SetupDataProvider;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -54,6 +55,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import org.openoffice.setup.InstallData;
 
 public class ChooseComponents extends JPanel implements MouseListener, KeyListener, TreeSelectionListener {
 
@@ -65,6 +67,8 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
     private PanelTitle titleBox;
 
     public ChooseComponents() {
+
+        InstallData data = InstallData.getInstance();
 
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
@@ -86,6 +90,7 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
         componentTree.addKeyListener( this );
         componentTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         componentTree.addTreeSelectionListener(this);
+        // if ( data.useRtl() ) { componentTree.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         String BorderTitle = ResourceManager.getString("String_ChooseComponents3");
         TitledBorder PanelBorder = BorderFactory.createTitledBorder(BorderTitle);
@@ -103,6 +108,7 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
 
         DescriptionPanel.add(descriptionLabel, BorderLayout.CENTER);
         DescriptionPanel.add(sizeLabel, BorderLayout.EAST);
+        if ( data.useRtl() ) { DescriptionPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         add(new JScrollPane(componentTree), BorderLayout.CENTER);
         add(DescriptionPanel, BorderLayout.SOUTH);

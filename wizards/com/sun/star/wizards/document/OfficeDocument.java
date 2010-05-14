@@ -33,7 +33,8 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XDocumentProperties;
+import com.sun.star.document.XDocumentPropertiesSupplier;
 import com.sun.star.document.XEventsSupplier;
 import com.sun.star.document.XTypeDetection;
 import com.sun.star.drawing.XDrawPagesSupplier;
@@ -425,10 +426,10 @@ public class OfficeDocument
         return xDrawPagesSupplier.getDrawPages().getCount();
     }
 
-    public static Object getDocumentInfo(Object document)
+    public static XDocumentProperties getDocumentProperties(Object document)
     {
-        XDocumentInfoSupplier xDocumentInfoSupplier = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, document);
-        return xDocumentInfoSupplier.getDocumentInfo();
+        XDocumentPropertiesSupplier xDocumentPropertiesSupplier = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, document);
+        return xDocumentPropertiesSupplier.getDocumentProperties();
     }
 
     public static int showMessageBox(XMultiServiceFactory xMSF, String windowServiceName, int windowAttribute, String MessageText)

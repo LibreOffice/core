@@ -1,3 +1,7 @@
 SetProductInstallationPath
 RegisterLanguagePack
 GetUserInstallMode    
+IsOfficeRunning
+RegisterExtensions
+DeregisterExtensions
+RemoveExtensions

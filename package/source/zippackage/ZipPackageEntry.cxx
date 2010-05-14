@@ -36,20 +36,11 @@
 #endif
 #include <vos/diagnose.hxx>
 
-#if defined( OSL_DEBUG )
-#if OSL_DEBUG > 0
-#include <ImplValidCharacters.hxx>
-#endif
-#endif
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>
 #include <ContentInfo.hxx>
 
-#if defined( OSL_DEBUG_LEVEL )
-#if OSL_DEBUG_LEVEL > 0
-#include <ImplValidCharacters.hxx>
-#endif
-#endif
+#include <comphelper/storagehelper.hxx>
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -84,10 +75,11 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     if ( pParent && pParent->hasByName ( aEntry.sName ) )
         pParent->removeByName ( aEntry.sName );
 
-    const sal_Unicode *pChar = aName.getStr();
-    if(pChar == 0 || pChar != 0) {
-        VOS_ENSURE ( Impl_IsValidChar (pChar, static_cast < sal_Int16 > ( aName.getLength() ), sal_False), "Invalid character in new zip package entry name!");
-    }
+    // unfortunately no other exception than RuntimeException can be thrown here
+    // usually the package is used through storage implementation, the problem should be detected there
+    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, sal_True ) )
+        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+
     aEntry.sName = aName;
 
     if ( pParent )
