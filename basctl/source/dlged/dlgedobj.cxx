@@ -1377,54 +1377,6 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
-{
-    // #109994# fixed here, because the drawing layer doesn't handle objects
-    // with a width or height of 0 in a proper way
-    Rectangle aRect_( aOutRect );
-    if ( aRect_.IsEmpty() )
-    {
-        aRect_.Left() -= nTol;
-        aRect_.Top() -= nTol;
-        aRect_.Right() = ( aRect_.Right() == RECT_EMPTY ? aOutRect.Left() + nTol : aRect_.Right() + nTol );
-        aRect_.Bottom() = ( aRect_.Bottom() == RECT_EMPTY ? aOutRect.Top() + nTol : aRect_.Bottom() + nTol );
-
-        if ( aRect_.IsInside( rPnt ) )
-            return (SdrObject*)this;
-        else
-            return 0;
-    }
-
-    if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ))
-    {
-        Rectangle aROuter = aOutRect;
-        aROuter.Left()   -= nTol;
-        aROuter.Right()  += nTol;
-        aROuter.Top()    -= nTol;
-        aROuter.Bottom() += nTol;
-
-        Rectangle aRInner = aOutRect;
-        if( (aRInner.GetSize().Height() > (long)nTol*2) &&
-            (aRInner.GetSize().Width()  > (long)nTol*2)    )
-        {
-            aRInner.Left()   += nTol;
-            aRInner.Right()  -= nTol;
-            aRInner.Top()    += nTol;
-            aRInner.Bottom() -= nTol;
-        }
-
-        if( aROuter.IsInside( rPnt ) && !aRInner.IsInside( rPnt ) )
-            return (SdrObject*)this;
-        else
-            return 0;
-    }
-    else
-        return SdrUnoObj::CheckHit( rPnt, nTol, pSet );
-}
-
-
-//----------------------------------------------------------------------------
-
 TYPEINIT1(DlgEdForm, DlgEdObj);
 DBG_NAME(DlgEdForm);
 
@@ -1853,32 +1805,6 @@ void DlgEdForm::UpdateTabOrderAndGroups()
 {
     UpdateTabOrder();
     UpdateGroups();
-}
-
-//----------------------------------------------------------------------------
-
-SdrObject* DlgEdForm::CheckHit( const Point& rPnt, USHORT nTol, const SetOfByte* ) const
-{
-    Rectangle aROuter = aOutRect;
-    aROuter.Left()   -= nTol;
-    aROuter.Right()  += nTol;
-    aROuter.Top()    -= nTol;
-    aROuter.Bottom() += nTol;
-
-    Rectangle aRInner = aOutRect;
-    if( (aRInner.GetSize().Height() > (long)nTol*2) &&
-        (aRInner.GetSize().Width()  > (long)nTol*2)    )
-    {
-        aRInner.Left()   += nTol;
-        aRInner.Right()  -= nTol;
-        aRInner.Top()    += nTol;
-        aRInner.Bottom() -= nTol;
-    }
-
-    if( aROuter.IsInside( rPnt ) && !aRInner.IsInside( rPnt ) )
-        return (SdrObject*)this;
-    else
-        return 0;
 }
 
 //----------------------------------------------------------------------------

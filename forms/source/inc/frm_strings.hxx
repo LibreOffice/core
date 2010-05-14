@@ -113,6 +113,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_CYCLE,                    "Cycle" );
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,            "DataField" );
     FORMS_CONSTASCII_STRING( PROPERTY_ENABLED,                  "Enabled" );
+    FORMS_CONSTASCII_STRING( PROPERTY_ENABLEVISIBLE,                  "EnableVisible" );
     FORMS_CONSTASCII_STRING( PROPERTY_READONLY,                 "ReadOnly" );
     FORMS_CONSTASCII_STRING( PROPERTY_RELEVANT,                 "Relevant" );
     FORMS_CONSTASCII_STRING( PROPERTY_ISREADONLY,               "IsReadOnly" );
@@ -135,7 +136,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_BUTTONTYPE,               "ButtonType" );
     FORMS_CONSTASCII_STRING( PROPERTY_STRINGITEMLIST,           "StringItemList" );
     FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,             "DefaultText" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULTCHECKED,           "DefaultState" );
+    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_STATE,             "DefaultState" );
     FORMS_CONSTASCII_STRING( PROPERTY_FORMATKEY,                "FormatKey" );
     FORMS_CONSTASCII_STRING( PROPERTY_FORMATSSUPPLIER,          "FormatsSupplier" );
     FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_ACTION,            "SubmitAction" );

@@ -43,10 +43,18 @@ public class Test10 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToSubstream( xTempStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
                 return false;
 
 
@@ -64,6 +72,10 @@ public class Test10 implements StorageTest {
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "SubStream2", "MediaType2", true, pBytes2 ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "BigSubStream2", "MediaType2", true, pBigBytes ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
@@ -120,7 +132,14 @@ public class Test10 implements StorageTest {
             if ( !m_aTestHelper.InternalCheckStream( xClonedSubStream, "SubStream1", "MediaType1", true, pBytes1, true ) )
                 return false;
 
+            XStream xClonedBigSubStream = m_aTestHelper.cloneSubStream( xTempStorage, "BigSubStream1" );
+            if ( !m_aTestHelper.InternalCheckStream( xClonedBigSubStream, "BigSubStream1", "MediaType1", true, pBigBytes, true ) )
+                return false;
+
             if ( !m_aTestHelper.disposeStream( xClonedSubStream, "SubStream1" ) )
+                return false;
+
+            if ( !m_aTestHelper.disposeStream( xClonedBigSubStream, "BigSubStream1" ) )
                 return false;
 
             // ==============================
@@ -141,6 +160,9 @@ public class Test10 implements StorageTest {
                 return false;
 
             if ( !m_aTestHelper.checkStream( xClonedSubStorage, "SubStream2", "MediaType2", true, pBytes2 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xClonedSubStorage, "BigSubStream2", "MediaType2", true, pBigBytes ) )
                 return false;
 
             XStorage xCloneOfRoot = m_aTestHelper.cloneStorage( m_xStorageFactory, xTempStorage );
@@ -193,6 +215,9 @@ public class Test10 implements StorageTest {
                 return false;
 
             if ( !m_aTestHelper.checkStream( xSubStorageOfClone, "SubStream2", "MediaType2", true, pBytes2 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xSubStorageOfClone, "BigSubStream2", "MediaType2", true, pBigBytes ) )
                 return false;
 
             return true;

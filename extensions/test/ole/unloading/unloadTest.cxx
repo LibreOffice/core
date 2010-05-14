@@ -60,7 +60,7 @@ sal_Bool test2();
 sal_Bool test3();
 sal_Bool test4();
 
-int main(int argc, char* argv[])
+int main(int, char**)
 {
        sal_Bool bTest1= test1();
        sal_Bool bTest2= test2();

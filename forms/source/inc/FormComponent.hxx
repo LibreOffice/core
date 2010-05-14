@@ -36,6 +36,7 @@
 #include "property.hrc"
 #include "property.hxx"
 #include "propertybaghelper.hxx"
+#include "resettable.hxx"
 #include "services.hxx"
 #include "windowstateguard.hxx"
 
@@ -648,8 +649,8 @@ private:
     ::com::sun::star::uno::Type         m_aValuePropertyType;
     bool                                m_bValuePropertyMayBeVoid;
 
+    ResetHelper                         m_aResetHelper;
     ::cppu::OInterfaceContainerHelper   m_aUpdateListeners;
-    ::cppu::OInterfaceContainerHelper   m_aResetListeners;
     ::cppu::OInterfaceContainerHelper   m_aFormComponentListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >

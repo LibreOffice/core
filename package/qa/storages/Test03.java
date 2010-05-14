@@ -52,6 +52,18 @@ public class Test03 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes ) )
+                return false;
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -140,15 +152,24 @@ public class Test03 implements StorageTest {
             // check that root storage contents are represented correctly
             String sRootCont[] = xRootNameAccess.getElementNames();
 
-            if ( sRootCont.length != 2 )
+            if ( sRootCont.length != 3 )
             {
                 m_aTestHelper.Error( "Root storage contains wrong amount of children!" );
                 return false;
             }
 
-            if ( !( sRootCont[0].equals( "SubStorage1" ) && sRootCont[1].equals( "SubStream1" )
-                 || sRootCont[0].equals( "SubStream1" ) && sRootCont[1].equals( "SubStorage1" ) )
-              || !( xRootNameAccess.hasByName( "SubStream1" ) && xRootNameAccess.hasByName( "SubStorage1" ) ) )
+            int nFlag = 0;
+            for ( int nInd = 0; nInd < sRootCont.length; nInd++ )
+            {
+                if ( sRootCont[nInd].equals( "SubStorage1" ) )
+                    nFlag |= 1;
+                else if ( sRootCont[nInd].equals( "SubStream1" ) )
+                    nFlag |= 2;
+                else if ( sRootCont[nInd].equals( "BigSubStream1" ) )
+                    nFlag |= 4;
+            }
+
+            if ( nFlag != 7 || !( xRootNameAccess.hasByName( "BigSubStream1" ) && xRootNameAccess.hasByName( "SubStream1" ) && xRootNameAccess.hasByName( "SubStorage1" ) ) )
             {
                 m_aTestHelper.Error( "Root storage contains wrong list of children!" );
                 return false;
@@ -169,9 +190,9 @@ public class Test03 implements StorageTest {
                 return false;
             }
 
-            if ( !xChildAccess.hasByName( "SubStream2" )
+            if ( !( xChildAccess.hasByName( "SubStream2" ) && xChildAccess.hasByName( "BigSubStream2" ) )
               || !xResultSubStorage.isStreamElement( "SubStream2" )
-              || xResultSubStorage.isStorageElement( "SubStream2" ) )
+              || !xResultSubStorage.isStreamElement( "BigSubStream2" ) )
             {
                 m_aTestHelper.Error( "'SubStream2' can not be detected as child stream element of 'SubStorage1'!" );
                 return false;

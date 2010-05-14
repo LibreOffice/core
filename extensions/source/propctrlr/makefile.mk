@@ -98,7 +98,8 @@ SLOFILES=           $(SLO)$/controlfontdialog.obj \
                     $(SLO)$/defaulthelpprovider.obj \
                     $(SLO)$/MasterDetailLinkDialog.obj \
                     $(SLO)$/inspectormodelbase.obj \
-                    $(SLO)$/propertycontrolextender.obj
+                    $(SLO)$/propertycontrolextender.obj \
+                    $(SLO)$/formgeometryhandler.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=			propres.src	 \

@@ -49,44 +49,45 @@ import com.sun.star.wizards.document.TimeStampControl;
 public class FormControlArranger
 {
 
-    XNameContainer xFormName;
-    XMultiServiceFactory xMSF;
-    public DatabaseControl[] DBControlList = null;
+    protected DatabaseControl[] DBControlList = null;
+
+    private XNameContainer xFormName;
+    private XMultiServiceFactory xMSF;
     private Control[] LabelControlList = null;
     private XStatusIndicator xProgressBar;
     private FieldColumn[] FieldColumns;
-    DatabaseControl curDBControl;
+    private DatabaseControl curDBControl;
     // Control curLabelControl;
-    int icurArrangement;
-    boolean bIsFirstRun;
-    boolean bIsVeryFirstRun;
-    boolean bControlsareCreated;
-    int cXOffset;
-    int cYOffset;
-    final int cVertDistance = 200;
-    final int cHoriDistance = 300;
-    final int cLabelGap = 100;
-    final double CMAXREDUCTION = 0.7;
-    FormHandler oFormHandler;
-    int iReduceWidth;
-    int nXTCPos;
-    int nYTCPos;
-    int nXDBPos;
-    int nYDBPos;
-    int nTCHeight;
-    int nTCWidth;
-    int nDBHeight;
-    int nDBWidth;
-    int nMaxTCWidth;
-    int nFormWidth;
-    int nFormHeight;
-    int nMaxRowY;
-    int nSecMaxRowY;
-    int nMaxColRightX;
-    int a;
-    int StartA;
-    int nMaxDBYPos = 0;     //the maximum YPosition of a DBControl in the form
-    Short NBorderType = new Short((short) 1); //3-D Border
+    private int icurArrangement;
+    private boolean bIsFirstRun;
+    private boolean bIsVeryFirstRun;
+    private boolean bControlsareCreated;
+    private int cXOffset;
+    private int cYOffset;
+    private static final int cVertDistance = 200;
+    private static final int cHoriDistance = 300;
+    private static final int cLabelGap = 100;
+    private static final double CMAXREDUCTION = 0.7;
+    private FormHandler oFormHandler;
+    private int iReduceWidth;
+    private int nXTCPos;
+    private int nYTCPos;
+    private int nXDBPos;
+    private int nYDBPos;
+    private int nTCHeight;
+    private int nTCWidth;
+    private int nDBHeight;
+    private int nDBWidth;
+    private int nMaxTCWidth;
+    private int nFormWidth;
+    private int nFormHeight;
+    private int nMaxRowY;
+    private int nSecMaxRowY;
+    private int nMaxColRightX;
+    private int a;
+    private int StartA;
+    private int nMaxDBYPos = 0;     //the maximum YPosition of a DBControl in the form
+    private Short NBorderType = new Short((short) 1); //3-D Border
 
     public FormControlArranger(FormHandler _oFormHandler, XNameContainer _xFormName, CommandMetaData oDBMetaData, XStatusIndicator _xProgressBar, Point _StartPoint, Size _FormSize)
     {
@@ -140,7 +141,7 @@ public class FormControlArranger
     private boolean isReducable(int _index)
     {
         boolean bisreducable = false;
-        int ntype = this.FieldColumns[_index].FieldType;
+        int ntype = this.FieldColumns[_index].getFieldType();
         switch (ntype)
         {
             case DataType.TINYINT:
@@ -294,7 +295,7 @@ public class FormControlArranger
             {
                 nControlBaseWidth = curDBControl.getSize().Width;
             }
-            if (FieldColumns[i].FieldType == DataType.TIMESTAMP)
+            if (FieldColumns[i].getFieldType() == DataType.TIMESTAMP)
             {
                 TimeStampControl oDBTimeStampControl = (TimeStampControl) curDBControl;
                 nControlBaseWidth = oDBTimeStampControl.getSize().Width;
@@ -570,7 +571,7 @@ public class FormControlArranger
             {
                 Point aPoint = new Point(nXTCPos, nYTCPos);
                 Size aSize = new Size(nTCWidth, nTCHeight);
-                final String sFieldName = FieldColumns[i].m_sFieldName;
+                final String sFieldName = FieldColumns[i].getFieldName();
                 this.LabelControlList[i] = new Control(oFormHandler, xFormName, FormHandler.SOLABEL, sFieldName, aPoint, aSize);
                 if (bIsVeryFirstRun)
                 {
@@ -581,7 +582,7 @@ public class FormControlArranger
                 }
                 String sTitle = FieldColumns[i].getFieldTitle();
                 nTCWidth = LabelControlList[i].getPreferredWidth(sTitle);
-            }
+                }
             Control curLabelControl = LabelControlList[i];
             if (icurArrangement == FormWizard.SOCOLUMNARLEFT)
             {
@@ -625,8 +626,8 @@ public class FormControlArranger
     {
         try
         {
-            String sFieldName = FieldColumns[i].m_sFieldName;
-            int nFieldType = FieldColumns[i].FieldType;
+            String sFieldName = FieldColumns[i].getFieldName();
+            int nFieldType = FieldColumns[i].getFieldType();
 
             Point aPoint = new Point(nXDBPos, nYDBPos);
             if (bControlsareCreated)
@@ -664,8 +665,7 @@ public class FormControlArranger
             }
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
             {
-                LabelControlList[i].setPropertyValue("MultiLine", Boolean.TRUE);
-                // Helper.setUnoPropertyValue(LabelControlList[i], "MultiLine", Boolean.TRUE);
+                Helper.setUnoPropertyValue(LabelControlList[i], "MultiLine", Boolean.TRUE);
             }
             checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
             aDBControl.setPropertyValue("Border", NBorderType);

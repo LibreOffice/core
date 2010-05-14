@@ -104,6 +104,7 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
     ,m_nBorder(1)
     ,m_nWritingMode( WritingMode2::CONTEXT )
     ,m_nContextWritingMode( WritingMode2::CONTEXT )
+    ,m_bEnableVisible(sal_True)
     ,m_bEnable(sal_True)
     ,m_bNavigation(sal_True)
     ,m_bRecordMarker(sal_True)
@@ -130,6 +131,7 @@ OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const
 
     m_aDefaultControl = _pOriginal->m_aDefaultControl;
     m_bEnable = _pOriginal->m_bEnable;
+    m_bEnableVisible = _pOriginal->m_bEnableVisible;
     m_bNavigation = _pOriginal->m_bNavigation;
     m_nBorder = _pOriginal->m_nBorder;
     m_nWritingMode = _pOriginal->m_nWritingMode;
@@ -457,7 +459,7 @@ void OGridControlModel::_reset()
 //------------------------------------------------------------------------------
 void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES( 36 )
+    BEGIN_DESCRIBE_BASE_PROPERTIES( 37 )
         DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
@@ -465,6 +467,7 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP3(TABSTOP,             sal_Bool,           BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(ENABLED,             sal_Bool,           BOUND);
+        DECL_PROP2(ENABLEVISIBLE,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(BORDER,              sal_Int16,          BOUND);
         DECL_PROP2(BORDERCOLOR,         sal_Int16,          BOUND, MAYBEVOID);
         DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,    BOUND);
@@ -537,6 +540,9 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
             break;
         case PROPERTY_ID_ENABLED:
             setBOOL(rValue, m_bEnable);
+            break;
+        case PROPERTY_ID_ENABLEVISIBLE:
+            setBOOL(rValue, m_bEnableVisible);
             break;
         case PROPERTY_ID_BORDER:
             rValue <<= (sal_Int16)m_nBorder;
@@ -616,6 +622,9 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
         case PROPERTY_ID_ENABLED:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bEnable);
             break;
+        case PROPERTY_ID_ENABLEVISIBLE:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bEnableVisible);
+            break;
         case PROPERTY_ID_BORDER:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nBorder);
             break;
@@ -687,6 +696,9 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         case PROPERTY_ID_ENABLED:
             m_bEnable = getBOOL(rValue);
             break;
+        case PROPERTY_ID_ENABLEVISIBLE:
+            m_bEnableVisible = getBOOL(rValue);
+            break;
         case PROPERTY_ID_RECORDMARKER:
             m_bRecordMarker = getBOOL(rValue);
             break;
@@ -744,6 +756,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         case PROPERTY_ID_RECORDMARKER:
         case PROPERTY_ID_DISPLAYSYNCHRON:
         case PROPERTY_ID_ENABLED:
+        case PROPERTY_ID_ENABLEVISIBLE:
             aReturn = makeBoolAny(sal_True);
             break;
 

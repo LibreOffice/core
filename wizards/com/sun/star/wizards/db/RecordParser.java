@@ -251,7 +251,7 @@ public class RecordParser extends QueryMetaData
             String[] sFieldNames = getFieldNames();
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                String sFieldName = FieldColumns[i].m_sFieldName;
+                String sFieldName = FieldColumns[i].getFieldName();
                 int nColIndex = JavaTools.FieldInList(AllQueryFieldNames, sFieldName) + 1;
                 FieldColumns[i].ColIndex = nColIndex;
                 if (nColIndex == -1)
@@ -283,7 +283,7 @@ public class RecordParser extends QueryMetaData
     public Object getGroupColumnValue(int ColIndex)
     {
         FieldColumn CurDBFieldColumn = this.GroupFieldColumns[ColIndex];
-        return getColumnValue(CurDBFieldColumn.ColIndex, CurDBFieldColumn.FieldType);
+        return getColumnValue(CurDBFieldColumn.ColIndex, CurDBFieldColumn.getFieldType());
     }
 
     public boolean getcurrentRecordData(java.util.Vector DataVector)
@@ -292,7 +292,7 @@ public class RecordParser extends QueryMetaData
         for (int i = 0; i < RecordFieldColumns.length; i++)
         {
             FieldColumn CurDBFieldColumn = this.RecordFieldColumns[i];
-            RecordValueArray[i] = getColumnValue(CurDBFieldColumn.ColIndex, CurDBFieldColumn.FieldType); //FinalColIndex
+            RecordValueArray[i] = getColumnValue(CurDBFieldColumn.ColIndex, CurDBFieldColumn.getFieldType()); //FinalColIndex
         }
         DataVector.addElement(RecordValueArray);
         return true;

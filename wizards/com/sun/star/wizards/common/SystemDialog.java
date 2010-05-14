@@ -152,7 +152,6 @@ public class SystemDialog
      *
      * @param displayDir
      * @param defaultName
-     * @param url should the returned path be an url. If false converts the
      * given url to a local path.
      * @return
      */
@@ -293,7 +292,7 @@ public class SystemDialog
             int MaxCount = xPropertyValue.length;
             for (int i = 0; i < MaxCount; i++)
             {
-                PropertyValue aValue = (PropertyValue) xPropertyValue[i];
+                PropertyValue aValue = xPropertyValue[i];
                 if (aValue != null && aValue.Name.equals("UIName"))
                 {
                     return AnyConverter.toString(aValue.Value);

@@ -90,7 +90,7 @@ namespace frm
         switch ( _nHandle )
         {
         case PROPERTY_ID_REFVALUE:          _rValue <<= m_sReferenceValue; break;
-        case PROPERTY_ID_DEFAULTCHECKED:    _rValue <<= (sal_Int16)m_eDefaultChecked; break;
+        case PROPERTY_ID_DEFAULT_STATE:    _rValue <<= (sal_Int16)m_eDefaultChecked; break;
 
         case PROPERTY_ID_UNCHECKED_REFVALUE:
             OSL_ENSURE( m_bSupportSecondRefValue, "OReferenceValueComponent::getFastPropertyValue: not supported!" );
@@ -117,11 +117,11 @@ namespace frm
             OSL_VERIFY( _rValue >>= m_sNoCheckReferenceValue );
             break;
 
-        case PROPERTY_ID_DEFAULTCHECKED:
+        case PROPERTY_ID_DEFAULT_STATE:
         {
             sal_Int16 nDefaultChecked( (sal_Int16)STATE_NOCHECK );
             OSL_VERIFY( _rValue >>= nDefaultChecked );
-            m_eDefaultChecked = (CheckState)nDefaultChecked;
+            m_eDefaultChecked = (ToggleState)nDefaultChecked;
             resetNoBroadcast();
         }
         break;
@@ -146,7 +146,7 @@ namespace frm
             bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_sNoCheckReferenceValue );
             break;
 
-        case PROPERTY_ID_DEFAULTCHECKED:
+        case PROPERTY_ID_DEFAULT_STATE:
             bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, (sal_Int16)m_eDefaultChecked );
             break;
 
@@ -168,7 +168,7 @@ namespace frm
     {
         BEGIN_DESCRIBE_PROPERTIES( m_bSupportSecondRefValue ? 3 : 2, OBoundControlModel )
             DECL_PROP1( REFVALUE,       ::rtl::OUString,    BOUND );
-            DECL_PROP1( DEFAULTCHECKED, sal_Int16,          BOUND );
+            DECL_PROP1( DEFAULT_STATE, sal_Int16,          BOUND );
             if ( m_bSupportSecondRefValue )
             {
                 DECL_PROP1( UNCHECKED_REFVALUE, ::rtl::OUString,    BOUND );

@@ -103,7 +103,6 @@
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/confignode.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/wrkwin.hxx>
@@ -344,7 +343,7 @@ namespace pcr
             sObjectID = sObjectID + xGrfObj->getUniqueID();
             m_xComponent->setPropertyValue( _rPropertyName, uno::makeAny( sObjectID ) );
         }
-        else if ( PROPERTY_ID_FONT_NAME == nPropId )
+        else if ( PROPERTY_ID_FONT == nPropId )
         {
             // special handling, the value is a faked value we generated ourself in impl_executeFontDialog_nothrow
             Sequence< NamedValue > aFontPropertyValues;
@@ -619,7 +618,7 @@ namespace pcr
             case 1: nWritingMode = WritingMode2::RL_TB;      break;
             case 2: nWritingMode = WritingMode2::CONTEXT;    break;
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToControlValue: unexpected 'normalized value' for WritingMode!" );
+                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToPropertyValue: unexpected 'normalized value' for WritingMode!" );
                 nWritingMode = WritingMode2::CONTEXT;
                 break;
             }
@@ -761,6 +760,51 @@ namespace pcr
             }
 
             aControlValue = FormComponentPropertyHandler_Base::convertToControlValue( _rPropertyName, makeAny( nNormalized ), _rControlValueType );
+        }
+        break;
+
+        case PROPERTY_ID_FONT:
+        {
+            FontDescriptor aFont;
+            OSL_VERIFY( _rPropertyValue >>= aFont );
+
+            ::rtl::OUStringBuffer displayName;
+            if ( !aFont.Name.getLength() )
+            {
+                displayName.append( String( PcrRes( RID_STR_FONT_DEFAULT ) ) );
+            }
+            else
+            {
+                // font name
+                displayName.append( aFont.Name );
+                displayName.appendAscii( ", " );
+
+                // font style
+                ::FontWeight  eWeight = VCLUnoHelper::ConvertFontWeight( aFont.Weight );
+                USHORT nStyleResID = RID_STR_FONTSTYLE_REGULAR;
+                if ( aFont.Slant == FontSlant_ITALIC )
+                {
+                    if ( eWeight > WEIGHT_NORMAL )
+                        nStyleResID = RID_STR_FONTSTYLE_BOLD_ITALIC;
+                    else
+                        nStyleResID = RID_STR_FONTSTYLE_ITALIC;
+                }
+                else
+                {
+                    if ( eWeight > WEIGHT_NORMAL )
+                        nStyleResID = RID_STR_FONTSTYLE_BOLD;
+                }
+                displayName.append( String( PcrRes( nStyleResID ) ) );
+
+                // font size
+                if ( aFont.Height )
+                {
+                    displayName.appendAscii( ", " );
+                    displayName.append( sal_Int32( aFont.Height ) );
+                }
+            }
+
+            aControlValue <<= displayName.makeStringAndClear();
         }
         break;
 
@@ -924,6 +968,7 @@ namespace pcr
         aInterestingProperties.push_back( PROPERTY_SHOWTHOUSANDSEP );
         aInterestingProperties.push_back( PROPERTY_FORMATKEY );
         aInterestingProperties.push_back( PROPERTY_EMPTY_IS_NULL );
+        aInterestingProperties.push_back( PROPERTY_TOGGLE );
         return Sequence< ::rtl::OUString >( &(*aInterestingProperties.begin()), aInterestingProperties.size() );
     }
 
@@ -1010,7 +1055,7 @@ namespace pcr
         };
         break;
 
-        case PROPERTY_ID_FONT_NAME:
+        case PROPERTY_ID_FONT:
             bReadOnly = sal_True;
             aDescriptor.PrimaryButtonId = UID_PROP_DLG_FONT_TYPE;
             break;
@@ -1238,7 +1283,7 @@ namespace pcr
             ::std::vector< ::rtl::OUString >::const_iterator pEnd = aEnumValues.end();
 
             // for a checkbox: if "ambiguous" is not allowed, remove this from the sequence
-            if  (   ( PROPERTY_ID_DEFAULTCHECKED == nPropId )
+            if  (   ( PROPERTY_ID_DEFAULT_STATE == nPropId )
                 ||  ( PROPERTY_ID_STATE == nPropId )
                 )
             {
@@ -1434,7 +1479,7 @@ namespace pcr
                 eResult = InteractiveSelectionResult_ObtainedValue;
             break;
 
-        case PROPERTY_ID_FONT_NAME:
+        case PROPERTY_ID_FONT:
             if ( impl_executeFontDialog_nothrow( _rData, aGuard ) )
                 eResult = InteractiveSelectionResult_ObtainedValue;
             break;
@@ -1661,7 +1706,7 @@ namespace pcr
         // ----- TriState -----
         case PROPERTY_ID_TRISTATE:
             if ( !_bFirstTimeInit )
-                _rxInspectorUI->rebuildPropertyUI( m_eComponentClass == eFormControl ? PROPERTY_DEFAULTCHECKED : PROPERTY_STATE );
+                _rxInspectorUI->rebuildPropertyUI( m_eComponentClass == eFormControl ? PROPERTY_DEFAULT_STATE : PROPERTY_STATE );
             break;  // case PROPERTY_ID_TRISTATE
 
         // ----- DecimalAccuracy -----
@@ -1744,6 +1789,14 @@ namespace pcr
                     }
                 }
             }
+        }
+        break;
+
+        case PROPERTY_ID_TOGGLE:
+        {
+            sal_Bool bIsToggleButton = sal_False;
+            OSL_VERIFY( _rNewValue >>= bIsToggleButton );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_STATE, bIsToggleButton );
         }
         break;
 
@@ -2257,67 +2310,6 @@ namespace pcr
                 return true;
 
         return false;
-    }
-
-    //------------------------------------------------------------------------
-    sal_Int16 FormComponentPropertyHandler::impl_getDocumentMeasurementUnit_throw() const
-    {
-        FieldUnit eUnit = FUNIT_NONE;
-
-        Reference< XServiceInfo > xDocumentSI( impl_getContextDocument_nothrow(), UNO_QUERY );
-        OSL_ENSURE( xDocumentSI.is(), "FormComponentPropertyHandler::impl_getDocumentMeasurementUnit_throw: No context document - where do I live?" );
-        if ( xDocumentSI.is() )
-        {
-            // determine the application type we live in
-            ::rtl::OUString sConfigurationLocation;
-            ::rtl::OUString sConfigurationProperty;
-            if ( xDocumentSI->supportsService( SERVICE_WEB_DOCUMENT ) )
-            {   // writer
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.WriterWeb/Layout/Other" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MeasureUnit" ) );
-            }
-            else if ( xDocumentSI->supportsService( SERVICE_TEXT_DOCUMENT ) )
-            {   // writer
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Writer/Layout/Other" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MeasureUnit" ) );
-            }
-            else if ( xDocumentSI->supportsService( SERVICE_SPREADSHEET_DOCUMENT ) )
-            {   // calc
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
-            }
-            else if ( xDocumentSI->supportsService( SERVICE_DRAWING_DOCUMENT ) )
-            {
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Draw/Layout/Other/MeasureUnit" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
-            }
-            else if ( xDocumentSI->supportsService( SERVICE_PRESENTATION_DOCUMENT ) )
-            {
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Impress/Layout/Other/MeasureUnit" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
-            }
-
-            // read the measurement unit from the configuration
-            if ( sConfigurationLocation.getLength() && sConfigurationProperty.getLength() )
-            {
-                ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-                    m_aContext.getLegacyServiceFactory(), sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
-                sal_Int32 nUnitAsInt = (sal_Int32)FUNIT_NONE;
-                aConfigTree.getNodeValue( sConfigurationProperty ) >>= nUnitAsInt;
-
-                // if this denotes a valid (and accepted) unit, then use it
-                if  ( ( nUnitAsInt > FUNIT_NONE ) && ( nUnitAsInt <= FUNIT_100TH_MM ) )
-                    eUnit = static_cast< FieldUnit >( nUnitAsInt );
-            }
-        }
-
-        if ( FUNIT_NONE == eUnit )
-        {
-            MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-            eUnit = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
-        }
-
-        return VCLUnoHelper::ConvertToMeasurementUnit( eUnit, 1 );
     }
 
     //------------------------------------------------------------------------

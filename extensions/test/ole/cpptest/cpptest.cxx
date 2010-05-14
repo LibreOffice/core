@@ -36,21 +36,15 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+#pragma warning(disable: 4917)
 #include <comdef.h>
 #include <tchar.h>
 #include<atlbase.h>
-CComModule _Module;
 #include<atlcom.h>
-#include<atlimpl.cpp>
-
-//CComModule _Module;
-BEGIN_OBJECT_MAP(ObjectMap)
-END_OBJECT_MAP()
-
 
 HRESULT doTest();
 
-int main(int argc, char* argv[])
+int main(int /*argc*/, char** /*argv*/)
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))
@@ -59,9 +53,6 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-
-    _Module.Init( ObjectMap, GetModuleHandle( NULL));
-
     if( FAILED(hr=doTest()))
     {
         _com_error err( hr);
@@ -69,8 +60,6 @@ int main(int argc, char* argv[])
         MessageBox( NULL, errMsg, "Test failed", MB_ICONERROR);
     }
 
-
-    _Module.Term();
     CoUninitialize();
     return 0;
 }
@@ -86,12 +75,20 @@ HRESULT doTest()
 
     IDispatchPtr starManager;
     //    var starManager=new ActiveXObject("com.sun.star.ServiceManager");
-    hr= starManager.CreateInstance(_T("com.sun.star.ServiceManager"));
+    if (FAILED(hr= starManager.CreateInstance(_T("com.sun.star.ServiceManager"))))
+    {
+        fprintf(stderr, "creating ServiceManager failed\n");
+        return hr;
+    }
     //    var starDesktop=starManager.createInstance("com.sun.star.frame.Desktop");
     _variant_t varP1(L"com.sun.star.frame.Desktop");
     _variant_t varRet;
     CComDispatchDriver dispMgr(starManager);
-    hr= dispMgr.Invoke1(L"createInstance", &varP1, &varRet);
+    if (FAILED(hr=  dispMgr.Invoke1(L"createInstance", &varP1, &varRet)))
+    {
+        fprintf(stderr,"createInstance of Desktop failed\n");
+        return hr;
+    }
     CComDispatchDriver dispDesk(varRet.pdispVal);
     varP1.Clear();
     varRet.Clear();
@@ -107,29 +104,13 @@ HRESULT doTest()
     args[1]= _variant_t((long) 40);
     args[0].vt= VT_ARRAY | VT_DISPATCH;;
     args[0].parray= ar;
-    hr= dispDesk.InvokeN(L"loadComponentFromURL", args, 4, &varRet);
+    if (FAILED(hr= dispDesk.InvokeN(L"loadComponentFromURL", args, 4, &varRet)))
+    {
+        fprintf(stderr,"loadComponentFromURL failed\n");
+        return hr;
+    }
     CComDispatchDriver dispDoc(varRet.pdispVal);
     varRet.Clear();
-
-    //var oFieldMaster = oDoc.createInstance("com.sun.star.text.FieldMaster.Database");
-    varP1= _variant_t(L"com.sun.star.text.FieldMaster.Database");
-    hr= dispDoc.Invoke1(L"createInstance", &varP1, &varRet);
-    CComDispatchDriver dispFieldMaster(varRet.pdispVal);
-    varP1.Clear();
-    varRet.Clear();
-
-    //var oObj = oDoc.createInstance("com.sun.star.text.TextField.Database");
-    varP1= _variant_t(L"com.sun.star.text.TextField.Database");
-    hr= dispDoc.Invoke1(L"createInstance", &varP1, &varRet);
-    CComDispatchDriver dispField(varRet.pdispVal);
-    varP1.Clear();
-    varRet.Clear();
-
-    //oObj.attachTextFieldMaster(oFieldMaster);
-    varP1= _variant_t(dispFieldMaster);
-    hr= dispField.Invoke1(L"attachTextFieldMaster", &varP1);
-
-
     return S_OK;
 
 }

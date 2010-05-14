@@ -35,9 +35,11 @@ import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.view.XControlAccess;
 import com.sun.star.wizards.common.*;
 
@@ -70,9 +72,7 @@ public class FormHandler
     public XDrawPage xDrawPage;
     private XDrawPageSupplier xDrawPageSupplier;
     public String[] sModelServices = new String[8];
-    public XNameContainer xNamedForm;
     public static ControlData[] oControlData;
-    // ControlData[] oImageControlData;
 
     public final static int SOLABEL = 0;
     public final static int SOTEXTBOX = 1;
@@ -126,7 +126,7 @@ public class FormHandler
         sModelServices[SOGRIDCONTROL] = "com.sun.star.form.component.GridControl";
         sModelServices[SOIMAGECONTROL] = "com.sun.star.form.component.DatabaseImageControl";
 
-        oControlData = new ControlData[21];
+        oControlData = new ControlData[22];
         oControlData[0] = createControlData(DataType.BIT,          SOCHECKBOX, "CheckBox", "CheckBox", false);
         oControlData[1] = createControlData(DataType.BOOLEAN,      SOCHECKBOX, "CheckBox", "CheckBox", false);
         oControlData[2] = createControlData(DataType.TINYINT,      SONUMERICCONTROL, "FormattedField", "FormattedField", false);
@@ -149,6 +149,8 @@ public class FormHandler
         oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, "ImageControl", "TextField", false);
         oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
         oControlData[20] = createControlData(DataType.BLOB,        SOIMAGECONTROL, "ImageControl", "TextField", false);
+
+        oControlData[21] = createControlData(DataType.OTHER,       SOIMAGECONTROL, "ImageControl", "TextField", false);
     }
 
     public int getControlType(int _fieldtype)
@@ -298,7 +300,7 @@ public class FormHandler
         {
             for (int i = xDrawPage.getCount() - 1; i >= 0; i--)
             {
-                if (hasControlByName(_FormName, xDrawPage.getByIndex(i)))
+                if (belongsToForm(xDrawPage.getByIndex(i), _FormName))
                 {
                     XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
                     xDrawPage.remove(xShape);
@@ -311,7 +313,23 @@ public class FormHandler
         }
     }
 
-    public boolean hasControlByName(String _FormName, Object _oDrawPageElement)
+    public void removeElement( XNameContainer _parentContainer, String _formName )
+    {
+        try
+        {
+            _parentContainer.removeByName( _formName );
+        }
+        catch ( WrappedTargetException e )
+        {
+            e.printStackTrace( System.err );
+        }
+        catch( final NoSuchElementException e )
+        {
+            e.printStackTrace( System.err );
+        }
+    }
+
+    public boolean belongsToForm(Object _oDrawPageElement, String _FormName)
     {
         XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
         if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape"))
@@ -324,7 +342,7 @@ public class FormHandler
                 XChild xChild = (XChild) UnoRuntime.queryInterface(XChild.class, xControlModel);
                 XNamed xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, xChild.getParent());
                 String sName = xNamed.getName();
-                return _FormName.equals(xNamed.getName());
+                return _FormName.equals(sName);
             }
         }
         return false;
@@ -339,6 +357,7 @@ public class FormHandler
             {
                 oDBForm = xMSFDoc.createInstance("com.sun.star.form.component.Form");
                 _xNamedFormContainer.insertByName(_FormName, oDBForm);
+                XNameContainer xNamedForm;
                 xNamedForm = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oDBForm);
                 return xNamedForm;
             }

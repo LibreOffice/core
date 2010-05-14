@@ -36,7 +36,7 @@ import com.sun.star.awt.XFixedText;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.Renderer;
+import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog2;
@@ -259,7 +259,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
      * @author rpiterman
      *
      */
-    public static class ARenderer implements Renderer
+    public static class ARenderer implements IRenderer
     {
 
         String template;

@@ -34,7 +34,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
@@ -50,6 +49,7 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/logging/XSimpleLogRing.hpp>
 
 
 #include <cppuhelper/implbase1.hxx>
@@ -74,6 +74,11 @@ struct PreCreationStruct
 
 namespace cppu {
     class OTypeCollection;
+}
+
+namespace package {
+    void StaticAddLog( const ::rtl::OUString& aMessage );
+    ::com::sun::star::uno::Sequence< sal_Int8 > MakeKeyFromPass( const ::rtl::OUString& aPass, sal_Bool bUseUTF );
 }
 
 struct WSInternalData_Impl
@@ -106,12 +111,16 @@ struct OWriteStream_Impl : public PreCreationStruct
     OWriteStream*   m_pAntiImpl;
     ::rtl::OUString m_aTempURL;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xCacheStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xCacheSeek;
+
     InputStreamsList_Impl m_aInputStreamsList;
 
     sal_Bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
     sal_Bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
 
     ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport > m_xPackageStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing >  m_xLogRing;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
@@ -124,6 +133,8 @@ struct OWriteStream_Impl : public PreCreationStruct
     sal_Bool m_bUseCommonPass;
     sal_Bool m_bHasCachedPassword;
     ::rtl::OUString m_aPass;
+
+    sal_Bool m_bCompressedSetExplicit;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > m_xPackage;
 
@@ -145,7 +156,8 @@ struct OWriteStream_Impl : public PreCreationStruct
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
 
-    ::rtl::OUString GetFilledTempFile();
+    ::rtl::OUString GetFilledTempFileIfNo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream );
+    ::rtl::OUString FillTempGetFileName();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >       GetTempFileAsStream();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetTempFileAsInputStream();
 
@@ -169,10 +181,15 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                 sal_Bool bForceEncrypted,
                 sal_Int16 nStorageType,
+                sal_Bool bDefaultCompress,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xRelInfoStream =
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >() );
 
     ~OWriteStream_Impl();
+
+    void CleanCacheStream();
+
+    void AddLog( const ::rtl::OUString& aMessage );
 
     sal_Bool UsesCommonPass_Impl() { return m_bUseCommonPass; }
     sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
@@ -279,6 +296,7 @@ protected:
 
     sal_Bool m_bInStreamDisconnected;
     sal_Bool m_bInitOnDemand;
+    sal_Int64 m_nInitPosition;
 
     sal_Bool m_bTransacted;
 
@@ -298,6 +316,7 @@ public:
     virtual ~OWriteStream();
 
     void CheckInitOnDemand();
+    void DeInit();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )

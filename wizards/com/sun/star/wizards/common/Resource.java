@@ -43,7 +43,11 @@ public class Resource
     String Unit;
     String Module;
 
-    /** Creates a new instance of Resource */
+    /** Creates a new instance of Resource
+     * @param _xMSF
+     * @param _Unit
+     * @param _Module
+     */
     public Resource(XMultiServiceFactory _xMSF, String _Unit, String _Module)
     {
         this.xMSF = _xMSF;
@@ -60,7 +64,7 @@ public class Resource
             Object[][] DummyArray = new Object[1][];
             Object[] nIDArray = new Object[1];
             nIDArray[0] = new Integer(nID);
-            String IDString = (String) xInvocation.invoke("getString", nIDArray, PointerArray, DummyArray);
+            final String IDString = (String) xInvocation.invoke("getString", nIDArray, PointerArray, DummyArray);
             return IDString;
         }
         catch (Exception exception)

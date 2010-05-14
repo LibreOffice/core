@@ -163,7 +163,10 @@ namespace pcr
             { "com.sun.star.form.inspection.XSDValidationPropertyHandler", true },
 
             // a handler which cares for XForms submissions
-            { "com.sun.star.form.inspection.SubmissionPropertyHandler", true }
+            { "com.sun.star.form.inspection.SubmissionPropertyHandler", true },
+
+            // a handler which cares for geometry properties of form controls
+            { "com.sun.star.form.inspection.FormGeometryHandler", true }
         };
 
         sal_Int32 nFactories = sizeof( aFactories ) / sizeof( aFactories[ 0 ] );

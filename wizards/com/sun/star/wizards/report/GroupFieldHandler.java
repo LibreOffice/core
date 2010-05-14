@@ -38,11 +38,11 @@ import java.util.Vector;
 public class GroupFieldHandler extends FieldSelection
 {
 
-    IReportDocument CurReportDocument;
+    private IReportDocument CurReportDocument;
     private Vector GroupFieldVector = new Vector();
-    QueryMetaData CurDBMetaData;
-    WizardDialog oWizardDialog;
-    static final short MAXSELFIELDS = 4;
+    private QueryMetaData CurDBMetaData;
+    private WizardDialog oWizardDialog;
+    private static final short MAXSELFIELDS = 4;
 
     public GroupFieldHandler(IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
     {
@@ -130,7 +130,7 @@ public class GroupFieldHandler extends FieldSelection
         super.toggleListboxButtons(iFieldsSelIndex, iSelFieldsSelIndex);
         int iSelCount = xSelectedFieldsListBox.getItemCount();
         if (iSelCount >= MAXSELFIELDS)
-        {
+            {
             CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, "Enabled", Boolean.FALSE);
         }
     }
@@ -139,7 +139,7 @@ public class GroupFieldHandler extends FieldSelection
     {
         int iSelCount = xSelectedFieldsListBox.getItemCount();
         if (iSelCount < MAXSELFIELDS)
-        {
+            {
             super.selectFields(bMoveAll);
         }
 

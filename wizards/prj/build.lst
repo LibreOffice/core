@@ -1,4 +1,4 @@
-wz      wizards     :   rsc javaunohelper unoil QADEVOOO:qadevOOo transex3 NULL
+wz      wizards     :    l10n rsc javaunohelper unoil QADEVOOO:qadevOOo NULL
 wz      wizards\util                                            nmake           -       all     wz_util NULL
 wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\configshare                              nmake           -       all     wz_configshare NULL

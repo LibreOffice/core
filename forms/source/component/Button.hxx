@@ -32,13 +32,19 @@
 #define _FRM_BUTTON_HXX_
 
 #include "clickableimage.hxx"
+#include "togglestate.hxx"
+#include "formnavigation.hxx"
+#include "resettable.hxx"
+
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XButton.hpp>
+#include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include "formnavigation.hxx"
+
+#include <cppuhelper/implbase1.hxx>
 
 //.........................................................................
 namespace frm
@@ -48,11 +54,19 @@ namespace frm
 //==================================================================
 // OButtonModel
 //==================================================================
-class OButtonModel
-        :public OClickableImageBaseModel
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::form::XReset
+                            >   OButtonModel_Base;
+class OButtonModel  :public OClickableImageBaseModel
+                    ,public OButtonModel_Base
 {
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OButtonModel );
+
+    // UNO
+    DECLARE_UNO3_AGG_DEFAULTS( OButtonModel, OClickableImageBaseModel );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OButtonModel);
@@ -63,13 +77,44 @@ public:
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
+    // XReset
+    virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
     // OControlModel's property handling
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
     ) const;
 
+    // XPropertySet and friends
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+                throw (::com::sun::star::uno::Exception);
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+                ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
+                throw (::com::sun::star::lang::IllegalArgumentException);
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
 protected:
     DECLARE_XCLONEABLE();
+
+private:
+    void    impl_resetNoBroadcast_nothrow();
+
+    using ::cppu::OPropertySetHelper::getFastPropertyValue;
+
+private:
+    ResetHelper m_aResetHelper;
+
+    // <properties>
+    ToggleState m_eDefaultState;          // the default check state
+    // </properties>
+protected:
+    using OClickableImageBaseModel::disposing;
 };
 
 //==================================================================

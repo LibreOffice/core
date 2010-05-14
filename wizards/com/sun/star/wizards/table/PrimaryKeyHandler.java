@@ -48,26 +48,26 @@ import com.sun.star.wizards.ui.XFieldSelectionListener;
 public class PrimaryKeyHandler implements XFieldSelectionListener
 {
 
-    TableWizard CurUnoDialog;
-    short curtabindex;
-    String SPRIMEKEYMODE = "togglePrimeKeyFields";
-    String SSINGLEKEYMODE = "toggleSinglePrimeKeyFields";
-    String SSEVERALKEYMODE = "toggleSeveralPrimeKeyFields";
-    XRadioButton optAddAutomatically;
-    XRadioButton optUseExisting;
-    XRadioButton optUseSeveral;
-    XCheckBox chkUsePrimaryKey;
-    XCheckBox chkcreatePrimaryKey;
-    XCheckBox chkApplyAutoValueExisting;
-    XCheckBox chkApplyAutoValueAutomatic;
-    XListBox lstSinglePrimeKey;
-    XFixedText lblPrimeFieldName;
-    FieldSelection curPrimaryKeySelection;
-    String[] fieldnames;
-    TableDescriptor curTableDescriptor;
-    int nAutoPrimeKeyDataType;
-    boolean bAutoPrimaryKeysupportsAutoIncrmentation;
-    final String SAUTOMATICKEYFIELDNAME = "ID";
+    private TableWizard CurUnoDialog;
+    private short curtabindex;
+    private final static String SPRIMEKEYMODE = "togglePrimeKeyFields";
+    private final static String SSINGLEKEYMODE = "toggleSinglePrimeKeyFields";
+    private final static String SSEVERALKEYMODE = "toggleSeveralPrimeKeyFields";
+    private XRadioButton optAddAutomatically;
+    private XRadioButton optUseExisting;
+    private XRadioButton optUseSeveral;
+    private XCheckBox chkUsePrimaryKey;
+    private XCheckBox chkcreatePrimaryKey;
+    private XCheckBox chkApplyAutoValueExisting;
+    private XCheckBox chkApplyAutoValueAutomatic;
+    private XListBox lstSinglePrimeKey;
+    private XFixedText lblPrimeFieldName;
+    private FieldSelection curPrimaryKeySelection;
+    private String[] fieldnames;
+    private TableDescriptor curTableDescriptor;
+    private int nAutoPrimeKeyDataType;
+    private boolean bAutoPrimaryKeysupportsAutoIncrmentation;
+    private final static String SAUTOMATICKEYFIELDNAME = "ID";
 
     public PrimaryKeyHandler(TableWizard _CurUnoDialog, TableDescriptor _curTableDescriptor)
     {
@@ -76,15 +76,15 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         bAutoPrimaryKeysupportsAutoIncrmentation = isAutoPrimeKeyAutoIncrementationsupported();
         curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
         Integer IPRIMEKEYSTEP = new Integer(TableWizard.SOPRIMARYKEYPAGE);
-        String sExplanations = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 26);
-        String screatePrimaryKey = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 27);
-        String slblPrimeFieldName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 31);
-        String sApplyAutoValue = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 33);
-        String sAddAutomatically = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 28);
-        String sUseExisting = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 29);
-        String sUseSeveral = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 30);
-        String slblAvailableFields = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 4);
-        String slblSelPrimaryFields = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 32);
+        final String sExplanations = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 26);
+        final String screatePrimaryKey = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 27);
+        final String slblPrimeFieldName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 31);
+        final String sApplyAutoValue = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 33);
+        final String sAddAutomatically = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 28);
+        final String sUseExisting = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 29);
+        final String sUseSeveral = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 30);
+        final String slblAvailableFields = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 4);
+        final String slblSelPrimaryFields = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 32);
         CurUnoDialog.insertLabel("lblExplanation",
                 new String[]
                 {
@@ -158,11 +158,29 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         lstSinglePrimeKey = CurUnoDialog.insertListBox("lstSinglePrimeKey", "onPrimeKeySelected", null, this,
                 new String[]
                 {
-                    "Dropdown", "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown",
+                    "Enabled",
+                    "Height",
+                    "HelpURL",
+                    "LineCount",
+                    "PositionX",
+                    "PositionY",
+                    "Step",
+                    "TabIndex",
+                    "Width"
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:41231", new Integer(162), new Integer(115), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(80)
+                    Boolean.TRUE,
+                    Boolean.FALSE,
+                    new Integer(12),
+                    "HID:41231",
+                    Short.valueOf(UnoDialog.getListBoxLineCount()),
+                    new Integer(162),
+                    new Integer(115),
+                    IPRIMEKEYSTEP,
+                    new Short(curtabindex++),
+                    new Integer(80)
                 });
 
         chkApplyAutoValueExisting = CurUnoDialog.insertCheckBox("chkApplyAutoValueExisting", SPRIMEKEYMODE, this,
@@ -181,7 +199,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
 
     public void initialize()
     {
-        boolean breselect;
+        // boolean breselect;
         fieldnames = curTableDescriptor.getNonBinaryFieldNames();
         String[] skeyfieldnames = curPrimaryKeySelection.getSelectedFieldNames();
         curPrimaryKeySelection.initialize(fieldnames, false);

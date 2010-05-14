@@ -223,6 +223,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         }
     }
 
+/*
     public static void main(String args[])
     {
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
@@ -245,7 +246,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             exception.printStackTrace(System.out);
         }
     }
-
+*/
     public void buildSteps()
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
@@ -331,7 +332,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             Object oFormWizard = this.xMSF.createInstance("com.sun.star.wizards.form.CallFormWizard");
             PropertyValue[] aProperties = new PropertyValue[4];
             aProperties[0] = Properties.createProperty("ActiveConnection", curTableDescriptor.DBConnection);
-            aProperties[1] = Properties.createProperty("DataSource", curTableDescriptor.xDataSource);
+            aProperties[1] = Properties.createProperty("DataSource", curTableDescriptor.getDataSource());
             aProperties[2] = Properties.createProperty("CommandType", new Integer(CommandType.TABLE));
             aProperties[3] = Properties.createProperty("Command", scomposedtablename);
             XInitialization xInitialization = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oFormWizard);

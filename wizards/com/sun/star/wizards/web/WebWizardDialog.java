@@ -912,7 +912,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
      * @author rpiterman
 
      */
-    private class LayoutRenderer implements ImageList.ImageRenderer
+    private class LayoutRenderer implements ImageList.IImageRenderer
     {
 
         public Object[] getImageUrls(Object listItem)

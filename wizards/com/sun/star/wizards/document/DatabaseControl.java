@@ -57,9 +57,9 @@ public class DatabaseControl extends Control
     {
         super();
         // m_FieldColumn = _curfieldcolumn;
-        if (_curfieldcolumn.FieldType != DataType.TIMESTAMP)
+        if (_curfieldcolumn.getFieldType() != DataType.TIMESTAMP)
         {
-            createGridColumn(_oGridControl, _curfieldcolumn, _curfieldcolumn.FieldType, _curfieldcolumn.getFieldTitle());
+            createGridColumn(_oGridControl, _curfieldcolumn, _curfieldcolumn.getFieldType(), _curfieldcolumn.getFieldTitle());
         }
     }
 
@@ -80,7 +80,7 @@ public class DatabaseControl extends Control
         try
         {
             m_nFieldType = _fieldtype;
-            String sFieldName = _curfieldcolumn.m_sFieldName;
+            String sFieldName = _curfieldcolumn.getFieldName();
             String sUniqueName = Desktop.getUniqueName(_oGridControl.xNameAccess, sFieldName);
 
             String sGridColumnName = getGridColumnName();

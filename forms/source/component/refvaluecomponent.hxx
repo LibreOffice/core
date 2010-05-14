@@ -28,10 +28,11 @@
  *
  ************************************************************************/
 
-#ifndef EFORMS2_FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
-#define EFORMS2_FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
+#ifndef FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
+#define FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
 
 #include "FormComponent.hxx"
+#include "togglestate.hxx"
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -40,8 +41,6 @@
 namespace frm
 {
 //........................................................................
-
-    enum CheckState { STATE_NOCHECK = 0, STATE_CHECK = 1, STATE_DONTKNOW = 2 };
 
     //====================================================================
     //= OReferenceValueComponent
@@ -54,7 +53,7 @@ namespace frm
         // <properties>
         ::rtl::OUString     m_sReferenceValue;          // the reference value to use for data exchange
         ::rtl::OUString     m_sNoCheckReferenceValue;   // the reference value to be exchanged when the control is not checked
-        CheckState          m_eDefaultChecked;          // the default check state
+        ToggleState         m_eDefaultChecked;          // the default check state
         // </properties>
 
         sal_Bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?
@@ -65,8 +64,8 @@ namespace frm
 
         const ::rtl::OUString& getNoCheckReferenceValue() const { return m_sNoCheckReferenceValue; }
 
-        CheckState             getDefaultChecked() const { return m_eDefaultChecked; }
-        void                   setDefaultChecked( CheckState _eChecked ) { m_eDefaultChecked = _eChecked; }
+        ToggleState            getDefaultChecked() const { return m_eDefaultChecked; }
+        void                   setDefaultChecked( ToggleState _eChecked ) { m_eDefaultChecked = _eChecked; }
 
     protected:
         OReferenceValueComponent(
@@ -109,5 +108,5 @@ namespace frm
 } // namespace frm
 //........................................................................
 
-#endif // EFORMS2_FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
+#endif // FORMS_SOURCE_COMPONENT_REFVALUECOMPONENT_HXX
 

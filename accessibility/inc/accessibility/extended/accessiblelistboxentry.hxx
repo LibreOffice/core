@@ -97,18 +97,6 @@ namespace accessibility
                                             m_aParent;
 
     private:
-        /** notifies all listeners that this object has changed
-            @param  _nEventId
-                is the event id
-            @param  _aOldValue
-                is the old value
-            @param  _aNewValue
-                is the new value
-        */
-        void    NotifyAccessibleEvent( sal_Int16 _nEventId,
-                                       const ::com::sun::star::uno::Any& _aOldValue,
-                                       const ::com::sun::star::uno::Any& _aNewValue );
-
         Rectangle               GetBoundingBox_Impl() const;
         Rectangle               GetBoundingBoxOnScreen_Impl() const;
         sal_Bool                IsAlive_Impl() const;

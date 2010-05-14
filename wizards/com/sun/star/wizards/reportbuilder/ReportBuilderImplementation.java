@@ -382,7 +382,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         {
             // removeGroupNamesofRecordTable(iSelCount);
             final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-            GroupFieldVector.addElement(CurFieldColumn.m_sFieldName);
+            GroupFieldVector.addElement(CurFieldColumn.getFieldName());
         }
         return true;
     }
@@ -400,7 +400,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         // throw new UnsupportedOperationException("Not supported yet.");
         final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-        GroupFieldVector.removeElement(CurFieldColumn.m_sFieldName);
+        GroupFieldVector.removeElement(CurFieldColumn.getFieldName());
     }
 
     private void setPageOrientation(int nOrientation, boolean bDoLayout)
@@ -606,8 +606,8 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         int[] FieldWidths = new int[FieldNames.length];
         for (int i = 0; i < FieldNames.length; i++)
         {
-            FieldTypes[i] = a.FieldColumns[i].FieldType;
-            FieldWidths[i] = a.FieldColumns[i].FieldWidth;
+            FieldTypes[i] = a.FieldColumns[i].getFieldType();
+            FieldWidths[i] = a.FieldColumns[i].getFieldWidth();
         }
         getReportBuilderLayouter().setTableName(_nType, TableName);
 //        getReportBuilderLayouter().insertFields(getRecordParser().getRecordFieldNames());

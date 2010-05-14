@@ -130,7 +130,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             try
             {
                 createTypeInspector();
-                sTableFilters = (String[]) AnyConverter.toArray(xDataSourcePropertySet.getPropertyValue("TableFilter"));
+                sTableFilters = (String[]) AnyConverter.toArray(getDataSourcePropertySet().getPropertyValue("TableFilter"));
             }
             catch (Exception e)
             {
@@ -261,9 +261,9 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 if (!isColunnNameDuplicate(xNameAccessColumns, xColPropertySet))
                 {
                     xAppendColumns.appendByDescriptor(xColPropertySet); //xColPropertySet.setPropertyValue("Type", new Integer(32423))
-                }
-                else
-                {
+                        }
+                        else
+                        {
                     breturn = false;
                 }
             }
@@ -851,7 +851,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             sTableFilters = sNewTableFilters;
             try
             {
-                xDataSourcePropertySet.setPropertyValue("TableFilter", sTableFilters);
+                getDataSourcePropertySet().setPropertyValue("TableFilter", sTableFilters);
             }
             catch (Exception e)
             {

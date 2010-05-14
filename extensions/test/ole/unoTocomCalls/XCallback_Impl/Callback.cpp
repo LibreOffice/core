@@ -223,7 +223,7 @@ STDMETHODIMP CCallback::outFloat(float *outFloat)
 {
     if( !outFloat)
         return E_POINTER;
-    *outFloat= 3.14;
+    *outFloat= 3.14f;
     return S_OK;
 }
 
@@ -242,7 +242,7 @@ STDMETHODIMP CCallback::outShort(short *outShort)
 {
     if(!outShort)
         return E_POINTER;
-    *outShort= 0xffff;
+    *outShort= -1;
     return S_OK;
 }
 
@@ -416,7 +416,7 @@ STDMETHODIMP CCallback::inoutShort(short *inoutVal)
 {
     if( !inoutVal)
         return E_POINTER;
-    *inoutVal= 0xffff;
+    *inoutVal= -1;
     return S_OK;
 }
 

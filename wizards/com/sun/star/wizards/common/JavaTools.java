@@ -52,6 +52,7 @@ public class JavaTools
     {
     }
 
+/*
     public static void main(String args[])
     {
         String sPath = "";
@@ -75,7 +76,7 @@ public class JavaTools
             exception.printStackTrace(System.out);
         }
     }
-
+*/
     public static String[] copyStringArray(String[] FirstArray)
     {
         if (FirstArray != null)
@@ -141,7 +142,7 @@ public class JavaTools
      * @param _aIntegerVector
      * @return
      */
-    public static int[] IntegerTointList(Vector _aIntegerVector)
+    public static int[] IntegerTointList(Vector<Integer> _aIntegerVector)
     {
         try
         {
@@ -167,7 +168,7 @@ public class JavaTools
      * @param _aBooleanVector
      * @return
      */
-    public static boolean[] BooleanTobooleanList(Vector _aBooleanVector)
+    public static boolean[] BooleanTobooleanList(Vector<Boolean> _aBooleanVector)
     {
         try
         {
@@ -537,9 +538,7 @@ public class JavaTools
 
     public static String[][] removeOutdatedFields(String[][] baselist, String[] _complist, int _compindex)
     {
-        String[][] retarray = new String[][]
-        {
-        };
+        String[][] retarray = new String[][] {};
         if ((baselist != null) && (_complist != null))
         {
             if (baselist.length > 0)
@@ -547,7 +546,8 @@ public class JavaTools
                 Vector retvector = new Vector();
                 for (int i = 0; i < baselist.length; i++)
                 {
-                    if (FieldInList(_complist, baselist[i][_compindex]) != -1)
+                    String sValue = baselist[i][_compindex];
+                    if (FieldInList(_complist, sValue) != -1)
                     {
                         retvector.add(baselist[i]);
                     //          else

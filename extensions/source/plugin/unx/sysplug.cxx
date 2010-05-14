@@ -50,7 +50,7 @@ UnxPluginComm::UnxPluginComm(
                              int nDescriptor1,
                              int nDescriptor2
                              ) :
-        PluginComm( ::rtl::OUStringToOString( library, osl_getThreadTextEncoding() ) ),
+        PluginComm( ::rtl::OUStringToOString( library, osl_getThreadTextEncoding() ), false ),
         PluginConnector( nDescriptor2 )
 {
     char pDesc[32];

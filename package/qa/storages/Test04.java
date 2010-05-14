@@ -63,6 +63,14 @@ public class Test04 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage1, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -78,6 +86,10 @@ public class Test04 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage2, "BigSubStream2", "MediaType2", false, pBigBytes ) )
+                return false;
 
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
 
@@ -158,6 +170,15 @@ public class Test04 implements StorageTest {
             if ( !m_aTestHelper.moveElementTo( xTempSubStorage1, "SubStream1", xTempFileStorage ) )
                 return false;
 
+            if ( !m_aTestHelper.copyElementTo( xTempSubStorage1, "BigSubStream1", xTempFileStorage ) )
+                return false;
+
+            if ( !m_aTestHelper.renameElement( xTempFileStorage, "BigSubStream1", "BigSubStream1_copy" ) )
+                return false;
+
+            if ( !m_aTestHelper.moveElementTo( xTempSubStorage1, "BigSubStream1", xTempFileStorage ) )
+                return false;
+
             if ( !m_aTestHelper.commitStorage( xTempFileStorage ) )
                 return false;
 
@@ -212,13 +233,25 @@ public class Test04 implements StorageTest {
             if ( !m_aTestHelper.checkStream( xResStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkStream( xResStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
             if ( !m_aTestHelper.checkStream( xResStorage, "SubStream1_copy", "MediaType1", true, pBytes1 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xResStorage, "BigSubStream1_copy", "MediaType1", true, pBigBytes ) )
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResSubStorage1, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkStream( xResSubStorage1, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
             if ( !m_aTestHelper.checkStream( xResSubStorage2, "SubStream2", "MediaType2", false, pBytes2 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xResSubStorage2, "BigSubStream2", "MediaType2", false, pBigBytes ) )
                 return false;
 
             // the storage must be disposed before removing

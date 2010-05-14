@@ -1,3 +1,4 @@
+
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,8 @@ INCPRE+=$(SOLARINCDIR)$/offuh
 SLOFILES=	$(SLO)$/formnavigation.obj \
             $(SLO)$/controlfeatureinterception.obj \
             $(SLO)$/urltransformer.obj \
-            $(SLO)$/windowstateguard.obj
+            $(SLO)$/windowstateguard.obj \
+            $(SLO)$/resettable.obj \
 
 # --- Targets ----------------------------------
 

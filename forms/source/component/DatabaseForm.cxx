@@ -65,6 +65,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/XModifiable2.hpp>
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
@@ -141,6 +142,41 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseForm()
 namespace frm
 {
 //.........................................................................
+
+//==================================================================
+//= DocumentModifyGuard
+//==================================================================
+class DocumentModifyGuard
+{
+public:
+    DocumentModifyGuard( const Reference< XInterface >& _rxFormComponent )
+        :m_xDocumentModify( getXModel( _rxFormComponent ), UNO_QUERY )
+    {
+        OSL_ENSURE( m_xDocumentModify.is(), "DocumentModifyGuard::DocumentModifyGuard: no document, or no XModifiable2!" );
+        impl_changeModifiableFlag_nothrow( false );
+    }
+    ~DocumentModifyGuard()
+    {
+        impl_changeModifiableFlag_nothrow( true );
+    }
+
+private:
+    void    impl_changeModifiableFlag_nothrow( const bool _enable )
+    {
+        try
+        {
+            if ( m_xDocumentModify.is() )
+                _enable ? m_xDocumentModify->enableSetModified() : m_xDocumentModify->disableSetModified();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+private:
+    Reference< XModifiable2 >   m_xDocumentModify;
+};
 
 //==================================================================
 //= OFormSubmitResetThread
@@ -411,6 +447,11 @@ void ODatabaseForm::impl_construct()
         m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
     }
 
+    {
+        Reference< XWarningsSupplier > xRowSetWarnings( m_xAggregate, UNO_QUERY );
+        m_aWarnings.setExternalWarnings( xRowSetWarnings );
+    }
+
     if ( m_xAggregate.is() )
     {
         m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
@@ -438,6 +479,8 @@ ODatabaseForm::~ODatabaseForm()
 
     if (m_xAggregate.is())
         m_xAggregate->setDelegator( NULL );
+
+    m_aWarnings.setExternalWarnings( NULL );
 
     if (m_pAggregatePropertyMultiplexer)
     {
@@ -1435,6 +1478,18 @@ Sequence< PropertyValue > SAL_CALL ODatabaseForm::getPropertyValues() throw (Run
 void SAL_CALL ODatabaseForm::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     m_aPropertyBagHelper.setPropertyValues( _rProps );
+}
+
+//------------------------------------------------------------------------------
+Any SAL_CALL ODatabaseForm::getWarnings(  ) throw (SQLException, RuntimeException)
+{
+    return m_aWarnings.getWarnings();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::clearWarnings(  ) throw (SQLException, RuntimeException)
+{
+    m_aWarnings.clearWarnings();
 }
 
 //------------------------------------------------------------------------------
@@ -2940,6 +2995,10 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     if (!isLoaded())
         return;
+
+    DocumentModifyGuard aModifyGuard( *this );
+        // ensures the document is not marked as "modified" just because we change some control's content during
+        // reloading ...
 
     EventObject aEvent(static_cast<XWeak*>(this));
     {

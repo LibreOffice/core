@@ -101,6 +101,7 @@ class OGridControlModel :public OControlModel
     sal_Int16                   m_nBorder;
     sal_Int16                   m_nWritingMode;
     sal_Int16                   m_nContextWritingMode;
+    sal_Bool                    m_bEnableVisible    : 1;
     sal_Bool                    m_bEnable           : 1;
     sal_Bool                    m_bNavigation       : 1;
     sal_Bool                    m_bRecordMarker     : 1;

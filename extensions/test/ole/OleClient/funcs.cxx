@@ -42,6 +42,7 @@
 #include "com/sun/star/uno/TypeClass.hpp"
 #include "com/sun/star/script/XInvocation.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include "rtl/ustring.hxx"
 
@@ -276,6 +277,7 @@ bool equalSequences(const Any& orig, const Any& returned)
         default:
             return false;
     }
+    return false;
 }
 
 template< class T >
@@ -292,6 +294,7 @@ bool equalSequences(const Sequence<T>& seqIn, const Sequence<Any> & seqOut)
         if (anyIn != anyOut)
             return false;
     }
+
     return true;
 }
 

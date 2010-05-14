@@ -74,16 +74,24 @@ public class Test08 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             // the stream will be encrypted with common password
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
             if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "SubStream1", "MediaType1", true, pBytes1, true ) )
+                return false;
+            if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes, true ) )
                 return false;
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             // the stream will not be encrypted
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
             if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "SubStream2", "MediaType2", false, pBytes2, false ) )
+                return false;
+            if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes, false ) )
                 return false;
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -93,6 +101,8 @@ public class Test08 implements StorageTest {
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             // the stream will not be encrypted
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream3", "MediaType3", false, pBytes3, sPass2 ) )
+                return false;
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "BigSubStream3", "MediaType3", false, pBigBytes, sPass2 ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
@@ -190,12 +200,18 @@ public class Test08 implements StorageTest {
 
             if ( !m_aTestHelper.checkEncrStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
+            if ( !m_aTestHelper.checkEncrStream( xResultSubStorage, "BigSubStream1", "MediaType1", pBigBytes, sPass1 ) )
+                return false;
 
             if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream2", "MediaType2", false, pBytes2 ) )
+                return false;
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes ) )
                 return false;
 
             // the common root storage password should allow to open this stream
             if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream3", "MediaType3", true, pBytes3 ) )
+                return false;
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "BigSubStream3", "MediaType3", true, pBigBytes ) )
                 return false;
 
             // dispose used storages to free resources

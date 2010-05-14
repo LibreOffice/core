@@ -293,7 +293,7 @@ namespace pcr
                 _rxInspectorUI->enablePropertyUI( PROPERTY_WORDBREAK,   nTextType == TEXTTYPE_RICHTEXT );
             _rxInspectorUI->enablePropertyUI( PROPERTY_MAXTEXTLEN,      nTextType != TEXTTYPE_RICHTEXT );
             _rxInspectorUI->enablePropertyUI( PROPERTY_ECHO_CHAR,       nTextType == TEXTTYPE_SINGLELINE );
-            _rxInspectorUI->enablePropertyUI( PROPERTY_FONT_NAME,       nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_FONT,            nTextType != TEXTTYPE_RICHTEXT );
             _rxInspectorUI->enablePropertyUI( PROPERTY_ALIGN,           nTextType != TEXTTYPE_RICHTEXT );
             _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
             _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );

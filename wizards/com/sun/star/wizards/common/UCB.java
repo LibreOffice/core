@@ -55,11 +55,14 @@ import com.sun.star.uno.UnoRuntime;
  * There is an incosistency with argument order.
  * It should be always: dir,filename.
  */
-public class UCB {
+public class UCB
+{
+
     private Object ucb;
     private FileAccess fa;
 
-    public UCB(XMultiServiceFactory xmsf) throws Exception {
+    public UCB(XMultiServiceFactory xmsf) throws Exception
+    {
         String[] keys = new String[2];
         keys[ 0 ] = "Local";
         keys[ 1 ] = "Office";
@@ -72,31 +75,43 @@ public class UCB {
         throws Exception
     {
         if (!fa.exists(dir,true))
+        {
           return;
+        }
         List l = listFiles(dir,null);
         for (int i = 0; i<l.size(); i++)
+        {
             delete(FileAccess.connectURLs(dir ,(String)l.get(i)));
     }
+    }
 
-    public void delete(String filename) throws Exception {
+    public void delete(String filename) throws Exception
+    {
         //System.out.println("UCB.delete(" + filename);
         executeCommand( getContent(filename),"delete",Boolean.TRUE);
     }
 
-    public void copy(String sourceDir, String targetDir) throws Exception  {
+    public void copy(String sourceDir, String targetDir) throws Exception
+    {
         copy(sourceDir,targetDir,(Verifier)null);
     }
 
-    public void copy(String sourceDir, String targetDir, Verifier verifier) throws Exception {
+    public void copy(String sourceDir, String targetDir, Verifier verifier) throws Exception
+    {
         List files = listFiles(sourceDir,verifier);
         for (int i = 0; i<files.size(); i++)
+        {
           copy(sourceDir, (String)files.get(i), targetDir);
+        }
 
     }
 
-    public void copy(String sourceDir, String filename, String targetDir, String targetName ) throws Exception {
+    public void copy(String sourceDir, String filename, String targetDir, String targetName) throws Exception
+    {
         if (!fa.exists(targetDir,true))
+        {
           fa.fileAccess.createFolder(targetDir);
+        }
         //System.out.println("UCB.copy(" + sourceDir + ", " + filename +  ", " + targetDir+ ", " + targetName);
         executeCommand(ucb, "globalTransfer", copyArg(sourceDir,filename, targetDir,targetName));
     }
@@ -108,18 +123,21 @@ public class UCB {
      * @param targetDir
      * @throws Exception
      */
-    public void copy(String sourceDir, String filename, String targetDir) throws Exception {
+    public void copy(String sourceDir, String filename, String targetDir) throws Exception
+    {
         copy(sourceDir,filename, targetDir, "");
     }
+
     /**
      * target name can be "", in which case the name stays lige the source name
      * @param sourceDir
-     * @param filename
+     * @param sourceFilename
      * @param targetDir
-     * @param targetName
+     * @param targetFilename
      * @return
      */
-    public GlobalTransferCommandArgument copyArg(String sourceDir, String sourceFilename, String targetDir, String targetFilename) {
+    public GlobalTransferCommandArgument copyArg(String sourceDir, String sourceFilename, String targetDir, String targetFilename)
+    {
 
         GlobalTransferCommandArgument aArg = new GlobalTransferCommandArgument();
         aArg.Operation = TransferCommandOperation.COPY;
@@ -144,7 +162,8 @@ public class UCB {
         return xCmdProcessor.execute(aCommand, 0, null);
     }
 
-    public List listFiles(String path,Verifier verifier) throws Exception {
+    public List listFiles(String path, Verifier verifier) throws Exception
+    {
         Object xContent = getContent(path);
 
         OpenCommandArgument2 aArg = new OpenCommandArgument2();
@@ -166,27 +185,40 @@ public class UCB {
 
         List files = new Vector();
 
-        if (xResultSet.first()) {
+        if (xResultSet.first())
+        {
             // obtain XContentAccess interface for child content access and XRow for properties
             XContentAccess xContentAccess = (XContentAccess)UnoRuntime.queryInterface(
                 XContentAccess.class, xResultSet);
             XRow xRow = (XRow)UnoRuntime.queryInterface(XRow.class, xResultSet);
-            do {
+            do
+            {
                 // Obtain URL of child.
                 String aId = xContentAccess.queryContentIdentifierString();
                 // First column: Title (column numbers are 1-based!)
                 String aTitle = xRow.getString(1);
                 if (aTitle.length() == 0 && xRow.wasNull())
-                    ;//ignore
+                {
+                    ; //ignore
+                }
                 else
+                {
                     files.add(aTitle);
-            } while (xResultSet.next()); // next child
+                }
+            }
+            while (xResultSet.next()); // next child
         }
 
         if (verifier != null)
+        {
             for (int i = 0; i<files.size(); i++)
+            {
                 if (!verifier.verify(files.get(i)))
+                {
                     files.remove(i--);
+                }
+            }
+        }
 
         return files;
     }
@@ -202,29 +234,40 @@ public class UCB {
         Object row = executeCommand(content,"getPropertyValues",pv);
         XRow xrow = (XRow)UnoRuntime.queryInterface(XRow.class,row);
         if (type.equals(String.class))
+        {
            return xrow.getString(1);
+        }
         else if (type.equals(Boolean.class))
+        {
             return xrow.getBoolean(1) ? Boolean.TRUE : Boolean.FALSE;
+        }
         else if (type.equals(Integer.class))
+        {
             return new Integer(xrow.getInt(1));
+        }
         else if (type.equals(Short.class))
+        {
             return new Short(xrow.getShort(1));
-        else return null;
+        }
+        else
+        {
+            return null;
+        }
 
     }
 
-    public Object getContent(String path) throws Exception {
+    public Object getContent(String path) throws Exception
+    {
         //System.out.println("Getting Content for : " + path);
-        XContentIdentifier id = ((XContentIdentifierFactory)UnoRuntime
-          .queryInterface(XContentIdentifierFactory.class,ucb)).createContentIdentifier(path);
+        XContentIdentifier id = ((XContentIdentifierFactory) UnoRuntime.queryInterface(XContentIdentifierFactory.class, ucb)).createContentIdentifier(path);
 
         return ((XContentProvider)UnoRuntime.queryInterface(
           XContentProvider.class,ucb)).queryContent(id);
     }
 
-    public static interface Verifier {
+    public static interface Verifier
+    {
+
         public boolean verify(Object object);
     }
-
-
 }

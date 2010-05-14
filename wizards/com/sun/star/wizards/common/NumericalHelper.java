@@ -106,7 +106,7 @@ public class NumericalHelper
     {
 
         byte retValue = 0;
-        boolean hasConversionWarning = false;
+        // boolean hasConversionWarning = false;
         TypeObject aTypeObject = getTypeObject(aValue);
         switch (aTypeObject.iType)
         {

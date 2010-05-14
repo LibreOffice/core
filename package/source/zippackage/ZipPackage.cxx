@@ -390,7 +390,7 @@ void ZipPackage::parseContentType()
         try {
             // the content type must exist in OFOPXML format!
             if ( !xRootFolder->hasByName( aContentTypes ) )
-                throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Wrong format!" ) ),
+                throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Wrong format!" ) ),
                                         uno::Reference< uno::XInterface >() );
 
             uno::Reference< lang::XUnoTunnel > xTunnel;
@@ -408,7 +408,7 @@ void ZipPackage::parseContentType()
                         ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, xFactory );
 
                     if ( aContentTypeInfo.getLength() != 2 )
-                        throw io::IOException();
+                        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
                     // set the implicit types fist
                     for ( nInd = 0; nInd < aContentTypeInfo[0].getLength(); nInd++ )
@@ -626,7 +626,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     else if ( aFormatName.equalsAscii( "OFOPXMLFormat" ) )
                         m_nFormat = OFOPXML_FORMAT;
                     else
-                        throw lang::IllegalArgumentException(); // TODO:
+                        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 
                     pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
@@ -642,7 +642,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             else
             {
                 // The URL is not acceptable
-                throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad arguments." ) ),
+                throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Bad arguments." ) ),
                     static_cast < ::cppu::OWeakObject * > ( this ) );
             }
         }
@@ -655,7 +655,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xContentStream, xFactory );
                 xContentSeek = uno::Reference < XSeekable > ( xContentStream, UNO_QUERY );
                 if ( ! xContentSeek.is() )
-                    throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
+                    throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "The package component _requires_ an XSeekable interface!" ) ),
                             static_cast < ::cppu::OWeakObject * > ( this ) );
 
                 if ( !xContentSeek->getLength() )
@@ -698,7 +698,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 if( pZipFile ) { delete pZipFile; pZipFile = NULL; }
 
                 throw com::sun::star::packages::zip::ZipIOException (
-                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad Zip File." ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Bad Zip File." ) ),
                     static_cast < ::cppu::OWeakObject * > ( this ) );
             }
         }
@@ -764,7 +764,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 pCurrent = pCurrent->doGetByName(sTemp).pFolder;
             }
             else
-                throw NoSuchElementException();
+                throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             nOldIndex = nIndex+1;
         }
         if ( bFolder )
@@ -783,7 +783,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 return pCurrent->getByName( sTemp );
             }
             else
-                throw NoSuchElementException();
+                throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         }
     }
 }
@@ -922,7 +922,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     {
         VOS_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
         throw WrappedTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error adding mimetype to the ZipOutputStream!" ) ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Error adding mimetype to the ZipOutputStream!" ) ),
                 static_cast < OWeakObject * > ( this ),
                 makeAny( r ) );
     }
@@ -1084,7 +1084,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
                 VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
                 IOException aException;
                 throw WrappedTargetException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM ( "Couldn't get a ManifestWriter!" ) ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Couldn't get a ManifestWriter!" ) ),
                         static_cast < OWeakObject * > ( this ),
                         makeAny( aException ) );
             }
@@ -1181,7 +1181,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
                 throw aException;
 
             throw WrappedTargetException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Problem writing the original content!" ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Problem writing the original content!" ) ),
                     static_cast < OWeakObject * > ( this ),
                     aCaught );
         }
@@ -1189,7 +1189,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
         {
             // the document is written directly, although it was empty it is important to notify that the writing has failed
             // TODO/LATER: let the package be able to recover in this situation
-            ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( "This package is unusable!" ) );
+            ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package is unusable!" ) );
             embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), ::rtl::OUString() );
             throw WrappedTargetException( aErrTxt,
                                             static_cast < OWeakObject * > ( this ),
@@ -1265,7 +1265,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
     if ( eMode == e_IMode_XInputStream )
     {
         IOException aException;
-        throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) ),
+        throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package is read only!" ) ),
                 static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
     }
 
@@ -1289,14 +1289,14 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 xOutputStream = xStream->getOutputStream();
                 uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
                 if ( !xTruncate.is() )
-                    throw uno::RuntimeException();
+                    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
                 // after successful truncation the original file contents are already lost
                 xTruncate->truncate();
             }
             catch( uno::Exception& r )
             {
-                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) ),
+                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package is read only!" ) ),
                         static_cast < OWeakObject * > ( this ), makeAny ( r ) );
             }
 
@@ -1372,7 +1372,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                     uno::Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
                     OSL_ENSURE( xPropSet.is(), "This is a temporary file that must implement XPropertySet!\n" );
                     if ( !xPropSet.is() )
-                        throw uno::RuntimeException();
+                        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
                     OUString sTargetFolder = sURL.copy ( 0, sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
                     Content aContent ( sTargetFolder, uno::Reference < XCommandEnvironment > () );
@@ -1399,7 +1399,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                         DisconnectFromTargetAndThrowException_Impl( xContentStream );
 
                     throw WrappedTargetException(
-                                                OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package may be read only!" ) ),
+                                                OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package may be read only!" ) ),
                                                 static_cast < OWeakObject * > ( this ),
                                                 makeAny ( r ) );
                 }
@@ -1434,7 +1434,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
         OSL_ENSURE( sal_False, "These calls are pretty simple, they should not fail!\n" );
     }
 
-    ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) );
+    ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package is read only!" ) );
     embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), aTempURL );
     throw WrappedTargetException( aErrTxt,
                                     static_cast < OWeakObject * > ( this ),
@@ -1536,30 +1536,30 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     if ( m_nFormat != PACKAGE_FORMAT )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") )
       ||aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaTypeFallbackUsed") ) )
-        throw PropertyVetoException();
+        throw PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
         if (!( aValue >>= aEncryptionKey ) )
-            throw IllegalArgumentException();
+            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseManifest") ) )
     {
         if (!( aValue >>= bUseManifest ) )
-            throw IllegalArgumentException();
+            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // TODO/LATER: Activate the check when zip-ucp is ready
     // if ( m_nFormat != PACKAGE_FORMAT )
-    //  throw UnknownPropertyException();
+    //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     Any aAny;
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
@@ -1582,7 +1582,7 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         aAny <<= m_bMediaTypeFallbackUsed;
         return aAny;
     }
-    throw UnknownPropertyException();
+    throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)

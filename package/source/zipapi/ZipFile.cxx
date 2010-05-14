@@ -127,8 +127,9 @@ void ZipFile::setInputStream ( Reference < XInputStream > xNewStream )
     aGrabber.setInputStream ( xStream );
 }
 
-void ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher )
+sal_Bool ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode )
 {
+    sal_Bool bResult = sal_False;
     if ( ! xEncryptionData.isEmpty() )
     {
         Sequence < sal_uInt8 > aDerivedKey (16);
@@ -144,13 +145,17 @@ void ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionData,
                             xEncryptionData->nIterationCount );
 
         rCipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-        aResult = rtl_cipher_init( rCipher, rtl_Cipher_DirectionDecode,
+        aResult = rtl_cipher_init( rCipher, bDecode ? rtl_Cipher_DirectionDecode : rtl_Cipher_DirectionEncode,
                                    aDerivedKey.getConstArray(),
                                    aDerivedKey.getLength(),
                                    reinterpret_cast < const sal_uInt8 * > ( xEncryptionData->aInitVector.getConstArray() ),
                                    xEncryptionData->aInitVector.getLength());
         OSL_ASSERT (aResult == rtl_Cipher_E_None);
+
+        bResult = ( aResult == rtl_Cipher_E_None );
     }
+
+    return bResult;
 }
 
 void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData,
@@ -293,7 +298,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
                             Reference< XInterface >() );
 
     if ( !rData->aKey.getLength() )
-        throw packages::WrongPasswordException();
+        throw packages::WrongPasswordException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
@@ -319,7 +324,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
         xStream->readBytes( aReadBuffer, nSize );
 
         if ( !StaticHasValidPassword( aReadBuffer, rData ) )
-            throw packages::WrongPasswordException();
+            throw packages::WrongPasswordException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
     return new XUnbufferedStream ( xStream, rData );
@@ -335,7 +340,7 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
 
     // make a temporary cipher
     rtlCipher aCipher;
-    StaticGetCipher ( rData, aCipher );
+    StaticGetCipher ( rData, aCipher, sal_True );
 
     Sequence < sal_Int8 > aDecryptBuffer ( nSize );
     rtlDigest aDigest = rtl_digest_createSHA1();
@@ -434,7 +439,7 @@ Reference < XInputStream > ZipFile::createMemoryStream(
 
     if ( bMustDecrypt )
     {
-        StaticGetCipher ( rData, aCipher );
+        StaticGetCipher ( rData, aCipher, sal_True );
         aDecryptBuffer.realloc ( nSize );
     }
 
@@ -552,7 +557,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         // check if we can decrypt it or not
         OSL_ENSURE( rData->aDigest.getLength(), "Can't detect password correctness without digest!\n" );
         if ( rData->aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
-                throw packages::WrongPasswordException();
+                throw packages::WrongPasswordException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
     else
         bNeedRawStream = ( rEntry.nMethod == STORED );
@@ -584,7 +589,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
             RuntimeException )
 {
     if ( rData.isEmpty() )
-        throw packages::NoEncryptionException();
+        throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );

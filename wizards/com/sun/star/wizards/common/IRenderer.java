@@ -1,4 +1,5 @@
-/*************************************************************************
+/*
+ ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -35,7 +36,7 @@ package com.sun.star.wizards.common;
  * Can be used to reference resources, internationalizartion
  * a.s.o
  */
-public interface Renderer
+public interface IRenderer
 {
 
     public String render(Object object);

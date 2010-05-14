@@ -344,7 +344,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         for (int i = 0; i < nSize; i++)
         {
             DBColumn CurDBColumn = (DBColumn) DBColumnsVector.elementAt(i);
-            String sFieldName = CurDBColumn.CurDBField.m_sFieldName;
+            String sFieldName = CurDBColumn.CurDBField.getFieldName();
             if (!sFieldName.equals(_sNewNames[i]))
             {
                 CurDBColumn.CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_sNewNames[i]);
@@ -467,13 +467,13 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         {
             removeGroupNamesofRecordTable(iSelCount);
             FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByTitle(CurGroupTitle);
-            GroupFieldVector.addElement(CurFieldColumn.m_sFieldName);
+            GroupFieldVector.addElement(CurFieldColumn.getFieldName());
             GroupCount += 1;
             try
             {
                 String sPath = FileAccess.getPathFromList(xMSF, ReportPath, "cnt-default.ott");
                 oTextSectionHandler.insertTextSection(GROUPSECTION + GroupCount, sPath, GroupCount == 1);
-                CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurFieldColumn.m_sFieldName, GroupCount - 1, TBLGROUPSECTION + (GroupCount));
+                CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurFieldColumn.getFieldName(), GroupCount - 1, TBLGROUPSECTION + (GroupCount));
                 CurDBColumn.formatValueCell();
                 if (CurDBColumn != null)
                 {
@@ -500,7 +500,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         removeGroupNamesofRecordTable(NewSelGroupNames.length + 1);
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByTitle(CurGroupTitle);
-        GroupFieldVector.removeElement(CurFieldColumn.m_sFieldName);
+        GroupFieldVector.removeElement(CurFieldColumn.getFieldName());
         try
         {
             oTextSectionHandler.removeLastTextSection();
@@ -610,8 +610,8 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         FieldColumn oFieldColumn1 = (FieldColumn) _oObject1;
         FieldColumn oFieldColumn2 = (FieldColumn) _oObject2;
-        DBColumn oDBColumn1 = getDBColumnByName(oFieldColumn1.m_sFieldName);
-        DBColumn oDBColumn2 = getDBColumnByName(oFieldColumn2.m_sFieldName);
+        DBColumn oDBColumn1 = getDBColumnByName(oFieldColumn1.getFieldName());
+        DBColumn oDBColumn2 = getDBColumnByName(oFieldColumn2.getFieldName());
         if (oDBColumn1.ValColumn < oDBColumn2.ValColumn)
         {
             return -1;
@@ -631,7 +631,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         for (int i = 0; i < DBColumnsVector.size(); i++)
         {
             DBColumn oDBColumn = (DBColumn) DBColumnsVector.get(i);
-            if (oDBColumn.CurDBField.m_sFieldName.equals(_FieldName))
+            if (oDBColumn.CurDBField.getFieldName().equals(_FieldName))
             {
                 return oDBColumn;
             }
@@ -647,7 +647,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             for (int i = 0; i < _FieldColumns.length; i++)
             {
                 FieldColumn CurFieldColumn = _FieldColumns[i];
-                if (!CurFieldColumn.m_sFieldName.equals(_FieldName))
+                if (!CurFieldColumn.getFieldName().equals(_FieldName))
                 {
                     aFieldColumns.add(CurFieldColumn);
                 }

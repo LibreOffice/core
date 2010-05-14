@@ -94,83 +94,59 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ en-US ] = "Please select the type of your external address book:";
     };
 
-    RadioButton RB_MORK
-    {
-        Pos     = MAP_APPFONT ( 15, 68 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-        Group = TRUE;
-
-        Text [ en-US ] = "Mozilla / Netscape";
-    };
-// All position & size/height data below this is not used
-    RadioButton RB_THUNDERBIRD
-    {
-        Pos     = MAP_APPFONT ( 15, 79 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
-        Text [ en-US ] = "Thunderbird";
-    };
     RadioButton RB_EVOLUTION
      {
-         Pos        = MAP_APPFONT ( 15, 90 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "Evolution";
     };
     RadioButton RB_EVOLUTION_GROUPWISE
      {
-         Pos        = MAP_APPFONT ( 15, 90 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "Groupwise";
     };
     RadioButton RB_EVOLUTION_LDAP
      {
-         Pos        = MAP_APPFONT ( 15, 90 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "Evolution LDAP";
+    };
+    RadioButton RB_MORK
+    {
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Mozilla / Netscape";
+    };
+    RadioButton RB_THUNDERBIRD
+    {
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Thunderbird";
     };
     RadioButton RB_KAB
      {
-         Pos        = MAP_APPFONT ( 15, 101 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "KDE address book";
     };
     RadioButton RB_MACAB
     {
-        Pos     = MAP_APPFONT ( 15, 101 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "Mac OS X address book";
     };
     RadioButton RB_LDAP
     {
-        Pos     = MAP_APPFONT ( 15, 112 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "LDAP address data";
     };
     RadioButton RB_OUTLOOK
     {
-        Pos     = MAP_APPFONT ( 15, 123 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "Outlook address book";
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
-        Pos     = MAP_APPFONT ( 15,134 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "Windows system address book";
     };
     RadioButton RB_OTHER
     {
-        Pos     = MAP_APPFONT ( 15, 145 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-
         Text [ en-US ] = "Other external data source";
     };
 };
