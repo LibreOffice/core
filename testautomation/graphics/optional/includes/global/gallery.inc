@@ -268,18 +268,16 @@ endcase
 testcase tGallery_CreateAndWorkWithANewGalleryThemes
     Dim iMenuEntries as Integer
     Dim j as Integer
-    '/// Open a new Writer document
-    '/// Tools / Gallery
+    printlog "Open a new Writer document"
+    printlog "Tools / Gallery"
     printlog "create a new gallery-theme ( TT-theme )"
     gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
     iMenuEntries = Gallerys.GetItemCount
     printlog "- Clicking on 'New Theme' and creating a new theme"
-    '/// Create a new gallery-theme
-    '/// + by clicking on <i>New Theme</i>
     NewTheme.Click
-    '/// +Activate <i>General</i> tabpage and insert <b><i>TT-theme</b></i> as name
+    printlog "+Activate General tabpage and insert TT-theme as name"
     Kontext
     Active.SetPage TabAllgemeinGallery
     Kontext "TabAllgemeinGallery"
@@ -287,177 +285,192 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
     sleep (1)
     printlog "  - named the new theme 'TT-theme' on the general-page"
     printlog "  - insert all files out of '[gTestToolpath]\global\input\graf_inp' in the files-page"
-    '/// +Activate <i>Files</i> tabpage
+    printlog "+Activate Files tabpage"
     Kontext
     Active.SetPage TabDateien
     Kontext "TabDateien"
     printlog "     - click 'add' without a selected file => insert-graphic-dialog has to be be visible"
-    '/// +Click on <i>Add</i> (If no file is selected the <i>Graphic-Insert</i> dialog has to be be opened -> close it)
+    printlog "+Click on Add (If no file is selected the Graphic-Insert dialog has to be be opened -> close it)"
     Hinzufuegen.Click
     sleep (1)
     Kontext "GrafikEinfuegenDlg"
     GrafikEinfuegenDlg.Cancel
     sleep (1)
     printlog "     - click 'find files' to insert the path for graphics"
-    '///+Click on <i>Find Files</i> => <i>select-path</i> dialog will be visible
+    printlog "+Click on Find Files => select-path dialog will be visible"
     Kontext "TabDateien"
     Suche.Click
     sleep (1)
-    '/// +Insert [gTesttoolPath]/input/global/graf_inp as path-name as click on <i>Select</i>
+    printlog "+Insert [gTesttoolPath]/input/global/graf_inp as path-name as click on Select"
     Kontext "OeffnenDlg"
     Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
     sleep (1)
     Auswaehlen.Click
     sleep (10)
-    '/// +Click on <i>Add</i> for some graphics
+    printlog "+Click on Add for some graphics"
     printlog "     - 'add' one by one"
     Kontext "TabDateien"
     DateiListe.Select 1
     WaitSlot(1000)
     Hinzufuegen.Click
+    printlog "Checking if Apply window is closed"
+    Kontext "ApplyGallery"
+    for j=1 to 100
+        if ApplyGallery.Exists then
+            sleep (1)
+        else
+            j=101
+        endif
+    next j
+    
     sleep (1)
+    Kontext "TabDateien"
+    printlog "add the 2nd one"
     DateiListe.Select 1
     Hinzufuegen.Click
+    printlog "Checking if Apply window is closed"
+    Kontext "ApplyGallery"
+    for j=1 to 100
+        if ApplyGallery.Exists then
+            sleep (1)
+        else
+            j=101
+        endif
+    next j
     sleep (1)
-    '/// +Click on <i>Add all</i> for rest of the graphics
-    '/// +<ul><li>apply-dialog -> cancel</li></ul>
-    '/// +click on <i>Add all</i> for rest of the graphics
+    Kontext "TabDateien"
+
+    printlog "+Click on Add all for rest of the graphics"
     printlog "     - 'add all' for the rest of the files"
     DateiListe.Select 1
     HinzufuegenAlle.Click
-    sleep (10)
+    sleep (1)
     printlog "     - apply-dialog -> cancel"
     Kontext "ApplyGallery"
-            for j=1 to 100
-                if ApplyGallery.Exists then
-                    try
-                        ApplyGallery.Cancel
-                    catch
-                    endcatch
-                else
-                    if j>5 then j=101
-                        sleep (1)
-                    end if
-                next j
-        Kontext "TabDateien"
-        if DateiListe.GetItemCount > 1 then
-            printlog "     - 'add all' for the rest of the files"
-            DateiListe.Select 1
-            HinzufuegenAlle.Click
-            sleep (2)
-            Kontext "ApplyGallery"
-                for j=1 to 100
-                    If ApplyGallery.Exists then
-                        sleep (1)
-                    else
-                        j=101
-                    end if
-                next j
-        end if
-        Kontext "TabDateien"
-            printlog "  - click 'OK' for the tabpages"
-            TabDateien.OK
-            '/// +Check if the new entry is inserted and select it
-            printlog "  - check if the new entrie is inserted and select it"
-        Kontext "Gallery"
-            if Gallerys.GetItemCount <> ( iMenuEntries + 1 ) then
-                warnlog "No new theme was created => the test ends here"
-                ToolsGallery
-                call hCloseDocument
+    for j=1 to 100
+        if ApplyGallery.Exists then
+            sleep (1)
+        else
+            j=101
+        endif
+    next j
+    sleep (1)
+    Kontext "TabDateien"
+   
+    if DateiListe.GetItemCount > 1 then
+        printlog "     - 'add all' for the rest of the files"
+        DateiListe.Select 1
+        HinzufuegenAlle.Click
+        sleep (2)
+        Kontext "ApplyGallery"
+        for j=1 to 100
+            If ApplyGallery.Exists then
+                sleep (1)
             else
-                gMouseClick 50,50            '/// make mouseclick to set focus ///'
-                Kontext "Gallery"
-                Gallerys.Select "TT-theme"
-                Gallerys.MouseMove ( 10, 10 )
-                sleep (1)
-                Gallerys.OpenContextMenu
-                '/// +Update the entry (1. entry in context menu ) => cancel it
-                printlog "  - update the entry => cancel the update"
-                sleep (3)
-                hMenuSelectNr (1)
-                sleep (1)
-                Kontext "AktualisierenGallery"
-                    if AktualisierenGallery.Exists <> TRUE then
-                        AktualisierenGallery.Cancel
-                    end if
-                    do
-                        sleep 1
-                    loop while AktualisierenGallery.Exists
-                    Kontext "Gallery"
-                        Gallerys.Select "TT-theme"
-                        Gallerys.OpenContextMenu
-                        '/// +Update it (1. entry in context menu )
-                        printlog "  - update"
-                        sleep (3)
-                        hMenuSelectNr (1)
-                        for j=1 to 100
-                            Kontext "AktualisierenGallery"
-                            if AktualisierenGallery.Exists <> TRUE then
-                                j=101
-                            else
-                                sleep (1)
-                            end if
-                        next j
-                    '/// +Rename it (3. entry in context menu)
-                    printlog "  - rename ( 3. entry in context-menu )"
-                    Kontext "Gallery"
-                        Gallerys.OpenContextMenu
-                        sleep (3)
-                        hMenuSelectNr (3)
-                        Kontext "GalleryNewTitle"
-                            Title.SetText "New TT-theme"
-                            GalleryNewTitle.OK
-                    Kontext "Gallery"
-                        Gallerys.Select "New TT-theme"
-                        '///+Add new files in properties (4. entry in context menu)
-                        printlog "  - add new graphics in properties ( 4. entry in context-menu )"
-                    Kontext "Gallery"
-                        Gallerys.OpenContextMenu
-                        sleep (3)
-                        hMenuSelectNr (4)
-                        Kontext
-                        Active.SetPage TabDateien
-                        Kontext "TabDateien"
-                            Suche.Click
-                            Kontext "OeffnenDlg"
-                                Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
-                                Auswaehlen.Click
-                                sleep (10)
-                        Kontext "TabDateien"
-                            DateiListe.Select 1
-                            Hinzufuegen.Click
-                            TabDateien.OK
-                            '/// +Delete the entry (2. entry in context menu)
-                            printlog "  - delete the entry ( 2. entry in context-menu )"
-                            printlog "     - messagebox -> no"
-                    Kontext "Gallery"
-                        Gallerys.Select "New TT-theme"
-                        sleep (10)
-                        Gallerys.OpenContextMenu
-                        sleep (3)
-                        hMenuSelectNr (2)
-                        Kontext "Active"
-                            sleep (1)
-                            Active.No
-                            printlog "     - messagebox -> yes"
-                    Kontext "Gallery"
-                        sleep (1)
-                        Gallerys.Select "New TT-theme"
-                        sleep (1)
-                        Gallerys.OpenContextMenu
-                        sleep (3)
-                        hMenuSelectNr (2)
-                        Kontext "Active"
-                            Active.Yes
-                    try
-                        Kontext "Gallery"
-                        Gallerys.Select "New TT-theme"
-                        warnlog "The entry isn't deleted!"
-                    catch
-                    endcatch
-                end if
-            sleep 10
+                j=101
+            end if
+        next j
+    end if
+    Kontext "TabDateien"
+    printlog "  - click 'OK' for the tabpages"
+    TabDateien.OK
+    printlog "+Check if the new entry is inserted and select it"
+    printlog "  - check if the new entrie is inserted and select it"
+    Kontext "Gallery"
+    if Gallerys.GetItemCount <> ( iMenuEntries + 1 ) then
+        warnlog "No new theme was created => the test ends here"
         ToolsGallery
+        call hCloseDocument
+    else
+        printlog "make mouseclick to set focus"
+        gMouseClick 50,50            
+        Kontext "Gallery"
+        Gallerys.Select "TT-theme"
+        Gallerys.MouseMove ( 10, 10 )
+        sleep (1)
+        Gallerys.OpenContextMenu
+        printlog "+Update the entry (1. entry in context menu ) => cancel it"
+        sleep (3)
+        hMenuSelectNr (1)
+        sleep (1)
+        Kontext "AktualisierenGallery"
+        if AktualisierenGallery.Exists <> TRUE then
+            AktualisierenGallery.Cancel
+        end if
+        do
+        sleep 1
+        loop while AktualisierenGallery.Exists
+        Kontext "Gallery"
+        Gallerys.Select "TT-theme"
+        Gallerys.OpenContextMenu
+        printlog "+Update it (1. entry in context menu )"
+        sleep (3)
+        hMenuSelectNr (1)
+        for j=1 to 100
+            Kontext "AktualisierenGallery"
+                if AktualisierenGallery.Exists <> TRUE then
+                    j=101
+                else
+                    sleep (1)
+                end if
+        next j
+        printlog "  - rename ( 3. entry in context-menu )"
+        Kontext "Gallery"
+        Gallerys.OpenContextMenu
+        sleep (3)
+        hMenuSelectNr (3)
+        Kontext "GalleryNewTitle"
+        Title.SetText "New TT-theme"
+        GalleryNewTitle.OK
+        Kontext "Gallery"
+        Gallerys.Select "New TT-theme"
+        printlog "  - add new graphics in properties ( 4. entry in context-menu )"
+        Kontext "Gallery"
+        Gallerys.OpenContextMenu
+        sleep (3)
+        hMenuSelectNr (4)
+        Kontext
+        Active.SetPage TabDateien
+        Kontext "TabDateien"
+        Suche.Click
+        Kontext "OeffnenDlg"
+        Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
+        Auswaehlen.Click
+        sleep (10)
+        Kontext "TabDateien"
+        DateiListe.Select 1
+        Hinzufuegen.Click
+        TabDateien.OK
+        printlog "  - delete the entry ( 2. entry in context-menu )"
+        printlog "     - messagebox -> no"
+        Kontext "Gallery"
+        Gallerys.Select "New TT-theme"
+        sleep (5)
+        Gallerys.OpenContextMenu
+        sleep (3)
+        hMenuSelectNr (2)
+        Kontext "Active"
+        sleep (1)
+        Active.No
+        printlog "     - messagebox -> yes"
+        Kontext "Gallery"
+        sleep (1)
+        Gallerys.Select "New TT-theme"
+        sleep (1)
+        Gallerys.OpenContextMenu
+        sleep (3)
+        hMenuSelectNr (2)
+        Kontext "Active"
+        Active.Yes
+        try
+            Kontext "Gallery"
+            Gallerys.Select "New TT-theme"
+            warnlog "The entry isn't deleted!"
+        catch
+        endcatch
+    end if
+    sleep 10
+    ToolsGallery
     call hCloseDocument
 endcase
 

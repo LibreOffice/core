@@ -91,9 +91,6 @@ BearbeitenRahmendokument SID_EDIT_FRAMESET
 BearbeitenFrameSet SID_EDIT_FRAMESET
 BearbeitenPlugIn SID_PLUGINS_ACTIVE
 BearbeitenImageMap SID_IMAP
-BearbeitenObjektBearbeiten SID_VERB_START
-BearbeitenObjektEdit SID_VERB_START
-BearbeitenObjektOeffnen SID_VERB_OPEN
 BearbeitenLiteraturdatenbank SID_COMP_BIBLIOGRAPHY
 
 ' **** Writer
@@ -234,7 +231,7 @@ EinfuegenObjektVideo SID_INSERT_VIDEO
 EinfuegenFrame SID_INSERT_FLOATINGFRAME
 
 ' **** Writer
-EinfuegenSonderzeichenWriter FN_INSERT_SYMBOL
+EinfuegenSonderzeichenWriter .uno:InsertSymbol
 EinfuegenFormelWriter FN_INSERT_SMA
 EinfuegenTabelleWriter FN_INSERT_TABLE
 EinfuegenDateiWriter SID_INSERTDOC
@@ -285,7 +282,7 @@ EinfuegenNotizCalc SID_INSERT_POSTIT
 EinfuegenExterneDatenQuelle SID_EXTERNAL_SOURCE
 
 ' **** Einfuegenmenue : Draw
-EinfuegenSonderzeichenDraw SID_BULLET
+EinfuegenSonderzeichenDraw .uno:InsertSymbol
 EinfuegenGrafikAusBildbearbeitungDraw SID_INSERT_IMAGE
 EinfuegenFormelDraw SID_INSERT_MATH
 EinfuegenTabelleDraw SID_ATTR_TABLE

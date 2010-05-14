@@ -39,14 +39,9 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFrameActionListener;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.TestEnvironment;
-import util.SOfficeFactory;
 
 /**
 * Testing <code>com.sun.star.frame.XFrame</code>

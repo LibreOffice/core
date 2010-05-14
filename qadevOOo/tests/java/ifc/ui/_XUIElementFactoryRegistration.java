@@ -31,9 +31,6 @@
 package ifc.ui;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.ui.XUIElement;
 import com.sun.star.ui.XUIElementFactory;
 import com.sun.star.ui.XUIElementFactoryRegistration;
 import lib.MultiMethodTest;

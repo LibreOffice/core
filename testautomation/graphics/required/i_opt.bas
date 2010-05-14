@@ -56,14 +56,14 @@ sub main
     printLog Chr(13) + "---------    Options   - Tools Impress -    ----------"
 
     ' Special Tests
-    Call tToolsOptionsMeasurementUnit ("Presentation")
+    Call tToolsOptionsMeasurementUnit ("IMPRESS")
     Call tiAlwaysWithCurrentPage
     
     ' More common tests
-    Call tToolsOptionsDrawGeneral ("Presentation")
-    Call tToolsOptionsDrawView    ("Presentation")
-    Call tToolsOptionsDrawGrid    ("Presentation")
-    Call tToolsOptionsDrawPrint   ("Presentation")
+    Call tToolsOptionsDrawGeneral ("IMPRESS")
+    Call tToolsOptionsDrawView    ("IMPRESS")
+    Call tToolsOptionsDrawGrid    ("IMPRESS")
+    Call tToolsOptionsDrawPrint   ("IMPRESS")
 
     Call hStatusOut
 end sub

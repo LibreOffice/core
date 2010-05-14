@@ -33,7 +33,7 @@ package ifc.awt;
 import com.sun.star.awt.XTabController;
 import com.sun.star.awt.XUnoControlContainer;
 import lib.MultiMethodTest;
-import lib.Status;
+
 /**
  * Testing <code>com.sun.star.awt.XUnoControlContainer</code>
  * interface methods :

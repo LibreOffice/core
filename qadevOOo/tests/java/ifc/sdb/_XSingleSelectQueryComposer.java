@@ -38,7 +38,6 @@ import lib.StatusException;
 import lib.Status;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XIndexAccess;
 
 /**
 * Testing <code>com.sun.star.sdb.XSingleSelectQueryComposer</code>

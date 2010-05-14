@@ -62,7 +62,7 @@ testcase tQuickInsertGraphNotAsLink
         '         endif
         ' Note: Can be locale dependent!
         if (iCurrentFile = 4) AND (gPlatform="osx") then
-            qaerrorlog("#158701# crash on MacOS X on loading ball.eps")
+            qaerrorlog("#i100253# crash on MacOS X on loading ball.eps")
             goto skipformat
         endif
 
@@ -131,13 +131,12 @@ testcase tQuickInsertGraphNotAsLink
                     gMouseClick (90, 90)
                 endcatch
             endif
-            
-            skipformat:
         else 
             warnlog( "Insert Graphics Dialog is not open, aborting" )
             goto endsub
         endif
         
+    skipformat:
     next iCurrentFile
     
     printlog( "" )

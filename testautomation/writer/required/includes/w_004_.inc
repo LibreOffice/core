@@ -1,3 +1,4 @@
+'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '*
@@ -236,10 +237,13 @@ testcase tInsertFieldsOther
                         exit do
                     end if
                 Loop
-                Sleep 5
+                
                 Kontext "ScriptSelector"
-                Sleep 1
-                ScriptSelector.Close
+                if ( ScriptSelector.exists( 5 ) ) then
+                    ScriptSelector.Close
+                else
+                    warnlog( "Dialog <ScriptSelector> is not available" )
+                endif
                 Kontext "TabFunktionen"
                 i=100
             end if
@@ -362,25 +366,26 @@ testcase tInsertHyperlink
     Call wEinfuegenHyperlink(3)
     wait 500
     Call DialogTest ( TabHyperlinkDokument )
-    if gUseSysDlg = False then
-        DateiOeffnen.Click
-        Sleep 1
-        Kontext "OeffnenDlg"
+    
+    DateiOeffnen.Click
+
+    Kontext "OeffnenDlg"
+    if ( OeffnenDlg.exists( 1 ) ) then
         OeffnenDlg.Cancel
-        Sleep 1
-    end if
+    else
+        warnlog( "Dialog <OeffnenDlg> is not available" )
+    endif
 
     Kontext "Hyperlink"
     printlog "-  New Document"
     Call wEinfuegenHyperlink(4)
     wait 500
     Call DialogTest ( TabHyperlinkNeuesDokument )
-    if gUseSysDlg = False then
-        Pfad.Click
-        Sleep 1
-        Kontext "OeffnenDlg"
-        OeffnenDlg.Cancel
-    end if
+    
+    Pfad.Click
+    Sleep 1
+    Kontext "OeffnenDlg"
+    OeffnenDlg.Cancel
 
     Kontext "TabHyperlinkNeuesDokument"
     TabHyperlinkNeuesDokument.Cancel
@@ -540,8 +545,11 @@ testcase tInsertCrossReference
                 end if
             Loop
             Kontext "ScriptSelector"
-            Sleep 1
-            ScriptSelector.Close
+            if ( ScriptSelector.exists( 3 ) ) then
+                ScriptSelector.Close
+            else
+                warnlog( "Dialog <ScriptSelector> is not available" )
+            endif
             Kontext "TabFunktionen"
             i=100
         end if
@@ -765,15 +773,15 @@ testcase tInsertIndexesBibliographyEntry
     end if
     printlog " Open new document"
     Call hNewDocument
-    Sleep 2
-
+    
     printlog " Insert / Indexes and Tables / Bibliography Entry "
-    InsertIndexesBibliographyEntry
+    hUseAsyncSlot( "InsertIndexesBibliographyEntry" )
+    
     Kontext "Active"
-    if Active.Exists then
+    if ( Active.Exists() ) then
         Do
             try
-                if Active.GetRT = 304 then
+                if ( Active.GetRT = 304 ) then
                     Warnlog Active.Gettext
                     Active.Ok
                 end if
@@ -784,17 +792,27 @@ testcase tInsertIndexesBibliographyEntry
     end if
 
     Kontext "LiteratureintragEinfuegen"
-    Call DialogTest ( LiteratureintragEinfuegen )
-    printlog " In dialog 'Insert Bibliography Entry' click 'Edit'"
-    EintragBearbeiten.Click
+    if ( LiteratureintragEinfuegen.exists( 1 ) ) then
+        Call DialogTest ( LiteratureintragEinfuegen )
+        
+        printlog " In dialog 'Insert Bibliography Entry' click 'Edit'"
+        EintragBearbeiten.Click
 
-    Kontext "LiteratureintragDefinieren"
-    Call DialogTest ( LiteratureintragDefinieren )
-    printlog " Close dialog 'Define Bibliography Entry'"
-    LiteratureintragDefinieren.Close
-    Kontext "LiteratureintragEinfuegen"
-    printlog " Close dialog 'Insert Bibliography Entry'"
-    EintragSchliessen.Click
+        Kontext "LiteratureintragDefinieren"
+        if ( LiteratureintragDefinieren.exists( 1 ) ) then
+            Call DialogTest ( LiteratureintragDefinieren )
+            printlog " Close dialog 'Define Bibliography Entry'"
+            LiteratureintragDefinieren.Close
+        else
+            warnlog( "Dialog <LiteratureintragDefinieren> is not available" )
+        endif
+        
+        Kontext "LiteratureintragEinfuegen"
+        printlog " Close dialog 'Insert Bibliography Entry'"
+        EintragSchliessen.Click
+    else
+        warnlog( "Dialog <LiteratureintragEinfuegen> is not available" )
+    endif
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -1051,10 +1069,9 @@ testcase tInsertGraphicsFromFile
     printlog " Select as graphic to insert: '...\writer\required\input\graphics\jolink.jpg"
     Dateiname.Settext ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     Oeffnen.Click
-    sleep 1
 
     Kontext "Active"
-    if Active.Exists then
+    if Active.Exists( 1 ) then
         Warnlog Active.Gettext
         Active.Ok
         Kontext "GrafikEinfuegenDlg"
@@ -1109,7 +1126,7 @@ testcase tInsertGraphicsFromFile
         Do
             j = j + 1
             Kontext "Active"
-            if Active.Exists then
+            if Active.Exists() then
                 if Active.GetRT = 304 then
                     if j = 1 then Warnlog Active.Gettext
                     Active.Ok
@@ -1165,6 +1182,10 @@ testcase tInsertAllGraphicsFromFile
 
     GetFileList(quellpfad, "*.*" , Ziel())
     for i=1 to ListCount(Ziel())
+        if (gPlatform = "osx") AND (right(ziel(i),3) = "eps") then
+            qaerrorlog "#i100253# skipping eps"
+            i=i+1
+        endif
         printlog "- Graphic: " + Right(Ziel(i),3) + "-Format"
         Call hGrafikEinfuegen ( Ziel(i) )
         Sleep 5
@@ -1342,30 +1363,28 @@ testcase tInsertFile
 
     printlog " Open new document"
     Call hNewDocument
-    if gUseSysDlg = False then
-        InsertFileWriter
-        printlog " Insert / File"
-        WaitSlot (3000)
-        Kontext "OeffnenDlg"
-        WaitSlot (2000)
-        printlog " Check 'File dialog'"
-        if OeffnenDlg.Exists then
-            Call DialogTest ( OeffnenDlg )
-            try
-                Standard.Click
-            catch
-                Exceptlog
-            endcatch
+    InsertFileWriter
+    WaitSlot( 2000 )
+    
+    printlog " Insert / File"
+    Kontext "OeffnenDlg"
 
-            Kontext "Active"
-            if Active.Exists then
-                Warnlog Active.Gettext
-                Active.Ok
-            else
-                Kontext "OeffnenDlg"
-                OeffnenDlg.Cancel
-            end if
-            Sleep 1
+    printlog " Check 'File dialog'"
+    if OeffnenDlg.Exists( 2 ) then
+        Call DialogTest ( OeffnenDlg )
+        try
+            Standard.Click
+        catch
+            Exceptlog
+        endcatch
+
+        Kontext "Active"
+        if Active.Exists then
+            Warnlog Active.Gettext
+            Active.Ok
+        else
+            Kontext "OeffnenDlg"
+            OeffnenDlg.Cancel
         end if
     end if
 
@@ -1505,10 +1524,13 @@ testcase tHtmlDocInsertFieldsOther
                         exit do
                     end if
                 Loop
-                Sleep 5
+
                 Kontext "ScriptSelector"
-                Sleep 1
-                ScriptSelector.Close
+                if ( ScriptSelector.exists( 3 ) ) then
+                    ScriptSelector.Close
+                else
+                    warnlog( "Dialog <ScriptSelector> is not available" )
+                endif
                 Kontext "TabFunktionen"
                 i=100
             end if
@@ -1549,11 +1571,15 @@ testcase tHtmlDocInsertSection
     Kontext "TabBereiche"
     Call DialogTest (TabBereiche)
     Verknuepfung.Check
-    if gUseSysDlg = False then
-        Auswaehlen.Click
-        Kontext "OeffnenDlg"
+
+    Auswaehlen.Click
+    Kontext "OeffnenDlg"
+    if ( OeffnenDlg.exists( 1 ) ) then
         OeffnenDlg.Cancel
-    end if
+    else
+        warnlog( "Dialog <OeffnenDlg> is not available" )
+    endif
+
     Wait 500
     Kontext
     printlog "-  Tabpage Columns"
@@ -1684,10 +1710,9 @@ testcase tHtmlDocInsertGraphicsFromFile
     printlog " Select as graphic to insert: '...\writer\required\input\graphics\jolink.jpg"
     Dateiname.Settext ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     Oeffnen.Click
-    sleep 1
 
     Kontext "Active"
-    if Active.Exists then
+    if Active.Exists( 1 ) then
         Warnlog Active.Gettext
         Active.Ok
         Kontext "GrafikEinfuegenDlg"

@@ -45,14 +45,20 @@
 
 testcase tExportAllReadableFormatsIntoODF
 
+	if iSprache <> 1 then
+		QAErrorlog "#100970#test only support english language"
+		goto endsub
+	endif
+
     Dim AvailableFilters( 35 ) as String
     Dim TemplateFilterFile as String
-    Dim CurrentFile as String
     Dim ImportFileList ( 300 ) as String
     Dim ExportFileList ( 300 ) as String
     Dim WorkDirectory as String
     Dim ImportDir as String
     Dim SavedCorrectly as Boolean
+	Dim sExportFilter as string
+	Dim sExportFile as string
     Dim i as Integer
 
     TemplateFilterFile = ConvertPath ( gTesttoolPath + "writer\optional\input\filterlist.txt")
@@ -63,95 +69,107 @@ testcase tExportAllReadableFormatsIntoODF
         GetFileList ( WorkDirectory, "*.*", ExportFileList() )
         if KillFileList ( ExportFileList() ) <> TRUE then
             Warnlog "Couldn't delete all Files in Output-Directory, the followings are still there:"
-            for i=1 to FileList(0)
-                printlog "  <> " & FileList(i)
+            for i=1 to FehlerListe(0)
+                printlog "  <> " & FehlerListe(i)
             next i
+			goto endsub
         end if
     end if
     app.Mkdir WorkDirectory
 
-    Printlog " Read the directory with files we wish to import."
-        GetFileList ( ImportDir, "*.*", ImportFileList() )
-    printlog "  Done."
+    Printlog "- Read the directory with files we wish to import."
+    GetFileList ( ImportDir, "*.*", ImportFileList() )
+    printlog "-  Done."
 
-    Printlog " Choose a filter."
-    For i = 1 to listCount(ImportFileList())
-        currentfile = ImportFileList(i)
-        try
-            Call hFileOpen ( ImportFileList(i), false )
+    printlog "- Start loading files in list"
+	For i = 1 to listCount(ImportFileList())
+		printlog "- " & i & ". load: " & ImportFileList(i)
+        Call hFileOpen ( ImportFileList(i) )
+		printlog "-  done"
+		
+		Kontext "TextImport"
+		if TextImport.Exists then
+			TextImport.Ok
+			printlog "-  Text import dialog passed"
+		end if
 
-            Kontext "TextImport"
-            if TextImport.Exists then
-                TextImport.Ok
-            end if
+		Kontext "Filterauswahl"
+		if Filterauswahl.Exists then
+			Filterauswahl.Cancel
+			printlog "-  Filterdialog passed"
+		end if
 
-            Kontext "Filterauswahl"
-            if Filterauswahl.Exists then
-                Filterauswahl.Cancel
-            end if
+		Kontext "AsciiFilterOptionen"
+		if AsciiFilterOptionen.Exists then
+			AsciiFilterOptionen.Ok
+			printlog "-  ASCII-Filter dialog passed"
+		end if
 
-            Kontext "AsciiFilterOptionen"
-            if AsciiFilterOptionen.Exists then AsciiFilterOptionen.Ok
-            Kontext "SecurityWarning"
-            if SecurityWarning.Exists(3) then SecurityWarning.Ok
-            Kontext "DocumentWriter"
-            if DocumentWriter.Exists(3) then
-                Do until DocumentWriter.StatusIsProgress = false
-                    wait 500
-                Loop
-            else
-                Kontext "DocumentCalc"
-                if DocumentCalc.Exists(3) then
-                    Do until DocumentCalc.StatusIsProgress = false
-                        wait 500
-                    Loop
-                else
-                    Warnlog "Neither DocumentWriter or DocumentCalc existed? Some other dialogue in focus?"
-                end if
-            end if
+		Kontext "SecurityWarning"
+		if SecurityWarning.Exists(3) then
+			SecurityWarning.Ok
+			printlog "-  Security warning passed"
+		end if
 
-            ' Check for macro alert
-            Kontext "SecurityWarning"
-            if SecurityWarning.Exists then
-                if inStr(currentfile,"sw40") = false then
-                    QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
-                end if
-                SecurityWarning.Cancel
-            end if
-            Sleep 1
+		Kontext "DocumentWriter"
+		if DocumentWriter.Exists(3) then
+			Do until DocumentWriter.StatusIsProgress = false
+				wait 500
+			Loop
+		else
+			Kontext "DocumentCalc"
+			if DocumentCalc.Exists(3) then
+				Do until DocumentCalc.StatusIsProgress = false
+					wait 500
+				Loop
+			else
+				Warnlog "Neither DocumentWriter or DocumentCalc existed? Some other dialogue in focus?"
+			end if
+		end if
 
-            Kontext "AlienWarning"
-            if AlienWarning.Exists then AlienWarning.Ok
+		' Check for macro alert
+		Kontext "SecurityWarning"
+		if SecurityWarning.Exists then
+			if inStr(ImportFileList(i),"sw40") = false then
+				QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+			end if
+			SecurityWarning.Cancel
+		end if
+		Sleep 1
 
-            Printlog " Exporting file: " + ImportFileList(CurrentFile)
+		Kontext "AlienWarning"
+		if AlienWarning.Exists then
+			AlienWarning.Ok
+			printlog "-  Alien warning passed"
+		endif
 
-            Printlog " Save as ( ODF )"
-            printlog (ConvertPath (WorkDirectory + "ExportedFile" + i))
-            Call hFileSaveAsWithFilterKill (ConvertPath (WorkDirectory + "ExportedFile" + i), "writer8")
+		sExportFile = WorkDirectory & "ExportedFile" & i & ".odf"
+		Printlog "-  Save as : " & ConvertPath ( sExportFile )
+		if hFileSaveAsWithFilterKill (sExportFile, "writer8") = true then
+			printlog "-  done"            
+			printlog "-  close file"
+			Call hCloseDocument
 
-            Printlog " Close file."
-            Call hCloseDocument
+			Printlog "-  Open previous saved file"
+			Call hFileOpenWithFilter (sExportFile, "writer8")
+			printlog "-  done"  
+			' Check for macro alert
+			Kontext "SecurityWarning"
+			if SecurityWarning.Exists then
+				if inStr(ImportFileList(i),"sw40")  = false then
+					QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+				end if
+				SecurityWarning.Cancel
+			end if
+			Sleep 1
+		else
+			Warnlog "Unable to save file: " & sExportFile
+		endif
 
-            Printlog " Open Saved File."
-            Call hFileOpenWithFilter (ConvertPath (WorkDirectory + "ExportedFile" + i), "writer8", false)
-
-            ' Check for macro alert
-            Kontext "SecurityWarning"
-            if SecurityWarning.Exists then
-                if inStr(currentfile,"sw40")  = false then
-                    QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
-                end if
-                SecurityWarning.Cancel
-            end if
-            Sleep 1
-
-            printlog "   Close all open files."
-            Do Until GetDocumentCount = 0
-                Call hCloseDocument
-            Loop
-        catch
-            Warnlog "Error with file: " + ImportFileList(i)
-        endcatch
+		printlog "-  Close all open files."
+		Do Until GetDocumentCount = 0
+			Call hCloseDocument
+		Loop
     next i 'File
 
 endcase
@@ -160,6 +178,11 @@ endcase
 
 testcase tExportAllReadableFormatsIntoThemselves
 
+	if iSprache <> 1 then
+		QAErrorlog "#100970#test only support english language"
+		goto endsub
+	endif
+	
     Dim AvailableFilters( 35 ) as String
     Dim TemplateFilterFile as String
     Dim SavedCorrectly as Boolean
@@ -191,7 +214,7 @@ testcase tExportAllReadableFormatsIntoThemselves
     end if
     app.Mkdir sWorkDirectory
 
-    For iCurrentFileIndex = 1 to 17
+    For iCurrentFileIndex = 1 to 16
         select case iCurrentFileIndex
                     case 1 :   sCurrentFile = "xml2.odt"
                                     sCurrentFilter = "writer8"
@@ -221,12 +244,12 @@ testcase tExportAllReadableFormatsIntoThemselves
                                      sCurrentFilter = "StarOffice XML (Writer)"
                     case 14 : sCurrentFile = "winw97.doc"
                                      sCurrentFilter = "MS Word 97"
-                    case 15 : sCurrentFile = "html/html.html"
-                                     sCurrentFilter = "HTML (StarWriter)"
-                    case 16 : sCurrentFile = "winword6.doc"
+                    case 15 : sCurrentFile = "winword6.doc"
                                      sCurrentFilter = "MS Word 95"
-                    case 17 : sCurrentFile = "wintext.txt"
+                    case 16 : sCurrentFile = "wintext.txt"
                                      sCurrentFilter = "Text (encoded)"
+                    case 17 : sCurrentFile = "html.html"
+                                     sCurrentFilter = "HTML (StarWriter)"									 
 
 'TODO: 18-23 not applyable. Can be opened, but saving in the format is not supported.
 
@@ -353,6 +376,11 @@ endcase
 
 testcase tExportTop5FormatsIntoTop5
 
+	if iSprache <> 1 then
+		QAErrorlog "#100970#test only support english language"
+		goto endsub
+	endif
+
     Dim ExportFileList(300) as String
     Dim sWorkDirectory as String
     Dim sImportDir as String
@@ -381,7 +409,7 @@ testcase tExportTop5FormatsIntoTop5
     app.Mkdir sWorkDirectory
 
     '// Start of the LOAD-Loop
-    For iCurrentLoadFileIndex = 1 to 5
+    For iCurrentLoadFileIndex = 1 to 4
         Select case iCurrentLoadFileIndex
                     case 1 :  sCurrentLoadFile = "xml2.odt"
                                     sCurrentLoadFilter = "writer8"
@@ -391,7 +419,7 @@ testcase tExportTop5FormatsIntoTop5
                                     sCurrentLoadFilter = "MS Word 97"
                     case 4 :  sCurrentLoadFile = "rtf.rtf"
                                     sCurrentLoadFilter = "Rich Text Format"
-                    case 5 :  sCurrentLoadFile = "html\html.html"
+                    case 5 :  sCurrentLoadFile = "html.html"
                                     sCurrentLoadFilter = "HTML (StarWriter)"
         End select
 

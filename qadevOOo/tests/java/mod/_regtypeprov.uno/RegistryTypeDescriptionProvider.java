@@ -41,7 +41,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import java.io.PrintWriter;
 import lib.Status;
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;

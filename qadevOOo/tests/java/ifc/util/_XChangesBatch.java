@@ -30,21 +30,12 @@
 
 package ifc.util;
 
-import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XProperty;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XHierarchicalName;
-import com.sun.star.container.XHierarchicalNameAccess;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameReplace;
-import com.sun.star.document.XTypeDetection;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.ElementChange;
 import lib.MultiMethodTest;
 
 import com.sun.star.util.XChangesBatch;
-import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
 

@@ -31,11 +31,8 @@ package ifc.sheet;
 
 import com.sun.star.sheet.XScenario;
 import com.sun.star.table.CellRangeAddress;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
 import lib.Status;
-import util.ValueComparer;
 
 /**
  *

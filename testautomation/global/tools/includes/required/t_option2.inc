@@ -68,6 +68,7 @@ sub DialogeFuerTypenKontrollieren
     Dim i as Integer
     Dim iCount as Integer
     Dim iErrorCount as integer
+    dim iExitCounter as integer : iExitCounter = 0
     Kontext "TabPfade"
     Typ.TypeKeys "<Down><Down><Home>"
     iCount = 0
@@ -75,28 +76,40 @@ sub DialogeFuerTypenKontrollieren
     for i=1 to Typ.GetItemCount
         if i<>1 then Typ.TypeKeys "<Down>"
         printlog "      "+typ.getText
-        if bAsianLan <> TRUE then
+        if ( bAsianLan <> TRUE ) then
             try
                 Bearbeiten.Click
-                kontext
-                if active.exists (3) then
-                    iErrorCount = iErrorCount + 1
-                    if (iErrorCount > 1) then
-                        Warnlog active.getText
+                
+                do while( iExitCounter <= 10 )
+                
+                    kontext "Active"
+                    if ( active.exists() ) then
+                        iErrorCount = iErrorCount + 1
+                        if (iErrorCount > 1) then
+                            Warnlog active.getText
+                        endif
+                        qaErrorlog "#i69014# gallery path doesn't exist: '" + active.getText + "'"
+                        printlog active.getText
+                        active.ok
                     endif
-                    qaErrorlog "#i69014# gallery path doesn't exist: '" + active.getText + "'"
-                    printlog active.getText
-                    active.ok
-                endif
-                Kontext "OeffnenDlg"
-                if OeffnenDlg.Exists(2) then
-                    if Dateityp.IsVisible = TRUE then Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
-                    OeffnenDlg.Cancel
-                else
+                    
+                    Kontext "OeffnenDlg"
+                    if OeffnenDlg.Exists() then
+                        if ( Dateityp.IsVisible ) then 
+                            Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
+                        endif
+                        OeffnenDlg.Cancel
+                        exit do
+                    endif
+                    
                     Kontext "PfadeAuswaehlen"
-                    PfadeAuswaehlen.Cancel
-                end if
-                Sleep (1)
+                    if ( PfadeAuswaehlen.exists() ) then
+                        PfadeAuswaehlen.Cancel
+                        exit do
+                    endif
+                    
+                    iExitCounter = iExitCounter + 1
+                loop
                 Kontext "TabPfade"
             catch
                 Warnlog "Error on entry " & i & "!"
@@ -104,26 +117,36 @@ sub DialogeFuerTypenKontrollieren
             endcatch
         else
             try
-                if Bearbeiten.IsEnabled = TRUE then
+                if ( Bearbeiten.IsEnabled ) then
                     Bearbeiten.Click
-                    kontext
-                    if active.exists (3) then
-                        iErrorCount = iErrorCount + 1
-                        if (iErrorCount > 1) then
-                            Warnlog active.getText
+                    
+                    do while( iExitCounter <= 10 ) 
+                    
+                        kontext "Active"
+                        if active.exists () then
+                            iErrorCount = iErrorCount + 1
+                            if (iErrorCount > 1) then
+                                Warnlog active.getText
+                            endif
+                            qaErrorlog "WorkAround for #109107# has to come up only once @'Add-Ins'! else BUG!"
+                            active.ok
                         endif
-                        qaErrorlog "WorkAround for #109107# has to come up only once @'Add-Ins'! else BUG!"
-                        active.ok
-                    endif
-                    Kontext "OeffnenDlg"
-                    if OeffnenDlg.Exists(2) then
-                        if Dateityp.IsVisible = TRUE then Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
-                        OeffnenDlg.Cancel
-                    else
+                        
+                        Kontext "OeffnenDlg"
+                        if OeffnenDlg.Exists() then
+                            if ( Dateityp.IsVisible ) then 
+                                Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
+                                OeffnenDlg.Cancel
+                                exit do
+                            endif
+                        endif
+                        
                         Kontext "PfadeAuswaehlen"
-                        PfadeAuswaehlen.Cancel
-                    end if
-                    Sleep (1)
+                        if ( PfadeAuswaehlen.exists() ) then
+                            PfadeAuswaehlen.Cancel
+                            exit do
+                        end if
+                    loop
                     Kontext "TabPfade"
                 else
                     iCount = iCount + 1
@@ -263,76 +286,6 @@ function hSetMacroSecurity( iLevel as integer ) as integer
     OptionenDLG.OK()
     '///</ul>
     hSetMacroSecurity() = iOldSecurityLevel
-end function
-
-'-------------------------------------------------------------------------
-
-function fGetSetMacroSecurityUNO (optional iLevel as integer) as integer
-    ' Input  : Security level where 0 = low and 3 = very high; empty: just return current value
-    ' Return : Previous security level, -1 on error
-    ' Changes: If iLevel is given, update global variable gMacroSecurityLevel to new level
-    ' NOTE   : If possible use this function outside the testcase
-    '///Switch between macro security levels in Tools/Options without using the UI
-    Dim sFileFunction as string
-    Dim iOldSecurityLevel as integer
-    Dim oUnoOfficeConnection as object
-    Dim oUnoConfigurationAccess as object
-    Dim aPropertyValue(1) As new com.sun.star.beans.PropertyValue ' Array of pairs: Property with Value
-    Dim xViewRoot
-    Dim bOptional as boolean
-
-    sFileFunction = "global::tools::inc::t_option2.inc::hSetMacroSecurity::"
-    bOptional = isMissing(iLevel)
-    iOldSecurityLevel = -1
-
-    ' Open OOo UNO-Port for communication
-    oUnoOfficeConnection=hGetUnoService(TRUE)
-    if (NOT isNull(oUnoOfficeConnection)) then
-        try
-            ' Open Configuration access
-            oUnoConfigurationAccess=oUnoOfficeConnection.createInstance("com.sun.star.configuration.ConfigurationProvider")
-            if (NOT isNull(oUnoConfigurationAccess)) then
-                ' Specifies the location of the view root in the configuration:
-                ' The value is the Path name of the configuration item to change.
-                aPropertyValue(0).Name="nodepath"
-                ' Controls how updates are handled in the cache: If false , the cache
-                ' must operate in  write-through mode, where updates are written to
-                ' persistent storage at once - that is before ::commitChanges()  returns.
-                aPropertyValue(1).Name="lazywrite"
-                aPropertyValue(1).Value=False
-
-                '///Tools / Options / Security
-                '///Check which 'Macro Security Level' is set and put it into returnvalue.
-                aPropertyValue(0).Value="/org.openoffice.Office.Common/Security/Scripting"
-                xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-                iOldSecurityLevel = xViewRoot.getByName("MacroSecurityLevel")
-                ' If input is given, use it by setting the Security Level
-                if NOT bOptional then
-                    xViewRoot.setPropertyValue("MacroSecurityLevel", iLevel)
-                    xViewRoot.commitChanges()
-                    ' Since we use lazywrite=false, the call to '.commitChanges()' returns if all data is written.
-                    ' This call to ask for pending changes is just to convince me;
-                    if xViewRoot.hasPendingChanges() then
-                        qaErrorLog(sFileFunction+"Changes still pending...")
-                        ' At this point there is no needed to think about what to do, if it doesn't work.
-                        ' If it doesn't work, the change is performed in the UI via
-                        ' global::system::inc::master.inc::mMakeGeneralOptions
-                    end if
-                    ' Update global value
-                    gMacroSecurityLevel = iLevel
-                end if
-                ' Destroy, discard, dump, get rid of, put away, throw away, trash, the object:
-                xViewRoot.dispose()
-            else
-                qaErrorLog(sFileFunction+"Couldn't create Configuration access")
-            end if
-        catch
-            qaErrorLog(sFileFunction+"Failure during reading or setting Configuration Value")
-        endcatch
-    else
-        qaErrorLog(sFileFunction+"Couldn't get UNO service")
-    end if
-    fGetSetMacroSecurityUNO = iOldSecurityLevel
 end function
 
 '*******************************************************************************
@@ -477,7 +430,7 @@ function hSetMacroSecurityAPI( iSecLevel as integer ) as integer
         xViewRoot.commitChanges()
         xViewRoot.dispose()
 
-        printlog( CFN & "Setting macro security level to " & caLevel( iSecLevel )
+        'printlog( CFN & "Setting macro security level to " & caLevel( iSecLevel )
 
     catch
 

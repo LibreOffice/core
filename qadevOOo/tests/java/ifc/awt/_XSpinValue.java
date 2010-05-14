@@ -41,7 +41,6 @@ import com.sun.star.uno.UnoRuntime;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import lib.MultiMethodTest;
-import util.FormTools;
 
 public class _XSpinValue extends MultiMethodTest {
 

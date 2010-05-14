@@ -184,7 +184,7 @@ testcase tStandardBar_3
     '///+<li>Click on Paste</li>
     printlog( "Paste" )
     Kontext "Standardbar"
-    hWaitForObject( Einfuegen , 8000 )
+    sleep( 3 ) ' No better solution found yet.
     Einfuegen.Click()
 
     Kontext "DocumentCalc"

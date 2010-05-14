@@ -33,7 +33,6 @@ package ifc.text;
 import com.sun.star.beans.PropertyValue;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Set;
 import lib.StatusException;
 import lib.TestParameters;
 import share.LogWriter;

@@ -36,8 +36,6 @@ import com.sun.star.view.XSelectionSupplier;
 
 import lib.MultiMethodTest;
 
-import util.ValueComparer;
-
 
 /**
 * Testing <code>com.sun.star.frame.XModel</code>

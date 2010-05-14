@@ -41,7 +41,7 @@ private SLEEP_TIME_REQUESTED as integer
 private SLEEP_CALLS_SUM as integer
 private SLEEP_TIME_USED as integer
 
-private const VERBOSE = false
+private const VERBOSE = true
 
 function GetClipboardText as string
 
@@ -1201,7 +1201,8 @@ function hUseAsyncSlot( cSlot as string ) as integer
 
     dim iWait as integer
     dim iTime as integer : iTime = 0
-    const MAX_WAIT = 50
+    const MAX_WAIT = 100
+    const DELAY = 100
     const CFN = "global::tools::includes::required::hUseAsyncSlot():"
 
     if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )    
@@ -1209,44 +1210,86 @@ function hUseAsyncSlot( cSlot as string ) as integer
     for iWait = 1 to MAX_WAIT
         try
             select case ( lcase( cSlot ) )
-            case "fileclose"            : FileClose
-            case "filesaveas"           : FileSaveAs
-            case "filesaveall"          : FileSaveAll
-            case "fileexport"           : FileExport
+            case "fileclose"                      : FileClose
+            case "filesaveas"                     : FileSaveAs( "SynchronMode", TRUE )
+            case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
+            case "fileexport"                     : FileExport
+            case "filereload"                     : FileReload( "SynchronMode", TRUE )
             
-            case "editcopy"             : EditCopy
-            case "editpaste"            : EditPaste
-            case "editcut"              : EditCut
-            case "editselectall"        : EditSelectAll
-            case "editselectallmath"    : EditSelectAllMath
-            case "editdeletecontents"   : EditDeleteContents
-            case "editundo"             : EditUndo
-            case "editredo"             : EditRedo
-            case "editrepeat"           : EditRepeat
-            case "editpastespecial"     : EditPasteSpecial
-            case "editsearchandreplace" : EditSearchAndReplace
-            case "editduplicate"        : EditDuplicate
-            case "editgluepoints"       : EditGluePoints
-            case "editdeleteslide"      : EditDeleteSlide
-            case "editobjectproperties" : EditObjectProperties
-            case "editobjectedit"       : EditObjectEdit
-            case "editobjectsavecopyas" : EditObjectSaveCopyAs
+            case "editdoc"                        : EditDoc
+            case "editcopy"                       : EditCopy
+            case "editchangesrecord"              : EditChangesRecord
+            case "editchangesshow"                : EditChangesShow
+            case "editchangesprotecttrace"        : EditChangesProtectTrace
+            case "editchangescomment"             : EditChangesComment
+
+            case "editpaste"                      : EditPaste
+            case "editcut"                        : EditCut
+            case "editselectall"                  : EditSelectAll
+            case "editselectallmath"              : EditSelectAllMath
+            case "editselectionmodeblock"         : EditSelectionModeBlock
+            case "editselectionmodestandard"      : EditSelectionModeStandard
+            case "editdeletecontents"             : EditDeleteContents
+            case "editundo"                       : EditUndo
+            case "editredo"                       : EditRedo
+            case "editrepeat"                     : EditRepeat
+            case "editpastespecial"               : EditPasteSpecial
+            case "editpastespecialwriter"         : EditPasteSpecialWriter
+            case "editsearchandreplace"           : EditSearchAndReplace
+            case "editduplicate"                  : EditDuplicate
+            case "editgluepoints"                 : EditGluePoints
+            case "editdeleteslide"                : EditDeleteSlide
+            case "editobjectproperties"           : EditObjectProperties
+            case "editobjectedit"                 : EditObjectEdit
+            case "editobjectsavecopyas"           : EditObjectSaveCopyAs
             
-            case "formatcontrol"        : FormatControl
-            case "formateditpoints"     : FormatEditPoints
+            case "formatcontrol"                  : FormatControl
+            case "formateditpoints"               : FormatEditPoints
+            case "formatsections"                 : FormatSections
+            case "formatchangecaseupper"          : FormatChangeCaseUpper
+            case "formatchangecaselower"          : FormatChangeCaseLower
+            case "formatarea"                     : FormatArea
+            case "formatarrangebringtofrontcalc"  : FormatArrangeBringToFrontCalc
+            case "formatflipvertically"           : FormatFlipVertically
+            case "formatfliphorizontally"         : FormatFlipHorizontally
+            case "formatline"                     : FormatLine
+            case "formatpositionandsize"          : FormatPositionAndSize
+            case "formatfontwork"                 : FormatFontwork
+            case "formatparagraph"                : FormatParagraph
+            case "formatstylebold"                : FormatStyleBold
+            case "formatungroupdraw"              : FormatUngroupDraw
+            case "formatexitgroupdraw"            : FormatExitGroupDraw
+            case "formatgroupgroup"               : FormatGroupGroup
+            case "formatgroupeditgroupcalc"       : FormatGroupEditGroupCalc
+            case "formatalignmentlefttext"        : FormatAlignmentLeftText
+            case "formatgraphics"                 : FormatGraphics
+            case "formatanchortopage"             : FormatAnchorToPage
+            case "formatwrapcontour"              : FormatWrapContour
+            case "formatwrapeditcontour"          : FormatWrapEditContour
+            case "formatpagewriter"               : FormatPageWriter
+            
+            case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
+            
+            case "contextpositionandsize"         : ContextPositionAndSize
+            
+            case "toolslanguagehyphenate"         : ToolsLanguageHyphenate
+            case "toolsupdateallindexes"          : ToolsUpdateAllIndexes
+            case "toolsupdatefields"              : ToolsUpdateFields
+            case "toolsupdatelinks"               : ToolsUpdateLinks
+            case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
             
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select
             
             exit for
         catch
-            wait( 100 )
-            iTime = iWait * 100
+            wait( DELAY )
+            iTime = iWait * DELAY
         endcatch
     next iWait
     
     ' Timeout is -1
-    if ( iTime = 5000 ) then
+    if ( iTime = MAX_WAIT * DELAY ) then
         iTime = -1 
     endif
     if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )

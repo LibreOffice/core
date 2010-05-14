@@ -54,11 +54,11 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///+<li>Open Tools/Options, go to Presentataion/General page</li>
     ToolsOptions
-    hToolsOptions( "IMPRESS" , "General" )
+    hToolsOptions( gApplication , "General" )
 
     '///+<li>Check or uncheck to start with autopilot</li>
     Kontext "TabSonstigesDraw"
-    if ( mitAutopilotStarten.exists() ) then
+    if ( mitAutopilotStarten.exists( 2 ) ) then
 
         if ( bEnable ) then
             mitAutopilotStarten.check()
@@ -68,14 +68,14 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
             printlog( CFN & "Disable Impress Autopilot" )
         endif
 
+        '///+<li>Return Status of Checkbox (checked=TRUE)</li>
+        hUseImpressAutopilot() = mitAutopilotStarten.isChecked()
+
     else
 
         warnlog( CFN & "Cannot find Autopilot Checkbox" )
 
     endif
-   
-    '///+<li>Return Status of Checkbox (checked=TRUE)</li>
-    hUseImpressAutopilot() = mitAutopilotStarten.isChecked()
 
     '///+<li>Close Tools/Options</li>
     Kontext "OptionenDlg"

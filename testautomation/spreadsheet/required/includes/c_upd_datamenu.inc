@@ -796,6 +796,15 @@ testcase tDataDataPilot
     Kontext "Datenpilot"
     Zusaetze.Open
     DialogTest ( Datenpilot )
+	'/// Verify that the 'Selection from' editfield is correct
+	printlog "Verify that the 'Selection from' editfield has content"
+    printlog "The Range is" & DataPilotRange.Gettext
+    '/// Click on 'Shrink' button for 'Selection from' to open rangechooser
+    printlog " Click on 'Shrink' button for 'Selection from' to open rangechooser"
+    DataPilotRangeShrink.Click
+    '/// Close rangechooser by click on 'Maximize' button
+    printlog " Close rangechooser by click on 'Maximize' button"
+    DataPilotRangeShrink.Click
     '/// Verify that the 'Results to' combobox has items
     printlog " Verify that the 'Results to' combobox has items"
     If AusgabeAb.GetItemCount < 1 then
@@ -929,16 +938,23 @@ testcase tDataDataPilot
     '/// Close 'Data Field' dialog with 'Cancel'
     printlog " Close 'Data Field' dialog with 'Cancel'"
     Datenfeld.Cancel
-    sleep 1
+    sleep 2
     Kontext "Datenpilot"
-    '/// Select first item (Sum – 2000) in 'Data Fields' by 3 <TAB>
-    printlog " Select first item (Sum – 2000) in 'Data Fields' by 3 <TAB>"
+    '/// Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>
+    printlog " Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>"
     Datenpilot.TypeKeys "<TAB><TAB><TAB>",TRUE
-    Sleep 1
+    Sleep 3
     '/// Click on 'Options' button to open 'Data Filed' dialog
     printlog " Click on 'Options' button to open 'Data Filed' dialog"
-    Optionen.Click
-    sleep 1
+    If Optionen.IsEnabled Then
+        Optionen.Click
+    else
+        warnlog "Option button is not enabled. Aborting"
+        Datenpilot.Cancel
+        Call hCloseDocument
+        goto endsub
+    end if
+	sleep 3
     Kontext "DataFieldsFunctionDlg"
     '/// Click on 'More' button
     printlog " Click on 'More' button"

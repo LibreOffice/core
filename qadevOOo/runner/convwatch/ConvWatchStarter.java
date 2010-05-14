@@ -31,7 +31,6 @@
 package convwatch;
 
 // imports
-import java.util.Enumeration;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileFilter;
@@ -39,11 +38,9 @@ import java.io.FileFilter;
 import convwatch.EnhancedComplexTestCase;
 import com.sun.star.lang.XMultiServiceFactory;
 
-import helper.ProcessHandler;
 import convwatch.ConvWatchException;
 import convwatch.DirectoryHelper;
 import convwatch.GraphicalTestArguments;
-import convwatch.NameHelper;
 import convwatch.HTMLOutputter;
 import helper.OfficeProvider;
 import helper.OfficeWatcher;

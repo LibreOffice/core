@@ -40,7 +40,6 @@ import helper.APIDescGetter;
 import helper.AppProvider;
 import helper.OfficeProvider;
 import helper.OfficeWatcher;
-import helper.ProcessHandler;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -29,13 +29,10 @@
  ************************************************************************/
 package mod._cfgmgr2;
 
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
 import com.sun.star.util.XStringSubstitution;
-import com.sun.star.util.XURLTransformer;
 
 import java.io.PrintWriter;
 

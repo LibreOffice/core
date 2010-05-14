@@ -40,7 +40,6 @@ import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XSet;
-import com.sun.star.loader.XImplementationLoader;
 
 import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XAcceptor;

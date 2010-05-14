@@ -37,7 +37,8 @@
 '*
 '\******************************************************************************
 
-private const C_INFO = FALSE ' Set this to TRUE to increase verbosity of some functions
+private const C_INFO = TRUE ' Set this to TRUE to increase verbosity of some functions
+private const VERBOSE = true
 
 function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// hGrafikEinfuegen hGraphicInsert
@@ -722,6 +723,19 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
+function hFileCloseAll() as integer
+
+    dim iDocumentCount as integer : iDocumentCount = 0
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument()
+        iDocumentCount = iDocumentCount + 1
+    Loop
+    hFileCloseAll() = iDocumentCount
+    
+end function
+'
+'-------------------------------------------------------------------------------
+'
 function hFileOpen( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
@@ -785,7 +799,7 @@ function hFileSave() as boolean
     const CFN = "global::tools::inc::t_files.inc::hFileSave():"
     hFileSave() = FALSE
     if ( C_INFO ) then printlog( CFN & "Save file." )
-    FileSave
+    FileSave( "SynchronMode", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSave() = TRUE
 
 end function
@@ -904,6 +918,14 @@ function hFileWait( optional bWarn as boolean ) as integer
             iWait = -4
             exit do
         endif
+        
+        ' LOAD: Master Password Dialog
+        kontext "MasterPasswordEnter"
+        if ( MasterPasswordEnter.exists() ) then
+            iWait = -10
+            warnlog( CFN & "Master Password dialog displayed. Tests are likely to fail" )
+            exit do
+        endif
 
         ' LOAD: Filter selection dialog
         Kontext "Filterauswahl"
@@ -957,6 +979,7 @@ function hFileWait( optional bWarn as boolean ) as integer
         case -7   : printlog( CFN & "A dialog box is in the way (1 button), rc = " & iWait )
         case -8   : printlog( CFN & "A dialog box is in the way (2 buttons), rc = " & iWait )
         case -9   : printlog( CFN & "A dialog box is in the way (3 buttons), rc = " & iWait )
+        case -10  : printlog( CFN & "Master Password Dialog displayed, rc = " & iWait )
         case else : printlog( CFN & "File I/O completed in " & iWait & " seconds" )
         end select
     endif

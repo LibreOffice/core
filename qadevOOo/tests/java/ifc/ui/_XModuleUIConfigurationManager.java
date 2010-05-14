@@ -31,11 +31,7 @@
 package ifc.ui;
 
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ui.XModuleUIConfigurationManager;
-import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
-import com.sun.star.ui.XUIConfigurationManager;
 import lib.MultiMethodTest;
 
 public class _XModuleUIConfigurationManager extends MultiMethodTest {

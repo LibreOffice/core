@@ -36,7 +36,6 @@ import com.sun.star.i18n.XLocaleData;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

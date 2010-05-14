@@ -29,25 +29,28 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
 '*
 '* short description : General option test (sub-routines for options tests)
 '*
-'************************************************************************
-'*
-' #1 hToolsOptions       'Select the correct page in Tools / Options
-'*
-'\***********************************************************************
+'\******************************************************************************
 
 function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIONAL bSilent as Boolean ) as Boolean
+
+    const CFN = "global::tools::includes::required::t_option.inc:"
+
     Dim bCorPage as Boolean
     Dim bFirst as Boolean
-    Dim AnzahlEintraegeZu as Integer
-    Dim AnzahlEintraege as Integer
-    Dim i as Integer
+    
+    Dim InitialNodeCount as Integer ' All nodes collapsed
+    Dim CurrentNodeCount as Integer ' Number of nodes when a top node is expanded
+    Dim iCurrentPage as Integer     ' Increment variable for stepping through the nodes
     Dim startpos as integer
+    
+    Applicationname = ucase( Applicationname )
+    Tabpagename     = ucase( Tabpagename     )
 
     '///<i>hToolsOptions</i>: Routine to select the correct option page
     '///+<u>input</u>: The groupname as string, name of optionpage as string
@@ -81,83 +84,44 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
 
     if ExtrasOptionenDlg.Exists then
         Optionsliste.TypeKeys "<HOME>"
-        for i = 1 to 12+1
+        for iCurrentPage = 1 to 12+1
             Optionsliste.TypeKeys "-<DOWN>"
-        next i
+        next iCurrentPage
         'Optionsliste.TypeKeys "<HOME>"
-        AnzahlEintraegeZu = Optionsliste.GetItemCount
-        select case Ucase$(Applicationname)
+        InitialNodeCount = Optionsliste.GetItemCount
+        select case Applicationname
         case "STAROFFICE"        : startpos = 1
         case "LOADSAVE"          : startpos = 2
         case "LANGUAGESETTINGS"  : startpos = 3
-        case "WRITER"
-            if ((gApplication = "WRITER")OR(gApplication = "MASTERDOCUMENT")OR(gApplication = "HTML")) then
-                startpos = 4
-            else
-                qaErrorLog "please review your test; the OptionsSet '" + Applicationname + "' is not available for application '" + gApplication + "'"
-                exit function
-            endif
-        case "HTML"
-            if ((gApplication = "WRITER")OR(gApplication = "MASTERDOCUMENT")OR(gApplication = "HTML")) then
-                startpos = 5
-            else
-                qaErrorLog "please review your test; the OptionsSet '" + Applicationname + "' is not available for application '" + gApplication + "'"
-                exit function
-            endif
-
-        case "CALC"
-            if (gApplication = "CALC") then
-                startpos = 4
-            else
-                qaErrorLog "please review your test; the OptionsSet '" + Applicationname + "' is not available for application '" + gApplication + "'"
-                exit function
-            endif
-
-        case "IMPRESS"
-            if ((gApplication = "DRAW")OR(gApplication = "DRAW")) then
-                startpos = 4
-            else
-                qaErrorLog "please review your test; the OptionsSet '" + Applicationname + "' is not available for application '" + gApplication + "'"
-                exit function
-            endif
-
-        case "DRAWING"
-            if ((gApplication = "DRAW")OR(gApplication = "IMPRESS")) then
-                startpos = 4
-            else
-                qaErrorLog "please review your test; the OptionsSet '" + Applicationname + "' is not available for application '" + gApplication + "'"
-                exit function
-            endif
-
-        case "MATH"
-            if (gApplication = "MATH") then
-                startpos = 4
-            else
-                qaErrorLog "please review your test; the OptionsSet '" + Applicationname + "' is not available for application '" + gApplication + "'"
-                exit function
-            endif
-
-        case "DATASOURCES"
-            startpos = AnzahlEintraegeZu -2
-        case "CHART"
-            startpos = AnzahlEintraegeZu -1
-        case "INTERNET"
-            startpos = AnzahlEintraegeZu ' always the last one
+        case "WRITER"            : startpos = 4
+        case "MASTERDOCUMENT"    : startpos = 4
+        case "HTML"              : startpos = 5
+        case "CALC"              : startpos = 4
+        case "IMPRESS"           : startpos = 4
+        case "DRAW"              : startpos = 4
+        case "MATH"              : startpos = 4
+        case "DATASOURCES"       : startpos = InitialNodeCount -2
+        case "CHART"             : startpos = InitialNodeCount -1
+        case "INTERNET"          : startpos = InitialNodeCount ' always the last one
         case else
-            warnlog "hToolsOptions(): " + Applicationname + " / " + Tabpagename + " could not be found! Please review your testscript! '" + gApplication + "'"
+            warnlog( CFN & "Invalid Application name specified: " & Applicationname )
+            printlog( "Valid options are:" )
+            printlog( "gApplications: WRITER, CALC, MASTERDOCUMENT, DRAW, IMPRESS, HTML, MATH, CHART" )
+            printlog( "additionally.: STAROFFICE, LOADSAVE, LANGUAGESETTINGS, DATASOURCES, INTERNET" )
+            printlog( "All names must be uppercase" )
             exit function
         end select
 
         Optionsliste.select Startpos
         Optionsliste.typekeys "+"
-        AnzahlEintraege = Optionsliste.GetItemCount
+        CurrentNodeCount = Optionsliste.GetItemCount
         bFirst = TRUE
-        for i = 1 to AnzahlEintraege - AnzahlEintraegeZu
+        for iCurrentPage = 1 to CurrentNodeCount - InitialNodeCount
             bCorPage = FALSE
             Kontext "ExtrasOptionenDlg"
             Optionsliste.TypeKeys "<DOWN>"
-            sleep (1)
-            select case ucase$(Applicationname)
+            WaitSlot() ' Some sort of NOOP
+            select case Applicationname
             case "STAROFFICE"
                 '///Pages in group &quot;StarOffice&quot;are:
                 '///+<ul><li>&quot;UserData&quot;</li>
@@ -172,7 +136,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 '///+<li>&quot;Appearence&quot;</li>
                 '///+<li>&quot;Accessibility&quot;</li>
                 '///+<li>&quot;Java&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "USERDATA"
                     Kontext "TabBenutzerdaten"
                     if TabBenutzerdaten.exists then bCorPage = TRUE
@@ -249,7 +213,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 '///+<li>&quot;VBAProperties&quot;</li>
                 '///+<li>&quot;MicrosoftOffice&quot;</li>
                 '///+<li>&quot;HTMLCompatibility&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "GENERAL"
                     Kontext "TabSpeichern"
                     if TabSpeichern.exists then bCorPage = TRUE
@@ -280,7 +244,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 Kontext "Active"
                 if Active.Exists then Active.OK
                 Kontext "ExtrasOptionenDlg"
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "LANGUAGES"
                     Kontext "TabSprachen"
                     If TabSprachen.exists(2) then bCorPage = TRUE
@@ -313,7 +277,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 Kontext "Active"
                 if Active.Exists then Active.OK
                 Kontext "ExtrasOptionenDlg"
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "PROXY"
                     Kontext "ProxyWarnung"
                     if ProxyWarnung.Exists then
@@ -346,7 +310,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 '///+<li>&quot;Print&quot;</li>
                 '///+<li>&quot;Table&quot;</li>
                 '///+<li>&quot;Changes&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "GENERAL"
                     Kontext "TabLaden"
                     If TabLaden.exists then bCorPage = TRUE
@@ -422,7 +386,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 '///+<li>&quot;Table&quot;</li>
                 '///+<li>&quot;Source&quot;</li>
                 '///+<li>&quot;Background&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "VIEW"
                     Kontext "TabInhalteHTML"
                     If TabInhalteHTML.exists then bCorPage = TRUE
@@ -462,7 +426,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 '///+<li>&quot;Changes&quot;</li>
                 '///+<li>&quot;Grid&quot;</li>
                 '///+<li>&quot;Print&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "GENERAL"
                     Kontext "TabLayoutCalc"
                     If TabLayoutCalc.exists(2) then bCorPage = TRUE
@@ -504,7 +468,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 '///+<li>&quot;View&quot;</li>
                 '///+<li>&quot;Grid&quot;</li>
                 '///+<li>&quot;Print&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "GENERAL"
                     Kontext "TabSonstigesDraw"
                     If TabSonstigesDraw.exists then bCorPage = TRUE
@@ -531,7 +495,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 '///+<li>&quot;View&quot;</li>
                 '///+<li>&quot;Grid&quot;</li>
                 '///+<li>&quot;Print&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "GENERAL"
                     Kontext "TabSonstigesDraw"
                     If TabSonstigesDraw.exists then bCorPage = TRUE
@@ -555,7 +519,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
             case "MATH"
                 '///Page(s) in group &quot;Formula&quot;are:
                 '///+<ul><li>&quot;Settings&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "SETTINGS"
                     Kontext "TabDruckenMath"
                     If TabDruckenMath.exists then bCorPage = TRUE
@@ -564,7 +528,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
             case "CHART"
                 '///Pages in group &quot;Chart&quot;are:
                 '///+<ul><li>&quot;DefaultColors&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "DEFAULTCOLORS"
                     Kontext "TabGrundfarben"
                     If TabGrundfarben.exists(4) then bCorPage = TRUE
@@ -573,7 +537,7 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
             case "DATASOURCES"
                 '///Pages in group &quot;Datasource&quot;are:
                 '///+<ul><li>&quot;Connetions&quot;</li></ul>
-                select case ucase$(Tabpagename)
+                select case Tabpagename
                 case "CONNECTIONS"
                     Kontext "TabConnections"
                     If TabConnections.exists(4) then bCorPage = TRUE
@@ -586,17 +550,17 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 bCorPage = False
             end select
             If bCorPage = TRUE then Exit for
-        next i
-        if bCorPage = FALSE then
-            if bSilent = FALSE then
-                warnlog "hToolsOptions(): "+ Applicationname + " / " + Tabpagename + " could not be found! Please review your test!"
+        next iCurrentPage
+        if ( NOT bCorPage ) then
+            if ( NOT bSilent ) then
+                warnlog CFN & Applicationname + " / " + Tabpagename + " could not be found! Please review your test!"
             else
-                printlog "hToolsOptions(): "+ Applicationname + " / " + Tabpagename + " should not be found!"
+                printlog CFN & Applicationname + " / " + Tabpagename + " could not be found!"
             end if
         end if
     else
         bCorPage = FALSE
-        warnlog "Please open the option-dialog with 'ToolsOptions' before you called this routine!"
+        warnlog CFN & "Please open the option-dialog with 'ToolsOptions' before you called this routine!"
     end if
     hToolsOptions = bCorPage
 end function

@@ -322,6 +322,8 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
     '///</ul>
     '///</ol>
     
+    const CFN = "hExtensionRemoveGUI(): "
+    
     printlog( "Removing extension by name: " & cExtensionName )
 
     ToolsPackageManager
@@ -332,7 +334,14 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
             if ( Remove.exists() ) then
                 if ( Remove.isEnabled() ) then
                     Remove.click()
-                    WaitSlot( 5000 )
+                    
+                    kontext "Active"
+                    if ( Active.exists( 3 ) ) then
+                        printlog( Active.getText() )
+                        Active.OK()
+                    else
+                        warnlog( CFN & "Expected confirmation dialog is missing" )
+                    endif
                     hExtensionRemoveGUI() = 0
                 else
                     hExtensionRemoveGUI() = 2
@@ -344,6 +353,7 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
             hExtensionRemoveGUI() = 3
         endcatch
         
+        kontext "PackageManager"
         PackageManager.close()
     else
         hExtensionRemoveGUI() = 1

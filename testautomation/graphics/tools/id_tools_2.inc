@@ -54,7 +54,6 @@
 ' #1 ResetMeasurement
 ' #1 SetKontextApplication
 ' #1 hSetSpellHypLanguage
-' #1 TBOrestart
 ' #1 hTBOtypeInDoc
 ' #1 Position_Vergleichen
 ' #1 g_demoguide
@@ -482,17 +481,6 @@ sub hSetSpellHypLanguage
         '///+ close dialog 'Options - ' with OK ///'
         ExtrasOptionenDlg.OK
     endif
-end sub
-
-'-------------------------------------------------------------------------------
-sub TBOrestart
-
-    hCloseDocument
-    sleep (5)
-    ExitRestartTheOffice
-    sleep (10)
-    hNewDocument
-    sleep (5)
 end sub
 
 '-------------------------------------------------------------------------------

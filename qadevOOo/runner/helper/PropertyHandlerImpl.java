@@ -33,7 +33,6 @@ import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.inspection.LineDescriptor;
 import com.sun.star.inspection.XPropertyControlFactory;
 import com.sun.star.inspection.XPropertyHandler;
-import com.sun.star.inspection.LineDescriptor;
 
 /**
  * This implementation of <CODE>PropertyHandler</CODE> do currently nothig.

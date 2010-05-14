@@ -18,8 +18,6 @@ Stylist_Neu HID_STYLIST_NEW
 Stylist_Aendern HID_STYLIST_EDIT
 Stylist_Loeschen HID_STYLIST_DELETE
 
-' ** Kontextmenue OLEObjekte
-Edit SID_VERB_START
 'Open
 
 ' ** Kontextmenue Objekte

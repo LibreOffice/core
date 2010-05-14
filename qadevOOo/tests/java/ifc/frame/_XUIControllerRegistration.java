@@ -30,7 +30,6 @@
 
 package ifc.frame;
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XUIControllerRegistration;
 import lib.MultiMethodTest;
 

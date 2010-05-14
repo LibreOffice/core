@@ -30,8 +30,6 @@
 
 package ifc.frame;
 
-import com.sun.star.awt.XPopupMenu;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XInplaceLayout;
 import lib.MultiMethodTest;
 
