@@ -35,6 +35,7 @@ import com.sun.star.accessibility.XAccessibleRelationSet;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.IndexOutOfBoundsException;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
@@ -160,7 +161,11 @@ public class AccessibleRelationSet {
         throws com.sun.star.lang.IllegalArgumentException,
         IndexOutOfBoundsException
     {
-        xTextDoc = WriterTools.createTextDoc(connection.getFactory());
+        XMultiServiceFactory factory = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class,
+            connection.getComponentContext().getServiceManager());
+
+        xTextDoc = WriterTools.createTextDoc(factory);
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
@@ -176,7 +181,7 @@ public class AccessibleRelationSet {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(connection.getFactory(), aModel);
+        XWindow xWindow = at.getCurrentWindow(factory, aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);

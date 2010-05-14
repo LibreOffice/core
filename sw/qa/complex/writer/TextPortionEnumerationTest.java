@@ -1235,7 +1235,9 @@ public class TextPortionEnumerationTest
 
     @Before public void before() throws Exception
     {
-        m_xMSF = connection.getFactory();
+        m_xMSF = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class,
+            connection.getComponentContext().getServiceManager());
         XPropertySet xPropertySet = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, m_xMSF);
         Object defaultCtx = xPropertySet.getPropertyValue("DefaultContext");

@@ -265,7 +265,9 @@ public class CheckCrossReferences {
 
     @Before public void setUpDocument() throws com.sun.star.uno.Exception {
         document = util.WriterTools.loadTextDoc(
-            connection.getFactory(),
+            UnoRuntime.queryInterface(
+                XMultiServiceFactory.class,
+                connection.getComponentContext().getServiceManager()),
             TestDocument.getUrl("CheckCrossReferences.odt"));
     }
 

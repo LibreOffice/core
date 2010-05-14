@@ -46,8 +46,10 @@ public class CheckNamedPropertyValues {
     {
         XNameContainer xCont = UnoRuntime.queryInterface(
             XNameContainer.class,
-            connection.getFactory().createInstance(
-                "com.sun.star.document.NamedPropertyValues"));
+            (connection.getComponentContext().getServiceManager().
+             createInstanceWithContext(
+                 "com.sun.star.document.NamedPropertyValues",
+                 connection.getComponentContext())));
 
         assertNotNull("XNameContainer was queried but returned null.", xCont);
         PropertyValue[] prop1 = new PropertyValue[1];

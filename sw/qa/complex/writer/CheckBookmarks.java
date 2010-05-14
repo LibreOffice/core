@@ -120,7 +120,9 @@ public class CheckBookmarks {
     }
 
     @Before public void setUpDocuments() throws Exception {
-        m_xMsf = connection.getFactory();
+        m_xMsf = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class,
+            connection.getComponentContext().getServiceManager());
         m_xDoc = util.WriterTools.createTextDoc(m_xMsf);
         setupBookmarks();
         actualHashes.m_nSetupHash = BookmarkHashes.getBookmarksHash(m_xDoc);

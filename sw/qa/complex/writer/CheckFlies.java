@@ -31,6 +31,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNamed;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import complexlib.ComplexTestCase;
@@ -195,7 +196,9 @@ public class CheckFlies {
 
     @Before public void setUpDocument() throws com.sun.star.uno.Exception {
         document = util.WriterTools.loadTextDoc(
-            connection.getFactory(),
+            UnoRuntime.queryInterface(
+                XMultiServiceFactory.class,
+                connection.getComponentContext().getServiceManager()),
             TestDocument.getUrl("CheckFlies.odt"));
     }
 

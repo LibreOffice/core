@@ -46,8 +46,10 @@ public class CheckIndexedPropertyValues {
     {
         XIndexContainer xCont = UnoRuntime.queryInterface(
             XIndexContainer.class,
-            connection.getFactory().createInstance(
-                "com.sun.star.document.IndexedPropertyValues"));
+            (connection.getComponentContext().getServiceManager().
+             createInstanceWithContext(
+                 "com.sun.star.document.IndexedPropertyValues",
+                 connection.getComponentContext())));
 
         assertNotNull("XIndexContainer was queried but returned null.", xCont);
         PropertyValue[] prop1 = new PropertyValue[1];

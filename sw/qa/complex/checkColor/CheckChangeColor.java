@@ -4,6 +4,7 @@ import com.sun.star.awt.Size;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Any;
@@ -61,7 +62,10 @@ public class CheckChangeColor {
     }
 
     @Before public void setUpDocument() throws com.sun.star.uno.Exception {
-        document = SOfficeFactory.getFactory(connection.getFactory()).
+        document = SOfficeFactory.getFactory(
+            UnoRuntime.queryInterface(
+                XMultiServiceFactory.class,
+                connection.getComponentContext().getServiceManager())).
             createTextDoc(null);
     }
 

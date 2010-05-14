@@ -37,6 +37,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextRange;
@@ -79,7 +80,7 @@ public class CheckIndeterminateState {
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
-        XWindow xWindow = at.getCurrentContainerWindow(connection.getFactory(), aModel);
+        XWindow xWindow = at.getCurrentContainerWindow(getFactory(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot,
@@ -95,8 +96,7 @@ public class CheckIndeterminateState {
     }
 
     @Before public void setUpDocument() throws com.sun.star.uno.Exception {
-        document = SOfficeFactory.getFactory(connection.getFactory()).
-            createTextDoc(null);
+        document = SOfficeFactory.getFactory(getFactory()).createTextDoc(null);
     }
 
     @After public void tearDownDocument() {
@@ -116,4 +116,10 @@ public class CheckIndeterminateState {
     }
 
     private static final OfficeConnection connection = new OfficeConnection();
+
+    private static final XMultiServiceFactory getFactory() {
+        return UnoRuntime.queryInterface(
+            XMultiServiceFactory.class,
+            connection.getComponentContext().getServiceManager());
+    }
 }
