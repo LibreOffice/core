@@ -106,6 +106,7 @@ PKGFORMAT+=$(MAKETARGETS:e:s/.//)
 # also in archive format, so that tests that require an OOo installation (like
 # smoketestoo_native) have one available:
 openoffice_$(defaultlangiso) : $$@.archive
+openoffice_$(defaultlangiso).archive : $(ADDDEPS)
 
 .IF "$(VERBOSE)"=="TRUE"
 VERBOSESWITCH=-verbose
