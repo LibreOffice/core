@@ -770,7 +770,6 @@ void UniversalContentBroker::prepareAndRegister(
                                           aIt->URLTemplate,
                                           0);
 
-            OSL_ENSURE(bSuccess, "UniversalContentBroker::prepareAndRegister(): Bad content provider");
         }
         else
             OSL_ENSURE(false,
