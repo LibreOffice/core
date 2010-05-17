@@ -40,6 +40,7 @@ Globals
 			OOODOWNLOADNAME 1
 			STARTCENTER_LAYOUT_STYLE 0
 			BUILDIDCWS {buildidcws}
+            OPENSOURCE 1
 		}
 	}
 }
