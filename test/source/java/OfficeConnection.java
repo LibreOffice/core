@@ -57,8 +57,7 @@ public final class OfficeConnection {
                 "-nofirststartwizard", "-norestore",
                 "-accept=" + description + ";urp",
                 "-env:UserInstallation=" + Argument.get("user"),
-                "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
-                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
+                "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
             String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();

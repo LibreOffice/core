@@ -87,12 +87,9 @@ void OfficeConnection::setUp() {
             toAbsoluteFileUrl(argUser));
         rtl::OUString jreArg(
             RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
-        rtl::OUString classpathArg(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
         rtl_uString * args[] = {
             noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
-            acceptArg.pData, userArg.pData, jreArg.pData, classpathArg.pData };
+            acceptArg.pData, userArg.pData, jreArg.pData };
         rtl_uString ** envs = 0;
         rtl::OUString argEnv;
         if (detail::getArgument(
