@@ -252,8 +252,11 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
         Reference< XStream > xTempFile( mxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
         {
             Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
-            BinaryXOutputStream aOutStrm( xOutStrm, true );    // true = close output stream on destruction of aOutStrm
-            BinaryXInputStream aInStrm( xInStrm, false );      // false = do not close intput stream on destruction of aInStrm
+            /*  Pass false to both binary stream objects to keep the UNO
+                streams alive. Life time of these streams is controlled by the
+                tempfile implementation. */
+            BinaryXOutputStream aOutStrm( xOutStrm, false );
+            BinaryXInputStream aInStrm( xInStrm, false );
             aInStrm.copyToStream( aOutStrm );
         } // scope closes output stream of tempfile
         xInStrm = xTempFile->getInputStream();

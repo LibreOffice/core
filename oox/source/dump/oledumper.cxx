@@ -942,7 +942,7 @@ void ComCtlTreeViewObject::implDumpProperties()
     mnStringFlags = dumpHex< sal_uInt32 >( "string-flags", "COMCTL-TREEVIEW-STRINGFLAGS" );
 }
 
-void ComCtlTreeViewObject::implDumpCommonExtra( sal_Int64 nEndPos )
+void ComCtlTreeViewObject::implDumpCommonExtra( sal_Int64 /*nEndPos*/ )
 {
     dumpOleColor( "text-color" );
     dumpOleColor( "back-color" );
