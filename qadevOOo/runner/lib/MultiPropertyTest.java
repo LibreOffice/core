@@ -191,6 +191,12 @@ public class MultiPropertyTest extends MultiMethodTest
                         tRes.tested(propName, true);
                         return;
                     }
+                    else
+                    {
+                        log.println( "property '"+propName+"' is not set but is not MAYBEVOID");
+                        tRes.tested(propName, false);
+                        return;
+                    }
                 }
 
                 Object newValue;
