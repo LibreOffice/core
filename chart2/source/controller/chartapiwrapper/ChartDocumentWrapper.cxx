@@ -1499,6 +1499,16 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     const uno::Reference< uno::XInterface >& rDelegator )
     throw (uno::RuntimeException)
 {
+    if( m_bIsDisposed )
+    {
+        if( rDelegator.is() )
+            throw lang::DisposedException(
+                C2U("ChartDocumentWrapper is disposed" ),
+                static_cast< ::cppu::OWeakObject* >( this ));
+        else
+            return;
+    }
+
     if( rDelegator.is())
     {
         m_xDelegator = rDelegator;
