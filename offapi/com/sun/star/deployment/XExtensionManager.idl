@@ -81,8 +81,7 @@ interface XExtensionManager
         @return
                 supported <type>XPackageTypeInfo</type>s.
     */
-    sequence<XPackageTypeInfo> getSupportedPackageTypes(
-        [in] string repository);
+    sequence<XPackageTypeInfo> getSupportedPackageTypes();
 
     /** creates a command channel to be used to asynchronously abort a command.
 
@@ -283,8 +282,11 @@ interface XExtensionManager
 
        @param repository
               the repository which is to be synchronized
+       @return
+              If true - then at least one extension was removed or added. Otherwise
+              nothing was chaned.
     */
-    void synchronize(
+    boolean synchronize(
         [in] string repository,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )

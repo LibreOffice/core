@@ -262,8 +262,11 @@ interface XPackageManager
 
        @param
             removed extensions which must be revoked
+       @return
+            If true - then at least one extension was removed or added. Otherwise
+            nothing was chaned.
     */
-    void synchronize([in] com::sun::star::task::XAbortChannel xAbortChannel,
+    boolean synchronize([in] com::sun::star::task::XAbortChannel xAbortChannel,
                      [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
