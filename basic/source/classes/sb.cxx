@@ -69,10 +69,12 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
+const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
+const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
+
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
-//      pVBAGlobals = (SbUnoObject*)Find( String(RTL_CONSTASCII_USTRINGPARAM("VBAGlobals")), SbxCLASS_DONTCARE );
     {
         Any aThisDoc;
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
@@ -98,7 +100,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
 //  i#i68894#
 SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
 {
-    if( rName.EqualsAscii("ThisComponent") )
+    if( rName == aThisComponent )
         return NULL;
     // rename to init globals
     if ( getVBAGlobals( ) )
