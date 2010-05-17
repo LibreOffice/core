@@ -45,6 +45,8 @@ testcase tBasicVBACompatXLSM_XLSB()
     const MODULE_NOT_FOUND = 0
     const MAX_DELAY = 3
     const RC_TIMEOUT = -1
+
+    const THE_MODULE_THAT_BEHAVES_DIFFERENTLY = 6
     
     const RELATIVE_PATH = "framework/optional/input/vba-compat/"
 
@@ -62,15 +64,6 @@ testcase tBasicVBACompatXLSM_XLSB()
         cTestModuleList( 5 ) = "MySheetModule"
         cTestModuleList( 6 ) = "MyUserForm"
         cTestModuleList( 7 ) = "MyWorkbookModule"
-
-    dim cTestVerificationStrings( MODULE_COUNT )
-        cTestVerificationStrings( 1 ) = "MyChartModule"
-        cTestVerificationStrings( 2 ) = "MyCodeModule"
-        cTestVerificationStrings( 3 ) = "MyPrivateClassModule"
-        cTestVerificationStrings( 4 ) = "MyPublicClassModule"
-        cTestVerificationStrings( 5 ) = "MySheetModule"
-        cTestVerificationStrings( 6 ) = "MyUserForm initialized"
-        cTestVerificationStrings( 7 ) = "MyUserForm"
 
     dim cTestFile as string
     dim iCurrentFile as integer
@@ -91,6 +84,7 @@ testcase tBasicVBACompatXLSM_XLSB()
 
         for iCurrentModule = 1 to MODULE_COUNT
 
+            printlog( "" )
             printlog( "Tryng to execute macro: " & cTestModuleList( iCurrentModule ) )
             ToolsMacro_uno
 
@@ -101,23 +95,13 @@ testcase tBasicVBACompatXLSM_XLSB()
 
                     printlog( "Execute the default macro <Test> for the current module" )
 
-                    if ( hClickButton( Ausfuehren ) > RC_TIMEOUT ) then
-
-                        kontext "Active"
-                        printlog( "Probe for messagebox containing the module name" )
-                        if ( Active.exists( MAX_DELAY ) ) then
-
-                            if ( Active.getText() = cTestVerificationStrings( iCurrentModule ) ) then
-                                printlog( "The correct macro has been executed: " & cTestVerificationStrings( iCurrentModule )
-                            else
-                                warnlog( "Incorrect macro executed:" )
-                                printlog( "Expected: " & cTestVerificationStrings( iCurrentModule ) )
-                                printlog( "Found...: " & Active.getText() )
-                            endif
-                            Active.ok()
-                            WaitSlot()
+                    if ( hClickButton( Ausfuehren ) <> RC_TIMEOUT ) then
+                        if ( iCurrentModule = THE_MODULE_THAT_BEHAVES_DIFFERENTLY ) then
+                            ' Fuzzy matching message string
+                            hTestMacroType2( cTestModuleList( iCurrentModule ) )
                         else
-                            warnlog( "Macro was not executed" )
+                            ' Exact matching message string
+                            hTestMacroType1( cTestModuleList( iCurrentModule ) )
                         endif
                     else
                         warnlog( "No executable macro found for the current module / <Run> button is disabled" )
@@ -141,4 +125,62 @@ testcase tBasicVBACompatXLSM_XLSB()
 
 endcase
 
+'*******************************************************************************
 
+function hTestMacroType1( cMessage as string ) as boolean
+
+    ' exact matching
+
+    kontext "Active"
+    if ( Active.exists( 2 ) ) then
+        if ( Active.getText() = cMessage ) then
+            printlog( "Correct macro has been executed" )
+            hTestMacroType1() = true
+        else
+            warnlog( "Incorrect macro executed: " )
+            printlog( "Expected: " & cMessage )
+            printlog( "Found...: " & Active.getText() )
+            hTestMacroType1() = false
+        endif
+
+        Active.ok()
+        WaitSlot()
+
+    else
+        warnlog( "Messagebox missing, macro was not executed" )
+        hTestMacroType1() = false
+    endif
+
+end function
+
+'*******************************************************************************
+
+function hTestMacroType2( cMessage as string ) as boolean
+
+    ' fuzzy matching
+
+    dim iCurrentMessage as integer
+
+    for iCurrentMessage = 1 to 2
+
+        kontext "Active"
+        if ( Active.exists( 2 ) ) then
+            if ( if ( instr( Active.getText() , cMessage ) > 0 ) then
+                printlog( "Correct macro has been executed" )
+                hTestMacroType2() = true
+            else
+                warnlog( "Incorrect macro executed: " )
+                printlog( "Expected: " & cMessage )
+                printlog( "Found...: " & Active.getText() )
+                hTestMacroType2() = false
+            endif
+
+            Active.ok()
+            WaitSlot()
+
+        else
+            warnlog( "Messagebox missing, macro not executed" )
+            hTestMacroType2() = false
+        endif
+
+end function
