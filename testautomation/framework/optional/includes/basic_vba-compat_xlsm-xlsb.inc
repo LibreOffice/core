@@ -103,7 +103,8 @@ testcase tBasicVBACompatXLSM_XLSB()
                             printlog( "Expected: " & cTestModuleList( iCurrentModule ) )
                             printlog( "Found...: " & Active.getText() )
                         endif
-
+                        Active.ok()
+                        WaitSlot()
                     else
                         warnlog( "Macro was not executed" )
                     endif
