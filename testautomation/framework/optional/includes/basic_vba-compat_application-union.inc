@@ -94,6 +94,7 @@ testcase tBasicVBACompatApplicationUnion()
         printlog( "Check for the " & EXPECTED_MACRO_COUNT & " expected messageboxes" )
         for iCurrentMacro = 1 to EXPECTED_MACRO_COUNT
 
+            printlog( "" )
             kontext "Active"
             printlog( iCurrentMacro & ": Check for messagebox: " & macro_identifier( iCurrentMacro ) )
             if ( Active.exists( MAX_WAIT ) ) then
@@ -102,7 +103,6 @@ testcase tBasicVBACompatApplicationUnion()
                     printlog( "The expected macro was executed" )
                 else
                     warnlog( "Unexpected macro executed: " & Active.getText() )
-                    printlog( Active.getText() )
                 endif
                 Active.ok()
 
