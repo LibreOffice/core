@@ -165,7 +165,7 @@ function hTestMacroType2( cMessage as string ) as boolean
 
         kontext "Active"
         if ( Active.exists( 2 ) ) then
-            if ( if ( instr( Active.getText() , cMessage ) > 0 ) then
+            if ( instr( Active.getText() , cMessage ) > 0 ) then
                 printlog( "Correct macro has been executed" )
                 hTestMacroType2() = true
             else
@@ -182,5 +182,6 @@ function hTestMacroType2( cMessage as string ) as boolean
             warnlog( "Messagebox missing, macro not executed" )
             hTestMacroType2() = false
         endif
+    next iCurrentMessage
 
 end function
