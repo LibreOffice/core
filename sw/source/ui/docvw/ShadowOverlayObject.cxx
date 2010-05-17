@@ -40,7 +40,6 @@
 
 #include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 
 namespace sw { namespace sidebarwindows {
