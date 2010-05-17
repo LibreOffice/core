@@ -38,6 +38,7 @@ sub main
     use "framework\optional\includes\basic_vba-compat_import_enabled.inc"
     use "framework\optional\includes\basic_vba-compat_thisworkbook.inc"
     use "framework\optional\includes\basic_vba-compat_application-union.inc"
+    use "framework\optional\includes\basic_vba-compat_xlsm-xlsb.inc"
     
     call hStatusIn( "framework" , "f_basic_vba-compat.bas" )
     call tBasicVBACompatImportNothing()
@@ -45,6 +46,7 @@ sub main
     call tBasicVBACompatImportEnabled()
     call tBasicVBACompatThisWorkBook()
     call tBasicVBACompatApplicationUnion()
+    call tBasicVBACompatXLSM_XLSB()
     call hStatusOut()
 
 end sub
