@@ -34,7 +34,7 @@
 testcase tBasicVBACompatXLSM_XLSB()
 
     printlog( "Functionality of macros in XLSM/XLSB files" )
-    ' Based on issue #i110672
+    ' Based on issue #i111007
 
     const IMPORT_EXCEL_MACROS  = TRUE
     const EXEC_EXCEL_MACROS    = TRUE
@@ -62,6 +62,15 @@ testcase tBasicVBACompatXLSM_XLSB()
         cTestModuleList( 5 ) = "MySheetModule"
         cTestModuleList( 6 ) = "MyUserForm"
         cTestModuleList( 7 ) = "MyWorkbookModule"
+
+    dim cTestVerificationStrings( MODULE_COUNT )
+        cTestVerificationStrings( 1 ) = "MyChartModule"
+        cTestVerificationStrings( 2 ) = "MyCodeModule"
+        cTestVerificationStrings( 3 ) = "MyPrivateClassModule"
+        cTestVerificationStrings( 4 ) = "MyPublicClassModule"
+        cTestVerificationStrings( 5 ) = "MySheetModule"
+        cTestVerificationStrings( 6 ) = "MyUserForm initialized"
+        cTestVerificationStrings( 7 ) = "MyUserForm"
 
     dim cTestFile as string
     dim iCurrentFile as integer
@@ -98,11 +107,11 @@ testcase tBasicVBACompatXLSM_XLSB()
                         printlog( "Probe for messagebox containing the module name" )
                         if ( Active.exists( MAX_DELAY ) ) then
 
-                            if ( Active.getText() = cTestModuleList( iCurrentModule ) ) then
-                                printlog( "The correct macro has been executed: " & cTestModuleList( iCurrentModule )
+                            if ( Active.getText() = cTestVerificationStrings( iCurrentModule ) ) then
+                                printlog( "The correct macro has been executed: " & cTestVerificationStrings( iCurrentModule )
                             else
                                 warnlog( "Incorrect macro executed:" )
-                                printlog( "Expected: " & cTestModuleList( iCurrentModule ) )
+                                printlog( "Expected: " & cTestVerificationStrings( iCurrentModule ) )
                                 printlog( "Found...: " & Active.getText() )
                             endif
                             Active.ok()
@@ -123,7 +132,7 @@ testcase tBasicVBACompatXLSM_XLSB()
         next iCurrentModule
 
         printlog( "Close the document" )
-        hFileClose()
+        hFileCloseAll()
 
     next iCurrentFile
 
