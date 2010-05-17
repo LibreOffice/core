@@ -877,7 +877,8 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     t_string2string title2filter;
     OUString sDefaultFilter( StrAllFiles::get() );
 
-    const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes( m_pManager->getExtensionManager()->getSupportedPackageTypes( OUSTR("user") ) );
+    const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes(
+        m_pManager->getExtensionManager()->getSupportedPackageTypes() );
 
     for ( sal_Int32 pos = 0; pos < packageTypes.getLength(); ++pos )
     {

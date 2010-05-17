@@ -402,16 +402,19 @@ Reference<deploy::XPackage> ExtensionManager::backupExtension(
     return xBackup;
 }
 
+//The supported package types are actually determined by the registry. However
+//creating a registry
+//(desktop/source/deployment/registry/dp_registry.cxx:PackageRegistryImpl) will
+//create all the backends, so that the registry can obtain from them the package
+//types. Creating the registry will also set up the registry folder containing
+//all the subfolders for the respective backends.
+//Because all repositories support the same backends, we can just delegate this
+//call to one of the repositories.
 uno::Sequence< Reference<deploy::XPackageTypeInfo> >
-ExtensionManager::getSupportedPackageTypes(OUString const & repository)
+ExtensionManager::getSupportedPackageTypes()
     throw (uno::RuntimeException)
 {
-    if (repository.equals(OUSTR("user")))
-        return m_userRepository->getSupportedPackageTypes();
-    else if (repository.equals(OUSTR("shared")))
-        return m_sharedRepository->getSupportedPackageTypes();
-    else
-        return uno::Sequence< Reference<deploy::XPackageTypeInfo> >();
+    return m_userRepository->getSupportedPackageTypes();
 }
 
 // Only add to shared and user repository
@@ -437,7 +440,6 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),
             static_cast<cppu::OWeakObject*>(this), 0);
-
     ::osl::MutexGuard guard(getMutex());
     Reference<deploy::XPackage> xTmpExtension =
         getTempExtension(url, xAbortChannel, xCmdEnv);
@@ -448,7 +450,6 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
     dp_misc::DescriptionInfoset info(dp_misc::getDescriptionInfoset(xTmpExtension->getURL()));
     const ::boost::optional<dp_misc::SimpleLicenseAttributes> licenseAttributes =
         info.getSimpleLicenseAttributes();
-
     Reference<deploy::XPackage> xOldExtension;
     Reference<deploy::XPackage> xExtensionBackup;
 
@@ -481,14 +482,12 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                 //the action.
                 checkInstall(sDisplayName, xCmdEnv);
             }
-
             //Prevent showing the license if requested.
             Reference<ucb::XCommandEnvironment> _xCmdEnv(xCmdEnv);
             ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>());
             if (licenseAttributes && licenseAttributes->suppressIfRequired
                 && props.isSuppressedLicense())
                 _xCmdEnv = Reference<ucb::XCommandEnvironment>(new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
-
             bCanInstall = xTmpExtension->checkPrerequisites(
                 xAbortChannel, _xCmdEnv, xOldExtension.is()) == 0 ? true : false;
         }
@@ -528,10 +527,8 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                     xOldExtension, Reference<task::XAbortChannel>(),
                     tmpCmdEnv);
             }
-
             xNewExtension = xPackageManager->addPackage(
                 url, properties, OUString(), xAbortChannel, xCmdEnv);
-
             //If we add a user extension and there is already one which was
             //disabled by a user, then the newly installed one is enabled. If we
             //add to another repository then the user extension remains
@@ -1023,7 +1020,7 @@ void ExtensionManager::reinstallDeployedExtensions(
     }
 }
 
-void ExtensionManager::synchronize(
+sal_Bool ExtensionManager::synchronize(
     OUString const & repository,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -1035,6 +1032,7 @@ void ExtensionManager::synchronize(
 {
     try
     {
+        sal_Bool bModified = sal_False;
         Reference<deploy::XPackageManager> xPackageManager;
         OUString file;
         if (repository.equals(OUSTR("user")))
@@ -1065,7 +1063,7 @@ void ExtensionManager::synchronize(
         sSynchronizing.SearchAndReplaceAllAscii( "%NAME", repository );
         dp_misc::ProgressLevel progress(xCmdEnv, sSynchronizing);
 
-        xPackageManager->synchronize(xAbortChannel, xCmdEnv);
+        bModified = xPackageManager->synchronize(xAbortChannel, xCmdEnv);
         try
         {
             const uno::Sequence<uno::Sequence<Reference<deploy::XPackage> > >
@@ -1109,6 +1107,7 @@ void ExtensionManager::synchronize(
                 static_cast<OWeakObject*>(this), exc);
 
         }
+        return bModified;
     } catch (deploy::DeploymentException& ) {
         throw;
     } catch (ucb::CommandFailedException & ) {
@@ -1202,7 +1201,6 @@ Reference<deploy::XPackage> ExtensionManager::getTempExtension(
     Reference<ucb::XCommandEnvironment> tmpCmdEnvA(new TmpRepositoryCommandEnv());
     Reference<deploy::XPackage> xTmpPackage = m_tmpRepository->addPackage(
         url, uno::Sequence<beans::NamedValue>(),OUString(), xAbortChannel, tmpCmdEnvA);
-
     if (!xTmpPackage.is())
     {
         throw deploy::DeploymentException(

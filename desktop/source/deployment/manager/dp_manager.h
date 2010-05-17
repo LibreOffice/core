@@ -89,11 +89,11 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     bool isInstalled(
         css::uno::Reference<css::deployment::XPackage> const & package);
 
-    void synchronizeRemovedExtensions(
+    bool synchronizeRemovedExtensions(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
-    void synchronizeAddedExtensions(
+    bool synchronizeAddedExtensions(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
@@ -246,7 +246,7 @@ public:
     virtual ::sal_Bool SAL_CALL isReadOnly(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL synchronize(
+    virtual ::sal_Bool SAL_CALL synchronize(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,

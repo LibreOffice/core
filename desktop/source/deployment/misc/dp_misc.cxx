@@ -602,7 +602,7 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
     Reference<deployment::XExtensionManager> xExtensionManager;
     //synchronize shared before bundled otherewise there are
     //more revoke and registration calls.
-    bool bSynced = false;
+    bool bModified = false;
     const OUString sShared(RTL_CONSTASCII_USTRINGPARAM("shared"));
     if (needToSyncRepostitory(sShared))
     {
@@ -612,9 +612,8 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 
         if (xExtensionManager.is())
         {
-            xExtensionManager->synchronize(
+            bModified = xExtensionManager->synchronize(
                 sShared, Reference<task::XAbortChannel>(), xCmdEnv);
-            bSynced = true;
         }
     }
 
@@ -629,24 +628,22 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
         }
         if (xExtensionManager.is())
         {
-            xExtensionManager->synchronize(
+            bModified |= xExtensionManager->synchronize(
                 sBundled, Reference<task::XAbortChannel>(), xCmdEnv);
-            bSynced = true;
         }
     }
 
-    if (bSynced)
+    if (bModified)
     {
         Reference<task::XRestartManager> restarter(
             comphelper_getProcessComponentContext()->getValueByName(
                 OUSTR( "/singletons/com.sun.star.task.OfficeRestartManager") ), UNO_QUERY );
         if (restarter.is())
         {
-            fprintf(stdout, "\nrestarting\n");
             restarter->requestRestart(xCmdEnv.is() == sal_True ? xCmdEnv->getInteractionHandler() :
                                       Reference<task::XInteractionHandler>());
-         }
-    }
+        }
+     }
 }
 
 

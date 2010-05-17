@@ -78,7 +78,7 @@ public:
 //XExtensionManager
     virtual css::uno::Sequence<
         css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
-        getSupportedPackageTypes(::rtl::OUString const & repository)
+        getSupportedPackageTypes()
             throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::task::XAbortChannel> SAL_CALL
@@ -185,7 +185,7 @@ public:
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
 
-    virtual void SAL_CALL synchronize(
+    virtual sal_Bool SAL_CALL synchronize(
         ::rtl::OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )

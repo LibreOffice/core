@@ -1245,7 +1245,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
 {
     return m_readOnly;
 }
-void PackageManagerImpl::synchronizeRemovedExtensions(
+bool PackageManagerImpl::synchronizeRemovedExtensions(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
@@ -1253,6 +1253,7 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
     //find all which are in the extension data base but which
     //are removed already.
     OSL_ASSERT(!m_context.equals(OUSTR("user")));
+    bool bModified = false;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
     typedef ActivePackages::Entries::const_iterator ITActive;
@@ -1322,6 +1323,7 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
                 xPackage->revokePackage(xAbortChannel, xCmdEnv);
                 removePackage(xPackage->getIdentifier().Value, xPackage->getName(),
                               xAbortChannel, xCmdEnv);
+                bModified |= true;
             }
         }
         catch( uno::Exception & )
@@ -1329,14 +1331,15 @@ void PackageManagerImpl::synchronizeRemovedExtensions(
             OSL_ASSERT(0);
         }
     }
+    return bModified;
 }
 
 
-void PackageManagerImpl::synchronizeAddedExtensions(
+bool PackageManagerImpl::synchronizeAddedExtensions(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
-       // clean up activation layer, scan for zombie temp dirs:
+    bool bModified = false;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
     ::ucbhelper::Content tempFolder(
@@ -1441,6 +1444,7 @@ void PackageManagerImpl::synchronizeAddedExtensions(
                     //try to install the extension again.
                     dbData.failedPrerequisites = OUString::valueOf(failedPrereq);
                     insertToActivationLayerDB(id, dbData);
+                    bModified |= true;
                 }
             }
         }
@@ -1449,9 +1453,10 @@ void PackageManagerImpl::synchronizeAddedExtensions(
             OSL_ASSERT(0);
         }
     }
+    return bModified;
 }
 
-void PackageManagerImpl::synchronize(
+sal_Bool PackageManagerImpl::synchronize(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
     throw (css::deployment::DeploymentException,
@@ -1459,12 +1464,15 @@ void PackageManagerImpl::synchronize(
            css::ucb::CommandAbortedException,
            css::uno::RuntimeException)
 {
-
     check();
+    bool bModified = false;
     if (m_context.equals(OUSTR("user")))
-        return;
-    synchronizeRemovedExtensions(xAbortChannel, xCmdEnv);
-    synchronizeAddedExtensions(xAbortChannel, xCmdEnv);
+        return bModified;
+    bModified |=
+        synchronizeRemovedExtensions(xAbortChannel, xCmdEnv);
+    bModified |= synchronizeAddedExtensions(xAbortChannel, xCmdEnv);
+
+    return bModified;
 }
 
 Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWithUnacceptedLicenses(

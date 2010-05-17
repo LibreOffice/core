@@ -1399,11 +1399,9 @@ void Desktop::Main()
         // and process those extensions (has to be done before checking
         // the extension dependencies!
         SynchronizeExtensionRepositories();
-
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
             return;
-
         // First Start Wizard allowed ?
         if ( ! pCmdLineArgs->IsNoFirstStartWizard())
         {
@@ -1447,7 +1445,6 @@ void Desktop::Main()
         }
 
         SetSplashScreenProgress(50);
-
         // Backing Component
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
@@ -1628,7 +1625,6 @@ void Desktop::Main()
 
         ::comphelper::ComponentContext aContext( xSMgr );
         xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
-
         if ( !xRestartManager.is() || !xRestartManager->isRestartRequested( sal_True ) )
             Execute();
     }
@@ -1654,22 +1650,20 @@ void Desktop::Main()
     }
 
     delete pResMgr;
-
     // Restore old value
     if ( pCmdLineArgs->IsHeadless() )
         SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
 
     // remove temp directory
     RemoveTemporaryDirectory();
-
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
     nAcquireCount = Application::ReleaseSolarMutex();
+    printf("###1\n");
     DeregisterServices();
+    printf("###2\n");
     Application::AcquireSolarMutex(nAcquireCount);
-
     tools::DeInitTestToolLib();
-
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
