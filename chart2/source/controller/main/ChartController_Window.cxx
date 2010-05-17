@@ -507,6 +507,11 @@ void ChartController::execute_Paint( const Rectangle& rRect )
 {
     try
     {
+        uno::Reference< frame::XModel > xModel( m_aModel->getModel() );
+        DBG_ASSERT( xModel.is(), "ChartController::execute_Paint: have no model to paint");
+        if( !xModel.is() )
+            return;
+
         //better performance for big data
         uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
         if( xProp.is() )
