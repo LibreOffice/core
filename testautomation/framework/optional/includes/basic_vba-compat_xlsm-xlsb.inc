@@ -44,6 +44,7 @@ testcase tBasicVBACompatXLSM_XLSB()
 
     const MODULE_NOT_FOUND = 0
     const MAX_DELAY = 3
+    const RC_TIMEOUT = -1
     
     const RELATIVE_PATH = "framework/optional/input/vba-compat/"
 
@@ -90,23 +91,27 @@ testcase tBasicVBACompatXLSM_XLSB()
                 if ( hSelectNodeByName( MakroAus, cTestModuleList( iCurrentModule ) ) <> MODULE_NOT_FOUND ) then
 
                     printlog( "Execute the default macro <Test> for the current module" )
-                    Ausfuehren.click()
 
-                    kontext "Active"
-                    printlog( "Probe for messagebox containing the module name" )
-                    if ( Active.exists( MAX_DELAY ) ) then
+                    if ( hClickButton( Ausfuehren ) > RC_TIMEOUT ) then
 
-                        if ( Active.getText() = cTestModuleList( iCurrentModule ) ) then
-                            printlog( "The correct macro has been executed: " & cTestModuleList( iCurrentModule )
+                        kontext "Active"
+                        printlog( "Probe for messagebox containing the module name" )
+                        if ( Active.exists( MAX_DELAY ) ) then
+
+                            if ( Active.getText() = cTestModuleList( iCurrentModule ) ) then
+                                printlog( "The correct macro has been executed: " & cTestModuleList( iCurrentModule )
+                            else
+                                warnlog( "Incorrect macro executed:" )
+                                printlog( "Expected: " & cTestModuleList( iCurrentModule ) )
+                                printlog( "Found...: " & Active.getText() )
+                            endif
+                            Active.ok()
+                            WaitSlot()
                         else
-                            warnlog( "Incorrect macro executed:" )
-                            printlog( "Expected: " & cTestModuleList( iCurrentModule ) )
-                            printlog( "Found...: " & Active.getText() )
+                            warnlog( "Macro was not executed" )
                         endif
-                        Active.ok()
-                        WaitSlot()
                     else
-                        warnlog( "Macro was not executed" )
+                        warnlog( "No executable macro found for the current module / <Run> button is disabled" )
                     endif
                 else
                     warnlog( "the expected macro module could not be found" )
