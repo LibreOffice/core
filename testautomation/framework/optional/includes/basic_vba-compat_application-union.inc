@@ -43,6 +43,7 @@ testcase tBasicVBACompatApplicationUnion()
     const MODULE_NAME          = "Module1"
     const EXPECTED_MACRO_COUNT = 6
     const MAX_WAIT             = 2
+    const RC_FAILURE           = -1
 
     dim macro_identifier( EXPECTED_MACRO_COUNT )
         macro_identifier( 1 ) = "1: True"
@@ -89,29 +90,34 @@ testcase tBasicVBACompatApplicationUnion()
         endif
 
         printlog( "Click <Ausfuehren> to execute the macro" )
-        iMacroPosition = hClickButton( Ausfuehren )
+        if ( hClickButton( Ausfuehren ) <> RC_FAILURE ) then
 
-        printlog( "Check for the " & EXPECTED_MACRO_COUNT & " expected messageboxes" )
-        for iCurrentMacro = 1 to EXPECTED_MACRO_COUNT
+            printlog( "Check for the " & EXPECTED_MACRO_COUNT & " expected messageboxes" )
+            for iCurrentMacro = 1 to EXPECTED_MACRO_COUNT
 
-            printlog( "" )
-            kontext "Active"
-            printlog( iCurrentMacro & ": Check for messagebox: " & macro_identifier( iCurrentMacro ) )
-            if ( Active.exists( MAX_WAIT ) ) then
+                printlog( "" )
+                kontext "Active"
+                printlog( iCurrentMacro & ": Check for messagebox: " & macro_identifier( iCurrentMacro ) )
+                if ( Active.exists( MAX_WAIT ) ) then
 
-                if ( Active.getText() = macro_identifier( iCurrentMacro ) ) then
-                    printlog( "The expected macro was executed" )
+                    if ( Active.getText() = macro_identifier( iCurrentMacro ) ) then
+                        printlog( "The expected macro was executed" )
+                    else
+                        warnlog( "Unexpected macro executed: " & Active.getText() )
+                    endif
+                    Active.ok()
+
                 else
-                    warnlog( "Unexpected macro executed: " & Active.getText() )
+                    warnlog( "Expected messagebox not displayed within reasonable timeframe" )
+                    goto endsub
                 endif
-                Active.ok()
 
-            else
-                warnlog( "Expected messagebox not displayed within reasonable timeframe" )
-                goto endsub
-            endif
-
-        next iCurrentMacro
+            next iCurrentMacro
+        else
+            warnlog( "Unable to execute macro, the <Run Macro> button is disabled" )
+            kontext "Makro"
+            Makro.close()
+        endif
     else
         warnlog( "Failed to open BASIC organizer" )
     endif
