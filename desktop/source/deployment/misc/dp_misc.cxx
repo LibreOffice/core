@@ -602,7 +602,7 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
     Reference<deployment::XExtensionManager> xExtensionManager;
     //synchronize shared before bundled otherewise there are
     //more revoke and registration calls.
-    bool bModified = false;
+    sal_Bool bModified = false;
     const OUString sShared(RTL_CONSTASCII_USTRINGPARAM("shared"));
     if (needToSyncRepostitory(sShared))
     {
