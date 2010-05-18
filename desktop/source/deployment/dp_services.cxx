@@ -77,10 +77,6 @@ namespace dp_log {
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
-namespace dp_migration {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
 namespace dp_info {
 extern sdecl::ServiceDecl const serviceDecl;
 bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
@@ -110,7 +106,6 @@ sal_Bool SAL_CALL component_writeInfo(
         dp_registry::backend::executable::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
-        dp_migration::serviceDecl,
         dp_info::serviceDecl,
         dp_manager::serviceDecl) &&
         dp_manager::factory::singleton_entries( pRegistryKey ) &&
@@ -133,7 +128,6 @@ void * SAL_CALL component_getFactory(
         dp_registry::backend::executable::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
-        dp_migration::serviceDecl,
         dp_info::serviceDecl,
         dp_manager::serviceDecl);
 }
