@@ -52,10 +52,64 @@ namespace writerfilter
 
     void XMLTag::addAttr(string sName, sal_uInt32 nValue)
     {
-        char buffer[256];
+        static char buffer[256];
         snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, nValue);
         addAttr(sName, buffer);
     }
+
+void XMLTag::addAttr(string sName, uno::Any aAny)
+{
+    string aTmpStrInt;
+    string aTmpStrFloat;
+    string aTmpStrString;
+
+    static char buffer[256];
+
+    try
+    {
+        sal_Int32 nInt = 0;
+        aAny >>= nInt;
+
+        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32,
+                 nInt);
+
+        aTmpStrInt = buffer;
+    }
+    catch (uno::Exception aExcept)
+    {
+        aTmpStrInt = "exception";
+    }
+
+    try
+    {
+        float nFloat = 0.0;
+        aAny >>= nFloat;
+
+        snprintf(buffer, sizeof(buffer), "%f",
+                 nFloat);
+
+        aTmpStrFloat = buffer;
+    }
+    catch (uno::Exception aExcept)
+    {
+        aTmpStrFloat = "exception";
+    }
+
+    try
+    {
+        ::rtl::OUString aStr;
+        aAny >>= aStr;
+
+        aTmpStrString = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr();
+    }
+    catch (uno::Exception aExcept)
+    {
+        aTmpStrString = "exception";
+    }
+
+    addAttr(sName, "i:" + aTmpStrInt + " f:" + aTmpStrFloat + " s:" +
+            aTmpStrString);
+}
 
     void XMLTag::addTag(XMLTag::Pointer_t pTag)
     {
@@ -65,8 +119,13 @@ namespace writerfilter
 
     void XMLTag::chars(const string & rChars)
     {
-        mChars = rChars;
+        mChars += rChars;
     }
+
+void XMLTag::chars(const ::rtl::OUString & rChars)
+{
+    chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
+}
 
     const string & XMLTag::getTag() const
     {
@@ -240,6 +299,11 @@ namespace writerfilter
         currentTag()->addAttr(name, value);
     }
 
+void TagLogger::attribute(const string & name, const uno::Any aAny)
+{
+    currentTag()->addAttr(name, aAny);
+}
+
     void TagLogger::addTag(XMLTag::Pointer_t pTag)
     {
         currentTag()->addTag(pTag);
@@ -364,6 +428,40 @@ namespace writerfilter
         mpTag->addTag(pTag);
     }
 
+
+XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropSet)
+{
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
+    uno::Sequence<beans::Property> aProps(xPropSetInfo->getProperties());
+
+    XMLTag::Pointer_t pResult(new XMLTag("unoPropertySet"));
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        XMLTag::Pointer_t pPropTag(new XMLTag("property"));
+
+        ::rtl::OUString sName(aProps[i].Name);
+
+        pPropTag->addAttr("name", sName);
+        try
+        {
+            pPropTag->addAttr("value", rPropSet->getPropertyValue(sName));
+        }
+        catch (uno::Exception aException)
+        {
+            XMLTag::Pointer_t pException(new XMLTag("exception"));
+
+            pException->chars("getPropertyValue(\"");
+            pException->chars(sName);
+            pException->chars("\")");
+            pPropTag->addTag(pException);
+        }
+
+        pResult->addTag(pPropTag);
+    }
+
+    return pResult;
+}
 
 }
 #endif // DEBUG

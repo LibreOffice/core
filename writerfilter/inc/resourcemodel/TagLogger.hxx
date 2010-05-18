@@ -31,6 +31,7 @@
 #ifdef DEBUG
 
 #include <rtl/ustring.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <string>
@@ -78,8 +79,10 @@ namespace writerfilter
         void addAttr(string name, string value);
         void addAttr(string name, const ::rtl::OUString & value);
         void addAttr(string name, sal_uInt32 nValue);
+        void addAttr(string name, uno::Any rAny);
         void addTag(Pointer_t pTag);
         void chars(const string & rChars);
+        void chars(const ::rtl::OUString & rChars);
         const string & getTag() const;
         string toString() const;
 
@@ -112,6 +115,7 @@ namespace writerfilter
         void attribute(const string & name, const string & value);
         void attribute(const string & name, const ::rtl::OUString & value);
         void attribute(const string & name, sal_uInt32 value);
+        void attribute(const string & name, const uno::Any aAny);
         void addTag(XMLTag::Pointer_t pTag);
         void chars(const string & chars);
         void chars(const ::rtl::OUString & chars);
@@ -147,6 +151,8 @@ namespace writerfilter
         virtual void attribute(Id name, Value & val);
         virtual void sprm(Sprm & sprm);
     };
+
+WRITERFILTER_DLLPUBLIC XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropSet);
 }
 
 #endif // DEBUG
