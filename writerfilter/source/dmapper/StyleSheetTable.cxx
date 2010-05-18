@@ -807,6 +807,10 @@ uno::Sequence< ::rtl::OUString > PropValVector::getNames()
   -----------------------------------------------------------------------*/
 void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("applyStyleSheets");
+#endif
+
     try
     {
         uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
