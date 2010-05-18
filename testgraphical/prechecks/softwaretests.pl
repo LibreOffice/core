@@ -283,7 +283,8 @@ sub getFastPath($)
 sub checkForGhostscript()
 {
     print "Search for Ghostscript\n" if ($verbose);
-    if ($OSNAME eq "linux")
+    if ($OSNAME eq "linux" ||
+        $OSNAME eq "solaris")
     {
         # search for ghostscript
         local *GHOSTSCRIPT;
@@ -328,7 +329,7 @@ sub checkForGhostscript()
     }
     else
     {
-        print "ERROR: Check for Ghostscript failed, due to unsupported environment.\n";
+        print "ERROR: Check for Ghostscript failed, due to unsupported '$OSNAME' environment.\n";
         $nGlobalErrors ++;
     }
 }
@@ -358,7 +359,8 @@ sub checkForPSDriver()
 sub checkForImageMagick()
 {
     print "Search for Imagemagick\n" if ($verbose);
-    if ($OSNAME eq "linux")
+    if ($OSNAME eq "linux" ||
+        $OSNAME eq "solaris")
     {
         # search for imagemagick
         local *IMAGEMAGICK;
