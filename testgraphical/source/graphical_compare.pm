@@ -537,6 +537,10 @@ sub SingleDocumentCompare($$$$$$)
                         # }
                     }
                 }
+                else
+                {
+                    print "WARNING: The show program '$sJavaProgram' doesn't exists.\n";
+                }
             }
         }
     }
