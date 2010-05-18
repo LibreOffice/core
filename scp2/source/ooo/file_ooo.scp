@@ -1777,15 +1777,6 @@ File gid_File_Spotlight_Bundle
 End
 #endif
 
-#if defined MACOSX && !defined QUARTZ
-File gid_File_Bin_Fondu
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "fondu";
-    Styles = (PACKED);
-End
-#endif
-
 File gid_File_Config_Javasettingsunopkginstall
     USER_FILE_BODY;
     Dir = gid_Dir_Config;
