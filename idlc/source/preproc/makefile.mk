@@ -43,7 +43,6 @@ LIBSALCPPRT=$(0)
 OBJFILES=   \
             $(OBJ)$/cpp.obj	\
             $(OBJ)$/eval.obj	\
-            $(OBJ)$/getopt.obj	\
             $(OBJ)$/include.obj	\
             $(OBJ)$/lex.obj	\
             $(OBJ)$/macro.obj	\

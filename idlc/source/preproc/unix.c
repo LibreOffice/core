@@ -39,9 +39,7 @@
 
 #include "cpp.h"
 
-extern int cppgetopt(int, char *const *, const char *);
-extern char *optarg, rcsid[];
-extern int optind;
+extern char rcsid[];
 
 int Pflag = 0;                          /* print no line information */
 int Iflag = 0;                          /* print includes */
@@ -62,7 +60,7 @@ void
     Tokenrow tr;
 
     setup_kwtab();
-    while ((c = cppgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
+    while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
         switch (c)
         {
             case 'N':
