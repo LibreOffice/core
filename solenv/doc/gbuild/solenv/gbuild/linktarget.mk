@@ -15,7 +15,7 @@ namespace gb
     class CObject : public HasSource, public HasDependencies, public Target
     {
         public:
-            Path get_source() {};
+            Path get_source();
         private:
             /// CObjects do not need to be explicitly constructed.
             /// They are named after the path of their source file (without

@@ -9,7 +9,7 @@ namespace gb
     class Library : public IsCleanable, public HasDependencies, public IsLinking, public DeliversHeaders, public HasCompileSettings, public Target
     {
         public:
-            Library(String name) {};
+            Library(String name);
             /// Returns how the library is named in the filesystem on the current platform.
             /// Library filename schemes are defined in solenv/gbuild/libnames.mk (with some platformdependant hacks in solenv/gbuild/platform/*.mk.
 
@@ -18,14 +18,13 @@ namespace gb
 
         private:
             /// private helper function for the constructor
-            void Library_impl(
-                LinkTarget library_linktarget) {};
+            void Library_impl(LinkTarget library_linktarget);
             /// platformdependant additional setup for constructor (used on Windows only)
             void Library_platform(
                 LinkTarget library_linktarget,
                 Path dllfile);
             /// helper function to wrap LinkTargets functions (this is more or less pimpl ...)
-            void forward_to_linktarget(Function f) {};
+            void forward_to_linktarget(Function f);
 
             /// List of buildable libraries (i.e. libraries that are not expected to exist outside of \$(OUTDIR) on the system).
             static const List<Library> TARGETS;
