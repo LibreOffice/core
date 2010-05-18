@@ -12,6 +12,9 @@
         <prop oor:name="ImageURL" oor:type="xs:string">
           <value>vnd.sun.star.extension://UPDATED_IDENTIFIER/panel.png</value>
         </prop>
+        <prop oor:name="HelpURL" oor:type="xs:string">
+          <value>vnd.sun.star.help://UPDATED_IDENTIFIER/colorpanel</value>
+        </prop>
       </node>
     </node>
   </node>
