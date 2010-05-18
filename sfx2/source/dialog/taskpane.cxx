@@ -157,6 +157,13 @@ namespace sfx2
         }
 
         //--------------------------------------------------------------------------------------------------------------
+        ::rtl::OUString lcl_getPanelHelpURL( const ::utl::OConfigurationNode& i_rPanelConfigNode )
+        {
+            const ::rtl::OUString sHelpURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "HelpURL" ) ) );
+            return sHelpURL;
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
         Image lcl_getPanelImage( const Reference< XFrame >& i_rDocFrame, const ::utl::OConfigurationNode& i_rPanelConfigNode )
         {
             const ::rtl::OUString sImageURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "ImageURL" ) ) );
@@ -302,6 +309,7 @@ namespace sfx2
 
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
+        virtual SmartId GetHelpID() const;
         virtual void Activate( Window& i_rParentWindow );
         virtual void Deactivate();
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );
@@ -323,6 +331,7 @@ namespace sfx2
     private:
         const ::rtl::OUString   m_sUIName;
         const Image             m_aPanelImage;
+        const ::rtl::OUString   m_aPanelHelpURL;
         const ::rtl::OUString   m_sResourceURL;
         const ::rtl::OUString   m_sPanelConfigPath;
         Reference< XFrame >     m_xFrame;
@@ -334,6 +343,7 @@ namespace sfx2
     CustomToolPanel::CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState, const Reference< XFrame >& i_rFrame )
         :m_sUIName( ::comphelper::getString( i_rPanelWindowState.getNodeValue( "UIName" ) ) )
         ,m_aPanelImage( lcl_getPanelImage( i_rFrame, i_rPanelWindowState ) )
+        ,m_aPanelHelpURL( lcl_getPanelHelpURL( i_rPanelWindowState ) )
         ,m_sResourceURL( i_rPanelWindowState.getLocalName() )
         ,m_sPanelConfigPath( i_rPanelWindowState.getNodePath() )
         ,m_xFrame( i_rFrame )
@@ -408,6 +418,12 @@ namespace sfx2
     Image CustomToolPanel::GetImage() const
     {
         return m_aPanelImage;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    SmartId CustomToolPanel::GetHelpID() const
+    {
+        return SmartId( m_aPanelHelpURL );
     }
 
     //------------------------------------------------------------------------------------------------------------------
