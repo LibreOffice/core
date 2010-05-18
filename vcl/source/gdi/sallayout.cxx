@@ -144,10 +144,10 @@ int GetVerticalFlags( sal_UCS4 nChar )
             return GF_ROTR; // right
         return GF_ROTL;     // left
     }
-    else if( (nChar >= 0x02F800 && nChar <= 0x02FFFF) ) // non-BMP CJK ideographs
-        return GF_NONE; // not rotated
+    else if( (nChar >= 0x20000) && (nChar <= 0x3FFFF) ) // all SIP/TIP ideographs
+        return GF_ROTL; // left
 
-    return GF_NONE;
+    return GF_NONE; // not rotated as default
 }
 
 // -----------------------------------------------------------------------
