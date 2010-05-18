@@ -24,30 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef INCLUDED_FORM_CONTROL_HELPER_HXX
+#define INCLUDED_FORM_CONTROL_HELPER_HXX
 
-#include <util.hxx>
-
-using namespace ::std;
+#include <FFDataHandler.hxx>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include "FieldTypes.hxx"
 
 namespace writerfilter {
-namespace doctok {
-void util_assert(bool bTest)
+namespace dmapper {
+
+using namespace ::com::sun::star;
+
+class FormControlHelper
 {
-    if (! bTest)
-        clog << "ASSERT!\n" << endl;
+public:
+    typedef boost::shared_ptr<FormControlHelper> Pointer_t;
+    FormControlHelper(FieldId eFieldId,
+                      uno::Reference<text::XTextDocument> rTextDocument,
+                      FFDataHandler::Pointer_t pFFData);
+    ~FormControlHelper();
+
+    bool insertControl(uno::Reference<text::XTextRange> xTextRange);
+
+private:
+    FFDataHandler::Pointer_t m_pFFData;
+    struct FormControlHelper_Impl;
+    typedef boost::shared_ptr<FormControlHelper_Impl> ImplPointer_t;
+    ImplPointer_t m_pImpl;
+
+    bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
+                        const ::rtl::OUString & rControlName);
+};
+
+}
 }
 
-void printBytes(ostream & o, const string & str)
-{
-    unsigned int nCount = str.size();
-    for (unsigned int n = 0; n < nCount; ++n)
-    {
-        unsigned char c = static_cast<unsigned char>(str[n]);
-        if (c < 128 && isprint(c))
-            o << str[n];
-        else
-            o << ".";
-    }
-}
-
-}}
+#endif // INCLUDED_FORM_CONTROL_HELPER_HXX

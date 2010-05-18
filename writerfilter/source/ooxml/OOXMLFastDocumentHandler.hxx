@@ -95,8 +95,6 @@ public:
     void setDocument(OOXMLDocument * pDocument);
     void setXNoteId(const ::rtl::OUString & rXNoteId);
 
-    OOXMLParserState::Pointer_t getParserState() const;
-
 private:
     OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &); // not defined
     void operator =(OOXMLFastDocumentHandler &); // not defined

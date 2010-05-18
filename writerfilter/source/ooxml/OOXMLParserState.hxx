@@ -29,8 +29,11 @@
 
 #include <stack>
 #include <ooxml/OOXMLDocument.hxx>
-#include <resourcemodel/TagLogger.hxx>
 #include "OOXMLPropertySetImpl.hxx"
+
+#ifdef DEBUG
+#include <resourcemodel/TagLogger.hxx>
+#endif
 
 namespace writerfilter {
 namespace ooxml
@@ -76,24 +79,18 @@ public:
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
 
-    void incContextCount();
     const string getHandle() const;
     void setHandle();
-    unsigned int getContextCount() const;
 
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument() const;
 
     void setXNoteId(const rtl::OUString & rId);
     const rtl::OUString & getXNoteId() const;
-    void setXNoteType(const Id & rId);
-    const Id & getXNoteType() const;
 
     const rtl::OUString & getTarget() const;
 
-    void newCharacterProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     void resolveCharacterProperties(Stream & rStream);
-    OOXMLPropertySet::Pointer_t getCharacterProperties() const;
     void setCharacterProperties(OOXMLPropertySet::Pointer_t pProps);
     void resolveCellProperties(Stream & rStream);
     void setCellProperties(OOXMLPropertySet::Pointer_t pProps);
@@ -105,8 +102,15 @@ public:
     void startTable();
     void endTable();
 
+    void incContextCount();
+
+#ifdef DEBUG
+public:
+    unsigned int getContextCount() const;
     string toString() const;
     XMLTag::Pointer_t toTag() const;
+#endif
+
 };
 
 }}

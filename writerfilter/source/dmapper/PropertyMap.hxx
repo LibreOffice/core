@@ -193,6 +193,7 @@ class SectionPropertyMap : public PropertyMap
     bool                                    m_bGutterRTL;
     bool                                    m_bSFBiDi;
 
+    sal_Int32                               m_nGridType;
     sal_Int32                               m_nGridLinePitch;
     sal_Int32                               m_nDxtCharSpace;
 
@@ -265,6 +266,7 @@ public:
     void SetDzaGutter( sal_Int32 nSet ) {m_nDzaGutter = nSet; }
     void SetSFBiDi( bool bSet ) { m_bSFBiDi = bSet;}
 
+    void SetGridType(sal_Int32 nSet) { m_nGridType = nSet; }
     void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }
     void SetDxtCharSpace( sal_Int32 nSet ) { m_nDxtCharSpace = nSet; }
 

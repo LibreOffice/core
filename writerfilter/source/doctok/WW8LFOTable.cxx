@@ -62,13 +62,6 @@ void WW8LFOTable::initPayload()
     payloadOffsets.push_back(nOffsetLFOData);
 }
 
-sal_uInt32 WW8LFOTable::calcPayloadOffset()
-{
-    sal_uInt32 nResult = 4 + getEntryCount() * WW8LFO::getSize();
-
-    return nResult;
-}
-
 sal_uInt32 WW8LFOTable::getEntryCount()
 {
     return getU32(0);

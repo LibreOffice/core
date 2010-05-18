@@ -19,6 +19,7 @@
   <token tokenid="ooxml:trackchange"/>
   <token tokenid="ooxml:object"/>
   <token tokenid="ooxml:tblStart"/>
+  <token tokenid="ooxml:ffdata"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>
@@ -14105,7 +14106,7 @@
           <xs:documentation>Cryptographic Hashing Algorithm</xs:documentation>
         </attribute>
         <attribute name="cryptSpinCount">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Iterations to Run Hashing Algorithm</xs:documentation>
         </attribute>
         <attribute name="cryptProvider">
@@ -15079,7 +15080,7 @@
       </define>
       <define name="CT_FFTextType">
         <attribute name="val">
-          <text/>
+          <ref name="ST_FFName"/>
           <xs:documentation>Text Box Form Field Type Values</xs:documentation>
         </attribute>
       </define>
@@ -15206,7 +15207,7 @@
       </define>
       <define name="CT_FFHelpText">
         <attribute name="type">
-          <text/>
+          <ref name="ST_InfoTextType"/>
           <xs:documentation>Help Text Type</xs:documentation>
         </attribute>
         <attribute name="val">
@@ -15216,7 +15217,7 @@
       </define>
       <define name="CT_FFStatusText">
         <attribute name="type">
-          <text/>
+          <ref name="ST_InfoTextType"/>
           <xs:documentation>Status Text Type</xs:documentation>
         </attribute>
         <attribute name="val">
@@ -15750,15 +15751,15 @@
       </define>
       <define name="CT_DocGrid">
         <attribute name="type">
-          <text/>
+          <ref name="ST_DocGrid"/>
           <xs:documentation>Document Grid Type</xs:documentation>
         </attribute>
         <attribute name="linePitch">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Document Grid Line Pitch</xs:documentation>
         </attribute>
         <attribute name="charSpace">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Document Grid Character Pitch</xs:documentation>
         </attribute>
       </define>
@@ -21754,11 +21755,11 @@
       <attribute name="val" tokenid="ooxml:CT_Kinsoku_val"/>
     </resource>
     <resource name="ST_TextDirection" resource="List">
-      <value tokenid="ooxml:Value_ST_TextDirection_lrTb">lrTb</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_tbRl">tbRl</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_btLr">btLr</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_lrTbV">lrTbV</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_tbRlV">tbRlV</value>
+      <value tokenid="0">lrTb</value>
+      <value tokenid="1">tbRl</value>
+      <value tokenid="3">btLr</value>
+      <value tokenid="4">lrTbV</value>
+      <value tokenid="5">tbRlV</value>
       <value tokenid="ooxml:Value_ST_TextDirection_tbLrV">tbLrV</value>
     </resource>
     <resource name="CT_TextDirection" resource="Value">
@@ -21854,6 +21855,24 @@
       <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:trackchange"/>
       <action name="start" action="clearProps"/>
       <action name="end" action="mark" sendtokenid="ooxml:endtrackchange"/>
+    </resource>
+    <resource name="EG_RangeMarkupElements" resource="Properties">
+      <element name="bookmarkStart" tokenid="ooxml:EG_RangeMarkupElements_bookmarkStart"/>
+      <element name="bookmarkEnd" tokenid="ooxml:EG_RangeMarkupElements_bookmarkEnd"/>
+      <element name="moveFromRangeStart" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeStart"/>
+      <element name="moveFromRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeEnd"/>
+      <element name="moveToRangeStart" tokenid="ooxml:EG_RangeMarkupElements_moveToRangeStart"/>
+      <element name="moveToRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_moveToRangeEnd"/>
+      <element name="commentRangeStart" tokenid="ooxml:EG_RangeMarkupElements_commentRangeStart"/>
+      <element name="commentRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_commentRangeEnd"/>
+      <element name="customXmlInsRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeStart"/>
+      <element name="customXmlInsRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeEnd"/>
+      <element name="customXmlDelRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeStart"/>
+      <element name="customXmlDelRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeEnd"/>
+      <element name="customXmlMoveFromRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeStart"/>
+      <element name="customXmlMoveFromRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeEnd"/>
+      <element name="customXmlMoveToRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeStart"/>
+      <element name="customXmlMoveToRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeEnd"/>
     </resource>
     <resource name="CT_NumPr" resource="Properties">
       <kind name="paragraph"/>
@@ -22037,6 +22056,8 @@
       <element name="checkBox" tokenid="ooxml:CT_FFData_checkBox"/>
       <element name="ddList" tokenid="ooxml:CT_FFData_ddList"/>
       <element name="textInput" tokenid="ooxml:CT_FFData_textInput"/>
+      <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:ffdata"/>
+      <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_FFHelpText" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_FFHelpText_type"/>
@@ -22045,6 +22066,23 @@
     <resource name="CT_FFStatusText" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_FFStatusText_type"/>
       <attribute name="val" tokenid="ooxml:CT_FFStatusText_val"/>
+    </resource>
+    <resource name="CT_FFCheckBox" resource="Properties">
+      <element name="size" tokenid="ooxml:CT_FFCheckBox_size"/>
+      <element name="sizeAuto" tokenid="ooxml:CT_FFCheckBox_sizeAuto"/>
+      <element name="default" tokenid="ooxml:CT_FFCheckBox_default"/>
+      <element name="checked" tokenid="ooxml:CT_FFCheckBox_checked"/>
+    </resource>
+    <resource name="CT_FFDDList" resource="Properties">
+      <element name="result" tokenid="ooxml:CT_FFDDList_result"/>
+      <element name="default" tokenid="ooxml:CT_FFDDList_default"/>
+      <element name="listEntry" tokenid="ooxml:CT_FFDDList_listEntry"/>
+    </resource>
+    <resource name="CT_FFTextInput" resource="Properties">
+      <element name="type" tokenid="ooxml:CT_FFTextInput_type"/>
+      <element name="default" tokenid="ooxml:CT_FFTextInput_default"/>
+      <element name="maxLength" tokenid="ooxml:CT_FFTextInput_maxLength"/>
+      <element name="format" tokenid="ooxml:CT_FFTextInput_format"/>
     </resource>
     <resource name="ST_SectionMark" resource="List">
       <value tokenid="0">continuous</value>
@@ -22208,6 +22246,11 @@
       <value name="lines" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_lines">lines</value>
       <value name="linesAndChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_linesAndChars">linesAndChars</value>
       <value name="snapToChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_snapToChars">snapToChars</value>
+    </resource>
+    <resource name="CT_DocGrid" resource="Properties">
+      <attribute name="type" tokenid="ooxml:CT_DocGrid_type"/>
+      <attribute name="linePitch" tokenid="ooxml:CT_DocGrid_linePitch"/>
+      <attribute name="charSpace" tokenid="ooxml:CT_DocGrid_charSpace"/>
     </resource>
     <resource name="ST_HdrFtr" resource="List">
       <value tokenid="ooxml:Value_ST_HrdFtr_even">even</value>
@@ -22434,10 +22477,10 @@
       <element name="u" tokenid="ooxml:EG_RPrBase_u"/>
       <element name="effect" tokenid="sprm:CSfxText"/>
       <element name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
-      <element name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
+      <element name="shd" tokenid="sprm:CShd"/>
       <element name="fitText" tokenid="ooxml:EG_RPrBase_fitText"/>
       <element name="vertAlign" tokenid="ooxml:EG_RPrBase_vertAlign"/>
-      <element name="rtl" tokenid="ooxml:EG_RPrBase_rtl"/>
+      <element name="rtl" tokenid="sprm:CFBiDi"/>
       <element name="cs" tokenid="sprm:CComplexScript"/>
       <element name="em" tokenid="sprm:CKcd"/>
       <element name="lang" tokenid="ooxml:EG_RPrBase_lang"/>

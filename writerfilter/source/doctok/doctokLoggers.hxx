@@ -28,6 +28,8 @@
 #ifndef INCLUDED_DOCTOK_LOGGERS_HXX
 #define INCLUDED_DOCTOK_LOGGERS_HXX
 
+#ifdef DEBUG
+
 #include <resourcemodel/TagLogger.hxx>
 
 namespace writerfilter {
@@ -36,5 +38,5 @@ namespace writerfilter {
     }
 }
 
-
+#endif // DEBUG
 #endif // INCLUDED_DOCTOK_LOGGERS_HXX

@@ -42,7 +42,11 @@ using ::com::sun::star::xml::sax::SAXException;
 namespace writerfilter {
 namespace ooxml
 {
+
+#ifdef DEBUG
 TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
+#endif
+
 using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl

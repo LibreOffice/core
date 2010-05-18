@@ -39,10 +39,12 @@ namespace writerfilter
 
     string WRITERFILTER_DLLPUBLIC xmlify(const string & str);
 
+#ifdef DEBUG
     string WRITERFILTER_DLLPUBLIC propertysetToString
     (uno::Reference<beans::XPropertySet> const & rProps);
 
     string toString(uno::Reference< text::XTextRange > textRange);
     string toString(const string & rString);
+#endif
 }
 #endif // INCLUDED_RESOURCEMODEL_UTIL_HXX
