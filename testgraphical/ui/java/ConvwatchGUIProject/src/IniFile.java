@@ -387,7 +387,7 @@ public class IniFile implements Enumeration
      * @param _sSection
      * @param _sKey
      * @param _nDefault if there is a problem, key not found... this value will return
-     * @return
+     * @return the value as integer if possible to convert, if not return default value.
      */
     public int getIntValue(String _sSection, String _sKey, int _nDefault)
         {

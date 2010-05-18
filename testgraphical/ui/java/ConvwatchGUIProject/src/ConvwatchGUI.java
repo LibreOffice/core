@@ -41,14 +41,14 @@ import javax.swing.SwingWorker;
 
 public class ConvwatchGUI extends javax.swing.JFrame
 {
-    /** Creates new form ConvwatchGUI
-     * @param args
-     */
-
     private ImageIcon[] m_aImageIcon;
     private String m_sInifile;
     private int m_nMaxPages;
     private int m_nCurrentPage;
+
+    /** Creates new form ConvwatchGUI
+     * @param args
+     */
 
     private ConvwatchGUI(String args[])
     {

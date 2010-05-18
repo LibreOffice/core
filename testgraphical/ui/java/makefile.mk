@@ -38,9 +38,16 @@ TARGET=notargetyet
 
 .INCLUDE :  target.mk
 
+.IF "$(SHOW)" == ""
+nothing .PHONY:
+
+.ELSE
+
 # PERLDEBUG=-d:ptkdb
 ALLTAR: 
     $(COPY) ConvwatchGUIProject$/dist/ConvwatchGUIProject.jar $(CLASSDIR)
+
+.END
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
