@@ -145,6 +145,7 @@ public:
     // IToolPanel
     virtual ::rtl::OUString GetDisplayName() const;
     virtual Image GetImage() const;
+    virtual SmartId GetHelpID() const;
     virtual void Activate( Window& i_rParentWindow );
     virtual void Deactivate();
     virtual void SetSizePixel( const Size& i_rPanelWindowSize );
@@ -268,6 +269,12 @@ Reference< XAccessible > ColoredPanel::CreatePanelAccessible( const Reference< X
 Image ColoredPanel::GetImage() const
 {
     return Image( m_aPanelIcon );
+}
+
+//-----------------------------------------------------------------------------
+SmartId ColoredPanel::GetHelpID() const
+{
+    return SmartId();
 }
 
 //=============================================================================
