@@ -70,9 +70,15 @@ ALLTAR: selftest
 
 # $(PRJ)$/util$/makefile.pmk contains ALLTAR stuff
 
-
+# selftest is the default run through at the moment and use pdf export to create output.
+# dmake
 selftest:
     $(PERL) $(PERLDEBUG) compare.pl -creatortype pdf $(PREPAREONLY) -pool singletest -document eis-test.odt $(P_SHOW)
+
+# selftest_ps is like the default run through but use always postscript print out
+# dmake selftest_ps
+selftest_ps:
+    $(PERL) $(PERLDEBUG) compare.pl -creatortype ps $(PREPAREONLY) -pool singletest -document eis-test.odt $(P_SHOW)
 
 #
 #
@@ -80,13 +86,23 @@ selftest:
 #
 #
 
+# dmake demo SHOW=1
 demo:
     $(PERL) $(PERLDEBUG) compare.pl $(CREATORTYPE) $(PREPAREONLY) -pool $@ $(P_SHOW)
 
-# this test will most the time fail.
+# failtest is a demonstration of a failure, with SHOW=1 it should open a java windows which shows 3 pictures,
+# the current document, the reference document and the difference between both.
+# dmake failtest SHOW=1
+# dmake failtest PREPARE=1
+# This test will most the time fail, it is just a demonstration.
 failtest:
     $(PERL) $(PERLDEBUG) compare.pl $(CREATORTYPE) $(PREPAREONLY) -force -pool demo -document CurrentTime.ods $(P_SHOW)
 
+# manual runs through all documents found in document-pool
+# dmake manual
+# dmake manual PDF=1 SHOW=1
+# dmake manual PREPARE=1 PDF=1
+# should help to create a lot of references at one time.
 manual:
     $(PERL) $(PERLDEBUG) compare.pl $(CREATORTYPE) $(PREPAREONLY) -force $(P_SHOW)
 
