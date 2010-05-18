@@ -1224,13 +1224,18 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     const SalColor aKeepBrushColor = nBrushColor_;
     nBrushColor_ = nPenColor_;
 
+    // #i11575#desc5#b adjust B2D tesselation result to raster positions
+    basegfx::B2DPolygon aPolygon = rPolygon;
+    const double fHalfWidth = 0.5 * rLineWidth.getX();
+    aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(+fHalfWidth,+fHalfWidth) );
+
     // shortcut for hairline drawing to improve performance
     if( bIsHairline )
     {
         // hairlines can benefit from a simplified tesselation
         // e.g. for hairlines the linejoin style can be ignored
         basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, rPolygon, rLineWidth.getX() );
+        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
 
         // draw tesselation result
         const int nTrapCount = aB2DTrapVector.size();
@@ -1242,16 +1247,15 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     }
 
     // get the area polygon for the line polygon
-    basegfx::B2DPolygon aPolygon = rPolygon;
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
     {
         // prepare for createAreaGeometry() with anisotropic linewidth
-        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
+        aPolygon.transform( basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
     }
 
     // create the area-polygon for the line
-    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin) );
+    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin) );
 
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
@@ -1278,3 +1282,4 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
