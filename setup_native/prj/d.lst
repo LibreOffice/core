@@ -32,6 +32,11 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 ..\source\linux\*.dat %_DEST%\bin%_EXT%\*.dat
 ..\source\mac\*.icns %_DEST%\bin%_EXT%\*.icns
 ..\source\mac\Info.plist.langpack %_DEST%\bin%_EXT%\Info.plist.langpack
+..\source\mac\ooo\osxdndinstall.png %_DEST%\bin%_EXT%\osl\osxdndinstall.png
+..\source\mac\ooo\DS_Store %_DEST%\bin%_EXT%\osl\DS_Store
+..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin%_EXT%\osl\DS_Store_Langpack
+..\source\mac\broffice\osxdndinstall.png %_DEST%\bin%_EXT%\broffice\osxdndinstall.png
+..\source\mac\broffice\DS_Store %_DEST%\bin%_EXT%\broffice\DS_Store
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
 ..\source\java\brofficeorg_setup.gif %_DEST%\bin%_EXT%\broffice\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
