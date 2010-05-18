@@ -138,13 +138,6 @@ void    usage(void);
 void    err_quit(const char *, ...);
 void    silent_quit(void);
 
-/* poor man's getopt() */
-int     simple_getopt(char *pargv[], const char *poptstring);
-char    *optarg = NULL;
-int     optind  = 1;
-int     optopt  = 0;
-int     opterr  = 0;
-
 uint8
 read_uint8(const file_t *pfile)
 {
@@ -731,45 +724,6 @@ usage()
             pprogname);
 }
 
-/* my very simple minded implementation of getopt()
- * it's to sad that getopt() is not available everywhere
- * note: this is not a full POSIX conforming getopt()
- */
-int simple_getopt(char *pargv[], const char *poptstring)
-{
-    char *parg = pargv[optind];
-
-    /* skip all response file arguments */
-    if ( parg ) {
-        while ( *parg == '@' )
-            parg = pargv[++optind];
-
-        if ( parg[0] == '-' && parg[1] != '\0' ) {
-            char *popt;
-            int c = parg[1];
-            if ( (popt = strchr(poptstring, c)) == NULL ) {
-                optopt = c;
-                if ( opterr )
-                    fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
-                return '?';
-            }
-            if ( *(++popt) == ':') {
-                if ( parg[2] != '\0' ) {
-                    optarg = ++parg;
-                } else {
-                    optarg = pargv[++optind];
-                }
-            } else {
-                optarg = NULL;
-            }
-            ++optind;
-            return c;
-        }
-    }
-    return -1;
-}
-
-
 int CDECL
 main(int argc, char *argv[])
 {
@@ -817,7 +771,7 @@ main(int argc, char *argv[])
     opterr = 0;
     pincs = allocate_growable();
 
-    while( (c = simple_getopt(pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
+    while( (c = getopt(nall_argc, pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
         switch(c) {
             case 'i':
             case 'I':
