@@ -80,6 +80,12 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    SmartId DummyPanel::GetHelpID() const
+    {
+        return SmartId();
+    }
+
+    //--------------------------------------------------------------------
     void DummyPanel::GrabFocus()
     {
     }
