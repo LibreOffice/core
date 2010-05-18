@@ -1505,7 +1505,7 @@
                     <value xml:lang="en-US">Align Left</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>3</value>
+                    <value>11</value>
                 </prop>
             </node>
             <node oor:name=".uno:RightPara" oor:op="replace">
@@ -1513,7 +1513,7 @@
                     <value xml:lang="en-US">Align Right</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>3</value>
+                    <value>11</value>
                 </prop>
             </node>
             <node oor:name=".uno:CenterPara" oor:op="replace">
@@ -1521,7 +1521,7 @@
                     <value xml:lang="en-US">Centered</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>3</value>
+                    <value>11</value>
                 </prop>
             </node>
             <node oor:name=".uno:SendFax" oor:op="replace">
@@ -1537,7 +1537,7 @@
                     <value xml:lang="en-US">Justified</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>7</value>
+                    <value>15</value>
                 </prop>
             </node>
             <node oor:name=".uno:HelpChooseFile" oor:op="replace">
@@ -1550,7 +1550,7 @@
                     <value xml:lang="en-US">Line Spacing: 1</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>7</value>
+                    <value>15</value>
                 </prop>
             </node>
             <node oor:name=".uno:SpacePara15" oor:op="replace">
@@ -1558,7 +1558,7 @@
                     <value xml:lang="en-US">Line Spacing : 1.5</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>7</value>
+                    <value>15</value>
                 </prop>
             </node>
             <node oor:name=".uno:SpacePara2" oor:op="replace">
@@ -1566,7 +1566,7 @@
                     <value xml:lang="en-US">Line Spacing : 2</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>7</value>
+                    <value>15</value>
                 </prop>
             </node>
             <node oor:name=".uno:StatusGetPosition" oor:op="replace">
@@ -2071,7 +2071,7 @@
                     <value xml:lang="en-US">Bullets On/Off</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>7</value>
+                    <value>15</value>
                 </prop>
             </node>
             <node oor:name=".uno:FormatArea" oor:op="replace">
@@ -2150,7 +2150,7 @@
                     <value xml:lang="en-US">Numbering On/Off</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>7</value>
+                    <value>15</value>
                 </prop>
             </node>
             <node oor:name=".uno:BezierConvert" oor:op="replace">
@@ -2309,7 +2309,7 @@
                     <value xml:lang="en-US">Edit File</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertImageControl" oor:op="replace">
@@ -3168,7 +3168,7 @@
                     <value xml:lang="en-US">~Hyperlink</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:Merge" oor:op="replace">
@@ -3186,7 +3186,7 @@
                     <value xml:lang="en-US">Superscript</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:Intersect" oor:op="replace">
@@ -3199,7 +3199,7 @@
                     <value xml:lang="en-US">Subscript</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:FontDialog" oor:op="replace">
@@ -3260,7 +3260,7 @@
                     <value xml:lang="en-US">Format Paintbrush</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:Repeat" oor:op="replace">
@@ -3417,7 +3417,7 @@
                     <value xml:lang="en-US">Na~vigator</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:RestoreEditingView" oor:op="replace">
@@ -4020,7 +4020,7 @@
                     <value xml:lang="en-US">~Data Sources</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:MenuBarVisible" oor:op="replace">
@@ -4240,7 +4240,7 @@
                     <value xml:lang="en-US">~Find &amp; Replace...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:HelperDialog" oor:op="replace">

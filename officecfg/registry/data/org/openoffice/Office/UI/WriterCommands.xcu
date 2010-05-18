@@ -614,7 +614,7 @@
                     <value xml:lang="en-US">Superscript</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:SubScript" oor:op="replace">
@@ -622,7 +622,7 @@
                     <value xml:lang="en-US">Subscript</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:CharLeftSel" oor:op="replace">
@@ -2124,7 +2124,7 @@
                     <value xml:lang="en-US">~Nonprinting Characters</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
             <node oor:name=".uno:SortDialog" oor:op="replace">
