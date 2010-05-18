@@ -153,6 +153,18 @@ XMLTag::Pointer_t PropertyMap::toTag() const
                     sal_Int32 aInt;
                     aMapIter->second >>= aInt;
                     pTag->addAttr("value", aInt);
+
+                    sal_uInt32 auInt;
+                    aMapIter->second >>= auInt;
+                    pTag->addAttr("unsignedValue", auInt);
+
+                    float aFloat;
+                    aMapIter->second >>= aFloat;
+                    pTag->addAttr("floatValue", aFloat);
+
+                    ::rtl::OUString aStr;
+                    aMapIter->second >>= auInt;
+                    pTag->addAttr("stringValue", aStr);
                 }
                 catch (...) {
                 }
