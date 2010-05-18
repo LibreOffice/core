@@ -14106,7 +14106,7 @@
           <xs:documentation>Cryptographic Hashing Algorithm</xs:documentation>
         </attribute>
         <attribute name="cryptSpinCount">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Iterations to Run Hashing Algorithm</xs:documentation>
         </attribute>
         <attribute name="cryptProvider">

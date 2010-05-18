@@ -150,6 +150,7 @@ for a rng:define
 
  -->
 <xsl:template name="factoryattributetoresourcemapinner">
+  <xsl:variable name="defname" select="@name"/>
   <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
     <xsl:variable name="name" select="@name"/>
     <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
@@ -158,6 +159,11 @@ for a rng:define
   </xsl:for-each>
 
   <xsl:for-each select=".//rng:attribute">
+    <xsl:if test="position()=1">
+      <xsl:text>
+      // </xsl:text>
+      <xsl:value-of select="$defname"/>
+    </xsl:if>
     <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:variable name="resource">
       <xsl:for-each select="rng:ref">
@@ -166,6 +172,9 @@ for a rng:define
         </xsl:for-each>
       </xsl:for-each>
       <xsl:for-each select=".//rng:text">
+        <xsl:text>String</xsl:text>
+      </xsl:for-each>
+      <xsl:for-each select=".//rng:data[@type='base64Binary']">
         <xsl:text>String</xsl:text>
       </xsl:for-each>
     </xsl:variable>
