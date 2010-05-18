@@ -685,17 +685,26 @@ void StyleSheetTable::sprm(Sprm & rSprm)
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             // no break
         default:
+            {
                 if (!m_pImpl->m_pCurrentEntry)
                     break;
+
                 TablePropertiesHandlerPtr pTblHandler( new TablePropertiesHandler( true ) );
                 pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties );
                 if ( !pTblHandler->sprm( rSprm ) )
                 {
                     m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
-                m_pImpl->m_rDMapper.sprm( rSprm );
+
+                    PropertyMapPtr pProps(new PropertyMap());
+                    m_pImpl->m_rDMapper.sprm( rSprm, pProps );
+
+                    m_pImpl->m_pCurrentEntry->pProperties->insert(pProps);
+
                     m_pImpl->m_rDMapper.PopStyleSheetProperties( );
                 }
             }
+            break;
+    }
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("StyleSheetTable.sprm");
@@ -971,7 +980,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                 // Don't add the style name properties
                             bool bIsParaStyleName = aPropValues[nProp].Name.equalsAscii( "ParaStyleName" );
                             bool bIsCharStyleName = aPropValues[nProp].Name.equalsAscii( "CharStyleName" );
-                            if ( !bInsert && !bIsParaStyleName && !bIsCharStyleName )
+                            if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
 #ifdef DEBUG_DOMAINMAPPER
                                 dmapper_logger->element("insert");
