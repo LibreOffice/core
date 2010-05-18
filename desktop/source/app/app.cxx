@@ -1659,9 +1659,7 @@ void Desktop::Main()
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
     nAcquireCount = Application::ReleaseSolarMutex();
-    printf("###1\n");
     DeregisterServices();
-    printf("###2\n");
     Application::AcquireSolarMutex(nAcquireCount);
     tools::DeInitTestToolLib();
     // be sure that path/language options gets destroyed before
