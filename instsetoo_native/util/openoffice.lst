@@ -76,6 +76,7 @@ OpenOffice
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -419,6 +420,7 @@ BrOffice
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -437,6 +439,7 @@ BrOffice
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
@@ -508,6 +511,7 @@ BrOffice_wJRE
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
@@ -578,6 +582,7 @@ BrOffice_Dev
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
