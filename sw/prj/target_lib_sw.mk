@@ -739,8 +739,8 @@ $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
 
 
 $(eval $(call gb_SdiTarget_set_include,sw/sdi/swslots,\
-    $$(INCLUDE) \
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/sdi \
+    $$(INCLUDE) \
 ))
 # vim: set noet sw=4 ts=4:
