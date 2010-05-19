@@ -64,6 +64,8 @@ testcase tVerifyFilterNames
     else
         cFile = cFile & gIsoLang & ".txt"
     endif
+
+    
     
     dim cFileIn as string
         cFileIn  = gTesttoolPath & "framework\optional\input\filternames\" & cFile
@@ -71,6 +73,9 @@ testcase tVerifyFilterNames
         
     dim cFileOut as string
         cFileOut = hGetWorkPath() & cFile
+
+    ' Replace blanks with underscores
+    cFile = hStringReplaceChar( sFile, " ", "_" )
     
     printlog( "Create a new document" )
     hCreateDocument()
