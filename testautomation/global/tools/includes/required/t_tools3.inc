@@ -1182,16 +1182,22 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     endif
 
     if ( oDialog.exists() ) then
-        select case( iClosingMethod )
-        case METHOD_CLOSE  : oDialog.close()
-        case METHOD_CANCEL : oDialog.cancel()
-        case METHOD_202    : oDialog.click( 202 )
-        case METHOD_YES    : oDialog.yes()
-        case METHOD_NO     : oDialog.no()
-        case METHOD_OK     : oDialog.ok()
-        case else :
-            warnlog( CFN & " Script error: Allowed closing methods are cancel, close, ok, yes, no and 202" )
-        end select
+        try
+            select case( iClosingMethod )
+            case METHOD_CLOSE  : oDialog.close()
+            case METHOD_CANCEL : oDialog.cancel()
+            case METHOD_202    : oDialog.click( 202 )
+            case METHOD_YES    : oDialog.yes()
+            case METHOD_NO     : oDialog.no()
+            case METHOD_OK     : oDialog.ok()
+            case else :
+                warnlog( CFN & " Script error: Allowed closing methods are cancel, close, ok, yes, no and 202" )
+            end select
+        catch
+            warnlog( CFN & "This dialog does not provide the requested closing method" )
+            hCloseDialog() = FALSE
+            exit function
+        endcatch
     else
         if ( bDialogMustExist ) then
             warnlog( CFN & "The requested dialog is not available, no action taken" )
