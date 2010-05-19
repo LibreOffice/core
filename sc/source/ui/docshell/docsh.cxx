@@ -49,6 +49,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -2632,3 +2633,58 @@ sal_Bool ScDocShell::AcceptStateUpdate() const
     return sal_False;
 }
 //-->Added by PengYunQuan for Validity Cell Range Picker
+
+
+void ScDocShell::SetChangeRecording( bool bActivate )
+{
+    ScDocument * pDoc = GetDocument();
+    DBG_ASSERT( pDoc, "ScDocument missing" );
+    if (pDoc)
+    {
+        if (bActivate)
+            pDoc->StartChangeTracking();
+        else
+            pDoc->EndChangeTracking();
+    }
+}
+
+
+bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack)
+    {
+        if (rNewPassword.Len())
+        {
+            // when password protection is applied change tracking must always be active
+            SetChangeRecording( true );
+
+            ::com::sun::star::uno::Sequence< sal_Int8 > aProtectionHash;
+            SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
+            pChangeTrack->SetProtection( aProtectionHash );
+        }
+        else
+        {
+            pChangeTrack->SetProtection( ::com::sun::star::uno::Sequence< sal_Int8 >() );
+        }
+        bRes = true;
+    }
+
+    return bRes;
+}
+
+
+bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack && pChangeTrack->IsProtected())
+    {
+        rPasswordHash = pChangeTrack->GetProtection();
+        bRes = true;
+    }
+    return bRes;
+}
+
+
