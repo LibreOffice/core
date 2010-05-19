@@ -385,7 +385,7 @@ testcase t_DrawingEngine
     printlog "Open a drawing"
     hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/Blueprint.odg"))
 
-    Call sMakeReadOnlyDocumentEditable
+    Call fMakeDocumentWritable
 
     '///Select grouped object and enter group
     printlog "Select group"
