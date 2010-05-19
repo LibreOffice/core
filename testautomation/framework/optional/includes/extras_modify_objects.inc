@@ -81,12 +81,12 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     next iObject
     
     printlog( "Verify object count (en_US only)" )
-    if ( gProductName = "StarOffice" and gISOLang = "en-US" ) then
+    if ( gProductName = "Oracle Open Office" and gISOLang = "en-US" ) then
         if ( iObjectSum <> iObjectCountExpected ) then
             warnlog( "Number of objects has changed. OLD: " & iObjectCountExpected &_
             " NEW: " & iObjectSum )
         else
-            printlog( "Object count is ok for en-US / StarOffice" )
+            printlog( "Object count is ok for en-US / Oracle Open Office" )
         endif
     else
         printlog( "Template count testing skipped for non-en_US/StarOffice" )
@@ -95,7 +95,7 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     Kontext "TemplateAndDocuments"
     printlog( "Switch from preview to document info" )
     docinfo.click()
-    TemplateAndDocuments.cancel()
+    hCloseDialog( TemplateAndDocuments, "cancel" )
    
     printlog( "" )
     printlog( "Starting to load/save/close/reload/close all Objects" )
@@ -141,7 +141,7 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
                 if ( hFileWait( false ) = -6 ) then 
                     warnlog( "Load failure: ASCII filter dialog displayed, recovering" )
                     kontext "FilterAuswahl"
-                    FilterAuswahl.cancel()
+                    hCloseDialog( FilterAuswahl, "cancel" )
                     hDestroyDocument()
                 else
                     printlog( "Build filename; save, reload and delete" )
