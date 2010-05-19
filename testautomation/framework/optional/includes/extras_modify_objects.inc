@@ -111,11 +111,14 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
             printlog( "Folder index = " & iObjectFolder & ", Object index = " & iObject )
             
             hFileCloseAll()
-            
-            if ( iReset = 10 ) then
-                call exitRestartTheOffice()
-                iReset = 0
-            endif
+
+            ' every now and then the office becomes a little unstable.
+            ' Enable the if()-block then, otherwise you might miss some broken
+            ' documents (because the test aborts too early)
+            'if ( iReset = 10 ) then
+            '    call exitRestartTheOffice()
+            '    iReset = 0
+            'endif
           
             printlog( "Select the item we want to load" )
             FileNewFromTemplate
