@@ -153,27 +153,23 @@ function hChangeDoc() as string
                       Kontext "DocumentWriter"
                       DocumentWriter.TypeKeys "<Return>This doc is changed!"
                       hChangeDoc() = "Changed WRITER/HTML/MASTERDOC"
-                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>CALC: Write some text into the current location (usually A1)</li>
       case "CALC"   : Kontext "DocumentCalc"
                       DocumentCalc.TypeKeys "<Down>This doc is changed!<Return>"
                       hChangeDoc() = "Changed CALC"
-                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>DRAW: Draw a rectangle</li>
       case "DRAW"   : Kontext "DocumentDraw"
                       hRechteckErstellen ( 20, 20, 25, 25 )
                       gMouseClick ( 1, 1 )
                       hChangeDoc() = "Changed DRAW"
-                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>IMPRESS: Draw a rectangle</li>
       case "IMPRESS": Kontext "DocumentImpress"
                       hRechteckErstellen ( 20, 20, 25, 25 )
                       gMouseClick ( 1, 1 )
                       hChangeDoc() = "Changed IMPRESS"
-                      'DocumentWriter.typeKeys( "<MOD2 F6>" )
 
       '///+<li>MATH: Create a simple formaula</li>
       case "MATH"   : SchreibenInMathdok( "b over c" )
@@ -235,12 +231,9 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
 
     '///+<li>Write the result to the printlog if desired</li>
     if ( irc = 0 ) then
-   
-        if ( bWarn ) then
-            warnlog ( CFN & "The focus is not on the expected document" )
-        else
-            if ( GVERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
-        endif
+
+        if ( GVERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
+        if ( bWarn ) then warnlog ( CFN & "The focus is not on the expected document" )
         
         printlog( CFN & "Expected: " & cString )
         printlog( CFN & "Found...: " & cIdentifier )
@@ -366,12 +359,14 @@ function hDestroyDocument() as boolean
     
     Kontext "Active"
     if ( Active.Exists( 2 ) ) then
-        printlog( "Msgbox: " & Active.getText() )
-        try
-            hCloseDialog( Active, "no" )
-        catch
-            hCloseDialog( Active, "202" )
-        endcatch
+        printlog( CFN & "Msgbox: " & Active.getText() )
+        hCloseDialog( Active, "no" )
+        hCloseDialog( Active, "202,optional" )
+
+        ' This could be the "Error saving document" warning.
+        if ( hCloseDialog( Active, "ok,optional" ) ) then
+            warnlog( CFN & "An unexpected message has been handled" )
+        endif
     end if
     
     if ( getDocumentCount() = iDocCount ) then hCloseDocument()
@@ -384,55 +379,16 @@ end function
 
 function hInitSingleDoc() as boolean
 
-    '///<h3>Make sure exactly one single writer document is open</h3>
-    '///<i>The wizards cannot be triggered correctly from the backing window. 
-    '///+ As a workaround this function checks the amount of open documents and
-    '///+ creates exactly one unchanged Writer document</i><br><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Errorcondition (Boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: Exactly one Writer document is open</li>
-    '///+<li>FALSE: Any error</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitSingleDoc::"
-    dim cOldApplication as string
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Close all documents until we are on the backing window</li>
     hFileCloseAll()
-    
-    '///+<li>Save the previous gApplication</li>
-    cOldApplication = gApplication
-    
-    '///+<li>Set gApplication to WRITER</li>
-    gApplication = "WRITER"
-    
-    '///+<li>Open one new Writer document</li>
-    call hNewDocument()
-    
-    '///+<li>Verify that exactly one document is open</li>
-    if ( getDocumentCount = 1 ) then 
-        printlog( "One single unchanged writer document is open" )
+    hCreateDocument()
+
+    if ( GVERBOSE ) then printlog( "hInitSingleDoc(): Opening document: " & gApplication )
+
+    if ( getDocumentCount = 1 ) then
         hInitSingleDoc() = true
     else
-        printlog( CFN & "Failed to open just one single writer document" )
         hInitSingleDoc() = false
     endif
-    
-    '///+<li>Restore gApplication</li>
-    gApplication = cOldApplication
-    '///</ul>
 
 end function
 
@@ -468,42 +424,37 @@ function hInitWriteDocIdentifier( cString as string ) as boolean
     '///</ol>
 
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitWriteDocIdentifier::"
+    const RC_TIMEOUT = -1
 
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Verify number of open documents</li>
-    if ( getDocumentCount <> 1 ) then
-        printlog( CFN & "Incorrect document count" )
-        hInitWriteDocIdentifier() = false
-        exit function
-    endif
-    
-    '///+<li>Verify that it is a writer document</li>
-    kontext "DocumentWriter"
-    if ( not DocumentWriter.exists() ) then
-        printlog( CFN & "Open document is not a text document" )
-        hInitWriteDocIdentifier() = false
-        exit function
-    endif
-    
-    '///+<li>Write the string</li>
-    kontext "DocumentWriter"
-    DocumentWriter.typeKeys( "<MOD1 END>" )
-    DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
-    DocumentWriter.typeKeys( "<DELETE>" )
-    DocumentWriter.typekeys( cString )
-    
-    '///+<li>Verify the string</li>
-    DocumentWriter.typeKeys( "<MOD1 END>" )
-    DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
-    EditCopy
-    if ( getClipboardText = cString ) then
-        printlog( CFN & "Document has been successfully modified." )
-        hInitWriteDocIdentifier() = true
+    if ( getDocumentCount = 1 and gApplication = "WRITER" ) then
+
+        kontext "DocumentWriter"
+        DocumentWriter.typeKeys( "<MOD1 END>" )
+        DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
+        DocumentWriter.typeKeys( "<DELETE>" )
+        DocumentWriter.typekeys( cString )
+
+        DocumentWriter.typeKeys( "<MOD1 END>" )
+        DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
+
+        if ( hUseAsyncSlot( "EditCopy" ) <> RC_TIMEOUT ) then
+
+            if ( getClipboardText = cString ) then
+                printlog( CFN & "Writer document has been successfully modified." )
+                hInitWriteDocIdentifier() = true
+            else
+                warnlog( CFN & "Could not verify document identification string" )
+                hInitWriteDocIdentifier() = false
+            endif
+        else
+            warnlog( CFN & "Unable to copy text to clipboard using <EditCopy>" )
+            hInitWriteDocIdentifier() = false
+        endif
     else
-        printlog( CFN & "Could not verify document identification string" )
+        warnlog ( CFN & "Only one single writer document may be open"   )
+        printlog( CFN & "Number of documents: " & getDocumentCount )
+        printlog( CFN & "Application........: " & gApplication     )
         hInitWriteDocIdentifier() = false
-    endif    
-    '///</ul>
+    endif
 
 end function

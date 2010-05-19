@@ -978,14 +978,18 @@ end function
 
 function hUseAsyncSlot( cSlot as string ) as integer
 
+    ' These are a selection of slots that take time to get enabled after
+    ' actions have been performed on a document. Although they might appear
+    ' to be ready in the UI we still need to probe them.
+
     dim iRetries as integer : iRetries = 0
     dim iTime as integer : iTime = 0
 
     dim slot as string : slot = lcase( cSlot )
 
-    const MAX_RETRIES    = 100 ' Number of time we try to call the slot
-    const DELAY          = 100 ' 100ms delay to wait between retries
-    const RETVAL_TIMEOUT = -1  ' Returnvalue if slot is not available
+    const MAX_RETRIES = 100 ' Number of time we try to call the slot
+    const DELAY       = 100 ' 100ms delay to wait between retries
+    const RC_TIMEOUT  = -1  ' Returnvalue if slot is not available
     const CFN = "global::tools::includes::required::hUseAsyncSlot(): "
 
     if ( GVERBOSE ) then printlog( "Execute <" & cSlot & ">" )
@@ -1092,7 +1096,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     iTime = iRetries * DELAY
 
     ' Timeout is -1
-    if ( iRetries = MAX_RETRIES ) then iTime = RETVAL_TIMEOUT
+    if ( iRetries = MAX_RETRIES ) then iTime = RC_TIMEOUT
 
     if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hUseAsyncSlot() = iTime
@@ -1108,7 +1112,7 @@ function hClickButton( oButton as object ) as integer
 
     const MAX_RETRIES    = 50  ' Try to click the button max 50 times
     const DELAY          = 100 ' 100ms wait between retries
-    const RETVAL_TIMEOUT = -1  ' Return -1 if the button is not available
+    const RC_TIMEOUT     = -1  ' Return -1 if the button is not available
     const CFN = "global::tools::includes::required::hClickButton(): "
 
     if ( GVERBOSE ) then printlog( "Click <" & oButton.name() & ">" )
@@ -1126,7 +1130,7 @@ function hClickButton( oButton as object ) as integer
     ' Total time used
     iTime = iRetries * DELAY
 
-    if ( iRetries = MAX_RETRIES ) then iTime = RETVAL_TIMEOUT
+    if ( iRetries = MAX_RETRIES ) then iTime = RC_TIMEOUT
 
     if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hClickButton() = iTime
@@ -1177,17 +1181,22 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
         printlog( "Closing dialog <" & oDialog.name() & "> using the flags <" & sFlags & ">.")
     endif
 
-    if ( oDialog.exists() ) then
-        select case( iClosingMethod )
-        case METHOD_CLOSE  : oDialog.close()
-        case METHOD_CANCEL : oDialog.cancel()
-        case METHOD_OK     : oDialog.ok()
-        case METHOD_202    : oDialog.click( 202 )
-        case METHOD_YES    : oDialog.yes()
-        case METHOD_NO     : oDialog.no()
-        case else :
-            warnlog( CFN & " Script error: Allowed closing methods are cancel, close, ok, yes, no and 202" )
-        end select
+    if ( oDialog.exists( 1 ) ) then
+        try
+            select case( iClosingMethod )
+            case METHOD_CLOSE  : oDialog.close()
+            case METHOD_CANCEL : oDialog.cancel()
+            case METHOD_202    : oDialog.click( 202 )
+            case METHOD_YES    : oDialog.yes()
+            case METHOD_NO     : oDialog.no()
+            case METHOD_OK     : oDialog.ok()
+            case else :
+                warnlog( CFN & " Script error: Allowed closing methods are cancel, close, ok, yes, no and 202" )
+            end select
+        catch
+            printlog( CFN & "Could not execute action with provided flags: " & sFlags )
+            hCloseDialog() = FALSE
+        endcatch
     else
         if ( bDialogMustExist ) then
             warnlog( CFN & "The requested dialog is not available, no action taken" )
@@ -1206,6 +1215,8 @@ end function
 function hWaitForObject( oControl as object, iTime as integer ) as integer
 
     const CFN = "global::tools::includes::required::t_tools3.inc::hWaitForObject(): "
+    const RC_TIMEOUT = -1
+
     dim iWait as integer
 
     if ( GVERBOSE ) then printlog( CFN & "Entering function for control: " & oControl.name() )
@@ -1227,6 +1238,6 @@ function hWaitForObject( oControl as object, iTime as integer ) as integer
     next iWait
 
     printlog( CFN & "Control not found or not enabled, timeout reached" )
-    hWaitForObject() = -1
+    hWaitForObject() = RC_TIMEOUT
 
 end function
