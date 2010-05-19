@@ -183,7 +183,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
         try
         {
             static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
-            float fCheckBoxHeight;
+            float fCheckBoxHeight = 0.0;
             xTextRangeProps->getPropertyValue(sCharHeight) >>= fCheckBoxHeight;
             nCheckBoxHeight = floor(fCheckBoxHeight * 35.3);
         }
