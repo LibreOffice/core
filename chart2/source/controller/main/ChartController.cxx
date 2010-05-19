@@ -410,7 +410,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         m_apDropTargetHelper.reset();
     }
     {
-        awt::Size aPageSize( ChartModelHelper::getPageSize(m_aModel->getModel()) );
+        awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
 
         // calls to VCL
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
@@ -420,7 +420,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         m_pChartWindow->Show();
         m_apDropTargetHelper.reset(
             new ChartDropTargetHelper( m_pChartWindow->GetDropTarget(),
-                                       uno::Reference< chart2::XChartDocument >( m_aModel->getModel(), uno::UNO_QUERY )));
+                                       uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
 
         impl_createDrawViewController();
     }
@@ -514,7 +514,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                     if( m_aSelection.hasSelection() )
                         this->impl_selectObjectAndNotiy();
                     else
-                        ChartModelHelper::triggerRangeHighlighting( m_aModel->getModel() );
+                        ChartModelHelper::triggerRangeHighlighting( getModel() );
 
                     impl_initializeAccessible();
 
@@ -601,7 +601,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     //select chart area per default:
     select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) ) );
 
-    uno::Reference< lang::XMultiServiceFactory > xFact( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
     if( xFact.is())
     {
         m_xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
@@ -615,7 +615,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     if( m_pChartWindow )
         m_pChartWindow->Invalidate();
 
-    uno::Reference< chart2::XUndoSupplier > xUndoSupplier( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< chart2::XUndoSupplier > xUndoSupplier( getModel(), uno::UNO_QUERY );
     if( xUndoSupplier.is())
         m_xUndoManager.set( xUndoSupplier->getUndoManager());
 
@@ -735,7 +735,7 @@ void ChartController::impl_createDrawViewController()
         if( m_pDrawModelWrapper )
         {
             m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),m_pChartWindow,true);
-            m_pDrawViewWrapper->attachParentReferenceDevice( m_aModel->getModel());
+            m_pDrawViewWrapper->attachParentReferenceDevice( getModel() );
         }
     }
 }
@@ -776,7 +776,7 @@ void ChartController::impl_deleteDrawViewController()
         if( m_aModel.is())
         {
             uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener;
-            uno::Reference< chart2::data::XDataReceiver > xDataReceiver( m_aModel->getModel(), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataReceiver > xDataReceiver( getModel(), uno::UNO_QUERY );
             if( xDataReceiver.is() )
                 xSelectionChangeListener = uno::Reference< view::XSelectionChangeListener >( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
             if( xSelectionChangeListener.is() )
@@ -959,6 +959,8 @@ bool ChartController::impl_releaseThisModel( const uno::Reference< uno::XInterfa
             bReleaseModel = true;
         }
     }
+    if( bReleaseModel )
+        m_aDispatchContainer.setModel( 0 );
     return bReleaseModel;
 }
 
@@ -1059,7 +1061,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         , sal_Int32 /* nSearchFlags */)
         throw(uno::RuntimeException)
 {
-    if ( !m_aLifeTimeManager.impl_isDisposed() )
+    if ( !m_aLifeTimeManager.impl_isDisposed() && getModel().is() )
     {
         if( rTargetFrameName.getLength() &&
             rTargetFrameName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_self")))
@@ -1103,7 +1105,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     //----------------------------------
     else if(aCommand.equals("Update")) //Update Chart
     {
-        ChartViewHelper::setViewToDirtyState( m_aModel->getModel() );
+        ChartViewHelper::setViewToDirtyState( getModel() );
         if( m_pChartWindow )
             m_pChartWindow->Invalidate();
     }
@@ -1325,12 +1327,12 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
 {
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHARTTYPE ))), m_xUndoManager, m_aModel->getModel() );
+        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHARTTYPE ))), m_xUndoManager, getModel() );
 
     // /--
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
     //prepare and open dialog
-    ChartTypeDialog aDlg( m_pChartWindow, m_aModel->getModel(), m_xCC );
+    ChartTypeDialog aDlg( m_pChartWindow, getModel(), m_xCC );
     if( aDlg.Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();
@@ -1343,14 +1345,14 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 {
     //-------------------------------------------------------------
     //convert properties to ItemSet
-    uno::Reference< XChartDocument >   xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< XChartDocument >   xChartDoc( getModel(), uno::UNO_QUERY );
     DBG_ASSERT( xChartDoc.is(), "Invalid XChartDocument" );
     if( !xChartDoc.is())
         return;
 
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_DATA_RANGES ))), m_xUndoManager, m_aModel->getModel() );
+        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_DATA_RANGES ))), m_xUndoManager, getModel() );
     if( xChartDoc.is())
     {
         // /--
@@ -1367,20 +1369,20 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 
 void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
 {
-    ControllerLockGuard aCLGuard( m_aModel->getModel());
+    ControllerLockGuard aCLGuard( getModel() );
 
     //get selected series
     ::rtl::OUString aObjectCID(m_aSelection.getSelectedCID());
     uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legendentries and labels?
-            aObjectCID, m_aModel->getModel() ) );
+            aObjectCID, getModel() ) );
 
     UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
             (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
             ::rtl::OUString( String( SchResId( STR_OBJECT_DATASERIES )))),
-        m_xUndoManager, m_aModel->getModel());
+        m_xUndoManager, getModel());
 
-    bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( m_aModel->getModel() ), xGivenDataSeries, bForward );
+    bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getModel() ), xGivenDataSeries, bForward );
     if( bChanged )
     {
         m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );
@@ -1432,7 +1434,7 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 {
     // the source can also be a subobject of the ChartModel
     // @todo: change the source in ChartModel to always be the model itself ?
-//     if( m_aModel->getModel() == aEvent.Source )
+//     if( getModel() == aEvent.Source )
 
 
     //todo? update menu states ?
@@ -1511,7 +1513,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         uno::Sequence< uno::Any > aArguments(5);
         uno::Reference<view::XSelectionSupplier> xSelectionSupplier(this);
         aArguments[0]=uno::makeAny(xSelectionSupplier);
-        uno::Reference<frame::XModel> xModel(m_aModel->getModel());
+        uno::Reference<frame::XModel> xModel(getModel());
         aArguments[1]=uno::makeAny(xModel);
         aArguments[2]=uno::makeAny(m_xChartView);
         uno::Reference< XAccessible > xParent;
