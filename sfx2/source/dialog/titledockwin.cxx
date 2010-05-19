@@ -48,7 +48,7 @@ namespace sfx2
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_nStyle )
         ,m_sTitle()
         ,m_aToolbox( this )
-        ,m_aContentWindow( this )
+        ,m_aContentWindow( this, WB_DIALOGCONTROL )
         ,m_aBorder( 3, 1, 3, 3 )
         ,m_bLayoutPending( false )
     {
