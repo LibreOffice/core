@@ -45,6 +45,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 XMLSEC1VERSION=1.2.14
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
+TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 
 #xmlsec1-configure.patch: Set up the build. Straightforward configuration
 #xmlsec1-olderlibxml2.patch: Allow build against older libxml2, for macosx

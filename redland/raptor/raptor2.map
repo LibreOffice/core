@@ -1,4 +1,4 @@
-RAPTOR2 {
+UDK_3_0_0 {
     global:
         GetVersionInfo;
 raptor_ntriples_string_as_utf8_string;
