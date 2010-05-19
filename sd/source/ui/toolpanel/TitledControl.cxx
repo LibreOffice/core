@@ -54,16 +54,13 @@ TitledControl::TitledControl (
       mpUserData(NULL),
       mpClickHandler(new ClickHandler(rClickHandler))
 {
-    if (pControl.get() != NULL)
-    {
-        mpControlContainer->AddControl (::std::auto_ptr<TreeNode> (
-            new TitleBar (this, rTitle, eType, pControl->IsExpandable())));
-        pControl->SetParentNode (this);
-    }
+    mpControlContainer->AddControl (::std::auto_ptr<TreeNode> (
+        new TitleBar (this, rTitle, eType, pControl->IsExpandable())));
+    pControl->SetParentNode (this);
     mpControlContainer->AddControl (pControl);
 
-    FocusManager::Instance().RegisterDownLink(this, GetControl()->GetWindow());
-    FocusManager::Instance().RegisterUpLink(GetControl()->GetWindow(), this);
+    FocusManager::Instance().RegisterDownLink( GetTitleBar()->GetWindow(), GetControl()->GetWindow() );
+    FocusManager::Instance().RegisterUpLink( GetControl()->GetWindow(), GetTitleBar()->GetWindow() );
 
     SetBackground (Wallpaper());
 
