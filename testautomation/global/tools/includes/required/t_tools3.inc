@@ -1181,22 +1181,17 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
         printlog( "Closing dialog <" & oDialog.name() & "> using the flags <" & sFlags & ">.")
     endif
 
-    if ( oDialog.exists( 1 ) ) then
-        try
-            select case( iClosingMethod )
-            case METHOD_CLOSE  : oDialog.close()
-            case METHOD_CANCEL : oDialog.cancel()
-            case METHOD_202    : oDialog.click( 202 )
-            case METHOD_YES    : oDialog.yes()
-            case METHOD_NO     : oDialog.no()
-            case METHOD_OK     : oDialog.ok()
-            case else :
-                warnlog( CFN & " Script error: Allowed closing methods are cancel, close, ok, yes, no and 202" )
-            end select
-        catch
-            printlog( CFN & "Could not execute action with provided flags: " & sFlags )
-            hCloseDialog() = FALSE
-        endcatch
+    if ( oDialog.exists() ) then
+        select case( iClosingMethod )
+        case METHOD_CLOSE  : oDialog.close()
+        case METHOD_CANCEL : oDialog.cancel()
+        case METHOD_202    : oDialog.click( 202 )
+        case METHOD_YES    : oDialog.yes()
+        case METHOD_NO     : oDialog.no()
+        case METHOD_OK     : oDialog.ok()
+        case else :
+            warnlog( CFN & " Script error: Allowed closing methods are cancel, close, ok, yes, no and 202" )
+        end select
     else
         if ( bDialogMustExist ) then
             warnlog( CFN & "The requested dialog is not available, no action taken" )

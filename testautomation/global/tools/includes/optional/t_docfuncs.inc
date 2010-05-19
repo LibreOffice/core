@@ -351,23 +351,38 @@ function hDestroyDocument() as boolean
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hDestroyDocument: "
     dim iDocCount as integer : iDocCount = getDocumentCount()
     hDestroyDocument() = false
+
+    dim method( 3 ) as string
+        method( 1 ) = "no,optional"
+        method( 2 ) = "202,optional"
+        method( 3 ) = "ok,optional"  ' This could be a File I/O error
+
+    dim iCurrentMethod as integer
+    dim bDialogClosed as boolean
     
     if ( iDocCount = 0 ) then exit function
     if ( GVERBOSE ) then printlog( CFN & "In.: Open: " & iDocCount )
 
     hUseAsyncSlot( "FileClose" )
-    
-    Kontext "Active"
-    if ( Active.Exists( 2 ) ) then
-        printlog( CFN & "Msgbox: " & Active.getText() )
-        hCloseDialog( Active, "no" )
-        hCloseDialog( Active, "202,optional" )
 
-        ' This could be the "Error saving document" warning.
-        if ( hCloseDialog( Active, "ok,optional" ) ) then
-            warnlog( CFN & "An unexpected message has been handled" )
+    for iCurrentMethod = 1 to 3
+
+        bDialogClosed = false
+
+        Kontext "Active"
+        if ( Active.exists( 1 ) ) then
+            printlog( CFN & "Msgbox: " & Active.getText() )
+            if ( GVERBOSE ) then printlog( CFN & "Method: " & method( iCurrentMethod ) )
+            bDialogClosed = hCloseDialog( Active, method( iCurrentMethod ) )
+        else
+            exit for
         endif
-    end if
+        
+        if ( iCurrentMethod = 3 and bDialogClosed ) then 
+            warnlog( "Unexpected messagebox was handled" )
+        endif
+        
+    next iCurrentMethod
     
     if ( getDocumentCount() = iDocCount ) then hCloseDocument()
     if ( getDocumentCount() = iDocCount - 1 ) then hDestroyDocument() = true
