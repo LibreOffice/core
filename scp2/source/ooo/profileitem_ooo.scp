@@ -148,13 +148,22 @@ ProfileItem gid_Profileitem_Soffice_ProgressPosition
     Value = "-1,-1";
 End
 
+ProfileItem gid_Profileitem_Soffice_NativeProgress
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "NativeProgress";
+    Value = "true";
+End
+
 #ifdef WNT
 
 ProfileItem gid_Profileitem_Soffice_Hideeula
     ProfileID = gid_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 7;
+    Order = 8;
     Key = "HideEula";
     Value = "[HIDEEULA]";
     Inifiletablekey = "HideEula";
