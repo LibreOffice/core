@@ -1026,6 +1026,13 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     SET_SCRIPT_INVAL( nPos )
                 }
             }
+
+            // --> OD 2010-02-16 #i104008#
+            if ( GetShell() )
+            {
+                GetShell()->InvalidateAccessibleParaAttrs( *this );
+            }
+            // <--
         }
         break;
         case RES_OBJECTDYING:

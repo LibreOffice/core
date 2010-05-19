@@ -83,9 +83,9 @@
 #define CB_ALLOWDUPLICATEFIELDNAMES 23
 #define CB_EXPORTEMPTYPAGES         24
 #define CB_ADDSTREAM                25
-
 #define CB_PDFA_1B_SELECT           26
 #define CB_EXPORTNOTESPAGES         27
+#define CB_EMBEDSTANDARDFONTS       28
 
 #define FL_OLD_PAGES        51
 #define RB_OLD_ALL          52

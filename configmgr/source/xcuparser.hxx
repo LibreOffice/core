@@ -49,6 +49,7 @@ namespace configmgr {
 class GroupNode;
 class LocalizedPropertyNode;
 class Modifications;
+class Partial;
 class PropertyNode;
 class SetNode;
 struct Data;
@@ -56,7 +57,9 @@ struct Span;
 
 class XcuParser: public Parser {
 public:
-    XcuParser(int layer, Data * data, Modifications * modifications);
+    XcuParser(
+        int layer, Data & data, Partial const * partial,
+        Modifications * broadcastModifications);
 
 private:
     virtual ~XcuParser();
@@ -105,36 +108,44 @@ private:
 
     void handleSetNode(XmlReader & reader, SetNode * set);
 
+    void recordModification();
+
     struct State {
         rtl::Reference< Node > node; // empty iff ignore or <items>
         rtl::OUString name; // empty and ignored if !insert
         bool ignore;
         bool insert;
         bool locked;
+        bool pop;
 
-        inline State(): ignore(true), insert(false), locked(false) {}
+        inline State(bool thePop):
+            ignore(true), insert(false), locked(false), pop(thePop)
+        {}
 
         inline State(rtl::Reference< Node > const & theNode, bool theLocked):
-            node(theNode), ignore(false), insert(false), locked(theLocked)
+            node(theNode), ignore(false), insert(false), locked(theLocked),
+            pop(true)
         {}
 
         inline State(
             rtl::Reference< Node > const & theNode,
             rtl::OUString const & theName, bool theLocked):
             node(theNode), name(theName), ignore(false), insert(true),
-            locked(theLocked)
+            locked(theLocked), pop(true)
         {}
     };
 
     typedef std::stack< State > StateStack;
 
     ValueParser valueParser_;
-    Data * data_;
-    Modifications * modifications_;
+    Data & data_;
+    Partial const * partial_;
+    Modifications * broadcastModifications_;
+    bool recordModifications_;
+    bool trackPath_;
     rtl::OUString componentName_;
     StateStack state_;
-    Path modificationPath_;
-    rtl::OUString path_;
+    Path path_;
 };
 
 }

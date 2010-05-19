@@ -371,7 +371,11 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
                 lang::EventObject aEvent( xCloseable );
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )
-                    (static_cast< util::XCloseListener*>(aIt.next()))->notifyClosing( aEvent );
+                {
+                    uno::Reference< util::XCloseListener > xListener( aIt.next(), uno::UNO_QUERY );
+                    if( xListener.is() )
+                        xListener->notifyClosing( aEvent );
+                }
             }
         }
     }

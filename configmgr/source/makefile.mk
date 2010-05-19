@@ -54,6 +54,7 @@ SLOFILES = \
     $(SLO)/nodemap.obj \
     $(SLO)/pad.obj \
     $(SLO)/parsemanager.obj \
+    $(SLO)/partial.obj \
     $(SLO)/propertynode.obj \
     $(SLO)/rootaccess.obj \
     $(SLO)/services.obj \

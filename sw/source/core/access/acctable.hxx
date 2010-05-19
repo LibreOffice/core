@@ -29,13 +29,16 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#ifndef _ACCCONTEXT_HXX
-#include "acccontext.hxx"
-#endif
+#include <acccontext.hxx>
 
 class SwTabFrm;
 class SwAccessibleTableData_Impl;
 class SwTableBox;
+class SwSelBoxes;
+
+namespace sw { namespace access {
+    class SwAccessibleChild;
+} }
 
 class SwAccessibleTable :
         public SwAccessibleContext,
@@ -218,9 +221,10 @@ public:
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );
 
-    virtual void DisposeChild( const SwFrmOrObj& rFrmOrObj, sal_Bool bRecursive );
-    virtual void InvalidateChildPosOrSize( const SwFrmOrObj& rFrmOrObj,
-                                        const SwRect& rFrm );
+    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrmOrObj,
+                               sal_Bool bRecursive );
+    virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrmOrObj,
+                                           const SwRect& rFrm );
 
     //=====  XAccessibleSelection  ============================================
 

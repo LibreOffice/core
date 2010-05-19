@@ -158,6 +158,9 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
     catch( const Exception&  )
     {

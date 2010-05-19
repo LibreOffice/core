@@ -55,7 +55,7 @@ PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
 .ENDIF
 
 FINDLIBFILES_TMP:=$(subst,/,$/ \
-    $(shell @$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v .pyc |$(GREP) -v .py\~ |$(GREP) -v .orig ))
+    $(shell @$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v "\.pyc" |$(GREP) -v "\.py~" |$(GREP) -v .orig | $(GREP) -v _failed))
 FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
 
 FILES=\

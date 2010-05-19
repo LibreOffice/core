@@ -294,38 +294,3 @@ String STR_SMARTTAG_CLICK
     Text [ en-US ] = "%s-click to open Smart Tag menu" ;
 };
 
-String STR_POSTIT_TODAY
-{
-    Text [ en-US ] = "Today," ;
-};
-
-String STR_POSTIT_YESTERDAY
-{
-    Text [ en-US ] = "Yesterday," ;
-};
-
-String STR_DELETE_ALL_NOTES
-{
-    Text [ en-US ] = "All Comments" ;
-};
-
-String STR_DELETE_AUTHOR_NOTES
-{
-    Text [ en-US ] = "Comments by " ;
-};
-
-String STR_NODATE
-{
-    Text [ en-US ] = "(no date)" ;
-};
-
-String STR_NOAUTHOR
-{
-    Text [ en-US ] = "(no author)" ;
-};
-
-String STR_REPLY
-{
-    Text [ en-US ] = "Reply to $1" ;
-};
-

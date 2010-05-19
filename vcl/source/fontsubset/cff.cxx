@@ -33,6 +33,7 @@
 #include <assert.h>
 
 #include <vcl/fontsubset.hxx>
+#include <vcl/strhelper.hxx>
 
 //#define IGNORE_HINTS
 
@@ -2027,6 +2028,17 @@ void Type1Emitter::emitAllCrypted( void)
 
 // --------------------------------------------------------------------
 
+// #i110387# quick-and-dirty double->ascii conversion
+// needed because sprintf/ecvt/etc. alone are too localized (LC_NUMERIC)
+// also strip off trailing zeros in fraction while we are at it
+inline int dbl2str( char* pOut, double fVal, int nPrecision=6)
+{
+    const int nLen = psp::getValueOfDouble( pOut, fVal, nPrecision);
+    return nLen;
+}
+
+// --------------------------------------------------------------------
+
 void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     const ValVector& rVector)
 {
@@ -2042,10 +2054,11 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
         aVal = *it;
         if( ++it == rVector.end() )
             break;
-        mpPtr += sprintf( mpPtr, "%g ", aVal);
+        mpPtr += dbl2str( mpPtr, aVal);
+        *(mpPtr++) = ' ';
     }
     // emit the last value
-    mpPtr += sprintf( mpPtr, "%g", aVal);
+    mpPtr += dbl2str( mpPtr, aVal);
     // emit the line tail
     mpPtr += sprintf( mpPtr, pLineTail);
 }
@@ -2202,18 +2215,33 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rEmitter.emitValVector( "/FamilyBlues [", "]ND\n", mpCffLocal->maFamilyBlues);
     rEmitter.emitValVector( "/FamilyOtherBlues [", "]ND\n", mpCffLocal->maFamilyOtherBlues);
 
-    if( mpCffLocal->mfBlueScale)
-        pOut += sprintf( pOut, "/BlueScale %.6f def\n", mpCffLocal->mfBlueScale);
-    if( mpCffLocal->mfBlueShift)    // default BlueShift==7
-        pOut += sprintf( pOut, "/BlueShift %.1f def\n", mpCffLocal->mfBlueShift);
-    if( mpCffLocal->mfBlueFuzz)     // default BlueFuzz==1
-        pOut += sprintf( pOut, "/BlueFuzz %.1f def\n", mpCffLocal->mfBlueFuzz);
+    if( mpCffLocal->mfBlueScale) {
+        pOut += sprintf( pOut, "/BlueScale ");
+        pOut += dbl2str( pOut, mpCffLocal->mfBlueScale, 6);
+        pOut += sprintf( pOut, " def\n");
+    }
+    if( mpCffLocal->mfBlueShift) {  // default BlueShift==7
+        pOut += sprintf( pOut, "/BlueShift ");
+        pOut += dbl2str( pOut, mpCffLocal->mfBlueShift);
+        pOut += sprintf( pOut, " def\n");
+    }
+    if( mpCffLocal->mfBlueFuzz) {       // default BlueFuzz==1
+        pOut += sprintf( pOut, "/BlueFuzz ");
+        pOut += dbl2str( pOut, mpCffLocal->mfBlueFuzz);
+        pOut += sprintf( pOut, " def\n");
+    }
 
     // emit stem hint related privdict entries
-    if( mpCffLocal->maStemStdHW)
-        pOut += sprintf( pOut, "/StdHW [%g] def\n", mpCffLocal->maStemStdHW);
-    if( mpCffLocal->maStemStdVW)
-        pOut += sprintf( pOut, "/StdVW [%g] def\n", mpCffLocal->maStemStdVW);
+    if( mpCffLocal->maStemStdHW) {
+        pOut += sprintf( pOut, "/StdHW [");
+        pOut += dbl2str( pOut, mpCffLocal->maStemStdHW);
+        pOut += sprintf( pOut, "] def\n");
+    }
+    if( mpCffLocal->maStemStdVW) {
+        pOut += sprintf( pOut, "/StdVW [");
+        pOut += dbl2str( pOut, mpCffLocal->maStemStdVW);
+        pOut += sprintf( pOut, "] def\n");
+    }
     rEmitter.emitValVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
     rEmitter.emitValVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
 
@@ -2224,8 +2252,11 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, "/LanguageGroup %d def\n", mpCffLocal->mnLangGroup);
     if( mpCffLocal->mnLangGroup == 1) // compatibility with ancient printers
         pOut += sprintf( pOut, "/RndStemUp false def\n");
-    if( mpCffLocal->mfExpFactor)
-        pOut += sprintf( pOut, "/ExpansionFactor %.2f def\n", mpCffLocal->mfExpFactor);
+    if( mpCffLocal->mfExpFactor) {
+        pOut += sprintf( pOut, "/ExpansionFactor ");
+        pOut += dbl2str( pOut, mpCffLocal->mfExpFactor);
+        pOut += sprintf( pOut, " def\n");
+    }
 #endif // IGNORE_HINTS
 
     // emit remaining privdict entries
@@ -2248,6 +2279,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 
     // emit used GlobalSubr charstrings
     // these are the just the default subrs
+    // TODO: do we need them as the flex hints are resolved differently?
     static const char aSubrs[] =
         "/Subrs 5 array\n"
         "dup 0 15 RD \x5F\x3D\x6B\xAC\x3C\xBD\x74\x3D\x3E\x17\xA0\x86\x58\x08\x85 NP\n"

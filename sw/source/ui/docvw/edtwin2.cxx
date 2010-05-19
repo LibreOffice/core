@@ -87,7 +87,6 @@
 #include <utlui.hrc>
 #endif
 
-#include <postit.hxx>
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 

@@ -143,6 +143,22 @@ ooo_window_wrapper_real_focus_gtk (GtkWidget *, GdkEventFocus *)
     return FALSE;
 }
 
+static gboolean ooo_tooltip_map( GtkWidget* pToolTip, gpointer )
+{
+    AtkObject* pAccessible = gtk_widget_get_accessible( pToolTip );
+    if( pAccessible )
+        atk_object_notify_state_change( pAccessible, ATK_STATE_SHOWING, TRUE );
+    return FALSE;
+}
+
+static gboolean ooo_tooltip_unmap( GtkWidget* pToolTip, gpointer )
+{
+    AtkObject* pAccessible = gtk_widget_get_accessible( pToolTip );
+    if( pAccessible )
+        atk_object_notify_state_change( pAccessible, ATK_STATE_SHOWING, FALSE );
+    return FALSE;
+}
+
 /*****************************************************************************/
 
 static bool
@@ -208,6 +224,16 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
     g_signal_connect_after( GTK_WIDGET( data ), "focus-out-event",
                             G_CALLBACK (ooo_window_wrapper_real_focus_gtk),
                             NULL);
+
+    if( obj->role == ATK_ROLE_TOOL_TIP )
+    {
+        g_signal_connect_after( GTK_WIDGET( data ), "map-event",
+                                G_CALLBACK (ooo_tooltip_map),
+                                NULL);
+        g_signal_connect_after( GTK_WIDGET( data ), "unmap-event",
+                                G_CALLBACK (ooo_tooltip_unmap),
+                                NULL);
+    }
 }
 
 /*****************************************************************************/

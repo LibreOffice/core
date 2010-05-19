@@ -694,6 +694,13 @@ void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 
 void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
+    if( nX1 == nX2 && nY1 == nY2 )
+    {
+        // #i109453# platform independent code expects at least one pixel to be drawn
+        drawPixel( nX1, nY1 );
+        return;
+    }
+
     if( !CheckContext() )
         return;
 

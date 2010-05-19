@@ -182,8 +182,9 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
             //              das kopierte TextAttribut wieder entfernt werden,
             //              sonst wird es als TextSelektion erkannt
             const SwIndex& rIdx = pFlyFmt->GetAnchor().GetCntntAnchor()->nContent;
-            SwTxtFlyCnt* pTxtFly = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
-                                                rIdx, RES_TXTATR_FLYCNT );
+            SwTxtFlyCnt *const pTxtFly = static_cast<SwTxtFlyCnt *>(
+                pTxtNd->GetTxtAttrForCharAt(
+                    rIdx.GetIndex(), RES_TXTATR_FLYCNT));
             if( pTxtFly )
             {
                 ((SwFmtFlyCnt&)pTxtFly->GetFlyCnt()).SetFlyFmt( 0 );
@@ -835,8 +836,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 pClpDoc->CopyRange( rCopy, rInsPos, false );
                 {
                     aIndexBefore++;
-                    SwPaM aPaM(SwPosition(aIndexBefore, 0),
-                               SwPosition(rInsPos.nNode, 0));
+                    SwPaM aPaM(SwPosition(aIndexBefore),
+                               SwPosition(rInsPos.nNode));
                     aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
                 }
             }
@@ -1065,8 +1066,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
                 {
                     aIndexBefore++;
-                    SwPaM aPaM(SwPosition(aIndexBefore, 0),
-                               SwPosition(rInsPos.nNode, 0));
+                    SwPaM aPaM(SwPosition(aIndexBefore),
+                               SwPosition(rInsPos.nNode));
 
                     aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
                 }

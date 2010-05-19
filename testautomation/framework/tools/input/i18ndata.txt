@@ -15,6 +15,7 @@
 46=swedish
 48=polish
 49=german
+50=slovenian
 55=portuguese brazilian
 81=japanese
 82=korean
@@ -36,6 +37,7 @@
 46=sv
 48=pl
 49=de
+50=sl
 55=pt-BR
 81=ja
 82=ko

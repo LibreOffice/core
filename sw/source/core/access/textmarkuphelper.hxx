@@ -37,30 +37,37 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 struct TextSegment;
 } } } }
 
-class SwTxtNode;
 class SwAccessiblePortionData;
+class SwTxtNode;
+// --> OD 2010-02-19 #i108125#
+class SwWrongList;
+// <--
 
 class SwTextMarkupHelper
 {
     public:
-        SwTextMarkupHelper( const SwTxtNode& rTxtNode,
-                            const SwAccessiblePortionData& rPortionData );
+        SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
+                            const SwTxtNode& rTxtNode );
+        // --> OD 2010-02-19 #i108125#
+        SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
+                            const SwWrongList& rTextMarkupList );
+        // <--
         ~SwTextMarkupHelper() {}
 
-        sal_Int32 getTextMarkupCount( sal_Int32 nTextMarkupType )
+        sal_Int32 getTextMarkupCount( const sal_Int32 nTextMarkupType )
                 throw (::com::sun::star::lang::IllegalArgumentException,
                        ::com::sun::star::uno::RuntimeException);
 
         ::com::sun::star::accessibility::TextSegment getTextMarkup(
-                                                    sal_Int32 nTextMarkupIndex,
-                                                    sal_Int32 nTextMarkupType )
+                                            const sal_Int32 nTextMarkupIndex,
+                                            const sal_Int32 nTextMarkupType )
                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                        ::com::sun::star::lang::IllegalArgumentException,
                        ::com::sun::star::uno::RuntimeException);
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::accessibility::TextSegment >
-                getTextMarkupAtIndex( sal_Int32 nCharIndex,
-                                      sal_Int32 nTextMarkupType )
+                getTextMarkupAtIndex( const sal_Int32 nCharIndex,
+                                      const sal_Int32 nTextMarkupType )
                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                        ::com::sun::star::lang::IllegalArgumentException,
                        ::com::sun::star::uno::RuntimeException);
@@ -69,8 +76,12 @@ class SwTextMarkupHelper
         SwTextMarkupHelper( const SwTextMarkupHelper& );
         SwTextMarkupHelper& operator=( const SwTextMarkupHelper& );
 
-        const SwTxtNode& mrTxtNode;
         const SwAccessiblePortionData& mrPortionData;
+
+        // --> OD 2010-02-19 #i108125#
+        const SwTxtNode* mpTxtNode;
+        const SwWrongList* mpTextMarkupList;
+        // <--
 };
 #endif
 

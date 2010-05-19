@@ -88,7 +88,7 @@ testcase tHHConversion_1
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -135,7 +135,7 @@ testcase tHHConversion_2
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -184,7 +184,7 @@ testcase tHHConversion_3
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -233,7 +233,7 @@ testcase tHHConversion_4
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -282,7 +282,7 @@ testcase tHHConversion_5
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -332,7 +332,7 @@ testcase tHHConversion_6
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -378,7 +378,7 @@ testcase tHHConversion_7
    Kontext "HangulHanjaConversion"
      HanjaAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -435,7 +435,7 @@ testcase tHHConversion_8
    Kontext "HangulHanjaConversion"
      HanjaAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -492,7 +492,7 @@ testcase tHHConversion_9
    Kontext "HangulHanjaConversion"
      HanjaAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -549,7 +549,7 @@ testcase tHHConversion_10
    Kontext "HangulHanjaConversion"
      HanjaAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -606,7 +606,7 @@ testcase tHHConversion_11
    Kontext "HangulHanjaConversion"
      HangulAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -663,7 +663,7 @@ testcase tHHConversion_12
    Kontext "HangulHanjaConversion"
      HangulAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -720,7 +720,7 @@ testcase tHHConversion_13
    Kontext "HangulHanjaConversion"
      HangulAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -777,7 +777,7 @@ testcase tHHConversion_14
    Kontext "HangulHanjaConversion"
      HangulAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -925,7 +925,7 @@ testcase tHHConversion_17
      if Word.GetText <> sWord then
          Warnlog "Hope get " & sWord & " in Word" & " but get " & Word.GetText
      end if
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -974,7 +974,7 @@ testcase tHHConversion_18
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1007,7 +1007,7 @@ testcase tHHConversion_18
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1121,7 +1121,7 @@ testcase tHHConversion_20
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1185,7 +1185,7 @@ testcase tHHConversion_21
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1220,7 +1220,7 @@ testcase tHHConversion_21
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1328,7 +1328,7 @@ testcase tHHConversion_23
     ToolsLanguageHangulHanjaConversion
     Kontext "HangulHanjaConversion"
 	for i = 1 to 2
-	    if Replace.IsEnabled then    
+	    if ReplaceBtn.IsEnabled then    
 		    try
  	  	 	    Suggestions.Select 1
 		    catch
@@ -1348,7 +1348,7 @@ testcase tHHConversion_23
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1398,7 +1398,7 @@ testcase tHHConversion_24
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1449,7 +1449,7 @@ testcase tHHConversion_25
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1513,7 +1513,7 @@ testcase tHHConversion_26
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 

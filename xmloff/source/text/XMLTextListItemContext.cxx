@@ -69,6 +69,8 @@ XMLTextListItemContext::XMLTextListItemContext(
       mxNumRulesOverride()
       // <--
 {
+    static ::rtl::OUString s_NumberingRules(
+        RTL_CONSTASCII_USTRINGPARAM("NumberingRules"));
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -105,7 +107,7 @@ XMLTextListItemContext::XMLTextListItemContext(
                     aAny >>= xStyle;
 
                     uno::Reference< beans::XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                    aAny = xPropSet->getPropertyValue( rTxtImp.sNumberingRules );
+                    aAny = xPropSet->getPropertyValue(s_NumberingRules);
                     aAny >>= mxNumRulesOverride;
                 }
                 else

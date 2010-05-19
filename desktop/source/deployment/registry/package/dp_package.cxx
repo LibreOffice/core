@@ -287,7 +287,7 @@ BackendImpl::BackendImpl(
                                    m_xBundleTypeInfo->getShortDescription(),
                                    RID_IMG_DEF_PACKAGE_BUNDLE,
                                    RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
-      m_typeInfos( 2 )
+    m_typeInfos(2)
 {
     m_typeInfos[ 0 ] = m_xBundleTypeInfo;
     m_typeInfos[ 1 ] = m_xLegacyBundleTypeInfo;
@@ -342,17 +342,32 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
-            const OUString title( ucbContent.getPropertyValue(
-                                      StrTitle::get() ).get<OUString>() );
-            if (title.endsWithIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(".oxt") ) ||
-                title.endsWithIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
-                mediaType = OUSTR("application/vnd.sun.star.package-bundle");
-            else if (title.endsWithIgnoreAsciiCaseAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM(".zip") ))
-                mediaType =
-                    OUSTR("application/vnd.sun.star.legacy-package-bundle");
+            if (ucbContent.isFolder())
+            {
+                //Every .oxt, uno.pkg file must contain a META-INF folder
+                ::ucbhelper::Content metaInfContent;
+                if (create_ucb_content(
+                    &metaInfContent, makeURL( url, OUSTR("META-INF/manifest.xml") ),
+                    xCmdEnv, false /* no throw */ ))
+                {
+                     mediaType = OUSTR("application/vnd.sun.star.package-bundle");
+                }
+                //No support of legacy bundles, because every folder could be one.
+            }
+            else
+            {
+                const OUString title( ucbContent.getPropertyValue(
+                                          StrTitle::get() ).get<OUString>() );
+                if (title.endsWithIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM(".oxt") ) ||
+                    title.endsWithIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
+                    mediaType = OUSTR("application/vnd.sun.star.package-bundle");
+                else if (title.endsWithIgnoreAsciiCaseAsciiL(
+                             RTL_CONSTASCII_STRINGPARAM(".zip") ))
+                    mediaType =
+                        OUSTR("application/vnd.sun.star.legacy-package-bundle");
+            }
         }
         if (mediaType.getLength() == 0)
             throw lang::IllegalArgumentException(
@@ -1303,7 +1318,7 @@ void BackendImpl::PackageImpl::scanBundle(
     {
         OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
         return;
-}
+    }
 
 
     const lang::Locale officeLocale = getOfficeLocale();

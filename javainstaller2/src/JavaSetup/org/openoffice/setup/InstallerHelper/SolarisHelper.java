@@ -120,8 +120,8 @@ public class SolarisHelper {
         String mailLine = "mail=";
         adminFile.add(mailLine);
 
-        String conflictLine = "conflict=quit";
-        if ( data.isUserInstallation() ) { conflictLine = "conflict=nocheck"; }
+        String conflictLine = "conflict=nochange";
+        if ( data.isUserInstallation() ) { conflictLine = "conflict=nochange"; }
         adminFile.add(conflictLine);
 
         String runlevelLine = "runlevel=nocheck";

@@ -29,7 +29,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:oor="http://openoffice.org/2001/registry">
   <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="value"/>
+  <xsl:preserve-space elements="value it"/>
+    <!-- TODO: strip space from "value" elements that have "it" children -->
   <xsl:template match="/">
     <oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -63,19 +64,25 @@
   </xsl:template>
   <xsl:template
      match="oor:component-schema|oor:component-data|templates|component|group|
-            set|node-ref|prop|item|value|node">
+            set|node-ref|prop|item|value|it|unicode|node">
     <xsl:copy copy-namespaces="no">
       <!-- prune oor:component-data xmlns:install="..." namespaces (would only
            work in XSLT 2.0, however) -->
-      <xsl:for-each select="@*">
-        <xsl:attribute name="{name()}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
+      <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+  <xsl:template match="value[it]">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="*"/>
+        <!-- ignore text elements (which must be whitespace only) -->
     </xsl:copy>
   </xsl:template>
   <xsl:template match="info|import|uses|constraints"/>
     <!-- TODO: no longer strip elements when they are eventually read by
          configmgr implementation -->
+  <xsl:template match="@*">
+    <xsl:copy/>
+  </xsl:template>
 </xsl:stylesheet>

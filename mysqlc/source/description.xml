@@ -20,8 +20,8 @@
         <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
     </publisher>
     <icon>
-        <default xlink:href="images/sun_extension.png" />
-        <high-contrast xlink:href="images/sun_extension_hc.png" />
+        <default xlink:href="images/extension_32.png" />
+        <high-contrast xlink:href="images/extension_32_h.png" />
     </icon>
     <extension-description>
         <src lang="#LANG#" xlink:href="description/description_#LANG#.txt"/>

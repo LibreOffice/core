@@ -160,7 +160,7 @@ int check( TestFunc func, Type eT, void* p )
 |*  Letzte Aenderung
 |*
 *************************************************************************/
-#if defined(IA64) || defined(ARM32) || defined(HPPA)
+#if defined(IA64) || defined(ARM32) || defined(HPPA) || defined(AXP)
 
 int forceerror()
 {

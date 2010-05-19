@@ -84,7 +84,7 @@ void SwIndexReg::ChkArr()
 
 
 
-SwIndex::SwIndex( SwIndexReg* pArr, xub_StrLen nIdx )
+SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
     : nIndex( nIdx ), pArray( pArr ), pNext( 0 ), pPrev( 0 )
 {
     if( !pArray )

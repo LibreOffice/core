@@ -117,7 +117,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         else
             aTmpStr = rSh.GetUniqueSectionName();
 
-        SwSection   aSection(CONTENT_SECTION,aTmpStr);
+        SwSectionData aSection(CONTENT_SECTION, aTmpStr);
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );
@@ -153,10 +153,10 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
         // <--
 
-        aSection.SetProtect(bProtect);
+        aSection.SetProtectFlag(bProtect);
         aSection.SetHidden(bHidden);
         // --> FME 2004-06-22 #114856# edit in readonly sections
-        aSection.SetEditInReadonly(bEditInReadonly);
+        aSection.SetEditInReadonlyFlag(bEditInReadonly);
         // <--
 
         if(SFX_ITEM_SET ==
@@ -193,9 +193,10 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
 }
 
-IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSection*, pSect )
+IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
 {
-    if( pSect )
+    ::std::auto_ptr<SwSectionData> pSectionData(pSect);
+    if (pSectionData.get())
     {
         SfxItemSet aSet(pThis->GetView().GetPool(),
                 RES_COL, RES_COL,
@@ -214,10 +215,9 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSection*, pSect )
         AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
                                                         &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
         DBG_ASSERT(aTabDlg, "Dialogdiet fail!");
-        aTabDlg->SetSection(*pSect);
+        aTabDlg->SetSectionData(*pSectionData);
         aTabDlg->Execute();
 
-        delete pSect;
         delete aTabDlg;
     }
     return 0;

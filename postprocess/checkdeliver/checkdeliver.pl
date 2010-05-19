@@ -48,7 +48,7 @@ my $solverdir        = '';
 my $platform         = '';
 my $milestoneext     = '';
 my $local_env        = 0;
-my $source_config    = SourceConfig -> new();
+my $source_config    = SourceConfig -> new($ENV{SOLARSRC});
 my @exceptionmodlist = (
                         "postprocess",
                         "instset.*native",

@@ -28,6 +28,8 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <set>
+
 #include "configmgr/update.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
@@ -55,6 +57,23 @@ void insertExtensionXcuFile(bool shared, rtl::OUString const & fileUri) {
         Modifications mods;
         Components::getSingleton().insertExtensionXcuFile(
             shared, fileUri, &mods);
+        Components::getSingleton().initGlobalBroadcaster(
+            mods, rtl::Reference< RootAccess >(), &bc);
+    }
+    bc.send();
+}
+
+void insertModificationXcuFile(
+    rtl::OUString const & fileUri,
+    std::set< rtl::OUString > const & includedPaths,
+    std::set< rtl::OUString > const & excludedPaths)
+{
+    Broadcaster bc;
+    {
+        osl::MutexGuard g(lock);
+        Modifications mods;
+        Components::getSingleton().insertModificationXcuFile(
+            fileUri, includedPaths, excludedPaths, &mods);
         Components::getSingleton().initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }

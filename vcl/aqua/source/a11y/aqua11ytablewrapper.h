@@ -30,9 +30,15 @@
 
 #include "aqua11ywrapper.h"
 
-@interface AquaA11yTableWrapper : NSObject
+#define MAXIMUM_ACCESSIBLE_TABLE_CELLS 1000
+
+@interface AquaA11yTableWrapper : AquaA11yWrapper
 {
 }
-+(id)childrenAttributeForElement:(AquaA11yWrapper *)wrapper;
++(id)childrenAttributeForElement:(AquaA11yTableWrapper *)wrapper;
++(void)addAttributeNamesTo: (NSMutableArray *)attributeNames object: (AquaA11yWrapper*)pObject;
+
+-(id)rowsAttribute;
+-(id)columnsAttribute;
 @end
 #endif // _SV_AQUA11TABLEWRAPPER_H

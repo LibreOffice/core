@@ -89,6 +89,8 @@ this is inserted for the case that the preprocessor ignores error
 #    define THIS_ARCH "M68K"
 #elif defined HPPA
 #    define THIS_ARCH "HPPA"
+#elif defined AXP
+#    define THIS_ARCH "ALPHA"
 #endif
 
 #if ! defined THIS_ARCH

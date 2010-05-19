@@ -81,17 +81,6 @@
 
 #define STR_SMARTTAG_CLICK              (RC_DOCVW_BEGIN + 21)
 
-#define STR_POSTIT_TODAY                (RC_DOCVW_BEGIN + 22)
-#define STR_POSTIT_YESTERDAY            (RC_DOCVW_BEGIN + 23)
-
-#define STR_DELETE_ALL_NOTES            (RC_DOCVW_BEGIN + 24)
-#define STR_DELETE_AUTHOR_NOTES         (RC_DOCVW_BEGIN + 25)
-
-#define STR_NODATE                      (RC_DOCVW_BEGIN + 26)
-#define STR_NOAUTHOR                    (RC_DOCVW_BEGIN + 27)
-
-#define STR_REPLY                       (RC_DOCVW_BEGIN + 28)
-
 #define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
 
 #define DOCVW_ACT_END   STR_SMARTTAG_CLICK

@@ -155,6 +155,12 @@ sub add_lowercase_productname_setupscriptvariable
                 $newline = "\%LCONEWORDPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $value = $original;
+                $value =~ s/\s*$//g;
+                $value =~ s/^\s*//g;
+                $value =~ s/ /\%20/g;
+                $newline = "\%MASKEDPRODUCTNAME " . $value . "\n";
+                push(@{$variablesref} ,$newline);
+                $value = $original;
                 $value =~ s/\s/\_/g;
                 # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";

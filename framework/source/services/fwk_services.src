@@ -53,34 +53,6 @@ Window DLG_BACKING
     {
         Text [ en-US ] = "~Open a document...";
     };
-    Bitmap BMP_BACKING_WRITER
-    {
-        File = "odt_32.png";
-    };
-    Bitmap BMP_BACKING_CALC
-    {
-        File = "ods_32.png";
-    };
-    Bitmap BMP_BACKING_IMPRESS
-    {
-        File = "odp_32.png";
-    };
-    Bitmap BMP_BACKING_DRAW
-    {
-        File = "odg_32.png";
-    };
-    Bitmap BMP_BACKING_DATABASE
-    {
-        File = "odb_32.png";
-    };
-    Bitmap BMP_BACKING_FORMULA
-    {
-        File = "odf_32.png";
-    };
-    Bitmap BMP_BACKING_FOLDER
-    {
-        File = "folder_32.png";
-    };
     String STR_BACKING_EXTHELP
     {
         Text [ en-US ] = "Add new features to %PRODUCTNAME";
@@ -137,6 +109,38 @@ Resource RES_BACKING_IMAGES
     {
         File = "addtemplate_32.png";
     };
+    Bitmap BMP_BACKING_WRITER
+    {
+        File = "odt_32.png";
+    };
+    Bitmap BMP_BACKING_CALC
+    {
+        File = "ods_32.png";
+    };
+    Bitmap BMP_BACKING_IMPRESS
+    {
+        File = "odp_32.png";
+    };
+    Bitmap BMP_BACKING_DRAW
+    {
+        File = "odg_32.png";
+    };
+    Bitmap BMP_BACKING_DATABASE
+    {
+        File = "odb_32.png";
+    };
+    Bitmap BMP_BACKING_FORMULA
+    {
+        File = "odf_32.png";
+    };
+    Bitmap BMP_BACKING_OPENFILE
+    {
+        File = "folder_32.png";
+    };
+    Bitmap BMP_BACKING_OPENTEMPLATE
+    {
+        File = "templates_32.png";
+    };
 };
 
 Resource RES_BACKING_IMAGES_HC
@@ -176,6 +180,38 @@ Resource RES_BACKING_IMAGES_HC
     Bitmap BMP_BACKING_TPLREP
     {
         File = "template_hc.png";
+    };
+    Bitmap BMP_BACKING_WRITER
+    {
+        File = "odt_32_hc.png";
+    };
+    Bitmap BMP_BACKING_CALC
+    {
+        File = "ods_32_hc.png";
+    };
+    Bitmap BMP_BACKING_IMPRESS
+    {
+        File = "odp_32_hc.png";
+    };
+    Bitmap BMP_BACKING_DRAW
+    {
+        File = "odg_32_hc.png";
+    };
+    Bitmap BMP_BACKING_DATABASE
+    {
+        File = "odb_32_hc.png";
+    };
+    Bitmap BMP_BACKING_FORMULA
+    {
+        File = "odf_32_hc.png";
+    };
+    Bitmap BMP_BACKING_OPENFILE
+    {
+        File = "folder_32_hc.png";
+    };
+    Bitmap BMP_BACKING_OPENTEMPLATE
+    {
+        File = "templates_32_hc.png";
     };
 };
 

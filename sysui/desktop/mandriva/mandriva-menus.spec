@@ -16,6 +16,8 @@ Requires: mandrake-release
 Provides: openoffice.org3-desktop-integration
 
 %define _unpackaged_files_terminate_build 0
+%define _binary_filedigest_algorithm 1
+%define _binary_payload w9.gzdio
 
 %define menuversion %(echo %version|cut -d'.' -f 1-2)
 %{?!update_menus:%define update_menus if [ -x /usr/bin/update-menus ]; then /usr/bin/update-menus || true ; fi}

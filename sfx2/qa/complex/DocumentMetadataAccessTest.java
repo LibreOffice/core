@@ -42,6 +42,7 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.Pair;
 import com.sun.star.beans.StringPair;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XEnumeration;
@@ -689,23 +690,25 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
             log.println("Checking RDFa in loaded test document...");
 
             XMetadatable xPara;
-            Statement[] stmts;
+            Pair<Statement[], Boolean> result;
 
             Statement x_FooBarLit1 = new Statement(foo, bar, mkLit("1"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 1",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_FooBarLit1
                     }));
 
             Statement x_FooBarLit2 = new Statement(foo, bar, mkLit("2"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 2",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_FooBarLit2
                     }));
 
@@ -713,37 +716,40 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
                 new Statement(blank1, bar, mkLit("3"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 3",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_BlankBarLit3
                     }));
             XBlankNode b3 = (XBlankNode) UnoRuntime.queryInterface(
-                XBlankNode.class, stmts[0].Subject);
+                XBlankNode.class, result.First[0].Subject);
 
             Statement x_BlankBarLit4 =
                 new Statement(blank2, bar, mkLit("4"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 4",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_BlankBarLit4
                     }));
             XBlankNode b4 = (XBlankNode) UnoRuntime.queryInterface(
-                XBlankNode.class, stmts[0].Subject);
+                XBlankNode.class, result.First[0].Subject);
 
             Statement x_BlankBarLit5 =
                 new Statement(blank1, bar, mkLit("5"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 5",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_BlankBarLit5
                     }));
             XBlankNode b5 = (XBlankNode) UnoRuntime.queryInterface(
-                XBlankNode.class, stmts[0].Subject);
+                XBlankNode.class, result.First[0].Subject);
 
             assure("RDFa: 3 != 4",
                 !b3.getStringValue().equals(b4.getStringValue()));
@@ -754,9 +760,10 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
             Statement x_FooBazLit6 = new Statement(foo, baz, mkLit("6"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 6",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_FooBarLit6, x_FooBazLit6
                     }));
 
@@ -765,9 +772,10 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
             Statement x_FooFooLit7 = new Statement(foo, foo, mkLit("7"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 7",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_FooBarLit7, x_FooBazLit7, x_FooFooLit7
                     }));
 
@@ -776,43 +784,41 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
             Statement x_FooBarLit = new Statement(foo, bar, lit, null);
             Statement x_FooBarLittype = new Statement(foo, bar, lit_type, null);
 
-            Statement x_FooLabelLit8 =
-                new Statement(foo, rdfs_label, mkLit("8"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 8",
-                eq(stmts, new Statement[] {
-                        x_FooBarLit, x_FooLabelLit8
+                result.Second &&
+                eq(result.First, new Statement[] {
+                        x_FooBarLit
                     }));
 
-            Statement x_FooLabelLit9 =
-                new Statement(foo, rdfs_label, mkLit("9"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 9",
-                eq(stmts, new Statement[] {
-                        x_FooBarLit, x_FooLabelLit9
+                result.Second &&
+                eq(result.First, new Statement[] {
+                        x_FooBarLit
                     }));
 
-            Statement x_FooLabelLit10 =
-                new Statement(foo, rdfs_label, mkLit("10"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 10",
-                eq(stmts, new Statement[] {
-                        x_FooBarLittype, x_FooLabelLit10
+                result.Second &&
+                eq(result.First, new Statement[] {
+                        x_FooBarLittype
                     }));
 
             Statement x_FooBarLit11
                 = new Statement(foo, bar, mkLit("11", bar), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 11",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_FooBarLit11
                     }));
 
@@ -821,66 +827,67 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
                 new Statement(xFile, bar, mkLit("12"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 12",
-                eq(stmts, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                         x_FileBarLit12
                     }));
 
-            Statement x_FooLabelLit13 =
-                new Statement(foo, rdfs_label, mkLit("13"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 13",
-                eq(stmts, new Statement[] {
-                        x_FooBarLit, x_FooLabelLit13
+                result.Second &&
+                eq(result.First, new Statement[] {
+                        x_FooBarLit
                     }));
 
             Statement x_FooLabelLit14 =
                 new Statement(foo, rdfs_label, mkLit("14"), null);
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
+            result = xRep.getStatementRDFa(xPara);
             assure("RDFa: 14",
-                eq(stmts, new Statement[] {
-                        x_FooBarLit, x_FooLabelLit14
+                result.Second &&
+                eq(result.First, new Statement[] {
+                        x_FooBarLit
                     }));
 
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
-            assure("RDFa: 15", eq(stmts, new Statement[] { } ));
+            result = xRep.getStatementRDFa(xPara);
+            assure("RDFa: 15", eq(result.First, new Statement[] { } ));
 
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
-            assure("RDFa: 16", eq(stmts, new Statement[] { } ));
+            result = xRep.getStatementRDFa(xPara);
+            assure("RDFa: 16", eq(result.First, new Statement[] { } ));
 
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
-            assure("RDFa: 17", eq(stmts, new Statement[] { } ));
+            result = xRep.getStatementRDFa(xPara);
+            assure("RDFa: 17", eq(result.First, new Statement[] { } ));
 
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
-            assure("RDFa: 18", eq(stmts, new Statement[] { } ));
+            result = xRep.getStatementRDFa(xPara);
+            assure("RDFa: 18", eq(result.First, new Statement[] { } ));
 
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
-            assure("RDFa: 19", eq(stmts, new Statement[] { } ));
+            result = xRep.getStatementRDFa(xPara);
+            assure("RDFa: 19", eq(result.First, new Statement[] { } ));
 
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
-            assure("RDFa: 20", eq(stmts, new Statement[] { } ));
+            result = xRep.getStatementRDFa(xPara);
+            assure("RDFa: 20", eq(result.First, new Statement[] { } ));
 
             xPara = (XMetadatable) UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            stmts = xRep.getStatementRDFa(xPara);
-            assure("RDFa: 21", eq(stmts, new Statement[] { } ));
+            result = xRep.getStatementRDFa(xPara);
+            assure("RDFa: 21", eq(result.First, new Statement[] { } ));
 
             log.println("...done");
 

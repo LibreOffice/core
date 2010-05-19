@@ -2322,12 +2322,6 @@ bool SwFEShell::IsGroupAllowed() const
             else
                 pUpGroup = pObj->GetUpGroup();
 
-            // --> OD 2006-11-06 #130889# - make code robust
-//            if ( bIsGroupAllowed &&
-//                 FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() )
-//            {
-//                bIsGroupAllowed = false;
-//            }
             if ( bIsGroupAllowed )
             {
                 SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
@@ -2342,7 +2336,6 @@ bool SwFEShell::IsGroupAllowed() const
                     bIsGroupAllowed = false;
                 }
             }
-            // <--
 
             // OD 27.06.2003 #108784# - check, if all selected objects are in the
             // same header/footer or not in header/footer.

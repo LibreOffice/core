@@ -36,7 +36,7 @@
 
 // ------------------------------------------------------------------------
 
-#define WIN_MTF_MAX_POLYPOLYCOUNT   16
+#define WIN_MTF_MAX_CLIP_DEPTH 16
 
 void WinMtfClipPath::ImpUpdateType()
 {
@@ -54,26 +54,28 @@ void WinMtfClipPath::IntersectClipRect( const Rectangle& rRect )
 {
     if ( !aPolyPoly.Count() )
         aPolyPoly = Polygon( rRect );
-    else if ( aPolyPoly.Count() < WIN_MTF_MAX_POLYPOLYCOUNT )
+    else if ( nDepth < WIN_MTF_MAX_CLIP_DEPTH )
     {
         Polygon aPolygon( rRect );
         PolyPolygon aIntersection;
         PolyPolygon aPolyPolyRect( aPolygon );
         aPolyPoly.GetIntersection( aPolyPolyRect, aIntersection );
         aPolyPoly = aIntersection;
+        nDepth++;
     }
     ImpUpdateType();
 }
 
 void WinMtfClipPath::ExcludeClipRect( const Rectangle& rRect )
 {
-    if ( aPolyPoly.Count() && ( aPolyPoly.Count() < WIN_MTF_MAX_POLYPOLYCOUNT ) )
+    if ( aPolyPoly.Count() && ( nDepth < WIN_MTF_MAX_CLIP_DEPTH ) )
     {
         Polygon aPolygon( rRect );
         PolyPolygon aPolyPolyRect( aPolygon );
         PolyPolygon aDifference;
         aPolyPoly.GetDifference( aPolyPolyRect, aDifference );
         aPolyPoly = aDifference;
+        nDepth++;
     }
     ImpUpdateType();
 }
@@ -82,8 +84,10 @@ void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nCl
 {
     if ( !rPolyPolygon.Count() )
         aPolyPoly = rPolyPolygon;
-    else if ( rPolyPolygon.Count() < WIN_MTF_MAX_POLYPOLYCOUNT )
+    else if ( nDepth < WIN_MTF_MAX_CLIP_DEPTH )
     {
+        nDepth++;
+
         PolyPolygon aNewClipPath;
 
         // #115345# Watch out for empty aPolyPoly here - conceptually,

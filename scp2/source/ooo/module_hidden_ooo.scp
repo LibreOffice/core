@@ -968,6 +968,17 @@ Module gid_Module_Root_Extension_Dictionary_It
 	Styles = (HIDDEN_ROOT);
 End
 
+Module gid_Module_Root_Extension_Dictionary_Ku_Tr
+	Name = "gid_Module_Root_Extension_Dictionary_Ku_Tr";
+	Description = "gid_Module_Root_Extension_Dictionary_Ku_Tr";
+	Files = (gid_File_Extension_Dictionary_Ku_Tr);
+	InstallOrder = "2000";
+	Spellcheckerlanguage = "ku-TR";
+	PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+	Styles = (HIDDEN_ROOT);
+End
+
 Module gid_Module_Root_Extension_Dictionary_Lt
 	Name = "gid_Module_Root_Extension_Dictionary_Lt";
 	Description = "gid_Module_Root_Extension_Dictionary_Lt";

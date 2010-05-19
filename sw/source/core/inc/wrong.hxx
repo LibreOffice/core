@@ -57,7 +57,13 @@ public:
         : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList) {}
 };
 
-enum WrongListType  { WRONGLIST_SPELL, WRONGLIST_GRAMMAR, WRONGLIST_SMARTTAG };
+enum WrongListType
+{
+    WRONGLIST_SPELL,
+    WRONGLIST_GRAMMAR,
+    WRONGLIST_SMARTTAG,
+    WRONGLIST_CHANGETRACKING
+};
 
 class SwWrongList
 {

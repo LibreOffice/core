@@ -28,14 +28,16 @@
 #ifndef _SECTION_HXX
 #define _SECTION_HXX
 
+#include <boost/utility.hpp>
 
 #include <com/sun/star/uno/Sequence.h>
-#include <sfx2/lnkbase.hxx>
+
 #include <tools/rtti.hxx>
-#ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
-#endif
 #include <svl/svarray.hxx>
+#include <sfx2/lnkbase.hxx>
+#include <sfx2/Metadatable.hxx>
+
 #include <frmfmt.hxx>
 
 
@@ -77,61 +79,119 @@ enum LinkCreateType
     CREATE_UPDATE           // Link connecten und updaten
 };
 
+class SW_DLLPUBLIC SwSectionData
+{
+private:
+    SectionType m_eType;
 
-class SW_DLLPUBLIC SwSection : public SwClient
+    String m_sSectionName;
+    String m_sCondition;
+    String m_sLinkFileName;
+    String m_sLinkFilePassword; // JP 27.02.2001: must be changed to Sequence
+    ::com::sun::star::uno::Sequence <sal_Int8> m_Password;
+
+    /// it seems this flag caches the current final "hidden" state
+    bool m_bHiddenFlag          : 1;
+    /// flags that correspond to attributes in the format:
+    /// may have different value than format attribute:
+    /// format attr has value for this section, while flag is
+    /// effectively ORed with parent sections!
+    bool m_bProtectFlag         : 1;
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    bool m_bEditInReadonlyFlag  : 1;
+    // <--
+    bool m_bHidden              : 1; // all paragraphs hidden?
+    bool m_bCondHiddenFlag      : 1; // Hiddenflag for condition
+    bool m_bConnectFlag         : 1; // connected to server?
+
+public:
+
+    SwSectionData(SectionType const eType, String const& rName);
+    explicit SwSectionData(SwSection const&);
+    SwSectionData(SwSectionData const&);
+    SwSectionData & operator=(SwSectionData const&);
+    bool operator==(SwSectionData const&) const;
+
+    String const& GetSectionName() const    { return m_sSectionName; }
+    void SetSectionName(String const& rName){ m_sSectionName = rName; }
+    SectionType GetType() const             { return m_eType; }
+    void SetType(SectionType const eNew)    { m_eType = eNew; }
+
+    bool IsHidden() const { return m_bHidden; }
+    void SetHidden(bool const bFlag = true) { m_bHidden = bFlag; }
+
+    bool IsHiddenFlag() const { return m_bHiddenFlag; }
+    SW_DLLPRIVATE void
+        SetHiddenFlag(bool const bFlag) { m_bHiddenFlag = bFlag; }
+    bool IsProtectFlag() const { return m_bProtectFlag; }
+    SW_DLLPRIVATE void
+        SetProtectFlag(bool const bFlag) { m_bProtectFlag = bFlag; }
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    bool IsEditInReadonlyFlag() const { return m_bEditInReadonlyFlag; }
+    void SetEditInReadonlyFlag(bool const bFlag)
+        { m_bEditInReadonlyFlag = bFlag; }
+    // <--
+
+    void SetCondHidden(bool const bFlag = true) { m_bCondHiddenFlag = bFlag; };
+    bool IsCondHidden() const { return m_bCondHiddenFlag; }
+
+    String const& GetCondition() const      { return m_sCondition; }
+    void SetCondition(String const& rNew)   { m_sCondition = rNew; }
+
+    String const& GetLinkFileName() const   { return m_sLinkFileName; };
+    void SetLinkFileName(String const& rNew, String const* pPassWd = 0)
+    {
+        m_sLinkFileName = rNew;
+        if (pPassWd) { SetLinkFilePassword(*pPassWd); }
+    }
+
+    String const& GetLinkFilePassword() const   { return m_sLinkFilePassword; }
+    void SetLinkFilePassword(String const& rS)  { m_sLinkFilePassword = rS; }
+
+    ::com::sun::star::uno::Sequence<sal_Int8> const& GetPassword() const
+                                            { return m_Password; }
+    void SetPassword(::com::sun::star::uno::Sequence<sal_Int8> const& rNew)
+                                            { m_Password = rNew; }
+    bool IsLinkType() const
+    { return (DDE_LINK_SECTION == m_eType) || (FILE_LINK_SECTION == m_eType); }
+
+    bool IsConnectFlag() const                  { return m_bConnectFlag; }
+    void SetConnectFlag(bool const bFlag = true){ m_bConnectFlag = bFlag; }
+};
+
+class SW_DLLPUBLIC SwSection
+    : public SwClient
+    , private ::boost::noncopyable
 {
     // damit beim Anlegen/Loeschen von Frames das Flag richtig gepflegt wird!
     friend class SwSectionNode;
     // the "read CTOR" of SwSectionFrm have to change the Hiddenflag
     friend class SwSectionFrm;
 
-    String sSectionNm;
-    String sCondition;          // erstmal, vielleicht auch mal ein Feld ??
-    String sLinkFileName,
-           sLinkFilePassWd;     // JP 27.02.2001: must later changed to Sequence
-    ::com::sun::star::uno::Sequence <sal_Int8> aPasswd;
+private:
+    SwSectionData m_Data;
 
-    SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
-    ::sfx2::SvBaseLinkRef refLink;
+    SwServerObjectRef m_RefObj; // set if DataServer
+    ::sfx2::SvBaseLinkRef m_RefLink;
 
-    SectionType eType;
-
-    BOOL bProtectFlag : 1;      // Flags fuer schnelle Abfragen, wird ueber
-                                // Attribut im Format gesetzt
-    BOOL bHiddenFlag : 1;       // Flag: Absaetze versteckt ?
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    BOOL bEditInReadonlyFlag : 1;
-    // <--
-    BOOL bHidden : 1;           // alle Absaetze nicht sichtbar ?
-    BOOL bCondHiddenFlag : 1;   // Hiddenflag fuer die Bedingung ?
-    BOOL bConnectFlag : 1;      // Flag: "Verbindung zum Server" vorhanden?
-
-
-    SW_DLLPRIVATE void _SetHiddenFlag( BOOL bHidden, BOOL bCondition );
-    SW_DLLPRIVATE void _SetProtectFlag( BOOL bFlag ) { bProtectFlag = bFlag; }
-    /* SW_DLLPUBLIC */ BOOL _IsProtect() const;
-
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    void _SetEditInReadonlyFlag( BOOL bFlag ) { bEditInReadonlyFlag = bFlag; }
-    BOOL _IsEditInReadonly() const;
-    // <--
+    SW_DLLPRIVATE void ImplSetHiddenFlag(
+            bool const bHidden, bool const bCondition);
 
 public:
     TYPEINFO();     // rtti
 
-    SwSection( SectionType eType, const String& rName,
-                SwSectionFmt* pFmt = 0 );
-    ~SwSection();
+    SwSection(SectionType const eType, String const& rName,
+                SwSectionFmt & rFormat);
+    virtual ~SwSection();
 
-    // kopiere nur die Daten der Section!
-    // Ableitung bleibt (beim Left) erhalten.
-    SwSection& operator=( const SwSection& );
-    BOOL operator==( const SwSection& rCmp ) const;
+    bool DataEquals(SwSectionData const& rCmp) const;
 
-    const String& GetName() const           { return sSectionNm; }
-    void SetName( const String& rName )     { sSectionNm = rName; }
-    SectionType GetType() const             { return eType; }
-    void SetType( SectionType eNew )        { eType = eNew; }
+    void SetSectionData(SwSectionData const& rData);
+
+    String const& GetSectionName() const    { return m_Data.GetSectionName(); }
+    void SetSectionName(String const& rName){ m_Data.SetSectionName(rName); }
+    SectionType GetType() const             { return m_Data.GetType(); }
+    void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
     SwSectionFmt* GetFmt()          { return (SwSectionFmt*)pRegisteredIn; }
     SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)pRegisteredIn; }
@@ -140,78 +200,76 @@ public:
 
     // setze die Hidden/Protected -> gesamten Baum updaten !
     // (Attribute/Flags werden gesetzt/erfragt)
-    BOOL IsHidden() const { return bHidden; }
-    BOOL IsProtect() const { return GetFmt() ? _IsProtect()
-                                            : IsProtectFlag(); }
-
+    bool IsHidden()  const { return m_Data.IsHidden(); }
+    void SetHidden (bool const bFlag = true);
+    bool IsProtect() const;
+    void SetProtect(bool const bFlag = true);
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    BOOL IsEditInReadonly()const { return GetFmt() ? _IsEditInReadonly() : IsEditInReadonlyFlag(); }
-    void SetEditInReadonly( BOOL bFlag = TRUE );
+    bool IsEditInReadonly() const;
+    void SetEditInReadonly(bool const bFlag = true);
     // <--
-
-    void SetHidden( BOOL bFlag = TRUE );
-    void SetProtect( BOOL bFlag = TRUE );
 
     // erfrage die internen Flags (Zustand inklusive Parents nicht, was
     // aktuell an der Section gesetzt ist!!)
-    BOOL IsHiddenFlag() const { return bHiddenFlag; }
-    BOOL IsProtectFlag() const { return bProtectFlag; }
+    bool IsHiddenFlag()  const { return m_Data.IsHiddenFlag(); }
+    bool IsProtectFlag() const { return m_Data.IsProtectFlag(); }
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    BOOL IsEditInReadonlyFlag() const { return bEditInReadonlyFlag; }
+    bool IsEditInReadonlyFlag() const { return m_Data.IsEditInReadonlyFlag(); }
     // <--
 
-    void SetCondHidden( BOOL bFlag = TRUE );
-    BOOL IsCondHidden() const { return bCondHiddenFlag; }
+    void SetCondHidden(bool const bFlag = true);
+    bool IsCondHidden() const { return m_Data.IsCondHidden(); }
     // erfrage (auch ueber die Parents), ob diese Section versteckt sein soll.
     BOOL CalcHiddenFlag() const;
 
 
     inline SwSection* GetParent() const;
 
-    // setze/erfrage die Bedingung
-    const String& GetCondition() const          { return sCondition; }
-    void SetCondition( const String& rNew )     { sCondition = rNew; }
+    String const& GetCondition() const      { return m_Data.GetCondition(); }
+    void SetCondition(String const& rNew)   { m_Data.SetCondition(rNew); }
 
-    // setze/erfrage den gelinkten FileNamen
     const String& GetLinkFileName() const;
-    void SetLinkFileName( const String& rNew, const String* pPassWd = 0 );
-    // Passwort des gelinkten Files (nur waehrend der Laufzeit gueltig!)
-    const String& GetLinkFilePassWd() const         { return sLinkFilePassWd; }
-    void SetLinkFilePassWd( const String& rS )      { sLinkFilePassWd = rS; }
+    void SetLinkFileName(String const& rNew, String const*const pPassWd = 0);
+    // password of linked file (only valid during runtime!)
+    String const& GetLinkFilePassword() const
+        { return m_Data.GetLinkFilePassword(); }
+    void SetLinkFilePassword(String const& rS)
+        { m_Data.SetLinkFilePassword(rS); }
 
     // get / set password of this section
-    const ::com::sun::star::uno::Sequence <sal_Int8>&
-            GetPasswd() const               { return aPasswd; }
-    void SetPasswd( const ::com::sun::star::uno::Sequence <sal_Int8>& rNew )
-                                            { aPasswd = rNew; }
+    ::com::sun::star::uno::Sequence<sal_Int8> const& GetPassword() const
+                                            { return m_Data.GetPassword(); }
+    void SetPassword(::com::sun::star::uno::Sequence <sal_Int8> const& rNew)
+                                            { m_Data.SetPassword(rNew); }
 
     // Daten Server-Methoden
     void SetRefObject( SwServerObject* pObj );
-    const SwServerObject* GetObject() const     {  return &refObj; }
-          SwServerObject* GetObject()           {  return &refObj; }
-    BOOL IsServer() const                       {  return refObj.Is(); }
+    const SwServerObject* GetObject() const {  return & m_RefObj; }
+          SwServerObject* GetObject()       {  return & m_RefObj; }
+    bool IsServer() const                   {  return m_RefObj.Is(); }
 
     // Methoden fuer gelinkte Bereiche
-    USHORT GetUpdateType() const        { return refLink->GetUpdateMode();  }
-    void SetUpdateType( USHORT nType )  { refLink->SetUpdateMode( nType );  }
+    USHORT GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
+    void SetUpdateType(USHORT const nType )
+        { m_RefLink->SetUpdateMode(nType); }
 
-    BOOL IsConnected() const        { return refLink.Is(); }
-    void UpdateNow()                { refLink->Update(); }
-    void Disconnect()               { refLink->Disconnect(); }
+    bool IsConnected() const        { return m_RefLink.Is(); }
+    void UpdateNow()                { m_RefLink->Update(); }
+    void Disconnect()               { m_RefLink->Disconnect(); }
 
-    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *refLink; }
-          ::sfx2::SvBaseLink& GetBaseLink()          { return *refLink; }
+    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *m_RefLink; }
+          ::sfx2::SvBaseLink& GetBaseLink()          { return *m_RefLink; }
 
     void CreateLink( LinkCreateType eType );
 
     void MakeChildLinksVisible( const SwSectionNode& rSectNd );
 
-    BOOL IsLinkType() const
-        { return DDE_LINK_SECTION == eType || FILE_LINK_SECTION == eType; }
+    bool IsLinkType() const { return m_Data.IsLinkType(); }
 
     // Flags fuer UI - Verbindung geklappt?
-    BOOL IsConnectFlag() const                  { return bConnectFlag; }
-    void SetConnectFlag( BOOL bFlag = TRUE )    { bConnectFlag = bFlag; }
+    bool IsConnectFlag() const      { return m_Data.IsConnectFlag(); }
+    void SetConnectFlag(bool const bFlag = true)
+                                    { m_Data.SetConnectFlag(bFlag); }
 
     // return the TOX base class if the section is a TOX section
     const SwTOXBase* GetTOXBase() const;
@@ -219,16 +277,15 @@ public:
     // --> OD 2007-02-14 #b6521322#
     void BreakLink();
     // <--
-private:
-    // privater Constructor, weil nie kopiert werden darf !!
-    SwSection( const SwSection& );
-    // @@@ but copy assignment "SwSection & operator= ( const SwSection& )" is public? @@@
+
 };
 
 
 enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
 
-class SW_DLLPUBLIC SwSectionFmt : public SwFrmFmt
+class SW_DLLPUBLIC SwSectionFmt
+    : public SwFrmFmt
+    , public ::sfx2::Metadatable
 {
     friend class SwDoc;
 
@@ -239,7 +296,6 @@ class SW_DLLPUBLIC SwSectionFmt : public SwFrmFmt
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextSection> m_wXTextSection;
 
-    /* SW_DLLPUBLIC */ SwSection* _GetSection() const;
     SW_DLLPRIVATE void UpdateParent();      // Parent wurde veraendert
 
 protected:
@@ -259,7 +315,7 @@ public:
         // erfrage vom Format Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
-    SwSection* GetSection() const { return (SwSection*)_GetSection(); }
+    SwSection* GetSection() const;
     inline SwSectionFmt* GetParent() const;
     inline SwSection* GetParentSection() const;
 
@@ -274,9 +330,10 @@ public:
     // befindet.
     BOOL IsInNodesArr() const;
 
-          SwSectionNode* GetSectionNode( BOOL bAlways = FALSE );
-    const SwSectionNode* GetSectionNode( BOOL bAlways = FALSE ) const
-    {   return ((SwSectionFmt*)this)->GetSectionNode( bAlways ); }
+          SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
+    const SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false) const
+        { return const_cast<SwSectionFmt *>(this)
+                ->GetSectionNode(bEvenIfInUndo); }
 
     // ist die Section eine gueltige fuers GlobalDocument?
     const SwSection* GetGlobalDocSection() const;
@@ -287,6 +344,14 @@ public:
     SW_DLLPRIVATE void SetXTextSection(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextSection> const& xTextSection)
             { m_wXTextSection = xTextSection; }
+
+    // sfx2::Metadatable
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry();
+    virtual bool IsInClipboard() const;
+    virtual bool IsInUndo() const;
+    virtual bool IsInContent() const;
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
 
 };
 
@@ -314,7 +379,9 @@ inline SwSection* SwSectionFmt::GetParentSection() const
     SwSectionFmt* pParent = GetParent();
     SwSection* pRet = 0;
     if( pParent )
-        pRet = pParent->_GetSection();
+    {
+        pRet = pParent->GetSection();
+    }
     return pRet;
 }
 

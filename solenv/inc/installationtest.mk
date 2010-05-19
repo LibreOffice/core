@@ -72,12 +72,12 @@ my_javaenv = \
 # smoketestoo_native:
 .IF "$(OS)" == "WNT"
 $(MISC)/$(TARGET)/installation.flag : $(shell \
-        ls $(installationtest_instset)/OOo_*_install_$(defaultlangiso).zip)
+        ls $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip)
     $(MKDIRHIER) $(@:d)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
-    unzip $(installationtest_instset)/OOo_*_install_$(defaultlangiso).zip \
+    unzip $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip \
         -d "$$my_tmp" && \
-    mv "$$my_tmp"/OOo_*_install_$(defaultlangiso) "$$my_tmp"/opt && \
+    mv "$$my_tmp"/OOo_*_install-arc_$(defaultlangiso) "$$my_tmp"/opt && \
     echo "$$my_tmp" > $@
 .END
 

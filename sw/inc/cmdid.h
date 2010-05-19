@@ -907,6 +907,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_PARA_NUM_STRING              (FN_EXTRA2 + 110)
 #define FN_UNO_TABLE_NAME                   (FN_EXTRA2 + 111)
 #define FN_UNO_META                         (FN_EXTRA2 + 112)
+#define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe

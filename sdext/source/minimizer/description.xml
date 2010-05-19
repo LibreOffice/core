@@ -30,8 +30,8 @@
     </display-name>
 
     <icon>
-      <default xlink:href="bitmaps/em47.png" />
-      <high-contrast xlink:href="bitmaps/em47_hc.png" />
+      <default xlink:href="bitmaps/extension_32.png" />
+      <high-contrast xlink:href="bitmaps/extension_32_h.png" />
     </icon>
 
 </description>

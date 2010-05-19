@@ -829,7 +829,8 @@ void rtfSections::SetHdFt(rtfSection &rSection)
 
 SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
 {
-    SwSection aSection(CONTENT_SECTION, mrReader.pDoc->GetUniqueSectionName());
+    SwSectionData aSectionData(CONTENT_SECTION,
+            mrReader.pDoc->GetUniqueSectionName());
 
     SfxItemSet aSet( mrReader.pDoc->GetAttrPool(), aFrmFmtSetRange );
 
@@ -838,7 +839,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
         nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
     rSection.mpSection =
-        mrReader.pDoc->InsertSwSection( rMyPaM, aSection, &aSet );
+        mrReader.pDoc->InsertSwSection( rMyPaM, aSectionData, 0, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;

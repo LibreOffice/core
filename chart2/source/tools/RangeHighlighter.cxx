@@ -348,7 +348,11 @@ void RangeHighlighter::fireSelectionEvent()
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< view::XSelectionChangeListener*>(aIt.next()))->selectionChanged( aEvent );
+        {
+            uno::Reference< view::XSelectionChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->selectionChanged( aEvent );
+        }
     }
 }
 

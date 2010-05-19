@@ -2323,11 +2323,10 @@ BOOL SwDoc::RemoveInvisibleContent()
             }
             if( pSect->GetCondition().Len() )
             {
-                SwSection aSect( pSect->GetType(), pSect->GetName() );
-                aSect = *pSect;
-                aSect.SetCondition( aEmptyStr );
-                aSect.SetHidden( FALSE );
-                ChgSection( n, aSect );
+                SwSectionData aSectionData( *pSect );
+                aSectionData.SetCondition( aEmptyStr );
+                aSectionData.SetHidden( false );
+                UpdateSection( n, aSectionData );
             }
         }
 

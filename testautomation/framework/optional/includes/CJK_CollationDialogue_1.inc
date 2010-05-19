@@ -52,6 +52,12 @@ testcase tLanguageTest_1
         sKeyTypeTChinese   = "Numerisch"
         sKeyTypeJapanese   = "Numerisch"
         sKeyTypeKoren      = "Numerisch"
+    case 50   :' Slovenian
+        sKeyTypeEnglishUSA = "Alfanumerično"
+        sKeyTypeSChinese   = "Nabor znakov"
+        sKeyTypeTChinese   = "Numerično"
+        sKeyTypeJapanese   = "Nabor znakov"
+        sKeyTypeKoren      = "Nabor znakov"
     case 55   :' Brazilian
         sKeyTypeEnglishUSA = "Alfanumérico"
         sKeyTypeSChinese   = "Conjunto de caracteres"
@@ -273,6 +279,12 @@ testcase tLanguageTest_2
         sKeyTypeTChinese   = "Numerisch"
         sKeyTypeJapanese   = "Numerisch"
         sKeyTypeKoren      = "Numerisch"
+    case 50   :' Slovenian
+        sKeyTypeEnglishUSA = "Alfanumerično"
+        sKeyTypeSChinese   = "Nabor znakov"
+        sKeyTypeTChinese   = "Numerično"
+        sKeyTypeJapanese   = "Nabor znakov"
+        sKeyTypeKoren      = "Nabor znakov"
     case 55   :' Brazilian
         sKeyTypeEnglishUSA = "numérico"
         sKeyTypeSChinese   = "numérico"
@@ -494,6 +506,8 @@ testcase tStrokeSort
         sKeyTypeSChinese      =  "Stroke"
     case 49   :  ' German
         sKeyTypeSChinese      =  "Stroke"
+    case 50   :  ' Slovenian
+        sKeyTypeSChinese      =  "Poteza"
     case 55   :  ' Brazilian
         sKeyTypeSChinese      =  "Traço"
     case 81   :  ' Japanese
@@ -582,6 +596,8 @@ testcase tPinyinSort
         sKeyTypeSChinese      =  "Pinyin"
     case 49   :  ' German
         sKeyTypeSChinese      =  "Pinyin"
+    case 50   :  ' Slovenian
+        sKeyTypeSChinese      =  "Pinjin"
     case 55   :  ' Brazilian
         sKeyTypeSChinese      =  "Pinyin"
     case 81   :  ' Japanese

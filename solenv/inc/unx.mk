@@ -167,6 +167,10 @@
 .INCLUDE : unxlnghppa.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXL"
+.INCLUDE : unxlngaxp.mk
+.ENDIF
+
 # --- general *ix settings ---
 HC=hc
 HCFLAGS=

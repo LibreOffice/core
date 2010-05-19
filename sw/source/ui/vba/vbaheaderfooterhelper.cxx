@@ -155,7 +155,7 @@ sal_Bool HeaderFooterHelper::isEvenPagesFooter( const uno::Reference< frame::XMo
     }
     return sal_False;
 }
-
+#ifdef TOMORROW
 sal_Bool HeaderFooterHelper::isPrimaryHeader( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XText >& xCurrentText ) throw (uno::RuntimeException)
 {
     if( isHeader( xModel, xCurrentText ) )
@@ -173,3 +173,4 @@ sal_Bool HeaderFooterHelper::isPrimaryFooter( const uno::Reference< frame::XMode
     }
     return sal_False;
 }
+#endif

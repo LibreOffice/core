@@ -374,10 +374,6 @@ ScVbaControlFactory::ScVbaControlFactory( const uno::Reference< uno::XComponentC
 {
 }
 
-ScVbaControl* ScVbaControlFactory::createControl()  throw (uno::RuntimeException)
-{
-    return createControl( m_xModel );
-}
 ScVbaControl* ScVbaControlFactory::createControl( const uno::Reference< uno::XInterface >& xParent )  throw (uno::RuntimeException)
 {
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );

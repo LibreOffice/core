@@ -120,12 +120,14 @@ sub GetIniInformation
    gOOoStartupTimeOut = fgetOOoStartupTimeOut()
    gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
    call sCheckValgrindStatus()
+    ' set a global path for custom scripts, like basepath, but outside of current environment
    gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
-   sTemp = ConvertPath (gTestToolPath + gPrivateEnvironmentLocation + "inc/privateenvironment.inc")
-   if fileExists(sTemp) then
-       use sTemp
-       call getUseFilesPrivateEnvironment
-   else
+    if (gPrivateEnvironmentLocation <> "" AND gPrivateEnvironmentLocation <> ".") then
+        if NOT fileExists(gPrivateEnvironmentLocation) then
+            qaErrorLog "[PrivateEnvironment] defined in: '"+gTesttoolIni+"', but the path '"+gPrivateEnvironmentLocation+"'does not exist!"
+        else
+            gPrivateEnvironmentLocation = ""
+        end if
        gPrivateEnvironmentLocation = ""
    end if
 end sub
@@ -334,6 +336,7 @@ sub GetLanguageInformation
          case "no_no", "no-no", "no" : iSprache = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : iSprache = 48        ' Polish
          case "de_de", "de-de", "de" : iSprache = 49        ' German
+         case "sl_si", "sl-si", "sl" : iSprache = 50        ' Slovenian
 		 case "sr_rs", "sr-rs", "sr" : iSprache = 51        ' Serbian (Cyrillic)
          case "sh_rs", "sh-rs", "sh" : iSprache = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : iSprache = 55        ' Portuguese (Brazil)
@@ -347,7 +350,6 @@ sub GetLanguageInformation
          case "hi_in", "hi-in", "hi" : iSprache = 91        ' Hindi
          case "ar_ar", "ar-ar", "ar" : iSprache = 96        ' Arabic
          case "he_he", "he-he", "he" : iSprache = 97        ' Hebrew
-         case "sl_si", "sl-si", "sl" : iSprache = 386       ' Slovenian
          case "zz_zz", "zz-zz", "zz" : iSprache = 01        ' unknown
                                        warnlog "iniinfo.inc::GetLanguageInformation()"
                                        warnlog "- sLanOutIni = " & sLanOutIni & " (unknown language)"
@@ -397,7 +399,8 @@ function ConvertLanguage ( Sprache as String ) as Integer
       case "daenisch", "danish"                             : ConvertLanguage = 45
       case "schwedisch", "swedish"                          : ConvertLanguage = 46
       case "norwegian", "norwegisch"                        : ConvertLanguage = 47
-      case "polnisch", "polish"                             : ConvertLanguage = 48      
+      case "polnisch", "polish"                             : ConvertLanguage = 48
+      case "slovenian", "slovenisch"                        : ConvertLanguage = 50
 	  case "serbisch kyrillisch", "serbian cyrillic"        : ConvertLanguage = 51
 	  case "serbisch latein", "serbian latin"               : ConvertLanguage = 52	  
       case "japanisch", "japanese"                          : ConvertLanguage = 81
@@ -408,7 +411,6 @@ function ConvertLanguage ( Sprache as String ) as Integer
       case "tuerkisch", "turkish"                           : ConvertLanguage = 90
       case "arabisch", "arab"                               : ConvertLanguage = 96
       case "catalan", "katalanisch"                         : ConvertLanguage = 99
-      case "slovenian", "slovenisch"                        : ConvertLanguage = 386
    end select
 end function
 
@@ -436,6 +438,7 @@ function GetLanguageText ( iLan ) as String
       case 47   : GetLanguageText = "Norwegian"
       case 48   : GetLanguageText = "Polnish"
       case 49   : GetLanguageText = "German"
+      case 50   : GetlanguageText = "Slovenian"
       case 51   : GetlanguageText = "Serbian (Cyrillic)"
       case 52   : GetlanguageText = "Serbian (Latin)"	  
       case 55   : GetLanguageText = "Portuguese (Brazil)"
@@ -450,7 +453,6 @@ function GetLanguageText ( iLan ) as String
       case 96   : GetLanguageText = "Arabic"
       case 97   : GetLanguageText = "Hebrew"
       case 99   : GetLanguageText = "Unknown"
-      case 386  : GetlanguageText = "Slovenian"
       case else : GetLanguageText = "detection failed"
    end select
 end function
@@ -480,6 +482,7 @@ function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
          case "no_no", "no-no", "no" : ConvertLanguage2 = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : ConvertLanguage2 = 48        ' Polish
          case "de_de", "de-de", "de" : ConvertLanguage2 = 49        ' German
+         case "sl_si", "sl-si", "sl" : ConvertLanguage2 = 50        ' Slovenian
          case "sr_rs", "sr_rs", "sr" : ConvertLanguage2 = 51        ' Serbian (Cyrillic)
          case "sh_rs", "sh_rs", "sh" : ConvertLanguage2 = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : ConvertLanguage2 = 55        ' Portuguese (Brazil)
@@ -493,7 +496,6 @@ function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
          case "hi_in", "hi-in", "hi" : ConvertLanguage2 = 91        ' Hindi
          case "ar_ar", "ar-ar", "ar" : ConvertLanguage2 = 96        ' Arabic
          case "he_he", "he-he", "he" : ConvertLanguage2 = 97        ' Hebrew
-         case "sl_si", "sl-si", "sl" : ConvertLanguage2 = 386
          case "zz_zz", "zz-zz", "zz" : ConvertLanguage2 = 01        ' unknown
          case else                   : if isMissing (bExact) then
                                          printlog "iniinfo.inc::ConvertLanguage2(): Unknown systemlanguage '" & sSprache & "'!"
@@ -535,6 +537,7 @@ function ConvertCodeToLanguage ( sSprache as String ) as Integer
          case "2047" : ConvertCodeToLanguage = 47        ' Norwegian
          case "1045" : ConvertCodeToLanguage = 48        ' Polish
          case "1031" : ConvertCodeToLanguage = 49        ' German
+         case "1060" : ConvertCodeToLanguage = 50        ' Slovenian
          case "    " : ConvertCodeToLanguage = 55        ' Portuguese (Brazil)
          case "3098" : ConvertCodeToLanguage = 51        ' Serbian (Cyriliic)
          case "2074" : ConvertCodeToLanguage = 52        ' Serbian (Latin)		 
@@ -548,7 +551,6 @@ function ConvertCodeToLanguage ( sSprache as String ) as Integer
 '         case "    " : ConvertCodeToLanguage = 91        ' Hindi
          case "1025" : ConvertCodeToLanguage = 96        ' Arabic
 '         case "    " : ConvertCodeToLanguage = 97        ' Hebrew
-         case "1060" : ConvertCodeToLanguage = 386        ' Slovenian
          case else   : printlog "iniinfo.inc::ConvertCodeToLanguage(): Num. Code could not be detect or is unknown and will be set to 01 (English (USA))!"
                        ConvertCodeToLanguage = 01
    end select

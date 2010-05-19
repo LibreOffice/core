@@ -79,6 +79,8 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 ,   msContinueListId()
 // <--
 {
+    static ::rtl::OUString s_PropNameDefaultListId(
+        RTL_CONSTASCII_USTRINGPARAM("DefaultListId"));
     {
         // get the parent list block context (if any); this is a bit ugly...
         XMLTextListBlockContext * pLB(0);
@@ -180,10 +182,12 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             {
                 uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
                                             xNumRuleProps->getPropertySetInfo());
-                if ( xNumRulePropSetInfo.is() &&
-                     xNumRulePropSetInfo->hasPropertyByName( mrTxtImport.sPropNameDefaultListId) )
+                if (xNumRulePropSetInfo.is() &&
+                    xNumRulePropSetInfo->hasPropertyByName(
+                         s_PropNameDefaultListId))
                 {
-                    xNumRuleProps->getPropertyValue( mrTxtImport.sPropNameDefaultListId ) >>= sListStyleDefaultListId;
+                    xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
+                        >>= sListStyleDefaultListId;
                     DBG_ASSERT( sListStyleDefaultListId.getLength() != 0,
                                 "no default list id found at numbering rules instance. Serious defect -> please inform OD." );
                 }

@@ -102,35 +102,6 @@ sub GetUseFiles
         gTestToolPath = gRemotePath
     end if
     
-'/// Load private environment dependant settings
-'/// BaseDirectory is the setting from the TestTool application at Extra->Settings->Profile->Base directory
-'/// This path is available in the global variable: gTestToolPath
-'/// The private environment location directory is taken from the file BaseDirectory+errorlog/privateenvironment.txt
-'/// The default file is taken from cvs: qa/qatesttool/errorlog/privateenvironment.txt
-'/// The default content is: 
-'/// >[PrivateEnvironment]
-'/// >Current=global/private/
-'/// The path is defined relative to BaseDirectory and put into the global variable: gPrivateEnvironmentLocation
-'/// At the resulting path of BaseDirectory + gPrivateEnvironmentLocation + 'inc/' there has to exist the file: privateenvironment.inc
-'/// with at least the sub: getUseFilesPrivateEnvironment which will get executed
-
-    if (gPrivateEnvironmentLocation = "") then
-    sPrivateEnvironmentLocation = ConvertPath (gTestToolPath + "errorlog\privateenvironment.txt")
-    if fileExists(sPrivateEnvironmentLocation) then
-        gPrivateEnvironmentLocation = getIniValue(sPrivateEnvironmentLocation, "PrivateEnvironment", "Current")
-        ' TODO: remove trailing path character
-    else
-        gPrivateEnvironmentLocation = "global/private/"
-    end if
-    sTemp = ConvertPath (gTestToolPath + gPrivateEnvironmentLocation + "inc/privateenvironment.inc")
-    if fileExists(sTemp) then
-        use sTemp
-        call getUseFilesPrivateEnvironment
-    else
-        'qaErrorLog "Private Environment Control File Location specified in '" + sPrivateEnvironmentLocation + "', but the file doesn't exist: '" +sTemp+ "'"
-    end if
-    end if
-    
     ' Check if environment works with this OOo version
 '/// Control the behaviour of the environment via the file qa/qatesttool/global/version.txt:
 '/// [EnvironmentVersion]

@@ -36,6 +36,8 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 
+#include <sfx2/Metadatable.hxx>
+
 #include <unocoll.hxx>
 #include <toxe.hxx>
 
@@ -48,8 +50,9 @@ class SwTOXType;
  *
  * --------------------------------------------------*/
 
-typedef ::cppu::WeakImplHelper5
-<   ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::ImplInheritanceHelper5
+<   ::sfx2::MetadatableMixin
+,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet
 ,   ::com::sun::star::container::XNamed
@@ -80,6 +83,11 @@ public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XDocumentIndex>
         CreateXDocumentIndex(SwDoc & rDoc, SwTOXBaseSection const& rSection);
+
+    // MetadatableMixin
+    virtual ::sfx2::Metadatable* GetCoreObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        GetModel();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

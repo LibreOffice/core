@@ -469,6 +469,7 @@ testcase tGallery_GalleryView_Preview
         case 46     :   jpeg_bkg =  2    : iAnimation =  1   :   iSound = 17
         case 48     :   jpeg_bkg =  2    : iAnimation =  1   :   iSound = 17
         case 49     :   jpeg_bkg = 12   : iAnimation =  1   :   iSound = 16
+        case 50     :   jpeg_bkg = 12   : iAnimation =  1   :   iSound = 16
         case 55     :   jpeg_bkg = 21   : iAnimation =  1   :   iSound = 28
         case 81     :   jpeg_bkg = 21   : iAnimation =  1   :   iSound = 10  'FHA TODO: Find out the right numbers for Asian languages.
         case 82     :   jpeg_bkg =  1    : iAnimation = 17  :   iSound = 12
@@ -489,6 +490,7 @@ testcase tGallery_GalleryView_Preview
         case 46     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 48     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 49     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
+        case 50     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 55     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 81     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2  'FHA TODO: Find out the right numbers for Asian languages.
         case 82     :   jpeg_bkg =  1   :   iAnimation =  5     :   iSound =  2
@@ -651,6 +653,7 @@ testcase tGallery_GalleryView_Insert
         case 46     :   jpeg_bkg = 1     :   iAnimation =  2
         case 48     :   jpeg_bkg = 3     :   iAnimation =  1
         case 49     :   jpeg_bkg = 1     :   iAnimation =  2
+        case 50     :   jpeg_bkg = 1     :   iAnimation =  2
         case 55     :   jpeg_bkg = 8     :   iAnimation =  1
         case 81     :   jpeg_bkg = 1     :   iAnimation =  3
         case 82     :   jpeg_bkg = 1     :   iAnimation = 17
@@ -671,6 +674,7 @@ testcase tGallery_GalleryView_Insert
         case 46   : jpeg_bkg =  1 : iAnimation =  2
         case 48   : jpeg_bkg =  3 : iAnimation =  1
         case 49   : jpeg_bkg =  1 : iAnimation =  2
+        case 50   : jpeg_bkg =  1 : iAnimation =  2
         case 55   : jpeg_bkg =  6 : iAnimation =  1
         case 81   : jpeg_bkg =  1 : iAnimation =  3
         case 82   : jpeg_bkg =  1 : iAnimation =  1
@@ -859,6 +863,7 @@ testcase tGallery_GalleryView_Delete
     case 39   : jpeg_bkg = 10  :   iAnimation = 1   :  iSound = 27
     case 46   : jpeg_bkg = 1    :   iAnimation = 2   :  iSound = 18
     case 49   : jpeg_bkg = 1    :   iAnimation = 2   :  iSound = 17
+    case 50   : jpeg_bkg = 1    :   iAnimation = 2   :  iSound = 17
     case 55   : jpeg_bkg = 8    :   iAnimation = 1   :  iSound = 30
     case 81   : jpeg_bkg = 1    :   iAnimation = 3   :  iSound = 10
     case 82   : jpeg_bkg = 1    :   iAnimation = 17 :  iSound = 12

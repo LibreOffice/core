@@ -1474,6 +1474,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     USHORT nMode;
     USHORT nCode = rEvt.mnCode;
     bool bHorz = rEvt.mbHorz;
+    bool bPixel = rEvt.mbDeltaIsPixel;
     if ( nCode & KEY_MOD1 )
         nMode = COMMAND_WHEEL_ZOOM;
     else if ( nCode & KEY_MOD2 )
@@ -1486,7 +1487,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
             bHorz = true;
     }
 
-    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz );
+    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz, bPixel );
     Point               aMousePos( rEvt.mnX, rEvt.mnY );
     BOOL                bRet = TRUE;
 

@@ -451,9 +451,9 @@ void writeNode(
 
 void writeModifications(
     Components & components, oslFileHandle handle,
-    rtl::OUString const & grandparentPathRepresentation,
-    rtl::OUString const & parentName, rtl::Reference< Node > const & parent,
-    rtl::OUString const & nodeName, rtl::Reference< Node > const & node,
+    rtl::OUString const & parentPathRepresentation,
+    rtl::Reference< Node > const & parent, rtl::OUString const & nodeName,
+    rtl::Reference< Node > const & node,
     Modifications::Node const & modifications)
 {
     // It is never necessary to write oor:finalized or oor:mandatory attributes,
@@ -461,27 +461,15 @@ void writeModifications(
     if (modifications.children.empty()) {
         OSL_ASSERT(parent.is());
             // components themselves have no parent but must have children
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
+        writeAttributeValue(handle, parentPathRepresentation);
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
         if (node.is()) {
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
-            writeAttributeValue(
-                handle,
-                (grandparentPathRepresentation +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                 Data::createSegment(parent->getTemplateName(), parentName)));
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
             writeNode(components, handle, parent, nodeName, node);
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
         } else {
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
             switch (parent->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
-                writeAttributeValue(handle, grandparentPathRepresentation);
-                writeData(
-                    handle, RTL_CONSTASCII_STRINGPARAM("\"><prop oor:name=\""));
-                writeAttributeValue(handle, parentName);
-                writeData(
-                    handle,
-                    RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\"><value"));
+                writeData(handle, RTL_CONSTASCII_STRINGPARAM("<value"));
                 if (nodeName.getLength() != 0) {
                     writeData(
                         handle, RTL_CONSTASCII_STRINGPARAM(" xml:lang=\""));
@@ -489,61 +477,44 @@ void writeModifications(
                     writeData(handle, RTL_CONSTASCII_STRINGPARAM("\""));
                 }
                 writeData(
-                    handle,
-                    RTL_CONSTASCII_STRINGPARAM(
-                        " oor:op=\"remove\"/></prop></item>"));
+                    handle, RTL_CONSTASCII_STRINGPARAM(" oor:op=\"remove\"/>"));
                 break;
             case Node::KIND_GROUP:
                 OSL_ASSERT(
                     dynamic_cast< GroupNode * >(parent.get())->isExtensible());
-                writeAttributeValue(
-                    handle,
-                    (grandparentPathRepresentation +
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                     Data::createSegment(
-                         parent->getTemplateName(), parentName)));
                 writeData(
-                    handle, RTL_CONSTASCII_STRINGPARAM("\"><prop oor:name=\""));
+                    handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
                 writeAttributeValue(handle, nodeName);
                 writeData(
                     handle,
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "\" oor:op=\"remove\"/></item>"));
+                    RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"remove\"/>"));
                 break;
             case Node::KIND_SET:
-                writeAttributeValue(
-                    handle,
-                    (grandparentPathRepresentation +
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                     Data::createSegment(
-                         parent->getTemplateName(), parentName)));
                 writeData(
-                    handle, RTL_CONSTASCII_STRINGPARAM("\"><node oor:name=\""));
+                    handle, RTL_CONSTASCII_STRINGPARAM("<node oor:name=\""));
                 writeAttributeValue(handle, nodeName);
                 writeData(
                     handle,
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "\" oor:op=\"remove\"/></item>"));
+                    RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"remove\"/>"));
                 break;
             default:
                 OSL_ASSERT(false); // this cannot happen
                 break;
             }
         }
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
     } else {
-        rtl::OUString parentPathRep;
-        if (parent.is()) { // components themselves have no parent
-            parentPathRep = grandparentPathRepresentation +
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                Data::createSegment(parent->getTemplateName(), parentName);
-        }
         OSL_ASSERT(node.is());
+        rtl::OUString pathRep(
+            parentPathRepresentation +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+            Data::createSegment(node->getTemplateName(), nodeName));
         for (Modifications::Node::Children::const_iterator i(
                  modifications.children.begin());
              i != modifications.children.end(); ++i)
         {
             writeModifications(
-                components, handle, parentPathRep, nodeName, node, i->first,
+                components, handle, pathRep, node, i->first,
                 node->getMember(i->first), i->second);
         }
     }
@@ -605,9 +576,8 @@ void writeModFile(
          j != data.modifications.getRoot().children.end(); ++j)
     {
         writeModifications(
-            components, tmp.handle, rtl::OUString(), rtl::OUString(),
-            rtl::Reference< Node >(), j->first,
-            Data::findNode(Data::NO_LAYER, data.components, j->first),
+            components, tmp.handle, rtl::OUString(), rtl::Reference< Node >(),
+            j->first, Data::findNode(Data::NO_LAYER, data.components, j->first),
             j->second);
     }
     writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("</oor:items>"));

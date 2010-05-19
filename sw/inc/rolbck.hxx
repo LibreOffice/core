@@ -75,13 +75,6 @@ class SwCharFmt;
 
 #include <memory>
 
-#ifdef DBG_UTIL
-class Writer;
-#define OUT_HSTR_HINT( name )    \
-    friend Writer& OutUndo_Hstr_ ## name( Writer&, const SwHistoryHint& );
-#else
-#define OUT_HSTR_HINT( name )
-#endif
 
 enum HISTORY_HINT {
     HSTRY_SETFMTHNT,
@@ -126,7 +119,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     virtual String GetDescription() const;
 
-    OUT_HSTR_HINT(SetFmtHnt)
 };
 
 class SwHistoryResetFmt : public SwHistoryHint
@@ -140,7 +132,6 @@ public:
     // <--
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(ResetFmtHnt)
 };
 
 class SwHistorySetTxt : public SwHistoryHint
@@ -155,12 +146,11 @@ public:
     virtual ~SwHistorySetTxt();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetTxtHnt)
 };
 
 class SwHistorySetTxtFld : public SwHistoryHint
 {
-    //!! beware of the order for the declation of thje auto_ptrs.
+    //!! beware of the order for the declation of the auto_ptrs.
     //!! If they get destroyed in the wrong order sw may crash (namely mail-merge as well)
     ::std::auto_ptr<SwFieldType> m_pFldType;
     const ::std::auto_ptr<SwFmtFld> m_pFld;
@@ -176,7 +166,6 @@ public:
 
     virtual String GetDescription() const;
 
-    OUT_HSTR_HINT(SetTxtFldHnt)
 };
 
 class SwHistorySetRefMark : public SwHistoryHint
@@ -190,7 +179,6 @@ public:
     SwHistorySetRefMark( SwTxtRefMark* pTxtHt, ULONG nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetRefMarkHnt)
 };
 
 class SwHistorySetTOXMark : public SwHistoryHint
@@ -207,7 +195,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     int IsEqual( const SwTOXMark& rCmp ) const;
 
-    OUT_HSTR_HINT(SetToxMarkHnt)
 };
 
 class SwHistoryResetTxt : public SwHistoryHint
@@ -226,7 +213,6 @@ public:
     ULONG GetNode() const           { return m_nNodeIndex; }
     xub_StrLen GetCntnt() const     { return m_nStart; }
 
-    OUT_HSTR_HINT(ResetTxtHnt)
 };
 
 class SwHistorySetFootnote : public SwHistoryHint
@@ -245,7 +231,6 @@ public:
 
     virtual String GetDescription() const;
 
-    OUT_HSTR_HINT(SetFtnHnt)
 };
 
 class SwHistoryChangeFmtColl : public SwHistoryHint
@@ -258,7 +243,6 @@ public:
     SwHistoryChangeFmtColl( SwFmtColl* pColl, ULONG nNode, BYTE nNodeWhich );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(ChangeFmtColl)
 };
 
 class SwHistoryTxtFlyCnt : public SwHistoryHint
@@ -271,7 +255,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     SwUndoDelLayFmt* GetUDelLFmt() { return m_pUndo.get(); }
 
-    OUT_HSTR_HINT(FlyCnt)
 };
 
 class SwHistoryBookmark : public SwHistoryHint
@@ -284,7 +267,6 @@ class SwHistoryBookmark : public SwHistoryHint
         bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
         const ::rtl::OUString& GetName() const;
 
-        OUT_HSTR_HINT(Bookmark)
 
     private:
         const ::rtl::OUString m_aName;
@@ -312,7 +294,6 @@ public:
                          const SvUShortsSort& rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetAttrSet)
 };
 
 
@@ -333,7 +314,6 @@ public:
     ULONG GetNode() const               { return m_nNodeIndex; }
     xub_StrLen GetCntnt() const         { return m_nStart; }
 
-    OUT_HSTR_HINT(ResetAttrSet)
 };
 
 class SwHistoryChangeFlyAnchor : public SwHistoryHint
@@ -368,7 +348,6 @@ public:
     SwHistoryChangeCharFmt( const SfxItemSet& rSet, const String & sFmt);
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetAttrSet)
 };
 
 

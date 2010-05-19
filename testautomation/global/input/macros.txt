@@ -279,3 +279,48 @@ Sub Main
     ' Uncommenting this should result in an error "Invalid procedure call"
     oInstanceErr1 = oSingleton.get( 42 )
 End Sub
+
+# ---------------------------------------------------------------------------- #
+
+[i106744-1]
+sub main
+    msgbox test1()
+end sub
+
+Function test1() As String
+
+    Dim foo As String : foo = "astring"
+    
+    On Error Resume Next
+    test1 = "GOT ERROR"
+    If IsEmpty(foo) Then
+        test1 = "EMPTY"
+    Else
+        test1 = "NOT EMPTY"
+    End If
+
+End Function
+
+# ---------------------------------------------------------------------------- #
+
+[i106744-2]
+option VBASupport 1
+
+sub main
+    msgbox test1()
+end sub
+
+Function test1() As String
+
+    Dim foo As String : foo = "astring"
+    
+    On Error Resume Next
+    test1 = "GOT ERROR"
+    If IsEmpty(foo) Then
+        test1 = "EMPTY"
+    Else
+        test1 = "NOT EMPTY"
+    End If
+
+End Function
+

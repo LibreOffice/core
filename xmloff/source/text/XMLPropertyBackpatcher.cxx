@@ -30,9 +30,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <tools/debug.hxx>
 #include "XMLPropertyBackpatcher.hxx"
 #include <xmloff/txtimp.hxx>    // XMLTextImportHelper partially implemented here
@@ -206,7 +204,34 @@ void XMLPropertyBackpatcher<A>::SetDefault()
 template class XMLPropertyBackpatcher<sal_Int16>;
 template class XMLPropertyBackpatcher<OUString>;
 
+struct SAL_DLLPRIVATE XMLTextImportHelper::BackpatcherImpl
+{
+    /// backpatcher for references to footnotes and endnotes
+    ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
+        m_pFootnoteBackpatcher;
 
+    /// backpatchers for references to sequences
+    ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
+        m_pSequenceIdBackpatcher;
+
+    ::std::auto_ptr< XMLPropertyBackpatcher< ::rtl::OUString> >
+        m_pSequenceNameBackpatcher;
+
+};
+
+::boost::shared_ptr<XMLTextImportHelper::BackpatcherImpl>
+XMLTextImportHelper::MakeBackpatcherImpl()
+{
+    // n.b.: the shared_ptr stores the dtor!
+    return ::boost::shared_ptr<BackpatcherImpl>(new BackpatcherImpl);
+}
+
+static ::rtl::OUString const& GetSequenceNumber()
+{
+    static ::rtl::OUString s_SequenceNumber(
+        RTL_CONSTASCII_USTRINGPARAM("SequenceNumber"));
+    return s_SequenceNumber;
+}
 
 //
 // XMLTextImportHelper
@@ -224,32 +249,34 @@ template class XMLPropertyBackpatcher<OUString>;
 
 XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetFootnoteBP()
 {
-    if (NULL == pFootnoteBackpatcher)
+    if (!m_pBackpatcherImpl->m_pFootnoteBackpatcher.get())
     {
-        pFootnoteBackpatcher =
-            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber);
+        m_pBackpatcherImpl->m_pFootnoteBackpatcher.reset(
+            new XMLPropertyBackpatcher<sal_Int16>(GetSequenceNumber()));
     }
-    return *pFootnoteBackpatcher;
+    return *m_pBackpatcherImpl->m_pFootnoteBackpatcher;
 }
 
 XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
 {
-    if (NULL == pSequenceIdBackpatcher)
+    if (!m_pBackpatcherImpl->m_pSequenceIdBackpatcher.get())
     {
-        pSequenceIdBackpatcher =
-            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber);
+        m_pBackpatcherImpl->m_pSequenceIdBackpatcher.reset(
+            new XMLPropertyBackpatcher<sal_Int16>(GetSequenceNumber()));
     }
-    return *pSequenceIdBackpatcher;
+    return *m_pBackpatcherImpl->m_pSequenceIdBackpatcher;
 }
 
 XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
 {
-    if (NULL == pSequenceNameBackpatcher)
+    static ::rtl::OUString s_SourceName(
+        RTL_CONSTASCII_USTRINGPARAM("SourceName"));
+    if (!m_pBackpatcherImpl->m_pSequenceNameBackpatcher.get())
     {
-        pSequenceNameBackpatcher =
-            new XMLPropertyBackpatcher<OUString>(sSourceName);
+        m_pBackpatcherImpl->m_pSequenceNameBackpatcher.reset(
+            new XMLPropertyBackpatcher<OUString>(s_SourceName));
     }
-    return *pSequenceNameBackpatcher;
+    return *m_pBackpatcherImpl->m_pSequenceNameBackpatcher;
 }
 
 void XMLTextImportHelper::InsertFootnoteID(
@@ -283,9 +310,3 @@ void XMLTextImportHelper::ProcessSequenceReference(
     GetSequenceNameBP().SetProperty(xPropSet, sXMLId);
 }
 
-void XMLTextImportHelper::_FinitBackpatcher()
-{
-    delete pFootnoteBackpatcher;
-    delete pSequenceIdBackpatcher;
-    delete pSequenceNameBackpatcher;
-}

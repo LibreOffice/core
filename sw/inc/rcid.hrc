@@ -78,6 +78,7 @@
 #define RC_UNDO                     (RC_BASE + 3750)
 #define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
 #define RC_UNOCORE                  (RC_BASE + 4050)
+#define RC_ANNOTATION               (RC_BASE + 4150)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Bereiche ausspannen
@@ -87,8 +88,6 @@
 #define RC_APP_BEGIN                RC_APP
 #define RC_APP_END                  (RC_APP_BEGIN + 199)
 
-
-
 // Dialog-Verzeichnis
 #define RC_DIALOG_BEGIN             RC_DIALOG
 #define RC_DIALOG_END               (RC_DIALOG_BEGIN + 99)
@@ -96,6 +95,10 @@
 // Editwin & Co
 #define RC_DOCVW_BEGIN              RC_DOCVW
 #define RC_DOCVW_END                (RC_DOCVW_BEGIN + 99)
+
+// Annotation
+#define RC_ANNOTATION_BEGIN             RC_ANNOTATION
+#define RC_ANNOTATION_END               (RC_ANNOTATION_BEGIN + 99)
 
 // SW/Web
 #define RC_WEB_BEGIN                RC_WEB

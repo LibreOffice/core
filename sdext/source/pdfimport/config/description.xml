@@ -29,8 +29,8 @@
     </display-name>
 
     <icon>
-      <default xlink:href="images/pdfiext.png" />
-      <high-contrast xlink:href="images/pdfiext_hc.png" />
+      <default xlink:href="images/extension_32.png" />
+      <high-contrast xlink:href="images/extension_32_h.png" />
     </icon>
 
 </description>

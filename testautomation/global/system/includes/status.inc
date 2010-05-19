@@ -271,8 +271,7 @@ sub hStatusWriteOutputFirstFile ()
         sPlat = "win"
     end if
 
-   slVersion() = Split(gProductName, " ")                         '(15)
-   sProduct = slVersion(0)
+    sProduct = gProductName                         '(15)
 
     ' major is from start to 'm'
     iPosA = 1

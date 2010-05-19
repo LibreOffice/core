@@ -39,6 +39,8 @@
 
 #include <cppuhelper/implbase7.hxx>
 
+#include <sfx2/Metadatable.hxx>
+
 #include <unobaseclass.hxx>
 
 
@@ -52,8 +54,9 @@ class SwSectionFmt;
 
 struct SwTextSectionProperties_Impl;
 
-typedef ::cppu::WeakImplHelper7
-<   ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::ImplInheritanceHelper7
+<   ::sfx2::MetadatableMixin
+,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet
 ,   ::com::sun::star::beans::XPropertyState
@@ -83,6 +86,11 @@ public:
             ::com::sun::star::text::XTextSection >
         CreateXTextSection(SwSectionFmt *const pFmt = 0,
                 const bool bIndexHeader = false);
+
+    // MetadatableMixin
+    virtual ::sfx2::Metadatable* GetCoreObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        GetModel();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

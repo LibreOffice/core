@@ -157,13 +157,16 @@ MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
 BROFFICENOLOGOSPLASH:=$(BIN)$/broffice$/intro.zip
+BROFFICENOLOGOBRAND:=$(BIN)$/broffice$/images_brand.zip
 BROFFICEDEVNOLOGOSPLASH:=$(BIN)$/broffice_dev$/intro.zip
+BROFFICENDEVOLOGOBRAND:=$(BIN)$/broffice_dev$/images_brand.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 
-ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH) $(BROFFICENOLOGOSPLASH) $(BROFFICEDEVNOLOGOSPLASH)
+ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH) $(BROFFICENOLOGOSPLASH) $(BROFFICEDEVNOLOGOSPLASH) \
+    $(BROFFICENOLOGOBRAND) $(BROFFICEDEVNOLOGOBRAND)
 .IF "$(OS)" == "WNT"
 ADDDEPS+=hack_msitemplates
 .ENDIF
@@ -197,11 +200,6 @@ $(MAKETARGETS) : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS)"!=""
 
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
-
-.IF "$(OS)" == "MACOSX"
-DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store DS_Store_Langpack}
-$(foreach,i,$(alllangiso) {openoffice openofficedev openofficewithjre ooolanguagepack broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
-.ENDIF # "$(OS)" == "MACOSX"
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!=""
@@ -314,8 +312,9 @@ $(BIN)$/broffice$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_nologo$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
-$(BIN)$/{osxdndinstall.png DS_Store DS_Store_Langpack} : $(PRJ)$/res$/$$(@:f)
-    @$(COPY) $< $@
+$(BIN)$/broffice$/images_brand.zip : $(SOLARCOMMONBINDIR)$/broffice_nologo$/images_brand.zip
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
 
 hack_msitemplates .PHONY:
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)

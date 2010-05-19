@@ -126,7 +126,7 @@ int find_free_node()
     return -1;
 }
 
-int find_cur_node(sal_Int32 cur_id)
+int find_cur_node(long cur_id)
 {
     for(int i=0; i<MAX_NODE_NUM; i++)
     {

@@ -26,9 +26,13 @@
  ************************************************************************/
 #ifndef _ACCFOOTNOTE_HXX
 #define _ACCFOOTNOTE_HXX
-#ifndef _ACCCONTEXT_HXX
-#include "acccontext.hxx"
-#endif
+
+#include <sal/types.h>
+
+#include <acccontext.hxx>
+
+class SwAccessibleMap;
+class SwFtnFrm;
 
 class SwAccessibleFootnote : public SwAccessibleContext
 {

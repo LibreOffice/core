@@ -262,7 +262,7 @@ BOOL SwCursor::GotoRegion( const String& rName )
         const SwNodeIndex* pIdx;
         const SwSection* pSect;
         if( 0 != ( pSect = pFmt->GetSection() ) &&
-            pSect->GetName() == rName &&
+            pSect->GetSectionName() == rName &&
             0 != ( pIdx = pFmt->GetCntnt().GetCntntIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {

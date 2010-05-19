@@ -947,8 +947,6 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     // Anker noch nicht gesetzt ?
     // DrawObjecte duerfen niemals in Kopf-/Fusszeilen landen.
     const bool bIsAtCntnt = (FLY_AT_PAGE != eAnchorId);
-//                    FLY_AT_CNTNT == eAnchorId || FLY_IN_CNTNT == eAnchorId ||
-//                    FLY_AT_FLY == eAnchorId || FLY_AUTO_CNTNT == eAnchorId;
 
     const SwNodeIndex* pChkIdx = 0;
     if( !pAnchor )

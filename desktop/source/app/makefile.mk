@@ -65,6 +65,7 @@ SHL1LIBS = $(SLB)$/mig.lib
 
 SHL1STDLIBS = \
     $(COMPHELPERLIB) \
+    $(CONFIGMGRLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(I18NISOLANGLIB) \

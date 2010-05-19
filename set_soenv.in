@@ -510,9 +510,9 @@ elsif ( $platform =~ m/linux/ )
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
-      $CPU            = "A";
-      $CPUNAME        = "ALPHA_";
-      $OUTPATH        = "unxlnga";
+      $CPU            = "L";
+      $CPUNAME        = "AXP";
+      $OUTPATH        = "unxlngaxp";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";

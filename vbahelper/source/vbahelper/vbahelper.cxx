@@ -98,15 +98,6 @@ namespace ooo
 namespace vba
 {
 
-uno::Reference< lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell* pShell )
-{
-    uno::Any aUnoVar;
-    if ( !pShell || ! pShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aUnoVar ) )
-        throw lang::IllegalArgumentException();
-    uno::Reference< lang::XMultiServiceFactory > xVBAFactory( aUnoVar, uno::UNO_QUERY_THROW );
-    return xVBAFactory;
-}
-
 css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShell* pShell, const sal_Char* _pAsciiName ) throw (css::uno::RuntimeException)
 {
     OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
@@ -114,13 +105,6 @@ css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShe
     return getVBAServiceFactory( pShell )->createInstance( sVarName );
 }
 
-css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell* pShell, const sal_Char* _pAsciiName, const uno::Sequence< uno::Any >& aArgs ) throw ( css::uno::RuntimeException )
-{
-    OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
-    ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
-    uno::Reference< uno::XInterface > xIf = getVBAServiceFactory( pShell )->createInstanceWithArguments( sVarName, aArgs  );
-    return xIf;
-}
 // helper method to determine if the view ( calc ) is in print-preview mode
 bool isInPrintPreview( SfxViewFrame* pView )
 {

@@ -121,6 +121,7 @@ namespace framework
         sal_Int32                       mnLayoutStyle;
         svt::AcceleratorExecute*        mpAccExec;
         long                            mnBtnPos;
+        long                            mnBtnTop;
 
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;

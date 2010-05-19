@@ -1681,7 +1681,7 @@ namespace
 }
 
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const ::rtl::OUString& _rScriptURL,
-    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError )
 {
     OSL_TRACE( "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;
@@ -1722,7 +1722,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         nErr = ERRCODE_BASIC_INTERNAL_ERROR;
     }
 
-    if ( bCaughtException )
+    if ( bCaughtException && bRaiseError )
     {
         ::std::auto_ptr< VclAbstractDialog > pScriptErrDlg;
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -1745,10 +1745,10 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
             aParams,
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
-            aOutParam)
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam
+        , bool bRaiseError )
 {
-    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam );
+    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError );
 }
 
 //-------------------------------------------------------------------------

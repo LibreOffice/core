@@ -28,117 +28,118 @@
 #define _ACCFRMOBJSLIST_HXX
 
 #include <accfrmobj.hxx>
+#include <swrect.hxx>
 
-class SwFrmOrObjSList;
+class SwAccessibleMap;
 
-class SwFrmOrObjSList_const_iterator
+class SwAccessibleChildSList;
+
+class SwAccessibleChildSList_const_iterator
 {
-    friend class SwFrmOrObjSList;
-    const SwFrmOrObjSList& rList;   // The frame we are iterating over
-    SwFrmOrObj aCurr;               // The current object
-    sal_uInt16 nNextObj;            // The index of the current sdr object
+private:
+    friend class SwAccessibleChildSList;
 
-    inline SwFrmOrObjSList_const_iterator( const SwFrmOrObjSList& rLst );
-    SwFrmOrObjSList_const_iterator( const SwFrmOrObjSList& rLst, sal_Bool );
+    const SwAccessibleChildSList& rList;    // The frame we are iterating over
+    sw::access::SwAccessibleChild aCurr;    // The current object
+    sal_uInt16 nNextObj;                    // The index of the current sdr object
 
-//  SwFrmOrObjSList_const_iterator& begin();
-    SwFrmOrObjSList_const_iterator& next();
-    SwFrmOrObjSList_const_iterator& next_visible();
+    inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList& rLst )
+        : rList( rLst )
+        , nNextObj( 0 )
+    {}
+
+    SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList& rLst,
+                                           SwAccessibleMap& rAccMap );
+
+    SwAccessibleChildSList_const_iterator& next();
+    SwAccessibleChildSList_const_iterator& next_visible();
 
 public:
 
-    inline SwFrmOrObjSList_const_iterator(
-            const SwFrmOrObjSList_const_iterator& rIter );
-    inline sal_Bool operator==(
-            const SwFrmOrObjSList_const_iterator& r ) const;
+    inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList_const_iterator& rIter )
+        : rList( rIter.rList )
+        , aCurr( rIter.aCurr )
+        , nNextObj( rIter.nNextObj )
+    {}
+
+    inline sal_Bool operator==( const SwAccessibleChildSList_const_iterator& r ) const
+    {
+        return aCurr == r.aCurr;
+    }
+
     inline sal_Bool operator!=(
-            const SwFrmOrObjSList_const_iterator& r ) const;
-    inline SwFrmOrObjSList_const_iterator& operator++();
-    inline const SwFrmOrObj& operator*() const;
+            const SwAccessibleChildSList_const_iterator& r ) const
+    {
+        return !(*this == r);
+    }
+
+    SwAccessibleChildSList_const_iterator& operator++();
+
+    inline const sw::access::SwAccessibleChild& operator*() const
+    {
+        return aCurr;
+    }
 };
 
 // An iterator to iterate over a frame's child in any order
-class SwFrmOrObjSList
+class SwAccessibleChildSList
 {
-    friend class SwFrmOrObjSList_const_iterator;
-
-    SwRect aVisArea;
-    const SwFrm *pFrm;  // The frame we are iterating over
-    sal_Bool bVisibleOnly;
+    const SwRect maVisArea;
+    const SwFrm& mrFrm;
+    const sal_Bool mbVisibleChildrenOnly;
+    SwAccessibleMap& mrAccMap;
 
 public:
 
-    typedef SwFrmOrObjSList_const_iterator const_iterator;
+    typedef SwAccessibleChildSList_const_iterator const_iterator;
 
-    inline SwFrmOrObjSList( const SwFrm *pF );
-    inline SwFrmOrObjSList( const SwRect& rVisArea, const SwFrm *pF );
+    inline SwAccessibleChildSList( const SwFrm& rFrm,
+                                   SwAccessibleMap& rAccMap )
+        : maVisArea()
+        , mrFrm( rFrm )
+        , mbVisibleChildrenOnly( sal_False )
+        , mrAccMap( rAccMap )
+    {}
 
-    inline const_iterator begin() const;
-    inline const_iterator end() const;
+    inline SwAccessibleChildSList( const SwRect& rVisArea,
+                                   const SwFrm& rFrm,
+                                   SwAccessibleMap& rAccMap )
+        : maVisArea( rVisArea )
+        , mrFrm( rFrm )
+        , mbVisibleChildrenOnly( sw::access::SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly() )
+        , mrAccMap( rAccMap )
+    {
+    }
+
+    inline const_iterator begin() const
+    {
+        return SwAccessibleChildSList_const_iterator( *this, mrAccMap );
+    }
+
+    inline const_iterator end() const
+    {
+        return SwAccessibleChildSList_const_iterator( *this );
+    }
+
+    inline const SwFrm& GetFrm() const
+    {
+        return mrFrm;
+    }
+
+    inline sal_Bool IsVisibleChildrenOnly() const
+    {
+        return mbVisibleChildrenOnly;
+    }
+
+    inline const SwRect& GetVisArea() const
+    {
+        return maVisArea;
+    }
+
+    inline SwAccessibleMap& GetAccMap() const
+    {
+        return mrAccMap;
+    }
 };
-
-inline SwFrmOrObjSList_const_iterator::SwFrmOrObjSList_const_iterator(
-        const SwFrmOrObjSList& rLst ) :
-    rList( rLst ), nNextObj( 0 )
-{
-}
-
-inline SwFrmOrObjSList_const_iterator::SwFrmOrObjSList_const_iterator(
-        const SwFrmOrObjSList_const_iterator& rIter ) :
-    rList( rIter.rList ),
-    aCurr( rIter.aCurr ),
-    nNextObj( rIter.nNextObj )
-{
-}
-
-inline sal_Bool SwFrmOrObjSList_const_iterator::operator==(
-    const SwFrmOrObjSList_const_iterator& r ) const
-{
-    return aCurr == r.aCurr;
-}
-
-inline sal_Bool SwFrmOrObjSList_const_iterator::operator!=(
-    const SwFrmOrObjSList_const_iterator& r ) const
-{
-    return !(aCurr == r.aCurr);
-}
-
-inline SwFrmOrObjSList_const_iterator& SwFrmOrObjSList_const_iterator::operator++()
-{
-    return rList.bVisibleOnly ? next_visible() : next();
-}
-
-inline const SwFrmOrObj& SwFrmOrObjSList_const_iterator::operator*() const
-{
-    return aCurr;
-}
-
-inline SwFrmOrObjSList::SwFrmOrObjSList( const SwFrm *pF ) :
-    pFrm( pF ),
-    bVisibleOnly( sal_False )
-{
-}
-
-inline SwFrmOrObjSList::SwFrmOrObjSList( const SwRect& rVisArea,
-                                             const SwFrm *pF ) :
-    aVisArea( rVisArea ),
-    pFrm( pF )
-{
-    SwFrmOrObj aFrm( pFrm );
-    bVisibleOnly = aFrm.IsVisibleChildrenOnly();
-}
-
-inline SwFrmOrObjSList_const_iterator SwFrmOrObjSList::begin() const
-{
-//  SwFrmOrObjSList_const_iterator aIter2( *this );
-//  aIter2.begin();
-//  return aIter2;
-    return SwFrmOrObjSList_const_iterator( *this, sal_True );
-}
-
-inline SwFrmOrObjSList_const_iterator SwFrmOrObjSList::end() const
-{
-    return SwFrmOrObjSList_const_iterator( *this );
-}
 
 #endif

@@ -2562,8 +2562,9 @@ void ScHTMLTable::SetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos, SCCOLROW 
     while( nIndex >= rSizes.size() )
         rSizes.push_back( rSizes.empty() ? 1 : (rSizes.back() + 1) );
     // update size of passed position and all following
+    // #i109987# only grow, don't shrink - use the largest needed size
     SCsCOLROW nDiff = nSize - ((nIndex == 0) ? rSizes.front() : (rSizes[ nIndex ] - rSizes[ nIndex - 1 ]));
-    if( nDiff != 0 )
+    if( nDiff > 0 )
         for( ScSizeVec::iterator aIt = rSizes.begin() + nIndex, aEnd = rSizes.end(); aIt != aEnd; ++aIt )
             *aIt += nDiff;
 }

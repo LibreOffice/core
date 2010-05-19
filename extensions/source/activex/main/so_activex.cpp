@@ -44,8 +44,10 @@ const REGSAM n32KeyAccess = KEY_ALL_ACCESS;
 
 #ifdef _AMD64_
 const BOOL bX64 = TRUE;
+#define REG_DELETE_KEY_A( key, aPath, nKeyAccess ) RegDeleteKeyExA( key, aPath, nKeyAccess, 0 )
 #else
 const BOOL bX64 = FALSE;
+#define REG_DELETE_KEY_A( key, aPath, nKeyAccess ) RegDeleteKeyA( key, aPath )
 #endif
 
 // 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExA if WINVER < 0x0502.
@@ -363,7 +365,7 @@ HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
         RegCloseKey( hkey1 ),hkey1= NULL;
 
     // delete the key itself
-    return RegDeleteKeyExA( hkey, pPath, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ), 0 );
+    return REG_DELETE_KEY_A( hkey, pPath, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ) );
 }
 
 STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )

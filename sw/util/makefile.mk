@@ -44,7 +44,7 @@ sw_res_files= \
     $(SRS)$/dialog.srs       \
     $(SRS)$/chrdlg.srs       \
     $(SRS)$/config.srs       \
-    $(SRS)$/dbui.srs	    \
+    $(SRS)$/dbui.srs         \
     $(SRS)$/dochdl.srs       \
     $(SRS)$/docvw.srs        \
     $(SRS)$/envelp.srs       \
@@ -60,7 +60,7 @@ sw_res_files= \
     $(SRS)$/smartmenu.srs    \
     $(SRS)$/table.srs        \
     $(SRS)$/uiview.srs       \
-    $(SRS)$/undo.srs        \
+    $(SRS)$/undo.srs         \
     $(SRS)$/unocore.srs      \
     $(SRS)$/utlui.srs        \
     $(SRS)$/web.srs          \
@@ -118,8 +118,8 @@ SHL1STDLIBS+= \
     $(SALLIB) \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
-    $(I18NUTILLIB)	\
-                $(VBAHELPERLIB) \
+    $(I18NUTILLIB)
+SHL1STDLIBS+= \
     $(AVMEDIALIB)
 
 .IF "$(GUI)"=="WNT"
@@ -337,6 +337,7 @@ SHL4STDLIBS= \
     $(BASICLIB)     \
     $(I18NUTILLIB)
 
+.IF "$(ENABLE_VBA)" == "YES"
 #target vba
 TARGET_VBA=vbaswobj
 SHL5TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
@@ -370,5 +371,6 @@ SHL5STDLIBS= \
 
 SHL5DEPN=$(SHL1TARGETN)
 SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib
+.ENDIF # .IF "$(ENABLE_VBA)" == "YES"
 
 .INCLUDE :  target.mk

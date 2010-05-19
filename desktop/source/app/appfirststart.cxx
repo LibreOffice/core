@@ -108,6 +108,9 @@ OUString Desktop::GetLicensePath()
 /* Check if we need to accept license. */
 sal_Bool Desktop::LicenseNeedsAcceptance()
 {
+    // Don't show a license
+    return sal_False;
+/*
     sal_Bool bShowLicense = sal_True;
     sal_Int32 nOpenSourceContext = 0;
     try
@@ -122,6 +125,7 @@ sal_Bool Desktop::LicenseNeedsAcceptance()
         bShowLicense = sal_False;
 
     return bShowLicense;
+*/
 }
 
 /* Local function - was the wizard completed already? */

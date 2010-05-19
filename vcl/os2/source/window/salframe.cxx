@@ -3032,10 +3032,8 @@ static void ImplHandleMoveMsg( HWND hWnd)
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleSizeMsg( HWND hWnd, MPARAM nMP2 )
+static void ImplHandleSizeMsg( HWND hWnd, MPARAM nMP2 )
 {
-    long nRet;
-
         Os2SalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
@@ -3047,11 +3045,10 @@ static long ImplHandleSizeMsg( HWND hWnd, MPARAM nMP2 )
                 pFrame->mpGraphics->mnHeight = (int)SHORT2FROMMP(nMP2);
             // Status merken
             ImplSaveFrameState( pFrame );
-            nRet = pFrame->CallCallback( SALEVENT_RESIZE, 0 );
+            pFrame->CallCallback( SALEVENT_RESIZE, 0 );
             if ( WinIsWindowVisible( pFrame->mhWndFrame ) && !pFrame->mbInShow )
                 WinUpdateWindow( pFrame->mhWndClient );
         }
-    return nRet;
 }
 
 // -----------------------------------------------------------------------

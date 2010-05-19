@@ -1156,8 +1156,6 @@ void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
             ImplTabItem* pItem = ImplGetItem( nPageId );
             if( pItem && pItem->mbEnabled )
                 SelectTabPage( nPageId );
-            else
-                Sound::Beep( SOUND_ERROR, this );
         }
     }
 }

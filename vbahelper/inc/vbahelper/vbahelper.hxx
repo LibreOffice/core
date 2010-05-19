@@ -35,17 +35,19 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
+#include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <sfx2/dispatch.hxx>
-//#include <ooo/vba/msforms/XShape.hpp>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
 #include <vcl/pointr.hxx>
-#define VBAHELPER_DLLIMPLEMENTATION
-#include <vbahelper/vbadllapi.h>
 #include <memory>
-namespace css = ::com::sun::star;
+#include "vbaaccesshelper.hxx"
 
+namespace css = ::com::sun::star;
 namespace ooo
 {
     namespace vba
@@ -62,7 +64,7 @@ namespace ooo
         }
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShell* pShell,  const sal_Char* _pAsciiName ) throw (css::uno::RuntimeException);
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell* pShell,  const sal_Char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs ) throw (css::uno::RuntimeException);
+
         css::uno::Reference< css::frame::XModel > getCurrentDoc( const rtl::OUString& sKey ) throw (css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);

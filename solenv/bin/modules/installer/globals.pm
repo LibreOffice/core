@@ -78,6 +78,7 @@ BEGIN
         "dgo",
         "kok",
         "mni",
+        "ca-XV",
         "sat",
         "ug",
         "om",

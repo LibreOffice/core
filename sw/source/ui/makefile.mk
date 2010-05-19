@@ -58,8 +58,8 @@ SUBLIBS1= \
         $(SLB)$/dbui.lib     \
         $(SLB)$/dialog.lib   \
         $(SLB)$/dochdl.lib   \
-        $(SLB)$/docvw.lib    \
-        $(SLB)$/envelp.lib   \
+                $(SLB)$/docvw.lib    \
+                $(SLB)$/envelp.lib   \
         $(SLB)$/fldui.lib    \
         $(SLB)$/frmdlg.lib   \
         $(SLB)$/globdoc.lib

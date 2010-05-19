@@ -25,18 +25,23 @@
  *
  ************************************************************************/
 
-#ifndef _NODE_HXX
-#define _NODE_HXX
+#ifndef SW_NODE_HXX
+#define SW_NODE_HXX
+
+#include <vector>
+
+#include <boost/utility.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <tools/mempool.hxx>
 #include <tools/gen.hxx>
+
 #include "swdllapi.h"
 #include <ndarr.hxx>
 #include <ndtyp.hxx>
 #include <index.hxx>
 #include <fmtcol.hxx>
-#include <boost/shared_ptr.hpp>
-#include <vector>
+
 // ---------------------
 // forward Deklarationen
 // ---------------------
@@ -55,6 +60,7 @@ class SwOLENode;
 class SwRect;
 class SwSection;
 class SwSectionFmt;
+class SwTOXBase;
 class SwSectionNode;
 class SwStartNode;
 class SwTabFrm;
@@ -547,22 +553,24 @@ private:
 //---------
 // SwSectionNode
 //---------
-class SwSectionNode : public SwStartNode
+class SwSectionNode
+    : public SwStartNode
+    , private ::boost::noncopyable
 {
     friend class SwNodes;
-    SwSection* pSection;
+
+private:
+    ::std::auto_ptr<SwSection> const m_pSection;
+
 protected:
     virtual ~SwSectionNode();
 
 public:
-    SwSectionNode( const SwNodeIndex&, SwSectionFmt& rFmt );
+    SwSectionNode(SwNodeIndex const&,
+        SwSectionFmt & rFmt, SwTOXBase const*const pTOXBase);
 
-    const SwSection& GetSection() const { return *pSection; }
-    SwSection& GetSection() { return *pSection; }
-
-    // setze ein neues SectionObject. Erstmal nur gedacht fuer die
-    // neuen VerzeichnisSections. Der geht ueber in den Besitz des Nodes!
-    void SetNewSection( SwSection* pNewSection );
+    const SwSection& GetSection() const { return *m_pSection; }
+          SwSection& GetSection()       { return *m_pSection; }
 
     SwFrm *MakeFrm();
 
@@ -591,10 +599,6 @@ public:
     // _nicht_ in einem versteckten (Unter-)Bereich liegt
     BOOL IsCntntHidden() const;
 
-private:
-    // privater Constructor, weil nie kopiert werden darf !!
-    SwSectionNode( const SwSection& rNode );
-    SwSectionNode & operator= ( const SwSection& rNode );
 };
 
 

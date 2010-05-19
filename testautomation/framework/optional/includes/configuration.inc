@@ -253,8 +253,8 @@ testcase tToolsOptionsAPIConfiguration
         case 07   : iJump =  0      ' Russian
         case 30   : iJump =  0      ' Greek
         case 31   : iJump =  0      ' Netherlands
-        case 33   : iJump = 0      ' French
-        case 34   : iJump = 0      ' Spanish
+        case 33   : iJump = 0       ' French
+        case 34   : iJump = 0       ' Spanish
         case 35   : iJump =  0      ' Finnish
         case 36   : iJump =  0      ' Hungaria
         case 37   : iJump =  0      ' Catalan
@@ -263,20 +263,21 @@ testcase tToolsOptionsAPIConfiguration
         case 43   : iJump =  0      ' Slowak
         case 44   : iJump =  0      ' English (GB)
         case 45   : iJump =  0      ' Danish
-        case 46   : iJump =  0     ' Swedish
+        case 46   : iJump =  0      ' Swedish
         case 47   : iJump =  0      ' Norwegian
         case 48   : iJump =  0      ' Polish
         case 49   : iJump =  1      ' German
         case 51   : iJump =  0      ' Slowak
-        case 55   : iJump =  0     ' Portuguese (Brazil)
-        case 66   : iJump =  0     ' Thai
+        case 50   : iJump =  0      ' Slovenian
+        case 55   : iJump =  0      ' Portuguese (Brazil)
+        case 66   : iJump =  0      ' Thai
         case 81   : iJump =  0      ' Japanese ' disabled, because locale dependant!
         case 82   : iJump =  0      ' Korean   ' disabled, because locale dependant!
         case 86   : iJump =  0      ' Chinese (simplified)  ' disabled, because locale dependant!
         case 88   : iJump =  0      ' Chinese (traditional) ' disabled, because locale dependant!
         case 90   : iJump =  0      ' Turkish
         case 91   : iJump =  0      ' Hindi
-        case 96   : iJump =  0     ' Arab
+        case 96   : iJump =  0      ' Arab
         case 97   : iJump =  0      ' Hebrew
         case else : qaErrorlog "The work-dir can't changed to the internal office-work-dir! Please insert the language in this list!"
             iJump =  0

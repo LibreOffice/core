@@ -108,7 +108,11 @@ void ModifyBroadcaster::fireEvent()
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< util::XModifyListener*>(aIt.next()))->modified( aEvent );
+        {
+            uno::Reference< util::XModifyListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->modified( aEvent );
+        }
     }
 }
 

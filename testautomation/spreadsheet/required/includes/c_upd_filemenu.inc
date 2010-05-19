@@ -310,6 +310,7 @@ testcase tFileOpenHTML
     Call hNewDocument
     Printlog " Open File-Open-dialog"
     FileOpen
+    waitslot (5)
     Kontext "OeffnenDlg"
     Printlog " Enter filename  spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
     Dateiname.settext (sTestFile)
@@ -317,7 +318,6 @@ testcase tFileOpenHTML
     Call hSelectUIFilter (sTestFilter1)
     Printlog " Click on Open"
     Oeffnen.Click
-    sleep (1)
     Kontext "HTMLImportOptions"
     Printlog " Use every control on dialog Import Options"
     Custom.Check
@@ -325,11 +325,13 @@ testcase tFileOpenHTML
     Automatic.Check
     DetectSpecialNumbers.Check
     HTMLImportOptions.OK
+    sleep (2)
     Printlog " Close recent document"
     Call hCloseDocument
     Printlog " Retry with Calc Web Querry filter"
     Printlog " Open File-Open-dialog"
     FileOpen
+    waitslot (5)
     Kontext "OeffnenDlg"
     Printlog " Enter filename  spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
     Dateiname.settext (sTestFile)
@@ -337,7 +339,6 @@ testcase tFileOpenHTML
     Call hSelectUIFilter (sTestFilter2)
     Printlog " Click on Open"
     Oeffnen.Click
-    sleep (1)
     Kontext "HTMLImportOptions"
     Printlog " Use every control on dialog Import Options"
     Custom.Check
@@ -345,6 +346,7 @@ testcase tFileOpenHTML
     Automatic.Check
     DetectSpecialNumbers.Check
     HTMLImportOptions.OK
+    sleep (2)
     Printlog " Close recent document"
     Call hCloseDocument
 

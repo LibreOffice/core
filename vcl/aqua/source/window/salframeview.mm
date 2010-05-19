@@ -37,7 +37,9 @@
 #include "vcl/window.hxx"
 
 #include "vcl/svapp.hxx"
- 
+
+#define WHEEL_EVENT_FACTOR 1.5
+
 static USHORT ImplGetModifierMask( unsigned int nMask )
 {
     USHORT nRet = 0;
@@ -654,11 +656,12 @@ private:
         mpFrame->CocoaToVCL( aPt );
         
         SalWheelMouseEvent aEvent;
-        aEvent.mnTime   = mpFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
-        aEvent.mnCode   |= KEY_MOD1; // we want zooming, no scrolling
+        aEvent.mnTime           = mpFrame->mnLastEventTime;
+        aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
+        aEvent.mbDeltaIsPixel   = TRUE;
         
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
@@ -667,11 +670,11 @@ private:
         if( dZ != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dZ));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dZ < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dZ < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
+            aEvent.mnScrollLines = dZ > 0 ? dZ/WHEEL_EVENT_FACTOR : -dZ/WHEEL_EVENT_FACTOR;
             if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -712,10 +715,11 @@ private:
         mpFrame->CocoaToVCL( aPt );
         
         SalWheelMouseEvent aEvent;
-        aEvent.mnTime   = mpFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mnTime           = mpFrame->mnLastEventTime;
+        aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mbDeltaIsPixel   = TRUE;
         
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
@@ -724,9 +728,9 @@ private:
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dX < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dX < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -734,9 +738,9 @@ private:
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ))
         {
             aEvent.mnDelta = static_cast<long>(floor(dY));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dY < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dY < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -771,10 +775,11 @@ private:
         mpFrame->CocoaToVCL( aPt );
 
         SalWheelMouseEvent aEvent;
-        aEvent.mnTime   = mpFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mnTime         = mpFrame->mnLastEventTime;
+        aEvent.mnX            = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY            = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mbDeltaIsPixel = TRUE;
 
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
@@ -783,30 +788,27 @@ private:
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dX < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dX < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
-            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
+            aEvent.mnScrollLines = dY > 0 ? dX/WHEEL_EVENT_FACTOR : -dX/WHEEL_EVENT_FACTOR;
             if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
-            if( aEvent.mnScrollLines > 15 )
-                aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
         {
             aEvent.mnDelta = static_cast<long>(floor(dY));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dY < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dY < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
-            if( aEvent.mnScrollLines == 0 )
+            aEvent.mnScrollLines = dY > 0 ? dY/WHEEL_EVENT_FACTOR : -dY/WHEEL_EVENT_FACTOR;
+            if( aEvent.mnScrollLines < 1 )
                 aEvent.mnScrollLines = 1;
-            if( aEvent.mnScrollLines > 15 )
-                aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
-            
+
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
         }
     }

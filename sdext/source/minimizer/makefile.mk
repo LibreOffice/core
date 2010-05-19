@@ -103,8 +103,8 @@ COMPONENT_BITMAPS= \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
 
 COMPONENT_IMAGES=\
-    $(EXTENSIONDIR)$/bitmaps$/em47.png \
-    $(EXTENSIONDIR)$/bitmaps$/em47_hc.png
+    $(EXTENSIONDIR)$/bitmaps$/extension_32.png \
+    $(EXTENSIONDIR)$/bitmaps$/extension_32_h.png
 
 # rather freestyle or common to all?
 COMPONENT_HELP= \
@@ -129,7 +129,7 @@ $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_IMAGES) : images$/$$(@:f)
+$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

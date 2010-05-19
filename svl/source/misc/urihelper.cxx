@@ -123,8 +123,7 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
                                                  eStyle);
         if (bCheckFileExists
             && !bWasAbsolute
-            && (aAbsURIRef.GetProtocol() == INET_PROT_FILE
-                || aAbsURIRef.GetProtocol() == INET_PROT_VND_SUN_STAR_WFS))
+            && (aAbsURIRef.GetProtocol() == INET_PROT_FILE))
         {
             INetURLObject aNonFileURIRef;
             aNonFileURIRef.SetSmartURL(rTheRelURIRef,

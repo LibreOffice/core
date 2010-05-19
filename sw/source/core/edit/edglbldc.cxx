@@ -146,7 +146,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 }
 
 BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
-                                            const SwSection& rNew )
+        SwSectionData & rNew)
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         return FALSE;

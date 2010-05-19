@@ -313,7 +313,8 @@ ULONG SwHTMLWriter::WriteStream()
 
                 // nur das Tag fuer die Section merken
                 ByteString aName;
-                HTMLOutFuncs::ConvertStringToHTML( pSNd->GetSection().GetName(),
+                HTMLOutFuncs::ConvertStringToHTML(
+                    pSNd->GetSection().GetSectionName(),
                                                    aName, eDestEnc, &aNonConvertableCharacters );
 
                 ByteString sOut( '<' );
@@ -541,7 +542,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     ByteString sOut( '<' );
     sOut += pTag;
 
-    const String& rName = rSection.GetName();
+    const String& rName = rSection.GetSectionName();
     if( rName.Len() && !bContinued )
     {
         ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"";

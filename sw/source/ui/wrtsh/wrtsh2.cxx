@@ -468,20 +468,20 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     }
     else
     {
-        SwSection aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
+        SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
         String aLinkFile( rBkmk.GetURL().GetToken(0, '#') );
         aLinkFile += sfx2::cTokenSeperator;
         aLinkFile += sfx2::cTokenSeperator;
         aLinkFile += rBkmk.GetURL().GetToken(1, '#');
         aSection.SetLinkFileName( aLinkFile );
-        aSection.SetProtect( TRUE );
+        aSection.SetProtectFlag( true );
         const SwSection* pIns = InsertSection( aSection );
         if( EXCHG_IN_ACTION_MOVE == nAction && pIns )
         {
-            aSection = *pIns;
+            aSection = SwSectionData(*pIns);
             aSection.SetLinkFileName( aEmptyStr );
             aSection.SetType( CONTENT_SECTION );
-            aSection.SetProtect( FALSE );
+            aSection.SetProtectFlag( false );
 
             // the update of content from linked section at time delete
             // the undostack. Then the change of the section dont create
@@ -489,7 +489,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             BOOL bDoesUndo = DoesUndo();
             if( UNDO_INSSECTION != GetUndoIds() )
                 DoUndo( FALSE );
-            ChgSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
+            UpdateSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
             DoUndo( bDoesUndo );
         }
     }

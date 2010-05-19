@@ -602,7 +602,7 @@ void SwView::Replace()
     }
     else
     {
-        if (GetPostItMgr()->GetActivePostIt())
+        if (GetPostItMgr()->HasActiveSidebarWin())
             GetPostItMgr()->Replace(pSrchItem);
         sal_Bool bReplaced = pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
                                             pSrchItem->GetRegExp());

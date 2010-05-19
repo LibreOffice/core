@@ -391,7 +391,9 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         bool emptied( pSttStr->Len() && !pSttTxtNd->Len() );
         if (!bOneNode || emptied) // merging may overwrite xmlids...
         {
-            m_pMetadataUndoStart = pSttTxtNd->CreateUndo( emptied );
+            m_pMetadataUndoStart = (emptied)
+                ? pSttTxtNd->CreateUndoForDelete()
+                : pSttTxtNd->CreateUndo();
         }
 
         if( bOneNode )
@@ -425,7 +427,10 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
 
         // METADATA: store
         bool emptied( pEndStr->Len() && !pEndTxtNd->Len() );
-        m_pMetadataUndoEnd = pEndTxtNd->CreateUndo( emptied );
+
+        m_pMetadataUndoEnd = (emptied)
+            ? pEndTxtNd->CreateUndoForDelete()
+            : pEndTxtNd->CreateUndo();
     }
 
     // sind es nur zwei Nodes, dann ist schon alles erledigt.

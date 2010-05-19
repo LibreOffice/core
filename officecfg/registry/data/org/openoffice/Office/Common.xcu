@@ -134,7 +134,7 @@
         <prop oor:name="TemplateRepositoryURL" oor:type="xs:string">
             <value>${STARTCENTER_TEMPLREP_URL}</value>
         </prop>
-        <prop oor:name="StartCenterLayoutStyle" oor:type="xs:int">
+        <prop oor:name="StartCenterLayoutStyle" oor:type="xs:int" install:module="brand">
             <value>${STARTCENTER_LAYOUT_STYLE}</value>
         </prop>
     </node>

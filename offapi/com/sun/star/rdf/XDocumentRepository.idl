@@ -28,6 +28,10 @@
 #ifndef __com_sun_star_rdf_XDocumentRepository_idl__
 #define __com_sun_star_rdf_XDocumentRepository_idl__
 
+#ifndef __com_sun_star_beans_Pair_idl__
+#include <com/sun/star/beans/Pair.idl>
+#endif
+
 #ifndef __com_sun_star_rdf_XMetadatable_idl__
 #include <com/sun/star/rdf/XMetadatable.idl>
 #endif
@@ -82,13 +86,6 @@ interface XDocumentRepository : XRepository
             <ul>
             <li>
             <code>Subject Predicate XLiteral(RDFaContent^^RDFaDatatype)</code>
-            </li>
-            </ul>
-            Further, add the following RDF statement to the same unspecified
-            named graph:
-            <ul>
-            <li>
-            <code>Subject rdfs:label XLiteral(Object->getText())</code>
             </li>
             </ul>
         </li>
@@ -172,13 +169,13 @@ interface XDocumentRepository : XRepository
             <li>if the element has no RDFa meta-data attributes:
                 the empty sequence.</li>
             <li>if the element has RDFa meta-data attributes:
-                and no <code>rdfa:content</code> attached:
-                a sequence with the RDFa-statements corresponding to the
-                attributes</li>
-            <li>if the element has RDFa meta-data attributes,
-                and also <code>rdfa:content</code> attached:
-                a sequence with the RDFa-statements corresponding to the
-                attributes, including the RDFa-labels-statement</li>
+                <ul>
+                <li>a sequence with the RDFa-statements corresponding to the
+                attributes.</li>
+                <li>a flag indicating whether there is a xhtml:content
+                attribute.</li>
+                </ul>
+            </li>
             </ul>
 
         @throws com::sun::star::lang::IllegalArgumentException
@@ -190,7 +187,8 @@ interface XDocumentRepository : XRepository
 
         @see Statement
      */
-    sequence<Statement> getStatementRDFa([in] XMetadatable Element)
+    com::sun::star::beans::Pair< sequence<Statement>, boolean >
+            getStatementRDFa([in] XMetadatable Element)
         raises( com::sun::star::lang::IllegalArgumentException,
                 RepositoryException );
 

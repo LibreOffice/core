@@ -8,6 +8,7 @@
 mkdir: %_DEST%\inc%_EXT%\basic
 ..\inc\vbahelper\vbacollectionimpl.hxx %_DEST%\inc%_EXT%\vbahelper\vbacollectionimpl.hxx
 ..\inc\vbahelper\vbahelper.hxx %_DEST%\inc%_EXT%\vbahelper\vbahelper.hxx
+..\inc\vbahelper\vbaaccesshelper.hxx %_DEST%\inc%_EXT%\vbahelper\vbaaccesshelper.hxx
 ..\inc\vbahelper\helperdecl.hxx %_DEST%\inc%_EXT%\vbahelper\helperdecl.hxx
 ..\inc\vbahelper\vbahelperinterface.hxx %_DEST%\inc%_EXT%\vbahelper\vbahelperinterface.hxx
 ..\inc\vbahelper\vbaapplicationbase.hxx %_DEST%\inc%_EXT%\vbahelper\vbaapplicationbase.hxx

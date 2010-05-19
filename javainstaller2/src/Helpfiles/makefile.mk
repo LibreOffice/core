@@ -43,8 +43,15 @@ INPUT=java_ulffiles
 .INCLUDE :	target.mk
 
 .IF "$(SOLAR_JAVA)"!=""
+.IF "$(WITH_LANG)"==""
+ULFDIR:=$(PRJ)/src/Localization
+.ELSE          #"$(WITH_LANG)"==""
+ULFDIR:=$(COMMONMISC)/$(INPUT)
+.ENDIF          #"$(WITH_LANG)"==""
+
+
 ALLTAR: $(BIN)$/Prologue.html
 
-$(BIN)$/Prologue.html : create_helpfiles.pl helpfilenames.txt $(COMMONMISC)$/$(INPUT)$/setupstrings.ulf
-    $(PERL) create_helpfiles.pl $/ $(COMMONMISC)$/$(INPUT) $(BIN)
+$(BIN)$/Prologue.html : create_helpfiles.pl helpfilenames.txt $(ULFDIR)/setupstrings.ulf
+    $(PERL) create_helpfiles.pl / $(ULFDIR) $(BIN)
 .ENDIF

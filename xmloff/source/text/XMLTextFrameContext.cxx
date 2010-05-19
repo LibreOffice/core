@@ -43,7 +43,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
@@ -1032,10 +1031,11 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
                 OUString sValue( rValue );
                 sValue.trim();
-                const sal_Int32 nRotateLen = sizeof(sXML_rotate)-1;
+                const OUString aRotate(GetXMLToken(XML_ROTATE));
+                const sal_Int32 nRotateLen(aRotate.getLength());
                 sal_Int32 nLen = sValue.getLength();
                 if( nLen >= nRotateLen+3 &&
-                    0 == sValue.compareToAscii( sXML_rotate, nRotateLen ) &&
+                    0 == sValue.compareTo( aRotate, nRotateLen ) &&
                     '(' == sValue[nRotateLen] &&
                     ')' == sValue[nLen-1] )
                 {
@@ -1241,6 +1241,14 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
                        const OUString& rTargetFrameName,
                        sal_Bool bMap )
 {
+    static ::rtl::OUString s_HyperLinkURL(
+        RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL"));
+    static ::rtl::OUString s_HyperLinkName(
+        RTL_CONSTASCII_USTRINGPARAM("HyperLinkName"));
+    static ::rtl::OUString s_HyperLinkTarget(
+        RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget"));
+    static ::rtl::OUString s_ServerMap(
+        RTL_CONSTASCII_USTRINGPARAM("ServerMap"));
     if( !xPropSet.is() )
         return;
 
@@ -1248,29 +1256,29 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     Reference < XPropertySetInfo > xPropSetInfo =
         xPropSet->getPropertySetInfo();
     if( !xPropSetInfo.is() ||
-        !xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkURL ) )
+        !xPropSetInfo->hasPropertyByName(s_HyperLinkURL))
         return;
 
     Any aAny;
     aAny <<= rHRef;
-    xPropSet->setPropertyValue( xTxtImp->sHyperLinkURL, aAny );
+    xPropSet->setPropertyValue( s_HyperLinkURL, aAny );
 
-    if( xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkName ) )
+    if (xPropSetInfo->hasPropertyByName(s_HyperLinkName))
     {
         aAny <<= rName;
-        xPropSet->setPropertyValue( xTxtImp->sHyperLinkName, aAny );
+        xPropSet->setPropertyValue(s_HyperLinkName, aAny);
     }
 
-    if( xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkTarget ) )
+    if (xPropSetInfo->hasPropertyByName(s_HyperLinkTarget))
     {
         aAny <<= rTargetFrameName;
-        xPropSet->setPropertyValue( xTxtImp->sHyperLinkTarget, aAny );
+        xPropSet->setPropertyValue( s_HyperLinkTarget, aAny );
     }
 
-    if( xPropSetInfo->hasPropertyByName( xTxtImp->sServerMap ) )
+    if (xPropSetInfo->hasPropertyByName(s_ServerMap))
     {
         aAny.setValue( &bMap, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( xTxtImp->sServerMap, aAny );
+        xPropSet->setPropertyValue(s_ServerMap, aAny);
     }
 }
 
