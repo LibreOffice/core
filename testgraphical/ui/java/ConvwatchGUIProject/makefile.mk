@@ -56,10 +56,15 @@ dist/ConvwatchGUIProject.jar: src/ConvwatchGUI.java src/IniFile.java
 # 	error
 # .endif
 #
-#	$(ANT)
+.IF "$(GUI)"=="WNT"
+    $(ANT)
+.ELSE
     ant
+.END
 
 .END
+
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 clean:
     $(ANT) clean
