@@ -2195,7 +2195,7 @@ void DomainMapper::sprm(Sprm & rSprm)
 void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
 {
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("sprm");
+    dmapper_logger->startElement("DomainMapper.sprm");
     dmapper_logger->chars(rSprm.toString());
 #endif
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
@@ -2867,6 +2867,13 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                         /* WRITERFILTERSTATUS: */
                     {
                         uno::Any aBold( uno::makeAny( nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
+
+#ifdef DEBUG_DOMAINMAPPER
+                        dmapper_logger->startElement("charWeight");
+                        dmapper_logger->attribute("weight", nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL);
+                        dmapper_logger->endElement("charWeight");
+#endif
+
                         rContext->Insert(ePropertyId, true, aBold );
                         if( nSprmId != NS_sprm::LN_CFBoldBi ) // sprmCFBoldBi
                             rContext->Insert(PROP_CHAR_WEIGHT_ASIAN, true, aBold );
@@ -4231,7 +4238,8 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("sprm");
+    dmapper_logger->addTag(rContext->toTag());
+    dmapper_logger->endElement("DomainMapper.sprm");
 #endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -4241,13 +4249,13 @@ void DomainMapper::entry(int /*pos*/,
                          writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("entry");
+    dmapper_logger->startElement("DomainMapper.entry");
 #endif
 
     ref->resolve(*this);
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("entry");
+    dmapper_logger->endElement("DomainMapper.entry");
 #endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
