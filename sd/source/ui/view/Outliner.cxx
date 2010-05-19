@@ -566,7 +566,8 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 
 void Outliner::Initialize (bool bDirectionIsForward)
 {
-    bool bOldDirectionIsForward = mbDirectionIsForward;
+    const bool bIsAtEnd (maObjectIterator == ::sd::outliner::OutlinerContainer(this).end());
+    const bool bOldDirectionIsForward = mbDirectionIsForward;
     mbDirectionIsForward = bDirectionIsForward;
 
     if (maObjectIterator == ::sd::outliner::Iterator())
@@ -601,10 +602,19 @@ void Outliner::Initialize (bool bDirectionIsForward)
     {
         // Requested iteration direction has changed.  Turn arround the iterator.
         maObjectIterator.Reverse();
-        // The iterator has pointed to the object one ahead/before the current
-        // one.  Now move it to the one before/ahead the current one.
-        ++maObjectIterator;
-        ++maObjectIterator;
+        if (bIsAtEnd)
+        {
+            // The iterator has pointed to end(), which after the search
+            // direction is reversed, becomes begin().
+            maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
+        }
+        else
+        {
+            // The iterator has pointed to the object one ahead/before the current
+            // one.  Now move it to the one before/ahead the current one.
+            ++maObjectIterator;
+            ++maObjectIterator;
+        }
 
         mbMatchMayExist = true;
     }
