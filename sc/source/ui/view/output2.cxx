@@ -75,7 +75,7 @@
 #include "scmod.hxx"
 #include "fillinfo.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <math.h>
 
@@ -1341,9 +1341,9 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
     const SfxItemSet* pOldCondSet = NULL;
     BYTE nOldScript = 0;
 
-    // alternative pattern instance in case we need to modify the pattern
+    // alternative pattern instances in case we need to modify the pattern
     // before processing the cell value.
-    ::boost::scoped_ptr<ScPatternAttr> pAltPattern;
+    ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
 
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
@@ -1486,10 +1486,11 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                             pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue())
                     {
                         // Disable line break when the cell content is numeric.
-                        pAltPattern.reset(new ScPatternAttr(*pPattern));
+                        aAltPatterns.push_back(new ScPatternAttr(*pPattern));
+                        ScPatternAttr* pAltPattern = &aAltPatterns.back();
                         SfxBoolItem aLineBreak(ATTR_LINEBREAK, false);
                         pAltPattern->GetItemSet().Put(aLineBreak);
-                        pPattern = pAltPattern.get();
+                        pPattern = pAltPattern;
                     }
 
                     BYTE nScript = GetScriptType( pDoc, pCell, pPattern, pCondSet );
