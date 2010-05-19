@@ -204,46 +204,55 @@ testcase tiViewSlideMaster
 endcase 'tiViewSlideMaster
 '--------------------------------------------------------
 testcase tiViewToolbar_1
+
+    const DEFAULT_DELAY = 3
     
-    Dim Zaehler as integer
-    Dim i as integer
-    
+    Dim NumberOfGraphicModes as integer
+    Dim iCurrentGraphicsMode as integer
+
+    dim TestFile as string
+        TestFile = ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
+
     printlog "open application "
     Call hNewDocument
-    sleep 2
+
     printlog "Insert->Graphic... : global\input\graf_inp\desp.bmp "
-    InsertGraphicsFromFile
-    sleep 2
+    hUseAsyncSlot( "InsertGraphicsFromFile" )
+
     Kontext "GrafikEinfuegenDlg"
-    sleep 1
-    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
-    sleep 1
-    Oeffnen.Click
-    sleep 3
-    Kontext "Messagebox"
-    if Messagebox.Exists then
-        Warnlog Messagebox.GetText
-        Messagebox.OK
-    end if
-    Kontext "DocumentImpress"
-    printlog "select graphic "
-    EditSelectAll
-    sleep 2
-    Kontext "GraphicObjectbar"
-    sleep 1
-    printlog "The Graphics Toolbar has to be visible now; If not -> ERROR "
-    if GraphicObjectbar.Exists Then
-        Printlog "- graphic object toolbar exists"
-        Zaehler=Grafikmodus.GetItemCount
-        for i = 1 to Zaehler
-            Printlog "- access all controls in the toolbar (" +i+"/"+Zaehler+")"
-            Grafikmodus.Select i
-            sleep 3
-        next i
-        sleep 3
+    if ( GrafikEinfuegenDlg.exists( DEFAULT_DELAY ) ) then
+        Dateiname.SetText( TestFile )
+        Oeffnen.Click
+
+        Kontext "Messagebox"
+        if ( Messagebox.Exists( DEFAULT_DELAY ) ) then
+            Warnlog Messagebox.GetText
+            hCloseDialog( Messagebox, "ok" )
+        end if
+
+        Kontext "DocumentImpress"
+        printlog "select graphic "
+        hUseAsyncSlot( "EditSelectAll" )
+
+        Kontext "GraphicObjectbar"
+        printlog "The Graphics Toolbar has to be visible now; If not -> ERROR "
+        if ( GraphicObjectbar.Exists( DEFAULT_DELAY ) ) Then
+
+            Printlog "- graphic object toolbar exists"
+            NumberOfGraphicModes=Grafikmodus.GetItemCount
+
+            for iCurrentGraphicsMode = 1 to NumberOfGraphicModes
+                Printlog( "- access all controls in the toolbar (" & iCurrentGraphicsMode & "/" & NumberOfGraphicModes & ")" )
+                Grafikmodus.Select( iCurrentGraphicsMode )
+                sleep ( DEFAULT_DELAY )
+            next iCurrentGraphicsMode
+        else
+            Warnlog "- No graphic function toolbar visible"
+        end if
     else
-        Warnlog "- No graphic function toolbar visible"
-    end if
+        warnlog( "Insert Graphics dialog did not open" )
+    endif
+    
     printlog "close application "
     Call hCloseDocument
     

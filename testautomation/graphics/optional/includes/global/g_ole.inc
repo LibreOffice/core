@@ -29,10 +29,6 @@
 '*
 '* short description: includefile for Ole-testing
 '*
-'**************************************************************************************
-' #1 tOLE_Copy
-' #1 tOLE_SaveLoad
-' #1 tiOpenOLECrash
 '\*************************************************************************************
 
 testcase tOLE_Copy
@@ -273,16 +269,18 @@ testcase tOLE_SaveLoad
     MenuSelect (0)
     printlog "Save the File."
     FileSaveAs
-    sleep 1
     Kontext "SpeichernDlg"
-    Dateiname.Settext (filename)
-    printlog "Saving as: " & filename
-    Speichern.Click
+    if ( SpeichernDlg.exists( 1 ) ) then
+        Dateiname.Settext (filename)
+        printlog "Saving as: " & filename
+        Speichern.Click
+    else
+        warnlog( "<FileSaveAs> dialog did not open" )
+    endif
     
     printlog "If the file already exists - press yes to overwrite it."
-    Sleep 3
     kontext "Messagebox"
-    if Messagebox.exists then
+    if ( Messagebox.exists( 3 ) ) then
         Messagebox.Yes
     endif
     Sleep 3
@@ -341,7 +339,7 @@ testcase tiOpenOLECrash
     FileOpen
     sleep 1
     Kontext "OeffnenDlg"
-    printlog " Use file: graphics\\optional\\input\\generic_de.ppt "
+    printlog " Use file: graphics\optional\input\generic_de.ppt "
     oFile = ConvertPath (gTesttoolPath + "graphics\required\input\generic_de.ppt")
     Printlog "file:    '" + oFile + "'"
     Dateiname.SetText (oFile)
@@ -363,20 +361,31 @@ testcase tiOpenOLECrash
     
     FileSaveAs
     Kontext "SpeichernDlg"
-    sFileodp = (ConvertPath(gOfficePath + "user\work\generic_de"))
-    Dateiname.SetText (sFileodp)
-    Dateityp.Select (1)
-    Speichern.Click
-    Kontext "Messagebox"
-    if Messagebox.Exists(2) then
-        Messagebox.Yes
-        Kontext "AlienWarning"
-    if AlienWarning.Exists(2) then
-        Warnlog "Should not be any alienwarning when saving in our own format!"
-        AlienWarning.OK
-    end if
-    printlog "Saved as: " + sFileodp
-    end if
+    if ( SpeichernDlg.exists( 2 ) ) then
+        sFileodp = (ConvertPath(gOfficePath + "user\work\generic_de"))
+        Dateiname.SetText (sFileodp)
+        Dateityp.Select (1)
+        Speichern.Click
+        Kontext "Messagebox"
+        if Messagebox.Exists(2) then
+            try
+                Messagebox.Yes
+            catch
+                warnlog( "#i110938 - Failure to save certain impress documents" )
+                Messagebox.ok()
+                goto endsub
+            endcatch
+            Kontext "AlienWarning"
+        if AlienWarning.Exists(2) then
+            Warnlog "Should not be any alienwarning when saving in our own format!"
+            AlienWarning.OK
+        end if
+        printlog "Saved as: " + sFileodp
+        end if
+    else
+        warnlog( "<FileSaveAs> dislog did not open" )
+        goto endsub
+    endif
     Sleep 3
     kontext "DocumentImpress"
     printlog "3. Close Impress."

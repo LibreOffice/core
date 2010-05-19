@@ -49,7 +49,7 @@ testcase tStandardBar_4
     
     hStandardbarSaveAs()
     
-    brc = hInitBackingMode()
+    hFileCloseAll()
 
         
 endcase

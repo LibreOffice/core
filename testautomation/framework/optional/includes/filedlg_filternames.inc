@@ -46,7 +46,7 @@ testcase tVerifyFilterNames
     dim iCurrentItem as integer
     
     dim cFile as string
-    dim iErr as integer
+    dim irc as integer
 
 
     ' For Windows and Solaris Sparc there exists additional commercial filters
@@ -105,7 +105,8 @@ testcase tVerifyFilterNames
         
         OeffnenDlg.cancel()
         
-        iErr = hManageComparisionList( cFileIn, cFileOut, asFilterNames() )    
+        irc = hManageComparisionList( cFileIn, cFileOut, asFilterNames() )
+        hListResultEvaluation( irc , 0 )
 
     else
         warnlog( "File Open dialog not present." )
@@ -113,11 +114,6 @@ testcase tVerifyFilterNames
 
     printlog( "Close the document" )    
     hDestroyDocument()
-    
-    if ( iErr <> 0 ) then
-        warnlog( "Filterlist differs from reference, please review" )
-    endif
-    
-     
+         
 endcase
 

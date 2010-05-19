@@ -80,7 +80,7 @@ testcase tToolsSpellcheck
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
@@ -125,7 +125,7 @@ testcase tToolsSpellcheck
                 if Active.exists then
                     if Active.GetRT = 304 then Active.Ok
                     Warnlog "Dialog 'Spellcheck' not up!"
-                    Call hCloseDocument
+                    hFileCloseAll()
                     goto endsub
                 end if
             catch
@@ -204,9 +204,8 @@ testcase tToolsSpellcheck
     Spellcheck.Close
     wait 500
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+
 endcase
 
 ' -------------------------------------------
@@ -243,7 +242,7 @@ testcase tToolsThesaurus
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
@@ -299,9 +298,8 @@ testcase tToolsThesaurus
     printlog " Close 'Thesaurus' dialog"
     Thesaurus.Cancel
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 
 ' -------------------------------------------
@@ -339,7 +337,7 @@ testcase tToolsHyphenation
         LingFile = str$(iSprache) + "-hyph.dat"
     end select
 
-    if ( not hFileExists( DieDatei ) ) then
+    if ( not FileExists( DieDatei ) ) then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
@@ -1232,7 +1230,7 @@ testcase tMasterDocToolsHyphenation
     end select
 
     sTestFile = convertpath( sTestFile )
-    if ( not hFileExists( sTestFile ) )then
+    if ( not FileExists( sTestFile ) )then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if

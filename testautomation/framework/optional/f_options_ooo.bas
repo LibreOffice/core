@@ -79,7 +79,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_control_objects.inc"
     use "global\tools\includes\optional\t_key_tools.inc"
     
-    use "framework\tools\includes\init_tools.inc"
     use "framework\tools\includes\options_tools.inc"
     
     Call GetUseFiles
