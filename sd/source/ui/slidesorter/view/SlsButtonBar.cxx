@@ -806,6 +806,9 @@ BitmapEx BitmapBackgroundTheme::CreateBackground (
     const OutputDevice& rTemplateDevice,
     const bool bIsButtonDown) const
 {
+    (void)rTemplateDevice;
+    (void)bIsButtonDown;
+
     OSL_ASSERT(mpTheme);
 
     // Get images.
@@ -1035,7 +1038,7 @@ Size TextButton::GetSize (void) const
 
 
 
-Size TextButton::GetSize (const Button::IconSize eIconSize) const
+Size TextButton::GetSize (const Button::IconSize) const
 {
     return Size();
 }
@@ -1099,7 +1102,6 @@ void ImageButton::Paint (
 
     // Choose icon.
     BitmapEx aIcon;
-    const bool bIsHover (meState == State_Hover);
     switch (meIconSize)
     {
         case IconSize_Large:

@@ -203,7 +203,7 @@ Resource RID_SLIDESORTER_ICONS
 
     Image IMAGE_BUTTONBAR_LARGE
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_large.png" ; };
     };
     Image IMAGE_BUTTONBAR_MEDIUM
     {
@@ -216,7 +216,7 @@ Resource RID_SLIDESORTER_ICONS
 
     Image IMAGE_BUTTONBAR_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_hc.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_large_hc.png" ; };
     };
     Image IMAGE_BUTTONBAR_MEDIUM_HC
     {

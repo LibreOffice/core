@@ -105,7 +105,7 @@ ColorData GreenColorForValue (const int nValue, const Color& rColor) {
 ColorData BlueColorForValue (const int nValue, const Color& rColor) {
     return Color(rColor.GetRed(),rColor.GetGreen(),nValue).GetColor(); }
 
-ColorData HueColorForValue (const int nValue, const Color& rColor) {
+ColorData HueColorForValue (const int nValue, const Color&) {
     return Color::HSBtoRGB(nValue,100,100); }
 ColorData SaturationColorForValue (const int nValue, const Color& rColor) {
     USHORT nHue,nSaturation,nBrightness;
@@ -141,7 +141,7 @@ public:
         Show();
     }
     virtual ~AdornedSlider (void) { delete mpSlider; }
-    virtual void Paint(const Rectangle& rRect)
+    virtual void Paint(const Rectangle&)
     {
         for (int nX=0,nWidth=GetSizePixel().Width(); nX<nWidth; ++nX)
         {
@@ -516,7 +516,7 @@ public:
         pWindow->Show();
     }
 
-    void SetBaseColor (const ColorData aColor)
+    void SetBaseColor (const ColorData)
     {
         //        mpColorControl->SetRgbColor(aColor);
         //        mpColorControl->SetHsbColor(aColor);
