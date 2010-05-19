@@ -2533,8 +2533,8 @@ void DomainMapper_Impl::handleAutoNum
 void DomainMapper_Impl::handleAuthor
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
-    uno::Reference< uno::XInterface > & xFieldInterface,
-    uno::Reference< beans::XPropertySet > xFieldProperties)
+     uno::Reference< uno::XInterface > & /*xFieldInterface*/,
+     uno::Reference< beans::XPropertySet > xFieldProperties)
 {
     xFieldProperties->setPropertyValue
         ( rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
@@ -2649,8 +2649,8 @@ void DomainMapper_Impl::handleAuthor
 void DomainMapper_Impl::handleToc
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
-    uno::Reference< uno::XInterface > & xFieldInterface,
-    uno::Reference< beans::XPropertySet > xFieldProperties,
+     uno::Reference< uno::XInterface > & /*xFieldInterface*/,
+     uno::Reference< beans::XPropertySet > /*xFieldProperties*/,
     const ::rtl::OUString & sTOCServiceName)
 {
     ::rtl::OUString sValue;
@@ -3028,40 +3028,40 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         ::std::vector<rtl::OUString> aParts = pContext->GetCommandParts();
                         ::std::vector<rtl::OUString>::const_iterator aItEnd = aParts.end();
-                        ::std::vector<rtl::OUString>::const_iterator aIt = aParts.begin();
+                        ::std::vector<rtl::OUString>::const_iterator aPartIt = aParts.begin();
 
                         OUString sURL;
 
-                        while (aIt != aItEnd)
+                        while (aPartIt != aItEnd)
                         {
-                            if (aIt->equalsAscii("\\l"))
+                            if (aPartIt->equalsAscii("\\l"))
                             {
-                                aIt++;
+                                aPartIt++;
 
-                                if (aIt == aItEnd)
+                                if (aPartIt == aItEnd)
                                     break;
 
                                 sURL = OUString('#');
-                                sURL += *aIt;
+                                sURL += *aPartIt;
                             }
-                            else if (aIt->equalsAscii("\\m") ||
-                                     aIt->equalsAscii("\\n"))
+                            else if (aPartIt->equalsAscii("\\m") ||
+                                     aPartIt->equalsAscii("\\n"))
                             {
                             }
-                            else if (aIt->equalsAscii("\\o") ||
-                                     aIt->equalsAscii("\\t"))
+                            else if (aPartIt->equalsAscii("\\o") ||
+                                     aPartIt->equalsAscii("\\t"))
                             {
-                                aIt++;
+                                aPartIt++;
 
-                                if (aIt == aItEnd)
+                                if (aPartIt == aItEnd)
                                     break;
                             }
                             else
                             {
-                                sURL = *aIt;
+                                sURL = *aPartIt;
                             }
 
-                            aIt++;
+                            aPartIt++;
                         }
 
                         if (sURL.getLength() > 0)

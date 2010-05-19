@@ -423,7 +423,7 @@ void FFDataHandler::sprm(Sprm & r_Sprm)
     default:
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->element("unhandled");
-#endif DEBUG_DOMAINMAPPER
+#endif
         break;
     }
 #ifdef DEBUG_DOMAINMAPPER
@@ -475,7 +475,7 @@ void FFDataHandler::attribute(Id name, Value & val)
     default:
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->element("unhandled");
-#endif DEBUG_DOMAINMAPPER
+#endif
         break;
     }
 }
