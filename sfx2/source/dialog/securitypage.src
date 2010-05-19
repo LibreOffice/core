@@ -125,21 +125,15 @@ TabPage TP_DOCINFOSECURITY
         Size = MAP_APPFONT( 176, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Open file read-only";
     };
-    CheckBox REMOVE_INFO_ON_SAVING_CB
-    {
-        Pos = MAP_APPFONT( 12, 147 );
-        Size = MAP_APPFONT( 176, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "Remove personal ~information on saving";
-    };
     CheckBox RECORD_CHANGES_CB
     {
-        Pos = MAP_APPFONT( 12, 162 );
+        Pos = MAP_APPFONT( 12, 147 );
         Size = MAP_APPFONT( 176, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Record ~changes";
     };
     PushButton CHANGE_PROTECTION_PB
     {
-        Pos = MAP_APPFONT( 194, 160 );
+        Pos = MAP_APPFONT( 194, 145 );
         Size = MAP_APPFONT( 60, RSC_CD_PUSHBUTTON_HEIGHT );
     };
     String STR_PROTECT
@@ -150,7 +144,14 @@ TabPage TP_DOCINFOSECURITY
     {
         Text [ en-US ] = "~Unprotect...";
     };
-
+    String STR_END_REDLINING_WARNING
+    {
+        Text [ en-US ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
+    };
 };
 
+String RID_SFX_INCORRECT_PASSWORD
+{
+    Text [ en-US ] = "Incorrect password" ;
+};
 

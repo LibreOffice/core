@@ -41,12 +41,12 @@
 #define CONFIRM_PASSWORD_TO_MODIFY_ED       11
 #define OPTIONS_FL                          12
 #define OPEN_READONLY_CB                    13
-#define REMOVE_INFO_ON_SAVING_CB            14
-#define RECORD_CHANGES_CB                   15
-#define CHANGE_PROTECTION_PB                16
+#define RECORD_CHANGES_CB                   14
+#define CHANGE_PROTECTION_PB                15
 
 #define STR_PROTECT                         101
 #define STR_UNPROTECT                       102
+#define STR_END_REDLINING_WARNING           103
 
 #endif
 
