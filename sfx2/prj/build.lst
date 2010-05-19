@@ -22,3 +22,4 @@ sf	sfx2\source\inet						nmake	-	all	sf_inet sf_sdi sf_inc NULL
 sf	sfx2\source\explorer					nmake	-	all	sf_expl sf_sdi sf_inc NULL
 sf      sfx2\util                                                               nmake   -       all     sf_util sf_appl sf_bast sf_cnfg sf_ctrl sf_dlg sf_doc sf_expl sf_inet sf_menu sf_layout sf_noti sf_sbar sf_tbox sf_view NULL
 sf sfx2\qa\unoapi nmake - all sf_qa_unoapi NULL
+sf  sfx2\qa\cppunit							nmake	-	all sf_qa_cppunit sf_util NULL
