@@ -378,18 +378,6 @@ namespace sfx2
                 UNO_SET_THROW );
 
             m_aCustomPanel = CustomPanelUIElement( xElement );
-
-            // ensure tabbing through the panel window works - need access to the VCL Window for this
-            Reference< XWindow > xPanelWindow( m_aCustomPanel.getPanelWindow() );
-            const Reference< XControl > xPanelControl( xPanelWindow, UNO_QUERY );
-            if ( xPanelControl.is() )
-                // windows created by the XContainerWindowProvider might, in real, be an XControl
-                // In this case, obtain the VCL Window from the peer
-                xPanelWindow.set( xPanelControl->getPeer(), UNO_QUERY_THROW );
-            Window* pPanelWindow = VCLUnoHelper::GetWindow( xPanelWindow );
-            OSL_ENSURE( pPanelWindow != NULL, "CustomToolPanel::impl_ensureToolPanelWindow: invalid (unknown) XWindow implementation of the panel window!" );
-            if ( pPanelWindow != NULL )
-                pPanelWindow->SetStyle( pPanelWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
         }
         catch( const Exception& )
         {
