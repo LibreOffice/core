@@ -212,7 +212,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     LPTSTR  lpCommandLine = NULL;
     int argc = 0;
     LPTSTR * argv = NULL;
-    bool first = true;
+    bool bFirst = true;
     WCHAR cwd[MAX_PATH];
     DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
     if (cwdLen >= MAX_PATH) {
@@ -318,7 +318,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             }
         }
 
-        if (first) {
+        if ( bFirst ) {
             argv = GetCommandArgs(&argc);
             std::size_t n = wcslen(argv[0]) + 2;
             for (int i = 1; i < argc; ++i) {
@@ -334,7 +334,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             lpCommandLine, MY_STRING(L"\""));
         p = desktop_win32::commandLineAppend(p, argv[0]);
         for (int i = 1; i < argc; ++i) {
-            if (first || wcsncmp(argv[i], MY_STRING(L"-env:")) == 0) {
+            if (bFirst || ::desktop::ExitHelper::E_NORMAL_RESTART == dwExitCode || wcsncmp(argv[i], MY_STRING(L"-env:")) == 0) {
                 p = desktop_win32::commandLineAppend(p, MY_STRING(L"\" \""));
                 p = desktop_win32::commandLineAppend(p, argv[i]);
             }
@@ -348,7 +348,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             p = desktop_win32::commandLineAppendEncoded(p, cwd);
         }
         desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
-        first = false;
+        bFirst = false;
 
         TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
         BOOL    bHeadlessMode( FALSE );
