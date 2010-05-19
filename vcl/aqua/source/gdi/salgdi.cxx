@@ -497,7 +497,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         if( bLineDraw )
             aPoint += aHalfPointOfs;
 
-        if( nClosedIdx != 0 ) { // first point => just move there
+        if( !nPointIdx ) { // first point => just move there
             CGPathMoveToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
             continue;
         }
@@ -506,7 +506,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         if( bHasCurves )
         {
             bPendingCurve = rPolygon.isNextControlPointUsed( nPrevIdx );
-            bPendingCurve |= rPolygon.isPrevControlPointUsed( nPointIdx );
+            bPendingCurve |= rPolygon.isPrevControlPointUsed( nClosedIdx );
         }
 
         if( !bPendingCurve )    // line segment
