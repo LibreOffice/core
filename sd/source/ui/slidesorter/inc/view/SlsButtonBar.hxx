@@ -32,7 +32,8 @@
 #include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>
-
+#include <vcl/bmpacc.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -54,6 +55,7 @@ class ButtonBar
 {
 public:
     ButtonBar (SlideSorter& rSlideSorter);
+    ~ButtonBar (void);
 
     void ProcessButtonDownEvent (
         const model::SharedPageDescriptor& rpDescriptor,
@@ -66,21 +68,6 @@ public:
         const Point aMouseModelLocation,
         const bool bIsMouseButtonDown);
 
-    /** Set the page object for which to control the buttons.  The set
-        of displayed buttons depends on whether this page is excluded
-        from the slide show or not.
-        @param rsPageHelpText
-            When the mouse is moved over a button then a help text for
-            that button is displayed.  When it is moved off the button
-            area then the given page help text is displayed instead.
-    */
-    /*
-    void SetPage (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const Point aMouseModelLocation,
-        const bool bIsMouseButtonDown,
-        const ::rtl::OUString& rsPageHelpText);
-    */
     void ResetPage (void);
 
     /** Return the number of buttons that are to be displayed in page
@@ -127,10 +114,13 @@ public:
     */
     ::rtl::OUString GetButtonHelpText (void) const;
 
+    class BackgroundTheme;
+
 private:
     SlideSorter& mrSlideSorter;
     Size maPageObjectSize;
-    Rectangle maBoundingBox;
+    Rectangle maButtonBoundingBox;
+    Point maBackgroundLocation;
     model::SharedPageDescriptor mpDescriptor;
     bool mbIsExcluded;
     boost::shared_ptr<Button> mpButtonUnderMouse;
@@ -138,13 +128,13 @@ private:
     boost::shared_ptr<Button> mpDownButton;
     ::std::vector<SharedButton> maRegularButtons;
     ::std::vector<SharedButton> maExcludedButtons;
-    Bitmap maNormalBackground;
-    Bitmap maButtonDownBackground;
+    BitmapEx maNormalBackground;
+    BitmapEx maButtonDownBackground;
     bool mbIsMouseOverBar;
+    ::boost::scoped_ptr<BackgroundTheme> mpBackgroundTheme;
 
-    /** In contrast to the other SetPage variant, this method only
-        sets mpDescriptor.  If the given descriptor differs from
-        mpDescriptor then the buttons are placed anew.
+    /** Remember the specified page.  If it differs from mpDescriptor then
+        the buttons are placed anew.
         @return
             The returned flag indicates wether the mpDescriptor member
             is set to a new value.
@@ -156,12 +146,9 @@ private:
         OutputDevice& rDevice,
         const Point aOffset);
     void LayoutButtons (const Size aPageModelSize);
-    bool LayoutButtons (
-        const Size aPageObjectSize,
-        const bool bIsSmall);
-    Bitmap CreateBackground (
+    bool LayoutButtons (void);
+    BitmapEx CreateBackground (
         const OutputDevice& rTemplateDevice,
-        const Size aSize,
         const bool bIsButtonDown) const;
     bool IsMouseOverBar (const Point aModelLocation) const;
 };
@@ -177,7 +164,9 @@ public:
         const ::rtl::OUString& rsHelpText);
     virtual ~Button (void);
 
-    enum State { ST_Normal, ST_Hover, ST_Down };
+    enum State { State_Normal, State_Hover, State_Down };
+    enum IconSize { IconSize_Large, IconSize_Medium, IconSize_Small };
+
     /** Set a new state.
         @return
             When the new state is different from the old state
@@ -186,7 +175,7 @@ public:
     bool SetState (const State eState);
     State GetState (void) const;
 
-    virtual void Place (const Rectangle aButtonBarBox, const sal_Int32 nIndex) = 0;
+    virtual void Place (const Rectangle aButtonBarBox) = 0;
     virtual void Paint (
         OutputDevice& rDevice,
         const Point aOffset,
@@ -201,11 +190,13 @@ public:
         button.
     */
     virtual Size GetSize (void) const = 0;
+    virtual Size GetSize (const IconSize eIconSize) const = 0;
     ::rtl::OUString GetHelpText (void) const;
     bool IsDown (void) const;
     void SetActiveState (const bool bIsActive);
     bool IsActive (void) const;
-    void SetIsSmall (const bool bIsSmall);
+    void SetIconSize (const IconSize eIconSize);
+    IconSize GetIconSize (void) const;
 
 protected:
     SlideSorter& mrSlideSorter;
@@ -214,7 +205,7 @@ protected:
     const ::rtl::OUString msHelpText;
     // Buttons that lie (partly) outside the button bar are deactivated.
     bool mbIsActive;
-    bool mbIsSmall;
+    IconSize meIconSize;
 };
 
 
@@ -227,13 +218,14 @@ public:
         const ::rtl::OUString& rsText,
         const ::rtl::OUString& rsHelpText);
 
-    virtual void Place (const Rectangle aButtonBarBox, const sal_Int32 nIndex);
+    virtual void Place (const Rectangle aButtonBarBox);
     virtual void Paint (
         OutputDevice& rDevice,
         const Point aOffset,
         const double nAlpha,
         const ::boost::shared_ptr<Theme>& rpTheme) const;
     virtual Size GetSize (void) const;
+    virtual Size GetSize (const IconSize eIconSize) const;
 
 private:
     const ::rtl::OUString msText;
@@ -246,29 +238,30 @@ class ImageButton : public Button
 public:
     ImageButton (
         SlideSorter& rSlideSorter,
-        const BitmapEx& rRegularIcon,
-        const BitmapEx& rHoverIcon,
-        const BitmapEx& rDownIcon,
-        const BitmapEx& rSmallRegularIcon,
+        const BitmapEx& rLargeIcon,
+        const BitmapEx& rLargeHoverIcon,
+        const BitmapEx& rMediumIcon,
+        const BitmapEx& rMediumHoverIcon,
+        const BitmapEx& rSmallIcon,
         const BitmapEx& rSmallHoverIcon,
-        const BitmapEx& rSmallDownIcon,
         const ::rtl::OUString& rsHelpText);
 
-    virtual void Place (const Rectangle aButtonBarBox, const sal_Int32 nIndex);
+    virtual void Place (const Rectangle aButtonBarBox);
     virtual void Paint (
         OutputDevice& rDevice,
         const Point aOffset,
         const double nAlpha,
         const ::boost::shared_ptr<Theme>& rpTheme) const;
     virtual Size GetSize (void) const;
+    virtual Size GetSize (const IconSize eIconSize) const;
 
 private:
-    const BitmapEx maNormalIcon;
-    const BitmapEx maHoverIcon;
-    const BitmapEx maDownIcon;
+    const BitmapEx maLargeIcon;
+    const BitmapEx maLargeHoverIcon;
+    const BitmapEx maMediumIcon;
+    const BitmapEx maMediumHoverIcon;
     const BitmapEx maSmallIcon;
     const BitmapEx maSmallHoverIcon;
-    const BitmapEx maSmallDownIcon;
 };
 
 

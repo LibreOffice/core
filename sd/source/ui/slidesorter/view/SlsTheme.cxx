@@ -109,10 +109,10 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
       maColor(),
       mnButtonCornerRadius(3),
       mnButtonMaxAlpha(0),
-      mnButtonBarMaxAlpha(255 * 20/100),
+      mnButtonBarMaxAlpha(255 * 0/100),
       mnButtonPaintType(1),
       mnButtonBorder(4),
-      mnButtonGap(8)
+      mnButtonGap(0)
 
 {
     {
@@ -201,18 +201,28 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);
             InitializeIcon(Icon_HideSlideOverlay, IMAGE_HIDE_SLIDE_OVERLAY);
 
-            InitializeIcon(Icon_Command1Regular, IMAGE_COMMAND1_REGULAR_HC);
-            InitializeIcon(Icon_Command1Hover, IMAGE_COMMAND1_HOVER_HC);
+            InitializeIcon(Icon_ButtonBarLarge, IMAGE_BUTTONBAR_LARGE_HC);
+            InitializeIcon(Icon_ButtonBarMedium, IMAGE_BUTTONBAR_MEDIUM_HC);
+            InitializeIcon(Icon_ButtonBarSmall, IMAGE_BUTTONBAR_SMALL_HC);
+
+            InitializeIcon(Icon_Command1Large, IMAGE_COMMAND1_LARGE_HC);
+            InitializeIcon(Icon_Command1LargeHover, IMAGE_COMMAND1_LARGE_HOVER_HC);
+            InitializeIcon(Icon_Command1Medium, IMAGE_COMMAND1_MEDIUM_HC);
+            InitializeIcon(Icon_Command1MediumHover, IMAGE_COMMAND1_MEDIUM_HOVER_HC);
             InitializeIcon(Icon_Command1Small, IMAGE_COMMAND1_SMALL_HC);
             InitializeIcon(Icon_Command1SmallHover, IMAGE_COMMAND1_SMALL_HOVER_HC);
 
-            InitializeIcon(Icon_Command2Regular, IMAGE_COMMAND2_REGULAR_HC);
-            InitializeIcon(Icon_Command2Hover, IMAGE_COMMAND2_HOVER_HC);
+            InitializeIcon(Icon_Command2Large, IMAGE_COMMAND2_LARGE_HC);
+            InitializeIcon(Icon_Command2LargeHover, IMAGE_COMMAND2_LARGE_HOVER_HC);
+            InitializeIcon(Icon_Command2Medium, IMAGE_COMMAND2_MEDIUM_HC);
+            InitializeIcon(Icon_Command2MediumHover, IMAGE_COMMAND2_MEDIUM_HOVER_HC);
             InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL_HC);
             InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER_HC);
 
-            InitializeIcon(Icon_Command3Regular, IMAGE_COMMAND3_REGULAR_HC);
-            InitializeIcon(Icon_Command3Hover, IMAGE_COMMAND3_HOVER_HC);
+            InitializeIcon(Icon_Command3Large, IMAGE_COMMAND3_LARGE_HC);
+            InitializeIcon(Icon_Command3LargeHover, IMAGE_COMMAND3_LARGE_HOVER_HC);
+            InitializeIcon(Icon_Command3Medium, IMAGE_COMMAND3_SMALL_HC);
+            InitializeIcon(Icon_Command3MediumHover, IMAGE_COMMAND3_SMALL_HOVER_HC);
             InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL_HC);
             InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER_HC);
         }
@@ -222,18 +232,28 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);
             InitializeIcon(Icon_HideSlideOverlay, IMAGE_HIDE_SLIDE_OVERLAY);
 
-            InitializeIcon(Icon_Command1Regular, IMAGE_COMMAND1_REGULAR);
-            InitializeIcon(Icon_Command1Hover, IMAGE_COMMAND1_HOVER);
+            InitializeIcon(Icon_ButtonBarLarge, IMAGE_BUTTONBAR_LARGE);
+            InitializeIcon(Icon_ButtonBarMedium, IMAGE_BUTTONBAR_MEDIUM);
+            InitializeIcon(Icon_ButtonBarSmall, IMAGE_BUTTONBAR_SMALL);
+
+            InitializeIcon(Icon_Command1Large, IMAGE_COMMAND1_LARGE);
+            InitializeIcon(Icon_Command1LargeHover, IMAGE_COMMAND1_LARGE_HOVER);
+            InitializeIcon(Icon_Command1Medium, IMAGE_COMMAND1_MEDIUM);
+            InitializeIcon(Icon_Command1MediumHover, IMAGE_COMMAND1_MEDIUM_HOVER);
             InitializeIcon(Icon_Command1Small, IMAGE_COMMAND1_SMALL);
             InitializeIcon(Icon_Command1SmallHover, IMAGE_COMMAND1_SMALL_HOVER);
 
-            InitializeIcon(Icon_Command2Regular, IMAGE_COMMAND2_REGULAR);
-            InitializeIcon(Icon_Command2Hover, IMAGE_COMMAND2_HOVER);
+            InitializeIcon(Icon_Command2Large, IMAGE_COMMAND2_LARGE);
+            InitializeIcon(Icon_Command2LargeHover, IMAGE_COMMAND2_LARGE_HOVER);
+            InitializeIcon(Icon_Command2Medium, IMAGE_COMMAND2_MEDIUM);
+            InitializeIcon(Icon_Command2MediumHover, IMAGE_COMMAND2_MEDIUM_HOVER);
             InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL);
             InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER);
 
-            InitializeIcon(Icon_Command3Regular, IMAGE_COMMAND3_REGULAR);
-            InitializeIcon(Icon_Command3Hover, IMAGE_COMMAND3_HOVER);
+            InitializeIcon(Icon_Command3Large, IMAGE_COMMAND3_LARGE);
+            InitializeIcon(Icon_Command3LargeHover, IMAGE_COMMAND3_LARGE_HOVER);
+            InitializeIcon(Icon_Command3Medium, IMAGE_COMMAND3_SMALL);
+            InitializeIcon(Icon_Command3MediumHover, IMAGE_COMMAND3_SMALL_HOVER);
             InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL);
             InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER);
         }
@@ -431,14 +451,14 @@ void Theme::SetGradientBrightnessOverride (const GradientColorType eType, const 
 
 
 
-BitmapEx Theme::GetIcon (const IconType eType)
+const BitmapEx& Theme::GetIcon (const IconType eType)
 {
     if (eType>=0 && size_t(eType)<maIcons.size())
         return maIcons[eType];
     else
     {
         OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
-        return BitmapEx();
+        return maIcons[0];
     }
 }
 

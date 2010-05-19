@@ -73,8 +73,6 @@ public:
         MouseOverIndicator,
         // Bounding box of the page number.
         PageNumber,
-        // Bounding box of the frame that sometimes is painted around the page number.
-        PageNumberFrame,
         // Bounding box of the pane name.
         Name,
         // Indicator whether or not there is a slide transition associated
@@ -135,7 +133,6 @@ private:
     double mnModelToWindowScale;
     Rectangle maPageObjectBoundingBox;
     Rectangle maPageNumberAreaBoundingBox;
-    Rectangle maPageNumberFrameBoundingBox;
     Rectangle maPreviewBoundingBox;
     Rectangle maTransitionEffectBoundingBox;
     const Image maTransitionEffectIcon;

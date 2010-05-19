@@ -43,9 +43,8 @@
 namespace sd { namespace slidesorter { namespace view {
 
 namespace {
-const static sal_Int32 gnPageNumberOffset = 5;
-const static sal_Int32 gnPageNumberFrameHorizontalOffset = 2;
-const static sal_Int32 gnPageNumberFrameVerticalOffset = 1;
+const static sal_Int32 gnLeftPageNumberOffset = 2;
+const static sal_Int32 gnRightPageNumberOffset = 5;
 const static sal_Int32 gnOuterBorderWidth = 5;
 const static sal_Int32 gnInfoAreaMinWidth = 26;
 const static Size gaButtonSize (32,32);
@@ -79,18 +78,12 @@ PageObjectLayouter::PageObjectLayouter (
 
     maPageNumberAreaBoundingBox = Rectangle(
         Point(
-            maPreviewBoundingBox.Left()
-                - gnPageNumberOffset
-                - gnPageNumberFrameHorizontalOffset
-                - aPageNumberAreaSize.Width(),
+            std::max(gnLeftPageNumberOffset,
+                maPreviewBoundingBox.Left()
+                - gnRightPageNumberOffset
+                - aPageNumberAreaSize.Width()),
             nMaximumBorderWidth),
         aPageNumberAreaSize);
-
-    maPageNumberFrameBoundingBox = Rectangle(
-        maPageNumberAreaBoundingBox.Left() - gnPageNumberFrameHorizontalOffset,
-        maPageNumberAreaBoundingBox.Top() - gnPageNumberFrameVerticalOffset,
-        maPageNumberAreaBoundingBox.Right() + gnPageNumberFrameHorizontalOffset,
-        maPageNumberAreaBoundingBox.Bottom() + gnPageNumberFrameVerticalOffset);
 
     const Size aIconSize (maTransitionEffectIcon.GetSizePixel());
     maTransitionEffectBoundingBox = Rectangle(
@@ -119,9 +112,9 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     const sal_Int32 nLeftAreaWidth (
         ::std::max(
             gnInfoAreaMinWidth,
-            2*gnPageNumberOffset
+            gnRightPageNumberOffset
                 + ::std::max(
-                    nPageNumberAreaWidth + 2 * gnPageNumberFrameHorizontalOffset,
+                    nPageNumberAreaWidth,
                     nIconWidth)));
     sal_Int32 nPreviewWidth;
     sal_Int32 nPreviewHeight;
@@ -202,10 +195,6 @@ Rectangle PageObjectLayouter::GetBoundingBox (
 
         case PageNumber:
             aBoundingBox = maPageNumberAreaBoundingBox;
-            break;
-
-        case PageNumberFrame:
-            aBoundingBox = maPageNumberFrameBoundingBox;
             break;
 
         case Name:

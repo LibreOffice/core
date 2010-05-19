@@ -47,7 +47,87 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
+/** Base class for the painter of the background bar onto which the buttons
+    are painted.  It also provides some size information.
+*/
+class ButtonBar::BackgroundTheme
+{
+public:
+    BackgroundTheme(
+        const ::boost::shared_ptr<Theme>& rpTheme,
+        const ::std::vector<SharedButton>& rButtons);
+    /** Set the preview bounding box, the maximal area in which to display
+        buttons.  A call to this method triggers a call to Layout().
+    */
+    void SetPreviewBoundingBox (const Rectangle& rPreviewBoundingBox);
+    Button::IconSize GetIconSize (void) const;
+
+    virtual BitmapEx CreateBackground (
+        const OutputDevice& rTemplateDevice,
+        const bool bIsButtonDown) const = 0;
+    virtual Point GetBackgroundLocation (void) = 0;
+    virtual Rectangle GetButtonArea (void) = 0;
+
+protected:
+    ::boost::shared_ptr<Theme> mpTheme;
+    Rectangle maPreviewBoundingBox;
+    Size maMinimumLargeButtonAreaSize;
+    Size maMinimumMediumButtonAreaSize;
+    Size maMinimumSmallButtonAreaSize;
+    Button::IconSize meIconSize;
+
+    virtual void Layout (void) = 0;
+
+private:
+    void UpdateMinimumIconSizes(const ::std::vector<SharedButton>& rButtons);
+};
+
+
 namespace {
+    /** Rectangular button bar that covers the whole width of the preview.
+    */
+    class RectangleBackgroundTheme : public ButtonBar::BackgroundTheme
+    {
+    public:
+        RectangleBackgroundTheme(
+            const ::boost::shared_ptr<Theme>& rpTheme,
+            const ::std::vector<SharedButton>& rButtons);
+        virtual BitmapEx CreateBackground (
+            const OutputDevice& rTemplateDevice,
+            const bool bIsButtonDown) const;
+        virtual Point GetBackgroundLocation (void);
+        virtual Rectangle GetButtonArea (void);
+    protected:
+        virtual void Layout (void);
+    private:
+        sal_Int32 mnBarHeight;
+    };
+
+    /** Button bar is composed of three images, the left and right end of
+        the bar and the center image.  Buttons are only placed over the
+        center image.  The center image is painted as is, it is not scaled.
+    */
+    class BitmapBackgroundTheme : public ButtonBar::BackgroundTheme
+    {
+    public:
+        BitmapBackgroundTheme(
+            const ::boost::shared_ptr<Theme>& rpTheme,
+            const ::std::vector<SharedButton>& rButtons);
+        virtual BitmapEx CreateBackground (
+            const OutputDevice& rTemplateDevice,
+            const bool bIsButtonDown) const;
+        virtual Point GetBackgroundLocation (void);
+        virtual Rectangle GetButtonArea (void);
+    protected:
+        virtual void Layout (void);
+    private:
+        Rectangle maButtonArea;
+        Point maBackgroundLocation;
+    };
+
+    /** The source mask is essentially multiplied with the given alpha value.
+        The result is writen to the result mask.
+    */
     void AdaptTransparency (AlphaMask& rMask, const AlphaMask& rSourceMask, const double nAlpha)
     {
         BitmapWriteAccess* pBitmap = rMask.AcquireWriteAccess();
@@ -67,7 +147,8 @@ namespace {
                 }
         }
     }
-}
+
+} // end of anonymous namespace
 
 
 
@@ -77,7 +158,8 @@ namespace {
 ButtonBar::ButtonBar (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maPageObjectSize(0,0),
-      maBoundingBox(),
+      maButtonBoundingBox(),
+      maBackgroundLocation(),
       mpDescriptor(),
       mbIsExcluded(false),
       mpButtonUnderMouse(),
@@ -86,13 +168,26 @@ ButtonBar::ButtonBar (SlideSorter& rSlideSorter)
       maExcludedButtons(),
       maNormalBackground(),
       maButtonDownBackground(),
-      mbIsMouseOverBar(false)
+      mbIsMouseOverBar(false),
+      mpBackgroundTheme()
 {
     maExcludedButtons.push_back(::boost::shared_ptr<Button>(new UnhideButton(mrSlideSorter)));
 
     maRegularButtons.push_back(::boost::shared_ptr<Button>(new StartShowButton(mrSlideSorter)));
     maRegularButtons.push_back(::boost::shared_ptr<Button>(new HideButton(mrSlideSorter)));
     maRegularButtons.push_back(::boost::shared_ptr<Button>(new DuplicateButton(mrSlideSorter)));
+
+    mpBackgroundTheme.reset(
+        new BitmapBackgroundTheme(
+            mrSlideSorter.GetTheme(),
+            maRegularButtons));
+}
+
+
+
+
+ButtonBar::~ButtonBar (void)
+{
 }
 
 
@@ -104,7 +199,7 @@ void ButtonBar::ProcessButtonDownEvent (
 {
     SetButtonUnderMouse(GetButtonAt(aMouseModelLocation));
     if (mpButtonUnderMouse)
-        mpButtonUnderMouse->SetState(Button::ST_Down);
+        mpButtonUnderMouse->SetState(Button::State_Down);
     mpDownButton = mpButtonUnderMouse;
 
     mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
@@ -120,7 +215,7 @@ void ButtonBar::ProcessButtonUpEvent (
     SetButtonUnderMouse(GetButtonAt(aMouseModelLocation));
     if (mpButtonUnderMouse)
     {
-        mpButtonUnderMouse->SetState(Button::ST_Hover);
+        mpButtonUnderMouse->SetState(Button::State_Hover);
         if (mpButtonUnderMouse == mpDownButton)
         {
             // This is done only when the buttons are sufficiently visible.
@@ -158,20 +253,19 @@ void ButtonBar::ProcessMouseMotionEvent (
     {
         bButtonHasChanged = SetButtonUnderMouse(GetButtonAt(aMouseModelLocation));
 
-        // Update the button state.
         if (mpButtonUnderMouse)
         {
-            // When the mouse button is down, mark the button under
-            // the mouse only as pressed when it is the same button
-            // the mouse button was pressed over, and where the button
-            // release would lead to a click action.
+            // When the mouse button is down, mark the button under the
+            // mouse only as pressed when it is the same button the mouse
+            // button was pressed over, and where the button release would
+            // lead to a click action.
             if (bIsMouseButtonDown)
             {
                 if (mpButtonUnderMouse==mpDownButton)
-                    bButtonStateHasChanged = mpButtonUnderMouse->SetState(Button::ST_Down);
+                    bButtonStateHasChanged = mpButtonUnderMouse->SetState(Button::State_Down);
             }
             else
-                bButtonStateHasChanged = mpButtonUnderMouse->SetState(Button::ST_Hover);
+                bButtonStateHasChanged = mpButtonUnderMouse->SetState(Button::State_Hover);
         }
     }
 
@@ -296,7 +390,7 @@ bool ButtonBar::SetButtonUnderMouse (const SharedButton& rButton)
     if (mpButtonUnderMouse != rButton)
     {
         if (mpButtonUnderMouse)
-            mpButtonUnderMouse->SetState(Button::ST_Normal);
+            mpButtonUnderMouse->SetState(Button::State_Normal);
 
         mpButtonUnderMouse = rButton;
 
@@ -355,81 +449,28 @@ void ButtonBar::PaintButtonBackground (
     OutputDevice& rDevice,
     const Point aOffset)
 {
-    Bitmap* pBitmap = NULL;
+    BitmapEx* pBitmap = NULL;
+    if (maButtonDownBackground.IsEmpty() || maNormalBackground.IsEmpty())
+    {
+        if (mpBackgroundTheme)
+        {
+            maButtonDownBackground = mpBackgroundTheme->CreateBackground(rDevice, true);
+            maNormalBackground = mpBackgroundTheme->CreateBackground(rDevice, false);
+        }
+    }
     if (mpButtonUnderMouse && mpButtonUnderMouse->IsDown())
-    {
-        if (maButtonDownBackground.IsEmpty())
-            maButtonDownBackground = CreateBackground(rDevice, maBoundingBox.GetSize(), true);
         pBitmap = &maButtonDownBackground;
-    }
     else
-    {
-        if (maNormalBackground.IsEmpty())
-            maNormalBackground = CreateBackground(rDevice, maBoundingBox.GetSize(), false);
         pBitmap = &maNormalBackground;
-    }
-
     if (pBitmap != NULL)
     {
-        BYTE aTransparency (mpDescriptor->GetVisualState().GetButtonBarAlpha()*255);
-        AlphaMask aMask (pBitmap->GetSizePixel(), &aTransparency);
-        rDevice.DrawBitmapEx(maBoundingBox.TopLeft()+aOffset, BitmapEx(*pBitmap, aMask));
+        AlphaMask aMask (pBitmap->GetSizePixel());
+        AdaptTransparency(
+            aMask,
+            pBitmap->GetAlpha(),
+            mpDescriptor->GetVisualState().GetButtonBarAlpha());
+        rDevice.DrawBitmapEx(maBackgroundLocation+aOffset, BitmapEx(pBitmap->GetBitmap(), aMask));
     }
-}
-
-
-
-
-Bitmap ButtonBar::CreateBackground (
-    const OutputDevice& rTemplateDevice,
-    const Size aSize,
-    const bool bIsButtonDown) const
-{
-    VirtualDevice aDevice (rTemplateDevice);
-    aDevice.SetOutputSizePixel(aSize);
-
-    // Setup background color.
-    Color aTopFillColor (mrSlideSorter.GetTheme()->GetGradientColor(
-        Theme::Gradient_ButtonBackground,
-        Theme::Fill1));
-    Color aTopBorderColor (mrSlideSorter.GetTheme()->GetGradientColor(
-        Theme::Gradient_ButtonBackground,
-        Theme::Border1));
-    Color aBottomFillColor (mrSlideSorter.GetTheme()->GetGradientColor(
-        Theme::Gradient_ButtonBackground,
-        Theme::Fill2));
-    Color aBottomBorderColor (mrSlideSorter.GetTheme()->GetGradientColor(
-        Theme::Gradient_ButtonBackground,
-        Theme::Border2));
-    if (bIsButtonDown)
-    {
-        aTopFillColor.DecreaseLuminance(50);
-        aTopBorderColor.DecreaseLuminance(50);
-        aBottomFillColor.DecreaseLuminance(50);
-        aBottomBorderColor.DecreaseLuminance(50);
-    }
-
-    const int nCenter (aSize.Height() / 2);
-
-    // Fill upper and lower half.
-    aDevice.SetLineColor();
-    aDevice.SetFillColor(aTopFillColor);
-    aDevice.DrawRect(Rectangle(0,0,aSize.Width()-1,nCenter));
-    aDevice.SetFillColor(aBottomFillColor);
-    aDevice.DrawRect(Rectangle(0,nCenter,aSize.Width()-1,aSize.Height()-1));
-
-    // Draw border.
-    aDevice.SetFillColor();
-    aDevice.SetLineColor(aTopBorderColor);
-    aDevice.DrawLine(Point(0,nCenter),Point(0,0));
-    aDevice.DrawLine(Point(0,0), Point(aSize.Width()-1,0));
-    aDevice.DrawLine(Point(aSize.Width()-1,0),Point(aSize.Width()-1,nCenter));
-    aDevice.SetLineColor(aBottomBorderColor);
-    aDevice.DrawLine(Point(0,nCenter),Point(0,aSize.Height()-1));
-    aDevice.DrawLine(Point(0,aSize.Height()-1), Point(aSize.Width()-1,aSize.Height()-1));
-    aDevice.DrawLine(Point(aSize.Width()-1,aSize.Height()-1),Point(aSize.Width()-1,nCenter));
-
-    return aDevice.GetBitmap(Point(0,0), aSize);
 }
 
 
@@ -440,7 +481,10 @@ bool ButtonBar::IsMouseOverBar (const Point aModelLocation) const
     if ( ! mpDescriptor || ! mpDescriptor->GetBoundingBox().IsInside(aModelLocation))
         return false;
 
-    return maBoundingBox.IsInside(aModelLocation - mpDescriptor->GetBoundingBox().TopLeft());
+    if ( ! maButtonBoundingBox.IsInside(aModelLocation - mpDescriptor->GetBoundingBox().TopLeft()))
+        return false;
+
+    return true;
 }
 
 
@@ -460,8 +504,15 @@ void ButtonBar::LayoutButtons (const Size aPageObjectSize)
     {
         maPageObjectSize = aPageObjectSize;
 
-        if ( ! LayoutButtons(aPageObjectSize, false))
-            LayoutButtons(aPageObjectSize, true);
+        if (mpBackgroundTheme)
+        {
+            mpBackgroundTheme->SetPreviewBoundingBox(
+                mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
+                    Point(0,0),
+                    PageObjectLayouter::Preview,
+                    PageObjectLayouter::ModelCoordinateSystem));
+            LayoutButtons();
+        }
 
         // Release the background bitmaps so that on the next paint
         // they are created anew in the right size.
@@ -473,64 +524,66 @@ void ButtonBar::LayoutButtons (const Size aPageObjectSize)
 
 
 
-bool ButtonBar::LayoutButtons (
-    const Size aPageObjectSize,
-    const bool bIsSmall)
+bool ButtonBar::LayoutButtons (void)
 {
-    (void)aPageObjectSize;
+    const sal_Int32 nGap (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonGap));
+    const sal_Int32 nBorder (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonBorder));
+
+    const Button::IconSize eIconSize (mpBackgroundTheme->GetIconSize());
 
     // Tell buttons which size they are.
     for (sal_uInt32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
-        maExcludedButtons[nIndex]->SetIsSmall(bIsSmall);
+        maExcludedButtons[nIndex]->SetIconSize(eIconSize);
     for (sal_uInt32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
-        maRegularButtons[nIndex]->SetIsSmall(bIsSmall);
+        maRegularButtons[nIndex]->SetIconSize(eIconSize);
 
-    // Determine maximal height of the buttons.
+    // Determine maximal height and total width of the buttons.
     // Start with the buttons used for the excluded state.
     sal_Int32 nMaximumHeight (0);
+    sal_Int32 nExcludedTotalWidth ((maExcludedButtons.size()-1) * nGap + 2*nBorder);
     for (sal_uInt32 nIndex=0; nIndex<maExcludedButtons.size(); ++nIndex)
     {
         const Size aSize (maExcludedButtons[nIndex]->GetSize());
         if (aSize.Height() > nMaximumHeight)
             nMaximumHeight = aSize.Height();
+        nExcludedTotalWidth += aSize.Width();
     }
 
     // Do the same for the regular buttons.
+    sal_Int32 nRegularTotalWidth ((maRegularButtons.size()-1) * nGap + 2*nBorder);
     for (sal_uInt32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
     {
         const Size aSize (maRegularButtons[nIndex]->GetSize());
         if (aSize.Height() > nMaximumHeight)
             nMaximumHeight = aSize.Height();
+        nRegularTotalWidth += aSize.Width();
     }
-    nMaximumHeight += 2*mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonBorder);
+    nMaximumHeight += 2*nBorder;
 
     // Set up the bounding box of the button bar.
-    maBoundingBox
-        = mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
-            Point(0,0),
-            PageObjectLayouter::Preview,
-            PageObjectLayouter::ModelCoordinateSystem);
-
-    maBoundingBox.Top() = maBoundingBox.Bottom()- nMaximumHeight;
-    maBoundingBox.Left() -= 1;
-    maBoundingBox.Right() += 1;
-    maBoundingBox.Bottom() += 1;
+    maButtonBoundingBox = mpBackgroundTheme->GetButtonArea();
+    maBackgroundLocation = mpBackgroundTheme->GetBackgroundLocation();
+    if (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonPaintType) == 1)
+    {
+        // Center the buttons.
+        maButtonBoundingBox.Left() += (maButtonBoundingBox.GetWidth() - nRegularTotalWidth)/2;
+        maButtonBoundingBox.Right() = maButtonBoundingBox.Left() + nRegularTotalWidth - 1;
+    }
 
     // Place the buttons.
-    Rectangle aBox (maBoundingBox);
-    const sal_Int32 nGap (mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonGap));
+    Rectangle aBox (maButtonBoundingBox);
     if (maExcludedButtons.size() > 1)
-        aBox.Right() -= mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonBorder);
+        aBox.Right() -= nBorder;
     for (sal_Int32 nIndex=maExcludedButtons.size()-1; nIndex>=0; --nIndex)
     {
-        maExcludedButtons[nIndex]->Place(aBox, maExcludedButtons.size()-1-nIndex);
+        maExcludedButtons[nIndex]->Place(aBox);
         aBox.Right() = maExcludedButtons[nIndex]->GetBoundingBox().Left() - nGap;
     }
-    aBox = maBoundingBox;
-    aBox.Right() -= mrSlideSorter.GetTheme()->GetIntegerValue(Theme::Integer_ButtonBorder);
+    aBox = maButtonBoundingBox;
+    aBox.Right() -= nBorder;
     for (sal_Int32 nIndex=maRegularButtons.size()-1; nIndex>=0; --nIndex)
     {
-        maRegularButtons[nIndex]->Place(aBox, maRegularButtons.size()-1-nIndex);
+        maRegularButtons[nIndex]->Place(aBox);
         aBox.Right() = maRegularButtons[nIndex]->GetBoundingBox().Left() - nGap;
     }
 
@@ -541,7 +594,282 @@ bool ButtonBar::LayoutButtons (
     for (sal_uInt32 nIndex=0; nIndex<maRegularButtons.size(); ++nIndex)
         if ( ! maRegularButtons[nIndex]->IsActive())
             return false;
+
     return true;
+}
+
+
+
+
+//===== BackgroundTheme =====================================================
+
+ButtonBar::BackgroundTheme::BackgroundTheme (
+    const ::boost::shared_ptr<Theme>& rpTheme,
+    const ::std::vector<SharedButton>& rButtons)
+    : mpTheme(rpTheme)
+{
+    UpdateMinimumIconSizes(rButtons);
+}
+
+
+
+
+void ButtonBar::BackgroundTheme::SetPreviewBoundingBox (const Rectangle& rPreviewBoundingBox)
+{
+    maPreviewBoundingBox = rPreviewBoundingBox;
+    Layout();
+}
+
+
+
+
+void ButtonBar::BackgroundTheme::UpdateMinimumIconSizes (
+    const ::std::vector<SharedButton>& rButtons)
+{
+    OSL_ASSERT(mpTheme);
+
+    sal_Int32 nMaximumHeightLarge (0);
+    sal_Int32 nMaximumHeightMedium (0);
+    sal_Int32 nMaximumHeightSmall (0);
+    const sal_Int32 nGap (mpTheme->GetIntegerValue(Theme::Integer_ButtonGap));
+    const sal_Int32 nBorder (mpTheme->GetIntegerValue(Theme::Integer_ButtonBorder));
+    sal_Int32 nTotalWidthLarge ((rButtons.size()-1) * nGap + 2*nBorder);
+    sal_Int32 nTotalWidthMedium ((rButtons.size()-1) * nGap + 2*nBorder);
+    sal_Int32 nTotalWidthSmall ((rButtons.size()-1) * nGap + 2*nBorder);
+    for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
+    {
+        // Update large size.
+        Size aSize = rButtons[nIndex]->GetSize(Button::IconSize_Large);
+        if (aSize.Height() > nMaximumHeightLarge)
+            nMaximumHeightLarge = aSize.Height();
+        nTotalWidthLarge += aSize.Width();
+
+        // Update medium size.
+        aSize = rButtons[nIndex]->GetSize(Button::IconSize_Medium);
+        if (aSize.Height() > nMaximumHeightMedium)
+            nMaximumHeightMedium = aSize.Height();
+        nTotalWidthMedium += aSize.Width();
+
+        // Update small size.
+        aSize = rButtons[nIndex]->GetSize(Button::IconSize_Small);
+        if (aSize.Height() > nMaximumHeightSmall)
+            nMaximumHeightSmall = aSize.Height();
+        nTotalWidthSmall += aSize.Width();
+    }
+    maMinimumLargeButtonAreaSize = Size(nTotalWidthLarge, nMaximumHeightLarge+2*nBorder);
+    maMinimumMediumButtonAreaSize = Size(nTotalWidthMedium, nMaximumHeightMedium+2*nBorder);
+    maMinimumSmallButtonAreaSize = Size(nTotalWidthSmall, nMaximumHeightSmall+2*nBorder);
+}
+
+
+
+
+Button::IconSize ButtonBar::BackgroundTheme::GetIconSize (void) const
+{
+    return meIconSize;
+}
+
+
+
+
+//===== RectangleBackgroundTheme ============================================
+
+RectangleBackgroundTheme::RectangleBackgroundTheme (
+    const ::boost::shared_ptr<Theme>& rpTheme,
+    const ::std::vector<SharedButton>& rButtons)
+    : BackgroundTheme(rpTheme, rButtons),
+      mnBarHeight(0)
+{
+}
+
+
+
+
+BitmapEx RectangleBackgroundTheme::CreateBackground (
+    const OutputDevice& rTemplateDevice,
+    const bool bIsButtonDown) const
+{
+    OSL_ASSERT(mpTheme);
+
+    // Setup background color.
+    Color aTopFillColor (mpTheme->GetGradientColor(
+        Theme::Gradient_ButtonBackground,
+        Theme::Fill1));
+    Color aTopBorderColor (mpTheme->GetGradientColor(
+        Theme::Gradient_ButtonBackground,
+        Theme::Border1));
+    Color aBottomFillColor (mpTheme->GetGradientColor(
+        Theme::Gradient_ButtonBackground,
+        Theme::Fill2));
+    Color aBottomBorderColor (mpTheme->GetGradientColor(
+        Theme::Gradient_ButtonBackground,
+        Theme::Border2));
+    if (bIsButtonDown)
+    {
+        aTopFillColor.DecreaseLuminance(50);
+        aTopBorderColor.DecreaseLuminance(50);
+        aBottomFillColor.DecreaseLuminance(50);
+        aBottomBorderColor.DecreaseLuminance(50);
+    }
+
+    const int nWidth (maPreviewBoundingBox.GetWidth()+2);
+    const int nHeight (mnBarHeight);
+    const int nCenter (nHeight / 2);
+
+    VirtualDevice aDevice (rTemplateDevice, 0, 8);
+    aDevice.SetOutputSizePixel(Size(nWidth,nHeight));
+
+    // Fill upper and lower half.
+    aDevice.SetLineColor();
+    aDevice.SetFillColor(aTopFillColor);
+    aDevice.DrawRect(Rectangle(0,0,nWidth-1,nCenter));
+    aDevice.SetFillColor(aBottomFillColor);
+    aDevice.DrawRect(Rectangle(0,nCenter,nWidth-1,nHeight-1));
+
+    // Draw border.
+    aDevice.SetFillColor();
+    aDevice.SetLineColor(aTopBorderColor);
+    aDevice.DrawLine(Point(0,nCenter),Point(0,0));
+    aDevice.DrawLine(Point(0,0), Point(nWidth-1,0));
+    aDevice.DrawLine(Point(nWidth-1,0),Point(nWidth-1,nCenter));
+    aDevice.SetLineColor(aBottomBorderColor);
+    aDevice.DrawLine(Point(0,nCenter),Point(0,nHeight-1));
+    aDevice.DrawLine(Point(0,nHeight-1), Point(nWidth-1,nHeight-1));
+    aDevice.DrawLine(Point(nWidth-1,nHeight-1),Point(nWidth-1,nCenter));
+
+    return aDevice.GetBitmapEx(Point(0,0), Size(nWidth,nHeight));
+}
+
+
+
+
+Point RectangleBackgroundTheme::GetBackgroundLocation (void)
+{
+    return Point(
+        maPreviewBoundingBox.Left()-1,
+        maPreviewBoundingBox.Bottom() - mnBarHeight + 2);
+}
+
+
+
+
+Rectangle RectangleBackgroundTheme::GetButtonArea (void)
+{
+    return Rectangle(
+        maPreviewBoundingBox.Left(),
+        maPreviewBoundingBox.Bottom() - mnBarHeight + 2,
+        maPreviewBoundingBox.Right(),
+        maPreviewBoundingBox.Bottom());
+}
+
+
+
+
+void RectangleBackgroundTheme::Layout (void)
+{
+    if (maPreviewBoundingBox.GetWidth() < maMinimumLargeButtonAreaSize.Width())
+        if (maPreviewBoundingBox.GetWidth() < maMinimumMediumButtonAreaSize.Width())
+        {
+            meIconSize = Button::IconSize_Small;
+            mnBarHeight = maMinimumSmallButtonAreaSize.Height();
+        }
+        else
+        {
+            meIconSize = Button::IconSize_Medium;
+            mnBarHeight = maMinimumMediumButtonAreaSize.Height();
+        }
+    else
+    {
+        meIconSize = Button::IconSize_Large;
+        mnBarHeight = maMinimumLargeButtonAreaSize.Height();
+    }
+}
+
+
+
+
+//===== BitmapBackgroundTheme =================================================
+
+BitmapBackgroundTheme::BitmapBackgroundTheme (
+    const ::boost::shared_ptr<Theme>& rpTheme,
+    const ::std::vector<SharedButton>& rButtons)
+    : BackgroundTheme(rpTheme, rButtons),
+      maButtonArea(),
+      maBackgroundLocation()
+{
+}
+
+
+
+
+BitmapEx BitmapBackgroundTheme::CreateBackground (
+    const OutputDevice& rTemplateDevice,
+    const bool bIsButtonDown) const
+{
+    OSL_ASSERT(mpTheme);
+
+    // Get images.
+    switch (meIconSize)
+    {
+        case Button::IconSize_Large:
+        default:
+            return mpTheme->GetIcon(Theme::Icon_ButtonBarLarge);
+
+        case Button::IconSize_Medium:
+            return mpTheme->GetIcon(Theme::Icon_ButtonBarMedium);
+
+        case Button::IconSize_Small:
+            return mpTheme->GetIcon(Theme::Icon_ButtonBarSmall);
+    }
+}
+
+
+
+
+Point BitmapBackgroundTheme::GetBackgroundLocation (void)
+{
+    return maBackgroundLocation;
+}
+
+
+
+
+Rectangle BitmapBackgroundTheme::GetButtonArea (void)
+{
+    return maButtonArea;
+}
+
+
+
+
+void BitmapBackgroundTheme::Layout (void)
+{
+    Size aImageSize (mpTheme->GetIcon(Theme::Icon_ButtonBarLarge).GetSizePixel());
+    if (aImageSize.Width() >= maPreviewBoundingBox.GetWidth())
+    {
+        aImageSize = mpTheme->GetIcon(Theme::Icon_ButtonBarMedium).GetSizePixel();
+        if (aImageSize.Width() >= maPreviewBoundingBox.GetWidth())
+        {
+            meIconSize = Button::IconSize_Small;
+            aImageSize = mpTheme->GetIcon(Theme::Icon_ButtonBarSmall).GetSizePixel();
+        }
+        else
+            meIconSize = Button::IconSize_Medium;
+    }
+    else
+    {
+        meIconSize = Button::IconSize_Large;
+    }
+
+    maButtonArea = Rectangle(
+        Point(
+            maPreviewBoundingBox.Left() + (maPreviewBoundingBox.GetWidth()-aImageSize.Width()) / 2,
+            maPreviewBoundingBox.Bottom() - aImageSize.Height()),
+        aImageSize);
+    maBackgroundLocation = Point(
+        maPreviewBoundingBox.Left()
+            + (maPreviewBoundingBox.GetWidth()-aImageSize.Width())/2,
+        maPreviewBoundingBox.Bottom() - aImageSize.Height());
 }
 
 
@@ -553,11 +881,11 @@ Button::Button (
     SlideSorter& rSlideSorter,
     const ::rtl::OUString& rsHelpText)
     : mrSlideSorter(rSlideSorter),
-      meState(ST_Normal),
+      meState(State_Normal),
       maBoundingBox(),
       msHelpText(rsHelpText),
       mbIsActive(false),
-      mbIsSmall(false)
+      meIconSize(IconSize_Large)
 {
 }
 
@@ -617,7 +945,7 @@ Rectangle Button::GetBoundingBox (void) const
 
 bool Button::IsDown (void) const
 {
-    return mbIsActive && meState==ST_Down;
+    return mbIsActive && meState==State_Down;
 }
 
 
@@ -639,9 +967,17 @@ bool Button::IsActive (void) const
 
 
 
-void Button::SetIsSmall (const bool bIsSmall)
+void Button::SetIconSize (const IconSize eIconSize)
 {
-    mbIsSmall = bIsSmall;
+    meIconSize = eIconSize;
+}
+
+
+
+
+Button::IconSize Button::GetIconSize (void) const
+{
+    return meIconSize;
 }
 
 
@@ -661,9 +997,8 @@ TextButton::TextButton (
 
 
 
-void TextButton::Place (const Rectangle aButtonBarBox, const sal_Int32 nIndex)
+void TextButton::Place (const Rectangle aButtonBarBox)
 {
-    (void)nIndex;
     maBoundingBox = aButtonBarBox;
     SetActiveState(true);
 }
@@ -700,38 +1035,41 @@ Size TextButton::GetSize (void) const
 
 
 
+Size TextButton::GetSize (const Button::IconSize eIconSize) const
+{
+    return Size();
+}
+
+
+
+
 //===== ImageButon ============================================================
 
 ImageButton::ImageButton (
     SlideSorter& rSlideSorter,
-    const BitmapEx& rRegularIcon,
-    const BitmapEx& rHoverIcon,
-    const BitmapEx& rPressedIcon,
+    const BitmapEx& rLargeIcon,
+    const BitmapEx& rLargeHoverIcon,
+    const BitmapEx& rMediumIcon,
+    const BitmapEx& rMediumHoverIcon,
     const BitmapEx& rSmallIcon,
     const BitmapEx& rSmallHoverIcon,
-    const BitmapEx& rSmallPressedIcon,
     const ::rtl::OUString& rsHelpText)
     : Button(rSlideSorter, rsHelpText),
-      maNormalIcon(rRegularIcon),
-      maHoverIcon(rHoverIcon.IsEmpty() ? rRegularIcon : rHoverIcon),
-      maDownIcon(rPressedIcon.IsEmpty() ? rRegularIcon : rPressedIcon),
+      maLargeIcon(rLargeIcon),
+      maLargeHoverIcon(rLargeHoverIcon.IsEmpty() ? rLargeIcon : rLargeHoverIcon),
+      maMediumIcon(rMediumIcon),
+      maMediumHoverIcon(rMediumHoverIcon.IsEmpty() ? rMediumIcon : rMediumHoverIcon),
       maSmallIcon(rSmallIcon),
-      maSmallHoverIcon(rSmallHoverIcon.IsEmpty() ? rSmallIcon : rSmallHoverIcon),
-      maSmallDownIcon(rSmallPressedIcon.IsEmpty() ? rSmallIcon : rSmallPressedIcon)
+      maSmallHoverIcon(rSmallHoverIcon.IsEmpty() ? rSmallIcon : rSmallHoverIcon)
 {
 }
 
 
 
 
-void ImageButton::Place (
-    const Rectangle aButtonBarBox,
-    const sal_Int32 nIndex)
+void ImageButton::Place (const Rectangle aButtonBarBox)
 {
-    (void)nIndex;
-    const sal_Int32 nWidth (mbIsSmall
-        ? maSmallIcon.GetSizePixel().Width()
-        : maNormalIcon.GetSizePixel().Width());
+    const sal_Int32 nWidth (GetSize().Width());
     maBoundingBox = Rectangle(
         aButtonBarBox.Right() - nWidth,
         aButtonBarBox.Top(),
@@ -761,27 +1099,29 @@ void ImageButton::Paint (
 
     // Choose icon.
     BitmapEx aIcon;
-    switch (meState)
+    const bool bIsHover (meState == State_Hover);
+    switch (meIconSize)
     {
-        case ST_Normal:
-            if (mbIsSmall)
+        case IconSize_Large:
+        default:
+            if (meState == State_Normal)
+                aIcon = maLargeIcon;
+            else
+                aIcon = maLargeHoverIcon;
+            break;
+
+        case IconSize_Medium:
+            if (meState == State_Normal)
+                aIcon = maMediumIcon;
+            else
+                aIcon = maMediumHoverIcon;
+            break;
+
+        case IconSize_Small:
+            if (meState == State_Normal)
                 aIcon = maSmallIcon;
             else
-                aIcon = maNormalIcon;
-            break;
-
-        case ST_Hover:
-            if (mbIsSmall)
                 aIcon = maSmallHoverIcon;
-            else
-                aIcon = maHoverIcon;
-            break;
-
-        case ST_Down:
-            if (mbIsSmall)
-                aIcon = maSmallDownIcon;
-            else
-                aIcon = maDownIcon;
             break;
     }
 
@@ -809,10 +1149,26 @@ void ImageButton::Paint (
 
 Size ImageButton::GetSize (void) const
 {
-    if (mbIsSmall)
-        return maSmallIcon.GetSizePixel();
-    else
-        return maNormalIcon.GetSizePixel();
+    return GetSize(meIconSize);
+}
+
+
+
+
+Size ImageButton::GetSize (const Button::IconSize eIconSize) const
+{
+    switch (eIconSize)
+    {
+        case IconSize_Large:
+        default:
+            return maLargeIcon.GetSizePixel();
+
+        case IconSize_Medium:
+            return maMediumIcon.GetSizePixel();
+
+        case IconSize_Small:
+            return maSmallIcon.GetSizePixel();
+    }
 }
 
 
@@ -850,12 +1206,12 @@ void UnhideButton::ProcessClick (const model::SharedPageDescriptor& rpDescriptor
 StartShowButton::StartShowButton (SlideSorter& rSlideSorter)
     : ImageButton(
         rSlideSorter,
-        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1Regular),
-        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1Hover),
-        BitmapEx(),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1Large),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1LargeHover),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1Medium),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command1SmallHover),
-        BitmapEx(),
         rSlideSorter.GetTheme()->GetString(Theme::String_Command1))
 {
 }
@@ -884,12 +1240,12 @@ void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
 HideButton::HideButton (SlideSorter& rSlideSorter)
     : ImageButton(
         rSlideSorter,
-        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Regular),
-        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Hover),
-        BitmapEx(),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Large),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2LargeHover),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Medium),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2SmallHover),
-        BitmapEx(),
         rSlideSorter.GetTheme()->GetString(Theme::String_Command2))
 {
 }
@@ -916,12 +1272,12 @@ void HideButton::ProcessClick (const model::SharedPageDescriptor& rpDescriptor)
 DuplicateButton::DuplicateButton (SlideSorter& rSlideSorter)
     : ImageButton(
         rSlideSorter,
-        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Regular),
-        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Hover),
-        BitmapEx(),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Large),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3LargeHover),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Medium),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3SmallHover),
-        BitmapEx(),
         rSlideSorter.GetTheme()->GetString(Theme::String_Command3))
 {
 }

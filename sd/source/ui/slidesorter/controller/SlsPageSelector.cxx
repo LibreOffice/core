@@ -97,8 +97,8 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
 
 void PageSelector::SelectAllPages (void)
 {
-    PageSelector::UpdateLock aLock (*this);
     BoolContext aContext (mbIsMakeVisibleDisabled, true);
+    PageSelector::UpdateLock aLock (*this);
 
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)

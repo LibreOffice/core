@@ -664,10 +664,14 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
             {
                 model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
                 SdrPage* pCandidate = pDescriptor->GetPage();
-                if (pCandidate!=NULL && &pCandidate->TRG_GetMasterPage() == pPage)
+                if (pCandidate!=NULL
+                    && pCandidate->TRG_HasMasterPage()
+                    && &pCandidate->TRG_GetMasterPage() == pPage)
+                {
                     pCacheManager->InvalidatePreviewBitmap(
                         mrSlideSorter.GetModel().GetDocument()->getUnoModel(),
                         pCandidate);
+                }
                 mrSlideSorter.GetView().GetPreviewCache()->RequestPreviewBitmap(pCandidate);
             }
         }

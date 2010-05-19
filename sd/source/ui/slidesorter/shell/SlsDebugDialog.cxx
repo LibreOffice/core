@@ -236,7 +236,8 @@ public:
         mpTitle->SetPosSizePixel(nLeft, nTop, nWidth,20);
         mpTitle->Show();
 
-        SetColor(aStartColor);
+        SetRgbColor(aStartColor);
+        SetHsbColor(aStartColor);
 
         mpTextValue->SetText(::rtl::OUString::createFromAscii("x000000"));
         mpTextValue->SetPosSizePixel(nLeft, nTop+85, 150, 20);
@@ -264,7 +265,7 @@ public:
         delete mpContainer;
     }
 
-    void SetColor (const ColorData aColorData)
+    void SetRgbColor (const ColorData aColorData)
     {
         maCurrentColor = Color(aColorData);
 
@@ -272,9 +273,13 @@ public:
         mpGreenSlider->SetValue(maCurrentColor.GetGreen());
         mpBlueSlider->SetValue(maCurrentColor.GetBlue());
 
-        USHORT nHue (0);
-        USHORT nSaturation (0);
-        USHORT nBrightness (0);
+        UpdateDisplay(maCurrentColor);
+    }
+    void SetHsbColor (const ColorData aColorData)
+    {
+        maCurrentColor = Color(aColorData);
+
+        USHORT nHue, nSaturation, nBrightness;
         maCurrentColor.RGBtoHSB(nHue, nSaturation, nBrightness);
         mpHueSlider->SetValue(nHue);
         mpSaturationSlider->SetValue(nSaturation);
@@ -354,7 +359,7 @@ private:
 IMPL_LINK(ColorControl, UpdateFromRGBColor, void*, EMPTYARG)
 {
     const ColorData aColor (GetRGBColor());
-    SetColor(aColor);
+    SetHsbColor(aColor);
     UpdateDisplay(Color(aColor));
     if (maSetter)
     {
@@ -369,7 +374,7 @@ IMPL_LINK(ColorControl, UpdateFromRGBColor, void*, EMPTYARG)
 IMPL_LINK(ColorControl, UpdateFromHSBColor, void*, EMPTYARG)
 {
     const ColorData aColor (GetHSBColor());
-    SetColor(aColor);
+    SetRgbColor(aColor);
     UpdateDisplay(Color(aColor));
     if (maSetter)
     {
@@ -513,7 +518,8 @@ public:
 
     void SetBaseColor (const ColorData aColor)
     {
-        mpColorControl->SetColor(aColor);
+        //        mpColorControl->SetRgbColor(aColor);
+        //        mpColorControl->SetHsbColor(aColor);
     }
 
     ::Window* GetContainer (void)
@@ -529,7 +535,8 @@ public:
     void SetType (const Theme::GradientColorType eType)
     {
         meType = eType;
-        mpColorControl->SetColor(mpTheme->GetGradientColor(meType, Theme::Base));
+        mpColorControl->SetRgbColor(mpTheme->GetGradientColor(meType, Theme::Base));
+        mpColorControl->SetHsbColor(mpTheme->GetGradientColor(meType, Theme::Base));
         mpFillOffset1Slider->SetThumbPos(mpTheme->GetGradientOffset(meType, Theme::Fill1));
         mpFillOffset2Slider->SetThumbPos(mpTheme->GetGradientOffset(meType, Theme::Fill2));
         mpBorderOffset1Slider->SetThumbPos(mpTheme->GetGradientOffset(meType, Theme::Border1));

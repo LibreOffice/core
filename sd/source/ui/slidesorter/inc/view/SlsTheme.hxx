@@ -132,21 +132,30 @@ public:
         Icon_RawShadow,
         Icon_RawInsertShadow,
         Icon_HideSlideOverlay,
-        Icon_Command1Regular,
-        Icon_Command1Hover,
+        Icon_ButtonBarLarge,
+        Icon_ButtonBarMedium,
+        Icon_ButtonBarSmall,
+        Icon_Command1Large,
+        Icon_Command1LargeHover,
+        Icon_Command1Medium,
+        Icon_Command1MediumHover,
         Icon_Command1Small,
         Icon_Command1SmallHover,
-        Icon_Command2Regular,
-        Icon_Command2Hover,
+        Icon_Command2Large,
+        Icon_Command2LargeHover,
+        Icon_Command2Medium,
+        Icon_Command2MediumHover,
         Icon_Command2Small,
         Icon_Command2SmallHover,
-        Icon_Command3Regular,
-        Icon_Command3Hover,
+        Icon_Command3Large,
+        Icon_Command3LargeHover,
+        Icon_Command3Medium,
+        Icon_Command3MediumHover,
         Icon_Command3Small,
         Icon_Command3SmallHover,
         _IconType_Size_
     };
-    BitmapEx GetIcon (const IconType eType);
+    const BitmapEx& GetIcon (const IconType eType);
 
     enum IntegerValueType
     {

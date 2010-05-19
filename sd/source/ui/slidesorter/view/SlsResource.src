@@ -32,123 +32,153 @@
 
 Resource RID_SLIDESORTER_ICONS
 {
-    Image IMAGE_COMMAND1_REGULAR
+    Image IMAGE_COMMAND1_LARGE
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1.png" ; };
     };
-
-    Image IMAGE_COMMAND1_HOVER
+    Image IMAGE_COMMAND1_LARGE_HOVER
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1_hover.png" ; };
     };
-
+    Image IMAGE_COMMAND1_MEDIUM
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_medium.png" ; };
+    };
+    Image IMAGE_COMMAND1_MEDIUM_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_medium_hover.png" ; };
+    };
     Image IMAGE_COMMAND1_SMALL
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1_small.png" ; };
     };
-
     Image IMAGE_COMMAND1_SMALL_HOVER
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1_small_hover.png" ; };
     };
 
-    Image IMAGE_COMMAND1_REGULAR_HC
+    Image IMAGE_COMMAND1_LARGE_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1_hc.png" ; };
     };
-
-    Image IMAGE_COMMAND1_HOVER_HC
+    Image IMAGE_COMMAND1_LARGE_HOVER_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1_hover_hc.png" ; };
     };
-
+    Image IMAGE_COMMAND1_MEDIUM_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_medium_hc.png" ; };
+    };
+    Image IMAGE_COMMAND1_MEDIUM_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command1_medium_hover_hc.png" ; };
+    };
     Image IMAGE_COMMAND1_SMALL_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1_small_hc.png" ; };
     };
-
     Image IMAGE_COMMAND1_SMALL_HOVER_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command1_small_hover_hc.png" ; };
     };
 
 
-    Image IMAGE_COMMAND2_REGULAR
+    Image IMAGE_COMMAND2_LARGE
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2.png" ; };
     };
-
-    Image IMAGE_COMMAND2_HOVER
+    Image IMAGE_COMMAND2_LARGE_HOVER
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2_hover.png" ; };
     };
-
+    Image IMAGE_COMMAND2_MEDIUM
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_medium.png" ; };
+    };
+    Image IMAGE_COMMAND2_MEDIUM_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_medium_hover.png" ; };
+    };
     Image IMAGE_COMMAND2_SMALL
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2_small.png" ; };
     };
-
     Image IMAGE_COMMAND2_SMALL_HOVER
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2_small_hover.png" ; };
     };
 
-    Image IMAGE_COMMAND2_REGULAR_HC
+    Image IMAGE_COMMAND2_LARGE_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2_hc.png" ; };
     };
-
-    Image IMAGE_COMMAND2_HOVER_HC
+    Image IMAGE_COMMAND2_LARGE_HOVER_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2_hover_hc.png" ; };
     };
-
+    Image IMAGE_COMMAND2_MEDIUM_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_medium_hc.png" ; };
+    };
+    Image IMAGE_COMMAND2_MEDIUM_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2_medium_hover_hc.png" ; };
+    };
     Image IMAGE_COMMAND2_SMALL_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2_small_hc.png" ; };
     };
-
     Image IMAGE_COMMAND2_SMALL_HOVER_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command2_small_hover_hc.png" ; };
     };
 
 
-    Image IMAGE_COMMAND3_REGULAR
+    Image IMAGE_COMMAND3_LARGE
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3.png" ; };
     };
-
-    Image IMAGE_COMMAND3_HOVER
+    Image IMAGE_COMMAND3_LARGE_HOVER
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_hover.png" ; };
     };
-
+    Image IMAGE_COMMAND3_MEDIUM
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_medium.png" ; };
+    };
+    Image IMAGE_COMMAND3_MEDIUM_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_medium_hover.png" ; };
+    };
     Image IMAGE_COMMAND3_SMALL
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_small.png" ; };
     };
-
     Image IMAGE_COMMAND3_SMALL_HOVER
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_small_hover.png" ; };
     };
 
-    Image IMAGE_COMMAND3_REGULAR_HC
+    Image IMAGE_COMMAND3_LARGE_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_hc.png" ; };
     };
-
-    Image IMAGE_COMMAND3_HOVER_HC
+    Image IMAGE_COMMAND3_LARGE_HOVER_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_hover_hc.png" ; };
     };
-
+    Image IMAGE_COMMAND3_MEDIUM_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_medium_hc.png" ; };
+    };
+    Image IMAGE_COMMAND3_MEDIUM_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_medium_hover_hc.png" ; };
+    };
     Image IMAGE_COMMAND3_SMALL_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_small_hc.png" ; };
     };
-
     Image IMAGE_COMMAND3_SMALL_HOVER_HC
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_small_hover_hc.png" ; };
@@ -169,6 +199,35 @@ Resource RID_SLIDESORTER_ICONS
     {
         ImageBitmap = Bitmap { File = "slide_sorter_hide_slide_overlay.png" ; };
     };
+
+
+    Image IMAGE_BUTTONBAR_LARGE
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar.png" ; };
+    };
+    Image IMAGE_BUTTONBAR_MEDIUM
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_medium.png" ; };
+    };
+    Image IMAGE_BUTTONBAR_SMALL
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_small.png" ; };
+    };
+
+    Image IMAGE_BUTTONBAR_LARGE_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_hc.png" ; };
+    };
+    Image IMAGE_BUTTONBAR_MEDIUM_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_medium_hc.png" ; };
+    };
+    Image IMAGE_BUTTONBAR_SMALL_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_small_hc.png" ; };
+    };
+
+
 
     String STRING_UNHIDE
     {

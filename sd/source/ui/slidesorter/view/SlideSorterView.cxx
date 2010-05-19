@@ -228,6 +228,8 @@ void SlideSorterView::Dispose (void)
     mpLayeredDevice->Dispose();
     mpPreviewCache.reset();
 
+    SetPageUnderMouse(SharedPageDescriptor(),false);
+
     // Hide the page to avoid problems in the view when deleting
     // visualized objects
     HideSdrPage();
@@ -1062,6 +1064,8 @@ bool SlideSorterView::SetState (
             if (nId != Animator::NotAnAnimationId)
                 mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
 
+            // Prepare the blending functors that translate [0,1] animation
+            // times into alpha values of buttons and button bar.
             const ::boost::function<double(double)> aButtonBlendFunctor (
                 ::boost::bind(
                     AnimationFunction::Blend,

@@ -33,49 +33,67 @@
 
 #include "glob.hrc"
 
-#define IMAGE_COMMAND1_REGULAR          1
-#define IMAGE_COMMAND1_HOVER            2
-#define IMAGE_COMMAND1_SMALL            3
-#define IMAGE_COMMAND1_SMALL_HOVER      4
+#define IMAGE_COMMAND1_LARGE            1
+#define IMAGE_COMMAND1_LARGE_HOVER      2
+#define IMAGE_COMMAND1_MEDIUM           3
+#define IMAGE_COMMAND1_MEDIUM_HOVER     4
+#define IMAGE_COMMAND1_SMALL            5
+#define IMAGE_COMMAND1_SMALL_HOVER      6
 
-#define IMAGE_COMMAND1_REGULAR_HC       5
-#define IMAGE_COMMAND1_HOVER_HC         6
-#define IMAGE_COMMAND1_SMALL_HC         7
-#define IMAGE_COMMAND1_SMALL_HOVER_HC   8
-
-
-#define IMAGE_COMMAND2_REGULAR          10
-#define IMAGE_COMMAND2_HOVER            11
-#define IMAGE_COMMAND2_SMALL            12
-#define IMAGE_COMMAND2_SMALL_HOVER      13
-
-#define IMAGE_COMMAND2_REGULAR_HC       14
-#define IMAGE_COMMAND2_HOVER_HC         15
-#define IMAGE_COMMAND2_SMALL_HC         16
-#define IMAGE_COMMAND2_SMALL_HOVER_HC   17
+#define IMAGE_COMMAND1_LARGE_HC         7
+#define IMAGE_COMMAND1_LARGE_HOVER_HC   8
+#define IMAGE_COMMAND1_MEDIUM_HC        9
+#define IMAGE_COMMAND1_MEDIUM_HOVER_HC  10
+#define IMAGE_COMMAND1_SMALL_HC         11
+#define IMAGE_COMMAND1_SMALL_HOVER_HC   12
 
 
-#define IMAGE_COMMAND3_REGULAR          20
-#define IMAGE_COMMAND3_HOVER            21
-#define IMAGE_COMMAND3_SMALL            22
-#define IMAGE_COMMAND3_SMALL_HOVER      23
+#define IMAGE_COMMAND2_LARGE            20
+#define IMAGE_COMMAND2_LARGE_HOVER      21
+#define IMAGE_COMMAND2_MEDIUM           22
+#define IMAGE_COMMAND2_MEDIUM_HOVER     23
+#define IMAGE_COMMAND2_SMALL            24
+#define IMAGE_COMMAND2_SMALL_HOVER      25
 
-#define IMAGE_COMMAND3_REGULAR_HC       24
-#define IMAGE_COMMAND3_HOVER_HC         25
-#define IMAGE_COMMAND3_SMALL_HC         26
-#define IMAGE_COMMAND3_SMALL_HOVER_HC   27
+#define IMAGE_COMMAND2_LARGE_HC         26
+#define IMAGE_COMMAND2_LARGE_HOVER_HC   27
+#define IMAGE_COMMAND2_MEDIUM_HC        28
+#define IMAGE_COMMAND2_MEDIUM_HOVER_HC  29
+#define IMAGE_COMMAND2_SMALL_HC         30
+#define IMAGE_COMMAND2_SMALL_HOVER_HC   31
 
 
-#define IMAGE_SHADOW                    30
-#define IMAGE_INSERT_SHADOW             31
-#define IMAGE_HIDE_SLIDE_OVERLAY        32
+#define IMAGE_COMMAND3_LARGE            40
+#define IMAGE_COMMAND3_LARGE_HOVER      41
+#define IMAGE_COMMAND3_MEDIUM           42
+#define IMAGE_COMMAND3_MEDIUM_HOVER     43
+#define IMAGE_COMMAND3_SMALL            44
+#define IMAGE_COMMAND3_SMALL_HOVER      45
 
-#define STRING_UNHIDE                   33
-#define STRING_DRAG_AND_DROP_PAGES      34
-#define STRING_DRAG_AND_DROP_SLIDES     35
+#define IMAGE_COMMAND3_LARGE_HC         46
+#define IMAGE_COMMAND3_LARGE_HOVER_HC   47
+#define IMAGE_COMMAND3_MEDIUM_HC        48
+#define IMAGE_COMMAND3_MEDIUM_HOVER_HC  49
+#define IMAGE_COMMAND3_SMALL_HC         50
+#define IMAGE_COMMAND3_SMALL_HOVER_HC   51
 
-#define STRING_COMMAND1                 36
-#define STRING_COMMAND2                 37
-#define STRING_COMMAND3                 38
+#define IMAGE_BUTTONBAR_LARGE           60
+#define IMAGE_BUTTONBAR_LARGE_HC        61
+#define IMAGE_BUTTONBAR_MEDIUM          62
+#define IMAGE_BUTTONBAR_MEDIUM_HC       63
+#define IMAGE_BUTTONBAR_SMALL           64
+#define IMAGE_BUTTONBAR_SMALL_HC        65
+
+#define IMAGE_SHADOW                    70
+#define IMAGE_INSERT_SHADOW             71
+#define IMAGE_HIDE_SLIDE_OVERLAY        72
+
+#define STRING_UNHIDE                   73
+#define STRING_DRAG_AND_DROP_PAGES      74
+#define STRING_DRAG_AND_DROP_SLIDES     75
+
+#define STRING_COMMAND1                 76
+#define STRING_COMMAND2                 77
+#define STRING_COMMAND3                 78
 
 #endif
