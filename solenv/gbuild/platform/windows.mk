@@ -210,7 +210,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
-    > $(call gb_CxxObject_get_dep_target,$(2)))
+    > $(call gb_CObject_get_dep_target,$(2)))
 endef
 
 define gb_CObject__command_dep
