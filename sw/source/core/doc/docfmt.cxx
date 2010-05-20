@@ -397,10 +397,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
         // JP 22.08.96: Sonderfall: steht der Crsr in einem URL-Attribut
         //              dann wird dessen Bereich genommen
-        const SwTxtAttr* pURLAttr;
-        if( pTxtNd->HasHints() &&
-            0 != ( pURLAttr = pTxtNd->GetTxtAttr( rSt, RES_TXTATR_INETFMT ))
-            && pURLAttr->GetINetFmt().GetValue().Len() )
+        SwTxtAttr const*const pURLAttr(
+            pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
+        if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
         {
             nMkPos = *pURLAttr->GetStart();
             nPtPos = *pURLAttr->GetEnd();
@@ -902,10 +901,9 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
             // JP 22.08.96: Sonderfall: steht der Crsr in einem URL-Attribut
             //              dann wird dessen Bereich genommen
-            const SwTxtAttr* pURLAttr;
-            if( pTxtNd->HasHints() &&
-                0 != ( pURLAttr = pTxtNd->GetTxtAttr( rSt, RES_TXTATR_INETFMT ))
-                && pURLAttr->GetINetFmt().GetValue().Len() )
+            SwTxtAttr const*const pURLAttr(
+                pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
+            if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
             {
                 nMkPos = *pURLAttr->GetStart();
                 nPtPos = *pURLAttr->GetEnd();
