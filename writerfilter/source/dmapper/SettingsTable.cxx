@@ -36,6 +36,11 @@
 #include <ConversionHelper.hxx>
 #include <rtl/ustring.hxx>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/QNameToString.hxx>
+#include "dmapperLoggers.hxx"
+#endif
+
 namespace writerfilter {
 namespace dmapper
 {
@@ -88,8 +93,15 @@ SettingsTable::~SettingsTable()
     delete m_pImpl;
 }
 
-void SettingsTable::attribute(Id /*Name*/, Value & val)
+void SettingsTable::attribute(Id nName, Value & val)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("SettingsTable.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
+    dmapper_logger->attribute("value", val.toString());
+#endif
+
+    (void) nName;
     int nIntValue = val.getInt();
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
@@ -108,10 +120,18 @@ void SettingsTable::attribute(Id /*Name*/, Value & val)
     }
     }
 #endif
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("SettingsTable.attribute");
+#endif
 }
 
 void SettingsTable::sprm(Sprm& rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("SettingsTable.sprm");
+    dmapper_logger->chars(rSprm.toString());
+#endif
+
     sal_uInt32 nSprmId = rSprm.getId();
 
     Value::Pointer_t pValue = rSprm.getValue();
@@ -206,6 +226,10 @@ void SettingsTable::sprm(Sprm& rSprm)
         OSL_ENSURE( false, "unknown sprmid in SettingsTable::sprm()");
     }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("SettingsTable.sprm");
+#endif
 }
 
 void SettingsTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
