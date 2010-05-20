@@ -43,7 +43,8 @@
 ScSheetSaveData::ScSheetSaveData() :
     mnStartTab( -1 ),
     mnStartOffset( -1 ),
-    maPreviousNote( rtl::OUString(), rtl::OUString(), ScAddress(ScAddress::INITIALIZE_INVALID) )
+    maPreviousNote( rtl::OUString(), rtl::OUString(), ScAddress(ScAddress::INITIALIZE_INVALID) ),
+    mbInSupportedSave( false )
 {
 }
 
@@ -268,5 +269,15 @@ bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) cons
     }
 
     return true;    // success
+}
+
+bool ScSheetSaveData::IsInSupportedSave() const
+{
+    return mbInSupportedSave;
+}
+
+void ScSheetSaveData::SetInSupportedSave( bool bSet )
+{
+    mbInSupportedSave = bSet;
 }
 
