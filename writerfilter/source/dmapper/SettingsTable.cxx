@@ -62,6 +62,21 @@ struct SettingsTable_Impl
     bool                m_bNoPunctuationKerning;
     bool                m_doNotIncludeSubdocsInStats; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     bool                m_bRecordChanges;
+    int                 m_nEdit;
+    bool                m_bFormatting;
+    bool                m_bEnforcement;
+    int                 m_nCryptProviderType;
+    int                 m_nCryptAlgorithmClass;
+    int                 m_nCryptAlgorithmType;
+    ::rtl::OUString     m_sCryptAlgorithmSid;
+    int                 m_nCryptSpinCount;
+    ::rtl::OUString     m_sCryptProvider;
+    ::rtl::OUString     m_sAlgIdExt;
+    ::rtl::OUString     m_sAlgIdExtSource;
+    ::rtl::OUString     m_sCryptProviderTypeExt;
+    ::rtl::OUString     m_sCryptProviderTypeExtSource;
+    ::rtl::OUString     m_sHash;
+    ::rtl::OUString     m_sSalt;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -71,6 +86,13 @@ struct SettingsTable_Impl
     , m_bNoPunctuationKerning(false)
     , m_doNotIncludeSubdocsInStats(false)
     , m_bRecordChanges(false)
+    , m_nEdit(NS_ooxml::LN_Value_wordprocessingml_ST_DocProtect_none)
+    , m_bFormatting(false)
+    , m_bEnforcement(false)
+    , m_nCryptProviderType(NS_ooxml::LN_Value_wordprocessingml_ST_CryptProv_rsaAES)
+    , m_nCryptAlgorithmClass(NS_ooxml::LN_Value_wordprocessingml_ST_AlgClass_hash)
+    , m_nCryptAlgorithmType(NS_ooxml::LN_Value_wordprocessingml_ST_AlgType_typeAny)
+    , m_nCryptSpinCount(0)
     {}
 
     ListTablePtr GetListTable()
