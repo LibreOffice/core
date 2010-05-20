@@ -49,10 +49,13 @@
 
 #include <com/sun/star/text/XFormField.hpp>
 
+#include "RDFaImportHelper.hxx"
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -113,7 +116,6 @@ XMLTextMarkImportContext::XMLTextMarkImportContext(
     const OUString& rLocalName )
     : SvXMLImportContext(rImport, nPrefix, rLocalName)
     , m_rHelper(rHlp)
-    , m_bHaveAbout(false)
 {
 }
 
@@ -190,13 +192,13 @@ void XMLTextMarkImportContext::EndElement()
 {
     SvXMLImportContext::EndElement();
 
-    const OUString sAPI_reference_mark(
+    static const OUString sAPI_reference_mark(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ReferenceMark"));
-    const OUString sAPI_bookmark(
+    static const OUString sAPI_bookmark(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark"));
-    const OUString sAPI_fieldmark(
+    static const OUString sAPI_fieldmark(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Fieldmark"));
-    const OUString sAPI_formfieldmark(
+    static const OUString sAPI_formfieldmark(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FormFieldmark"));
 
     if (m_sBookmarkName.getLength() > 0)
@@ -228,13 +230,6 @@ void XMLTextMarkImportContext::EndElement()
                                 m_sBookmarkName,
                                 m_rHelper.GetCursorAsRange()->getStart(),
                                 m_sXmlId) );
-                        if (m_bHaveAbout)
-                        {
-                            const Reference<com::sun::star::rdf::XMetadatable>
-                                xMeta( xContent, UNO_QUERY);
-                            GetImport().AddRDFa(xMeta,
-                                m_sAbout, m_sProperty, m_sContent, m_sDatatype);
-                        }
                         if ((lcl_MarkType)nTmp==TypeFieldmark) {
                             if (xContent.is() && bImportAsField) {
                                 // setup fieldmark...
@@ -252,9 +247,22 @@ void XMLTextMarkImportContext::EndElement()
                 case TypeFieldmarkStart:
                 case TypeBookmarkStart:
                     // save XTextRange for later construction of bookmark
-                    m_rHelper.InsertBookmarkStartRange(
-                        m_sBookmarkName, m_rHelper.GetCursorAsRange()->getStart(),
-                        m_sXmlId);
+                    {
+                        ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes >
+                            pRDFaAttributes;
+                        if (m_bHaveAbout && (TypeBookmarkStart
+                                == static_cast<lcl_MarkType>(nTmp)))
+                        {
+                            pRDFaAttributes =
+                                GetImport().GetRDFaImportHelper().ParseRDFa(
+                                    m_sAbout, m_sProperty,
+                                    m_sContent, m_sDatatype);
+                        }
+                        m_rHelper.InsertBookmarkStartRange(
+                            m_sBookmarkName,
+                            m_rHelper.GetCursorAsRange()->getStart(),
+                            m_sXmlId, pRDFaAttributes);
+                    }
                     break;
 
                 case TypeFieldmarkEnd:
@@ -262,8 +270,11 @@ void XMLTextMarkImportContext::EndElement()
                 {
                     // get old range, and construct
                     Reference<XTextRange> xStartRange;
-                    if (m_rHelper.FindAndRemoveBookmarkStartRange(m_sBookmarkName,
-                            xStartRange, m_sXmlId))
+                    ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes >
+                        pRDFaAttributes;
+                    if (m_rHelper.FindAndRemoveBookmarkStartRange(
+                            m_sBookmarkName, xStartRange,
+                            m_sXmlId, pRDFaAttributes))
                     {
                         Reference<XTextRange> xEndRange(
                             m_rHelper.GetCursorAsRange()->getStart());
@@ -295,12 +306,12 @@ void XMLTextMarkImportContext::EndElement()
                                     m_sBookmarkName,
                                     xInsertionRange,
                                     m_sXmlId) );
-                            if (m_bHaveAbout)
+                            if (pRDFaAttributes)
                             {
-                                const Reference<com::sun::star::rdf::XMetadatable>
-                                    xMeta( xContent, UNO_QUERY);
-                                GetImport().AddRDFa(xMeta,
-                                    m_sAbout, m_sProperty, m_sContent, m_sDatatype);
+                                const Reference<rdf::XMetadatable>
+                                    xMeta(xContent, UNO_QUERY);
+                                GetImport().GetRDFaImportHelper().AddRDFa(
+                                    xMeta, pRDFaAttributes);
                             }
 
                             if ((lcl_MarkType)nTmp==TypeFieldmarkEnd) {
