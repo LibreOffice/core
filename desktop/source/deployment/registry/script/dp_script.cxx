@@ -476,7 +476,7 @@ void BackendImpl::PackageImpl::processPackage_(
         }
     }
     bool bSuccess = bScript || bDialog;     // Something must have happened
-    if( bRunning )
+    if( bRunning && !startup)
         if( (bScript && !bScriptSuccess) || (bDialog && !bDialogSuccess) )
             bSuccess = false;
 

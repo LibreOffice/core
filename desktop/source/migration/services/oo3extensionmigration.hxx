@@ -103,10 +103,6 @@ namespace migration
         void                    scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions );
         bool                    scanDescriptionXml( const ::rtl::OUString& sDescriptionXmlFilePath );
         bool                    migrateExtension( const ::rtl::OUString& sSourceDir );
-        /* fills m_scriptElements and  m_dialogElements
-        */
-        //void registerConfigurationPackage(
-        //    const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > & xPkg);
 
     public:
         OO3ExtensionMigration(::com::sun::star::uno::Reference<

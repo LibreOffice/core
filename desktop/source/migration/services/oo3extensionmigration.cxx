@@ -139,17 +139,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
     }
 }
 
-//void OO3ExtensionMigration::registerConfigurationPackage( const uno::Reference< deployment::XPackage > & xPkg)
-//{
-//    const ::rtl::OUString sMediaType = xPkg->getPackageType()->getMediaType();
-//    if ( (sMediaType.equals(sConfigurationDataType) || sMediaType.equals(sConfigurationSchemaType) ) )
-//    {
-//        xPkg->revokePackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-//        xPkg->registerPackage(false, uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-//    }
-//}
-
- void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions )
+void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions )
 {
     osl::Directory    aScanRootDir( sSourceDir );
     osl::FileStatus   fs(FileStatusMask_Type | FileStatusMask_FileURL);

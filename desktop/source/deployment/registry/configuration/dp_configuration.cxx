@@ -35,7 +35,6 @@
 #include "dp_backend.h"
 #include "dp_persmap.h"
 #include "dp_ucb.h"
-#include "dp_xml.h"
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
