@@ -175,7 +175,7 @@ struct SfxSecurityPage_Impl
     String              m_aEndRedliningWarning;
     bool                m_bEndRedliningWarningDone;
 
-    DECL_LINK( RecordChangesCBHdl, void* );
+    DECL_LINK( RecordChangesCBToggleHdl, void* );
     DECL_LINK( ChangeProtectionPBHdl, void* );
 
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
@@ -218,7 +218,9 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
     if (nTemp > nBtnTextWidth)
         nBtnTextWidth = nTemp;
 
-    m_aRecordChangesCB.SetClickHdl( LINK( this, SfxSecurityPage_Impl, RecordChangesCBHdl ) );
+    // force toggle hdl called before visual change of checkbox
+    m_aRecordChangesCB.SetStyle( m_aRecordChangesCB.GetStyle() | WB_EARLYTOGGLE );
+    m_aRecordChangesCB.SetToggleHdl( LINK( this, SfxSecurityPage_Impl, RecordChangesCBToggleHdl ) );
     m_aChangeProtectionPB.SetClickHdl( LINK( this, SfxSecurityPage_Impl, ChangeProtectionPBHdl ) );
 }
 
@@ -348,7 +350,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 }
 
 
-IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBHdl, void*, EMPTYARG )
+IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBToggleHdl, void*, EMPTYARG )
 {
     // when change recording gets disabled protection must be disabled as well
     if (!m_aRecordChangesCB.IsChecked())    // the new check state is already present, thus the '!'
