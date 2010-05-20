@@ -44,7 +44,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Pos = MAP_APPFONT( 3, 3 );
         Size = MAP_APPFONT( 165, 8 );
-        Text [ en-US ] = "File encryption";
+        Text [ en-US ] = "File encryption password";
     };
 
     FixedText FT_PASSWD_TO_OPEN
@@ -67,7 +67,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Pos = MAP_APPFONT( 6, 45 );
         Size = MAP_APPFONT( 159, 8 );
-        Text [ en-US ] = "~Reenter password to open";
+        Text [ en-US ] = "Confirm password";
         WordBreak = TRUE;
     };
 
@@ -89,9 +89,9 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Pos = MAP_APPFONT( 6, 80 );
         Size = MAP_APPFONT( 159, 4*8 );     // some extra space for translation in other languages
-        Text [ en-US ] = "Note: If you lose or forget the password, it can not be recovered. "\
-                "It is advisable to keep passwords in a safe place. Passwords are "\
-                "case-sensitive.";
+        Text [ en-US ] = "Note: After a password has been set, the document will only open with "\
+                "the password. Should you lose the password, there will be no way to "\
+                "recover the document. Please also note that this password is case-sensitive.";
         WordBreak = TRUE;
     };
 
@@ -127,7 +127,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Pos = MAP_APPFONT( 3, 154 );
         Size = MAP_APPFONT( 165, 8 );
-        Text [ en-US ] = "File sharing options";
+        Text [ en-US ] = "File sharing password";
     };
 
     CheckBox CB_OPEN_READONLY
@@ -142,7 +142,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Pos = MAP_APPFONT( 6, 186 );
         Size = MAP_APPFONT( 159, 8 );
-        Text [ en-US ] = "Enter password to modify";
+        Text [ en-US ] = "Enter password to allow editing";
         WordBreak = TRUE;
     };
 
@@ -158,7 +158,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Pos = MAP_APPFONT( 6, 214 );
         Size = MAP_APPFONT( 159, 8 );
-        Text [ en-US ] = "Reenter password to modify";
+        Text [ en-US ] = "Confirm password";
         WordBreak = TRUE;
     };
 
@@ -190,6 +190,21 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     String STR_FEWER_OPTIONS
     {
         Text [ en-US ] = "Fewer ~Options" ;
+    };
+
+    String STR_ONE_PASSWORD_MISMATCH
+    {
+        Text [ en-US ] = "The confirmation password did not match the password. Set the password again by entering the same password in both boxes." ;
+    };
+
+    String STR_TWO_PASSWORDS_MISMATCH
+    {
+        Text [ en-US ] = "The confirmation passwords did not match the original passwords. Set the passwords again." ;
+    };
+
+    String STR_INVALID_STATE_FOR_OK_BUTTON
+    {
+        Text [ en-US ] = "Please enter a password to open or to modify, or check the open read-only option to continue." ;
     };
 /*
     Image IMG_PASSWD_MATCH
