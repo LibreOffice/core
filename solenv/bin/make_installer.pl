@@ -257,6 +257,10 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
 
+installer::ziplist::overwrite_ooovendor( $allvariableshashref );
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3c.log", $allvariableshashref); }
+
+
 ########################################################
 # Check if this is simple packaging mechanism
 ########################################################
