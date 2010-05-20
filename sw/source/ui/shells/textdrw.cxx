@@ -133,7 +133,6 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
 
         if (rSh.IsObjSelected())
         {
-//          rSh.ChgAnchor(FLY_AT_CNTNT);
             rSh.UnSelectFrm();
         }
     }
