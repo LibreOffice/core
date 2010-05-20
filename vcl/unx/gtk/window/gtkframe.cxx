@@ -691,7 +691,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         XFree( pHints );
 
         if (GetX11SalData()->GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz"))
-        return;
+            return;
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the
          *  right thing, but gtk handles it internally whereas we
@@ -831,7 +831,8 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
         }
 
-        if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
+        if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN )
+            && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), true );
@@ -1291,7 +1292,8 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( m_pWindow )
     {
-        if( m_pParent && (m_pParent->m_nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN) )
+        if( m_pParent && (m_pParent->m_nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN)
+            && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), bVisible );
         if( bVisible )
         {
@@ -1453,6 +1455,12 @@ void GtkSalFrame::setMinMaxSize()
                 aGeo.max_height = maGeometry.nHeight;
                 aHints |= GDK_HINT_MAX_SIZE;
             }
+        }
+        if( m_bFullscreen )
+        {
+            aGeo.max_width = m_aMaxSize.Width();
+            aGeo.max_height = m_aMaxSize.Height();
+            aHints |= GDK_HINT_MAX_SIZE;
         }
         if( aHints )
             gtk_window_set_geometry_hints( GTK_WINDOW(m_pWindow),
@@ -1805,8 +1813,6 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             {
                 m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                                                Size( maGeometry.nWidth, maGeometry.nHeight ) );
-                // workaround different window managers have different opinions about
-                // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
                 bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
                 if( bVisible )
                     Show( FALSE );
@@ -1823,12 +1829,22 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
                 gtk_window_move( GTK_WINDOW(m_pWindow),
                                  maGeometry.nX = aNewPosSize.Left(),
                                  maGeometry.nY = aNewPosSize.Top() );
+                // #i110881# for the benefit of compiz set a max size here
+                // else setting to fullscreen fails for unknown reasons
+                m_aMaxSize.Width() = aNewPosSize.GetWidth()+100;
+                m_aMaxSize.Height() = aNewPosSize.GetHeight()+100;
+                // workaround different legacy version window managers have different opinions about
+                // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
+                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                    gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
                 if( bVisible )
                     Show( TRUE );
             }
             else
             {
                 bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
+                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                    gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
                 if( bVisible )
                     Show( FALSE );
                 m_nStyle &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
@@ -1851,8 +1867,11 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
         {
             if( bFullScreen )
             {
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                {
+                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+                }
                 gtk_window_fullscreen( GTK_WINDOW(m_pWindow) );
                 moveToScreen( nScreen );
                 Size aScreenSize = pDisp->GetScreenSize( m_nScreen );
@@ -1864,8 +1883,11 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             else
             {
                 gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
+                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                {
+                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
+                }
                 moveToScreen( nScreen );
             }
         }
@@ -3179,6 +3201,15 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
                        Size( pThis->maGeometry.nWidth, pThis->maGeometry.nHeight ) );
     }
     pThis->m_nState = pEvent->window_state.new_window_state;
+
+    #if OSL_DEBUG_LEVEL > 1
+    if( (pEvent->window_state.changed_mask & GDK_WINDOW_STATE_FULLSCREEN) )
+    {
+        fprintf( stderr, "window %p %s full screen state\n",
+            pThis,
+            (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? "enters" : "leaves");
+    }
+    #endif
 
     return FALSE;
 }
