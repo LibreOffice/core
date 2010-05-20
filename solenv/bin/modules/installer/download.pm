@@ -653,10 +653,6 @@ sub get_install_type
 
     my $type = "";
 
-    my $cwsproduct = 0;
-    # the environment variable CWS_WORK_STAMP is set only in CWS
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsproduct = 1; }
-
     if ( $installer::globals::languagepack )
     {
         $type = "langpack";
@@ -671,7 +667,7 @@ sub get_install_type
             $type = $type . "-deb";
         }
 
-        if (( $installer::globals::packageformat eq "archive" ) && ( $cwsproduct ))
+        if ( $installer::globals::packageformat eq "archive" )
         {
             $type = $type . "-arc";
         }
@@ -690,7 +686,7 @@ sub get_install_type
             $type = $type . "-deb";
         }
 
-        if (( $installer::globals::packageformat eq "archive" ) && ( $cwsproduct ))
+        if ( $installer::globals::packageformat eq "archive" )
         {
             $type = $type . "-arc";
         }

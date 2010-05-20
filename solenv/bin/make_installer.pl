@@ -1348,6 +1348,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Debian allows no underline in package name
             if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
 
+            # Debian allows no underline in package name
+            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
+
             my $linkaddon = "";
             my $linkpackage = 0;
             $installer::globals::add_required_package = "";
@@ -2126,17 +2129,19 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # include the license text into the table Control.idt
 
-            # my $licensefilesource = installer::windows::idtglobal::get_licensefilesource($onelanguage, $filesinproductlanguageresolvedarrayref);
-            my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
-            my $licensefile = installer::files::read_file($licensefilesource);
-            installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
-            my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
-            my $controltable = installer::files::read_file($controltablename);
-            installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
-            installer::files::save_file($controltablename, $controltable);
+            if ( ! $allvariableshashref->{'HIDELICENSEDIALOG'} )
+            {
+                my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
+                my $licensefile = installer::files::read_file($licensefilesource);
+                installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
+                my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
+                my $controltable = installer::files::read_file($controltablename);
+                installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
+                installer::files::save_file($controltablename, $controltable);
 
-            $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
-            push(@installer::globals::logfileinfo, $infoline);
+                $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
 
             # include office directory in CustomAction table
 
