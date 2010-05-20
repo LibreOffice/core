@@ -164,7 +164,12 @@ public:
         Integer_ButtonBarMaxAlpha,
         Integer_ButtonPaintType,
         Integer_ButtonBorder,
-        Integer_ButtonGap
+        Integer_ButtonGap,
+        Integer_ButtonFadeInDelay,
+        Integer_ButtonFadeInDuration,
+        Integer_ButtonFadeOutDelay,
+        Integer_ButtonFadeOutDuration,
+        _IntegerValueType_Size_
     };
     sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
     void SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue);
@@ -206,12 +211,7 @@ private:
     ::std::vector<GradientDescriptor> maGradients;
     ::std::vector<BitmapEx> maIcons;
     ::std::vector<ColorData> maColor;
-    sal_Int32 mnButtonCornerRadius;
-    sal_Int32 mnButtonMaxAlpha;
-    sal_Int32 mnButtonBarMaxAlpha;
-    sal_Int32 mnButtonPaintType;
-    sal_Int32 mnButtonBorder;
-    sal_Int32 mnButtonGap;
+    ::std::vector<sal_Int32> maIntegerValues;
     ::std::vector<rtl::OUString> maStrings;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);

@@ -63,7 +63,8 @@ VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
       mnScrollAnimationId(Animator::NotAnAnimationId),
       maRequestedVisibleTopLeft(),
       meRequestedAnimationMode(Animator::AM_Immediate),
-      mbIsCurrentSlideTrackingActive(true)
+      mbIsCurrentSlideTrackingActive(true),
+      mnDisableCount(0)
 {
 }
 
@@ -99,10 +100,13 @@ void VisibleAreaManager::RequestVisible (
 {
     if (rpDescriptor)
     {
-        maVisibleRequests.push_back(
-            mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
-                rpDescriptor->GetPageIndex(),
-                true));
+        if (mnDisableCount == 0)
+        {
+            maVisibleRequests.push_back(
+                mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
+                    rpDescriptor->GetPageIndex(),
+                    true));
+        }
         if (bForce && ! mbIsCurrentSlideTrackingActive)
             ActivateCurrentSlideTracking();
         MakeVisible();
@@ -114,7 +118,7 @@ void VisibleAreaManager::RequestVisible (
 
 void VisibleAreaManager::RequestCurrentSlideVisible (void)
 {
-    if (mbIsCurrentSlideTrackingActive)
+    if (mbIsCurrentSlideTrackingActive && mnDisableCount==0)
         RequestVisible(
             mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
@@ -230,6 +234,21 @@ void VisibleAreaManager::MakeVisible (void)
 
 
 
+//===== VisibleAreaManager::TemporaryDisabler =================================
+
+VisibleAreaManager::TemporaryDisabler::TemporaryDisabler (SlideSorter& rSlideSorter)
+    : mrVisibleAreaManager(rSlideSorter.GetController().GetVisibleAreaManager())
+{
+    ++mrVisibleAreaManager.mnDisableCount;
+}
+
+
+
+
+VisibleAreaManager::TemporaryDisabler::~TemporaryDisabler (void)
+{
+    --mrVisibleAreaManager.mnDisableCount;
+}
 
 
 

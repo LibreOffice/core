@@ -37,6 +37,8 @@
 #include "controller/SlsSlotManager.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsPageSelector.hxx"
+#include "controller/SlsAnimator.hxx"
+#include "controller/SlsAnimationFunction.hxx"
 #include "app.hrc"
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
@@ -44,6 +46,7 @@
 #include <vcl/virdev.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <boost/bind.hpp>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -151,6 +154,23 @@ namespace {
 } // end of anonymous namespace
 
 
+//===== ButtonBar::Lock =======================================================
+
+ButtonBar::Lock::Lock (SlideSorter& rSlideSorter)
+    : mrButtonBar(rSlideSorter.GetView().GetButtonBar())
+{
+    ++mrButtonBar.mnLockCount;
+}
+
+
+
+
+ButtonBar::Lock::~Lock (void)
+{
+    --mrButtonBar.mnLockCount;
+}
+
+
 
 
 //===== ButtonBar =============================================================
@@ -169,7 +189,8 @@ ButtonBar::ButtonBar (SlideSorter& rSlideSorter)
       maNormalBackground(),
       maButtonDownBackground(),
       mbIsMouseOverBar(false),
-      mpBackgroundTheme()
+      mpBackgroundTheme(),
+      mnLockCount(0)
 {
     maExcludedButtons.push_back(::boost::shared_ptr<Button>(new UnhideButton(mrSlideSorter)));
 
@@ -407,17 +428,17 @@ void ButtonBar::Paint (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor)
 {
-    if ( ! mpDescriptor || mpDescriptor!=rpDescriptor)
+    if ( ! rpDescriptor)
         return;
 
-    const double nButtonAlpha (mpDescriptor->GetVisualState().GetButtonAlpha());
+    const double nButtonAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
     if (nButtonAlpha >= 1)
         return;
 
     const Point aOffset (rpDescriptor->GetBoundingBox().TopLeft());
 
     // Paint the background.
-    PaintButtonBackground(rDevice, aOffset);
+    PaintButtonBackground(rDevice, rpDescriptor, aOffset);
 
     // Paint the buttons.
     const ::std::vector<SharedButton>& rButtons (
@@ -447,6 +468,7 @@ bool ButtonBar::IsMouseOverButton (void) const
 
 void ButtonBar::PaintButtonBackground (
     OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor,
     const Point aOffset)
 {
     BitmapEx* pBitmap = NULL;
@@ -468,7 +490,7 @@ void ButtonBar::PaintButtonBackground (
         AdaptTransparency(
             aMask,
             pBitmap->GetAlpha(),
-            mpDescriptor->GetVisualState().GetButtonBarAlpha());
+            rpDescriptor->GetVisualState().GetButtonBarAlpha());
         rDevice.DrawBitmapEx(maBackgroundLocation+aOffset, BitmapEx(pBitmap->GetBitmap(), aMask));
     }
 }
@@ -596,6 +618,111 @@ bool ButtonBar::LayoutButtons (void)
             return false;
 
     return true;
+}
+
+
+
+
+void ButtonBar::RequestFadeIn (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const bool bAnimate)
+{
+    if ( ! rpDescriptor)
+        return;
+    if (mnLockCount > 0)
+        return;
+
+    const double nMinAlpha (0);
+    if ( ! bAnimate)
+    {
+        rpDescriptor->GetVisualState().SetButtonAlpha(nMinAlpha);
+        rpDescriptor->GetVisualState().SetButtonBarAlpha(nMinAlpha);
+    }
+    else
+        StartFadeAnimation(rpDescriptor, nMinAlpha, true);
+}
+
+
+
+
+void ButtonBar::RequestFadeOut (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const bool bAnimate)
+{
+    if ( ! rpDescriptor)
+        return;
+    if (mnLockCount > 0)
+        return;
+
+    const double nMaxAlpha (1);
+    if ( ! bAnimate)
+    {
+        rpDescriptor->GetVisualState().SetButtonAlpha(nMaxAlpha);
+        rpDescriptor->GetVisualState().SetButtonBarAlpha(nMaxAlpha);
+    }
+    else
+        StartFadeAnimation(rpDescriptor, nMaxAlpha, false);
+}
+
+
+
+
+void ButtonBar::StartFadeAnimation (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const double nTargetAlpha,
+    const bool bFadeIn)
+{
+    const double nCurrentButtonAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
+    const double nCurrentButtonBarAlpha (rpDescriptor->GetVisualState().GetButtonBarAlpha());
+
+    // Stop a running animation.
+    const controller::Animator::AnimationId nId (
+        rpDescriptor->GetVisualState().GetButtonAlphaAnimationId());
+    if (nId != controller::Animator::NotAnAnimationId)
+        mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
+
+    // Prepare the blending functors that translate [0,1] animation
+    // times into alpha values of buttons and button bar.
+    const ::boost::function<double(double)> aButtonBlendFunctor (
+        ::boost::bind(
+            controller::AnimationFunction::Blend,
+            nCurrentButtonAlpha,
+            nTargetAlpha,
+            ::boost::bind(controller::AnimationFunction::Linear, _1)));
+    const ::boost::function<double(double)> aButtonBarBlendFunctor (
+        ::boost::bind(
+            controller::AnimationFunction::Blend,
+            nCurrentButtonBarAlpha,
+            nTargetAlpha,
+            ::boost::bind(controller::AnimationFunction::Linear, _1)));
+
+    // Delay the fade in a little bit when the buttons are not visible at
+    // all so that we do not leave a trail of half-visible buttons when the
+    // mouse is moved across the screen.  No delay on fade out or when the
+    // buttons are already showing.  Fade out is faster than fade in.
+    const double nDelay (nCurrentButtonBarAlpha>0 && nCurrentButtonBarAlpha<1
+        ? 0
+        : (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
+            ?  Theme::Integer_ButtonFadeInDelay
+            :  Theme::Integer_ButtonFadeOutDelay)));
+    const double nDuration (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
+            ?  Theme::Integer_ButtonFadeInDuration
+            :  Theme::Integer_ButtonFadeOutDuration));
+    rpDescriptor->GetVisualState().SetButtonAlphaAnimationId(
+        mrSlideSorter.GetController().GetAnimator()->AddAnimation(
+            ::boost::bind(
+                controller::AnimationFunction::ApplyButtonAlphaChange,
+                rpDescriptor,
+                ::boost::ref(mrSlideSorter.GetView()),
+                ::boost::bind(aButtonBlendFunctor, _1),
+                ::boost::bind(aButtonBarBlendFunctor, _1)),
+            nDelay,
+            nDuration,
+            ::boost::bind(
+                &model::VisualState::SetButtonAlphaAnimationId,
+                ::boost::ref(rpDescriptor->GetVisualState()),
+                controller::Animator::NotAnAnimationId)
+            ));
 }
 
 

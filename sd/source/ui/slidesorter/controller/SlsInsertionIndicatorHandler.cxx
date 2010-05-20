@@ -100,6 +100,7 @@ void InsertionIndicatorHandler::End (const controller::Animator::AnimationMode e
     meMode = UnknownMode;
 
     mpInsertionIndicatorOverlay->Hide();
+    mpInsertionIndicatorOverlay.reset(new view::InsertionIndicatorOverlay(mrSlideSorter));
 }
 
 

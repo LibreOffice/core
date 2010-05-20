@@ -190,7 +190,6 @@ private:
     model::SharedPageDescriptor mpCurrentPage;
     sal_Int32 mnUpdateLockCount;
     bool mbIsUpdateCurrentPagePending;
-    bool mbIsMakeVisibleDisabled;
 
     /** Enable the broadcasting of selection change events.  This calls the
         SlideSorterController::SelectionHasChanged() method to do the actual

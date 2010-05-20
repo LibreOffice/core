@@ -61,6 +61,17 @@ public:
         const model::SharedPageDescriptor& rpDescriptor,
         const bool bForce = false);
 
+    /** Temporarily disable the update of the visible area.
+    */
+    class TemporaryDisabler
+    {
+    public:
+        TemporaryDisabler (SlideSorter& rSlideSorter);
+        ~TemporaryDisabler (void);
+    private:
+        VisibleAreaManager& mrVisibleAreaManager;
+    };
+
 private:
     SlideSorter& mrSlideSorter;
 
@@ -77,6 +88,7 @@ private:
     Point maRequestedVisibleTopLeft;
     Animator::AnimationMode meRequestedAnimationMode;
     bool mbIsCurrentSlideTrackingActive;
+    int  mnDisableCount;
 
     void MakeVisible (void);
     ::boost::optional<Point> GetRequestedTopLeft (void) const;

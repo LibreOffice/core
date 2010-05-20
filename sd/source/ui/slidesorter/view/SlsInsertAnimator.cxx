@@ -449,6 +449,7 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
     mnLocalInsertIndex = -1;
     const sal_Int32 nRunLength (mnEndIndex - mnStartIndex + 1);
     model::SlideSorterModel& rModel (mrAnimatorAccess.GetModel());
+    view::SlideSorterView& rView (mrAnimatorAccess.GetView());
     for (sal_Int32 nIndex=0; nIndex<nRunLength; ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor(rModel.GetPageDescriptor(nIndex+mnStartIndex));
@@ -456,7 +457,12 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
             if (eMode == controller::Animator::AM_Animated)
                 maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
             else
+            {
+                const Rectangle aOldBoundingBox (pDescriptor->GetBoundingBox());
                 pDescriptor->GetVisualState().SetLocationOffset(Point(0,0));
+                rView.RequestRepaint(aOldBoundingBox);
+                rView.RequestRepaint(pDescriptor);
+            }
         maEndOffset[nIndex] = Point(0,0);
     }
     if (eMode == controller::Animator::AM_Animated)
@@ -518,12 +524,13 @@ void PageObjectRun::operator () (const double nGlobalTime)
         // Request a repaint of the old and new bounding box (which largely overlap.)
         rView.RequestRepaint(aOldBoundingBox);
         rView.RequestRepaint(pDescriptor);
-
-        // Call Flush to make a) animations a bit more smooth and
-        // b) on Mac without the Flush a Reset of the page locations is not
-        // properly visualized when the mouse leaves the window during drag-and-drop.
-        mrAnimatorAccess.GetContentWindow()->Flush();
     }
+
+    // Call Flush to make
+    // a) animations a bit more smooth and
+    // b) on Mac without the Flush a Reset of the page locations is not properly
+    // visualized when the mouse leaves the window during drag-and-drop.
+    mrAnimatorAccess.GetContentWindow()->Flush();
 }
 
 

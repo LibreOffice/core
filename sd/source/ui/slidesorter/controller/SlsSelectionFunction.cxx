@@ -44,6 +44,7 @@
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsSlotManager.hxx"
+#include "controller/SlsVisibleAreaManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
@@ -181,7 +182,7 @@ public:
 
     virtual Mode GetMode (void) const = 0;
     virtual void Abort (void) = 0;
-    void ProcessEvent (EventDescriptor& rDescriptor);
+    virtual void ProcessEvent (EventDescriptor& rDescriptor);
 
     /** Set the selection to exactly the specified page and also set it as
         the current page.
@@ -220,6 +221,9 @@ private:
 };
 
 
+/** This is the default handler for processing events.  It activates the
+    multi selection or drag-and-drop when the right conditions are met.
+*/
 class NormalModeHandler : public SelectionFunction::ModeHandler
 {
 public:
@@ -247,6 +251,9 @@ private:
 };
 
 
+/** Handle events during a multi selection, which typically is started by
+    pressing the left mouse button when not over a page.
+*/
 class MultiSelectionModeHandler : public SelectionFunction::ModeHandler
 {
 public:
@@ -261,6 +268,7 @@ public:
 
     virtual SelectionFunction::Mode GetMode (void) const;
     virtual void Abort (void);
+    virtual void ProcessEvent (SelectionFunction::EventDescriptor& rDescriptor);
 
     enum SelectionMode { SM_Normal, SM_Add, SM_Toggle };
 
@@ -278,6 +286,7 @@ private:
     Pointer maSavedPointer;
     sal_Int32 mnAnchorIndex;
     sal_Int32 mnSecondIndex;
+    view::ButtonBar::Lock maButtonBarLock;
 
     virtual void UpdateModelPosition (const Point& rMouseModelPosition);
     virtual void UpdateSelection (void);
@@ -295,6 +304,8 @@ private:
 };
 
 
+/** Handle events during drag-and-drop.
+*/
 class DragAndDropModeHandler : public SelectionFunction::ModeHandler
 {
 public:
@@ -317,6 +328,9 @@ private:
 };
 
 
+/** Handle events while the left mouse button is pressed over the button
+    bar.
+*/
 class ButtonModeHandler : public SelectionFunction::ModeHandler
 {
 public:
@@ -327,7 +341,6 @@ public:
     virtual void Abort (void);
 
     virtual SelectionFunction::Mode GetMode (void) const;
-    virtual void ProcessEvent (SelectionFunction::EventDescriptor& rDescriptor);
 
 protected:
     virtual bool ProcessButtonDownEvent (SelectionFunction::EventDescriptor& rDescriptor);
@@ -780,23 +793,11 @@ void SelectionFunction::ProcessKeyEvent (const KeyEvent& rEvent)
 
 void SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
 {
-    PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
-    PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
-
     // The call to ProcessEvent may switch to another mode handler.
-    // To avoid the destruction of the called handler before the call
-    // completes we aquire a temporary reference here.
+    // Prevent the untimely destruction of the called handler  by aquiring a
+    // temporary reference here.
     ::boost::shared_ptr<ModeHandler> pModeHandler (mpModeHandler);
     pModeHandler->ProcessEvent(rDescriptor);
-
-    if (rDescriptor.mnEventCode & BUTTON_UP)
-    {
-//        mpWindow->ReleaseMouse();
-
-        // Hide insertion indicator.
-        if ( ! mrController.IsContextMenuOpen())
-            mrController.GetInsertionIndicatorHandler()->End(Animator::AM_Animated);
-    }
 }
 
 
@@ -1097,6 +1098,9 @@ void SelectionFunction::ModeHandler::ReprocessEvent (EventDescriptor& rDescripto
 void SelectionFunction::ModeHandler::ProcessEvent (
     SelectionFunction::EventDescriptor& rDescriptor)
 {
+    PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
+    PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
+
     bool bIsProcessed (false);
     switch (rDescriptor.mnEventCode & (BUTTON_DOWN | BUTTON_UP | MOUSE_MOTION | MOUSE_DRAG))
     {
@@ -1518,7 +1522,8 @@ MultiSelectionModeHandler::MultiSelectionModeHandler (
       maSecondCorner(rMouseModelPosition),
       maSavedPointer(mrSlideSorter.GetContentWindow()->GetPointer()),
       mnAnchorIndex(-1),
-      mnSecondIndex(-1)
+      mnSecondIndex(-1),
+      maButtonBarLock(rSlideSorter)
 {
     const Pointer aSelectionPointer (POINTER_TEXT);
     mrSlideSorter.GetContentWindow()->SetPointer(aSelectionPointer);
@@ -1548,6 +1553,22 @@ SelectionFunction::Mode MultiSelectionModeHandler::GetMode (void) const
 void MultiSelectionModeHandler::Abort (void)
 {
     mrSlideSorter.GetView().RequestRepaint(mrSlideSorter.GetModel().RestoreSelection());
+}
+
+
+
+
+void MultiSelectionModeHandler::ProcessEvent (
+    SelectionFunction::EventDescriptor& rDescriptor)
+{
+    // During a multi selection we do not want sudden jumps of the
+    // visible area caused by moving newly selected pages into view.
+    // Therefore disable that temporarily.  The disabler object is
+    // released at the end of the event processing, after the focus and
+    // current slide have been updated.
+    VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);
+
+    ModeHandler::ProcessEvent(rDescriptor);
 }
 
 
@@ -1604,6 +1625,8 @@ void MultiSelectionModeHandler::UpdatePosition (
     const Point& rMousePosition,
     const bool bAllowAutoScroll)
 {
+    VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);
+
     // Convert window coordinates into model coordinates (we need the
     // window coordinates for auto-scrolling because that remains
     // constant while scrolling.)
@@ -1729,9 +1752,7 @@ void MultiSelectionModeHandler::UpdateSelection (void)
 
         for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
         {
-            model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
-
-            UpdateSelectionState(pDescriptor, aRange.IsInside(nIndex));
+            UpdateSelectionState(rModel.GetPageDescriptor(nIndex), aRange.IsInside(nIndex));
         }
     }
 }
@@ -1867,14 +1888,6 @@ SelectionFunction::Mode ButtonModeHandler::GetMode (void) const
 
 void ButtonModeHandler::Abort (void)
 {
-}
-
-
-
-
-void ButtonModeHandler::ProcessEvent (SelectionFunction::EventDescriptor& rDescriptor)
-{
-    (void)rDescriptor;
 }
 
 

@@ -114,7 +114,38 @@ public:
     */
     ::rtl::OUString GetButtonHelpText (void) const;
 
+    /** Request the button bar to be shown.
+        @param bAnimate
+            This flag controls whether to just show the button bar (<FALSE/>)
+            or to fade it in smoothly (<TRUE/>.)
+    */
+    void RequestFadeIn (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bAnimate);
+
+    /** Request the button bar to be hidden.
+        @param bAnimate
+            This flag controls whether to just hide the button bar (<FALSE/>)
+            or to fade it out smoothly (<TRUE/>.)
+    */
+    void RequestFadeOut (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bAnimate);
+
     class BackgroundTheme;
+
+    /** While at least one Lock object exists the button bar will not be
+        displayed.  Used, e.g. during a mouse multiselection to avoid
+        confusing and unhelpfull visual signals.
+    */
+    class Lock
+    {
+    public:
+        Lock (SlideSorter& rSlideSorter);
+        ~Lock (void);
+    private:
+        ButtonBar& mrButtonBar;
+    };
 
 private:
     SlideSorter& mrSlideSorter;
@@ -132,6 +163,7 @@ private:
     BitmapEx maButtonDownBackground;
     bool mbIsMouseOverBar;
     ::boost::scoped_ptr<BackgroundTheme> mpBackgroundTheme;
+    int mnLockCount;
 
     /** Remember the specified page.  If it differs from mpDescriptor then
         the buttons are placed anew.
@@ -144,6 +176,7 @@ private:
     bool SetButtonUnderMouse (const SharedButton& rButton = SharedButton());
     void PaintButtonBackground (
         OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpPageDescriptor,
         const Point aOffset);
     void LayoutButtons (const Size aPageModelSize);
     bool LayoutButtons (void);
@@ -151,6 +184,10 @@ private:
         const OutputDevice& rTemplateDevice,
         const bool bIsButtonDown) const;
     bool IsMouseOverBar (const Point aModelLocation) const;
+    void StartFadeAnimation (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const double nTargetAlpha,
+        const bool bFadeIn);
 };
 
 

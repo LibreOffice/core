@@ -962,57 +962,42 @@ SlideSorterDebugDialog::SlideSorterDebugDialog (SlideSorter& rSlideSorter)
 
     maControls.push_back(new SliderControl(
         mpTopLevelWindow,
-        "Button Border",
+        "Button Fade In Delay (ms)",
         Rectangle(10,nY,nWidth,nY+60),
-        Range(0,64),
-        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonBorder),
-        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonBorder, _1),
-        ::boost::bind(&view::ButtonBar::RequestLayout,
-            ::boost::ref(rSlideSorter.GetView().GetButtonBar()))));
+        Range(0,1000),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeInDelay),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeInDelay,_1),
+        SliderControl::Updater()));
     nY += maControls.back()->GetHeight() + nGap;
 
     maControls.push_back(new SliderControl(
         mpTopLevelWindow,
-        "Button Gap",
+        "Button Fade In Duration (ms)",
         Rectangle(10,nY,nWidth,nY+60),
-        Range(0,64),
-        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonGap),
-        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonGap, _1),
-        ::boost::bind(&view::ButtonBar::RequestLayout,
-            ::boost::ref(rSlideSorter.GetView().GetButtonBar()))));
-    nY += maControls.back()->GetHeight() + nGap;
-
-    maControls.push_back(new GradientControl(
-        mpTopLevelWindow,
-        "Button Background",
-        true,
-        Theme::Gradient_ButtonBackground,
-        Rectangle(10,nY,nWidth-4,nY+230),
-        rSlideSorter,
-        ::boost::bind(&view::ButtonBar::RequestLayout,
-            ::boost::ref(rSlideSorter.GetView().GetButtonBar()))));
+        Range(0,2000),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeInDuration),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeInDuration, _1),
+        SliderControl::Updater()));
     nY += maControls.back()->GetHeight() + nGap;
 
     maControls.push_back(new SliderControl(
         mpTopLevelWindow,
-        "Max Button Alpha",
+        "Button Fade Out Delay (ms)",
         Rectangle(10,nY,nWidth,nY+60),
-        Range(0,255),
-        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonMaxAlpha),
-        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonMaxAlpha, _1),
-        ::boost::bind(&view::SlideSorterView::RequestRepaint,
-            ::boost::ref(rSlideSorter.GetView()))));
+        Range(0,1000),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeOutDelay),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeOutDelay,_1),
+        SliderControl::Updater()));
     nY += maControls.back()->GetHeight() + nGap;
 
     maControls.push_back(new SliderControl(
         mpTopLevelWindow,
-        "Max Button Bar Alpha",
+        "Button Fade Out Duration (ms)",
         Rectangle(10,nY,nWidth,nY+60),
-        Range(0,255),
-        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonBarMaxAlpha),
-        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonBarMaxAlpha,_1),
-        ::boost::bind(&view::SlideSorterView::RequestRepaint,
-            ::boost::ref(rSlideSorter.GetView()))));
+        Range(0,2000),
+        ::boost::bind(&view::Theme::GetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeOutDuration),
+        ::boost::bind(&view::Theme::SetIntegerValue, pTheme, view::Theme::Integer_ButtonFadeOutDuration, _1),
+        SliderControl::Updater()));
     nY += maControls.back()->GetHeight() + nGap;
 
     GradientControl* pControl = new GradientControl(

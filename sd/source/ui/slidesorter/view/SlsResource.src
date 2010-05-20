@@ -231,7 +231,7 @@ Resource RID_SLIDESORTER_ICONS
 
     String STRING_UNHIDE
     {
-        Text [ en-US ] = "unhide" ;
+        Text [ en-US ] = "Show" ;
     };
 
     String STRING_DRAG_AND_DROP_PAGES
@@ -251,7 +251,7 @@ Resource RID_SLIDESORTER_ICONS
 
     String STRING_COMMAND2
     {
-        Text [ en-US ] = "Show/Hide Slide" ;
+        Text [ en-US ] = "Hide Slide" ;
     };
 
     String STRING_COMMAND3

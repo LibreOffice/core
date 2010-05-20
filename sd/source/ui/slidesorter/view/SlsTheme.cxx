@@ -45,6 +45,7 @@ namespace sd { namespace slidesorter { namespace view {
 
 // Grays
 #define Black 0x000000
+#define White 0xffffff
 
 // Reds
 #define Amber 0xff7e00
@@ -107,13 +108,7 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
       maGradients(),
       maIcons(),
       maColor(),
-      mnButtonCornerRadius(3),
-      mnButtonMaxAlpha(0),
-      mnButtonBarMaxAlpha(255 * 0/100),
-      mnButtonPaintType(1),
-      mnButtonBorder(4),
-      mnButtonGap(0)
-
+      maIntegerValues()
 {
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
@@ -130,12 +125,24 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maColor[Background] = maBackgroundColor;
         maColor[PageBackground] = AirForceBlue;
         maColor[ButtonBackground] = Black;
-        maColor[ButtonText] = AntiqueWhite;
+        maColor[ButtonText] = White;
         maColor[MouseOverColor] = gnMouseOverColor;
         maColor[PageNumberBorder] = Azure;
         maColor[PageNumberColor] = 0x0848a8f;
         maColor[Selection] = StellaBlue;
         maColor[PreviewBorder] = 0x949599;
+
+        maIntegerValues.resize(_IntegerValueType_Size_);
+        maIntegerValues[Integer_ButtonCornerRadius] = 3;
+        maIntegerValues[Integer_ButtonMaxAlpha] = 0;
+        maIntegerValues[Integer_ButtonBarMaxAlpha] = 0;
+        maIntegerValues[Integer_ButtonPaintType] = 1;
+        maIntegerValues[Integer_ButtonBorder] = 4;
+        maIntegerValues[Integer_ButtonGap] = 0;
+        maIntegerValues[Integer_ButtonFadeInDelay] = 500;
+        maIntegerValues[Integer_ButtonFadeInDuration] = 400;
+        maIntegerValues[Integer_ButtonFadeOutDelay] = 0;
+        maIntegerValues[Integer_ButtonFadeOutDuration] = 250;
     }
 
     Update(rpProperties);
@@ -252,8 +259,8 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
             InitializeIcon(Icon_Command3Large, IMAGE_COMMAND3_LARGE);
             InitializeIcon(Icon_Command3LargeHover, IMAGE_COMMAND3_LARGE_HOVER);
-            InitializeIcon(Icon_Command3Medium, IMAGE_COMMAND3_SMALL);
-            InitializeIcon(Icon_Command3MediumHover, IMAGE_COMMAND3_SMALL_HOVER);
+            InitializeIcon(Icon_Command3Medium, IMAGE_COMMAND3_MEDIUM);
+            InitializeIcon(Icon_Command3MediumHover, IMAGE_COMMAND3_MEDIUM_HOVER);
             InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL);
             InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER);
         }
@@ -467,28 +474,12 @@ const BitmapEx& Theme::GetIcon (const IconType eType)
 
 sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
 {
-    switch (eType)
+    if (eType>=0 && size_t(eType)<maIntegerValues.size())
+        return maIntegerValues[eType];
+    else
     {
-        case Integer_ButtonCornerRadius:
-            return mnButtonCornerRadius;
-
-        case Integer_ButtonMaxAlpha:
-            return mnButtonMaxAlpha;
-
-        case Integer_ButtonBarMaxAlpha:
-            return mnButtonBarMaxAlpha;
-
-        case Integer_ButtonPaintType:
-            return mnButtonPaintType;
-
-        case Integer_ButtonBorder:
-            return mnButtonBorder;
-
-        case Integer_ButtonGap:
-            return mnButtonGap;
-
-        default:
-            return 0;
+        OSL_ASSERT(eType>=0 && size_t(eType)<maIntegerValues.size());
+        return 0;
     }
 }
 
@@ -497,34 +488,11 @@ sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
 
 void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue)
 {
-    switch (eType)
+    if (eType>=0 && size_t(eType)<maIntegerValues.size())
+        maIntegerValues[eType] = nValue;
+    else
     {
-        case Integer_ButtonCornerRadius:
-            mnButtonCornerRadius = nValue;
-            break;
-
-        case Integer_ButtonMaxAlpha:
-            mnButtonMaxAlpha = nValue;
-            break;
-
-        case Integer_ButtonBarMaxAlpha:
-            mnButtonBarMaxAlpha = nValue;
-            break;
-
-        case Integer_ButtonPaintType:
-            mnButtonPaintType = nValue;
-            break;
-
-        case Integer_ButtonBorder:
-            mnButtonBorder = nValue;
-            break;
-
-        case Integer_ButtonGap:
-            mnButtonGap = nValue;
-            break;
-
-        default:
-            break;
+        OSL_ASSERT(eType>=0 && size_t(eType)<maIntegerValues.size());
     }
 }
 

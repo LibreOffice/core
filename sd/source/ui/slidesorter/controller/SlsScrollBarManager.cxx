@@ -344,6 +344,7 @@ IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
             / double(pScrollBar->GetRange().Len());
         mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
         mrSlideSorter.GetContentWindow()->SetVisibleXY (nRelativePosition, -1);
+        mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
     return TRUE;
 }

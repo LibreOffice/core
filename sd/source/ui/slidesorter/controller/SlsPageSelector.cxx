@@ -55,23 +55,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 
-namespace
-{
-class BoolContext
-{
-public:
-    BoolContext (bool& rValue, bool bContextValue) : mrValue(rValue),mbSavedValue(mrValue)
-    { mrValue = bContextValue; }
-    ~BoolContext (void)
-    { mrValue = mbSavedValue; }
-private:
-    bool& mrValue;
-    const bool mbSavedValue;
-};
-
-} // end of anonymous namespace
-
-
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -86,8 +69,7 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
       mpSelectionAnchor(),
       mpCurrentPage(),
       mnUpdateLockCount(0),
-      mbIsUpdateCurrentPagePending(false),
-      mbIsMakeVisibleDisabled(false)
+      mbIsUpdateCurrentPagePending(false)
 {
     CountSelectedPages ();
 }
@@ -97,7 +79,7 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
 
 void PageSelector::SelectAllPages (void)
 {
-    BoolContext aContext (mbIsMakeVisibleDisabled, true);
+    VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);
     PageSelector::UpdateLock aLock (*this);
 
     int nPageCount = mrModel.GetPageCount();
@@ -110,8 +92,8 @@ void PageSelector::SelectAllPages (void)
 
 void PageSelector::DeselectAllPages (void)
 {
+    VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);
     PageSelector::UpdateLock aLock (*this);
-    BoolContext aContext (mbIsMakeVisibleDisabled, true);
 
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
@@ -200,9 +182,8 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
     if (rpDescriptor.get()!=NULL
         && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, true))
     {
-        mnSelectedPageCount ++;
-        if ( ! mbIsMakeVisibleDisabled)
-            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
+        ++mnSelectedPageCount;
+        mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 
         mpMostRecentlySelectedPage = rpDescriptor;
@@ -246,9 +227,8 @@ void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
     if (rpDescriptor.get()!=NULL
         && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
     {
-        mnSelectedPageCount --;
-        if ( ! mbIsMakeVisibleDisabled)
-            mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
+        --mnSelectedPageCount;
+        mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor);
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
         if (mpMostRecentlySelectedPage == rpDescriptor)
             mpMostRecentlySelectedPage.reset();

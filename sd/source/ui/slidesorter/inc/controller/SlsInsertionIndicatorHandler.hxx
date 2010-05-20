@@ -70,6 +70,10 @@ public:
     */
     void End (const controller::Animator::AnimationMode eMode);
 
+    /** This context make sure that the insertion indicator is shown
+        (provided that the clipboard is not empty) while the context is
+        alive.  Typically used while a context menu is displayed.
+    */
     class ForceShowContext
     {
     public:
