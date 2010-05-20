@@ -92,7 +92,7 @@ public class XMLExporter extends TestCase {
     }
 
     /**
-     * Document disposed here.
+     * Close document
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         if( xChartDoc!=null ) {
