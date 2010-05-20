@@ -2206,6 +2206,7 @@ sub do_fetch
     my $ooo_svn_server = $config->get_ooo_svn_server();
     my $so_svn_server = $config->get_so_svn_server();
     my $prebuild_dir = $config->get_prebuild_binaries_location();
+    my $external_tarball_source = $prebuild_dir;
     # Check early for platforms so we can bail out before anything time consuming is done
     # in case of a missing platform
     my @platforms;
@@ -2368,10 +2369,10 @@ sub do_fetch
         }
     }
 
-    if ( !$onlysolver ) {
+    if ( !$onlysolver && defined($external_tarball_source) ) {
         my $source_root_dir = "$workspace/$masterws";
-        my $external_tarball_source = "$prebuild_dir/$masterws/ext_sources";
-        if ( -e "$source_root_dir/ooo/ooo.lst" && defined($prebuild_dir) && -d $external_tarball_source ) {
+        $external_tarball_source .= "/$masterws/ext_sources";
+        if ( -e "$source_root_dir/ooo/ooo.lst" && -d $external_tarball_source ) {
             fetch_external_tarballs($source_root_dir, $external_tarball_source);
         }
     }
