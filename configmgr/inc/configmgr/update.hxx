@@ -30,6 +30,8 @@
 
 #include "sal/config.h"
 
+#include <set>
+
 #include "configmgr/detail/configmgrdllapi.hxx"
 
 namespace rtl { class OUString; }
@@ -43,6 +45,11 @@ OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcsFile(
 
 OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcuFile(
     bool shared, rtl::OUString const & fileUri);
+
+OOO_DLLPUBLIC_CONFIGMGR void insertModificationXcuFile(
+    rtl::OUString const & fileUri,
+    std::set< rtl::OUString > const & includedPaths,
+    std::set< rtl::OUString > const & excludedPaths);
 
 }
 
