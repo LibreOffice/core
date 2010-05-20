@@ -244,7 +244,9 @@ public:
     /** Show a tool tip with either the given help text, or when that is
         empty, with the content of msHelpText.
     */
-    void SetHelpText (const ::rtl::OUString& rsHelpText, bool bIsDefaultHelpText);
+    void SetHelpText (
+        const ::rtl::OUString& rsHelpText,
+        const bool bIsDefaultHelpText);
     const ::rtl::OUString& GetDefaultHelpText (void) const;
 
 protected:

@@ -672,12 +672,14 @@ void ButtonBar::StartFadeAnimation (
     const double nTargetAlpha,
     const bool bFadeIn)
 {
-    const double nCurrentButtonAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
-    const double nCurrentButtonBarAlpha (rpDescriptor->GetVisualState().GetButtonBarAlpha());
+    model::SharedPageDescriptor pDescriptor (rpDescriptor);
+
+    const double nCurrentButtonAlpha (pDescriptor->GetVisualState().GetButtonAlpha());
+    const double nCurrentButtonBarAlpha (pDescriptor->GetVisualState().GetButtonBarAlpha());
 
     // Stop a running animation.
     const controller::Animator::AnimationId nId (
-        rpDescriptor->GetVisualState().GetButtonAlphaAnimationId());
+        pDescriptor->GetVisualState().GetButtonAlphaAnimationId());
     if (nId != controller::Animator::NotAnAnimationId)
         mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
 
@@ -708,11 +710,11 @@ void ButtonBar::StartFadeAnimation (
     const double nDuration (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
             ?  Theme::Integer_ButtonFadeInDuration
             :  Theme::Integer_ButtonFadeOutDuration));
-    rpDescriptor->GetVisualState().SetButtonAlphaAnimationId(
+    pDescriptor->GetVisualState().SetButtonAlphaAnimationId(
         mrSlideSorter.GetController().GetAnimator()->AddAnimation(
             ::boost::bind(
                 controller::AnimationFunction::ApplyButtonAlphaChange,
-                rpDescriptor,
+                pDescriptor,
                 ::boost::ref(mrSlideSorter.GetView()),
                 ::boost::bind(aButtonBlendFunctor, _1),
                 ::boost::bind(aButtonBarBlendFunctor, _1)),
@@ -720,7 +722,7 @@ void ButtonBar::StartFadeAnimation (
             nDuration,
             ::boost::bind(
                 &model::VisualState::SetButtonAlphaAnimationId,
-                ::boost::ref(rpDescriptor->GetVisualState()),
+                ::boost::ref(pDescriptor->GetVisualState()),
                 controller::Animator::NotAnAnimationId)
             ));
 }
@@ -991,15 +993,11 @@ void BitmapBackgroundTheme::Layout (void)
         meIconSize = Button::IconSize_Large;
     }
 
-    maButtonArea = Rectangle(
-        Point(
-            maPreviewBoundingBox.Left() + (maPreviewBoundingBox.GetWidth()-aImageSize.Width()) / 2,
-            maPreviewBoundingBox.Bottom() - aImageSize.Height()),
-        aImageSize);
     maBackgroundLocation = Point(
         maPreviewBoundingBox.Left()
             + (maPreviewBoundingBox.GetWidth()-aImageSize.Width())/2,
         maPreviewBoundingBox.Bottom() - aImageSize.Height());
+    maButtonArea = Rectangle(maBackgroundLocation, aImageSize);
 }
 
 

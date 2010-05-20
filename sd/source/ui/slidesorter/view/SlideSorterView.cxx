@@ -1029,13 +1029,13 @@ bool SlideSorterView::SetState (
 
     // When the page object is not visible (i.e. not on the screen then
     // nothing has to be painted.
-    if ( ! pDescriptor->HasState(PageDescriptor::ST_Visible))
-        return true;
-
-    // For most states a change of that state leads to visible difference
-    // and we have to request a repaint.
-    if (eState != PageDescriptor::ST_WasSelected)
-        RequestRepaint(pDescriptor);
+    if (pDescriptor->HasState(PageDescriptor::ST_Visible))
+    {
+        // For most states a change of that state leads to visible
+        // difference and we have to request a repaint.
+        if (eState != PageDescriptor::ST_WasSelected)
+            RequestRepaint(pDescriptor);
+    }
 
     // Fade in or out the buttons.
     if (eState == PageDescriptor::ST_MouseOver)
