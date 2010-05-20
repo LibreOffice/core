@@ -1546,6 +1546,7 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HELPURL,
                      BASEPROPERTY_LINECOUNT,
                      BASEPROPERTY_MULTISELECTION,
+                     BASEPROPERTY_MULTISELECTION_SIMPLEMODE,
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_SELECTEDITEMS,
                      BASEPROPERTY_STRINGITEMLIST,
@@ -1929,6 +1930,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                      pListBox->EnableMultiSelection( b );
             }
             break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+                ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, sal_False );
+                break;
             case BASEPROPERTY_LINECOUNT:
             {
                 sal_Int16 n = sal_Int16();
@@ -1991,6 +1995,11 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             case BASEPROPERTY_MULTISELECTION:
             {
                  aProp <<= (sal_Bool) pListBox->IsMultiSelectionEnabled();
+            }
+            break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+            {
+                aProp <<= (sal_Bool)( ( pListBox->GetStyle() & WB_SIMPLEMODE ) == 0 );
             }
             break;
             case BASEPROPERTY_LINECOUNT:

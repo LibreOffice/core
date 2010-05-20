@@ -338,6 +338,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_HARDLINEBREAKS:
             case BASEPROPERTY_NOLABEL:              aDefault <<= (sal_Bool) sal_False; break;
 
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
             case BASEPROPERTY_HIDEINACTIVESELECTION:
             case BASEPROPERTY_ENFORCE_FORMAT:
             case BASEPROPERTY_AUTOCOMPLETE:
