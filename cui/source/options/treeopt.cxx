@@ -129,6 +129,13 @@
 #include <svx/drawitem.hxx>
 #include <rtl/uri.hxx>
 
+#ifdef LINUX
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -2194,6 +2201,28 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Mozilla Plug-in tab-page on Mac
             if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN )
                 continue;
+#endif
+#ifdef LINUX
+            // Disable Mozilla Plug-in tab-page on Linux if we find a
+            // globally installed plugin
+            if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN ) {
+                struct stat sb;
+                char *p;
+                bool bHaveSystemWidePlugin = false;
+                char mozpaths[]="/usr/lib/mozilla/plugins/libnpsoplugin.so:/usr/lib/firefox/plugins/libnpsoplugin.so:/usr/lib/mozilla-firefox/plugins/libnpsoplugin.so:/usr/lib/iceweasel/plugins/libnpsoplugin.so:/usr/lib/iceape/plugins/libnpsoplugin.so:/usr/lib/browser-plugins/libnpsoplugin.so:/usr/lib64/browser-plugins/libnpsoplugin.so";
+
+                p = strtok(mozpaths, ":");
+                while (p != NULL) {
+                    if (stat(p, &sb) != -1) {
+                         bHaveSystemWidePlugin = true;
+                         break;
+                    }
+                    p = strtok(NULL, ":");
+                }
+
+                if (bHaveSystemWidePlugin == true)
+                    continue;
+            }
 #endif
             AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
         }
