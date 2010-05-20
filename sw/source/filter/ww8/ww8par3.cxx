@@ -2207,19 +2207,16 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     {
         *pDataStream >> nDefaultChecked;
         nChecked = nDefaultChecked;
-        //Don't know the details yet
-        switch (nHeaderByte)
+
+        sal_uInt8 iRes = (nHeaderByte >> 2) & 0x1F;
+        switch (iRes)
         {
-            case 0x65: //01100101
-                //use defaults ?
-                break;
-            case 0x1: //00000001
-                //swap to unchecked from checked (#114841)?
-                nChecked = false;
-                break;
-            case 0x5: //00000101
-                //change to checked
+            case 1:  //checked
                 nChecked = true;
+                break;
+            case 25: //undefined, Undefined checkboxes are treated as unchecked
+            case 0:  //unchecked
+                nChecked = false;
                 break;
             default:
                 ASSERT(!this, "unknown option, please report to cmc");
