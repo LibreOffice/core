@@ -25,52 +25,45 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_XCDPARSER_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_XCDPARSER_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_PARTIAL_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_PARTIAL_HXX
 
 #include "sal/config.h"
 
+#include <map>
 #include <set>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include "boost/noncopyable.hpp"
 
-#include "parser.hxx"
-#include "xmlreader.hxx"
+#include "path.hxx"
+
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
-struct Data;
-struct Span;
-
-class XcdParser: public Parser {
+class Partial: private boost::noncopyable {
 public:
-    typedef std::set< rtl::OUString > Dependencies;
+    enum Containment { CONTAINS_NOT, CONTAINS_SUBNODES, CONTAINS_NODE };
 
-    XcdParser(int layer, Dependencies const & dependencies, Data & data);
+    Partial(
+        std::set< rtl::OUString > const & includedPaths,
+        std::set< rtl::OUString > const & excludedPaths);
+
+    ~Partial();
+
+    Containment contains(Path const & path) const;
 
 private:
-    virtual ~XcdParser();
+    struct Node {
+        typedef std::map< rtl::OUString, Node > Children;
 
-    virtual XmlReader::Text getTextMode();
+        Node(): startInclude(false) {}
 
-    virtual bool startElement(
-        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
+        Children children;
+        bool startInclude;
+    };
 
-    virtual void endElement(XmlReader const & reader);
-
-    virtual void characters(Span const & text);
-
-    enum State {
-        STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
-
-    int layer_;
-    Dependencies const & dependencies_;
-    Data & data_;
-    State state_;
-    rtl::OUString dependency_;
-    rtl::Reference< Parser > nestedParser_;
-    long nesting_;
+    Node root_;
 };
 
 }
