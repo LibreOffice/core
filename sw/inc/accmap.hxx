@@ -33,14 +33,15 @@
 #include <vos/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
-#include "viewsh.hxx"
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 
 #include <vector>
 
+class ViewShell;
 class Rectangle;
 class SwFrm;
+class SwTxtFrm;
 class SwPageFrm;
 class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
@@ -48,85 +49,17 @@ class SwAccessibleEventList_Impl;
 class SwAccessibleEventMap_Impl;
 class SwShapeList_Impl;
 class SdrObject;
-namespace accessibility { class AccessibleShape; }
+namespace accessibility {
+    class AccessibleShape;
+}
 class SwAccessibleShapeMap_Impl;
 struct SwAccessibleEvent_Impl;
-// --> OD 2005-12-13 #i27301#
 class SwAccessibleSelectedParas_Impl;
-// <--
 class SwRect;
 class MapMode;
 class SwAccPreviewData;
-// OD 14.01.2003 #103492#
-#ifndef _PREVWPAGE_HXX
-#include <prevwpage.hxx>
-#endif
-
-// helper class that stores preview data
-class SwAccPreviewData
-{
-    typedef std::vector<Rectangle> Rectangles;
-    Rectangles maPreviewRects;
-    Rectangles maLogicRects;
-
-    SwRect maVisArea;
-    Fraction maScale;
-
-    const SwPageFrm *mpSelPage;
-
-    /** adjust logic page retangle to its visible part
-
-        OD 17.01.2003 #103492#
-
-        @author OD
-
-        @param _iorLogicPgSwRect
-        input/output parameter - reference to the logic page rectangle, which
-        has to be adjusted.
-
-        @param _rPrevwPgSwRect
-        input parameter - constant reference to the corresponding preview page
-        rectangle; needed to determine the visible part of the logic page rectangle.
-
-        @param _rPrevwWinSize
-        input paramter - constant reference to the preview window size in TWIP;
-        needed to determine the visible part of the logic page rectangle
-    */
-    void AdjustLogicPgRectToVisibleArea( SwRect&         _iorLogicPgSwRect,
-                                         const SwRect&   _rPrevwPgSwRect,
-                                         const Size&     _rPrevwWinSize );
-
-public:
-    SwAccPreviewData();
-    ~SwAccPreviewData();
-
-    // OD 14.01.2003 #103492# - complete re-factoring of method due to new
-    // page/print preview functionality.
-    void Update( const std::vector<PrevwPage*>& _rPrevwPages,
-                 const Fraction&  _rScale,
-                 const SwPageFrm* _pSelectedPageFrm,
-                 const Size&      _rPrevwWinSize );
-
-    // OD 14.01.2003 #103492# - complete re-factoring of method due to new
-    // page/print preview functionality.
-    void InvalidateSelection( const SwPageFrm* _pSelectedPageFrm );
-
-    const SwRect& GetVisArea() const;
-
-    MapMode GetMapModeForPreview( ) const;
-
-    /** Adjust the MapMode so that the preview page appears at the
-     * proper position. rPoint identifies the page for which the
-     * MapMode should be adjusted. If bFromPreview is true, rPoint is
-     * a preview coordinate; else it's a document coordinate. */
-    // OD 17.01.2003 #103492# - delete unused 3rd parameter.
-    void AdjustMapMode( MapMode& rMapMode,
-                        const Point& rPoint ) const;
-
-    inline const SwPageFrm *GetSelPage() const { return mpSelPage; }
-
-    void DisposePage(const SwPageFrm *pPageFrm );
-};
+struct PrevwPage;
+class Window;
 
 // real states for events
 #define ACC_STATE_EDITABLE 0x01
@@ -154,7 +87,7 @@ typedef sal_uInt16 tAccessibleStates;
 class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
                         public accessibility::IAccessibleParent
 {
-    ::vos::OMutex maMutex;
+    mutable ::vos::OMutex maMutex;
     ::vos::OMutex maEventMutex;
     SwAccessibleContextMap_Impl *mpFrmMap;
     SwAccessibleShapeMap_Impl *mpShapeMap;
@@ -246,14 +179,7 @@ public:
         return mpVSh;
     }
 
-    inline const SwRect& GetVisArea() const
-    {
-        DBG_ASSERT( !GetShell()->IsPreView() || (mpPreview != NULL),
-                    "preview without preview data?" );
-        return GetShell()->IsPreView()
-               ? mpPreview->GetVisArea()
-               : GetShell()->VisArea();
-    }
+    const SwRect& GetVisArea() const;
 
     /** get size of a dedicated preview page
 
@@ -274,10 +200,14 @@ public:
     void RemoveContext( const SdrObject *pObj );
 
     // Dispose frame and its children if bRecursive is set
-    void Dispose( const SwFrm *pFrm, const SdrObject *pObj,
-                  sal_Bool bRecursive=sal_False );
+    void Dispose( const SwFrm* pFrm,
+                  const SdrObject* pObj,
+                  Window* pWindow,
+                  sal_Bool bRecursive = sal_False );
 
-    void InvalidatePosOrSize( const SwFrm *pFrm, const SdrObject *pObj,
+    void InvalidatePosOrSize( const SwFrm* pFrm,
+                              const SdrObject* pObj,
+                              Window* pWindow,
                               const SwRect& rOldFrm );
 
     void InvalidateContent( const SwFrm *pFrm );
@@ -332,6 +262,9 @@ public:
         @author OD
     */
     void InvalidateTextSelectionOfAllParas();
+
+    sal_Int32 GetChildIndex( const SwFrm& rParentFrm,
+                             Window& rChild ) const;
 
     // update preview data (and fire events if necessary)
     // OD 15.01.2003 #103492# - complete re-factoring of method due to new

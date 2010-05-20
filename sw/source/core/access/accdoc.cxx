@@ -155,8 +155,10 @@ uno::Reference< XAccessible> SAL_CALL
     if( mpChildWin  )
     {
         CHECK_FOR_DEFUNC( XAccessibleContext )
-        if( nIndex == GetChildCount() )
+        if ( nIndex == GetChildCount( *(GetMap()) ) )
+        {
             return mpChildWin->GetAccessible();
+        }
     }
 
     return SwAccessibleContext::getAccessibleChild( nIndex );
