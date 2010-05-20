@@ -144,7 +144,8 @@ testcase t_Introduction
         warnlog "Tasks Panel not visible. Opening now."
         ViewTaskPane
     endif
-    Kontext "LayoutsPreview"
+    View.OpenMenu
+    MenuSelect(MenuGetItemId(1))
     LayoutsPreview.TypeKeys "<HOME> <DOWN> <DOWN> <RETURN>"
     sleep (5)
     '///Add a background
@@ -160,7 +161,8 @@ testcase t_Introduction
     MenuSelect(MenuGetItemID(3))
     View.OpenMenu
     MenuSelect(MenuGetItemID(2))
-    Kontext "AvailableForUsePreview"
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(1))
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
     sleep (5)    
     '///Add a transition effect
