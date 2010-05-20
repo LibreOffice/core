@@ -54,6 +54,7 @@ SLOFILES= \
     $(SLO)$/resourcemodel.obj \
     $(SLO)$/util.obj \
     $(SLO)$/TagLogger.obj \
+    $(SLO)$/ResourceModelHelper.obj \
     $(SLO)$/WW8Analyzer.obj \
     $(SLO)$/Protocol.obj
 

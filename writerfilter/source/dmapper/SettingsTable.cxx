@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 
+#include <resourcemodel/ResourceModelHelper.hxx>
 #include <SettingsTable.hxx>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
@@ -42,6 +43,9 @@
 #endif
 
 namespace writerfilter {
+
+using resourcemodel::resolveSprmProps;
+
 namespace dmapper
 {
 
@@ -243,6 +247,11 @@ void SettingsTable::sprm(Sprm& rSprm)
         m_pImpl->m_bRecordChanges = bool(rSprm.getValue( )->getInt( ) );
     }
     break;
+    case NS_ooxml::LN_CT_Settings_documentProtection:
+        {
+            resolveSprmProps(*this, rSprm);
+        }
+        break;
     default:
     {
         OSL_ENSURE( false, "unknown sprmid in SettingsTable::sprm()");

@@ -140,8 +140,6 @@ private:
     rtl::OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
     com::sun::star::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
-    void resolveAttributeProperties(Value & val);
-    void resolveSprmProps(Sprm & sprm_);
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
 };
