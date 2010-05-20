@@ -77,7 +77,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
-
+#include <cstdio>
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
@@ -1325,8 +1325,8 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
     if( aIntersect.HasArea() )
     {
         SwTxtNode *pNd = (SwTxtNode*)GetTxtFrm()->GetTxtNode();
-        SwIndex aIndex( pNd, GetIdx() );
-        SwTxtAttr *pAttr = pNd->GetTxtAttr( aIndex, RES_TXTATR_INETFMT );
+        SwTxtAttr *const pAttr =
+            pNd->GetTxtAttrAt(GetIdx(), RES_TXTATR_INETFMT);
         if( pAttr )
         {
             const SwFmtINetFmt& rFmt = pAttr->GetINetFmt();
