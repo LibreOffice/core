@@ -133,7 +133,6 @@ using namespace ::com::sun::star::io;
 #include <unotools/saveopt.hxx>
 #include <svl/documentlockfile.hxx>
 
-#include "opostponedtruncationstream.hxx"
 #include "helper.hxx"
 #include <sfx2/request.hxx>      // SFX_ITEMSET_SET
 #include <sfx2/app.hxx>          // GetFilterMatcher

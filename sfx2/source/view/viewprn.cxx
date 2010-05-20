@@ -330,6 +330,9 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 
         if ( m_bNeedsChange )
             mpObjectShell->EnableSetModified( m_bOrigStatus );
+
+        if ( mpViewShell )
+            mpViewShell->pImp->pPrinterController = 0;
     }
 }
 
@@ -640,6 +643,8 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                                                                                this,
                                                                                rProps
                                                                                ) );
+    pImp->pPrinterController = pController.get();
+
     SfxObjectShell *pObjShell = GetObjectShell();
     pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
@@ -652,6 +657,11 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                             String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
 
     Printer::PrintJob( pController, aJobSetup );
+}
+
+Printer* SfxViewShell::GetActivePrinter() const
+{
+    return pImp->pPrinterController ? pImp->pPrinterController->getPrinter().get() : 0;
 }
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
