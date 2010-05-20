@@ -205,7 +205,7 @@ testcase tiEditSearchAndReplace
     SearchFor.SetText sExpression(2)           '/// Search for word 2 ///'
     ReplaceWith.SetText sExpression(1)       '/// Replace with word 1 ///'
 
-    Replace.Click                      '/// Replace 1 ///'
+    ReplaceBtn.Click                      '/// Replace 1 ///'
     Kontext "Messagebox"
     if Messagebox.Exists(4) Then
         Kontext "Messagebox"
