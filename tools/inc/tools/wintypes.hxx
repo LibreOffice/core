@@ -215,6 +215,7 @@ typedef sal_Int64 WinBits;
 
 // Window-Bits for CheckBox
 #define WB_CBLINESTYLE          ((WinBits)SAL_CONST_INT64(0x2000000000))
+#define WB_EARLYTOGGLE          ((WinBits)SAL_CONST_INT64(0x4000000000))
 
 // Window-Bits for Edit
 #define WB_PASSWORD             ((WinBits)0x01000000)

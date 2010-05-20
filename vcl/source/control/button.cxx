@@ -3675,11 +3675,14 @@ void CheckBox::ImplCheck()
     else
         eNewState = STATE_NOCHECK;
     meState = eNewState;
-    ImplInvalidateOrDrawCheckBoxState();
 
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
-    Toggle();
+    if( (GetStyle() & WB_EARLYTOGGLE) )
+        Toggle();
+    ImplInvalidateOrDrawCheckBoxState();
+    if( ! (GetStyle() & WB_EARLYTOGGLE) )
+        Toggle();
     if ( aDelData.IsDelete() )
         return;
     ImplRemoveDel( &aDelData );
