@@ -59,9 +59,7 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.win32
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
-    $(TARFILE_NAME).patch.free_null \
-    $(TARFILE_NAME).patch.storage_hashes_context_serialize_get_statement \
-    $(TARFILE_NAME).patch.storage_hashes_list_duplicates
+
 
 .IF "$(OS)"=="OS2"
 BUILD_ACTION=dmake
