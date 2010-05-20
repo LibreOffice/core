@@ -32,6 +32,7 @@
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/weak.hxx>
 
 namespace comphelper {
 
@@ -52,7 +53,9 @@ class PasswordContinuation;
 /** Implements the task.XInteractionRequest interface for requesting a password
     string for a document.
  */
-class COMPHELPER_DLLPUBLIC DocPasswordRequest : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class COMPHELPER_DLLPUBLIC DocPasswordRequest :
+        public ::com::sun::star::task::XInteractionRequest,
+        public ::cppu::OWeakObject
 {
 public:
     explicit            DocPasswordRequest(
@@ -61,6 +64,11 @@ public:
                             const ::rtl::OUString& rDocumentName,
                             sal_Bool bPasswordToModify = sal_False );
     virtual             ~DocPasswordRequest();
+
+    // XInterface / OWeakObject
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
 
     sal_Bool            isAbort() const;
     sal_Bool            isPassword() const;

@@ -36,6 +36,7 @@
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
@@ -47,6 +48,7 @@ using ::com::sun::star::task::PasswordRequestMode;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionContinuation;
 using ::com::sun::star::task::XInteractionPassword2;
+using ::com::sun::star::task::XInteractionRequest;
 
 namespace comphelper {
 
@@ -129,6 +131,26 @@ DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
 
 DocPasswordRequest::~DocPasswordRequest()
 {
+}
+
+/*uno::*/Any SAL_CALL DocPasswordRequest::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
+{
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
+}
+
+void SAL_CALL DocPasswordRequest::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL DocPasswordRequest::release(  ) throw ()
+{
+    OWeakObject::release();
 }
 
 sal_Bool DocPasswordRequest::isAbort() const
