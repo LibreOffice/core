@@ -182,7 +182,45 @@ namespace svt
         ,m_pImpl( new RoadmapWizardImpl )
     {
         DBG_CTOR( RoadmapWizard, CheckInvariants );
+        impl_construct();
+    }
 
+    //--------------------------------------------------------------------
+    RoadmapWizard::RoadmapWizard( Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+        :OWizardMachine( _pParent, i_nStyle, _nButtonFlags )
+        ,m_pImpl( new RoadmapWizardImpl )
+    {
+        DBG_CTOR( RoadmapWizard, CheckInvariants );
+        impl_construct();
+    }
+
+    namespace
+    {
+        void lcl_dump( const Window& i_rWindow, const size_t i_level )
+        {
+            for ( size_t i=0; i<i_level; ++i )
+                fprintf( stderr, " " );
+
+
+
+            const char* indicatorTS = ( ( i_rWindow.GetStyle() & WB_TABSTOP ) != 0 ) ? "+" : "-";
+            const char* indicatorDC = ( ( i_rWindow.GetStyle() & WB_DIALOGCONTROL ) != 0 ) ? "+" : "-";
+            const char* indicatorCDC = ( ( i_rWindow.GetStyle() & WB_CHILDDLGCTRL ) != 0 ) ? "+" : "-";
+            fprintf( stderr, "(%s%s%s) %s\n", indicatorTS, indicatorDC, indicatorCDC, typeid( i_rWindow ).name() );
+
+            const Window* child = i_rWindow.GetWindow( WINDOW_FIRSTCHILD );
+            while ( child )
+            {
+                lcl_dump( *child, i_level + 1 );
+                child = child->GetWindow( WINDOW_NEXT );
+            }
+            fflush( stderr );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void RoadmapWizard::impl_construct()
+    {
         SetLeftAlignedButtonCount( 1 );
         SetEmptyViewMargin();
 
@@ -534,6 +572,8 @@ namespace svt
         enableButtons( WZB_PREVIOUS, bHaveEnabledState );
 
         implUpdateRoadmap();
+
+        lcl_dump( *this, 0 );
     }
 
     //--------------------------------------------------------------------

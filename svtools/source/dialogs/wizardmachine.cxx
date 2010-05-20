@@ -161,6 +161,25 @@ namespace svt
         ,m_pHelp(NULL)
         ,m_pImpl( new WizardMachineImplData )
     {
+        implConstruct( _nButtonFlags );
+    }
+
+    //---------------------------------------------------------------------
+    OWizardMachine::OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+        :WizardDialog( _pParent, i_nStyle )
+        ,m_pFinish(NULL)
+        ,m_pCancel(NULL)
+        ,m_pNextPage(NULL)
+        ,m_pPrevPage(NULL)
+        ,m_pHelp(NULL)
+        ,m_pImpl( new WizardMachineImplData )
+    {
+        implConstruct( _nButtonFlags );
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardMachine::implConstruct( const sal_uInt32 _nButtonFlags )
+    {
         m_pImpl->sTitleBase = GetText();
 
         // create the buttons according to the wizard button flags
@@ -225,8 +244,6 @@ namespace svt
 
             AddButton( m_pCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
         }
-
-
     }
 
     //---------------------------------------------------------------------
@@ -274,35 +291,42 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
+    TabPage* OWizardMachine::GetOrCreatePage( const WizardState i_nState )
+    {
+        if ( NULL == GetPage( i_nState ) )
+        {
+            TabPage* pNewPage = createPage( i_nState );
+            DBG_ASSERT( pNewPage, "OWizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
+
+            // fill up the page sequence of our base class (with dummies)
+            while ( m_pImpl->nFirstUnknownPage < i_nState )
+            {
+                AddPage( NULL );
+                ++m_pImpl->nFirstUnknownPage;
+            }
+
+            if ( m_pImpl->nFirstUnknownPage == i_nState )
+            {
+                // encountered this page number the first time
+                AddPage( pNewPage );
+                ++m_pImpl->nFirstUnknownPage;
+            }
+            else
+                // already had this page - just change it
+                SetPage( i_nState, pNewPage );
+        }
+        return GetPage( i_nState );
+    }
+
+    //---------------------------------------------------------------------
     void OWizardMachine::ActivatePage()
     {
         WizardDialog::ActivatePage();
 
         WizardState nCurrentLevel = GetCurLevel();
-        if (NULL == GetPage(nCurrentLevel))
-        {
-            TabPage* pNewPage = createPage(nCurrentLevel);
-            DBG_ASSERT(pNewPage, "OWizardMachine::ActivatePage: invalid new page (NULL)!");
+        GetOrCreatePage( nCurrentLevel );
 
-            // fill up the page sequence of our base class (with dummies)
-            while (m_pImpl->nFirstUnknownPage < nCurrentLevel)
-            {
-                AddPage(NULL);
-                ++m_pImpl->nFirstUnknownPage;
-            }
-
-            if (m_pImpl->nFirstUnknownPage == nCurrentLevel)
-            {
-                // encountered this page number the first time
-                AddPage(pNewPage);
-                ++m_pImpl->nFirstUnknownPage;
-            }
-            else
-                // already had this page - just change it
-                SetPage(nCurrentLevel, pNewPage);
-        }
-
-        enterState(nCurrentLevel);
+        enterState( nCurrentLevel );
     }
 
     //---------------------------------------------------------------------

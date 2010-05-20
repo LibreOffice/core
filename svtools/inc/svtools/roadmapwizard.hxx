@@ -80,6 +80,11 @@ namespace svt
             const ResId& _rRes,
             sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
         );
+        RoadmapWizard(
+            Window* _pParent,
+            const WinBits i_nStyle,
+            sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
+        );
         ~RoadmapWizard( );
 
         void            SetRoadmapBitmap( const BitmapEx& _rBitmap );
@@ -230,13 +235,15 @@ protected:
     private:
         SVT_DLLPRIVATE void ResizeFixedLine();
 
-    private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, void* );
 
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)
         */
         SVT_DLLPRIVATE void implUpdateRoadmap( );
+
+    private:
+        SVT_DLLPRIVATE void impl_construct();
     };
 
 //........................................................................

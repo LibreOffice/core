@@ -62,8 +62,7 @@ namespace svt
             eTravelForward,         // traveling forward (maybe with skipping pages)
             eTravelBackward,        // traveling backward (maybe with skipping pages)
             eFinish,                // the wizard is about to be finished
-            eValidate,              // the data should be validated only, no traveling wll happen
-            eValidateNoUI           // the data should be validated only, without displaying error messages and other UI
+            eValidate               // the data should be validated only, no traveling wll happen
         };
     };
 
@@ -189,6 +188,7 @@ namespace svt
             For the button flags, use any combination of the WZB_* flags.
         */
         OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags );
+        OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
         ~OWizardMachine();
 
         /// enable (or disable) buttons
@@ -355,6 +355,9 @@ namespace svt
         void resumeTraveling( AccessGuard );
         bool isTravelingSuspended() const;
 
+    protected:
+        TabPage* GetOrCreatePage( const WizardState i_nState );
+
     private:
        // long OnNextPage( PushButton* );
         DECL_DLLPRIVATE_LINK(OnNextPage, PushButton*);
@@ -363,6 +366,7 @@ namespace svt
 
         SVT_DLLPRIVATE void     implResetDefault(Window* _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();
+        SVT_DLLPRIVATE void     implConstruct( const sal_uInt32 _nButtonFlags );
     };
 
     /// helper class to temporarily suspend any traveling in the wizard

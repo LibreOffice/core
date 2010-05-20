@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=../../..
 
 PRJNAME=svtools
-TARGET=unoiface
+TARGET=unowiz
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -39,20 +39,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-            $(SLO)$/addrtempuno.obj \
-            $(SLO)$/contextmenuhelper.obj \
-            $(SLO)$/framestatuslistener.obj \
-            $(SLO)$/generictoolboxcontroller.obj \
-            $(SLO)$/genericunodialog.obj \
-            $(SLO)$/miscservices.obj\
-            $(SLO)$/statusbarcontroller.obj \
-            $(SLO)$/toolboxcontroller.obj \
-            $(SLO)$/treecontrolpeer.obj \
-            $(SLO)$/unocontroltablemodel.obj \
-            $(SLO)$/unoevent.obj \
-            $(SLO)$/unoiface.obj \
-            $(SLO)$/unoimap.obj \
-            $(SLO)$/svtxgridcontrol.obj
+    $(SLO)$/unowizard.obj \
+    $(SLO)$/wizardshell.obj \
+    $(SLO)$/wizardpageshell.obj
 
 # --- Targets ------------------------------------------------------
 
