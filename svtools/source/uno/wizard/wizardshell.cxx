@@ -124,6 +124,9 @@ namespace svt { namespace uno
 
         case WizardTypes::eFinish:
             return WizardTravelType::FINISH;
+
+        default:
+            break;
         }
         OSL_ENSURE( false, "WizardShell::convertCommitReasonToTravelType: unsupported CommitPageReason!" );
         return WizardTravelType::FINISH;
