@@ -425,7 +425,7 @@ testcase tiOpenOLECrash
     
     printlog "8. Choose OpenOffice.org 2.0 Formular"
     Kontext "OLEObjektInsert"
-    Objekttyp.Select (3)
+    Objekttyp.Select (4)
     sleep (2)
     PrintLog "    Object: " + Objekttyp.GetSelText + "  will be inserted."
     printlog "Leave dialog 'Insert OLE Object' with OK"
