@@ -37,6 +37,10 @@
         <prop oor:name="ooSetupVersionAboutBox" install:module="brand">
             <value>${ABOUTBOXPRODUCTVERSION}</value>
         </prop>
+        <prop oor:name="ooVendor" install:module="brand">
+            <value>${OOOVENDOR}</value>
+        </prop>
+
         <prop oor:name="ooSetupExtension" install:module="brand">
             <value >${PRODUCTEXTENSION}</value>
         </prop>
