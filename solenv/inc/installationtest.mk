@@ -53,7 +53,7 @@ my_sofficepath = \
     $(installationtest_instpath)/opt/OpenOffice.org.app/Contents/MacOS/soffice
 .ELIF "$(OS)" == "WNT"
 my_sofficepath = \
-    $(installationtest_instpath)/opt/OpenOffice.org 3/program/soffice.exe
+    $(installationtest_instpath)'/opt/OpenOffice.org 3/program/soffice.exe'
 .ELSE
 my_sofficepath = \
     $(installationtest_instpath)/opt/openoffice.org3/program/soffice
@@ -62,7 +62,7 @@ my_sofficepath = \
 .IF "$(OOO_TEST_SOFFICE)" == ""
 my_soffice = path:$(my_sofficepath)
 .ELSE
-my_soffice = $(OOO_TEST_SOFFICE)
+my_soffice = '$(OOO_TEST_SOFFICE:s/'/'\''/)'
 .END
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
@@ -95,8 +95,8 @@ cpptest .PHONY : $(MISC)/$(TARGET)/services.rdb
     $(CPPUNITTESTER) \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
-        -env:arg-soffice='$(my_soffice:s/'/'\''/)' \
-        -env:arg-user=$(MISC)/$(TARGET)/user $(my_cppenv) $(OOO_CPPTEST_ARGS)
+        -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
+        $(my_cppenv) $(OOO_CPPTEST_ARGS)
     $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
@@ -115,7 +115,7 @@ javatest .PHONY : $(JAVATARGET)
     $(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
         '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
-        -Dorg.openoffice.test.arg.soffice='$(my_soffice:s/'/'\''/)' \
+        -Dorg.openoffice.test.arg.soffice=$(my_soffice) \
         -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
         $(my_javaenv) org.junit.runner.JUnitCore \
         $(foreach,i,$(JAVATESTFILES) $(subst,/,. $(PACKAGE)).$(i:s/.java//))
