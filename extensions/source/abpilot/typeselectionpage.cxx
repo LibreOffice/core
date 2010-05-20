@@ -214,11 +214,8 @@ namespace abp
 
         if (AST_INVALID == getSelectedType( ))
         {
-            if ( _eReason != eValidateNoUI )
-            {
-                ErrorBox aError(this, ModuleRes(RID_ERR_NEEDTYPESELECTION));
-                aError.Execute();
-            }
+            ErrorBox aError(this, ModuleRes(RID_ERR_NEEDTYPESELECTION));
+            aError.Execute();
             return sal_False;
         }
 
