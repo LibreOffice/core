@@ -1507,6 +1507,20 @@ sub add_License_Files_into_Installdir
             $newfile->{'specificlanguage'} = "";
             $newfile->{'haslanguagemodule'} = "0";
 
+            if ( defined $newfile->{'InstallName'} )
+            {
+                if ( $newfile->{'InstallName'} =~ /^\s*(.*?)_$defaultlanguage\.?(\w*?)\s*$/ )
+                {
+                    my $localfilename = $1;
+                    my $localextension = $2;
+
+                    if ( $localextension eq "" ) { $newfile->{'InstallName'} = $localfilename; }
+                    else { $newfile->{'InstallName'} = $localfilename . "\." . $localextension; }
+                }
+            }
+
+            $newfile->{'removelangfromfile'} = "1"; # Important for files with an InstallName, because language also has to be removed there.
+
             if ( $foundofficedir )
             {
                 $newfile->{'Dir'} = $officedirectorygid;
@@ -1528,6 +1542,12 @@ sub add_License_Files_into_Installdir
 
             $infoline = "New files: Adding file $newfilename for the installation root to the file list. Language: $defaultlanguage\n";
             push( @installer::globals::logfileinfo, $infoline);
+
+            if ( defined $newfile->{'InstallName'} )
+            {
+                $infoline = "New files: Using installation name: $newfile->{'InstallName'}\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
 
             # Collecting license and readme file for the installation set
 
