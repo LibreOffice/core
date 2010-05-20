@@ -1,4 +1,5 @@
 mkdir: %_DEST%\bin%_EXT%\osl
+mkdir: %_DEST%\bin%_EXT%\broffice
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
@@ -31,7 +32,13 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 ..\source\linux\*.dat %_DEST%\bin%_EXT%\*.dat
 ..\source\mac\*.icns %_DEST%\bin%_EXT%\*.icns
 ..\source\mac\Info.plist.langpack %_DEST%\bin%_EXT%\Info.plist.langpack
+..\source\mac\ooo\osxdndinstall.png %_DEST%\bin%_EXT%\osl\osxdndinstall.png
+..\source\mac\ooo\DS_Store %_DEST%\bin%_EXT%\osl\DS_Store
+..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin%_EXT%\osl\DS_Store_Langpack
+..\source\mac\broffice\osxdndinstall.png %_DEST%\bin%_EXT%\broffice\osxdndinstall.png
+..\source\mac\broffice\DS_Store %_DEST%\bin%_EXT%\broffice\DS_Store
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
+..\source\java\brofficeorg_setup.gif %_DEST%\bin%_EXT%\broffice\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 ..\source\java\javaversion2.dat %_DEST%\bin%_EXT%\javaversion2.dat
 ..\source\opensolaris\bundledextensions\installed %_DEST%\bin%_EXT%\osolsmf\installed
@@ -39,6 +46,7 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 ..\source\opensolaris\bundledextensions\ooo_bundled_extensions.xml %_DEST%\bin%_EXT%\osolsmf\ooo_bundled_extensions.xml
 ..\source\opensolaris\bundledextensions\svc-ooo_bundled_extensions %_DEST%\bin%_EXT%\osolsmf\svc-ooo_bundled_extensions
 ..\source\packinfo\solariscopyrightfile %_DEST%\bin%_EXT%\solariscopyrightfile
+..\source\packinfo\linuxcopyrightfile %_DEST%\bin%_EXT%\linuxcopyrightfile
 ..\source\packinfo\*.txt %_DEST%\bin%_EXT%\*.txt
 ..\source\packinfo\*.pcp %_DEST%\bin%_EXT%\*.pcp
 ..\scripts\admin.pl %_DEST%\bin%_EXT%\admin.pl
