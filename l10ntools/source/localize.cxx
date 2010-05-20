@@ -959,8 +959,16 @@ int _cdecl main( int argc, char *argv[] )
         aIter.SetLanguageRestriction( sLanguages );
         if ( bExport ){
             if( bQuiet2 ){ /*printf("");*/fflush( stdout );}
-            aIter.Extract( sFileName );
-            if( bQuiet2 ){ printf("\n    %d files found!\n",aIter.GetFileCnt());}
+            if( *iter == "ooo" )
+                aIter.Extract( sFileName );
+            else
+            {
+                ByteString sFileNameWithExt( sFileName );
+                sFileNameWithExt += ByteString( "." );
+                sFileNameWithExt += ByteString( (*iter).c_str() , (*iter).length() );
+                aIter.Extract( sFileNameWithExt );
+            }
+            if( bQuiet2 ){ printf("\n%d files found!\n",aIter.GetFileCnt());}
         }
     }
     if( hasPwd )
@@ -973,7 +981,7 @@ int _cdecl main( int argc, char *argv[] )
         if ( bExport ){
             if( bQuiet2 ){ /*printf("");*/fflush( stdout );}
             aIter.Extract( sFileName );
-            if( bQuiet2 ){ printf("\n    %d files found!\n",aIter.GetFileCnt());}
+            if( bQuiet2 ){ printf("\n%d files found!\n",aIter.GetFileCnt());}
         }
 
     }
