@@ -880,7 +880,10 @@ void SmEditWindow::Cut()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->Cut();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::Copy()
@@ -894,14 +897,20 @@ void SmEditWindow::Paste()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->Paste();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::Delete()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->DeleteSelected();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::InsertText(const String& Text)
