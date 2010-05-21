@@ -71,13 +71,13 @@ interface XVisualObject: ::com::sun::star::uno::XInterface
         </p>
 
         @param nAspect
-            the aspect specifying the form of object representation
-            can take values from <type>Aspects</type> constant set
+            the aspect specifying the form of object representation.
+            Can take values from <type>Aspects</type> constant set.
 
         @param aSize
             the new size of the visual area
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws ::com::sun::star::embed::WrongStateException
@@ -101,13 +101,13 @@ interface XVisualObject: ::com::sun::star::uno::XInterface
         </p>
 
         @param nAspect
-            the aspect specifying the form of object representation
-            can take values from <type>Aspects</type> constant set
+            the aspect specifying the form of object representation.
+            Can take values from <type>Aspects</type> constant set.
 
         @return
             the size of visual area
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws ::com::sun::star::embed::WrongStateException
@@ -127,7 +127,8 @@ interface XVisualObject: ::com::sun::star::uno::XInterface
         </p>
 
         @param nAspect
-            the aspect the representation is requested for
+            the aspect the representation is requested for.
+            Can take values from <type>Aspects</type> constant set.
 
         @return
             the visual representation of the object in the default format and
@@ -153,7 +154,8 @@ interface XVisualObject: ::com::sun::star::uno::XInterface
     /** retrieves map mode the object communicates in.
 
         @param nAspect
-            the aspect the map mode is requested for
+            the aspect the map mode is requested for.
+            Can take values from <type>Aspects</type> constant set.
 
         @return
             the map mode the object communicates in, it can take values from
