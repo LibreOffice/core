@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+***   AUTOMATICALLY GENERATED - DO NOT EDIT   ***
+***         EDIT ../build.xml INSTEAD         ***
+-->
+<project name="TaskPaneComponentuno-impl" default="netbeans" basedir="..">
+    <description>Builds, tests, and runs an UNO project.</description>
+
+    <import file="build-impl.xml"/>
+
+    <!-- ================================================================================== -->
+
+    <target name="-uno-project-init" depends="-do-init">
+        <property file="nbproject/project-uno.properties"/>
+        <property name="build.uno.version" value="2.0.6"/>
+
+        <!-- set variablers from SDK and Office -->
+        <echo message="setting up UNO environment ..."/>
+        <property name="office.unopkg" value="${office.program.dir}${file.separator}unopkg"/>
+        <property name="office.soffice" value="${office.program.dir}${file.separator}soffice"/>
+
+        <property name="sdk.idl.dir" location="${oo.sdk.dir}${file.separator}idl"/>
+        <property name="sdk.idlc" value="${sdk.bin.dir}${file.separator}idlc"/>
+        <property name="sdk.regmerge" value="${ure.bin.dir}${file.separator}regmerge"/>
+        <property name="sdk.javamaker" value="${sdk.bin.dir}${file.separator}javamaker"/>
+
+        <dirname property="project.dir" file="build.xml"/>
+        <property name="uno.package.name" value="${project.dir}${file.separator}${dist.dir}${file.separator}${project.name}.oxt"/>
+        <property name="src.dir.absolute" value="${project.dir}${file.separator}${src.dir}"/>
+
+        <property name="idl.out" value="${project.dir}${file.separator}${build.dir}${file.separator}idl"/>
+        <property name="idl.classes.dir" value="${project.dir}${file.separator}${build.classes.dir}"/>
+        <property name="idl.out.urd" value="${idl.out}/urd"/>
+        <property name="idl.out.rdb" value="${idl.out}/rdb"/>
+        <property name="idl.rdb.name" value="types.rdb"/>
+        <property name="idl.rdb.fullpath" value="${idl.out.rdb}/${idl.rdb.name}"/>
+
+        <property name="images.base.dir" value="${build.dir}/img"/>
+        <property name="build.registry.dir" value="${build.dir}/cpreg"/>
+
+        <mkdir dir="${idl.out}"/>
+        <mkdir dir="${idl.out.urd}"/>
+        <mkdir dir="${idl.out.rdb}"/>
+        <mkdir dir="${images.base.dir}"/>
+        <mkdir dir="${build.registry.dir}"/>
+
+        <condition property="oo.version.three">
+            <equals arg1="${oo.version.number}" arg2="three"/>
+        </condition>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- handle images -->
+    <target name="-uno-images-condition" description="check images" depends="-uno-project-init">
+        <available file="${images.dir}" type="dir" property="images.required"/>
+    </target>
+
+    <target name="images" description="copy images" depends="-uno-images-condition" if="images.required">
+        <mkdir dir="${images.base.dir}/${images.dir}"/>
+        <copy todir="${images.base.dir}/${images.dir}">
+            <fileset dir="${images.dir}"/>
+        </copy>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- handle xcu/xcs files with package names -->
+
+    <target name="-uno-registryfiles-condition" description="check xcu and xcs files" depends="-uno-project-init">
+        <available file="${registry.dir}" type="dir" property="xcuxcs.required"/>
+    </target>
+
+    <target name="registry" description="copy registry files" depends="-uno-registryfiles-condition" if="xcuxcs.required">
+        <mkdir dir="${build.registry.dir}/${registry.dir}"/>
+        <copy todir="${build.registry.dir}/${registry.dir}">
+            <fileset dir="${registry.dir}" includes="**/*.xcu,**/*.xcs"/>
+        </copy>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="-uno-idl-idlc-condition" description="check idlc dependencies" depends="-uno-project-init">
+        <uptodate property="idlc.notRequired" targetfile ="${build.dir}/idlc.compile">
+           <srcfiles dir= "${src.dir}" includes="**/*.idl"/>
+        </uptodate>
+    </target>
+
+    <!-- compile UNO idl files: execution -->
+    <target name="-uno-idl-idlc" description="Compile the IDL Conditionally" depends="-uno-idl-idlc-condition" unless="idlc.notRequired">
+        <apply executable="${sdk.idlc}" dir="${office.program.dir}" failonerror="true">
+            <env key="PATH" path="${office.tool.path}"/>
+            <env key="LD_LIBRARY_PATH" path="${office.tool.path}"/>
+            <env key="DYLD_LIBRARY_PATH" path="${office.tool.path}"/>
+            <arg value="-C"/>
+            <arg value="-O"/>
+            <arg value="${idl.out.urd}"/>
+            <arg value="-I"/>
+            <arg value="${src.dir.absolute}"/>
+            <arg value="-I"/>
+            <arg value="${sdk.idl.dir}"/>
+            <fileset dir="${src.dir}" includes="**/*.idl" casesensitive="yes" id="idl.list.id"/>
+        </apply>
+        <!-- list for copying idl files in own jar -->
+        <property name="idl.file" refid="idl.list.id"/>
+        <propertyfile file="${idl.out}/idl_list.properties">
+            <entry key="idl.file.list" value="${idl.file}"/>
+        </propertyfile>
+        <replace file="${idl.out}/idl_list.properties" token=".idl" value=".class"/>
+        <replace file="${idl.out}/idl_list.properties" token=";" value=","/>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <!-- merge urd files: execution -->
+    <target name="-uno-idl-regmerge" description="Merge urd Files Conditionally" depends="-uno-idl-idlc,-uno-idl-idlc-condition" unless="idlc.notRequired">
+        <!-- to only extract the new files, delete the old rdb -->
+        <delete file="${idl.rdb.fullpath}"/>
+        <apply executable="${sdk.regmerge}" dir="${office.program.dir}" failonerror="true">
+            <env key="PATH" path="${office.tool.path}"/>
+            <env key="LD_LIBRARY_PATH" path="${office.tool.path}"/>
+            <env key="DYLD_LIBRARY_PATH" path="${office.tool.path}"/>
+            <arg file="${idl.rdb.fullpath}"/>
+            <arg value="/UCR"/>
+            <fileset dir="${idl.out.urd}" includes="**/*.urd" casesensitive="yes"/>
+        </apply>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <!-- should javamaker be executed -->
+    <target name="-uno-idl-javamaker-condition" description="check if rdb was created" depends="-uno-idl-regmerge,-uno-idl-idlc-condition">
+        <available file="${idl.rdb.name}" filepath="${idl.out.rdb}" property="javamaker.Required"/>
+    </target>
+
+    <!-- generate Java class files from type library: execution -->
+    <target name="-uno-idl-javamaker" depends="-uno-idl-regmerge,-uno-idl-idlc-condition,-uno-idl-javamaker-condition" if="javamaker.Required" unless="idlc.notRequired">
+        <echo message="generating java class files from rdb..."/>
+        <exec executable="${sdk.javamaker}" dir="${office.program.dir}" failonerror="true">
+            <env key="PATH" path="${office.tool.path}"/>
+            <env key="LD_LIBRARY_PATH" path="${office.tool.path}"/>
+            <env key="DYLD_LIBRARY_PATH" path="${office.tool.path}"/>
+            <arg value="-BUCR"/>
+            <arg value="-O"/>
+            <arg value="${idl.classes.dir}"/>
+            <arg file="${idl.rdb.fullpath}"/>
+            <arg value="${oo.unotypes.rdb}"/> <!-- from ConfigurationSettings -->
+            <arg value="${oo.offapi.rdb}"/> <!-- from ConfigurationSettings -->
+        </exec>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="-uno-idl-result" depends="-uno-idl-javamaker">
+        <touch file="${build.dir}/idlc.compile"/>
+        <echo message="build UNO idl files finished"/>
+    </target>
+
+    <!-- the main target, called in recursive builds -->
+    <target name="uno-idl-compile" description="Compiles UNO idl files" depends="-uno-idl-result"/>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="jar" depends="-uno-project-init,uno-idl-compile,-jar-idl-types,compile,-pre-jar,-do-jar-with-manifest,-do-jar-without-manifest,-do-jar-with-mainclass,-do-jar-with-libraries,-do-openoffice-manifest,-post-jar">
+        <jar basedir="${build.classes.dir}" compress="true" filesonly="true" manifest="${build.dir}/MANIFEST.MF" jarfile="${dist.jar}" excludes="**/*.xml,**/*.txt,${idl.file.list},${build.classes.excludes}"/>
+    </target>
+
+    <target name="-jar-idl-types" depends="-do-uno-types" unless="no.idl.files">
+        <mkdir dir="${dist.dir}"/>
+        <jar basedir="${build.classes.dir}" compress="true" jarfile="${dist.dir}/${idl_types.jar}" includes="${idl.file.list}">
+            <manifest>
+                <attribute name="UNO-Type-Path" value="&lt;&gt;"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="-do-openoffice-manifest" depends="-copy-user-manifest,-external-jars,-do-registration,-do-class-path"/>
+
+    <!-- macro for checking manifest entries from a user manifest -->
+    <macrodef name="check-manifest-entry">
+        <attribute name="entry.name"/>
+        <attribute name="condition.property.name"/>
+        <sequential>
+            <condition property="@{condition.property.name}">
+                <and>
+                    <!-- if file does not exist, "isfileselected" is not executed -->
+                    <!-- necessary construct because available is not allowed here
+                        but should be according to documentation -->
+                    <istrue value="${build.manifest.exists}"/>
+                    <!-- produces an error if file is not there -->
+                    <isfileselected file="${build.dir}/MANIFEST.MF">
+                        <contains text="@{entry.name}"/>
+                    </isfileselected>
+                </and>
+            </condition>
+        </sequential>
+    </macrodef>
+
+    <!-- enter the class path with external jars, if external jars exit and the user did not enter his own -->
+    <target name="-do-class-path" depends="-external-jars,-check-class-path" unless="class.path.exists">
+        <manifest file="${build.dir}/MANIFEST.MF" mode="update">
+            <attribute name="Class-Path" value="${external.jars}"/>
+        </manifest>
+    </target>
+    <target name="-check-class-path">
+        <check-manifest-entry condition.property.name="class.path.exists" entry.name="Class-Path"/>
+    </target>
+
+    <!-- enter idl type definitions if it exists and if the user did not overwrite it -->
+    <target name="-do-uno-types" depends="-do-empty-unopath,-do-idl-unopath"/>
+    <target name="-do-idl-unopath" depends="-check-uno-types" if="own.idl.files" unless="uno.path.exists">
+        <manifest file="${build.dir}/MANIFEST.MF" mode="update">
+            <attribute name="UNO-Type-Path" value="${idl_types.jar}"/>
+        </manifest>
+    </target>
+    <target name="-do-empty-unopath" depends="-check-uno-types" if="no.idl.files" unless="uno.path.exists">
+        <manifest file="${build.dir}/MANIFEST.MF" mode="update">
+            <attribute name="UNO-Type-Path" value=""/>
+        </manifest>
+    </target>
+    <target name="-check-uno-types">
+        <property file="${idl.out}/idl_list.properties"/>
+        <check-manifest-entry condition.property.name="uno.path.exists" entry.name="UNO-Type-Path"/>
+        <condition property="no.idl.files">
+            <equals arg1="${idl.file.list}" arg2="" trim="true"/>
+        </condition>
+        <condition property="own.idl.files">
+            <not>
+                <istrue value="${no.idl.files}"/>
+            </not>
+        </condition>
+    </target>
+
+    <!-- enter the registration classes unless the user did not enter his own. Do nothing when the project is old -->
+    <target name="-do-registration" depends="-do-central-registration,-check-registration-classes-name"
+                if="new.project.registration" unless="do.no.registration">
+        <manifest file="${build.dir}/MANIFEST.MF" mode="update">
+            <section name="${slash.registration.class}">
+                <attribute name="RegistrationClasses" value="${registration.classname}"/>
+            </section>
+        </manifest>
+    </target>
+    <target name="-check-registration-classes-name">
+        <check-manifest-entry condition.property.name="registration.classes.exists" entry.name="RegistrationClasses"/>
+        <condition property="do.no.registration">
+            <or>
+                <istrue value="${registration.classes.exists}"/>
+                <istrue value="${registration.class.exists}"/>
+            </or>
+        </condition>
+    </target>
+
+    <!-- enter the registration class name unless the user did not enter his own. Do nothing when the project is old -->
+    <target name="-do-central-registration" depends="-check-registration-class-name,-do-old-project-registration" if="new.project.registration" unless="registration.class.exists">
+        <property name="regclass.properties" value="${build.dir}/regclass.properties"/>
+        <propertyfile file="${regclass.properties}">
+            <entry key="dot.registration" value="${slash.registration.class}"/>
+        </propertyfile>
+        <replace file="${regclass.properties}" token=".class" value=""/>
+        <replace file="${regclass.properties}" token="/" value="."/>
+        <property file="${regclass.properties}"/>
+        <manifest file="${build.dir}/MANIFEST.MF" mode="update">
+            <attribute name="RegistrationClassName" value="${dot.registration}"/>
+        </manifest>
+    </target>
+    <target name="-check-registration-class-name">
+        <check-manifest-entry condition.property.name="registration.class.exists" entry.name="RegistrationClassName"/>
+    </target>
+
+    <!-- Do the registration for older projects without a central registration class -->
+    <target name="-do-old-project-registration" depends="-check-for-old-project" if="old.project.registration" unless="registration.class.exists">
+        <manifest file="${build.dir}/MANIFEST.MF" mode="update">
+            <attribute name="RegistrationClassName" value="${registration.classname}"/>
+        </manifest>
+    </target>
+    <target name="-check-for-old-project">
+        <!-- central registration class in project -->
+        <fileset id="registration.class.name" dir="${build.dir}/classes">
+            <patternset>
+                <include name="**/CentralRegistrationClass.class"/>
+            </patternset>
+        </fileset>
+        <property name="systemslash.registration.class" refid="registration.class.name"/>
+        <!-- make forward slash from backslash on Windows -->
+        <property name="regclass.properties" value="${build.dir}/regclass.properties"/>
+        <propertyfile file="${regclass.properties}">
+            <entry key="slash.registration.class" value="${systemslash.registration.class}"/>
+        </propertyfile>
+        <replace file="${regclass.properties}" token="\\" value="/"/>
+        <property file="${regclass.properties}"/>
+        <!-- now slash is ok -->
+        <condition property="old.project.registration">
+            <equals trim="true" arg1="${slash.registration.class}" arg2=""/>
+        </condition>
+        <condition property="new.project.registration">
+            <isfalse value="${old.project.registration}"/>
+        </condition>
+    </target>
+
+    <!-- copy the user manifest if it exists -->
+    <target name="-copy-user-manifest" depends="-check-user-manifest" if="user.manifest.exists">
+        <copy file="manifest.mf" tofile="${build.dir}/MANIFEST.MF" overwrite="true"/>
+        <available file="${build.dir}/MANIFEST.MF" property="build.manifest.exists"/>
+    </target>
+    <target name="-check-user-manifest">
+        <available file="manifest.mf" property="user.manifest.exists"/>
+    </target>
+
+    <!-- handle the class path for external jar files unless there is a user overwrite -->
+    <target name="-external-jars" depends="-rm-external-jars,-add-external-jars"/>
+
+    <target name="-add-external-jars" depends="-external-jars-condition" if="do.externalJars">
+        <!-- get property external.jars for classpath from props file -->
+        <property file="${dist.dir}/${external.jar.dir}/jars.properties"/>
+    </target>
+
+    <target name="-rm-external-jars" depends="-external-jars-condition" unless="do.externalJars">
+        <!-- empty property, if no jars -->
+        <property name="external.jars" value=""/>
+    </target>
+
+    <target name="-external-jars-condition">
+        <available file="${dist.dir}/${external.jar.dir}" type="dir" property="do.externalJars"/>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="-delete-uno-package">
+        <delete failonerror="false" file="${uno.package.name}"/>
+    </target>
+
+    <target name="-pre-uno-package">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+
+    <target name="-license-exists">
+        <available file="${project.dir}/${licenses.dir}" type="dir" property="do.license"/>
+    </target>
+
+    <!-- test for licenses dir is necessary because zipfileset fails if dir not there -->
+    <target name="-uno-package-with-license" depends="-license-exists" if="do.license">
+        <zip update="true" destfile="${uno.package.name}">
+            <zipfileset dir="${project.dir}/${licenses.dir}" includes="**" casesensitive="yes" prefix="${licenses.dir}"/>
+        </zip>
+    </target>
+
+    <target name="-description-exists">
+        <available file="${project.dir}/${description.dir}" type="dir" property="do.description"/>
+    </target>
+
+    <!-- test for description dir is necessary because zipfileset fails if dir not there -->
+    <target name="-uno-package-with-description" depends="-description-exists" if="do.description">
+        <zip update="true" destfile="${uno.package.name}">
+            <zipfileset dir="${project.dir}/${description.dir}" includes="**" casesensitive="yes" prefix="${description.dir}"/>
+        </zip>
+    </target>
+
+    <target name="-help-exists">
+        <available file="${project.dir}/${help.dir}" type="dir" property="do.help"/>
+    </target>
+
+    <!-- test for help dir is necessary because zipfileset fails if dir not there -->
+    <target name="-uno-package-with-help" depends="-help-exists" if="do.help">
+        <zip update="true" destfile="${uno.package.name}">
+            <zipfileset dir="${help.dir}" includes="${help.content.extensions}" prefix="${help.dir}"/>
+        </zip>
+    </target>
+
+    <target name="-dialogs-exists">
+        <available file="${project.dir}/${dialogs.dir}" type="dir" property="do.dialogs"/>
+    </target>
+
+    <!-- test for dialogs dir is necessary because zipfileset fails if dir not there -->
+    <target name="-uno-package-with-dialogs" depends="-dialogs-exists" if="do.dialogs">
+        <zip update="true" destfile="${uno.package.name}">
+            <zipfileset dir="${dialogs.dir}" includes="${dialog.content.extensions}" prefix="dialogs"/>
+        </zip>
+    </target>
+
+    <target name="-do-uno-package" description="Creates UNO extension pacakge" depends="-uno-package-with-license,-uno-package-with-help,-uno-package-with-dialogs,-uno-package-with-description">
+        <echo message="creating UNO extension package ..."/>
+        <zip update="true" destfile="${uno.package.name}">
+            <fileset dir="${src.dir}" includes="${manifest.package.extensions}" casesensitive="yes"/>
+            <fileset dir="${build.registry.dir}" casesensitive="yes"/>
+            <fileset dir="${src.dir}" includes="description.xml" casesensitive="yes"/>
+            <fileset dir="${dist.dir}" includes="**/*.jar" casesensitive="yes"/>
+            <fileset dir="${images.base.dir}" includes="**" casesensitive="yes"/>
+            <fileset dir="${idl.out.rdb}" includes="**/*.rdb" casesensitive="yes"/>
+            <zipfileset dir="${src.dir}" includes="uno-extension-manifest.xml" fullpath="META-INF/manifest.xml"/>
+        </zip>
+    </target>
+
+    <target name="-post-uno-package">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+
+    <target name="uno-package" description="Creates UNO extension pacakge" depends="jar,images,registry,-delete-uno-package,-pre-uno-package,-do-uno-package,-post-uno-package"/>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<!--    <target name="uno-deploy" description="Deploys UNO extension package" depends="uno-package">
+        <echo message="deploying UNO extension package ..."/>
+        <echo message="${office.unopkg} gui -f ${uno.package.name}"/>
+        <echo message="${office.soffice} ${uno.package.name}"/>
+        <exec executable="${office.soffice}" dir="${office.program.dir}" failonerror="true">
+            <arg file="${uno.package.name}"/>
+        </exec>
+    </target> -->
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="uno-run" description="Run OpenOffice.org" depends="uno-package,-run-oo"/>
+
+    <!-- subtargets for different office versions -->
+    <target name="-run-oo">
+        <echo message="${office.unopkg} gui -f ${uno.package.name}"/>
+        <exec dir="${office.program.dir}" executable="${office.unopkg}" failonerror="true">
+            <arg value="gui"/>
+            <arg value="-f"/>
+            <arg file="${uno.package.name}"/>
+        </exec>
+        <echo message="${office.soffice}"/>
+        <exec executable="${office.soffice}" dir="${office.program.dir}" failonerror="true">
+            <arg value="${office.startup.options}"/>
+        </exec>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="uno-debug" description="Debugss UNO extension package in Target Office" depends="uno-package,-oo-debug"/>
+
+    <target name="-oo-debug">
+        <!-- security fail for executing this without netbeans -->
+        <fail unless="netbeans.home">This target can only run inside the NetBeans IDE.</fail>
+        <!-- start debugger and get connection address jpda.address -->
+        <nbjpdastart name="Debug Office" addressproperty="jpda.address" transport="dt_socket">
+            <classpath path="${build.classes.dir}"/>
+            <sourcepath path="${src.dir}"/>
+        </nbjpdastart>
+        <!-- register component in temporary user installation -->
+        <echo message="debugging UNO extension package ..."/>
+        <echo message="${office.unopkg} gui -f ${uno.package.name}"/>
+        <exec dir="${office.program.dir}" executable="${office.unopkg}">
+            <arg value="gui"/>
+            <arg value="-f"/>
+            <arg file="${uno.package.name}"/>
+            <env key="UserInstallation" value="${office.debug.user.directory}"/>
+        </exec>
+        <!-- start Office with debug Java and user installation -->
+        <echo message="starting the Office with ..."/>
+        <echo message="user installation: ${office.debug.user.directory}"/>
+        <echo message="debug options:     &quot;-Xdebug&quot; &quot;-Xrunjdwp:transport=dt_socket,address=${jpda.address}&quot;"/>
+        <echo message="${office.soffice}"/>
+        <exec dir="${office.program.dir}" executable="${office.soffice}" failonerror="true">
+            <arg value="-nofirststartwizard"/>
+            <arg value="${office.startup.options}"/>
+            <env key="UserInstallation" value="${office.debug.user.directory}"/>
+            <env key="JAVA_TOOL_OPTIONS" value="&quot;-Xdebug&quot; &quot;-Xrunjdwp:transport=dt_socket,address=${jpda.address}&quot;"/>
+        </exec>
+    </target>
+
+</project>
