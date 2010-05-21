@@ -39,7 +39,6 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 
 using rtl::OUString;
-using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -60,8 +59,8 @@ void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCus
     // not sure if this needs to be implemented
 }
 
-void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
-    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
+void CustomShapeProperties::pushToPropSet(
+        const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
 {
     if ( maShapePresetType.getLength() )
     {
