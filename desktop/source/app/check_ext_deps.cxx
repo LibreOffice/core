@@ -396,10 +396,5 @@ sal_Bool Desktop::CheckExtensionDependencies()
 void Desktop::SynchronizeExtensionRepositories()
 {
     RTL_LOGFILE_CONTEXT(aLog,"desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
-    OUString sDisable;
-    ::rtl::Bootstrap::get( UNISTRING( "DISABLE_SYNC_EXTENSIONS" ), sDisable, OUString() );
-    if (sDisable.getLength() > 0)
-        return;
-
     dp_misc::syncRepositories( new SilentCommandEnv( this ) );
 }
