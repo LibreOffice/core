@@ -742,6 +742,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
 {
     if( !m_xTitle.is()  )
     {
+        ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
         m_xTitle = new TitleWrapper( TitleHelper::MAIN_TITLE, m_spChart2ModelContact );
     }
     return m_xTitle;
@@ -752,6 +753,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
 {
     if( !m_xSubTitle.is() )
     {
+        ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
         m_xSubTitle = new TitleWrapper( TitleHelper::SUB_TITLE, m_spChart2ModelContact );
     }
     return m_xSubTitle;
