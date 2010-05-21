@@ -206,7 +206,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pView(0),
     bAuthorInitialised(sal_False),
     bEmbeddedLoadSave( sal_False ),
-    pClipboard( 0 ),
     pDragDrop( 0 ),
     pXSelection( 0 )
 {

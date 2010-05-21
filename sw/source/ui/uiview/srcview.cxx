@@ -599,15 +599,11 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_PASTE:
             {
-                BOOL bDisable = 0 == SW_MOD()->pClipboard;
-                if( bDisable  )
-                {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard(
-                                                            &aEditWin) );
-                    bDisable = !aDataHelper.GetXTransferable().is() ||
-                                0 == aDataHelper.GetFormatCount();
-                }
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard(
+                                                        &aEditWin) );
+                BOOL bDisable = !aDataHelper.GetXTransferable().is() ||
+                            0 == aDataHelper.GetFormatCount();
                 if( bDisable )
                     rSet.DisableItem(nWhich);
             }
