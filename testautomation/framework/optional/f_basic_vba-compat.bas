@@ -60,8 +60,16 @@ sub LoadIncludeFiles
 
     use "global\tools\includes\optional\t_basic_organizer_tools.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
+<<<<<<< local
     use "global\tools\includes\optional\t_stringtools.inc"
+=======
+    use "global\tools\includes\optional\t_security_tools.inc"
+>>>>>>> other
     use "global\tools\includes\optional\t_macro_tools.inc"
+<<<<<<< local
+=======
+    use "global\tools\includes\optional\t_docfuncs.inc"
+>>>>>>> other
 
     use "framework\optional\includes\basic_vba_compat_tools.inc"
     

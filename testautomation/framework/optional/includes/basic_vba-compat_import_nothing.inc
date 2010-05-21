@@ -56,8 +56,14 @@ testcase tBasicVBACompatImportNothing()
         
     dim cNodeCount as integer
     
-
-
+    ' Depending on the mode of macro import we have differtent basic libraries listed
+    const NODE_COUNT     = 74 ' Do not import Microsoft(R) Excel(R) macros at all
+    const NODE_COUNT_OOO = 72 
+    const MACRO_LIST     = 0  ' The document library should have no scripts listed
+    const DOCUMENT_POSITION_OFFSET = -1
+    
+    const IMPORT_EXCEL_MACROS = FALSE
+    const EXEC_EXCEL_MACROS   = FALSE
  
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
@@ -76,8 +82,10 @@ testcase tBasicVBACompatImportNothing()
     cNodeCount = hExpandAllNodes( MakroAus )
     
     printlog( "Verify that we have the correct node count for the current mode" )
-    if ( cNodeCount <> NODE_COUNT ) then
-        warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    if ( gOOo ) then
+        if ( cNodeCount <> NODE_COUNT_OOO ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    else
+        if ( cNodeCount <> NODE_COUNT ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
     endif
     
     printlog( "Verify position of the document node" )

@@ -57,7 +57,11 @@ testcase tFormatStylistFlyer
     if Gestalter.NotExists = false Then
         qaErrorLog "   - Expected Stylist to be closed; But is Open. Check tests."
     else
-        hTypekeys "<F11>"   '/// open stylist by pressing key [F11] ///'
+        if lcase(gPlatform) = "osx" then
+            hTypekeys "<mod1 t>"
+        else
+            hTypekeys "<F11>"   '/// open stylist by pressing key [F11] ///'
+        end if
         sleep 1
     end if
     Kontext "Gestalter"
@@ -200,7 +204,11 @@ testcase tFormatStylistDocuments
     printlog "  -   Close stylist using F11"
     Gestalter.Undock
     Sleep 1
-    hTypeKeys "<F11>"
+    if lcase(gPlatform) = "osx" then
+        hTypekeys "<mod1 t>"
+    else
+        hTypeKeys "<F11>"
+    end if
     Kontext "Gestalter"
     if Gestalter.exists then
         warnlog "   Stylist still exists - closing again"
@@ -661,7 +669,11 @@ testcase tiFormatStylist
         TabOptionenNumerierung.Cancel
         sleep 1
     endif
-    hTypeKeys "<F11>"
+    if lcase(gPlatform) = "osx" then
+        hTypekeys "<mod1 t>"
+    else
+        hTypeKeys "<F11>"
+    end if
     sleep 1
     Kontext "Gestalter"
     if Gestalter.Exists Then Warnlog "- Stylist could not be closed pressing F11"
@@ -866,7 +878,11 @@ testcase tFormatStylist
     if (Stylist.NotExists) then
         ErrorLog "There is no stylist open, should be."
     else
-        hTypekeys "<F11>"
+        if lcase(gPlatform) = "osx" then
+            hTypekeys "<mod1 t>"
+        else
+            hTypekeys "<F11>"
+        end if
         Kontext "Stylist"
         if (Stylist.Exists) then
             ErrorLog "The Stylist should be closed now."

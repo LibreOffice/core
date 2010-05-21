@@ -271,8 +271,7 @@ sub hStatusWriteOutputFirstFile ()
         sPlat = "win"
     end if
 
-   slVersion() = Split(gProductName, " ")                         '(15)
-   sProduct = slVersion(0)
+    sProduct = gProductName                         '(15)
 
     ' major is from start to 'm'
     iPosA = 1
@@ -416,7 +415,7 @@ gTestName="" '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     wend
     bError = True
     if (i = 18) then ' big database error; resultfile wasn't created
-        warnlog "Status Write Error! (TimeOut waiting for webservice result)" +chr(13)+ "Email is send to: " + gReturnAddress
+        warnlog "Status Write Error! (TimeOut waiting for webservice result)"
     else
         ListRead(glsStatusPage(), sOutFileTemp)   '3
         i = ListCount(glsStatusPage())

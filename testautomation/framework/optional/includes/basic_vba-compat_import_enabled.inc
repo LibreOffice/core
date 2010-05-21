@@ -80,6 +80,15 @@ testcase tBasicVBACompatImportEnabled()
     dim cTempString as string
     dim bFound as boolean  
     
+    ' Depending on the mode of macro import we have differtent basic libraries listed
+    const NODE_COUNT_OOO = 74
+    const NODE_COUNT     = 76
+ 
+    const DOCUMENT_POSITION_OFFSET = -3
+    
+    const IMPORT_EXCEL_MACROS = TRUE
+    const EXEC_EXCEL_MACROS   = TRUE
+ 
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     
@@ -97,9 +106,10 @@ testcase tBasicVBACompatImportEnabled()
     cNodeCount = hExpandAllNodes( MakroAus )
     
     printlog( "Verify that we have the correct node count for the current mode." )
-    if ( cNodeCount <> NODE_COUNT ) then
-        warnlog( "The number of nodes is incorrect: " & cNodeCount )
-        printlog( "Expected were...................: " & NODE_COUNT )
+    if ( gOOo ) then
+        if ( cNodeCount <> NODE_COUNT_OOO ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    else
+        if ( cNodeCount <> NODE_COUNT ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
     endif
     
     printlog( "Verify position of the document node." )
