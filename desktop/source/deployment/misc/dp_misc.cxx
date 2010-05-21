@@ -603,8 +603,8 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
     //synchronize shared before bundled otherewise there are
     //more revoke and registration calls.
     sal_Bool bModified = false;
-    const OUString sShared(RTL_CONSTASCII_USTRINGPARAM("shared"));
-    if (needToSyncRepostitory(sShared))
+    if (needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("shared")))
+        || needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
     {
         xExtensionManager =
             deployment::ExtensionManager::get(
@@ -613,23 +613,7 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
         if (xExtensionManager.is())
         {
             bModified = xExtensionManager->synchronize(
-                sShared, Reference<task::XAbortChannel>(), xCmdEnv);
-        }
-    }
-
-    const OUString sBundled(RTL_CONSTASCII_USTRINGPARAM("bundled"));
-    if (needToSyncRepostitory( sBundled))
-    {
-        if (!xExtensionManager.is())
-        {
-            xExtensionManager =
-                deployment::ExtensionManager::get(
-                    comphelper_getProcessComponentContext());
-        }
-        if (xExtensionManager.is())
-        {
-            bModified |= xExtensionManager->synchronize(
-                sBundled, Reference<task::XAbortChannel>(), xCmdEnv);
+                Reference<task::XAbortChannel>(), xCmdEnv);
         }
     }
 

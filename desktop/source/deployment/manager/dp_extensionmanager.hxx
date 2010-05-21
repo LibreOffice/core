@@ -186,7 +186,6 @@ public:
             css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL synchronize(
-        ::rtl::OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,

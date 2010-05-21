@@ -116,6 +116,29 @@ OUString CompIdentifiers::getName(::std::vector<Reference<deploy::XPackage> > co
     OSL_ASSERT(extension.is());
     return extension->getDisplayName();
 }
+
+void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const & xCmdEnv)
+{
+    //Write the lastmodified file
+    try {
+        ::rtl::Bootstrap::expandMacros(url);
+        ::ucbhelper::Content ucbStamp(url, xCmdEnv );
+        dp_misc::erase_path( url, xCmdEnv );
+        ::rtl::OString stamp("1" );
+        Reference<css::io::XInputStream> xData(
+            ::xmlscript::createInputStream(
+                ::rtl::ByteSequence(
+                    reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
+                    stamp.getLength() ) ) );
+        ucbStamp.writeStream( xData, true /* replace existing */ );
+    }
+    catch(...)
+    {
+        uno::Any exc(::cppu::getCaughtException());
+        throw deploy::DeploymentException(
+            OUSTR("Failed to update") + url, 0, exc);
+    }
+}
 } //end namespace
 
 namespace dp_manager {
@@ -1021,7 +1044,6 @@ void ExtensionManager::reinstallDeployedExtensions(
 }
 
 sal_Bool ExtensionManager::synchronize(
-    OUString const & repository,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
     throw (deploy::DeploymentException,
@@ -1033,37 +1055,20 @@ sal_Bool ExtensionManager::synchronize(
     try
     {
         sal_Bool bModified = sal_False;
-        Reference<deploy::XPackageManager> xPackageManager;
-        OUString file;
-        if (repository.equals(OUSTR("user")))
-        {
-            xPackageManager = m_userRepository;
-        }
-        else if (repository.equals(OUSTR("shared")))
-        {
-            xPackageManager = m_sharedRepository;
-            file = OUString (
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$SHARED_EXTENSIONS_USER/lastsynchronized"));
-        }
-        else if (repository.equals(OUSTR("bundled")))
-        {
-            xPackageManager = m_bundledRepository;
-            file = OUString (
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
-        }
-        else
-            throw lang::IllegalArgumentException(
-                OUSTR("No valid repository name provided."),
-                static_cast<cppu::OWeakObject*>(this), 0);
 
         ::osl::MutexGuard guard(getMutex());
-        String sSynchronizing(StrSyncRepository::get());
-        sSynchronizing.SearchAndReplaceAllAscii( "%NAME", repository );
-        dp_misc::ProgressLevel progress(xCmdEnv, sSynchronizing);
+        String sSynchronizingShared(StrSyncRepository::get());
+        sSynchronizingShared.SearchAndReplaceAllAscii( "%NAME", OUSTR("shared"));
+        dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
+        bModified = m_sharedRepository->synchronize(xAbortChannel, xCmdEnv);
+        progressShared.update(OUSTR("\n\n"));
 
-        bModified = xPackageManager->synchronize(xAbortChannel, xCmdEnv);
+        String sSynchronizingBundled(StrSyncRepository::get());
+        sSynchronizingBundled.SearchAndReplaceAllAscii( "%NAME", OUSTR("bundled"));
+        dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
+        bModified |= m_bundledRepository->synchronize(xAbortChannel, xCmdEnv);
+        progressBundled.update(OUSTR("\n\n"));
+
         try
         {
             const uno::Sequence<uno::Sequence<Reference<deploy::XPackage> > >
@@ -1082,31 +1087,8 @@ sal_Bool ExtensionManager::synchronize(
             //so we will no repeat this everytime OOo starts.
             OSL_ENSURE(0, "Extensions Manager: synchronize");
         }
-
-
-        progress.update(OUSTR("\n\n"));
-
-        //Write the lastmodified file
-        try {
-            ::rtl::Bootstrap::expandMacros(file);
-            ::ucbhelper::Content ucbStamp(file, xCmdEnv );
-            dp_misc::erase_path( file, xCmdEnv );
-            ::rtl::OString stamp("1" );
-            Reference<css::io::XInputStream> xData(
-                ::xmlscript::createInputStream(
-                    ::rtl::ByteSequence(
-                        reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
-                        stamp.getLength() ) ) );
-            ucbStamp.writeStream( xData, true /* replace existing */ );
-        }
-        catch(...)
-        {
-            uno::Any exc(::cppu::getCaughtException());
-            throw deploy::DeploymentException(
-                OUSTR("Failed to update") + file,
-                static_cast<OWeakObject*>(this), exc);
-
-        }
+        writeLastModified(OUSTR("$BUNDLED_EXTENSIONS_USER/lastsynchronized"), xCmdEnv);
+        writeLastModified(OUSTR("$SHARED_EXTENSIONS_USER/lastsynchronized"), xCmdEnv);
         return bModified;
     } catch (deploy::DeploymentException& ) {
         throw;
