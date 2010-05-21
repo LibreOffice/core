@@ -99,8 +99,8 @@ testcase tExampleCalculation
 	call fCalcCompareCellValue ("C15","4" & sDecimalseperator & "0000 mg")
 	call fCalcCompareCellValue ("D15","18" & sDecimalseperator & "0000 mg")
 	call fCalcCompareCellValue ("E15","22" & sDecimalseperator & "0000 ct")
-	call fCalcCompareCellValue ("G13","120" & sDecimalseperator & "00")
-	call fCalcCompareCellValue ("G14","180" & sDecimalseperator & "00")
+	call fCalcCompareCellValue ("G13","120")
+	call fCalcCompareCellValue ("G14","180")
 	call fCalcCompareCellValue ("G15","300")
 	printlog " Tools - Solver"
 	ToolsSolver
@@ -116,8 +116,8 @@ testcase tExampleCalculation
 	call fCalcCompareCellValue ("C15","4" & sDecimalseperator & "0000 mg")
 	call fCalcCompareCellValue ("D15","51" & sDecimalseperator & "3333 mg")
 	call fCalcCompareCellValue ("E15","68" & sDecimalseperator & "6667 ct")
-	call fCalcCompareCellValue ("G13","520" & sDecimalseperator & "00")
-	call fCalcCompareCellValue ("G14","-20" & sDecimalseperator & "00")
+	call fCalcCompareCellValue ("G13","520")
+	call fCalcCompareCellValue ("G14","-20")
 	call fCalcCompareCellValue ("G15","500")
 	printlog " So the solution found is correct but not usefull. Let's limit the lemonade to positive values by adding a new limitation."
 	printlog " Tools - Solver"

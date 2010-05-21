@@ -92,17 +92,17 @@ testcase tArrayconstants01
     kontext "DocumentCalc"
     DocumentCalc.TypeKeys ("=" & sFunctionSIN & "({1;2;3}) <MOD1 SHIFT RETURN>")
     '///Check that the cellvalue  of A4 is "0.84"
-    printlog "Check that the cellvalue  of A4 is ""0.841470984807896"""
+    printlog "Check that the cellvalue  of A4 is ""0.8414709848"""
     call fCalcSelectRange ("A5")
     kontext "DocumentCalc"
     DocumentCalc.TypeKeys "=A4<TAB>=B4<TAB>=C4<RETURN>" 'because a part of a matrix is protected we need a helpcell with only the values
-    call fCalcCompareCellValue ("A5","0" & sDecimalseperator & "841470984807896")
+    call fCalcCompareCellValue ("A5","0" & sDecimalseperator & "8414709848")
     '///Check that the cell contents of B4 is "0.91"
-    printlog "Check that the cell contents of B4 is ""0.909297426825682"""
-    call fCalcCompareCellValue ("B5","0" & sDecimalseperator & "909297426825682")
+    printlog "Check that the cell contents of B4 is ""0.9092974268"""
+    call fCalcCompareCellValue ("B5","0" & sDecimalseperator & "9092974268")
     '///Check that the cell contents of C4 is "0.14"
-    printlog "Check that the cell contents of C4 is ""0.141120008059867"""
-    call fCalcCompareCellValue ("C5","0" & sDecimalseperator & "141120008059867")
+    printlog "Check that the cell contents of C4 is ""0.1411200081"""
+    call fCalcCompareCellValue ("C5","0" & sDecimalseperator & "1411200081")
 
     '///In cell A6 enter "={1;2|4;5;6}"
     printlog "In cell A6 enter ""={1;2|4;5;6}"""
