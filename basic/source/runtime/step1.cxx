@@ -35,6 +35,7 @@
 #include "iosys.hxx"
 #include "image.hxx"
 #include "sbunoobj.hxx"
+#include "errobject.hxx"
 
 bool checkUnoObjectType( SbUnoObject* refVal,
     const String& aClass );
@@ -360,6 +361,7 @@ void SbiRuntime::StepERRHDL( UINT32 nOp1 )
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
+    SbxErrObject::getUnoErrObject()->Clear();
 }
 
 // Resume nach Fehlern (+0=statement, 1=next or Label)
@@ -380,6 +382,8 @@ void SbiRuntime::StepRESUME( UINT32 nOp1 )
     }
     else
         pCode = pErrStmnt;
+    if ( pError ) // current in error handler ( and got a Resume Next statment )
+        SbxErrObject::getUnoErrObject()->Clear();
 
     if( nOp1 > 1 )
         StepJUMP( nOp1 );

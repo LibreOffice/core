@@ -942,7 +942,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 try {
                     xElementRootStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                                                                     aElementPath,
-                                                                    embed::ElementModes::READWRITE );
+                                                                    embed::ElementModes::READ );
                 } catch( uno::Exception& )
                 {
                     // TODO: error handling
