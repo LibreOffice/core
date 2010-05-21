@@ -70,6 +70,8 @@ namespace svt { namespace uno
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::ui::dialogs::XWizardController;
     using ::com::sun::star::ui::dialogs::XWizardPage;
+    using ::com::sun::star::container::NoSuchElementException;
+    using ::com::sun::star::util::InvalidStateException;
     /** === end UNO using === **/
     namespace WizardButton = ::com::sun::star::ui::dialogs::WizardButton;
 
@@ -205,12 +207,17 @@ namespace svt { namespace uno
     //--------------------------------------------------------------------
     Dialog* Wizard::createDialog( Window* i_pParent )
     {
-        return new WizardShell( i_pParent, this, m_xController, m_aWizardSteps );
+        Dialog* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
+        pDialog->SetSmartHelpId( SmartId( m_sHelpURL ) );
+        return pDialog;
     }
 
     //--------------------------------------------------------------------
     void Wizard::destroyDialog()
     {
+        if ( m_pDialog )
+            m_sHelpURL = m_pDialog->GetSmartHelpId().GetStr();
+
         Wizard_Base::destroyDialog();
     }
 
@@ -258,6 +265,31 @@ namespace svt { namespace uno
         Sequence< Property > aProps;
         describeProperties( aProps );
         return new ::cppu::OPropertyArrayHelper( aProps );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL Wizard::getHelpURL() throw (RuntimeException)
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        if ( !m_pDialog )
+            return m_sHelpURL;
+
+        const SmartId aSmartId( m_pDialog->GetSmartHelpId() );
+        return aSmartId.GetStr();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL Wizard::setHelpURL( const ::rtl::OUString& i_HelpURL ) throw (RuntimeException)
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        if ( !m_pDialog )
+            m_sHelpURL = i_HelpURL;
+        else
+            m_pDialog->SetSmartHelpId( SmartId( i_HelpURL ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -309,6 +341,24 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, ::sal_Bool i_Enable ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::updateTravelUI: invalid dialog implementation!" );
+
+        if ( !pWizardImpl->knowsPage( i_PageID ) )
+            throw NoSuchElementException( ::rtl::OUString(), *this );
+
+        if ( i_PageID == pWizardImpl->getCurrentPage() )
+            throw InvalidStateException( ::rtl::OUString(), *this );
+
+        pWizardImpl->enablePage( i_PageID, i_Enable );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::updateTravelUI(  ) throw (RuntimeException)
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -354,6 +404,21 @@ namespace svt { namespace uno
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::getCurrentPage: invalid dialog implementation!" );
 
         return pWizardImpl->getCurrentWizardPage();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, ::sal_Bool i_Final ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        if ( ( i_PathIndex < 0 ) || ( i_PathIndex >= m_aWizardSteps.getLength() ) )
+            throw NoSuchElementException( ::rtl::OUString(), *this );
+
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::activatePath: invalid dialog implementation!" );
+
+        pWizardImpl->activatePath( i_PathIndex );
     }
 
     //------------------------------------------------------------------------------------------------------------------

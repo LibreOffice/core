@@ -75,14 +75,18 @@ namespace svt { namespace uno
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
         // ::com::sun::star::ui::dialogs::XWizard
+        virtual ::rtl::OUString SAL_CALL getHelpURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setHelpURL( const ::rtl::OUString& _helpurl ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, ::sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL travelNext(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL travelPrevious(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, ::sal_Bool Enable ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateTravelUI(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, ::sal_Bool Final ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::ui::dialogs::XExecutableDialog
         virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException);
@@ -102,6 +106,7 @@ namespace svt { namespace uno
         ::comphelper::ComponentContext                                                          m_aContext;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >    m_xController;
+        ::rtl::OUString                                                                         m_sHelpURL;
     };
 
 //......................................................................................................................

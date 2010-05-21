@@ -84,14 +84,25 @@ namespace svt { namespace uno
         sal_Bool    travelNext()        { return WizardShell_Base::travelNext(); }
         sal_Bool    travelPrevious()    { return WizardShell_Base::travelPrevious(); }
 
-        void        preExecute()
+        void        activatePath( const sal_Int16 i_nPathID )
         {
-            // activate the first page
-            ActivatePage();
+            WizardShell_Base::activatePath( PathId( i_nPathID ) );
         }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage >
                     getCurrentWizardPage() const;
+
+        sal_Int16   getCurrentPage() const
+        {
+            return impl_stateToPageId( getCurrentState() );
+        }
+
+        void        enablePage( const sal_Int16 i_PageID, const sal_Bool i_Enable );
+
+        bool        knowsPage( const sal_Int16 i_nPageID ) const
+        {
+            return knowsState( impl_pageIdToState( i_nPageID ) );
+        }
 
     private:
         sal_Int16   impl_stateToPageId( const WizardTypes::WizardState i_nState ) const

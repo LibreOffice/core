@@ -142,7 +142,7 @@ protected:
 
             You can only activate paths which share the first <code>k</code> states with the path
             which is previously active (if any), where <code>k</code> is the index of the
-            current state within the current page.
+            current state within the current path.
 
             <example>
             Say you have paths, <code>(0,1,2,5)</code> and <code>(0,1,4,5)</code>. This means that after
@@ -201,6 +201,10 @@ protected:
             @see declarePath
         */
         void    enableState( WizardState _nState, bool _bEnable = true );
+
+        /** returns true if and only if the given state is known in at least one declared path
+        */
+        bool    knowsState( WizardState _nState ) const;
 
         // OWizardMachine overriables
         virtual void            enterState( WizardState _nState );

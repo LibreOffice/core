@@ -210,6 +210,12 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void WizardShell::enablePage( const sal_Int16 i_nPageID, const sal_Bool i_bEnable )
+    {
+        enableState( impl_pageIdToState( i_nPageID ), i_bEnable );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     TabPage* WizardShell::createPage( WizardState i_nState )
     {
         ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", NULL );

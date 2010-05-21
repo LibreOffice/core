@@ -342,15 +342,16 @@ namespace svt
         if ( (sal_Int32)aNewPathPos->second.size() <= nCurrentStatePathIndex )
             return;
 
-#if OSL_DEBUG_LEVEL > 0
         // assert that the current and the new path are equal, up to nCurrentStatePathIndex
         Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
         if ( aActivePathPos != m_pImpl->aPaths.end() )
         {
-            DBG_ASSERT( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) > nCurrentStatePathIndex,
-                "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+            if ( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
+            {
+                OSL_ENSURE( false, "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+                return;
+            }
         }
-#endif
 
         m_pImpl->nActivePath = _nPathId;
         m_pImpl->bActivePathIsDefinite = _bDecideForIt;
@@ -655,11 +656,33 @@ namespace svt
         // if the state is currently in the roadmap, reflect it's new status
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
     }
+
+    //--------------------------------------------------------------------
+    bool RoadmapWizard::knowsState( WizardState i_nState ) const
+    {
+        for (   Paths::const_iterator path = m_pImpl->aPaths.begin();
+                path != m_pImpl->aPaths.end();
+                ++path
+            )
+        {
+            for (   WizardPath::const_iterator state = path->second.begin();
+                    state != path->second.end();
+                    ++state
+                )
+            {
+                if ( *state == i_nState )
+                    return true;
+            }
+        }
+        return false;
+    }
+
     //--------------------------------------------------------------------
     bool RoadmapWizard::isStateEnabled( WizardState _nState ) const
     {
         return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }
+
     //--------------------------------------------------------------------
     void RoadmapWizard::Resize()
     {
