@@ -29,6 +29,7 @@ package com.sun.star.wizards.query;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
 
@@ -82,21 +83,22 @@ public class CallQueryWizard
      */
     public static class QueryWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor
     {
-
-        PropertyValue[] databaseproperties;
-        public XComponent Document = null;
-        public XComponent DocumentDefinition = null;
+        private PropertyValue[] m_wizardContext;
+        // <properties>
+        public String           Command;
+        public final Integer    CommandType = com.sun.star.sdb.CommandType.QUERY;
+        // </properties>
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
-        public QueryWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
+        public QueryWizardImplementation( XMultiServiceFactory i_serviceFactory )
         {
             super();
-            xmultiservicefactory = xmultiservicefactoryInitialization;
-            registerProperty("Document", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
-            registerProperty("DocumentDefinition", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
+            m_serviceFactory = i_serviceFactory;
+            registerProperty( "Command", (short)( PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID ) );
+            registerProperty( "CommandType", PropertyAttribute.READONLY );
         }
 
         public void trigger(String sEvent)
@@ -105,20 +107,8 @@ public class CallQueryWizard
             {
                 if (sEvent.compareTo("start") == 0)
                 {
-                    QueryWizard CurQueryWizard = new QueryWizard(xmultiservicefactory);
-                    XComponent[] obj = CurQueryWizard.startQueryWizard(xmultiservicefactory, databaseproperties);
-                    if (obj != null)
-                    {
-                        DocumentDefinition = obj[1];
-                        Document = obj[0];
-                    }
-                    CurQueryWizard = null;
-                }
-                else if (sEvent.compareTo("end") == 0)
-                {
-                    DocumentDefinition = null;
-                    Document = null;
-                    databaseproperties = null;
+                    QueryWizard CurQueryWizard = new QueryWizard( m_serviceFactory, m_wizardContext );
+                    Command = CurQueryWizard.startQueryWizard();
                 }
             }
             catch (Exception exception)
@@ -132,7 +122,7 @@ public class CallQueryWizard
         private static final String __serviceName = "com.sun.star.wizards.query.CallQueryWizard";
         /** The service manager, that gives access to all registered services.
          */
-        private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
+        private com.sun.star.lang.XMultiServiceFactory m_serviceFactory;
 
         /** This method is a member of the interface for initializing an object
          * directly after its creation.
@@ -143,7 +133,7 @@ public class CallQueryWizard
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
         {
-            databaseproperties = Properties.convertToPropertyValueArray(object);
+            m_wizardContext = Properties.convertToPropertyValueArray(object);
         }
 
         /** This method returns an array of all supported service names.
