@@ -132,6 +132,7 @@ sub set_global_environment_variables
     if ( $ENV{'RPM'} ) { $installer::globals::rpm = $ENV{'RPM'}; }
     if ( $ENV{'DONTCOMPRESS'} ) { $installer::globals::solarisdontcompress = 1; }
 
+    if ( $installer::globals::localinstalldir ) { $installer::globals::localinstalldirset = 1; }
     # Special handling, if LOCALINSTALLDIR contains "~" in the path
     if ( $installer::globals::localinstalldir =~ /^\s*\~/ ) { check_tilde_in_directory(); }
 }
