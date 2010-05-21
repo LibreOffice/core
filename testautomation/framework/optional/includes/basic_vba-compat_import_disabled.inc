@@ -68,15 +68,6 @@ testcase tBasicVBACompatImportDisabled()
     dim iCurrentModule as integer  
     dim cCurrentModule as string
     dim bFound as boolean  
-    
-    ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT_OOO = 78 ' OpenOffice.org
-    const NODE_COUNT     = 80 ' branded product
- 
-    const DOCUMENT_POSITION_OFFSET = -7
-    
-    const IMPORT_EXCEL_MACROS = TRUE
-    const EXEC_EXCEL_MACROS   = FALSE
  
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
