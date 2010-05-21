@@ -28,6 +28,8 @@
 #ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
 #define _XMLOFF_SETTINGSEXPORTHELPER_HXX
 
+#include "xmloff/dllapi.h"
+
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -40,9 +42,15 @@ namespace com
         namespace util { struct DateTime; }
     } }
 }
-class XMLSettingsExportHelper
+
+namespace xmloff
 {
-    SvXMLExport&    rExport;
+    class XMLSettingsExportContext;
+}
+
+class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
+{
+    ::xmloff::XMLSettingsExportContext& m_rContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringSubstitution > mxStringSubsitution;
 
@@ -91,10 +99,10 @@ class XMLSettingsExportHelper
                     const rtl::OUString rName) const;
 
 public:
-    XMLSettingsExportHelper(SvXMLExport& rExport);
+    XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext );
     ~XMLSettingsExportHelper();
 
-    void exportSettings(
+    void exportAllSettings(
         const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
         const rtl::OUString& rName) const;
 };

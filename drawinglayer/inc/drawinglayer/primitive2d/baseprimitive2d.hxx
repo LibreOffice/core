@@ -102,14 +102,16 @@ namespace drawinglayer
 
             Current Basic 2D Primitives are:
 
-            - BitmapPrimitive2D (bitmap data, evtl. with alpha)
-            - MetafilePrimitive2D (VCL Metafile, currently no decomposition, but planned, so may vanish)
+            - BitmapPrimitive2D (bitmap data, evtl. with transparence)
             - PointArrayPrimitive2D (single points)
             - PolygonHairlinePrimitive2D (hairline curves/polygons)
             - PolyPolygonColorPrimitive2D (colored polygons)
 
+            UPDATE: MetafilePrimitive2D (VCL Metafile) is taken off this list since
+            it is implemented with the integration of CWS aw078 into DV300m69.
+
             All other implemented primitives have a defined decomposition and can thus be
-            decomposed downt to this small set.
+            decomposed down to this small set.
 
             A renderer implementing support for this minimal set of primitives can completely
             render primitive-based visualisations. Of course, he also has to take states into account

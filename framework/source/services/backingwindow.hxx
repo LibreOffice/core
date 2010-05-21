@@ -86,24 +86,14 @@ namespace framework
         Size                            maWelcomeSize;
         FixedText                       maProduct;
         Size                            maProductSize;
-        FixedText                       maCreateText;
-        Size                            maCreateSize;
-        FixedText                       maWriterText;
         ImageButton                     maWriterButton;
-        FixedText                       maCalcText;
         ImageButton                     maCalcButton;
-        FixedText                       maImpressText;
         ImageButton                     maImpressButton;
-        FixedText                       maDrawText;
-        ImageButton                     maDrawButton;
-        FixedText                       maDBText;
-        ImageButton                     maDBButton;
-        FixedText                       maMathText;
-        ImageButton                     maMathButton;
-        FixedText                       maTemplateText;
-        ImageButton                     maTemplateButton;
-        FixedText                       maOpenText;
         ImageButton                     maOpenButton;
+        ImageButton                     maDrawButton;
+        ImageButton                     maDBButton;
+        ImageButton                     maMathButton;
+        ImageButton                     maTemplateButton;
 
         DecoToolBox                     maToolbox;
 
@@ -121,16 +111,18 @@ namespace framework
         Rectangle                       maControlRect;
 
         long                            mnColumnWidth[2];
+        long                            mnTextColumnWidth[2];
         Color                           maLabelTextColor;
         Color                           maWelcomeTextColor;
 
         Size                            maButtonImageSize;
 
         bool                            mbInitControls;
+        sal_Int32                       mnLayoutStyle;
         svt::AcceleratorExecute*        mpAccExec;
+        long                            mnBtnPos;
+        long                            mnBtnTop;
 
-
-        static const long nBtnPos = 240;
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;
         static const int nItemId_Info = 3;
@@ -142,12 +134,12 @@ namespace framework
 
         void loadImage( const ResId& i_rId, ImageButton& i_rButton );
 
-        void layoutButtonAndText( const char* i_pURL, int nColumn, const std::set<rtl::OUString>& i_rURLS,
-                                  SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
-                                  ImageButton& i_rBtn, FixedText& i_rText,
-                                  MnemonicGenerator& i_rMnemonicGen,
-                                  const String& i_rStr = String()
-                                  );
+        void layoutButton( const char* i_pURL, int nColumn, const std::set<rtl::OUString>& i_rURLS,
+                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
+                           ImageButton& i_rBtn,
+                           MnemonicGenerator& i_rMnemonicGen,
+                           const String& i_rStr = String()
+                           );
 
         void dispatchURL( const rtl::OUString& i_rURL,
                           const rtl::OUString& i_rTarget = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
@@ -168,8 +160,6 @@ namespace framework
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-        virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
-        virtual Window*     GetParentLabeledBy( const Window* pLabeled ) const;
     virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );

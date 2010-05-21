@@ -133,20 +133,25 @@ sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
     return nBuildId;
 }
 
+OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::data::XDataProvider >& xDataProvider )
+{
+    OUString aResult = rRange;
+    Reference< chart2::data::XRangeXMLConversion > xRangeConversion( xDataProvider, uno::UNO_QUERY );
+    if( xRangeConversion.is())
+        aResult = xRangeConversion->convertRangeFromXML( rRange );
+    return aResult;
+}
+
 Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange( const Reference< chart2::data::XDataSequence >& xSeq, const Reference< chart2::data::XDataProvider >& xDataProvider )
 {
     Reference< chart2::data::XDataSequence > xRet;
     OUString aRange;
-    Reference< chart2::data::XRangeXMLConversion > xRangeConversion( xDataProvider, uno::UNO_QUERY );
-    if( xRangeConversion.is() )
+    if( xSeq.is() && SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) )
     {
-        if( xSeq.is() && SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) )
-        {
-            xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
-                xRangeConversion->convertRangeFromXML( aRange )) );
-            SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
-                Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
-        }
+        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
+            lcl_ConvertRange( aRange, xDataProvider )) );
+        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+            Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
     }
     return xRet;
 }
@@ -383,6 +388,53 @@ Reference< chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence()
                 OUString::createFromAscii("com.sun.star.chart2.data.LabeledDataSequence"),
                 xContext ), uno::UNO_QUERY_THROW );
     return xResult;
+}
+
+Reference< chart2::data::XDataSequence > CreateDataSequence(
+        const OUString & rRange,
+        const Reference< chart2::XChartDocument >& xChartDoc )
+{
+    Reference< chart2::data::XDataSequence > xRet;
+
+    if( !xChartDoc.is() )
+    {
+        DBG_ERROR( "need a chart document" );
+        return xRet;
+    }
+
+    Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
+    if( !xDataProvider.is() )
+    {
+        DBG_ERROR( "need a data provider" );
+        return xRet;
+    }
+
+    try
+    {
+        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
+        SchXMLTools::setXMLRangePropertyAtDataSequence( xRet, rRange );
+    }
+    catch( const lang::IllegalArgumentException & )
+    {
+        DBG_ERROR( "could not create data sequence" );
+    }
+
+    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() )
+    {
+        //#i103911# switch to internal data in case the parent cannot provide the requested data
+        xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
+        xDataProvider = xChartDoc->getDataProvider();
+        try
+        {
+            xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
+            SchXMLTools::setXMLRangePropertyAtDataSequence( xRet, rRange );
+        }
+        catch( const lang::IllegalArgumentException & )
+        {
+            DBG_ERROR( "could not create data sequence" );
+        }
+    }
+    return xRet;
 }
 
 void CreateCategories(

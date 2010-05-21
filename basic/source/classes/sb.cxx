@@ -55,6 +55,7 @@
 #include "sb.hrc"
 #include <basrid.hxx>
 #include <vos/mutex.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -68,6 +69,10 @@ TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
 //  i#i68894#
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::Any;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::lang::XMultiServiceFactory;
 
 const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
 const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
@@ -75,7 +80,25 @@ const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
+    {
+        Any aThisDoc;
+        if ( GetUNOConstant("ThisComponent", aThisDoc) )
+        {
+            Reference< XMultiServiceFactory > xDocFac( aThisDoc, UNO_QUERY );
+                        if ( xDocFac.is() )
+            {
+                try
+                {
+                    xDocFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+                }
+                catch( Exception& )
+                {
+                    // Ignore
+                }
+            }
+        }
         pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
+    }
     return pVBAGlobals;
 }
 
