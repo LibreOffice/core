@@ -183,6 +183,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_FORMAT()
     return sProp;
 }
 
+const ::rtl::OUString& MediaDescriptor::PROP_FRAME()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Frame"));
+    return sProp;
+}
+
 const ::rtl::OUString& MediaDescriptor::PROP_FRAMENAME()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("FrameName"));
