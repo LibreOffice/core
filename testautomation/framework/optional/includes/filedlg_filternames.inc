@@ -46,7 +46,7 @@ testcase tVerifyFilterNames
     dim iCurrentItem as integer
     
     dim cFile as string
-    dim iErr as integer
+    dim irc as integer
 
 
     ' For Windows and Solaris Sparc there exists additional commercial filters
@@ -64,6 +64,8 @@ testcase tVerifyFilterNames
     else
         cFile = cFile & gIsoLang & ".txt"
     endif
+
+    
     
     dim cFileIn as string
         cFileIn  = gTesttoolPath & "framework\optional\input\filternames\" & cFile
@@ -71,6 +73,9 @@ testcase tVerifyFilterNames
         
     dim cFileOut as string
         cFileOut = hGetWorkPath() & cFile
+
+    ' Replace blanks with underscores
+    cFile = hStringReplaceChar( sFile, " ", "_" )
     
     printlog( "Create a new document" )
     hCreateDocument()
@@ -105,7 +110,8 @@ testcase tVerifyFilterNames
         
         OeffnenDlg.cancel()
         
-        iErr = hManageComparisionList( cFileIn, cFileOut, asFilterNames() )    
+        irc = hManageComparisionList( cFileIn, cFileOut, asFilterNames() )
+        hListResultEvaluation( irc , 0 )
 
     else
         warnlog( "File Open dialog not present." )
@@ -113,11 +119,6 @@ testcase tVerifyFilterNames
 
     printlog( "Close the document" )    
     hDestroyDocument()
-    
-    if ( iErr <> 0 ) then
-        warnlog( "Filterlist differs from reference, please review" )
-    endif
-    
-     
+         
 endcase
 

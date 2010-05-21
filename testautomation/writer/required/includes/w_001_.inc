@@ -55,9 +55,6 @@ end sub
 
 testcase tFileNewLabels
 
-QAErrorLog "#i102218# - tFileNewLabels outcommented due to bug."
-goto endsub
-
     Dim iSheetFormat as integer
     Dim iBrandIndex as integer
     Dim iType as integer
@@ -246,9 +243,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileNewBusinessCards
-
-QAErrorLog "#i102218# - tFileNewBusinessCards outcommented due to bug."
-goto endsub
 
     Dim iFormat as integer
     Dim iBrand as integer

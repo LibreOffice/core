@@ -48,6 +48,7 @@ testcase tHelpSearch
     dim cBasePath as string 
         cBasePath = gTesttoolPath & "framework\optional\input\help_browser\"
     dim cDataFile as string
+    dim sProductName as string : sProductName = hStringReplaceChar( gProductName, " ", "_" )
     
     brc = hOpenHelp()
     if ( not brc ) then
@@ -75,15 +76,14 @@ testcase tHelpSearch
 
     ListAllDelete( aUIList() )
     hGetListItems( Result, aUIList() )
-    
-    cDataFile = gProductName & "_search_without_filter_" & gIsoLang & ".txt"
+
+
+    cDataFile = sProductName & "_search_without_filter_" & gIsoLang & ".txt"
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 
     irc       = hManageComparisionList( sFileIn, sFileOut, aUIList() )
-    if ( irc <> 0 ) then
-        warnlog( "Lists are not identical, please review the log" )
-    endif
+    hListResultEvaluation( irc , 0 )
     
     ' ------------ Search whole words only -------------------------------------
     printlog( "" )
@@ -98,7 +98,7 @@ testcase tHelpSearch
     ListAllDelete( aUIList() )
     hGetListItems( Result, aUIList() )
     
-    cDataFile = gProductName & "_search_whole_words_only_" & gIsoLang & ".txt"    
+    cDataFile = sProductName & "_search_whole_words_only_" & gIsoLang & ".txt"
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 
@@ -120,7 +120,7 @@ testcase tHelpSearch
     ListAllDelete( aUIList() )
     hGetListItems( Result, aUIList() )
     
-    cDataFile = gProductName & "_search_headings_only_" & gIsoLang & ".txt"    
+    cDataFile = sProductName & "_search_headings_only_" & gIsoLang & ".txt"
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 

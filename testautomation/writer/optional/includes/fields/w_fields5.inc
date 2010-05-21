@@ -685,7 +685,7 @@ testcase tVariablesDDEFieldManual
   printlog "DDE field - manual"
  '/// <b> DDE field - manual </b>
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+  if FileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
   Call hNewDocument
 
@@ -753,7 +753,7 @@ testcase tVariablesDDEFieldManual
 
   Call hCloseDocument
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+  if FileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
 endcase
 
@@ -778,7 +778,7 @@ testcase tVariablesDDEFieldAutomatic
   printlog "DDE field - automatic"
  '/// <b> DDE field - automatic </b>
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+  if FileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
   Call hNewDocument
 
@@ -832,7 +832,7 @@ testcase tVariablesDDEFieldAutomatic
 
   Call hCloseDocument
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+  if FileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
 endcase
 

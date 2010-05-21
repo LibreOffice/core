@@ -36,10 +36,12 @@ testcase tUpdtScriptCount
     printlog( "Resource test for macros and scripts / related dialogs" )
 
     const SCRIPTING_DIALOGS = 5
+
     dim aScriptCount( SCRIPTING_DIALOGS )
         aScriptCount( 1 ) = 10
         aScriptCount( 2 ) = 14
-        aScriptCount( 3 ) = 10 
+        aScriptCount( 3 ) = 10
+
     if ( gOOo ) then
         aScriptCount( 4 ) = 585
         aScriptCount( 5 ) = 601 
@@ -51,7 +53,7 @@ testcase tUpdtScriptCount
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer
     
-    hInitSingleDoc()       
+    hInitSingleDoc()
 
     for iCurrentDialog = 1 to SCRIPTING_DIALOGS
 
@@ -103,13 +105,13 @@ endcase
 
 function hGetScriptCount( oTree as object, oList as object ) as integer
 
-    dim iTreeItem as integer
-    dim iScript as integer : iScript = 0
+    dim iCurrentTreeItem as integer
+    dim iScriptCount as integer : iScriptCount = 0
     
-    for iTreeItem = 1 to oTree.getItemCount()
-        oTree.select( iTreeItem )
-        iScript = iScript + oList.getItemCount()
-    next iTreeItem
-    hGetScriptCount() = iScript
+    for iCurrentTreeItem = 1 to oTree.getItemCount()
+        oTree.select( iCurrentTreeItem )
+        iScriptCount = iScriptCount + oList.getItemCount()
+    next iCurrentTreeItem
+    hGetScriptCount() = iScriptCount
     
 end function

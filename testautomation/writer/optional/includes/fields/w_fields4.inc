@@ -277,7 +277,7 @@ testcase tDocInformationUserDefined
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
@@ -361,7 +361,7 @@ testcase tDocInformationCreated
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
@@ -475,7 +475,7 @@ testcase tDocInformationModified
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
@@ -491,7 +491,7 @@ testcase tDocInformationModified
 	printlog "Doc Information - Modified"
 	'/// <b> Doc Information - Modified </b>
 	
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 	
 	Call hNewDocument
 	
@@ -585,7 +585,7 @@ testcase tDocInformationModified
 		endcatch
 	end if
 	
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 
 endcase
 
@@ -612,7 +612,7 @@ testcase tDocInformationModifiedSavefile
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
@@ -625,7 +625,7 @@ testcase tDocInformationModifiedSavefile
 	sFixResult(1) =  "08/18/2000"
 	sFixResult(2) =  "11:40:11"
 	
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 	
 	printlog "Doc Information - Modified (save file)"
 	'/// <b> Doc Information - Modified (save file)</b>
@@ -707,7 +707,7 @@ testcase tDocInformationModifiedSavefile
 	endcatch
 	end if
 	
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 
 endcase
 
@@ -731,7 +731,7 @@ testcase tDocInformationPrinted
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
@@ -860,13 +860,13 @@ testcase tDocInformationRevisionnumber
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
 	sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformationRevisionnumber.sxw" )
 	
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 	
 	printlog "Doc Information - Revision number"
 	'/// <b> Doc Information - Revision number</b>
@@ -939,7 +939,7 @@ testcase tDocInformationRevisionnumber
 		endcatch
 	end if
 	
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 
 endcase
 
@@ -959,13 +959,13 @@ testcase tDocInformationTotaleditingtime
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
 	sSaveasFile = ConvertPath (gOfficePath + "user\work\tDocInformationRevisionnumber.sxw" )
 
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 	
 	printlog "Doc Information - Tatal editing time"
 	'/// <b> Doc Information - Tatal editing time </b>
@@ -1027,7 +1027,7 @@ testcase tDocInformationTotaleditingtime
 	  endcatch
 	end if
 	
-	if hFileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
+	if FileExists ( sSaveAsFile ) then app.kill ( sSaveAsFile )
 
 endcase
 

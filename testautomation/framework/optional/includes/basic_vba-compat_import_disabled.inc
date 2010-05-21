@@ -78,9 +78,10 @@ testcase tBasicVBACompatImportDisabled()
     hFileOpen( cTestFile )
     
     printlog( "Open the Basic organizer" )
-    hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Expand all nodes" )
+    kontext "Makro"
     cNodeCount = hExpandAllNodes( MakroAus )
     
     printlog( "Verify that we have the correct node count for the current mode" )
@@ -93,7 +94,7 @@ testcase tBasicVBACompatImportDisabled()
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
     if ( MakroAus.getSelText() <> "vba-test.xls" ) then
-        qaerrorlog( "The document node is not at the expected position" )
+        printlog( "The document node is not at the expected position, searching..." )
     endif
     
     for iCurrentModule = 2 to 7

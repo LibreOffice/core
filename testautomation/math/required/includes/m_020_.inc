@@ -40,7 +40,7 @@ testcase tMainToolbar
    '/// open application ///'
    Call hNewDocument
       '/// type something into document ///'
-      hTBOtypeInDoc
+      SchreibenInMathdok "a over b"
       kontext "Toolbar"
       '/// click buttons on Main Toolbar ///'
       '/// click 'Zoom in' ///'

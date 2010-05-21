@@ -31,8 +31,6 @@
 '*
 '\******************************************************************************
 
-private const VERBOSE = FALSE ' set to TRUE for debugging
-
 function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// hGrafikEinfuegen hGraphicInsert
     '/// A graphic will be inserted (not linked).
@@ -143,56 +141,7 @@ function hGrafikVerknuepftEinfuegen  ( Grafik$ ) as Boolean
         'GrafikEinfuegenDlg not open
     endif
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function IsItSaved as boolean
-    '/// IsItSaved
-    '/// Wait until document is saved.
-    Dim iLoop as integer
 
-    IsItSaved = FALSE
-    sleep(3)
-    for iLoop =1 to 20
-        try
-            'Calling slot 'IsDocSaving'
-            IsItSaved = IsDocSaving
-        catch
-            IsItSaved = FALSE
-        endcatch
-
-        if IsItSaved = TRUE then
-            exit for
-        end if
-        sleep(1)
-    next iLoop
-    sleep(2)
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function IsItLoaded as boolean
-    '/// IsItLoaded
-    '/// Wait until document is loaded
-    Dim iLoop as integer
-
-    IsItLoaded = FALSE
-    sleep(3)
-    for iLoop =1 to 20
-        try
-            'Calling slot 'IsDocLoading'
-            IsItLoaded = IsDocLoading
-        catch
-            IsItLoaded = FALSE
-        endcatch
-
-        if IsItLoaded = TRUE then
-            exit for
-        end if
-        sleep(1)
-    next iLoop
-    sleep(2)
-end function
 '
 '-------------------------------------------------------------------------------
 '
@@ -229,6 +178,11 @@ end function
 '-------------------------------------------------------------------------------
 '
 function IsImageLoaded
+
+' used by:
+' - hGrafikEinfuegen = IsImageLoaded
+' - hGrafikVerknuepftEinfuegen = IsImageLoaded
+
     '/// IsImageLoaded
     '/// Wait until images in document are loaded
     Dim i% : Dim Herbert as Boolean
@@ -254,70 +208,9 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-sub hIsWebPageLoaded as boolean
-    'Author: Joerg Sievers
-    '/// If a document in StarOffice Writer is loaded all 9 items in the
-    '///+ statusbar are visible otherwise not.
-    '///+ This sub checks the state of these items.
-    Dim i as integer
-    Dim iGibtdenStatusraus as integer
-    printlog "- global::tools::inc::tfiles.inc::hIsWebPageLoaded"
-    hIsWebPageLoaded = FALSE
-    for i = 1 to 20
-        Kontext "DocumentWriter"
-        if DocumentWriter.Exists(3) then
-            'Count the items on the status bar.
-            iGibtdenStatusraus = DocumentWriter.StatusGetItemCount
-            'There are nine items on the status bar if the web page has been loaded.
-            if iGibtdenStatusraus = 9 then
-                hIsWebPageLoaded = TRUE
-                exit for
-            end If
-        end if
-        WaitSlot( 3000 )
-    next i
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hSys2IntDlg
-    '/// Change from system to StarOffice-internal file-dialog (only for Win32)
-    if gPlatgroup <> "unx" then
-        Call hhSysToInt ( TRUE )
-    endif
-    gUseSysDlg = FALSE
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hInt2SysDlg
-    '/// Change from StarOffice-internal to system file-dialog (only for Win32)
-    if gPlatgroup <> "unx" then
-        Call hhSysToInt ( FALSE )
-    endif
-    gUseSysDlg = TRUE
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hhSysToInt ( bwhats as Boolean )
-    '/// subroutine for <i>hSys2IntDlg</i> and </i>hInt2SysDlg</i>
-    ToolsOptions
-    hToolsOptions ( "StarOffice", "General" )
-    if bwhats = TRUE then
-        StarOfficeDialogeBenutzen.Check
-    else
-        StarOfficeDialogeBenutzen.Uncheck
-    end if
-    Sleep 1
-    Kontext "OptionenDlg"
-    OptionenDlg.OK
-    WaitSlot( 3000 )
-end sub
-'
-'-------------------------------------------------------------------------------
-'
 function hGetUsedFilter () as string
+
+    ' used in math and graphics modules
     '/// Get used filter for loaded file.
     try
         FileSaveAs
@@ -327,28 +220,6 @@ function hGetUsedFilter () as string
     catch
         hGetUsedFilter = "Not possible; try/catch fail in function"
     endcatch
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hFileExport (sName as string, sFilter as string) as boolean
-    '/// Wrapper function to simplify the use of the export functions, just give a filename and export format.
-    '///+ INPUT:<ul><li>sName: filename</li><li>sFilter: &quot;PDF&quot;: call export for PDF</li></ul>
-    '///+ RETURN: execution success?
-    select case sFilter
-    case "PDF" : '/// use the function 'hExportAsPDF' with RECOMMENDED values /// '
-        hFileExport = hExportAsPDFmulti (3, TRUE,  sName, FALSE, TRUE, 1, 1)
-    end select
-    kontext
-    if active.exists(5) then
-        try
-            printlog active.getText
-            active.ok
-            warnLog "i26820 - errormessage about saving"
-        catch
-            printlog "pdf unexpected error in hFileExport()"
-        endcatch
-    endif
 end function
 '
 '-------------------------------------------------------------------------------
@@ -665,7 +536,7 @@ function hDeleteFile( cFileOrig as string ) as boolean
                 warnlog( CFN & "File was not deleted: " & cFile )
                 hDeleteFile() = false
             else
-                if ( VERBOSE ) then printlog( CFN & "File successfully deleted: " & cFile )
+                if ( GVERBOSE ) then printlog( CFN & "File successfully deleted: " & cFile )
                 hDeleteFile() = true
             endif
         catch
@@ -699,7 +570,7 @@ function hFileOpen( cFile as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     hFileOpen() = FALSE
     const CFN = "global::tools::inc::t_files.inc::hFileOpen():"
-    if ( VERBOSE ) then printlog( CFN & "Load: " & sFile )
+    if ( GVERBOSE ) then printlog( CFN & "Load: " & sFile )
     FileOpen( "URL", sFile, "FrameName", "_default" )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpen() = TRUE
 
@@ -717,7 +588,7 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial():"
     hFileOpenSpecial() = FALSE
-    if ( VERBOSE ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
+    if ( GVERBOSE ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
 
     select case( lcase( cFlag ) )
     case "readonly"
@@ -742,7 +613,7 @@ function hFileOpenWithFilter( cFile as string, cFilter as string )
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileOpenWithFilter():"
     hFileOpenWithFilter() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
+    if ( GVERBOSE ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
     FileOpen( "URL", sFile, "FrameName", "_default", "FilterName", cFilter )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpenWithFilter() = TRUE
 
@@ -754,7 +625,7 @@ function hFileSave() as boolean
 
     const CFN = "global::tools::inc::t_files.inc::hFileSave():"
     hFileSave() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save file." )
+    if ( GVERBOSE ) then printlog( CFN & "Save file." )
     FileSave( "SynchronMode", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSave() = TRUE
 
@@ -767,7 +638,7 @@ function hFileSaveAs( cFile as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAs():"
     hFileSaveAs() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save: " & sFile )
+    if ( GVERBOSE ) then printlog( CFN & "Save: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAs() = TRUE
 
@@ -780,7 +651,7 @@ function hFileSaveAsKill( cFile as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKill():"
     hFileSaveAsKill() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save, replacing: " & sFile )
+    if ( GVERBOSE ) then printlog( CFN & "Save, replacing: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKill() = TRUE
 
@@ -793,7 +664,7 @@ function hFileSaveAsKillWithPassword( cFile as string, cPassword as string ) as 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKillWithPassword():"
     hFileSaveAsKillWithPassword() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
+    if ( GVERBOSE ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE, "Password", cPassword )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKillWithPassword() = TRUE
 
@@ -806,7 +677,7 @@ function hFileSaveAsWithFilter( cFile as string, cFilter as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilter():"
     hFileSaveAsWithFilter() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
+    if ( GVERBOSE ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilter() = TRUE
 
@@ -819,7 +690,7 @@ function hFileSaveAsWithFilterKill( cFile as string, cFilter as string ) as bool
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilterKill():"
     hFileSaveAsWithFilterKill() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
+    if ( GVERBOSE ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilterKill() = TRUE
 
@@ -924,7 +795,7 @@ function hFileWait( optional bWarn as boolean ) as integer
 
     loop
 
-    if ( VERBOSE ) then
+    if ( GVERBOSE ) then
         select case iWait
         case -1   : printlog( CFN & "Timeout reached, rc = " & iWait )
         case -2   : printlog( CFN & "Macro security warning displayed, rc = " & iWait )
