@@ -1070,6 +1070,7 @@ void AxToggleButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
     rPropMap.setProperty( PROP_Toggle, true );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
+    rConv.convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 

@@ -85,13 +85,25 @@ namespace core {
 
 // ============================================================================
 
+namespace {
+
+bool lclHasSuffix( const OUString& rFragmentPath, const OUString& rSuffix )
+{
+    sal_Int32 nSuffixPos = rFragmentPath.getLength() - rSuffix.getLength();
+    return (nSuffixPos >= 0) && rFragmentPath.match( rSuffix, nSuffixPos );
+}
+
+} // namespace
+
+// ============================================================================
+
 struct XmlFilterBaseImpl
 {
     typedef RefMap< OUString, Relations > RelationsMap;
 
+    Reference< XFastParser > mxFastParser;
     OUString            maBinSuffix;
-    Reference< XFastTokenHandler >
-                        mxTokenHandler;
+    OUString            maVmlSuffix;
     RelationsMap        maRelationsMap;
     TextFieldStack      maTextFieldStack;
     explicit            XmlFilterBaseImpl();
@@ -101,7 +113,7 @@ struct XmlFilterBaseImpl
 
 XmlFilterBaseImpl::XmlFilterBaseImpl() :
     maBinSuffix( CREATE_OUSTRING( ".bin" ) ),
-    mxTokenHandler( new FastTokenHandler )
+    maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
 {
 }
 
@@ -113,6 +125,38 @@ XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalF
     mnRelId( 1 ),
     mnMaxDocId( 0 )
 {
+    try
+    {
+        // create the fast parser
+        mxImpl->mxFastParser.set( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
+        mxImpl->mxFastParser->setTokenHandler( new FastTokenHandler );
+
+        // register XML namespaces
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" ), NMSP_CDR );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_VML_DOC );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_VML_XLS );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_VML_PPT );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/activeX" ), NMSP_AX );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_XLS );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ), NMSP_XDR );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/2006/main" ), NMSP_XM );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 XmlFilterBase::~XmlFilterBase()
@@ -140,8 +184,7 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         return false;
 
     // try to import binary streams (fragment extension must be '.bin')
-    sal_Int32 nBinSuffixPos = aFragmentPath.getLength() - mxImpl->maBinSuffix.getLength();
-    if( (nBinSuffixPos >= 0) && aFragmentPath.match( mxImpl->maBinSuffix, nBinSuffixPos ) )
+    if( lclHasSuffix( aFragmentPath, mxImpl->maBinSuffix ) )
     {
         try
         {
@@ -170,40 +213,15 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     if( !xDocHandler.is() )
         return false;
 
+    // check that the fast parser exists
+    if( !mxImpl->mxFastParser.is() )
+        return false;
+
     // try to import XML stream
     try
     {
         // try to open the fragment stream (this may fail - do not assert)
         Reference< XInputStream > xInStrm( rxHandler->openFragmentStream(), UNO_SET_THROW );
-
-        // create the fast parser
-        Reference< XFastParser > xParser( getGlobalFactory()->createInstance(
-            CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
-        xParser->setFastDocumentHandler( xDocHandler );
-        xParser->setTokenHandler( mxImpl->mxTokenHandler );
-
-        // register XML namespaces
-        xParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
-
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" ), NMSP_CDR );
-
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_VML_DOC );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_VML_XLS );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_VML_PPT );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/activeX" ), NMSP_AX );
-
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_XLS );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ), NMSP_XDR );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/2006/main" ), NMSP_XM );
-
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
 
         // create the input source and parse the stream
         InputSource aSource;
@@ -212,7 +230,8 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         // own try/catch block for showing parser failure assertion with fragment path
         try
         {
-            xParser->parseStream( aSource );
+            mxImpl->mxFastParser->setFastDocumentHandler( xDocHandler );
+            mxImpl->mxFastParser->parseStream( aSource );
             return true;
         }
         catch( Exception& )

@@ -47,6 +47,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <com/sun/star/document/XActionLockable.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -89,7 +90,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
 , mpMasterTextListStyle( new TextListStyle )
 , mnSubType( 0 )
-, mnIndex( 0 )
+, mnSubTypeIndex( -1 )
 , mnRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
@@ -157,6 +158,9 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
     catch( const Exception&  )
     {
@@ -365,6 +369,10 @@ Reference< XShape > Shape::createAndInsert(
         }
         rxShapes->add( mxShape );
 
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->addActionLock();
+
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
         {
@@ -412,13 +420,23 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.assignUsed( getFillProperties() );
 
         PropertyMap aShapeProperties;
+        PropertyMap::const_iterator aShapePropIter;
+
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
         if( mxCreateCallback.get() )
-            aShapeProperties.insert( mxCreateCallback->getShapeProperties().begin(), mxCreateCallback->getShapeProperties().end() );
+        {
+            for ( aShapePropIter = mxCreateCallback->getShapeProperties().begin();
+                aShapePropIter != mxCreateCallback->getShapeProperties().end(); aShapePropIter++ )
+                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
+        }
 
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
-            aShapeProperties.insert( mpTextBody->getTextProperties().maPropertyMap.begin(), mpTextBody->getTextProperties().maPropertyMap.end() );
+        {
+            for ( aShapePropIter = mpTextBody->getTextProperties().maPropertyMap.begin();
+                aShapePropIter != mpTextBody->getTextProperties().maPropertyMap.end(); aShapePropIter++ )
+                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
+        }
 
         // applying properties
         PropertySet aPropSet( xSet );
@@ -464,6 +482,8 @@ Reference< XShape > Shape::createAndInsert(
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
         }
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
 
     // use a callback for further processing on the XShape (e.g. charts)

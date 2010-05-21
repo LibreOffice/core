@@ -386,6 +386,7 @@ TextOverlap
 TextRightDistance
 TextRotation
 TextUpperDistance
+TextVerticalAdjust
 TextWordWrap
 TextWritingMode
 Title

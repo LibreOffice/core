@@ -187,7 +187,7 @@ MERGE:=python ../tools/merge/pyAltFCFGMerge
 MERGE:=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/python ../tools/merge/pyAltFCFGMerge
 .ENDIF
 .ELSE
-MERGE    := $(JAVAI) -jar $(SOLARBINDIR)$/FCFGMerge.jar
+MERGE    := $(JAVAI) $(JAVAIFLAGS) -jar $(SOLARBINDIR)$/FCFGMerge.jar
 .ENDIF
 
 PACKLANG := $(XSLTPROC) --nonet
