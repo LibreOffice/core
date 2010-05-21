@@ -393,7 +393,23 @@ sub set_important_properties
     if ( $allvariables->{'HIDELICENSEDIALOG'} )
     {
         my $onepropertyline = "HIDEEULA" . "\t" . "1" . "\n";
-        push(@{$propertyfile}, $onepropertyline);
+
+        my $already_defined = 0;
+
+        for ( my $i = 0; $i <= $#{$propertyfile}; $i++ )
+        {
+            if ( ${$propertyfile}[$i] =~ /^\s*HIDEEULA\t/ )
+            {
+                ${$propertyfile}[$i] = $onepropertyline;
+                $already_defined = 1;
+                last;
+            }
+        }
+
+        if ( ! $already_defined )
+        {
+            push(@{$propertyfile}, $onepropertyline);
+        }
     }
 
     # Setting .NET requirements
@@ -540,7 +556,7 @@ sub set_languages_in_property_table
 
     if ($installer::globals::sofficeiconadded)  # set in shortcut.pm
     {
-        $onepropertyline =  "ARPPRODUCTICON" . "\t" . "soffice.exe" . "\n";
+        $onepropertyline =  "ARPPRODUCTICON" . "\t" . "soffice.ico" . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 

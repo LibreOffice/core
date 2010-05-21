@@ -623,6 +623,7 @@ Module gid_Module_Root_Files_6
     gid_File_Oo_Ldap_Xcd_Sample,
     gid_File_Oo_Ad_Ldap_Xcd_Sample,
     gid_File_Share_Registry_Main_Xcd,
+    gid_File_Share_Registry_Forcedefault_Xcd,
 	gid_File_Pymailmerge,
     gid_File_Xsl_Common_Measure_Conversion,
 	gid_File_Xsl_Common_Math_Functions,
@@ -962,6 +963,17 @@ Module gid_Module_Root_Extension_Dictionary_It
 	Files = (gid_File_Extension_Dictionary_It);
 	InstallOrder = "2000";
 	Spellcheckerlanguage = "it";
+	PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+	Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Root_Extension_Dictionary_Ku_Tr
+	Name = "gid_Module_Root_Extension_Dictionary_Ku_Tr";
+	Description = "gid_Module_Root_Extension_Dictionary_Ku_Tr";
+	Files = (gid_File_Extension_Dictionary_Ku_Tr);
+	InstallOrder = "2000";
+	Spellcheckerlanguage = "ku-TR";
 	PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Styles = (HIDDEN_ROOT);

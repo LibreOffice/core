@@ -78,6 +78,7 @@ BEGIN
         "dgo",
         "kok",
         "mni",
+        "ca-XV",
         "sat",
         "ug",
         "om",
@@ -136,7 +137,9 @@ BEGIN
     $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
+    $isfreebsdbuild = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacbuild = 0;
     $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
@@ -180,7 +183,7 @@ BEGIN
     $installertypedir = "";
     $controlledmakecabversion = "5";
     $saved_packages_path = "";
-    $max_lang_length = 50;
+    $max_lang_length = 65;
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();
@@ -233,7 +236,7 @@ BEGIN
     $mergefiles_added_into_collector = 0;
     $creating_windows_installer_patch = 0;
 
-    $strip = 1;
+    $strip = $ENV{DISABLE_STRIP} eq '';
     $solarjava = 0;
     $jdklib = "";
     $jrepath = "";
@@ -268,7 +271,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "Sun";
+    $sundirname = "Oracle";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
@@ -513,13 +516,12 @@ BEGIN
         if ( $plat =~ /darwin/i )
         {
             $libextension = "\.dylib";
-            $archiveformat = ".dmg";
         }
         else
         {
             $libextension = "\.so";
-            $archiveformat = ".tar.gz";
         }
+        $archiveformat = ".tar.gz";
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;

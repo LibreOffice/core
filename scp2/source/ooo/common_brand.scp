@@ -84,6 +84,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
              gid_Brand_File_Share_Registry_Brand_Xcd,
+             gid_Brand_File_Share_Registry_O5oo_Xcd
              gid_Brand_File_Script_Unopkg,
              gid_Brand_File_Share_Xdg_Base,
              gid_Brand_File_Share_Xdg_Calc,
@@ -118,19 +119,22 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Share_Readme);
     Files = (gid_Brand_File_Res_Iso,
              gid_Brand_File_Res_Ooo,
-             gid_Brand_File_Entitlement,
              gid_Brand_File_Help_C05_Sdatabase_Zip,
              gid_Brand_File_Help_C05_Scalc_Zip,
              gid_Brand_File_Help_C05_Sdraw_Zip,
              gid_Brand_File_Help_C05_Swriter_Zip,
              gid_Brand_File_License_License,
+             gid_Brand_File_License_License_Small,
              gid_Brand_File_License_License_Html,
+             gid_Brand_File_License_License_Html_Small,
              gid_Brand_File_Readme_Readme,
              gid_Brand_File_Readme_Readme_Html,
              gid_Brand_File_Share_Registry_Cjk_Xcd,
              gid_Brand_File_Share_Registry_Korea_Xcd,
              gid_Brand_File_Txt_License,
+             gid_Brand_File_Txt_License_Small,
              gid_Brand_File_Txt_License_Html,
+             gid_Brand_File_Txt_License_Html_Small,
              gid_Brand_File_Txt_Readme,
              gid_Brand_File_Txt_Readme_Html);
 End
@@ -818,6 +822,15 @@ ProfileItem gid_Brand_Profileitem_Soffice_ProgressFrameColor_So
     Value = "${PROGRESSFRAMECOLOR}";
 End
 
+ProfileItem gid_Brand_Profileitem_Soffice_NativeProgress_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "NativeProgress";
+    Value = "${NATIVEPROGRESS}";
+End
+
 #ifdef WNT
 ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     ProfileID = gid_Brand_Profile_Soffice_Ini;
@@ -827,6 +840,20 @@ ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     Key = "HideEula";
     Value = "[HIDEEULA]";
     Inifiletablekey = "HideEula";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Soffice_Startlang
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 8;
+    Key = "STARTLANG";
+    Value = "[STARTLANG]";
+    Inifiletablekey = "STARTLANG";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
 End
