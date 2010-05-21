@@ -280,14 +280,11 @@ interface XExtensionManager
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
 
-       @param repository
-              the repository which is to be synchronized
        @return
               If true - then at least one extension was removed or added. Otherwise
               nothing was chaned.
     */
     boolean synchronize(
-        [in] string repository,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
