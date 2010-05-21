@@ -28,14 +28,15 @@
 #define __com_sun_star_ui_dialogs_XWizard_idl__
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#include <com/sun/star/util/InvalidStateException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
 
 //==================================================================================================================
-
 module com { module sun { module star { module ui { module dialogs {
 
-interface XWizardPage;
-
 //==================================================================================================================
+
+interface XWizardPage;
 
 /**
  */
@@ -43,11 +44,70 @@ interface XWizard
 {
     interface   XExecutableDialog;
 
+    /** is the help URL of the wizard's main window.
+    */
+    [attribute] string  HelpURL;
+
+    /** provides access to the current page of the wizard
+    */
+    XWizardPage
+            getCurrentPage();
+
+    /** enables or disables a certain button in the wizard
+
+        <p>Normally, you will want to use this method for the <em>Finish</em> button only: The <em>Next</em>
+        and <em>Back</em> buttons are usually maintained automatically, the <em>Help</em> and <em>Cancel</em>
+        buttons are unlikely to ever being disabled.</p>
+
+        @param WizardButton
+            denotes the button to enable or disable, as one of the <type>WizardButton</type> constants
+        @param Enable
+            specifies whether the button should be enabled (<TRUE/>) or disabled (<FALSE/>)
+    */
     void    enableButton( [in] short WizardButton, [in] boolean Enable );
+
+    /** sets a button in the wizard as default button
+
+        <p>In general, the default button in a wizard is the one which is activated when the user presses
+        the <em>return</em> key while the focus is in a control which does not handle this key itself (such as
+        ordinary input controls).</p>
+
+        <p>You can use this method, for instance, to make the <em>Next</em> button the default button on all pages
+        except the last one, where <em>Finish</em> should be defaulted.</p>
+    */
     void    setDefaultButton( [in] short WizardButton );
 
+    /** travels to the next page, if possible
+
+        <p>Calling this method is equivalent to the user pressing the <em>Next</em> button in the wizard. Consequently,
+        the method will fail if in the current state of the wizard, it is not allowed to advance to a next page.</p>
+    */
     boolean travelNext();
+
+    /** travels to the next page, if possible
+
+        <p>Calling this method is equivalent to the user pressing the <em>Back</em> button in the wizard.</p>
+    */
     boolean travelPrevious();
+
+    /** enables or disables the given page
+
+        <p>You can use this method when not all pages of your wizard are necessarily needed in all cases. For instance,
+        assume that your first wizard page contains a check box, which the user can check to enter additional data.
+        If you place this data on the second page, then you will want to enable this second page if and only if the
+        checkbox is checked.</p>
+
+        <p>If a page is disabled, it can reached neither by clicking the respective item in the wizard's roadmap,
+        nor by sequential traveling. Still, the page's item is displayed in the roadmap, though disabled.</p>
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no page with the given ID
+        @throws ::com::sun::star::util::InvalidStateException
+            if the page shall be disabled, but is active currently.
+    */
+    void    enablePage( [in] short PageID, [in] boolean Enable )
+        raises  (   ::com::sun::star::container::NoSuchElementException
+                ,   ::com::sun::star::util::InvalidStateException );
 
     /** updates the wizard elements which are related to traveling.
 
@@ -59,11 +119,61 @@ interface XWizard
     */
     void    updateTravelUI();
 
+    /** advances to the given page, if possible.
+
+        <p>Calling this method is equivalent to the user repeatedly pressing the <em>Next</em> button, until the
+        given page is reached. Consequently, the method will fail if one of the intermediate pages does not allow
+        advancing to the next page.</p>
+    */
     boolean advanceTo( [in] short PageId );
+
+    /** goes back to the given page, if possible.
+
+        <p>Calling this method is equivalent to the user repeatedly pressing the <em>Back</em> button, until the
+        given page is reached.</p>
+    */
     boolean goBackTo( [in] short PageId );
 
-    XWizardPage
-            getCurrentPage();
+    /** activates a path
+
+        <p>If the wizard has been created with multiple paths of control flow, then this method allows switching to
+        another path.</p>
+
+        <p>You can only activate a path which shares the first <code>k</code> pages with the path
+        which is previously active (if any), where <code>k</code> is the index of the current page within the current
+        path.</p>
+
+        <p><strong>Example</strong>: Say you have paths, <code>(0,1,2,5)</code> and <code>(0,1,4,5)</code> (with
+        the numbers denoting page IDs). This means that after page <code>1</code>, you either continue with page
+        <code>2</code> or state <code>4</code>,and after this, you finish in state <code>5</code>.<br/>
+        Now if the first path is active, and your current state is <code>1</code>, then you can easily switch to the
+        second path, since both paths start with <code>(0,1)</code>.<br/>
+        However, if your current state is <code>2</code>, then you can not switch to the second path anymore.</p>
+
+        @param PathIndex
+            the index of the path, as used in the <member>Wizard::createMultiplePathsWizard</member> constructor.
+        @param Final
+            <p>If <TRUE/>, the path will be completely activated, even if it is a conflicting path (i.e. there is another
+            path which shares the first <code>k</code> states with the to-be-activated path.)</p>
+
+            <p>If <FALSE/>, then the new path is checked for conflicts with other paths. If such conflicts exists, the path
+            is not completely activated, but only up to the point where it does <em>not</em> conflict.</p>
+
+            <p>In this latter case, you need another activatePath method (usually triggered by the user doing some decisions
+            and entering some data on the reachable pages) before the wizard can actually be finished.</p>
+
+            <p>With the paths in the example above, if you activate the second path, then only steps <code>0</code> and
+            <code>1</code> are activated, since they are common to both paths. Steps <code>2</code>, <code>4</code>,
+            and <code>5</code> are not reachable, yet.</p>
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no path with the given index
+        @throws ::com::sun::star::util::InvalidStateException
+            if the path cannot be activated in the current state of the wizard.
+    */
+    void    activatePath( [in] short PathIndex, [in] boolean Final )
+        raises  (   ::com::sun::star::container::NoSuchElementException
+                ,   ::com::sun::star::util::InvalidStateException );
 };
 
 //==================================================================================================================
