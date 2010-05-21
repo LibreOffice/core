@@ -88,7 +88,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             case SID_OPENDLG_FUNCTION:
                     //  #53318# inplace macht die EditShell Aerger...
                     //! kann nicht immer umgeschaltet werden ????
-                    if (!pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace())
+                    if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
                         pTabViewShell->SetDontSwitch(TRUE);         // EditShell nicht abschalten
                     // kein break
 
@@ -244,7 +244,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     if (nSlot == FID_INPUTLINE_BLOCK)
                     {
-                        pTabViewShell->EnterBlock( String(), pData );
+                        pTabViewShell->EnterBlock( aString, pData );
                     }
                     else if ( aString.Len() > 0 && ( aString.GetChar(0) == '=' || aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
                     {

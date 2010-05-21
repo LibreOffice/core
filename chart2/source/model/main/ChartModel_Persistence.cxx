@@ -464,7 +464,7 @@ void SAL_CALL ChartModel::initNew()
                 {
                     xDiagramProperties->setPropertyValue( C2U("RightAngledAxes"), uno::makeAny( sal_True ));
                     xDiagramProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( drawing::ProjectionMode_PARALLEL ));
-                    ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
+                    ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
                 }
 
                 //set some new 'defaults' for wall and floor
@@ -697,7 +697,11 @@ void SAL_CALL ChartModel::impl_notifyModifiedListeners()
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< util::XModifyListener*>(aIt.next()))->modified( aEvent );
+        {
+            uno::Reference< util::XModifyListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->modified( aEvent );
+        }
     }
 }
 
@@ -827,8 +831,11 @@ void SAL_CALL ChartModel::impl_notifyStorageChangeListeners()
     {
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< document::XStorageChangeListener* >(aIt.next()))->notifyStorageChange(
-                static_cast< ::cppu::OWeakObject* >( this ), m_xStorage );
+        {
+            uno::Reference< document::XStorageChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->notifyStorageChange( static_cast< ::cppu::OWeakObject* >( this ), m_xStorage );
+        }
     }
 }
 

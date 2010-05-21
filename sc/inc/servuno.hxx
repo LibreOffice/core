@@ -88,12 +88,16 @@ class ScDocShell;
 // BM
 #define SC_SERVICE_CHDATAPROV   37
 
+// formula parser
 #define SC_SERVICE_FORMULAPARS  38
 #define SC_SERVICE_OPCODEMAPPER 39
+
+// VBA specific
 #define SC_SERVICE_VBAOBJECTPROVIDER   40
 #define SC_SERVICE_VBACODENAMEPROVIDER   41
+#define SC_SERVICE_VBAGLOBALS   42
 
-#define SC_SERVICE_COUNT        42
+#define SC_SERVICE_COUNT        43
 #define SC_SERVICE_INVALID      USHRT_MAX
 
 

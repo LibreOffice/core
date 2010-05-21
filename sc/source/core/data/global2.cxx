@@ -49,6 +49,10 @@
 #include "rechead.hxx"
 #include "compiler.hxx"
 #include "paramisc.hxx"
+// Wang Xu Ming -- 2009-5-18
+// DataPilot Migration
+#include "dpglobal.hxx"
+// End Comments
 
 #include "sc.hrc"
 #include "globstr.hrc"
@@ -59,7 +63,6 @@ using ::std::vector;
 
 
 
-#define MAX_LABELS 256 //!!! aus fieldwnd.hxx, muss noch nach global.hxx ???
 
 //------------------------------------------------------------------------
 // struct ScImportParam:
@@ -142,30 +145,32 @@ BOOL ScImportParam::operator==( const ScImportParam& rOther ) const
 //------------------------------------------------------------------------
 // struct ScQueryParam:
 
-ScQueryEntry::ScQueryEntry()
+ScQueryEntry::ScQueryEntry() :
+    bDoQuery(FALSE),
+    bQueryByString(FALSE),
+    bQueryByDate(false),
+    nField(0),
+    eOp(SC_EQUAL),
+    eConnect(SC_AND),
+    pStr(new String),
+    nVal(0.0),
+    pSearchParam(NULL),
+    pSearchText(NULL)
 {
-    bDoQuery        = FALSE;
-    bQueryByString  = FALSE;
-    eOp             = SC_EQUAL;
-    eConnect        = SC_AND;
-    nField          = 0;
-    nVal            = 0.0;
-    pStr            = new String;
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
 }
 
-ScQueryEntry::ScQueryEntry(const ScQueryEntry& r)
+ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
+    bDoQuery(r.bDoQuery),
+    bQueryByString(r.bQueryByString),
+    bQueryByDate(r.bQueryByDate),
+    nField(r.nField),
+    eOp(r.eOp),
+    eConnect(r.eConnect),
+    pStr(new String(*r.pStr)),
+    nVal(r.nVal),
+    pSearchParam(NULL),
+    pSearchText(NULL)
 {
-    bDoQuery        = r.bDoQuery;
-    bQueryByString  = r.bQueryByString;
-    eOp             = r.eOp;
-    eConnect        = r.eConnect;
-    nField          = r.nField;
-    nVal            = r.nVal;
-    pStr            = new String(*r.pStr);
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
 }
 
 ScQueryEntry::~ScQueryEntry()
@@ -182,6 +187,7 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
 {
     bDoQuery        = r.bDoQuery;
     bQueryByString  = r.bQueryByString;
+    bQueryByDate    = r.bQueryByDate;
     eOp             = r.eOp;
     eConnect        = r.eConnect;
     nField          = r.nField;
@@ -202,6 +208,7 @@ void ScQueryEntry::Clear()
 {
     bDoQuery        = FALSE;
     bQueryByString  = FALSE;
+    bQueryByDate    = false;
     eOp             = SC_EQUAL;
     eConnect        = SC_AND;
     nField          = 0;
@@ -220,6 +227,7 @@ BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
 {
     return bDoQuery         == r.bDoQuery
         && bQueryByString   == r.bQueryByString
+        && bQueryByDate     == r.bQueryByDate
         && eOp              == r.eOp
         && eConnect         == r.eConnect
         && nField           == r.nField
@@ -905,90 +913,3 @@ String ScGlobal::GetDocTabName( const String& rFileName,
     return aDocTab;
 }
 
-// ============================================================================
-
-ScSimpleSharedString::StringTable::StringTable() :
-    mnStrCount(0)
-{
-    // empty string (ID = 0)
-    maSharedStrings.push_back(String());
-    maSharedStringIds.insert( SharedStrMap::value_type(String(), mnStrCount++) );
-}
-
-ScSimpleSharedString::StringTable::StringTable(const ScSimpleSharedString::StringTable& r) :
-    maSharedStrings(r.maSharedStrings),
-    maSharedStringIds(r.maSharedStringIds),
-    mnStrCount(r.mnStrCount)
-{
-}
-
-ScSimpleSharedString::StringTable::~StringTable()
-{
-}
-
-sal_Int32 ScSimpleSharedString::StringTable::insertString(const String& aStr)
-{
-    SharedStrMap::const_iterator itr = maSharedStringIds.find(aStr),
-        itrEnd = maSharedStringIds.end();
-
-    if (itr == itrEnd)
-    {
-        // new string.
-        maSharedStrings.push_back(aStr);
-        maSharedStringIds.insert( SharedStrMap::value_type(aStr, mnStrCount) );
-        return mnStrCount++;
-    }
-
-    // existing string.
-    return itr->second;
-}
-
-sal_Int32 ScSimpleSharedString::StringTable::getStringId(const String& aStr)
-{
-    SharedStrMap::const_iterator itr = maSharedStringIds.find(aStr),
-        itrEnd = maSharedStringIds.end();
-    if (itr == itrEnd)
-    {
-        // string not found.
-        return insertString(aStr);
-    }
-    return itr->second;
-}
-
-const String* ScSimpleSharedString::StringTable::getString(sal_Int32 nId) const
-{
-    if (nId >= mnStrCount)
-        return NULL;
-
-    return &maSharedStrings[nId];
-}
-
-// ----------------------------------------------------------------------------
-
-ScSimpleSharedString::ScSimpleSharedString()
-{
-}
-
-ScSimpleSharedString::ScSimpleSharedString(const ScSimpleSharedString& r) :
-    maStringTable(r.maStringTable)
-{
-}
-
-ScSimpleSharedString::~ScSimpleSharedString()
-{
-}
-
-sal_Int32 ScSimpleSharedString::insertString(const String& aStr)
-{
-    return maStringTable.insertString(aStr);
-}
-
-const String* ScSimpleSharedString::getString(sal_Int32 nId)
-{
-    return maStringTable.getString(nId);
-}
-
-sal_Int32 ScSimpleSharedString::getStringId(const String& aStr)
-{
-    return maStringTable.getStringId(aStr);
-}

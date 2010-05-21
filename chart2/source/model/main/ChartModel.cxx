@@ -106,8 +106,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext( xContext )
-    // default visual area is 8 x 7 cm
-    , m_aVisualAreaSize( 8000, 7000 )
+    , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
     , m_xDataProvider( 0 )
     , m_xInternalDataProvider( 0 )
     , m_xPageBackground( new PageBackground( m_xContext ) )
@@ -231,7 +230,11 @@ void SAL_CALL ChartModel::impl_notifyCloseListeners()
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< util::XCloseListener*>(aIt.next()))->notifyClosing( aEvent );
+        {
+            uno::Reference< util::XCloseListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->notifyClosing( aEvent );
+        }
     }
 }
 

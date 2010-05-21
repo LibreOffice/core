@@ -165,6 +165,7 @@ private:
     BOOL            bInit;
     BOOL            bCancelled;
     BOOL            bInSelect;
+    bool            mbListHasDates;
     ULONG           nSel;
     ScFilterBoxMode eMode;
 
@@ -188,6 +189,8 @@ public:
     BOOL            IsInInit() const        { return bInit; }
     void            SetCancelled()          { bCancelled = TRUE; }
     BOOL            IsInSelect() const      { return bInSelect; }
+    void            SetListHasDates(bool b) { mbListHasDates = b; }
+    bool            HasDates() const        { return mbListHasDates; }
 };
 
 //-------------------------------------------------------------------
@@ -203,6 +206,7 @@ ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
     bInit( TRUE ),
     bCancelled( FALSE ),
     bInSelect( FALSE ),
+    mbListHasDates(false),
     nSel( 0 ),
     eMode( eNewMode )
 {
@@ -907,7 +911,9 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
         pFilterBox->SetSeparatorPos( nDefCount - 1 );
 
         //  get list entries
-        pDoc->GetFilterEntries( nCol, nRow, nTab, aStrings, true );
+        bool bHasDates = false;
+        pDoc->GetFilterEntries( nCol, nRow, nTab, true, aStrings, bHasDates);
+        pFilterBox->SetListHasDates(bHasDates);
 
         //  check widths of numerical entries (string entries are not included)
         //  so all numbers are completely visible
@@ -1117,7 +1123,7 @@ void ScGridWindow::FilterSelect( ULONG nSel )
             ExecDataSelect( nCol, nRow, aString );
             break;
         case SC_FILTERBOX_FILTER:
-            ExecFilter( nSel, nCol, nRow, aString );
+            ExecFilter( nSel, nCol, nRow, aString, pFilterBox->HasDates() );
             break;
         case SC_FILTERBOX_SCENARIO:
             pViewData->GetView()->UseScenario( aString );
@@ -1150,7 +1156,7 @@ void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr )
 
 void ScGridWindow::ExecFilter( ULONG nSel,
                                SCCOL nCol, SCROW nRow,
-                               const String& aValue )
+                               const String& aValue, bool bCheckForDates )
 {
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1222,6 +1228,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
                     rNewEntry.bDoQuery       = TRUE;
                     rNewEntry.bQueryByString = TRUE;
                     rNewEntry.nField         = nCol;
+                    rNewEntry.bQueryByDate   = bCheckForDates;
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {
                         rNewEntry.eOp   = SC_TOPVAL;
@@ -2407,24 +2414,20 @@ long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
             SfxViewFrame* pViewFrame = pViewData->GetViewShell()->GetViewFrame();
             if (pViewFrame)
             {
-                SfxFrame* pFrame = pViewFrame->GetFrame();
-                if (pFrame)
+                com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pViewFrame->GetFrame().GetController();
+                if (xController.is())
                 {
-                    com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
-                    if (xController.is())
+                    ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                    if (pImp && pImp->IsMouseListening())
                     {
-                        ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                        if (pImp && pImp->IsMouseListening())
-                        {
-                            ::com::sun::star::awt::MouseEvent aEvent;
-                            lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
-                            if ( rNEvt.GetWindow() )
-                                aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
-                            if ( nType == EVENT_MOUSEBUTTONDOWN)
-                                pImp->MousePressed( aEvent );
-                            else
-                                pImp->MouseReleased( aEvent );
-                        }
+                        ::com::sun::star::awt::MouseEvent aEvent;
+                        lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
+                        if ( rNEvt.GetWindow() )
+                            aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
+                        if ( nType == EVENT_MOUSEBUTTONDOWN)
+                            pImp->MousePressed( aEvent );
+                        else
+                            pImp->MouseReleased( aEvent );
                     }
                 }
             }
@@ -2689,9 +2692,32 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 
         if ( bMouse )
         {
+            SCsCOL nCellX = -1;
+            SCsROW nCellY = -1;
+            pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
+            ScDocument* pDoc = pViewData->GetDocument();
+            SCTAB nTab = pViewData->GetTabNo();
+            const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+            bool bSelectAllowed = true;
+            if ( pProtect && pProtect->isProtected() )
+            {
+                // This sheet is protected.  Check if a context menu is allowed on this cell.
+                bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HASATTR_PROTECTED);
+                bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+                bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+                if (bCellProtected)
+                    bSelectAllowed = bSelProtected;
+                else
+                    bSelectAllowed = bSelUnprotected;
+            }
+            if (!bSelectAllowed)
+                // Selecting this cell is not allowed, neither is context menu.
+                return;
+
             //  #i18735# First select the item under the mouse pointer.
             //  This can change the selection, and the view state (edit mode, etc).
-            SelectForContextMenu( aPosPixel );
+            SelectForContextMenu( aPosPixel, nCellX, nCellY );
         }
 
         BOOL bDone = FALSE;
@@ -2786,15 +2812,12 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
+void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY )
 {
     //  #i18735# if the click was outside of the current selection,
     //  the cursor is moved or an object at the click position selected.
     //  (see SwEditWin::SelectMenuPosition in Writer)
 
-    SCsCOL nCellX;
-    SCsROW nCellY;
-    pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nCellX, nCellY );
     ScTabView* pView = pViewData->GetView();
     ScDrawView* pDrawView = pView->GetScDrawView();
 

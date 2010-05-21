@@ -215,7 +215,7 @@ private:
 
     BOOL            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            ExecFilter( ULONG nSel, SCCOL nCol, SCROW nRow,
-                                const String& aValue );
+                                const String& aValue, bool bCheckForDates );
     void            FilterSelect( ULONG nSel );
 
     void            ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr );
@@ -273,7 +273,7 @@ private:
 
     void            PasteSelection( const Point& rPosPixel );
 
-    void            SelectForContextMenu( const Point& rPosPixel );
+    void            SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY );
 
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 

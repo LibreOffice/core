@@ -265,7 +265,8 @@ public:
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
-    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
+    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+                           SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, USHORT nError);
 
@@ -379,7 +380,9 @@ public:
                         SCCOL nStartCol, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow );
 
     void        GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-                                BOOL bIncludeOld );
+                                BOOL bIncludeOld, bool bOnlyDown ) const;
+
+    bool        ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir );
@@ -421,11 +424,11 @@ public:
     void        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE );
+                                    ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc );
@@ -468,7 +471,7 @@ public:
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
 //UNUSED2009-05 BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
-    BOOL        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
+    bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,
@@ -642,8 +645,8 @@ public:
     SCSIZE      Query(ScQueryParam& rQueryParam, BOOL bKeepSub);
     BOOL        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
 
-    void        GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings);
-    void        GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings );
+    void        GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates);
+    void        GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings, bool& rHasDates );
     BOOL        GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
 
     BOOL        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
@@ -659,8 +662,8 @@ public:
 
     void        FindConditionalFormat( ULONG nKey, ScRangeList& rRanges );
 
-    void        IncRecalcLevel()        { ++nRecalcLvl; }
-    void        DecRecalcLevel()        { if (!--nRecalcLvl) SetDrawPageSize(); }
+    void        IncRecalcLevel() { ++nRecalcLvl; }
+    void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true ) { if (!--nRecalcLvl) SetDrawPageSize(true, bUpdateNoteCaptionPos); }
 
     BOOL        IsSortCollatorGlobal() const;
     void        InitSortCollator( const ScSortParam& rPar );
@@ -734,7 +737,7 @@ private:
     BOOL        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, BOOL bInSel,
                                     const ScMarkData& rMark) const;
     BOOL        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark );
-    void        SetDrawPageSize(bool bResetStreamValid = true);
+    void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true );
     BOOL        TestTabRefAbs(SCTAB nTable);
     void        CompileDBFormula();
     void        CompileDBFormula( BOOL bCreateFormulaString );

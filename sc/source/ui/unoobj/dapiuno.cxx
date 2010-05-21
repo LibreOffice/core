@@ -1274,17 +1274,21 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeExc
     return aRet;
 }
 
+ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh, BOOL bRecord, BOOL bApi );
+
 void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
-    if (pDPObj)
-    {
-        ScDPObject* pNew = new ScDPObject(*pDPObj);
-        ScDBDocFunc aFunc(*GetDocShell());
-        aFunc.DataPilotUpdate( pDPObj, pNew, TRUE, TRUE );
-        delete pNew;        // DataPilotUpdate copies settings from "new" object
-    }
+    if( ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName) )
+        RefreshDPObject( pDPObj, NULL, GetDocShell(), TRUE, TRUE );
+    //if (pDPObj)
+    //{
+    //  ScDPObject* pNew = new ScDPObject(*pDPObj);
+    //  ScDBDocFunc aFunc(*GetDocShell());
+    //  aFunc.DataPilotUpdate( pDPObj, pNew, TRUE, TRUE );
+    //  delete pNew;        // DataPilotUpdate copies settings from "new" object
+    //}
+
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const CellAddress& aAddr)
@@ -1887,9 +1891,10 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     String aNameString(aPropertyName);
     if ( aNameString.EqualsAscii( SC_UNONAME_FUNCTION ) )
     {
-        GeneralFunction eFunction = GeneralFunction_NONE;
-        if( aValue >>= eFunction )
-            setFunction( eFunction );
+        // #i109350# use GetEnumFromAny because it also allows sal_Int32
+        GeneralFunction eFunction = (GeneralFunction)
+                            ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        setFunction( eFunction );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_SUBTOTALS ) )
     {

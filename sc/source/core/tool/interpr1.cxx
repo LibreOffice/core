@@ -2488,7 +2488,14 @@ void ScInterpreter::ScN()
         Pop();
     }
     else
+    {
+        // Temporarily override the ConvertStringToValue() error for
+        // GetCellValue() / GetCellValueOrZero()
+        USHORT nSErr = mnStringNoValueError;
+        mnStringNoValueError = errCellNoValue;
         fVal = GetDouble();
+        mnStringNoValueError = nSErr;
+    }
     if ( nGlobalError == NOTAVAILABLE || nGlobalError == errIllegalArgument )
         nGlobalError = 0;       // N(#NA) and N("text") are ok
     if ( !nGlobalError && nErr != NOTAVAILABLE )
@@ -6053,6 +6060,10 @@ void ScInterpreter::ScDBCount()
             // iterators.
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pQueryParam.get());
             SCTAB nTab = p->nTab;
+            // ScQueryCellIterator doesn't make use of ScDBQueryParamBase::mnField,
+            // so the source range has to be restricted, like before the introduction
+            // of ScDBQueryParamBase.
+            p->nCol1 = p->nCol2 = p->mnField;
             ScQueryCellIterator aCellIter( pDok, nTab, *p);
             if ( aCellIter.GetFirst() )
             {

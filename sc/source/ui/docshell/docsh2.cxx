@@ -102,6 +102,7 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
 
     InitItems();
     CalcOutputFactor();
+#if 0
     uno::Any aGlobs;
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[ 0 ] <<= GetModel();
@@ -121,6 +122,7 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
         BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
         if ( pAppMgr )
             pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
+#endif
 
     return bRet;
 }

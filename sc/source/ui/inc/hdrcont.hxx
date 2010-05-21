@@ -77,7 +77,7 @@ private:
 
     long            GetScrPos( SCCOLROW nEntryNo );
     SCCOLROW        GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder );
-
+    bool            IsSelectionAllowed(SCCOLROW nPos) const;
     void            ShowDragHelp();
 
     void            DoPaint( SCCOLROW nStart, SCCOLROW nEnd );

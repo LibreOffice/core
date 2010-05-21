@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: langbox.hxx,v $
+ * $Revision: 1.4.242.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,16 +27,50 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "segdefs_.hxx"
 
-//****************************************************************
-//
-//und jetzt alle probleme mit ERROR: unknown pragma beseitigen
-//
-//----------------------------------------------------------------
+#ifndef SC_UI_IMPORTOPTIONS_HXX
+#define SC_UI_IMPORTOPTIONS_HXX
 
-//segmente mit laenge 00000H (map) werden von tcovsegs.exe vergessen
-//jetzt defines nachflicken!
+#include "vcl/dialog.hxx"
+#include "vcl/button.hxx"
+#include "vcl/fixed.hxx"
+#include "i18npool/lang.h"
+#include "svx/langbox.hxx"
+
+class ScTextImportOptionsDlg : public ModalDialog
+{
+public:
+    ScTextImportOptionsDlg(Window* pParent);
+    virtual ~ScTextImportOptionsDlg();
+
+    virtual short Execute();
+
+    LanguageType getLanguageType() const;
+    bool isDateConversionSet() const;
+
+private:
+    void init();
+
+private:
+    OKButton        maBtnOk;
+    CancelButton    maBtnCancel;
+    HelpButton      maBtnHelp;
+
+    FixedLine       maFlChooseLang;
+
+    RadioButton     maRbAutomatic;
+    RadioButton     maRbCustom;
+
+    SvxLanguageBox  maLbCustomLang;
+
+    FixedLine       maFlOption;
+
+    CheckBox        maBtnConvertDate;
+
+    DECL_LINK( OKHdl, OKButton* );
+
+    DECL_LINK( RadioHdl, RadioButton* );
+};
 
 
-
+#endif

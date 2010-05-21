@@ -85,6 +85,7 @@
 #include "inputwin.hxx"
 #include "funcdesc.hxx"
 #include "docuno.hxx"
+#include "charthelper.hxx"
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -2817,6 +2818,10 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             nNewTab--;
 
         SetTabNo( nNewTab, TRUE );
+
+        //#i29848# adjust references to data on the copied sheet
+        if( bCopy )
+            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pDoc, pDestDoc, nTab, nNewTab );
     }
 }
 

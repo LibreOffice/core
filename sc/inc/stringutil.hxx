@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: table.hxx,v $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,10 +28,29 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
+#ifndef SC_STRINGUTIL_HXX
+#define SC_STRINGUTIL_HXX
+
+#include "rtl/ustring.hxx"
+
+class ScStringUtil
+{
+public:
+    /**
+     * Check if a given string is a simple decimal number (e.g. 12.345). We
+     * don't do any elaborate parsing here; we only check for the simplest
+     * case of decimal number format.
+     *
+     * @param rStr string to parse
+     * @param dsep decimal separator
+     * @param gsep group separator (aka thousands separator)
+     * @param rVal value of successfully parsed number
+     *
+     * @return true if the string is a valid number, false otherwise.
+     */
+    static bool parseSimpleNumber(
+        const ::rtl::OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
+};
 
 
-
-// -----------------------------------------------------------------------
-
+#endif
