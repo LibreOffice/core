@@ -219,11 +219,6 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     defaultButton(WZB_NEXT);
 }
 
-void FirstStartWizard::EnableButtonsWhileMigration()
-{
-    enableButtons(0xff, sal_True);
-}
-
 void FirstStartWizard::DisableButtonsWhileMigration()
 {
     enableButtons(0xff, sal_False);

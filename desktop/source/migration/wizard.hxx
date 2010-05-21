@@ -62,7 +62,6 @@ public:
     virtual short Execute();
     virtual long PreNotify( NotifyEvent& rNEvt );
 
-    void EnableButtonsWhileMigration();
     void DisableButtonsWhileMigration();
 
 private:

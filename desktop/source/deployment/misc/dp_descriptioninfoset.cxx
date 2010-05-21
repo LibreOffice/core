@@ -264,12 +264,6 @@ DescriptionInfoset::getUpdateDownloadUrls() const
             ::boost::optional< ::rtl::OUString >();
 }
 
-css::uno::Reference< css::xml::xpath::XXPathAPI > DescriptionInfoset::getXpath()
-    const
-{
-    return m_xpath;
-}
-
 ::boost::optional< ::rtl::OUString > DescriptionInfoset::getOptionalValue(
     ::rtl::OUString const & expression) const
 {
