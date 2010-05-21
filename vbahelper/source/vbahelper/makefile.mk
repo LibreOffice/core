@@ -33,6 +33,11 @@ ENABLE_EXCEPTIONS := TRUE
 VISIBILITY_HIDDEN=TRUE
 # --- Settings -----------------------------------------------------
 
+.IF "$(ENABLE_VBA)" == "NO"
+dummy:
+    @echo "Nothing to build"
+.ENDIF
+
 .INCLUDE :  settings.mk
 
 SLOFILES=\

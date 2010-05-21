@@ -34,6 +34,10 @@ TARGET=vbahelper
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_VBA)" == "NO"
+dummy:
+    @echo "Nothing to build"
+.ENDIF
 
 TARGET_HELPER=vbahelper
 
