@@ -43,6 +43,12 @@ interface XWizardPage : ::com::sun::star::lang::XComponent
     */
     [attribute, readonly]   ::com::sun::star::awt::XWindow  Window;
 
+    /** denotes the ID of the page.
+
+        <p>Within a wizard, no two pages are allowed to have the same ID.</p>
+    */
+    [attribute, readonly]   short PageId;
+
     /** called when the page is activated
     */
     void    activatePage();

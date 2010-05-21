@@ -33,6 +33,8 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
+interface XWizardPage;
+
 //==================================================================================================================
 
 /**
@@ -60,7 +62,8 @@ interface XWizard
     boolean advanceTo( [in] short PageId );
     boolean goBackTo( [in] short PageId );
 
-    short   getCurrentPage();
+    XWizardPage
+            getCurrentPage();
 };
 
 //==================================================================================================================
