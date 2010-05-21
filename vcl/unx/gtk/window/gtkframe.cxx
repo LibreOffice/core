@@ -1353,15 +1353,11 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             //
             // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
             // awesome.
-            bool bMetaCity = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity");
-            if( nUserTime == 0 &&
-               ( bMetaCity ||
-                 (
-                    getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz") &&
-                    (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION))
-                 )
-               )
-              )
+            bool bHack =
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
+                ;
+            if( nUserTime == 0 && bHack )
             {
                 /* #i99360# ugly workaround an X11 library bug */
                 nUserTime= getDisplay()->GetLastUserEventTime( true );
@@ -1369,7 +1365,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             }
             lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
 
-            if( bMetaCity && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
+            if( bHack && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
 
             gtk_widget_show( m_pWindow );
