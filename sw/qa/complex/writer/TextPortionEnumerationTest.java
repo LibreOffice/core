@@ -3881,7 +3881,7 @@ public class TextPortionEnumerationTest
         String filename = "TESTXMLID.odt";
         String file;
         try {
-            file = util.utils.getFullTestURL(filename);
+            file = TestDocument.getUrl(filename);
             xComp = doLoad(file);
             if (xComp != null)
             {
