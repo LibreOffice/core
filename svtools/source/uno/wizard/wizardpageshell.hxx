@@ -60,6 +60,9 @@ namespace svt { namespace uno
         // OWizardPage overridables (why isn't this method part of IWizardPage?)
         virtual bool        canAdvance() const;
 
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage >&
+                            getWizardPage() const { return m_xWizardPage; }
+
     private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >  m_xController;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage >              m_xWizardPage;

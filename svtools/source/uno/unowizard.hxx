@@ -82,7 +82,7 @@ namespace svt { namespace uno
         virtual void SAL_CALL updateTravelUI(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int16 SAL_CALL getCurrentPage(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::ui::dialogs::XExecutableDialog
         virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException);

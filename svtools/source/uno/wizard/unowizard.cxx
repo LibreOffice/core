@@ -69,6 +69,7 @@ namespace svt { namespace uno
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::ui::dialogs::XWizardController;
+    using ::com::sun::star::ui::dialogs::XWizardPage;
     /** === end UNO using === **/
     namespace WizardButton = ::com::sun::star::ui::dialogs::WizardButton;
 
@@ -344,7 +345,7 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::sal_Int16 SAL_CALL Wizard::getCurrentPage(  ) throw (RuntimeException)
+    Reference< XWizardPage > SAL_CALL Wizard::getCurrentPage(  ) throw (RuntimeException)
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -352,7 +353,7 @@ namespace svt { namespace uno
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::getCurrentPage: invalid dialog implementation!" );
 
-        return pWizardImpl->getCurrentPage();
+        return pWizardImpl->getCurrentWizardPage();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -365,7 +366,6 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int16 SAL_CALL Wizard::execute(  ) throw (RuntimeException)
     {
-        // simply disambiguate
         return Wizard_Base::OGenericUnoDialog::execute();
     }
 

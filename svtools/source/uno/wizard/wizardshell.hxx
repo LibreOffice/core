@@ -54,6 +54,9 @@ namespace svt { namespace uno
         );
         virtual ~WizardShell();
 
+        // Dialog overridables
+        virtual short   Execute();
+
         // OWizardMachine overridables
         virtual TabPage*    createPage( WizardState i_nState );
         virtual void        enterState( WizardState i_nState );
@@ -78,12 +81,17 @@ namespace svt { namespace uno
         {
             return skipBackwardUntil( impl_pageIdToState( i_nPageId ) );
         }
-        sal_Int16   getCurrentPage() const
-        {
-            return impl_stateToPageId( getCurrentState() );
-        }
         sal_Bool    travelNext()        { return WizardShell_Base::travelNext(); }
         sal_Bool    travelPrevious()    { return WizardShell_Base::travelPrevious(); }
+
+        void        preExecute()
+        {
+            // activate the first page
+            ActivatePage();
+        }
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage >
+                    getCurrentWizardPage() const;
 
     private:
         sal_Int16   impl_stateToPageId( const WizardTypes::WizardState i_nState ) const

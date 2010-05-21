@@ -56,6 +56,7 @@ namespace svt { namespace uno
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::ui::dialogs::XWizardController;
     using ::com::sun::star::ui::dialogs::XWizard;
+    using ::com::sun::star::ui::dialogs::XWizardPage;
     /** === end UNO using === **/
     namespace WizardTravelType = ::com::sun::star::ui::dialogs::WizardTravelType;
 
@@ -101,14 +102,18 @@ namespace svt { namespace uno
         ShowButtonFixedLine( true );
         SetRoadmapInteractive( true );
         enableAutomaticNextButtonState();
-
-        // activate the first page
-        ActivatePage();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     WizardShell::~WizardShell()
     {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    short WizardShell::Execute()
+    {
+        ActivatePage();
+        return WizardShell_Base::Execute();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -193,6 +198,15 @@ namespace svt { namespace uno
         }
 
         return sal_True;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XWizardPage > WizardShell::getCurrentWizardPage() const
+    {
+        const WizardState eState = getCurrentState();
+        const WizardPageShell* pPage = dynamic_cast< const WizardPageShell* >( GetPage( eState ) );
+        ENSURE_OR_RETURN( pPage, "WizardShell::getCurrentWizardPage: invalid page/implementation!", NULL );
+        return pPage->getWizardPage();
     }
 
     //------------------------------------------------------------------------------------------------------------------
