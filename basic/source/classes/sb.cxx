@@ -49,6 +49,7 @@
 #include "disas.hxx"
 #include "runtime.hxx"
 #include <basic/sbuno.hxx>
+#include <basic/sbobjmod.hxx>
 #include "stdobj.hxx"
 #include "filefmt.hxx"
 #include "sb.hrc"
@@ -56,6 +57,10 @@
 #include <vos/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "errobject.hxx"
+
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+using namespace ::com::sun::star::script;
 
 // #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
@@ -510,6 +515,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             }
         }
     }
+    SetModuleType( ModuleType::CLASS );
 }
 
 SbClassModuleObject::~SbClassModuleObject()
@@ -707,6 +713,7 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     SetParent( p );
     pLibInfo = NULL;
     bNoRtl = bBreak = FALSE;
+    bVBAEnabled = FALSE;
     pModules = new SbxArray;
 
     if( !GetSbData()->nInst++ )
@@ -807,7 +814,34 @@ SbModule* StarBASIC::MakeModule( const String& rName, const String& rSrc )
 
 SbModule* StarBASIC::MakeModule32( const String& rName, const ::rtl::OUString& rSrc )
 {
-    SbModule* p = new SbModule( rName );
+    ModuleInfo mInfo;
+    mInfo.ModuleType = ModuleType::NORMAL;
+    return MakeModule32(  rName, mInfo, rSrc );
+}
+SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo, const rtl::OUString& rSrc )
+{
+
+    OSL_TRACE("create module %s type mInfo %d", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(), mInfo.ModuleType );
+    SbModule* p = NULL;
+    switch ( mInfo.ModuleType )
+    {
+        case ModuleType::DOCUMENT:
+            // In theory we should be able to create Object modules
+            // in ordinary basic ( in vba mode thought these are create
+            // by the application/basic and not by the user )
+            p = new SbObjModule( rName, mInfo, isVBAEnabled() );
+            break;
+        case ModuleType::CLASS:
+            p = new SbModule( rName, isVBAEnabled() );
+            p->SetModuleType( ModuleType::CLASS );
+        break;
+        case ModuleType::FORM:
+            p = new SbUserFormModule( rName, mInfo, isVBAEnabled() );
+        break;
+        default:
+            p = new SbModule( rName, isVBAEnabled() );
+
+    }
     p->SetSource32( rSrc );
     p->SetParent( this );
     pModules->Insert( p, pModules->Count() );
@@ -983,6 +1017,12 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
                 }
                 pNamed = p;
             }
+            // Only variables qualified by the Module Name e.g. Sheet1.foo
+            // should work for Documant && Class type Modules
+            INT32 nType = p->GetModuleType();
+            if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
+                continue;
+
             // otherwise check if the element is available
             // unset GBLSEARCH-Flag (due to Rekursion)
             USHORT nGblFlag = p->GetFlags() & SBX_GBLSEARCH;

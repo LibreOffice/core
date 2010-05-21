@@ -52,7 +52,7 @@ bool SbiRuntime::isVBAEnabled()
     bool result = false;
     SbiInstance* pInst = pINST;
     if ( pInst && pINST->pRun )
-        result = pInst->pRun->GetImageFlag( SBIMG_VBASUPPORT );
+        result = pInst->pRun->bVBAEnabled;
     return result;
 }
 
@@ -62,6 +62,24 @@ static BOOL bStaticGlobalEnableReschedule = TRUE;
 void StarBASIC::StaticEnableReschedule( BOOL bReschedule )
 {
     bStaticGlobalEnableReschedule = bReschedule;
+}
+void StarBASIC::SetVBAEnabled( BOOL bEnabled )
+{
+    if ( bDocBasic )
+    {
+        bVBAEnabled = bEnabled;
+    }
+}
+
+BOOL StarBASIC::isVBAEnabled()
+{
+    if ( bDocBasic )
+    {
+        if( SbiRuntime::isVBAEnabled() )
+            return TRUE;
+        return bVBAEnabled;
+    }
+    return FALSE;
 }
 
 
@@ -552,6 +570,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
     nForLvl   = 0;
     nOps      = 0;
     refExprStk = new SbxArray;
+    SetVBAEnabled( pMod->IsVBACompat() );
 #if defined GCC
     SetParameters( pe ? pe->GetParameters() : (class SbxArray *)NULL );
 #else
@@ -559,7 +578,6 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
 #endif
     pRefSaveList = NULL;
     pItemStoreList = NULL;
-    bVBAEnabled = isVBAEnabled();
 }
 
 SbiRuntime::~SbiRuntime()
@@ -576,6 +594,11 @@ SbiRuntime::~SbiRuntime()
         pItemStoreList = pToDeleteItem->pNext;
         delete pToDeleteItem;
     }
+}
+
+void SbiRuntime::SetVBAEnabled(bool bEnabled )
+{
+    bVBAEnabled = bEnabled;
 }
 
 // Aufbau der Parameterliste. Alle ByRef-Parameter werden direkt

@@ -121,6 +121,10 @@ using namespace com::sun::star::io;
 #include <io.h>
 #endif
 
+using namespace rtl;
+
+#include <basic/sbobjmod.hxx>
+
 static void FilterWhiteSpace( String& rStr )
 {
     rStr.EraseAllChars( ' ' );
@@ -4128,12 +4132,20 @@ RTLFUNC(Load)
 
     // Diesen Call einfach an das Object weiterreichen
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
-    if( pObj && pObj->IsA( TYPE( SbxObject ) ) )
+    if ( pObj )
     {
-        SbxVariable* pVar = ((SbxObject*)pObj)->
-            Find( String( RTL_CONSTASCII_USTRINGPARAM("Load") ), SbxCLASS_METHOD );
-        if( pVar )
-            pVar->GetInteger();
+        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        {
+            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
+            pFormModule->load();
+        }
+        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        {
+            SbxVariable* pVar = ((SbxObject*)pObj)->
+                Find( String( RTL_CONSTASCII_USTRINGPARAM("Load") ), SbxCLASS_METHOD );
+            if( pVar )
+                pVar->GetInteger();
+        }
     }
 }
 
@@ -4151,12 +4163,20 @@ RTLFUNC(Unload)
 
     // Diesen Call einfach an das Object weitereichen
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
-    if( pObj && pObj->IsA( TYPE( SbxObject ) ) )
+    if ( pObj )
     {
-        SbxVariable* pVar = ((SbxObject*)pObj)->
-            Find( String( RTL_CONSTASCII_USTRINGPARAM("Unload") ), SbxCLASS_METHOD );
-        if( pVar )
-            pVar->GetInteger();
+        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        {
+            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
+            pFormModule->Unload();
+        }
+        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        {
+            SbxVariable* pVar = ((SbxObject*)pObj)->
+                Find( String( RTL_CONSTASCII_USTRINGPARAM("Unload") ), SbxCLASS_METHOD );
+            if( pVar )
+                pVar->GetInteger();
+        }
     }
 }
 
