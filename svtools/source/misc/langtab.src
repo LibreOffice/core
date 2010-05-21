@@ -307,6 +307,18 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Asturian" ; LANGUAGE_USER_ASTURIAN ; > ;
         < "Sorbian, Upper" ; LANGUAGE_UPPER_SORBIAN_GERMANY ; > ;
         < "Sorbian, Lower" ; LANGUAGE_LOWER_SORBIAN_GERMANY ; > ;
+        < "Latgalian" ; LANGUAGE_USER_LATGALIAN ; > ;
+        < "Maore" ; LANGUAGE_USER_MAORE ; > ;
+        < "Bushi" ; LANGUAGE_USER_BUSHI ; > ;
+        < "Tahitian" ; LANGUAGE_USER_TAHITIAN ; > ;
+        < "Malagasy, Plateau" ; LANGUAGE_USER_MALAGASY_PLATEAU ; > ;
+        < "Papiamentu (Netherlands Antilles)" ; LANGUAGE_PAPIAMENTU ; > ;
+        < "Papiamento (Aruba)" ; LANGUAGE_USER_PAPIAMENTU_ARUBA ; > ;
+        < "Sardinian, Campidanese" ; LANGUAGE_USER_SARDINIAN_CAMPIDANESE ; > ;
+        < "Sardinian, Gallurese" ; LANGUAGE_USER_SARDINIAN_GALLURESE ; > ;
+        < "Sardinian, Logudorese" ; LANGUAGE_USER_SARDINIAN_LOGUDORESE ; > ;
+        < "Sardinian, Sassarese" ; LANGUAGE_USER_SARDINIAN_SASSARESE ; > ;
+        < "Bafia" ; LANGUAGE_USER_BAFIA ; > ;
     };
 };
 

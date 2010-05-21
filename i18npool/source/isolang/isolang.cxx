@@ -287,7 +287,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BELARUSIAN,                  "be", "BY" },
     { LANGUAGE_CATALAN,                     "ca", "ES" },   // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD" },   // Andorra
-    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "XV" },   // XV: ISO 3166 user-assigned; workaround for UI localization only, do not use in document content!
+    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "XV" },   // XV: ISO 3166 user-assigned; old workaround for UI localization only, do not use in document content! Kept just in case..
+    { LANGUAGE_USER_CATALAN_VALENCIAN,     "qcv", "ES" },   // qcv: ISO 639-3 reserved-for-local-use; for UI localization, use in document content on own risk!
     { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM" },
     { LANGUAGE_FRENCH_COTE_D_IVOIRE,        "fr", "CI" },
     { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
@@ -349,6 +350,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_YORUBA,                      "yo", "NG" },
     { LANGUAGE_SOMALI,                      "so", "SO" },
     { LANGUAGE_PAPIAMENTU,                 "pap", "AN" },
+    { LANGUAGE_USER_PAPIAMENTU_ARUBA,      "pap", "AW" },
     { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG" },
     { LANGUAGE_YIDDISH,                     "yi", "IL" },   // new: old was "ji"
     { LANGUAGE_YIDDISH,                     "ji", "IL" },   // old: new is "yi"
@@ -401,7 +403,11 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_KURDISH_SYRIA,          "ku", "SY" },
     { LANGUAGE_USER_KURDISH_IRAQ,           "ku", "IQ" },
     { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR" },
-    { LANGUAGE_USER_SARDINIAN,              "sc", "IT" },
+    { LANGUAGE_USER_SARDINIAN,              "sc", "IT" },   // macrolanguage code
+    { LANGUAGE_USER_SARDINIAN_CAMPIDANESE, "sro", "IT" },
+    { LANGUAGE_USER_SARDINIAN_GALLURESE,   "sdn", "IT" },
+    { LANGUAGE_USER_SARDINIAN_LOGUDORESE,  "src", "IT" },
+    { LANGUAGE_USER_SARDINIAN_SASSARESE,   "sdc", "IT" },
     { LANGUAGE_BRETON_FRANCE,               "br", "FR" },
     { LANGUAGE_OBSOLETE_USER_BRETON,        "br", "FR" },
     { LANGUAGE_KALAALLISUT_GREENLAND,       "kl", "GL" },
@@ -445,6 +451,12 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_SHUSWAP,               "shs", "CA" },
     { LANGUAGE_USER_ANCIENT_GREEK,         "grc", "GR" },
     { LANGUAGE_USER_ASTURIAN,              "ast", "ES" },
+    { LANGUAGE_USER_LATGALIAN,             "ltg", "LV" },
+    { LANGUAGE_USER_MAORE,                 "swb", "YT" },
+    { LANGUAGE_USER_BUSHI,                 "buc", "YT" },
+    { LANGUAGE_USER_TAHITIAN,               "ty", "PF" },
+    { LANGUAGE_USER_MALAGASY_PLATEAU,      "plt", "MG" },
+    { LANGUAGE_USER_BAFIA,                 "ksf", "CM" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };

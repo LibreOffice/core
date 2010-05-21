@@ -36,39 +36,33 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # --- Common ----------------------------------------------------------
 
 SHL1OBJS=  \
-    $(SLO)$/basegfx1d.obj \
-    $(SLO)$/basegfx2d.obj \
-    $(SLO)$/basegfx3d.obj \
-    $(SLO)$/testtools.obj
-
-# linking statically against basegfx parts
-SHL1LIBS=\
-    $(SLB)$/curve.lib	\
-    $(SLB)$/matrix.lib	\
-    $(SLB)$/numeric.lib	\
-    $(SLB)$/point.lib	\
-    $(SLB)$/polygon.lib	\
-    $(SLB)$/range.lib	\
-    $(SLB)$/tuple.lib	\
-    $(SLB)$/tools.lib	\
-    $(SLB)$/color.lib	\
-    $(SLB)$/vector.lib
+    $(SLO)$/basegfx1d.obj      \
+    $(SLO)$/basegfx2d.obj      \
+    $(SLO)$/basegfx3d.obj      \
+    $(SLO)$/boxclipper.obj     \
+    $(SLO)$/basegfxtools.obj   \
+    $(SLO)$/clipstate.obj      \
+    $(SLO)$/genericclipper.obj \
+    $(SLO)$/testtools.obj	
 
 SHL1TARGET= basegfx_tests
 SHL1STDLIBS= \
+                $(BASEGFXLIB) \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
-                        $(CPPULIB)       \
-                                $(TESTSHL2LIB) \
+                $(CPPULIB)       \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = export.map
+SHL1RPATH = NONE
 
 # END ------------------------------------------------------------------
 
@@ -81,13 +75,6 @@ SLOFILES=$(SHL1OBJS)
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk
 
-# --- Enable testshl2 execution in normal build ------------------------
-
-$(MISC)$/unittest_succeeded : $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        @echo - start unit test on library $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        $(TESTSHL2) -sf $(mktmp ) -forward $(BIN)$/ $(SHL1TARGETN)
-        $(TOUCH) $@
-
-ALLTAR : $(MISC)$/unittest_succeeded
+.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
+CDEFS+= -DVERBOSE
+.ENDIF
