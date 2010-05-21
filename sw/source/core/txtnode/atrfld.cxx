@@ -32,6 +32,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <docufld.hxx>
+#include <doc.hxx>
 
 #include "reffld.hxx"
 #include "ddefld.hxx"
@@ -68,7 +69,7 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
     SwClient( rFld.GetTyp() ),
     pTxtAttr( 0 )
 {
-    pField = rFld.Copy();
+    pField = rFld.CopyField();
 }
 
 // #i24434#
@@ -83,7 +84,7 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     if(rAttr.GetFld())
     {
         rAttr.GetFld()->GetTyp()->Add(this);
-        pField = rAttr.GetFld()->Copy();
+        pField = rAttr.GetFld()->CopyField();
     }
 }
 
@@ -254,9 +255,10 @@ BOOL SwFmtFld::IsProtect() const
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStartPos )
+SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
+        bool const bInClipboard)
     : SwTxtAttr( rAttr, nStartPos )
-    , m_aExpand( rAttr.GetFld()->Expand() )
+    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;
@@ -283,7 +285,8 @@ void SwTxtFld::Expand() const
     ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
-    XubString aNewExpand( pFld->Expand() );
+    XubString aNewExpand(
+        pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
     if( aNewExpand == m_aExpand )
     {

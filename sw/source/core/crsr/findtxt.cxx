@@ -145,7 +145,9 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
                         //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
                            BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
-                            !((SwTxtFld*)pHt)->GetFld().GetFld()->Expand().Len();
+                            !(static_cast<SwTxtFld const*>(pHt)
+                                ->GetFld().GetFld()->ExpandField(
+                                    rNd.GetDoc()->IsClipBoard()).Len());
                         if ( bEmpty && nStart == nAkt )
                            {
                             rArr.Insert( nAkt, rArr.Count() );

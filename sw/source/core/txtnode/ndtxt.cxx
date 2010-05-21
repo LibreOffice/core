@@ -2994,8 +2994,10 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                         rTxt.Erase( nPos, 1 );
                         if( bExpandFlds )
                         {
-                            const XubString aExpand( ((SwTxtFld*)pAttr)->GetFld().
-                                                    GetFld()->Expand() );
+                            const XubString aExpand(
+                                static_cast<SwTxtFld const*>(pAttr)->GetFld()
+                                    .GetFld()->ExpandField(
+                                        GetDoc()->IsClipBoard()));
                             rTxt.Insert( aExpand, nPos );
                             nPos = nPos + aExpand.Len();
                             nEndPos = nEndPos + aExpand.Len();
@@ -3142,7 +3144,9 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 {
                 case RES_TXTATR_FIELD:
                     {
-                        const XubString aExpand( ((SwTxtFld*)pHt)->GetFld().GetFld()->Expand() );
+                        XubString const aExpand(
+                            static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
+                                ->ExpandField(GetDoc()->IsClipBoard()));
                         if( aExpand.Len() )
                         {
                             aDestIdx++;     // dahinter einfuegen;
@@ -3238,7 +3242,9 @@ const ModelToViewHelper::ConversionMap*
         const SwTxtAttr* pAttr = (*pSwpHints2)[i];
         if ( RES_TXTATR_FIELD == pAttr->Which() )
         {
-            const XubString aExpand( ((SwTxtFld*)pAttr)->GetFld().GetFld()->Expand() );
+            const XubString aExpand(
+                static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
+                    ->ExpandField(GetDoc()->IsClipBoard()));
             if ( aExpand.Len() > 0 )
             {
                 const xub_StrLen nFieldPos = *pAttr->GetStart();
