@@ -418,7 +418,7 @@ namespace svt { namespace uno
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::activatePath: invalid dialog implementation!" );
 
-        pWizardImpl->activatePath( i_PathIndex );
+        pWizardImpl->activatePath( i_PathIndex, i_Final );
     }
 
     //------------------------------------------------------------------------------------------------------------------

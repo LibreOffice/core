@@ -84,9 +84,9 @@ namespace svt { namespace uno
         sal_Bool    travelNext()        { return WizardShell_Base::travelNext(); }
         sal_Bool    travelPrevious()    { return WizardShell_Base::travelPrevious(); }
 
-        void        activatePath( const sal_Int16 i_nPathID )
+        void        activatePath( const sal_Int16 i_nPathID, const sal_Bool i_bFinal )
         {
-            WizardShell_Base::activatePath( PathId( i_nPathID ) );
+            WizardShell_Base::activatePath( PathId( i_nPathID ), i_bFinal );
         }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage >
