@@ -161,11 +161,11 @@ Resource RID_SLIDESORTER_ICONS
 
     Image IMAGE_COMMAND3_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_command3_hc.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_large_hc.png" ; };
     };
     Image IMAGE_COMMAND3_LARGE_HOVER_HC
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_command3_hover_hc.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command3_large_hover_hc.png" ; };
     };
     Image IMAGE_COMMAND3_MEDIUM_HC
     {
@@ -229,11 +229,6 @@ Resource RID_SLIDESORTER_ICONS
     };
 
 
-    String STRING_UNHIDE
-    {
-        Text [ en-US ] = "Show" ;
-    };
-
     String STRING_DRAG_AND_DROP_PAGES
     {
         Text [ en-US ] = "Drag and Drop Pages" ;
@@ -249,9 +244,19 @@ Resource RID_SLIDESORTER_ICONS
         Text [ en-US ] = "Start Slide Show" ;
     };
 
-    String STRING_COMMAND2
+    String STRING_COMMAND2_A
     {
         Text [ en-US ] = "Hide Slide" ;
+    };
+
+    String STRING_COMMAND2_B
+    {
+        Text [ en-US ] = "Show" ;
+    };
+
+    String STRING_COMMAND2_HELP
+    {
+        Text [ en-US ] = "Show Slide" ;
     };
 
     String STRING_COMMAND3

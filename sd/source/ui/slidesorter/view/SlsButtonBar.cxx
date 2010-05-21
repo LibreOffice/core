@@ -1306,8 +1306,8 @@ Size ImageButton::GetSize (const Button::IconSize eIconSize) const
 UnhideButton::UnhideButton (SlideSorter& rSlideSorter)
     : TextButton(
         rSlideSorter,
-        rSlideSorter.GetTheme()->GetString(Theme::String_Unhide),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command2))
+        rSlideSorter.GetTheme()->GetString(Theme::String_Command2_B),
+        rSlideSorter.GetTheme()->GetString(Theme::String_Command2_Help))
 {
 }
 
@@ -1373,7 +1373,7 @@ HideButton::HideButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2SmallHover),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command2))
+        rSlideSorter.GetTheme()->GetString(Theme::String_Command2_A))
 {
 }
 

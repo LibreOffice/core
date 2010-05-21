@@ -180,7 +180,9 @@ public:
         String_DragAndDropPages,
         String_DragAndDropSlides,
         String_Command1,
-        String_Command2,
+        String_Command2_A,
+        String_Command2_B,
+        String_Command2_Help,
         String_Command3,
         _StringType_Size_
     };

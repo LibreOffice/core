@@ -487,21 +487,21 @@ bool ScrollBarManager::TestScrollBarVisibilities (
 
 void ScrollBarManager::SetTopLeft (const Point aNewTopLeft)
 {
-    if ((mpVerticalScrollBar == NULL
+    if (( ! mpVerticalScrollBar
             || mpVerticalScrollBar->GetThumbPos() == aNewTopLeft.Y())
-        && (mpHorizontalScrollBar == NULL
+        && ( ! mpHorizontalScrollBar
             || mpHorizontalScrollBar->GetThumbPos() == aNewTopLeft.X()))
         return;
 
     // Flush pending repaints before scrolling to avoid temporary artifacts.
     mrSlideSorter.GetContentWindow()->Update();
 
-    if (mpVerticalScrollBar != NULL)
+    if (mpVerticalScrollBar)
     {
         mpVerticalScrollBar->SetThumbPos(aNewTopLeft.Y());
         mnVerticalPosition = aNewTopLeft.Y() / double(mpVerticalScrollBar->GetRange().Len());
     }
-    if (mpHorizontalScrollBar != NULL)
+    if (mpHorizontalScrollBar)
     {
         mpHorizontalScrollBar->SetThumbPos(aNewTopLeft.X());
         mnHorizontalPosition = aNewTopLeft.X() / double(mpHorizontalScrollBar->GetRange().Len());
@@ -674,6 +674,84 @@ IMPL_LINK(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, EMPTYARG)
     RepeatAutoScroll();
 
     return 0;
+}
+
+
+
+
+void ScrollBarManager::Scroll(
+    const Orientation eOrientation,
+    const Unit eUnit,
+    const sal_Int32 nDistance)
+{
+    bool bIsVertical (false);
+    switch (eOrientation)
+    {
+        case Orientation_Horizontal: bIsVertical = false; break;
+        case Orientation_Vertical: bIsVertical = true; break;
+        default:
+            OSL_ASSERT(eOrientation==Orientation_Horizontal || eOrientation==Orientation_Vertical);
+            return;
+    }
+
+    Point aNewTopLeft (
+        mpHorizontalScrollBar ? mpHorizontalScrollBar->GetThumbPos() : 0,
+        mpVerticalScrollBar ? mpVerticalScrollBar->GetThumbPos() : 0);
+    switch (eUnit)
+    {
+        case Unit_Pixel:
+            if (bIsVertical)
+                aNewTopLeft.Y() += nDistance;
+            else
+                aNewTopLeft.X() += nDistance;
+            break;
+
+        case Unit_Slide:
+        {
+            view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
+
+            // Calculate estimate of new location.
+            if (bIsVertical)
+                aNewTopLeft.Y() += nDistance * rLayouter.GetPageObjectSize().Height();
+            else
+                aNewTopLeft.X() += nDistance * rLayouter.GetPageObjectSize().Width();
+
+            // Adapt location to show whole slides.
+            if (bIsVertical)
+                if (nDistance > 0)
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X(), aNewTopLeft.Y()+mpVerticalScrollBar->GetVisibleSize()),
+                        true));
+                    aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Bottom()
+                        - mpVerticalScrollBar->GetVisibleSize();
+                }
+                else
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X(), aNewTopLeft.Y()),
+                        true));
+                    aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Top();
+                }
+            else
+                if (nDistance > 0)
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X()+mpVerticalScrollBar->GetVisibleSize(), aNewTopLeft.Y()),
+                        true));
+                    aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Right()
+                        - mpVerticalScrollBar->GetVisibleSize();
+                }
+                else
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X(), aNewTopLeft.Y()),
+                            true));
+                    aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Left();
+                }
+        }
+    }
+    SetTopLeft(aNewTopLeft);
 }
 
 

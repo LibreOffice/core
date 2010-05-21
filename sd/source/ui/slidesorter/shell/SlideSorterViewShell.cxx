@@ -570,47 +570,6 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
 
 
 
-bool SlideSorterViewShell::HandleScrollCommand (const CommandEvent& rEvent, ::sd::Window* pWindow)
-{
-    bool bDone (false);
-
-    if (rEvent.GetCommand() == COMMAND_WHEEL
-        && mpSlideSorter->GetView().GetOrientation() == view::Layouter::HORIZONTAL)
-    {
-        // Make the wheel scroll the horizontal scroll bar.  For this we
-        // change the IsHoriz() flag of the CommandWheelData structure.
-        CommandWheelData* pData = (CommandWheelData*)rEvent.GetData();
-        CommandEvent aEvent (
-            rEvent.GetMousePosPixel(),
-            COMMAND_WHEEL,
-            FALSE,
-            new CommandWheelData(
-                pData->GetDelta(),
-                pData->GetNotchDelta(),
-                pData->GetScrollLines(),
-                pData->GetMode(),
-                pData->GetModifier(),
-                TRUE));
-        bDone = ViewShell::HandleScrollCommand(aEvent, pWindow);
-    }
-    else
-        bDone = ViewShell::HandleScrollCommand(rEvent, pWindow);
-
-    if (bDone)
-    {
-        OSL_ASSERT(mpSlideSorter.get()!=NULL);
-        if (rEvent.GetCommand() == COMMAND_WHEEL)
-        {
-            mpSlideSorter->GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
-        }
-    }
-
-    return bDone;
-}
-
-
-
-
 void SlideSorterViewShell::Activate (BOOL bIsMDIActivate)
 {
     ViewShell::Activate(bIsMDIActivate);

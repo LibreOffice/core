@@ -127,8 +127,6 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    virtual bool HandleScrollCommand (const CommandEvent& rEvent, ::sd::Window* pWindow);
-
     virtual void Activate (BOOL IsMDIActivate);
 
     //===== Drag and Drop =====================================================

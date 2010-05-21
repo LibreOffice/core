@@ -114,11 +114,12 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         LocalResource aResource (RID_SLIDESORTER_ICONS);
 
         maStrings.resize(_StringType_Size_);
-        maStrings[String_Unhide] = String(SdResId(STRING_UNHIDE));
         maStrings[String_DragAndDropPages] = String(SdResId(STRING_DRAG_AND_DROP_PAGES));
         maStrings[String_DragAndDropSlides] = String(SdResId(STRING_DRAG_AND_DROP_SLIDES));
         maStrings[String_Command1] = String(SdResId(STRING_COMMAND1));
-        maStrings[String_Command2] = String(SdResId(STRING_COMMAND2));
+        maStrings[String_Command2_A] = String(SdResId(STRING_COMMAND2_A));
+        maStrings[String_Command2_B] = String(SdResId(STRING_COMMAND2_B));
+        maStrings[String_Command2_Help] = String(SdResId(STRING_COMMAND2_HELP));
         maStrings[String_Command3] = String(SdResId(STRING_COMMAND3));
 
         maColor.resize(_ColorType_Size_);
@@ -530,7 +531,12 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 void Theme::InitializeIcon (const IconType eType, USHORT nResourceId)
 {
     if (eType>=0 && size_t(eType)<maIcons.size())
-        maIcons[eType] = Image(SdResId(nResourceId)).GetBitmapEx();
+    {
+        const BitmapEx aIcon (Image(SdResId(nResourceId)).GetBitmapEx());
+        OSL_TRACE("loaded icon %d in size %dx%d", nResourceId, aIcon.GetSizePixel().Width(),
+            aIcon.GetSizePixel().Height());
+        maIcons[eType] = aIcon;
+    }
     else
     {
         OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());

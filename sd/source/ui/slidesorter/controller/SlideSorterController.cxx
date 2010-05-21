@@ -502,10 +502,35 @@ bool SlideSorterController::Command (
 
         case COMMAND_WHEEL:
         {
-            // We ignore zooming with control+mouse wheel.
             const CommandWheelData* pData = rEvent.GetWheelData();
-            if (pData!=NULL && pData->IsMod1())
-                bEventHasBeenHandled = true;
+            if (pData == NULL)
+                return false;
+            if (pData->IsMod1())
+            {
+                // We do not support zooming with control+mouse wheel.
+                return false;
+            }
+            // Determine whether to scroll horizontally or vertically.  This
+            // depends on the orientation of the scroll bar and the
+            // IsHoriz() flag of the event.
+            if ((mrSlideSorter.GetView().GetOrientation()==view::Layouter::HORIZONTAL)
+                == pData->IsHorz())
+            {
+                GetScrollBarManager().Scroll(
+                    ScrollBarManager::Orientation_Vertical,
+                    ScrollBarManager::Unit_Slide,
+                    -pData->GetNotchDelta());
+            }
+            else
+            {
+                GetScrollBarManager().Scroll(
+                    ScrollBarManager::Orientation_Horizontal,
+                    ScrollBarManager::Unit_Slide,
+                    -pData->GetNotchDelta());
+            }
+            mrSlideSorter.GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
+
+            bEventHasBeenHandled = true;
         }
         break;
     }
