@@ -39,6 +39,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XShapes;
 using ::oox::core::XmlFilterBase;
 
@@ -155,6 +156,10 @@ bool Drawing::convertShapeClientAnchor( Rectangle& /*orShapeRect*/, const OUStri
 }
 
 void Drawing::convertControlClientData( const Reference< XControlModel >& /*rxCtrlModel*/, const ShapeClientData& /*rClientData*/ ) const
+{
+}
+
+void Drawing::notifyShapeInserted( const Reference< XShape >& /*rxShape*/, const Rectangle& /*rShapeRect*/ )
 {
 }
 

@@ -35,6 +35,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
+    namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
     namespace util { struct DateTime; }
     namespace drawing { class XDrawPage; }
@@ -355,8 +356,6 @@ public:
 
     /** Changes the current sheet type. */
     void                setSheetType( WorksheetType eSheetType );
-    /** Sets the dimension (used area) of the sheet. */
-    void                setDimension( const ::com::sun::star::table::CellRangeAddress& rRange );
     /** Stores the cell formatting data of the current cell. */
     void                setCellFormat( const CellModel& rModel );
     /** Merges the cells in the passed cell range. */
@@ -379,6 +378,14 @@ public:
     void                setDrawingPath( const ::rtl::OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
     void                setVmlDrawingPath( const ::rtl::OUString& rVmlDrawingPath );
+
+    /** Extends the used area of this sheet by the passed cell position. */
+    void                extendUsedArea( const ::com::sun::star::table::CellAddress& rAddress );
+    /** Extends the used area of this sheet by the passed cell range. */
+    void                extendUsedArea( const ::com::sun::star::table::CellRangeAddress& rRange );
+    /** Extends the shape bounding box by the position and size of the passed rectangle. */
+    void                extendShapeBoundingBox(
+                            const ::com::sun::star::awt::Rectangle& rShapeRect );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if width has not been set with setDefaultColumnWidth(). */

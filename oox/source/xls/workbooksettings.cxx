@@ -191,23 +191,6 @@ void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
     maBookSettings.mbSaveExtLinkValues = bSaveExtLinks;
 }
 
-void WorkbookSettings::importFileSharing( BiffInputStream& rStrm )
-{
-    maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
-    rStrm >> maFileSharing.mnPasswordHash;
-    if( getBiff() == BIFF8 )
-    {
-        sal_uInt16 nStrLen = rStrm.readuInt16();
-        // there is no string flags field if string is empty
-        if( nStrLen > 0 )
-            maFileSharing.maUserName = rStrm.readUniStringBody( nStrLen );
-    }
-    else
-    {
-        maFileSharing.maUserName = rStrm.readByteStringUC( false, getTextEncoding() );
-    }
-}
-
 void WorkbookSettings::importBookBool( BiffInputStream& rStrm )
 {
     // value of 0 means save external values, value of 1 means strip external values
@@ -239,6 +222,23 @@ void WorkbookSettings::importDateMode( BiffInputStream& rStrm )
 void WorkbookSettings::importDelta( BiffInputStream& rStrm )
 {
     rStrm >> maCalcSettings.mfIterateDelta;
+}
+
+void WorkbookSettings::importFileSharing( BiffInputStream& rStrm )
+{
+    maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
+    rStrm >> maFileSharing.mnPasswordHash;
+    if( getBiff() == BIFF8 )
+    {
+        sal_uInt16 nStrLen = rStrm.readuInt16();
+        // there is no string flags field if string is empty
+        if( nStrLen > 0 )
+            maFileSharing.maUserName = rStrm.readUniStringBody( nStrLen );
+    }
+    else
+    {
+        maFileSharing.maUserName = rStrm.readByteStringUC( false, getTextEncoding() );
+    }
 }
 
 void WorkbookSettings::importHideObj( BiffInputStream& rStrm )

@@ -36,6 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace awt { class XControlModel; }
     namespace drawing { class XDrawPage; }
+    namespace drawing { class XShape; }
 } } }
 
 namespace oox { namespace core { class XmlFilterBase; } }
@@ -123,7 +124,8 @@ public:
     /** Final processing after import of the fragment. */
     void                finalizeFragmentImport();
 
-    /** Creates and inserts all UNO shapes into the passed container. */
+    /** Creates and inserts all UNO shapes into the passed container. The virtual
+        function notifyShapeInserted() will be called for each new shape. */
     void                convertAndInsert() const;
 
     /** Returns the registered info structure for an OLE object, if extant. */
@@ -145,6 +147,12 @@ public:
     virtual void        convertControlClientData(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
                             const ShapeClientData& rClientData ) const;
+
+    /** Derived classes may want to know that a shape has been inserted. Will
+        be called from the convertAndInsert() implementation. */
+    virtual void        notifyShapeInserted(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect );
 
 protected:
     /** Derived classes may create a specialized form control helper object. */
