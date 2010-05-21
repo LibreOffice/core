@@ -35,6 +35,7 @@
 #include "tools/extendapplicationenvironment.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
+#include "rtl/bootstrap.hxx"
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/conditn.hxx"
@@ -331,10 +332,6 @@ extern "C" int unopkg_main()
             }
         }
 
-        xComponentContext = getUNO(
-            disposeGuard, option_verbose, option_shared, subcmd_gui,
-            xLocalComponentContext );
-
         if (repository.getLength() == 0)
         {
             if (option_shared)
@@ -359,6 +356,29 @@ extern "C" int unopkg_main()
             }
         }
 
+        if (subCommand.equals(OUSTR("reinstall")))
+        {
+            //We must prevent that services and types are loaded by UNO,
+            //otherwise we cannot delete the registry data folder.
+            OUString extensionUnorc;
+            if (repository.equals(OUSTR("user")))
+                extensionUnorc = OUSTR("$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+            else if (repository.equals(OUSTR("shared")))
+                extensionUnorc = OUSTR("$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+            else if (repository.equals(OUSTR("bundled")))
+                extensionUnorc = OUSTR("$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+            else
+                OSL_ASSERT(0);
+
+            ::rtl::Bootstrap::expandMacros(extensionUnorc);
+            oslFileError e = osl_removeFile(extensionUnorc.pData);
+            if (e != osl_File_E_None && e != osl_File_E_NOENT)
+                throw Exception(OUSTR("Could not delete ") + extensionUnorc, 0);
+        }
+
+        xComponentContext = getUNO(
+            disposeGuard, option_verbose, option_shared, subcmd_gui,
+            xLocalComponentContext );
 
         Reference<deployment::XExtensionManager> xExtensionManager(
             deployment::ExtensionManager::get( xComponentContext ) );
@@ -368,7 +388,11 @@ extern "C" int unopkg_main()
                           option_force, option_verbose) );
 
         //synchronize bundled/shared extensions
-        if (!subcmd_gui && ! dp_misc::office_is_running())
+        //Do not synchronize when command is "reinstall". This could add types and services to UNO and
+        //prevent the deletion of the registry data folder
+        //synching is done in XExtensionManager.reinstall
+        if (!subcmd_gui && ! subCommand.equals(OUSTR("reinstall"))
+            && ! dp_misc::office_is_running())
             dp_misc::syncRepositories(xCmdEnv);
 
         if (subcmd_add ||

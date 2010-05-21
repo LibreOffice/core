@@ -994,6 +994,7 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
    }
 }
 
+//only to be called from unopkg!!!
 void ExtensionManager::reinstallDeployedExtensions(
     OUString const & repository,
     Reference<task::XAbortChannel> const & xAbortChannel,
@@ -1009,6 +1010,9 @@ void ExtensionManager::reinstallDeployedExtensions(
 
         ::osl::MutexGuard guard(getMutex());
         xPackageManager->reinstallDeployedPackages(xAbortChannel, xCmdEnv);
+        //We must sync here, otherwise we will get exceptions when extensions
+        //are removed.
+        dp_misc::syncRepositories(xCmdEnv);
         const uno::Sequence< Reference<deploy::XPackage> > extensions(
             xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
 
@@ -1087,8 +1091,12 @@ sal_Bool ExtensionManager::synchronize(
             //so we will no repeat this everytime OOo starts.
             OSL_ENSURE(0, "Extensions Manager: synchronize");
         }
-        writeLastModified(OUSTR("$BUNDLED_EXTENSIONS_USER/lastsynchronized"), xCmdEnv);
-        writeLastModified(OUSTR("$SHARED_EXTENSIONS_USER/lastsynchronized"), xCmdEnv);
+        OUString lastSyncBundled(RTL_CONSTASCII_USTRINGPARAM(
+                                     "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
+        writeLastModified(lastSyncBundled, xCmdEnv);
+        OUString lastSyncShared(RTL_CONSTASCII_USTRINGPARAM(
+                                    "$SHARED_EXTENSIONS_USER/lastsynchronized"));
+        writeLastModified(lastSyncShared, xCmdEnv);
         return bModified;
     } catch (deploy::DeploymentException& ) {
         throw;
