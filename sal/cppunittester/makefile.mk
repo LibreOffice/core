@@ -23,16 +23,23 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-UDK_3_0_0 {
-    global:
-        component_getFactory;
-        component_getImplementationEnvironment;
-        component_writeInfo;
+PRJ = ..
+PRJNAME = sal
+TARGET = cppunittester
 
-        _ZN4_STL7num_put*; # STLport
+ENABLE_EXCEPTIONS = TRUE
 
-    local:
-        *;
-};
+.INCLUDE: settings.mk
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+OBJFILES = $(APP1OBJS)
+
+APP1OBJS = $(OBJ)/cppunittester.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)
+APP1TARGET = cppunittester
+
+.INCLUDE: target.mk

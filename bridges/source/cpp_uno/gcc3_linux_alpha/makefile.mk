@@ -27,35 +27,51 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=sal
-TARGET=qa_osl_semaphore
-
+PRJNAME=bridges
+TARGET=gcc3_uno
+LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-CFLAGS+= $(LFS_CFLAGS)
-CXXFLAGS+= $(LFS_CFLAGS)
+# --- Files --------------------------------------------------------
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Semaphore by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/osl_Semaphore.obj
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXL"
 
-SHL1TARGET= osl_Semaphore
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+.IF "$(cppu_no_leak)" == ""
+CFLAGS += -DLEAK_STATIC_DATA
+.ENDIF
 
-SHL1IMPLIB= i$(SHL1TARGET)
+# In case someone enabled the non-standard -fomit-frame-pointer which does not
+# work with the .cxx sources in this directory:
+CFLAGSCXX += -fno-omit-frame-pointer
 
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+CFLAGSNOOPT=-O0
 
-# auto generated Target:Semaphore
-# END ------------------------------------------------------------------
+SLOFILES= \
+    $(SLO)$/except.obj		\
+    $(SLO)$/cpp2uno.obj		\
+    $(SLO)$/uno2cpp.obj
+
+SHL1TARGET= $(TARGET)
+
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
+SHL1VERSIONMAP=..$/..$/bridge_exports.map
+SHL1RPATH=URELIB
+
+SHL1OBJS = $(SLOFILES)
+SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
+
+SHL1STDLIBS= \
+        $(CPPULIB)                      \
+        $(SALLIB)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+

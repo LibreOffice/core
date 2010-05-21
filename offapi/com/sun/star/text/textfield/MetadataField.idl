@@ -32,6 +32,10 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
 #ifndef __com_sun_star_text_TextField_idl__
 #include <com/sun/star/text/TextField.idl>
 #endif
@@ -50,7 +54,8 @@
 module com { module sun { module star { module text { module textfield {
 
 //=============================================================================
-/** is a <type>TextField</type> whose content is specified by RDF metadata.
+/** is a <type scope="com::sun::star::text">TextField</type> whose content
+    is specified by RDF metadata.
 
     @since OOo 3.2
 
@@ -59,8 +64,8 @@ module com { module sun { module star { module text { module textfield {
 service MetadataField
 {
     //-------------------------------------------------------------------------
-    /** None of the properties of <type>TextContent</type> are
-        supported. */
+    /** None of the properties of
+        <type scope="com::sun::star::text">TextContent</type> are supported. */
     service  com::sun::star::text::TextField;
 
     //-------------------------------------------------------------------------
@@ -73,9 +78,16 @@ service MetadataField
     interface com::sun::star::text::XText;
 
     //-------------------------------------------------------------------------
-    /** The <type>TextContent</type>s that are contained in the
-        <type>MetadataField</type> can be enumerated. */
+    /** The <type scope="com::sun::star::text">TextContent</type>s that are
+        contained in the <type>MetadataField</type> can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+    /** The <type scope="com::sun::star::text">TextContent</type>
+        that is the parent of this <type>MetadataField</type>.
+        @since OOo 3.3
+     */
+    interface com::sun::star::container::XChild;
 
     //-------------------------------------------------------------------------
     /** this is the number format for this field.
