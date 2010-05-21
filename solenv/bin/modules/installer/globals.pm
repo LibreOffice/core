@@ -236,7 +236,7 @@ BEGIN
     $mergefiles_added_into_collector = 0;
     $creating_windows_installer_patch = 0;
 
-    $strip = $ENV{'DISABLE_STRIP'} eq '';
+    $strip = 1;
     $solarjava = 0;
     $jdklib = "";
     $jrepath = "";
