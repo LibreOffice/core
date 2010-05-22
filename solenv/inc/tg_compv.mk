@@ -77,6 +77,7 @@ COMNAME=msci
 .IF "$(COM)"=="GCC"
 
 SHORTSTDCPP3:=
+SHORTSTDC3:="1"
 
 .IF "$(CCNUMVER)">="000200910000"
 COMID=GCC
@@ -101,6 +102,11 @@ SHORTSTDCPP3="5"
 .ENDIF
 
 .IF "$(CCNUMVER)">="000300040000"
+.IF "$(OS)$(CPU)" == "LINUXH" || "$(OS)$(CPU)" == "LINUX6"
+#gcc >= 3.4.0: on m68k-linux and hppa-linux this is libgcc_s.so.2. For all
+#others, this is libgcc_s.so.1.
+SHORTSTDC3:="2"
+.ENDIF
 SHORTSTDCPP3="6"
 .ENDIF
 

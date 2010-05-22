@@ -133,7 +133,7 @@ AC_ARG_ENABLE(evolution2,
 ],,)
 AC_ARG_WITH(system-stdlibs,
 [  --with-system-stdlibs   use libstdc++/libgcc_s already on system
-],,checkforstdlibproblems=yes)
+],,)
 AC_ARG_ENABLE(cups,
 [  --disable-cups          disable cups support in the psprint project
 ],,enable_cups=yes)
@@ -3508,23 +3508,6 @@ else
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(BUILD_QADEVOOO)
-
-dnl ===================================================================
-dnl Check for prelinked libgcc_s.so.1
-dnl ===================================================================
-if test "$_os" = "Linux" -a -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
-  if test -n "$checkforstdlibproblems"; then
-    if test -f /etc/rpm/macros.prelink; then
-      with_system_stdlibs=yes
-      AC_MSG_WARN([prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override])
-      echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
-    elif test "$GCC" = "yes" -a ! -e `$CC -print-file-name=libgcc_s.so.1`; then
-      with_system_stdlibs=yes
-      AC_MSG_WARN([platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override])
-      echo "platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
-    fi
-  fi
-fi
 
 dnl ===================================================================
 dnl Check for system stdlibs

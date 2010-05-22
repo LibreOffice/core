@@ -887,7 +887,7 @@ End
 File gid_File_Dl_GccS
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_VER("gcc_s", "1");
+    Name = SCP2_URE_DL_VER("gcc_s", STRING(SHORTSTDC3));
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "C601D04B-2194-4F1B-BB09-7B4930D6E1DB";
 End
