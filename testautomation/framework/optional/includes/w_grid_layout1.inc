@@ -121,7 +121,7 @@ testcase tTextGridDialog_2
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-    Seitennummer.SetText "2"
+    Seitennummer.SetText "2" : Wait( 2000 )
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
@@ -167,7 +167,7 @@ testcase tTextGridDialog_3
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-    Seitennummer.SetText "2"
+    Seitennummer.SetText "2" : Wait( 2000 )
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
@@ -215,7 +215,7 @@ testcase tTextGridDialog_4
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-    Seitennummer.SetText "2"
+    Seitennummer.SetText "2" : Wait( 2000 )
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
@@ -401,7 +401,7 @@ testcase tFontSizeChanges_1
     ViewNavigator
     Kontext "NavigatorWriter"
     if NavigatorWriter.exists(5) then
-        Seitennummer.SetText "2"
+        Seitennummer.SetText "2" : Wait( 2000 )
         kontext "Navigator"
         hCloseDialog( Navigator, "close" )
     else
