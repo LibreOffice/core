@@ -439,10 +439,10 @@ sal_Bool FirstStartWizard::leaveState(WizardState)
     return sal_True;
 }
 
-sal_Bool FirstStartWizard::onFinish(sal_Int32 _nResult)
+sal_Bool FirstStartWizard::onFinish()
 {
     // return sal_True;
-    if (svt::RoadmapWizard::onFinish(_nResult))
+    if ( svt::RoadmapWizard::onFinish() )
     {
 #ifndef OS2 // cannot enable quickstart on first startup, see shutdownicon.cxx comments.
         enableQuickstart();
