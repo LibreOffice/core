@@ -35,6 +35,7 @@
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/xls/numberformatsbuffer.hxx"
 
@@ -75,6 +76,22 @@ const sal_Int16 API_ESCAPE_SUBSCRIPT        = -101;     /// Subscript: lower cha
 
 const sal_Int8 API_ESCAPEHEIGHT_NONE        = 100;      /// Relative character height if not escaped.
 const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       /// Relative character height if escaped.
+
+// ============================================================================
+
+/** Special implementation of the GraphicHelper for Excel palette and scheme
+    colors.
+ */
+class ExcelGraphicHelper : public GraphicHelper, public WorkbookHelper
+{
+public:
+    explicit            ExcelGraphicHelper( const WorkbookHelper& rHelper );
+
+    /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+    /** Derived classes may implement to resolve a palette index to an RGB color. */
+    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
+};
 
 // ============================================================================
 
@@ -205,7 +222,7 @@ struct ApiScriptFontName
 {
     ::rtl::OUString     maName;             /// Font name.
     sal_Int16           mnFamily;           /// Font family.
-    sal_Int16           mnCharSet;          /// Font character set.
+    sal_Int16           mnTextEnc;          /// Font text encoding.
 
     explicit            ApiScriptFontName();
 };

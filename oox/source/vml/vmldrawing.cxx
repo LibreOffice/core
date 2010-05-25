@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include "tokens.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "oox/ole/axcontrolhelper.hxx"
+#include "oox/ole/axcontrol.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 
@@ -97,15 +97,12 @@ Drawing::~Drawing()
 {
 }
 
-::oox::ole::AxControlHelper& Drawing::getControlHelper() const
+::oox::ole::EmbeddedForm& Drawing::getControlForm() const
 {
-    // create the helper object on demand
-    if( !mxCtrlHelper.get() )
-    {
-        mxCtrlHelper.reset( createControlHelper() );
-        OSL_ENSURE( mxCtrlHelper.get(), "Drawing::getControlHelper - cannot create form controls helper" );
-    }
-    return *mxCtrlHelper;
+    if( !mxCtrlForm.get() )
+        mxCtrlForm.reset( new ::oox::ole::EmbeddedForm(
+            mrFilter.getModelFactory(), mxDrawPage, mrFilter.getGraphicHelper() ) );
+    return *mxCtrlForm;
 }
 
 void Drawing::registerOleObject( const OleObjectInfo& rOleObject )
@@ -156,11 +153,6 @@ bool Drawing::convertShapeClientAnchor( Rectangle& /*orShapeRect*/, const OUStri
 
 void Drawing::convertControlClientData( const Reference< XControlModel >& /*rxCtrlModel*/, const ShapeClientData& /*rClientData*/ ) const
 {
-}
-
-::oox::ole::AxControlHelper* Drawing::createControlHelper() const
-{
-    return new ::oox::ole::AxEmbeddedControlHelper( mrFilter, mxDrawPage );
 }
 
 // ============================================================================

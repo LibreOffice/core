@@ -38,21 +38,24 @@ testcase tBasicVBACompatImportNothing()
     
     ' This test case is based on the use cases provided in issue #i88690
     ' Spec: http://specs.openoffice.org/appwide/options_settings/Option_Dialog.odt
-    
-    dim cTestFile as string
-        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/vba-test.xls"
-        
-    dim cNodeCount as integer
-    
-    ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT     = 74 ' Do not import Microsoft(R) Excel(R) macros at all
-    const NODE_COUNT_OOO = 72 
-    const MACRO_LIST     = 0  ' The document library should have no scripts listed
+' Depending on the mode of macro import we have differtent basic libraries listed
+    const NODE_COUNT = 72 ' Do not import Microsoft(R) Excel(R) macros at all
+    const MACRO_LIST = 0  ' The document library should have no scripts listed
     const DOCUMENT_POSITION_OFFSET = -1
-    
+
     const IMPORT_EXCEL_MACROS = FALSE
     const EXEC_EXCEL_MACROS   = FALSE
- 
+
+    const DOCUMENT_NAME = "vba-test.xls"
+    const MATCH_NONE    = 0
+    const MATCH_EXACT   = 1
+    const MATCH_PARTLY  = 2
+
+    dim cTestFile as string
+        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & DOCUMENT_NAME
+        
+    dim cNodeCount as integer
+     
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     
@@ -78,9 +81,11 @@ testcase tBasicVBACompatImportNothing()
     
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
-    if ( MakroAus.getSelText() <> "vba-test.xls" ) then
-        qaerrorlog( "The document node is not at the expected position" )
-    endif
+    select case( hCompareSubStrings( MakroAus.getSelText(), DOCUMENT_NAME  ) )
+    case MATCH_NONE   : warnlog ( "The document is not listed at the expected position" )
+    case MATCH_EXACT  : printlog( "The document is at the expected position and writable" )
+    case MATCH_PARTLY : printlog( "The document is at the expected position and write protected" )
+    end select
     
     printlog( "Select the last node, this should be the standard Library for the document" )
     MakroAus.select( cNodeCount ) 

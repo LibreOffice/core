@@ -98,7 +98,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     // symbol font not supported
 
     if( maCharColor.isUsed() )
-        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter );
+        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );
 
     if( moLang.has() && (moLang.get().getLength() > 0) )
     {
@@ -144,7 +144,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
         rPropMap[ PROP_CharUnderlineHasColor ] <<= true;
-        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter );
+        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter.getGraphicHelper() );
     }
 }
 

@@ -35,7 +35,7 @@
 #include <rtl/ustring.hxx>
 #include "oox/helper/helper.hxx"
 
-namespace oox { namespace core { class FilterBase; } }
+namespace oox { class GraphicHelper; }
 
 namespace oox {
 namespace drawingml {
@@ -90,7 +90,7 @@ public:
     bool                isPlaceHolder() const { return meMode == COLOR_PH; }
     /** Returns the final RGB color value.
         @param nPhClr  Actual color for the phClr placeholder color used in theme style lists. */
-    sal_Int32           getColor( const ::oox::core::FilterBase& rFilter, sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
+    sal_Int32           getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Returns true, if the color has a transparence set. */
     bool                hasTransparence() const;

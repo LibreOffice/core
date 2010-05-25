@@ -85,7 +85,6 @@ VbaGlobalsBase::createInstanceWithArguments( const ::rtl::OUString& ServiceSpeci
 {
 
     uno::Reference< uno::XInterface > xReturn;
-
     if ( hasServiceName( ServiceSpecifier ) )
         xReturn = mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( ServiceSpecifier, Arguments, mxContext );
     return xReturn;

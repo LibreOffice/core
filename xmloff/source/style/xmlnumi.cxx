@@ -27,16 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/debug.hxx>
-#include <tools/fontenum.hxx>
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
-#include <xmloff/xmlimp.hxx>
-#include <xmloff/XMLBase64ImportContext.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -51,26 +42,33 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
+#include <tools/fontenum.hxx>
+
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/nmspmap.hxx>
+#include "xmlnmspe.hxx"
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/XMLBase64ImportContext.hxx>
 #include <xmloff/xmltoken.hxx>
 
 #include "i18nmap.hxx"
 #include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
-#endif
-#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
 #include <xmloff/XMLFontStylesContext.hxx>
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #include <xmloff/maptype.hxx>
-
 
 #include <xmloff/xmlnumi.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
+
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 

@@ -131,7 +131,6 @@
         HelpID = MN_FORMAT_ALGN ; \
         Command = ".uno:AlignTextMenu" ; \
         Text [ en-US ] = "A~lignment" ; \
-        RadioCheck = TRUE ; \
         SubMenu = Menu\
         {\
             ItemList = \

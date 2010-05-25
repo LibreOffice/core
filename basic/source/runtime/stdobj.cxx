@@ -230,7 +230,7 @@ static Methods aMethods[] = {
 { "EOF",            SbxBOOL,      1 | _FUNCTION, RTLNAME(EOF),0             },
   { "Channel",      SbxINTEGER, 0,NULL,0 },
 { "Erl",            SbxLONG,          _ROPROP,   RTLNAME( Erl ),0           },
-{ "Err",            SbxLONG,          _RWPROP,   RTLNAME( Err ),0           },
+{ "Err",            SbxVARIANT,       _RWPROP,   RTLNAME( Err ),0           },
 { "Error",          SbxSTRING,    1 | _FUNCTION, RTLNAME( Error ),0         },
   { "code",         SbxLONG, 0,NULL,0 },
 { "Exp",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Exp),0             },

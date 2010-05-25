@@ -76,10 +76,8 @@ namespace
 
         if (pReturnTypeDescr)
         {
-            if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
-            {
+            if (!arm::return_in_hidden_param(pReturnTypeRef))
                 pUnoReturn = pRegisterReturn; // direct way for simple types
-            }
             else // complex return via ptr (pCppReturn)
             {
                 pCppReturn = *(void **)pCppStack;
@@ -410,8 +408,30 @@ extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
     void **pCallStack )
 {
     sal_Int64 nRegReturn;
-    cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack,
+    typelib_TypeClass aType = cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack,
         &nRegReturn );
+
+    switch( aType )
+    {
+        case typelib_TypeClass_BOOLEAN:
+        case typelib_TypeClass_BYTE:
+            nRegReturn = (unsigned long)(*(unsigned char *)&nRegReturn);
+            break;
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_SHORT:
+            nRegReturn = (unsigned long)(*(unsigned short *)&nRegReturn);
+            break;
+        case typelib_TypeClass_ENUM:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_LONG:
+            nRegReturn = (unsigned long)(*(unsigned int *)&nRegReturn);
+            break;
+        case typelib_TypeClass_VOID:
+        default:
+            break;
+    }
+
     return nRegReturn;
 }
 
@@ -422,9 +442,9 @@ namespace
     const int codeSnippetSize = 20;
 
     unsigned char *codeSnippet(unsigned char* code, sal_Int32 functionIndex,
-        sal_Int32 vtableOffset, bool simple_ret_type )
+        sal_Int32 vtableOffset, bool bHasHiddenParam)
     {
-        if (!simple_ret_type)
+        if (bHasHiddenParam)
             functionIndex |= 0x80000000;
 
         unsigned long * p = (unsigned long *)code;
@@ -478,24 +498,25 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         switch (member->eTypeClass)
         {
             case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+            {
+                typelib_InterfaceAttributeTypeDescription *pAttrTD =
+                    reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
+
                 // Getter:
                 (s++)->fn = code + writetoexecdiff;
                 code = codeSnippet(
                     code, functionOffset++, vtableOffset,
-                    bridges::cpp_uno::shared::isSimpleType(
-                        reinterpret_cast<
-                            typelib_InterfaceAttributeTypeDescription * >(
-                            member)->pAttributeTypeRef));
+                    arm::return_in_hidden_param( pAttrTD->pAttributeTypeRef ));
+
                 // Setter:
-                if (!reinterpret_cast<
-                    typelib_InterfaceAttributeTypeDescription * >(
-                        member)->bReadOnly)
+                if (!pAttrTD->bReadOnly)
                 {
                     (s++)->fn = code + writetoexecdiff;
                     code = codeSnippet(
-                        code, functionOffset++, vtableOffset, true);
+                        code, functionOffset++, vtableOffset, false);
                 }
                 break;
+            }
             case typelib_TypeClass_INTERFACE_METHOD:
             {
                 (s++)->fn = code + writetoexecdiff;
@@ -504,11 +525,8 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     reinterpret_cast<
                         typelib_InterfaceMethodTypeDescription * >(member);
 
-                bool issimple = bridges::cpp_uno::shared::isSimpleType(
-                    pMethodTD->pReturnTypeRef);
-
                 code = codeSnippet(code, functionOffset++, vtableOffset,
-                    issimple);
+                    arm::return_in_hidden_param(pMethodTD->pReturnTypeRef));
                 break;
             }
         default:

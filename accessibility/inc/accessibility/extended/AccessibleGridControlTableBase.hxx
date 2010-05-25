@@ -57,9 +57,9 @@ public:
         @param eDescrText  The constant for the description text. */
     AccessibleGridControlTableBase(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
-            ::svt::table::IAccessibleTable& rTable,
-            ::svt::table::AccessibleTableControlObjType  eObjType );
+        ::com::sun::star::accessibility::XAccessible >& rxParent,
+    ::svt::table::IAccessibleTable& rTable,
+    ::svt::table::AccessibleTableControlObjType  eObjType );
 
 protected:
     virtual ~AccessibleGridControlTableBase();

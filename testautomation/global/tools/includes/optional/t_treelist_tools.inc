@@ -356,6 +356,16 @@ function hSelectNodeByName( oControl as object , _name as string ) as integer
                 iThisNode = iCurrentNode
                 exit for
             endif
+
+            if ( instr( cNodeName, _name ) > 0 ) then
+                if ( instr( cNodeName, "(" ) > 0 ) then
+                    printlog( CFN & "Node has readonly marker" )
+                    iThisNode = iCurrentNode
+                    exit for
+                else
+                    qaerrorlog( CFN & "Fuzzy match. This might or might not be the correct node" )
+                endif
+            endif
         next iCurrentNode
     endcatch
     

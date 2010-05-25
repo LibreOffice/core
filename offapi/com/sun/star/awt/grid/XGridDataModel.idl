@@ -1,5 +1,6 @@
 /*************************************************************************
  *
+ * $Revision: 1.8 $
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -41,6 +42,8 @@ module com {  module sun {  module star {  module awt { module grid {
     retrieve the content data that is displayed in the actual control.
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridDataModel</type>.
+
+    @since OOo 3.3.0
 */
 interface XGridDataModel: ::com::sun::star::lang::XComponent
 {
@@ -54,7 +57,11 @@ interface XGridDataModel: ::com::sun::star::lang::XComponent
 
     /** Returns the content of each row.
     */
-    [attribute,readonly] sequence< sequence< string > > Data;
+    [attribute,readonly] sequence< sequence< any > > Data;
+
+    /**Specifies the width of row header.
+    */
+    [attribute] long RowHeaderWidth;
 
     /** Returns the number of rows in in the model.
         @returns
@@ -69,7 +76,7 @@ interface XGridDataModel: ::com::sun::star::lang::XComponent
         @param data
                 the content of the row.
     */
-    void addRow( [in] string headername, [in] sequence< string > data );
+    void addRow( [in] string headername, [in] sequence< any > data );
 
     /** Removes a row from the model.
 
@@ -81,6 +88,26 @@ interface XGridDataModel: ::com::sun::star::lang::XComponent
     /** Removes all rows from the model.
     */
     void removeAll();
+
+    /**Updates the content of a given cell.
+        @param row
+            the row index
+        @param column
+            the column index
+        @param value
+            the new value of the cell.
+    */
+    void updateCell([in] long row, [in] long column, [in] any value );
+
+    /**Updates the content of a given row.
+        @param row
+            the row index
+        @param columns
+            column indexes of the cells, which should be updated
+        @param value
+            the new values of the cells.
+    */
+    void updateRow([in] long row, [in] sequence< long > columns, [in] sequence< any > values);
 
     //-------------------------------------------------------------------------
 

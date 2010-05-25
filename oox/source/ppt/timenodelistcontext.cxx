@@ -504,19 +504,13 @@ namespace oox { namespace ppt {
                     NodePropertyMap & pProps(mpNode->getNodeProperties());
                     pProps[ NP_DIRECTION ] = makeAny( mnDir == XML_cw );
                     pProps[ NP_COLORINTERPOLATION ] = makeAny( mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB );
+                    const GraphicHelper& rGraphicHelper = getFilter().getGraphicHelper();
                     if( maToClr.isUsed() )
-                    {
-                        mpNode->setTo( Any( maToClr.getColor( getFilter() ) ) );
-                    }
+                        mpNode->setTo( Any( maToClr.getColor( rGraphicHelper ) ) );
                     if( maFromClr.isUsed() )
-                    {
-                        mpNode->setFrom( Any( maFromClr.getColor( getFilter() ) ) );
-                    }
+                        mpNode->setFrom( Any( maFromClr.getColor( rGraphicHelper ) ) );
                     if( mbHasByColor )
-                    {
                         mpNode->setBy( Any ( m_byColor.get() ) );
-                    }
-
                 }
             }
 

@@ -46,6 +46,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <basic/basrdll.hxx>
@@ -202,20 +203,34 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDoc
     pLayout = pParent;
     aXEditorWindow.Show();
 
-    BasicManager* pBasMgr = rDocument.getBasicManager();
-    if ( pBasMgr )
-    {
-        StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
-        if ( pBasic )
-        {
-            xBasic = pBasic;
-            xModule = (SbModule*)pBasic->FindModule( aName );
-        }
-    }
-
     SetBackground();
 }
 
+SbModuleRef ModulWindow::XModule()
+{
+    // ModuleWindows can now be created as a result of the
+    // modules getting created via the api. This is a result of an
+    // elementInserted event from the BasicLibrary container.
+    // However the SbModule is also created from a different listener to
+    // the same event ( in basmgr ) Therefore it is possible when we look
+    // for xModule it may not yet be available, here we keep tring to access
+    // the module until such time as it exists
+
+    if ( !xModule.Is() )
+    {
+        BasicManager* pBasMgr = GetDocument().getBasicManager();
+        if ( pBasMgr )
+        {
+            StarBASIC* pBasic = pBasMgr->GetLib( GetLibName() );
+            if ( pBasic )
+            {
+                xBasic = pBasic;
+                xModule = (SbModule*)pBasic->FindModule( GetName() );
+            }
+        }
+    }
+    return xModule;
+}
 
 __EXPORT ModulWindow::~ModulWindow()
 {
@@ -266,7 +281,7 @@ void ModulWindow::CheckCompileBasic()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         // Zur Laufzeit wird niemals compiliert!
         BOOL bRunning = StarBASIC::IsRunning();
@@ -322,7 +337,7 @@ BOOL ModulWindow::BasicExecute()
 
     CheckCompileBasic();
 
-    if ( xModule.Is() && xModule->IsCompiled() && !aStatus.bError )
+    if ( XModule().Is() && xModule->IsCompiled() && !aStatus.bError )
     {
         if ( GetBreakPoints().Count() )
             aStatus.nBasicFlags = aStatus.nBasicFlags | SbDEBUG_BREAK;
@@ -332,6 +347,9 @@ BOOL ModulWindow::BasicExecute()
             DBG_ASSERT( xModule.Is(), "Kein Modul!" );
             AddStatus( BASWIN_RUNNINGBASIC );
             USHORT nStart, nEnd, nCurMethodStart = 0;
+            TextSelection aSel = GetEditView()->GetSelection();
+            if ( aDocument.isInVBAMode() )
+                nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
             SbMethod* pMethod = 0;
             // erstes Macro, sonst blind "Main" (ExtSearch?)
             for ( USHORT nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
@@ -339,15 +357,27 @@ BOOL ModulWindow::BasicExecute()
                 SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
                 DBG_ASSERT( pM, "Method?" );
                 pM->GetLineRange( nStart, nEnd );
-                if ( !pMethod || ( nStart < nCurMethodStart ) )
+                if ( aDocument.isInVBAMode() )
+                {
+                    if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
+                    {
+                        pMethod = pM;
+                        break;
+                    }
+                }
+                else if  ( !pMethod || ( nStart < nCurMethodStart ) )
                 {
                     pMethod = pM;
                     nCurMethodStart = nStart;
                 }
             }
             if ( !pMethod )
-                pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
-
+            {
+                if ( aDocument.isInVBAMode() )
+                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), FALSE, rtl::OUString() ).getLength() > 0 ) ? TRUE : FALSE;
+                else
+                    pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
+            }
             if ( pMethod )
             {
                 pMethod->SetDebugFlags( aStatus.nBasicFlags );
@@ -374,7 +404,7 @@ BOOL ModulWindow::CompileBasic()
     CheckCompileBasic();
 
     BOOL bIsCompiled = FALSE;
-    if ( xModule.Is() )
+    if ( XModule().Is() )
         bIsCompiled = xModule->IsCompiled();
 
     return bIsCompiled;
@@ -551,11 +581,11 @@ BOOL ModulWindow::ImportDialog()
 
 BOOL ModulWindow::ToggleBreakPoint( ULONG nLine )
 {
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
     BOOL bNewBreakPoint = FALSE;
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         CheckCompileBasic();
         if ( aStatus.bError )
@@ -597,9 +627,9 @@ BOOL ModulWindow::ToggleBreakPoint( ULONG nLine )
 
 void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 {
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         CheckCompileBasic();
 
@@ -823,9 +853,9 @@ void ModulWindow::BasicRemoveWatch()
 void ModulWindow::EditMacro( const String& rMacroName )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         CheckCompileBasic();
 
@@ -895,12 +925,12 @@ BOOL __EXPORT ModulWindow::AllowUndo()
 void __EXPORT ModulWindow::UpdateData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
     // UpdateData wird gerufen, wenn sich der Source von aussen
     // geaendert hat.
     // => Keine Unterbrechungen erwuenscht!
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         SetModule( xModule->GetSource32() );
 
@@ -1193,19 +1223,6 @@ void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 }
 
 
-BOOL ModulWindow::RenameModule( const String& rNewName )
-{
-    if ( !BasicIDE::RenameModule( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
-        return FALSE;
-
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
-        pBindings->Invalidate( SID_DOC_MODIFIED );
-
-    return TRUE;
-}
-
-
 BOOL __EXPORT ModulWindow::IsModified()
 {
     return GetEditEngine() ? GetEditEngine()->IsModified() : FALSE;
@@ -1221,7 +1238,7 @@ void __EXPORT ModulWindow::GoOnTop()
 String ModulWindow::GetSbModuleName()
 {
     String aModuleName;
-    if ( xModule.Is() )
+    if ( XModule().Is() )
         aModuleName = xModule->GetName();
     return aModuleName;
 }
@@ -1343,7 +1360,7 @@ USHORT __EXPORT ModulWindow::GetSearchOptions()
 
 void __EXPORT ModulWindow::BasicStarted()
 {
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         aStatus.bIsRunning = TRUE;
         BreakPointList& rList = GetBreakPoints();
@@ -1372,7 +1389,39 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
     ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, GetName(), OBJ_TYPE_MODULE );
+    String aModName( GetName() );
+    String aLibSubName;
+    if( xBasic.Is() && aDocument.isInVBAMode() && XModule().Is() )
+    {
+        switch( xModule->GetModuleType() )
+        {
+            case script::ModuleType::DOCUMENT:
+            {
+                aLibSubName = String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) );
+                uno::Reference< container::XNameContainer > xLib = aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+                if( xLib.is() )
+                {
+                    String sObjName;
+                    ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
+                    if( sObjName.Len() )
+                    {
+                        aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
+                    }
+                }
+                break;
+            }
+            case script::ModuleType::FORM:
+                aLibSubName = String( IDEResId( RID_STR_USERFORMS ) );
+                break;
+            case script::ModuleType::NORMAL:
+                aLibSubName = String( IDEResId( RID_STR_NORMAL_MODULES ) );
+                break;
+            case script::ModuleType::CLASS:
+                aLibSubName = String( IDEResId( RID_STR_CLASS_MODULES ) );
+                break;
+        }
+    }
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
 }
 
 void ModulWindow::SetReadOnly( BOOL b )

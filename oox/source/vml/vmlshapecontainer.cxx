@@ -33,7 +33,6 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::drawing::XShapes;
-using ::oox::core::XmlFilterBase;
 
 namespace oox {
 namespace vml {

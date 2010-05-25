@@ -50,14 +50,17 @@ struct GridSelectionEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    /** Contains the x coordinate of the selected cell**/
-    long x;
+    /** the selected row*/
+    long Row;
 
-    /** Contains the y coordinate of the selected cell**/
-    long y;
+    /** the selected column*/
+    long Column;
+
+    /**number of selected rows, if multiple rows selected*/
+    long Range;
 
     /** Contains the action <type>SelectionEventType</types> that was performed **/
-    SelectionEventType action;
+    SelectionEventType Action;
 
 };
 

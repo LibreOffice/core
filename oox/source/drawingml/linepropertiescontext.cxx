@@ -93,7 +93,7 @@ Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( 
 
         case A_TOKEN( headEnd ):  // CT_LineEndProperties
         case A_TOKEN( tailEnd ):  // CT_LineEndProperties
-        {                                   // ST_LineEndType
+        {                         // ST_LineEndType
             bool bTailEnd = nElement == A_TOKEN( tailEnd );
             LineArrowProperties& rArrowProps = bTailEnd ? mrLineProperties.maEndArrow : mrLineProperties.maStartArrow;
             rArrowProps.moArrowType = aAttribs.getToken( XML_type );

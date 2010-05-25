@@ -831,6 +831,18 @@ void SvxSearchDialog::CalculateDelta_Impl()
         pMoreBtn->AddWindow( &aNoFormatBtn );
     }
 
+    if (bDrawApp || bImpressApp)
+    {
+        // "Find All" button is hidden--align "Find" vertically to the
+        // search listbox
+        Point aNewPt(aSearchBtn.GetPosPixel());
+        const Size aBtnSz(aSearchBtn.GetSizePixel());
+        const Size aLBSz(aSearchLB.GetSizePixel());
+        const int nOff((aLBSz.Height() - aBtnSz.Height()) / 2);
+        aNewPt.Y() = aSearchLB.GetPosPixel().Y() + nOff;
+        aSearchBtn.SetPosPixel(aNewPt);
+    }
+
     if ( bDrawApp )
     {
         // Draw App: "Regular expressions" and "Search for Styles" check boxes are hidden
@@ -1016,6 +1028,8 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
 
         if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_DRAW )
         {
+            aSearchAllBtn.Hide();
+
             aRegExpBtn.Hide();
             aLayoutBtn.Hide();
 

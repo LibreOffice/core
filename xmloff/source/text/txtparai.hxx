@@ -46,7 +46,6 @@ class XMLParaContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
     ::rtl::OUString             sStyleName;
-    ::rtl::OUString             sId;
     ::rtl::OUString             m_sXmlId;
     ::rtl::OUString             m_sAbout;
     ::rtl::OUString             m_sProperty;

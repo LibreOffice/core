@@ -26,8 +26,8 @@
  ************************************************************************/
 
 #include "oox/dump/pptxdumper.hxx"
-#include "oox/helper/olestorage.hxx"
 #include "oox/helper/zipstorage.hxx"
+#include "oox/ole/olestorage.hxx"
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/xlsbdumper.hxx"
@@ -91,17 +91,18 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
     {
         if( rStrgPath.equalsAscii( "ppt" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
         {
-            StorageRef xStrg( new OleStorage( getFactory(), xInStrm, false ) );
+            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if( rStrgPath.equalsAscii( "ppt/embeddings" ) )
         {
-            StorageRef xStrg( new OleStorage( getFactory(), xInStrm, false ) );
+            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if( rStrgPath.equalsAscii( "ppt/activeX" ) )
         {
-            OcxGuidControlObject( *this, rxStrm, rSysFileName ).dump();
+            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, true ) );
+            ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else
         {

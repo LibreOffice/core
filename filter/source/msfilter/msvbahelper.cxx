@@ -24,9 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_filter.hxx"
 
-#define VBAHELPER_DLLIMPLEMENTATION
-#include <vbahelper/msvbahelper.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>

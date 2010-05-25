@@ -34,8 +34,6 @@
 
 namespace oox {
 
-class BinaryInputStream;
-
 // ============================================================================
 
 /** Interface for binary output stream classes.
@@ -49,9 +47,6 @@ public:
     virtual void        writeData( const StreamDataSequence& rData ) = 0;
     /** Derived classes implement writing from the (existing) buffer pMem. */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes ) = 0;
-
-    /** Copies nBytes bytes from the current position of the passed input stream. */
-    void                copyStream( BinaryInputStream& rInStrm, sal_Int64 nBytes = SAL_MAX_INT64 );
 
     /** Writes a value to the stream and converts it to platform byte order.
         Supported types: SAL integers (8 to 64 bit), float, double. */

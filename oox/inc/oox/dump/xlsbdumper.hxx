@@ -98,7 +98,7 @@ private:
 private:
     typedef ::boost::shared_ptr< RecordInputStream > RecordInputStreamRef;
 
-    RecordInputStreamRef mxStrm;
+    RecordInputStreamRef mxBiffStrm;
     NameListRef         mxErrCodes;
 };
 

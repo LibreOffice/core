@@ -2751,19 +2751,16 @@ FormulaParser::~FormulaParser()
 
 void FormulaParser::importFormula( FormulaContext& rContext, const OUString& rFormulaString ) const
 {
-    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importOoxFormula( rContext, rFormulaString );
 }
 
 void FormulaParser::importFormula( FormulaContext& rContext, RecordInputStream& rStrm ) const
 {
-    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importOobFormula( rContext, rStrm );
 }
 
 void FormulaParser::importFormula( FormulaContext& rContext, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
 {
-    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importBiffFormula( rContext, rStrm, pnFmlaSize );
 }
 

@@ -33,8 +33,8 @@
 namespace oox {
 namespace ole {
 
-class AxControl;
-class AxControlModelBase;
+class ControlModelBase;
+class EmbeddedControl;
 
 // ============================================================================
 
@@ -44,32 +44,32 @@ class AxControlPropertyContext : public ::oox::core::ContextHandler2
 public:
     explicit            AxControlPropertyContext(
                             ::oox::core::FragmentHandler2& rFragment,
-                            AxControlModelBase& rModel );
+                            ControlModelBase& rModel );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 
 private:
-    AxControlModelBase& mrModel;
+    ControlModelBase&   mrModel;
     sal_Int32           mnPropId;           /// Identifier of currently processed property.
 };
 
 // ============================================================================
 
-/** Fragment handler for an ActiveX form control fragment. */
+/** Fragment handler for an embedded ActiveX form control fragment. */
 class AxControlFragment : public ::oox::core::FragmentHandler2
 {
 public:
     explicit            AxControlFragment(
                             ::oox::core::XmlFilterBase& rFilter,
                             const ::rtl::OUString& rFragmentPath,
-                            AxControl& rControl );
+                            EmbeddedControl& rControl );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 
 private:
-    AxControl&          mrControl;
+    EmbeddedControl&    mrControl;
 };
 
 // ============================================================================

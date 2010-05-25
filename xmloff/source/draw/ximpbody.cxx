@@ -62,6 +62,9 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 ,   mbHadSMILNodes( false )
 {
+    bool bHaveXmlId( false );
+    OUString sXmlId;
+
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -109,13 +112,17 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 maUseDateTimeDeclName =  sValue;
                 break;
             }
-
-            case XML_TOK_DRAWPAGE_ID:
+            case XML_TOK_DRAWPAGE_DRAWID:
             {
-                uno::Reference< uno::XInterface > xRef( rShapes.get() );
-                GetImport().getInterfaceToIdentifierMapper().registerReference( sValue, xRef );
-                break;
+                if (!bHaveXmlId) { sXmlId = sValue; }
             }
+            break;
+            case XML_TOK_DRAWPAGE_XMLID:
+            {
+                sXmlId = sValue;
+                bHaveXmlId = true;
+            }
+            break;
             case XML_TOK_DRAWPAGE_HREF:
             {
                 maHREF = sValue;
@@ -124,6 +131,12 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
+    if (sXmlId.getLength())
+    {
+        uno::Reference< uno::XInterface > const xRef( rShapes.get() );
+        GetImport().getInterfaceToIdentifierMapper().registerReference(
+            sXmlId, xRef );
+    }
     GetImport().GetShapeImport()->startPage( rShapes );
 
     uno::Reference< drawing::XDrawPage > xShapeDrawPage(rShapes, uno::UNO_QUERY);

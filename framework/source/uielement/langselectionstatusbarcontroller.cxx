@@ -272,6 +272,9 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
         }
     }
     std::map< sal_Int16, ::rtl::OUString > LangTable;
+    bool bMultipleLanguages = m_aCurLang.compareToAscii( "*" ) == 0;
+    bool bNothingSelected = true;
+    sal_Int16 nMenuItemStyle = !bMultipleLanguages ? css::awt::MenuItemStyle::RADIOCHECK : 0;
 
     for( std::set< ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
     {
@@ -281,22 +284,26 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
         {
             //nItemId = xPopupMenu->getItemCount()+1;
             nItemId++;
-            xPopupMenu->insertItem( nItemId, *it, css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+            xPopupMenu->insertItem( nItemId, *it, nMenuItemStyle, nItemId );
             LangTable[nItemId]=*it;
             if( *it == m_aCurLang )
             {
                 //make a sign for the current language
                 xPopupMenu->checkItem( nItemId, TRUE );
+                bNothingSelected = false;
             }
         }
     }
 
     //7--none
     nItemId++;
-    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_NONE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_NONE )), nMenuItemStyle, nItemId );
+    if (bNothingSelected && !bMultipleLanguages)
+        xPopupMenu->checkItem( nItemId, TRUE );
+
     //More...
     nItemId++;
-    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_MORE )), 0, nItemId );
 
     for( ::std::set< ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
     {
@@ -305,22 +312,22 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
             *it != ::rtl::OUString::createFromAscii( ""  ))
         {
             nItemId++;
-            subPopupMenu->insertItem( nItemId, *it, css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+            subPopupMenu->insertItem( nItemId, *it, 0, nItemId );
             LangTable[nItemId]=*it;
         }
     }
     //7--none
     nItemId++;
-    subPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_NONE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    subPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_NONE )), 0, nItemId );
     //More
     nItemId++;
-    subPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    subPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_MORE )), 0, nItemId );
 
     nItemId++;
     xPopupMenu->insertSeparator(nItemId);
 
     nItemId++;
-    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_SET_LANGUAGE_FOR_PARAGRAPH )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_SET_LANGUAGE_FOR_PARAGRAPH )), 0, nItemId );
     xPopupMenu->setPopupMenu( nItemId, subPopupMenu );
 
     //display the popup menu and execute every command

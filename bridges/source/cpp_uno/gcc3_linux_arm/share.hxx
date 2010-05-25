@@ -89,5 +89,12 @@ namespace CPPU_CURRENT_NAMESPACE
     void fillUnoException(
         __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
+
+namespace arm
+{
+    enum armlimits { MAX_GPR_REGS = 4 };
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
+}
+
 #endif
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

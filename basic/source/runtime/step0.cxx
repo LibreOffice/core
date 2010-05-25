@@ -30,6 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/fsys.hxx>
 
+#include "errobject.hxx"
 #include "runtime.hxx"
 #include "sbintern.hxx"
 #include "iosys.hxx"
@@ -1116,6 +1117,7 @@ void SbiRuntime::StepSTDERROR()
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
+    SbxErrObject::getUnoErrObject()->Clear();
 }
 
 void SbiRuntime::StepNOERROR()
@@ -1124,6 +1126,7 @@ void SbiRuntime::StepNOERROR()
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
+    SbxErrObject::getUnoErrObject()->Clear();
     bError = FALSE;
 }
 
@@ -1132,6 +1135,9 @@ void SbiRuntime::StepNOERROR()
 void SbiRuntime::StepLEAVE()
 {
     bRun = FALSE;
+        // If VBA and we are leaving an ErrorHandler then clear the error ( it's been processed )
+    if ( bInError && pError )
+        SbxErrObject::getUnoErrObject()->Clear();
 }
 
 void SbiRuntime::StepCHANNEL()      // TOS = Kanalnummer
@@ -1265,6 +1271,9 @@ void SbiRuntime::StepERROR()
     SbxVariableRef refCode = PopVar();
     USHORT n = refCode->GetUShort();
     SbError error = StarBASIC::GetSfxFromVBError( n );
-    Error( error );
+    if ( bVBAEnabled )
+        pInst->Error( error );
+    else
+        Error( error );
 }
 

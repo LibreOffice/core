@@ -597,6 +597,7 @@ Menu MN_TAB_POPUPMENU
                 MN_EDIT_CONTOUR\
                 MenuItem\
                 {\
+                    Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
@@ -661,6 +662,7 @@ String MN_DRAW_POPUPMENU
                 MN_WRAP_CONTOUR_1\
                 MenuItem\
                 {\
+                    Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
@@ -686,6 +688,7 @@ String MN_DRAW_POPUPMENU
 #define MN_AT_FRAME \
     MenuItem\
     {\
+        RadioCheck = TRUE ; \
         Identifier = FN_TOOL_ANKER_FRAME ; \
         HelpID = FN_TOOL_ANKER_FRAME ; \
         Text [ en-US ] = "To ~Frame" ; \
@@ -704,24 +707,28 @@ String MN_DRAW_POPUPMENU
             {\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_PAGE ; \
                     HelpID = FN_TOOL_ANKER_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_PARAGRAPH ; \
                     HelpID = FN_TOOL_ANKER_PARAGRAPH ; \
                     Text [ en-US ] = "To ~Paragraph" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_AT_CHAR ; \
                     HelpID = FN_TOOL_ANKER_AT_CHAR ; \
                     Text [ en-US ] = "To ~Character" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_CHAR ; \
                     HelpID = FN_TOOL_ANKER_CHAR ; \
                     Text [ en-US ] = "As C~haracter" ; \

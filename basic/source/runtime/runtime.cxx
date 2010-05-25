@@ -43,13 +43,16 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "sbunoobj.hxx"
+#include "errobject.hxx"
+
+using namespace ::com::sun::star;
 
 bool SbiRuntime::isVBAEnabled()
 {
     bool result = false;
     SbiInstance* pInst = pINST;
     if ( pInst && pINST->pRun )
-        result = pInst->pRun->GetImageFlag( SBIMG_VBASUPPORT );
+        result = pInst->pRun->bVBAEnabled;
     return result;
 }
 
@@ -59,6 +62,24 @@ static BOOL bStaticGlobalEnableReschedule = TRUE;
 void StarBASIC::StaticEnableReschedule( BOOL bReschedule )
 {
     bStaticGlobalEnableReschedule = bReschedule;
+}
+void StarBASIC::SetVBAEnabled( BOOL bEnabled )
+{
+    if ( bDocBasic )
+    {
+        bVBAEnabled = bEnabled;
+    }
+}
+
+BOOL StarBASIC::isVBAEnabled()
+{
+    if ( bDocBasic )
+    {
+        if( SbiRuntime::isVBAEnabled() )
+            return TRUE;
+        return bVBAEnabled;
+    }
+    return FALSE;
 }
 
 
@@ -422,6 +443,35 @@ void SbiInstance::Error( SbError n, const String& rMsg )
     }
 }
 
+void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const String& rMsg )
+{
+    if( !bWatchMode )
+    {
+        SbError n = StarBASIC::GetSfxFromVBError( static_cast< USHORT >( nVBNumber ) );
+        if ( !n )
+            n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
+
+        aErrorMsg = rMsg;
+        SbiRuntime::translateErrorToVba( n, aErrorMsg );
+
+        bool bVBATranslationAlreadyDone = true;
+        pRun->Error( SbERR_BASIC_COMPAT, bVBATranslationAlreadyDone );
+    }
+}
+
+void SbiInstance::setErrorVB( sal_Int32 nVBNumber, const String& rMsg )
+{
+    SbError n = StarBASIC::GetSfxFromVBError( static_cast< USHORT >( nVBNumber ) );
+    if( !n )
+        n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
+
+    aErrorMsg = rMsg;
+    SbiRuntime::translateErrorToVba( n, aErrorMsg );
+
+    nErr = n;
+}
+
+
 void SbiInstance::FatalError( SbError n )
 {
     pRun->FatalError( n );
@@ -520,6 +570,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
     nForLvl   = 0;
     nOps      = 0;
     refExprStk = new SbxArray;
+    SetVBAEnabled( pMod->IsVBACompat() );
 #if defined GCC
     SetParameters( pe ? pe->GetParameters() : (class SbxArray *)NULL );
 #else
@@ -527,7 +578,6 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
 #endif
     pRefSaveList = NULL;
     pItemStoreList = NULL;
-    bVBAEnabled = isVBAEnabled();
 }
 
 SbiRuntime::~SbiRuntime()
@@ -544,6 +594,11 @@ SbiRuntime::~SbiRuntime()
         pItemStoreList = pToDeleteItem->pNext;
         delete pToDeleteItem;
     }
+}
+
+void SbiRuntime::SetVBAEnabled(bool bEnabled )
+{
+    bVBAEnabled = bEnabled;
 }
 
 // Aufbau der Parameterliste. Alle ByRef-Parameter werden direkt
@@ -791,10 +846,24 @@ BOOL SbiRuntime::Step()
     return bRun;
 }
 
-void SbiRuntime::Error( SbError n )
+void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
 {
     if( n )
+    {
         nError = n;
+        if( isVBAEnabled() && !bVBATranslationAlreadyDone )
+        {
+            String aMsg = pInst->GetErrorMsg();
+            sal_Int32 nVBAErrorNumber = translateErrorToVba( nError, aMsg );
+            SbxVariable* pSbxErrObjVar = SbxErrObject::getErrObject();
+            SbxErrObject* pGlobErr = static_cast< SbxErrObject* >( pSbxErrObjVar );
+            if( pGlobErr != NULL )
+                pGlobErr->setNumberAndDescription( nVBAErrorNumber, aMsg );
+
+            pInst->aErrorMsg = aMsg;
+            nError = SbERR_BASIC_COMPAT;
+        }
+    }
 }
 
 void SbiRuntime::Error( SbError _errCode, const String& _details )
@@ -824,6 +893,32 @@ void SbiRuntime::FatalError( SbError _errCode, const String& _details )
 {
     StepSTDERROR();
     Error( _errCode, _details );
+}
+
+sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
+{
+    // If a message is defined use that ( in preference to
+    // the defined one for the error ) NB #TODO
+    // if there is an error defined it more than likely
+    // is not the one you want ( some are the same though )
+    // we really need a new vba compatible error list
+    if ( !rMsg.Len() )
+    {
+        // TEST, has to be vb here always
+#ifdef DBG_UTIL
+        SbError nTmp = StarBASIC::GetSfxFromVBError( nError );
+        DBG_ASSERT( nTmp, "No VB error!" );
+#endif
+
+        StarBASIC::MakeErrorText( nError, rMsg );
+        rMsg = StarBASIC::GetErrorText();
+        if ( !rMsg.Len() ) // no message for err no, need localized resource here
+            rMsg = String( RTL_CONSTASCII_USTRINGPARAM("Internal Object Error:") );
+    }
+    // no num? most likely then it *is* really a vba err
+    USHORT nVBErrorCode = StarBASIC::GetVBErrorCode( nError );
+    sal_Int32 nVBAErrorNumber = ( nVBErrorCode == 0 ) ? nError : nVBErrorCode;
+    return nVBAErrorNumber;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -57,6 +57,7 @@
 class ScTableSheetsObj;
 class ScCellRangesBase;
 class ScCellRangeObj;
+class ScCellRangesObj;
 class ScDocShell;
 class ScDocument;
 
@@ -111,14 +112,16 @@ class ScVbaRange : public ScVbaRange_BASE
     virtual css::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar ) throw (css::uno::RuntimeException);
     virtual void   setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar ) throw ( css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XRange > getArea( sal_Int32 nIndex  ) throw( css::uno::RuntimeException );
-    ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
     ScCellRangeObj* getCellRangeObj( )  throw ( css::uno::RuntimeException );
-    SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
+    ScCellRangesObj* getCellRangesObj() throw ( css::uno::RuntimeException );
     css::uno::Reference< ov::XCollection >& getBorders();
     void groupUnGroup( bool bUnGroup = false ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
      css::uno::Reference< ov::excel::XRange > PreviousNext( bool bIsPrevious );
      css::uno::Reference< ov::excel::XRange > SpecialCellsImpl( sal_Int32 nType, const css::uno::Any& _oValue) throw ( css::script::BasicErrorException );
     css::awt::Point getPosition() throw ( css::uno::RuntimeException );
+protected:
+    virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
+    virtual SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
 public:
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, sal_Bool bIsRows = false, sal_Bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, sal_Bool bIsRows = false, sal_Bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
@@ -170,10 +173,6 @@ public:
     virtual css::uno::Any SAL_CALL getPageBreak() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPageBreak( const css::uno::Any& _pagebreak ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XValidation > SAL_CALL getValidation() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getFormulaHidden() throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual void SAL_CALL setFormulaHidden(const css::uno::Any& aHidden) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    //virtual css::uno::Any SAL_CALL getLocked() throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    //virtual void SAL_CALL setLocked(const css::uno::Any& aLocked) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
     // Methods

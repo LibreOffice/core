@@ -51,7 +51,7 @@ public:
     AccessibleGridControlHeader(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible >& rxParent,
-            ::svt::table::IAccessibleTable&                  rTable,
+            ::svt::table::IAccessibleTable& rTable,
             ::svt::table::AccessibleTableControlObjType  eObjType );
 
 protected:

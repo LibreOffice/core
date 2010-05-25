@@ -44,11 +44,11 @@ namespace oox {
 
 // ============================================================================
 
-ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxFactory ) :
-    maMarkerContainer(   rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
-    maDashContainer(     rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
-    maGradientContainer( rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
-    maBitmapContainer(   rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
+ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
+    maMarkerContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
+    maDashContainer(     rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
+    maGradientContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
+    maBitmapContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
     maDashNameBase( CREATE_OUSTRING( "msLineDash " ) ),
     maGradientNameBase( CREATE_OUSTRING( "msFillGradient " ) ),
     maBitmapNameBase( CREATE_OUSTRING( "msFillBitmap " ) )

@@ -217,7 +217,7 @@ protected:
 
     void                dumpDffClientRect();
     void                dumpEmbeddedDff();
-    void                dumpOcxControl();
+    void                dumpControl();
 
 private:
     typedef ::boost::shared_ptr< BiffSharedData >       BiffSharedDataRef;
@@ -242,7 +242,7 @@ void BiffObjectBase::writeRectItem( const String& rName,
         Type nLeft, Type nTop, Type nWidth, Type nHeight,
         const NameListWrapper& rListWrp, FormatType eFmtType )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeEmptyItem( rName );
     writeValueItem( "x-pos", nLeft, eFmtType, rListWrp );
     writeValueItem( "y-pos", nTop, eFmtType, rListWrp );
@@ -508,6 +508,10 @@ protected:
                             const StorageRef& rxStrg,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rSysPath );
+
+    virtual void        implDumpBaseStream(
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName );
 };
 
 // ============================================================================

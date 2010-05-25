@@ -199,7 +199,7 @@ sal_Int32 SheetViewModel::getPageBreakZoom() const
 
 sal_Int32 SheetViewModel::getGridColor( const FilterBase& rFilter ) const
 {
-    return mbDefGridColor ? API_RGB_TRANSPARENT : maGridColor.getColor( rFilter );
+    return mbDefGridColor ? API_RGB_TRANSPARENT : maGridColor.getColor( rFilter.getGraphicHelper() );
 }
 
 const PaneSelectionModel* SheetViewModel::getPaneSelection( sal_Int32 nPaneId ) const

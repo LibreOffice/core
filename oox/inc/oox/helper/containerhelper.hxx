@@ -84,32 +84,84 @@ public:
         Does *not* check whether the last element is an empty reference. */
     inline sal_Int32    getLastIndex() const { return static_cast< sal_Int32 >( this->size() ) - 1; }
 
-    /** Calls the passed member function of ObjType on every contained object. */
+    /** Calls the passed functor for every contained object, automatically
+        skips all elements that are empty references. */
     template< typename FunctorType >
-    inline void         forEach( const FunctorType& rFunctor ) const
+    inline void         forEach( FunctorType aFunctor ) const
                         {
-                            ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
+                            ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( aFunctor ) );
                         }
 
-    /** Calls the passed member function of ObjType on every contained object. */
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
     template< typename FuncType >
     inline void         forEachMem( FuncType pFunc ) const
                         {
                             forEach( ::boost::bind( pFunc, _1 ) );
                         }
 
-    /** Calls the passed member function of ObjType on every contained object. */
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType >
     inline void         forEachMem( FuncType pFunc, ParamType aParam ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam ) );
                         }
 
-    /** Calls the passed member function of ObjType on every contained object. */
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
+    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
+    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
+                        {
+                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3 ) );
+                        }
+
+    /** Calls the passed functor for every contained object. Passes the index as
+        first argument and the object reference as second argument to rFunctor. */
+    template< typename FunctorType >
+    inline void         forEachWithIndex( const FunctorType& rFunctor ) const
+                        {
+                            ::std::for_each( this->begin(), this->end(), ForEachFunctorWithIndex< FunctorType >( rFunctor ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the vector index to the member function. */
+    template< typename FuncType >
+    inline void         forEachMemWithIndex( FuncType pFunc ) const
+                        {
+                            forEachWithIndex( ::boost::bind( pFunc, _2, _1 ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the vector index as first argument to the member function. */
+    template< typename FuncType, typename ParamType >
+    inline void         forEachMemWithIndex( FuncType pFunc, ParamType aParam ) const
+                        {
+                            forEachWithIndex( ::boost::bind( pFunc, _2, _1, aParam ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the vector index as first argument to the member function. */
+    template< typename FuncType, typename ParamType1, typename ParamType2 >
+    inline void         forEachMemWithIndex( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
+                        {
+                            forEachWithIndex( ::boost::bind( pFunc, _2, _1, aParam1, aParam2 ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the vector index as first argument to the member function. */
+    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
+    inline void         forEachMemWithIndex( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
+                        {
+                            forEachWithIndex( ::boost::bind( pFunc, _2, _1, aParam1, aParam2, aParam3 ) );
                         }
 
     /** Searches for an element by using the passed functor that takes a
@@ -125,17 +177,26 @@ private:
     template< typename FunctorType >
     struct ForEachFunctor
     {
-        const FunctorType&  mrFunctor;
-        inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
-        inline void         operator()( const value_type& rxValue ) const { if( rxValue.get() ) mrFunctor( *rxValue ); }
+        FunctorType         maFunctor;
+        inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
+        inline void         operator()( const value_type& rxValue ) { if( rxValue.get() ) maFunctor( *rxValue ); }
+    };
+
+    template< typename FunctorType >
+    struct ForEachFunctorWithIndex
+    {
+        FunctorType         maFunctor;
+        sal_Int32           mnIndex;
+        inline explicit     ForEachFunctorWithIndex( const FunctorType& rFunctor ) : maFunctor( rFunctor ), mnIndex( 0 ) {}
+        inline void         operator()( const value_type& rxValue ) { if( rxValue.get() ) maFunctor( mnIndex, *rxValue ); ++mnIndex; }
     };
 
     template< typename FunctorType >
     struct FindFunctor
     {
-        const FunctorType&  mrFunctor;
-        inline explicit     FindFunctor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
-        inline bool         operator()( const value_type& rxValue ) const { return rxValue.get() && mrFunctor( *rxValue ); }
+        FunctorType         maFunctor;
+        inline explicit     FindFunctor( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
+        inline bool         operator()( const value_type& rxValue ) { return rxValue.get() && maFunctor( *rxValue ); }
     };
 
     inline const value_type* getRef( sal_Int32 nIndex ) const
@@ -173,41 +234,53 @@ public:
                             return pxRef && pxRef->get();
                         }
 
-    /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
+    /** Returns a reference to the object accossiated to the passed key, or an
+        empty reference on error. */
     inline mapped_type  get( key_type nKey ) const
                         {
                             if( const mapped_type* pxRef = getRef( nKey ) ) return *pxRef;
                             return mapped_type();
                         }
 
-    /** Calls the passed functor for every contained object. */
+    /** Calls the passed functor for every contained object, automatically
+        skips all elements that are empty references. */
     template< typename FunctorType >
     inline void         forEach( const FunctorType& rFunctor ) const
                         {
                             ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
                         }
 
-    /** Calls the passed member function of ObjType on every contained object. */
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
     template< typename FuncType >
     inline void         forEachMem( FuncType pFunc ) const
                         {
                             forEach( ::boost::bind( pFunc, _1 ) );
                         }
 
-    /** Calls the passed member function of ObjType on every contained object. */
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType >
     inline void         forEachMem( FuncType pFunc, ParamType aParam ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam ) );
                         }
 
-    /** Calls the passed member function of ObjType on every contained object. */
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
                         }
 
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
+    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
+    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
+                        {
+                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3 ) );
+                        }
     /** Calls the passed functor for every contained object. Passes the key as
         first argument and the object reference as second argument to rFunctor. */
     template< typename FunctorType >
@@ -240,21 +313,29 @@ public:
                             forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam1, aParam2 ) );
                         }
 
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the object key as first argument to the member function. */
+    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
+    inline void         forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
+                        {
+                            forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam1, aParam2, aParam3 ) );
+                        }
+
 private:
     template< typename FunctorType >
     struct ForEachFunctor
     {
-        const FunctorType&  mrFunctor;
-        inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
-        inline void         operator()( const value_type& rValue ) const { if( rValue.second.get() ) mrFunctor( *rValue.second ); }
+        FunctorType         maFunctor;
+        inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
+        inline void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( *rValue.second ); }
     };
 
     template< typename FunctorType >
     struct ForEachFunctorWithKey
     {
-        const FunctorType&  mrFunctor;
-        inline explicit     ForEachFunctorWithKey( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
-        inline void         operator()( const value_type& rValue ) const { if( rValue.second.get() ) mrFunctor( rValue.first, *rValue.second ); }
+        FunctorType         maFunctor;
+        inline explicit     ForEachFunctorWithKey( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
+        inline void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( rValue.first, *rValue.second ); }
     };
 
     inline const mapped_type* getRef( key_type nKey ) const
@@ -453,7 +534,7 @@ public:
     /** Returns the reference to an existing element of the passed vector, or
         the passed default value, if the passed index is out of bounds. */
     template< typename Type >
-    static Type&        getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex, Type& rDefault );
+    static Type&        getVectorElement( ::std::vector< Type >& rVector, sal_Int32 nIndex, Type& rDefault );
 
     /** Returns the pointer to an existing element of the passed map, or a null
         pointer, if an element with the passed key does not exist. */
@@ -522,7 +603,7 @@ const Type& ContainerHelper::getVectorElement( const ::std::vector< Type >& rVec
 }
 
 template< typename Type >
-Type& ContainerHelper::getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex, Type& rDefault )
+Type& ContainerHelper::getVectorElement( ::std::vector< Type >& rVector, sal_Int32 nIndex, Type& rDefault )
 {
     return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? rVector[ static_cast< size_t >( nIndex ) ] : rDefault;
 }

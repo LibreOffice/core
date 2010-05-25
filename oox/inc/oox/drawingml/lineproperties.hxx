@@ -104,16 +104,16 @@ struct LineProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
+                            const GraphicHelper& rGraphicHelper,
                             const LinePropertyIds& rPropIds = DEFAULT_IDS,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Writes the properties to the passed property map. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
+                            const GraphicHelper& rGraphicHelper,
                             const LinePropertyIds& rPropIds = DEFAULT_IDS,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };

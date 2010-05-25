@@ -179,7 +179,7 @@ uno::Sequence< ::rtl::OUString > OOXMLDocPropHandler::GetKeywordsSet( const ::rt
                 case (sal_Unicode)',':
                 case (sal_Unicode)';':
                 case (sal_Unicode)':':
-                case (sal_Unicode)' ':
+                case (sal_Unicode)'\t':
                     // this is a delimiter
                     // unfortunately I did not find any specification for the possible delimiters
                     if ( aResult[nCounter].getLength() )

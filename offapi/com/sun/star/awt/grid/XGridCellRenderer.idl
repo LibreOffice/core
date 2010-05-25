@@ -37,10 +37,9 @@ module com {  module sun {  module star {  module awt { module grid {
 
 //=============================================================================
 
-/** gives access to the items of a list box and makes it possible to
-    register item and action event listeners.
+/** renderer for cells
  */
-interface XGridCellRenderer: com::sun::star::uno::XInterface
+interface XGridCellRenderer
 {
     //-------------------------------------------------------------------------
 

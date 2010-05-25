@@ -50,6 +50,7 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
+        ,m_bResize(false)
     {
     }
 
@@ -62,8 +63,12 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     bool DefaultInputHandler::MouseMove( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
-        (void)_rControl;
-        (void)_rMEvt;
+        Point aPoint = _rMEvt.GetPosPixel();
+        if(m_bResize)
+        {
+            _rControl.resizeColumn(aPoint);
+            return true;
+        }
         return false;
     }
 
@@ -72,41 +77,60 @@ namespace svt { namespace table
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.isClickInVisibleArea(aPoint))
+        RowPos nRow = _rControl.getCurrentRow(aPoint);
+        if(nRow == -1)
+        {
+            m_bResize = _rControl.startResizeColumn(aPoint);
+            bHandled = true;
+        }
+        else if(nRow >= 0)
         {
             if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
             {
-                LoseFocus(_rControl);
                 _rControl.setCursorAtCurrentCell(aPoint);
                 bHandled = true;
             }
             else
             {
-                bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+                if(!_rControl.isRowSelected(nRow))
+                    bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+                else
+                    bHandled = true;
             }
         }
         return bHandled;
     }
-
     //--------------------------------------------------------------------
     bool DefaultInputHandler::MouseButtonUp( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.isClickInVisibleArea(aPoint))
+        if(_rControl.getCurrentRow(aPoint) >= 0)
         {
-            if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            if(m_bResize)
             {
-                GetFocus(_rControl);
-                _rControl.setCursorAtCurrentCell(aPoint);
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
+            else if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            {
                 bHandled = true;
             }
             else
+            {
                 bHandled = _rControl.getSelEngine()->SelMouseButtonUp(_rMEvt);
+            }
+        }
+        else
+        {
+            if(m_bResize)
+            {
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
         }
         return bHandled;
     }
-
     //--------------------------------------------------------------------
     bool DefaultInputHandler::KeyInput( IAbstractTableControl& _rControl, const KeyEvent& rKEvt )
     {
@@ -134,11 +158,11 @@ namespace svt { namespace table
             { KEY_PAGEDOWN, KEY_MOD1,   cursorToLastLine },
             { KEY_HOME,     KEY_MOD1,   cursorTopLeft },
             { KEY_END,      KEY_MOD1,   cursorBottomRight },
-            { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
-            { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
-            { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
-            { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
-            { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
+        { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
+        { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
+        { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
+        { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
+        { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
 
             { 0, 0, invalidTableControlAction }
         };
@@ -205,7 +229,6 @@ namespace svt { namespace table
         // TODO
         return false;
     }
-
 //........................................................................
 } } // namespace svt::table
 //........................................................................

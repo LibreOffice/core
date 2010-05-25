@@ -27,15 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
-#include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
-#include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
-#include "fonthdl.hxx"
-#endif
+
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -52,10 +44,21 @@
 // <--
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <tools/debug.hxx>
+
+#include <xmloff/nmspmap.hxx>
+#include "xmlnmspe.hxx"
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmluconv.hxx>
+#include "fonthdl.hxx"
 #include "XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <tools/fontenum.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -294,9 +297,12 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     OUStringBuffer sTmp;
     sTmp.append( nLevel + 1 );
     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
-    if( sTextStyleName.getLength() > 0 )
+    // #i110694#: no style-name on list-level-style-image
+    if ((sTextStyleName.getLength() > 0) && (NumberingType::BITMAP != eType))
+    {
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                 GetExport().EncodeStyleName( sTextStyleName ) );
+    }
     if( sPrefix.getLength() > 0 )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sPrefix );
     if( sSuffix.getLength() > 0 )

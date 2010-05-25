@@ -41,6 +41,13 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+=-DSYSTEM_REDLAND $(REDLAND_CFLAGS)
 .ENDIF
 
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+CFLAGS+= $(LIBXSLT_CFLAGS)
+.ELSE
+LIBXSLTINCDIR=external$/libxslt
+CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
+.ENDIF
+
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
 
@@ -64,6 +71,7 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
     $(REDLANDLIB) \
+    $(XSLTLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)	\
     $(SALLIB) \

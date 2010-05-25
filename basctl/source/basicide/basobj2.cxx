@@ -191,7 +191,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if ( pIDEShell )
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_MODULE, FALSE );
+        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, TRUE );
         if ( pWin )
         {
             // set new name in window

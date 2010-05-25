@@ -61,6 +61,7 @@ namespace comphelper {
 
 namespace oox {
     class BinaryOutputStream;
+    class TextInputStream;
 }
 
 namespace oox { namespace core {
@@ -576,43 +577,41 @@ protected:
 // ============================================================================
 // ============================================================================
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream > ConfigInputStreamRef;
-
 class ConfigItemBase
 {
 public:
     virtual             ~ConfigItemBase();
-    void                readConfigBlock( const ConfigInputStreamRef& rxStrm );
+    void                readConfigBlock( TextInputStream& rStrm );
 
 protected:
     inline explicit     ConfigItemBase() {}
 
     virtual void        implProcessConfigItemStr(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             const ::rtl::OUString& rKey,
                             const ::rtl::OUString& rData );
 
     virtual void        implProcessConfigItemInt(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             sal_Int64 nKey,
                             const ::rtl::OUString& rData );
 
     void                readConfigBlockContents(
-                            const ConfigInputStreamRef& rxStrm );
+                            TextInputStream& rStrm );
 
 private:
     enum LineType { LINETYPE_DATA, LINETYPE_END };
 
     LineType            readConfigLine(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             ::rtl::OUString& orKey,
                             ::rtl::OUString& orData ) const;
 
     LineType            readConfigLine(
-                            const ConfigInputStreamRef& rxStrm ) const;
+                            TextInputStream& rStrm ) const;
 
     void                processConfigItem(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             const ::rtl::OUString& rKey,
                             const ::rtl::OUString& rData );
 };
@@ -673,12 +672,12 @@ protected:
     virtual bool        implIsValid() const;
 
     virtual void        implProcessConfigItemStr(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             const ::rtl::OUString& rKey,
                             const ::rtl::OUString& rData );
 
     virtual void        implProcessConfigItemInt(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             sal_Int64 nKey,
                             const ::rtl::OUString& rData );
 
@@ -721,7 +720,7 @@ public:
 
 protected:
     virtual void        implProcessConfigItemStr(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             const ::rtl::OUString& rKey,
                             const ::rtl::OUString& rData );
 
@@ -750,7 +749,7 @@ public:
 
 protected:
     virtual void        implProcessConfigItemStr(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             const ::rtl::OUString& rKey,
                             const ::rtl::OUString& rData );
 
@@ -777,7 +776,7 @@ public:
 
 protected:
     virtual void        implProcessConfigItemStr(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             const ::rtl::OUString& rKey,
                             const ::rtl::OUString& rData );
 
@@ -917,14 +916,14 @@ public:
 protected:
     virtual bool        implIsValid() const;
     virtual void        implProcessConfigItemStr(
-                            const ConfigInputStreamRef& rxStrm,
+                            TextInputStream& rStrm,
                             const ::rtl::OUString& rKey,
                             const ::rtl::OUString& rData );
 
 private:
     bool                readConfigFile( const ::rtl::OUString& rFileUrl );
     template< typename ListType >
-    void                readNameList( const ConfigInputStreamRef& rxStrm, const ::rtl::OUString& rListName );
+    void                readNameList( TextInputStream& rStrm, const ::rtl::OUString& rListName );
     void                createShortList( const ::rtl::OUString& rData );
     void                createUnitConverter( const ::rtl::OUString& rData );
 
@@ -960,11 +959,11 @@ template< typename ListType >
 }
 
 template< typename ListType >
-void SharedConfigData::readNameList( const ConfigInputStreamRef& rxStrm, const ::rtl::OUString& rListName )
+void SharedConfigData::readNameList( TextInputStream& rStrm, const ::rtl::OUString& rListName )
 {
     NameListRef xList = createNameList< ListType >( rListName );
     if( xList.get() )
-        xList->readConfigBlock( rxStrm );
+        xList->readConfigBlock( rStrm );
 }
 
 // ============================================================================
@@ -1182,7 +1181,7 @@ typedef ::boost::shared_ptr< Output > OutputRef;
 class IndentGuard
 {
 public:
-    inline explicit     IndentGuard( Output& rOut ) : mrOut( rOut ) { mrOut.incIndent(); }
+    inline explicit     IndentGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.incIndent(); }
     inline              ~IndentGuard() { mrOut.decIndent(); }
 private:
                         IndentGuard( const IndentGuard& );
@@ -1196,17 +1195,17 @@ private:
 class TableGuard
 {
 public:
-    inline explicit     TableGuard( Output& rOut, sal_Int32 nW1 ) :
-                            mrOut( rOut ) { mrOut.startTable( nW1 ); }
-    inline explicit     TableGuard( Output& rOut, sal_Int32 nW1, sal_Int32 nW2 ) :
-                            mrOut( rOut ) { mrOut.startTable( nW1, nW2 ); }
-    inline explicit     TableGuard( Output& rOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3 ) :
-                            mrOut( rOut ) { mrOut.startTable( nW1, nW2, nW3 ); }
-    inline explicit     TableGuard( Output& rOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 ) :
-                            mrOut( rOut ) { mrOut.startTable( nW1, nW2, nW3, nW4 ); }
-    inline explicit     TableGuard( Output& rOut, size_t nColCount,
+    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1 ) :
+                            mrOut( *rxOut ) { mrOut.startTable( nW1 ); }
+    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2 ) :
+                            mrOut( *rxOut ) { mrOut.startTable( nW1, nW2 ); }
+    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3 ) :
+                            mrOut( *rxOut ) { mrOut.startTable( nW1, nW2, nW3 ); }
+    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 ) :
+                            mrOut( *rxOut ) { mrOut.startTable( nW1, nW2, nW3, nW4 ); }
+    inline explicit     TableGuard( const OutputRef& rxOut, size_t nColCount,
                                 const sal_Int32* pnColWidths ) :
-                            mrOut( rOut ) { mrOut.startTable( nColCount, pnColWidths ); }
+                            mrOut( *rxOut ) { mrOut.startTable( nColCount, pnColWidths ); }
     inline              ~TableGuard() { mrOut.endTable(); }
     inline void         tab() { mrOut.tab(); }
     inline void         tab( size_t nCol ) { mrOut.tab( nCol ); }
@@ -1222,8 +1221,8 @@ private:
 class ItemGuard
 {
 public:
-    inline explicit     ItemGuard( Output& rOut, const String& rName = EMPTY_STRING ) :
-                            mrOut( rOut ) { mrOut.startItem( rName ); }
+    inline explicit     ItemGuard( const OutputRef& rxOut, const String& rName = EMPTY_STRING ) :
+                            mrOut( *rxOut ) { mrOut.startItem( rName ); }
     inline              ~ItemGuard() { mrOut.endItem(); }
     inline void         cont() { mrOut.contItem(); }
 private:
@@ -1238,7 +1237,7 @@ private:
 class MultiItemsGuard
 {
 public:
-    inline explicit     MultiItemsGuard( Output& rOut ) : mrOut( rOut ) { mrOut.startMultiItems(); }
+    inline explicit     MultiItemsGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.startMultiItems(); }
     inline              ~MultiItemsGuard() { mrOut.endMultiItems(); }
 private:
                         MultiItemsGuard( const MultiItemsGuard& );
@@ -1280,7 +1279,8 @@ class ObjectBase : public Base
 public:
     virtual             ~ObjectBase();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getFactory() const { return mxConfig->getFactory(); }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                        getFactory() const { return mxConfig->getFactory(); }
 
     void                dump();
 
@@ -1333,6 +1333,10 @@ protected:
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rSysPath );
 
+    virtual void        implDumpBaseStream(
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName );
+
     void                addPreferredStream( const String& rStrmName );
     void                addPreferredStorage( const String& rStrgPath );
 
@@ -1355,7 +1359,7 @@ private:
                             const StorageRef& rxStrg,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rItemName,
-                            const ::rtl::OUString& rSysOutPath,
+                            const ::rtl::OUString& rSysPath,
                             bool bIsStrg, bool bIsStrm );
 
 private:
@@ -1394,10 +1398,6 @@ protected:
     void                construct( const OutputObjectBase& rParent );
 
     virtual bool        implIsValid() const;
-
-    // ------------------------------------------------------------------------
-
-    inline Output&      out() const { return *mxOut; }
 
     // ------------------------------------------------------------------------
 
@@ -1451,7 +1451,7 @@ protected:
     template< typename Type >
     void                writeHexPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep = ',' );
 
-private:
+protected:
     OutputRef           mxOut;
 };
 
@@ -1472,14 +1472,14 @@ void OutputObjectBase::addNameToItem( Type nData, const NameListWrapper& rListWr
 template< typename Type >
 void OutputObjectBase::writeNameItem( const String& rName, Type nData, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeName( cfg(), nData, rListWrp );
 }
 
 template< typename Type >
 void OutputObjectBase::writeDecItem( const String& rName, Type nData, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeDec( nData );
     addNameToItem( nData, rListWrp );
 }
@@ -1487,7 +1487,7 @@ void OutputObjectBase::writeDecItem( const String& rName, Type nData, const Name
 template< typename Type >
 void OutputObjectBase::writeHexItem( const String& rName, Type nData, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeHex( nData );
     addNameToItem( nData, rListWrp );
 }
@@ -1495,7 +1495,7 @@ void OutputObjectBase::writeHexItem( const String& rName, Type nData, const Name
 template< typename Type >
 void OutputObjectBase::writeShortHexItem( const String& rName, Type nData, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeShortHex( nData );
     addNameToItem( nData, rListWrp );
 }
@@ -1503,7 +1503,7 @@ void OutputObjectBase::writeShortHexItem( const String& rName, Type nData, const
 template< typename Type >
 void OutputObjectBase::writeBinItem( const String& rName, Type nData, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeBin( nData );
     addNameToItem( nData, rListWrp );
 }
@@ -1511,7 +1511,7 @@ void OutputObjectBase::writeBinItem( const String& rName, Type nData, const Name
 template< typename Type >
 void OutputObjectBase::writeFixItem( const String& rName, Type nData, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeFix( nData );
     addNameToItem( nData, rListWrp );
 }
@@ -1519,7 +1519,7 @@ void OutputObjectBase::writeFixItem( const String& rName, Type nData, const Name
 template< typename Type >
 void OutputObjectBase::writeDecBoolItem( const String& rName, Type nData, const NameListWrapper& rListWrp )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeDec( nData );
     aItem.cont();
     mxOut->writeBool( nData != 0 );
@@ -1533,7 +1533,7 @@ void OutputObjectBase::writeValueItem( const String& rName, Type nData, FormatTy
         writeDecBoolItem( rName, nData, rListWrp );
     else
     {
-        ItemGuard aItem( *mxOut, rName );
+        ItemGuard aItem( mxOut, rName );
         mxOut->writeValue( nData, eFmtType );
         addNameToItem( nData, rListWrp );
     }
@@ -1549,7 +1549,7 @@ void OutputObjectBase::writeValueItem( const ItemFormat& rItemFmt, Type nData )
 template< typename Type >
 void OutputObjectBase::writeDecPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeDec( nData1 );
     mxOut->writeChar( cSep );
     mxOut->writeDec( nData2 );
@@ -1558,7 +1558,7 @@ void OutputObjectBase::writeDecPairItem( const String& rName, Type nData1, Type 
 template< typename Type >
 void OutputObjectBase::writeHexPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeHex( nData1 );
     mxOut->writeChar( cSep );
     mxOut->writeHex( nData2 );
@@ -1586,7 +1586,6 @@ protected:
 
     // ------------------------------------------------------------------------
 
-    inline BinaryInputStream& in() const { return *mxStrm; }
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         getXInputStream() const;
 
@@ -1655,7 +1654,7 @@ protected:
     template< typename Type >
     void                dumpHexPair( const String& rName, sal_Unicode cSep = ',' );
 
-private:
+protected:
     BinaryInputStreamRef mxStrm;
 };
 
@@ -1822,16 +1821,12 @@ public:
                             rtl_TextEncoding eTextEnc );
 
 protected:
+    virtual bool        implIsValid() const;
     virtual void        implDump();
     virtual void        implDumpLine( const ::rtl::OUString& rLine, sal_uInt32 nLine );
 
 private:
-    bool                readCharLine( ::rtl::OUString& orLine, sal_Unicode& orcNextLineChar );
-    bool                readUcs2Line( ::rtl::OUString& orLine, sal_Unicode& orcNextLineChar );
-    bool                readLine( ::rtl::OUString& orLine, sal_Unicode& orcNextLineChar );
-
-private:
-    rtl_TextEncoding    meTextEnc;
+    ::boost::shared_ptr< TextInputStream > mxTextStrm;
 };
 
 // ============================================================================

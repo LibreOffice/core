@@ -30,8 +30,8 @@
 #include <math.h>
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/core/namespaces.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 
 using ::rtl::OUString;
@@ -350,7 +350,7 @@ void Color::clearTransparence()
     mnAlpha = MAX_PERCENT;
 }
 
-sal_Int32 Color::getColor( const ::oox::core::FilterBase& rFilter, sal_Int32 nPhClr ) const
+sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
     /*  Special handling for theme style list placeholder colors (state
         COLOR_PH), Color::getColor() may be called with different placeholder
@@ -368,10 +368,10 @@ sal_Int32 Color::getColor( const ::oox::core::FilterBase& rFilter, sal_Int32 nPh
         case COLOR_CRGB:    break;  // nothing to do
         case COLOR_HSL:     break;  // nothing to do
 
-        case COLOR_SCHEME:  setResolvedRgb( rFilter.getSchemeColor( mnC1 ) );       break;
-        case COLOR_PALETTE: setResolvedRgb( rFilter.getPaletteColor( mnC1 ) );      break;
-        case COLOR_SYSTEM:  setResolvedRgb( rFilter.getSystemColor( mnC1, mnC2 ) ); break;
-        case COLOR_PH:      setResolvedRgb( nPhClr ); bIsPh = true;                 break;
+        case COLOR_SCHEME:  setResolvedRgb( rGraphicHelper.getSchemeColor( mnC1 ) );        break;
+        case COLOR_PALETTE: setResolvedRgb( rGraphicHelper.getPaletteColor( mnC1 ) );       break;
+        case COLOR_SYSTEM:  setResolvedRgb( rGraphicHelper.getSystemColor( mnC1, mnC2 ) );  break;
+        case COLOR_PH:      setResolvedRgb( nPhClr ); bIsPh = true;                         break;
 
         case COLOR_FINAL:   return mnC1;
     }

@@ -28,11 +28,11 @@
 #define _MSVBAHELPER_HXX
 
 #include <sfx2/objsh.hxx>
-#include <vbahelper/vbadllapi.h>
+#include "filter/msfilter/msfilterdllapi.h"
 
 namespace ooo { namespace vba
 {
-    class VBAHELPER_DLLPUBLIC VBAMacroResolvedInfo
+    class MSFILTER_DLLPUBLIC VBAMacroResolvedInfo
     {
         SfxObjectShell* mpDocContext;
         bool mbFound;
@@ -47,9 +47,9 @@ namespace ooo { namespace vba
         void SetResolvedMacro(const String& sMacro ) { msResolvedMacro = sMacro; }
     };
 
-    VBAHELPER_DLLPUBLIC String makeMacroURL( const String& sMacroName );
-    VBAHELPER_DLLPUBLIC  VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& sMod, bool bSearchGlobalTemplates = false );
-    VBAHELPER_DLLPUBLIC sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArgs, com::sun::star::uno::Any& aRet, const com::sun::star::uno::Any& aCaller );
+    MSFILTER_DLLPUBLIC String makeMacroURL( const String& sMacroName );
+    MSFILTER_DLLPUBLIC  VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& sMod, bool bSearchGlobalTemplates = false );
+    MSFILTER_DLLPUBLIC sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArgs, com::sun::star::uno::Any& aRet, const com::sun::star::uno::Any& aCaller );
 } }
 
 #endif

@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 #include <com/sun/star/awt/grid/XGridColumn.idl>
+
 #include <com/sun/star/awt/grid/XGridColumnListener.idl>
 
 //=============================================================================
@@ -42,12 +43,18 @@ module com {  module sun {  module star {  module awt { module grid {
     retrieve the column structure that is displayed in the actual control.
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridColumnModel</type>.
+
+    @since OOo 3.3.0
 */
-interface XGridColumnModel: com::sun::star::uno::XInterface
+interface XGridColumnModel
 {
-    /** Specifies whether column selection is allowed
+    ///** Specifies whether column selection is allowed
+    //*/
+    //[attribute] boolean ColumnSelectionAllowed;
+
+    /**Specifies the height of column header.
     */
-    [attribute] boolean ColumnSelectionAllowed;
+    [attribute] long ColumnHeaderHeight;
 
     /** Returns the number of columns.
         @returns
@@ -81,29 +88,28 @@ interface XGridColumnModel: com::sun::star::uno::XInterface
 
     /** Returns a specific column.
         @param index
-                the position of the reuquested column.
+                the position of the requested column.
         @returns
                  the requested column.
     */
     XGridColumn getColumn( [in] long index);
 
+    /** Sets default columns to the column model.
+        @param elements
+            the number of default columns that should be set.
+    */
+    void setDefaultColumns([in] long elements);
+
+    /**Creates new XGridColumn with the settings of other column. To be used if the columns which are added to
+        the column model have the same settings.
+        @param column
+            the column, which is already created
+    */
+    XGridColumn copyColumn( [in] XGridColumn column );
+
     /*
     long getTotalColumnWidth();
     */
-
-    /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
-        @param Listener
-            the listener to add.
-    */
-    [oneway] void addColumnListener( [in] XGridColumnListener  listener);
-
-    //-------------------------------------------------------------------------
-
-    /** Removes a listener previously added with <method>addColumnListener()</method>.
-        @param Listener
-            the listener to remove.
-    */
-    [oneway] void removeColumnListener( [in] XGridColumnListener listener);
 };
 
 //=============================================================================

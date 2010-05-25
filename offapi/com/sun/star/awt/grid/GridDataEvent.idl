@@ -27,10 +27,7 @@
 #ifndef __com_sun_star_awt_grid_GridDataEvent_idl__
 #define __com_sun_star_awt_grid_GridDataEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
-
 
 //=============================================================================
 
@@ -46,6 +43,8 @@ module com {  module sun {  module star {  module awt {  module grid {
     @see XGridDataModel
     @see XGridControl
     @see XGridDataListener
+
+    @sonce OOo 3.3.0
  */
 struct GridDataEvent: com::sun::star::lang::EventObject
 {
@@ -67,7 +66,7 @@ struct GridDataEvent: com::sun::star::lang::EventObject
     string headerName;
 
     /** Contains the changed row**/
-    sequence<string> rowData;
+    sequence<any> rowData;
 
 
 };

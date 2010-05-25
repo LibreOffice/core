@@ -28,12 +28,8 @@
 #ifndef OOX_HELPER_STORAGEBASE_HXX
 #define OOX_HELPER_STORAGEBASE_HXX
 
-#include <vector>
-#include <map>
-#include <boost/shared_ptr.hpp>
-#include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <oox/dllapi.h>
+#include "oox/dllapi.h"
+#include "oox/helper/containerhelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace embed { class XStorage; }
@@ -71,6 +67,13 @@ public:
     /** Returns true, if the object represents a valid storage. */
     bool                isStorage() const;
 
+    /** Returns true, if the object represents the root storage. */
+    bool                isRootStorage() const;
+
+    /** Returns true, if the storage operates in read-only mode (based on an
+        input stream). */
+    bool                isReadOnly() const;
+
     /** Returns the com.sun.star.embed.XStorage interface of the current storage. */
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
                         getXStorage() const;
@@ -81,7 +84,8 @@ public:
     /** Returns the full path of this storage. */
     ::rtl::OUString     getPath() const;
 
-    /** Fills the passed vector with the names of all elements of this storage. */
+    /** Fills the passed vector with the names of all direct elements of this
+        storage. */
     void                getElementNames( ::std::vector< ::rtl::OUString >& orElementNames ) const;
 
     /** Opens and returns the specified sub storage from the storage.
@@ -89,10 +93,11 @@ public:
         @param rStorageName
             The name of the embedded storage. The name may contain slashes to
             open storages from embedded substorages.
-        @param bCreate
-            True = create missing sub storages (for export filters).
+        @param bCreateMissing
+            True = create missing sub storages (for export filters). Must be
+            false for storages based on input streams.
      */
-    StorageRef          openSubStorage( const ::rtl::OUString& rStorageName, bool bCreate );
+    StorageRef          openSubStorage( const ::rtl::OUString& rStorageName, bool bCreateMissing );
 
     /** Opens and returns the specified input stream from the storage.
 
@@ -116,13 +121,27 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         openOutputStream( const ::rtl::OUString& rStreamName );
 
-    /** Commits the changes to the storage and all the substorages. (in case it is transacted object)
+    /** Copies the specified element from this storage to the passed
+         destination storage.
+
+        @param rElementName
+            The name of the embedded storage or stream. The name may contain
+            slashes to specify an element in an embedded substorage. In this
+            case, the element will be copied to the same substorage in the
+            destination storage.
      */
-    void commit();
+    void                copyToStorage( StorageBase& rDestStrg, const ::rtl::OUString& rElementName );
+
+    /** Copies all streams of this storage and of all substorages to the passed
+        destination. */
+    void                copyStorageToStorage( StorageBase& rDestStrg );
+
+    /** Commits the changes to the storage and all substorages. */
+    void                commit();
 
 protected:
     /** Special constructor for sub storage objects. */
-    explicit            StorageBase( const StorageBase& rParentStorage, const ::rtl::OUString& rStorageName );
+    explicit            StorageBase( const StorageBase& rParentStorage, const ::rtl::OUString& rStorageName, bool bReadOnly );
 
 private:
                         StorageBase( const StorageBase& );
@@ -149,19 +168,24 @@ private:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         implOpenOutputStream( const ::rtl::OUString& rElementName ) = 0;
 
-    StorageRef          getSubStorage( const ::rtl::OUString& rElementName, bool bCreate );
+    /** Commits the current storage. */
+    virtual void        implCommit() const = 0;
+
+    /** Helper that opens and caches the specified direct substorage. */
+    StorageRef          getSubStorage( const ::rtl::OUString& rElementName, bool bCreateMissing );
 
 private:
-    typedef ::std::map< ::rtl::OUString, StorageRef >                               SubStorageMap;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  XInputStreamRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > XStreamRef;
+    typedef RefMap< ::rtl::OUString, StorageBase > SubStorageMap;
 
     SubStorageMap       maSubStorages;      /// Map of direct sub storages.
-    XInputStreamRef     mxInStream;         /// Cached base input stream (to keep it alive).
-    XStreamRef          mxOutStream;        /// Cached base output stream (to keep it alive).
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        mxInStream;         /// Cached base input stream (to keep it alive).
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+                        mxOutStream;        /// Cached base output stream (to keep it alive).
+    ::rtl::OUString     maParentPath;       /// Full path of parent storage.
     ::rtl::OUString     maStorageName;      /// Name of this storage, if it is a substorage.
-    const StorageBase*  mpParentStorage;    /// Parent storage if this is a sub storage.
     bool                mbBaseStreamAccess; /// True = access base streams with empty stream name.
+    bool                mbReadOnly;         /// True = storage opened read-only (based on input stream).
 };
 
 // ============================================================================
@@ -169,4 +193,3 @@ private:
 } // namespace oox
 
 #endif
-

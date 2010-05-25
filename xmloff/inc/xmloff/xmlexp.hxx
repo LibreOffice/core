@@ -590,6 +590,12 @@ public:
     /// name of stream in package, e.g., "content.xml"
     ::rtl::OUString GetStreamName() const;
 
+    // FIXME: this is only for legacy stuff that has not yet been adapted
+    //        to implement XMetadatable; this can write duplicate IDs!
+    /// add xml:id and legacy namespace id
+    void SAL_DLLPRIVATE AddAttributeIdLegacy(
+            sal_uInt16 const nLegacyPrefix, ::rtl::OUString const& rValue);
+
     /// add xml:id attribute (for RDF metadata)
     void AddAttributeXmlId(::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface> const & i_xIfc);
