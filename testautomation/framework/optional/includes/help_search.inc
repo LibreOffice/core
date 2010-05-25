@@ -142,7 +142,7 @@ testcase tHelpSearch
     ListAllDelete( aUIList() )
     hGetListItems( Result, aUIList() )
     
-    cDataFile = gProductName & "_search_headings_and_whole_words_" & gIsoLang & ".txt"
+    cDataFile = sProductName & "_search_headings_and_whole_words_" & gIsoLang & ".txt"
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 
