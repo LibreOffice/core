@@ -61,11 +61,11 @@ testcase tGridcontrolLoad
             hCloseDialog( ScriptSelector, "ok" )
 
             printlog( "Probe for unexpected messagebox" )
-
-            ' REM what is supposed to happen here?
-            ' Wait for a messagebox and print an error no matter what?
-            ' Very, very strange
-
+            kontext "Active"
+            if ( Active.exists( 5 ) ) then
+                warnlog( "Unexpected messagebox: " & Active.getText() )
+                Active.ok()
+            endif
         else
             warnlog( "The requested Macro could not be found: " & MACRO_NAME )
         endif

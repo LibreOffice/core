@@ -452,6 +452,8 @@ function hFindInList( oControl as object, cObject as string ) as integer
 
     for iCurrentObject = 1 to oControl.getItemCount()
 
+        oControl.select( iCurrentObject )
+        
         if ( oControl.getSelText() = cObject ) then
             hFindInList() = iCurrentObject
             exit function
