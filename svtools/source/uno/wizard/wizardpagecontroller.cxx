@@ -81,6 +81,10 @@ namespace svt { namespace uno
 
             Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
             xPageWindow->setVisible( sal_True );
+
+            TabPage* pTabPage( getTabPage() );
+            if ( pTabPage )
+                pTabPage->SetStyle( pTabPage->GetStyle() | WB_CHILDDLGCTRL | WB_DIALOGCONTROL );
         }
         catch( const Exception& )
         {
