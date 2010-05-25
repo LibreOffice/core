@@ -38,6 +38,8 @@ testcase tHelpSearch
         goto endsub
     endif
 
+    const RC_LISTS_IDENTICAL = 0
+
     dim brc as boolean
     dim irc as integer
     
@@ -49,16 +51,15 @@ testcase tHelpSearch
         cBasePath = gTesttoolPath & "framework\optional\input\help_browser\"
     dim cDataFile as string
     dim sProductName as string : sProductName = hStringReplaceChar( gProductName, " ", "_" )
-    
-    brc = hOpenHelp()
-    if ( not brc ) then
+
+    printlog( "Open Help Browser" )
+    if ( not hOpenHelp() ) then
         warnlog( "Help not open, aborting test" )
         goto endsub
     endif
 
-    
-    brc = hSelectHelpTab( "find" )
-    if ( not brc ) then
+    printlog( "Go to the Find-Tabpage" )
+    if ( not hSelectHelpTab( "find" ) ) then
         warnlog( "Could not access requested TabPage, aborting test" )
         call hClosehelp()
         goto endsub
@@ -82,8 +83,8 @@ testcase tHelpSearch
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 
-    irc       = hManageComparisionList( sFileIn, sFileOut, aUIList() )
-    hListResultEvaluation( irc , 0 )
+    irc = hManageComparisionList( sFileIn, sFileOut, aUIList() )
+    hListResultEvaluation( irc , RC_LISTS_IDENTICAL )
     
     ' ------------ Search whole words only -------------------------------------
     printlog( "" )
@@ -102,10 +103,8 @@ testcase tHelpSearch
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 
-    irc       = hManageComparisionList( sFileIn, sFileOut, aUIList() )
-    if ( irc <> 0 ) then
-        warnlog( "Lists are not identical, please review the log" )
-    endif
+    irc = hManageComparisionList( sFileIn, sFileOut, aUIList() )
+    hListResultEvaluation( irc , RC_LISTS_IDENTICAL )
 
     ' ------------ Search headings only ----------------------------------------
     printlog( "" )
@@ -124,10 +123,8 @@ testcase tHelpSearch
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 
-    irc       = hManageComparisionList( sFileIn, sFileOut, aUIList() )
-    if ( irc <> 0 ) then
-        warnlog( "Lists are not identical, please review the log" )
-    endif
+    irc = hManageComparisionList( sFileIn, sFileOut, aUIList() )
+    hListResultEvaluation( irc , RC_LISTS_IDENTICAL )
 
     ' ------------ Search headings and whole words -----------------------------
     printlog( "" )
@@ -146,11 +143,8 @@ testcase tHelpSearch
     sFileOut  = hGetWorkFile( cDataFile )
     sFileIn   = convertpath( cBasePath & cDataFile )
 
-    irc       = hManageComparisionList( sFileIn, sFileOut, aUIList() )
-    if ( irc <> 0 ) then
-        warnlog( "Lists are not identical, please review the log" )
-    endif    
-    
+    irc = hManageComparisionList( sFileIn, sFileOut, aUIList() )
+    hListResultEvaluation( irc , RC_LISTS_IDENTICAL )
     
     hCloseHelp()
 
