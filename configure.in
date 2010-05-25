@@ -5134,14 +5134,20 @@ if test "$_os" = "Linux"; then
    fi
 fi
 
-AC_CHECK_FUNCS(getopt, SYSTEM_GETOPT=YES, [SYSTEM_GETOPT=NO])
-AC_CHECK_FUNCS(readdir_r, SYSTEM_READDIR_R=YES, [SYSTEM_READDIR_R=NO])
-if test "$SYSTEM_GETOPT" = "YES" -a "$SYSTEM_READDIR_R" = "YES"; then
-	SYSTEM_GLIBC=YES
+if "$_os" != "WNT"; then
+  AC_CHECK_FUNCS(getopt, HAVE_GETOPT=YES, [HAVE_GETOPT=NO])
+  AC_CHECK_FUNCS(readdir_r, HAVE_READDIR_R=YES, [HAVE_READDIR_R=NO])
+  if test "$HAVE_GETOPT" = "YES" -a "$HAVE_READDIR_R" = "YES"; then
+	SYSTEM_LIBC=YES
+  fi
+else
+  HAVE_GETOPT=NO
+  HAVE_READDIR_R=NO
+  SYSTEM_LIBC=YES
 fi
-AC_SUBST(SYSTEM_GETOPT)
-AC_SUBST(SYSTEM_READDIR_R)
-AC_SUBST(SYSTEM_GLIBC)
+AC_SUBST(HAVE_GETOPT)
+AC_SUBST(HAVE_READDIR_R)
+AC_SUBST(SYSTEM_LIBC)
 
 dnl =========================================
 dnl Check for the Microsoft Platform SDK.
