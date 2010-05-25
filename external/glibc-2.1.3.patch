@@ -123,7 +123,7 @@
 +
 +# --- Files --------------------------------------------------------
 +
-+.IF "$(SYSTEM_GETOPT)" != "YES"
++.IF "$(HAVE_GETOPT)" != "YES"
 +OBJFILES=	$(OBJ)$/getopt.obj		\
 +			$(OBJ)$/getopt1.obj
 +
@@ -132,7 +132,7 @@
 +LIB1OBJFILES=$(OBJFILES)
 +.ENDIF
 +
-+.IF "$(SYSTEM_READDIR_R)" != "YES"
++.IF "$(HAVE_READDIR_R)" != "YES"
 +TARGET2=gnu_readdir_r
 +OBJFILES+= $(OBJ)$/readdir_r.obj
 +LIB2TARGET=$(SLB)$/$(TARGET2).lib
@@ -140,7 +140,7 @@
 +LIB2OBJFILES= $(OBJ)$/readdir_r.obj
 +.ENDIF
 +
-+.IF "$(SYSTEM_READDIR_R)" == "YES" && "$(SYSTEM_GETOPT)" == "YES"
++.IF "$(HAVE_READDIR_R)" == "YES" && "$(HAVE_GETOPT)" == "YES"
 +@all:
 +	@echo "Nothing to do here.
 +.ENDIF
