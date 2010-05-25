@@ -113,7 +113,7 @@ protected:
     virtual sal_Bool    leaveState(WizardState _nState);
     virtual ::svt::IWizardPageController*
                         getPageController( TabPage* _pCurrentPage ) const;
-    virtual sal_Bool    onFinish(sal_Int32 _nResult);
+    virtual sal_Bool    onFinish();
 
 protected:
     inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
