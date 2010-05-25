@@ -35,6 +35,12 @@ private const SOURCE_PATH = "framework\optional\input\CJK\"
 
 testcase tTextGridDialog_1
 
+    dim lsSave( 3 ) as string
+    dim lbSave( 3 ) as string
+
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
+
     '/// Check if tabpage 'Text Grid' disappears when "Asian Language support" is NOT checked
     if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
         Call CheckAsianLanguageSupport("Off")
@@ -82,8 +88,8 @@ testcase tTextGridDialog_1
 
    Kontext "ExtrasOptionenDlg"
    hCloseDialog( ExtrasOptionenDlg, "ok" )
+   hFileCloseAll()
 
-    hCloseDocument()
 endcase
 
 '-------------------------------------------------------------------------
@@ -116,12 +122,13 @@ testcase tTextGridDialog_2
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
+    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     '/// In No Grid mode, there should be only 1 page, the focus is before the first line
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Call DocumentWriter.TypeKeys  "<Shift Left>"
     hUseAsyncSlot( "EditCopy" )
 
@@ -161,11 +168,12 @@ testcase tTextGridDialog_3
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
+    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Call DocumentWriter.TypeKeys  "<Shift Left>"
     hUseAsyncSlot( "EditCopy" )
 
@@ -208,11 +216,12 @@ testcase tTextGridDialog_4
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
+    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Call DocumentWriter.TypeKeys  "<Shift Left>"
     hUseAsyncSlot( "EditCopy" )
 
@@ -294,10 +303,8 @@ testcase  tGridDisplay_1
         endif
     else
         Kontext "Printing"
-        if( Printing.exists( 1 )) then
-            Printing.OK
-            Printing.notExists( 5 )
-        endif
+        hCloseDialog( Printing, "ok" )
+
         kontext
         if ( active.exists( 2 ) ) then
             qaErrorLog active.getText
@@ -402,7 +409,7 @@ testcase tFontSizeChanges_1
     endif
 
     Kontext "DocumentWriter"
-    sleep 3
+    wait( 200 ) ' sleep 3
     Call DocumentWriter.TypeKeys  "<Shift Right>"
 
     hUseAsyncSlot( "EditCopy" )
@@ -445,7 +452,7 @@ testcase tRubyText_1
     hUseAsyncSlot( "FormatAutoformatApply" )
     WaitSlot( 3000 )
     Call DocumentWriter.TypeKeys  "<End>"
-    Sleep 2
+    wait( 200 ) ' sleep 2
     Call DocumentWriter.TypeKeys  "<Shift Left>"
     hUseAsyncSlot( "EditCopy" )
 
@@ -473,11 +480,11 @@ testcase tIndentsTest_1
     sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Down>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Call DocumentWriter.TypeKeys  "<Tab>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Call DocumentWriter.TypeKeys  "<End>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
 
     '/// Active navigator dialogue , check if the page number is 1
     Kontext
@@ -485,16 +492,16 @@ testcase tIndentsTest_1
     Kontext "NavigatorWriter"
     if Seitennummer.GetText <> sCorrectPage1 then Warnlog "First test :Something wrong in indents test!"
     kontext "Navigator"
-    hCloseDialog( Navigator, "cancel" )
+    hCloseDialog( Navigator, "close" )
 
     '/// press TAB in second line again
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Home>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Call DocumentWriter.TypeKeys  "<Tab>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Call DocumentWriter.TypeKeys  "<End>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
 
     '/// Active navigator dialogue , check if the page number is 2
     Kontext
@@ -502,7 +509,7 @@ testcase tIndentsTest_1
     Kontext "NavigatorWriter"
     if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Second test :Something wrong in indents test!"
     kontext "Navigator"
-    hCloseDialog( Navigator, "cancel" )
+    hCloseDialog( Navigator, "close" )
 
     Call hCloseDocument
 endcase
@@ -525,9 +532,9 @@ testcase tObjectsTest_1
 
     '/// If object is anchored as Character , check if it will snap to the appropriate grid cell
     fStartupNavigator( "OLEObject" , 1 )
-    Sleep 1
+    wait( 200 ) ' sleep 1
     Auswahlliste.TypeKeys "<Return>"
-    Sleep 1
+    wait( 200 ) ' sleep 1
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
@@ -539,7 +546,7 @@ testcase tObjectsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText   sCorrectPage2
-    WaitSlot( 5000 ) ' Sleep 5
+    WaitSlot( 5000 ) ' wait( 200 ) ' sleep 5
     if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Something wrong when object is anchored as Character!"
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
@@ -556,7 +563,7 @@ testcase tObjectsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText   sCorrectPage2
-    WaitSlot( 5000 ) ' Sleep 5
+    WaitSlot( 5000 ) ' wait( 200 ) ' sleep 5
     if Seitennummer.GetText <> sCorrectPage1 then Warnlog "Something wrong when object is anchored to Character!"
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
