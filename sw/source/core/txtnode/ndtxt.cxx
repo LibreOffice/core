@@ -1196,60 +1196,109 @@ BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
     return bRet;
 }
 
-
-// gebe das vorgegebene Attribut, welches an der TextPosition (rIdx)
-// gesetzt ist, zurueck. Gibt es keines, returne 0-Pointer.
-// (gesetzt heisst, je nach bExpand ?
-//                                    Start < rIdx <= End
-//                                  : Start <= rIdx < End )
-
-SwTxtAttr* SwTxtNode::GetTxtAttr( const SwIndex& rIdx, USHORT nWhichHt,
-                                  BOOL bExpand ) const
+static bool lcl_GetTxtAttrDefault(xub_StrLen const nIndex,
+    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
 {
-    const SwTxtAttr* pRet = 0;
-    const SwTxtAttr* pHt = 0;
-    const xub_StrLen *pEndIdx = 0;
-    const xub_StrLen nIdx = rIdx.GetIndex();
-    const USHORT  nSize = m_pSwpHints ? m_pSwpHints->Count() : 0;
+    return ((nHintStart <= nIndex) && (nIndex <  nHintEnd));
+}
+static bool lcl_GetTxtAttrExpand(xub_StrLen const nIndex,
+    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+{
+    return ((nHintStart <  nIndex) && (nIndex <= nHintEnd));
+}
+static bool lcl_GetTxtAttrParent(xub_StrLen const nIndex,
+    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+{
+    return ((nHintStart <  nIndex) && (nIndex <  nHintEnd));
+}
+
+static void
+lcl_GetTxtAttrs(
+    ::std::vector<SwTxtAttr *> *const pVector, SwTxtAttr **const ppTxtAttr,
+    SwpHints *const pSwpHints,
+    xub_StrLen const nIndex, RES_TXTATR const nWhich,
+    enum SwTxtNode::GetTxtAttrMode const eMode)
+{
+    USHORT const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
+    xub_StrLen nPreviousIndex(0); // index of last hint with nWhich
+    bool (*pMatchFunc)(xub_StrLen const, xub_StrLen const, xub_StrLen const)=0;
+    switch (eMode)
+    {
+        case SwTxtNode::DEFAULT:   pMatchFunc = &lcl_GetTxtAttrDefault; break;
+        case SwTxtNode::EXPAND:    pMatchFunc = &lcl_GetTxtAttrExpand;  break;
+        case SwTxtNode::PARENT:    pMatchFunc = &lcl_GetTxtAttrParent;  break;
+        default: OSL_ASSERT(false);
+    }
 
     for( USHORT i = 0; i < nSize; ++i )
     {
-        // ist der Attribut-Anfang schon groesser als der Idx ?
-        pHt = (*m_pSwpHints)[i];
-        if ( nIdx < *(pHt->GetStart()) )
-            break;          // beenden, kein gueltiges Attribut
-
-        // ist es das gewuenschte Attribut ?
-        if( pHt->Which() != nWhichHt )
-            continue;       // nein, weiter
-
-        pEndIdx = pHt->GetEnd();
-        // liegt innerhalb des Bereiches ??
-        if( !pEndIdx )
+        SwTxtAttr *const pHint = pSwpHints->GetTextHint(i);
+        xub_StrLen const nHintStart( *(pHint->GetStart()) );
+        if (nIndex < nHintStart)
         {
-            if( *pHt->GetStart() == nIdx )
-            {
-                pRet = pHt;
-                break;
-            }
+            return; // hints are sorted by start, so we are done...
         }
-        else if( *pHt->GetStart() <= nIdx && nIdx <= *pEndIdx )
+
+        if (pHint->Which() != nWhich)
         {
+            continue;
+        }
+
+        xub_StrLen const*const pEndIdx = pHint->GetEnd();
+        ASSERT(pEndIdx || pHint->HasDummyChar(),
+                "hint with no end and no dummy char?");
             // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
             // simuliert, d.h. der Start wuede verschoben, das Ende expandiert,
-            if( bExpand )
+        bool const bContained( (pEndIdx)
+            ? (*pMatchFunc)(nIndex, nHintStart, *pEndIdx)
+            : (nHintStart == nIndex) );
+        if (bContained)
+        {
+            if (pVector)
             {
-                if( *pHt->GetStart() < nIdx )
-                    pRet = pHt;
+                if (nPreviousIndex < nHintStart)
+                {
+                    pVector->clear(); // clear hints that are outside pHint
+                    nPreviousIndex = nHintStart;
+                }
+                pVector->push_back(pHint);
             }
             else
             {
-                if( nIdx < *pEndIdx )
-                    pRet = pHt;     // den am dichtesten liegenden
+                *ppTxtAttr = pHint; // and possibly overwrite outer hint
+            }
+            if (!pEndIdx)
+            {
+                break;
             }
         }
     }
-    return (SwTxtAttr*)pRet;        // kein gueltiges Attribut gefunden !!
+}
+
+::std::vector<SwTxtAttr *>
+SwTxtNode::GetTxtAttrsAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+                        enum GetTxtAttrMode const eMode) const
+{
+    ::std::vector<SwTxtAttr *> ret;
+    lcl_GetTxtAttrs(& ret, 0, m_pSwpHints, nIndex, nWhich, eMode);
+    return ret;
+}
+
+SwTxtAttr *
+SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+                        enum GetTxtAttrMode const eMode) const
+{
+    ASSERT(    (nWhich == RES_TXTATR_META)
+            || (nWhich == RES_TXTATR_METAFIELD)
+            || (nWhich == RES_TXTATR_AUTOFMT)
+            || (nWhich == RES_TXTATR_INETFMT)
+            || (nWhich == RES_TXTATR_CJK_RUBY)
+            || (nWhich == RES_TXTATR_UNKNOWN_CONTAINER),
+        "GetTxtAttrAt() will give wrong result for this hint!");
+
+    SwTxtAttr * pRet(0);
+    lcl_GetTxtAttrs(0, & pRet, m_pSwpHints, nIndex, nWhich, eMode);
+    return pRet;
 }
 
 /*************************************************************************
@@ -2885,6 +2934,51 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 
     return bRet;
 }
+
+// --> OD 2010-01-05 #b6884103#
+SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
+{
+    SwTwips nAdditionalIndent = 0;
+
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    if ( pRule )
+    {
+        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+        {
+            nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+
+            if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+            {
+                nAdditionalIndent = nAdditionalIndent -
+                                    GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+            }
+        }
+        else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            if ( AreListLevelIndentsApplicable() )
+            {
+                nAdditionalIndent = rFmt.GetIndentAt() + rFmt.GetFirstLineIndent();
+            }
+            else
+            {
+                nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+                if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                {
+                    nAdditionalIndent = nAdditionalIndent -
+                                        GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+                }
+            }
+        }
+    }
+    else
+    {
+        nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+    }
+
+    return nAdditionalIndent;
+}
+// <--
 
 // --> OD 2008-12-02 #i96772#
 void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const

@@ -34,7 +34,7 @@
 #define MN_READONLY_OPENURL             (RC_DOCVW_BEGIN + 2)
 #define MN_READONLY_OPENURLNEW          (RC_DOCVW_BEGIN + 3)
 #define MN_READONLY_EDITDOC             (RC_DOCVW_BEGIN + 4)
-#define MN_READONLY_BROWSE_STOP         (RC_DOCVW_BEGIN + 5)
+    // FREE, formerly known as MN_READONLY_BROWSE_STOP
 #define MN_READONLY_BROWSE_BACKWARD     (RC_DOCVW_BEGIN + 6)
 #define MN_READONLY_BROWSE_FORWARD      (RC_DOCVW_BEGIN + 7)
 #define MN_READONLY_SELECTION_MODE      (RC_DOCVW_BEGIN + 8)
@@ -80,17 +80,6 @@
 #define STR_TABLE_SELECT_COL            (RC_DOCVW_BEGIN + 20)
 
 #define STR_SMARTTAG_CLICK              (RC_DOCVW_BEGIN + 21)
-
-#define STR_POSTIT_TODAY                (RC_DOCVW_BEGIN + 22)
-#define STR_POSTIT_YESTERDAY            (RC_DOCVW_BEGIN + 23)
-
-#define STR_DELETE_ALL_NOTES            (RC_DOCVW_BEGIN + 24)
-#define STR_DELETE_AUTHOR_NOTES         (RC_DOCVW_BEGIN + 25)
-
-#define STR_NODATE                      (RC_DOCVW_BEGIN + 26)
-#define STR_NOAUTHOR                    (RC_DOCVW_BEGIN + 27)
-
-#define STR_REPLY                       (RC_DOCVW_BEGIN + 28)
 
 #define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
 

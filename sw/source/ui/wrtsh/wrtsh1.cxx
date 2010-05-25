@@ -644,7 +644,7 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
 void SwWrtShell::LaunchOLEObj( long nVerb )
 {
     if ( GetCntType() == CNT_OLE &&
-         !GetView().GetViewFrame()->GetFrame()->IsInPlace() )
+         !GetView().GetViewFrame()->GetFrame().IsInPlace() )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
         ASSERT( xRef.is(), "OLE not found" );
@@ -1378,10 +1378,13 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         if ( pTxtNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            short nTxtNodeFirstLineOffset( 0 );
-            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
-            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
-                                           nTxtNodeFirstLineOffset;
+            // --> OD 2010-01-05 #b6884103#
+//            short nTxtNodeFirstLineOffset( 0 );
+//            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
+//            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
+//                                           nTxtNodeFirstLineOffset;
+            const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
+            // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
                 const SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;
@@ -1473,7 +1476,7 @@ SelectionType SwWrtShell::GetSelectionType() const
 //      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
-    if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->GetActivePostIt() )
+    if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
         return nsSelectionType::SEL_POSTIT;
      int nCnt;
 
@@ -1805,7 +1808,7 @@ BOOL SwWrtShell::Pop( BOOL bOldCrsr )
  --------------------------------------------------------------------*/
 BOOL SwWrtShell::CanInsert()
 {
-    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActivePostIt()!= NULL)));
+    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
 
 // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden

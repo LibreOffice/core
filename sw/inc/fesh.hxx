@@ -476,7 +476,7 @@ public:
     void EndTextEdit();             //Loescht ggf. das Objekt.
 
     //Ankertyp des selektierten Objektes, -1 bei Uneindeutigkeit oder
-    //Rahmenselektion; FLY_PAGE bzw. FLY_AT_CNTNT aus frmatr.hxx sonst.
+    //Rahmenselektion; FLY_AT_PAGE bzw. FLY_AT_PARA aus frmatr.hxx sonst.
     short GetAnchorId() const;
 
     //Erzeugen von DrawObjekten, beim Begin wird der Objekttyp mitgegeben.
@@ -536,10 +536,10 @@ public:
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
-    //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-    // angemeldet sein.
-    void Insert( SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet = 0,
-                SwFrmFmt* = 0, const Point* = 0 );
+
+    // Insertion of a drawing object which have to be already inserted in the DrawModel
+    void InsertDrawObj( SdrObject& rDrawObj,
+                        const Point& rInsertPosition );
 
     BOOL ReplaceSdrObj( const String& rGrfName, const String& rFltName,
                         const Graphic* pGrf = 0 );

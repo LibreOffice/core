@@ -710,8 +710,9 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
         SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
         ASSERT( pTNd, "Wo ist mein CntntNode?" );
 
-        SwTxtFld* pTxtFld = (SwTxtFld*)pTNd->GetTxtAttr( rPos.nContent,
-                                                        RES_TXTATR_FIELD );
+        SwTxtFld * pTxtFld = static_cast<SwTxtFld *>(
+            pTNd->GetTxtAttrForCharAt(rPos.nContent.GetIndex(),
+                RES_TXTATR_FIELD));
         BOOL bDelFld = 0 == pTxtFld;
         if( bDelFld )
         {
@@ -1005,9 +1006,9 @@ BOOL SwCrsrShell::IsPageAtPos( const Point &rPt ) const
 }
 
 BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
-                                        SwContentAtPos& rCntntAtPos,
-                                        BOOL bSetCrsr,
-                                        SwRect* pFldRect )
+                                   SwContentAtPos& rCntntAtPos,
+                                   BOOL bSetCrsr,
+                                   SwRect* pFldRect )
 {
     SET_CURR_SHELL( this );
     BOOL bRet = FALSE;
@@ -1242,13 +1243,27 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 {
                     pTxtAttr = 0;
                     if( SwContentAtPos::SW_TOXMARK & rCntntAtPos.eCntntAtPos )
-                        pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent,
-                                                        RES_TXTATR_TOXMARK );
+                    {
+                        ::std::vector<SwTxtAttr *> const marks(
+                            pTxtNd->GetTxtAttrsAt(
+                               aPos.nContent.GetIndex(), RES_TXTATR_TOXMARK));
+                        if (marks.size())
+                        {   // hmm... can only return 1 here
+                            pTxtAttr = *marks.begin();
+                        }
+                    }
 
                     if( !pTxtAttr &&
                         SwContentAtPos::SW_REFMARK & rCntntAtPos.eCntntAtPos )
-                        pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent,
-                                                        RES_TXTATR_REFMARK );
+                    {
+                        ::std::vector<SwTxtAttr *> const marks(
+                            pTxtNd->GetTxtAttrsAt(
+                               aPos.nContent.GetIndex(), RES_TXTATR_REFMARK));
+                        if (marks.size())
+                        {   // hmm... can only return 1 here
+                            pTxtAttr = *marks.begin();
+                        }
+                    }
 
                     if( pTxtAttr )
                     {
@@ -1293,8 +1308,8 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( !bRet && SwContentAtPos::SW_INETATTR & rCntntAtPos.eCntntAtPos
                     && !aTmpState.bFtnNoInfo )
                 {
-                    pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent,
-                                                    RES_TXTATR_INETFMT );
+                    pTxtAttr = pTxtNd->GetTxtAttrAt(
+                            aPos.nContent.GetIndex(), RES_TXTATR_INETFMT);
                     // nur INetAttrs mit URLs "erkennen"
                     if( pTxtAttr && pTxtAttr->GetINetFmt().GetValue().Len() )
                     {
@@ -1629,8 +1644,11 @@ BOOL SwCrsrShell::SelectTxtAttr( USHORT nWhich, BOOL bExpand,
         if( !pTxtAttr )
         {
             SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-            pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( rPos.nContent,
-                                                    nWhich, bExpand ) : 0;
+            pTxtAttr = (pTxtNd)
+                ? pTxtNd->GetTxtAttrAt(rPos.nContent.GetIndex(),
+                        static_cast<RES_TXTATR>(nWhich),
+                        (bExpand) ? SwTxtNode::EXPAND : SwTxtNode::DEFAULT)
+                : 0;
         }
 
         if( pTxtAttr )

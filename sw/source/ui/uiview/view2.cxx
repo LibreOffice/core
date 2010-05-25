@@ -72,7 +72,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <editeng/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/ptitem.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -126,7 +125,6 @@
 #include <dbmgr.hxx>
 
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 
 #include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
@@ -1028,7 +1026,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if(bQuery)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
-                SfxHelp::OpenHelpAgent( pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
+                SfxHelp::OpenHelpAgent( &pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,
@@ -1370,12 +1368,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 {
                                     ASSERT( !this,
                                         "was ist das fuer ein Verzeichnis?" );
-                                    sStr = pCurrSect->GetName();
+                                    sStr = pCurrSect->GetSectionName();
                                 }
                             }
                             break;
                         default:
-                            sStr = pCurrSect->GetName();
+                            sStr = pCurrSect->GetSectionName();
                             break;
                         }
                     }
@@ -1761,8 +1759,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         break;
         case SID_ATTR_INSERT:
             SwPostItMgr* pMgr = GetPostItMgr();
-            if (pMgr && pMgr->GetActivePostIt())
-                pMgr->GetActivePostIt()->ToggleInsMode();
+            if ( pMgr && pMgr->HasActiveSidebarWin() )
+            {
+                pMgr->ToggleInsModeOnActiveSidebarWin();
+            }
             else
                 rSh.ToggleInsMode();
             bUp = TRUE;
@@ -1776,9 +1776,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         rBnd.Update(nWhich);
     }
 }
-
-
-
 
 void SwView::InsFrmMode(USHORT nCols)
 {

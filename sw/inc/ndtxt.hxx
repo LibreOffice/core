@@ -363,14 +363,30 @@ public:
     BOOL DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
                         BOOL bFmtToTxtAttributes = TRUE );
 
-    // gebe das vorgegebene Attribut, welches an der TextPosition (rIdx)
-    // gesetzt ist zurueck. Gibt es keines, returne 0-Pointer
-    // gesetzt heisst: Start <= rIdx < End
-    // FIXME: this function does not seem to be well-defined for those
-    // hints of which several may cover a single position, like TOXMark,
-    // or CharFmt
-    SwTxtAttr *GetTxtAttr( const SwIndex& rIdx, USHORT nWhichHt,
-                           BOOL bExpand = FALSE ) const;
+    enum GetTxtAttrMode {
+        DEFAULT,    /// DEFAULT: (Start <  nIndex <= End)
+        EXPAND,     /// EXPAND : (Start <= nIndex <  End)
+        PARENT,     /// PARENT : (Start <  nIndex <  End)
+    };
+
+    /** get the innermost text attribute covering position nIndex.
+        @param nWhich   only attribute with this id is returned.
+        @param eMode    the predicate for matching (@see GetTxtAttrMode).
+
+        ATTENTION: this function is not well-defined for those
+        hints of which several may cover a single position, like
+        RES_TXTATR_CHARFMT, RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK
+     */
+    SwTxtAttr *GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+                            enum GetTxtAttrMode const eMode = DEFAULT) const;
+
+    /** get the innermost text attributes covering position nIndex.
+        @param nWhich   only attributes with this id are returned.
+        @param eMode    the predicate for matching (@see GetTxtAttrMode).
+     */
+    ::std::vector<SwTxtAttr *> GetTxtAttrsAt(xub_StrLen const nIndex,
+                            RES_TXTATR const nWhich,
+                            enum GetTxtAttrMode const eMode = DEFAULT) const;
 
     /** get the text attribute at position nIndex which owns
         the dummy character CH_TXTATR_* at that position, if one exists.
@@ -487,6 +503,10 @@ public:
        @retval FALSE  else
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+
+    // --> OD 2010-01-05 #b6884103#
+    SwTwips GetAdditionalIndentForStartingNewList() const;
+    // <--
 
     // --> OD 2008-12-02 #i96772#
     void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;
