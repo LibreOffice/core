@@ -1364,6 +1364,18 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 }
 
 
+bool SwDocShell::IsChangeRecording() const
+{
+    return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
+}
+
+
+bool SwDocShell::HasChangeRecordProtection() const
+{
+    return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
+}
+
+
 void SwDocShell::SetChangeRecording( bool bActivate )
 {
     USHORT nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
@@ -1379,10 +1391,9 @@ bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
     const SfxPoolItem*  pItem = NULL;
 
     IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
-
     Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
     if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
-        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() != 0))
+        && ((SfxBoolItem*)pItem)->GetValue() == aPasswd.getLength() > 0)
         return false;
 
     bool bRes = false;

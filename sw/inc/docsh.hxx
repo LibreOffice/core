@@ -306,6 +306,8 @@ public:
 
     // passwword protection for Writer (derived from SfxObjectShell)
     // see also:    FN_REDLINE_ON, FN_REDLINE_ON
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
     virtual void    SetChangeRecording( bool bActivate );
     virtual bool    SetProtectionPassword( const String &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );

@@ -545,6 +545,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     else
                         pParent = &GetViewFrame()->GetWindow();
                     SfxPasswordDialog aPasswdDlg( pParent );
+                    aPasswdDlg.SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
                     aPasswdDlg.Execute();
                     String sNewPasswd( aPasswdDlg.GetPassword() );
@@ -581,6 +582,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             else
                 pParent = &GetViewFrame()->GetWindow();
             SfxPasswordDialog aPasswdDlg( pParent );
+            aPasswdDlg.SetMinLen( 1 );
             if(!aPasswd.getLength())
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
