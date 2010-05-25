@@ -1674,6 +1674,11 @@ void SdrEdgeObj::SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly )
         *pEdgeTrack = XPolygon( rPoly.getB2DPolygon( 0 ) );
         bEdgeTrackDirty = sal_False;
         bEdgeTrackUserDefined = sal_True;
+
+        // #i110629# also set aRect and maSnapeRect dependent from pEdgeTrack
+        const Rectangle aPolygonBounds(pEdgeTrack->GetBoundRect());
+        aRect = aPolygonBounds;
+        maSnapRect = aPolygonBounds;
     }
 }
 
@@ -2206,17 +2211,31 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
 
 void SdrEdgeObj::NbcSetSnapRect(const Rectangle& rRect)
 {
-    Rectangle aOld(GetSnapRect());
-    long nMulX = rRect.Right()  - rRect.Left();
-    long nDivX = aOld.Right()   - aOld.Left();
-    long nMulY = rRect.Bottom() - rRect.Top();
-    long nDivY = aOld.Bottom()  - aOld.Top();
-    if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
-    if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
-    Fraction aX(nMulX, nDivX);
-    Fraction aY(nMulY, nDivY);
-    NbcResize(aOld.TopLeft(), aX, aY);
-    NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
+    const Rectangle aOld(GetSnapRect());
+
+    if(aOld != rRect)
+    {
+        if(aRect.IsEmpty() && 0 == pEdgeTrack->GetPointCount())
+        {
+            // #i110629# When initializing, do not scale on empty Rectangle; this
+            // will mirror the underlying text object (!)
+            aRect = rRect;
+            maSnapRect = rRect;
+        }
+        else
+        {
+            long nMulX = rRect.Right()  - rRect.Left();
+            long nDivX = aOld.Right()   - aOld.Left();
+            long nMulY = rRect.Bottom() - rRect.Top();
+            long nDivY = aOld.Bottom()  - aOld.Top();
+            if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
+            if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
+            Fraction aX(nMulX, nDivX);
+            Fraction aY(nMulY, nDivY);
+            NbcResize(aOld.TopLeft(), aX, aY);
+            NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
+        }
+    }
 }
 
 void SdrEdgeObj::NbcMove(const Size& rSiz)
