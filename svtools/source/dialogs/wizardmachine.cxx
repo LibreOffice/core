@@ -30,6 +30,7 @@
 #include <svtools/wizardmachine.hxx>
 #include <svtools/helpid.hrc>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <svtools/svtdata.hxx>
 #ifndef _SVTOOLS_HRC
@@ -101,7 +102,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardPage::commitPage( CommitPageReason )
+    sal_Bool OWizardPage::commitPage( WizardTypes::CommitPageReason )
     {
         return sal_True;
     }
@@ -419,9 +420,10 @@ namespace svt
     void OWizardMachine::enterState(WizardState _nState)
     {
         // tell the page
-        IWizardPage* pCurrentPage = getWizardPage(GetPage(_nState));
-        if ( pCurrentPage )
-            pCurrentPage->initializePage();
+        IWizardPageController* pController = getPageController( GetPage( _nState ) );
+        OSL_ENSURE( pController, "OWizardMachine::enterState: no controller for the given page!" );
+        if ( pController )
+            pController->initializePage();
 
         if ( isAutomaticNextButtonStateEnabled() )
             enableButtons( WZB_NEXT, canAdvance() );
@@ -471,10 +473,9 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
-        IWizardPage* pCurrentPage = getWizardPage(GetPage(getCurrentState()));
-        if ( pCurrentPage )
-            return pCurrentPage->commitPage( _eReason );
-        return sal_True;
+        IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        ENSURE_OR_RETURN( pController != NULL, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", sal_True );
+        return pController->commitPage( _eReason );
     }
 
     //---------------------------------------------------------------------
@@ -688,10 +689,10 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IWizardPage* OWizardMachine::getWizardPage(TabPage* _pCurrentPage) const
+    IWizardPageController* OWizardMachine::getPageController( TabPage* _pCurrentPage ) const
     {
-        OWizardPage* pPage = dynamic_cast< OWizardPage* >( _pCurrentPage );
-        return pPage;
+        IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
+        return pController;
     }
 
     //---------------------------------------------------------------------
@@ -714,11 +715,12 @@ namespace svt
     //---------------------------------------------------------------------
     void OWizardMachine::updateTravelUI()
     {
-        OWizardPage* pPage = dynamic_cast< OWizardPage* >( GetPage( getCurrentState() ) );
+        const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        OSL_ENSURE( pController != NULL, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
 
         bool bCanAdvance =
-                ( !pPage || pPage->canAdvance() )   // the current page allows to advance
-            &&  canAdvance();                       // the dialog as a whole allows to advance
+                ( !pController || pController->canAdvance() )   // the current page allows to advance
+            &&  canAdvance();                                   // the dialog as a whole allows to advance
         enableButtons( WZB_NEXT, bCanAdvance );
     }
 

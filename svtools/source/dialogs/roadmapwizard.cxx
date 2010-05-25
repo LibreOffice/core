@@ -398,8 +398,14 @@ namespace svt
         }
 
         // can we advance from the current page?
-        const OWizardPage* pCurrentPage = dynamic_cast< const OWizardPage* >( GetPage( getCurrentState() ) );
-        const bool bCurrentPageCanAdvance = !pCurrentPage || pCurrentPage->canAdvance();
+        bool bCurrentPageCanAdvance = true;
+        TabPage* pCurrentPage = GetPage( getCurrentState() );
+        if ( pCurrentPage )
+        {
+            const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+            OSL_ENSURE( pController != NULL, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
+            bCurrentPageCanAdvance = !pController || pController->canAdvance();
+        }
 
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary

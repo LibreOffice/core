@@ -66,7 +66,7 @@ namespace svt
         };
     };
 
-    class SAL_NO_VTABLE IWizardPage : public WizardTypes
+    class SAL_NO_VTABLE IWizardPageController
     {
     public:
         //-----------------------------------------------------------------
@@ -77,7 +77,16 @@ namespace svt
         // to be committed for this.
         // So initializePage and commitPage are designated to initialitzing/committing data on the page.
         virtual void        initializePage() = 0;
-        virtual sal_Bool    commitPage( CommitPageReason _eReason ) = 0;
+        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason ) = 0;
+
+        /** determines whether or not it is allowed to advance to a next page
+
+            You should make this dependent on the current state of the page only, not on
+            states on other pages of the whole dialog.
+
+            The default implementation always returns <TRUE/>.
+        */
+        virtual bool    canAdvance() const = 0;
     };
 
     //=====================================================================
@@ -86,7 +95,7 @@ namespace svt
     class OWizardMachine;
     struct WizardPageImplData;
 
-    class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPage
+    class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {
     private:
         WizardPageImplData*     m_pImpl;
@@ -100,23 +109,10 @@ namespace svt
         OWizardPage( Window* _pParent, const ResId& _rResId );
         ~OWizardPage();
 
-        // This methods  behave somewhat different than ActivatePage/DeactivatePage
-        // The latter are handled by the base class itself whenever changing the pages is in the offing,
-        // i.e., when it's already decided which page is the next.
-        // We may have situations where the next page depends on the state of the current, which needs
-        // to be committed for this.
-        // So initializePage and commitPage are designated to initialitzing/committing data on the page.
+        // IWizardPageController overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
-
-        /** determines whether or not it is allowed to advance to a next page
-
-            You should make this dependent on the current state of the page only, not on
-            states on other pages of the whole dialog.
-
-            The default implementation always returns <TRUE/>.
-        */
-        virtual bool    canAdvance() const;
+        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason );
+        virtual bool        canAdvance() const;
 
     protected:
         // TabPage overridables
@@ -342,7 +338,8 @@ namespace svt
         */
         WizardState             getCurrentState() const { return WizardDialog::GetCurLevel(); }
 
-        virtual IWizardPage*    getWizardPage(TabPage* _pCurrentPage) const;
+        virtual IWizardPageController*
+                                getPageController( TabPage* _pCurrentPage ) const;
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
