@@ -31,45 +31,6 @@
 '*
 '\******************************************************************************
 
-'Functions:
-' #1 hFindSpellHypLanguage
-' #1 GetDecimalSeperator
-' #1 LiberalMeasurement
-' #1 GetMeasUnit
-' #1 StrToDouble
-' #1 fGetPositionX
-' #1 setStartCurrentPage
-' #1 fIsDocumentWritable
-' #1 fIsDocumentWritable
-' #1 fGetSizeXY
-' #1 hCallExport
-' #1 checkexppdfwaitmax10sec
-' #1 fCompareTwoValues
-' #1 fConvertBackslashToSlash
-' #1 hScreenFontAntialiasing
-' #1 fSaveLoadAllFormats
-' #1 setCharacterLanguage
-' #1 toggleGermanSpellchecking
-' #1 sAnalyseContextMenu
-' #1 sLongToBinary
-' #1 sBinaryToLong
-' #1 fGetIntoDictionary
-' #1 hSelectInList
-' #1 hWalkTheStyles2
-' #1 fGetSlideNumber
-' #1 fGetSlideCount
-' #1 fGetSlideName
-' #1 fGetSetPageBackground
-' #1 CreateTextSetEffectAndAngle
-' #1 fGetPresentationStyle
-' #1 hPrepareSearchBUG
-' #1 makeNumOutOfText
-' #1 wIgnorierenlisteLoeschen
-' #1 optionstest
-' #1 optionstest2
-
-
-'\*****************************************************************
 function hFindSpellHypLanguage (optional sBooks()) as string
     printlog "print all available languages that have a language module"
     dim iListLength as integer
@@ -98,8 +59,7 @@ function hFindSpellHypLanguage (optional sBooks()) as string
         ModuleBearbeiten.Close
         Kontext "ExtrasOptionenDlg"
         printlog "close dialog 'Options - '"
-        ExtrasOptionenDlg.OK
-        sleep 1
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     endif
 end function
 
@@ -235,19 +195,21 @@ function fGetPositionX () as string
 
    fGetPositionX = ""
    try
-      ContextPositionAndSize
+       ContextPositionAndSize
+
+       kontext
+       active.SetPage TabPositionAndSize
+       kontext "TabPositionAndSize"
+       if ( TabPositionAndSize.exists( 5 ) ) then
+          fGetPositionX = PositionX.GetText()
+          TabPositionAndSize.OK()
+       else
+          warnlog( "Couldn't switch to <TabPositionAndSize>" )
+       endif
    catch
-      warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
+       warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
    endcatch
-   kontext
-   active.SetPage TabPositionAndSize
-   kontext "TabPositionAndSize"
-   if TabPositionAndSize.exists (5) then
-      fGetPositionX = PositionX.GetText
-      TabPositionAndSize.OK
-   else
-      warnlog "Couldn't switch tab page :-( "
-   endif
+
 end function
 
 '-------------------------------------------------------------------------------
@@ -266,7 +228,7 @@ function setStartCurrentPage(optional bState as boolean) as boolean
         endif
     Kontext "ExtrasOptionenDlg"
     printlog "+ close dialog 'Options - Presenation - General' with OK "
-    ExtrasOptionenDlg.OK
+    hCloseDialog( ExtrasOptionenDlg, "ok" )
 end function
 
 '-------------------------------------------------------------------------------
@@ -278,11 +240,11 @@ function fIsDocumentWritable() as boolean
     printlog " true if the document is writeable otherwise false"
 
     Kontext "Standardbar"
-        if Bearbeiten.GetState(2) <> 1 then
-            fIsDocumentWritable = false
-        else
-            fIsDocumentWritable = true
-        endif
+    if Bearbeiten.GetState( 2 ) <> 1 then
+        fIsDocumentWritable = false
+    else
+        fIsDocumentWritable = true
+    endif
 
 end function
 
@@ -295,17 +257,17 @@ function fMakeDocumentWritable() as boolean
     printlog " true if the document can make writeable otherwise false"
 
     Kontext "Standardbar"
-    sleep (1)
+    sleep ( 1 )
         if Bearbeiten.GetState(2) <> 1 then
             Bearbeiten.Click
             Kontext
-                if Active.Exists(1) then
-                    Active.Yes
-                    fMakeDocumentWritable = true
-                else
-                    warnlog "No messagebox after making document editable?"
-                    fMakeDocumentWritable = false
-                endif
+            if Active.Exists(1) then
+                Active.Yes
+                fMakeDocumentWritable = true
+            else
+                warnlog "No messagebox after making document editable?"
+                fMakeDocumentWritable = false
+            endif
         else
             printlog "Document is allready writable."
             fMakeDocumentWritable = true
@@ -323,6 +285,7 @@ function fGetSizeXY (sX as string, sY as string, bGet as boolean) as Boolean
    bReturn = True
    try
       ContextPositionAndSize
+      exit function
    catch
       warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
    endcatch

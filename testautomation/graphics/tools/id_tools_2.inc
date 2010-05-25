@@ -31,58 +31,6 @@
 '*
 '\******************************************************************************
 
-'Subs:
-' #1 sFileExport
-' #1 callAutocorrectOptions
-' #1 sCheckCheck
-' #1 sCheckUnderlined
-' #1 sCheckSupperscript
-' #1 sCheckDash
-' #1 sPrintCheckOrder
-' #1 writertest
-' #1 calctest
-' #1 tClipboardFromDrawTest
-' #1 Select_Copy
-' #1 SaveMeasurementSetFirst
-' #1 MeasurementSetFirst
-' #1 ResetMeasurement
-' #1 SetKontextApplication
-' #1 hSetSpellHypLanguage
-' #1 hTBOtypeInDoc
-' #1 Position_Vergleichen
-' #1 g_demoguide
-' #1 sFormatTextDrawAnimation
-' #1 mouseclickinpresentation
-' #1 im_002_
-' #1 im_003_
-' #1 im_004_
-' #1 im_005_
-' #1 im_007_
-' #1 im_011_
-' #1 D_002_
-' #1 D_003_
-' #1 D_005_
-' #1 d_007
-' #1 hOpenGallery
-' #1 LoadGraphic
-' #1 CheckGraphic 
-' #1 GetOnlyGraphics
-' #1 tSettingsToCM
-' #1 tResetSettings
-' #1 id_001
-' #1 id_002
-' #1 id_003
-' #1 id_004
-' #1 id_005
-' #1 id_006
-' #1 id_007
-' #1 id_008
-' #1 id_009
-' #1 id_011
-' #1 hWalkTheStyles
-
-'\*****************************************************************
-
 sub sFileExport
 
     printlog " just exporting is done in qatesttool/framework/first test: 'tGraphicExport' but there is no loading, "

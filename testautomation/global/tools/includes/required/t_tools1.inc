@@ -836,16 +836,14 @@ function ActiveDeactivateAsianSupport ( WhatState as Boolean ) as Boolean
         gAsianSup = WhatState    ' Set the global variable
 
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     else
         ActiveDeactivateAsianSupport = TRUE
         If WhatState = FALSE then
             warnlog "Deactivating of asian language support is not possible, because it is disabled in cjk versions"
         end if
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     end if
 
 end function
@@ -875,16 +873,14 @@ function ActiveDeactivateCTLSupport ( WhatState as Boolean ) as Boolean
         gCTLSup = WhatState    ' Set the global variable
 
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     else
         ActiveDeactivateCTLSupport = TRUE
         If WhatState = FALSE then
             warnlog "Deactivating of CTL language support is not possible, because it is disabled in ctl versions"
         end if
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     end if
 
 end function
@@ -1123,34 +1119,30 @@ end sub
 sub raiseApplication
 
     ' Try to solve focus problem on MacOS X; After calling this function, OOo should be most front;
-    Dim i as integer
-    Dim a as integer
-    Dim b as integer
-    Dim tBundle as string
-    Dim aPath
+    dim iCurrentDir as integer
+    dim iNumberOfHits as integer : iNumberOfHits = 0
+    dim iDirPosition as integer
+    dim tBundle as string
+    dim aPath ' string array with dynamic itemcount, intended.
 
     ' Calling just the .app with open on MacOS X via shell command
     if ( lcase( gPlatform ) = "osx" ) then
-    
+
+        ' Split the path into its components
         aPath = split(gNetzOfficePath, gPathSigne)
-        a=0
+
         ' make sure 'Contents' is just one time in path
-        for i=0 to uBound(aPath)
-        
-            if "Contents" = aPath(i) then
-                a=a+1
-            endif
-            
-        next i
+        for iCurrentDir = 0 to uBound(aPath)
+            if "Contents" = aPath( iCurrentDir ) then iNumberOfHits = iNumberOfHits + 1
+        next iCurrentDir
         
         ' exit if not
-        if a<>1 then
-            exit sub
-        end if
+        if ( iNumberOfHits <> 1 ) then exit sub
         
-        i=inStr(gNetzOfficePath, "Contents")
-        tBundle=left(gNetzOfficePath, i-2)
-        shell("open",1 ,tBundle, true)
+        iDirPosition = inStr( gNetzOfficePath, "Contents" )
+        tBundle = left( gNetzOfficePath, iDirPosition - 2 )
+
+        shell( "open", 1, tBundle, true )
         
     end if
 end sub
