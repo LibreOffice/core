@@ -1078,7 +1078,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     }
     // -----------------------------------------------------------------------------
-    IWizardPage* ODbTypeWizDialogSetup::getWizardPage(TabPage* _pCurrentPage) const
+    IWizardPageController* ODbTypeWizDialogSetup::getPageController( TabPage* _pCurrentPage ) const
     {
         OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
         return pPage;

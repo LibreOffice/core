@@ -405,7 +405,7 @@ sal_Bool ODbTypeWizDialog::saveDatasource()
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-IWizardPage* ODbTypeWizDialog::getWizardPage(TabPage* _pCurrentPage) const
+IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const
 {
     OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
     return pPage;
