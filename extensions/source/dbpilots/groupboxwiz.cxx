@@ -187,18 +187,15 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGroupBoxWizard::onFinish(sal_Int32 _nResult)
+    sal_Bool OGroupBoxWizard::onFinish()
     {
-        if (RET_OK != _nResult)
-            return OControlWizard::onFinish(_nResult);
-
         // commit the basic control setttings
         commitControlSettings(&m_aSettings);
 
         // create the radio buttons
         createRadios();
 
-        return OControlWizard::onFinish(_nResult);
+        return OControlWizard::onFinish();
     }
 
     //=====================================================================

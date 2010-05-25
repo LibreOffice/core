@@ -213,13 +213,10 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAddessBookSourcePilot::onFinish(sal_Int32 _nResult)
+    sal_Bool OAddessBookSourcePilot::onFinish()
     {
-        if (!OAddessBookSourcePilot_Base::onFinish(_nResult))
+        if ( !OAddessBookSourcePilot_Base::onFinish() )
             return sal_False;
-
-        if (RET_OK != _nResult)
-            return sal_True;
 
         implCommitAll();
 

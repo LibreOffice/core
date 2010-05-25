@@ -68,8 +68,7 @@ namespace dbp
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
         virtual void                enterState( WizardState _nState );
         virtual sal_Bool            leaveState( WizardState _nState );
-
-        virtual sal_Bool onFinish(sal_Int32 _nResult);
+        virtual sal_Bool            onFinish();
 
         virtual sal_Bool approveControl(sal_Int16 _nClassId);
 

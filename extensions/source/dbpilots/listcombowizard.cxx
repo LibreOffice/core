@@ -226,13 +226,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OListComboWizard::onFinish(sal_Int32 _nResult)
+    sal_Bool OListComboWizard::onFinish()
     {
-        if (!OControlWizard::onFinish(_nResult))
+        if ( !OControlWizard::onFinish() )
             return sal_False;
-
-        if (RET_OK != _nResult)
-            return sal_True;
 
         implApplySettings();
         return sal_True;

@@ -285,9 +285,9 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGridWizard::onFinish(sal_Int32 _nResult)
+    sal_Bool OGridWizard::onFinish()
     {
-        if (!OControlWizard::onFinish(_nResult))
+        if ( !OControlWizard::onFinish() )
             return sal_False;
 
         implApplySettings();
