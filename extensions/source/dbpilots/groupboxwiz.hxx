@@ -117,7 +117,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
         DECL_LINK( OnMoveEntry, PushButton* );
@@ -145,7 +145,7 @@ namespace dbp
     protected:
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
@@ -164,7 +164,8 @@ namespace dbp
         ListBox         m_aOptions;
 
         StringArray     m_aUncommittedValues;
-        WizardState     m_nLastSelection;
+        ::svt::WizardTypes::WizardState
+                        m_nLastSelection;
 
     public:
         OOptionValuesPage( OControlWizard* _pParent );
@@ -175,7 +176,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         void implTraveledOptions();
 
@@ -217,7 +218,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
     };
 

@@ -207,7 +207,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TypeSelectionPage::commitPage( CommitPageReason _eReason )
+    sal_Bool TypeSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;

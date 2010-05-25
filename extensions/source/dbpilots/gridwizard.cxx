@@ -362,7 +362,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGridFieldsSelection::commitPage( CommitPageReason _eReason )
+    sal_Bool OGridFieldsSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGridPage::commitPage(_eReason))
             return sal_False;
