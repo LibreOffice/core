@@ -102,10 +102,12 @@ SHORTSTDCPP3="5"
 .ENDIF
 
 .IF "$(CCNUMVER)">="000300040000"
-.IF "$(OS)$(CPU)" == "LINUXH" || "$(OS)$(CPU)" == "LINUX6"
-#gcc >= 3.4.0: on m68k-linux and hppa-linux this is libgcc_s.so.2. For all
-#others, this is libgcc_s.so.1.
+.IF "$(OS)$(CPU)" == "LINUX6"
+#for gcc >= 3.4.0 on m68k-linux this is libgcc_s.so.2.
 SHORTSTDC3:="2"
+.ELIF "$(OS)$(CPU)" == "LINUXH"
+#for gcc >= 3.4.0 on hppa-linux this is libgcc_s.so.4.
+SHORTSTDC3:="4"
 .ENDIF
 SHORTSTDCPP3="6"
 .ENDIF
