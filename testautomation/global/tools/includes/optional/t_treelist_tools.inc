@@ -170,7 +170,7 @@ function hExpandNode( oControl as object, iNode as integer ) as integer
     '///<ul>
     '///+<li>Returns new nodecount or 0 on error</li>
     '///</ul>
-    
+    const RC_FAILURE = 0
     const CFN = "hExpandNode::"
     
     dim iOldNodeCount as integer
@@ -182,7 +182,7 @@ function hExpandNode( oControl as object, iNode as integer ) as integer
     
     iOldNodeCount = hGetNodeCount( oControl )
     if ( iNode <= iOldNodeCount ) then
-        if ( iNode > 0 ) then
+        if ( iNode > RC_FAILURE ) then
             oControl.select( iNode )
         endif
         try
@@ -190,10 +190,10 @@ function hExpandNode( oControl as object, iNode as integer ) as integer
             hExpandNode() = hGetNodeCount( oControl )
         catch
             warnlog( "#i84194# Treelist access failed (Keyboard navigation)" )
-            hExpandNode() = 0
+            hExpandNode() = RC_FAILURE
         endcatch
     else
-        hExpandNode() = 0
+        hExpandNode() = RC_FAILURE
     endif
     
 end function
@@ -375,23 +375,17 @@ function hSelectTheLastNode( oControl as object ) as integer
     const CFN = "hSelectTheLastNode::"
     dim iCurrentNodeCount as integer
     
-    if ( GVERBOSE ) then printlog( CFN & "Enter with option (control): " & oControl.name() )
-    
-    iCurrentNodeCount = -1
-    
-    do while( iCurrentNodeCount < hGetNodeCount( oControl ) )
-    
-        iCurrentNodeCount = hGetNodeCount( oControl )
-        hExpandNode( oControl, iCurrentNodeCount )
-        
+    iCurrentNodeCount = hExpandAllNodes( oControl )
+    if ( iCurrentNodeCount > 0 ) then
+        oControl.select( iCurrentNodeCount )
         if ( GVERBOSE ) then
             printlog( CFN & "Nodename.....: " & oControl.getText() )
             printlog( CFN & "Node position: " & iCurrentNodeCount )
         endif
-        
-    loop
+    else
+        iCurrentNodeCount = -1
+    endif
     
-    if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & iCurrentNodeCount )
     hSelectTheLastNode() = iCurrentNodeCount
     
 end function
@@ -449,3 +443,22 @@ function hGetListItems( oControl as object, aList() as string ) as integer
     
 end function
 
+'*******************************************************************************
+
+function hFindInList( oControl as object, cObject as string ) as integer
+
+    const RETVAL_FAILURE = 0
+    dim iCurrentObject as integer
+
+    for iCurrentObject = 1 to oControl.getItemCount()
+
+        if ( oControl.getSelText() = cObject ) then
+            hFindInList() = iCurrentObject
+            exit function
+        endif
+
+    next iCurrentObject
+
+    hFindInList() = RETVAL_FAILURE
+
+end function

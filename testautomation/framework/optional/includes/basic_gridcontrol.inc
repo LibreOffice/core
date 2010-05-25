@@ -32,100 +32,49 @@
 '\******************************************************************************
 
 testcase tGridcontrolLoad
-    dim sLocation as string
-    dim i,x,a as integer
-    dim sTemp as string
-    dim lFiles(200) as string
-    dim bTemp as boolean
-    dim iError, iOK as integer
+
+    const MACRO_NAME = "VclTestTool"
+    const MACRO_NOT_FOUND = 0
+    const FILE_NAME  = "framework/optional/input/gridcontrol.odt"
+
+    dim iPos as integer
     
-    sLocation = "framework/optional/include/basic_gridcontrol.inc::"
+    printlog( "Open the test document: " & FILE_NAME )
+    call hFileOpen( gTestToolPath & FILE_NAME )
 
-    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
-
-    printlog "Open the test document"
-    call hFileOpen(convertPath(gTestToolPath + "framework/optional/input/gridcontrol.odt"))
-    printlog "Security dialog might come up"
-    kontext "SecurityWarning"
-    if SecurityWarning.exists(5) then
-        printlog "Allow to run macros"
-        SecurityWarning.ok
-    endif
-    call sleep 1
-
-    printlog "Start the macro, that performs the test"
-    printlog "Tools->Macros->Run Macro..."
+    printlog( "Open the <Run Macro> dialog" )
     ToolsMacrosRunMacro
+
+    printlog( "Find the document, its library and the test macro, run the macro" )
     Kontext "ScriptSelector"
-    if ScriptSelector.exists(10) then
-        x = LibraryTreeList.getItemCount
-        printlog "Look for library 'gridcontrol'"
-        for i = 1 to x
-            sTemp = LibraryTreeList.getItemText(i)
-            'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-            if (instr(sTemp,"gridcontrol")>0 OR instr(sTemp,"GRIDCONTROL")) then
-                a = i
-                printlog "Found library ("+i+"/"+x+"): '" + sTemp + "'"
-            endif
-        next i
-        if 0 <> a then
-            printlog "Select the library and unfold it"
-            LibraryTreeList.select(a)
-            LibraryTreeList.typeKeys("+")
-            printlog "Go to 'Standard' and unfold"
-            LibraryTreeList.typeKeys("<down>")
-            LibraryTreeList.typeKeys("+")
-            printlog "Go to 'Module1'"
-            LibraryTreeList.typeKeys("<down>")
+    if ( ScriptSelector.exists( 10 ) ) then
 
-            printlog "Select macro name 'VclTestTool'"
-            x = ScriptList.getItemCount
-            for i = 1 to x
-                sTemp = ScriptList.getItemText(i)
-                'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-                if "VclTestTool" = sTemp then
-                    a = i
-                    printlog "Found macro ("+i+"/"+x+"): '" + sTemp + "'"
-                endif
-            next i
-            if (0 <> a) then
-                printlog "Select the macro"
-                ScriptList.select(a)
-                printlog "Start the macro by pressing the button 'run'"
-                ScriptSelector.ok
-                printlog "sleep... at least 60 seconds"
-                call sleep(60)
-                printlog "If macro fails for whatever reason, a message comes up"
-                Kontext
-                if active.exists() then
-                    warnlog "" + active.getText
-                    active.ok
-                    try
-                        EditCopy
-                        warnlog getclipboard()
-                    catch
-                    endcatch
-                    printlog "close basic ide"
-                    call hCloseDocument()
-                    printlog "close document"
-                    call hCloseDocument()
-                    goto endsub
-                endif
+        printlog( "Select the last node" )
+        hSelectTheLastNode( LibraryTreeList )
 
-            else
-                warnlog sLocation + "Macro not found: 'Main'"
-            endif
+        printlog( "Search for the macro within the current module" )
+        iPos = hFindInList( ScriptList, MACRO_NAME )
+        if ( iPos <> MACRO_NOT_FOUND ) then
+
+            printlog( "The requested macro was found: " & MACRO_NAME )
+            ScriptList.select( iPos )
+            hCloseDialog( ScriptSelector, "ok" )
+
+            printlog( "Probe for unexpected messagebox" )
+
+            ' REM what is supposed to happen here?
+            ' Wait for a messagebox and print an error no matter what?
+            ' Very, very strange
+
         else
-            warnlog sLocation + "Library not found: 'gridcontrol'"
+            warnlog( "The requested Macro could not be found: " & MACRO_NAME )
         endif
     else
-        warnlog sLocation + "'Run macro dialog' didn't came up"
+        warnlog( "ScriptSelector failed to open" )
     endif
     
-    printlog "clean up"
-    printlog "Close the document, else an error about the navigator will be thrown"
-    if getDocumentcount > 0 then
-        call hCloseDocument()
-    endif
+    printlog( "Test exit, cleanup" )
+    hFileCloseAll()
+    
 endcase
 
