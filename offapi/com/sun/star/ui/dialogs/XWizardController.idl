@@ -33,20 +33,36 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-interface XWizard;
-
 //==================================================================================================================
 
-/**
+/** is the interface of a client-provided controller of a custom <type>Wizard</type>.
  */
 interface XWizardController
 {
+    /** creates a page
+
+        <p>Wizard pages are created on demand, when the respective page is reached during traveling through the
+        wizard. Effectively, this means the method is called at most once for each possible page ID.</p>
+
+        @param ParentWindow
+            the parent window to use for the page window
+        @param PageId
+            the ID of the page.
+        @return
+            the requested page.
+    */
     XWizardPage createPage( [in] ::com::sun::star::awt::XWindow ParentWindow, [in] short PageId );
 
+    /** provides the title of a page given by ID
+
+        <p>The page titles are displayed in the wizard's roadmap.</p>
+    */
     string  getPageTitle( [in] short PageId );
 
     boolean canAdvance();
 
+    /** called when a new page in the wizard is being activated
+    */
     void    onActivatePage( [in] short PageId );
 
     /** called when the current page is about to be left
@@ -61,8 +77,14 @@ interface XWizardController
     */
     boolean confirmDeactivatePage( [in] short PageId, [in] short Reason );
 
+    /** called when a page in the wizard is being deactivated
+    */
     void    onDeactivatePage( [in] short PageId );
 
+    /** called when the wizard is about to be finished.
+
+        <p>This method allows the controller to do any final checks, and ultimatively veto finishing the wizard.</p>
+    */
     boolean confirmFinish();
 };
 

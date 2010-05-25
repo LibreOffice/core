@@ -33,12 +33,15 @@ module com { module sun { module star { module ui { module dialogs {
 
 //==================================================================================================================
 
-/**
+/** denotes ways to leave a <type>Wizard</type>'s page
  */
 constants WizardTravelType
 {
+    /// indicates the wizard page is left due to forward traveling through the wizard
     const short FORWARD = 1;
+    /// indicates the wizard page is left due to backward traveling through the wizard
     const short BACKWARD = 2;
+    /// indicates the wizard page is left since the wizard is about to be finished
     const short FINISH = 3;
 };
 

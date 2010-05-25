@@ -33,14 +33,19 @@ module com { module sun { module star { module ui { module dialogs {
 
 //==================================================================================================================
 
-/**
+/** denotes the buttons found in a <type>Wizard</type>
  */
 constants WizardButton
 {
+    /// denotes the button used to travel forward through the wizard
     const short NEXT = 1;
+    /// denotes the button used to travel backward through the wizard
     const short PREVIOUS = 2;
+    /// denotes the button used to finish the wizard
     const short FINISH = 3;
+    /// denotes the button used to cancel the wizard
     const short CANCEL = 4;
+    /// denotes the button used to request help
     const short HELP = 5;
 };
 
