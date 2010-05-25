@@ -34,10 +34,16 @@
 
 #include <svtools/roadmapwizard.hxx>
 
+#include <boost/shared_ptr.hpp>
+#include <map>
+
 //......................................................................................................................
 namespace svt { namespace uno
 {
 //......................................................................................................................
+
+    class WizardPageController;
+    typedef ::boost::shared_ptr< WizardPageController > PWizardPageController;
 
     //==================================================================================================================
     //= WizardShell
@@ -65,6 +71,8 @@ namespace svt { namespace uno
         virtual String      getStateDisplayName( WizardState i_nState ) const;
         virtual bool        canAdvance() const;
         virtual sal_Bool    onFinish( sal_Int32 _nResult );
+        virtual IWizardPageController*
+                            getPageController( TabPage* _pCurrentPage ) const;
 
         // attribute access
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizard >&
@@ -115,6 +123,8 @@ namespace svt { namespace uno
             return static_cast< WizardState >( i_nPageId - m_nFirstPageID );
         }
 
+        PWizardPageController impl_getController( TabPage* i_pPage ) const;
+
         // prevent outside access to some base class members
         using WizardShell_Base::skip;
         using WizardShell_Base::skipUntil;
@@ -122,9 +132,12 @@ namespace svt { namespace uno
         using WizardShell_Base::getCurrentState;
 
     private:
+        typedef ::std::map< TabPage*, PWizardPageController > Page2ControllerMap;
+
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizard >            m_xWizard;
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >  m_xController;
         const sal_Int16                                                                             m_nFirstPageID;
+        Page2ControllerMap                                                                          m_aPageControllers;
     };
 
 //......................................................................................................................

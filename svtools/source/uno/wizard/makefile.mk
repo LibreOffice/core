@@ -41,7 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES= \
     $(SLO)$/unowizard.obj \
     $(SLO)$/wizardshell.obj \
-    $(SLO)$/wizardpageshell.obj
+    $(SLO)$/wizardpagecontroller.obj
 
 # --- Targets ------------------------------------------------------
 

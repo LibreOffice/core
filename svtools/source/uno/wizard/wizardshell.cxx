@@ -27,7 +27,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "wizardshell.hxx"
-#include "wizardpageshell.hxx"
+#include "wizardpagecontroller.hxx"
 
 #include <tools/diagnose_ex.h>
 
@@ -201,12 +201,22 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    PWizardPageController WizardShell::impl_getController( TabPage* i_pPage ) const
+    {
+        Page2ControllerMap::const_iterator pos = m_aPageControllers.find( i_pPage );
+        ENSURE_OR_RETURN( pos != m_aPageControllers.end(), "WizardShell::impl_getController: no controller for this page!", PWizardPageController() );
+        return pos->second;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     Reference< XWizardPage > WizardShell::getCurrentWizardPage() const
     {
         const WizardState eState = getCurrentState();
-        const WizardPageShell* pPage = dynamic_cast< const WizardPageShell* >( GetPage( eState ) );
-        ENSURE_OR_RETURN( pPage, "WizardShell::getCurrentWizardPage: invalid page/implementation!", NULL );
-        return pPage->getWizardPage();
+
+        PWizardPageController pController( impl_getController( GetPage( eState ) ) );
+        ENSURE_OR_RETURN( pController, "WizardShell::getCurrentWizardPage: invalid page/controller!", NULL );
+
+        return pController->getWizardPage();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -219,7 +229,19 @@ namespace svt { namespace uno
     TabPage* WizardShell::createPage( WizardState i_nState )
     {
         ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", NULL );
-        return new WizardPageShell( *this, m_xController, impl_stateToPageId( i_nState ) );
+
+        ::boost::shared_ptr< WizardPageController > pController( new WizardPageController( *this, m_xController, impl_stateToPageId( i_nState ) ) );
+        TabPage* pPage = pController->getTabPage();
+        ENSURE_OR_RETURN( pPage != NULL, "WizardShell::createPage: illegal tab page!", NULL );
+
+        m_aPageControllers[ pPage ] = pController;
+        return pPage;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    IWizardPageController* WizardShell::getPageController( TabPage* i_pCurrentPage ) const
+    {
+        return impl_getController( i_pCurrentPage ).get();
     }
 
     //------------------------------------------------------------------------------------------------------------------
