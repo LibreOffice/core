@@ -104,7 +104,7 @@ testcase tMacroUsertemplate
     printlog( "Insert test macro" )
     hInsertMacro( 3 )
 
-    printog( "Close BASIC IDE" )
+    printlog( "Close BASIC IDE" )
     hCloseBasicIde()
 
     printlog( "Close Document" )
