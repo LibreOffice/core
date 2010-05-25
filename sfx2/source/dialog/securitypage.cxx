@@ -55,49 +55,27 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////
 
-static short lcl_GetPassword( Window *pParent, bool bShowConfirm, /*out*/String &rPassword )
-{
-    bool bRes = false;
-    SfxPasswordDialog aPasswdDlg( pParent );
-    if (bShowConfirm)
-        aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
-    if (RET_OK == aPasswdDlg.Execute() && aPasswdDlg.GetPassword().Len() > 0)
-    {
-        rPassword = aPasswdDlg.GetPassword();
-        bRes = true;
-    }
-    return bRes;
-}
-
-
-static bool lcl_IsPasswordCorrect( const String &rPassword )
-{
-    bool bRes = false;
-
-    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-    uno::Sequence< sal_Int8 >   aPasswordHash;
-    bool bHasPassword = pCurDocShell->GetProtectionHash( aPasswordHash );
-
-    // check if supplied password was correct
-    uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );
-    SvPasswordHelper::GetHashPassword( aNewPasswd, rPassword );
-    if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
-        bRes = true;    // password was correct
-    else
-        InfoBox( NULL, String( SfxResId( RID_SFX_INCORRECT_PASSWORD ) ) ).Execute();
-
-    return bRes;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-
 
 namespace
 {
     enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
     enum RedlineFunc    { RF_ON, RF_PROTECT };
 
+/*
+    bool QueryIsEnabled( USHORT _nSlot )
+    {
+        bool bRes = false;
+        SfxViewShell* pViewSh = SfxViewShell::Current();
+        if (pViewSh)
+        {
+            const SfxPoolItem* pItem;
+            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
+            SfxItemState eState = pDisp->QueryState( _nSlot, pItem );
+            bRes = (eState & SFX_ITEM_DISABLED) == 0;
+        }
+        return bRes;
+    }
+*/
 
     bool QueryState( USHORT _nSlot, bool& _rValue )
     {
@@ -107,7 +85,8 @@ namespace
         {
             const SfxPoolItem* pItem;
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            bRet = SFX_ITEM_AVAILABLE <= pDisp->QueryState( _nSlot, pItem );
+            SfxItemState nState = pDisp->QueryState( _nSlot, pItem );
+            bRet = SFX_ITEM_AVAILABLE <= nState;
             if (bRet)
                 _rValue = ( static_cast< const SfxBoolItem* >( pItem ) )->GetValue();
         }
@@ -137,6 +116,50 @@ namespace
         }
         return bRet;
     }
+}
+
+
+//////////////////////////////////////////////////////////////////////
+
+
+static short lcl_GetPassword(
+    Window *pParent,
+    bool bProtect,
+    /*out*/String &rPassword )
+{
+    bool bRes = false;
+    SfxPasswordDialog aPasswdDlg( pParent );
+    const String aTitle( SfxResId( bProtect ? RID_SFX_PROTECT_RECORDS : RID_SFX_UNPROTECT_RECORDS ) );
+    aPasswdDlg.SetText( aTitle );
+    aPasswdDlg.SetMinLen( 1 );
+    if (bProtect)
+        aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
+    if (RET_OK == aPasswdDlg.Execute() && aPasswdDlg.GetPassword().Len() > 0)
+    {
+        rPassword = aPasswdDlg.GetPassword();
+        bRes = true;
+    }
+    return bRes;
+}
+
+
+static bool lcl_IsPasswordCorrect( const String &rPassword )
+{
+    bool bRes = false;
+
+    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
+    uno::Sequence< sal_Int8 >   aPasswordHash;
+    bool bHasPassword = pCurDocShell->GetProtectionHash( aPasswordHash );
+
+    // check if supplied password was correct
+    uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );
+    SvPasswordHelper::GetHashPassword( aNewPasswd, rPassword );
+    if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
+        bRes = true;    // password was correct
+    else
+        InfoBox( NULL, String( SfxResId( RID_SFX_INCORRECT_PASSWORD ) ) ).Execute();
+
+    return bRes;
 }
 
 
@@ -235,39 +258,43 @@ BOOL SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
     bool bModified = false;
 
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-    if (pCurDocShell)
+    if (pCurDocShell&& !pCurDocShell->IsReadOnly())
     {
-        if (m_eRedlingMode != RL_NONE && !pCurDocShell->IsReadOnly())
+        if (m_eRedlingMode != RL_NONE )
         {
-            // change recording
-            const bool bDoRecordChanges = m_aRecordChangesCB.IsChecked();
-            pCurDocShell->SetChangeRecording( bDoRecordChanges );
+            const bool bDoRecordChanges     = m_aRecordChangesCB.IsChecked();
+            const bool bDoChangeProtection  = m_aChangeProtectionPB.GetText() != m_aProtectSTR;
 
-            // no change recording should imply no password protection
-            if (!bDoRecordChanges && (!m_bNewPasswordIsValid || m_aNewPassword.Len() != 0))
+            // sanity checks
+            DBG_ASSERT( bDoRecordChanges || !bDoChangeProtection, "no change recording should imply no change protection" );
+            DBG_ASSERT( bDoChangeProtection || !bDoRecordChanges, "no change protection should imply no change recording" );
+            DBG_ASSERT( !bDoChangeProtection || m_aNewPassword.Len() > 0, "change protection should imply password length is > 0" );
+            DBG_ASSERT( bDoChangeProtection || m_aNewPassword.Len() == 0, "no change protection should imply password length is 0" );
+
+            // change recording
+            if (bDoRecordChanges != pCurDocShell->IsChangeRecording())
             {
-                // actually this should not be possible. Thus just as 'coded comment':
-                DBG_ASSERT( 0, "unexpected state of UI" );
-                m_bNewPasswordIsValid = true;
-                m_aNewPassword = String();
+                pCurDocShell->SetChangeRecording( bDoRecordChanges );
+                bModified = true;
             }
 
             // change record protection
-            if (m_bNewPasswordIsValid)
+            if (m_bNewPasswordIsValid &&
+                bDoChangeProtection != pCurDocShell->HasChangeRecordProtection())
             {
-                const bool bDoChangeProtection = m_aChangeProtectionPB.GetText() != m_aProtectSTR;
                 DBG_ASSERT( !bDoChangeProtection || bDoRecordChanges,
                         "change protection requires record changes to be active!" );
                 pCurDocShell->SetProtectionPassword( m_aNewPassword );
+                bModified = true;
             }
-
-            bModified = true;
         }
 
         // open read-only?
-        if (pCurDocShell->HasSecurityOptOpenReadOnly())
+        const sal_Bool bDoOpenReadonly = m_aOpenReadonlyCB.IsChecked();
+        if (pCurDocShell->HasSecurityOptOpenReadOnly() &&
+            bDoOpenReadonly != pCurDocShell->IsSecurityOptOpenReadOnly())
         {
-            pCurDocShell->SetSecurityOptOpenReadOnly( m_aOpenReadonlyCB.IsChecked() );
+            pCurDocShell->SetSecurityOptOpenReadOnly( bDoOpenReadonly );
             bModified = true;
         }
     }
@@ -333,16 +360,22 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             m_aRecordChangesCB.Check( bRecordChanges );
             m_aRecordChangesCB.Enable( /*!bProtection && */!bIsReadonly );
 
-            DBG_ASSERT( pCurDocShell, "doc shell missing" );
-            if (pCurDocShell)
-            {
-                m_bOrigPasswordIsConfirmed = true;   // default case if no password is set
-                uno::Sequence< sal_Int8 > aPasswordHash;
-                // check if password is available
-                if (pCurDocShell->GetProtectionHash( aPasswordHash ) &&
-                    aPasswordHash.getLength() > 0)
-                    m_bOrigPasswordIsConfirmed = false;  // password found, needs to be confirmed later on
-            }
+            m_bOrigPasswordIsConfirmed = true;   // default case if no password is set
+            uno::Sequence< sal_Int8 > aPasswordHash;
+            // check if password is available
+            if (pCurDocShell->GetProtectionHash( aPasswordHash ) &&
+                aPasswordHash.getLength() > 0)
+                m_bOrigPasswordIsConfirmed = false;  // password found, needs to be confirmed later on
+        }
+        else
+        {
+            // A Calc document that is shared will have 'm_eRedlingMode == RL_NONE'
+            // In shared documents change recording and protection must be disabled,
+            // similar to documents that do not support change recording at all.
+            m_aRecordChangesCB.Check( FALSE );
+            m_aRecordChangesCB.Disable();
+            m_aChangeProtectionPB.Check( FALSE );
+            m_aChangeProtectionPB.Disable();
         }
     }
 

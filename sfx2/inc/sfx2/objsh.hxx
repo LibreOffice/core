@@ -686,6 +686,8 @@ public:
     // change recording and respective passwword protection for Writer and Calc
     // slots available for Writer:  FN_REDLINE_ON, FN_REDLINE_ON
     // slots used for Calc:         FID_CHG_RECORD, SID_CHG_PROTECT
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
     virtual void    SetChangeRecording( bool bActivate );
     virtual bool    SetProtectionPassword( const String &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );

@@ -1076,6 +1076,22 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 }
 
 
+bool SfxObjectShell::IsChangeRecording() const
+{
+    // currently this function needs to be overwritten by Writer and Calc only
+    DBG_ASSERT( 0, "function not implemented" );
+    return false;
+}
+
+
+bool SfxObjectShell::HasChangeRecordProtection() const
+{
+    // currently this function needs to be overwritten by Writer and Calc only
+    DBG_ASSERT( 0, "function not implemented" );
+    return false;
+}
+
+
 void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
