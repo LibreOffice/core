@@ -276,11 +276,11 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool WizardShell::onFinish( sal_Int32 i_nResult )
+    sal_Bool WizardShell::onFinish()
     {
         try
         {
-            if ( ( i_nResult == RET_OK ) && m_xController.is() && !m_xController->confirmFinish() )
+            if ( m_xController.is() && !m_xController->confirmFinish() )
                 return sal_False;
         }
         catch( const Exception& )
@@ -288,7 +288,7 @@ namespace svt { namespace uno
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        return WizardShell_Base::onFinish( i_nResult );
+        return WizardShell_Base::onFinish();
     }
 
 //......................................................................................................................

@@ -445,9 +445,9 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardMachine::onFinish(sal_Int32 _nResult)
+    sal_Bool OWizardMachine::onFinish()
     {
-        return Finnish(_nResult);
+        return Finnish( RET_OK );
     }
 
     //---------------------------------------------------------------------
@@ -460,8 +460,7 @@ namespace svt
         {
             return 0L;
         }
-        long nRet = onFinish( RET_OK );
-        return nRet;
+        return onFinish() ? 1L : 0L;
     }
 
     //---------------------------------------------------------------------

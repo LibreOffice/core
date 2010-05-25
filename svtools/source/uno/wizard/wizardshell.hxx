@@ -70,7 +70,7 @@ namespace svt { namespace uno
         virtual sal_Bool    leaveState( WizardState i_nState );
         virtual String      getStateDisplayName( WizardState i_nState ) const;
         virtual bool        canAdvance() const;
-        virtual sal_Bool    onFinish( sal_Int32 _nResult );
+        virtual sal_Bool    onFinish();
         virtual IWizardPageController*
                             getPageController( TabPage* _pCurrentPage ) const;
 

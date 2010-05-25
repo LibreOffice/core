@@ -259,7 +259,7 @@ namespace svt
         /** called when the finish button is pressed
             <p>By default, only the base class' Finnish method (which is not virtual) is called</p>
         */
-        virtual sal_Bool    onFinish(sal_Int32 _nResult);
+        virtual sal_Bool    onFinish();
 
         /// travel to the next state
         sal_Bool            travelNext();
