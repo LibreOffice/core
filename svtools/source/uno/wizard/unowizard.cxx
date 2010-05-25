@@ -207,8 +207,9 @@ namespace svt { namespace uno
     //--------------------------------------------------------------------
     Dialog* Wizard::createDialog( Window* i_pParent )
     {
-        Dialog* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
+        WizardShell* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
         pDialog->SetSmartHelpId( SmartId( m_sHelpURL ) );
+        pDialog->setTitleBase( m_sTitle );
         return pDialog;
     }
 
