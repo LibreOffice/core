@@ -2635,16 +2635,47 @@ sal_Bool ScDocShell::AcceptStateUpdate() const
 //-->Added by PengYunQuan for Validity Cell Range Picker
 
 
+bool ScDocShell::IsChangeRecording() const
+{
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    return pChangeTrack != NULL;
+}
+
+
+bool ScDocShell::HasChangeRecordProtection() const
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack)
+        bRes = pChangeTrack->IsProtected();
+    return bRes;
+}
+
+
 void ScDocShell::SetChangeRecording( bool bActivate )
 {
-    ScDocument * pDoc = GetDocument();
-    DBG_ASSERT( pDoc, "ScDocument missing" );
-    if (pDoc)
+    bool bOldChangeRecording = IsChangeRecording();
+
+    if (bActivate)
     {
-        if (bActivate)
-            pDoc->StartChangeTracking();
-        else
-            pDoc->EndChangeTracking();
+        aDocument.StartChangeTracking();
+        ScChangeViewSettings aChangeViewSet;
+        aChangeViewSet.SetShowChanges(TRUE);
+        aDocument.SetChangeViewSettings(aChangeViewSet);
+    }
+    else
+    {
+        aDocument.EndChangeTracking();
+        PostPaintGridAll();
+    }
+
+    if (bOldChangeRecording != IsChangeRecording())
+    {
+        UpdateAcceptChangesDialog();
+        // Slots invalidieren
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
+            pBindings->InvalidateAll(FALSE);
     }
 }
 
@@ -2655,6 +2686,8 @@ bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
     if (pChangeTrack)
     {
+        sal_Bool bProtected = pChangeTrack->IsProtected();
+
         if (rNewPassword.Len())
         {
             // when password protection is applied change tracking must always be active
@@ -2669,6 +2702,12 @@ bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
             pChangeTrack->SetProtection( ::com::sun::star::uno::Sequence< sal_Int8 >() );
         }
         bRes = true;
+
+        if ( bProtected != pChangeTrack->IsProtected() )
+        {
+            UpdateAcceptChangesDialog();
+            SetDocumentModified();
+        }
     }
 
     return bRes;

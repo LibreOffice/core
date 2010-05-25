@@ -665,17 +665,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     if ( bDo )
                     {
-                        //  update "accept changes" dialog
-                        //! notify all views
-                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                        if ( pViewFrm && pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
-                        {
-                            SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
-                            if (pChild)
-                            {
-                                ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                            }
-                        }
+                        UpdateAcceptChangesDialog();
 
                         // Slots invalidieren
                         if (pBindings)
@@ -1165,6 +1155,21 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
 //------------------------------------------------------------------
 
+void UpdateAcceptChangesDialog()
+{
+    //  update "accept changes" dialog
+    //! notify all views
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
+    {
+        SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
+        if ( pChild )
+            ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+    }
+}
+
+//------------------------------------------------------------------
+
 BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQueryIfProtected )
 {
     BOOL bDone = FALSE;
@@ -1218,15 +1223,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
             }
             if ( bProtected != pChangeTrack->IsProtected() )
             {
-                //  update "accept changes" dialog
-                //! notify all views
-                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
-                {
-                    SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
-                    if ( pChild )
-                        ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                }
+                UpdateAcceptChangesDialog();
                 bDone = TRUE;
             }
         }
