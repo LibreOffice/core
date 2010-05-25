@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NDTXT_HXX
-#define _NDTXT_HXX
+#ifndef SW_NDTXT_HXX
+#define SW_NDTXT_HXX
 
 #include <cppuhelper/weakref.hxx>
 
@@ -133,6 +133,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     // pointer to the list, to whose the text node is added to
     SwList* mpList;
     // <--
+    /// #i111677# cached expansion (for clipboard)
+    ::std::auto_ptr< ::rtl::OUString > m_pNumStringCache;
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextContent> m_wXParagraph;

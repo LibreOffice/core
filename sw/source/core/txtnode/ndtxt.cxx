@@ -1486,6 +1486,13 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
     xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
 
+    if (pDest->GetDoc()->IsClipBoard() && this->GetNum())
+    {
+        // #i111677# cache expansion of source (for clipboard)
+        pDest->m_pNumStringCache.reset(
+            new ::rtl::OUString(this->GetNumString()));
+    }
+
     if( !nLen )
     {
         // wurde keine Laenge angegeben, dann Kopiere die Attribute
@@ -2771,6 +2778,11 @@ BOOL SwTxtNode::HasBullet() const
 //i53420 added max outline parameter
 XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, const unsigned int _nRestrictToThisLevel ) const
 {
+    if (GetDoc()->IsClipBoard() && m_pNumStringCache.get())
+    {
+        // #i111677# do not expand number strings in clipboard documents
+        return *m_pNumStringCache;
+    }
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule &&
          IsCountedInList() &&
