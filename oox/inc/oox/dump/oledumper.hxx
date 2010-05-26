@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: oledumper.hxx,v $
- * $Revision: 1.1.2.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +43,26 @@ namespace dump {
 // ============================================================================
 // ============================================================================
 
-class StdFontObject : public InputObjectBase
+class OleInputObjectBase : public InputObjectBase
+{
+protected:
+    inline explicit     OleInputObjectBase() {}
+
+    ::rtl::OUString     dumpAnsiString32( const String& rName );
+    ::rtl::OUString     dumpUniString32( const String& rName );
+
+    sal_Int32           dumpStdClipboardFormat( const String& rName = EMPTY_STRING );
+    ::rtl::OUString     dumpAnsiString32OrStdClip( const String& rName );
+    ::rtl::OUString     dumpUniString32OrStdClip( const String& rName );
+
+    void                writeOleColorItem( const String& rName, sal_uInt32 nColor );
+    sal_uInt32          dumpOleColor( const String& rName );
+};
+
+// ============================================================================
+// ============================================================================
+
+class StdFontObject : public OleInputObjectBase
 {
 public:
     explicit            StdFontObject( const InputObjectBase& rParent );
@@ -57,7 +73,7 @@ protected:
 
 // ============================================================================
 
-class StdPicObject : public InputObjectBase
+class StdPicObject : public OleInputObjectBase
 {
 public:
     explicit            StdPicObject( const InputObjectBase& rParent );
@@ -68,7 +84,7 @@ protected:
 
 // ============================================================================
 
-class StdHlinkObject : public InputObjectBase
+class StdHlinkObject : public OleInputObjectBase
 {
 public:
     explicit            StdHlinkObject( const InputObjectBase& rParent );
@@ -90,7 +106,27 @@ private:
 // ============================================================================
 // ============================================================================
 
-class OlePropertyStreamObject : public BinaryStreamObject
+class OleStreamObject : public OleInputObjectBase
+{
+public:
+    explicit            OleStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+};
+
+// ============================================================================
+
+class OleCompObjObject : public OleStreamObject
+{
+public:
+    explicit            OleCompObjObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+
+protected:
+    virtual void        implDump();
+};
+
+// ============================================================================
+// ============================================================================
+
+class OlePropertyStreamObject : public InputObjectBase
 {
 public:
     explicit            OlePropertyStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
@@ -149,35 +185,140 @@ protected:
 // ============================================================================
 // ============================================================================
 
-struct OcxFormSiteInfo
-{
-    ::rtl::OUString     maProgId;
-    sal_Int32           mnId;
-    sal_uInt32          mnLength;
-    bool                mbInStream;
-
-    inline explicit     OcxFormSiteInfo() : mnId( 0 ), mnLength( 0 ), mbInStream( false ) {}
-};
-
-typedef ::std::vector< OcxFormSiteInfo > OcxFormSiteInfoVector;
-
-// ----------------------------------------------------------------------------
-
-struct OcxFormSharedData
-{
-    OUStringVector      maClassInfoProgIds;
-    OcxFormSiteInfoVector maSiteInfos;
-};
-
-// ============================================================================
-// ============================================================================
-
-class OcxPropertyObjectBase : public InputObjectBase
+class ComCtlObjectBase : public OleInputObjectBase
 {
 protected:
-    inline explicit     OcxPropertyObjectBase() {}
+    explicit            ComCtlObjectBase(
+                            const InputObjectBase& rParent,
+                            sal_uInt32 nDataId5, sal_uInt32 nDataId6, sal_uInt16 nVersion,
+                            bool bCommonPart, bool bComplexPart );
 
-    using               InputObjectBase::construct;
+    virtual void        implDump();
+    virtual void        implDumpProperties() = 0;
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
+    virtual void        implDumpCommonTrailing();
+
+private:
+    bool                dumpComCtlHeader( sal_uInt32 nExpId, sal_uInt16 nExpMajor = SAL_MAX_UINT16, sal_uInt16 nExpMinor = SAL_MAX_UINT16 );
+    bool                dumpComCtlSize();
+    bool                dumpComCtlData( sal_uInt32& ornCommonPartSize );
+    bool                dumpComCtlCommon( sal_uInt32 nPartSize );
+    bool                dumpComCtlComplex();
+
+protected:
+    sal_uInt32          mnDataId5;
+    sal_uInt32          mnDataId6;
+    sal_uInt16          mnVersion;
+    bool                mbCommonPart;
+    bool                mbComplexPart;
+};
+
+// ============================================================================
+
+class ComCtlScrollBarObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlScrollBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+};
+
+// ============================================================================
+
+class ComCtlProgressBarObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlProgressBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+};
+
+// ============================================================================
+
+class ComCtlSliderObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlSliderObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+};
+
+// ============================================================================
+
+class ComCtlUpDownObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlUpDownObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+};
+
+// ============================================================================
+
+class ComCtlImageListObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlImageListObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
+    virtual void        implDumpCommonTrailing();
+};
+
+// ============================================================================
+
+class ComCtlTabStripObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlTabStripObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
+};
+
+// ============================================================================
+
+class ComCtlTreeViewObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlTreeViewObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
+
+private:
+    sal_uInt32          mnStringFlags;
+};
+
+// ============================================================================
+
+class ComCtlStatusBarObject : public ComCtlObjectBase
+{
+public:
+    explicit            ComCtlStatusBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
+
+protected:
+    virtual void        implDumpProperties();
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
+    virtual void        implDumpCommonTrailing();
+};
+
+// ============================================================================
+// ============================================================================
+
+class AxPropertyObjectBase : public OleInputObjectBase
+{
+protected:
+    inline explicit     AxPropertyObjectBase() {}
+
+    using               OleInputObjectBase::construct;
     void                construct(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
@@ -216,19 +357,19 @@ protected:
 
     inline bool         dumpBoolProperty() { return startNextProperty(); }
     inline sal_Int32    dumpHmmProperty() { return dumpDecProperty< sal_Int32 >( 0, "CONV-HMM-TO-CM" ); }
-    inline sal_uInt8    dumpMousePtrProperty() { return dumpDecProperty< sal_uInt8 >( 0, "OCX-MOUSEPTR" ); }
+    inline sal_uInt8    dumpMousePtrProperty() { return dumpDecProperty< sal_uInt8 >( 0, "OLE-MOUSEPTR" ); }
     template< typename Type >
-    inline Type         dumpBorderStyleProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "OCX-BORDERSTYLE" ); }
+    inline Type         dumpBorderStyleProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "AX-BORDERSTYLE" ); }
     template< typename Type >
-    inline Type         dumpSpecialEffectProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "OCX-SPECIALEFFECT" ); }
-    inline sal_uInt32   dumpEnabledProperty() { return dumpDecProperty< sal_uInt32 >( 1, "OCX-ENABLED" ); }
-    inline sal_Int32    dumpOrientationProperty() { return dumpDecProperty< sal_Int32 >( -1, "OCX-ORIENTATION" ); }
-    inline sal_Int32    dumpDelayProperty() { return dumpDecProperty< sal_Int32 >( 50, "OCX-CONV-MS" ); }
-    inline sal_uInt32   dumpImagePosProperty() { return dumpHexProperty< sal_uInt32 >( 0x00070001, "OCX-IMAGEPOS" ); }
-    inline sal_uInt8    dumpImageSizeModeProperty() { return dumpDecProperty< sal_uInt8 >( 0, "OCX-IMAGESIZEMODE" ); }
-    inline sal_uInt8    dumpImageAlignProperty() { return dumpDecProperty< sal_uInt8 >( 2, "OCX-IMAGEALIGN" ); }
+    inline Type         dumpSpecialEffectProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "AX-SPECIALEFFECT" ); }
+    inline sal_uInt32   dumpEnabledProperty() { return dumpDecProperty< sal_uInt32 >( 1, "AX-ENABLED" ); }
+    inline sal_Int32    dumpOrientationProperty() { return dumpDecProperty< sal_Int32 >( -1, "AX-ORIENTATION" ); }
+    inline sal_Int32    dumpDelayProperty() { return dumpDecProperty< sal_Int32 >( 50, "AX-CONV-MS" ); }
+    inline sal_uInt32   dumpImagePosProperty() { return dumpHexProperty< sal_uInt32 >( 0x00070001, "AX-IMAGEPOS" ); }
+    inline sal_uInt8    dumpImageSizeModeProperty() { return dumpDecProperty< sal_uInt8 >( 0, "AX-IMAGESIZEMODE" ); }
+    inline sal_uInt8    dumpImageAlignProperty() { return dumpDecProperty< sal_uInt8 >( 2, "AX-IMAGEALIGN" ); }
 
-    sal_uInt32          dumpFlagsProperty( sal_uInt32 nDefault, const sal_Char* pcNameList = "OCX-FLAGS" );
+    sal_uInt32          dumpFlagsProperty( sal_uInt32 nDefault, const sal_Char* pcNameList = "AX-FLAGS" );
     sal_uInt32          dumpColorProperty( sal_uInt32 nDefault );
     sal_Unicode         dumpUnicodeProperty();
     void                dumpUnknownProperty();
@@ -244,7 +385,7 @@ protected:
     void                dumpToPosition( sal_Int64 nPos );
 
 private:
-    void                constructOcxPropObj( const String& rPropNameList, bool b64BitPropFlags );
+    void                constructAxPropObj( const String& rPropNameList, bool b64BitPropFlags );
 
     void                dumpVersion();
     ::rtl::OUString     dumpString( const String& rName, sal_uInt32 nSize, bool bArray );
@@ -288,13 +429,13 @@ private:
 // ----------------------------------------------------------------------------
 
 template< typename Type >
-void OcxPropertyObjectBase::alignInput()
+void AxPropertyObjectBase::alignInput()
 {
-    in().skip( (sizeof( Type ) - ((in().tell() - mnPropertiesStart) % sizeof( Type ))) % sizeof( Type ) );
+    mxStrm->skip( (sizeof( Type ) - ((mxStrm->tell() - mnPropertiesStart) % sizeof( Type ))) % sizeof( Type ) );
 }
 
 template< typename Type >
-Type OcxPropertyObjectBase::dumpDecProperty( Type nDefault, const NameListWrapper& rListWrp )
+Type AxPropertyObjectBase::dumpDecProperty( Type nDefault, const NameListWrapper& rListWrp )
 {
     if( startNextProperty() )
     {
@@ -305,7 +446,7 @@ Type OcxPropertyObjectBase::dumpDecProperty( Type nDefault, const NameListWrappe
 }
 
 template< typename Type >
-Type OcxPropertyObjectBase::dumpHexProperty( Type nDefault, const NameListWrapper& rListWrp )
+Type AxPropertyObjectBase::dumpHexProperty( Type nDefault, const NameListWrapper& rListWrp )
 {
     if( startNextProperty() )
     {
@@ -317,10 +458,10 @@ Type OcxPropertyObjectBase::dumpHexProperty( Type nDefault, const NameListWrappe
 
 // ============================================================================
 
-class OcxCFontNewObject : public OcxPropertyObjectBase
+class AxCFontNewObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxCFontNewObject( const InputObjectBase& rParent );
+    explicit            AxCFontNewObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -328,10 +469,10 @@ protected:
 
 // ============================================================================
 
-class OcxColumnInfoObject : public OcxPropertyObjectBase
+class AxColumnInfoObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxColumnInfoObject( const InputObjectBase& rParent );
+    explicit            AxColumnInfoObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -339,10 +480,10 @@ protected:
 
 // ============================================================================
 
-class OcxCommandButtonObject : public OcxPropertyObjectBase
+class AxCommandButtonObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxCommandButtonObject( const InputObjectBase& rParent );
+    explicit            AxCommandButtonObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -351,10 +492,10 @@ protected:
 
 // ============================================================================
 
-class OcxMorphControlObject : public OcxPropertyObjectBase
+class AxMorphControlObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxMorphControlObject( const InputObjectBase& rParent );
+    explicit            AxMorphControlObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -370,10 +511,10 @@ private:
 
 // ============================================================================
 
-class OcxLabelObject : public OcxPropertyObjectBase
+class AxLabelObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxLabelObject( const InputObjectBase& rParent );
+    explicit            AxLabelObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -382,10 +523,10 @@ protected:
 
 // ============================================================================
 
-class OcxImageObject : public OcxPropertyObjectBase
+class AxImageObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxImageObject( const InputObjectBase& rParent );
+    explicit            AxImageObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -393,10 +534,10 @@ protected:
 
 // ============================================================================
 
-class OcxScrollBarObject : public OcxPropertyObjectBase
+class AxScrollBarObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxScrollBarObject( const InputObjectBase& rParent );
+    explicit            AxScrollBarObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -404,10 +545,10 @@ protected:
 
 // ============================================================================
 
-class OcxSpinButtonObject : public OcxPropertyObjectBase
+class AxSpinButtonObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxSpinButtonObject( const InputObjectBase& rParent );
+    explicit            AxSpinButtonObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -415,10 +556,10 @@ protected:
 
 // ============================================================================
 
-class OcxTabStripObject : public OcxPropertyObjectBase
+class AxTabStripObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxTabStripObject( const InputObjectBase& rParent );
+    explicit            AxTabStripObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -429,71 +570,89 @@ private:
 };
 
 // ============================================================================
+// ============================================================================
 
-class OcxControlObject : public InputObjectBase
+class FormControlStreamObject : public OleInputObjectBase
 {
 public:
-    explicit            OcxControlObject(
-                            const InputObjectBase& rParent,
-                            const ::rtl::OUString& rProgId,
-                            sal_Int64 nLength );
+    explicit            FormControlStreamObject(
+                            const ObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName,
+                            const ::rtl::OUString* pProgId = 0 );
+    explicit            FormControlStreamObject(
+                            const OutputObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString* pProgId = 0 );
 
 protected:
     virtual void        implDump();
+
+private:
+    void                constructFormCtrlStrmObj( const ::rtl::OUString* pProgId );
 
 private:
     ::rtl::OUString     maProgId;
-    sal_Int64           mnLength;
+    bool                mbReadGuid;
+};
+
+// ============================================================================
+// ============================================================================
+
+struct VbaFormSiteInfo
+{
+    ::rtl::OUString     maProgId;
+    sal_Int32           mnId;
+    sal_uInt32          mnLength;
+    bool                mbInStream;
+
+    inline explicit     VbaFormSiteInfo() : mnId( 0 ), mnLength( 0 ), mbInStream( false ) {}
+};
+
+typedef ::std::vector< VbaFormSiteInfo > VbaFormSiteInfoVector;
+
+// ============================================================================
+
+struct VbaFormSharedData
+{
+    OUStringVector      maClassInfoProgIds;
+    VbaFormSiteInfoVector maSiteInfos;
 };
 
 // ============================================================================
 
-class OcxGuidControlObject : public InputObjectBase
+class VbaFormClassInfoObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxGuidControlObject(
-                            const InputObjectBase& rParent,
-                            sal_Int64 nLength );
-    explicit            OcxGuidControlObject(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm );
-    explicit            OcxGuidControlObject(
-                            const ObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName );
+    explicit            VbaFormClassInfoObject( const InputObjectBase& rParent, VbaFormSharedData& rFormData );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDumpShortProperties();
 
 private:
-    sal_Int64           mnLength;
+    VbaFormSharedData&  mrFormData;
 };
 
 // ============================================================================
 
-class OcxControlsStreamObject : public InputObjectBase
+class VbaFormSiteObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxControlsStreamObject(
-                            const ObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
-                            OcxFormSharedData& rFormData );
+    explicit            VbaFormSiteObject( const InputObjectBase& rParent, VbaFormSharedData& rFormData );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDumpShortProperties();
 
 private:
-    OcxFormSharedData&  mrFormData;
+    VbaFormSharedData&  mrFormData;
 };
 
 // ============================================================================
-// ============================================================================
 
-class OcxPageObject : public OcxPropertyObjectBase
+class VbaFormDesignExtObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxPageObject( const InputObjectBase& rParent );
+    explicit            VbaFormDesignExtObject( const InputObjectBase& rParent );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -501,87 +660,14 @@ protected:
 
 // ============================================================================
 
-class OcxMultiPageObject : public OcxPropertyObjectBase
+class VbaFStreamObject : public AxPropertyObjectBase
 {
 public:
-    explicit            OcxMultiPageObject( const InputObjectBase& rParent );
-
-protected:
-    virtual void        implDumpShortProperties();
-    virtual void        implDumpExtended();
-
-private:
-    sal_Int32           mnPageCount;
-};
-
-// ============================================================================
-
-class OcxMultiPageStreamObject : public InputObjectBase
-{
-public:
-    explicit            OcxMultiPageStreamObject(
+    explicit            VbaFStreamObject(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rSysFileName,
-                            OcxFormSharedData& rFormData );
-
-protected:
-    virtual void        implDump();
-
-private:
-    OcxFormSharedData&  mrFormData;
-};
-
-// ============================================================================
-// ============================================================================
-
-class OcxFormClassInfoObject : public OcxPropertyObjectBase
-{
-public:
-    explicit            OcxFormClassInfoObject( const InputObjectBase& rParent, OcxFormSharedData& rFormData );
-
-protected:
-    virtual void        implDumpShortProperties();
-
-private:
-    OcxFormSharedData&  mrFormData;
-};
-
-// ============================================================================
-
-class OcxFormSiteObject : public OcxPropertyObjectBase
-{
-public:
-    explicit            OcxFormSiteObject( const InputObjectBase& rParent, OcxFormSharedData& rFormData );
-
-protected:
-    virtual void        implDumpShortProperties();
-
-private:
-    OcxFormSharedData&  mrFormData;
-};
-
-// ============================================================================
-
-class OcxFormDesignExtObject : public OcxPropertyObjectBase
-{
-public:
-    explicit            OcxFormDesignExtObject( const InputObjectBase& rParent );
-
-protected:
-    virtual void        implDumpShortProperties();
-};
-
-// ============================================================================
-
-class OcxFormObject : public OcxPropertyObjectBase
-{
-public:
-    explicit            OcxFormObject(
-                            const ObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
-                            OcxFormSharedData& rFormData );
+                            VbaFormSharedData& rFormData );
 
 protected:
     virtual void        implDumpShortProperties();
@@ -594,16 +680,78 @@ private:
     void                dumpDesignExtender();
 
 private:
-    OcxFormSharedData&  mrFormData;
+    VbaFormSharedData&  mrFormData;
     sal_uInt32          mnFlags;
 };
 
 // ============================================================================
 
-class OcxFormStorageObject : public OleStorageObject
+class VbaOStreamObject : public OleInputObjectBase
 {
 public:
-    explicit            OcxFormStorageObject(
+    explicit            VbaOStreamObject(
+                            const ObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName,
+                            VbaFormSharedData& rFormData );
+
+protected:
+    virtual void        implDump();
+
+private:
+    VbaFormSharedData&  mrFormData;
+};
+
+// ============================================================================
+
+class VbaPageObject : public AxPropertyObjectBase
+{
+public:
+    explicit            VbaPageObject( const InputObjectBase& rParent );
+
+protected:
+    virtual void        implDumpShortProperties();
+};
+
+// ============================================================================
+
+class VbaMultiPageObject : public AxPropertyObjectBase
+{
+public:
+    explicit            VbaMultiPageObject( const InputObjectBase& rParent );
+
+protected:
+    virtual void        implDumpShortProperties();
+    virtual void        implDumpExtended();
+
+private:
+    sal_Int32           mnPageCount;
+};
+
+// ============================================================================
+
+class VbaXStreamObject : public InputObjectBase
+{
+public:
+    explicit            VbaXStreamObject(
+                            const ObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName,
+                            VbaFormSharedData& rFormData );
+
+protected:
+    virtual void        implDump();
+
+private:
+    VbaFormSharedData&  mrFormData;
+};
+
+// ============================================================================
+
+class VbaContainerStorageObject : public OleStorageObject
+{
+public:
+    explicit            VbaContainerStorageObject(
                             const ObjectBase& rParent,
                             const StorageRef& rxStrg,
                             const ::rtl::OUString& rSysPath );
@@ -624,7 +772,7 @@ private:
     bool                isFormStorage( const ::rtl::OUString& rStrgPath ) const;
 
 private:
-    OcxFormSharedData   maFormData;
+    VbaFormSharedData   maFormData;
 };
 
 // ============================================================================
@@ -716,7 +864,7 @@ private:
 
 // ============================================================================
 
-class VbaFormStorageObject : public OcxFormStorageObject
+class VbaFormStorageObject : public VbaContainerStorageObject
 {
 public:
     explicit            VbaFormStorageObject(
@@ -757,6 +905,23 @@ protected:
 
 private:
     VbaSharedData       maVbaData;
+};
+
+// ============================================================================
+// ============================================================================
+
+class ActiveXStorageObject : public VbaContainerStorageObject
+{
+public:
+    explicit            ActiveXStorageObject(
+                            const ObjectBase& rParent,
+                            const StorageRef& rxStrg,
+                            const ::rtl::OUString& rSysPath );
+
+protected:
+    virtual void        implDumpBaseStream(
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName );
 };
 
 // ============================================================================

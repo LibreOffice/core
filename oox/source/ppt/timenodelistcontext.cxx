@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: timenodelistcontext.cxx,v $
- * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -507,19 +504,13 @@ namespace oox { namespace ppt {
                     NodePropertyMap & pProps(mpNode->getNodeProperties());
                     pProps[ NP_DIRECTION ] = makeAny( mnDir == XML_cw );
                     pProps[ NP_COLORINTERPOLATION ] = makeAny( mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB );
+                    const GraphicHelper& rGraphicHelper = getFilter().getGraphicHelper();
                     if( maToClr.isUsed() )
-                    {
-                        mpNode->setTo( Any( maToClr.getColor( getFilter() ) ) );
-                    }
+                        mpNode->setTo( Any( maToClr.getColor( rGraphicHelper ) ) );
                     if( maFromClr.isUsed() )
-                    {
-                        mpNode->setFrom( Any( maFromClr.getColor( getFilter() ) ) );
-                    }
+                        mpNode->setFrom( Any( maFromClr.getColor( rGraphicHelper ) ) );
                     if( mbHasByColor )
-                    {
                         mpNode->setBy( Any ( m_byColor.get() ) );
-                    }
-
                 }
             }
 

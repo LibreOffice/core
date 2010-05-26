@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: biffdetector.cxx,v $
- * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/olestorage.hxx"
+#include "oox/ole/olestorage.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OStringBuffer;
@@ -88,7 +85,7 @@ BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
     if( !rInStream.isEof() && rInStream.isSeekable() && (rInStream.getLength() > 4) )
     {
         sal_Int64 nOldPos = rInStream.tell();
-        rInStream.seek( 0 );
+        rInStream.seekToStart();
         sal_uInt16 nBofId, nBofSize;
         rInStream >> nBofId >> nBofSize;
 
@@ -214,7 +211,7 @@ OUString SAL_CALL BiffDetector::detect( Sequence< PropertyValue >& rDescriptor )
     if( xInStrm.is() )
     {
         OUString aWorkbookName;
-        StorageRef xStorage( new OleStorage( mxFactory, xInStrm, true ) );
+        StorageRef xStorage( new ::oox::ole::OleStorage( mxFactory, xInStrm, true ) );
         switch( detectStorageBiffVersion( aWorkbookName, xStorage ) )
         {
             case BIFF2:

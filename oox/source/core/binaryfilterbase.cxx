@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: binaryfilterbase.cxx,v $
- * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +26,7 @@
  ************************************************************************/
 
 #include "oox/core/binaryfilterbase.hxx"
-#include "oox/helper/olestorage.hxx"
+#include "oox/ole/olestorage.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -55,12 +52,12 @@ BinaryFilterBase::~BinaryFilterBase()
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new OleStorage( getGlobalFactory(), rxInStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxInStream, true ) );
 }
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new OleStorage( getGlobalFactory(), rxOutStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxOutStream, true ) );
 }
 
 // ============================================================================

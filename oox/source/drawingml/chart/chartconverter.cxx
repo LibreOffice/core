@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartconverter.cxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +33,9 @@
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::awt::Size;
+using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::data::XDataProvider;
 using ::com::sun::star::chart2::data::XDataSequence;
@@ -57,14 +56,15 @@ ChartConverter::~ChartConverter()
 }
 
 void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
-        ChartSpaceModel& rModel, const Reference< XChartDocument >& rxChartDoc )
+        ChartSpaceModel& rChartModel, const Reference< XChartDocument >& rxChartDoc,
+        const Reference< XShapes >& rxExternalPage, const Point& rChartPos, const Size& rChartSize )
 {
     OSL_ENSURE( rxChartDoc.is(), "ChartConverter::convertFromModel - missing chart document" );
     if( rxChartDoc.is() )
     {
-        ConverterRoot aConvBase( rFilter, *this, rxChartDoc, rModel );
-        ChartSpaceConverter aSpaceConv( aConvBase, rModel );
-        aSpaceConv.convertFromModel();
+        ConverterRoot aConvBase( rFilter, *this, rChartModel, rxChartDoc, rChartSize );
+        ChartSpaceConverter aSpaceConv( aConvBase, rChartModel );
+        aSpaceConv.convertFromModel( rxExternalPage, rChartPos );
     }
 }
 

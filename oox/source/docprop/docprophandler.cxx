@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docprophandler.cxx,v $
- * $Revision: 1.2.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,7 +179,7 @@ uno::Sequence< ::rtl::OUString > OOXMLDocPropHandler::GetKeywordsSet( const ::rt
                 case (sal_Unicode)',':
                 case (sal_Unicode)';':
                 case (sal_Unicode)':':
-                case (sal_Unicode)' ':
+                case (sal_Unicode)'\t':
                     // this is a delimiter
                     // unfortunately I did not find any specification for the possible delimiters
                     if ( aResult[nCounter].getLength() )

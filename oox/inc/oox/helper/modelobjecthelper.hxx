@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: modelobjecthelper.hxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +53,7 @@ class ModelObjectHelper
 {
 public:
     explicit            ModelObjectHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory );
 
     /** Returns true, if the model contains a line marker with the passed name. */
     bool                hasLineMarker( const ::rtl::OUString& rMarkerName ) const;

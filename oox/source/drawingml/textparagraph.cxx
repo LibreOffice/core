@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textparagraph.cxx,v $
- * $Revision: 1.7.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 
 #include <rtl/ustring.hxx>
+#include "oox/helper/propertyset.hxx"
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -81,11 +79,21 @@ void TextParagraph::insertAt(
             xText->insertControlCharacter( xStart, ControlCharacter::APPEND_PARAGRAPH, sal_False );
             xAt->gotoEnd( sal_True );
         }
-
-        for( TextRunVector::const_iterator aIt = maRuns.begin(), aEnd = maRuns.end(); aIt != aEnd; ++aIt )
+        if ( maRuns.begin() == maRuns.end() )
         {
-            (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle );
-            nParagraphSize += (*aIt)->getText().getLength();
+            PropertySet aPropSet( xStart );
+
+            TextCharacterProperties aTextCharacterProps( aTextCharacterStyle );
+            aTextCharacterProps.assignUsed( maEndProperties );
+            aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
+        }
+        else
+        {
+            for( TextRunVector::const_iterator aIt = maRuns.begin(), aEnd = maRuns.end(); aIt != aEnd; ++aIt )
+            {
+                (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle );
+                nParagraphSize += (*aIt)->getText().getLength();
+            }
         }
         xAt->gotoEnd( sal_True );
 
@@ -97,7 +105,6 @@ void TextParagraph::insertAt(
             pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
             fCharacterSize = pTextParagraphStyle->getCharHeightPoints( 18 );
         }
-
         maProperties.pushToPropSet( rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
 
         // empty paragraphs do not have bullets in ppt

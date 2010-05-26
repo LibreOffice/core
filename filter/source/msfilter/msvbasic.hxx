@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: msvbasic.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,16 +30,12 @@
 #ifndef _MSVBASIC_HXX
 #define _MSVBASIC_HXX
 
-#ifdef _SOLAR_H
 #include <tools/solar.h>
-#endif
 #include <tools/debug.hxx>
 #include <sot/storage.hxx>
 #include <tools/dynary.hxx>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#include<map>
+#include <map>
 
 /* class VBA:
  * The VBA class provides a set of methods to handle Visual Basic For
@@ -66,13 +59,12 @@ DECLARE_DYNARRAY(StringArray,String *)
 // #117718# define internal types to distinguish between
 // module types, form, class & normal
 // #i37965# DR 2004-12-03: add "Document", used in Excel for macros attached to sheet
-enum ModuleType { Unknown = 0, Normal, Class, Form, Document };
 
 // #117718# define map to hold types of module
 //
-
+typedef sal_Int32 ModType;
 typedef ::std::map< UniString,
-    ModuleType > ModuleTypeHash;
+    ModType > ModuleTypeHash;
 
 class VBA_Impl
 {
@@ -93,8 +85,7 @@ public:
     void Output(int len, const sal_uInt8 *data);
     //
     // #117718# member map of module names to types of module
-    ModuleType GetModuleType( const UniString& rModuleName );
-
+    ModType GetModuleType( const UniString& rModuleName );
     std::vector<String> maReferences;
 private:
     struct VBAOffset_Impl

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fillpropertiesgroupcontext.cxx,v $
- * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -273,12 +270,12 @@ Reference< XFastContextHandler > FillPropertiesContext::createFastChildContext(
 {
     switch( nElement )
     {
-        case A_TOKEN( noFill ):         { rFillProps.moFillType = getToken( nElement ); return 0; };
-        case A_TOKEN( solidFill ):      { rFillProps.moFillType = getToken( nElement ); return new SolidFillContext( rParent, rxAttribs, rFillProps ); };
-        case A_TOKEN( gradFill ):       { rFillProps.moFillType = getToken( nElement ); return new GradientFillContext( rParent, rxAttribs, rFillProps.maGradientProps ); };
-        case A_TOKEN( pattFill ):       { rFillProps.moFillType = getToken( nElement ); return new PatternFillContext( rParent, rxAttribs, rFillProps.maPatternProps ); };
-        case A_TOKEN( blipFill ):       { rFillProps.moFillType = getToken( nElement ); return new BlipFillContext( rParent, rxAttribs, rFillProps.maBlipProps ); };
-        case A_TOKEN( grpFill ):        { rFillProps.moFillType = getToken( nElement ); return 0; };    // TODO
+        case A_TOKEN( noFill ):     { rFillProps.moFillType = getToken( nElement ); return 0; };
+        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getToken( nElement ); return new SolidFillContext( rParent, rxAttribs, rFillProps ); };
+        case A_TOKEN( gradFill ):   { rFillProps.moFillType = getToken( nElement ); return new GradientFillContext( rParent, rxAttribs, rFillProps.maGradientProps ); };
+        case A_TOKEN( pattFill ):   { rFillProps.moFillType = getToken( nElement ); return new PatternFillContext( rParent, rxAttribs, rFillProps.maPatternProps ); };
+        case A_TOKEN( blipFill ):   { rFillProps.moFillType = getToken( nElement ); return new BlipFillContext( rParent, rxAttribs, rFillProps.maBlipProps ); };
+        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getToken( nElement ); return 0; };    // TODO
     }
     return 0;
 }

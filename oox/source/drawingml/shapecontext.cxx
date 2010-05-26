@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shapecontext.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +90,7 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
         break;
     case XML_ph:
         mpShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
-        mpShapePtr->setIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

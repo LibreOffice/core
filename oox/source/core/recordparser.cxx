@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: recordparser.cxx,v $
- * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,7 +277,6 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
         // try to leave a context, there may be other incomplete contexts on the stack
         if( const RecordInfo* pEndRecInfo = getEndRecordInfo( nRecId ) )
         {
-            (void)pEndRecInfo; // shut warning up in non-debug
             // finalize contexts without record identifier for context end
             while( !mxStack->empty() && !mxStack->hasCurrentEndRecId() )
                 mxStack->popContext();
@@ -291,7 +287,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
             if( xCurrContext.is() )
             {
                 // context end record may contain some data, handle it as simple record
-                aRecStrm.seek( 0 );
+                aRecStrm.seekToStart();
                 xCurrContext->startRecord( nRecId, aRecStrm );
                 xCurrContext->endRecord( nRecId );
             }
@@ -306,7 +302,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
             ContextHandlerRef xCurrContext = mxStack->getCurrentContext();
             if( xCurrContext.is() )
             {
-                aRecStrm.seek( 0 );
+                aRecStrm.seekToStart();
                 xCurrContext = xCurrContext->createRecordContext( nRecId, aRecStrm );
             }
             // track all context identifiers on the stack (do not push simple records)
@@ -317,7 +313,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
             if( xCurrContext.is() )
             {
                 // import the record
-                aRecStrm.seek( 0 );
+                aRecStrm.seekToStart();
                 xCurrContext->startRecord( nRecId, aRecStrm );
                 // end simple records (context records are finished in ContextStack::popContext)
                 if( !pStartRecInfo )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DomainMapperTableManager.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +44,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 
     sal_uInt32      m_nRow;
     sal_uInt32      m_nCell;
+    sal_uInt32      m_nGridSpan;
     sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
@@ -117,6 +115,7 @@ public:
         else
            DomainMapperTableManager_Base_t::insertTableProps( pProps );
     };
+
 };
 
 }}

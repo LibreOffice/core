@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: clrschemecontext.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +73,7 @@ clrSchemeColorContext::clrSchemeColorContext( ContextHandler& rParent, ClrScheme
 
 clrSchemeColorContext::~clrSchemeColorContext()
 {
-    mrClrScheme.setColor( mnColorToken, getColor( getFilter() ) );
+    mrClrScheme.setColor( mnColorToken, getColor( getFilter().getGraphicHelper() ) );
 }
 
 clrSchemeContext::clrSchemeContext( ContextHandler& rParent, ClrScheme& rClrScheme ) :

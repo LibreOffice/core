@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: propertyset.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,6 +91,10 @@ public:
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
     inline bool         getProperty( Type& orValue, sal_Int32 nPropId ) const;
+
+    /** Gets the specified property from the property set.
+        @return  the property value, or an empty Any, if the property is missing. */
+    ::com::sun::star::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occured. */

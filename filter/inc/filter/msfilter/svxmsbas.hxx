@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svxmsbas.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +64,9 @@ public:
     // bit 1 = 1 -> the VBA - storage is copy to the ObjectShell storage
     int Import( const String& rStorageName, const String &rSubStorageName,
                 BOOL bAsComment=TRUE, BOOL bStripped=TRUE );
+    int Import( const String& rStorageName, const String &rSubStorageName,
+                const std::vector< String >& codeNames,
+                BOOL bAsComment=TRUE, BOOL bStripped=TRUE );
 
     // only for the export - copy or delete the saved VBA-macro-storage
     // form the ObjectShell
@@ -87,6 +87,7 @@ private:
 
     MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
+                          const std::vector< String >& codeNames,
                           BOOL bAsComment, BOOL bStripped);
     MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
         const String &rSubStorageName);

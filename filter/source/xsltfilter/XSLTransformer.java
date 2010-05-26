@@ -1,14 +1,10 @@
-
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XSLTransformer.java,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +23,9 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************///Standard Java classes
+ ************************************************************************/
+
+//Standard Java classes
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -79,6 +77,8 @@ import com.sun.star.uno.UnoRuntime;
 //Uno to java Adaptor
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+
+import net.sf.saxon.FeatureKeys;
 
 /** This outer class provides an inner class to implement the service
  * description, a method to instantiate the
@@ -293,6 +293,9 @@ public class XSLTransformer
                             // create new transformer for this stylesheet
                             TransformerFactory tfactory = TransformerFactory.newInstance();
                             debug("TransformerFactory is '" + tfactory.getClass().getName() + "'");
+                // some external saxons (Debian, Ubuntu, ...) have this disabled
+                // per default
+                tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
                             transformer = tfactory.newTransformer(new StreamSource(stylesheeturl));
                             transformer.setOutputProperty("encoding", "UTF-8");
                             // transformer.setURIResolver(XSLTransformer.this);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shape.cxx,v $
- * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <com/sun/star/document/XActionLockable.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -79,7 +77,7 @@ OUString CreateShapeCallback::onCreateXShape( const OUString& rServiceName, cons
     return rServiceName;
 }
 
-void CreateShapeCallback::onXShapeCreated( const Reference< XShape >& ) const
+void CreateShapeCallback::onXShapeCreated( const Reference< XShape >&, const Reference< XShapes >& ) const
 {
 }
 
@@ -92,7 +90,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
 , mpMasterTextListStyle( new TextListStyle )
 , mnSubType( 0 )
-, mnIndex( 0 )
+, mnSubTypeIndex( -1 )
 , mnRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
@@ -138,7 +136,7 @@ const ShapeStyleRef* Shape::getShapeStyleRef( sal_Int32 nRefType ) const
 
 void Shape::addShape(
         const ::oox::core::XmlFilterBase& rFilterBase,
-        const ThemePtr& rxTheme,
+        const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
@@ -148,7 +146,7 @@ void Shape::addShape(
         rtl::OUString sServiceName( msServiceName );
         if( sServiceName.getLength() )
         {
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxTheme, rxShapes, pShapeRect, sal_False ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False ) );
 
             if( pShapeMap && msId.getLength() )
             {
@@ -158,8 +156,11 @@ void Shape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
-                addChildren( rFilterBase, *this, rxTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
     catch( const Exception&  )
     {
@@ -187,7 +188,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
 void Shape::addChildren(
         const ::oox::core::XmlFilterBase& rFilterBase,
         Shape& rMaster,
-        const ThemePtr& rxTheme,
+        const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         const awt::Rectangle& rClientRect,
         ShapeIdMap* pShapeMap )
@@ -238,14 +239,14 @@ void Shape::addChildren(
                 pShapeRect = &aShapeRect;
             }
         }
-        (*aIter++)->addShape( rFilterBase, rxTheme, rxShapes, pShapeRect, pShapeMap );
+        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, pShapeRect, pShapeMap );
     }
 }
 
 Reference< XShape > Shape::createAndInsert(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const rtl::OUString& rServiceName,
-        const ThemePtr& rxTheme,
+        const Theme* pTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
         const awt::Rectangle* pShapeRect,
         sal_Bool bClearText )
@@ -368,6 +369,10 @@ Reference< XShape > Shape::createAndInsert(
         }
         rxShapes->add( mxShape );
 
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->addActionLock();
+
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
         {
@@ -379,6 +384,9 @@ Reference< XShape > Shape::createAndInsert(
             }
         }
 
+        ModelObjectHelper& rModelObjectHelper = rFilterBase.getModelObjectHelper();
+        const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
+
         LineProperties aLineProperties;
         aLineProperties.maLineFill.moFillType = XML_noFill;
         sal_Int32 nLinePhClr = -1;
@@ -386,25 +394,25 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.moFillType = XML_noFill;
         sal_Int32 nFillPhClr = -1;
 
-        if( rxTheme.get() )
+        if( pTheme )
         {
             if( const ShapeStyleRef* pLineRef = getShapeStyleRef( XML_lnRef ) )
             {
-                if( const LineProperties* pLineProps = rxTheme->getLineStyle( pLineRef->mnThemedIdx ) )
+                if( const LineProperties* pLineProps = pTheme->getLineStyle( pLineRef->mnThemedIdx ) )
                     aLineProperties.assignUsed( *pLineProps );
-                nLinePhClr = pLineRef->maPhClr.getColor( rFilterBase );
+                nLinePhClr = pLineRef->maPhClr.getColor( rGraphicHelper );
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
-                if( const FillProperties* pFillProps = rxTheme->getFillStyle( pFillRef->mnThemedIdx ) )
+                if( const FillProperties* pFillProps = pTheme->getFillStyle( pFillRef->mnThemedIdx ) )
                     aFillProperties.assignUsed( *pFillProps );
-                nFillPhClr = pFillRef->maPhClr.getColor( rFilterBase );
+                nFillPhClr = pFillRef->maPhClr.getColor( rGraphicHelper );
             }
 //            if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_fillRef ) )
 //            {
-//                if( const EffectProperties* pEffectProps = rxTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
+//                if( const EffectProperties* pEffectProps = pTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
 //                    aEffectProperties.assignUsed( *pEffectProps );
-//                nEffectPhClr = pEffectRef->maPhClr.getColor( rFilterBase );
+//                nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
 //            }
         }
 
@@ -412,22 +420,32 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.assignUsed( getFillProperties() );
 
         PropertyMap aShapeProperties;
+        PropertyMap::const_iterator aShapePropIter;
+
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
         if( mxCreateCallback.get() )
-            aShapeProperties.insert( mxCreateCallback->getShapeProperties().begin(), mxCreateCallback->getShapeProperties().end() );
+        {
+            for ( aShapePropIter = mxCreateCallback->getShapeProperties().begin();
+                aShapePropIter != mxCreateCallback->getShapeProperties().end(); aShapePropIter++ )
+                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
+        }
 
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
-            aShapeProperties.insert( mpTextBody->getTextProperties().maPropertyMap.begin(), mpTextBody->getTextProperties().maPropertyMap.end() );
+        {
+            for ( aShapePropIter = mpTextBody->getTextProperties().maPropertyMap.begin();
+                aShapePropIter != mpTextBody->getTextProperties().maPropertyMap.end(); aShapePropIter++ )
+                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
+        }
 
         // applying properties
         PropertySet aPropSet( xSet );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
-            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rFilterBase );
+            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rGraphicHelper );
         if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
-        aFillProperties.pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper(), FillProperties::DEFAULT_IDS, mnRotation, nFillPhClr );
-        aLineProperties.pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper(), LineProperties::DEFAULT_IDS, nLinePhClr );
+        aFillProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, FillProperties::DEFAULT_IDS, mnRotation, nFillPhClr );
+        aLineProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, LineProperties::DEFAULT_IDS, nLinePhClr );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
@@ -443,7 +461,7 @@ Reference< XShape > Shape::createAndInsert(
             aPropSet.setProperties( aShapeProperties );
 
         if( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
-            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
+            mpCustomShapePropertiesPtr->pushToPropSet( xSet, mxShape );
 
         // in some cases, we don't have any text body.
         if( getTextBody() )
@@ -454,8 +472,8 @@ Reference< XShape > Shape::createAndInsert(
                 TextCharacterProperties aCharStyleProperties;
                 if( const ShapeStyleRef* pFontRef = getShapeStyleRef( XML_fontRef ) )
                 {
-                    if( rxTheme.get() )
-                        if( const TextCharacterProperties* pCharProps = rxTheme->getFontStyle( pFontRef->mnThemedIdx ) )
+                    if( pTheme )
+                        if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
                             aCharStyleProperties.assignUsed( *pCharProps );
                     aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
                 }
@@ -464,11 +482,13 @@ Reference< XShape > Shape::createAndInsert(
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
         }
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
 
     // use a callback for further processing on the XShape (e.g. charts)
     if( mxShape.is() && mxCreateCallback.get() )
-        mxCreateCallback->onXShapeCreated( mxShape );
+        mxCreateCallback->onXShapeCreated( mxShape, rxShapes );
 
     return mxShape;
 }

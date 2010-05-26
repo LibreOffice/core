@@ -3,13 +3,9 @@
  *
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   
-  Copyright 2008 by Sun Microsystems, Inc.
+  Copyright 2000, 2010 Oracle and/or its affiliates.
  
   OpenOffice.org - a multi-platform office productivity suite
- 
-  $RCSfile: qnametostr.xsl,v $
- 
-  $Revision: 1.3 $
  
   This file is part of OpenOffice.org.
  
@@ -27,7 +23,7 @@
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
  ************************************************************************/
 
 -->
@@ -67,7 +63,66 @@
     xml:space="default">
   <xsl:output method="text" />
 
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <!--
+      Generates mapping from tokenids to strings. (DEBUG)
+  -->
+  <xsl:template name="qnametostr">
+    <xsl:text>
+void QNameToString::init_ooxml()
+{
+    /* ooxml */
+    </xsl:text>
+    <xsl:for-each select="//@tokenid">
+      <xsl:if test="generate-id(.) = generate-id(key('tokenids', .)[1]) and contains(., 'ooxml:')">
+        <xsl:text>
+    mMap[</xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="."/>
+    </xsl:call-template>
+    <xsl:text>] = "</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>";</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:text>
+}
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template name="ooxmlidstoxml">
+    <xsl:text>
+void ooxmlsprmidsToXML(::std::ostream &amp; out)
+{</xsl:text>
+    <xsl:for-each select="//@tokenid">
+      <xsl:if test="contains(., 'ooxml:') and generate-id(.) = generate-id(key('tokenids', .)[1]) and ancestor::element">
+        <xsl:text>
+    out &lt;&lt; "&lt;theid name=\"</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>\"&gt;</xsl:text>
+    <xsl:value-of select="90000 + position()"/>
+    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl; </xsl:text>
+      </xsl:if> 
+    </xsl:for-each>
+    <xsl:text>
+}</xsl:text>
+    <xsl:text>
+void ooxmlidsToXML(::std::ostream &amp; out)
+{</xsl:text>
+    <xsl:for-each select="//@tokenid">
+      <xsl:if test="contains(., 'ooxml:') and generate-id(.) = generate-id(key('tokenids', .)[1]) and ancestor::attribute">
+        <xsl:text>
+    out &lt;&lt; "&lt;theid name=\"</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>\"&gt;</xsl:text>
+    <xsl:value-of select="90000 + position()"/>
+    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl; </xsl:text>
+      </xsl:if> 
+    </xsl:for-each>
+    <xsl:text>
+}</xsl:text>
+  </xsl:template>
 
   <xsl:template match="/">
     <xsl:call-template name="qnametostr"/>

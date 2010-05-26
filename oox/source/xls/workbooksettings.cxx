@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: workbooksettings.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,7 +130,7 @@ void WorkbookSettings::importFileSharing( const AttributeList& rAttribs )
 
 void WorkbookSettings::importWorkbookPr( const AttributeList& rAttribs )
 {
-    maBookSettings.maCodeName          = rAttribs.getString( XML_codePage, OUString() );
+    maBookSettings.maCodeName          = rAttribs.getString( XML_codeName, OUString() );
     maBookSettings.mnShowObjectMode    = rAttribs.getToken( XML_showObjects, XML_all );
     maBookSettings.mnUpdateLinksMode   = rAttribs.getToken( XML_updateLinks, XML_userSet );
     maBookSettings.mnDefaultThemeVer   = rAttribs.getInteger( XML_defaultThemeVersion, -1 );
@@ -321,6 +318,9 @@ void WorkbookSettings::finalizeImport()
     Reference< XCalculatable > xCalculatable( getDocument(), UNO_QUERY );
     if( xCalculatable.is() )
         xCalculatable->enableAutomaticCalculation( (maCalcSettings.mnCalcMode == XML_auto) || (maCalcSettings.mnCalcMode == XML_autoNoTable) );
+
+    // VBA code name
+    aPropSet.setProperty( PROP_CodeName, maBookSettings.maCodeName );
 }
 
 sal_Int16 WorkbookSettings::getApiShowObjectMode() const

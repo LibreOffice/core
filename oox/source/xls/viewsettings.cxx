@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewsettings.cxx,v $
- * $Revision: 1.5.20.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -202,7 +199,7 @@ sal_Int32 SheetViewModel::getPageBreakZoom() const
 
 sal_Int32 SheetViewModel::getGridColor( const FilterBase& rFilter ) const
 {
-    return mbDefGridColor ? API_RGB_TRANSPARENT : maGridColor.getColor( rFilter );
+    return mbDefGridColor ? API_RGB_TRANSPARENT : maGridColor.getColor( rFilter.getGraphicHelper() );
 }
 
 const PaneSelectionModel* SheetViewModel::getPaneSelection( sal_Int32 nPaneId ) const

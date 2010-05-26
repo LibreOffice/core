@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formulaparser.cxx,v $
- * $Revision: 1.5.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2754,19 +2751,16 @@ FormulaParser::~FormulaParser()
 
 void FormulaParser::importFormula( FormulaContext& rContext, const OUString& rFormulaString ) const
 {
-    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importOoxFormula( rContext, rFormulaString );
 }
 
 void FormulaParser::importFormula( FormulaContext& rContext, RecordInputStream& rStrm ) const
 {
-    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importOobFormula( rContext, rStrm );
 }
 
 void FormulaParser::importFormula( FormulaContext& rContext, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
 {
-    OOX_LOADSAVE_TIMER( IMPORTFORMULA );
     mxImpl->importBiffFormula( rContext, rStrm, pnFmlaSize );
 }
 

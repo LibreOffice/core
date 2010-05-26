@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OOXMLTestService.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,10 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/**
-  Copyright 2005 Sun Microsystems, Inc.
-  */
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMain.hpp>
@@ -71,6 +64,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <ooxml/OOXMLDocument.hxx>
+#include <resourcemodel/TagLogger.hxx>
 
 #include <ctype.h>
 
@@ -98,6 +92,12 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
+#ifdef DEBUG_ELEMENT
+        writerfilter::TagLogger::Pointer_t debugLogger
+        (writerfilter::TagLogger::getInstance("DEBUG"));
+        debugLogger->startDocument();
+#endif
+
         rtl::OUString arg=aArguments[0];
 
         ::comphelper::setProcessServiceFactory(xServiceFactory);
@@ -142,6 +142,11 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
         Stream::Pointer_t pStream = createStreamHandler();
         pDocument->resolve(*pStream);
+
+#ifdef DEBUG_ELEMENT
+        writerfilter::TagLogger::dump("DEBUG");
+        debugLogger->endDocument();
+#endif
 
         ::ucbhelper::ContentBroker::deinitialize();
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: modelobjecthelper.cxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,11 +44,11 @@ namespace oox {
 
 // ============================================================================
 
-ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxFactory ) :
-    maMarkerContainer(   rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
-    maDashContainer(     rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
-    maGradientContainer( rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
-    maBitmapContainer(   rxFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
+ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
+    maMarkerContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
+    maDashContainer(     rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
+    maGradientContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
+    maBitmapContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
     maDashNameBase( CREATE_OUSTRING( "msLineDash " ) ),
     maGradientNameBase( CREATE_OUSTRING( "msFillGradient " ) ),
     maBitmapNameBase( CREATE_OUSTRING( "msFillBitmap " ) )

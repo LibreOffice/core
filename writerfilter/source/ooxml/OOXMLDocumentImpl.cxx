@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OOXMLDocumentImpl.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLDocumentImpl.hxx"
@@ -40,6 +38,7 @@
 
 #include <iostream>
 
+using ::com::sun::star::xml::sax::SAXException;
 namespace writerfilter {
 namespace ooxml
 {
@@ -305,6 +304,10 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
+#ifdef DEBUG_RESOLVE
+    debug_logger->startElement("OOXMLDocumentImpl.resolve");
+#endif
+
     uno::Reference< xml::sax::XFastParser > xParser
         (mpStream->getFastParser());
 
@@ -333,8 +336,20 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         xml::sax::InputSource aParserInput;
         aParserInput.aInputStream = mpStream->getDocumentStream();
-        xParser->parseStream(aParserInput);
+        try
+        {
+            xParser->parseStream(aParserInput);
+        }
+        catch (...) {
+#ifdef DEBUG_ELEMENT
+            debug_logger->element("exception");
+#endif
+        }
     }
+
+#ifdef DEBUG_RESOLVE
+    debug_logger->endElement("OOXMLDocumentImpl.resolve");
+#endif
 }
 
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const ::rtl::OUString & rId)

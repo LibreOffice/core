@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: worksheetfragment.cxx,v $
- * $Revision: 1.5.4.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -873,6 +870,7 @@ bool BiffWorksheetFragment::importFragment()
                     case BIFF8: switch( nRecId )
                     {
                         case BIFF_ID_CFHEADER:          rCondFormats.importCfHeader( mrStrm );          break;
+                        case BIFF_ID_CODENAME:          rWorksheetSett.importCodeName( mrStrm );        break;
                         case BIFF_ID_COLINFO:           importColInfo();                                break;
                         case BIFF_ID_DATAVALIDATION:    importDataValidation();                         break;
                         case BIFF_ID_DATAVALIDATIONS:   importDataValidations();                        break;
@@ -1083,7 +1081,7 @@ void BiffWorksheetFragment::importHyperlink()
         return;
 
     // try to read the StdHlink data
-    if( !::oox::ole::OleHelper::importStdHlink( aModel, mrStrm, getTextEncoding(), true ) )
+    if( !::oox::ole::OleHelper::importStdHlink( aModel, mrStrm, true ) )
         return;
 
     // try to read the optional following SCREENTIP record

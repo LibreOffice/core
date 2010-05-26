@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: worksheetsettings.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,6 +120,8 @@ public:
     void                importPassword( BiffInputStream& rStrm );
     /** Imports protection settings from the SHEETPROTECTION record. */
     void                importSheetProtection( BiffInputStream& rStrm );
+    /** Imports the VBA code module name from the CODENAME record. */
+    void                importCodeName( BiffInputStream& rStrm );
     /** Imports phonetic settings from the PHONETICPR record. */
     void                importPhoneticPr( BiffInputStream& rStrm );
 

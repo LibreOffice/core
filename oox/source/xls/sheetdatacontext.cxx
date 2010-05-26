@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sheetdatacontext.cxx,v $
- * $Revision: 1.5.4.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,7 +171,6 @@ OoxSheetDataContext::OoxSheetDataContext( OoxWorksheetFragmentBase& rFragment ) 
 
 ContextHandlerRef OoxSheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    OOX_LOADSAVE_TIMER( ONCREATESHEETCONTEXT );
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( sheetData ):
@@ -204,7 +200,6 @@ ContextHandlerRef OoxSheetDataContext::onCreateContext( sal_Int32 nElement, cons
 
 void OoxSheetDataContext::onEndElement( const OUString& rChars )
 {
-    OOX_LOADSAVE_TIMER( ONENDSHEETELEMENT );
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( v ):
@@ -345,7 +340,6 @@ ContextHandlerRef OoxSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, 
 
 void OoxSheetDataContext::importRow( const AttributeList& rAttribs )
 {
-    OOX_LOADSAVE_TIMER( IMPORTROW );
     RowModel aModel;
     aModel.mnFirstRow     = aModel.mnLastRow = rAttribs.getInteger( XML_r, -1 );
     aModel.mfHeight       = rAttribs.getDouble( XML_ht, -1.0 );
@@ -364,7 +358,6 @@ void OoxSheetDataContext::importRow( const AttributeList& rAttribs )
 
 void OoxSheetDataContext::importCell( const AttributeList& rAttribs )
 {
-    OOX_LOADSAVE_TIMER( IMPORTCELL );
     maCurrCell.reset();
     maCurrCell.mxCell         = getCell( rAttribs.getString( XML_r, OUString() ), &maCurrCell.maAddress );
     maCurrCell.mnCellType     = rAttribs.getToken( XML_t, XML_n );

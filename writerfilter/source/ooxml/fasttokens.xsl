@@ -3,13 +3,9 @@
  *
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   
-  Copyright 2008 by Sun Microsystems, Inc.
+  Copyright 2000, 2010 Oracle and/or its affiliates.
  
   OpenOffice.org - a multi-platform office productivity suite
- 
-  $RCSfile: fasttokens.xsl,v $
- 
-  $Revision: 1.4 $
  
   This file is part of OpenOffice.org.
  
@@ -27,7 +23,7 @@
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
  ************************************************************************/
 
 -->
@@ -65,7 +61,25 @@
   <xsl:output method="text" />
   <xsl:param name="prefix"/>
   
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <xsl:template name="fasttokens">
+    <xsl:text>
+typedef sal_Int32 Token_t;
+    </xsl:text>
+    <xsl:for-each select="/model/fasttoken">
+      <xsl:text>
+const Token_t OOXML_</xsl:text>
+<xsl:value-of select="translate(., '-', '_')"/>
+<xsl:text> = </xsl:text>
+<xsl:value-of select="position() - 1"/>
+<xsl:text>;</xsl:text>
+    </xsl:for-each>
+    <xsl:text>
+const Token_t OOXML_FAST_TOKENS_END =</xsl:text>
+<xsl:value-of select="count(/model/fasttoken)"/>
+<xsl:text>;&#xa;</xsl:text>
+  </xsl:template>
 
   <xsl:template match="/">
     <out xml:space="preserve">

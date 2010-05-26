@@ -2,13 +2,9 @@
 # 
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,13 +39,13 @@ CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar crimson.jar
 
 .IF "$(SYSTEM_XALAN)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XALAN_JAR)
+EXTRAJARFILES += $(XALAN_JAR)
 .ELSE
 JARFILES += xalan.jar
 .ENDIF
 
 .IF "$(SYSTEM_XML_APIS)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XML_APIS_JAR)
+EXTRAJARFILES += $(XML_APIS_JAR)
 .ELSE
 JARFILES += xml-apis.jar
 .ENDIF

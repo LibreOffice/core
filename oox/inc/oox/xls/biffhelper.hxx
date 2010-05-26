@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: biffhelper.hxx,v $
- * $Revision: 1.4.20.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -496,6 +493,8 @@ const sal_uInt16 BIFF_ID_TOPMARGIN          = 0x0028;
 const sal_uInt16 BIFF_ID_TXO                = 0x01B6;
 const sal_uInt16 BIFF_ID_UNCALCED           = 0x005E;
 const sal_uInt16 BIFF_ID_USESELFS           = 0x0160;
+const sal_uInt16 BIFF_ID_VBAPROJECT         = 0x00D3;
+const sal_uInt16 BIFF_ID_VBAPROJECTEMPTY    = 0x01BD;
 const sal_uInt16 BIFF_ID_VCENTER            = 0x0084;
 const sal_uInt16 BIFF_ID_VERPAGEBREAKS      = 0x001A;
 const sal_uInt16 BIFF_ID_WINDOW1            = 0x003D;

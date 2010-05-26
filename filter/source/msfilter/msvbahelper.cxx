@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:
- * $Revision:
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
+
 #include <filter/msfilter/msvbahelper.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>

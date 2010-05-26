@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptshapecontext.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +63,7 @@ PPTShapeContext::PPTShapeContext( ContextHandler& rParent, const SlidePersistPtr
 {
 }
 
-oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
+oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, sal_Int32 nSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
     oox::drawingml::ShapePtr aShapePtr;
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
@@ -74,11 +71,14 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, st
     {
         if ( (*aRevIter)->getSubType() == nMasterPlaceholder )
         {
-            aShapePtr = *aRevIter;
-            break;
+            if ( ( nSubTypeIndex == -1 ) || ( nSubTypeIndex == (*aRevIter)->getSubTypeIndex() ) )
+            {
+                aShapePtr = *aRevIter;
+                break;
+            }
         }
         std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren );
+        aShapePtr = findPlaceholder( nMasterPlaceholder, nSubTypeIndex, rChildren );
         if ( aShapePtr.get() )
             break;
         aRevIter++;
@@ -87,10 +87,11 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, st
 }
 
 // if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
-oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
+oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder,
+    sal_Int32 nSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
-    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, rShapes );
-    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, rShapes );
+    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, nSubTypeIndex, rShapes );
+    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, nSubTypeIndex, rShapes );
 }
 
 Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
@@ -110,7 +111,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
     {
         sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
-        mpShapePtr->setIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         if ( nSubType )
         {
             PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
@@ -134,7 +135,8 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                             nSecondPlaceholder = XML_title;
                             break;
                         case XML_obj :          // slide/layout
-                            nFirstPlaceholder = XML_body;
+                            nFirstPlaceholder = XML_obj;
+                            nSecondPlaceholder = XML_body;
                             break;
                         case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
                         case XML_sldNum :       // slide/layout/master/notes/notesmaster/handoutmaster
@@ -157,12 +159,13 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                     {
                         oox::drawingml::ShapePtr pPlaceholder;
                         if ( eShapeLocation == Layout )     // for layout objects the referenced object can be found within the same shape tree
-                            pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, mpSlidePersistPtr->getShapes()->getChildren() );
+                            pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, -1, mpSlidePersistPtr->getShapes()->getChildren() );
                         else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
                         {
                             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                             if ( pMasterPersist.get() )
-                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, pMasterPersist->getShapes()->getChildren() );
+                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
+                                    pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
                         }
                         if ( pPlaceholder.get() )
                         {

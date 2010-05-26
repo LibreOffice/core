@@ -4,13 +4,9 @@
  *
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   
-  Copyright 2008 by Sun Microsystems, Inc.
+  Copyright 2000, 2010 Oracle and/or its affiliates.
  
   OpenOffice.org - a multi-platform office productivity suite
- 
-  $RCSfile: resourceids.xsl,v $
- 
-  $Revision: 1.5 $
  
   This file is part of OpenOffice.org.
  
@@ -28,7 +24,7 @@
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
  ************************************************************************/
 
 -->
@@ -68,7 +64,27 @@
     xml:space="default">
   <xsl:output method="text" />
 
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <!--
+      Generates contant definitions for tokenids.
+  -->
+  <xsl:template name="defineooxmlids">
+    <xsl:text>
+namespace NS_ooxml
+{</xsl:text>
+<xsl:for-each select="//@tokenid|//@sendtokenid">
+  <xsl:if test="contains(., 'ooxml:') and generate-id(.) = generate-id(key('tokenids', .)[1])">
+    <xsl:text>
+    const Id LN_</xsl:text>
+    <xsl:value-of select="substring-after(., 'ooxml:')"/>
+    <xsl:text> = </xsl:text>
+    <xsl:value-of select="90000 + position()"/>
+    <xsl:text>;</xsl:text>
+  </xsl:if>
+</xsl:for-each>
+}
+  </xsl:template>
 
   <xsl:template match="/">
     <out>

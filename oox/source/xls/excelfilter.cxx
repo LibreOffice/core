@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excelfilter.cxx,v $
- * $Revision: 1.6.6.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelchartconverter.hxx"
+#include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/workbookfragment.hxx"
 #include "oox/dump/biffdumper.hxx"
@@ -59,29 +57,29 @@ namespace xls {
 // ============================================================================
 
 ExcelFilterBase::ExcelFilterBase() :
-    mpHelper( 0 )
+    mpData( 0 )
 {
 }
 
 ExcelFilterBase::~ExcelFilterBase()
 {
-    OSL_ENSURE( !mpHelper, "ExcelFilterBase::~ExcelFilterBase - workbook helper not cleared" );
+    OSL_ENSURE( !mpData, "ExcelFilterBase::~ExcelFilterBase - workbook data not cleared" );
 }
 
-void ExcelFilterBase::setWorkbookHelper( WorkbookHelper& rHelper )
+void ExcelFilterBase::registerWorkbookData( WorkbookData& rData )
 {
-    mpHelper = &rHelper;
+    mpData = &rData;
 }
 
-WorkbookHelper& ExcelFilterBase::getWorkbookHelper() const
+WorkbookData& ExcelFilterBase::getWorkbookData() const
 {
-    OSL_ENSURE( mpHelper, "ExcelFilterBase::getWorkbookHelper - missing workbook helper" );
-    return *mpHelper;
+    OSL_ENSURE( mpData, "ExcelFilterBase::getWorkbookData - missing workbook data" );
+    return *mpData;
 }
 
-void ExcelFilterBase::clearWorkbookHelper()
+void ExcelFilterBase::unregisterWorkbookData()
 {
-    mpHelper = 0;
+    mpData = 0;
 }
 
 // ============================================================================
@@ -127,12 +125,7 @@ bool ExcelFilter::importDocument() throw()
     if( aWorkbookPath.getLength() > 0 )
     {
         WorkbookHelperRoot aHelper( *this );
-        if( aHelper.isValid() )
-        {
-            setWorkbookHelper( aHelper );   // needed for callbacks
-            bRet = importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) );
-            clearWorkbookHelper();
-        }
+        bRet = aHelper.isValid() && importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) );
     }
     return bRet;
 }
@@ -142,19 +135,9 @@ bool ExcelFilter::exportDocument() throw()
     return false;
 }
 
-sal_Int32 ExcelFilter::getSchemeColor( sal_Int32 nToken ) const
-{
-    return getWorkbookHelper().getTheme().getColorByToken( nToken );
-}
-
-sal_Int32 ExcelFilter::getPaletteColor( sal_Int32 nPaletteIdx ) const
-{
-    return getWorkbookHelper().getStyles().getPaletteColor( nPaletteIdx );
-}
-
 const ::oox::drawingml::Theme* ExcelFilter::getCurrentTheme() const
 {
-    return &getWorkbookHelper().getTheme();
+    return &WorkbookHelper( getWorkbookData() ).getTheme();
 }
 
 ::oox::vml::Drawing* ExcelFilter::getVmlDrawing()
@@ -169,7 +152,12 @@ const TableStyleListPtr ExcelFilter::getTableStyles()
 
 ::oox::drawingml::chart::ChartConverter& ExcelFilter::getChartConverter()
 {
-    return getWorkbookHelper().getChartConverter();
+    return WorkbookHelper( getWorkbookData() ).getChartConverter();
+}
+
+GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
+{
+    return new ExcelGraphicHelper( getWorkbookData() );
 }
 
 OUString ExcelFilter::implGetImplementationName() const
@@ -232,12 +220,7 @@ bool ExcelBiffFilter::importDocument() throw()
     if( eBiff != BIFF_UNKNOWN )
     {
         WorkbookHelperRoot aHelper( *this, eBiff );
-        if( aHelper.isValid() )
-        {
-            setWorkbookHelper( aHelper );   // needed for callbacks
-            bRet = BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
-            clearWorkbookHelper();
-        }
+        bRet = aHelper.isValid() && BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
     }
     return bRet;
 }
@@ -247,9 +230,9 @@ bool ExcelBiffFilter::exportDocument() throw()
     return false;
 }
 
-sal_Int32 ExcelBiffFilter::getPaletteColor( sal_Int32 nPaletteIdx ) const
+GraphicHelper* ExcelBiffFilter::implCreateGraphicHelper() const
 {
-    return getWorkbookHelper().getStyles().getPaletteColor( nPaletteIdx );
+    return new ExcelGraphicHelper( getWorkbookData() );
 }
 
 OUString ExcelBiffFilter::implGetImplementationName() const

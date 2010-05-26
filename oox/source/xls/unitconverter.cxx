@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unitconverter.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +108,7 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     mnNullDate( lclGetDays( Date( 30, 12, 1899 ) ) )
 {
     // initialize constant and default coefficients
-    const DeviceInfo& rDeviceInfo = getBaseFilter().getDeviceInfo();
+    const DeviceInfo& rDeviceInfo = getBaseFilter().getGraphicHelper().getDeviceInfo();
     maCoeffs[ UNIT_INCH ]    = MM100_PER_INCH;
     maCoeffs[ UNIT_POINT ]   = MM100_PER_POINT;
     maCoeffs[ UNIT_TWIP ]    = MM100_PER_TWIP;

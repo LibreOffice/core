@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textcharacterproperties.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +98,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     // symbol font not supported
 
     if( maCharColor.isUsed() )
-        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter );
+        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );
 
     if( moLang.has() && (moLang.get().getLength() > 0) )
     {
@@ -147,7 +144,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
         rPropMap[ PROP_CharUnderlineHasColor ] <<= true;
-        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter );
+        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter.getGraphicHelper() );
     }
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptimport.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,8 +53,6 @@ public:
     virtual bool importDocument() throw();
     virtual bool exportDocument() throw();
 
-    virtual sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
-
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
     virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
@@ -69,7 +64,10 @@ public:
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
+    sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
+
 private:
+    virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 
 private:

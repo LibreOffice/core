@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shape.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,8 @@ public:
                             const ::com::sun::star::awt::Rectangle& rShapeRect );
 
     virtual void        onXShapeCreated(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) const;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) const;
 
     inline const PropertyMap& getShapeProperties() const { return maShapeProps; }
 
@@ -125,9 +123,10 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
-    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
+    void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
-    void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; }
+    void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
+    sal_Int32                       getSubTypeIndex() const { return mnSubTypeIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
@@ -146,7 +145,7 @@ public:
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
                             const oox::core::XmlFilterBase& rFilterBase,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
@@ -164,7 +163,7 @@ protected:
                         createAndInsert(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const ::rtl::OUString& rServiceName,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
                             sal_Bool bClearText );
@@ -172,7 +171,7 @@ protected:
     void                addChildren(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             Shape& rMaster,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap );
@@ -188,11 +187,11 @@ protected:
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
-    rtl::OUString   msServiceName;
-    rtl::OUString    msName;
-    rtl::OUString    msId;
-    sal_uInt32      mnSubType;      // if this type is not zero, then the shape is a placeholder
-    sal_uInt32      mnIndex;
+    rtl::OUString       msServiceName;
+    rtl::OUString       msName;
+    rtl::OUString       msId;
+    sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
+    sal_Int32           mnSubTypeIndex;
 
     ShapeStyleRefMap   maShapeStyleRefs;
 

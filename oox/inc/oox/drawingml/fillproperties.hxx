@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fillproperties.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include "oox/helper/helper.hxx"
 
 namespace oox {
+    class GraphicHelper;
     class ModelObjectHelper;
     class PropertyMap;
     class PropertySet;
@@ -159,8 +157,8 @@ struct FillProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
+                            const GraphicHelper& rGraphicHelper,
                             const FillPropertyIds& rPropIds = DEFAULT_IDS,
                             sal_Int32 nShapeRotation = 0,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
@@ -168,8 +166,8 @@ struct FillProperties
     /** Writes the properties to the passed property set. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
+                            const GraphicHelper& rGraphicHelper,
                             const FillPropertyIds& rPropIds = DEFAULT_IDS,
                             sal_Int32 nShapeRotation = 0,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
@@ -187,13 +185,13 @@ struct GraphicProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::FilterBase& rFilter,
+                            const GraphicHelper& rGraphicHelper,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Writes the properties to the passed property set. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const ::oox::core::FilterBase& rFilter,
+                            const GraphicHelper& rGraphicHelper,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 

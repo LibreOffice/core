@@ -3,13 +3,9 @@
  *
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   
-  Copyright 2008 by Sun Microsystems, Inc.
+  Copyright 2000, 2010 Oracle and/or its affiliates.
  
   OpenOffice.org - a multi-platform office productivity suite
- 
-  $RCSfile: modelcleanup.xsl,v $
- 
-  $Revision: 1.6 $
  
   This file is part of OpenOffice.org.
  
@@ -27,7 +23,7 @@
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
  ************************************************************************/
 
 -->
@@ -38,7 +34,7 @@
     xmlns:xalan="http://xml.apache.org/xalan"
     exclude-result-prefixes = "xalan"
     xml:indent="true">
-  <xsl:output method="xml" />
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" omit-xml-declaration="no"/>
 
 
   <xsl:key name="resources"
@@ -89,6 +85,116 @@
     </xsl:element>
   </xsl:template>
 
+    <xsl:template name="typeofdefine">
+        <xsl:for-each select="rng:data">
+            <xsl:choose>
+                <xsl:when test="@type='base64Binary'"> 
+                    <xsl:text>String</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='boolean'"> 
+                    <xsl:text>Boolean</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='byte'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='dateTime'"> 
+                    <xsl:text>String</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='decimal'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='float'"> 
+                    <xsl:text>Float</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='hexBinary'"> 
+                    <xsl:text>Hex</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='int'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='integer'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='positiveInteger'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='string'"> 
+                    <xsl:text>String</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='token'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='unsignedInt'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:when test="@type='unsignedLong'"> 
+                    <xsl:text>Integer</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>Unknown</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="typeofattribute">
+        <xsl:for-each select="rng:ref">
+            <xsl:variable name="name" select="@name"/>
+            <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+                <xsl:call-template name="typeofdefine"/>
+            </xsl:for-each>
+        </xsl:for-each> 
+    </xsl:template>
+        
+    <xsl:template name="generatevalueresource">
+        <xsl:variable name="name" select="@name"/>
+        <resource>
+            <xsl:attribute name="name">
+                <xsl:value-of select="@name"/>
+            </xsl:attribute>
+            <xsl:attribute name="resource">Value</xsl:attribute>
+            <xsl:attribute name="generated">yes</xsl:attribute>
+            <xsl:for-each select=".//rng:attribute">
+                <xsl:variable name="type">
+                    <xsl:choose>
+                        <xsl:when test="rng:ref[@name='ST_OnOff']">
+                            <xsl:text>Boolean</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="rng:text">
+                            <xsl:text>String</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="typeofattribute"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <attribute>
+                    <xsl:attribute name="name">
+                        <xsl:value-of select="@name"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="tokenid">
+                        <xsl:text>ooxml:</xsl:text>
+                        <xsl:value-of select="$name"/>
+                        <xsl:text>_</xsl:text>
+                        <xsl:value-of select="@name"/>
+                    </xsl:attribute>	  
+                    <xsl:attribute name="action">
+                        <xsl:text>setValue</xsl:text>
+                    </xsl:attribute>
+                </attribute>
+                <xsl:if test="string-length($type) > 0">
+                    <action name="start">
+                        <xsl:attribute name="action">
+                            <xsl:text>setDefault</xsl:text>
+                            <xsl:value-of select="$type"/>
+                            <xsl:text>Value</xsl:text>
+                        </xsl:attribute>
+                    </action>
+                </xsl:if>
+            </xsl:for-each>
+        </resource>
+    </xsl:template>
+    
   <xsl:template match="namespace">
     <xsl:variable name="nsid" select="generate-id(.)"/>
     <xsl:element name="namespace">
@@ -101,10 +207,8 @@
         <xsl:copy-of select="$resources"/>
         <xsl:if test="count($resources) = 0">
           <xsl:if test="substring(@name, 1, 3) = 'CT_'">
-            <xsl:if test="./rng:attribute[@name='val']/rng:text">
-              <xsl:call-template name="generateresource">
-                <xsl:with-param name="resource">StringValue</xsl:with-param>
-              </xsl:call-template>
+            <xsl:if test="./rng:attribute[@name='val']">
+              <xsl:call-template name="generatevalueresource"/>
             </xsl:if>
           </xsl:if>
           <xsl:if test="substring(@name, 1, 3) = 'ST_'">

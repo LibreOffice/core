@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableData.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,6 +208,15 @@ public:
     }
 
     /**
+        Add properties to the last cell of the row.
+     */
+    void insertCellProperties(PropertiesPointer pProps)
+    {
+        if (! mCells.empty())
+            mCells.back()->insertProperties(pProps);
+    }
+
+    /**
        Return number of cells in the row.
     */
     unsigned int getCellCount()
@@ -333,14 +339,32 @@ public:
         mpRow->addCell(start, pProps);
     }
 
+    /**
+        End the current cell of the current row.
+
+        @parm end    end handle of the cell
+     */
     void endCell(const T & end)
     {
         mpRow->endCell(end);
     }
 
+    /**
+        Return if the current cell of the current row is open.
+     */
     bool isCellOpen() const
     {
         return mpRow->isCellOpen();
+    }
+
+    /**
+        Insert properties to the current cell of the current row.
+
+        @param pProps   the properties to add
+     */
+    void insertCellProperties(PropertiesPointer pProps)
+    {
+        mpRow->insertCellProperties(pProps);
     }
 
     /**

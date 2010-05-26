@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: customshapeproperties.cxx,v $
- * $Revision: 1.6.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,6 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 
 using rtl::OUString;
-using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -63,8 +59,8 @@ void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCus
     // not sure if this needs to be implemented
 }
 
-void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
-    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
+void CustomShapeProperties::pushToPropSet(
+        const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
 {
     if ( maShapePresetType.getLength() )
     {

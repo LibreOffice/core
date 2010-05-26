@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: zipstorage.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@ private:
     virtual void        implGetElementNames( ::std::vector< ::rtl::OUString >& orElementNames ) const;
 
     /** Opens and returns the specified sub storage from the storage. */
-    virtual StorageRef  implOpenSubStorage( const ::rtl::OUString& rElementName, bool bCreate );
+    virtual StorageRef  implOpenSubStorage( const ::rtl::OUString& rElementName, bool bCreateMissing );
 
     /** Opens and returns the specified input stream from the storage. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
@@ -81,6 +78,9 @@ private:
     /** Opens and returns the specified output stream from the storage. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         implOpenOutputStream( const ::rtl::OUString& rElementName );
+
+    /** Commits the current storage. */
+    virtual void        implCommit() const;
 
 private:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > XStorageRef;
@@ -93,4 +93,3 @@ private:
 } // namespace oox
 
 #endif
-

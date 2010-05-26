@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: axcontrolfragment.cxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,12 @@
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/ole/axcontrol.hxx"
+#include "oox/ole/olehelper.hxx"
+#include "oox/ole/olestorage.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::io::XInputStream;
+using ::com::sun::star::uno::Reference;
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandler2;
@@ -45,7 +46,7 @@ namespace ole {
 
 // ============================================================================
 
-AxControlPropertyContext::AxControlPropertyContext( FragmentHandler2& rFragment, AxControlModelBase& rModel ) :
+AxControlPropertyContext::AxControlPropertyContext( FragmentHandler2& rFragment, ControlModelBase& rModel ) :
     ContextHandler2( rFragment ),
     mrModel( rModel ),
     mnPropId( XML_TOKEN_INVALID )
@@ -90,7 +91,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
 
 // ============================================================================
 
-AxControlFragment::AxControlFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, AxControl& rControl ) :
+AxControlFragment::AxControlFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, EmbeddedControl& rControl ) :
     FragmentHandler2( rFilter, rFragmentPath, true ),
     mrControl( rControl )
 {
@@ -104,7 +105,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
         switch( rAttribs.getToken( AX_TOKEN( persistence ), XML_TOKEN_INVALID ) )
         {
             case XML_persistPropertyBag:
-                if( AxControlModelBase* pModel = mrControl.createModel( aClassId ) )
+                if( ControlModelBase* pModel = mrControl.createModel( aClassId ).get() )
                     return new AxControlPropertyContext( *this, *pModel );
             break;
 
@@ -116,10 +117,30 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                     BinaryXInputStream aInStrm( getFilter().openInputStream( aFragmentPath ), true );
                     if( !aInStrm.isEof() )
                     {
-                        mrControl.importBinaryModel( aInStrm );
                         // binary stream contains a copy of the class ID, must be equal to attribute value
-                        OSL_ENSURE( !mrControl.getModel() || aClassId.equalsIgnoreAsciiCase( mrControl.getClassId() ),
+                        OUString aStrmClassId = OleHelper::importGuid( aInStrm );
+                        OSL_ENSURE( aClassId.equalsIgnoreAsciiCase( aStrmClassId ),
                             "AxControlFragment::importBinaryControl - form control class ID mismatch" );
+                        if( ControlModelBase* pModel = mrControl.createModel( aStrmClassId ).get() )
+                            pModel->importBinaryModel( aInStrm );
+                    }
+                }
+            }
+            break;
+
+            case XML_persistStorage:
+            {
+                OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                if( aFragmentPath.getLength() > 0 )
+                {
+                    Reference< XInputStream > xStrgStrm = getFilter().openInputStream( aFragmentPath );
+                    if( xStrgStrm.is() )
+                    {
+                        OleStorage aStorage( getFilter().getGlobalFactory(), xStrgStrm, false );
+                        BinaryXInputStream aInStrm( aStorage.openInputStream( CREATE_OUSTRING( "f" ) ), true );
+                        if( !aInStrm.isEof() )
+                            if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModel( aClassId ).get() ) )
+                                pModel->importBinaryModel( aInStrm );
                     }
                 }
             }
@@ -133,4 +154,3 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
 
 } // namespace ole
 } // namespace oox
-

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vmlformatting.hxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,11 @@
 
 #include "oox/helper/helper.hxx"
 
-namespace oox { class PropertyMap; }
-namespace oox { namespace core { class FilterBase; } }
+namespace oox {
+    class GraphicHelper;
+    class ModelObjectHelper;
+    class PropertyMap;
+}
 
 namespace oox {
 namespace vml {
@@ -74,7 +74,7 @@ public:
 
     /** Converts the passed VML measure string to EMU (English Metric Units).
 
-        @param rFilter  The core filter object needed to perform pixel
+        @param rGraphicHelper  The graphic helper needed to perform pixel
             conversion according to the current output device.
 
         @param rValue  The VML measure value. This is a floating-point value
@@ -91,7 +91,7 @@ public:
             pixel. Set to false if omitted measure unit means EMU.
      */
     static sal_Int32    decodeMeasureToEmu(
-                            const ::oox::core::FilterBase& rFilter,
+                            const GraphicHelper& rGraphicHelper,
                             const ::rtl::OUString& rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
@@ -99,14 +99,14 @@ public:
 
     /** Converts the passed VML measure string to 1/100 mm.
 
-        @param rFilter  See above.
+        @param rGraphicHelper  See above.
         @param rValue  See above.
         @param nRefValue  See above.
         @param bPixelX  See above.
         @param bDefaultAsPixel  See above.
      */
     static sal_Int32    decodeMeasureToHmm(
-                            const ::oox::core::FilterBase& rFilter,
+                            const GraphicHelper& rGraphicHelper,
                             const ::rtl::OUString& rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
@@ -150,7 +150,8 @@ struct StrokeModel
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::FilterBase& rFilter ) const;
+                            ModelObjectHelper& rModelObjectHelper,
+                            const GraphicHelper& rGraphicHelper ) const;
 };
 
 // ============================================================================
@@ -175,7 +176,8 @@ struct FillModel
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::FilterBase& rFilter ) const;
+                            ModelObjectHelper& rModelObjectHelper,
+                            const GraphicHelper& rGraphicHelper ) const;
 };
 
 // ============================================================================

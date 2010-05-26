@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: binaryoutputstream.hxx,v $
- * $Revision: 1.3.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,6 @@
 
 namespace oox {
 
-class BinaryInputStream;
-
 // ============================================================================
 
 /** Interface for binary output stream classes.
@@ -52,9 +47,6 @@ public:
     virtual void        writeData( const StreamDataSequence& rData ) = 0;
     /** Derived classes implement writing from the (existing) buffer pMem. */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes ) = 0;
-
-    /** Copies nBytes bytes from the current position of the passed input stream. */
-    void                copyStream( BinaryInputStream& rInStrm, sal_Int64 nBytes = SAL_MAX_INT64 );
 
     /** Writes a value to the stream and converts it to platform byte order.
         Supported types: SAL integers (8 to 64 bit), float, double. */

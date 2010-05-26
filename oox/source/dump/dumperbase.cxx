@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dumperbase.cxx,v $
- * $Revision: 1.4.20.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,7 @@
 #include <osl/file.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include "oox/helper/binaryoutputstream.hxx"
+#include "oox/helper/textinputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffhelper.hxx"
 
@@ -775,6 +773,14 @@ OUString StringHelper::trimSpaces( const OUString& rStr )
     return rStr.copy( nBeg, nEnd - nBeg );
 }
 
+OUString StringHelper::trimTrailingNul( const OUString& rStr )
+{
+    sal_Int32 nLastPos = rStr.getLength() - 1;
+    if( (nLastPos >= 0) && (rStr[ nLastPos ] == 0) )
+        return rStr.copy( 0, nLastPos );
+    return rStr;
+}
+
 OString StringHelper::convertToUtf8( const OUString& rStr )
 {
     return OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 );
@@ -889,6 +895,25 @@ bool StringHelper::convertStringToBool( const OUString& rData )
         return false;
     sal_Int64 nData;
     return convertStringToInt( nData, rData ) && (nData != 0);
+}
+
+OUStringPair StringHelper::convertStringToPair( const OUString& rString, sal_Unicode cSep )
+{
+    OUStringPair aPair;
+    if( rString.getLength() > 0 )
+    {
+        sal_Int32 nEqPos = rString.indexOf( cSep );
+        if( nEqPos < 0 )
+        {
+            aPair.first = rString;
+        }
+        else
+        {
+            aPair.first = StringHelper::trimSpaces( rString.copy( 0, nEqPos ) );
+            aPair.second = StringHelper::trimSpaces( rString.copy( nEqPos + 1 ) );
+        }
+    }
+    return aPair;
 }
 
 void StringHelper::convertStringToStringList( OUStringVector& orVec, const OUString& rData, bool bIgnoreEmpty )
@@ -1018,31 +1043,31 @@ ConfigItemBase::~ConfigItemBase()
 {
 }
 
-void ConfigItemBase::readConfigBlock( const ConfigInputStreamRef& rxStrm )
+void ConfigItemBase::readConfigBlock( TextInputStream& rStrm )
 {
-    readConfigBlockContents( rxStrm );
+    readConfigBlockContents( rStrm );
 }
 
 void ConfigItemBase::implProcessConfigItemStr(
-        const ConfigInputStreamRef& /*rxStrm*/, const OUString& /*rKey*/, const OUString& /*rData*/ )
+        TextInputStream& /*rStrm*/, const OUString& /*rKey*/, const OUString& /*rData*/ )
 {
 }
 
 void ConfigItemBase::implProcessConfigItemInt(
-        const ConfigInputStreamRef& /*rxStrm*/, sal_Int64 /*nKey*/, const OUString& /*rData*/ )
+        TextInputStream& /*rStrm*/, sal_Int64 /*nKey*/, const OUString& /*rData*/ )
 {
 }
 
-void ConfigItemBase::readConfigBlockContents( const ConfigInputStreamRef& rxStrm )
+void ConfigItemBase::readConfigBlockContents( TextInputStream& rStrm )
 {
     bool bLoop = true;
-    while( bLoop && !rxStrm->isEOF() )
+    while( bLoop && !rStrm.isEof() )
     {
         OUString aKey, aData;
-        switch( readConfigLine( rxStrm, aKey, aData ) )
+        switch( readConfigLine( rStrm, aKey, aData ) )
         {
             case LINETYPE_DATA:
-                processConfigItem( rxStrm, aKey, aData );
+                processConfigItem( rStrm, aKey, aData );
             break;
             case LINETYPE_END:
                 bLoop = false;
@@ -1052,12 +1077,12 @@ void ConfigItemBase::readConfigBlockContents( const ConfigInputStreamRef& rxStrm
 }
 
 ConfigItemBase::LineType ConfigItemBase::readConfigLine(
-        const ConfigInputStreamRef& rxStrm, OUString& orKey, OUString& orData ) const
+        TextInputStream& rStrm, OUString& orKey, OUString& orData ) const
 {
     OUString aLine;
-    while( !rxStrm->isEOF() && (aLine.getLength() == 0) )
+    while( !rStrm.isEof() && (aLine.getLength() == 0) )
     {
-        try { aLine = rxStrm->readLine(); } catch( Exception& ) { aLine = OUString(); }
+        aLine = rStrm.readLine();
         if( (aLine.getLength() > 0) && (aLine[ 0 ] == OOX_DUMP_BOM) )
             aLine = aLine.copy( 1 );
         aLine = StringHelper::trimSpaces( aLine );
@@ -1070,41 +1095,27 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
         }
     }
 
-    LineType eResult = LINETYPE_END;
-    if( aLine.getLength() > 0 )
-    {
-        sal_Int32 nEqPos = aLine.indexOf( '=' );
-        if( nEqPos < 0 )
-        {
-            orKey = aLine;
-        }
-        else
-        {
-            orKey = StringHelper::trimSpaces( aLine.copy( 0, nEqPos ) );
-            orData = StringHelper::trimSpaces( aLine.copy( nEqPos + 1 ) );
-        }
-
-        if( (orKey.getLength() > 0) && ((orData.getLength() > 0) || !orKey.equalsAscii( "end" )) )
-            eResult = LINETYPE_DATA;
-    }
-
-    return eResult;
+    OUStringPair aPair = StringHelper::convertStringToPair( aLine );
+    orKey = aPair.first;
+    orData = aPair.second;
+    return ((orKey.getLength() > 0) && ((orData.getLength() > 0) || !orKey.equalsAscii( "end" ))) ?
+        LINETYPE_DATA : LINETYPE_END;
 }
 
-ConfigItemBase::LineType ConfigItemBase::readConfigLine( const ConfigInputStreamRef& rxStrm ) const
+ConfigItemBase::LineType ConfigItemBase::readConfigLine( TextInputStream& rStrm ) const
 {
     OUString aKey, aData;
-    return readConfigLine( rxStrm, aKey, aData );
+    return readConfigLine( rStrm, aKey, aData );
 }
 
 void ConfigItemBase::processConfigItem(
-        const ConfigInputStreamRef& rxStrm, const OUString& rKey, const OUString& rData )
+        TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
     sal_Int64 nKey;
     if( StringHelper::convertStringToInt( nKey, rKey ) )
-        implProcessConfigItemInt( rxStrm, nKey, rData );
+        implProcessConfigItemInt( rStrm, nKey, rData );
     else
-        implProcessConfigItemStr( rxStrm, rKey, rData );
+        implProcessConfigItemStr( rStrm, rKey, rData );
 }
 
 // ============================================================================
@@ -1134,18 +1145,18 @@ bool NameListBase::implIsValid() const
 }
 
 void NameListBase::implProcessConfigItemStr(
-        const ConfigInputStreamRef& rxStrm, const OUString& rKey, const OUString& rData )
+        TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
     if( rKey.equalsAscii( "include" ) )
         include( rData );
     else if( rKey.equalsAscii( "exclude" ) )
         exclude( rData );
     else
-        ConfigItemBase::implProcessConfigItemStr( rxStrm, rKey, rData );
+        ConfigItemBase::implProcessConfigItemStr( rStrm, rKey, rData );
 }
 
 void NameListBase::implProcessConfigItemInt(
-        const ConfigInputStreamRef& /*rxStrm*/, sal_Int64 nKey, const OUString& rData )
+        TextInputStream& /*rStrm*/, sal_Int64 nKey, const OUString& rData )
 {
     implSetName( nKey, rData );
 }
@@ -1179,6 +1190,15 @@ void NameListBase::exclude( const OUString& rKeys )
 
 // ============================================================================
 
+void ItemFormatMap::insertFormats( const NameListRef& rxNameList )
+{
+    if( Base::isValid( rxNameList ) )
+        for( NameListBase::const_iterator aIt = rxNameList->begin(), aEnd = rxNameList->end(); aIt != aEnd; ++aIt )
+            (*this)[ aIt->first ].parse( aIt->second );
+}
+
+// ============================================================================
+
 ConstList::ConstList( const SharedConfigData& rCfgData ) :
     NameListBase( rCfgData ),
     maDefName( OOX_DUMP_ERR_NONAME ),
@@ -1187,14 +1207,14 @@ ConstList::ConstList( const SharedConfigData& rCfgData ) :
 }
 
 void ConstList::implProcessConfigItemStr(
-        const ConfigInputStreamRef& rxStrm, const OUString& rKey, const OUString& rData )
+        TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
     if( rKey.equalsAscii( "default" ) )
         setDefaultName( rData );
     else if( rKey.equalsAscii( "quote-names" ) )
         setQuoteNames( StringHelper::convertStringToBool( rData ) );
     else
-        NameListBase::implProcessConfigItemStr( rxStrm, rKey, rData );
+        NameListBase::implProcessConfigItemStr( rStrm, rKey, rData );
 }
 
 void ConstList::implSetName( sal_Int64 nKey, const OUString& rName )
@@ -1246,12 +1266,12 @@ void MultiList::setNamesFromVec( sal_Int64 nStartKey, const OUStringVector& rNam
 }
 
 void MultiList::implProcessConfigItemStr(
-        const ConfigInputStreamRef& rxStrm, const OUString& rKey, const OUString& rData )
+        TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
     if( rKey.equalsAscii( "ignore-empty" ) )
         mbIgnoreEmpty = StringHelper::convertStringToBool( rData );
     else
-        ConstList::implProcessConfigItemStr( rxStrm, rKey, rData );
+        ConstList::implProcessConfigItemStr( rStrm, rKey, rData );
 }
 
 void MultiList::implSetName( sal_Int64 nKey, const OUString& rName )
@@ -1270,7 +1290,7 @@ FlagsList::FlagsList( const SharedConfigData& rCfgData ) :
 }
 
 void FlagsList::implProcessConfigItemStr(
-        const ConfigInputStreamRef& rxStrm, const OUString& rKey, const OUString& rData )
+        TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
     if( rKey.equalsAscii( "ignore" ) )
     {
@@ -1280,52 +1300,63 @@ void FlagsList::implProcessConfigItemStr(
     }
     else
     {
-        NameListBase::implProcessConfigItemStr( rxStrm, rKey, rData );
+        NameListBase::implProcessConfigItemStr( rStrm, rKey, rData );
     }
 }
 
 void FlagsList::implSetName( sal_Int64 nKey, const OUString& rName )
 {
-    insertRawName( nKey, rName );
+    if( (nKey != 0) && ((nKey & (nKey - 1)) == 0) )  // only a single bit set?
+        insertRawName( nKey, rName );
 }
 
 OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
 {
-    sal_Int64 nFlags = nKey;
-    setFlag( nFlags, mnIgnore, false );
-    sal_Int64 nFound = 0;
+    sal_Int64 nFound = mnIgnore;
     OUStringBuffer aName;
     // add known flags
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
     {
         sal_Int64 nMask = aIt->first;
-        const OUString& rFlagName = aIt->second;
-        bool bNegated = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == '!');
-        sal_Int32 nBothSep = bNegated ? rFlagName.indexOf( '!', 1 ) : -1;
-        bool bFlag = getFlag( nFlags, nMask );
-        if( bFlag )
-        {
-            if( !bNegated )
-                StringHelper::appendToken( aName, rFlagName );
-            else if( nBothSep > 0 )
-                StringHelper::appendToken( aName, rFlagName.copy( nBothSep + 1 ) );
-        }
-        else if( bNegated )
-        {
-            if( nBothSep > 0 )
-                StringHelper::appendToken( aName, rFlagName.copy( 1, nBothSep - 1 ) );
-            else
-                StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
-        }
         setFlag( nFound, nMask );
+        if( !getFlag( mnIgnore, nMask ) )
+        {
+            const OUString& rFlagName = aIt->second;
+            bool bOnOff = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == ':');
+            bool bFlag = getFlag( nKey, nMask );
+            if( bOnOff )
+            {
+                StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
+                aName.appendAscii( bFlag ? ":on" : ":off" );
+            }
+            else
+            {
+                bool bNegated = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == '!');
+                sal_Int32 nBothSep = bNegated ? rFlagName.indexOf( '!', 1 ) : -1;
+                if( bFlag )
+                {
+                    if( !bNegated )
+                        StringHelper::appendToken( aName, rFlagName );
+                    else if( nBothSep > 0 )
+                        StringHelper::appendToken( aName, rFlagName.copy( nBothSep + 1 ) );
+                }
+                else if( bNegated )
+                {
+                    if( nBothSep > 0 )
+                        StringHelper::appendToken( aName, rFlagName.copy( 1, nBothSep - 1 ) );
+                    else
+                        StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
+                }
+            }
+        }
     }
     // add unknown flags
-    setFlag( nFlags, nFound, false );
-    if( nFlags != 0 )
+    setFlag( nKey, nFound, false );
+    if( nKey != 0 )
     {
         OUStringBuffer aUnknown( CREATE_OUSTRING( OOX_DUMP_UNKNOWN ) );
         aUnknown.append( OOX_DUMP_ITEMSEP );
-        StringHelper::appendShortHex( aUnknown, nFlags, true );
+        StringHelper::appendShortHex( aUnknown, nKey, true );
         StringHelper::enclose( aUnknown, '(', ')' );
         StringHelper::appendToken( aName, aUnknown.makeStringAndClear() );
     }
@@ -1345,6 +1376,11 @@ void FlagsList::implIncludeList( const NameListBase& rList )
 
 // ============================================================================
 
+bool CombiList::ExtItemFormatKey::operator<( const ExtItemFormatKey& rRight ) const
+{
+    return (mnKey < rRight.mnKey) || ((mnKey == rRight.mnKey) && (maFilter < rRight.maFilter));
+}
+
 CombiList::CombiList( const SharedConfigData& rCfgData ) :
     FlagsList( rCfgData )
 {
@@ -1354,9 +1390,34 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
 {
     if( (nKey & (nKey - 1)) != 0 )  // more than a single bit set?
     {
-        ExtItemFormat& rItemFmt = maFmtMap[ nKey ];
-        OUStringVector aRemain = rItemFmt.parse( rName );
-        rItemFmt.mbShiftValue = aRemain.empty() || !aRemain.front().equalsAscii( "noshift" );
+        typedef ::std::set< ExtItemFormatKey > ExtItemFormatKeySet;
+        ::std::set< ExtItemFormatKey > aItemKeys;
+        ExtItemFormat aItemFmt;
+        OUStringVector aRemain = aItemFmt.parse( rName );
+        for( OUStringVector::iterator aIt = aRemain.begin(), aEnd = aRemain.end(); aIt != aEnd; ++aIt )
+        {
+            OUStringPair aPair = StringHelper::convertStringToPair( *aIt );
+            if( aPair.first.equalsAscii( "noshift" ) )
+            {
+                aItemFmt.mbShiftValue = StringHelper::convertStringToBool( aPair.second );
+            }
+            else if( aPair.first.equalsAscii( "filter" ) )
+            {
+                OUStringPair aFilter = StringHelper::convertStringToPair( aPair.second, '~' );
+                ExtItemFormatKey aKey( nKey );
+                if( (aFilter.first.getLength() > 0) && StringHelper::convertStringToInt( aKey.maFilter.first, aFilter.first ) &&
+                    (aFilter.second.getLength() > 0) && StringHelper::convertStringToInt( aKey.maFilter.second, aFilter.second ) )
+                {
+                    if( aKey.maFilter.first == 0 )
+                        aKey.maFilter.second = 0;
+                    aItemKeys.insert( aKey );
+                }
+            }
+        }
+        if( aItemKeys.empty() )
+            aItemKeys.insert( ExtItemFormatKey( nKey ) );
+        for( ExtItemFormatKeySet::iterator aIt = aItemKeys.begin(), aEnd = aItemKeys.end(); aIt != aEnd; ++aIt )
+            maFmtMap[ *aIt ] = aItemFmt;
     }
     else
     {
@@ -1366,18 +1427,18 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
 
 OUString CombiList::implGetName( const Config& rCfg, sal_Int64 nKey ) const
 {
-    sal_Int64 nFlags = nKey;
     sal_Int64 nFound = 0;
     OUStringBuffer aName;
     // add known flag fields
     for( ExtItemFormatMap::const_iterator aIt = maFmtMap.begin(), aEnd = maFmtMap.end(); aIt != aEnd; ++aIt )
     {
-        sal_Int64 nMask = aIt->first;
-        if( nMask != 0 )
+        const ExtItemFormatKey& rMapKey = aIt->first;
+        sal_Int64 nMask = rMapKey.mnKey;
+        if( (nMask != 0) && ((nKey & rMapKey.maFilter.first) == rMapKey.maFilter.second) )
         {
             const ExtItemFormat& rItemFmt = aIt->second;
 
-            sal_uInt64 nUFlags = static_cast< sal_uInt64 >( nFlags );
+            sal_uInt64 nUFlags = static_cast< sal_uInt64 >( nKey );
             sal_uInt64 nUMask = static_cast< sal_uInt64 >( nMask );
             if( rItemFmt.mbShiftValue )
                 while( (nUMask & 1) == 0 ) { nUFlags >>= 1; nUMask >>= 1; }
@@ -1414,8 +1475,8 @@ OUString CombiList::implGetName( const Config& rCfg, sal_Int64 nKey ) const
             setFlag( nFound, nMask );
         }
     }
-    setFlag( nFlags, nFound, false );
-    StringHelper::appendToken( aName, FlagsList::implGetName( rCfg, nFlags ) );
+    setFlag( nKey, nFound, false );
+    StringHelper::appendToken( aName, FlagsList::implGetName( rCfg, nKey ) );
     return aName.makeStringAndClear();
 }
 
@@ -1540,18 +1601,18 @@ bool SharedConfigData::implIsValid() const
 }
 
 void SharedConfigData::implProcessConfigItemStr(
-        const ConfigInputStreamRef& rxStrm, const OUString& rKey, const OUString& rData )
+        TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
     if( rKey.equalsAscii( "include-config-file" ) )
         readConfigFile( maConfigPath + rData );
     else if( rKey.equalsAscii( "constlist" ) )
-        readNameList< ConstList >( rxStrm, rData );
+        readNameList< ConstList >( rStrm, rData );
     else if( rKey.equalsAscii( "multilist" ) )
-        readNameList< MultiList >( rxStrm, rData );
+        readNameList< MultiList >( rStrm, rData );
     else if( rKey.equalsAscii( "flagslist" ) )
-        readNameList< FlagsList >( rxStrm, rData );
+        readNameList< FlagsList >( rStrm, rData );
     else if( rKey.equalsAscii( "combilist" ) )
-        readNameList< CombiList >( rxStrm, rData );
+        readNameList< CombiList >( rStrm, rData );
     else if( rKey.equalsAscii( "shortlist" ) )
         createShortList( rData );
     else if( rKey.equalsAscii( "unitconverter" ) )
@@ -1565,12 +1626,13 @@ bool SharedConfigData::readConfigFile( const OUString& rFileUrl )
     bool bLoaded = maConfigFiles.count( rFileUrl ) > 0;
     if( !bLoaded )
     {
-        Reference< XTextInputStream > xTextInStrm =
-            InputOutputHelper::openTextInputStream( mxFactory, rFileUrl, CREATE_OUSTRING( "UTF-8" ) );
-        if( xTextInStrm.is() )
+        Reference< XInputStream > xInStrm = InputOutputHelper::openInputStream( mxFactory, rFileUrl );
+        BinaryXInputStream aInStrm( xInStrm, true );
+        TextInputStream aTxtStrm( aInStrm, RTL_TEXTENCODING_UTF8 );
+        if( !aTxtStrm.isEof() )
         {
             maConfigFiles.insert( rFileUrl );
-            readConfigBlockContents( xTextInStrm );
+            readConfigBlockContents( aTxtStrm );
             bLoaded = true;
         }
     }
@@ -2160,20 +2222,38 @@ void StorageObjectBase::construct( const ObjectBase& rParent )
 
 bool StorageObjectBase::implIsValid() const
 {
-    return mxStrg.get() && mxStrg->isStorage() && (maSysPath.getLength() > 0) && ObjectBase::implIsValid();
+    return mxStrg.get() && (maSysPath.getLength() > 0) && ObjectBase::implIsValid();
 }
 
 void StorageObjectBase::implDump()
 {
-    try
+    bool bIsStrg = mxStrg->isStorage();
+    bool bIsRoot = mxStrg->isRootStorage();
+    Reference< XInputStream > xBaseStrm;
+    if( !bIsStrg )
+        xBaseStrm = mxStrg->openInputStream( OUString() );
+
+    OUString aSysOutPath = maSysPath;
+    if( bIsRoot ) try
     {
+        aSysOutPath += OOX_DUMP_DUMPEXT;
         Reference< XSimpleFileAccess > xFileAccess( getFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
-        xFileAccess->kill( maSysPath + OOX_DUMP_DUMPEXT );
+        xFileAccess->kill( aSysOutPath );
     }
     catch( Exception& )
     {
     }
-    extractStorage( mxStrg, OUString(), maSysPath );
+
+    if( bIsStrg )
+    {
+        extractStorage( mxStrg, OUString(), aSysOutPath );
+    }
+    else if( xBaseStrm.is() )
+    {
+        BinaryInputStreamRef xInStrm( new BinaryXInputStream( xBaseStrm, false ) );
+        xInStrm->seekToStart();
+        implDumpBaseStream( xInStrm, aSysOutPath );
+    }
 }
 
 void StorageObjectBase::implDumpStream( const BinaryInputStreamRef&, const OUString&, const OUString&, const OUString& )
@@ -2183,6 +2263,10 @@ void StorageObjectBase::implDumpStream( const BinaryInputStreamRef&, const OUStr
 void StorageObjectBase::implDumpStorage( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rSysPath )
 {
     extractStorage( rxStrg, rStrgPath, rSysPath );
+}
+
+void StorageObjectBase::implDumpBaseStream( const BinaryInputStreamRef&, const OUString& )
+{
 }
 
 void StorageObjectBase::addPreferredStream( const String& rStrmName )
@@ -2220,7 +2304,7 @@ void StorageObjectBase::extractStream( StorageBase& rStrg, const OUString& rStrg
     {
         BinaryXOutputStream aOutStrm( InputOutputHelper::openOutputStream( getFactory(), rSysFileName ), true );
         if( !aOutStrm.isEof() )
-            aOutStrm.copyStream( aInStrm );
+            aInStrm.copyToStream( aOutStrm );
     }
     BinaryXInputStreamRef xDumpStrm( new BinaryXInputStream( InputOutputHelper::openInputStream( getFactory(), rSysFileName ), true ) );
     if( !xDumpStrm->isEof() )
@@ -2229,17 +2313,15 @@ void StorageObjectBase::extractStream( StorageBase& rStrg, const OUString& rStrg
 
 void StorageObjectBase::extractStorage( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rSysPath )
 {
-    OUString aSysOutPath = rSysPath + OOX_DUMP_DUMPEXT;
-
     // create directory in file system
-    ::osl::FileBase::RC eRes = ::osl::Directory::create( aSysOutPath );
+    ::osl::FileBase::RC eRes = ::osl::Directory::create( rSysPath );
     if( (eRes != ::osl::FileBase::E_None) && (eRes != ::osl::FileBase::E_EXIST) )
         return;
 
     // process preferred storages and streams in root storage first
     if( rStrgPath.getLength() == 0 )
         for( PreferredItemVector::iterator aIt = maPreferred.begin(), aEnd = maPreferred.end(); aIt != aEnd; ++aIt )
-            extractItem( rxStrg, rStrgPath, aIt->maName, aSysOutPath, aIt->mbStorage, !aIt->mbStorage );
+            extractItem( rxStrg, rStrgPath, aIt->maName, rSysPath, aIt->mbStorage, !aIt->mbStorage );
 
     // process children of the storage
     for( StorageIterator aIt( rxStrg ); aIt.isValid(); ++aIt )
@@ -2251,13 +2333,13 @@ void StorageObjectBase::extractStorage( const StorageRef& rxStrg, const OUString
             for( PreferredItemVector::iterator aIIt = maPreferred.begin(), aIEnd = maPreferred.end(); !bFound && (aIIt != aIEnd); ++aIIt )
                 bFound = aIIt->maName == aItemName;
         if( !bFound )
-            extractItem( rxStrg, rStrgPath, aItemName, aSysOutPath, aIt.isStorage(), aIt.isStream() );
+            extractItem( rxStrg, rStrgPath, aItemName, rSysPath, aIt.isStorage(), aIt.isStream() );
     }
 }
 
-void StorageObjectBase::extractItem( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rItemName, const OUString& rSysOutPath, bool bIsStrg, bool bIsStrm )
+void StorageObjectBase::extractItem( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rItemName, const OUString& rSysPath, bool bIsStrg, bool bIsStrm )
 {
-    OUString aSysFileName = getSysFileName( rItemName, rSysOutPath );
+    OUString aSysFileName = getSysFileName( rItemName, rSysPath );
     if( bIsStrg )
     {
         OUStringBuffer aStrgPath( rStrgPath );
@@ -2302,18 +2384,18 @@ bool OutputObjectBase::implIsValid() const
 
 void OutputObjectBase::writeEmptyItem( const String& rName )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
 }
 
 void OutputObjectBase::writeInfoItem( const String& rName, const String& rData )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeString( rData );
 }
 
 void OutputObjectBase::writeCharItem( const String& rName, sal_Unicode cData )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeChar( OOX_DUMP_STRQUOTE );
     mxOut->writeChar( cData );
     mxOut->writeChar( OOX_DUMP_STRQUOTE );
@@ -2321,7 +2403,7 @@ void OutputObjectBase::writeCharItem( const String& rName, sal_Unicode cData )
 
 void OutputObjectBase::writeStringItem( const String& rName, const OUString& rData )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeAscii( "(len=" );
     mxOut->writeDec( rData.getLength() );
     mxOut->writeAscii( ")," );
@@ -2334,19 +2416,19 @@ void OutputObjectBase::writeStringItem( const String& rName, const OUString& rDa
 
 void OutputObjectBase::writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeArray( pnData, nSize, cSep );
 }
 
 void OutputObjectBase::writeBoolItem( const String& rName, bool bData )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeBool( bData );
 }
 
 double OutputObjectBase::writeRkItem( const String& rName, sal_Int32 nRk )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeHexItem( rName, static_cast< sal_uInt32 >( nRk ), "RK-FLAGS" );
     double fValue = ::oox::xls::BiffHelper::calcDoubleFromRk( nRk );
     writeDecItem( "decoded", fValue );
@@ -2355,20 +2437,20 @@ double OutputObjectBase::writeRkItem( const String& rName, sal_Int32 nRk )
 
 void OutputObjectBase::writeColorABGRItem( const String& rName, sal_Int32 nColor )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     writeHexItem( rName, nColor );
     mxOut->writeColorABGR( nColor );
 }
 
 void OutputObjectBase::writeDateTimeItem( const String& rName, const DateTime& rDateTime )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeDateTime( rDateTime );
 }
 
 void OutputObjectBase::writeGuidItem( const String& rName, const OUString& rGuid )
 {
-    ItemGuard aItem( *mxOut, rName );
+    ItemGuard aItem( mxOut, rName );
     mxOut->writeString( rGuid );
     aItem.cont();
     mxOut->writeString( cfg().getStringOption( rGuid, OUString() ) );
@@ -2376,85 +2458,81 @@ void OutputObjectBase::writeGuidItem( const String& rName, const OUString& rGuid
 
 void OutputObjectBase::writeColIndexItem( const String& rName, sal_Int32 nCol )
 {
-    Output& rOut = out();
-    ItemGuard aItem( rOut, rName );
-    rOut.writeDec( nCol );
+    ItemGuard aItem( mxOut, rName );
+    mxOut->writeDec( nCol );
     aItem.cont();
-    rOut.writeColIndex( nCol );
+    mxOut->writeColIndex( nCol );
 }
 
 void OutputObjectBase::writeRowIndexItem( const String& rName, sal_Int32 nRow )
 {
-    Output& rOut = out();
-    ItemGuard aItem( rOut, rName );
-    rOut.writeDec( nRow );
+    ItemGuard aItem( mxOut, rName );
+    mxOut->writeDec( nRow );
     aItem.cont();
-    rOut.writeRowIndex( nRow );
+    mxOut->writeRowIndex( nRow );
 }
 
 void OutputObjectBase::writeColRangeItem( const String& rName, sal_Int32 nCol1, sal_Int32 nCol2 )
 {
-    Output& rOut = out();
-    ItemGuard aItem( rOut, rName );
-    rOut.writeColRowRange( nCol1, nCol2 );
+    ItemGuard aItem( mxOut, rName );
+    mxOut->writeColRowRange( nCol1, nCol2 );
     aItem.cont();
-    rOut.writeColRange( nCol1, nCol2 );
+    mxOut->writeColRange( nCol1, nCol2 );
 }
 
 void OutputObjectBase::writeRowRangeItem( const String& rName, sal_Int32 nRow1, sal_Int32 nRow2 )
 {
-    Output& rOut = out();
-    ItemGuard aItem( rOut, rName );
-    rOut.writeColRowRange( nRow1, nRow2 );
+    ItemGuard aItem( mxOut, rName );
+    mxOut->writeColRowRange( nRow1, nRow2 );
     aItem.cont();
-    rOut.writeRowRange( nRow1, nRow2 );
+    mxOut->writeRowRange( nRow1, nRow2 );
 }
 
 void OutputObjectBase::writeAddressItem( const String& rName, const Address& rPos )
 {
-    ItemGuard aItem( out(), rName );
-    StringHelper::appendAddress( out().getLine(), rPos );
+    ItemGuard aItem( mxOut, rName );
+    StringHelper::appendAddress( mxOut->getLine(), rPos );
 }
 
 void OutputObjectBase::writeRangeItem( const String& rName, const Range& rRange )
 {
-    ItemGuard aItem( out(), rName );
-    StringHelper::appendRange( out().getLine(), rRange );
+    ItemGuard aItem( mxOut, rName );
+    StringHelper::appendRange( mxOut->getLine(), rRange );
 }
 
 void OutputObjectBase::writeRangeListItem( const String& rName, const RangeList& rRanges )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeEmptyItem( rName );
     writeDecItem( "count", static_cast< sal_uInt16 >( rRanges.size() ) );
-    ItemGuard aItem( out(), "ranges" );
-    StringHelper::appendRangeList( out().getLine(), rRanges );
+    ItemGuard aItem( mxOut, "ranges" );
+    StringHelper::appendRangeList( mxOut->getLine(), rRanges );
 }
 
 void OutputObjectBase::writeTokenAddressItem( const String& rName, const TokenAddress& rPos, bool bNameMode )
 {
-    ItemGuard aItem( out(), rName );
-    StringHelper::appendAddress( out().getLine(), rPos, bNameMode );
+    ItemGuard aItem( mxOut, rName );
+    StringHelper::appendAddress( mxOut->getLine(), rPos, bNameMode );
 }
 
 void OutputObjectBase::writeTokenAddress3dItem( const String& rName, const OUString& rRef, const TokenAddress& rPos, bool bNameMode )
 {
-    ItemGuard aItem( out(), rName );
-    out().writeString( rRef );
-    StringHelper::appendAddress( out().getLine(), rPos, bNameMode );
+    ItemGuard aItem( mxOut, rName );
+    mxOut->writeString( rRef );
+    StringHelper::appendAddress( mxOut->getLine(), rPos, bNameMode );
 }
 
 void OutputObjectBase::writeTokenRangeItem( const String& rName, const TokenRange& rRange, bool bNameMode )
 {
-    ItemGuard aItem( out(), rName );
-    StringHelper::appendRange( out().getLine(), rRange, bNameMode );
+    ItemGuard aItem( mxOut, rName );
+    StringHelper::appendRange( mxOut->getLine(), rRange, bNameMode );
 }
 
 void OutputObjectBase::writeTokenRange3dItem( const String& rName, const OUString& rRef, const TokenRange& rRange, bool bNameMode )
 {
-    ItemGuard aItem( out(), rName );
-    out().writeString( rRef );
-    StringHelper::appendRange( out().getLine(), rRange, bNameMode );
+    ItemGuard aItem( mxOut, rName );
+    mxOut->writeString( rRef );
+    StringHelper::appendRange( mxOut->getLine(), rRange, bNameMode );
 }
 
 // ============================================================================
@@ -2505,8 +2583,7 @@ void InputObjectBase::skipBlock( sal_Int64 nBytes, bool bShowSize )
 
 void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bStream )
 {
-    Output& rOut = out();
-    TableGuard aTabGuard( rOut,
+    TableGuard aTabGuard( mxOut,
         bShowOffset ? 12 : 0,
         3 * OOX_DUMP_BYTESPERLINE / 2 + 1,
         3 * OOX_DUMP_BYTESPERLINE / 2 + 1,
@@ -2523,8 +2600,8 @@ void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bS
 
     while( bLoop && (nPos < nDumpEnd) )
     {
-        rOut.writeHex( static_cast< sal_uInt32 >( nPos ) );
-        rOut.tab();
+        mxOut->writeHex( static_cast< sal_uInt32 >( nPos ) );
+        mxOut->tab();
 
         sal_uInt8 pnLineData[ OOX_DUMP_BYTESPERLINE ];
         sal_Int32 nLineSize = bSeekable ? ::std::min( static_cast< sal_Int32 >( nDumpEnd - mxStrm->tell() ), OOX_DUMP_BYTESPERLINE ) : OOX_DUMP_BYTESPERLINE;
@@ -2538,18 +2615,18 @@ void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bS
             const sal_uInt8* pnEnd = 0;
             for( pnByte = pnLineData, pnEnd = pnLineData + nReadSize; pnByte != pnEnd; ++pnByte )
             {
-                if( (pnByte - pnLineData) == (OOX_DUMP_BYTESPERLINE / 2) ) rOut.tab();
-                rOut.writeHex( *pnByte, false );
-                rOut.writeChar( ' ' );
+                if( (pnByte - pnLineData) == (OOX_DUMP_BYTESPERLINE / 2) ) mxOut->tab();
+                mxOut->writeHex( *pnByte, false );
+                mxOut->writeChar( ' ' );
             }
 
             aTabGuard.tab( 3 );
             for( pnByte = pnLineData, pnEnd = pnLineData + nReadSize; pnByte != pnEnd; ++pnByte )
             {
-                if( (pnByte - pnLineData) == (OOX_DUMP_BYTESPERLINE / 2) ) rOut.tab();
-                rOut.writeChar( static_cast< sal_Unicode >( (*pnByte < 0x20) ? '.' : *pnByte ) );
+                if( (pnByte - pnLineData) == (OOX_DUMP_BYTESPERLINE / 2) ) mxOut->tab();
+                mxOut->writeChar( static_cast< sal_Unicode >( (*pnByte < 0x20) ? '.' : *pnByte ) );
             }
-            rOut.newLine();
+            mxOut->newLine();
         }
     }
 
@@ -2561,11 +2638,11 @@ void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bS
 void InputObjectBase::dumpBinary( const String& rName, sal_Int64 nBytes, bool bShowOffset )
 {
     {
-        MultiItemsGuard aMultiGuard( out() );
+        MultiItemsGuard aMultiGuard( mxOut );
         writeEmptyItem( rName );
         writeDecItem( "size", nBytes );
     }
-    IndentGuard aIndGuard( out() );
+    IndentGuard aIndGuard( mxOut );
     dumpRawBinary( nBytes, bShowOffset );
 }
 
@@ -2582,7 +2659,7 @@ void InputObjectBase::dumpRemaining( sal_Int64 nBytes )
 
 void InputObjectBase::dumpRemainingTo( sal_Int64 nPos )
 {
-    if( mxStrm->isEof() )
+    if( mxStrm->isEof() || (mxStrm->tell() > nPos) )
         writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
     else
         dumpRemaining( nPos - mxStrm->tell() );
@@ -2630,7 +2707,7 @@ sal_Unicode InputObjectBase::dumpUnicode( const String& rName )
     return cChar;
 }
 
-OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc )
+OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul )
 {
     sal_Int32 nDumpSize = getLimitedValue< sal_Int32, sal_Int64 >( mxStrm->getLength() - mxStrm->tell(), 0, nLen );
     OUString aString;
@@ -2641,16 +2718,20 @@ OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rt
         aBuffer[ nCharsRead ] = 0;
         aString = OStringToOUString( OString( &aBuffer.front() ), eTextEnc );
     }
+    if( bHideTrailingNul )
+        aString = StringHelper::trimTrailingNul( aString );
     writeStringItem( rName( "text" ), aString );
     return aString;
 }
 
-OUString InputObjectBase::dumpUnicodeArray( const String& rName, sal_Int32 nLen )
+OUString InputObjectBase::dumpUnicodeArray( const String& rName, sal_Int32 nLen, bool bHideTrailingNul )
 {
     OUStringBuffer aBuffer;
     for( sal_Int32 nIndex = 0; !mxStrm->isEof() && (nIndex < nLen); ++nIndex )
         aBuffer.append( static_cast< sal_Unicode >( mxStrm->readuInt16() ) );
     OUString aString = aBuffer.makeStringAndClear();
+    if( bHideTrailingNul )
+        aString = StringHelper::trimTrailingNul( aString );
     writeStringItem( rName( "text" ), aString );
     return aString;
 }
@@ -2696,7 +2777,7 @@ DateTime InputObjectBase::dumpFileTime( const String& rName )
 {
     DateTime aDateTime;
 
-    ItemGuard aItem( out(), rName( "file-time" ) );
+    ItemGuard aItem( mxOut, rName( "file-time" ) );
     sal_Int64 nFileTime = dumpDec< sal_Int64 >( EMPTY_STRING );
     // file time is in 10^-7 seconds (100 nanoseconds), convert to 1/100 seconds
     nFileTime /= 100000;
@@ -2807,9 +2888,9 @@ BinaryStreamObject::BinaryStreamObject( const OutputObjectBase& rParent, const B
 
 void BinaryStreamObject::dumpBinaryStream( bool bShowOffset )
 {
-    in().seek( 0 );
-    dumpRawBinary( in().getLength(), bShowOffset, true );
-    out().emptyLine();
+    mxStrm->seekToStart();
+    dumpRawBinary( mxStrm->getLength(), bShowOffset, true );
+    mxOut->emptyLine();
 }
 
 void BinaryStreamObject::implDump()
@@ -2819,110 +2900,47 @@ void BinaryStreamObject::implDump()
 
 // ============================================================================
 
-namespace {
-
-bool lclIsEof( BinaryInputStream& rStrm )
-{
-    return rStrm.isEof() || (rStrm.isSeekable() && (rStrm.tell() >= rStrm.getLength()));
-}
-
-template< typename BufferType, typename CharType >
-CharType lclAppendChar( BufferType& orBuffer, CharType cChar )
-{
-    if( (cChar == 0x0A) || (cChar == 0x0D) )
-        return cChar;
-    orBuffer.append( cChar );
-    return 0;
-}
-
-template< typename BufferType, typename CharType, typename StreamDataType >
-bool lclReadLine( BufferType& orBuffer, sal_Unicode& orcNextLineChar, BinaryInputStream& rStrm )
-{
-    CharType cLineEndChar = (orcNextLineChar == 0) ? 0 : lclAppendChar( orBuffer, static_cast< CharType >( orcNextLineChar ) );
-    orcNextLineChar = 0;
-
-    // read chars until EOF or line end character (LF or CR)
-    bool bIsEof = lclIsEof( rStrm );
-    while( !bIsEof && (cLineEndChar == 0) )
-    {
-        CharType cChar = static_cast< CharType >( rStrm.readValue< StreamDataType >() );
-        bIsEof = rStrm.isEof();
-        cLineEndChar = bIsEof ? 0 : lclAppendChar( orBuffer, cChar );
-    }
-
-    // try to skip LF following CR, or CR following LF
-    if( !lclIsEof( rStrm ) && (cLineEndChar != 0) )
-    {
-        CharType cChar = static_cast< CharType >( rStrm.readValue< StreamDataType >() );
-        bool bLineEnd = ((cChar == 0x0A) || (cChar == 0x0D)) && (cChar != cLineEndChar);
-        if( !rStrm.isEof() && !bLineEnd )
-            orcNextLineChar = static_cast< sal_Unicode >( cChar );
-    }
-
-    return (cLineEndChar != 0) || (orBuffer.getLength() > 0);
-}
-
-} // namespace
-
-// ----------------------------------------------------------------------------
-
 TextStreamObject::TextStreamObject( const ObjectBase& rParent,
-        const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc, const OUString& rSysFileName ) :
-    meTextEnc( eTextEnc )
+        const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc, const OUString& rSysFileName )
 {
     InputObjectBase::construct( rParent, rxStrm, rSysFileName );
+    if( rxStrm.get() )
+        mxTextStrm.reset( new TextInputStream( *rxStrm, eTextEnc ) );
 }
 
 TextStreamObject::TextStreamObject( const OutputObjectBase& rParent,
-        const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc ) :
-    meTextEnc( eTextEnc )
+        const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc )
 {
     InputObjectBase::construct( rParent, rxStrm );
+    if( rxStrm.get() )
+        mxTextStrm.reset( new TextInputStream( *rxStrm, eTextEnc ) );
+}
+
+bool TextStreamObject::implIsValid() const
+{
+    return InputObjectBase::implIsValid() && mxTextStrm.get();
 }
 
 void TextStreamObject::implDump()
 {
     OUString aLine;
-    sal_Unicode cNextLineChar = 0;
     sal_uInt32 nLine = 0;
-    while( readLine( aLine, cNextLineChar ) )
-        implDumpLine( aLine, ++nLine );
-    out().emptyLine();
+    while( !mxTextStrm->isEof() )
+    {
+        aLine = mxTextStrm->readLine();
+        if( !mxTextStrm->isEof() )
+            implDumpLine( aLine, ++nLine );
+    }
+    mxOut->emptyLine();
 }
 
 void TextStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 nLine )
 {
-    Output& rOut = out();
-    TableGuard aTabGuard( rOut, 8 );
-    rOut.writeDec( nLine, 6 );
-    rOut.tab();
-    rOut.writeString( rLine );
-    rOut.newLine();
-}
-
-bool TextStreamObject::readCharLine( OUString& orLine, sal_Unicode& orcNextLineChar )
-{
-    OStringBuffer aBuffer;
-    bool bHasData = lclReadLine< OStringBuffer, sal_Char, sal_uInt8 >( aBuffer, orcNextLineChar, in() );
-    if( bHasData )
-        orLine = OStringToOUString( aBuffer.makeStringAndClear(), meTextEnc );
-    return bHasData;
-}
-
-bool TextStreamObject::readUcs2Line( OUString& orLine, sal_Unicode& orcNextLineChar )
-{
-    OUStringBuffer aBuffer;
-    bool bHasData = lclReadLine< OUStringBuffer, sal_Unicode, sal_uInt16 >( aBuffer, orcNextLineChar, in() );
-    if( bHasData )
-        orLine = aBuffer.makeStringAndClear();
-    return bHasData;
-}
-
-bool TextStreamObject::readLine( OUString& orLine, sal_Unicode& orcNextLineChar )
-{
-    return (meTextEnc == RTL_TEXTENCODING_UCS2) ?
-        readUcs2Line( orLine, orcNextLineChar ) :
-        readCharLine( orLine, orcNextLineChar );
+    TableGuard aTabGuard( mxOut, 8 );
+    mxOut->writeDec( nLine, 6 );
+    mxOut->tab();
+    mxOut->writeString( rLine );
+    mxOut->newLine();
 }
 
 // ============================================================================
@@ -2938,9 +2956,9 @@ void XmlStreamObject::implDump()
     TextStreamObject::implDump();
     if( maIncompleteLine.getLength() > 0 )
     {
-        out().resetIndent();
-        out().writeString( maIncompleteLine );
-        out().emptyLine();
+        mxOut->resetIndent();
+        mxOut->writeString( maIncompleteLine );
+        mxOut->emptyLine();
         writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
     }
 }
@@ -2954,10 +2972,9 @@ void XmlStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 )
     aLine.append( rLine );
     maIncompleteLine = OUString();
 
-    Output& rOut = out();
     if( aLine.getLength() == 0 )
     {
-        rOut.newLine();
+        mxOut->newLine();
         return;
     }
 
@@ -3028,10 +3045,10 @@ void XmlStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 )
         // flush output line
         if( maIncompleteLine.getLength() == 0 )
         {
-            if( !bIsStartElement && bIsEndElement ) rOut.decIndent();
-            rOut.writeString( aOutLine.makeStringAndClear() );
-            rOut.newLine();
-            if( bIsStartElement && !bIsEndElement ) rOut.incIndent();
+            if( !bIsStartElement && bIsEndElement ) mxOut->decIndent();
+            mxOut->writeString( aOutLine.makeStringAndClear() );
+            mxOut->newLine();
+            if( bIsStartElement && !bIsEndElement ) mxOut->incIndent();
         }
     }
 }
@@ -3062,21 +3079,16 @@ bool RecordObjectBase::implIsValid() const
 void RecordObjectBase::implDump()
 {
     NameListRef xRecNames = getRecNames();
-
-    typedef ::std::map< sal_Int64, ItemFormat > ItemFormatMap;
-    ItemFormatMap aSimpleRecs;
-    if( NameListBase* pSimpleRecs = maSimpleRecs.getNameList( cfg() ).get() )
-        for( NameListBase::const_iterator aIt = pSimpleRecs->begin(), aEnd = pSimpleRecs->end(); aIt != aEnd; ++aIt )
-            aSimpleRecs[ aIt->first ].parse( aIt->second );
+    ItemFormatMap aSimpleRecs( maSimpleRecs.getNameList( cfg() ) );
 
     while( implStartRecord( *mxBaseStrm, mnRecPos, mnRecId, mnRecSize ) )
     {
         // record header
-        out().emptyLine();
+        mxOut->emptyLine();
         writeHeader();
         implWriteExtHeader();
-        IndentGuard aIndGuard( out() );
-        sal_Int64 nRecPos = in().tell();
+        IndentGuard aIndGuard( mxOut );
+        sal_Int64 nRecPos = mxStrm->tell();
 
         // record body
         if( !mbBinaryOnly && cfg().hasName( xRecNames, mnRecId ) )
@@ -3089,7 +3101,7 @@ void RecordObjectBase::implDump()
         }
 
         // remaining undumped data
-        if( !in().isEof() && (in().tell() == nRecPos) )
+        if( !mxStrm->isEof() && (mxStrm->tell() == nRecPos) )
             dumpRawBinary( mnRecSize, false );
         else
             dumpRemainingTo( nRecPos + mnRecSize );
@@ -3117,13 +3129,13 @@ void RecordObjectBase::constructRecObjBase( const BinaryInputStreamRef& rxBaseSt
 
 void RecordObjectBase::writeHeader()
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeEmptyItem( "REC" );
     if( mbShowRecPos && mxBaseStrm->isSeekable() )
         writeShortHexItem( "pos", mnRecPos, "CONV-DEC" );
     writeShortHexItem( "size", mnRecSize, "CONV-DEC" );
-    ItemGuard aItem( out(), "id" );
-    out().writeShortHex( mnRecId );
+    ItemGuard aItem( mxOut, "id" );
+    mxOut->writeShortHex( mnRecId );
     addNameToItem( mnRecId, "CONV-DEC" );
     addNameToItem( mnRecId, maRecNames );
 }
@@ -3165,7 +3177,7 @@ bool SequenceRecordObjectBase::implStartRecord( BinaryInputStream& rBaseStrm, sa
         sal_Int32 nRecSize = static_cast< sal_Int32 >( ornRecSize );
         mxRecData->realloc( nRecSize );
         bValid = (nRecSize == 0) || (rBaseStrm.readData( *mxRecData, nRecSize ) == nRecSize);
-        in().seekToStart();
+        mxStrm->seekToStart();
     }
     return bValid;
 }

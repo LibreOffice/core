@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +41,13 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+=-DSYSTEM_REDLAND $(REDLAND_CFLAGS)
 .ENDIF
 
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+CFLAGS+= $(LIBXSLT_CFLAGS)
+.ELSE
+LIBXSLTINCDIR=external$/libxslt
+CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
+.ENDIF
+
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
 
@@ -62,12 +65,13 @@ SHL1OBJS=   $(SLOFILES)
 SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 
-SHL1VERSIONMAP=../service/exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
     $(REDLANDLIB) \
+    $(XSLTLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)	\
     $(SALLIB) \

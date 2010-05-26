@@ -1,13 +1,10 @@
 /*************************************************************************
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RDFRepositoryTest.java,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,6 +22,7 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
+ *
  ************************************************************************/
 
 package complex.unoxml;
@@ -44,6 +42,7 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.Pair;
 import com.sun.star.beans.StringPair;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.ElementExistException;
@@ -462,9 +461,10 @@ public class RDFRepositoryTest extends ComplexTestCase
             XTextRange xTR = new TestRange(content);
             XMetadatable xM = (XMetadatable) xTR;
 
-            Statement[] result = xRep.getStatementRDFa((XMetadatable)xTR);
+            Pair<Statement[], Boolean> result =
+                xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: not empty (initial)",
-                0 == result.length);
+                0 == result.First.length);
 
             try {
                 xRep.setStatementRDFa(foo, new XURI[] {}, xM, "", null);
@@ -486,7 +486,8 @@ public class RDFRepositoryTest extends ComplexTestCase
 
             result = xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: without content",
-                1 == result.length && eq((Statement)result[0], x_FooBarTRLit));
+                !result.Second && (1 == result.First.length)
+                && eq((Statement)result.First[0], x_FooBarTRLit));
 
             //FIXME: do this?
             xTR.setString(lit.getStringValue());
@@ -498,13 +499,13 @@ public class RDFRepositoryTest extends ComplexTestCase
 */
 
             Statement x_FooBarLittype = new Statement(foo, bar, littype, null);
-            Statement x_FooLabelLit = new Statement(foo, rdfslabel, lit, null);
             xRep.setStatementRDFa(foo, new XURI[] { bar }, xM, "42", uint);
 
             result = xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: with content",
-                2 == result.length && eq((Statement)result[0], x_FooLabelLit)
-                && eq((Statement)result[1], x_FooBarLittype));
+                result.Second &&
+                (1 == result.First.length) &&
+                eq((Statement)result.First[0], x_FooBarLittype));
 
             //FIXME: do this?
             xTR.setString(content);
@@ -520,7 +521,7 @@ public class RDFRepositoryTest extends ComplexTestCase
 
             result = xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: not empty (removed)",
-                0 == result.length);
+                0 == result.First.length);
 
             xRep.setStatementRDFa(foo, new XURI[] { foo, bar, baz }, xM,
                 "", null);
@@ -529,14 +530,15 @@ public class RDFRepositoryTest extends ComplexTestCase
             Statement x_FooBazTRLit = new Statement(foo, baz, trlit, null);
             result = xRep.getStatementRDFa((XMetadatable) xTR);
             assure("RDFa: get: without content (multiple predicates, reinsert)",
-                eq(result, new Statement[] {
+                !result.Second &&
+                eq(result.First, new Statement[] {
                      x_FooFooTRLit, x_FooBarTRLit, x_FooBazTRLit }));
 
             xRep.removeStatementRDFa((XMetadatable)xTR);
 
             result = xRep.getStatementRDFa((XMetadatable) xTR);
             assure("RDFa: get: not empty (re-removed)",
-                0 == result.length);
+                0 == result.First.length);
 
             log.println("...done");
 

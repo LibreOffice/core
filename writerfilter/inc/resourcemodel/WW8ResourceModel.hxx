@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WW8ResourceModel.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,6 +150,7 @@ public:
 class WRITERFILTER_DLLPUBLIC Table
 {
 public:
+    typedef boost::shared_ptr<Table> Pointer_t;
     /**
        Receives an entry of the table.
 
