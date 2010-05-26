@@ -55,7 +55,7 @@ static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY   = ::rtl::OUString::cr
 static const ::rtl::OUString SERVICENAME_URLTRANSFORMER = ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer");
 static const sal_Int32       REMEMBER_SIZE = 10;
 
-void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, css::uno::Reference< css::frame::XFrame >& xFrame, css::uno::Sequence< css::beans::PropertyValue >& lArgs )
+void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
     css::uno::Reference< css::util::XURLTransformer > xURLTransformer( rSMgr->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY );
     if ( xURLTransformer.is() )
