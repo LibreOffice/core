@@ -26,8 +26,8 @@
  ************************************************************************/
 
 #include "oox/xls/biffhelper.hxx"
-#include <algorithm>
 #include <rtl/math.hxx>
+#include <rtl/tencinfo.h>
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffoutputstream.hxx"
 #include "oox/xls/worksheethelper.hxx"
@@ -56,87 +56,48 @@ const sal_uInt16 BIFF_IMGDATA_NATIVE        = 14;
 
 // ----------------------------------------------------------------------------
 
-static const struct CodePageEntry
+union DecodedDouble
 {
-    sal_uInt16          mnCodePage;
-    rtl_TextEncoding    meTextEnc;
-}
-spCodePages[] =
-{
-    {     437,  RTL_TEXTENCODING_IBM_437        },  // OEM US
-//  {     720,  RTL_TEXTENCODING_IBM_720        },  // OEM Arabic
-    {     737,  RTL_TEXTENCODING_IBM_737        },  // OEM Greek
-    {     775,  RTL_TEXTENCODING_IBM_775        },  // OEM Baltic
-    {     850,  RTL_TEXTENCODING_IBM_850        },  // OEM Latin I
-    {     852,  RTL_TEXTENCODING_IBM_852        },  // OEM Latin II (Central European)
-    {     855,  RTL_TEXTENCODING_IBM_855        },  // OEM Cyrillic
-    {     857,  RTL_TEXTENCODING_IBM_857        },  // OEM Turkish
-//  {     858,  RTL_TEXTENCODING_IBM_858        },  // OEM Multilingual Latin I with Euro
-    {     860,  RTL_TEXTENCODING_IBM_860        },  // OEM Portugese
-    {     861,  RTL_TEXTENCODING_IBM_861        },  // OEM Icelandic
-    {     862,  RTL_TEXTENCODING_IBM_862        },  // OEM Hebrew
-    {     863,  RTL_TEXTENCODING_IBM_863        },  // OEM Canadian (French)
-    {     864,  RTL_TEXTENCODING_IBM_864        },  // OEM Arabic
-    {     865,  RTL_TEXTENCODING_IBM_865        },  // OEM Nordic
-    {     866,  RTL_TEXTENCODING_IBM_866        },  // OEM Cyrillic (Russian)
-    {     869,  RTL_TEXTENCODING_IBM_869        },  // OEM Greek (Modern)
-    {     874,  RTL_TEXTENCODING_MS_874         },  // MS Windows Thai
-    {     932,  RTL_TEXTENCODING_MS_932         },  // MS Windows Japanese Shift-JIS
-    {     936,  RTL_TEXTENCODING_MS_936         },  // MS Windows Chinese Simplified GBK
-    {     949,  RTL_TEXTENCODING_MS_949         },  // MS Windows Korean (Wansung)
-    {     950,  RTL_TEXTENCODING_MS_950         },  // MS Windows Chinese Traditional BIG5
-    {    1200,  RTL_TEXTENCODING_DONTKNOW       },  // Unicode (BIFF8) - return *_DONTKNOW to preserve old code page
-    {    1250,  RTL_TEXTENCODING_MS_1250        },  // MS Windows Latin II (Central European)
-    {    1251,  RTL_TEXTENCODING_MS_1251        },  // MS Windows Cyrillic
-    {    1252,  RTL_TEXTENCODING_MS_1252        },  // MS Windows Latin I (BIFF4-BIFF8)
-    {    1253,  RTL_TEXTENCODING_MS_1253        },  // MS Windows Greek
-    {    1254,  RTL_TEXTENCODING_MS_1254        },  // MS Windows Turkish
-    {    1255,  RTL_TEXTENCODING_MS_1255        },  // MS Windows Hebrew
-    {    1256,  RTL_TEXTENCODING_MS_1256        },  // MS Windows Arabic
-    {    1257,  RTL_TEXTENCODING_MS_1257        },  // MS Windows Baltic
-    {    1258,  RTL_TEXTENCODING_MS_1258        },  // MS Windows Vietnamese
-    {    1361,  RTL_TEXTENCODING_MS_1361        },  // MS Windows Korean (Johab)
-    {   10000,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
-    {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
-    {   32769,  RTL_TEXTENCODING_MS_1252        }   // MS Windows Latin I (BIFF2-BIFF3)
+    double              mfValue;
+    sal_math_Double     maStruct;
+
+    inline explicit     DecodedDouble() {}
+    inline explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
 };
 
-/** Predicate to search by given code page. */
-struct CodePageEntry_CPPred
-{
-    inline explicit     CodePageEntry_CPPred( sal_uInt16 nCodePage ) : mnCodePage( nCodePage ) {}
-    inline bool         operator()( const CodePageEntry& rEntry ) const { return rEntry.mnCodePage == mnCodePage; }
-    sal_uInt16          mnCodePage;
-};
-
-/** Predicate to search by given text encoding. */
-struct CodePageEntry_TEPred
-{
-    inline explicit     CodePageEntry_TEPred( rtl_TextEncoding eTextEnc ) : meTextEnc( eTextEnc ) {}
-    inline bool         operator()( const CodePageEntry& rEntry ) const { return rEntry.meTextEnc == meTextEnc; }
-    rtl_TextEncoding    meTextEnc;
-};
-
-// ----------------------------------------------------------------------------
-
-bool lclCalcRkFromDouble( sal_Int32& ornRkValue, double fValue )
+bool lclCalcRkFromDouble( sal_Int32& ornRkValue, const DecodedDouble& rDecDbl )
 {
     // double
-    const sal_math_Double* pValue = reinterpret_cast< const sal_math_Double* >( &fValue );
-    if( (pValue->w32_parts.lsw == 0) && ((pValue->w32_parts.msw & 0x3) == 0) )
+    if( (rDecDbl.maStruct.w32_parts.lsw == 0) && ((rDecDbl.maStruct.w32_parts.msw & 0x3) == 0) )
     {
-        ornRkValue = static_cast< sal_Int32 >( pValue->w32_parts.msw );
+        ornRkValue = static_cast< sal_Int32 >( rDecDbl.maStruct.w32_parts.msw );
         return true;
     }
 
     // integer
     double fInt = 0.0;
-    double fFrac = modf( fValue, &fInt );
+    double fFrac = modf( rDecDbl.mfValue, &fInt );
     if( (fFrac == 0.0) && (-536870912.0 <= fInt) && (fInt <= 536870911.0) ) // 2^29
     {
         ornRkValue = static_cast< sal_Int32 >( fInt );
         ornRkValue <<= 2;
         ornRkValue |= BIFF_RK_INTFLAG;
+        return true;
+    }
+
+    return false;
+}
+
+bool lclCalcRkFromDouble( sal_Int32& ornRkValue, double fValue )
+{
+    DecodedDouble aDecDbl( fValue );
+    if( lclCalcRkFromDouble( ornRkValue, aDecDbl ) )
+        return true;
+
+    aDecDbl.mfValue *= 100.0;
+    if( lclCalcRkFromDouble( ornRkValue, aDecDbl ) )
+    {
+        ornRkValue |= BIFF_RK_100FLAG;
         return true;
     }
 
@@ -193,7 +154,7 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
         aOutStrm << sal_uInt16( 0x4D42 ) << nBmpSize << sal_Int32( 0 ) << nOffset;
 
         // copy the DIB header
-        aOutStrm.copyStream( rStrm, nDibHdrSize );
+        rStrm.copyToStream( aOutStrm, nDibHdrSize );
         nBytes -= nDibHdrSize;
 
         /*  Excel 3.x and Excel 4.x seem to write broken or out-dated DIB data.
@@ -215,8 +176,8 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
             aOutStrm.seek( nOutStrmPos );
         }
 
-        // copy remaining pixel data top output stream
-        aOutStrm.copyStream( rStrm, nBytes );
+        // copy remaining pixel data to output stream
+        rStrm.copyToStream( aOutStrm, nBytes );
     }
     rStrm.seek( nInStrmPos + nBytes );
 }
@@ -225,27 +186,24 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 // ============================================================================
 
-// conversion -----------------------------------------------------------------
-
 /*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
 {
-    double fValue = 0.0;
+    DecodedDouble aDecDbl( 0.0 );
     if( getFlag( nRkValue, BIFF_RK_INTFLAG ) )
     {
         sal_Int32 nTemp = nRkValue >> 2;
         setFlag< sal_Int32 >( nTemp, 0xE0000000, nRkValue < 0 );
-        fValue = nTemp;
+        aDecDbl.mfValue = nTemp;
     }
     else
     {
-        sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &fValue );
-        pDouble->w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
+        aDecDbl.maStruct.w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
     }
 
     if( getFlag( nRkValue, BIFF_RK_100FLAG ) )
-        fValue /= 100.0;
+        aDecDbl.mfValue /= 100.0;
 
-    return fValue;
+    return aDecDbl.mfValue;
 }
 
 /*static*/ bool BiffHelper::calcRkFromDouble( sal_Int32& ornRkValue, double fValue )
@@ -276,32 +234,32 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
         case BIFF_ERR_NA:       nApiError = 0x7FFF; break;
         default:    OSL_ENSURE( false, "BiffHelper::calcDoubleFromError - unknown error code" );
     }
-    double fValue;
-    ::rtl::math::setNan( &fValue );
-    reinterpret_cast< sal_math_Double* >( &fValue )->nan_parts.fraction_lo = nApiError;
-    return fValue;
+    DecodedDouble aDecDbl;
+    ::rtl::math::setNan( &aDecDbl.mfValue );
+    aDecDbl.maStruct.nan_parts.fraction_lo = nApiError;
+    return aDecDbl.mfValue;
 }
 
 /*static*/ rtl_TextEncoding BiffHelper::calcTextEncodingFromCodePage( sal_uInt16 nCodePage )
 {
-    const CodePageEntry* pEntry = ::std::find_if( spCodePages, STATIC_ARRAY_END( spCodePages ), CodePageEntry_CPPred( nCodePage ) );
-    if( pEntry == STATIC_ARRAY_END( spCodePages ) )
+    // some specials for BIFF
+    switch( nCodePage )
     {
-        OSL_ENSURE( false, "UnitConverter::calcTextEncodingFromCodePage - unknown code page" );
-        return RTL_TEXTENCODING_DONTKNOW;
+        case 1200:  return RTL_TEXTENCODING_DONTKNOW;       // BIFF8 Unicode
+        case 32768: return RTL_TEXTENCODING_APPLE_ROMAN;
+        case 32769: return RTL_TEXTENCODING_MS_1252;        // BIFF2-BIFF3
     }
-    return pEntry->meTextEnc;
+
+    rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
+    OSL_ENSURE( eTextEnc != RTL_TEXTENCODING_DONTKNOW, "BiffHelper::calcTextEncodingFromCodePage - unknown code page" );
+    return eTextEnc;
 }
 
 /*static*/ sal_uInt16 BiffHelper::calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc )
 {
-    const CodePageEntry* pEntry = ::std::find_if( spCodePages, STATIC_ARRAY_END( spCodePages ), CodePageEntry_TEPred( eTextEnc ) );
-    if( pEntry == STATIC_ARRAY_END( spCodePages ) )
-    {
-        OSL_ENSURE( false, "UnitConverter::calcCodePageFromTextEncoding - unsupported text encoding" );
-        return 1252;
-    }
-    return pEntry->mnCodePage;
+    sal_uInt32 nCodePage = rtl_getWindowsCodePageFromTextEncoding( eTextEnc );
+    OSL_ENSURE( (0 < nCodePage) && (nCodePage <= SAL_MAX_UINT16), "BiffHelper::calcCodePageFromTextEncoding - unknown text encoding" );
+    return static_cast< sal_uInt16 >( (nCodePage == 0) ? 1252 : nCodePage );
 }
 
 /*static*/ void BiffHelper::importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff )
@@ -309,15 +267,14 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
     sal_uInt16 nFormat, nEnv;
     sal_Int32 nBytes;
     rStrm >> nFormat >> nEnv >> nBytes;
-    OSL_ENSURE( (nFormat == BIFF_IMGDATA_WMF) || (nFormat == BIFF_IMGDATA_DIB) || (nFormat == BIFF_IMGDATA_NATIVE), "BiffHelper::importImgData - unknown format" );
     OSL_ENSURE( nBytes > 0, "BiffHelper::importImgData - invalid data size" );
     if( (0 < nBytes) && (nBytes <= rStrm.getRemaining()) )
     {
         switch( nFormat )
         {
-            case BIFF_IMGDATA_WMF:      /* TODO */                                              break;
+//            case BIFF_IMGDATA_WMF:      /* TODO */                                              break;
             case BIFF_IMGDATA_DIB:      lclImportImgDataDib( orDataSeq, rStrm, nBytes, eBiff ); break;
-            case BIFF_IMGDATA_NATIVE:   /* TODO */                                              break;
+//            case BIFF_IMGDATA_NATIVE:   /* TODO */                                              break;
             default:                    OSL_ENSURE( false, "BiffHelper::importImgData - unknown image format" );
         }
     }

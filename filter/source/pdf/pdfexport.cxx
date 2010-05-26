@@ -50,6 +50,9 @@
 #include <svtools/filter.hxx>
 #include <svl/solar.hrc>
 #include <comphelper/string.hxx>
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
 
 #include <unotools/saveopt.hxx> // only for testing of relative saving options in PDF
 
@@ -427,8 +430,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbExportNotes;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
-//              else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ) )
-//                  rFilterData[ nData ].Value >>= mbEmbedStandardFonts;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ) )
+                    rFilterData[ nData ].Value >>= mbEmbedStandardFonts;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ) )
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ) )
@@ -940,7 +943,8 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
     rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );
 
-    rWriter.SetClipRegion( aPageRect );
+    basegfx::B2DRectangle aB2DRect( aPageRect.Left(), aPageRect.Top(), aPageRect.Right(), aPageRect.Bottom() );
+    rWriter.SetClipRegion( basegfx::B2DPolyPolygon( basegfx::tools::createPolygonFromRect( aB2DRect ) ) );
     bRet = ImplWriteActions( rWriter, &rPDFExtOutDevData, rMtf, aDummyVDev );
     rPDFExtOutDevData.ResetSyncData();
 
@@ -1643,7 +1647,15 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     const MetaClipRegionAction* pA = (const MetaClipRegionAction*) pAction;
 
                     if( pA->IsClipping() )
-                        rWriter.SetClipRegion( pA->GetRegion() );
+                    {
+                        if( pA->GetRegion().IsEmpty() )
+                            rWriter.SetClipRegion( basegfx::B2DPolyPolygon() );
+                        else
+                        {
+                            Region aReg( pA->GetRegion() );
+                            rWriter.SetClipRegion( aReg.ConvertToB2DPolyPolygon() );
+                        }
+                    }
                     else
                         rWriter.SetClipRegion();
                 }
@@ -1658,8 +1670,9 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                 case( META_ISECTREGIONCLIPREGION_ACTION ):
                 {
-                const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pAction;
-                rWriter.IntersectClipRegion( pA->GetRegion() );
+                    const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pAction;
+                    Region aReg( pA->GetRegion() );
+                    rWriter.IntersectClipRegion( aReg.ConvertToB2DPolyPolygon() );
                 }
                 break;
 
@@ -1829,7 +1842,7 @@ void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyP
     rDummyVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
 
     rWriter.Push();
-    rWriter.IntersectClipRegion( rPolyPoly );
+    rWriter.IntersectClipRegion( rPolyPoly.getB2DPolyPolygon() );
     ImplWriteActions( rWriter, NULL, aTmpMtf, rDummyVDev );
     rWriter.Pop();
 }

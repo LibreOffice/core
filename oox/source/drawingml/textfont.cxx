@@ -63,7 +63,7 @@ sal_Int16 lclGetFontFamily( sal_Int32 nOoxValue )
 
 TextFont::TextFont() :
     mnPitch( 0 ),
-    mnCharset( 0 )
+    mnCharset( WINDOWS_CHARSET_ANSI )
 {
 }
 
@@ -72,7 +72,7 @@ void TextFont::setAttributes( const AttributeList& rAttribs )
     maTypeface = rAttribs.getString( XML_typeface, OUString() );
     maPanose   = rAttribs.getString( XML_panose, OUString() );
     mnPitch    = rAttribs.getInteger( XML_pitchFamily, 0 );
-    mnCharset  = rAttribs.getInteger( XML_charset, 1 );
+    mnCharset  = rAttribs.getInteger( XML_charset, WINDOWS_CHARSET_DEFAULT );
 }
 
 void TextFont::assignIfUsed( const TextFont& rTextFont )
