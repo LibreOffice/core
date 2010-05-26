@@ -54,72 +54,23 @@ testcase tGridcontrolLoad
     call sleep 1
 
     printlog "Start the macro, that performs the test"
-    printlog "Tools->Macros->Run Macro..."
-    ToolsMacrosRunMacro
-    Kontext "ScriptSelector"
-    if ScriptSelector.exists(10) then
-        x = LibraryTreeList.getItemCount
-        printlog "Look for library 'gridcontrol'"
-        for i = 1 to x
-            sTemp = LibraryTreeList.getItemText(i)
-            'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-            if (instr(sTemp,"gridcontrol")>0 OR instr(sTemp,"GRIDCONTROL")) then
-                a = i
-                printlog "Found library ("+i+"/"+x+"): '" + sTemp + "'"
-            endif
+    Kontext "GridControlDialogStarter"
+    ShowGridcontrol.typeKeys "<space>"
+    Kontext "GridControlDialog"
+    if GridControlDialog.exists(5) then
+        for i=1 to gridcontrolcontrol.getcolumncount
+        for a=1 to gridcontrolcontrol.getrowcount
+            printlog " " + i + ":"+a+": '" + gridcontrolcontrol.getitemtype (i,a) + "' '" + gridcontrolcontrol.getitemtext (i,a) + "'"
+        next a
         next i
-        if 0 <> a then
-            printlog "Select the library and unfold it"
-            LibraryTreeList.select(a)
-            LibraryTreeList.typeKeys("+")
-            printlog "Go to 'Standard' and unfold"
-            LibraryTreeList.typeKeys("<down>")
-            LibraryTreeList.typeKeys("+")
-            printlog "Go to 'Module1'"
-            LibraryTreeList.typeKeys("<down>")
-
-            printlog "Select macro name 'VclTestTool'"
-            x = ScriptList.getItemCount
-            for i = 1 to x
-                sTemp = ScriptList.getItemText(i)
-                'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-                if "VclTestTool" = sTemp then
-                    a = i
-                    printlog "Found macro ("+i+"/"+x+"): '" + sTemp + "'"
-                endif
-            next i
-            if (0 <> a) then
-                printlog "Select the macro"
-                ScriptList.select(a)
-                printlog "Start the macro by pressing the button 'run'"
-                ScriptSelector.ok
-                printlog "sleep... at least 60 seconds"
-                call sleep(60)
-                printlog "If macro fails for whatever reason, a message comes up"
-                Kontext
-                if active.exists() then
-                    warnlog "" + active.getText
-                    active.ok
-                    try
-                        EditCopy
-                        warnlog getclipboard()
-                    catch
-                    endcatch
-                    printlog "close basic ide"
-                    call hCloseDocument()
-                    printlog "close document"
-                    call hCloseDocument()
-                    goto endsub
-                endif
-
-            else
-                warnlog sLocation + "Macro not found: 'Main'"
-            endif
-        else
-            warnlog sLocation + "Library not found: 'gridcontrol'"
-        endif
+        gridcontrolcontrol.select 5
+        gridcontrolcontrol.typeKeys("<down>")
+        gridcontrolcontrol.typeKeys("<down>")
+        gridcontrolcontrol.typeKeys("<down>")
+        gridcontrolcontrol.typeKeys("<down>")
+        GridControlDialog.close
     else
-        warnlog sLocation + "'Run macro dialog' didn't came up"
+        warnlog "Gridcontrol Dialog did not come up after pressing button"
     endif
     
     printlog "clean up"
