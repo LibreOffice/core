@@ -160,6 +160,12 @@
 					<desc>Specifies the name of the standard template file for the factory.</desc>
 				</info>
 			</prop>
+			<prop oor:name="ooSetupFactorySystemDefaultTemplateChanged" oor:type="xs:boolean">
+				<!-- UIHints: setup -->
+				<info>
+					<desc>Indicates if the system default template has been changed.</desc>
+				</info>
+			</prop>
 			<prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
