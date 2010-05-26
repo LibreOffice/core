@@ -63,11 +63,6 @@ testcase tGridcontrolLoad
             printlog " " + i + ":"+a+": '" + gridcontrolcontrol.getitemtype (i,a) + "' '" + gridcontrolcontrol.getitemtext (i,a) + "'"
         next a
         next i
-        gridcontrolcontrol.select 5
-        gridcontrolcontrol.typeKeys("<down>")
-        gridcontrolcontrol.typeKeys("<down>")
-        gridcontrolcontrol.typeKeys("<down>")
-        gridcontrolcontrol.typeKeys("<down>")
         GridControlDialog.close
     else
         warnlog "Gridcontrol Dialog did not come up after pressing button"
