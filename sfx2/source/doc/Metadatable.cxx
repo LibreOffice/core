@@ -33,6 +33,8 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx> // solarmutex
 
+#include <rtl/random.h>
+
 #include <boost/bind.hpp>
 
 #include <memory>
@@ -401,14 +403,16 @@ template< typename T >
 /*static*/ ::rtl::OUString create_id(const
     ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash > & i_rXmlIdMap)
 {
+    static rtlRandomPool s_Pool( rtl_random_createPool() );
     const ::rtl::OUString prefix( ::rtl::OUString::createFromAscii(s_prefix) );
     typename ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash >
         ::const_iterator iter;
     ::rtl::OUString id;
     do
     {
-        const int n( rand() );
-        id = prefix + ::rtl::OUString::valueOf(static_cast<sal_Int64>(n));
+        sal_Int32 n;
+        rtl_random_getBytes(s_Pool, & n, sizeof(n));
+        id = prefix + ::rtl::OUString::valueOf(static_cast<sal_Int32>(abs(n)));
         iter = i_rXmlIdMap.find(id);
     }
     while (iter != i_rXmlIdMap.end());
@@ -1488,8 +1492,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
     }
 }
 
-::boost::shared_ptr<MetadatableUndo> Metadatable::CreateUndo(
-    const bool i_isDelete)
+::boost::shared_ptr<MetadatableUndo> Metadatable::CreateUndo() const
 {
     OSL_ENSURE(!IsInUndo(), "CreateUndo called for object in undo?");
     OSL_ENSURE(!IsInClipboard(), "CreateUndo called for object in clipboard?");
@@ -1503,11 +1506,6 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                 pRegDoc->CreateUndo(*this) );
             pRegDoc->RegisterCopy(*this, *pUndo, false);
             pUndo->m_pReg = pRegDoc;
-
-            if (i_isDelete)
-            {
-                RemoveMetadataReference();
-            }
             return pUndo;
         }
     }
@@ -1516,6 +1514,13 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
         OSL_ENSURE(false, "Metadatable::CreateUndo: exception");
     }
     return ::boost::shared_ptr<MetadatableUndo>();
+}
+
+::boost::shared_ptr<MetadatableUndo> Metadatable::CreateUndoForDelete()
+{
+    ::boost::shared_ptr<MetadatableUndo> const pUndo( CreateUndo() );
+    RemoveMetadataReference();
+    return pUndo;
 }
 
 void Metadatable::RestoreMetadata(
@@ -1624,15 +1629,16 @@ MetadatableMixin::getMetadataReference()
 throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Metadatable* pObject( GetCoreObject() );
-    if (pObject)
+
+    Metadatable *const pObject( GetCoreObject() );
+    if (!pObject)
     {
-        return pObject->GetMetadataReference();
+        throw uno::RuntimeException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "MetadatableMixin: cannot get core object; not inserted?")),
+            *this);
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
+    return pObject->GetMetadataReference();
 }
 
 void SAL_CALL
@@ -1641,30 +1647,32 @@ MetadatableMixin::setMetadataReference(
 throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Metadatable* pObject( GetCoreObject() );
-    if (pObject)
+
+    Metadatable *const pObject( GetCoreObject() );
+    if (!pObject)
     {
-        return pObject->SetMetadataReference(i_rReference);
+        throw uno::RuntimeException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "MetadatableMixin: cannot get core object; not inserted?")),
+            *this);
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
+    return pObject->SetMetadataReference(i_rReference);
 }
 
 void SAL_CALL MetadatableMixin::ensureMetadataReference()
 throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Metadatable* pObject( GetCoreObject() );
-    if (pObject)
+
+    Metadatable *const pObject( GetCoreObject() );
+    if (!pObject)
     {
-        return pObject->EnsureMetadataReference();
+        throw uno::RuntimeException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "MetadatableMixin: cannot get core object; not inserted?")),
+            *this);
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
+    return pObject->EnsureMetadataReference();
 }
 
 } // namespace sfx2

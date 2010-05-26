@@ -34,11 +34,6 @@ PRJNAME=oovbaapi
 
 .IF "$(L10N_framework)"==""
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ENDIF
-
 # symbol files of Microsoft API
 MYSYMFILES = access.api vba.api adodb.api msforms.api word.api dao.api powerpoint.api excel.api stdole.api
 

@@ -48,7 +48,7 @@ struct Span;
 
 class XcsParser: public Parser {
 public:
-    XcsParser(int layer, Data * data);
+    XcsParser(int layer, Data & data);
 
 private:
     virtual ~XcsParser();
@@ -94,7 +94,7 @@ private:
     typedef std::stack< Element > ElementStack;
 
     ValueParser valueParser_;
-    Data * data_;
+    Data & data_;
     rtl::OUString componentName_;
     State state_;
     long ignoring_;
