@@ -149,7 +149,7 @@ static bool lcl_IsPasswordCorrect( const String &rPassword )
 
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
     uno::Sequence< sal_Int8 >   aPasswordHash;
-    bool bHasPassword = pCurDocShell->GetProtectionHash( aPasswordHash );
+    pCurDocShell->GetProtectionHash( aPasswordHash );
 
     // check if supplied password was correct
     uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );

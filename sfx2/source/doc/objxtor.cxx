@@ -1099,7 +1099,7 @@ void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
 }
 
 
-bool SfxObjectShell::SetProtectionPassword( const String &rPassword )
+bool SfxObjectShell::SetProtectionPassword( const String & /*rPassword*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
     DBG_ASSERT( 0, "function not implemented" );
