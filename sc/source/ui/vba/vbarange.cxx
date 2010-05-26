@@ -238,21 +238,28 @@ uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const uno::Re
     return xRange;
 }
 
-ScCellRangeObj*  ScVbaRange::getCellRangeObj() throw ( uno::RuntimeException )
+ScCellRangesBase* ScVbaRange::getCellRangesBase() throw ( uno::RuntimeException )
 {
-    uno::Reference< uno::XInterface > xIf;
-    if ( mxRanges.is() )
-        xIf.set( mxRanges, uno::UNO_QUERY_THROW );
-    else
-        xIf.set( mxRange, uno::UNO_QUERY_THROW );
-    ScCellRangeObj* pUnoCellRange = dynamic_cast< ScCellRangeObj* >( xIf.get() );
-    return pUnoCellRange;
+    if( mxRanges.is() )
+        return ScCellRangesBase::getImplementation( mxRanges );
+    if( mxRange.is() )
+        return ScCellRangesBase::getImplementation( mxRange );
+    throw uno::RuntimeException( rtl::OUString::createFromAscii("General Error creating range - Unknown" ), uno::Reference< uno::XInterface >() );
+}
+
+ScCellRangeObj* ScVbaRange::getCellRangeObj() throw ( uno::RuntimeException )
+{
+    return dynamic_cast< ScCellRangeObj* >( getCellRangesBase() );
+}
+
+ScCellRangesObj* ScVbaRange::getCellRangesObj() throw ( uno::RuntimeException )
+{
+    return dynamic_cast< ScCellRangesObj* >( getCellRangesBase() );
 }
 
 SfxItemSet*  ScVbaRange::getCurrentDataSet( ) throw ( uno::RuntimeException )
 {
-    ScCellRangeObj* pUnoCellRange = getCellRangeObj();
-    SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( pUnoCellRange );
+    SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't access Itemset for range" ) ), uno::Reference< uno::XInterface >() );
     return pDataSet;
@@ -3852,25 +3859,6 @@ ScVbaRange::getWorksheet() throw (uno::RuntimeException)
     return xSheet;
 }
 
-ScCellRangesBase*
-ScVbaRange::getCellRangesBase() throw( uno::RuntimeException )
-{
-    ScCellRangesBase* pUnoRangesBase = NULL;
-    if ( mxRanges.is() )
-    {
-        uno::Reference< uno::XInterface > xIf( mxRanges, uno::UNO_QUERY_THROW );
-        pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
-    }
-    else if ( mxRange.is() )
-    {
-        uno::Reference< uno::XInterface > xIf( mxRange, uno::UNO_QUERY_THROW );
-        pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
-    }
-    else
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("General Error creating range - Unknown" ), uno::Reference< uno::XInterface >() );
-    return pUnoRangesBase;
-}
-
 // #TODO remove this ugly application processing
 // Process an application Range request e.g. 'Range("a1,b2,a4:b6")
 uno::Reference< excel::XRange >
@@ -4587,26 +4575,6 @@ ScVbaRange::getValidation() throw (css::uno::RuntimeException)
     if ( !m_xValidation.is() )
         m_xValidation = new ScVbaValidation( this, mxContext, mxRange );
     return m_xValidation;
-}
-
-uno::Any ScVbaRange::getFormulaHidden() throw ( script::BasicErrorException, css::uno::RuntimeException)
-{
-    SfxItemSet* pDataSet = getCurrentDataSet();
-    const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &)
-        pDataSet->Get(ATTR_PROTECTION, TRUE);
-    SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, TRUE, NULL);
-    if(eState == SFX_ITEM_DONTCARE)
-        return aNULL();
-    return uno::makeAny(rProtAttr.GetHideFormula());
-
-}
-void ScVbaRange::setFormulaHidden(const uno::Any& Hidden) throw ( script::BasicErrorException, css::uno::RuntimeException)
-{
-    uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW);
-    util::CellProtection rCellAttr;
-    xProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLPRO))) >>= rCellAttr;
-    Hidden >>= rCellAttr.IsFormulaHidden;
-    xProps->setPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLPRO)), uno::makeAny(rCellAttr));
 }
 
 uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
