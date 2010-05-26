@@ -569,14 +569,11 @@ sub get_build_list_path {
 # Get dependencies hash of the current and all parent projects
 #
 sub get_parent_deps {
-    my (%parents_deps_hash, $module, $parent);
     my $prj_dir = shift;
     my $deps_hash = shift;
-    my @unresolved_parents = get_parents_array($prj_dir);
-    $parents_deps_hash{$_}++ foreach (@unresolved_parents);
-    $$deps_hash{$prj_dir} = \%parents_deps_hash;
+    my @unresolved_parents = ($prj_dir);
     my %skipped_branches = ();
-    while ($module = pop(@unresolved_parents)) {
+    while (my $module = pop(@unresolved_parents)) {
         if (defined $exclude_branches{$module}) {
             $skipped_branches{$module}++;
             next;
