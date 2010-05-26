@@ -40,7 +40,7 @@ Transferable::Transferable (
     ::sd::View* pWorkView,
     BOOL bInitOnGetData,
     SlideSorterViewShell* pViewShell,
-    const ::std::vector<Bitmap>& rRepresentatives)
+    const ::std::vector<Representative>& rRepresentatives)
     : SdTransferable (pSrcDoc, pWorkView, bInitOnGetData),
       mpViewShell(pViewShell),
       maRepresentatives(rRepresentatives)
@@ -92,7 +92,7 @@ void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 
 
 
-const ::std::vector<Bitmap>& Transferable::GetRepresentatives (void) const
+const ::std::vector<Transferable::Representative>& Transferable::GetRepresentatives (void) const
 {
     return maRepresentatives;
 }

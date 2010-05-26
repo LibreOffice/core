@@ -52,6 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::drawinglayer::primitive2d;
 
@@ -199,6 +200,20 @@ void PageObjectPainter::PaintBackground (
 
     const Bitmap& rBackground (GetBackgroundForState(rpDescriptor, rDevice));
     rDevice.DrawBitmap(aBox.TopLeft(), rBackground);
+
+    // Fill the interior of the preview area with the default background
+    // color of the page.
+    SdPage* pPage = rpDescriptor->GetPage();
+    if (pPage != NULL)
+    {
+        rDevice.SetFillColor(pPage->GetPageBackgroundColor(NULL));
+        rDevice.SetLineColor(pPage->GetPageBackgroundColor(NULL));
+        const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+            rpDescriptor,
+            PageObjectLayouter::Preview,
+            PageObjectLayouter::ModelCoordinateSystem));
+        rDevice.DrawRect(aPreviewBox);
+    }
 }
 
 
@@ -213,37 +228,17 @@ void PageObjectPainter::PaintPreview (
         PageObjectLayouter::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
 
-    const bool bIsExcluded (rpDescriptor->GetVisualState().GetCurrentVisualState()
-        == model::VisualState::VS_Excluded);
-
     if (mpCache != NULL)
     {
         const SdrPage* pPage = rpDescriptor->GetPage();
         mpCache->SetPreciousFlag(pPage, true);
 
-        if (bIsExcluded)
-        {
-            Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage,false));
-            if (aMarkedPreview.IsEmpty() || aMarkedPreview.GetSizePixel()!=aBox.GetSize())
-            {
-                aMarkedPreview = CreateMarkedPreview(
-                    aBox.GetSize(),
-                    mpCache->GetPreviewBitmap(pPage,true),
-                    mpTheme->GetIcon(Theme::Icon_HideSlideOverlay),
-                    rDevice);
-                mpCache->SetMarkedPreviewBitmap(pPage, aMarkedPreview);
-            }
-            rDevice.DrawBitmap(aBox.TopLeft(), aMarkedPreview);
-        }
-        else
-        {
-            const Bitmap aPreview (mpCache->GetPreviewBitmap(pPage,false));
-            if ( ! aPreview.IsEmpty())
-                if (aPreview.GetSizePixel() != aBox.GetSize())
-                    rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aPreview);
-                else
-                    rDevice.DrawBitmap(aBox.TopLeft(), aPreview);
-        }
+        const Bitmap aPreview (GetPreviewBitmap(rpDescriptor, &rDevice));
+        if ( ! aPreview.IsEmpty())
+            if (aPreview.GetSizePixel() != aBox.GetSize())
+                rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aPreview);
+            else
+                rDevice.DrawBitmap(aBox.TopLeft(), aPreview);
     }
 }
 
@@ -254,12 +249,16 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
     const Size& rSize,
     const Bitmap& rPreview,
     const BitmapEx& rOverlay,
-    const OutputDevice& rReferenceDevice) const
+    const OutputDevice* pReferenceDevice) const
 {
-    VirtualDevice aDevice (rReferenceDevice);
-    aDevice.SetOutputSizePixel(rSize);
+    ::boost::scoped_ptr<VirtualDevice> pDevice;
+    if (pReferenceDevice != NULL)
+        pDevice.reset(new VirtualDevice(*pReferenceDevice));
+    else
+        pDevice.reset(new VirtualDevice());
+    pDevice->SetOutputSizePixel(rSize);
 
-    aDevice.DrawBitmap(Point(0,0), rSize, rPreview);
+    pDevice->DrawBitmap(Point(0,0), rSize, rPreview);
 
     // Paint bitmap tiled over the preview to mark it as excluded.
     const sal_Int32 nIconWidth (rOverlay.GetSizePixel().Width());
@@ -268,9 +267,44 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
     {
         for (sal_Int32 nX=0; nX<rSize.Width(); nX+=nIconWidth)
             for (sal_Int32 nY=0; nY<rSize.Height(); nY+=nIconHeight)
-                aDevice.DrawBitmapEx(Point(nX,nY), rOverlay);
+                pDevice->DrawBitmapEx(Point(nX,nY), rOverlay);
     }
-    return aDevice.GetBitmap(Point(0,0), rSize);
+    return pDevice->GetBitmap(Point(0,0), rSize);
+}
+
+
+
+
+Bitmap PageObjectPainter::GetPreviewBitmap (
+    const model::SharedPageDescriptor& rpDescriptor,
+    const OutputDevice* pReferenceDevice) const
+{
+    const SdrPage* pPage = rpDescriptor->GetPage();
+    const bool bIsExcluded (rpDescriptor->GetVisualState().GetCurrentVisualState()
+        == model::VisualState::VS_Excluded);
+
+    if (bIsExcluded)
+    {
+        Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage,false));
+        const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+            rpDescriptor,
+            PageObjectLayouter::Preview,
+            PageObjectLayouter::ModelCoordinateSystem));
+        if (aMarkedPreview.IsEmpty() || aMarkedPreview.GetSizePixel()!=aPreviewBox.GetSize())
+        {
+            aMarkedPreview = CreateMarkedPreview(
+                aPreviewBox.GetSize(),
+                mpCache->GetPreviewBitmap(pPage,true),
+                mpTheme->GetIcon(Theme::Icon_HideSlideOverlay),
+                pReferenceDevice);
+            mpCache->SetMarkedPreviewBitmap(pPage, aMarkedPreview);
+        }
+        return aMarkedPreview;
+    }
+    else
+    {
+        return mpCache->GetPreviewBitmap(pPage,false);
+    }
 }
 
 

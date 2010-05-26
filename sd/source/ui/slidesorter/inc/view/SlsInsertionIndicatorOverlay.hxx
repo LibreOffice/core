@@ -30,6 +30,7 @@
 
 #include "model/SlsSharedPageDescriptor.hxx"
 #include "view/SlsILayerPainter.hxx"
+#include "controller/SlsTransferable.hxx"
 
 #include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
@@ -109,7 +110,7 @@ private:
         OutputDevice& rContent,
         const Size aPreviewSize,
         const sal_Int32 nOffset,
-        const ::std::vector<Bitmap>& rPages) const;
+        const ::std::vector<controller::Transferable::Representative>& rPages) const;
     void PaintPageCount (
         OutputDevice& rDevice,
         const sal_Int32 nSelectionCount,
@@ -119,7 +120,7 @@ private:
         scaled down previews of some of the selected pages.
     */
     void Create (
-        const ::std::vector<Bitmap>& rPages,
+        const ::std::vector<controller::Transferable::Representative>& rPages,
         const sal_Int32 nSelectionCount);
 };
 

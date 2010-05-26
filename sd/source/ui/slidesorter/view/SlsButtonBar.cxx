@@ -159,7 +159,7 @@ namespace {
 ButtonBar::Lock::Lock (SlideSorter& rSlideSorter)
     : mrButtonBar(rSlideSorter.GetView().GetButtonBar())
 {
-    ++mrButtonBar.mnLockCount;
+    mrButtonBar.AcquireLock();
 }
 
 
@@ -167,7 +167,7 @@ ButtonBar::Lock::Lock (SlideSorter& rSlideSorter)
 
 ButtonBar::Lock::~Lock (void)
 {
-    --mrButtonBar.mnLockCount;
+    mrButtonBar.ReleaseLock();
 }
 
 
@@ -725,6 +725,28 @@ void ButtonBar::StartFadeAnimation (
                 ::boost::ref(pDescriptor->GetVisualState()),
                 controller::Animator::NotAnAnimationId)
             ));
+}
+
+
+
+
+void ButtonBar::AcquireLock (void)
+{
+    if (mnLockCount == 0 && mpDescriptor)
+        RequestFadeOut(mpDescriptor, true);
+
+    ++mnLockCount;
+}
+
+
+
+
+void ButtonBar::ReleaseLock (void)
+{
+    --mnLockCount;
+
+    if (mnLockCount == 0 && mpDescriptor)
+        RequestFadeIn(mpDescriptor, true);
 }
 
 

@@ -409,7 +409,7 @@ void Clipboard::CreateSlideTransferable (
     // previews are included into the transferable so that an insertion
     // indicator can be rendered.
     aSelectedPages.Rewind();
-    ::std::vector<Bitmap> aRepresentatives;
+    ::std::vector<Transferable::Representative> aRepresentatives;
     aRepresentatives.reserve(3);
     ::boost::shared_ptr<cache::PageCache> pPreviewCache (
         mrSlideSorter.GetView().GetPreviewCache());
@@ -419,7 +419,9 @@ void Clipboard::CreateSlideTransferable (
         if ( ! pDescriptor || pDescriptor->GetPage()==NULL)
             continue;
         Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
-        aRepresentatives.push_back(aPreview);
+        aRepresentatives.push_back(Transferable::Representative(
+            aPreview,
+            pDescriptor->HasState(model::PageDescriptor::ST_Excluded)));
         if (aRepresentatives.size() >= 3)
             break;
     }

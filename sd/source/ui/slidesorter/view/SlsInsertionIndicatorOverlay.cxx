@@ -36,7 +36,6 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsTheme.hxx"
 #include "cache/SlsPageCache.hxx"
-#include "controller/SlsTransferable.hxx"
 #include "SlsFramePainter.hxx"
 #include "SlsLayeredDevice.hxx"
 #include "DrawDocShell.hxx"
@@ -129,7 +128,7 @@ void InsertionIndicatorOverlay::Create (const controller::Transferable* pTransfe
 
 
 void InsertionIndicatorOverlay::Create (
-    const ::std::vector<Bitmap>& rRepresentatives,
+    const ::std::vector<controller::Transferable::Representative>& rRepresentatives,
     const sal_Int32 nSelectionCount)
 {
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
@@ -195,13 +194,14 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
     OutputDevice& rContent,
     const Size aPreviewSize,
     const sal_Int32 nOffset,
-    const ::std::vector<Bitmap>& rRepresentatives) const
+    const ::std::vector<controller::Transferable::Representative>& rRepresentatives) const
 {
     const Point aOffset (0,rRepresentatives.size()==1 ? -nOffset : 0);
 
     // Paint the pages.
     Point aPageOffset (0,0);
     double nTransparency (0);
+    const BitmapEx aExclusionOverlay (mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_HideSlideOverlay));
     for (sal_Int32 nIndex=2; nIndex>=0; --nIndex)
     {
         if (rRepresentatives.size() <= sal_uInt32(nIndex))
@@ -225,14 +225,31 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         aPageOffset.X() += gnShadowBorder;
         aPageOffset.Y() += gnShadowBorder;
 
-        ::boost::shared_ptr<cache::PageCache> pPreviewCache (
-            mrSlideSorter.GetView().GetPreviewCache());
-        Bitmap aPreview (rRepresentatives[nIndex]);
+        // Paint the preview.
+        Bitmap aPreview (rRepresentatives[nIndex].maBitmap);
         const Size aSuperSampleSize(
             aPreviewSize.Width()*gnSuperScaleFactor,
             aPreviewSize.Height()*gnSuperScaleFactor);
         aPreview.Scale(aPreviewSize, BMP_SCALE_INTERPOLATE);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
+
+        // When the page is marked as excluded from the slide show then
+        // paint an overlay that visualizes this.
+        if (rRepresentatives[nIndex].mbIsExcluded)
+        {
+            const Region aSavedClipRegion (rContent.GetClipRegion());
+            rContent.IntersectClipRegion(Rectangle(aPageOffset, aPreviewSize));
+            // Paint bitmap tiled over the preview to mark it as excluded.
+            const sal_Int32 nIconWidth (aExclusionOverlay.GetSizePixel().Width());
+            const sal_Int32 nIconHeight (aExclusionOverlay.GetSizePixel().Height());
+            if (nIconWidth>0 && nIconHeight>0)
+            {
+                for (sal_Int32 nX=0; nX<aPreviewSize.Width(); nX+=nIconWidth)
+                    for (sal_Int32 nY=0; nY<aPreviewSize.Height(); nY+=nIconHeight)
+                        rContent.DrawBitmapEx(Point(nX,nY)+aPageOffset, aExclusionOverlay);
+            }
+            rContent.SetClipRegion(aSavedClipRegion);
+        }
 
         // Tone down the bitmap.  The further back the darker it becomes.
         Rectangle aBox (

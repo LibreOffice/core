@@ -188,6 +188,9 @@ private:
         const model::SharedPageDescriptor& rpDescriptor,
         const double nTargetAlpha,
         const bool bFadeIn);
+
+    void AcquireLock (void);
+    void ReleaseLock (void);
 };
 
 

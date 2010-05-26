@@ -45,22 +45,34 @@ class Transferable
     : public SdTransferable
 {
 public:
+    class Representative
+    {
+    public:
+        Representative (const Bitmap& rBitmap, const bool bIsExcluded)
+            : maBitmap(rBitmap), mbIsExcluded(bIsExcluded) {}
+        Representative (const Representative& rOther)
+            : maBitmap(rOther.maBitmap), mbIsExcluded(rOther.mbIsExcluded) {}
+        const Bitmap maBitmap;
+        const bool mbIsExcluded;
+    };
+
+
     Transferable (
         SdDrawDocument* pSrcDoc,
         ::sd::View* pWorkView,
         BOOL bInitOnGetData,
         SlideSorterViewShell* pViewShell,
-        const ::std::vector<Bitmap>& rRepresentatives);
+        const ::std::vector<Representative>& rRepresentatives);
 
     virtual ~Transferable (void);
 
     virtual void DragFinished (sal_Int8 nDropAction);
 
-    const ::std::vector<Bitmap>& GetRepresentatives (void) const;
+    const ::std::vector<Representative>& GetRepresentatives (void) const;
 
 private:
     SlideSorterViewShell* mpViewShell;
-    const ::std::vector<Bitmap> maRepresentatives;
+    const ::std::vector<Representative> maRepresentatives;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 };

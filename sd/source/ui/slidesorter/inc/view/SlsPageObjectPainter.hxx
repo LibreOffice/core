@@ -72,6 +72,21 @@ public:
     */
     void SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme);
 
+    /** Return a preview bitmap for the given page descriptor.  When the
+        page is excluded from the show then the preview is marked
+        accordingly.
+        @rpDescriptor
+            Defines the page for which to return the preview.
+        @pReferenceDevice
+            When not <NULL/> then this reference device is used to created a
+            compatible bitmap.
+        @return
+            The returned bitmap may have a different size then the preview area.
+    */
+    Bitmap GetPreviewBitmap (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const OutputDevice* pReferenceDevice) const;
+
 private:
     const Layouter& mrLayouter;
     ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
@@ -119,7 +134,7 @@ private:
         const Size& rSize,
         const Bitmap& rPreview,
         const BitmapEx& rOverlay,
-        const OutputDevice& TemplateDevice) const;
+        const OutputDevice* pReferenceDevice) const;
 };
 
 } } } // end of namespace sd::slidesorter::view

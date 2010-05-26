@@ -591,7 +591,7 @@ Layouter::Implementation::Implementation (const SharedSdWindow& rpWindow)
       mnBottomBorder(5),
       mnVerticalGap (10),
       mnHorizontalGap(10),
-      maMinimalSize(100,75),
+      maMinimalSize(120,90),
       maPreferredSize(200,150),
       maMaximalSize(300,200),
       mnMinimalColumnCount(1),
