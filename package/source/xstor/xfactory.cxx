@@ -257,7 +257,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     }
     else if ( xStream.is() )
     {
-        if ( ( nStorageMode & embed::ElementModes::WRITE ) && !xStream->getOutputStream().is()
+               if ( ( ( nStorageMode & embed::ElementModes::WRITE ) && !xStream->getOutputStream().is() )
           || !xStream->getInputStream().is() )
               throw uno::Exception(); // TODO: access denied
 
