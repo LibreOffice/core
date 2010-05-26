@@ -5087,6 +5087,10 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             rIn >> nCharCount
                 >> aParaPropSet.pParaSet->mnDepth;  // Einruecktiefe
 
+            aParaPropSet.pParaSet->mnDepth =
+                std::min(sal_uInt16(9),
+                    aParaPropSet.pParaSet->mnDepth);
+
             nCharCount--;
 
             rIn >> nMask;
@@ -5321,7 +5325,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
     rIn >> aTextHd;
     sal_uInt32 nMaxLen = aTextHd.nRecLen;
     if ( nMaxLen > 0xFFFF )
-        nMaxLen = 0xFFFF;
+        nMaxLen = 0xFFFE;
 
     if( aTextHd.nRecType == PPT_PST_TextCharsAtom )
     {
