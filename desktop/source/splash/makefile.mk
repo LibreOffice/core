@@ -54,7 +54,7 @@ SHL1OBJS=   $(SLOFILES) \
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB=i$(TARGET)
 
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
@@ -63,6 +63,7 @@ SHL1STDLIBS= \
     $(SVLLIB)           \
     $(SVTOOLLIB)        \
     $(COMPHELPERLIB)    \
+    $(CONFIGMGRLIB) \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
         $(UCBHELPERLIB)        \

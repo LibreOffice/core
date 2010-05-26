@@ -59,7 +59,7 @@ namespace drawinglayer
         bool isVisible() const { return !maDestPixel.IsEmpty(); }
         VirtualDevice& getContent() { return maContent; }
         VirtualDevice& getMask();
-        VirtualDevice& getAlpha();
+        VirtualDevice& getTransparence();
     };
 } // end of namespace drawinglayer
 

@@ -53,65 +53,17 @@ Window DLG_BACKING
     {
         Text [ en-US ] = "~Open a document...";
     };
-    Bitmap BMP_BACKING_WRITER
-    {
-        File = "odt_32.png";
-    };
-    Bitmap BMP_BACKING_CALC
-    {
-        File = "ods_32.png";
-    };
-    Bitmap BMP_BACKING_IMPRESS
-    {
-        File = "odp_32.png";
-    };
-    Bitmap BMP_BACKING_DRAW
-    {
-        File = "odg_32.png";
-    };
-    Bitmap BMP_BACKING_DATABASE
-    {
-        File = "odb_32.png";
-    };
-    Bitmap BMP_BACKING_FORMULA
-    {
-        File = "odf_32.png";
-    };
-    Bitmap BMP_BACKING_OPENFILE
-    {
-        File = "open_32.png";
-    };
-    Bitmap BMP_BACKING_OPENTEMPLATE
-    {
-        File = "template_32.png";
-    };
-    Bitmap BMP_BACKING_EXT
-    {
-        File = "extension_plus_26.png";
-    };
     String STR_BACKING_EXTHELP
     {
         Text [ en-US ] = "Add new features to %PRODUCTNAME";
-    };
-    Bitmap BMP_BACKING_REG
-    {
-        File = "register_32.png";
     };
     String STR_BACKING_REGHELP
     {
         Text [ en-US ] = "Register your %PRODUCTNAME";
     };
-    Bitmap BMP_BACKING_INFO
-    {
-        File = "info_26.png";
-    };
     String STR_BACKING_INFOHELP
     {
         Text [ en-US ] = "Get more information about %PRODUCTNAME";
-    };
-    Bitmap BMP_BACKING_TPLREP
-    {
-        File = "addtemplate_32.png";
     };
     String STR_BACKING_TPLREP
     {
@@ -141,6 +93,54 @@ Resource RES_BACKING_IMAGES
     {
         File = "backing_rtl_right.png";
     };
+    Bitmap BMP_BACKING_EXT
+    {
+        File = "extension.png";
+    };
+    Bitmap BMP_BACKING_REG
+    {
+        File = "register_32.png";
+    };
+    Bitmap BMP_BACKING_INFO
+    {
+        File = "info_26.png";
+    };
+    Bitmap BMP_BACKING_TPLREP
+    {
+        File = "addtemplate_32.png";
+    };
+    Bitmap BMP_BACKING_WRITER
+    {
+        File = "odt_32.png";
+    };
+    Bitmap BMP_BACKING_CALC
+    {
+        File = "ods_32.png";
+    };
+    Bitmap BMP_BACKING_IMPRESS
+    {
+        File = "odp_32.png";
+    };
+    Bitmap BMP_BACKING_DRAW
+    {
+        File = "odg_32.png";
+    };
+    Bitmap BMP_BACKING_DATABASE
+    {
+        File = "odb_32.png";
+    };
+    Bitmap BMP_BACKING_FORMULA
+    {
+        File = "odf_32.png";
+    };
+    Bitmap BMP_BACKING_OPENFILE
+    {
+        File = "folder_32.png";
+    };
+    Bitmap BMP_BACKING_OPENTEMPLATE
+    {
+        File = "templates_32.png";
+    };
 };
 
 Resource RES_BACKING_IMAGES_HC
@@ -164,6 +164,54 @@ Resource RES_BACKING_IMAGES_HC
     Bitmap BMP_BACKING_BACKGROUND_RTL_RIGHT
     {
         File = "backing_rtl_right_hc.png";
+    };
+    Bitmap BMP_BACKING_EXT
+    {
+        File = "extension_hc.png";
+    };
+    Bitmap BMP_BACKING_REG
+    {
+        File = "register_hc.png";
+    };
+    Bitmap BMP_BACKING_INFO
+    {
+        File = "info_hc.png";
+    };
+    Bitmap BMP_BACKING_TPLREP
+    {
+        File = "template_hc.png";
+    };
+    Bitmap BMP_BACKING_WRITER
+    {
+        File = "odt_32_hc.png";
+    };
+    Bitmap BMP_BACKING_CALC
+    {
+        File = "ods_32_hc.png";
+    };
+    Bitmap BMP_BACKING_IMPRESS
+    {
+        File = "odp_32_hc.png";
+    };
+    Bitmap BMP_BACKING_DRAW
+    {
+        File = "odg_32_hc.png";
+    };
+    Bitmap BMP_BACKING_DATABASE
+    {
+        File = "odb_32_hc.png";
+    };
+    Bitmap BMP_BACKING_FORMULA
+    {
+        File = "odf_32_hc.png";
+    };
+    Bitmap BMP_BACKING_OPENFILE
+    {
+        File = "folder_32_hc.png";
+    };
+    Bitmap BMP_BACKING_OPENTEMPLATE
+    {
+        File = "templates_32_hc.png";
     };
 };
 
