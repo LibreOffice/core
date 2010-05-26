@@ -148,12 +148,15 @@ sub register_extensions
             }
             close (UNOPKG);
 
-            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
-
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
             if ($returnvalue)
             {
+                # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
+                # contains strings like "Error" even in the case of success. This causes a packaging error
+                # when the log file is analyzed at the end, even if there is no real error.
+                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
                 $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
