@@ -3613,7 +3613,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
             ContentNode* pNode = GetEditDoc().SaveGetObject( 0 );
             SeekCursor( pNode, 1, aTmpFont );
             Color aFontColor( aTmpFont.GetColor() );
-            if( aFontColor == COL_AUTO )
+            if( (aFontColor == COL_AUTO) || IsForceAutoColor() )
                 aFontColor = GetAutoColor();
 
             // #i69346# check for reverse color of input method attribute
