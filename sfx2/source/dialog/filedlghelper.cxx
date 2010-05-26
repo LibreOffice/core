@@ -57,6 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/stillreadwriteinteraction.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -2673,10 +2674,12 @@ static int impl_isFolder( const OUString& rPath )
     {
     }
 
+    ::rtl::Reference <::comphelper::StillReadWriteInteraction> aHandler = new ::comphelper::StillReadWriteInteraction( xHandler );
+
     try
     {
         ::ucbhelper::Content aContent(
-            rPath, new ::ucbhelper::CommandEnvironment( xHandler, uno::Reference< ucb::XProgressHandler >() ) );
+            rPath, new ::ucbhelper::CommandEnvironment( static_cast< task::XInteractionHandler* > ( aHandler.get() ), uno::Reference< ucb::XProgressHandler >() ) );
         if ( aContent.isFolder() )
             return 1;
 
