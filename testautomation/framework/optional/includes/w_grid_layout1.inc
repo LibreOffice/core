@@ -36,7 +36,7 @@ private const SOURCE_PATH = "framework\optional\input\CJK\"
 testcase tTextGridDialog_1
 
     dim lsSave( 3 ) as string
-    dim lbSave( 3 ) as string
+    dim lbSave( 3 ) as boolean
 
     kontext "Navigator"
     hCloseDialog( Navigator, "close,optional" )
@@ -64,31 +64,31 @@ testcase tTextGridDialog_1
     Call CheckAsianLanguageSupport("On")
 
     hNewDocument
-   ToolsOptions
-   hToolsOptions ( "StarOffice", "General" )
+    ToolsOptions
+    hToolsOptions ( "StarOffice", "General" )
 
-   printlog " - save old data"
-   lsSave ( 1 ) = Zweistellig.GetText
-   lbSave ( 1 ) = Aktivieren.IsChecked
-   Aktivieren.Check
-   if gPlatgroup = "w95" then
-      lbSave (2) = StarOfficeDialogeBenutzen.IsChecked
-   end if
-   lbSave ( 3 ) = DruckenStatus.IsChecked
-   lsSave ( 3 ) = StyleSheet.GetSelText
+    printlog " - save old data"
+    lsSave ( 1 ) = Zweistellig.GetText
+    lbSave ( 1 ) = Aktivieren.IsChecked
+    Aktivieren.Check
+    if gPlatgroup = "w95" then
+        lbSave (2) = StarOfficeDialogeBenutzen.IsChecked
+    end if
+    lbSave ( 3 ) = DruckenStatus.IsChecked
+    lsSave ( 3 ) = StyleSheet.GetSelText
 
-   printlog " - invert/change data"
-   Zweistellig.SetText "1950"
-   Zuruecksetzen.Click
-   if gPlatgroup = "w95" then
-      if lbSave (2) = TRUE then StarOfficeDialogeBenutzen.Uncheck else StarOfficeDialogeBenutzen.Check
-   end if
-   If lbSave ( 3 ) = TRUE then DruckenStatus.Uncheck else DruckenStatus.Check
-   StyleSheet.Select 3
+    printlog " - invert/change data"
+    Zweistellig.SetText "1950"
+    Zuruecksetzen.Click
+    if gPlatgroup = "w95" then
+        if lbSave (2) = TRUE then StarOfficeDialogeBenutzen.Uncheck else StarOfficeDialogeBenutzen.Check
+    end if
+    If lbSave ( 3 ) = TRUE then DruckenStatus.Uncheck else DruckenStatus.Check
+    StyleSheet.Select 3
 
-   Kontext "ExtrasOptionenDlg"
-   hCloseDialog( ExtrasOptionenDlg, "ok" )
-   hFileCloseAll()
+    Kontext "ExtrasOptionenDlg"
+    hCloseDialog( ExtrasOptionenDlg, "ok" )
+    hFileCloseAll()
 
 endcase
 
@@ -424,24 +424,30 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tRubyText_1
+
     '/// If Ruby Text is applied and longer than its Base Text it will stretch over more grid cells than the base text itself.
-    Dim testFile , sRubyText as String
+    const TEST_FILE = "rubytest.sxw"
+    const RUBY_TEXT = "Ruby Test Text ....................."
 
-    testFile   = "rubytest.sxw"
-    sRubyText  = "Ruby Test Text ....................."
-
+    printlog( "Create a new document" )
     Call hNewDocument
 
-    '/// open a test file , and insert  long ruby test text
-    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-    sMakeReadOnlyDocumentEditable
+    printlog( "Open test file" )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + TEST_FILE )
+
+    printlog( "Remove write protection of document (if set)" )
+    Call sMakeReadOnlyDocumentEditable()
+
     Kontext "DocumentWriter"
+    printlog( "Mark character to the right of current cursor position" )
     Call DocumentWriter.TypeKeys  "<Shift Right>"
 
+    printlog( "Open <Format Ruby> dialog" )
     hUseAsyncSlot( "FormatRuby" )
+
     Kontext "RubyDialog"
     if ( RubyDialog.exists( 3 ) ) then
-        RubyText1.setText sRubyText
+        RubyText1.setText( RUBY_TEXT )
         RubyDialog.OK
         DialogClose.Click
     else
@@ -449,11 +455,16 @@ testcase tRubyText_1
     endif
 
     Kontext "DocumentWriter"
+    printlog( "Apply Autoformat" )
     hUseAsyncSlot( "FormatAutoformatApply" )
-    WaitSlot( 3000 )
+
+    printlog( "Select last character in current line" )
     Call DocumentWriter.TypeKeys  "<End>"
-    wait( 200 ) ' sleep 2
+    Wait( 200 )
     Call DocumentWriter.TypeKeys  "<Shift Left>"
+    Wait( 200 )
+
+    printlog( "<EditCopy>" )
     hUseAsyncSlot( "EditCopy" )
 
     if NOT(GetClipboardText = "5" OR GetClipboardText = "6") then
@@ -467,17 +478,18 @@ endcase
 
 testcase tIndentsTest_1
     '/// Indents should work and always indenting as close as possible to their measurements by snapping to the appropriate grid cell. Tabs therefore will be ignored.
-    Dim testFile , sCorrectPage1 , sCorrectPage2 as String
 
-    testFile       = "IndentsTest.sxw"
-    sCorrectPage1  = "1"
-    sCorrectPage2  = "2"
+    const TEST_FILE      = "IndentsTest.sxw"
+    const CORRECT_PAGE_1 = "1"
+    const CORRECT_PAGE_2 = "2"
 
     Call hNewDocument
 
     '/// open a test file , and press TAB in second line
-    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + TEST_FILE )
+
     sMakeReadOnlyDocumentEditable
+
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Down>"
     wait( 200 ) ' sleep 1
@@ -490,7 +502,9 @@ testcase tIndentsTest_1
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-    if Seitennummer.GetText <> sCorrectPage1 then Warnlog "First test :Something wrong in indents test!"
+    if ( Seitennummer.GetText <> CORRECT_PAGE_1 ) then
+        Warnlog "First test :Something wrong in indents test!"
+    endif
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
@@ -507,7 +521,9 @@ testcase tIndentsTest_1
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-    if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Second test :Something wrong in indents test!"
+    if ( Seitennummer.GetText <> CORRECT_PAGE_2 ) then
+        Warnlog "Second test :Something wrong in indents test!"
+    endif
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
@@ -519,16 +535,15 @@ endcase
 testcase tObjectsTest_1
     '/// If objects are anchored to text they will "wander" with its surrounding text.
     '/// If they are anchored as character they will snap to the appropriate grid cell (since they are a character).
-    Dim testFile , sCorrectPage1 , sCorrectPage2 as String
 
-    testFile       = "objectsTest.sxw"
-    sCorrectPage1  = "1"
-    sCorrectPage2  = "2"
+    const TEST_FILE      = "objectsTest.sxw"
+    const CORRECT_PAGE_1 = "1"
+    const CORRECT_PAGE_2 = "2"
 
     Call hNewDocument
 
     '/// open a test file , and press TAB in second line
-    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + TEST_FILE )
 
     '/// If object is anchored as Character , check if it will snap to the appropriate grid cell
     fStartupNavigator( "OLEObject" , 1 )
@@ -545,9 +560,11 @@ testcase tObjectsTest_1
 
     ViewNavigator
     Kontext "NavigatorWriter"
-    Seitennummer.SetText   sCorrectPage2
+    Seitennummer.SetText( CORRECT_PAGE_1 )
     WaitSlot( 5000 ) ' wait( 200 ) ' sleep 5
-    if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Something wrong when object is anchored as Character!"
+    if ( Seitennummer.GetText <> CORRECT_PAGE_1 ) then
+        Warnlog "Something wrong when object is anchored as Character!"
+    endif
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
@@ -562,9 +579,11 @@ testcase tObjectsTest_1
 
     ViewNavigator
     Kontext "NavigatorWriter"
-    Seitennummer.SetText   sCorrectPage2
+    Seitennummer.SetText( CORRECT_PAGE_2 )
     WaitSlot( 5000 ) ' wait( 200 ) ' sleep 5
-    if Seitennummer.GetText <> sCorrectPage1 then Warnlog "Something wrong when object is anchored to Character!"
+    if ( Seitennummer.GetText <> CORRECT_PAGE_1 ) then
+        Warnlog "Something wrong when object is anchored to Character!"
+    endif
     kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
