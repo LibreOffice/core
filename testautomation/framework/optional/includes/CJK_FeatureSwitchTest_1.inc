@@ -96,27 +96,30 @@ testcase tWriterUIChangesTest1
         TabAusrichtungAbsatz.Cancel
     end if
 
-   TabAusrichtungAbsatz.Cancel
+    ' JSK I have no idea why the tabpage was closed a second time so i do not fix it
+    ' but make closing the tabpage optional. I hate this.
+    kontext "TabAusrichtungAbsatz"
+    hCloseDialog( TabAusrichtungAbsatz, "cancel,optional" )
 
-  if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
-     Call CheckAsianLanguageSupport("Off")
+    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+        Call CheckAsianLanguageSupport("Off")
 
-      Kontext
-      FormatParagraph
-      Active.SetPage TabAusrichtungAbsatz
-      Kontext "TabAusrichtungAbsatz"
+        Kontext
+        FormatParagraph
+        Active.SetPage TabAusrichtungAbsatz
+        Kontext "TabAusrichtungAbsatz"
 
-      try
-        if TextrasterFangen.IsChecked = TRUE Or TextrasterFangen.IsChecked <> TRUE then
-           warnlog "Something wrong in checkbox 'snap to text grid'"
-        end if
-      catch
-      endcatch
+        try
+            if TextrasterFangen.IsChecked = TRUE Or TextrasterFangen.IsChecked <> TRUE then
+                warnlog "Something wrong in checkbox 'snap to text grid'"
+            end if
+        catch
+        endcatch
 
-     TabAusrichtungAbsatz.Cancel
-  end if
+        TabAusrichtungAbsatz.Cancel
+    end if
 
-  Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 '-------------------------------------------------------------------------
@@ -424,7 +427,7 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tWriterUIChangesTest9
-  call  hNewDocument
+    call  hNewDocument
 
     '/// turn on "Asian Language support" , Check if list box text direction appear
     Call CheckAsianLanguageSupport("On")
@@ -507,9 +510,9 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tWriterUIChangesTest11
- Dim iHopeNumber1 , iHopeNumber2 as Integer
- dim i as integer
- dim iCount as integer
+    Dim iHopeNumber1 , iHopeNumber2 as Integer
+    dim i as integer
+    dim iCount as integer
 
     iHopeNumber1 = 38
     iHopeNumber2 = 19
@@ -561,14 +564,14 @@ testcase tWriterUIChangesTest11
         'Referenze:
         TabOptionenNumerierung.Cancel
         qaerrorlog "the number of list box numbering is wrong when Asian Language support is on; expected: " + iHopeNumber1 + "; is: " + iCount
-     end if
-     
-     'print warning if no printer is available
-     kontext
-     if active.exists(5) then
-         qaErrorlog "print warning: '" + active.getText + "'"
-         active.ok
-     endif
+    end if
+
+    'print warning if no printer is available
+    kontext
+    if active.exists(5) then
+        qaErrorlog "print warning: '" + active.getText + "'"
+        active.ok
+    endif
 
     'print warning if no printer is available
     kontext
