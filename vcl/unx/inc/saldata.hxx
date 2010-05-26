@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: saldata.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +62,7 @@ protected:
             SalXLib            *pXLib_;
             SalDisplay         *m_pSalDisplay;
             pthread_t           hMainThread_;
+            rtl::OUString       maLocalHostName;
 
 public:
     X11SalData();
@@ -89,6 +87,9 @@ public:
     void                    StartTimer( ULONG nMS );
     inline  void            StopTimer();
     void                    Timeout() const;
+
+    const rtl::OUString&    GetLocalHostName() const
+    { return maLocalHostName; }
 
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );

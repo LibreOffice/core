@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bitmap.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -326,7 +323,23 @@ BOOL Bitmap::HasGreyPalette() const
     BOOL            bRet = FALSE;
 
     if( 1 == nBitCount )
-        bRet = TRUE;
+    {
+        BitmapReadAccess* pRAcc = ( (Bitmap*) this )->AcquireReadAccess();
+
+        if( pRAcc )
+        {
+            const BitmapColor& rCol0( pRAcc->GetPaletteColor( 0 ) );
+            const BitmapColor& rCol1( pRAcc->GetPaletteColor( 1 ) );
+            if( rCol0.GetRed() == rCol0.GetGreen() && rCol0.GetRed() == rCol0.GetBlue() &&
+                rCol1.GetRed() == rCol1.GetGreen() && rCol1.GetRed() == rCol1.GetBlue() )
+            {
+                bRet = TRUE;
+            }
+             ( (Bitmap*) this )->ReleaseAccess( pRAcc );
+        }
+        else
+            bRet = TRUE;
+    }
     else if( 4 == nBitCount || 8 == nBitCount )
     {
         BitmapReadAccess* pRAcc = ( (Bitmap*) this )->AcquireReadAccess();

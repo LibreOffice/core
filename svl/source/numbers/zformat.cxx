@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: zformat.cxx,v $
- * $Revision: 1.78.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -678,7 +675,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     xub_StrLen nAnzChars = ImpGetNumber(rString, nPos, sStr);
                     if (nAnzChars > 0)
                     {
-                        short F_Type;
+                        short F_Type = NUMBERFORMAT_UNDEFINED;
                         if (!pISc->IsNumberFormat(sStr,F_Type,fNumber) ||
                             ( F_Type != NUMBERFORMAT_NUMBER &&
                             F_Type != NUMBERFORMAT_SCIENTIFIC) )

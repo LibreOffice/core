@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: contentbroker.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -301,14 +298,18 @@ bool ContentBroker_Impl::initialize()
 
                     if ( m_xProviderMgr.is() )
                     {
-                        if ( !configureUcb( m_xProviderMgr,
-                                            m_xSMgr,
-                                            m_aProvData,
-                                            0 ) )
+                        ContentProviderDataList::const_iterator aEnd(m_aProvData.end());
+                        for (ContentProviderDataList::const_iterator aIt(m_aProvData.begin());
+                            aIt != aEnd; ++aIt)
                         {
-                            OSL_ENSURE( false, "Failed to configure UCB!" );
-                            return false;
+                            registerAtUcb(m_xProviderMgr,
+                                      m_xSMgr,
+                                      aIt->ServiceName,
+                                      aIt->Arguments,
+                                      aIt->URLTemplate,
+                                      0);
                         }
+
                     }
                 }
             }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: winproc.cxx,v $
- * $Revision: 1.127 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,7 +295,7 @@ static BOOL ImplCallCommand( Window* pChild, USHORT nEvt, void* pData = NULL,
         else
         {
             // simulate mouseposition at center of window
-            Size aSize = pChild->GetOutputSize();
+            Size aSize( pChild->GetOutputSizePixel() );
             aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
         }
     }
@@ -1477,6 +1474,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     USHORT nMode;
     USHORT nCode = rEvt.mnCode;
     bool bHorz = rEvt.mbHorz;
+    bool bPixel = rEvt.mbDeltaIsPixel;
     if ( nCode & KEY_MOD1 )
         nMode = COMMAND_WHEEL_ZOOM;
     else if ( nCode & KEY_MOD2 )
@@ -1489,7 +1487,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
             bHorz = true;
     }
 
-    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz );
+    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz, bPixel );
     Point               aMousePos( rEvt.mnX, rEvt.mnY );
     BOOL                bRet = TRUE;
 

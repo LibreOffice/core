@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: urlobj.cxx,v $
- * $Revision: 1.63.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,11 +189,6 @@ using namespace com::sun;
    ; private
    out-url = "OUT:///~" name ["/" *uric]
    name = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "?" / "@" / "_" / "~"
-
-
-   ; prvate (see RFC 1738, RFC 2396)
-   vnd-sun-star-wfs-url = "VND.SUN.STAR.WFS://" [host / "LOCALHOST"] ["/" segment *("/" segment)]
-   segment = *pchar
 
 
    ; private
@@ -406,8 +398,6 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false },
         { "out", "out://", 0, true, false, false, false, false, false,
           false, false },
-        { "vnd.sun.star.wfs", "vnd.sun.star.wfs://", 0, true, false, false,
-          false, true, true, true, false },
         { "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
           false, false, false, true, false },
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
@@ -432,7 +422,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false, false, false, false },
         { "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", 0, false, false, false,
           false, false, false, true, false },
-        { "", "", 0, false, false, false, false, false, false, false, false },
+        { "", "", 0, false, false, false, false, true, true, true, false },
         { "smb", "smb://", 139, true, true, false, true, true, true, true,
           true } };
 
@@ -1341,7 +1331,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
         if (pHostPortBegin)
         {
             sal_Unicode const * pPort = pHostPortEnd;
-            if (getSchemeInfo().m_bPort && pHostPortBegin < pHostPortEnd)
+            if ( getSchemeInfo().m_bPort && pHostPortBegin < pHostPortEnd )
             {
                 sal_Unicode const * p1 = pHostPortEnd - 1;
                 while (p1 > pHostPortBegin && INetMIME::isDigit(*p1))
@@ -1353,7 +1343,6 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
             switch (m_eScheme)
             {
                 case INET_PROT_FILE:
-                case INET_PROT_VND_SUN_STAR_WFS:
                     // If the host equals "LOCALHOST" (unencoded and ignoring
                     // case), turn it into an empty host:
                     if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort,
@@ -1370,7 +1359,6 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         return false;
                     }
                     break;
-
                 default:
                     if (pHostPortBegin == pPort)
                     {
@@ -1612,7 +1600,23 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                  STATE_DONE };
 
     rtl::OUStringBuffer aSynAbsURIRef;
-    aSynAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
+    // is empty ("") in that case, so take the scheme from m_aAbsURIRef
+    if (m_eScheme != INET_PROT_GENERIC)
+    {
+        aSynAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    }
+    else
+    {
+        sal_Unicode const * pSchemeBegin
+            = m_aAbsURIRef.getStr();
+        sal_Unicode const * pSchemeEnd = pSchemeBegin;
+        while (pSchemeEnd[0] != ':')
+        {
+            ++pSchemeEnd;
+        }
+        aSynAbsURIRef.append(pSchemeBegin, pSchemeEnd - pSchemeBegin);
+    }
     aSynAbsURIRef.append(sal_Unicode(':'));
 
     sal_Char cEscapePrefix = getEscapePrefix();
@@ -2165,11 +2169,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "vnd.sun.star.tdoc:", 0, INET_PROT_VND_SUN_STAR_TDOC,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
-              PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.wfs:", 0, INET_PROT_VND_SUN_STAR_WFS,
-              PrefixInfo::OFFICIAL },
-            { "wfs:", "vnd.sun.star.wfs:", INET_PROT_VND_SUN_STAR_WFS,
-              PrefixInfo::ALIAS } };
+              PrefixInfo::OFFICIAL } };
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
     PrefixInfo const * pMatch = 0;
@@ -2892,7 +2892,6 @@ bool INetURLObject::setHost(rtl::OUString const & rTheHost, bool bOctets,
     switch (m_eScheme)
     {
         case INET_PROT_FILE:
-        case INET_PROT_VND_SUN_STAR_WFS:
             {
                 rtl::OUString sTemp(aSynHost);
                 if (sTemp.equalsIgnoreAsciiCaseAsciiL(
@@ -2988,7 +2987,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             break;
 
         case INET_PROT_FILE:
-        case INET_PROT_VND_SUN_STAR_WFS:
         {
             if (bSkippedInitialSlash)
                 aTheSynPath.append(sal_Unicode('/'));
@@ -3401,7 +3399,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             if (aTheSynPath.getLength() == 0)
                 return false;
             break;
-
         default:
             OSL_ASSERT(false);
             break;
@@ -3828,7 +3825,27 @@ INetURLObject::getAbbreviated(
     OSL_ENSURE(rStringWidth.is(), "specification violation");
     sal_Char cEscapePrefix = getEscapePrefix();
     rtl::OUStringBuffer aBuffer;
-    aBuffer.appendAscii(getSchemeInfo().m_pScheme);
+    // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
+    // is empty ("") in that case, so take the scheme from m_aAbsURIRef
+    if (m_eScheme != INET_PROT_GENERIC)
+    {
+        aBuffer.appendAscii(getSchemeInfo().m_pScheme);
+    }
+    else
+    {
+        if (m_aAbsURIRef)
+        {
+            sal_Unicode const * pSchemeBegin
+                = m_aAbsURIRef.getStr();
+            sal_Unicode const * pSchemeEnd = pSchemeBegin;
+
+            while (pSchemeEnd[0] != ':')
+            {
+                ++pSchemeEnd;
+            }
+            aBuffer.append(pSchemeBegin, pSchemeEnd - pSchemeBegin);
+        }
+    }
     aBuffer.append(static_cast< sal_Unicode >(':'));
     bool bAuthority = getSchemeInfo().m_bAuthority;
     sal_Unicode const * pCoreBegin
@@ -4010,7 +4027,6 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
     switch (m_eScheme)
     {
         case INET_PROT_FILE:
-        case INET_PROT_VND_SUN_STAR_WFS:
         {
             // If the URL paths of two file URLs only differ in that one has a
             // final '/' and the other has not, take the two paths as
@@ -4165,7 +4181,6 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             switch (m_eScheme)
             {
                 case INET_PROT_FILE:
-                case INET_PROT_VND_SUN_STAR_WFS:
                     {
                         rtl::OUString sTemp(aSynHost);
                         if (sTemp.equalsIgnoreAsciiCaseAsciiL(

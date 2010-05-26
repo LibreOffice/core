@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabctrl.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,6 +174,9 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
         EnableChildTransparentMode( TRUE );
+
+    if ( pParent->IsDialog() )
+        pParent->AddChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
 }
 
 // -----------------------------------------------------------------
@@ -291,6 +291,9 @@ void TabControl::ImplLoadRes( const ResId& rResId )
 
 TabControl::~TabControl()
 {
+    if ( GetParent()->IsDialog() )
+        GetParent()->RemoveChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
+
     ImplFreeLayoutData();
 
     // TabCtrl-Daten loeschen
@@ -1073,6 +1076,42 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
 // -----------------------------------------------------------------------
 
+long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
+{
+    long nRet = 0;
+
+    if ( GetPageCount() > 1 )
+    {
+        KeyCode         aKeyCode = rKeyEvent.GetKeyCode();
+        USHORT          nKeyCode = aKeyCode.GetCode();
+
+        if ( aKeyCode.IsMod1() )
+        {
+            if ( aKeyCode.IsShift() || (nKeyCode == KEY_PAGEUP) )
+            {
+                if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEUP) )
+                {
+                    ImplActivateTabPage( FALSE );
+                    nRet = 1;
+                }
+            }
+            else
+            {
+                if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEDOWN) )
+                {
+                    ImplActivateTabPage( TRUE );
+                    nRet = 1;
+                }
+            }
+        }
+    }
+
+    return nRet;
+}
+
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( TabControl, ImplScrollBtnHdl, PushButton*, EMPTYARG )
 {
     ImplSetScrollBtnsState();
@@ -1089,6 +1128,24 @@ IMPL_LINK( TabControl, ImplListBoxSelectHdl, ListBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( TabControl, ImplWindowEventListener, VclSimpleEvent*, pEvent )
+{
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) && (pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT) )
+    {
+        VclWindowEvent* pWindowEvent = static_cast< VclWindowEvent* >(pEvent);
+        // Do not handle events from TabControl or it's children, which is done in Notify(), where the events can be consumed.
+        if ( !IsWindowOrChild( pWindowEvent->GetWindow() ) )
+        {
+            KeyEvent* pKeyEvent = static_cast< KeyEvent* >(pWindowEvent->GetData());
+            ImplHandleKeyEvent( *pKeyEvent );
+        }
+    }
+    return 0;
+}
+
+
+// -----------------------------------------------------------------------
+
 void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( mpTabCtrlData->mpListBox == NULL )
@@ -1099,8 +1156,6 @@ void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
             ImplTabItem* pItem = ImplGetItem( nPageId );
             if( pItem && pItem->mbEnabled )
                 SelectTabPage( nPageId );
-            else
-                Sound::Beep( SOUND_ERROR, this );
         }
     }
 }
@@ -1660,34 +1715,12 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
 
 long TabControl::Notify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && (GetPageCount() > 1) )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        USHORT          nKeyCode = aKeyCode.GetCode();
+    long nRet = 0;
 
-        if ( aKeyCode.IsMod1() )
-        {
-            if ( aKeyCode.IsShift() || (nKeyCode == KEY_PAGEUP) )
-            {
-                if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEUP) )
-                {
-                    ImplActivateTabPage( FALSE );
-                    return TRUE;
-                }
-            }
-            else
-            {
-                if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEDOWN) )
-                {
-                    ImplActivateTabPage( TRUE );
-                    return TRUE;
-                }
-            }
-        }
-    }
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+        nRet = ImplHandleKeyEvent( *rNEvt.GetKeyEvent() );
 
-    return Control::Notify( rNEvt );
+    return nRet ? nRet : Control::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------

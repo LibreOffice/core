@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atktextattributes.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +74,12 @@ static AtkTextAttribute atk_text_attribute_tab_stops = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_writing_mode = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_vertical_align = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_misspelled = ATK_TEXT_ATTR_INVALID;
+// --> OD 2010-03-01 #i92232#
+static AtkTextAttribute atk_text_attribute_tracked_change = ATK_TEXT_ATTR_INVALID;
+// <--
+// --> OD 2010-03-05 #i92233#
+static AtkTextAttribute atk_text_attribute_mm_to_pixel_ratio = ATK_TEXT_ATTR_INVALID;
+// <--
 
 /*****************************************************************************/
 
@@ -106,6 +109,9 @@ enum ExportedAttribute
     TEXT_ATTRIBUTE_STRIKETHROUGH,
     TEXT_ATTRIBUTE_UNDERLINE,
     TEXT_ATTRIBUTE_WEIGHT,
+    // --> OD 2010-03-05 #i92233#
+    TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO,
+    // <--
     TEXT_ATTRIBUTE_JUSTIFICATION,
     TEXT_ATTRIBUTE_BOTTOM_MARGIN,
     TEXT_ATTRIBUTE_FIRST_LINE_INDENT,
@@ -140,6 +146,9 @@ static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
     "CharStrikeout",        // TEXT_ATTRIBUTE_STRIKETHROUGH
     "CharUnderline",        // TEXT_ATTRIBUTE_UNDERLINE
     "CharWeight",           // TEXT_ATTRIBUTE_WEIGHT
+    // --> OD 2010-03-05 #i92233#
+    "MMToPixelRatio",       // TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO
+    // <--
     "ParaAdjust",           // TEXT_ATTRIBUTE_JUSTIFICATION
     "ParaBottomMargin",     // TEXT_ATTRIBUTE_BOTTOM_MARGIN
     "ParaFirstLineIndent",  // TEXT_ATTRIBUTE_FIRST_LINE_INDENT
@@ -1296,6 +1305,14 @@ attribute_set_new_from_property_values(
     attribute_set = attribute_set_prepend(attribute_set, atk_text_attribute_tab_stops,
         get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TAB_STOPS], TabStops2String));
 
+    // --> OD 2010-03-05 #i92233#
+    if( ATK_TEXT_ATTR_INVALID == atk_text_attribute_mm_to_pixel_ratio )
+        atk_text_attribute_mm_to_pixel_ratio = atk_text_attribute_register("mm-to-pixel-ratio");
+
+    attribute_set = attribute_set_prepend( attribute_set, atk_text_attribute_mm_to_pixel_ratio,
+        get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO], Float2String));
+    // <--
+
     return attribute_set;
 }
 
@@ -1311,6 +1328,49 @@ AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_se
     return attribute_set;
 }
 
+// --> OD 2010-03-01 #i92232#
+AtkAttributeSet* attribute_set_prepend_tracked_change_insertion( AtkAttributeSet* attribute_set )
+{
+    if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
+    {
+        atk_text_attribute_tracked_change = atk_text_attribute_register( "text-tracked-change" );
+    }
+
+    attribute_set = attribute_set_prepend( attribute_set,
+                                           atk_text_attribute_tracked_change,
+                                           g_strdup_printf( "insertion" ) );
+
+    return attribute_set;
+}
+
+AtkAttributeSet* attribute_set_prepend_tracked_change_deletion( AtkAttributeSet* attribute_set )
+{
+    if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
+    {
+        atk_text_attribute_tracked_change = atk_text_attribute_register( "text-tracked-change" );
+    }
+
+    attribute_set = attribute_set_prepend( attribute_set,
+                                           atk_text_attribute_tracked_change,
+                                           g_strdup_printf( "deletion" ) );
+
+    return attribute_set;
+}
+
+AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange( AtkAttributeSet* attribute_set )
+{
+    if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
+    {
+        atk_text_attribute_tracked_change = atk_text_attribute_register( "text-tracked-change" );
+    }
+
+    attribute_set = attribute_set_prepend( attribute_set,
+                                           atk_text_attribute_tracked_change,
+                                           g_strdup_printf( "attribute-change" ) );
+
+    return attribute_set;
+}
+// <--
 
 /*****************************************************************************/
 

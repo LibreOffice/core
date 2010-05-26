@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclevent.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,19 @@
 #include "vcl/dllapi.h"
 #include "vcl/impdel.hxx"
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <list>
 #include <vector>
 
 class Window;
 class Menu;
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility {
+        class XAccessible;
+    }
+}}}
 
 #define VCLEVENT_OBJECT_DYING                  1
 
@@ -187,6 +192,7 @@ class Menu;
 
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
 #define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
+#define VCLEVENT_TABLEROW_SELECT                1225
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {
@@ -242,6 +248,17 @@ public:
     USHORT GetItemPos() const { return mnPos; }
 };
 
+class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
+{
+public:
+    VclAccessibleEvent( ULONG n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    virtual ~VclAccessibleEvent();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
+};
+
 class VCL_DLLPUBLIC VclEventListeners : public std::list<Link>
 {
 public:
@@ -262,7 +279,10 @@ class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
         std::list< Link >::iterator     m_aIt;
         bool                            m_bWasInvalidated;
 
-        ListenerIt() : m_bWasInvalidated( false ) {}
+        ListenerIt(const std::list<Link>::iterator& rIt)
+            : m_aIt(rIt)
+            , m_bWasInvalidated( false )
+        {}
     };
 
     std::vector< ListenerIt >      m_aIterators;

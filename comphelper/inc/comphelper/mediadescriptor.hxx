@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mediadescriptor.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +83,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_FILTERNAME();
         static const ::rtl::OUString& PROP_FILTEROPTIONS();
         static const ::rtl::OUString& PROP_FORMAT();
+        static const ::rtl::OUString& PROP_FRAME();
         static const ::rtl::OUString& PROP_FRAMENAME();
         static const ::rtl::OUString& PROP_HIDDEN();
         static const ::rtl::OUString& PROP_INPUTSTREAM();

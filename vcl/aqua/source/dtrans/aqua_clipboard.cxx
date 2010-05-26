@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aqua_clipboard.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,6 +189,10 @@ void SAL_CALL AquaClipboard::setContents(const Reference<XTransferable>& xTransf
     const Reference<XClipboardOwner>& xClipboardOwner)
         throw( RuntimeException )
 {
+    NSArray* types = xTransferable.is() ?
+        mpDataFlavorMapper->flavorSequenceToTypesArray(xTransferable->getTransferDataFlavors()) :
+        [NSArray array];
+
     ClearableMutexGuard aGuard(m_aMutex);
 
     Reference<XClipboardOwner> oldOwner(mXClipboardOwner);
@@ -200,10 +201,9 @@ void SAL_CALL AquaClipboard::setContents(const Reference<XTransferable>& xTransf
     Reference<XTransferable> oldContent(mXClipboardContent);
     mXClipboardContent = xTransferable;
 
-    NSArray* types = mXClipboardContent.is() ?
-        mpDataFlavorMapper->flavorSequenceToTypesArray(mXClipboardContent->getTransferDataFlavors()) :
-        [NSArray array];
     mPasteboardChangeCount = [mPasteboard declareTypes: types owner: mEventListener];
+
+    aGuard.clear();
 
     // if we are already the owner of the clipboard
     // then fire lost ownership event
@@ -256,7 +256,7 @@ void SAL_CALL AquaClipboard::removeClipboardListener(const Reference< XClipboard
 
 void AquaClipboard::applicationDidBecomeActive(NSNotification* aNotification)
 {
-  MutexGuard aGuard(m_aMutex);
+  ClearableMutexGuard aGuard(m_aMutex);
 
   int currentPboardChgCount = [mPasteboard changeCount];
 
@@ -272,6 +272,8 @@ void AquaClipboard::applicationDidBecomeActive(NSNotification* aNotification)
 
       Reference<XTransferable> oldContent(mXClipboardContent);
       mXClipboardContent = Reference<XTransferable>();
+
+      aGuard.clear();
 
       if (oldOwner.is())
         {

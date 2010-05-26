@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: print.src,v $
- * $Revision: 1.1.2.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -359,7 +356,7 @@ ModalDialog SV_DLG_PRINT
         {
             Pos = MAP_APPFONT( 5, 35 );
             Size = MAP_APPFONT( 150, 10 );
-            Text [en-US] = "Range and Copies";
+            Text [en-US] = "Range and copies";
         };
         FixedText SV_PRINT_COPYCOUNT
         {

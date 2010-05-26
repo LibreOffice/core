@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.cxx,v $
- * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1131,6 +1128,16 @@ static Font getFont( NSFont* pFont, long nDPIY, const Font& rDefault )
     return aResult;
 }
 
+void AquaSalFrame::getResolution( long& o_rDPIX, long& o_rDPIY )
+{
+    if( ! mpGraphics )
+    {
+        GetGraphics();
+        ReleaseGraphics( mpGraphics );
+    }
+    mpGraphics->GetResolution( o_rDPIX, o_rDPIY );
+}
+
 // on OSX-Aqua the style settings are independent of the frame, so it does
 // not really belong here. Since the connection to the Appearance_Manager
 // is currently done in salnativewidgets.cxx this would be a good place.
@@ -1160,13 +1167,8 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // get the system font settings
     Font aAppFont = aStyleSettings.GetAppFont();
-    if( ! mpGraphics )
-    {
-        GetGraphics();
-        ReleaseGraphics( mpGraphics );
-    }
     long nDPIX = 72, nDPIY = 72;
-    mpGraphics->GetResolution( nDPIX, nDPIY );
+    getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 
     // TODO: better mapping of aqua<->ooo font settings

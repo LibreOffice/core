@@ -2,11 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolygontools.cxx,v $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1837,6 +1835,24 @@ namespace basegfx
             return aRetval;
         }
 
+        B2DPolygon createUnitPolygon()
+        {
+            static B2DPolygon aRetval;
+
+            if(!aRetval.count())
+            {
+                aRetval.append( B2DPoint( 0.0, 0.0 ) );
+                aRetval.append( B2DPoint( 1.0, 0.0 ) );
+                aRetval.append( B2DPoint( 1.0, 1.0 ) );
+                aRetval.append( B2DPoint( 0.0, 1.0 ) );
+
+                // close
+                aRetval.setClosed( true );
+            }
+
+            return aRetval;
+        }
+
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius )
         {
             return createPolygonFromEllipse( rCenter, fRadius, fRadius );
@@ -2330,7 +2346,8 @@ namespace basegfx
             // polygon must be closed to resemble a rect, and contain
             // at least four points.
             if( !rPoly.isClosed() ||
-                rPoly.count() < 4 )
+                rPoly.count() < 4 ||
+                rPoly.areControlPointsUsed() )
             {
                 return false;
             }

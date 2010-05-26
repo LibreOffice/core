@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xolesimplestorage.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -202,9 +199,9 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::
             uno::Reference< container::XNameAccess > xSubNameAccess;
             uno::Any aAny = xNameAccess->getByName( aElements[nInd] );
             if ( aAny >>= xInputStream )
-                InsertInputStreamToStorage_Impl( pNewStorage, aName, xInputStream );
+                InsertInputStreamToStorage_Impl( pNewStorage, aElements[nInd], xInputStream );
             else if ( aAny >>= xSubNameAccess )
-                InsertNameAccessToStorage_Impl( pNewStorage, aName, xSubNameAccess );
+                InsertNameAccessToStorage_Impl( pNewStorage, aElements[nInd], xSubNameAccess );
         }
     }
     catch( uno::Exception& )

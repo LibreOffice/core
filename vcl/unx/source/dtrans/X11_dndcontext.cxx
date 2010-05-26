@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: X11_dndcontext.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,8 @@ using namespace x11;
  */
 
 DropTargetDropContext::DropTargetDropContext(
-    Window aDropWindow,
-    Time aTimestamp,
+    XLIB_Window aDropWindow,
+    XLIB_Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),
@@ -77,8 +74,8 @@ void DropTargetDropContext::dropComplete( sal_Bool success ) throw()
  */
 
 DropTargetDragContext::DropTargetDragContext(
-    Window aDropWindow,
-    Time aTimestamp,
+    XLIB_Window aDropWindow,
+    XLIB_Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),
@@ -106,8 +103,8 @@ void DropTargetDragContext::rejectDrag() throw()
  */
 
 DragSourceContext::DragSourceContext(
-    Window aDropWindow,
-    Time aTimestamp,
+    XLIB_Window aDropWindow,
+    XLIB_Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),

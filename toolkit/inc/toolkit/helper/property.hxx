@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: property.hxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,6 +195,11 @@ namespace rtl {
 #define BASEPROPERTY_GRID_SELECTIONMODE             144
 #define BASEPROPERTY_ENABLEVISIBLE                  145  // sal_Bool
 #define BASEPROPERTY_REFERENCE_DEVICE               146
+#define BASEPROPERTY_HIGHCONTRASTMODE               147
+#define BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND       148
+#define BASEPROPERTY_GRID_HEADER_BACKGROUND         149
+#define BASEPROPERTY_GRID_LINE_COLOR                150
+#define BASEPROPERTY_GRID_ROW_BACKGROUND        151
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.

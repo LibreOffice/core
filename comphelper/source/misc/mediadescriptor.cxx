@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mediadescriptor.cxx,v $
- * $Revision: 1.20.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,6 +180,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_FILTEROPTIONS()
 const ::rtl::OUString& MediaDescriptor::PROP_FORMAT()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Format"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_FRAME()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Frame"));
     return sProp;
 }
 

@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -64,6 +60,8 @@ CDEFS+=-xalias_level=compatible
 .ENDIF
 .ENDIF
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # --- Common ----------------------------------------------------------
 .IF "$(L10N_framework)"==""
 
@@ -78,17 +76,10 @@ SHL1OBJS=  \
     $(SLO)$/linetest.obj		\
     $(SLO)$/masktest.obj		\
     $(SLO)$/polytest.obj		\
-    $(SLO)$/tools.obj		    \
-    $(SLO)$/bitmapdevice.obj    \
-    $(SLO)$/debug.obj			\
-    $(SLO)$/polypolygonrenderer.obj
-# last three objs are a bit of a hack: cannot link against LIBBASEBMP
-# here, because not yet delivered. Need the functionality to test, so
-# we're linking it in statically. Need to keep this in sync with
-# source/makefile.mk
+    $(SLO)$/tools.obj
 SHL1TARGET= tests
-SHL1STDLIBS= 	$(SALLIB)		 \
-                                $(TESTSHL2LIB)\
+SHL1STDLIBS=    $(BASEBMPLIB) \
+                $(SALLIB)		 \
                 $(CPPUNITLIB)	 \
                 $(BASEGFXLIB)
 
@@ -96,6 +87,8 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = export.map
+SHL1RPATH = NONE
+
 .ENDIF
 # END ------------------------------------------------------------------
 
@@ -125,16 +118,8 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk
 
 # --- Enable test execution in normal build ------------------------
 .IF "$(L10N_framework)"==""
-
-unittest : $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        @echo - start unit test on library $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        $(TESTSHL2) -sf $(mktmp ) $(SHL1TARGETN)
-
-ALLTAR : unittest
+.INCLUDE : _cppunit.mk
 .ENDIF

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: padialog.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,6 +147,11 @@ void PADialog::Init()
     ::psp::PrintFontManager& rFontManager( ::psp::PrintFontManager::get() );
     if( ! rFontManager.checkImportPossible() )
         m_aFontsPB.Enable( FALSE );
+    if( rFontManager.hasFontconfig() )
+    {
+        m_aFontsPB.Enable( FALSE );
+        m_aFontsPB.Show( FALSE );
+    }
 }
 
 PADialog::~PADialog()

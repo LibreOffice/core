@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salinst.cxx,v $
- * $Revision: 1.53.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -477,6 +474,7 @@ AquaSalInstance::AquaSalInstance()
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
     mnActivePrintJobs = 0;
+    maWaitingYieldCond = osl_createCondition();
 }
 
 // -----------------------------------------------------------------------
@@ -487,6 +485,7 @@ AquaSalInstance::~AquaSalInstance()
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     osl_destroyMutex( maUserEventListMutex );
+    osl_destroyCondition( maWaitingYieldCond );
 }
 
 // -----------------------------------------------------------------------
@@ -716,6 +715,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( aEvent.mpFrame && AquaSalFrame::isAlive( aEvent.mpFrame ) )
         {
             aEvent.mpFrame->CallCallback( aEvent.mnType, aEvent.mpData );
+            osl_setCondition( maWaitingYieldCond );
             // return if only one event is asked for
             if( ! bHandleAllCurrentEvents )
                 return;
@@ -788,6 +788,18 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 (*it)->maInvalidRect.SetEmpty();
             }
         }
+        osl_setCondition( maWaitingYieldCond );
+    }
+    else if( bWait )
+    {
+        // #i103162#
+        // wait until any thread (most likely the main thread)
+        // has dispatched an event, cop out at 200 ms
+        osl_resetCondition( maWaitingYieldCond );
+        TimeValue aVal = { 0, 200000000 };
+        ULONG nCount = ReleaseYieldMutex();
+        osl_waitCondition( maWaitingYieldCond, &aVal );
+        AcquireYieldMutex( nCount );
     }
 
     // we get some apple events way too early

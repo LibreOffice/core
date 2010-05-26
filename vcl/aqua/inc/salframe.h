@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.h,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,6 +183,8 @@ public:
     NSWindow* getWindow() const { return mpWindow; }
     NSView* getView() const { return mpView; }
     unsigned int getStyleMask() const { return mnStyleMask; }
+
+    void getResolution( long& o_rDPIX, long& o_rDPIY );
 
     // actually the follwing methods do the same thing: flipping y coordinates
     // but having two of them makes clearer what the coordinate system

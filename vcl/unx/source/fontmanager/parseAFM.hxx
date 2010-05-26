@@ -34,16 +34,6 @@
  *  10/19/2005 pl       - changed parseFile to accept a file name instead of a stream
  */
 
-/*************************************************************************
- *
- *  $RCSfile: parseAFM.hxx,v $
- *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:08:50 $
- *
- ************************************************************************/
-
 /* ParseAFM.h
  *
  * This header file is used in conjuction with the parseAFM.c file.

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: style.cxx,v $
- * $Revision: 1.19.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#ifndef GCC
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
 
 #define _SVSTDARR_STRINGS
@@ -811,6 +809,16 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
         {
             // Alle Styles umsetzen, deren Parent dieser hier ist
             ChangeParent( p->GetName(), p->GetParent() );
+
+            com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), com::sun::star::uno::UNO_QUERY );
+            if( xComp.is() ) try
+            {
+                xComp->dispose();
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+            }
+
             aStyles.erase(aIter);
             Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) );
         }
@@ -841,6 +849,15 @@ void SfxStyleSheetBasePool::Clear()
     SfxStyles::iterator aIter( aClearStyles.begin() );
     while( aIter != aClearStyles.end() )
     {
+        com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), com::sun::star::uno::UNO_QUERY );
+        if( xComp.is() ) try
+        {
+            xComp->dispose();
+        }
+        catch( com::sun::star::uno::Exception& )
+        {
+        }
+
         Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *(*aIter++).get() ) );
     }
 }

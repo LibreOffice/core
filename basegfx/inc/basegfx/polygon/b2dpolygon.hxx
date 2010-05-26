@@ -2,11 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolygon.hxx,v $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,6 +260,12 @@ namespace basegfx
 
         /// apply transformation given in matrix form
         void transform(const basegfx::B2DHomMatrix& rMatrix);
+
+        // point iterators (same iterator validity conditions as for vector)
+        const B2DPoint* begin() const;
+        const B2DPoint* end() const;
+        B2DPoint* begin();
+        B2DPoint* end();
     };
 } // end of namespace basegfx
 

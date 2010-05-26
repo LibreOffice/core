@@ -1,26 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2009 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -49,6 +50,7 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
+        ,m_bResize(false)
     {
     }
 
@@ -61,8 +63,12 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     bool DefaultInputHandler::MouseMove( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
-        (void)_rControl;
-        (void)_rMEvt;
+        Point aPoint = _rMEvt.GetPosPixel();
+        if(m_bResize)
+        {
+            _rControl.resizeColumn(aPoint);
+            return true;
+        }
         return false;
     }
 
@@ -71,41 +77,60 @@ namespace svt { namespace table
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.isClickInVisibleArea(aPoint))
+        RowPos nRow = _rControl.getCurrentRow(aPoint);
+        if(nRow == -1)
+        {
+            m_bResize = _rControl.startResizeColumn(aPoint);
+            bHandled = true;
+        }
+        else if(nRow >= 0)
         {
             if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
             {
-                LoseFocus(_rControl);
                 _rControl.setCursorAtCurrentCell(aPoint);
                 bHandled = true;
             }
             else
             {
-                bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+                if(!_rControl.isRowSelected(nRow))
+                    bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+                else
+                    bHandled = true;
             }
         }
         return bHandled;
     }
-
     //--------------------------------------------------------------------
     bool DefaultInputHandler::MouseButtonUp( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.isClickInVisibleArea(aPoint))
+        if(_rControl.getCurrentRow(aPoint) >= 0)
         {
-            if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            if(m_bResize)
             {
-                GetFocus(_rControl);
-                _rControl.setCursorAtCurrentCell(aPoint);
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
+            else if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            {
                 bHandled = true;
             }
             else
+            {
                 bHandled = _rControl.getSelEngine()->SelMouseButtonUp(_rMEvt);
+            }
+        }
+        else
+        {
+            if(m_bResize)
+            {
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
         }
         return bHandled;
     }
-
     //--------------------------------------------------------------------
     bool DefaultInputHandler::KeyInput( IAbstractTableControl& _rControl, const KeyEvent& rKEvt )
     {
@@ -133,11 +158,11 @@ namespace svt { namespace table
             { KEY_PAGEDOWN, KEY_MOD1,   cursorToLastLine },
             { KEY_HOME,     KEY_MOD1,   cursorTopLeft },
             { KEY_END,      KEY_MOD1,   cursorBottomRight },
-            { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
-            { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
-            { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
-            { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
-            { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
+        { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
+        { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
+        { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
+        { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
+        { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
 
             { 0, 0, invalidTableControlAction }
         };
@@ -204,7 +229,6 @@ namespace svt { namespace table
         // TODO
         return false;
     }
-
 //........................................................................
 } } // namespace svt::table
 //........................................................................

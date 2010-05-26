@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dhommatrixtools.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +29,39 @@
 #include "precompiled_basegfx.hxx"
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
+    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix )
+    {
+        rtl::OUStringBuffer aStrBuf;
+        aStrBuf.appendAscii("matrix(");
+
+        aStrBuf.append(rMatrix.get(0,0));
+        aStrBuf.appendAscii(", ");
+
+        aStrBuf.append(rMatrix.get(1,0));
+        aStrBuf.appendAscii(", ");
+
+        aStrBuf.append(rMatrix.get(0,1));
+        aStrBuf.appendAscii(", ");
+
+        aStrBuf.append(rMatrix.get(1,1));
+        aStrBuf.appendAscii(", ");
+
+        aStrBuf.append(rMatrix.get(0,2));
+        aStrBuf.appendAscii(", ");
+
+        aStrBuf.append(rMatrix.get(1,2));
+        aStrBuf.appendAscii(")");
+
+        return aStrBuf.makeStringAndClear();
+    }
+
     namespace tools
     {
         void createSinCosOrthogonal(double& o_rSin, double& o_rCos, double fRadiant)

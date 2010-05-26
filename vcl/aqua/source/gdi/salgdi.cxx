@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -694,6 +694,13 @@ void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 
 void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
+    if( nX1 == nX2 && nY1 == nY2 )
+    {
+        // #i109453# platform independent code expects at least one pixel to be drawn
+        drawPixel( nX1, nY1 );
+        return;
+    }
+
     if( !CheckContext() )
         return;
 
@@ -1095,7 +1102,8 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
     DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" );
 
     const CGPoint aDstPoint = { +pPosAry->mnDestX - pPosAry->mnSrcX, pPosAry->mnDestY - pPosAry->mnSrcY };
-    if( !mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth ) // workaround a Quartz crasher
+    if( (pPosAry->mnSrcWidth == pPosAry->mnDestWidth && pPosAry->mnSrcHeight == pPosAry->mnDestHeight) &&
+        (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth) ) // workaround a Quartz crasher
     {
         // in XOR mode the drawing context is redirected to the XOR mask
         // if source and target are identical then copyBits() paints onto the target context though

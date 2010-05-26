@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dhommatrixtools.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +31,8 @@
 #include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+
+namespace rtl { class OUString; }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -136,6 +134,7 @@ namespace basegfx
                 rPoint.getX(), rPoint.getY(),
                 fRadiant);
         }
+
     } // end of namespace tools
 } // end of namespace basegfx
 
@@ -224,6 +223,10 @@ namespace basegfx
             double getShearX() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return mfShearX; }
         };
     } // end of namespace tools
+
+    /// Returns a string with svg's "matrix(m00,m10,m01,m11,m02,m12)" representation
+    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix );
+
 } // end of namespace basegfx
 
 ///////////////////////////////////////////////////////////////////////////////

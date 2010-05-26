@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wintypes.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,10 +178,11 @@ typedef sal_Int64 WinBits;
 #define WB_NOLABEL              ((WinBits)0x02000000)
 #define WB_SORT                 ((WinBits)0x04000000)
 #define WB_DROPDOWN             ((WinBits)0x08000000)
+#define WB_HIDE                 ((WinBits)SAL_CONST_INT64(0x80000000))
 #define WB_AUTOHSCROLL          ((WinBits)SAL_CONST_INT64(0x10000000))
 #define WB_DOCKABLE             ((WinBits)SAL_CONST_INT64(0x20000000))
 #define WB_AUTOVSCROLL          ((WinBits)SAL_CONST_INT64(0x40000000))
-#define WB_HYPHENATION          (((WinBits)SAL_CONST_INT64(0x80000000)) | WB_WORDBREAK)
+#define WB_HYPHENATION          (((WinBits)SAL_CONST_INT64(0x800000000)) | WB_WORDBREAK)
 #define WB_CHILDDLGCTRL         ((WinBits)SAL_CONST_INT64(0x100000000000))
 
 // system floating window
@@ -196,7 +194,6 @@ typedef sal_Int64 WinBits;
 #define WB_DEFAULTWIN           ((WinBits)SAL_CONST_INT64(0x4000000000))
 #define WB_NEEDSFOCUS           ((WinBits)SAL_CONST_INT64(0x1000000000))
 
-#define WB_HIDE                 ((WinBits)SAL_CONST_INT64(0x80000000))
 #define WB_HSCROLL              WB_HORZ
 #define WB_VSCROLL              WB_VERT
 #define WB_TOPIMAGE             WB_TOP
@@ -208,6 +205,7 @@ typedef sal_Int64 WinBits;
 #define WB_SMALLSTYLE           ((WinBits)0x04000000)
 #define WB_TOGGLE               ((WinBits)SAL_CONST_INT64(0x1000000000))
 #define WB_BEVELBUTTON          ((WinBits)SAL_CONST_INT64(0x2000000000))
+#define WB_FLATBUTTON           ((WinBits)SAL_CONST_INT64(0x4000000000))
 
 // Window-Bits for FixedText
 #define WB_PATHELLIPSIS         ((WinBits)0x00100000)
@@ -332,6 +330,12 @@ typedef USHORT StandardButtonType;
 #define BUTTON_ABORT        ((StandardButtonType)9)
 #define BUTTON_LESS         ((StandardButtonType)10)
 #define BUTTON_COUNT        11
+
+// --------------------------------------------
+// - prominent place for ListBox window types -
+// --------------------------------------------
+
+enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
 
 #endif // _TOOLS_WINTYPES_HXX
 

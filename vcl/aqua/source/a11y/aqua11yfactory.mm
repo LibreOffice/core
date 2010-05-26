@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aqua11yfactory.mm,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +48,7 @@
 #include "aqua11ywrappersplitter.h"
 #include "aqua11ywrappertabgroup.h"
 #include "aqua11ywrappertoolbar.h"
+#include "aqua11ytablewrapper.h"
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star::accessibility;
@@ -146,6 +143,8 @@ static bool enabled = false;
             aWrapper = [ [ AquaA11yWrapperList alloc ] initWithAccessibleContext: rxAccessibleContext ];
         } else if ( [ nativeRole isEqualToString: NSAccessibilitySplitterRole ] ) {
             aWrapper = [ [ AquaA11yWrapperSplitter alloc ] initWithAccessibleContext: rxAccessibleContext ];
+        } else if ( [ nativeRole isEqualToString: NSAccessibilityTableRole ] ) {
+            aWrapper = [ [ AquaA11yTableWrapper alloc ] initWithAccessibleContext: rxAccessibleContext ];
         } else {
             aWrapper = [ [ AquaA11yWrapper alloc ] initWithAccessibleContext: rxAccessibleContext ];
         }

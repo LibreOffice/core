@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -95,6 +95,14 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  * atk-bridge's atexit handler gets called.
                  */
                 if( rModuleBase.equalsAscii("gtk") )
+                {
+                    pCloseModule = NULL;
+                }
+                /*
+                 * #i109007# KDE3 seems to have the same problem; an atexit cleanup
+                 * handler, which cannot be resolved anymore if the plugin is already unloaded.
+                 */
+                else if( rModuleBase.equalsAscii("kde") )
                 {
                     pCloseModule = NULL;
                 }

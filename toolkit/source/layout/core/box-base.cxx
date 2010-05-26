@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile$
- *
- * $Revision$
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,15 +104,16 @@ Box_Base::addChild (uno::Reference <awt::XLayoutConstrains> const& xChild)
 }
 
 Box_Base::ChildData*
-Box_Base::removeChildData( std::list< ChildData* > lst, css::uno::Reference< css::awt::XLayoutConstrains > const& xChild )
+Box_Base::removeChildData( std::list< ChildData* >& lst, css::uno::Reference< css::awt::XLayoutConstrains > const& xChild )
 {
     for ( std::list< ChildData* >::iterator it = lst.begin();
           it != lst.end(); it++ )
     {
         if ( (*it)->mxChild == xChild )
         {
+            ChildData* pRet = *it;
             lst.erase( it );
-            return *it;
+            return pRet;
         }
     }
     return 0;

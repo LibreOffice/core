@@ -1,26 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2009 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 #ifndef SVTOOLS_INC_TABLE_TABLETYPES_HXX
@@ -55,17 +56,17 @@ namespace svt { namespace table
 /** special column width value which indicates that the column should be
     automatically resized to fit the view
 */
-#define COLWIDTH_FIT_TO_VIEW    ((TableMetrics)-1)
+#define COLWIDTH_FIT_TO_VIEW    ((::svt::table::TableMetrics)-1)
 
 /// denotes the column containing the row headers
-#define COL_ROW_HEADERS         ((ColPos)-1)
+#define COL_ROW_HEADERS         ((::svt::table::ColPos)-1)
 /// denotes the row containing the column headers
-#define ROW_COL_HEADERS         ((RowPos)-1)
+#define ROW_COL_HEADERS         ((::svt::table::RowPos)-1)
 
 /// denotes an invalid column index
-#define COL_INVALID             ((ColPos)-2)
+#define COL_INVALID             ((::svt::table::ColPos)-2)
 /// denotes an invalid row index
-#define ROW_INVALID             ((RowPos)-2)
+#define ROW_INVALID             ((::svt::table::RowPos)-2)
 
 
 //........................................................................

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cairo_canvas.hxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,6 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/uno3.hxx>
@@ -68,7 +64,7 @@ namespace cairocanvas
     typedef ::cppu::WeakComponentImplHelper7< ::com::sun::star::rendering::XBitmapCanvas,
                                                 ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::rendering::XGraphicDevice,
-                                                ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
+                                                ::com::sun::star::lang::XMultiServiceFactory,
                                                 ::com::sun::star::util::XUpdatable,
                                                 ::com::sun::star::beans::XPropertySet,
                                                 ::com::sun::star::lang::XServiceName >  GraphicDeviceBase_Base;

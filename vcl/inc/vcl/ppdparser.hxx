@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ppdparser.hxx,v $
- * $Revision: 1.12.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +34,14 @@
 #include "tools/string.hxx"
 #include "tools/stream.hxx"
 
+#include "com/sun/star/lang/Locale.hpp"
+
 #define PRINTER_PPDDIR "driver"
 
 namespace psp {
 
 class PPDParser;
+class PPDTranslator;
 
 enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
 
@@ -49,9 +49,7 @@ struct PPDValue
 {
     PPDValueType    m_eType;
     String          m_aOption;
-    String          m_aOptionTranslation;
     String          m_aValue;
-    String          m_aValueTranslation;
 };
 
 // ----------------------------------------------------------------------
@@ -80,7 +78,6 @@ public:
 private:
 
     bool                m_bUIOption;
-    String              m_aUITranslation;
     UIType              m_eUIType;
     int                 m_nOrderDependency;
     SetupType           m_eSetupType;
@@ -102,7 +99,6 @@ public:
 
     const String&       getKey() const { return m_aKey; }
     bool                isUIKey() const { return m_bUIOption; }
-    const String&       getUITranslation() const { return m_aUITranslation; }
     UIType              getUIType() const { return m_eUIType; }
     SetupType           getSetupType() const { return m_eSetupType; }
     int                 getOrderDependency() const { return m_nOrderDependency; }
@@ -185,6 +181,9 @@ private:
     // fonts
     const PPDKey*                               m_pFontList;
 
+    // translations
+    PPDTranslator*                              m_pTranslator;
+
     PPDParser( const String& rFile );
     ~PPDParser();
 
@@ -193,7 +192,7 @@ private:
     void parseConstraint( const ByteString& rLine );
     void parse( std::list< ByteString >& rLines );
 
-    String handleTranslation( const ByteString& rString );
+    String handleTranslation( const ByteString& i_rString, bool i_bIsGlobalized );
 
     static void scanPPDDir( const String& rDir );
     static void initPPDFiles();
@@ -222,7 +221,7 @@ public:
     bool            isType42Capable() const { return m_bType42Capable; }
     ULONG           getLanguageLevel() const { return m_nLanguageLevel; }
 
-    const String&   getDefaultPaperDimension() const;
+    String          getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
     { getPaperDimension( getDefaultPaperDimension(), rWidth, rHeight ); }
     bool getPaperDimension( const String& rPaperName,
@@ -231,12 +230,12 @@ public:
     // returns false if paper not found
     int             getPaperDimensions() const
     { return m_pPaperDimensions ? m_pPaperDimensions->countValues() : 0; }
-    const String&   getPaperDimension( int ) const;
-    const String&   getPaperDimensionCommand( int ) const;
-    const String&   getPaperDimensionCommand( const String & ) const;
+    String          getPaperDimension( int ) const;
+    String          getPaperDimensionCommand( int ) const;
+    String          getPaperDimensionCommand( const String & ) const;
 
     // match the best paper for width and height
-    const String&   matchPaper( int nWidth, int nHeight ) const;
+    String          matchPaper( int nWidth, int nHeight ) const;
 
     bool getMargins( const String& rPaperName,
                      int &rLeft, int& rRight,
@@ -246,27 +245,27 @@ public:
 
     // values int pt
 
-    const String&   getDefaultInputSlot() const;
+    String          getDefaultInputSlot() const;
     int             getInputSlots() const
     { return m_pInputSlots ? m_pInputSlots->countValues() : 0; }
-    const String&   getSlot( int ) const;
-    const String&   getSlotCommand( int ) const;
-    const String&   getSlotCommand( const String& ) const;
+    String          getSlot( int ) const;
+    String          getSlotCommand( int ) const;
+    String          getSlotCommand( const String& ) const;
 
     void            getDefaultResolution( int& rXRes, int& rYRes ) const;
     int             getResolutions() const;
     void            getResolution( int, int& rXRes, int& rYRes ) const;
-    const String&   getResolutionCommand( int nXRes, int nYRes ) const;
+    String          getResolutionCommand( int nXRes, int nYRes ) const;
     // values in dpi
     void            getResolutionFromString( const String&, int&, int& ) const;
     // helper function
 
-    const String&   getDefaultDuplexType() const;
+    String          getDefaultDuplexType() const;
     int             getDuplexTypes() const
     { return m_pDuplexTypes ? m_pDuplexTypes->countValues() : 0; }
-    const String&   getDuplex( int ) const;
-    const String&   getDuplexCommand( int ) const;
-    const String&   getDuplexCommand( const String& ) const;
+    String          getDuplex( int ) const;
+    String          getDuplexCommand( int ) const;
+    String          getDuplexCommand( const String& ) const;
 
     int             getFonts() const
     { return m_pFontList ? m_pFontList->countValues() : 0; }
@@ -276,7 +275,18 @@ public:
     void            getFontAttributes( const String&,
                                        String& rEncoding,
                                        String& rCharset ) const;
-    const String&   getFont( int ) const;
+    String          getFont( int ) const;
+
+
+    rtl::OUString   translateKey( const rtl::OUString& i_rKey,
+                                  const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
+    rtl::OUString   translateOption( const rtl::OUString& i_rKey,
+                                     const rtl::OUString& i_rOption,
+                                     const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
+    rtl::OUString   translateValue( const rtl::OUString& i_rKey,
+                                    const rtl::OUString& i_rOption,
+                                    const rtl::OUString& i_rValue,
+                                    const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
 };
 
 // ----------------------------------------------------------------------

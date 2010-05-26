@@ -1,26 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2009 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 #ifndef SVTOOLS_INC_TABLE_TABLERENDERER_HXX
@@ -44,7 +45,7 @@ namespace svt { namespace table
     */
     class SAL_NO_VTABLE ITableRenderer
     {
-    public:
+        public:
         /** paints a (part of) header area
 
             There are two header areas in a table control:
@@ -177,12 +178,44 @@ namespace svt { namespace table
             @param _rText
                 the title of the header row
         */
-        virtual void    PaintRowHeader(
-                            bool _bActive, bool _bSelected,
+        virtual void    PaintRowHeader( bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
+                const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
 
         /** paints a certain cell
+
+            The row to be painted is denoted by the most recent call to
+            ->PrepareRow.
+
+            @param _bSelected
+                <TRUE/> if and only if the cell to be painted is
+                selected currently. This is the case if either
+                the row or the column of the cell is currently selected.
+                <br/>
+                Note that this flag is equal to the respective flag in the
+                previous ->PrepareRow call, it's passed here for convinience
+                only.
+            @param _bActive
+                <TRUE/> if the cell is currently active.
+                <br/>
+                Note that this flag is equal to the respective flag in the
+                previous ->PrepareRow call, it's passed here for convinience
+                only.
+            @param _rDevice
+                denotes the device to paint onto
+            @param _rArea
+                the are into which the cell should be painted
+            @param _rStyle
+                the style to be used for drawing
+            @param _pCellData
+                the content of the cell
+        */
+        virtual void    PaintCellImage( ColPos _nColumn,
+                            bool _bActive, bool _bSelected,
+                            OutputDevice& _rDevice, const Rectangle& _rArea,
+                const StyleSettings& _rStyle, Image* _pCellData ) = 0;
+
+    /** paints a certain cell
 
             The row to be painted is denoted by the most recent call to
             ->PrepareRow.
@@ -210,10 +243,10 @@ namespace svt { namespace table
             @param _rText
                 the content of the cell
         */
-        virtual void    PaintCell( ColPos _nColumn,
+        virtual void    PaintCellString( ColPos _nColumn,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
+                const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
 
         /** draws a cell cursor in the given rectangle
 

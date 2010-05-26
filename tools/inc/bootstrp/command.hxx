@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: command.hxx,v $
- * $Revision: 1.6.40.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,8 +92,6 @@ public:
     void            Print();
 };
 
-static ByteString thePath( "PATH" );
-
 /** Declares and spawns a child process.
     The spawned programm could be a native executable or a schell script.
 */
@@ -130,7 +125,7 @@ public:
                         @param sItem specifies the system shell
                         @return the Location (when programm was found)
                     */
-    static ByteString   Search( ByteString sEnv = thePath,
+    static ByteString   Search( ByteString sEnv,
                                     ByteString sItem = COMMAND_SHELL );
 
                     /** Spawns the Process

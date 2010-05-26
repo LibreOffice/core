@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atkbridge.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,17 +40,14 @@ bool InitAtkBridge(void)
 {
     const char* pVersion = atk_get_toolkit_version();
     if( ! pVersion )
-    {
-        g_warning( "unable to get gail version number" );
         return false;
-    }
 
     unsigned int major, minor, micro;
 
     /* check gail minimum version requirements */
     if( sscanf( pVersion, "%u.%u.%u", &major, &minor, &micro) < 3 )
     {
-        g_warning( "unable to parse gail version number" );
+        // g_warning( "unable to parse gail version number" );
         return false;
     }
 

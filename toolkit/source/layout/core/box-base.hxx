@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile$
- *
- * $Revision$
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +62,7 @@ protected:
     virtual ChildData *createChild( css::uno::Reference< css::awt::XLayoutConstrains > const& xChild ) = 0;
     virtual ChildProps *createChildProps( ChildData* pData ) = 0;
 
-    ChildData *removeChildData( std::list< ChildData *>, css::uno::Reference< css::awt::XLayoutConstrains > const& Child );
+    ChildData *removeChildData( std::list< ChildData *>&, css::uno::Reference< css::awt::XLayoutConstrains > const& Child );
 
 public:
     void AddChild( const css::uno::Reference< css::awt::XLayoutConstrains >& Child);

@@ -1,26 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2009 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 #ifndef SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
@@ -52,21 +53,27 @@ namespace svt { namespace table
     private:
         TableControl_Impl&  m_rTableControl;
         Link                m_aMouseButtonDownHdl;
-        Link                m_aMouseButtonUpHdl;
-
+         Link               m_aMouseButtonUpHdl;
+        Link                m_aSelectHdl;
+        RowPos              m_nRowAlreadySelected;
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );
         inline void         SetMouseButtonDownHdl( const Link& rLink )  { m_aMouseButtonDownHdl = rLink; }
         inline const Link&  GetMouseButtonDownHdl() const               { return m_aMouseButtonDownHdl; }
         inline void         SetMouseButtonUpHdl( const Link& rLink )    { m_aMouseButtonUpHdl = rLink; }
         inline const Link&  GetMouseButtonUpHdl() const             { return m_aMouseButtonUpHdl; }
+        inline void         SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
+        inline const Link&  GetSelectHdl() const                { return m_aSelectHdl; }
 
         // Window overridables
         virtual void        Paint( const Rectangle& rRect );
         virtual void        MouseMove( const MouseEvent& rMEvt);
         virtual void        MouseButtonDown( const MouseEvent& rMEvt);
         virtual void        MouseButtonUp( const MouseEvent& rMEvt);
-
+        virtual void        SetPointer( const Pointer& rPointer );
+        virtual void        CaptureMouse();
+        virtual void        ReleaseMouse();
+        virtual long        Notify(NotifyEvent& rNEvt);
     };
 //........................................................................
 } } // namespace svt::table
