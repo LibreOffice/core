@@ -912,10 +912,10 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
          SFX_ITEM_ON == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
          ( (SwFmtPageDesc*)pI )->GetPageDesc() )
     {
-        AppendSep( *(SwFmtPageDesc*)pI, *pNd, pFmt, nRstLnNum );
+        AppendSection( *(SwFmtPageDesc*)pI, *pNd, pFmt, nRstLnNum );
     }
     else
-        AppendSep( rExport.pAktPageDesc, pFmt, nRstLnNum );
+        AppendSection( rExport.pAktPageDesc, pFmt, nRstLnNum );
 }
 
 WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
@@ -924,7 +924,7 @@ WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
       pAttrs( 0 ),
       pTxtPos( 0 )
 {
-    // to be in sync with the AppendSep() call in the MSWordSections
+    // to be in sync with the AppendSection() call in the MSWordSections
     // constructor
     aCps.Insert( ULONG( 0 ), aCps.Count() );
 }
@@ -987,7 +987,7 @@ const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
     return NULL;
 }
 
-void MSWordSections::AppendSep( const SwPageDesc* pPd,
+void MSWordSections::AppendSection( const SwPageDesc* pPd,
     const SwSectionFmt* pSectionFmt, ULONG nLnNumRestartNo )
 {
     aSects.Insert( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo ),
@@ -1000,10 +1000,10 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
 {
     aCps.Insert( nStartCp, aCps.Count() );
 
-    MSWordSections::AppendSep( pPd, pSectionFmt, nLnNumRestartNo );
+    AppendSection( pPd, pSectionFmt, nLnNumRestartNo );
 }
 
-void MSWordSections::AppendSep( const SwFmtPageDesc& rPD,
+void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
     const SwNode& rNd, const SwSectionFmt* pSectionFmt, ULONG nLnNumRestartNo )
 {
     WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo,
@@ -1017,7 +1017,7 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
 {
     aCps.Insert(nStartCp, aCps.Count());
 
-    MSWordSections::AppendSep( rPD, rNd, pSectionFmt, nLnNumRestartNo );
+    AppendSection( rPD, rNd, pSectionFmt, nLnNumRestartNo );
 }
 
 // MSWordSections::SetNum() setzt in jeder Section beim 1. Aufruf den

@@ -439,7 +439,7 @@ void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
-    m_pSections->AppendSep( pPageDesc, pFmt, nLnNum );
+    m_pSections->AppendSection( pPageDesc, pFmt, nLnNum );
 }
 
 void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
@@ -473,7 +473,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
                 nRstLnNum = 0;
 
             AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
-            m_pSections->AppendSep( pAktPageDesc, pParentFmt, nRstLnNum );
+            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
         }
     }
 }
@@ -521,11 +521,11 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 
     if ( pNewPgDescFmt )
     {
-        m_pSections->AppendSep( *pNewPgDescFmt, rNd, pFmt, nLnNm );
+        m_pSections->AppendSection( *pNewPgDescFmt, rNd, pFmt, nLnNm );
     }
     else if ( pNewPgDesc )
     {
-        m_pSections->AppendSep( pNewPgDesc, rNd, pFmt, nLnNm );
+        m_pSections->AppendSection( pNewPgDesc, rNd, pFmt, nLnNm );
     }
 
 }
