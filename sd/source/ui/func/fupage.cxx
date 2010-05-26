@@ -84,6 +84,7 @@
 #include "undoback.hxx"
 #include "sdabstdlg.hxx"
 #include "sdresid.hxx"
+#include "sdundogr.hxx"
 #include "helpids.h"
 
 namespace sd {
@@ -359,6 +360,8 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                     ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
                 mbPageBckgrdDeleted = TRUE;
 
+            bool bSetToAllPages = false;
+
             // Ask, wether the setting are for the background-page or for the current page
             if( !mbMasterPage && bChanges )
             {
@@ -374,7 +377,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         aTit,
                         aTxt );
                     aQuestionBox.SetImage( QueryBox::GetStandardImage() );
-                    mbMasterPage = ( RET_YES == aQuestionBox.Execute() );
+                    bSetToAllPages = ( RET_YES == aQuestionBox.Execute() );
                 }
 
                 if( mbPageBckgrdDeleted )
@@ -402,6 +405,48 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                 pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
                 pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+            }
+            else if( bSetToAllPages )
+            {
+                String aComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
+                SfxUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
+                pUndoMgr->EnterListAction(aComment, aComment);
+                SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
+                pUndoGroup->SetComment(aComment);
+
+                //Set background on all master pages
+                USHORT nMasterPageCount = mpDoc->GetMasterSdPageCount(ePageKind);
+                for (USHORT i = 0; i < nMasterPageCount; ++i)
+                {
+                    SdPage *pMasterPage = mpDoc->GetMasterSdPage(i, ePageKind);
+                    SdStyleSheet *pStyle =
+                        pMasterPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
+                    StyleSheetUndoAction* pAction =
+                        new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyle, &(*pTempSet.get()));
+                    pUndoGroup->AddAction(pAction);
+                    pStyle->GetItemSet().Put( *(pTempSet.get()) );
+                    pStyle->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                }
+
+                //Remove background from all pages to reset to the master bg
+                USHORT nPageCount(mpDoc->GetSdPageCount(ePageKind));
+                for(USHORT i=0; i<nPageCount; ++i)
+                {
+                    SdPage *pPage = mpDoc->GetSdPage(i, ePageKind);
+
+                    const SfxItemSet& rFillAttributes = pPage->getSdrPageProperties().GetItemSet();
+                       if(XFILL_NONE != ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+                    {
+                        SdBackgroundObjUndoAction *pBackgroundObjUndoAction = new SdBackgroundObjUndoAction(*mpDoc, *pPage, rFillAttributes);
+                        pUndoGroup->AddAction(pBackgroundObjUndoAction);
+                        pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+                        pPage->ActionChanged();
+                    }
+                }
+
+                pUndoMgr->AddUndoAction(pUndoGroup);
+                pUndoMgr->LeaveListAction();
+
             }
 
             const SfxPoolItem *pItem;
