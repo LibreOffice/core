@@ -34,11 +34,6 @@ PACKAGE=ooo$/vba
 # --- Settings -----------------------------------------------------
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ELSE
-
 # ------------------------------------------------------------------------
 .IF "$(L10N_framework)"=""
 IDLFILES=\
@@ -71,4 +66,3 @@ IDLFILES=\
 # ------------------------------------------------------------------
 .ENDIF
 .INCLUDE :  target.mk
-.ENDIF

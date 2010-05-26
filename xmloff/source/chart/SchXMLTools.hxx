@@ -87,6 +87,11 @@ namespace SchXMLTools
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence();
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > CreateDataSequence(
+        const ::rtl::OUString& rRange,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+
     void CreateCategories(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > & xNewDoc,

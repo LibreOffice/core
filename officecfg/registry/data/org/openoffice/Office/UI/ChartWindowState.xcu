@@ -73,6 +73,90 @@
                     <value>true</value>
                 </prop>
             </node>
+            <node oor:name="private:resource/toolbar/basicshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Basic Shapes</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/symbolshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Symbol Shapes</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/arrowshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Block Arrows</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/flowchartshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Flowchart</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/calloutshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Callouts</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/starshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Stars and Banners</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>
