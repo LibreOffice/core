@@ -41,6 +41,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <svtools/toolboxcontroller.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/window.hxx>
 
 #include <map>
@@ -49,13 +50,26 @@ namespace css = ::com::sun::star        ;
 namespace svx
 {
 
-class FindTextFieldControl;
-
-struct ExecuteInfo
+class FindTextFieldControl : public ComboBox
 {
-    css::uno::Reference< css::frame::XDispatch >     xDispatch;
-    css::util::URL                                   aTargetURL;
-    css::uno::Sequence< css::beans::PropertyValue >  aArgs;
+public:
+    FindTextFieldControl( Window* pParent, WinBits nStyle,
+        css::uno::Reference< css::frame::XFrame >& xFrame,
+        css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+    virtual ~FindTextFieldControl();
+
+    virtual void Modify();
+    virtual long PreNotify( NotifyEvent& rNEvt );
+
+    void InitControls_Impl();
+    void Remember_Impl(const String& rStr);
+
+private:
+
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager;
+    sal_Bool m_bToClearTextField;
+
 };
 
 class SearchToolbarControllersManager
@@ -119,14 +133,10 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException );
 
-    sal_Int32 getFontSizePixel( const Window* pWindow );
-
-    DECL_STATIC_LINK( FindTextToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
     DECL_LINK(EditModifyHdl, void*);
 
 private:
 
-    css::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
     FindTextFieldControl* m_pFindTextFieldControl;
 
     USHORT m_nDownSearchId; // item position of findbar
@@ -171,12 +181,6 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
 
-    DECL_STATIC_LINK( DownSearchToolboxController, ExecuteHdl_Impl, ExecuteInfo* );
-
-private :
-
-    css::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
-
 };
 
 class UpSearchToolboxController : public svt::ToolboxController,
@@ -215,12 +219,6 @@ public:
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
-
-    DECL_STATIC_LINK( UpSearchToolboxController, ExecuteHdl_Impl, ExecuteInfo* );
-
-private :
-
-    css::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
 
 };
 
