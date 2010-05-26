@@ -1068,6 +1068,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatpagewriter"               : FormatPageWriter
             case "formatautoformatapply"          : FormatAutoformatApply
 
+            case "insertslide"                    : InsertSlide
             case "insertfieldsother"              : InsertFieldsOther
             case "insertgraphicsfromfile"         : InsertGraphicsFromFile
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
@@ -1082,6 +1083,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
 
             case "viewzoom"                       : ViewZoom
+            case "viewnormal"                     : ViewNormal
 
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select
