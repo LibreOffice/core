@@ -36,7 +36,6 @@
 #include <com/sun/star/util/URL.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
@@ -47,35 +46,33 @@ namespace svx
 static const ::rtl::OUString SEARCHITEM_SEARCHSTRING   = ::rtl::OUString::createFromAscii("SearchItem.SearchString");
 static const ::rtl::OUString SEARCHITEM_SEARCHBACKWARD = ::rtl::OUString::createFromAscii("SearchItem.Backward");
 
+static const ::rtl::OUString COMMAND_EXECUTESEARCH = ::rtl::OUString::createFromAscii(".uno:ExecuteSearch");
 static const ::rtl::OUString COMMAND_FINDTEXT   = ::rtl::OUString::createFromAscii(".uno:FindText")  ;
 static const ::rtl::OUString COMMAND_DOWNSEARCH = ::rtl::OUString::createFromAscii(".uno:DownSearch");
 static const ::rtl::OUString COMMAND_UPSEARCH   = ::rtl::OUString::createFromAscii(".uno:UpSearch")  ;
+static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY   = ::rtl::OUString::createFromAscii("AppendSearchHistory");
 
-static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY   = ::rtl::OUString::createFromAscii("AppendSearchHistory")  ;
+static const ::rtl::OUString SERVICENAME_URLTRANSFORMER = ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer");
+static const sal_Int32       REMEMBER_SIZE = 10;
 
-class FindTextFieldControl : public ComboBox
+void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
-public:
-    FindTextFieldControl( Window* pParent, WinBits nStyle,
-        css::uno::Reference< css::frame::XFrame >& xFrame,
-        css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
-    virtual ~FindTextFieldControl();
+    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( rSMgr->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY );
+    if ( xURLTransformer.is() )
+    {
+        css::util::URL aURL;
+        aURL.Complete = COMMAND_EXECUTESEARCH;
+        xURLTransformer->parseStrict(aURL);
 
-    virtual void Modify();
-    virtual long PreNotify( NotifyEvent& rNEvt );
-
-    void InitControls_Impl();
-    void Remember_Impl(const String& rStr);
-
-private:
-
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
-    css::uno::Reference < css::util::XURLTransformer > m_xURLTransformer;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager;
-
-    sal_Bool m_bToClearTextField;
-
-};
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
+        if ( xDispatchProvider.is() )
+        {
+            css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            if ( xDispatch.is() && aURL.Complete.getLength() > 0 )
+                xDispatch->dispatch( aURL, lArgs );
+        }
+    }
+}
 
 FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle,
     css::uno::Reference< css::frame::XFrame >& xFrame,
@@ -85,10 +82,6 @@ FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle,
     m_xServiceManager(xServiceManager),
     m_bToClearTextField(sal_True)
 {
-    m_xURLTransformer = css::uno::Reference< css::util::XURLTransformer >( m_xServiceManager->createInstance(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-        css::uno::UNO_QUERY_THROW );
-
     InitControls_Impl();
 }
 
@@ -107,11 +100,16 @@ void FindTextFieldControl::InitControls_Impl()
 void FindTextFieldControl::Remember_Impl(const String& rStr)
 {
     USHORT nCount = GetEntryCount();
+
     for (USHORT i=0; i<nCount; ++i)
     {
         if ( rStr == GetEntry(i))
             return;
     }
+
+    if (nCount == REMEMBER_SIZE)
+        RemoveEntry(REMEMBER_SIZE-1);
+
     InsertEntry(rStr, 0);
 }
 
@@ -126,51 +124,36 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 {
     long nRet= ComboBox::PreNotify( rNEvt );
 
-    switch ( rNEvt.GetType())
+    switch ( rNEvt.GetType() )
     {
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
             sal_Bool bCtrl = pKeyEvent->GetKeyCode().IsMod1();
-            if (bCtrl && KEY_G== nCode)
+            sal_Bool bAlt = pKeyEvent->GetKeyCode().IsMod2();
+            sal_Bool bShift = pKeyEvent->GetKeyCode().IsShift();
+            sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
+
+            if ( bCtrl && bAlt && KEY_F == nCode )
                 GrabFocusToDocument();
 
-            if (KEY_RETURN == nCode)
+            if ( KEY_RETURN == nCode )
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
                 Remember_Impl(GetText());
 
-                css::uno::Reference< css::frame::XDispatch >      xDispatch;
-                css::util::URL                                    aTargetURL;
+                ::rtl::OUString sFindText = GetText();
+                css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
 
-                if ( m_xURLTransformer.is() )
-                {
-                    aTargetURL.Complete = ::rtl::OUString::createFromAscii(".uno:ExecuteSearch");
-                    m_xURLTransformer->parseStrict( aTargetURL );
+                lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
+                lArgs[0].Value <<= sFindText;
 
-                    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY);
-                    if ( xDispatchProvider.is() )
-                        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(),  0 );
-                }
+                lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
+                if (bShift)
+                    lArgs[1].Value <<= sal_True;
+                else
+                    lArgs[1].Value <<= sal_False;
 
-                if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
-                {
-                    ::rtl::OUString sFindText = GetText();
-                    css::uno::Sequence< css::beans::PropertyValue >   aArgs( 2 );
-                    aArgs[0].Name = SEARCHITEM_SEARCHSTRING;
-                    aArgs[0].Value <<= sFindText;
-                    aArgs[1].Name =  SEARCHITEM_SEARCHBACKWARD;
-                    aArgs[1].Value <<= sal_False;
-
-                    // Execute dispatch asynchronously
-                    ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-                    pExecuteInfo->xDispatch     = xDispatch;
-                    pExecuteInfo->aTargetURL    = aTargetURL;
-                    pExecuteInfo->aArgs         = aArgs;
-                    Application::PostUserEvent( STATIC_LINK(0, DownSearchToolboxController , ExecuteHdl_Impl), pExecuteInfo );
-                }
+                impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
             }
             break;
         }
@@ -181,6 +164,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 SetText( String() );
                 m_bToClearTextField = sal_False;
             }
+            SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             break;
 
         case EVENT_LOSEFOCUS:
@@ -188,7 +172,6 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             {
                 SetText( String( ::rtl::OUString::createFromAscii("Find") ) );
                 SetControlForeground(COL_GRAY);
-
                 m_bToClearTextField = sal_True;
             }
             break;
@@ -242,7 +225,6 @@ void SearchToolbarControllersManager::registryController( const css::uno::Refere
         pIt->second[nSize].Name = sCommandURL;
         pIt->second[nSize].Value <<= xStatusListener;
     }
-
 }
 
 void SearchToolbarControllersManager::freeController( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& /*xStatusListener*/, const ::rtl::OUString& sCommandURL )
@@ -290,11 +272,8 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager )
     :svt::ToolboxController( rServiceManager,
     css::uno::Reference< css::frame::XFrame >(),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FindText" )) )
+    COMMAND_FINDTEXT )
 {
-    m_xURLTransformer = css::uno::Reference< css::util::XURLTransformer >( m_xServiceManager->createInstance(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-        css::uno::UNO_QUERY_THROW );
 }
 
 FindTextToolbarController::~FindTextToolbarController()
@@ -402,13 +381,9 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
         ToolBox* pToolbar =  ( ToolBox* )pParent;
         m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xServiceManager );
 
-        // Calculate height of the edit field according to the application font height
-        sal_Int32 nHeight = getFontSizePixel( m_pFindTextFieldControl );
-        nHeight += 200;
-        m_pFindTextFieldControl->SetSizePixel( Size( 100, nHeight ));
-
+        Size aSize(100, m_pFindTextFieldControl->GetTextHeight() + 200);
+        m_pFindTextFieldControl->SetSizePixel( aSize );
         m_pFindTextFieldControl->SetModifyHdl(LINK(this, FindTextToolbarController, EditModifyHdl));
-
     }
     xItemWindow = VCLUnoHelper::GetInterface( m_pFindTextFieldControl );
 
@@ -427,38 +402,6 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
     {
         m_pFindTextFieldControl->Remember_Impl(m_pFindTextFieldControl->GetText());
     }
-}
-
-sal_Int32 FindTextToolbarController::getFontSizePixel( const Window* pWindow )
-{
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    const Font&          rFont     = rSettings.GetAppFont();
-
-    // Calculate height of the application font used by window
-    sal_Int32 nHeight = sal_Int32( rFont.GetHeight() );
-    ::Size aPixelSize = pWindow->LogicToPixel( ::Size( 0, nHeight ), MAP_APPFONT );
-    return aPixelSize.Height();
-}
-
-IMPL_STATIC_LINK_NOINSTANCE( FindTextToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
-{
-    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-    try
-    {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
-        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-    }
-    catch ( css::uno::Exception& )
-    {
-
-    }
-
-    Application::AcquireSolarMutex( nRef );
-    delete pExecuteInfo;
-
-    return 0;
 }
 
 IMPL_LINK( FindTextToolbarController, EditModifyHdl, void *, EMPTYARG )
@@ -493,11 +436,8 @@ IMPL_LINK( FindTextToolbarController, EditModifyHdl, void *, EMPTYARG )
 DownSearchToolboxController::DownSearchToolboxController(const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager )
     : svt::ToolboxController( rServiceManager,
     css::uno::Reference< css::frame::XFrame >(),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DownSearch" )) )
+    COMMAND_DOWNSEARCH )
 {
-    m_xURLTransformer = css::uno::Reference< css::util::XURLTransformer >( m_xServiceManager->createInstance(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-        css::uno::UNO_QUERY_THROW );
 }
 
 DownSearchToolboxController::~DownSearchToolboxController()
@@ -577,89 +517,46 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-    css::uno::Reference< css::frame::XDispatch >      xDispatch;
-    css::util::URL                                    aTargetURL;
-
-    if ( m_xURLTransformer.is() )
+    ::rtl::OUString sFindText;
+    Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
+    ToolBox* pToolBox = (ToolBox*)pWindow;
+    if ( pToolBox )
     {
-        aTargetURL.Complete = ::rtl::OUString::createFromAscii(".uno:ExecuteSearch");
-        m_xURLTransformer->parseStrict( aTargetURL );
-
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY);
-        if ( xDispatchProvider.is() )
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(),  0 );
-    }
-
-    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
-    {
-        ::rtl::OUString sFindText;
-        Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
-        ToolBox* pToolBox = (ToolBox*)pWindow;
-        if ( pToolBox )
+        USHORT nItemCount = pToolBox->GetItemCount();
+        for ( USHORT i=0; i<nItemCount; ++i )
         {
-            USHORT nItemCount = pToolBox->GetItemCount();
-            for ( USHORT i=0; i<nItemCount; ++i )
+            ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
+            if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
             {
-                ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-                if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
-                {
-                    Window* pItemWin = pToolBox->GetItemWindow(i);
-                    if (pItemWin)
-                        sFindText = pItemWin->GetText();
-                    break;
-                }
+                Window* pItemWin = pToolBox->GetItemWindow(i);
+                if (pItemWin)
+                    sFindText = pItemWin->GetText();
+                break;
             }
         }
-
-        css::uno::Sequence< css::beans::PropertyValue >   aArgs( 2 );
-        aArgs[0].Name = SEARCHITEM_SEARCHSTRING;
-        aArgs[0].Value <<= sFindText;
-        aArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
-        aArgs[1].Value <<= sal_False;
-
-        // Execute dispatch asynchronously
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-        pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( STATIC_LINK(0, DownSearchToolboxController , ExecuteHdl_Impl), pExecuteInfo );
-
-        css::frame::FeatureStateEvent aEvent;
-        css::util::URL aCommand;
-        aCommand.Complete = COMMAND_APPENDSEARCHHISTORY;
-        aEvent.FeatureURL = aCommand;
-        aEvent.IsEnabled  = sal_True;
-
-        css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager()->findController(m_xFrame, COMMAND_FINDTEXT);
-        xStatusListener->statusChanged( aEvent );
     }
+
+    css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
+    lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
+    lArgs[0].Value <<= sFindText;
+    lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
+    lArgs[1].Value <<= sal_False;
+
+    impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
+
+    css::frame::FeatureStateEvent aEvent;
+    aEvent.FeatureURL.Complete = COMMAND_APPENDSEARCHHISTORY;
+    css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager()->findController(m_xFrame, COMMAND_FINDTEXT);
+    if (xStatusListener.is())
+        xStatusListener->statusChanged( aEvent );
 }
 
 // XStatusListener
 void SAL_CALL DownSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
-}
-
-IMPL_STATIC_LINK_NOINSTANCE( DownSearchToolboxController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
-{
-    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-    try
-    {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
-        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-    }
-    catch ( css::uno::Exception& )
-    {
-    }
-
-    Application::AcquireSolarMutex( nRef );
-    delete pExecuteInfo;
-
-    return 0;
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    if ( m_bDisposed )
+        return;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -668,11 +565,8 @@ IMPL_STATIC_LINK_NOINSTANCE( DownSearchToolboxController, ExecuteHdl_Impl, Execu
 UpSearchToolboxController::UpSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager )
     :svt::ToolboxController( rServiceManager,
     css::uno::Reference< css::frame::XFrame >(),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:UpSearch" )) )
+    COMMAND_UPSEARCH )
 {
-    m_xURLTransformer = css::uno::Reference< css::util::XURLTransformer >( m_xServiceManager->createInstance(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-        css::uno::UNO_QUERY_THROW );
 }
 
 UpSearchToolboxController::~UpSearchToolboxController()
@@ -752,89 +646,46 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
     if ( m_bDisposed )
         throw css::lang::DisposedException();
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-    css::uno::Reference< css::frame::XDispatch >      xDispatch;
-    css::util::URL                                    aTargetURL;
-
-    if ( m_xURLTransformer.is() )
+    ::rtl::OUString sFindText;
+    Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
+    ToolBox* pToolBox = (ToolBox*)pWindow;
+    if ( pToolBox )
     {
-        aTargetURL.Complete = ::rtl::OUString::createFromAscii(".uno:ExecuteSearch");
-        m_xURLTransformer->parseStrict( aTargetURL );
-
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY);
-        if ( xDispatchProvider.is() )
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(),  0 );
-    }
-
-    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
-    {
-        ::rtl::OUString sFindText;
-        Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
-        ToolBox* pToolBox = (ToolBox*)pWindow;
-        if ( pToolBox )
+        USHORT nItemCount = pToolBox->GetItemCount();
+        for ( USHORT i=0; i<nItemCount; ++i )
         {
-            USHORT nItemCount = pToolBox->GetItemCount();
-            for ( USHORT i=0; i<nItemCount; ++i )
+            ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
+            if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
             {
-                ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-                if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
-                {
-                    Window* pItemWin = pToolBox->GetItemWindow(i);
-                    if (pItemWin)
-                        sFindText = pItemWin->GetText();
-                    break;
-                }
+                Window* pItemWin = pToolBox->GetItemWindow(i);
+                if (pItemWin)
+                    sFindText = pItemWin->GetText();
+                break;
             }
         }
-
-        css::uno::Sequence< css::beans::PropertyValue >   aArgs( 2 );
-        aArgs[0].Name = SEARCHITEM_SEARCHSTRING;
-        aArgs[0].Value <<= sFindText;
-        aArgs[1].Name =  SEARCHITEM_SEARCHBACKWARD;
-        aArgs[1].Value <<= sal_True;
-
-        // Execute dispatch asynchronously
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-        pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( STATIC_LINK(0, UpSearchToolboxController , ExecuteHdl_Impl), pExecuteInfo );
-
-        css::frame::FeatureStateEvent aEvent;
-        css::util::URL aCommand;
-        aCommand.Complete = COMMAND_APPENDSEARCHHISTORY;
-        aEvent.FeatureURL = aCommand;
-        aEvent.IsEnabled  = sal_True;
-
-        css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager()->findController(m_xFrame, COMMAND_FINDTEXT);
-        xStatusListener->statusChanged( aEvent );
     }
+
+    css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
+    lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
+    lArgs[0].Value <<= sFindText;
+    lArgs[1].Name =  SEARCHITEM_SEARCHBACKWARD;
+    lArgs[1].Value <<= sal_True;
+
+    impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
+
+    css::frame::FeatureStateEvent aEvent;
+    aEvent.FeatureURL.Complete = COMMAND_APPENDSEARCHHISTORY;
+    css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager()->findController(m_xFrame, COMMAND_FINDTEXT);
+    if (xStatusListener.is())
+        xStatusListener->statusChanged( aEvent );
 }
 
 // XStatusListener
 void SAL_CALL UpSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
-}
-
-IMPL_STATIC_LINK_NOINSTANCE( UpSearchToolboxController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
-{
-    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-    try
-    {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
-        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-    }
-    catch ( css::uno::Exception& )
-    {
-    }
-
-    Application::AcquireSolarMutex( nRef );
-    delete pExecuteInfo;
-
-    return 0;
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    if ( m_bDisposed )
+        return;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -907,9 +758,7 @@ css::uno::Sequence< ::rtl::OUString >  FindbarDispatcher::getSupportedServiceNam
 void SAL_CALL FindbarDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
 {
     if ( aArguments.getLength() )
-    {
         aArguments[0] >>= m_xFrame;
-    }
 }
 
 // XDispatchProvider
