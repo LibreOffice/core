@@ -9,7 +9,7 @@
 
 mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\configurationkeys.hxx %_DEST%\inc%_EXT%\ucbhelper\configurationkeys.hxx
-..\inc\ucbhelper\configureucb.hxx %_DEST%\inc%_EXT%\ucbhelper\configureucb.hxx
+..\inc\ucbhelper\registerucb.hxx %_DEST%\inc%_EXT%\ucbhelper\registerucb.hxx
 ..\inc\ucbhelper\content.hxx %_DEST%\inc%_EXT%\ucbhelper\content.hxx
 ..\inc\ucbhelper\contentbroker.hxx %_DEST%\inc%_EXT%\ucbhelper\contentbroker.hxx
 ..\inc\ucbhelper\commandenvironment.hxx %_DEST%\inc%_EXT%\ucbhelper\commandenvironment.hxx
