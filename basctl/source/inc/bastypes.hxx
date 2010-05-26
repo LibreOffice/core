@@ -328,5 +328,13 @@ BOOL            QueryDelModule( const String& rName, Window* pParent = 0 );
 BOOL            QueryDelLib( const String& rName, BOOL bRef = FALSE, Window* pParent = 0 );
 BOOL            QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, BOOL bRepeat = FALSE, BOOL bNewTitle = FALSE );
 
-
+class ModuleInfoHelper
+{
+ModuleInfoHelper();
+ModuleInfoHelper(const ModuleInfoHelper&);
+ModuleInfoHelper& operator = (const ModuleInfoHelper&);
+public:
+    static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const String& rModName, String& rObjName );
+    static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const String& rModName );
+};
 #endif  // _BASTYPES_HXX
