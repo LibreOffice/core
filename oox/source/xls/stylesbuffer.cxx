@@ -95,10 +95,6 @@ const sal_Int32 OOX_FONTFAMILY_MODERN       = 3;
 const sal_Int32 OOX_FONTFAMILY_SCRIPT       = 4;
 const sal_Int32 OOX_FONTFAMILY_DECORATIVE   = 5;
 
-// OOX font charset (also used in BIFF)
-const sal_Int32 OOX_FONTCHARSET_UNUSED      = -1;
-const sal_Int32 OOX_FONTCHARSET_ANSI        = 0;
-
 // OOX cell text direction (also used in BIFF)
 const sal_Int32 OOX_XF_TEXTDIR_CONTEXT      = 0;
 const sal_Int32 OOX_XF_TEXTDIR_LTR          = 1;
@@ -307,7 +303,27 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+// ============================================================================
+
+ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
+    GraphicHelper( rHelper.getGlobalFactory(), rHelper.getBaseFilter().getTargetFrame() ),
+    WorkbookHelper( rHelper )
+{
+}
+
+sal_Int32 ExcelGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
+{
+    if( getFilterType() == FILTER_OOX )
+        return getTheme().getColorByToken( nToken );
+    return GraphicHelper::getSchemeColor( nToken );
+}
+
+sal_Int32 ExcelGraphicHelper::getPaletteColor( sal_Int32 nPaletteIdx ) const
+{
+    return getStyles().getPaletteColor( nPaletteIdx );
+}
+
+// ============================================================================
 
 void Color::setAuto()
 {
@@ -540,15 +556,15 @@ sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
     {
         case OOX_COLOR_WINDOWTEXT3:
         case OOX_COLOR_WINDOWTEXT:
-        case OOX_COLOR_CHWINDOWTEXT:    nColor = getBaseFilter().getSystemColor( XML_windowText );  break;
+        case OOX_COLOR_CHWINDOWTEXT:    nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_windowText );   break;
         case OOX_COLOR_WINDOWBACK3:
         case OOX_COLOR_WINDOWBACK:
-        case OOX_COLOR_CHWINDOWBACK:    nColor = getBaseFilter().getSystemColor( XML_window );      break;
-        case OOX_COLOR_BUTTONBACK:      nColor = getBaseFilter().getSystemColor( XML_btnFace );     break;
-        case OOX_COLOR_CHBORDERAUTO:    nColor = API_RGB_BLACK; /* really always black? */          break;
-        case OOX_COLOR_NOTEBACK:        nColor = getBaseFilter().getSystemColor( XML_infoBk );      break;
-        case OOX_COLOR_NOTETEXT:        nColor = getBaseFilter().getSystemColor( XML_infoText );    break;
-        case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;                               break;
+        case OOX_COLOR_CHWINDOWBACK:    nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_window );       break;
+        case OOX_COLOR_BUTTONBACK:      nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_btnFace );      break;
+        case OOX_COLOR_CHBORDERAUTO:    nColor = API_RGB_BLACK; /* really always black? */                              break;
+        case OOX_COLOR_NOTEBACK:        nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_infoBk );       break;
+        case OOX_COLOR_NOTETEXT:        nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_infoText );     break;
+        case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;                                                   break;
         default:                        OSL_ENSURE( false, "ColorPalette::getColor - unknown color index" );
     }
     return nColor;
@@ -573,7 +589,8 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
     {
         rFontName.maName = rFontDesc.Name;
         rFontName.mnFamily = rFontDesc.Family;
-        rFontName.mnCharSet = rFontDesc.CharSet;
+        // API font descriptor contains rtl_TextEncoding constants
+        rFontName.mnTextEnc = rFontDesc.CharSet;
     }
     else
     {
@@ -588,7 +605,7 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
 FontModel::FontModel() :
     mnScheme( XML_none ),
     mnFamily( OOX_FONTFAMILY_NONE ),
-    mnCharSet( OOX_FONTCHARSET_ANSI ),
+    mnCharSet( WINDOWS_CHARSET_DEFAULT ),
     mfHeight( 0.0 ),
     mnUnderline( XML_none ),
     mnEscapement( XML_baseline ),
@@ -656,7 +673,7 @@ ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
 
 ApiScriptFontName::ApiScriptFontName() :
     mnFamily( ::com::sun::star::awt::FontFamily::DONTKNOW ),
-    mnCharSet( RTL_TEXTENCODING_DONTKNOW )
+    mnTextEnc( RTL_TEXTENCODING_DONTKNOW )
 {
 }
 
@@ -978,13 +995,13 @@ void Font::finalizeImport()
         case OOX_FONTFAMILY_DECORATIVE:     maApiData.maDesc.Family = cssawt::FontFamily::DECORATIVE;   break;
     }
 
-    // character set
-    if( (0 <= maModel.mnCharSet) && (maModel.mnCharSet <= 255) )
+    // character set (API font descriptor uses rtl_TextEncoding in member CharSet!)
+    if( (0 <= maModel.mnCharSet) && (maModel.mnCharSet <= SAL_MAX_UINT8) )
         maApiData.maDesc.CharSet = static_cast< sal_Int16 >(
             rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maModel.mnCharSet ) ) );
 
     // color, height, weight, slant, strikeout, outline, shadow
-    maApiData.mnColor          = maModel.maColor.getColor( getBaseFilter() );
+    maApiData.mnColor          = maModel.maColor.getColor( getBaseFilter().getGraphicHelper() );
     maApiData.maDesc.Height    = static_cast< sal_Int16 >( maModel.mfHeight * 20.0 );
     maApiData.maDesc.Weight    = maModel.mbBold ? cssawt::FontWeight::BOLD : cssawt::FontWeight::NORMAL;
     maApiData.maDesc.Slant     = maModel.mbItalic ? cssawt::FontSlant_ITALIC : cssawt::FontSlant_NONE;
@@ -1085,19 +1102,19 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
         {
             rPropMap[ PROP_CharFontName ]    <<= maApiData.maLatinFont.maName;
             rPropMap[ PROP_CharFontFamily ]  <<= maApiData.maLatinFont.mnFamily;
-            rPropMap[ PROP_CharFontCharSet ] <<= maApiData.maLatinFont.mnCharSet;
+            rPropMap[ PROP_CharFontCharSet ] <<= maApiData.maLatinFont.mnTextEnc;
         }
         if( maApiData.maAsianFont.maName.getLength() > 0 )
         {
             rPropMap[ PROP_CharFontNameAsian ]    <<= maApiData.maAsianFont.maName;
             rPropMap[ PROP_CharFontFamilyAsian ]  <<= maApiData.maAsianFont.mnFamily;
-            rPropMap[ PROP_CharFontCharSetAsian ] <<= maApiData.maAsianFont.mnCharSet;
+            rPropMap[ PROP_CharFontCharSetAsian ] <<= maApiData.maAsianFont.mnTextEnc;
         }
         if( maApiData.maCmplxFont.maName.getLength() > 0 )
         {
             rPropMap[ PROP_CharFontNameComplex ]    <<= maApiData.maCmplxFont.maName;
             rPropMap[ PROP_CharFontFamilyComplex ]  <<= maApiData.maCmplxFont.mnFamily;
-            rPropMap[ PROP_CharFontCharSetComplex ] <<= maApiData.maCmplxFont.mnCharSet;
+            rPropMap[ PROP_CharFontCharSetComplex ] <<= maApiData.maCmplxFont.mnTextEnc;
         }
     }
     // font height
@@ -1160,7 +1177,7 @@ void Font::importFontData2( BiffInputStream& rStrm )
 
     maModel.setBiffHeight( nHeight );
     maModel.mnFamily     = OOX_FONTFAMILY_NONE;
-    maModel.mnCharSet    = OOX_FONTCHARSET_UNUSED;    // ensure to not use font charset in byte string import
+    maModel.mnCharSet    = -1;    // ensure to not use font charset in byte string import
     maModel.mnUnderline  = getFlagValue( nFlags, BIFF_FONTFLAG_UNDERLINE, XML_single, XML_none );
     maModel.mnEscapement = XML_none;
     maModel.mbBold       = getFlag( nFlags, BIFF_FONTFLAG_BOLD );
@@ -1771,7 +1788,7 @@ BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
 
 bool Border::convertBorderLine( BorderLine& rBorderLine, const BorderLineModel& rModel )
 {
-    rBorderLine.Color = rModel.maColor.getColor( getBaseFilter(), API_RGB_BLACK );
+    rBorderLine.Color = rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK );
     switch( rModel.mnStyle )
     {
         case XML_dashDot:           lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
@@ -2075,7 +2092,7 @@ void Fill::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
 
 void Fill::finalizeImport()
 {
-    const FilterBase& rFilter = getBaseFilter();
+    const GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
 
     if( mxPatternModel.get() )
     {
@@ -2127,16 +2144,16 @@ void Fill::finalizeImport()
                 case XML_solid:             nAlpha = 0x80;  break;
             }
 
-            sal_Int32 nWinTextColor = rFilter.getSystemColor( XML_windowText );
-            sal_Int32 nWinColor = rFilter.getSystemColor( XML_window );
+            sal_Int32 nWinTextColor = rGraphicHelper.getSystemColor( XML_windowText );
+            sal_Int32 nWinColor = rGraphicHelper.getSystemColor( XML_window );
 
             if( !rModel.mbPattColorUsed )
                 rModel.maPatternColor.setAuto();
-            sal_Int32 nPattColor = rModel.maPatternColor.getColor( rFilter, nWinTextColor );
+            sal_Int32 nPattColor = rModel.maPatternColor.getColor( rGraphicHelper, nWinTextColor );
 
             if( !rModel.mbFillColorUsed )
                 rModel.maFillColor.setAuto();
-            sal_Int32 nFillColor = rModel.maFillColor.getColor( rFilter, nWinColor );
+            sal_Int32 nFillColor = rModel.maFillColor.getColor( rGraphicHelper, nWinColor );
 
             maApiData.mnColor = lclGetMixedColor( nPattColor, nFillColor, nAlpha );
             maApiData.mbTransparent = false;
@@ -2148,11 +2165,11 @@ void Fill::finalizeImport()
         maApiData.mbUsed = true;    // no support for differential attributes
         GradientFillModel::ColorMap::const_iterator aIt = rModel.maColors.begin();
         OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
-        maApiData.mnColor = aIt->second.getColor( rFilter, API_RGB_WHITE );
+        maApiData.mnColor = aIt->second.getColor( rGraphicHelper, API_RGB_WHITE );
         if( ++aIt != rModel.maColors.end() )
         {
             OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
-            sal_Int32 nEndColor = aIt->second.getColor( rFilter, API_RGB_WHITE );
+            sal_Int32 nEndColor = aIt->second.getColor( rGraphicHelper, API_RGB_WHITE );
             maApiData.mnColor = lclGetMixedColor( maApiData.mnColor, nEndColor, 0x40 );
             maApiData.mbTransparent = false;
         }

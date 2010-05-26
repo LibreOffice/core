@@ -57,6 +57,12 @@ bool PropertySet::getAnyProperty( Any& orValue, sal_Int32 nPropId ) const
     return getAnyProperty( orValue, PropertyMap::getPropertyName( nPropId ) );
 }
 
+Any PropertySet::getAnyProperty( sal_Int32 nPropId ) const
+{
+    Any aValue;
+    return getAnyProperty( aValue, nPropId ) ? aValue : Any();
+}
+
 bool PropertySet::getBoolProperty( sal_Int32 nPropId ) const
 {
     Any aAny;
@@ -66,18 +72,17 @@ bool PropertySet::getBoolProperty( sal_Int32 nPropId ) const
 
 void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUString >& rPropNames ) const
 {
-    if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+    if( mxMultiPropSet.is() ) try
     {
-        try
-        {
-            orValues = mxMultiPropSet->getPropertyValues( rPropNames );
-        }
-        catch( Exception& )
-        {
-            OSL_ENSURE( false, "PropertySet::getProperties - cannot get all property values" );
-        }
+        orValues = mxMultiPropSet->getPropertyValues( rPropNames );
+        return;
     }
-    else if( mxPropSet.is() )
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "PropertySet::getProperties - cannot get all property values - fallback to single mode" );
+    }
+
+    if( mxPropSet.is() )
     {
         sal_Int32 nLen = rPropNames.getLength();
         const OUString* pPropName = rPropNames.getConstArray();
@@ -101,18 +106,17 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
     OSL_ENSURE( rPropNames.getLength() == rValues.getLength(),
         "PropertySet::setProperties - length of sequences different" );
 
-    if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+    if( mxMultiPropSet.is() ) try
     {
-        try
-        {
-            mxMultiPropSet->setPropertyValues( rPropNames, rValues );
-        }
-        catch( Exception& )
-        {
-            OSL_ENSURE( false, "PropertySet::setProperties - cannot set all property values" );
-        }
+        mxMultiPropSet->setPropertyValues( rPropNames, rValues );
+        return;
     }
-    else if( mxPropSet.is() )
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
+    }
+
+    if( mxPropSet.is() )
     {
         const OUString* pPropName = rPropNames.getConstArray();
         const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
