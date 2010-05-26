@@ -46,10 +46,16 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <rtl/logfile.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/storagehelper.hxx>
 
 
 #include <targetstatecontrol.hxx>
@@ -674,6 +680,85 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
     return m_nObjectState;
 }
 
+namespace
+{
+    bool lcl_CopyStream(uno::Reference<io::XInputStream> xIn, uno::Reference<io::XOutputStream> xOut)
+    {
+        const sal_Int32 nChunkSize = 4096;
+        uno::Sequence< sal_Int8 > aData(nChunkSize);
+        sal_Int32 nTotalRead = 0;
+        sal_Int32 nRead;
+        do
+        {
+            nRead = xIn->readBytes(aData, nChunkSize);
+            nTotalRead += nRead;
+            xOut->writeBytes(aData);
+        } while (nRead == nChunkSize);
+        return nTotalRead != 0;
+    }
+
+    //Dump the objects content to a tempfile, just the "CONTENTS" stream if
+    //there is one for non-compound documents, otherwise the whole content.
+    //
+    //On success a file is returned which must be removed by the caller
+    rtl::OUString lcl_ExtractObject(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xObjectStream)
+    {
+        rtl::OUString sUrl;
+
+        // the solution is only active for Unix systems
+#ifndef WNT
+        uno::Reference <beans::XPropertySet> xNativeTempFile(
+            xFactory->createInstance(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile"))), uno::UNO_QUERY_THROW);
+        uno::Reference < io::XStream > xStream(xNativeTempFile, uno::UNO_QUERY_THROW);
+
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[0] <<= xObjectStream;
+        aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+        uno::Reference< container::XNameContainer > xNameContainer(
+            xFactory->createInstanceWithArguments(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OLESimpleStorage")),
+                aArgs ), uno::UNO_QUERY_THROW );
+
+        uno::Reference< io::XStream > xCONTENTS;
+        xNameContainer->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONTENTS"))) >>= xCONTENTS;
+
+        sal_Bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
+
+        uno::Reference< io::XSeekable > xSeekableStor(xObjectStream, uno::UNO_QUERY);
+        if (xSeekableStor.is())
+            xSeekableStor->seek(0);
+
+        if (!bCopied)
+            bCopied = lcl_CopyStream(xObjectStream->getInputStream(), xStream->getOutputStream());
+
+        if (bCopied)
+        {
+            xNativeTempFile->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile")),
+                uno::makeAny(sal_False));
+            uno::Any aUrl = xNativeTempFile->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")));
+            aUrl >>= sUrl;
+
+            xNativeTempFile = uno::Reference<beans::XPropertySet>();
+
+            uno::Reference<ucb::XSimpleFileAccess> xSimpleFileAccess(
+                xFactory->createInstance(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
+                    uno::UNO_QUERY_THROW);
+
+            xSimpleFileAccess->setReadOnly(sUrl, sal_True);
+        }
+        else
+        {
+            xNativeTempFile->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile")),
+                uno::makeAny(sal_True));
+        }
+#endif
+        return sUrl;
+    }
+}
+
 //----------------------------------------------
 void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw ( lang::IllegalArgumentException,
@@ -789,10 +874,28 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             }
 
             if ( !m_pOwnView || !m_pOwnView->Open() )
-                throw embed::UnreachableStateException();
+            {
+                //Make a RO copy and see if the OS can find something to at
+                //least display the content for us
+                if (!m_aTempDumpURL.getLength())
+                    m_aTempDumpURL = lcl_ExtractObject(m_xFactory, m_xObjectStream);
+
+                if (m_aTempDumpURL.getLength())
+                {
+                    uno::Reference< system::XSystemShellExecute > xSystemShellExecute( m_xFactory->createInstance(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
+                        uno::UNO_QUERY_THROW);
+                    xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), system::SystemShellExecuteFlags::DEFAULTS);
+                }
+                else
+                    throw embed::UnreachableStateException();
+            }
         }
         else
+        {
+
             throw embed::UnreachableStateException();
+        }
     }
 }
 
