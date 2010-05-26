@@ -99,7 +99,7 @@ void PPTShape::addShape(
                             sServiceName = rtl::OUString();
                     }
                     break;
-                    case XML_obj :
+                       case XML_obj :
                     {
                         const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
                         sServiceName = sOutlinerShapeService;
