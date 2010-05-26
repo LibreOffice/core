@@ -73,7 +73,7 @@ class SwForm;
 struct CurTOXType;
 class SwTOXDescription;
 class SwTOXBase;
-class SwSection;
+class SwSectionData;
 struct SwDBData;
 class SwField;
 class Printer;
@@ -194,7 +194,7 @@ public:
 class AbstractInsertSectionTabDialog : public VclAbstractDialog  //add for SwInsertSectionTabDialog
 {
 public:
-    virtual void     SetSection(const SwSection& rSect) = 0;
+    virtual void     SetSectionData(SwSectionData const& rSect) = 0;
 };
 
 class AbstractSwWordCountDialog : public VclAbstractDialog

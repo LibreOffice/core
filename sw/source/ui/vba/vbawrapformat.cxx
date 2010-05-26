@@ -34,11 +34,6 @@
 using namespace ooo::vba;
 using namespace com::sun::star;
 
-SwVbaWrapFormat::SwVbaWrapFormat( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape ) : SwVbaWrapFormat_BASE( xParent, xContext ), m_xShape( xShape ), mnWrapFormatType( 0 ), mnSide( word::WdWrapSideType::wdWrapBoth )
-{
-    m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
-}
-
 SwVbaWrapFormat::SwVbaWrapFormat( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) : SwVbaWrapFormat_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext ), m_xShape( getXSomethingFromArgs< drawing::XShape >( aArgs, 1, false ) ), mnWrapFormatType( 0 ), mnSide( word::WdWrapSideType::wdWrapBoth )
 {
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );

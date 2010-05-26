@@ -1169,8 +1169,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             SwTxtNode* pTxtNd = pFlySave->nSttNd.GetNode().GetTxtNode();
             SwTxtFlyCnt* pFlyCnt = 0;
             if( 1 == pTxtNd->GetTxt().Len() &&
-                0 != ( pFlyCnt = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
-                                                0, RES_TXTATR_FLYCNT )) &&
+                0 != (pFlyCnt = static_cast<SwTxtFlyCnt*>(
+                        pTxtNd->GetTxtAttrForCharAt(0, RES_TXTATR_FLYCNT))) &&
                 pFlyCnt->GetFlyCnt().GetFrmFmt() )
             {
                 // then move the content into the surrounded fly
