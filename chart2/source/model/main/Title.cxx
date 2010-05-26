@@ -265,15 +265,16 @@ uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getT
 void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
     throw (uno::RuntimeException)
 {
-    // /--
-    MutexGuard aGuard( GetMutex() );
-    ModifyListenerHelper::removeListenerFromAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
-    m_aStrings = Strings;
-    ModifyListenerHelper::addListenerToAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+    {
+        MutexGuard aGuard( GetMutex() );
+        ModifyListenerHelper::removeListenerFromAllElements(
+            ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+        m_aStrings = Strings;
+        ModifyListenerHelper::addListenerToAllElements(
+            ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+    }
+    //don't keep the mutex locked while calling out
     fireModifyEvent();
-    // \--
 }
 
 // ================================================================================
