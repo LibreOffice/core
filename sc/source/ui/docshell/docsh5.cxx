@@ -65,6 +65,11 @@
 #include "sc.hrc"
 #include "waitoff.hxx"
 #include "sizedev.hxx"
+#include <basic/sbstar.hxx>
+#include <basic/basmgr.hxx>
+
+// defined in docfunc.cxx
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
 
 // ---------------------------------------------------------------------------
 
@@ -866,6 +871,8 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
         if (bRecord)
             aDocument.BeginDrawUndo();          // drawing layer must do its own undo actions
 
+        String sSrcCodeName;
+        aDocument.GetCodeName( nSrcTab, sSrcCodeName );
         if (!aDocument.CopyTab( nSrcTab, nDestTab ))
         {
             //! EndDrawUndo?
@@ -889,8 +896,38 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                 GetUndoManager()->AddUndoAction(
                         new ScUndoCopyTab( this, aSrcList, aDestList ) );
             }
-        }
 
+            BOOL bVbaEnabled = aDocument.IsInVBAMode();
+                        if ( bVbaEnabled )
+                        {
+                StarBASIC* pStarBASIC = GetBasic();
+                            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                            if ( GetBasicManager()->GetName().Len() > 0 )
+                            {
+                                aLibName = GetBasicManager()->GetName();
+                                pStarBASIC = GetBasicManager()->GetLib( aLibName );
+                            }
+                            SCTAB nTabToUse = nDestTab;
+                            if ( nDestTab == SC_TAB_APPEND )
+                                nTabToUse = aDocument.GetMaxTableNumber() - 1;
+                            String sCodeName;
+                            String sSource;
+                            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = GetBasicContainer();
+                            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+                            if( xLibContainer.is() )
+                            {
+                                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                                aLibAny >>= xLib;
+                            }
+                            if( xLib.is() )
+                            {
+                                rtl::OUString sRTLSource;
+                                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                                sSource = sRTLSource;
+                            }
+                            VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
+                        }
+                }
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
     }
     else
