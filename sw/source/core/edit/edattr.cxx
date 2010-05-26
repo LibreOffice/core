@@ -226,8 +226,8 @@ BOOL SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
     if( !pTxtNd )
         return FALSE;
 
-    SwTxtAttr *pFtn = pTxtNd->GetTxtAttr( pCrsr->GetPoint()->nContent,
-                                            RES_TXTATR_FTN );
+    SwTxtAttr *const pFtn = pTxtNd->GetTxtAttrForCharAt(
+        pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( pFtn && pFillFtn )
     {
         // Daten vom Attribut uebertragen

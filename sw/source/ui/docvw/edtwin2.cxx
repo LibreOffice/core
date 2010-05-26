@@ -72,7 +72,6 @@
 #include <docvw.hrc>
 #include <utlui.hrc>
 
-#include <postit.hxx>
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 

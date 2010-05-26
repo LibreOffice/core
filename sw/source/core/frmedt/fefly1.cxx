@@ -1801,11 +1801,6 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         else
             eType = OBJCNT_FLY;
     }
-    // --> OD 2006-11-06 #130889# - make code robust
-//    else if( pInvestigatedObj->ISA( SdrObjGroup ) &&
-//             FLY_IN_CNTNT !=
-//                ((SwDrawContact*)GetUserCall(pInvestigatedObj))->GetFmt()->GetAnchor().GetAnchorId() )
-//        eType = OBJCNT_GROUPOBJ;
     else if ( pInvestigatedObj->ISA( SdrObjGroup ) )
     {
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(GetUserCall( pInvestigatedObj ) ) );
@@ -1830,7 +1825,6 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             }
         }
     }
-    // <--
     else
         eType = OBJCNT_SIMPLE;
     return eType;

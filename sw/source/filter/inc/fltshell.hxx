@@ -255,14 +255,15 @@ public:
 
 class SwFltSection : public SfxPoolItem
 {
-    SwSection* pSection;
+    SwSectionData * m_pSection;
+
 public:
-    SwFltSection( SwSection* pSect );
+    SwFltSection( SwSectionData *const pSect );
     SwFltSection( const SwFltSection& );
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    SwSection* GetSection()         { return pSection; }
+    SwSectionData * GetSectionData()    { return m_pSection; }
 };
 // Der WWEndStack verhaelt sich wie der WWControlStck, nur dass die Attribute
 // auf ihm bis ans Ende des Dokuments gehortet werden, falls auf sie noch

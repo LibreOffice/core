@@ -40,8 +40,14 @@ class SwAccessibleMap;
 class SwCrsrShell;
 class SdrObject;
 class SwPaM;
-namespace utl { class AccessibleStateSetHelper; }
-namespace accessibility { class AccessibleShape; }
+namespace utl {
+    class AccessibleStateSetHelper;
+}
+namespace accessibility {
+    class AccessibleShape;
+}
+class SwFmtFld;
+class SwAccessibleChildContainer;
 
 const sal_Char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible";
 
@@ -339,13 +345,13 @@ public:
     virtual void Dispose( sal_Bool bRecursive = sal_False );
 
     // The child object is not visible an longer and should be destroyed
-    virtual void DisposeChild( const SwFrmOrObj& rFrmOrObj, sal_Bool bRecursive );
+    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrmOrObj, sal_Bool bRecursive );
 
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rFrm );
 
     // The vhild object has been moved by the layout
-    virtual void InvalidateChildPosOrSize( const SwFrmOrObj& rFrmOrObj,
+    virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrmOrObj,
                                            const SwRect& rFrm );
 
     // The content may have changed (but it hasn't tohave changed)
@@ -380,6 +386,25 @@ public:
         @author OD
     */
     void InvalidateAttr();
+
+    bool HasAdditionalAccessibleChildren();
+
+    /** get additional child by index
+
+        OD 2010-01-27 #i88070#
+
+        @author OD
+    */
+    Window* GetAdditionalAccessibleChild( const sal_Int32 nIndex );
+
+    /** get all additional accessible children
+
+        OD 2010-01-27 #i88070#
+
+        @author OD
+    */
+    void GetAdditionalAccessibleChildren( std::vector< Window* >* pChildren );
+
 
     const ::rtl::OUString& GetName() const { return sName; }
 
