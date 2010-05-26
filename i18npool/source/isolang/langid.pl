@@ -390,7 +390,7 @@ sub main()
                 '^\s*completelangiso\s*[= ](.{2,3}(-..)?)*' . $langcoun . '',
                 "$SRC_ROOT", "solenv", "inc/postset.mk",
                 # needs a duplicated pair of backslashes to produce a literal \\
-                ('^\s*completelangiso\s*=', '^\s+' . $langcoun . '\s*\\\\*$'));
+                ('^\s*completelangiso\s*=', '^\s*' . $langcoun . '\s*\\\\*$'));
         }
     }
     return 0;

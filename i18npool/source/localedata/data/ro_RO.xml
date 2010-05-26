@@ -223,10 +223,11 @@
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
-    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A Ă Â B-I Î J-S Ş T Ţ U-Z</IndexKey>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A Ă Â B-I Î J-S Ș Ş T Ț Ţ U-Z</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <UnicodeScript>2</UnicodeScript>
+    <UnicodeScript>3</UnicodeScript>
     <FollowPageWord>p.</FollowPageWord>
     <FollowPageWord>pp.</FollowPageWord>
   </LC_INDEX>

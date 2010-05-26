@@ -31,6 +31,7 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
+#include <vcl/bitmapex.hxx>
 
 // --------------
 // - IntroWindow -
@@ -46,6 +47,7 @@ public:
     ~IntroWindow();
 
     void SetBackgroundBitmap( const Bitmap& rBitmap );
+    void SetBackgroundBitmap( const BitmapEx& rBitmapEx );
 };
 
 #endif // _SV_INTROWIN_HXX
