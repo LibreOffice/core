@@ -541,18 +541,6 @@ sub set_global_directory_hostnames
             $installer::globals::officedirgid = $onedir->{'gid'};
             $allvariables->{'OFFICEDIRECTORYHOSTNAME'} = $installer::globals::officedirhostname;
         }
-        if ( $styles =~ /\bBASISDIRECTORY\b/ )
-        {
-            $installer::globals::basisdirhostname = $onedir->{'HostName'};
-            $installer::globals::basisdirgid = $onedir->{'gid'};
-            $allvariables->{'BASISDIRECTORYHOSTNAME'} = $installer::globals::basisdirhostname;
-        }
-        if ( $styles =~ /\bUREDIRECTORY\b/ )
-        {
-            $installer::globals::uredirhostname = $onedir->{'HostName'};
-            $installer::globals::uredirgid = $onedir->{'gid'};
-            $allvariables->{'UREDIRECTORYHOSTNAME'} = $installer::globals::uredirhostname;
-        }
         if ( $styles =~ /\bSUNDIRECTORY\b/ )
         {
             $installer::globals::sundirhostname = $onedir->{'HostName'};

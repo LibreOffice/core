@@ -6,6 +6,5 @@ setAllUsersProfile2K	51	ALLUSERSPROFILE	[%ALLUSERSPROFILE]
 SetAllUsersProfileNT	51	ALLUSERSPROFILE	[%SystemRoot]\Profiles\All Users
 setUserProfileNT	51	USERPROFILE	[%USERPROFILE]
 SetARPInstallLocation	51	ARPINSTALLLOCATION	[INSTALLLOCATION]
-SetUreInstallLocation	51	UREINSTALLLOCATION	[UREDIRECTORYGID]
 SameProductFound	19		The same version of this product is already installed.
 NewProductFound	19		A newer version of [ProductName] was found. To install an older version, the newer version needs to be removed first.

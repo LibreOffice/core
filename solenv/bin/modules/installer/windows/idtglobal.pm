@@ -1023,44 +1023,6 @@ sub add_officedir_to_database
         }
     }
 
-    if ( $installer::globals::basisinstalldirectoryset )
-    {
-        $found = 0;
-
-        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
-        {
-            if ( ${$customacfile}[$i] =~ /\bBASISDIRECTORYGID\b/ )
-            {
-                ${$customacfile}[$i] =~ s/\bBASISDIRECTORYGID\b/$installer::globals::basisinstalldirectory/;
-                $found = 1;
-            }
-        }
-
-        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
-        {
-            installer::exiter::exit_program("ERROR: \"BASISDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
-        }
-    }
-
-    if ( $installer::globals::ureinstalldirectoryset )
-    {
-        $found = 0;
-
-        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
-        {
-            if ( ${$customacfile}[$i] =~ /\bUREDIRECTORYGID\b/ )
-            {
-                ${$customacfile}[$i] =~ s/\bUREDIRECTORYGID\b/$installer::globals::ureinstalldirectory/;
-                $found = 1;
-            }
-        }
-
-        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
-        {
-            installer::exiter::exit_program("ERROR: \"UREDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
-        }
-    }
-
     # Saving the file
 
     installer::files::save_file($customactionfilename ,$customacfile);
