@@ -227,10 +227,18 @@
     };
     $StandDir = get_stand_dir();   # This also sets $initial_module
     $source_config = SourceConfig -> new($StandDir);
-    if (defined $html_path) {
-        $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html');
-    } else {
-        $html_file = CorrectPath($StandDir . '/../' . $ENV{INPATH}. '.build.html');
+
+    if ($html) {
+        if (defined $html_path) {
+            $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html');
+        } else {
+            my $log_directory = Cwd::realpath(CorrectPath($StandDir . '/../log'));
+            if ((!-d $log_directory) && (!mkdir($log_directory))) {
+                print_error("Cannot create $log_directory for writing html file\n");
+            };
+            $html_file = $log_directory . '/' . $ENV{INPATH}. '.build.html';
+            print "\nPath to html status page: $html_file\n";
+        };
     };
 
     if ($generate_config && ($clear_config || (scalar keys %remove_from_config)||(scalar keys %add_to_config))) {
@@ -1255,7 +1263,7 @@ sub check_deps_hash {
                     $jobs_hash{$key} = {    SHORT_NAME => $string,
                                             BUILD_NUMBER => $build_number,
                                             STATUS => 'waiting',
-                                            LOG_PATH => $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
+                                            LOG_PATH => '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
                                             LONG_LOG_PATH => CorrectPath($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
                                             START_TIME => 0,
                                             FINISH_TIME => 0,
