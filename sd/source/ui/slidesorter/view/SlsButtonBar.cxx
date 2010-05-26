@@ -33,6 +33,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlsTheme.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsToolTip.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsSlotManager.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
@@ -296,9 +297,9 @@ void ButtonBar::ProcessMouseMotionEvent (
         SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if (pWindow)
             if (mpButtonUnderMouse)
-                mrSlideSorter.GetView().SetHelpText(mpButtonUnderMouse->GetHelpText(), false);
+                mrSlideSorter.GetView().GetToolTip().ShowHelpText(mpButtonUnderMouse->GetHelpText());
             else
-                mrSlideSorter.GetView().SetHelpText(mrSlideSorter.GetView().GetDefaultHelpText(),true);
+                mrSlideSorter.GetView().GetToolTip().ShowDefaultHelpText();
     }
 
     if (bPageHasChanged || bButtonHasChanged || bButtonStateHasChanged)
@@ -1375,6 +1376,10 @@ void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
     if (mrSlideSorter.GetViewShell() != NULL
         && mrSlideSorter.GetViewShell()->GetDispatcher() != NULL)
     {
+        // Hide the tool tip early, while the slide show still intializes.
+        mrSlideSorter.GetView().GetToolTip().SetPage(model::SharedPageDescriptor());
+
+        // Request the start of the slide show.
         mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
             SID_PRESENTATION,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);

@@ -144,6 +144,7 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maIntegerValues[Integer_ButtonFadeInDuration] = 400;
         maIntegerValues[Integer_ButtonFadeOutDelay] = 0;
         maIntegerValues[Integer_ButtonFadeOutDuration] = 250;
+        maIntegerValues[Integer_ToolTipDelay] = 1000;
     }
 
     Update(rpProperties);

@@ -40,6 +40,7 @@
 #include "view/SlsPageObjectPainter.hxx"
 #include "view/SlsILayerPainter.hxx"
 #include "view/SlsButtonBar.hxx"
+#include "view/SlsToolTip.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsProperties.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -66,7 +67,6 @@
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/help.hxx>
 #include <algorithm>
 #include <svx/sdrpagewindow.hxx>
 #include <svl/itempool.hxx>
@@ -160,15 +160,13 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       meOrientation(Layouter::GRID),
       mpProperties(rSlideSorter.GetProperties()),
       mpPageUnderMouse(),
-      msDefaultHelpText(),
-      msCurrentHelpText(),
-      mnHelpWindowHandle(0),
       mnButtonUnderMouse(-1),
       mpPageObjectPainter(),
       mpSelectionPainter(),
       mpBackgroundPainter(
           new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Background))),
       mpButtonBar(new ButtonBar(mrSlideSorter)),
+      mpToolTip(new ToolTip(mrSlideSorter)),
       mbIsRearrangePending(true)
 {
     // Hide the page that contains the page objects.
@@ -840,53 +838,10 @@ ButtonBar& SlideSorterView::GetButtonBar (void) const
 
 
 
-void SlideSorterView::SetHelpText (
-    const ::rtl::OUString& rsHelpText,
-    const bool bIsDefaultHelpText)
+ToolTip& SlideSorterView::GetToolTip (void) const
 {
-    if (bIsDefaultHelpText)
-        msDefaultHelpText = rsHelpText;
-    if (msCurrentHelpText != rsHelpText)
-    {
-        if (mnHelpWindowHandle>0)
-        {
-            Help::HideTip(mnHelpWindowHandle);
-            mnHelpWindowHandle = 0;
-        }
-
-        msCurrentHelpText = rsHelpText;
-
-        if (msCurrentHelpText.getLength() > 0)
-        {
-            Rectangle aBox (
-                mpLayouter->GetPageObjectLayouter()->GetBoundingBox(
-                    mpPageUnderMouse,
-                    PageObjectLayouter::Preview,
-                    PageObjectLayouter::WindowCoordinateSystem));
-            ::Window* pParent (mrSlideSorter.GetContentWindow().get());
-            while (pParent!=NULL && pParent->GetParent()!=NULL)
-                pParent = pParent->GetParent();
-            const Point aOffset (
-                mrSlideSorter.GetContentWindow()->GetWindowExtentsRelative(pParent).TopLeft());
-            aBox.Move(aOffset.X(), aOffset.Y());
-            // We want the help text outside (below) the preview.  Therefore
-            // we have to make the box larger.
-            aBox.Bottom()+=25;
-            mnHelpWindowHandle = Help::ShowTip(
-                mrSlideSorter.GetContentWindow().get(),
-                aBox,
-                msCurrentHelpText,
-                QUICKHELP_CENTER | QUICKHELP_BOTTOM);
-        }
-    }
-}
-
-
-
-
-const ::rtl::OUString& SlideSorterView::GetDefaultHelpText (void) const
-{
-    return msDefaultHelpText;
+    OSL_ASSERT(mpToolTip);
+    return *mpToolTip;
 }
 
 
@@ -960,7 +915,7 @@ void SlideSorterView::UpdatePageUnderMouse (
         && GetButtonBar().IsMouseOverBar() != bIsMouseOverButtonBar
         && bIsMouseOverButtonBar)
     {
-        SetHelpText(msDefaultHelpText, true);
+        mpToolTip->ShowDefaultHelpText();
     }
 }
 
@@ -983,30 +938,7 @@ void SlideSorterView::SetPageUnderMouse (
 
         // Change the quick help text to display the name of the page under
         // the mouse.
-        SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-        if (pWindow)
-        {
-            ::rtl::OUString sHelpText;
-            if (mpPageUnderMouse)
-            {
-                SdPage* pPage = mpPageUnderMouse->GetPage();
-                if (pPage != NULL)
-                    sHelpText = pPage->GetName();
-                else
-                {
-                    OSL_ASSERT(mpPageUnderMouse->GetPage() != NULL);
-                }
-                if (sHelpText.getLength() == 0)
-                {
-                    sHelpText = String(SdResId(STR_PAGE));
-                    sHelpText += String::CreateFromInt32(mpPageUnderMouse->GetPageIndex()+1);
-                }
-
-                SetHelpText(sHelpText, true);
-            }
-            else
-                SetHelpText(::rtl::OUString(), false);
-        }
+        mpToolTip->SetPage(rpDescriptor);
     }
 }
 

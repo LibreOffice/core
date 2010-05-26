@@ -60,6 +60,7 @@ SLOFILES =      							\
     $(SLO)$/SlsPageObjectLayouter.obj		\
     $(SLO)$/SlsPageObjectPainter.obj		\
     $(SLO)$/SlsTheme.obj					\
+    $(SLO)$/SlsToolTip.obj					\
     $(SLO)$/SlsViewCacheContext.obj
 
 # --- Tagets -------------------------------------------------------

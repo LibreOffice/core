@@ -68,6 +68,7 @@ class LayeredDevice;
 class Layouter;
 class PageObjectPainter;
 class SelectionPainter;
+class ToolTip;
 
 
 class SlideSorterView
@@ -240,14 +241,7 @@ public:
     };
 
     ButtonBar& GetButtonBar (void) const;
-
-    /** Show a tool tip with either the given help text, or when that is
-        empty, with the content of msHelpText.
-    */
-    void SetHelpText (
-        const ::rtl::OUString& rsHelpText,
-        const bool bIsDefaultHelpText);
-    const ::rtl::OUString& GetDefaultHelpText (void) const;
+    ToolTip& GetToolTip (void) const;
 
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
@@ -267,15 +261,13 @@ private:
     Layouter::Orientation meOrientation;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
-    ::rtl::OUString msDefaultHelpText;
-    ::rtl::OUString msCurrentHelpText;
-    ULONG mnHelpWindowHandle;
     sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
     Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
     ::boost::scoped_ptr<ButtonBar> mpButtonBar;
+    ::boost::scoped_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;
 
     /** Determine the visibility of all page objects.

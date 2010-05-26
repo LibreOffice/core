@@ -169,6 +169,7 @@ public:
         Integer_ButtonFadeInDuration,
         Integer_ButtonFadeOutDelay,
         Integer_ButtonFadeOutDuration,
+        Integer_ToolTipDelay,
         _IntegerValueType_Size_
     };
     sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
