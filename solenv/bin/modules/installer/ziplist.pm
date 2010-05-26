@@ -644,7 +644,8 @@ sub set_manufacturer
     my ($allvariables) = @_;
 
     my $openofficeproductname = "OpenOffice.org";
-    my $sunname = "Sun Microsystems";
+    my $sunname = "";
+
 
     if ( $allvariables->{'OPENSOURCE'} && $allvariables->{'OPENSOURCE'} == 1 )
     {
@@ -655,8 +656,10 @@ sub set_manufacturer
     else
     {
         $installer::globals::isopensourceproduct = 0;
+        if (( $allvariables->{'DEFINEDMANUFACTURER'} ) && ( $allvariables->{'DEFINEDMANUFACTURER'} ne "" )) { $sunname = $allvariables->{'DEFINEDMANUFACTURER'}; }
+        else { installer::exiter::exit_program("ERROR: Property DEFINEDMANUFACTURER has to be set for this product!", "set_manufacturer"); }
         $installer::globals::manufacturer = $sunname;
-        $installer::globals::longmanufacturer = $sunname . ", Inc.";
+        $installer::globals::longmanufacturer = $sunname;
     }
 
     $allvariables->{'MANUFACTURER'} = $installer::globals::manufacturer;
@@ -739,6 +742,11 @@ sub replace_variables_in_ziplist_variables
     my $localminor = $installer::globals::lastminor;
     if ( $installer::globals::minor ) { $localminor = $installer::globals::minor; }
 
+    my $buildidstringcws = $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . ")";
+
+    # the environment variable CWS_WORK_STAMP is set only in CWS
+    if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstringcws = $buildidstringcws . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
+
     for ( my $i = 0; $i <= $#{$blockref}; $i++ )
     {
         if ($installer::globals::lastminor) { ${$blockref}[$i] =~ s/\{milestone\}/$milestonevariable/; }
@@ -749,6 +757,7 @@ sub replace_variables_in_ziplist_variables
         else { ${$blockref}[$i] =~ s/\{buildid\}//; }
         if ( $installer::globals::build ) { ${$blockref}[$i] =~ s/\{buildsource\}/$installer::globals::build/; }
         else { ${$blockref}[$i] =~ s/\{build\}//; }
+        ${$blockref}[$i] =~ s/\{buildidcws\}/$buildidstringcws/;
     }
 }
 

@@ -182,7 +182,9 @@ SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(DLLPOSTFIX)
 BASICLIB=-lsb$(DLLPOSTFIX)
+.IF "$(ENABLE_VBA)"=="YES"
 VBAHELPERLIB=-lvbahelper$(DLLPOSTFIX)
+.ENDIF
 DBTOOLSLIB=-ldbtools$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
@@ -266,8 +268,15 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
-TESTSHL2LIB = -ltestshl2$(DLLPOSTFIX)
+.IF "$(OS)" == "WNT"
+CPPUNITLIB = -lcygcppunit-1-12-1
+.ELSE
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CPPUNITLIB = $(CPPUNIT_LIBS)
+.ELSE
+CPPUNITLIB = -lcppunit
+.ENDIF
+.ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
@@ -341,6 +350,7 @@ LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 CONFIGMGRLIB=-lconfigmgr
+TESTLIB=-ltest
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -475,8 +485,7 @@ FREETYPELIB=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
-CPPUNITLIB = cppunit.lib
-TESTSHL2LIB = testshl2.lib
+CPPUNITLIB = icppunit_dll.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
 .IF "$(GUI)"=="OS2"
 REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
@@ -523,5 +532,6 @@ LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 CONFIGMGRLIB=iconfigmgr.lib
+TESTLIB=itest.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
