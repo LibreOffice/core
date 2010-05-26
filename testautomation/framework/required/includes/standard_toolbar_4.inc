@@ -38,7 +38,7 @@ testcase tStandardBar_4
     printlog( "Reset standardbar to defaults" )
     hResetStandardBar()
 
-    kontext "Writer"
+    gApplication = "WRITER"
     printlog( "Open one single Writer document" )
     hInitSingleDoc()
 
