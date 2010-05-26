@@ -305,12 +305,15 @@ testcase tiTableObjectBar
     endif
     Kontext "TableObjectBar"
     if TableObjectBar.NotExists(2) then ViewToolbarsTable
-    ZellenVerbinden.Click
-    printlog "Cells merged."
 
-    printlog "Checking split cells."
+    printlog( "Merge cells" )
+    Wait( 1000 )
+    ZellenVerbinden.Click
+
+    printlog( "Split cells" )
+    Wait( 1000 )
     ZelleTeilen.Click
-    printlog "Cells split."
+
     Kontext "ZellenTeilen"
     if ( ZellenTeilen.exists( 2 ) ) then
         
