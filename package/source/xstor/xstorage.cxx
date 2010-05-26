@@ -4807,11 +4807,11 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 m_pImpl->m_bIsModified = sal_True;
             }
         }
-        else if ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
                                     || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
                                     || aPropertyName.equalsAscii( "IsInconsistent" )
                                     || aPropertyName.equalsAscii( "URL" )
-                                    || aPropertyName.equalsAscii( "RepairPackage" ) )
+                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
            || aPropertyName.equalsAscii( "IsRoot" )
            || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -4855,8 +4855,8 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "URL" )
-                                    || aPropertyName.equalsAscii( "RepairPackage" ) )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "URL" )
+                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
            || aPropertyName.equalsAscii( "IsRoot" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
