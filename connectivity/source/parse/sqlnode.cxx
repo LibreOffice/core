@@ -715,13 +715,10 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rSt
         m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam );
 
     const OSQLParseNode* pPart2 = m_aChildren[1];
+    pPart2->getChild(0)->impl_parseNodeToString_throw( rString, aNewParam );
     pPart2->getChild(1)->impl_parseNodeToString_throw( rString, aNewParam );
-    if (SQL_ISTOKEN(pPart2->getChild(0), NOT))
-        pPart2->getChild(2)->impl_parseNodeToString_throw( rString, aNewParam );
-
-    sal_Int32 nCurentPos = pPart2->count() - 2;
-    pParaNode = pPart2->getChild(nCurentPos);
-    pEscNode  = pPart2->getChild(nCurentPos+1);
+    pParaNode = pPart2->getChild(2);
+    pEscNode  = pPart2->getChild(3);
 
     if (pParaNode->isToken())
     {

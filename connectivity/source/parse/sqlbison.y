@@ -1270,12 +1270,14 @@ like_predicate:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				OSQLParseNode* p2nd = $1->getChild(2);
-				if ( !xxx_pGLOBAL_SQLPARSER->buildLikeRule($1,p2nd,$1->getChild(3)) )
+				OSQLParseNode* p2nd = $1->removeAt(2);
+				OSQLParseNode* p3rd = $1->removeAt(2);
+				if ( !xxx_pGLOBAL_SQLPARSER->buildLikeRule($1,p2nd,p3rd) )
 				{
 					delete $$;
 					YYABORT;
 				}
+				$1->append(p3rd);
 			}
 			else
 				YYERROR;
@@ -1290,12 +1292,14 @@ like_predicate:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				OSQLParseNode* p2nd = $1->getChild(2);
-				if ( !xxx_pGLOBAL_SQLPARSER->buildLikeRule($1,p2nd,$1->getChild(3)) )
+				OSQLParseNode* p2nd = $1->removeAt(2);
+				OSQLParseNode* p3rd = $1->removeAt(2);
+				if ( !xxx_pGLOBAL_SQLPARSER->buildLikeRule($1,p2nd,p3rd) )
 				{
 					delete $$;
 					YYABORT;
 				}
+				$1->append(p3rd);
 			}
 			else
 				YYERROR;
