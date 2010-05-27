@@ -28,9 +28,11 @@
 #ifndef RDFAIMPORTHELPER_HXX
 #define RDFAIMPORTHELPER_HXX
 
-#include <com/sun/star/uno/Reference.h>
-
 #include <vector>
+
+#include <boost/shared_ptr.hpp>
+
+#include <com/sun/star/uno/Reference.h>
 
 
 namespace rtl { class OUString; }
@@ -46,6 +48,7 @@ class SvXMLImport;
 namespace xmloff {
 
 struct RDFaEntry;
+struct ParsedRDFaAttributes;
 
 class SAL_DLLPRIVATE RDFaImportHelper
 {
@@ -65,10 +68,23 @@ public:
 
     ~RDFaImportHelper();
 
-    /** Add a RDFa statement; parameters are XML attribute values */
+    /** Parse RDFa attributes */
+    ::boost::shared_ptr<ParsedRDFaAttributes> ParseRDFa(
+        ::rtl::OUString const & i_rAbout,
+        ::rtl::OUString const & i_rProperty,
+        ::rtl::OUString const & i_rContent,
+        ::rtl::OUString const & i_rDatatype);
+
+    /** Add a RDFa statement; must have been parsed with ParseRDFa */
     void AddRDFa(
         ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable>
-            i_xObject,
+            const & i_xObject,
+        ::boost::shared_ptr<ParsedRDFaAttributes> & i_pRDFaAttributes);
+
+    /** Parse and add a RDFa statement; parameters are XML attribute values */
+    void ParseAndAddRDFa(
+        ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable>
+            const & i_xObject,
         ::rtl::OUString const & i_rAbout,
         ::rtl::OUString const & i_rProperty,
         ::rtl::OUString const & i_rContent,
