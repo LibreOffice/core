@@ -74,6 +74,7 @@
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/util.hxx>
+#include <dmapperLoggers.hxx>
 #endif
 #include <ooxml/OOXMLFastTokens.hxx>
 
@@ -419,15 +420,12 @@ DomainMapper_Impl::DomainMapper_Impl(
     TableDataHandler_t::Pointer_t pTableHandler
         (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
     m_TableManager.setHandler(pTableHandler);
-
-    m_TableManager.startLevel();
 }
 /*-- 01.09.2006 10:22:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 DomainMapper_Impl::~DomainMapper_Impl()
 {
-    m_TableManager.endLevel();
 }
 /*-------------------------------------------------------------------------
 
@@ -843,14 +841,20 @@ void lcl_AddRangeAndStyle(
 
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
-#if DEBUG
-    clog << "finishParagraph" << endl;
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("finishParagraph");
 #endif
 
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend = rAppendContext.xTextAppend;
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->attribute("isTextAppend", xTextAppend.is());
+    dmapper_logger->attribute("isIgnor", m_TableManager.isIgnore());
+#endif
+
     if(xTextAppend.is() && ! m_TableManager.isIgnore())
     {
         try
@@ -1096,6 +1100,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
             //OSL_ENSURE( false, "ArgumentException in DomainMapper_Impl::finishParagraph" );
         }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("finishParagraph");
+#endif
 }
 /*-------------------------------------------------------------------------
 
@@ -1359,7 +1367,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         uno::Sequence< beans::PropertyValue > aFontProperties;
         if( pFontTable && pTopContext->GetFootnoteFontId() >= 0 && pFontTable->size() > (size_t)pTopContext->GetFootnoteFontId() )
         {
-            const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId()));
+            const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId())));
             PropertyMapPtr aFontProps( new PropertyMap );
             aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pFontEntry->sFontName  ));
             aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, true, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
@@ -3719,4 +3727,23 @@ void DomainMapper_Impl::ResetParaRedline( )
     }
 }
 
+/*-- 22.09.2009 10:26:19---------------------------------------------------
+
+-----------------------------------------------------------------------*/
+void DomainMapper_Impl::ApplySettingsTable()
+{
+    if( m_pSettingsTable )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xTextDefaults(
+                                                                m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Defaults"))), uno::UNO_QUERY_THROW );
+            sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
+            xTextDefaults->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
+        }
+        catch(const uno::Exception& )
+        {
+        }
+    }
+}
 }}
