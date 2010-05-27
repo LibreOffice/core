@@ -637,6 +637,13 @@ testcase i_us_presentation7
     else
         warnlog "   Presentation not finished, fullscreen view still open."
         DocumentPresentation.typeKeys "<ESC>"
+        
+        kontext "DocumentPresentation"
+        if ( DocumentPresentation.notExists( 3 ) ) then 
+            printlog( "Recovery attempt successful" )
+        else
+            goto endsub
+        endif
     end if
 
     kontext "DocumentImpress"
