@@ -292,11 +292,12 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
                 }
+                rElementTypeData.bLoaded = true;
             }
         }
     }
 
-    rElementTypeData.bLoaded = true;
+    //rElementTypeData.bLoaded = true;
 }
 
 void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData )
