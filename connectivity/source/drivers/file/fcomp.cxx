@@ -294,8 +294,8 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
     sal_Unicode cEscape = L'\0';
     const bool bNotLike = pPart2->getChild(0)->isToken();
 
-    OSQLParseNode* pAtom        = pPart2->getChild(pPredicateNode->count()-2);
-    OSQLParseNode* pOptEscape   = pPart2->getChild(pPredicateNode->count()-1);
+    OSQLParseNode* pAtom        = pPart2->getChild(pPart2->count()-2);
+    OSQLParseNode* pOptEscape   = pPart2->getChild(pPart2->count()-1);
 
     if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
     {
