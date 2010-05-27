@@ -2299,9 +2299,10 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
             aNext = EditPaM( aOldSel.Max().GetNode(), nEndOfSentence );
         }
         rEditView.pImpEditView->SetEditSelection( aNext );
+
+        FormatAndUpdate();
+        aEditDoc.SetModified(TRUE);
     }
-    FormatAndUpdate();
-    aEditDoc.SetModified(TRUE);
 #endif
 }
 /*-- 08.09.2008 11:33:02---------------------------------------------------
