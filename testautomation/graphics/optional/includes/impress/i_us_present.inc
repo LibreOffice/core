@@ -623,16 +623,20 @@ testcase i_us_presentation7
     SlidesControl.TypeKeys "<RETURN>" 'At the first slide
 
     hTypeKeys "<F5>"
-    kontext "DocumentPresentation"
 
+    kontext "DocumentPresentation"
     for iKeyStroke = 1 to KEY_STROKE_REPEAT
-        sleep (5)
+        wait( 3000 )
         DocumentPresentation.TypeKeys "<PAGEDOWN>"
+        wait( 2000 )
     next iKeyStroke
 
-    if DocumentPresentation.Exists(5) then
-        hTypeKeys "<ESC>"
-        warnlog "   Presentation should have ended. Please inform Automatic Tester."
+    kontext "DocumentPresentation"
+    if ( DocumentPresentation.notExists( 5 ) then
+        printlog( "Presentation closed. Good." )
+    else
+        warnlog "   Presentation not finished, fullscreen view still open."
+        DocumentPresentation.typeKeys "<ESC>"
     end if
 
     kontext "DocumentImpress"
@@ -669,7 +673,7 @@ testcase i_us_presentation7
     printlog "Close the office-session"
     ActiveDeactivateCTLSupport (FALSE)
 
-    printlog "Close Document"
+    printlog "Close Documents"
     hFileCloseAll()
     
 endcase 'i_us_presentation7
