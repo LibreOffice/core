@@ -632,7 +632,7 @@ testcase i_us_presentation7
     next iKeyStroke
 
     kontext "DocumentPresentation"
-    if ( DocumentPresentation.notExists( 5 ) then
+    if ( DocumentPresentation.notExists( 5 ) ) then
         printlog( "Presentation closed. Good." )
     else
         warnlog "   Presentation not finished, fullscreen view still open."
