@@ -134,7 +134,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             sal_Bool bShift = pKeyEvent->GetKeyCode().IsShift();
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
-            if ( bCtrl && bAlt && KEY_F == nCode )
+            if ( (bCtrl && bAlt && KEY_F == nCode) || KEY_ESCAPE == nCode )
                 GrabFocusToDocument();
 
             if ( KEY_RETURN == nCode )
