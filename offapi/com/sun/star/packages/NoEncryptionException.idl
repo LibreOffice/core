@@ -41,7 +41,7 @@
 // DocMerge from xml: exception com::sun::star::packages::NoEncryptionException
 /** This exception can be thrown in case object is not encrypted one as expected.
  */
-exception NoEncryptionException: com::sun::star::uno::Exception
+published exception NoEncryptionException: com::sun::star::uno::Exception
 {
 };
 

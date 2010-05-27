@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_embed_Aspects_idl__
-#define __com_sun_star_embed_Aspects_idl__
+#ifndef __com_sun_star_embed_StorageFormats_idl__
+#define __com_sun_star_embed_StorageFormats_idl__
 
 
 //============================================================================
@@ -33,47 +33,28 @@
 module com { module sun { module star { module embed {
 
 //============================================================================
-/** The constant set contains possible aspects for an embedded object.
+/** The constant set contains IDs of formats that are supported by
+    <type>StorageFactory</type>.
 
-    <p>
-    This constant set provides a set of values that
-    can be used to specify the kind of object view.
-    It can be used for example by container to request
-    view representation of a certain kind from
-    <type>XEmbeddedObject</type>.
-    </p>
-
-    <p>
-    The first 32 bits are reserved for MS OLE aspects.
-    </p>
-
-    @see XEmbeddedObject
+    @see <type>StorageFactory</type>
+    @since OOo 3.3
 */
-published constants Aspects
+published constants StorageFormats
 {
-    // MS OLE aspects
-
-    // -----------------------------------------------------------------------
-    /** specifies view of the object to be displayed as an embedded object
-        inside a container.
+    //------------------------------------------------------------------------
+    /** specifies package format
      */
-    const hyper MSOLE_CONTENT = 1;
+    const long PACKAGE = 1;
 
-    // -----------------------------------------------------------------------
-    /** specifies view of the object to be displayed in a browsing tool.
+    //------------------------------------------------------------------------
+    /** specifies zip format
      */
-    const hyper MSOLE_THUMBNAIL = 2;
+    const long ZIP = 2;
 
-    // -----------------------------------------------------------------------
-    /** specifies view of the object when object is represented by Icon.
+    //------------------------------------------------------------------------
+    /** specifies Office Open XML format
      */
-    const hyper MSOLE_ICON = 4;
-
-    // -----------------------------------------------------------------------
-    /** specifies view of the object for print preview.
-     */
-    const hyper MSOLE_DOCPRINT = 8;
-
+    const long OFOPXML = 3;
 };
 
 //============================================================================
