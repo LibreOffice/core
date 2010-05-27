@@ -100,12 +100,12 @@ namespace drawinglayer
                     {
                         case attribute::GRADIENTSTYLE_LINEAR:
                         {
-                            pNewTex.reset(new texture::GeoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle()));
+                            pNewTex.reset(new texture::GeoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_AXIAL:
                         {
-                            pNewTex.reset(new texture::GeoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle()));
+                            pNewTex.reset(new texture::GeoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RADIAL:
@@ -115,17 +115,17 @@ namespace drawinglayer
                         }
                         case attribute::GRADIENTSTYLE_ELLIPTICAL:
                         {
-                            pNewTex.reset(new texture::GeoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle()));
+                            pNewTex.reset(new texture::GeoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_SQUARE:
                         {
-                            pNewTex.reset(new texture::GeoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle()));
+                            pNewTex.reset(new texture::GeoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), rFillGradient.getAngle()));
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RECT:
                         {
-                            pNewTex.reset(new texture::GeoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle()));
+                            pNewTex.reset(new texture::GeoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), rFillGradient.getAngle()));
                             break;
                         }
                     }
