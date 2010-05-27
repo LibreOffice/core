@@ -58,10 +58,12 @@
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
+#include <swtblfmt.hxx>
 #include <txatbase.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtpdsc.hxx>
@@ -1910,6 +1912,7 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
             TableBidi( pTableTextNodeInfoInner );
             TableVerticalCell( pTableTextNodeInfoInner );
             TableOrientation( pTableTextNodeInfoInner );
+            TableSpacing( pTableTextNodeInfoInner );
         }
     }
 }
@@ -2087,6 +2090,41 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
                 break;
             default:
                 break;
+        }
+    }
+}
+
+void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+{
+    const SwTable * pTable = pTableTextNodeInfoInner->getTable();
+    const SwTableFmt * pTableFmt = dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+
+    if (pTableFmt != NULL)
+    {
+        const SvxULSpaceItem & rUL = pTableFmt->GetULSpace();
+
+        if (rUL.GetUpper() > 0)
+        {
+            sal_uInt8 nPadding = 2;
+            sal_uInt8 nPcVert = 0;
+            sal_uInt8 nPcHorz = 0;
+
+            sal_uInt8 nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
+
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TPc);
+            m_rWW8Export.pO->Insert( nTPc, m_rWW8Export.pO->Count() );
+
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaAbs);
+            m_rWW8Export.InsUInt16(rUL.GetUpper());
+
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaFromText);
+            m_rWW8Export.InsUInt16(rUL.GetUpper());
+        }
+
+        if (rUL.GetLower() > 0)
+        {
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaFromTextBottom);
+            m_rWW8Export.InsUInt16(rUL.GetLower());
         }
     }
 }
