@@ -1395,7 +1395,10 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 if ( pTxtNode->GetNumRule() )
                 {
                     const SwNumFmt aFmt( aNumRule.Get( 0 ) );
-                    nIndentChange -= aFmt.GetIndentAt() + aFmt.GetFirstLineIndent();
+                    if ( aFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                    {
+                        nIndentChange -= aFmt.GetIndentAt() + aFmt.GetFirstLineIndent();
+                    }
                 }
                 // <--
                 aNumRule.ChangeIndent( nIndentChange );
