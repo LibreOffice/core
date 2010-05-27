@@ -37,6 +37,12 @@
 
 #include <com/sun/star/view/SelectionType.idl>
 
+#include <com/sun/star/awt/FontDescriptor.idl>
+
+#include <com/sun/star/style/VerticalAlignment.idl>
+
+#include <com/sun/star/util/Color.idl>
+
 //=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
@@ -44,6 +50,8 @@ module com {  module sun {  module star {  module awt { module grid {
 //=============================================================================
 
 /** specifies the standard model of a <type>UnoControlGridModel</type>.
+
+    @since OOo 3.3.0
  */
 service UnoControlGridModel
 {
@@ -84,10 +92,67 @@ service UnoControlGridModel
     */
     [property] boolean VScroll;
 
+    /** Specifies that the control can be reached with the TAB key.
+     */
+    [property] boolean Tabstop;
+
     /** Specifies the selection mode that is enabled for this grid control.
         <p>The default value is <member scope="com::sun::star::view">SelectionType::SINGLE</member></p>
     */
     [property] ::com::sun::star::view::SelectionType SelectionModel;
+
+    /** Specifies the background color of rows. If color for even rows is set, then specifies
+        the color of odd rows. Default value is white.
+    */
+    [property] ::com::sun::star::util::Color RowBackgroundColor;
+
+    /** Specifies the background color of even rows. Default value is white.
+    */
+    [property] ::com::sun::star::util::Color EvenRowBackgroundColor;
+
+    /** Specifies the background color of header. Default value is white.
+    */
+    [property] ::com::sun::star::util::Color HeaderBackgroundColor;
+
+    /** Specifies the text color. Default value is black.
+    */
+    [property] ::com::sun::star::util::Color TextColor;
+
+    /** Specifies the line color. Default value is white.
+    */
+    [property] ::com::sun::star::util::Color LineColor;
+
+    /** specifies the vertical alignment of the content in the control.
+
+        <pre>
+            TOP
+            MIDDLE
+            BOTTOM
+        </pre>
+     */
+    [property] com::sun::star::style::VerticalAlignment VerticalAlign;
+
+    /** specifies the font attributes of the text in the control.
+     */
+    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
+     */
+    [property] short FontEmphasisMark;
+
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
+     */
+    [property] short FontRelief;
+
+    /** specifies the help text of the control.
+     */
+    [property] string HelpText;
+
+    /** specifies the help URL of the control.
+     */
+    [property] string HelpURL;
 
 };
 
