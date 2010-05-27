@@ -53,17 +53,8 @@ LIB1FILES=	\
 
 # --- Shared-Library -----------------------------------------------
 
-.IF "$(GUI)"!="UNX"
-LIB4TARGET= $(LB)$/ixo.lib
-LIB4FILES=	$(LB)$/_ixo.lib
-.IF "$(GUI)"!="OS2"
-LIB4OBJFILES=\
-    $(OBJ)$/xmlkywd.obj
-.ENDIF
-.ENDIF
-
 SHL1TARGET= xo$(DLLPOSTFIX)
-SHL1IMPLIB= _ixo
+SHL1IMPLIB= i$(TARGET)
 SHL1USE_EXPORTS=name
 
 SHL1STDLIBS= \
@@ -85,21 +76,6 @@ SHL1STDLIBS+=-licg617mxp
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=   $(LIB1TARGET)
-
-
-SHL5STDLIBS= \
-        $(TOOLSLIB)         \
-        $(SALLIB)           \
-        $(SALHELPERLIB)     \
-        $(CPPULIB)          \
-        $(CPPUHELPERLIB)    \
-        $(COMPHELPERLIB)
-
-.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
-    SHL5STDLIBS += -lxo$(DLLPOSTFIX)
-.ELSE
-    SHL5STDLIBS += ixo.lib
-.ENDIF
 
 # --- Def-File ---------------------------------------------------------
 

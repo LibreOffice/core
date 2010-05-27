@@ -374,31 +374,46 @@ void SdXMLShapeContext::EndElement()
 
     if( msHyperlink.getLength() != 0 ) try
     {
-        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY_THROW );
-        Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
+        const OUString sBookmark( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
 
-        uno::Sequence< beans::PropertyValue > aProperties( 3 );
-        aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
-        aProperties[0].Handle = -1;
-        aProperties[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("Presentation") );
-        aProperties[0].State = beans::PropertyState_DIRECT_VALUE;
+        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY );
+        if( xEventsSupplier.is() )
+        {
+            const OUString sEventType( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+            const OUString sClickAction( RTL_CONSTASCII_USTRINGPARAM( "ClickAction" ) );
 
-        aProperties[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ClickAction" ) );
-        aProperties[1].Handle = -1;
-        aProperties[1].Value <<= ::com::sun::star::presentation::ClickAction_DOCUMENT;
-        aProperties[1].State = beans::PropertyState_DIRECT_VALUE;
+            Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
 
-        aProperties[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
-        aProperties[2].Handle = -1;
-        aProperties[2].Value <<= msHyperlink;
-        aProperties[2].State = beans::PropertyState_DIRECT_VALUE;
+            uno::Sequence< beans::PropertyValue > aProperties( 3 );
+            aProperties[0].Name = sEventType;
+            aProperties[0].Handle = -1;
+            aProperties[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("Presentation") );
+            aProperties[0].State = beans::PropertyState_DIRECT_VALUE;
 
-        const OUString sAPIEventName( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
-        xEvents->replaceByName( sAPIEventName, Any( aProperties ) );
+            aProperties[1].Name = sClickAction;
+            aProperties[1].Handle = -1;
+            aProperties[1].Value <<= ::com::sun::star::presentation::ClickAction_DOCUMENT;
+            aProperties[1].State = beans::PropertyState_DIRECT_VALUE;
+
+            aProperties[2].Name = sBookmark;
+            aProperties[2].Handle = -1;
+            aProperties[2].Value <<= msHyperlink;
+            aProperties[2].State = beans::PropertyState_DIRECT_VALUE;
+
+            const OUString sAPIEventName( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
+            xEvents->replaceByName( sAPIEventName, Any( aProperties ) );
+        }
+        else
+        {
+            // in draw use the Bookmark property
+            Reference< beans::XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
+            xSet->setPropertyValue( sBookmark, Any( msHyperlink ) );
+            xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) ), Any( ::com::sun::star::presentation::ClickAction_DOCUMENT ) );
+        }
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::SdXMLShapeContext::EndElement(), exception caught!");
+        DBG_ERROR("xmloff::SdXMLShapeContext::EndElement(), exception caught while setting hyperlink!");
     }
 
     if( mxLockable.is() )
@@ -777,6 +792,7 @@ void SdXMLShapeContext::SetThumbnail()
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
+    bool bHaveXmlId( false );
     if( (XML_NAMESPACE_DRAW == nPrefix) || (XML_NAMESPACE_DRAW_EXT == nPrefix) )
     {
         if( IsXMLToken( rLocalName, XML_ZINDEX ) )
@@ -785,7 +801,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         }
         else if( IsXMLToken( rLocalName, XML_ID ) )
         {
-            maShapeId = rValue;
+            if (!bHaveXmlId) { maShapeId = rValue; };
         }
         else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
@@ -883,6 +899,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         if( IsXMLToken( rLocalName, XML_ID ) )
         {
             maShapeId = rValue;
+            bHaveXmlId = true;
         }
     }
 }
@@ -3689,7 +3706,7 @@ void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
 
 SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    if( mxTableImportContext.Is() )
+    if( mxTableImportContext.Is() && (nPrefix == XML_NAMESPACE_TABLE) )
         return mxTableImportContext->CreateChildContext(nPrefix, rLocalName, xAttrList);
     else
         return SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
