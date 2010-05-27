@@ -504,6 +504,12 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
+function hFileDelete( cFileOrig as string ) as boolean
+    hFileDelete() = hDeleteFile( cFileOrig )
+end function
+'
+'-------------------------------------------------------------------------------
+'
 function hDeleteFile( cFileOrig as string ) as boolean
 
     const CFN = "global::tools::includes::required::t_files.inc::hDeleteFile():"
@@ -569,10 +575,34 @@ function hFileOpen( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     hFileOpen() = FALSE
-    const CFN = "global::tools::inc::t_files.inc::hFileOpen():"
+    const CFN = "global::tools::inc::t_files.inc::hFileOpen(): "
     if ( GVERBOSE ) then printlog( CFN & "Load: " & sFile )
     FileOpen( "URL", sFile, "FrameName", "_default" )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpen() = TRUE
+
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hFileReOpen( cFile as string ) as boolean
+
+    const CFN = "global::tools::inc::t_files.inc::hFileReOpen(): "
+    dim iDocumentCount as integer : iDocumentCount = getDocumentCount
+    hFileReopen() = false
+
+    hCloseDocument()
+    
+    if ( cFile = "" ) then
+        hNewDocument()
+    else
+        if ( FileExists( cFile ) ) then
+            hFileOpen( cFile )
+        else
+            warnlog( CFN & "File does not exist: " & sFile )
+        endif
+    endif
+
+    if ( getDocumentCount = iDocumentCount ) then hFileReOpen() = true
 
 end function
 '
@@ -586,7 +616,7 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
     ' cFlag = <Any other string> treats string as password
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial():"
+    const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial(): "
     hFileOpenSpecial() = FALSE
     if ( GVERBOSE ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
 
@@ -611,7 +641,7 @@ end function
 function hFileOpenWithFilter( cFile as string, cFilter as string )
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileOpenWithFilter():"
+    const CFN = "global::tools::inc::t_files.inc::hFileOpenWithFilter(): "
     hFileOpenWithFilter() = FALSE
     if ( GVERBOSE ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
     FileOpen( "URL", sFile, "FrameName", "_default", "FilterName", cFilter )
@@ -623,7 +653,7 @@ end function
 '
 function hFileSave() as boolean
 
-    const CFN = "global::tools::inc::t_files.inc::hFileSave():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSave(): "
     hFileSave() = FALSE
     if ( GVERBOSE ) then printlog( CFN & "Save file." )
     FileSave( "SynchronMode", TRUE )
@@ -636,7 +666,7 @@ end function
 function hFileSaveAs( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAs():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAs(): "
     hFileSaveAs() = FALSE
     if ( GVERBOSE ) then printlog( CFN & "Save: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", FALSE )
@@ -649,7 +679,7 @@ end function
 function hFileSaveAsKill( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKill():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKill(): "
     hFileSaveAsKill() = FALSE
     if ( GVERBOSE ) then printlog( CFN & "Save, replacing: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE )
@@ -662,7 +692,7 @@ end function
 function hFileSaveAsKillWithPassword( cFile as string, cPassword as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKillWithPassword():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKillWithPassword(): "
     hFileSaveAsKillWithPassword() = FALSE
     if ( GVERBOSE ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE, "Password", cPassword )
@@ -675,7 +705,7 @@ end function
 function hFileSaveAsWithFilter( cFile as string, cFilter as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilter():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilter(): "
     hFileSaveAsWithFilter() = FALSE
     if ( GVERBOSE ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", FALSE )
@@ -688,7 +718,7 @@ end function
 function hFileSaveAsWithFilterKill( cFile as string, cFilter as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilterKill():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilterKill(): "
     hFileSaveAsWithFilterKill() = FALSE
     if ( GVERBOSE ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", TRUE )
@@ -704,7 +734,7 @@ function hFileWait( optional bWarn as boolean ) as integer
     ' Returns the time it took the slot to finish
     ' Negative returnvalues are given on timeout or any blocking dialog
 
-    const CFN = "global::tools::inc::t_files.inc::hFileWait():"
+    const CFN = "global::tools::inc::t_files.inc::hFileWait(): "
     const MAX_WAIT = 10
     dim iWait as integer : iWait = 0
     dim bWarnlog as boolean
