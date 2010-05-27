@@ -71,7 +71,6 @@ SHL1IMPLIB= sci
 
 # dynamic libraries
 SHL1STDLIBS=       \
-        $(VBAHELPERLIB) \
     $(BASICLIB)	\
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
