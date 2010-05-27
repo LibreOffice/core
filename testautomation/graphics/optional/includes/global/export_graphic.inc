@@ -29,20 +29,8 @@
 '*
 '* short description : Graphics Export A-tests. (More durable ones)
 '*
-'*******************************************************************************
-'*
-' #1 tEPS
-' #1 tGIF
-' #1 tJPEG
-' #1 tPBM
-' #1 tPCT
-' #1 tPGM
-' #1 tPPM
-' #1 tRAS
-' #1 tTIFF
-' #1 tXPM
-'*
 '\******************************************************************************
+
 testcase tEPS
 
     dim x as integer
@@ -65,64 +53,64 @@ testcase tEPS
             '  InterchangeEPSI.Check
             Level1.Check
             if Farbe.IsEnabled then warnlog " :-("
-                if Graustufen.IsEnabled then warnlog " :-("
-                    if LZWKodierung.IsEnabled then warnlog " :-("
-                        if Keine.IsEnabled then warnlog " :-("
-                            ' if (TextEinstellungen.IsEnabled <> TRUE) then warnlog " :-("
-                            Level2.Check
-                            if (Farbe.IsEnabled <> TRUE) then warnlog " :-("
-                                if (Graustufen.IsEnabled <> TRUE) then warnlog " :-("
-                                    if (LZWKodierung.IsEnabled <> TRUE) then warnlog " :-("
-                                        if (Keine.IsEnabled <> TRUE) then warnlog " :-("
-                                            ' if (TextEinstellungen.IsEnabled <> TRUE) then warnlog " :-("
-                                            printlog "'Color Resolution' listbox contains eight items"
-                                            ' x = TextEinstellungen.GetItemCount
-                                            ' if x <> 2 then warnlog "'TextEinstellungen' Count is wrong; should:2, is:" + x
-                                            ' for i = 1 to x
-                                            ' TextEinstellungen.Select i
-                                            ' sleep 1
-                                            ' Printlog " - " + i + ": '" +TextEinstellungen.GetSelText + "'"
-                                            ' next i
-                                            printlog "leave dialog with cancel -> there has to be no file created!"
-                                            EPSOptionen.Cancel
-                                            sleep 5
-                                            if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
-                                                Printlog "Ok :-)"
-                                            else
-                                                warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
-                                            endif
-                                        else
-                                            Warnlog "No '" + sFilter + "'-Option-Dialog!"
-                                            i=5
-                                        end if
-                                        sleep 2
-                                        Kontext "Active"
-                                        if Active.Exists(2) then
-                                            Warnlog "'" + sFilter + "' has a problem"
-                                            Active.OK
-                                        end if
-                                    end if
-                                    printlog " now save it realy and load the file afterwards"
-                                    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-                                        Kontext "EPSOptionen"
-                                        if EPSOptionen.Exists (2) then
-                                            printlog "TextEinstellungen.select 2"
-                                            EPSOptionen.OK
-                                            sleep 5
-                                        endif
-                                        if ( dir(OutputGrafikTBO+sExt) <> "") then
-                                            Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-                                        else
-                                            warnlog "File didn't get saved :-("
-                                        endif
-                                        hCloseDocument ()
-                                        sleep 5
-                                        hNewDocument()
-                                        sleep 5
-                                        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
-                                    endif
+            if Graustufen.IsEnabled then warnlog " :-("
+            if LZWKodierung.IsEnabled then warnlog " :-("
+            if Keine.IsEnabled then warnlog " :-("
+            ' if (TextEinstellungen.IsEnabled <> TRUE) then warnlog " :-("
+            Level2.Check
+            if (Farbe.IsEnabled <> TRUE) then warnlog " :-("
+            if (Graustufen.IsEnabled <> TRUE) then warnlog " :-("
+            if (LZWKodierung.IsEnabled <> TRUE) then warnlog " :-("
+            if (Keine.IsEnabled <> TRUE) then warnlog " :-("
+            ' if (TextEinstellungen.IsEnabled <> TRUE) then warnlog " :-("
+            printlog "'Color Resolution' listbox contains eight items"
+            ' x = TextEinstellungen.GetItemCount
+            ' if x <> 2 then warnlog "'TextEinstellungen' Count is wrong; should:2, is:" + x
+            ' for i = 1 to x
+            ' TextEinstellungen.Select i
+            ' sleep 1
+            ' Printlog " - " + i + ": '" +TextEinstellungen.GetSelText + "'"
+            ' next i
+            printlog "leave dialog with cancel -> there has to be no file created!"
+            EPSOptionen.Cancel
+            sleep 5
+            if ( dir(OutputGrafikTBO+sExt) = "") then ' inspired by bug #99932 Graphic is exported though cancel is pressed
+                Printlog "Ok :-)"
+            else
+                warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
+            endif
+        else
+            Warnlog "No '" + sFilter + "'-Option-Dialog!"
+            i=5
+        end if
+        sleep 2
+        Kontext "Active"
+        if Active.Exists(2) then
+            Warnlog "'" + sFilter + "' has a problem"
+            Active.OK
+        end if
+    end if
+    printlog " now save it realy and load the file afterwards"
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "EPSOptionen"
+        if EPSOptionen.Exists (2) then
+            printlog "TextEinstellungen.select 2"
+            EPSOptionen.OK
+            sleep 5
+        endif
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    endif
 
-                                    call hCloseDocument
+    call hCloseDocument
 
 endcase 'tEPS
 '-------------------------------------------------------------------------
@@ -154,176 +142,176 @@ testcase tPCT
             printlog "check if all properties have the right count, and depend on each other"
             Original.Check
             if Breite.IsEnabled then warnlog " :-("
-                if Hoehe.IsEnabled then warnlog " :-("
-                    Groesse.Check
-                    Breite.More
-                    Hoehe.Less
-                    printlog "leave dialog with cancel -> there has to be no file created!"
-                    PICTOptionen.Cancel
-                    sleep 5
-                    if ( dir(OutputGrafikTBO+sExt) = "") then
-                        Printlog "Ok :-)"
-                    else
-                        warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
-                    endif
-                else
-                    Warnlog "No  '" + sFilter + "' -Dialog!"
-                    i=5
-                end if
-                sleep 2
-                Kontext "Active"
-                if Active.Exists(2) then
-                    Warnlog " '" + sFilter + "'  has a problem"
-                    Active.OK
-                end if
-            end if
-            printlog " now save it realy and load the file afterwards"
-            if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-                Kontext "PICTOptionen"
-                if PICTOptionen.Exists (2) then
-                    Groesse.Check
-                    Breite.Less
-                    Hoehe.More
-                    PICTOptionen.OK
-                    iWaitIndex = 0
-                    do while PICTOptionen.Exists AND iWaitIndex < 30
-                        sleep (1)
-                        iWaitIndex = iWaitIndex + 1
-                    loop
-                endif
-                i=0
-                while ((NOT fileExists(OutputGrafikTBO+sExt)) AND (i<36))
-                    inc(i)
-                    sleep(5)
-                wend
-                if ( dir(OutputGrafikTBO+sExt) <> "") then
-                    Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
-                else
-                    warnlog "File didn't get saved :-("
-                endif
-                hCloseDocument ()
-                sleep 5
-                hNewDocument()
-                sleep 5
-                Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+            if Hoehe.IsEnabled then warnlog " :-("
+            Groesse.Check
+            Breite.More
+            Hoehe.Less
+            printlog "leave dialog with cancel -> there has to be no file created!"
+            PICTOptionen.Cancel
+            sleep 5
+            if ( dir(OutputGrafikTBO+sExt) = "") then
+                Printlog "Ok :-)"
+            else
+                warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
             endif
-            hCloseDocument ()
-            printlog " now save a SELECTION in ORIGINAL SIZE and load the file afterwards"
-            hFileOpen (sDocument)
-            sleep (10)
+        else
+            Warnlog "No  '" + sFilter + "' -Dialog!"
+            i=5
+        end if
+        sleep 2
+        Kontext "Active"
+        if Active.Exists(2) then
+            Warnlog " '" + sFilter + "'  has a problem"
+            Active.OK
+        end if
+    end if
+    printlog " now save it realy and load the file afterwards"
+    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+        Kontext "PICTOptionen"
+        if PICTOptionen.Exists (2) then
+            Groesse.Check
+            Breite.Less
+            Hoehe.More
+            PICTOptionen.OK
+            iWaitIndex = 0
+            do while PICTOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        i=0
+        while ((NOT fileExists(OutputGrafikTBO+sExt)) AND (i<36))
+            inc(i)
+            sleep(5)
+        wend
+        if ( dir(OutputGrafikTBO+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" + OutputGrafikTBO+sExt + "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    endif
+    hCloseDocument ()
+    printlog " now save a SELECTION in ORIGINAL SIZE and load the file afterwards"
+    hFileOpen (sDocument)
+    sleep (10)
 
-            printlog "check if the document is writable"
-            if fIsDocumentWritable = false then
-                printlog "make the document writable and check if it's succesfull"
-                if fMakeDocumentWritable = false then
-                    warnlog "The document can't be make writeable. Test stopped."
-                    goto endsub
-                endif
-            endif
+    printlog "check if the document is writable"
+    if fIsDocumentWritable = false then
+        printlog "make the document writable and check if it's succesfull"
+        if fMakeDocumentWritable = false then
+            warnlog "The document can't be make writeable. Test stopped."
+            goto endsub
+        endif
+    endif
 
-            hTypeKeys ("<escape><tab>")
-            fGetSizeXY sx1, sY, TRUE
-            if hCallExport (OutputGrafikTBO + "1" , sFilter, TRUE ) = TRUE then
-                Kontext "PICTOptionen"
-                if PICTOptionen.Exists (2) then
-                    Original.Check
-                    PICTOptionen.OK
-                    iWaitIndex = 0
-                    do while PICTOptionen.Exists AND iWaitIndex < 30
-                        sleep (1)
-                        iWaitIndex = iWaitIndex + 1
-                    loop
-                endif
-                i=0
-                while ((NOT fileExists(OutputGrafikTBO+ "1"+sExt)) AND (i<36))
-                    inc(i)
-                    sleep(5)
-                wend
-                if ( dir(OutputGrafikTBO + "1"+sExt) <> "") then
-                    Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "1"+sExt + "'"
+    hTypeKeys ("<escape><tab>")
+    fGetSizeXY sx1, sY, TRUE
+    if hCallExport (OutputGrafikTBO + "1" , sFilter, TRUE ) = TRUE then
+        Kontext "PICTOptionen"
+        if PICTOptionen.Exists (2) then
+            Original.Check
+            PICTOptionen.OK
+            iWaitIndex = 0
+            do while PICTOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        i=0
+        while ((NOT fileExists(OutputGrafikTBO+ "1"+sExt)) AND (i<36))
+            inc(i)
+            sleep(5)
+        wend
+        if ( dir(OutputGrafikTBO + "1"+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "1"+sExt + "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hNewDocument()
+        sleep 5
+        Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+sExt )
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
+        endif
+    endif
+    hCloseDocument ()
+    printlog " now CREATE a rectangle, select it, save it in SIZE and load the file afterwards"
+    hNewDocument()
+    hRechteckErstellen ( 10, 10, 30, 40 )
+    if hCallExport (OutputGrafikTBO + "2" , sFilter, TRUE ) = TRUE then
+        Kontext "PICTOptionen"
+        if PICTOptionen.Exists (2) then
+            Groesse.Check
+            Breite.SetText "9"
+            Hoehe.SetText "9"
+            Groesse.Check
+            printlog "Check 'Size' one more time to make the change go through"
+            sx1 = Breite.GetText
+            sY = Hoehe.GetText
+            PICTOptionen.OK
+            iWaitIndex = 0
+            do while PICTOptionen.Exists AND iWaitIndex < 30
+                sleep (1)
+                iWaitIndex = iWaitIndex + 1
+            loop
+        endif
+        i=0
+        while ((NOT fileExists(OutputGrafikTBO+ "2"+sExt)) AND (i<36))
+            inc(i)
+            sleep(5)
+        wend
+        if ( dir(OutputGrafikTBO + "2"+sExt) <> "") then
+            Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "2"+sExt + "'"
+        else
+            warnlog "File didn't get saved :-("
+        endif
+        hCloseDocument ()
+        sleep 5
+        hFileOpen (OutputGrafikTBO + "2"+sExt)
+        kontext "DocumentDraw"
+        DocumentDraw.TypeKeys ("<escape><tab>")
+        ContextOriginalSize
+        bTemp = FALSE
+        fGetSizeXY sx1, sY, bTemp
+        if (bTemp = FALSE) then
+            warnlog "Selected original size NOT OK :-("
+        endif
+    endif
+    if hCallExport (OutputGrafikTBO + "3" , sFilter, TRUE ) = TRUE then
+        Kontext "PICTOptionen"
+        if PICTOptionen.Exists (2) then
+            Groesse.Check
+            sX2 = Breite.GetText
+            if (LiberalMeasurement(sx1, sX2)) <> TRUE then
+                if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
+                    Printlog "Width was ok. Expected: " + sx1 + "' was: '" + sX2 + "'"
                 else
-                    warnlog "File didn't get saved :-("
-                endif
-                hCloseDocument ()
-                sleep 5
-                hNewDocument()
-                sleep 5
-                Call hGrafikEinfuegen ( OutputGrafikTBO + "1"+sExt )
-                bTemp = FALSE
-                fGetSizeXY sx1, sY, bTemp
-                if (bTemp = FALSE) then
-                    warnlog "Selected original size NOT OK :-("
+                    warnLog "Width is different expected: '" + sx1 + "' is: '" + sX2 + "'"
                 endif
             endif
-            hCloseDocument ()
-            printlog " now CREATE a rectangle, select it, save it in SIZE and load the file afterwards"
-            hNewDocument()
-            hRechteckErstellen ( 10, 10, 30, 40 )
-            if hCallExport (OutputGrafikTBO + "2" , sFilter, TRUE ) = TRUE then
-                Kontext "PICTOptionen"
-                if PICTOptionen.Exists (2) then
-                    Groesse.Check
-                    Breite.SetText "9"
-                    Hoehe.SetText "9"
-                    Groesse.Check
-                    printlog "Check 'Size' one more time to make the change go through"
-                    sx1 = Breite.GetText
-                    sY = Hoehe.GetText
-                    PICTOptionen.OK
-                    iWaitIndex = 0
-                    do while PICTOptionen.Exists AND iWaitIndex < 30
-                        sleep (1)
-                        iWaitIndex = iWaitIndex + 1
-                    loop
-                endif
-                i=0
-                while ((NOT fileExists(OutputGrafikTBO+ "2"+sExt)) AND (i<36))
-                    inc(i)
-                    sleep(5)
-                wend
-                if ( dir(OutputGrafikTBO + "2"+sExt) <> "") then
-                    Printlog "Ok :-) Saved as: '" + OutputGrafikTBO + "2"+sExt + "'"
+            sY2 = Hoehe.GetText
+            if (LiberalMeasurement(sY, sY2)) <> TRUE then
+                if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
+                    Printlog "Height was ok. Expected: " + sY + "' was: '" + sY2 + "'"
                 else
-                    warnlog "File didn't get saved :-("
-                endif
-                hCloseDocument ()
-                sleep 5
-                hFileOpen (OutputGrafikTBO + "2"+sExt)
-                kontext "DocumentDraw"
-                DocumentDraw.TypeKeys ("<escape><tab>")
-                ContextOriginalSize
-                bTemp = FALSE
-                fGetSizeXY sx1, sY, bTemp
-                if (bTemp = FALSE) then
-                    warnlog "Selected original size NOT OK :-("
+                    warnLog "Height is different expected: '" + sY + "' is: '" + sY2 + "'"
                 endif
             endif
-            if hCallExport (OutputGrafikTBO + "3" , sFilter, TRUE ) = TRUE then
-                Kontext "PICTOptionen"
-                if PICTOptionen.Exists (2) then
-                    Groesse.Check
-                    sX2 = Breite.GetText
-                    if (LiberalMeasurement(sx1, sX2)) <> TRUE then
-                        if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
-                            Printlog "Width was ok. Expected: " + sx1 + "' was: '" + sX2 + "'"
-                        else
-                            warnLog "Width is different expected: '" + sx1 + "' is: '" + sX2 + "'"
-                        endif
-                    endif
-                    sY2 = Hoehe.GetText
-                    if (LiberalMeasurement(sY, sY2)) <> TRUE then
-                        if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
-                            Printlog "Height was ok. Expected: " + sY + "' was: '" + sY2 + "'"
-                        else
-                            warnLog "Height is different expected: '" + sY + "' is: '" + sY2 + "'"
-                        endif
-                    endif
-                    PICTOptionen.Cancel
-                    sleep 5
-                endif
-            endif
+            PICTOptionen.Cancel
+            sleep 5
+        endif
+    endif
 
-            call hCloseDocument
+    call hCloseDocument
 
 endcase 'tPCT
 '-------------------------------------------------------------------------------
