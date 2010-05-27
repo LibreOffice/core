@@ -124,7 +124,7 @@ public:
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
     void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
-    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
+    void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
     sal_Int32                       getSubTypeIndex() const { return mnSubTypeIndex; }
@@ -191,8 +191,8 @@ protected:
     rtl::OUString       msServiceName;
     rtl::OUString       msName;
     rtl::OUString       msId;
-    sal_uInt32          mnSubType;      // if this type is not zero, then the shape is a placeholder
-    sal_uInt32          mnSubTypeIndex;
+    sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
+    sal_Int32           mnSubTypeIndex;
 
     ShapeStyleRefMap   maShapeStyleRefs;
 

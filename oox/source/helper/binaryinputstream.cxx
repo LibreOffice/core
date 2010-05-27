@@ -30,6 +30,7 @@
 #include <vector>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "oox/helper/binaryoutputstream.hxx"
 
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
@@ -100,6 +101,25 @@ OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulCh
         }
     }
     return aBuffer.makeStringAndClear();
+}
+
+void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes )
+{
+    if( nBytes > 0 )
+    {
+        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, INPUTSTREAM_BUFFERSIZE );
+        StreamDataSequence aBuffer( nBufferSize );
+        while( nBytes > 0 )
+        {
+            sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, nBufferSize );
+            sal_Int32 nBytesRead = readData( aBuffer, nReadSize );
+            rOutStrm.writeData( aBuffer );
+            if( nReadSize == nBytesRead )
+                nBytes -= nReadSize;
+            else
+                nBytes = 0;
+        }
+    }
 }
 
 void BinaryInputStream::readAtom( void* opMem, sal_uInt8 nSize )
@@ -214,7 +234,7 @@ sal_Int32 SequenceInputStream::readMemory( void* opMem, sal_Int32 nBytes )
     sal_Int32 nReadBytes = 0;
     if( !mbEof )
     {
-        nReadBytes = ::std::min< sal_Int32 >( nBytes, mrData.getLength() - mnPos );
+        nReadBytes = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mrData.getLength() - mnPos );
         if( nReadBytes > 0 )
             memcpy( opMem, mrData.getConstArray() + mnPos, static_cast< size_t >( nReadBytes ) );
         mnPos += nReadBytes;
@@ -227,8 +247,82 @@ void SequenceInputStream::skip( sal_Int32 nBytes )
 {
     if( !mbEof )
     {
-        sal_Int32 nSkipBytes = ::std::min< sal_Int32 >( nBytes, mrData.getLength() - mnPos );
+        sal_Int32 nSkipBytes = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mrData.getLength() - mnPos );
         mnPos += nSkipBytes;
+        mbEof = nSkipBytes < nBytes;
+    }
+}
+
+// ============================================================================
+
+RelativeInputStream::RelativeInputStream( BinaryInputStream& rInStrm, sal_Int64 nLength ) :
+    mrInStrm( rInStrm ),
+    mnStartPos( rInStrm.tell() ),
+    mnRelPos( 0 )
+{
+    sal_Int64 nRemaining = rInStrm.getRemaining();
+    mnLength = (nRemaining >= 0) ? ::std::min( nLength, nRemaining ) : nLength;
+    mbEof = mnLength < 0;
+}
+
+bool RelativeInputStream::isSeekable() const
+{
+    return mrInStrm.isSeekable();
+}
+
+sal_Int64 RelativeInputStream::getLength() const
+{
+    return mnLength;
+}
+
+sal_Int64 RelativeInputStream::tell() const
+{
+    return mnRelPos;
+}
+
+void RelativeInputStream::seek( sal_Int64 nPos )
+{
+    if( mrInStrm.isSeekable() && (mnStartPos >= 0) )
+    {
+        mnRelPos = getLimitedValue< sal_Int64, sal_Int64 >( nPos, 0, mnLength );
+        mrInStrm.seek( mnStartPos + mnRelPos );
+        mbEof = (mnRelPos != nPos) || mrInStrm.isEof();
+    }
+}
+
+sal_Int32 RelativeInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+{
+    sal_Int32 nReadBytes = 0;
+    if( !mbEof )
+    {
+        sal_Int32 nRealBytes = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnLength - mnRelPos );
+        nReadBytes = mrInStrm.readData( orData, nRealBytes );
+        mnRelPos += nReadBytes;
+        mbEof = (nRealBytes < nBytes) || mrInStrm.isEof();
+    }
+    return nReadBytes;
+}
+
+sal_Int32 RelativeInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+{
+    sal_Int32 nReadBytes = 0;
+    if( !mbEof )
+    {
+        sal_Int32 nRealBytes = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnLength - mnRelPos );
+        nReadBytes = mrInStrm.readMemory( opMem, nRealBytes );
+        mnRelPos += nReadBytes;
+        mbEof = (nRealBytes < nBytes) || mrInStrm.isEof();
+    }
+    return nReadBytes;
+}
+
+void RelativeInputStream::skip( sal_Int32 nBytes )
+{
+    if( !mbEof )
+    {
+        sal_Int32 nSkipBytes = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnLength - mnRelPos );
+        mrInStrm.skip( nSkipBytes );
+        mnRelPos += nSkipBytes;
         mbEof = nSkipBytes < nBytes;
     }
 }

@@ -93,7 +93,7 @@ void DffStreamObject::implWriteExtHeader()
         case DFF_ID_SP:                 pcListName = "DFFSP-RECORD-INST";           break;  // shape type
         case DFF_ID_SPLITMENUCOLORS:    pcListName = "DFFSPLITMENUC-RECORD-INST";   break;  // number of colors
     }
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeHexItem( "instance", mnInstVer, pcListName );
     if( isContainer() ) writeDecItem( "container-size", mnRealSize );
 }
@@ -137,11 +137,11 @@ void DffStreamObject::implDumpRecordBody()
             sal_uInt32 nClusters = dumpDec< sal_uInt32 >( "id-cluster-count" );
             dumpDec< sal_uInt32 >( "shape-count" );
             dumpDec< sal_uInt32 >( "drawing-count" );
-            out().resetItemIndex( 1 );
-            TableGuard aTabGuard( out(), 15, 16 );
-            for( sal_uInt32 nCluster = 1; !in().isEof() && (nCluster < nClusters); ++nCluster )
+            mxOut->resetItemIndex( 1 );
+            TableGuard aTabGuard( mxOut, 15, 16 );
+            for( sal_uInt32 nCluster = 1; !mxStrm->isEof() && (nCluster < nClusters); ++nCluster )
             {
-                MultiItemsGuard aMultiGuard( out() );
+                MultiItemsGuard aMultiGuard( mxOut );
                 writeEmptyItem( "#cluster" );
                 dumpDec< sal_uInt32 >( "drawing-id" );
                 dumpHex< sal_uInt32 >( "next-free-id", "CONV-DEC" );
@@ -223,14 +223,14 @@ void DffStreamObject::dumpDffOpt()
 {
     sal_uInt16 nPropCount = getInst();
     PropInfoVector aPropInfos;
-    out().resetItemIndex();
-    for( sal_uInt16 nPropIdx = 0; !in().isEof() && (nPropIdx < nPropCount); ++nPropIdx )
+    mxOut->resetItemIndex();
+    for( sal_uInt16 nPropIdx = 0; !mxStrm->isEof() && (nPropIdx < nPropCount); ++nPropIdx )
     {
         sal_uInt16 nPropId = dumpDffOptPropHeader();
         sal_uInt16 nBaseId = nPropId & DFF_OPT_IDMASK;
-        sal_uInt32 nValue = in().readuInt32();
+        sal_uInt32 nValue = mxStrm->readuInt32();
 
-        IndentGuard aIndent( out() );
+        IndentGuard aIndent( mxOut );
         if( getFlag( nPropId, DFF_OPT_COMPLEX ) )
         {
             writeHexItem( "complex-size", nValue, "CONV-DEC" );
@@ -280,14 +280,14 @@ void DffStreamObject::dumpDffOpt()
         }
     }
 
-    out().resetItemIndex();
-    for( PropInfoVector::iterator aIt = aPropInfos.begin(), aEnd = aPropInfos.end(); !in().isEof() && (aIt != aEnd); ++aIt )
+    mxOut->resetItemIndex();
+    for( PropInfoVector::iterator aIt = aPropInfos.begin(), aEnd = aPropInfos.end(); !mxStrm->isEof() && (aIt != aEnd); ++aIt )
     {
-        out().startMultiItems();
+        mxOut->startMultiItems();
         writeEmptyItem( "#complex-data" );
         writeHexItem( "id", aIt->mnId, "DFFOPT-PROPERTY-NAMES" );
-        out().endMultiItems();
-        IndentGuard aIndent( out() );
+        mxOut->endMultiItems();
+        IndentGuard aIndent( mxOut );
         switch( aIt->meType )
         {
             case PROPTYPE_BINARY:
@@ -308,8 +308,8 @@ void DffStreamObject::dumpDffOpt()
 
 sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
 {
-    MultiItemsGuard aMultiGuard( out() );
-    TableGuard aTabGuard( out(), 11 );
+    MultiItemsGuard aMultiGuard( mxOut );
+    TableGuard aTabGuard( mxOut, 11 );
     writeEmptyItem( "#prop" );
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
 }

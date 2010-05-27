@@ -159,6 +159,9 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
+        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
+        if( xLockable.is() )
+            xLockable->removeActionLock();
     }
     catch( const Exception&  )
     {
@@ -389,6 +392,9 @@ Reference< XShape > Shape::createAndInsert(
             }
         }
 
+        ModelObjectHelper& rModelObjectHelper = rFilterBase.getModelObjectHelper();
+        const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
+
         LineProperties aLineProperties;
         aLineProperties.maLineFill.moFillType = XML_noFill;
         sal_Int32 nLinePhClr = -1;
@@ -402,19 +408,19 @@ Reference< XShape > Shape::createAndInsert(
             {
                 if( const LineProperties* pLineProps = pTheme->getLineStyle( pLineRef->mnThemedIdx ) )
                     aLineProperties.assignUsed( *pLineProps );
-                nLinePhClr = pLineRef->maPhClr.getColor( rFilterBase );
+                nLinePhClr = pLineRef->maPhClr.getColor( rGraphicHelper );
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
                 if( const FillProperties* pFillProps = pTheme->getFillStyle( pFillRef->mnThemedIdx ) )
                     aFillProperties.assignUsed( *pFillProps );
-                nFillPhClr = pFillRef->maPhClr.getColor( rFilterBase );
+                nFillPhClr = pFillRef->maPhClr.getColor( rGraphicHelper );
             }
 //            if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_fillRef ) )
 //            {
 //                if( const EffectProperties* pEffectProps = pTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
 //                    aEffectProperties.assignUsed( *pEffectProps );
-//                nEffectPhClr = pEffectRef->maPhClr.getColor( rFilterBase );
+//                nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
 //            }
         }
 
@@ -443,11 +449,11 @@ Reference< XShape > Shape::createAndInsert(
         // applying properties
         PropertySet aPropSet( xSet );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
-            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rFilterBase );
+            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rGraphicHelper );
         if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
-        aFillProperties.pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper(), FillProperties::DEFAULT_IDS, mnRotation, nFillPhClr );
-        aLineProperties.pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper(), LineProperties::DEFAULT_IDS, nLinePhClr );
+        aFillProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, FillProperties::DEFAULT_IDS, mnRotation, nFillPhClr );
+        aLineProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, LineProperties::DEFAULT_IDS, nLinePhClr );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
@@ -463,7 +469,7 @@ Reference< XShape > Shape::createAndInsert(
             aPropSet.setProperties( aShapeProperties );
 
         if( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
-            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
+            mpCustomShapePropertiesPtr->pushToPropSet( xSet, mxShape );
 
         // in some cases, we don't have any text body.
         if( getTextBody() )
