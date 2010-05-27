@@ -965,7 +965,7 @@ int _cdecl main( int argc, char *argv[] )
             {
                 ByteString sFileNameWithExt( sFileName );
                 sFileNameWithExt += ByteString( "." );
-                sFileNameWithExt += ByteString( (*iter).c_str() , (*iter).length() );
+                sFileNameWithExt += ByteString( (*iter).c_str() );
                 aIter.Extract( sFileNameWithExt );
             }
             if( bQuiet2 ){ printf("\n%d files found!\n",aIter.GetFileCnt());}

@@ -55,7 +55,7 @@ BOOL PFormEntrys::GetTransex3Text( ByteString &rReturn,
 {
     BOOL rc = GetText( rReturn , nTyp , nLangIndex , bDel );
     ByteString test( rReturn );
-    for( int idx = 0; idx < rReturn.Len(); idx++ )
+    for( USHORT idx = 0; idx < rReturn.Len(); idx++ )
     {
         if( rReturn.GetChar( idx ) == '\"' && ( idx-1 > 0 )  &&  rReturn.GetChar( idx-1 ) == '\\' )
         {
