@@ -304,7 +304,7 @@
                     <value>0</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Find Toolbar</value>
+                    <value xml:lang="en-US">Find</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
