@@ -50,7 +50,7 @@ LIB1FILES=	$(SLB)$/bootstrap.lib \
         $(SLB)$/regtypeprov.lib \
         $(SLB)$/typemgr.lib
 
-SHL1VERSIONMAP = bootstrap.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
@@ -75,7 +75,7 @@ LIB2FILES=	\
         $(SLB)$/typeconverter.lib \
         $(SLB)$/uriproc.lib 
 
-SHL2VERSIONMAP = stocservices.map
+SHL2VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 
 SHL2STDLIBS= \
         $(CPPULIB)		\
