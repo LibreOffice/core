@@ -919,6 +919,12 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     bool bCopyBookmarks = true;
     BOOL bStartIsTxtNode = 0 != pSttTxtNd;
 
+    // #i104585# copy outline num rule to clipboard (for ASCII filter)
+    if (pDoc->IsClipBoard() && GetOutlineNumRule())
+    {
+        pDoc->SetOutlineNumRule(*GetOutlineNumRule());
+    }
+
     // --> OD 2009-08-25 #i86492#
     // Correct the search for a previous list:
     // First search for non-outline numbering list. Then search for non-outline
