@@ -164,7 +164,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       mpPageObjectPainter(),
       mpSelectionPainter(),
       mpBackgroundPainter(
-          new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Background))),
+          new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background))),
       mpButtonBar(new ButtonBar(mrSlideSorter)),
       mpToolTip(new ToolTip(mrSlideSorter)),
       mbIsRearrangePending(true)
@@ -348,7 +348,7 @@ void SlideSorterView::HandleDataChangeEvent (void)
     ::boost::shared_ptr<BackgroundPainter> pPainter (
         ::boost::dynamic_pointer_cast<BackgroundPainter>(mpBackgroundPainter));
     if (pPainter)
-        pPainter->SetColor(mrSlideSorter.GetTheme()->GetColor(Theme::Background));
+        pPainter->SetColor(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background));
 
     RequestRepaint();
 }

@@ -162,7 +162,7 @@ void InsertionIndicatorOverlay::Create (
     aContent.SetOutputSizePixel(aIconSize);
 
     aContent.SetFillColor();
-    aContent.SetLineColor(pTheme->GetColor(Theme::PreviewBorder));
+    aContent.SetLineColor(pTheme->GetColor(Theme::Color_PreviewBorder));
     const Point aOffset = PaintRepresentatives(aContent, aPreviewSize, nOffset, rRepresentatives);
 
     PaintPageCount(aContent, nSelectionCount, aPreviewSize, aOffset);
@@ -290,7 +290,7 @@ void InsertionIndicatorOverlay::PaintPageCount (
 {
     // Paint the number of slides.
     ::boost::shared_ptr<view::Theme> pTheme (mrSlideSorter.GetTheme());
-    ::boost::shared_ptr<Font> pFont(Theme::GetFont(Theme::PageCountFont, rDevice));
+    ::boost::shared_ptr<Font> pFont(Theme::GetFont(Theme::Font_PageCount, rDevice));
     if (pFont)
     {
         ::rtl::OUString sNumber (::rtl::OUString::valueOf(nSelectionCount));
@@ -312,8 +312,8 @@ void InsertionIndicatorOverlay::PaintPageCount (
 
         // Paint background, border and text.
         static const sal_Int32 nBorder = 5;
-        rDevice.SetFillColor(pTheme->GetColor(Theme::Selection));
-        rDevice.SetLineColor(pTheme->GetColor(Theme::Selection));
+        rDevice.SetFillColor(pTheme->GetColor(Theme::Color_Selection));
+        rDevice.SetLineColor(pTheme->GetColor(Theme::Color_Selection));
         rDevice.DrawRect(GrowRectangle(aTextBox, nBorder));
 
         rDevice.SetFillColor();

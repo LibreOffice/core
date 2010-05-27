@@ -45,6 +45,7 @@ namespace sd { namespace slidesorter { namespace view {
 
 // Grays
 #define Black 0x000000
+#define Gray 0xc0c0c0
 #define White 0xffffff
 
 // Reds
@@ -123,15 +124,16 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maStrings[String_Command3] = String(SdResId(STRING_COMMAND3));
 
         maColor.resize(_ColorType_Size_);
-        maColor[Background] = maBackgroundColor;
-        maColor[PageBackground] = AirForceBlue;
-        maColor[ButtonBackground] = Black;
-        maColor[ButtonText] = White;
-        maColor[MouseOverColor] = gnMouseOverColor;
-        maColor[PageNumberBorder] = Azure;
-        maColor[PageNumberColor] = 0x0848a8f;
-        maColor[Selection] = StellaBlue;
-        maColor[PreviewBorder] = 0x949599;
+        maColor[Color_Background] = maBackgroundColor;
+        maColor[Color_PageBackground] = AirForceBlue;
+        maColor[Color_ButtonBackground] = Black;
+        maColor[Color_ButtonText] = Gray;
+        maColor[Color_ButtonTextHover] = White;
+        maColor[Color_MouseOverColor] = gnMouseOverColor;
+        maColor[Color_PageNumberBorder] = Azure;
+        maColor[Color_PageNumber] = 0x0848a8f;
+        maColor[Color_Selection] = StellaBlue;
+        maColor[Color_PreviewBorder] = 0x949599;
 
         maIntegerValues.resize(_IntegerValueType_Size_);
         maIntegerValues[Integer_ButtonCornerRadius] = 3;
@@ -158,7 +160,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
     maPageBackgroundColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
-    maColor[Background] = maBackgroundColor;
+    maColor[Color_Background] = maBackgroundColor;
 
     maGradients.resize(_GradientColorType_Size_);
 
@@ -280,13 +282,13 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
     switch (eType)
     {
-        case PageNumberFont:
+        case Font_PageNumber:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
             pFont->SetTransparent(TRUE);
             pFont->SetWeight(WEIGHT_BOLD);
             break;
 
-        case PageCountFont:
+        case Font_PageCount:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
             pFont->SetTransparent(TRUE);
             pFont->SetWeight(WEIGHT_NORMAL);
@@ -296,7 +298,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             }
             break;
 
-        case ButtonFont:
+        case Font_Button:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
             pFont->SetTransparent(TRUE);
             pFont->SetWeight(WEIGHT_BOLD);

@@ -67,24 +67,25 @@ public:
     //    BitmapEx GetInsertIndicatorIcon (void) const;
 
     enum FontType {
-        PageNumberFont,
-        PageCountFont,
-        ButtonFont
+        Font_PageNumber,
+        Font_PageCount,
+        Font_Button
     };
     static ::boost::shared_ptr<Font> GetFont (
         const FontType eType,
         const OutputDevice& rDevice);
 
     enum ColorType {
-        Background,
-        PageBackground,
-        ButtonBackground,
-        ButtonText,
-        MouseOverColor,
-        PageNumberBorder,
-        PageNumberColor,
-        Selection,
-        PreviewBorder,
+        Color_Background,
+        Color_PageBackground,
+        Color_ButtonBackground,
+        Color_ButtonText,
+        Color_ButtonTextHover,
+        Color_MouseOverColor,
+        Color_PageNumberBorder,
+        Color_PageNumber,
+        Color_Selection,
+        Color_PreviewBorder,
         _ColorType_Size_
     };
     ColorData GetColor (const ColorType eType);

@@ -115,7 +115,7 @@ PageObjectPainter::PageObjectPainter (
       mpCache(rSlideSorter.GetView().GetPreviewCache()),
       mpProperties(rSlideSorter.GetProperties()),
       mpTheme(rSlideSorter.GetTheme()),
-      mpPageNumberFont(Theme::GetFont(Theme::PageNumberFont, *rSlideSorter.GetContentWindow())),
+      mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rSlideSorter.GetContentWindow())),
       mpShadowPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_RawShadow))),
       maNormalBackground(),
       maSelectionBackground(),
@@ -324,7 +324,7 @@ void PageObjectPainter::PaintPageNumber (
     const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNum() - 1) / 2 + 1);
     const String sPageNumber (String::CreateFromInt32(nPageNumber));
     rDevice.SetFont(*mpPageNumberFont);
-    rDevice.SetTextColor(Color(mpTheme->GetColor(Theme::PageNumberColor)));
+    rDevice.SetTextColor(Color(mpTheme->GetColor(Theme::Color_PageNumber)));
     rDevice.DrawText(aBox, sPageNumber, TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
 }
 

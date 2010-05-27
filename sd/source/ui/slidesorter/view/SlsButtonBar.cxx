@@ -1168,7 +1168,10 @@ void TextButton::Paint (
     if (mbIsActive)
     {
         // Paint text over the button background.
-        rDevice.SetTextColor(rpTheme->GetColor(Theme::ButtonText));
+        if (meState == State_Normal)
+            rDevice.SetTextColor(rpTheme->GetColor(Theme::Color_ButtonText));
+        else
+            rDevice.SetTextColor(rpTheme->GetColor(Theme::Color_ButtonTextHover));
         Rectangle aBox (maBoundingBox);
         aBox += aOffset;
         rDevice.DrawText(aBox, msText, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
