@@ -2984,7 +2984,6 @@ void WW8Export::ExportDocument_Impl()
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
 
-    SvStream* pOldStrm = &(Strm());         // JP 19.05.99: wozu das ???
     SvStorageStreamRef xWwStrm( GetWriter().GetStorage().OpenSotStream( aMainStg ) );
     SvStorageStreamRef xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
     xWwStrm->SetBufferSize( 32768 );
@@ -3004,7 +3003,7 @@ void WW8Export::ExportDocument_Impl()
         xDataStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     }
 
-    GetWriter().SetStrm( *xWwStrm );
+    GetWriter().SetStream( & *xWwStrm );
     pTableStrm = &xTableStrm;
     pDataStrm = &xDataStrm;
 
@@ -3026,7 +3025,8 @@ void WW8Export::ExportDocument_Impl()
     {
         bEncrypt =true;
 
-        GetWriter().SetStrm( *aTempMain.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE ) );
+        GetWriter().SetStream(
+            aTempMain.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE ) );
 
         pTableStrm = aTempTable.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
@@ -3178,7 +3178,7 @@ void WW8Export::ExportDocument_Impl()
     delete pPiece;
     delete pDop;
     delete pFib;
-    GetWriter().SetStrm( *pOldStrm );
+    GetWriter().SetStream( 0 );
 
 
     xWwStrm->SetBufferSize( 0 );

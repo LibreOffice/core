@@ -38,7 +38,7 @@
 #include <IDocumentListItems.hxx>
 // <--
 // --> OD 2010-01-13 #b6912256#
-#include <svl/svstdarr.hxx>
+//#include <svtools/svstdarr.hxx>
 #include <doc.hxx>
 // <--
 
