@@ -203,6 +203,7 @@ sub get_registry_value
     if ( $registry->{'Value'} ) { $value = $registry->{'Value'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
+    $value =~ s/\\\\\s*$/\\/g;  # making "\\" at end of value to "\"
     $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
     $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
 
@@ -224,6 +225,7 @@ sub get_registry_val64
     if ( $registry->{'Val64'} ) { $value = $registry->{'Val64'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
+    $value =~ s/\\\\\s*$/\\/g;  # making "\\" at end of value to "\"
     $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
     $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
 

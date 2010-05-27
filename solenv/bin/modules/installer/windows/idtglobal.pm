@@ -1596,7 +1596,8 @@ sub include_subdirname_into_directory_table
             {
                 my $newuniquename = "sub" . $subdir;
                 $newdir = $newuniquename;
-                my $newparent = $parent;
+                # my $newparent = $parent;
+                my $newparent = "INSTALLLOCATION";
                 my $newname = $name . "\:" . $subdir;
                 my $newline =
                 $line = "$newuniquename\t$newparent\t$newname\n";

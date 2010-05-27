@@ -380,6 +380,8 @@ BEGIN
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;
+    $vendordirectory = "";
+    $vendordirectoryset = 0;
     $officeinstalldirectory = "";
     $officeinstalldirectoryset = 0;
     $basisinstalldirectory = "";

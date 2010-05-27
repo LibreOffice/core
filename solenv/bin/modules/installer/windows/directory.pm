@@ -138,7 +138,34 @@ sub create_unique_directorynames
             $installer::globals::installlocationdirectoryset = 1;
             if ( $installer::globals::installlocationdirectory =~ /oracle_/i ) { $installer::globals::sundirexists = 1; }
         }
+
+        # setting the sundirectory
+        if ( $styles =~ /\bSUNDIRECTORY\b/ )
+        {
+            if ( $installer::globals::vendordirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag SUNDIRECTORY alread set: \"$installer::globals::vendordirectory\".", "create_unique_directorynames"); }
+            $installer::globals::vendordirectory = $uniquename;
+            $installer::globals::vendordirectoryset = 1;
+        }
     }
+}
+
+#####################################################
+# Adding ":." to selected default directory names
+#####################################################
+
+sub check_sourcedir_addon
+{
+    my ( $onedir, $allvariableshashref ) = @_;
+
+    if (($installer::globals::addchildprojects) ||
+        ($installer::globals::patch) ||
+        ($installer::globals::languagepack) ||
+        ($allvariableshashref->{'CHANGETARGETDIR'}))
+    {
+        my $sourcediraddon = "\:\.";
+        $onedir->{'defaultdir'} = $onedir->{'defaultdir'} . $sourcediraddon;
+    }
+
 }
 
 #####################################################
@@ -148,7 +175,7 @@ sub create_unique_directorynames
 
 sub set_installlocation_directory
 {
-    my ( $directoryref ) = @_;
+    my ( $directoryref, $allvariableshashref ) = @_;
 
     if ( ! $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION not set!", "set_installlocation_directory"); }
 
@@ -159,16 +186,12 @@ sub set_installlocation_directory
         if ( $onedir->{'uniquename'} eq $installer::globals::installlocationdirectory )
         {
             $onedir->{'uniquename'} = "INSTALLLOCATION";
+            check_sourcedir_addon($onedir, $allvariableshashref);
+        }
 
-            if (($installer::globals::addchildprojects) ||
-                ($installer::globals::patch) ||
-                ($installer::globals::languagepack) ||
-                ($allvariableshashref->{'CHANGETARGETDIR'}))
-            {
-
-                my $sourcediraddon = "\:\.";
-                $onedir->{'defaultdir'} = $onedir->{'defaultdir'} . $sourcediraddon;
-            }
+        if ( $onedir->{'uniquename'} eq $installer::globals::vendordirectory )
+        {
+            check_sourcedir_addon($onedir, $allvariableshashref);
         }
 
         if ( $onedir->{'uniqueparentname'} eq $installer::globals::installlocationdirectory )
@@ -415,7 +438,7 @@ sub create_directory_table
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
     create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
-    set_installlocation_directory($directoryref);
+    set_installlocation_directory($directoryref, $allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_3.log", $directoryref); }
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
     add_root_directories(\@directorytable, $allvariableshashref);
