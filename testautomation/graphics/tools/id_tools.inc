@@ -320,56 +320,57 @@ end function
 function hCallExport ( HyWhatsYourName as String , sFilter as String, optional bSelection as boolean ) as Boolean
    hCallExport = TRUE
    Printlog "Will try to select export filter: '" + sFilter + "'" + ""
-   try
-      FileExport
-   catch
-      Sleep 10
-      Warnlog "It takes to much time to export the graphic (>10 sec.). Please check the problem, maybe it's a bug!"
-      FileExport
-   endcatch
 
-   Sleep (3)
+   if ( hUseAsyncSlot( "FileExport" ) = -1 ) then
+       warnlog( "Slot <FileExport> is blocked" )
+       hCallExport() = false
+       exit function
+   endif
+
    Kontext "ExportierenDlg"
-   try
-      Dateityp.Select sFilter
-   catch
-      Warnlog "'" + sFilter + "' is missing!"
-      dim iAll, counter as integer
-      iAll = Dateityp.GetItemCount
-      printlog "   List of entries in the menu:"
-      for counter = 1 to iAll
-          printlog "   " + counter + "/" + iAll + ": " + Dateityp.GetItemText(counter)
-      next counter
-      hCallExport = FALSE
-      ExportierenDlg.Cancel
-      exit function
-   endcatch
-   if ((IsMissing(bSelection) = FALSE) AND (bSelection = TRUE)) then
-      sleep 2
-      Selektion.Check
-   else
-      if (Selektion.isEnabled) then
-         Selektion.UnCheck
-      endif
-   endif
+   if ( ExportierenDlg.exists( 3 ) ) then
+       try
+          Dateityp.Select sFilter
+       catch
+          Warnlog "'" + sFilter + "' is missing!"
+          dim iAll, counter as integer
+          iAll = Dateityp.GetItemCount
+          printlog "   List of entries in the menu:"
+          for counter = 1 to iAll
+              printlog "   " + counter + "/" + iAll + ": " + Dateityp.GetItemText(counter)
+          next counter
+          hCallExport = FALSE
+          ExportierenDlg.Cancel
+          exit function
+       endcatch
+       if ((IsMissing(bSelection) = FALSE) AND (bSelection = TRUE)) then
+          sleep 2
+          Selektion.Check
+       else
+          if (Selektion.isEnabled) then
+             Selektion.UnCheck
+          endif
+       endif
 
-   if AutomatischeDateinamenserweiterung.Exists then
-       QAErrorLog "OBSOLETE: Automatic file extension check-box in file dialog will be removed soon!"
-       AutomatischeDateinamenserweiterung.check
-   endif
+       if AutomatischeDateinamenserweiterung.Exists then
+           AutomatischeDateinamenserweiterung.check
+       endif
 
-   Dateiname.SetText ( HyWhatsYourName )
-   sleep 2
-   Speichern.Click
-   sleep 2
-   kontext "AlienWarning"
-      if AlienWarning.exists(5) then
-         warnlog "#i41983# Alien Warning on export not allowed"
-         AlienWarning.OK
-      endif
-   Kontext "Active"
-   if Active.Exists then Active.Yes
-   Sleep 3
+       Dateiname.SetText ( HyWhatsYourName )
+       Speichern.Click
+
+       kontext "AlienWarning"
+          if AlienWarning.exists(5) then
+             warnlog "#i41983# Alien Warning on export not allowed"
+             AlienWarning.OK
+          endif
+       Kontext "Active"
+       hCloseDialog( Active, "yes,optional" )
+    else
+        warnlog( "<ExportierenDlg> not open" )
+        hCallExport() = false
+    endif
+
 end function
 
 '-------------------------------------------------------------------------

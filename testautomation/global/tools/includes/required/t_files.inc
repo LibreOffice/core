@@ -598,7 +598,7 @@ function hFileReOpen( cFile as string ) as boolean
         if ( FileExists( cFile ) ) then
             hFileOpen( cFile )
         else
-            warnlog( CFN & "File does not exist: " & sFile )
+            warnlog( CFN & "File does not exist: " & cFile )
         endif
     endif
 

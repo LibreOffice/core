@@ -86,8 +86,10 @@ testcase tEPS
             Active.OK
         end if
     end if
-    printlog " now save it realy and load the file afterwards"
-    if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
+
+    printlog( "Save the file" )
+    if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
+
         Kontext "EPSOptionen"
         if ( EPSOptionen.Exists( 2 ) ) then
             printlog "TextEinstellungen.select 2"
@@ -95,7 +97,7 @@ testcase tEPS
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -125,10 +127,10 @@ testcase tPCT
     sDocument = gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString
     hFileOpen( sDocument )
 
-    if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
+    if ( hCallExport( OutputGrafikTBO , sFilter ) ) then
 
         Kontext "PICTOptionen"
-        if PICTOptionen.Exists (2) then
+        if ( PICTOptionen.Exists( 2 ) ) then
 
             printlog "check if all properties have the right count, and depend on each other"
             Original.Check
@@ -142,7 +144,7 @@ testcase tPCT
             hCloseDialog( PICTOptionen, "cancel" )
 
             if ( FileExists( OutputGrafikTBO + sExt ) ) then
-                warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
+                warnlog( "#i35177# - dialog <PictOptions> canceled, still the file was saved" )
             endif
         else
             Warnlog "No  '" + sFilter + "' -Dialog!"
@@ -161,7 +163,7 @@ testcase tPCT
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
 
         Kontext "PICTOptionen"
-        if PICTOptionen.Exists (2) then
+        if ( PICTOptionen.Exists( 2 ) ) then
             Groesse.Check
             Breite.Less
             Hoehe.More
@@ -170,14 +172,13 @@ testcase tPCT
 
         sOutputFile = OutputGrafikTBO+sExt
 
-        i=0
-        while( ( not FileExists( sOutputFile ) ) AND ( i < FILE_WRITE_TIMEOUT ) )
-            inc(i)
-            wait( 1000 )
-        wend
+        if ( hWaitForOutputFile( sOutputFile ) ) then
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( sOutputFile ) ' local helper function, see bottom of this file
+            printlog( "Save image, close file and re-insert graphics into new file" )
+            hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
+        else
+            warnlog( "File was not saved: " & sOutputFile )
+        endif
 
     endif
 
@@ -204,14 +205,13 @@ testcase tPCT
         endif
 
         sOutputFile = OutputGrafikTBO + "1" + sExt
-        i=0
-        while( ( NOT FileExists( sOutputFile ) ) AND ( i < FILE_WRITE_TIMEOUT ) )
-            inc( i )
-            wait( 1000 )
-        wend
+        if ( hWaitForOutputFile( sOutputFile ) ) then
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( sOutputFile ) ' local helper function, see bottom of this file
+            printlog( "Save image, close file and re-insert graphics into new file" )
+            hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
+        else
+            warnlog( "File was not saved: " & sOutputFile )
+        endif
 
         bTemp = FALSE
         fGetSizeXY sx1, sY, bTemp
@@ -240,11 +240,9 @@ testcase tPCT
 
         sOutputFile = OutputGrafikTBO + "2" + sExt
 
-        i=0
-        while( ( not FileExists( sOutputFile ) ) AND ( i < FILE_WRITE_TIMEOUT ) )
-            inc( i )
-            wait( 1000 )
-        wend
+        if ( not hWaitForOutputFile( sOutputFile ) ) then
+            warnlog( "File was not saved: " & sOutputFile )
+        endif
 
         printlog( "Reload file if it exists. Warn if not" )
         hFileReOpen( sOutputFile )
@@ -254,7 +252,7 @@ testcase tPCT
         ContextOriginalSize
         bTemp = FALSE
         fGetSizeXY( sx1, sY, bTemp )
-        if (not bTemp ) then warnlog "Selected original size NOT OK :-("
+        if ( not bTemp ) then warnlog "Selected original size NOT OK :-("
     endif
 
     if ( hCallExport( OutputGrafikTBO + "3", sFilter, TRUE ) ) then
@@ -304,7 +302,7 @@ testcase tPBM
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -329,7 +327,7 @@ testcase tPGM
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
 
     endif
 
@@ -355,7 +353,7 @@ testcase tPPM
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -373,7 +371,7 @@ testcase tRAS
     printlog "Save it"
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -394,7 +392,7 @@ testcase tTIFF
     printlog "Save it"
     if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -412,7 +410,7 @@ testcase tXPM
     printlog "save it"
     if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -438,7 +436,7 @@ testcase tGIF
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -464,7 +462,7 @@ testcase tJPEG
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
-        hWriteInsertGraphics( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
     call hCloseDocument
@@ -472,7 +470,7 @@ testcase tJPEG
 endcase 'tJPEG
 '-------------------------------------------------------------------------
 
-function hWriteInsertGraphics( sOutputFile as string )
+function hInsertGraphicsToNewFile( sOutputFile as string )
 
     if ( not FileExists( sOutputFile ) ) then
         warnlog( "File not saved: " & sOutputFile )
@@ -480,5 +478,32 @@ function hWriteInsertGraphics( sOutputFile as string )
         hFileReOpen( "" )
         Call hGrafikEinfuegen ( sOutputFile )
     endif
+
+end function
+
+'*******************************************************************************
+
+function hWaitForOutputFile( sOutputFile as string ) as boolean
+
+    const FILE_WRITE_TIMEOUT = 30
+    dim iWait as integer : iWait = 0
+
+    for iWait = 1 to FILE_WRITE_TIMEOUT
+
+        ' File found
+        if ( FileExists( sOutputFile ) ) then
+            hWaitForOutputFile() = true
+            exit function
+        endif
+
+        ' Timeout
+        if ( iWait = FILE_WRITE_TIMEOUT ) then
+            hWaitForOutputFile() = false
+            exit function
+        endif
+
+        wait( 1000 )
+
+    next iWait
 
 end function
