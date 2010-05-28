@@ -113,7 +113,43 @@ end sub
 '
 '-------------------------------------------------------------------------------
 '
+function hEnableDocumentEditMode() as boolean
+
+    hEnableDocumentEditMode() = false
+
+    wait( 1000 )
+
+    try
+        kontext "Standardbar"
+        if ( Bearbeiten.getState( 2 ) <> 1 ) then
+            Bearbeiten.click()
+
+            kontext "Active"
+            if ( Active.exists( 2 ) ) then
+                printlog( "Messagebox: " & Active.getText() )
+                hCloseDialog( Active, "yes" )
+            endif
+
+            kontext "Standardbar"
+            if ( Bearbeiten.getState( 2 ) = 1 ) then 
+                hEnableDocumentEditMode() = true
+                waitslot()
+            endif
+         else
+             warnlog( "Document is already in edit-mode" )
+         endif
+     catch
+        warnlog( "Failed to access <Bearbeiten> button on standardbar" )
+     endcatch
+
+end function
+
+'*******************************************************************************
+
 function sMakeReadOnlyDocumentEditable() as boolean
+
+    sMakeReadOnlyDocumentEditable() = hEnableDocumentEditMode()
+    exit function
 
     ' Function returns TRUE if document has been made editable and FALSE if
     ' no action was required (that is: Document was not read-only)

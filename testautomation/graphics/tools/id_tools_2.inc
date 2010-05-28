@@ -324,7 +324,7 @@ end Sub
 '-------------------------------------------------------------------------------
 sub SetKontextApplication
     
-    hSetDocumentContext() ' Global routinśe exists
+    hSetDocumentContext() ' Global routine exists
 
 end sub
 
