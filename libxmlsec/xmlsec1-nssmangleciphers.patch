@@ -1,5 +1,5 @@
---- misc/xmlsec1-1.2.12/src/nss/ciphers.c	2009-09-10 05:16:27.000000000 -0400
-+++ misc/build/xmlsec1-1.2.12/src/nss/ciphers.c	2009-09-10 06:59:39.000000000 -0400
+--- misc/xmlsec1-1.2.14/src/nss/ciphers.c	2009-09-10 05:16:27.000000000 -0400
++++ misc/build/xmlsec1-1.2.14/src/nss/ciphers.c	2009-09-10 06:59:39.000000000 -0400
 @@ -11,180 +11,421 @@
  
  #include <string.h>
