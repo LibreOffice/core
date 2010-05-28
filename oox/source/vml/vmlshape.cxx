@@ -317,7 +317,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
 
     PropertyMap aPropMap;
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
-    maTypeModel.maFillModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
+    maTypeModel.maFillModel.pushToPropMap( aPropMap, mrDrawing.getFilter(), rModelObjectHelper, rGraphicHelper );
 
     PropertySet aPropSet( rxShape );
     aPropSet.setProperties( aPropMap );

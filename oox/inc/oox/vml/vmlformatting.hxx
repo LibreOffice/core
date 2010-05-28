@@ -34,6 +34,7 @@ namespace oox {
     class GraphicHelper;
     class ModelObjectHelper;
     class PropertyMap;
+    namespace core { class FilterBase; }
 }
 
 namespace oox {
@@ -177,6 +178,7 @@ struct FillModel
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
+                            ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjectHelper,
                             const GraphicHelper& rGraphicHelper ) const;
 };
