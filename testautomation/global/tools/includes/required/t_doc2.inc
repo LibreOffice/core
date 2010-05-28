@@ -136,7 +136,7 @@ function hEnableDocumentEditMode() as boolean
                 waitslot()
             endif
          else
-             warnlog( "Document is already in edit-mode" )
+             printlog( "Document is already in edit-mode, no action taken" )
          endif
      catch
         warnlog( "Failed to access <Bearbeiten> button on standardbar" )
