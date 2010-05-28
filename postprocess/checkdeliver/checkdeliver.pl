@@ -95,9 +95,6 @@ sub get_globals
     if ( ! ( $platform && $srcrootdir && $solverdir ) ) {
         die "Error: please set environment\n";
     }
-    if ( ! -d $srcrootdir ) {
-        die "Error: cannot find source directory '$srcrootdir'\n";
-    }
     if ( ! -d $solverdir ) {
         die "Error: cannot find solver directory '$solverdir'\n";
     }
