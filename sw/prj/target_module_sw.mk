@@ -27,7 +27,8 @@
 
 $(eval $(call gb_Module_Module,sw,\
     $(call gb_AllLangResTarget_get_target,sw) \
-    $(call gb_Library_get_target,msword) \
+))
+#	$(call gb_Library_get_target,msword) \
     $(call gb_Library_get_target,sw) \
     $(call gb_Library_get_target,swd) \
     $(call gb_Library_get_target,swui) \
@@ -35,10 +36,11 @@ $(eval $(call gb_Module_Module,sw,\
     $(call gb_Package_get_target,sw_uiconfig) \
     $(call gb_Package_get_target,sw_xml) \
     $(call gb_Package_get_target,sw_misc) \
-))
 
 $(eval $(call gb_Module_read_includes,sw,\
-    lib_sw \
+    res_sw \
+))
+#	lib_sw \
     lib_swd \
     lib_swui \
     lib_msword \
@@ -46,5 +48,3 @@ $(eval $(call gb_Module_read_includes,sw,\
     package_misc \
     package_uiconfig \
     package_xml \
-    res_sw \
-))
