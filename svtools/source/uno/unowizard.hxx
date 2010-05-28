@@ -77,6 +77,7 @@ namespace svt { namespace uno
         // ::com::sun::star::ui::dialogs::XWizard
         virtual ::rtl::OUString SAL_CALL getHelpURL() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setHelpURL( const ::rtl::OUString& _helpurl ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getDialogWindow() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, ::sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (::com::sun::star::uno::RuntimeException);

@@ -72,6 +72,7 @@ namespace svt { namespace uno
     using ::com::sun::star::ui::dialogs::XWizardPage;
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::util::InvalidStateException;
+    using ::com::sun::star::awt::XWindow;
     /** === end UNO using === **/
     namespace WizardButton = ::com::sun::star::ui::dialogs::WizardButton;
 
@@ -291,6 +292,16 @@ namespace svt { namespace uno
             m_sHelpURL = i_HelpURL;
         else
             m_pDialog->SetSmartHelpId( SmartId( i_HelpURL ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XWindow > SAL_CALL Wizard::getDialogWindow() throw (RuntimeException)
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        ENSURE_OR_RETURN( m_pDialog, "Wizard::getDialogWindow: illegal call (execution did not start, yet)!", NULL );
+        return Reference< XWindow >( m_pDialog->GetComponentInterface(), UNO_QUERY );
     }
 
     //------------------------------------------------------------------------------------------------------------------
