@@ -348,7 +348,7 @@ namespace svt { namespace uno
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
-        ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::updateTravelUI: invalid dialog implementation!" );
+        ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::enablePage: invalid dialog implementation!" );
 
         if ( !pWizardImpl->knowsPage( i_PageID ) )
             throw NoSuchElementException( ::rtl::OUString(), *this );
