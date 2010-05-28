@@ -54,6 +54,7 @@ class WW8TableNodeInfoInner
     sal_uInt32 mnRow;
     bool mbEndOfLine;
     bool mbEndOfCell;
+    bool mbFirstInTable;
     const SwTableBox * mpTableBox;
     const SwTable * mpTable;
 
@@ -68,6 +69,7 @@ public:
     void setRow(sal_uInt32 nRow);
     void setEndOfLine(bool bEndOfLine);
     void setEndOfCell(bool bEndOfCell);
+    void setFirstInTable(bool bFirstInTable);
     void setTableBox(const SwTableBox * pTableBox);
     void setTable(const SwTable * pTable);
 
@@ -76,6 +78,7 @@ public:
     sal_uInt32 getRow() const;
     bool isEndOfCell() const;
     bool isEndOfLine() const;
+    bool isFirstInTable() const;
     const SwTableBox * getTableBox() const;
     const SwTable * getTable() const;
 
@@ -105,6 +108,7 @@ public:
     void setDepth(sal_uInt32 nDepth);
     void setEndOfLine(bool bEndOfLine);
     void setEndOfCell(bool bEndOfCell);
+    void setFirstInTable(bool bFirstInTable);
     void setTableBox(const SwTableBox *pTableBox);
     void setTable(const SwTable * pTable);
     void setCell(sal_uInt32 nCell);
@@ -115,6 +119,7 @@ public:
     sal_uInt32 getDepth() const;
     bool isEndOfLine() const;
     bool isEndOfCell() const;
+    bool isFirstInTable() const;
     const SwNode * getNode() const;
     const SwTableBox * getTableBox() const;
     const SwTable * getTable() const;
@@ -137,10 +142,18 @@ struct hashNode
     { return reinterpret_cast<size_t>(pNode); }
 };
 
+struct hashTable
+{
+    size_t operator()(const SwTable * pTable) const
+    { return reinterpret_cast<size_t>(pTable); }
+};
+
 class WW8TableInfo
 {
     typedef hash_map<const SwNode *, WW8TableNodeInfo::Pointer_t, hashNode > Map_t;
     Map_t mMap;
+    typedef hash_map<const SwTable *, const SwNode *, hashTable > FirstInTableMap_t;
+    FirstInTableMap_t mFirstInTableMap;
 
     WW8TableNodeInfo *
     processTableLine(const SwTable * pTable,
@@ -180,6 +193,7 @@ public:
     void processSwTable(const SwTable * pTable);
     WW8TableNodeInfo::Pointer_t getTableNodeInfo(const SwNode * pNode);
     const SwNode * getNextNode(const SwNode * pNode);
+    const WW8TableNodeInfo * getFirstTableNodeInfo() const;
 };
 
 }

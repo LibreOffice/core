@@ -47,6 +47,7 @@ WW8TableNodeInfoInner::WW8TableNodeInfoInner(WW8TableNodeInfo * pParent)
 , mnRow(0)
 , mbEndOfLine(false)
 , mbEndOfCell(false)
+, mbFirstInTable(false)
 , mpTableBox(NULL)
 , mpTable(NULL)
 {
@@ -79,6 +80,11 @@ void WW8TableNodeInfoInner::setEndOfLine(bool bEndOfLine)
 void WW8TableNodeInfoInner::setEndOfCell(bool bEndOfCell)
 {
     mbEndOfCell = bEndOfCell;
+}
+
+void WW8TableNodeInfoInner::setFirstInTable(bool bFirstInTable)
+{
+    mbFirstInTable = bFirstInTable;
 }
 
 void WW8TableNodeInfoInner::setTableBox(const SwTableBox * pTableBox)
@@ -114,6 +120,11 @@ bool WW8TableNodeInfoInner::isEndOfCell() const
 bool WW8TableNodeInfoInner::isEndOfLine() const
 {
     return mbEndOfLine;
+}
+
+bool WW8TableNodeInfoInner::isFirstInTable() const
+{
+    return mbFirstInTable;
 }
 
 const SwNode * WW8TableNodeInfoInner::getNode() const
@@ -227,6 +238,17 @@ void WW8TableNodeInfo::setEndOfCell(bool bEndOfCell)
 #ifdef DEBUG
     ::std::clog << "<endOfCell depth=\"" << mnDepth << "\">"
     << toString() << "</endOfCell>" << ::std::endl;
+#endif
+}
+
+void WW8TableNodeInfo::setFirstInTable(bool bFirstInTable)
+{
+    WW8TableNodeInfoInner::Pointer_t pInner = getInnerForDepth(mnDepth);
+    pInner->setFirstInTable(bFirstInTable);
+
+#ifdef DEBUG
+    ::std::clog << "<firstInTable depth=\"" << mnDepth << "\">"
+    << toString() << "</firstInTable>" << ::std::endl;
 #endif
 }
 
@@ -590,6 +612,16 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
 
     pNodeInfo->setCell(nCell);
     pNodeInfo->setRow(nRow);
+
+    if (pNode->IsTxtNode())
+    {
+        FirstInTableMap_t::const_iterator aIt = mFirstInTableMap.find(pTable);
+        if (aIt == mFirstInTableMap.end())
+        {
+            mFirstInTableMap[pTable] = pNode;
+            pNodeInfo->setFirstInTable(true);
+        }
+    }
 
 #ifdef DEBUG
     ::std::clog << pNodeInfo->toString() << ::std::endl;
