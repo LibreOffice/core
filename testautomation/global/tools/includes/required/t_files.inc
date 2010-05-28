@@ -31,199 +31,125 @@
 '*
 '\******************************************************************************
 
-function hGrafikEinfuegen  ( Grafik$ ) as Boolean
-    '/// hGrafikEinfuegen hGraphicInsert
-    '/// A graphic will be inserted (not linked).
-    '/// <u>Input</u>: Filename with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the graphic could be inserted or not.
+function hGrafikEinfuegen( cFile as string ) as Boolean
 
-    Dim DieDatei as String
-    Dim IsActive as Boolean
-
-    DieDatei = ConvertPath ( Grafik$ )
-
-    InsertGraphicsFromFile
-    WaitSlot()
-
-    Kontext
-    If Active.Exists(1) then
-        warnlog "  Hinweis: " & Active.GetText
-        Active.Ok
-    End If
-
-
-    Kontext "GrafikEinfuegenDlg"
-    if ( GrafikEinfuegenDlg.exists( 2 ) ) then
-
-        Vorschau.Uncheck
-        if gApplication <> "HTML" then
-            Verknuepfen.UnCheck
-        end if
-
-        Dateiname.SetText DieDatei
-        DateiTyp.Select 1                               ' set the filter to 'all formats'
-        Oeffnen.Click
-
-        Kontext "Active"
-        if Active.Exists(2) then
-            Warnlog "  Hinweis: " & Active.GetText
-            try
-                Active.OK
-            catch
-                try
-                    Active.Yes
-                catch
-                    Active.Cancel
-                endcatch
-            endcatch
-            Kontext "GrafikEinfuegenDlg"
-            if GrafikEinfuegenDlg.Exists then
-                GrafikEinfuegenDlg.Cancel
-                GarfikEinfuegenDlg.notExists( 4 )
-            endif
-        else
-            hGrafikEinfuegen = IsImageLoaded
-        end if
-    else
-        warnlog( "Insert graphics dialog not open" )
-    endif
+    hGrafikEinfuegen() = hInsertGraphic( cFile, "Static" )
+    exit function
     
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function hGrafikVerknuepftEinfuegen  ( Grafik$ ) as Boolean
-    '/// hGrafikEinfuegenEinfuegen hGraphicInsertLinked
-    '/// A graphic will be inserted <b>LINKED</b>
-    '/// <u>Input</u>: Filename with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the graphic could be inserted or not.
-    Dim DieDatei as String
-    Dim IsActive as Boolean
 
-    DieDatei = ConvertPath ( Grafik$ )
+'*******************************************************************************
 
-    InsertGraphicsFromFile
-    WaitSlot()
+function hGrafikVerknuepftEinfuegen( cFile as string ) as Boolean
 
-    Kontext
-    If Active.Exists(1) then
-        warnlog "  Hinweis: " & Active.GetText
-        Active.Ok
-    End If
-    Kontext "GrafikEinfuegenDlg"
-    if ( GrafikEinfuegenDlg.exists( 1 ) ) then
+    hGrafikVerknuepftEinfuegen() = hInsertGraphic( cFile, "Linked" )
+    exit function
 
-        Vorschau.UnCheck
-        if gApplication <> "HTML" AND gApplication <> "HTML" then
-            Verknuepfen.Check
-        end if
-
-        Dateiname.SetText DieDatei
-        DateiTyp.Select 1                               ' set the filter to 'all formats'
-        Oeffnen.Click
-
-        Kontext "Active"
-        if Active.Exists(2) then
-            Warnlog "  Hinweis: " + Active.GetText
-            try
-                Active.OK
-            catch
-                Active.Yes
-            endcatch
-            Kontext "GrafikEinfuegenDlg"
-            if GrafikEinfuegenDlg.Exists then
-                GrafikEinfuegenDlg.Cancel
-            endif
-        else
-            hGrafikVerknuepftEinfuegen = IsImageLoaded
-        end if
-    else
-        'GrafikEinfuegenDlg not open
-    endif
 end function
 
-'
-'-------------------------------------------------------------------------------
-'
-function hIsNamedDocLoaded (ShouldFile as String, optional bSilent as boolean) as Boolean
-    dim sTemp as string
-    '/// hIsNamedDocLoaded ///'
-    '/// !fails always if a template is loaded, because you have to set a new filename in the save-dialog -> not usable in this case ! ///'
-    '/// Input: name of loaded file; Output: True/False ///'
-    '///+' if a doc got loaded, the filename in a 'SaveAs' Dlg is different from "" ///
-    '///+' usually the file name of the loaded document with an changed extension chosen from SO ///
+'*******************************************************************************
 
-    if (isMissing(bSilent)) then
-        bSilent = False
+function hInsertGraphic( byval cFile as string, byval cMode as string ) as boolean
+
+    ' Insert a graphic file to the current document either linked or static
+    ' cFile: Fully qualified path to the file to be inserted
+    ' cMode: Supply "Linked" to link, empty string or anything else is static
+
+    ' In difference to the older functions (GrafikEinfuegen etc.) this function
+    ' does provide a working returnvalue and does not secretly hide warnings and
+    ' errors. It does not set the file type.
+
+    ' Make hFileWait() complain about any messageboxes
+    const SHOW_WARNINGS = true
+
+    ' Find out whether we link the file or not
+    dim bLinked as boolean : bLinked = false
+    if ( lcase( cMode ) = "linked" ) then bLinked = true
+
+    hInsertGraphic() = false
+    cFile = convertpath( cFile )
+
+    if ( FileExists( cFile ) ) then
+        InsertGraphicsFromFile
+
+        kontext "GrafikEinfuegenDlg"
+        if ( GrafikEinfuegenDlg.exists( 3 ) ) then
+
+            Vorschau.unCheck()
+            if ( Verknuepfen.isEnabled() ) then
+                if ( bLinked ) then
+                    Verknuepfen.check()
+                else
+                    Verknuepfen.unCheck()
+                endif
+            endif
+
+            DateiName.setText( cFile )
+            Oeffnen.click()
+
+            if ( hFileWait( SHOW_WARNINGS ) >= 0 ) then hInsertGraphic() = true
+            
+        else
+            warnlog( "hInsertGraphic(): Failed to open <Insert Graphics> dialog" )
+        endif
+    else
+        warnlog( "hInsertGraphic(): File does not exist: " & cFile )
     endif
 
-    hIsNamedDocLoaded  = FALSE      ' Let's  start WorstCase :-(
-    FileSaveAs
-    Kontext "SpeichernDlg"
-    If DateiOhneExt(DateiExtract(Dateiname.GetSelText)) = DateiOhneExt(DateiExtract(ShouldFile)) Then
-        hIsNamedDocLoaded = True
-    Else
-        sTemp = left(right(ShouldFile,2),1) ' get the 2nd last character ' vor;dot;sti;pot;std;xlt
-        if (((sTemp="o") or (sTemp="t") or (sTemp="l")) and ((left(right(ShouldFile,4),1)=".") or (left(right(ShouldFile,5),1)="."))) then
-            hIsNamedDocLoaded = TRUE ' exception! for linux! and MS-Office Templates
-        else
-            if ((Dateiname.GetSeltext = "") and not bSilent) then
-                Warnlog "Default filename is empty!"+left(right(ShouldFile,3),1)
+end function
+
+'*******************************************************************************
+
+function hIsNamedDocLoaded( cFileName as string ) as boolean
+
+    ' Retrieve the current filename from the document properties - which in
+    ' comparision to the old approach to retrive the name from the file save
+    ' dialog - gives us the file including its extension. So we only need
+    ' to compare the last characters from a full path to be relatively
+    ' certain that we work with the correct file. There is some small margin of
+    ' error, though.
+
+    const CFN = "global::tools::includes::required::hIsNamedDocumentLoaded(): "
+    const RC_FAILURE = -1
+
+    dim cDocumentName as string
+    dim iDocumentNameLength as integer
+
+    hIsNamedDocLoaded() = false
+
+    if ( hUseAsyncSlot( "FileProperties" ) <> RC_FAILURE ) then
+
+        kontext "TabDokument"
+        if ( TabDokument.exists( 2 ) ) then
+
+            cDocumentName = DokumentName.getText()
+            iDocumentNameLength = len( cDocumentName )
+
+            if ( GVERBOSE ) then
+                printlog( CFN & "Expected file: " & cFileName )
+                printlog( CFN & "Current file.: " & cDocumentName )
+                printlog( CFN & "Comparing last " & iDocumentNameLength & " characters" )
             endif
+
+            if ( right( cFileName, iDocumentNameLength ) = cDocumentName ) then
+                if ( GVERBOSE ) then printlog( CFN & "This is the expected file" )
+                hIsNamedDocLoaded() = true
+            else
+                if ( GVERBOSE ) then printlog( CFN & "This is *not* the expected file" )
+            endif
+
+            hCloseDialog( TabDokument, "cancel" )
+        else
+            warnlog( CFN & "Unable to open dialog <Document Properties>" )
         endif
-    End If
-    SpeichernDlg.Cancel
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function IsImageLoaded
-
-' used by:
-' - hGrafikEinfuegen = IsImageLoaded
-' - hGrafikVerknuepftEinfuegen = IsImageLoaded
-
-    '/// IsImageLoaded
-    '/// Wait until images in document are loaded
-    Dim i% : Dim Herbert as Boolean
-
-    Sleep 3
-    for i%=1 to 20
-        try
-            Herbert = IsDocImageLoading
-        catch
-            Herbert = FALSE
-        endcatch
-        if Herbert = TRUE then
-            i%=100
-        endif
-        Sleep (1)
-    next i%
-    if i<100 then
-        IsImageLoaded = FALSE
     else
-        IsImageLoaded = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hGetUsedFilter () as string
+        warnlog( CFN & "Unable to execute slot <FileProperties>" )
+    endif
 
-    ' used in math and graphics modules
-    '/// Get used filter for loaded file.
-    try
-        FileSaveAs
-        Kontext "SpeichernDlg"
-        hGetUsedFilter = dateityp.getseltext
-        SpeichernDlg.Cancel
-    catch
-        hGetUsedFilter = "Not possible; try/catch fail in function"
-    endcatch
 end function
-'
-'-------------------------------------------------------------------------------
-'
+
+'*******************************************************************************
+
 function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileName as string, bAutoExtension as boolean, bOverwriteFile as boolean, iRange as integer, iConpression as integer, optional sRange as string) as boolean
     '/// Export a document to PDF with various options.
     '///+ INPUT
@@ -579,30 +505,6 @@ function hFileOpen( cFile as string ) as boolean
     if ( GVERBOSE ) then printlog( CFN & "Load: " & sFile )
     FileOpen( "URL", sFile, "FrameName", "_default" )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpen() = TRUE
-
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hFileReOpen( cFile as string ) as boolean
-
-    const CFN = "global::tools::inc::t_files.inc::hFileReOpen(): "
-    dim iDocumentCount as integer : iDocumentCount = getDocumentCount
-    hFileReopen() = false
-
-    hCloseDocument()
-    
-    if ( cFile = "" ) then
-        hNewDocument()
-    else
-        if ( FileExists( cFile ) ) then
-            hFileOpen( cFile )
-        else
-            warnlog( CFN & "File does not exist: " & cFile )
-        endif
-    endif
-
-    if ( getDocumentCount = iDocumentCount ) then hFileReOpen() = true
 
 end function
 '
