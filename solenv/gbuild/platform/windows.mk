@@ -159,6 +159,7 @@ gb_LinkTarget_LDFLAGS := \
     -MACHINE:IX86 \
     -NODEFAULTLIB \
     -SUBSYSTEM:CONSOLE \
+    $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(ILIB)))) \
 
 
 ifeq ($(gb_DEBUGLEVEL),2)
