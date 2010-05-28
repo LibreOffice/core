@@ -76,10 +76,9 @@ testcase tEPS
                 warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
             endif
         else
-            Warnlog "No '" + sFilter + "'-Option-Dialog!"
-            i=5
+            warnlog( "No export options dialog was displayed" )
         end if
-        sleep 2
+
         Kontext "Active"
         if Active.Exists(2) then
             Warnlog "'" + sFilter + "' has a problem"
@@ -93,7 +92,9 @@ testcase tEPS
         Kontext "EPSOptionen"
         if ( EPSOptionen.Exists( 2 ) ) then
             printlog "TextEinstellungen.select 2"
-            hCloseDialog( EPSOptionen, "cancel" )
+            hCloseDialog( EPSOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
@@ -124,12 +125,13 @@ testcase tPCT
     const sExt = ".pct"
 
     printlog "open the document"
-    sDocument = gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString
+    sDocument = convertpath( gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString )
     hFileOpen( sDocument )
 
     if ( hCallExport( OutputGrafikTBO , sFilter ) ) then
 
         Kontext "PICTOptionen"
+        printlog( "Export options dialog" )
         if ( PICTOptionen.Exists( 2 ) ) then
 
             printlog "check if all properties have the right count, and depend on each other"
@@ -147,27 +149,29 @@ testcase tPCT
                 warnlog( "#i35177# - dialog <PictOptions> canceled, still the file was saved" )
             endif
         else
-            Warnlog "No  '" + sFilter + "' -Dialog!"
-            i=5
+            warnlog( "No export options dialog was displayed" )
         end if
-        sleep 2
         
         Kontext "Active"
         if Active.Exists(2) then
             Warnlog " '" + sFilter + "'  has a problem"
             Active.OK
         end if
+
     end if
 
     printlog " now save it realy and load the file afterwards"
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
 
         Kontext "PICTOptionen"
+        printlog( "Export options dialog" )
         if ( PICTOptionen.Exists( 2 ) ) then
             Groesse.Check
             Breite.Less
             Hoehe.More
             hCloseDialog( PICTOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         sOutputFile = OutputGrafikTBO+sExt
@@ -185,9 +189,9 @@ testcase tPCT
     hFileReOpen( sDocument )
 
     printlog "check if the document is writable"
-    if fIsDocumentWritable = false then
-        printlog "make the document writable and check if it's succesfull"
-        if fMakeDocumentWritable = false then
+    if ( not fIsDocumentWritable ) then
+        printlog( "Document is write protected, changing state" )
+        if ( not fMakeDocumentWritable ) then
             warnlog "The document can't be make writeable. Test stopped."
             goto endsub
         endif
@@ -196,25 +200,26 @@ testcase tPCT
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE
 
-    if ( hCallExport (OutputGrafikTBO + "1" , sFilter, TRUE ) ) then
+    if ( hCallExport( OutputGrafikTBO + "1", sFilter, TRUE ) ) then
 
         Kontext "PICTOptionen"
+        printlog( "Export options dialog" )
         if ( PICTOptionen.Exists( 2 ) ) then
             Original.Check
             hCloseDialog( PICTOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         sOutputFile = OutputGrafikTBO + "1" + sExt
         if ( hWaitForOutputFile( sOutputFile ) ) then
-
             printlog( "Save image, close file and re-insert graphics into new file" )
             hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
         else
             warnlog( "File was not saved: " & sOutputFile )
         endif
 
-        bTemp = FALSE
-        fGetSizeXY sx1, sY, bTemp
+        bTemp = fGetSizeXY( sx1, sY, bTemp )
         if (bTemp = FALSE) then
             warnlog "Selected original size NOT OK :-("
         endif
@@ -226,6 +231,7 @@ testcase tPCT
     if ( hCallExport( OutputGrafikTBO + "2" , sFilter, TRUE ) ) then
 
         Kontext "PICTOptionen"
+        printlog( "Export options dialog" )
         if ( PICTOptionen.Exists( 2 ) ) then
             Groesse.Check
             Breite.SetText "9"
@@ -236,6 +242,8 @@ testcase tPCT
             sx1 = Breite.GetText
             sY = Hoehe.GetText
             hCloseDialog( PICTOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         sOutputFile = OutputGrafikTBO + "2" + sExt
@@ -250,14 +258,14 @@ testcase tPCT
         kontext "DocumentDraw"
         DocumentDraw.TypeKeys ("<escape><tab>")
         ContextOriginalSize
-        bTemp = FALSE
-        fGetSizeXY( sx1, sY, bTemp )
+        bTemp = fGetSizeXY( sx1, sY, bTemp )
         if ( not bTemp ) then warnlog "Selected original size NOT OK :-("
     endif
 
     if ( hCallExport( OutputGrafikTBO + "3", sFilter, TRUE ) ) then
 
         Kontext "PICTOptionen"
+        printlog( "Export options dialog" )
         if ( PICTOptionen.Exists( 2 ) ) then
             Groesse.Check
             sX2 = Breite.GetText
@@ -277,6 +285,8 @@ testcase tPCT
                 endif
             endif
             hCloseDialog( PICTOptionen, "cancel" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
     endif
 
@@ -299,10 +309,13 @@ testcase tPBM
         if ( PBMOptionen.Exists( 2 ) ) then
             Ascii.Check
             hCloseDialog( PBMOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+
     endif
 
     call hCloseDocument
@@ -324,6 +337,8 @@ testcase tPGM
         if ( PGMOptionen.Exists( 2 ) ) then
             Ascii.Check
             hCloseDialog( PGMOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
@@ -350,10 +365,13 @@ testcase tPPM
         if ( PPMOptionen.Exists( 2 ) ) then
             Ascii.Check
             hCloseDialog( PPMOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+
     endif
 
     call hCloseDocument
@@ -372,6 +390,8 @@ testcase tRAS
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
         printlog( "Save image, close file and re-insert graphics into new file" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+    else
+        warnlog( "No export options dialog was displayed" )
     endif
 
     call hCloseDocument
@@ -393,6 +413,8 @@ testcase tTIFF
     if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
         printlog( "Save image, close file and re-insert graphics into new file" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+    else
+        warnlog( "No export options dialog was displayed" )
     endif
 
     call hCloseDocument
@@ -411,6 +433,8 @@ testcase tXPM
     if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
         printlog( "Save image, close file and re-insert graphics into new file" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+    else
+        warnlog( "No export options dialog was displayed" )
     endif
 
     call hCloseDocument
@@ -433,10 +457,13 @@ testcase tGIF
             Interlace.Uncheck
             TransparentSpeichern.UnCheck
             hCloseDialog( GIFOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+
     endif
 
     call hCloseDocument
@@ -459,10 +486,13 @@ testcase tJPEG
             Echtfarben.Check
             Qualitaet.ToMin
             hCloseDialog( JpegOptionen, "ok" )
+        else
+            warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Save image, close file and re-insert graphics into new file" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        
     endif
 
     call hCloseDocument
@@ -478,6 +508,29 @@ function hInsertGraphicsToNewFile( sOutputFile as string )
         hFileReOpen( "" )
         Call hGrafikEinfuegen ( sOutputFile )
     endif
+
+end function
+
+'*******************************************************************************
+
+function hFileReOpen( cFile as string ) as boolean
+
+    dim iDocumentCount as integer : iDocumentCount = getDocumentCount
+    hFileReopen() = false
+
+    hCloseDocument()
+
+    if ( cFile = "" ) then
+        hNewDocument()
+    else
+        if ( FileExists( cFile ) ) then
+            hFileOpen( cFile )
+        else
+            warnlog( "hFileReOpen(): File does not exist: " & cFile )
+        endif
+    endif
+
+    if ( getDocumentCount = iDocumentCount ) then hFileReOpen() = true
 
 end function
 
