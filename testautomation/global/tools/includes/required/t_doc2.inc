@@ -127,9 +127,9 @@ function hEnableDocumentEditMode() as boolean
             Bearbeiten.click()
 
             kontext "Active"
-            if ( Active.exists( 2 ) ) then
+            if ( Active.exists( 1 ) ) then
                 printlog( "Messagebox: " & Active.getText() )
-                hCloseDialog( Active, "yes" )
+                Active.yes()
             endif
 
             kontext "Standardbar"
