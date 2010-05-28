@@ -333,8 +333,8 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
 
     OSQLParseNode* pColumn = pPredicateNode->getChild(0);
     const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
-    OSQLParseNode* p1stValue = pPart2->getChild(3);
-    OSQLParseNode* p2ndtValue = pPart2->getChild(5);
+    OSQLParseNode* p1stValue = pPart2->getChild(2);
+    OSQLParseNode* p2ndtValue = pPart2->getChild(4);
 
     if (
             !(p1stValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p1stValue,parameter))

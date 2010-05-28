@@ -1193,12 +1193,18 @@ between_predicate_part_2:
 			{
 				$$ = SQL_NEW_RULE;
 				
-				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$2,$1,$4);
+				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$3,$2,$5);
 				if(nErg == 1)
 				{
 					OSQLParseNode* pTemp = $$;
 					$$ = pTemp->removeAt((sal_uInt32)0);
-					$$->insert(1,$1);
+					OSQLParseNode* pColumnRef = $$->removeAt((sal_uInt32)0);
+					$$->insert(0,$1);
+					OSQLParseNode* pBetween_predicate = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate));
+					pBetween_predicate->append(pColumnRef);
+					pBetween_predicate->append($$);
+					$$ = pBetween_predicate;
+					
 					delete pTemp;
 					delete $4;
 				}
@@ -4253,7 +4259,7 @@ sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,
 	pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQL_NODE_NAME));
 	OSQLParseNode* pComp = NULL;
 	if ( SQL_ISTOKEN( pCompare, BETWEEN) && pLiteral2 )
-		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate));
+		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate_part_2));
 	else
 		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
 	
