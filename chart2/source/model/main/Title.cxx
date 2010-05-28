@@ -256,24 +256,24 @@ uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
-    // \--
 }
 
-void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
+void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
     throw (uno::RuntimeException)
 {
+    uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
     {
         MutexGuard aGuard( GetMutex() );
-        ModifyListenerHelper::removeListenerFromAllElements(
-            ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
-        m_aStrings = Strings;
-        ModifyListenerHelper::addListenerToAllElements(
-            ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+        std::swap( m_aStrings, aOldStrings );
+        m_aStrings = rNewStrings;
     }
     //don't keep the mutex locked while calling out
+    ModifyListenerHelper::removeListenerFromAllElements(
+        ContainerHelper::SequenceToVector( aOldStrings ), m_xModifyEventForwarder );
+    ModifyListenerHelper::addListenerToAllElements(
+        ContainerHelper::SequenceToVector( rNewStrings ), m_xModifyEventForwarder );
     fireModifyEvent();
 }
 
