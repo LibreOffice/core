@@ -861,6 +861,9 @@ endcase
 
 testcase tToolsOptionsWriterMailMerge
 
+    warnlog( "#i111914# - Test excluded, needs review" )
+    goto endsub
+
     Call hNewDocument
     printlog ("- Tools/Options/Writer: Mail Merge ")
     Kontext "Navigator"
