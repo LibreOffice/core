@@ -59,6 +59,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
     moHeight.assignIfUsed( rSourceProps.moHeight );
+    moSpacing.assignIfUsed( rSourceProps.moSpacing );
     moUnderline.assignIfUsed( rSourceProps.moUnderline );
     moStrikeout.assignIfUsed( rSourceProps.moStrikeout );
     moCaseMap.assignIfUsed( rSourceProps.moCaseMap );
@@ -125,6 +126,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap[ PROP_CharHeightAsian ] <<= fHeight;
         rPropMap[ PROP_CharHeightComplex ] <<= fHeight;
     }
+
+    rPropMap[ PROP_CharKerning ] <<= (sal_Int16) GetTextSpacingPoint( moSpacing.get( 0 ) );
 
     rPropMap[ PROP_CharUnderline ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
     rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );

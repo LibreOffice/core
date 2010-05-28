@@ -26,10 +26,12 @@
  ************************************************************************/
 
 #include "oox/drawingml/customshapegeometry.hxx"
+#include "oox/drawingml/customshapeproperties.hxx"
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <comphelper/stl_types.hxx>
 #include <hash_map>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
@@ -37,6 +39,7 @@
 #include "tokens.hxx"
 
 using ::rtl::OUString;
+using namespace ::basegfx;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -176,6 +179,88 @@ Reference< XFastContextHandler > AdjustmentValueContext::createFastChildContext(
         rAdjustmentValues.push_back( aGuide );
     }
     return this;
+}
+
+// ---------------------------------------------------------------------
+
+class PathListContext : public ContextHandler
+{
+public:
+    PathListContext( ContextHandler& rParent, Shape& rShape );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException);
+
+protected:
+    Shape& mrShape;
+    sal_Int32 maPointToken;
+    ::basegfx::B2DPolygon maPolygon;
+};
+
+PathListContext::PathListContext( ContextHandler& rParent, Shape& rShape )
+: ContextHandler( rParent )
+, mrShape( rShape )
+{
+}
+
+Reference< XFastContextHandler > PathListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+  switch( aElementToken ) {
+  case NMSP_DRAWINGML | XML_path:
+      maPolygon.clear();
+      break;
+  case NMSP_DRAWINGML | XML_close:
+      maPolygon.setClosed( true );
+      break;
+  case NMSP_DRAWINGML | XML_pt:
+  {
+      OUString sX, sY;
+
+      sX = xAttribs->getOptionalValue( XML_x );
+      sY = xAttribs->getOptionalValue( XML_y );
+
+      double dX, dY;
+
+      dX = sX.toDouble();
+      dY = sY.toDouble();
+
+      maPolygon.append( B2DPoint ( dX, dY ) );
+      break;
+  }
+  case NMSP_DRAWINGML | XML_lnTo:
+  case NMSP_DRAWINGML | XML_moveTo:
+      maPointToken = aElementToken;
+      break;
+  }
+
+  return this;
+}
+
+void PathListContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
+{
+    switch( aElementToken ) {
+    case NMSP_DRAWINGML|XML_pathLst:
+    {
+        B2DPolyPolygon& rPoly = mrShape.getCustomShapeProperties()->getPolygon();
+        if( rPoly.count() ) {
+        if( rPoly.areControlPointsUsed() ) {
+            if( rPoly.isClosed() )
+            mrShape.setServiceName( "com.sun.star.drawing.ClosedBezierShape" );
+            else
+            mrShape.setServiceName( "com.sun.star.drawing.OpenBezierShape" );
+        } else {
+            if( rPoly.isClosed() )
+            mrShape.setServiceName( "com.sun.star.drawing.PolyPolygonPathShape" );
+            else
+            mrShape.setServiceName( "com.sun.star.drawing.PolyLinePathShape" );
+        }
+        }
+        break;
+    }
+    case NMSP_DRAWINGML|XML_path:
+        if( maPolygon.count() > 0 )
+        mrShape.getCustomShapeProperties()->getPolygon().append( maPolygon );
+        break;
+    }
 }
 
 // ---------------------------------------------------------------------
@@ -981,9 +1066,9 @@ static OUString GetTextShapeType( sal_Int32 nType )
 
 // ---------------------------------------------------------------------
 // CT_CustomGeometry2D
-CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler& rParent, const Reference< XFastAttributeList >& /* xAttribs */, CustomShapeProperties& rCustomShapeProperties )
+CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler& rParent, const Reference< XFastAttributeList >& /* xAttribs */, Shape& rShape )
 : ContextHandler( rParent )
-, mrCustomShapeProperties( rCustomShapeProperties )
+, mrShape( rShape )
 {
 }
 
@@ -997,8 +1082,9 @@ Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildCont
     case NMSP_DRAWINGML|XML_ahLst:      // CT_AdjustHandleList adjust handle list
     case NMSP_DRAWINGML|XML_cxnLst: // CT_ConnectionSiteList connection site list
     case NMSP_DRAWINGML|XML_rect:   // CT_GeomRectList geometry rect list
+      break;
     case NMSP_DRAWINGML|XML_pathLst:    // CT_Path2DList 2d path list
-        break;
+        return new PathListContext( *this, mrShape );
     }
 
     Reference< XFastContextHandler > xEmpty;
