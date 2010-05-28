@@ -199,6 +199,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     inline void TryDeleteSwpHints();
 
+    SW_DLLPRIVATE void impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet);
+
 public:
     bool IsWordCountDirty() const;
     bool IsWrongDirty() const;
