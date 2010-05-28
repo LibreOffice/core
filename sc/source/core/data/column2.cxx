@@ -193,6 +193,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
     double nPPT = bWidth ? nPPTX : nPPTY;
     if (Search(nRow,nIndex))
     {
+        ScBaseCell* pCell = pItems[nIndex].pCell;
         const ScPatternAttr* pPattern = rOptions.pPattern;
         if (!pPattern)
             pPattern = pAttrArray->GetPattern( nRow );
@@ -233,14 +234,18 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         else
             eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
                                             pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
-        BOOL bBreak;
+        bool bBreak;
         if ( eHorJust == SVX_HOR_JUSTIFY_BLOCK )
-            bBreak = TRUE;
+            bBreak = true;
         else if ( pCondSet &&
                     pCondSet->GetItemState(ATTR_LINEBREAK, TRUE, &pCondItem) == SFX_ITEM_SET)
             bBreak = ((const SfxBoolItem*)pCondItem)->GetValue();
         else
             bBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
+
+        if (pCell->HasValueData())
+            // Cell has a value.  Disable line break.
+            bBreak = false;
 
         //  get other attributes from pattern and conditional formatting
 
@@ -248,7 +253,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
                 ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
         if ( bAsianVertical )
-            bBreak = FALSE;
+            bBreak = false;
 
         if ( bWidth && bBreak )     // after determining bAsianVertical (bBreak may be reset)
             return 0;
@@ -300,7 +305,6 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
         }
 
-        ScBaseCell* pCell = pItems[nIndex].pCell;
         BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
         if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
