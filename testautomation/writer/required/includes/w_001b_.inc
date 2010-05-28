@@ -326,7 +326,7 @@ testcase tFileSendAutoabstractToPresentation
     Call hCloseDocument
     PrintLog "Close active document"
 
-    Call wDocSetContext
+    hSetDocumentContext()
     FileClose
 endcase
 '--------------------------------------------------------------------------------------------------------------------------------------------
@@ -862,7 +862,7 @@ testcase tMasterDocFileSendAutoabstractToPresentation
     Call hCloseDocument
     PrintLog "Close active document"
 
-    Call wDocSetContext
+    hSetDocumentContext()
     FileClose
     gApplication = "WRITER"
     

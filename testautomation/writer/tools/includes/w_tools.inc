@@ -94,35 +94,6 @@ end sub
 
 ' -----------------------------------------------------------------------
 
-sub wDocSetContext
-    Select Case Ucase(gApplication)
-    Case "WRITER"
-        Kontext "DocumentWriter"
-
-    Case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-
-    Case "HTML"
-        Kontext "DocumentWriterWeb"
-
-    Case "IMPRESS"
-        Kontext "DocumentImpress"
-
-    Case "DRAW"
-        Kontext "DocumentDraw"
-
-    Case "MATH"
-        Kontext "DocumentMath"
-
-    Case "CALC"
-        Kontext "DocumentCalc"
-
-    end select
-    wait 500
-end sub
-
-' -----------------------------------------------------------------------
-
 function wBlindtextEinfuegen() as boolean
     '/// This functions inserts a Dummytext and returns true if it was inserted
     Dim BlindText as string, bTemp as boolean

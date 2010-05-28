@@ -705,7 +705,7 @@ end sub
 function fInsertFrame (x1 as Integer , y1 as Integer , x2 as Integer , y2 as Integer)
     'This function will insert a frame with the coordinate
 
-    Call wDocSetContext
+    hSetDocumentContext()
 
     Call hToolbarSelect("INSERT", true )
     Sleep 1

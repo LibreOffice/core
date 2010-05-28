@@ -955,7 +955,7 @@ testcase tEditHyperlink
         goto endsub
     endif
 
-    Call wDocSetContext
+    hSetDocumentContext()
 
     PrintLog "Check if correct URL has been set to document"
     if ( hUseAsyncSlot( "EditCopy" ) > -1 ) then

@@ -716,7 +716,7 @@ testcase tFormatColumn
     printlog " Close dialog"
     SpaltenBreite.OK
     Wait 500
-    Call wDocSetContext
+    hSetDocumentContext()
     printlog " Enter some text in document"
     Call wTypeKeys ("Dies ist ein langer Text, HALLO HALLO")
     Wait 500
@@ -735,7 +735,7 @@ testcase tFormatColumn
     printlog " Format / Cloumn / Delete"
     TableDeleteColumns
     WaitSlot (500)
-    Call wDocSetContext
+    hSetDocumentContext()
     printlog " Press 'up' twice to point cursor in the table"
     Call wTypeKeys ("<Up>",2)
     wait 500
