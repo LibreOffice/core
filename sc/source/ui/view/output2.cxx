@@ -2351,7 +2351,20 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 }
                             }
                             if (bPixelToLogic)
-                                pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
+                            {
+                                Size aLogicSize = pRefDevice->PixelToLogic(aPaperSize);
+                                if ( bBreak && !bAsianVertical && pRefDevice != pFmtDevice )
+                                {
+                                    // #i85342# screen display and formatting for printer,
+                                    // use same GetEditArea call as in ScViewData::SetEditEngine
+
+                                    Fraction aFract(1,1);
+                                    Rectangle aUtilRect = ScEditUtil( pDoc, nCellX, nCellY, nTab, Point(0,0), pFmtDevice,
+                                        HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, FALSE );
+                                    aLogicSize.Width() = aUtilRect.GetWidth();
+                                }
+                                pEngine->SetPaperSize(aLogicSize);
+                            }
                             else
                                 pEngine->SetPaperSize(aPaperSize);
 
