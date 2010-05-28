@@ -132,10 +132,16 @@ ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
     return new ActiveWorkbook( this, mxContext );
 }
+
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    return getActiveWorkbook();
+    uno::Reference< frame::XModel > xModel = getThisExcelDoc(mxContext);
+    if( !xModel.is() )
+        return uno::Reference< excel::XWorkbook >();
+
+    ScVbaWorkbook *pWb = new ScVbaWorkbook( this, mxContext, xModel );
+    return uno::Reference< excel::XWorkbook > (pWb);
 }
 
 uno::Reference< XAssistant > SAL_CALL
@@ -769,46 +775,74 @@ bool lcl_canJoin( ScRange& r1, ScRange& r2 )
 void lcl_strip_containedRanges( Ranges& vRanges )
 {
     // get rid of ranges that are surrounded by other ranges
-    for( Ranges::iterator it = vRanges.begin(); it != vRanges.end(); ++it )
+    Ranges::iterator it_outer = vRanges.begin();
+    while( it_outer != vRanges.end() )
     {
-        for( Ranges::iterator it_inner = vRanges.begin(); it_inner != vRanges.end(); ++it_inner )
+        bool it_outer_erased = false;   // true = it_outer erased from vRanges
+        Ranges::iterator it_inner = vRanges.begin();
+        /*  Exit the inner loop if outer iterator has been erased in its last
+            iteration (this means it has been joined to last it_inner, or that
+            the it_inner contains it completely). The inner loop will restart
+            with next element of the outer loop, and all elements (from the
+            beginning of the list) will be checked against that new element. */
+        while( !it_outer_erased && (it_inner != vRanges.end()) )
         {
-            if ( it != it_inner )
+            bool it_inner_erased = false;   // true = it_inner erased from vRanges
+            if ( it_outer != it_inner )
             {
 #ifdef DEBUG
-            String r1;
-            String r2;
-            it->Format( r1, SCA_VALID ) ;
-            it_inner->Format( r2, SCA_VALID ) ;
-            OSL_TRACE( "try strip/join address %s with %s ",
-                rtl::OUStringToOString( r1, RTL_TEXTENCODING_UTF8 ).getStr(),
-                rtl::OUStringToOString( r2, RTL_TEXTENCODING_UTF8 ).getStr() );
+                String r1;
+                String r2;
+                it_outer->Format( r1, SCA_VALID ) ;
+                it_inner->Format( r2, SCA_VALID ) ;
+                OSL_TRACE( "try strip/join address %s with %s ",
+                    rtl::OUStringToOString( r1, RTL_TEXTENCODING_UTF8 ).getStr(),
+                    rtl::OUStringToOString( r2, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
-                if ( it->In( *it_inner ) )
-                    it_inner = vRanges.erase( it_inner );
-                else if ( it_inner->In( *it ) )
-                    it = vRanges.erase( it );
-#ifndef OWN_JOIN
-                else if ( (*it_inner).aStart.Row() == (*it).aStart.Row()
-                && (*it_inner).aEnd.Row() == (*it).aEnd.Row() )
+                if ( it_outer->In( *it_inner ) )
                 {
-                    it->ExtendTo( *it_inner );
                     it_inner = vRanges.erase( it_inner );
+                    it_inner_erased = true;
+                }
+                else if ( it_inner->In( *it_outer ) )
+                {
+                    it_outer = vRanges.erase( it_outer );
+                    it_outer_erased = true;
+                }
+#ifndef OWN_JOIN
+                else if ( (*it_inner).aStart.Row() == (*it_outer).aStart.Row()
+                        && (*it_inner).aEnd.Row() == (*it_outer).aEnd.Row() )
+                {
+                    it_outer->ExtendTo( *it_inner );
+                    it_inner = vRanges.erase( it_inner );
+                    it_inner_erased = true;
                 }
 #else
-                else if ( lcl_canJoin( *it, *it_inner ) )
+                else if ( lcl_canJoin( *it_outer, *it_inner ) )
                 {
-                    it->ExtendTo( *it_inner );
+                    it_outer->ExtendTo( *it_inner );
                     it_inner = vRanges.erase( it_inner );
+                    it_inner_erased = true;
                 }
-                else if ( lcl_canJoin( *it_inner, *it) )
+                else if ( lcl_canJoin( *it_inner, *it_outer) )
                 {
-                    it_inner->ExtendTo( *it );
-                    it = vRanges.erase( it );
+                    it_inner->ExtendTo( *it_outer );
+                    it_outer = vRanges.erase( it_outer );
+                    it_outer_erased = true;
                 }
 #endif
             }
+            /*  If it_inner has not been erased from vRanges, continue inner
+                loop with next element. Otherwise, it_inner already points to
+                the next element (return value of list::erase()). */
+            if( !it_inner_erased )
+                ++it_inner;
         }
+        /*  If it_outer has not been erased from vRanges, continue outer loop
+            with next element. Otherwise, it_outer already points to the next
+            element (return value of list::erase()). */
+        if( !it_outer_erased )
+            ++it_outer;
     }
 
 }
