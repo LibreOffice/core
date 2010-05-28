@@ -50,9 +50,9 @@ public class FileHelper
             String sOSArch = System.getProperty("os.arch");
             String sOSVersion = System.getProperty("os.version");
 
-            GlobalLogWriter.get().println(sOSName);
-            GlobalLogWriter.get().println(sOSArch);
-            GlobalLogWriter.get().println(sOSVersion);
+            GlobalLogWriter.println(sOSName);
+            GlobalLogWriter.println(sOSArch);
+            GlobalLogWriter.println(sOSVersion);
 
         }
 
@@ -110,7 +110,7 @@ public class FileHelper
             }
             catch (NullPointerException e)
             {
-                GlobalLogWriter.get().println("Exception caught. FileHelper.isDir('" + _sDir + "')");
+                GlobalLogWriter.println("Exception caught. FileHelper.isDir('" + _sDir + "')");
                 e.printStackTrace();
             }
             return false;
@@ -258,7 +258,7 @@ public class FileHelper
                     }
                     catch (java.io.IOException e)
                     {
-                        GlobalLogWriter.get().println("Exception caught. FileHelper.makeDirectories('" + new_dir.getAbsolutePath() + "')");
+                        GlobalLogWriter.println("Exception caught. FileHelper.makeDirectories('" + new_dir.getAbsolutePath() + "')");
                     }
                 }
             }
@@ -361,9 +361,9 @@ public class FileHelper
             {
                 if (m_bDebugTextShown == false)
                 {
-                    GlobalLogWriter.get().println("Found file: " + sName);
-                    GlobalLogWriter.get().println("Activate debug mode.");
-                    GlobalLogWriter.get().println("If debug mode is no longer necessary, remove the above file.");
+                    GlobalLogWriter.println("Found file: " + sName);
+                    GlobalLogWriter.println("Activate debug mode.");
+                    GlobalLogWriter.println("If debug mode is no longer necessary, remove the above file.");
                     m_bDebugTextShown = true;
                 }
                 bDebug = true;
@@ -460,6 +460,16 @@ public class FileHelper
                         {
                             // leave out files which started by '~$' these are Microsoft Office temp files
                             if (pathname.getName().startsWith("~$"))
+                            {
+                                return false;
+                            }
+                            // leave out files starts with '.~lock.' these are OpenOffice.org lock files
+                            if (pathname.getName().startsWith(".~lock."))
+                            {
+                                return false;
+                            }
+                            // leave out files ends with '#' these could be temp files
+                            if (pathname.getName().endsWith("#"))
                             {
                                 return false;
                             }
@@ -592,7 +602,7 @@ public class FileHelper
             if (_sFile.startsWith("file://"))
             {
                 sFilename = FileHelper.getSystemPathFromFileURL(_sFile);
-                GlobalLogWriter.get().println("CreateInfoFile: '" + sFilename + "'" );
+                GlobalLogWriter.println("CreateInfoFile: '" + sFilename + "'" );
             }
             else
             {
@@ -682,7 +692,7 @@ public class FileHelper
             }
             catch (java.io.IOException e)
             {
-                GlobalLogWriter.get().println("can't create Info file.");
+                GlobalLogWriter.println("can't create Info file.");
                 e.printStackTrace();
             }
             aIniFile.close();
