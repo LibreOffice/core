@@ -190,7 +190,9 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets all currently deployed extensions.
+    /** gets all currently deployed extensions, including disabled
+        user extensions.
+
         @param repository
                the repository from which the extensions are returned
         @param xAbortChannel
@@ -232,6 +234,23 @@ interface XExtensionManager
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
+
+    /** gets all extensions with the same identifer from all repositories.
+
+        The extension at the first position in the returned sequence represents
+        the extension from the user repository. The next element is from the shared
+        and the last one is from the bundled repository.
+        If one repository does not contain this extension, then the respective
+        element is a null reference.
+    */
+    sequence<XPackage> getExtensionsWithSameIdentifier(
+        [in] string identifier,
+        [in] string fileName,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::lang::IllegalArgumentException);
+
 
     /** returns a sequence containing all installed extensions.
 
