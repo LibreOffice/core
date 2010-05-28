@@ -1,0 +1,11 @@
+--- misc/libxslt-1.1.26.orig/configure	2009-12-21 10:07:14.000000000 +0000
++++ misc/build/libxslt-1.1.26/configure	2009-12-21 10:07:42.000000000 +0000
+@@ -13402,7 +13402,7 @@
+ $(/usr/bin/ld --help 2>&1 | grep -- --version-script >/dev/null) && \
+     VERSION_SCRIPT_FLAGS=-Wl,--version-script=
+ test "`uname`" == "SunOS" && \
+-    VERSION_SCRIPT_FLAGS="-Wl,-M -Wl,"
++    VERSION_SCRIPT_FLAGS=""
+ 
+  if test -n "$VERSION_SCRIPT_FLAGS"; then
+   USE_VERSION_SCRIPT_TRUE=
