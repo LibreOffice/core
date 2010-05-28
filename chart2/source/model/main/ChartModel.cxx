@@ -150,15 +150,28 @@ ChartModel::ChartModel( const ChartModel & rOther )
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
     osl_incrementInterlockedCount(&m_refCount);
 
-    m_xChartTypeManager.set( CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager ));
-    m_xTitle.set( CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
-    ModifyListenerHelper::addListener( m_xTitle, this );
-    m_xPageBackground.set( CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground ));
-    ModifyListenerHelper::addListener( m_xPageBackground, this );
+    Reference< util::XModifyListener > xListener;
+    Reference< chart2::XTitle > xNewTitle = CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle );
+    Reference< chart2::XDiagram > xNewDiagram = CreateRefClone< Reference< chart2::XDiagram > >()( rOther.m_xDiagram );
+    Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground );
+    Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager );
+    Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap );
 
-    m_xXMLNamespaceMap.set( CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap ));
+    {
+        MutexGuard aGuard( m_aModelMutex );
+        xListener = this;
+        m_xTitle = xNewTitle;
+        m_xDiagram = xNewDiagram;
+        m_xPageBackground = xNewPageBackground;
+        m_xChartTypeManager = xChartTypeManager;
+        m_xXMLNamespaceMap = xXMLNamespaceMap;
+    }
 
-    CloneRefVector< Reference< chart2::XDiagram > >( rOther.m_aDiagrams, m_aDiagrams );
+    ModifyListenerHelper::addListener( xNewTitle, xListener );
+    ModifyListenerHelper::addListener( xNewDiagram, xListener );
+    ModifyListenerHelper::addListener( xNewPageBackground, xListener );
+    xListener.clear();
+
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -508,8 +521,7 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     m_xNumberFormatsSupplier.clear();
     DisposeHelper::DisposeAndClear( m_xOwnNumberFormatsSupplier );
     DisposeHelper::DisposeAndClear( m_xChartTypeManager );
-    DisposeHelper::DisposeAllElements( m_aDiagrams );
-    m_aDiagrams.clear();
+    DisposeHelper::DisposeAndClear( m_xDiagram );
     DisposeHelper::DisposeAndClear( m_xTitle );
     DisposeHelper::DisposeAndClear( m_xPageBackground );
     DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
@@ -680,38 +692,26 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
 uno::Reference< chart2::XDiagram > SAL_CALL ChartModel::getFirstDiagram()
             throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
-    if( m_aDiagrams.size() )
-        return m_aDiagrams[ 0 ];
-    return uno::Reference< chart2::XDiagram >();
-    // \--
+    return m_xDiagram;
 }
-
-void ChartModel::impl_removeAllDiagrams()
-{
-    ModifyListenerHelper::removeListenerFromAllElements( m_aDiagrams, this );
-    m_aDiagrams.clear();
-}
-
-void ChartModel::impl_appendDiagram( const Reference< chart2::XDiagram > & xDiagram )
-{
-    Reference< util::XModifyBroadcaster > xBroadcaster( xDiagram, uno::UNO_QUERY );
-    ModifyListenerHelper::addListener( xDiagram, this );
-    m_aDiagrams.push_back( xDiagram );
-}
-
 
 void SAL_CALL ChartModel::setFirstDiagram( const uno::Reference< chart2::XDiagram >& xDiagram )
             throw (uno::RuntimeException)
 {
+    Reference< chart2::XDiagram > xOldDiagram;
+    Reference< util::XModifyListener > xListener;
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
-        impl_removeAllDiagrams();
-        impl_appendDiagram( xDiagram );
-        // \--
+        if( xDiagram == m_xDiagram )
+            return;
+        xOldDiagram = m_xDiagram;
+        m_xDiagram = xDiagram;
+        xListener = this;
     }
+    //don't keep the mutex locked while calling out
+    ModifyListenerHelper::removeListener( xOldDiagram, xListener );
+    ModifyListenerHelper::addListener( xDiagram, xListener );
     setModified( sal_True );
 }
 
@@ -881,10 +881,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
                     if( xDia.is())
                         xTemplate->changeDiagramData( xDia, xDataSource, aArguments );
                     else
-                    {
-                        impl_removeAllDiagrams();
-                        impl_appendDiagram( xTemplate->createDiagramByDataSource( xDataSource, aArguments ));
-                    }
+                        setFirstDiagram( xTemplate->createDiagramByDataSource( xDataSource, aArguments ) );
                 }
             }
         }

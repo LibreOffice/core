@@ -413,8 +413,6 @@ void SAL_CALL ChartModel::initNew()
     try
     {
         // create default chart
-        impl_removeAllDiagrams();
-
         Reference< chart2::XChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
         if( xTemplate.is())
         {
@@ -433,7 +431,7 @@ void SAL_CALL ChartModel::initNew()
 
                 Reference< chart2::XDiagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
 
-                impl_appendDiagram( xDiagram );
+                setFirstDiagram( xDiagram );
 
                 bool bIsRTL = Application::GetSettings().GetLayoutRTL();
                 //reverse x axis for rtl charts
