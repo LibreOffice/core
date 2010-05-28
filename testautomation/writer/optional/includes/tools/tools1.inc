@@ -68,35 +68,38 @@ function fFormatGraphic(Options as string) as boolean
 
     if ( hUseAsyncSlot( "FormatGraphics" ) <> -1 ) then
 
-    Kontext
-    if ( Active.exists( 2 ) ) then
-        Select case Options
-        case "TabType"                     : active.SetPage TabType
-        case "TabZusaetze"                 : active.SetPage TabZusaetze
-        case "TabUmlauf"                   : active.SetPage TabUmlauf
-        case "TabHyperlinkRahmen"          : active.SetPage TabHyperlinkRahmen
-        case "TabGrafik"                   : active.SetPage TabGrafik
-        case "TabZuschneiden"              : active.SetPage TabZuschneiden
-        case "TabUmrandung"                : active.SetPage TabUmrandung
-        case "TabHintergrund"              : active.SetPage TabHintergrund
-        case "TabMakro"
-            active.SetPage TabMakro
-            ' if no JRE is installed a messagebox appears
-            Do
-                j = j + 1
-                Kontext "Active"
-                if Active.Exists then
-                    if Active.GetRT = 304 then
-                        if j = 1 then Warnlog Active.Gettext
-                        Active.Ok
+        Kontext
+        if ( Active.exists( 2 ) ) then
+            Select case Options
+            case "TabType"                     : active.SetPage TabType
+            case "TabZusaetze"                 : active.SetPage TabZusaetze
+            case "TabUmlauf"                   : active.SetPage TabUmlauf
+            case "TabHyperlinkRahmen"          : active.SetPage TabHyperlinkRahmen
+            case "TabGrafik"                   : active.SetPage TabGrafik
+            case "TabZuschneiden"              : active.SetPage TabZuschneiden
+            case "TabUmrandung"                : active.SetPage TabUmrandung
+            case "TabHintergrund"              : active.SetPage TabHintergrund
+            case "TabMakro"
+                active.SetPage TabMakro
+                ' if no JRE is installed a messagebox appears
+                Do
+                    j = j + 1
+                    Kontext "Active"
+                    if Active.Exists then
+                        if Active.GetRT = 304 then
+                            if j = 1 then Warnlog Active.Gettext
+                            Active.Ok
+                        else
+                            exit do
+                        end if
                     else
                         exit do
                     end if
-                else
-                    exit do
-                end if
-            Loop
-        end select
+                Loop
+            end select
+        else
+            warnlog( "Failed to access <Format Graphics> Tabpage" )
+        endif
     else
         warnlog( "Failed to execute <FormatGraphics>" )
     endif
@@ -247,6 +250,8 @@ function fFormatStylesCatalog(Options as string)
     case "Page"           : Vorlagen.Select 4
     case "Numbering"      : Vorlagen.Select 5
     end Select
+
+    Kontext Options
 
 end function
 
