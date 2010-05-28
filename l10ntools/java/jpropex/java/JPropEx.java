@@ -100,7 +100,7 @@ public class JPropEx
         System.out.println("-p <project> -r <project_root> -i <input>|@<input> -o <output> -x <path1> -y <path2> -m <sdf_file> -l <lang>\n");
         System.out.println("Example:\ncd /data/cws/l10ntooling17/DEV300/ooo/reportbuilder/java/com/sun/star/report/function/metadata");
         System.out.println("Extract:\njpropex -p reportbuilder -r ../../../../../../.. -i Title-Function.properties -o new.sdf -l en-US");
-        System.out.println("Merge: use either ( -x path -y more_path ) or ( -o ) and ( -i filename ) or ( -i @filename )");
+        System.out.println("Merge: use either ( -x path -y more_path ) or ( -o ) and ( -i filename ) or ( -i @filename ). @filename contains a list with files");
         System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -x ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata -y ivo -i @abc -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");
         System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -x ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata -y ivo -i @abc -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");
         System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -o ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata/ -i Title-Function.properties -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");
