@@ -395,7 +395,8 @@ function hDrawControl( xPos as integer, _
     '///+<li>Mouse up on pos X/Y-End</li>
     '///</ol>
     '///</ul>
-    
+
+    autoexecute = false
     DialogWindow.MouseUp( 20 , 20 ) : wait 100
     
     try
@@ -408,7 +409,7 @@ function hDrawControl( xPos as integer, _
         warnlog( "#i39852# " & CFN & "Unable to complete mouseactions on dialog" )
         hDrawControl() = false
     endcatch
-    
+    autoexecute = true
 
 end function
 
@@ -735,6 +736,7 @@ function hSelectControl( iControl as integer ) as boolean
     '///+<li>Deselct everything and use <TAB> to activate the control</li>
     '///</ol>
 
+    autoexecute = false
     for iCurrentSelectionMethod = 1 to SELECTION_METHODS
 
         Kontext "BasicIDE"
@@ -790,6 +792,7 @@ function hSelectControl( iControl as integer ) as boolean
         endcatch
         
     next iCurrentSelectionMethod
+    autoexecute = true
     '///</ul>
 
 end function
