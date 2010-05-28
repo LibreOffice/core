@@ -122,6 +122,8 @@ function hEnableDocumentEditMode() as boolean
     try
         kontext "Standardbar"
         if ( Bearbeiten.getState( 2 ) <> 1 ) then
+
+            printlog( "Switch document to edit-mode" )
             Bearbeiten.click()
 
             kontext "Active"
@@ -131,7 +133,8 @@ function hEnableDocumentEditMode() as boolean
             endif
 
             kontext "Standardbar"
-            if ( Bearbeiten.getState( 2 ) = 1 ) then 
+            if ( Bearbeiten.getState( 2 ) = 1 ) then
+                printlog( "Successfully set document to edit-mode" )
                 hEnableDocumentEditMode() = true
                 waitslot()
             endif
