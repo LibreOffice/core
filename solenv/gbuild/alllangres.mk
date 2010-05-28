@@ -25,6 +25,26 @@
 #
 #*************************************************************************
 
+# SrsPartMergeTarget class
+
+gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target,transex3)
+gb_SrsPartMergeTarget_TRANSEXAUXDEPS := $(call gb_Library_get_target,tl) $(call gb_Library_get_target,sal)
+gb_SrsPartMergeTarget_TRANSEXCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib $(gb_SrsPartMergeTarget_TRANSEXTARGET)
+gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/l10n/$(INPATH)/misc/sdf/
+
+
+$(call gb_SrsPartMergeTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_SrsPartMergeTarget_TRANSEXTARGET) $(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
+    $(info gb_SrsPartMergeTarget $*)
+    $(call gb_Helper_abbreviate_dirs_native,\
+        mkdir -p $(dir $@) && \
+        $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
+            -p $(firstword $(subst /, ,$*)) \
+            -r $(SRCDIR)/$(firstword $(subst /, ,$*)) \
+            -i $(SRCDIR)/$* \
+            -o $@ \
+            -m $(SDF) \
+            -l all \
+            -qq)
 
 # SrsPartTarget class
 
@@ -33,17 +53,17 @@
 #  gb_SrsPartTarget_RSCCOMMAND
 #  gb_SrsPartTarget__command_dep
 
-$(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
-    $(call gb_SrsPartTarget__command_dep,$*,$<,$(INCLUDE),$(DEFS))
+$(call gb_SrsPartTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
+    $(call gb_SrsPartTarget__command_dep,$*,$(SRCDIR)/$*,$(INCLUDE),$(DEFS))
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) && \
         RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
         echo "-s \
             $(INCLUDE) \
-            -I$(dir $<) \
+            -I$(dir $(SRCDIR)/$*) \
             $(DEFS) \
             -fp=$@ \
-            $<" > $${RESPONSEFILE} && \
+            $(MERGEDFILE)" > $${RESPONSEFILE} && \
         $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
         rm -rf $${RESPONSEFILE})
 
@@ -55,7 +75,18 @@ $(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)
 $(call gb_SrsPartTarget_get_dep_target,%) :
     $(error unable to find resource definition file $(SRCDIR)/$*)
 
-gb_SrsPartTarget_SrsPartTarget =
+define gb_SrsPartTarget_SrsPartTarget
+ifeq ($(strip $(WITH_LANG)),)
+$(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(SRCDIR)/$*
+$(call gb_SrsPartTarget_get_target,$(1)) : $(SRCDIR)/$(1)
+else
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(SRCDIR)/$(1)
+$(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
+$(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf
+endif
+
+endef
 
 
 # SrsTarget class
@@ -116,6 +147,7 @@ define gb_SrsTarget_add_file
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,$(1)) : $(call gb_SrsPartTarget_get_dep_target,$(2))
 endif
+$(call gb_SrsPartTarget_SrsPartTarget,$(2))
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsPartTarget_get_target,$(2))
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTarget_get_target,$(1)) : PARTS += $(2)
