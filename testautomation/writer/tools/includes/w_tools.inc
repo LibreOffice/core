@@ -507,7 +507,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
 
     Sleep 2
 
-    Select Case Ucase(gApplication)
+    Select Case gApplication
     Case "CALC"
         if (Liste.GetItemCount < MinEntrys) then Umschalten.Click
         if Liste.GetItemCount >MinEntrys then
@@ -525,7 +525,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
             Liste.TypeKeys "<Return>"
         end if
 
-    Case "WRITER","HTML", "HTML"
+    Case "WRITER","HTML"
         if (Auswahlliste.GetItemCount < MinEntrys) then
             try
                 Inhaltsansicht.Click
