@@ -141,7 +141,7 @@ testcase tiFileSaveAs
                 printlog "("+i+"/"+x+"): "+sFilter(i)
                 hFileOpen ( sFilter(i) )
                 WaitSlot (3000)
-                If hIsNamedDocLoaded (sFilter(i), true) Then
+                If hIsNamedDocLoaded (sFilter(i)) Then
                     printlog "  used filter: " + hGetUsedFilter()
                 else
                     sTemp = left(right(sFilter(i),2),1)
