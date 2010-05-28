@@ -97,6 +97,7 @@ public class JPropEx
     private void help()
     {
         System.out.println("jpropex -> extract / merge java properties files");
+        System.out.println("-p <project> -r <project_root> -i <input>|@<input> -o <output> -x <path1> -y <path2> -m <sdf_file> -l <lang>\n");
         System.out.println("Example:\ncd /data/cws/l10ntooling17/DEV300/ooo/reportbuilder/java/com/sun/star/report/function/metadata");
         System.out.println("Extract:\njpropex -p reportbuilder -r ../../../../../../.. -i Title-Function.properties -o new.sdf -l en-US");
         System.out.println("Merge: use either ( -x path -y more_path ) or ( -o ) and ( -i filename ) or ( -i @filename )");
