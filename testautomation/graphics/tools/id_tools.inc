@@ -234,11 +234,6 @@ end function
 '-------------------------------------------------------------------------------
 function fIsDocumentWritable() as boolean
 
-    printlog " check if a document is writeable"
-    printlog " <u>parameter:</u>"
-    printlog " <u>return:</u>"
-    printlog " true if the document is writeable otherwise false"
-
     Kontext "Standardbar"
     if Bearbeiten.GetState( 2 ) <> 1 then
         fIsDocumentWritable = false
@@ -252,9 +247,6 @@ end function
 function fMakeDocumentWritable() as boolean
 
     printlog " make a document is writeable"
-    printlog " <u>parameter:</u>"
-    printlog " <u>return:</u>"
-    printlog " true if the document can make writeable otherwise false"
 
     Kontext "Standardbar"
     sleep ( 1 )
@@ -269,7 +261,7 @@ function fMakeDocumentWritable() as boolean
                 fMakeDocumentWritable = false
             endif
         else
-            printlog "Document is allready writable."
+            printlog "Document is already writable."
             fMakeDocumentWritable = true
         endif
 
