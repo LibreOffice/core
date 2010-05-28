@@ -668,6 +668,15 @@ void ButtonBar::RequestFadeOut (
 
 
 
+bool ButtonBar::IsVisible (const model::SharedPageDescriptor& rpDescriptor)
+{
+    const double nMaxAlpha (1);
+    return rpDescriptor && rpDescriptor->GetVisualState().GetButtonBarAlpha() < nMaxAlpha;
+}
+
+
+
+
 void ButtonBar::StartFadeAnimation (
     const model::SharedPageDescriptor& rpDescriptor,
     const double nTargetAlpha,
@@ -1463,8 +1472,6 @@ void DuplicateButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
             SID_DUPLICATE_PAGE,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
-
-
 
 
 

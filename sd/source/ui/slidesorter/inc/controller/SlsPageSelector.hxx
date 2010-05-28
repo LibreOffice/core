@@ -102,10 +102,19 @@ public:
     bool IsPageSelected (int nPageIndex);
 
     /** Deselect the descriptor that is associated with the given page.
+        @param bUpdateCurrentPage
+            When <TRUE/> then the current page is updated to the first slide
+            of the remaining selection.
     */
-    void DeselectPage (int nPageIndex);
-    void DeselectPage (const SdPage* pPage);
-    void DeselectPage (const model::SharedPageDescriptor& rpDescriptor);
+    void DeselectPage (
+        int nPageIndex,
+        const bool bUpdateCurrentPage = true);
+    void DeselectPage (
+        const SdPage* pPage,
+        const bool bUpdateCurrentPage = true);
+    void DeselectPage (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bUpdateCurrentPage = true);
 
     /** This convenience method returns the same number of pages that
         SlideSorterModel.GetPageCount() returns.  It is included here so

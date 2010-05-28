@@ -412,7 +412,6 @@ void SlideSorter::ReleaseListeners (void)
     SharedSdWindow pWindow (GetContentWindow());
     if (pWindow)
     {
-
         pWindow->RemoveEventListener(
             LINK(mpSlideSorterController.get(),
                 controller::SlideSorterController,

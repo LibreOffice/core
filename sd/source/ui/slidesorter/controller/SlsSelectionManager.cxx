@@ -304,69 +304,6 @@ void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
 }
 
 
-/*
-
-bool SelectionManager::DoesSelectionExceedVisibleArea (const Rectangle& rSelectionBox) const
-{
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (pWindow == NULL)
-        return true;
-
-    Rectangle aVisibleArea (pWindow->PixelToLogic(
-        Rectangle(
-            Point(0,0),
-            pWindow->GetOutputSizePixel())));
-    if (mrSlideSorter.GetView().GetOrientation() != Layouter::HORIZONTAL)
-        return rSelectionBox.GetHeight() > aVisibleArea.GetHeight();
-    else
-        return rSelectionBox.GetWidth() > aVisibleArea.GetWidth();
-}
-
-
-
-
-Rectangle SelectionManager::ResolveLargeSelection (
-    const SharedPageDescriptor& rpFirst,
-    const SharedPageDescriptor& rpLast,
-    const SelectionHint eSelectionHint)
-{
-    OSL_ASSERT(rpFirst.get()!=NULL);
-    OSL_ASSERT(rpLast.get()!=NULL);
-
-    // The mose recently selected page is assumed to lie in the range
-    // between first and last selected page.  Therefore the bounding box is
-    // not modified.
-    model::SharedPageDescriptor pRecent (
-        mrController.GetPageSelector().GetMostRecentlySelectedPage());
-
-    // Get the bounding box of the page object on which to concentrate.
-    model::SharedPageDescriptor pRepresentative;
-    switch (eSelectionHint)
-    {
-        case SH_FIRST:
-            pRepresentative = rpFirst;
-            break;
-
-        case SH_LAST:
-            pRepresentative = rpLast;
-            break;
-
-        case SH_RECENT:
-        default:
-            if (pRecent.get() == NULL)
-                pRepresentative = rpFirst;
-            else
-                pRepresentative = pRecent;
-            break;
-    }
-    OSL_ASSERT(pRepresentative.get() != NULL);
-
-    return mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
-        pRepresentative->GetPageIndex(),
-        true);
-}
-
-*/
 
 
 sal_Int32 SelectionManager::GetInsertionPosition (void) const

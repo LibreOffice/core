@@ -201,28 +201,34 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
 
 
 
-void PageSelector::DeselectPage (int nPageIndex)
+void PageSelector::DeselectPage (
+    int nPageIndex,
+    const bool bUpdateCurrentPage)
 {
     model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get() != NULL)
-        DeselectPage(pDescriptor);
+        DeselectPage(pDescriptor, bUpdateCurrentPage);
 }
 
 
 
 
-void PageSelector::DeselectPage (const SdPage* pPage)
+void PageSelector::DeselectPage (
+    const SdPage* pPage,
+    const bool bUpdateCurrentPage)
 {
     const sal_Int32 nPageIndex (mrModel.GetIndex(pPage));
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
-        DeselectPage(pDescriptor);
+        DeselectPage(pDescriptor, bUpdateCurrentPage);
 }
 
 
 
 
-void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
+void PageSelector::DeselectPage (
+    const SharedPageDescriptor& rpDescriptor,
+    const bool bUpdateCurrentPage)
 {
     if (rpDescriptor.get()!=NULL
         && mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
@@ -236,7 +242,8 @@ void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
             mbSelectionChangeBroadcastPending = true;
         else
             mrController.GetSelectionManager()->SelectionHasChanged();
-        UpdateCurrentPage();
+        if (bUpdateCurrentPage)
+            UpdateCurrentPage();
     }
 }
 

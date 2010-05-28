@@ -119,17 +119,20 @@ private:
     void PaintBorder (
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,
-        const Rectangle& rBox) const;
+        const Rectangle& rBox,
+        const int nBorderWidth) const;
     Bitmap& GetBackgroundForState (
         const model::SharedPageDescriptor& rpDescriptor,
         const OutputDevice& rTemplateDevice);
     Bitmap& GetBackground(
         Bitmap& rBackground,
         Theme::GradientColorType eType,
-        const OutputDevice& rTemplateDevice);
+        const OutputDevice& rTemplateDevice,
+        const int nBorderWidth);
     Bitmap CreateBackgroundBitmap(
         const OutputDevice& rReferenceDevice,
-        const Theme::GradientColorType eType) const;
+        const Theme::GradientColorType eType,
+        const int nBorderWidth) const;
     Bitmap CreateMarkedPreview(
         const Size& rSize,
         const Bitmap& rPreview,

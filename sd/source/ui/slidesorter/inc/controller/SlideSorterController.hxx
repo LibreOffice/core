@@ -134,9 +134,6 @@ public:
     ::boost::shared_ptr<SelectionManager> GetSelectionManager (void) const;
     ::boost::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler (void) const;
 
-    // forward VCLs PrePaint window event to DrawingLayer
-    void PrePaint();
-
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
     */

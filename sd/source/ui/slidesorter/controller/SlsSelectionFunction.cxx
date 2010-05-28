@@ -491,10 +491,8 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             model::SharedPageDescriptor pDescriptor (rFocusManager.GetFocusedPageDescriptor());
             if (pDescriptor && rCode.IsMod1())
             {
-                // Doing a multi selection by default.  Can we ask the event
-                // for the state of the shift key?
                 if (pDescriptor->HasState(model::PageDescriptor::ST_Selected))
-                    mrController.GetPageSelector().DeselectPage(pDescriptor);
+                    mrController.GetPageSelector().DeselectPage(pDescriptor, false);
                 else
                     mrController.GetPageSelector().SelectPage(pDescriptor);
             }
@@ -1341,8 +1339,13 @@ bool NormalModeHandler::ProcessButtonDownEvent (
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
             if (mrSlideSorter.GetView().GetButtonBar().IsMouseOverButton())
             {
-                mrSelectionFunction.SwitchToButtonMode();
-                ReprocessEvent(rDescriptor);
+                // Switch to button mode only when the buttons are visible
+                // (or being faded in.)
+                if (mrSlideSorter.GetView().GetButtonBar().IsVisible(rDescriptor.mpHitDescriptor))
+                {
+                    mrSelectionFunction.SwitchToButtonMode();
+                    ReprocessEvent(rDescriptor);
+                }
             }
             break;
 

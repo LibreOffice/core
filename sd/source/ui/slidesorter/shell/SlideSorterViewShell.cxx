@@ -532,16 +532,6 @@ void SlideSorterViewShell::ExecStatusBar (SfxRequest& rRequest)
 
 
 
-void SlideSorterViewShell::PrePaint()
-{
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    if (mpSlideSorter.get() != NULL)
-        mpSlideSorter->GetController().PrePaint();
-}
-
-
-
-
 void SlideSorterViewShell::Paint (
     const Rectangle& rBBox,
     ::sd::Window* pWindow)

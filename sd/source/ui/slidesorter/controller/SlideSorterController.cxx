@@ -54,6 +54,7 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsPageObjectPainter.hxx"
 #include "view/SlsTheme.hxx"
+#include "view/SlsToolTip.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "cache/SlsPageCacheManager.hxx"
 
@@ -143,8 +144,6 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
 
         // Connect the view with the window that has been created by our base
         // class.
-        //        mrView.AddWindowToPaintView(pWindow.get());
-        //        mrView.SetActualWin(pWindow.get());
         pWindow->SetBackground(Wallpaper());
         pWindow->SetCenterAllowed(false);
         pWindow->SetMapMode(MapMode(MAP_PIXEL));
@@ -328,15 +327,6 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
 
 
 
-void SlideSorterController::PrePaint()
-{
-    // forward VCLs PrePaint window event to DrawingLayer
-    //AF    mrView.PrePaint();
-}
-
-
-
-
 void SlideSorterController::Paint (
     const Rectangle& rBBox,
     ::Window* pWindow)
@@ -451,40 +441,42 @@ bool SlideSorterController::Command (
             }
 
             pWindow->ReleaseMouse();
+
+            Point aMenuLocation (0,0);
             if (rEvent.IsMouseEvent())
             {
-                mbIsContextMenuOpen = true;
-                if (pViewShell != NULL)
-                {
-                    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
-                    if (pDispatcher != NULL)
-                        pDispatcher->ExecutePopup(SdResId(nPopupId));
-                }
+                // We have to explicitly specify the location of the menu
+                // when the slide sorter is placed in an undocked child
+                // menu.  But when it is docked it does not hurt, so we
+                // specify the location always.
+                aMenuLocation = rEvent.GetMousePosPixel();
             }
             else
             {
                 // The event is not a mouse event.  Use the center of the
                 // focused page as top left position of the context menu.
-                if (pPage != NULL)
+                model::SharedPageDescriptor pDescriptor (
+                    GetFocusManager().GetFocusedPageDescriptor());
+                if (pDescriptor.get() != NULL)
                 {
-                    model::SharedPageDescriptor pDescriptor (
-                        GetFocusManager().GetFocusedPageDescriptor());
-                    if (pDescriptor.get() != NULL)
-                    {
-                        Rectangle aBBox (
-                            mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox (
-                                pDescriptor,
-                                PageObjectLayouter::PageObject,
-                                PageObjectLayouter::ModelCoordinateSystem));
-                        Point aCenter (aBBox.Center());
-                        mbIsContextMenuOpen = true;
-                        if (pViewShell != NULL)
-                            pViewShell->GetViewFrame()->GetDispatcher()->ExecutePopup(
-                                SdResId(nPopupId),
-                                pWindow,
-                                &aCenter);
-                    }
+                    Rectangle aBBox (
+                        mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox (
+                            pDescriptor,
+                            PageObjectLayouter::PageObject,
+                            PageObjectLayouter::ModelCoordinateSystem));
+                    aMenuLocation = aBBox.Center();
                 }
+            }
+
+            mbIsContextMenuOpen = true;
+            if (pViewShell != NULL)
+            {
+                SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
+                if (pDispatcher != NULL)
+                    pDispatcher->ExecutePopup(
+                        SdResId(nPopupId),
+                        pWindow,
+                        &aMenuLocation);
             }
             mbIsContextMenuOpen = false;
             if (pPage == NULL)
@@ -643,13 +635,21 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
 
             case VCLEVENT_WINDOW_GETFOCUS:
-                if (pActiveWindow && pWindow == pActiveWindow.get())
-                    GetFocusManager().ShowFocus(false);
+                if (pActiveWindow)
+                    if (pWindow == pActiveWindow.get())
+                        GetFocusManager().ShowFocus(false);
                 break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:
                 if (pActiveWindow && pWindow == pActiveWindow.get())
+                {
                     GetFocusManager().HideFocus();
+                    mrView.GetToolTip().Hide();
+
+                    // Select the current slide so that it is properly
+                    // visualized when the focus is moved to the edit view.
+                    GetPageSelector().SelectPage(GetCurrentSlideManager()->GetCurrentSlide());
+                }
                 break;
 
             case VCLEVENT_APPLICATION_DATACHANGED:

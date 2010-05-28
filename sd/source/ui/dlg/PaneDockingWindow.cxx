@@ -393,6 +393,12 @@ void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
 {
     if (rEvent.GetButtons() == MOUSE_LEFT && mpContentWindow)
     {
+        // For some strange reason we have to set the WB_DIALOGCONTROL at
+        // the content window in order to have it pass focus to its content
+        // window.  Without setting this flag here that works only on views
+        // that have not been taken from the cash and relocated to this pane
+        // docking window.
+        mpContentWindow->SetStyle(mpContentWindow->GetStyle() | WB_DIALOGCONTROL);
         mpContentWindow->GrabFocus();
     }
     SfxDockingWindow::MouseButtonDown(rEvent);

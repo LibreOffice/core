@@ -169,8 +169,8 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
     SetGradient(Gradient_SelectedPage, aSelectionColor, 50, 50, +100,+100, +50,+25);
     SetGradient(Gradient_MouseOverPage, aSelectionColor, 75, 75, +100,+100, +50,+25);
-    SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +100,0, -50,-75);
-    SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 75, 75, +100,0, -50,-75);
+    SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +100,+100, -50,-75);
+    SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 75, 75, +100,+100, -50,-75);
     SetGradient(Gradient_FocusedPage, aSelectionColor, -1,-1, 0,0, -50,-75);
 
 #else
@@ -417,6 +417,8 @@ void Theme::SetGradient (
 }
 
 
+
+
 sal_Int32 Theme::GetGradientSaturationOverride (const GradientColorType eType)
 {
     GradientDescriptor& rGradient (GetGradient(eType));
@@ -424,11 +426,15 @@ sal_Int32 Theme::GetGradientSaturationOverride (const GradientColorType eType)
 }
 
 
+
+
 sal_Int32 Theme::GetGradientBrightnessOverride (const GradientColorType eType)
 {
     GradientDescriptor& rGradient (GetGradient(eType));
     return rGradient.mnBrightnessOverride;
 }
+
+
 
 
 void Theme::SetGradientSaturationOverride (const GradientColorType eType, const sal_Int32 nValue)
@@ -444,6 +450,8 @@ void Theme::SetGradientSaturationOverride (const GradientColorType eType, const 
         rGradient.mnBorderOffset1,
         rGradient.mnBorderOffset2);
 }
+
+
 
 
 void Theme::SetGradientBrightnessOverride (const GradientColorType eType, const sal_Int32 nValue)
@@ -536,8 +544,6 @@ void Theme::InitializeIcon (const IconType eType, USHORT nResourceId)
     if (eType>=0 && size_t(eType)<maIcons.size())
     {
         const BitmapEx aIcon (Image(SdResId(nResourceId)).GetBitmapEx());
-        OSL_TRACE("loaded icon %d in size %dx%d", nResourceId, aIcon.GetSizePixel().Width(),
-            aIcon.GetSizePixel().Height());
         maIcons[eType] = aIcon;
     }
     else

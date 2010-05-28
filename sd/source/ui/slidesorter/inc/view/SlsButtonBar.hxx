@@ -132,6 +132,11 @@ public:
         const model::SharedPageDescriptor& rpDescriptor,
         const bool bAnimate);
 
+    /** Return whether the button bar is visible for the givn descriptor (or
+        being faded in.)
+    */
+    bool IsVisible (const model::SharedPageDescriptor& rpDescriptor);
+
     class BackgroundTheme;
 
     /** While at least one Lock object exists the button bar will not be

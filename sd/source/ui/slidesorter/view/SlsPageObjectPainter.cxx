@@ -356,46 +356,62 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
     const model::SharedPageDescriptor& rpDescriptor,
     const OutputDevice& rReferenceDevice)
 {
-    const bool bIsSelected (rpDescriptor->HasState(model::PageDescriptor::ST_Selected));
-    const bool bIsMouseOver (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver));
-    const bool bIsFocused (rpDescriptor->HasState(model::PageDescriptor::ST_Focused));
+    enum State { None = 0x00, Selected = 0x01, MouseOver = 0x02, Focused = 0x04 };
+    const int nFocusedBorderWidth (2);
+    const int nNormalBorderWidth (1);
 
-    if (bIsMouseOver)
+    const State eState (State(
+          (rpDescriptor->HasState(model::PageDescriptor::ST_Selected) ? Selected : None)
+        | (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver) ? MouseOver : None)
+        | (rpDescriptor->HasState(model::PageDescriptor::ST_Focused) ? Focused : None)));
+
+    switch (eState)
     {
-        if (bIsSelected && bIsFocused)
+        case MouseOver | Selected | Focused:
             return GetBackground(
                 maMouseOverSelectedAndFocusedBackground,
                 Theme::Gradient_MouseOverSelectedAndFocusedPage,
-                rReferenceDevice);
-        else
+                rReferenceDevice,
+                nFocusedBorderWidth);
+
+        case MouseOver | Selected:
+        case MouseOver | Focused:
+        case MouseOver:
             return GetBackground(
                 maMouseOverBackground,
                 Theme::Gradient_MouseOverPage,
-                rReferenceDevice);
-    }
-    else if (bIsSelected)
-    {
-        if (bIsFocused)
+                rReferenceDevice,
+                (eState & Focused) ? nFocusedBorderWidth : nNormalBorderWidth);
+
+        case Selected | Focused:
             return GetBackground(
                 maFocusedSelectionBackground,
                 Theme::Gradient_SelectedAndFocusedPage,
-                rReferenceDevice);
-        else
+                rReferenceDevice,
+                nFocusedBorderWidth);
+
+        case Selected:
             return GetBackground(
                 maSelectionBackground,
                 Theme::Gradient_SelectedPage,
-                rReferenceDevice);
+                rReferenceDevice,
+                nNormalBorderWidth);
+
+        case Focused:
+            return GetBackground(
+                maFocusedBackground,
+                Theme::Gradient_FocusedPage,
+                rReferenceDevice,
+                nFocusedBorderWidth);
+
+        case None:
+        default:
+            return GetBackground(
+                maNormalBackground,
+                Theme::Gradient_NormalPage,
+                rReferenceDevice,
+                nNormalBorderWidth);
     }
-    else if (bIsFocused)
-        return GetBackground(
-            maFocusedBackground,
-            Theme::Gradient_FocusedPage,
-            rReferenceDevice);
-    else
-        return GetBackground(
-            maNormalBackground,
-            Theme::Gradient_NormalPage,
-            rReferenceDevice);
 }
 
 
@@ -404,10 +420,11 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
 Bitmap& PageObjectPainter::GetBackground(
     Bitmap& rBackground,
     Theme::GradientColorType eType,
-    const OutputDevice& rReferenceDevice)
+    const OutputDevice& rReferenceDevice,
+    const int nBorderWidth)
 {
     if (rBackground.IsEmpty())
-        rBackground = CreateBackgroundBitmap(rReferenceDevice, eType);
+        rBackground = CreateBackgroundBitmap(rReferenceDevice, eType, nBorderWidth);
     return rBackground;
 }
 
@@ -416,7 +433,8 @@ Bitmap& PageObjectPainter::GetBackground(
 
 Bitmap PageObjectPainter::CreateBackgroundBitmap(
     const OutputDevice& rReferenceDevice,
-    const Theme::GradientColorType eColorType) const
+    const Theme::GradientColorType eColorType,
+    const int nBorderWidth) const
 {
     const Size aSize (mpPageObjectLayouter->GetPageObjectSize());
     VirtualDevice aBitmapDevice (rReferenceDevice);
@@ -451,7 +469,7 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
         aBitmapDevice.DrawLine(Point(0,nY), Point(aSize.Width(),nY));
     }
 
-    PaintBorder(aBitmapDevice, eColorType, Rectangle(Point(0,0), aSize));
+    PaintBorder(aBitmapDevice, eColorType, Rectangle(Point(0,0), aSize), nBorderWidth);
 
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
@@ -471,14 +489,29 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
 void PageObjectPainter::PaintBorder (
     OutputDevice& rDevice,
     const Theme::GradientColorType eColorType,
-    const Rectangle& rBox) const
+    const Rectangle& rBox,
+    const int nBorderWidth) const
 {
-    const Size aSize (mpPageObjectLayouter->GetPageObjectSize());
     rDevice.SetFillColor();
-    rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border2));
-    rDevice.DrawRect(rBox);
-    rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border1));
-    rDevice.DrawLine(rBox.TopLeft(), rBox.TopRight());
+    for (int nIndex=0; nIndex<nBorderWidth; ++nIndex)
+    {
+        const int nDelta (-nIndex);
+        rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border2));
+        rDevice.DrawLine(
+            Point(rBox.Left()-nDelta, rBox.Top()-nDelta),
+            Point(rBox.Left()-nDelta, rBox.Bottom()+nDelta));
+        rDevice.DrawLine(
+            Point(rBox.Left()-nDelta, rBox.Bottom()+nDelta),
+            Point(rBox.Right()+nDelta, rBox.Bottom()+nDelta));
+        rDevice.DrawLine(
+            Point(rBox.Right()+nDelta, rBox.Bottom()+nDelta),
+            Point(rBox.Right()+nDelta, rBox.Top()-nDelta));
+
+        rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border1));
+        rDevice.DrawLine(
+            Point(rBox.Left()-nDelta, rBox.Top()-nDelta),
+            Point(rBox.Right()+nDelta, rBox.Top()-nDelta));
+    }
 }
 
 

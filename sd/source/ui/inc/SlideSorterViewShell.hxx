@@ -113,9 +113,6 @@ public:
     virtual void SetZoom (long int nZoom);
     virtual void SetZoomRect (const Rectangle& rZoomRect);
 
-    /// forward VCLs PrePaint window event to DrawingLayer
-    virtual void PrePaint();
-
     /** This is a callback method used by the active window to delegate its
         Paint() call to.  This view shell itself delegates it to the view.
     */
