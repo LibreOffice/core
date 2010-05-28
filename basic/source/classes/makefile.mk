@@ -37,18 +37,28 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+ALLTAR .SEQUENTIAL : \
+        $(MISC)$/$(TARGET).don \
+        $(MISC)$/$(TARGET).slo
+
+$(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
+        +$(CPPUMAKER) -O$(OUT)$/inc -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
+        echo $@
+
+$(MISC)$/$(TARGET).slo : $(SLOTARGET)
+        echo $@
+
 # --- Allgemein -----------------------------------------------------------
 
-COMMON_SLOFILES=	\
+SLOFILES=	\
     $(SLO)$/sb.obj       \
     $(SLO)$/sbxmod.obj	\
     $(SLO)$/image.obj	\
     $(SLO)$/sbintern.obj	\
     $(SLO)$/sbunoobj.obj	\
     $(SLO)$/propacc.obj	\
-    $(SLO)$/disas.obj
-
-SLOFILES=	$(COMMON_SLOFILES)	\
+    $(SLO)$/disas.obj \
+    $(SLO)$/errobject.obj \
     $(SLO)$/eventatt.obj
 
 OBJFILES=	\
