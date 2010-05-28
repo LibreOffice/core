@@ -440,7 +440,7 @@ function hSetDocumentFactory() as string
     case "DRAW"             : cDocumentFactory = "private:factory/sdraw"
     case "IMPRESS"          : cDocumentFactory = "private:factory/simpress"
     case "WRITER"           : cDocumentFactory = "private:factory/swriter"
-    case "CALC"             : cDocumentFactory = "private:factory/scalc""
+    case "CALC"             : cDocumentFactory = "private:factory/scalc"
     case "MATH"             : cDocumentFactory = "private:factory/smath"
     case "HTML"             : cDocumentFactory = "private:factory/swriter/web"
     case "MASTERDOCUMENT"   : cDocumentFactory = "private:factory/swriter/GlobalDocument"
