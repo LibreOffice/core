@@ -38,6 +38,7 @@
 #include "dp_gui_shared.hxx"
 #include "dp_gui_theextmgr.hxx"
 #include "dp_misc.h"
+#include "dp_identifier.hxx"
 
 #include "vcl/ctrl.hxx"
 #include "vcl/menu.hxx"
@@ -104,15 +105,6 @@ struct StrAllFiles : public rtl::StaticWithInit< const OUString, StrAllFiles >
         return ret;
     }
 };
-
-//------------------------------------------------------------------------------
-UpdateListEntry::UpdateListEntry( const uno::Reference< deployment::XPackage > &xPackage ) :
-    m_xPackage( xPackage )
-{}
-
-//------------------------------------------------------------------------------
-UpdateListEntry::~UpdateListEntry()
-{}
 
 //------------------------------------------------------------------------------
 //                            ExtBoxWithBtns_Impl
@@ -849,9 +841,15 @@ bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
     if ( !xPackage.is() )
         return false;
 
-    std::vector< TUpdateListEntry > vEntries;
-    TUpdateListEntry pEntry( new UpdateListEntry( xPackage ) );
-    vEntries.push_back( pEntry );
+    // get the extension with highest version
+    uno::Sequence<uno::Reference<deployment::XPackage> > seqExtensions =
+    m_pManager->getExtensionManager()->getExtensionsWithSameIdentifier(
+        dp_misc::getIdentifier(xPackage), xPackage->getName(), uno::Reference<ucb::XCommandEnvironment>());
+    uno::Reference<deployment::XPackage> extension =
+        dp_misc::getExtensionWithHighestVersion(seqExtensions);
+    OSL_ASSERT(extension.is());
+    std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries;
+    vEntries.push_back(extension);
 
     m_pManager->updatePackages( vEntries );
 
@@ -1453,14 +1451,13 @@ IMPL_LINK( UpdateRequiredDialog, HandleUpdateBtn, void*, EMPTYARG )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    std::vector< TUpdateListEntry > vUpdateEntries;
+    std::vector< uno::Reference< deployment::XPackage > > vUpdateEntries;
     sal_Int32 nCount = m_pExtensionBox->GetEntryCount();
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( i );
-        TUpdateListEntry pUpdateEntry( new UpdateListEntry( pEntry->m_xPackage ) );
-        vUpdateEntries.push_back( pUpdateEntry );
+        vUpdateEntries.push_back( pEntry->m_xPackage );
     }
 
     aGuard.clear();

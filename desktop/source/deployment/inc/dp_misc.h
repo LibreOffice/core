@@ -179,6 +179,52 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void syncRepositories(::com::sun::star::uno::Reference<
                       ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
 
+enum UPDATE_SOURCE
+{
+    UPDATE_SOURCE_NONE,
+    UPDATE_SOURCE_SHARED,
+    UPDATE_SOURCE_BUNDLED,
+    UPDATE_SOURCE_ONLINE
+};
+
+/* determine if an update is available which is installed in the
+   user repository.
+
+   If the return value is UPDATE_SOURCE_NONE, then no update is
+   available, otherwise the return value determine from which the
+   repository the update is used.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+UPDATE_SOURCE isUpdateUserExtension(
+    bool bReadOnlyShared,
+    ::rtl::OUString const & userVersion,
+    ::rtl::OUString const & sharedVersion,
+    ::rtl::OUString const & bundledVersion,
+    ::rtl::OUString const & onlineVersion);
+
+/* determine if an update is available which is installed in the
+   shared repository.
+
+   If the return value is UPDATE_SOURCE_NONE, then no update is
+   available, otherwise the return value determine from which the
+   repository the update is used.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+UPDATE_SOURCE isUpdateSharedExtension(
+    bool bReadOnlyShared,
+    ::rtl::OUString const & sharedVersion,
+    ::rtl::OUString const & bundledVersion,
+    ::rtl::OUString const & onlineVersion);
+
+/* determines the extension with the highest identifier and returns it
+
+ */
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage>
+getExtensionWithHighestVersion(
+    ::com::sun::star::uno::Sequence<
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::deployment::XPackage> > const & seqExtensionsWithSameId);
 
 }
 

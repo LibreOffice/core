@@ -92,7 +92,8 @@ public:
 
     //-----------------
     bool checkUpdates( bool showUpdateOnly, bool parentVisible );
-    bool updatePackages( const std::vector< TUpdateListEntry > &vList );
+    bool updatePackages( const std::vector< ::com::sun::star::uno::Reference<
+                         ::com::sun::star::deployment::XPackage > > &vList );
 
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
                         bool bEnable );

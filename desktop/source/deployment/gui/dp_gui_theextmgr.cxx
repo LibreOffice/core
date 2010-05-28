@@ -201,7 +201,7 @@ bool TheExtensionManager::isVisible()
 //------------------------------------------------------------------------------
 bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
 {
-    std::vector< TUpdateListEntry > vEntries;
+    std::vector< uno::Reference< deployment::XPackage >  > vEntries;
     uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
 
     try {
@@ -219,17 +219,11 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
 
     for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
     {
-        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
-
-        // we don't want update notifications for bundled packages
-        for ( sal_Int32 j = 0; ( j < 2 ) && ( j < xPackageList.getLength() ); ++j )
+        uno::Reference< deployment::XPackage > xPackage = dp_misc::getExtensionWithHighestVersion(xAllPackages[i]);
+        OSL_ASSERT(xPackage.is());
+        if ( xPackage.is() )
         {
-            uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
-            if ( xPackage.is() )
-            {
-                TUpdateListEntry pEntry( new UpdateListEntry( xPackage ) );
-                vEntries.push_back( pEntry );
-            }
+            vEntries.push_back( xPackage );
         }
     }
 
@@ -255,7 +249,8 @@ bool TheExtensionManager::removePackage( const uno::Reference< deployment::XPack
 }
 
 //------------------------------------------------------------------------------
-bool TheExtensionManager::updatePackages( const std::vector< TUpdateListEntry > &vList )
+bool TheExtensionManager::updatePackages(
+    const std::vector< uno::Reference< deployment::XPackage >  > &vList )
 {
     m_pExecuteCmdQueue->checkForUpdates( vList );
 
