@@ -880,6 +880,7 @@ bool BiffWorksheetFragment::importFragment()
                     case BIFF8: switch( nRecId )
                     {
                         case BIFF_ID_CFHEADER:          rCondFormats.importCfHeader( mrStrm );          break;
+                        case BIFF_ID_CODENAME:          rWorksheetSett.importCodeName( mrStrm );        break;
                         case BIFF_ID_COLINFO:           importColInfo();                                break;
                         case BIFF_ID_DATAVALIDATION:    importDataValidation();                         break;
                         case BIFF_ID_DATAVALIDATIONS:   importDataValidations();                        break;
@@ -1096,7 +1097,7 @@ void BiffWorksheetFragment::importHyperlink()
         return;
 
     // try to read the StdHlink data
-    if( !::oox::ole::OleHelper::importStdHlink( aModel, mrStrm, getTextEncoding(), true ) )
+    if( !::oox::ole::OleHelper::importStdHlink( aModel, mrStrm, true ) )
         return;
 
     // try to read the optional following SCREENTIP record

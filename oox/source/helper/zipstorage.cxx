@@ -26,26 +26,29 @@
  ************************************************************************/
 
 #include "oox/helper/zipstorage.hxx"
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/storagehelper.hxx>
 #include "oox/helper/helper.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::container::NoSuchElementException;
 using ::com::sun::star::embed::XStorage;
+using ::com::sun::star::embed::XTransactedObject;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::XStream;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 
 namespace oox {
 
@@ -93,7 +96,7 @@ ZipStorage::ZipStorage(
 }
 
 ZipStorage::ZipStorage( const ZipStorage& rParentStorage, const Reference< XStorage >& rxStorage, const OUString& rElementName ) :
-    StorageBase( rParentStorage, rElementName ),
+    StorageBase( rParentStorage, rElementName, rParentStorage.isReadOnly() ),
     mxStorage( rxStorage )
 {
     OSL_ENSURE( mxStorage.is(), "ZipStorage::ZipStorage - missing storage" );
@@ -127,7 +130,7 @@ void ZipStorage::implGetElementNames( ::std::vector< OUString >& orElementNames 
     }
 }
 
-StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bCreate )
+StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bCreateMissing )
 {
     Reference< XStorage > xSubXStorage;
     bool bMissing = false;
@@ -138,7 +141,7 @@ StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bC
             xSubXStorage = mxStorage->openStorageElement(
                 rElementName, ::com::sun::star::embed::ElementModes::READ );
     }
-    catch( ::com::sun::star::container::NoSuchElementException& )
+    catch( NoSuchElementException& )
     {
         bMissing = true;
     }
@@ -146,15 +149,14 @@ StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bC
     {
     }
 
-    if( bMissing && bCreate )
-        try
-        {
-            xSubXStorage = mxStorage->openStorageElement(
-                rElementName, ::com::sun::star::embed::ElementModes::READWRITE );
-        }
-        catch( Exception& )
-        {
-        }
+    if( bMissing && bCreateMissing ) try
+    {
+        xSubXStorage = mxStorage->openStorageElement(
+            rElementName, ::com::sun::star::embed::ElementModes::READWRITE );
+    }
+    catch( Exception& )
+    {
+    }
 
     StorageRef xSubStorage;
     if( xSubXStorage.is() )
@@ -188,7 +190,17 @@ Reference< XOutputStream > ZipStorage::implOpenOutputStream( const OUString& rEl
     return xOutStream;
 }
 
+void ZipStorage::implCommit() const
+{
+    try
+    {
+        Reference< XTransactedObject >( mxStorage, UNO_QUERY_THROW )->commit();
+    }
+    catch( Exception& )
+    {
+    }
+}
+
 // ============================================================================
 
 } // namespace oox
-

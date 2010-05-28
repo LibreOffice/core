@@ -29,8 +29,8 @@
 #include <rtl/strbuf.hxx>
 #include "tokens.hxx"
 #include "oox/token/tokenmap.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
@@ -39,7 +39,6 @@
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::com::sun::star::geometry::IntegerRectangle2D;
-using ::oox::core::FilterBase;
 using ::oox::drawingml::Color;
 using ::oox::drawingml::FillProperties;
 using ::oox::drawingml::LineArrowProperties;
@@ -106,7 +105,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return fDefValue;
 }
 
-/*static*/ sal_Int32 ConversionHelper::decodeMeasureToEmu( const FilterBase& rFilter,
+/*static*/ sal_Int32 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
     // default for missing values is 0
@@ -150,7 +149,9 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
         else if( (cChar1 == 'p') && (cChar2 == 'c') )   // 1 pica = 1/6 inch = 152,400 EMU
             fValue *= 152400.0;
         else if( (cChar1 == 'p') && (cChar2 == 'x') )   // 1 pixel, dependent on output device, factor 360 to convert 1/100mm to EMU
-            fValue = bPixelX ? rFilter.convertScreenPixelX( 360.0 * fValue ) : rFilter.convertScreenPixelY( 360.0 * fValue );
+            fValue = bPixelX ?
+                rGraphicHelper.convertScreenPixelXToHmm( 360.0 * fValue ) :
+                rGraphicHelper.convertScreenPixelYToHmm( 360.0 * fValue );
     }
     else if( (aUnit.getLength() == 1) && (aUnit[ 0 ] == '%') )
     {
@@ -164,10 +165,10 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return static_cast< sal_Int32 >( fValue + 0.5 );
 }
 
-/*static*/ sal_Int32 ConversionHelper::decodeMeasureToHmm( const FilterBase& rFilter,
+/*static*/ sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
-    return (decodeMeasureToEmu( rFilter, rValue, nRefValue, bPixelX, bDefaultAsPixel ) + 180) / 360;
+    return (decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) + 180) / 360;
 }
 
 // ============================================================================
@@ -195,7 +196,7 @@ namespace {
         specifies the color to be used to resolve the color modifiers used in
         one-color gradients.
   */
-void lclGetColor( Color& orDmlColor, const FilterBase& rFilter,
+void lclGetColor( Color& orDmlColor, const GraphicHelper& rGraphicHelper,
         const OptValue< OUString >& roVmlColor, const OptValue< double >& roVmlOpacity,
         sal_Int32 nDefaultRgb, sal_Int32 nPrimaryRgb = API_RGB_TRANSPARENT )
 {
@@ -239,7 +240,7 @@ void lclGetColor( Color& orDmlColor, const FilterBase& rFilter,
     sal_Int32 nColorToken = StaticTokenMap::get().getTokenFromUnicode( aColorName );
     sal_Int32 nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue == API_RGB_TRANSPARENT )
-        nRgbValue = rFilter.getSystemColor( nColorToken, API_RGB_TRANSPARENT );
+        nRgbValue = rGraphicHelper.getSystemColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue != API_RGB_TRANSPARENT )
     {
         orDmlColor.setSrgbClr( nRgbValue );
@@ -284,9 +285,9 @@ void lclGetColor( Color& orDmlColor, const FilterBase& rFilter,
     orDmlColor.setSrgbClr( nDefaultRgb );
 }
 
-sal_Int32 lclGetEmu( const FilterBase& rFilter, const OptValue< OUString >& roValue, sal_Int32 nDefValue )
+sal_Int32 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int32 nDefValue )
 {
-    return roValue.has() ? ConversionHelper::decodeMeasureToEmu( rFilter, roValue.get(), 0, false, false ) : nDefValue;
+    return roValue.has() ? ConversionHelper::decodeMeasureToEmu( rGraphicHelper, roValue.get(), 0, false, false ) : nDefValue;
 }
 
 void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::DashStopVector& orCustomDash, const OptValue< OUString >& roDashStyle )
@@ -428,7 +429,8 @@ void StrokeModel::assignUsed( const StrokeModel& rSource )
     moJoinStyle.assignIfUsed( rSource.moJoinStyle );
 }
 
-void StrokeModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter ) const
+void StrokeModel::pushToPropMap( PropertyMap& rPropMap,
+        ModelObjectHelper& rModelObjectHelper, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML line formatting to DrawingML line formatting and let the
         DrawingML code do the hard work. */
@@ -439,8 +441,8 @@ void StrokeModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilte
         aLineProps.maLineFill.moFillType = XML_solidFill;
         lclConvertArrow( aLineProps.maStartArrow, maStartArrow );
         lclConvertArrow( aLineProps.maEndArrow, maEndArrow );
-        lclGetColor( aLineProps.maLineFill.maFillColor, rFilter, moColor, moOpacity, API_RGB_BLACK );
-        aLineProps.moLineWidth = lclGetEmu( rFilter, moWeight, 1 );
+        lclGetColor( aLineProps.maLineFill.maFillColor, rGraphicHelper, moColor, moOpacity, API_RGB_BLACK );
+        aLineProps.moLineWidth = lclGetEmu( rGraphicHelper, moWeight, 1 );
         lclGetDmlLineDash( aLineProps.moPresetDash, aLineProps.maCustomDash, moDashStyle );
         aLineProps.moLineCompound = lclGetDmlLineCompound( moLineStyle );
         aLineProps.moLineCap = lclGetDmlLineCap( moEndCap );
@@ -451,7 +453,7 @@ void StrokeModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilte
         aLineProps.maLineFill.moFillType = XML_noFill;
     }
 
-    aLineProps.pushToPropMap( rPropMap, rFilter, rFilter.getModelObjectHelper() );
+    aLineProps.pushToPropMap( rPropMap, rModelObjectHelper, rGraphicHelper );
 }
 
 // ============================================================================
@@ -472,7 +474,8 @@ void FillModel::assignUsed( const FillModel& rSource )
     moRotate.assignIfUsed( rSource.moRotate );
 }
 
-void FillModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter ) const
+void FillModel::pushToPropMap( PropertyMap& rPropMap,
+        ModelObjectHelper& rModelObjectHelper, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML fill formatting to DrawingML fill formatting and let the
         DrawingML code do the hard work. */
@@ -492,8 +495,8 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter 
 
                 // prepare colors
                 Color aColor1, aColor2;
-                lclGetColor( aColor1, rFilter, moColor, moOpacity, API_RGB_WHITE );
-                lclGetColor( aColor2, rFilter, moColor2, moOpacity2, API_RGB_WHITE, aColor1.getColor( rFilter ) );
+                lclGetColor( aColor1, rGraphicHelper, moColor, moOpacity, API_RGB_WHITE );
+                lclGetColor( aColor2, rGraphicHelper, moColor2, moOpacity2, API_RGB_WHITE, aColor1.getColor( rGraphicHelper ) );
 
                 // type XML_gradient is linear or axial gradient
                 if( nFillType == XML_gradient )
@@ -581,7 +584,7 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter 
             {
                 aFillProps.moFillType = XML_solidFill;
                 // fill color (default is white)
-                lclGetColor( aFillProps.maFillColor, rFilter, moColor, moOpacity, API_RGB_WHITE );
+                lclGetColor( aFillProps.maFillColor, rGraphicHelper, moColor, moOpacity, API_RGB_WHITE );
             }
         }
     }
@@ -590,7 +593,7 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter 
         aFillProps.moFillType = XML_noFill;
     }
 
-    aFillProps.pushToPropMap( rPropMap, rFilter, rFilter.getModelObjectHelper() );
+    aFillProps.pushToPropMap( rPropMap, rModelObjectHelper, rGraphicHelper );
 }
 
 // ============================================================================

@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace oox { namespace core { class XmlFilterBase; } }
-namespace oox { namespace ole { class AxControlHelper; } }
+namespace oox { namespace ole { class EmbeddedForm; } }
 
 namespace oox {
 namespace vml {
@@ -111,8 +111,8 @@ public:
     inline ShapeContainer& getShapes() { return *mxShapes; }
     /** Returns read access to the container of shapes and templates. */
     inline const ShapeContainer& getShapes() const { return *mxShapes; }
-    /** Returns the helper object used to process ActiveX form controls. */
-    ::oox::ole::AxControlHelper& getControlHelper() const;
+    /** Returns the form object used to process ActiveX form controls. */
+    ::oox::ole::EmbeddedForm& getControlForm() const;
 
     /** Registers the passed embedded OLE object. The related shape will then
         load the OLE object data from the specified fragment. */
@@ -154,12 +154,8 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                             const ::com::sun::star::awt::Rectangle& rShapeRect );
 
-protected:
-    /** Derived classes may create a specialized form control helper object. */
-    virtual ::oox::ole::AxControlHelper* createControlHelper() const;
-
 private:
-    typedef ::std::auto_ptr< ::oox::ole::AxControlHelper >  AxControlHelperPtr;
+    typedef ::std::auto_ptr< ::oox::ole::EmbeddedForm >     EmbeddedFormPtr;
     typedef ::std::auto_ptr< ShapeContainer >               ShapeContainerPtr;
     typedef ::std::map< ::rtl::OUString, OleObjectInfo >    OleObjectInfoMap;
     typedef ::std::map< ::rtl::OUString, ControlInfo >      ControlInfoMap;
@@ -167,7 +163,7 @@ private:
     ::oox::core::XmlFilterBase& mrFilter;   /// Filter object that imports/exports the VML drawing.
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                         mxDrawPage;         /// UNO draw page used to insert the shapes.
-    mutable AxControlHelperPtr mxCtrlHelper;/// Form control helper.
+    mutable EmbeddedFormPtr mxCtrlForm;     /// The control form used to process ActiveX controls.
     ShapeContainerPtr   mxShapes;           /// All shapes and shape templates.
     OleObjectInfoMap    maOleObjects;       /// Info about all embedded OLE objects, mapped by shape id.
     ControlInfoMap      maControls;         /// Info about all embedded form controls, mapped by control name.

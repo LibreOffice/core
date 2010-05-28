@@ -30,15 +30,10 @@
 #include <utility>
 #include <list>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XMergeable.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
@@ -52,7 +47,12 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/XMergeable.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include "properties.hxx"
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
@@ -75,31 +75,14 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::util::DateTime;
-using ::com::sun::star::util::XMergeable;
-using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::com::sun::star::util::XNumberFormatTypes;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::Size;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::drawing::XDrawPageSupplier;
-using ::com::sun::star::table::BorderLine;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::table::XCell;
-using ::com::sun::star::table::XCellRange;
-using ::com::sun::star::table::XColumnRowRange;
-using ::com::sun::star::table::XTableColumns;
-using ::com::sun::star::table::XTableRows;
+using ::com::sun::star::lang::Locale;
+using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::sheet::ConditionOperator;
 using ::com::sun::star::sheet::ValidationType;
 using ::com::sun::star::sheet::ValidationAlertStyle;
@@ -114,9 +97,26 @@ using ::com::sun::star::sheet::XSheetCellRanges;
 using ::com::sun::star::sheet::XSheetCondition;
 using ::com::sun::star::sheet::XSheetOutline;
 using ::com::sun::star::sheet::XSpreadsheet;
+using ::com::sun::star::table::BorderLine;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::table::XCell;
+using ::com::sun::star::table::XCellRange;
+using ::com::sun::star::table::XColumnRowRange;
+using ::com::sun::star::table::XTableColumns;
+using ::com::sun::star::table::XTableRows;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextRange;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::util::DateTime;
+using ::com::sun::star::util::XMergeable;
+using ::com::sun::star::util::XNumberFormatsSupplier;
+using ::com::sun::star::util::XNumberFormatTypes;
 
 namespace oox {
 namespace xls {
@@ -847,7 +847,6 @@ CellRangeAddress WorksheetData::getCellRangeFromRectangle( const Rectangle& rRec
 
 void WorksheetData::setCellFormat( const CellModel& rModel )
 {
-    OOX_LOADSAVE_TIMER( SETCELLFORMAT );
     if( rModel.mxCell.is() && ((rModel.mnXfId >= 0) || (rModel.mnNumFmtId >= 0)) )
     {
         // try to merge existing ranges and to write some formatting properties
@@ -1041,7 +1040,6 @@ void WorksheetData::setRowModel( const RowModel& rModel )
 
 void WorksheetData::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId ) const
 {
-    OOX_LOADSAVE_TIMER( CONVERTCOLUMNFORMAT );
     CellRangeAddress aRange( getSheetIndex(), nFirstCol, 0, nLastCol, mrMaxApiPos.Row );
     if( getAddressConverter().validateCellRange( aRange, true, false ) )
     {
@@ -1052,7 +1050,6 @@ void WorksheetData::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol
 
 void WorksheetData::convertRowFormat( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal_Int32 nXfId ) const
 {
-    OOX_LOADSAVE_TIMER( CONVERTROWFORMAT );
     CellRangeAddress aRange( getSheetIndex(), 0, nFirstRow, mrMaxApiPos.Column, nLastRow );
     if( getAddressConverter().validateCellRange( aRange, true, false ) )
     {
@@ -1074,13 +1071,13 @@ void WorksheetData::initializeWorksheetImport()
 
 void WorksheetData::finalizeWorksheetImport()
 {
-    OOX_LOADSAVE_TIMER( FINALIZESHEETDATA );
     lclUpdateProgressBar( mxRowProgress, 1.0 );
     finalizeXfIdRanges();
     lclUpdateProgressBar( mxFinalProgress, 0.25 );
     finalizeHyperlinkRanges();
     finalizeValidationRanges();
     finalizeMergedRanges();
+    maSheetSett.finalizeImport();
     maCondFormats.finalizeImport();
     maPageSett.finalizeImport();
     maSheetViewSett.finalizeImport();
@@ -1205,7 +1202,6 @@ void WorksheetData::writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowRan
 
 void WorksheetData::writeXfIdRangeProperties( const XfIdRange& rXfIdRange ) const
 {
-    OOX_LOADSAVE_TIMER( WRITECELLPROPERTIES );
     StylesBuffer& rStyles = getStyles();
     PropertyMap aPropMap;
     if( rXfIdRange.mnXfId >= 0 )
@@ -1220,7 +1216,6 @@ void WorksheetData::mergeXfIdRanges()
 {
     if( !maXfIdRanges.empty() )
     {
-        OOX_LOADSAVE_TIMER( MERGECELLFORMAT );
         // get row index of last range
         sal_Int32 nLastRow = maXfIdRanges.rbegin()->second.maRange.StartRow;
         // process all ranges located in the same row of the last range
@@ -1485,10 +1480,7 @@ void WorksheetData::finalizeDrawing()
     OSL_ENSURE( (getFilterType() == FILTER_OOX) || (maDrawingPath.getLength() == 0),
         "WorksheetData::finalizeDrawing - unexpected DrawingML path" );
     if( (getFilterType() == FILTER_OOX) && (maDrawingPath.getLength() > 0) )
-    {
-        OOX_LOADSAVE_TIMER( FINALIZEDRAWING );
         importOoxFragment( new OoxDrawingFragment( *this, maDrawingPath ) );
-    }
 }
 
 void WorksheetData::finalizeVmlDrawing()
@@ -1930,7 +1922,6 @@ void WorksheetHelper::setErrorCell( const Reference< XCell >& rxCell, sal_uInt8 
 void WorksheetHelper::setCell( CellModel& orModel ) const
 {
     OSL_ENSURE( orModel.mxCell.is(), "WorksheetHelper::setCell - missing cell interface" );
-    OOX_LOADSAVE_TIMER( SETCELL );
     if( orModel.mbHasValueStr ) switch( orModel.mnCellType )
     {
         case XML_b:

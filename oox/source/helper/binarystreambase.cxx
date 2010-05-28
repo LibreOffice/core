@@ -61,7 +61,24 @@ void BinaryStreamBase::seek( sal_Int64 )
 
 sal_Int64 BinaryStreamBase::getRemaining() const
 {
-    return isSeekable() ? ::std::max< sal_Int64 >( getLength() - tell(), 0 ) : -1;
+    // do not use isSeekable(), implementations may provide stream position and size even if not seekable
+    sal_Int64 nPos = tell();
+    sal_Int64 nLen = getLength();
+    return ((nPos >= 0) && (nLen >= 0)) ? ::std::max< sal_Int64 >( nLen - nPos, 0 ) : -1;
+}
+
+void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos )
+{
+    sal_Int64 nStrmPos = tell();
+    // nothing to do, if stream is at anchor position
+    if( isSeekable() && (0 <= nAnchorPos) && (nAnchorPos != nStrmPos) && (nBlockSize > 1) )
+    {
+        // prevent modulo with negative arguments...
+        sal_Int64 nSkipSize = (nAnchorPos < nStrmPos) ?
+            (nBlockSize - ((nStrmPos - nAnchorPos - 1) % nBlockSize) - 1) :
+            ((nAnchorPos - nStrmPos) % nBlockSize);
+        seek( nStrmPos + nSkipSize );
+    }
 }
 
 // ============================================================================
@@ -135,7 +152,7 @@ sal_Int64 SequenceSeekableStream::tell() const
 void SequenceSeekableStream::seek( sal_Int64 nPos )
 {
     mnPos = getLimitedValue< sal_Int32, sal_Int64 >( nPos, 0, mrData.getLength() );
-    mbEof = mnPos < nPos;
+    mbEof = mnPos != nPos;
 }
 
 // ============================================================================

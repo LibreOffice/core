@@ -30,8 +30,8 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include "oox/dump/oledumper.hxx"
-#include "oox/helper/olestorage.hxx"
 #include "oox/core/filterbase.hxx"
+#include "oox/ole/olestorage.hxx"
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulabase.hxx"
@@ -100,30 +100,30 @@ const sal_uInt16 BIFF_PT_NOSTRING           = 0xFFFF;
 
 namespace {
 
-void lclDumpDffClientPos( Output& rOut, BinaryInputStream& rStrm, const String& rName, sal_uInt16 nSubScale )
+void lclDumpDffClientPos( const OutputRef& rxOut, const BinaryInputStreamRef& rxStrm, const String& rName, sal_uInt16 nSubScale )
 {
-    MultiItemsGuard aMultiGuard( rOut );
-    TableGuard aTabGuard( rOut, 17 );
+    MultiItemsGuard aMultiGuard( rxOut );
+    TableGuard aTabGuard( rxOut, 17 );
     {
-        sal_uInt16 nPos = rStrm.readuInt16();
-        ItemGuard aItem( rOut, rName );
-        rOut.writeDec( nPos );
+        sal_uInt16 nPos = rxStrm->readuInt16();
+        ItemGuard aItem( rxOut, rName );
+        rxOut->writeDec( nPos );
     }
     {
-        sal_uInt16 nSubUnits = rStrm.readuInt16();
-        ItemGuard aItem( rOut, "sub-units" );
-        rOut.writeDec( nSubUnits );
-        rOut.writeChar( '/' );
-        rOut.writeDec( nSubScale );
+        sal_uInt16 nSubUnits = rxStrm->readuInt16();
+        ItemGuard aItem( rxOut, "sub-units" );
+        rxOut->writeDec( nSubUnits );
+        rxOut->writeChar( '/' );
+        rxOut->writeDec( nSubScale );
     }
 }
 
-void lclDumpDffClientRect( Output& rOut, BinaryInputStream& rStrm )
+void lclDumpDffClientRect( const OutputRef& rxOut, const BinaryInputStreamRef& rxStrm )
 {
-    lclDumpDffClientPos( rOut, rStrm, "start-col", 1024 );
-    lclDumpDffClientPos( rOut, rStrm, "start-row", 256 );
-    lclDumpDffClientPos( rOut, rStrm, "end-col", 1024 );
-    lclDumpDffClientPos( rOut, rStrm, "end-row", 256 );
+    lclDumpDffClientPos( rxOut, rxStrm, "start-col", 1024 );
+    lclDumpDffClientPos( rxOut, rxStrm, "start-row", 256 );
+    lclDumpDffClientPos( rxOut, rxStrm, "end-col", 1024 );
+    lclDumpDffClientPos( rxOut, rxStrm, "end-row", 256 );
 }
 
 } // namespace
@@ -138,7 +138,7 @@ BiffDffStreamObject::BiffDffStreamObject( const OutputObjectBase& rParent, const
 void BiffDffStreamObject::implDumpClientAnchor()
 {
     dumpHex< sal_uInt16 >( "flags", "DFF-CLIENTANCHOR-FLAGS" );
-    lclDumpDffClientRect( out(), in() );
+    lclDumpDffClientRect( mxOut, mxStrm );
 }
 
 // ============================================================================
@@ -161,15 +161,16 @@ void BiffCtlsStreamObject::implDump()
 {
     if( mnLength > 0 )
     {
-        out().emptyLine();
+        mxOut->emptyLine();
         writeEmptyItem( "CTLS-START" );
         {
-            IndentGuard aIndGuard( out() );
-            in().seek( mnStartPos );
-            OcxGuidControlObject( *this, mnLength ).dump();
+            IndentGuard aIndGuard( mxOut );
+            mxStrm->seek( mnStartPos );
+            RelativeInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, mnLength ) );
+            FormControlStreamObject( *this, xRelStrm ).dump();
         }
         writeEmptyItem( "CTLS-END" );
-        out().emptyLine();
+        mxOut->emptyLine();
     }
 }
 
@@ -315,7 +316,7 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
     switch( mnLastRecId )
     {
         case BIFF_ID_CHBEGIN:
-            out().incIndent();
+            mxOut->incIndent();
         break;
     }
 
@@ -351,7 +352,7 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
             mxBiffStrm->enableDecoder( false );
         break;
         case BIFF_ID_CHEND:
-            out().decIndent();
+            mxOut->decIndent();
         break;
     }
 
@@ -416,10 +417,10 @@ void BiffObjectBase::writeFontPortions( const FontPortionModelList& rPortions )
     if( !rPortions.empty() )
     {
         writeDecItem( "font-count", static_cast< sal_uInt32 >( rPortions.size() ) );
-        TableGuard aTabGuard( out(), 14 );
+        TableGuard aTabGuard( mxOut, 14 );
         for( FontPortionModelList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
         {
-            MultiItemsGuard aMultiGuard( out() );
+            MultiItemsGuard aMultiGuard( mxOut );
             writeDecItem( "char-pos", aIt->mnPos );
             writeDecItem( "font-idx", aIt->mnFontId, "FONTNAMES" );
         }
@@ -497,7 +498,7 @@ OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFl
     // #122185# bRich flag may be set, but format runs may be missing
     if( nFontCount > 0 )
     {
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         FontPortionModelList aPortions;
         aPortions.importPortions( *mxBiffStrm, nFontCount, BIFF_FONTPORTION_16BIT );
         writeFontPortions( aPortions );
@@ -508,7 +509,7 @@ OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFl
     if( nPhoneticSize > 0 )
     {
         sal_Int64 nStrmPos = mxBiffStrm->tell();
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         writeEmptyItem( "phonetic-data" );
         dumpUnused( 2 );
         dumpDec< sal_uInt16 >( "size" );
@@ -520,7 +521,7 @@ OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFl
         if( nLen == 0 ) dumpUnused( 2 );
         for( sal_uInt16 nPortion = 0; !mxBiffStrm->isEof() && (nPortion < nCount); ++nPortion )
         {
-            MultiItemsGuard aMultiGuard( out() );
+            MultiItemsGuard aMultiGuard( mxOut );
             dumpDec< sal_uInt16 >( "first-portion-char" );
             dumpDec< sal_uInt16 >( "first-main-char" );
             dumpDec< sal_uInt16 >( "main-char-count" );
@@ -560,7 +561,7 @@ rtl_TextEncoding BiffObjectBase::dumpCodePage( const String& rName )
 
 void BiffObjectBase::dumpFormulaResult( const String& rName )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     sal_uInt8 pnResult[ 8 ];
     mxBiffStrm->readMemory( pnResult, 8 );
     writeArrayItem( rName( "result" ), pnResult, 8 );
@@ -638,8 +639,7 @@ void BiffObjectBase::dumpRangeList( const String& rName, bool bCol16Bit, bool bR
 
 void BiffObjectBase::dumpConstArrayHeader( sal_uInt32& rnCols, sal_uInt32& rnRows )
 {
-    Output& rOut = out();
-    MultiItemsGuard aMultiGuard( rOut );
+    MultiItemsGuard aMultiGuard( mxOut );
     rnCols = dumpDec< sal_uInt8 >( "width" );
     rnRows = dumpDec< sal_uInt16 >( "height" );
     switch( getBiff() )
@@ -651,18 +651,17 @@ void BiffObjectBase::dumpConstArrayHeader( sal_uInt32& rnCols, sal_uInt32& rnRow
         case BIFF8: ++rnCols; ++rnRows;             break;
         case BIFF_UNKNOWN:                          break;
     }
-    ItemGuard aItem( rOut, "size" );
-    rOut.writeDec( rnCols );
-    rOut.writeChar( 'x' );
-    rOut.writeDec( rnRows );
+    ItemGuard aItem( mxOut, "size" );
+    mxOut->writeDec( rnCols );
+    mxOut->writeChar( 'x' );
+    mxOut->writeDec( rnRows );
     aItem.cont();
-    rOut.writeDec( rnCols * rnRows );
+    mxOut->writeDec( rnCols * rnRows );
 }
 
 OUString BiffObjectBase::dumpConstValue( sal_Unicode cStrQuote )
 {
-    Output& rOut = out();
-    MultiItemsGuard aMultiGuard( rOut );
+    MultiItemsGuard aMultiGuard( mxOut );
     OUStringBuffer aValue;
     switch( dumpDec< sal_uInt8 >( "type", mxConstType ) )
     {
@@ -672,7 +671,7 @@ OUString BiffObjectBase::dumpConstValue( sal_Unicode cStrQuote )
         break;
         case BIFF_DATATYPE_DOUBLE:
             dumpDec< double >( "value" );
-            aValue.append( rOut.getLastItemValue() );
+            aValue.append( mxOut->getLastItemValue() );
         break;
         case BIFF_DATATYPE_STRING:
             aValue.append( dumpString( "value", BIFF_STR_8BITLENGTH ) );
@@ -680,12 +679,12 @@ OUString BiffObjectBase::dumpConstValue( sal_Unicode cStrQuote )
         break;
         case BIFF_DATATYPE_BOOL:
             dumpBoolean( "value" );
-            aValue.append( rOut.getLastItemValue() );
+            aValue.append( mxOut->getLastItemValue() );
             dumpUnused( 7 );
         break;
         case BIFF_DATATYPE_ERROR:
             dumpErrorCode( "value" );
-            aValue.append( rOut.getLastItemValue() );
+            aValue.append( mxOut->getLastItemValue() );
             dumpUnused( 7 );
         break;
     }
@@ -712,22 +711,22 @@ void BiffObjectBase::dumpFrHeader( bool bWithFlags, bool bWithRange )
 
 void BiffObjectBase::dumpDffClientRect()
 {
-    lclDumpDffClientRect( out(), in() );
+    lclDumpDffClientRect( mxOut, mxStrm );
 }
 
 void BiffObjectBase::dumpEmbeddedDff()
 {
-    out().decIndent();
+    mxOut->decIndent();
     writeEmptyItem( "EMBEDDED-DFF-START" );
-    out().incIndent();
+    mxOut->incIndent();
     mxDffObj->dump();
-    out().emptyLine();
-    out().decIndent();
+    mxOut->emptyLine();
+    mxOut->decIndent();
     writeEmptyItem( "EMBEDDED-DFF-END" );
-    out().incIndent();
+    mxOut->incIndent();
 }
 
-void BiffObjectBase::dumpOcxControl()
+void BiffObjectBase::dumpControl()
 {
     sal_uInt32 nStartPos = dumpHex< sal_uInt32 >( "ctls-stream-pos", "CONV-DEC" );
     sal_uInt32 nLength = dumpHex< sal_uInt32 >( "ctls-stream-length", "CONV-DEC" );
@@ -784,26 +783,25 @@ void FormulaObject::dumpNameFormula( const String& rName )
 void FormulaObject::implDump()
 {
     {
-        MultiItemsGuard aMultiGuard( out() );
+        MultiItemsGuard aMultiGuard( mxOut );
         writeEmptyItem( maName );
         writeDecItem( "formula-size", mnSize );
     }
     if( mnSize == 0 ) return;
 
-    BinaryInputStream& rStrm = in();
-    sal_Int64 nStartPos = rStrm.tell();
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, rStrm.getLength() );
+    sal_Int64 nStartPos = mxStrm->tell();
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->getLength() );
 
     bool bValid = mxTokens.get();
     mxStack.reset( new FormulaStack );
     maAddData.clear();
-    IndentGuard aIndGuard( out() );
+    IndentGuard aIndGuard( mxOut );
     {
-        TableGuard aTabGuard( out(), 8, 18 );
-        while( bValid && !rStrm.isEof() && (rStrm.tell() < nEndPos) )
+        TableGuard aTabGuard( mxOut, 8, 18 );
+        while( bValid && !mxStrm->isEof() && (mxStrm->tell() < nEndPos) )
         {
-            MultiItemsGuard aMultiGuard( out() );
-            writeHexItem( EMPTY_STRING, static_cast< sal_uInt16 >( rStrm.tell() - nStartPos ) );
+            MultiItemsGuard aMultiGuard( mxOut );
+            writeHexItem( EMPTY_STRING, static_cast< sal_uInt16 >( mxStrm->tell() - nStartPos ) );
             sal_uInt8 nTokenId = dumpHex< sal_uInt8 >( EMPTY_STRING, mxTokens );
             bValid = mxTokens->hasName( nTokenId );
             if( bValid )
@@ -881,7 +879,7 @@ void FormulaObject::implDump()
             }
         }
     }
-    bValid = nEndPos == rStrm.tell();
+    bValid = nEndPos == mxStrm->tell();
     if( bValid )
     {
         dumpAddTokenData();
@@ -889,7 +887,7 @@ void FormulaObject::implDump()
         writeInfoItem( "classes", mxStack->getClassesString() );
     }
     else
-        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), nEndPos - rStrm.tell(), false );
+        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), nEndPos - mxStrm->tell(), false );
 
     mnSize = 0;
 }
@@ -1006,12 +1004,12 @@ OUString FormulaObject::createPlaceHolder() const
 
 sal_uInt16 FormulaObject::readFuncId()
 {
-    return (getBiff() >= BIFF4) ? in().readuInt16() : in().readuInt8();
+    return (getBiff() >= BIFF4) ? mxStrm->readuInt16() : mxStrm->readuInt8();
 }
 
 OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo** oppFuncInfo )
 {
-    ItemGuard aItemGuard( out(), "func-id" );
+    ItemGuard aItemGuard( mxOut, "func-id" );
     writeHexItem( EMPTY_STRING, nFuncId, "FUNCID" );
     OUStringBuffer aBuffer;
     const FunctionInfo* pFuncInfo = mxFuncProv->getFuncInfoFromBiffFuncId( nFuncId );
@@ -1025,9 +1023,9 @@ OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo*
     }
     OUString aFuncName = aBuffer.makeStringAndClear();
     aItemGuard.cont();
-    out().writeChar( OOX_DUMP_STRQUOTE );
-    out().writeString( aFuncName );
-    out().writeChar( OOX_DUMP_STRQUOTE );
+    mxOut->writeChar( OOX_DUMP_STRQUOTE );
+    mxOut->writeString( aFuncName );
+    mxOut->writeChar( OOX_DUMP_STRQUOTE );
     if( oppFuncInfo ) *oppFuncInfo = pFuncInfo;
     return aFuncName;
 }
@@ -1133,13 +1131,13 @@ OUString FormulaObject::dumpTokenRefTabIdxs()
 void FormulaObject::dumpIntToken()
 {
     dumpDec< sal_uInt16 >( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpDoubleToken()
 {
     dumpDec< double >( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpStringToken()
@@ -1153,13 +1151,13 @@ void FormulaObject::dumpStringToken()
 void FormulaObject::dumpBoolToken()
 {
     dumpBoolean( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpErrorToken()
 {
     dumpErrorCode( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpMissArgToken()
@@ -1201,14 +1199,14 @@ void FormulaObject::dumpRefToken( const OUString& rTokClass, bool bNameMode )
 {
     TokenAddress aPos = dumpTokenAddress( bNameMode );
     writeTokenAddressItem( "addr", aPos, bNameMode );
-    mxStack->pushOperand( createRef( out().getLastItemValue() ), rTokClass );
+    mxStack->pushOperand( createRef( mxOut->getLastItemValue() ), rTokClass );
 }
 
 void FormulaObject::dumpAreaToken( const OUString& rTokClass, bool bNameMode )
 {
     TokenRange aRange = dumpTokenRange( bNameMode );
     writeTokenRangeItem( "range", aRange, bNameMode );
-    mxStack->pushOperand( createRef( out().getLastItemValue() ), rTokClass );
+    mxStack->pushOperand( createRef( mxOut->getLastItemValue() ), rTokClass );
 }
 
 void FormulaObject::dumpRefErrToken( const OUString& rTokClass, bool bArea )
@@ -1222,7 +1220,7 @@ void FormulaObject::dumpRef3dToken( const OUString& rTokClass, bool bNameMode )
     OUString aRef = dumpTokenRefTabIdxs();
     TokenAddress aPos = dumpTokenAddress( bNameMode );
     writeTokenAddress3dItem( "addr", aRef, aPos, bNameMode );
-    mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+    mxStack->pushOperand( mxOut->getLastItemValue(), rTokClass );
 }
 
 void FormulaObject::dumpArea3dToken( const OUString& rTokClass, bool bNameMode )
@@ -1230,7 +1228,7 @@ void FormulaObject::dumpArea3dToken( const OUString& rTokClass, bool bNameMode )
     OUString aRef = dumpTokenRefTabIdxs();
     TokenRange aRange = dumpTokenRange( bNameMode );
     writeTokenRange3dItem( "range", aRef, aRange, bNameMode );
-    mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+    mxStack->pushOperand( mxOut->getLastItemValue(), rTokClass );
 }
 
 void FormulaObject::dumpRefErr3dToken( const OUString& rTokClass, bool bArea )
@@ -1260,7 +1258,7 @@ void FormulaObject::dumpExpToken( const String& rName )
     aPos.mnCol = dumpDec< sal_uInt16, sal_uInt8 >( getBiff() != BIFF2, "col" );
     writeAddressItem( "base-addr", aPos );
     OUStringBuffer aOp( rName );
-    StringHelper::appendIndex( aOp, out().getLastItemValue() );
+    StringHelper::appendIndex( aOp, mxOut->getLastItemValue() );
     mxStack->pushOperand( aOp.makeStringAndClear() );
 }
 
@@ -1288,7 +1286,7 @@ void FormulaObject::dumpFuncToken( const OUString& rTokClass )
 void FormulaObject::dumpFuncVarToken( const OUString& rTokClass )
 {
     sal_uInt8 nParamCount;
-    in() >> nParamCount;
+    *mxStrm >> nParamCount;
     sal_uInt16 nFuncId = readFuncId();
     bool bCmd = getFlag( nFuncId, BIFF_TOK_FUNCVAR_CMD );
     if( bCmd )
@@ -1345,7 +1343,7 @@ bool FormulaObject::dumpAttrToken()
         case BIFF_TOK_ATTR_CHOOSE:
         {
             sal_uInt16 nCount = dumpDec< sal_uInt16, sal_uInt8 >( !bBiff2, "choices" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
                 dumpDec< sal_uInt16, sal_uInt8 >( !bBiff2, "#skip" );
             dumpDec< sal_uInt16, sal_uInt8 >( !bBiff2, "skip-err" );
@@ -1431,7 +1429,7 @@ void FormulaObject::dumpNlrColRowToken( const OUString& rTokClass, bool bAddData
     {
         TokenAddress aPos = dumpTokenAddress( false );
         writeInfoItem( "addr", lclCreateNlr( aPos ) );
-        mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+        mxStack->pushOperand( mxOut->getLastItemValue(), rTokClass );
     }
 }
 
@@ -1447,7 +1445,7 @@ void FormulaObject::dumpNlrRangeToken( const OUString& rTokClass, bool bAddData 
     {
         TokenAddress aPos = dumpTokenAddress( false );
         writeInfoItem( "addr", lclCreateNlr( aPos ) );
-        mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+        mxStack->pushOperand( mxOut->getLastItemValue(), rTokClass );
     }
     dumpUnknown( 1 );
     dumpRange( "target-range" );
@@ -1462,24 +1460,23 @@ void FormulaObject::dumpNlrRangeErrToken()
 
 void FormulaObject::dumpAddTokenData()
 {
-    Output& rOut = out();
-    rOut.resetItemIndex();
+    mxOut->resetItemIndex();
     for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); aIt != aEnd; ++aIt )
     {
         AddDataType eType = *aIt;
 
         {
-            ItemGuard aItem( rOut, "#add-data" );
+            ItemGuard aItem( mxOut, "#add-data" );
             switch( eType )
             {
-                case ADDDATA_NLR:       rOut.writeAscii( "tNlr" );      break;
-                case ADDDATA_ARRAY:     rOut.writeAscii( "tArray" );    break;
-                case ADDDATA_MEMAREA:   rOut.writeAscii( "tMemArea" );  break;
+                case ADDDATA_NLR:       mxOut->writeAscii( "tNlr" );      break;
+                case ADDDATA_ARRAY:     mxOut->writeAscii( "tArray" );    break;
+                case ADDDATA_MEMAREA:   mxOut->writeAscii( "tMemArea" );  break;
             }
         }
 
         size_t nIdx = aIt - maAddData.begin();
-        IndentGuard aIndGuard( rOut );
+        IndentGuard aIndGuard( mxOut );
         switch( eType )
         {
             case ADDDATA_NLR:       dumpAddDataNlr( nIdx );     break;
@@ -1513,7 +1510,7 @@ void FormulaObject::dumpAddDataArray( size_t nIdx )
     dumpConstArrayHeader( nCols, nRows );
 
     OUStringBuffer aOp;
-    TableGuard aTabGuard( out(), 17 );
+    TableGuard aTabGuard( mxOut, 17 );
     for( sal_uInt32 nRow = 0; nRow < nRows; ++nRow )
     {
         OUStringBuffer aArrayLine;
@@ -1779,7 +1776,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt8 >( "creator", "CHFRINFO-APPVERSION" );
             dumpDec< sal_uInt8 >( "writer", "CHFRINFO-APPVERSION" );
             sal_uInt16 nCount = dumpDec< sal_uInt16 >( "rec-range-count" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
                 dumpHexPair< sal_uInt16 >( "#rec-range", '-' );
         }
@@ -1995,7 +1992,7 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_COLUMNDEFAULT:
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_Int32 nCol = 0, nCount = dumpColRange(); nCol < nCount; ++nCol )
                 dumpXfIdx( "#xf-idx", true );
             dumpUnused( 2 );
@@ -2018,11 +2015,11 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_COORDLIST:
         {
-            out().resetItemIndex();
-            TableGuard aTabGuard( out(), 12, 10 );
+            mxOut->resetItemIndex();
+            TableGuard aTabGuard( mxOut, 12, 10 );
             while( rStrm.getRemaining() >= 4 )
             {
-                MultiItemsGuard aMultiGuard( out() );
+                MultiItemsGuard aMultiGuard( mxOut );
                 writeEmptyItem( "#point" );
                 dumpDec< sal_uInt16 >( "x" );
                 dumpDec< sal_uInt16 >( "y" );
@@ -2040,10 +2037,10 @@ void WorkbookStreamObject::implDumpRecordBody()
             sal_Int32 nCol2 = dumpColIndex( "last-col-idx", false );
             sal_Int32 nCol1 = dumpColIndex( "first-col-idx", false );
             sal_Int32 nRow = dumpRowIndex( "row-idx" );
-            TableGuard aTabGuard( out(), 14, 17 );
+            TableGuard aTabGuard( mxOut, 14, 17 );
             for( Address aPos( nCol1, nRow ); !rStrm.isEof() && (aPos.mnCol <= nCol2); ++aPos.mnCol )
             {
-                MultiItemsGuard aMultiGuard( out() );
+                MultiItemsGuard aMultiGuard( mxOut );
                 writeAddressItem( "pos", aPos );
                 dumpConstValue();
             }
@@ -2117,7 +2114,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_DBCELL:
             dumpDec< sal_uInt32 >( "reverse-offset-to-row" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             while( rStrm.getRemaining() >= 2 )
                 dumpDec< sal_uInt16 >( "#cell-offset" );
         break;
@@ -2181,7 +2178,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             else
             {
                 dumpString( "workbook-url" );
-                out().resetItemIndex();
+                mxOut->resetItemIndex();
                 for( sal_uInt16 nSheet = 0; !rStrm.isEof() && (nSheet < nCount); ++nSheet )
                     dumpString( "#sheet-name" );
             }
@@ -2214,11 +2211,11 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff == BIFF8 )
             {
                 sal_uInt16 nCount = dumpDec< sal_uInt16 >( "ref-count" );
-                TableGuard aTabGuard( out(), 10, 17, 24 );
-                out().resetItemIndex();
+                TableGuard aTabGuard( mxOut, 10, 17, 24 );
+                mxOut->resetItemIndex();
                 for( sal_uInt16 nRefId = 0; !rStrm.isEof() && (nRefId < nCount); ++nRefId )
                 {
-                    MultiItemsGuard aMultiGuard( out() );
+                    MultiItemsGuard aMultiGuard( mxOut );
                     writeEmptyItem( "#ref" );
                     dumpDec< sal_uInt16 >( "extbook-idx" );
                     dumpDec< sal_Int16 >( "first-sheet", "EXTERNSHEET-IDX" );
@@ -2353,7 +2350,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( nFormat == 9 )
             {
                 writeEmptyItem( "bitmap-header" );
-                IndentGuard aIndGuard( out() );
+                IndentGuard aIndGuard( mxOut );
                 if( dumpDec< sal_uInt32 >( "header-size" ) == 12 )
                 {
                     dumpDec< sal_Int16 >( "width" );
@@ -2374,7 +2371,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpRowIndex( "first-row-with-cell", eBiff == BIFF8 );
             dumpRowIndex( "first-free-row", eBiff == BIFF8 );
             if( nRecId == BIFF3_ID_INDEX ) dumpHex< sal_uInt32 >( (eBiff <= BIFF4) ? "first-xf-pos" : "defcolwidth-pos", "CONV-DEC" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             while( rStrm.getRemaining() >= 4 )
                 dumpHex< sal_uInt32 >( "#first-row-pos-of-block", "CONV-DEC" );
         break;
@@ -2424,10 +2421,10 @@ void WorkbookStreamObject::implDumpRecordBody()
         {
             Address aPos = dumpAddress();
             {
-                TableGuard aTabGuard( out(), 12 );
+                TableGuard aTabGuard( mxOut, 12 );
                 for( ; rStrm.getRemaining() >= 4; ++aPos.mnCol )
                 {
-                    MultiItemsGuard aMultiGuard( out() );
+                    MultiItemsGuard aMultiGuard( mxOut );
                     writeAddressItem( "pos", aPos );
                     dumpXfIdx();
                 }
@@ -2440,10 +2437,10 @@ void WorkbookStreamObject::implDumpRecordBody()
         {
             Address aPos = dumpAddress();
             {
-                TableGuard aTabGuard( out(), 12, 12 );
+                TableGuard aTabGuard( mxOut, 12, 12 );
                 for( ; rStrm.getRemaining() >= 8; ++aPos.mnCol )
                 {
-                    MultiItemsGuard aMultiGuard( out() );
+                    MultiItemsGuard aMultiGuard( mxOut );
                     writeAddressItem( "pos", aPos );
                     dumpXfIdx();
                     dumpRk( "value" );
@@ -2616,13 +2613,13 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_PTPAGEFIELDS:
         {
-            out().resetItemIndex();
-            TableGuard aTabGuard( out(), 17, 17, 17 );
+            mxOut->resetItemIndex();
+            TableGuard aTabGuard( mxOut, 17, 17, 17 );
             while( rStrm.getRemaining() >= 6 )
             {
                 writeEmptyItem( "#page-field" );
-                MultiItemsGuard aMultiGuard( out() );
-                IndentGuard aIndGuard( out() );
+                MultiItemsGuard aMultiGuard( mxOut );
+                IndentGuard aIndGuard( mxOut );
                 dumpDec< sal_Int16 >( "base-field" );
                 dumpDec< sal_Int16 >( "item", "PTPAGEFIELDS-ITEM" );
                 dumpDec< sal_uInt16 >( "dropdown-obj-id" );
@@ -2631,7 +2628,7 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_PTROWCOLFIELDS:
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_Int64 nIdx = 0, nCount = rStrm.getRemaining() / 2; nIdx < nCount; ++nIdx )
                 dumpDec< sal_Int16 >( "#field-idx" );
         break;
@@ -2641,19 +2638,19 @@ void WorkbookStreamObject::implDumpRecordBody()
             {
                 sal_uInt16 nCount = (mnPTRowColItemsIdx == 0) ? mnPTRowFields : mnPTColFields;
                 sal_Int64 nLineSize = 8 + 2 * nCount;
-                out().resetItemIndex();
+                mxOut->resetItemIndex();
                 while( rStrm.getRemaining() >= nLineSize )
                 {
                     writeEmptyItem( "#line-data" );
-                    IndentGuard aIndGuard( out() );
-                    MultiItemsGuard aMultiGuard( out() );
+                    IndentGuard aIndGuard( mxOut );
+                    MultiItemsGuard aMultiGuard( mxOut );
                     dumpDec< sal_uInt16 >( "ident-count" );
                     dumpDec< sal_uInt16 >( "item-type", "PTROWCOLITEMS-ITEMTYPE" );
                     dumpDec< sal_uInt16 >( "used-count" );
                     dumpHex< sal_uInt16 >( "flags", "PTROWCOLITEMS-FLAGS" );
                     OUStringBuffer aItemList;
                     for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
-                        StringHelper::appendToken( aItemList, in().readInt16() );
+                        StringHelper::appendToken( aItemList, mxStrm->readInt16() );
                     writeInfoItem( "item-idxs", aItemList.makeStringAndClear() );
                 }
                 ++mnPTRowColItemsIdx;
@@ -2719,10 +2716,10 @@ void WorkbookStreamObject::implDumpRecordBody()
             writeStringItem( "name", rStrm.readUniStringBody( nNameLen, true ) );
             if( nUserLen > 0 ) dumpUniString( "user" );         // repeated string length
             if( nCommentLen > 0 ) dumpUniString( "comment" );   // repeated string length
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_uInt16 nCell = 0; !rStrm.isEof() && (nCell < nCellCount); ++nCell )
                 dumpAddress( "#pos" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_uInt16 nCell = 0; !rStrm.isEof() && (nCell < nCellCount); ++nCell )
                 dumpString( "#value" );
             dumpUnused( 2 * nCellCount );
@@ -2808,7 +2805,7 @@ void WorkbookStreamObject::implDumpRecordBody()
         case BIFF_ID_SST:
             dumpDec< sal_uInt32 >( "string-cell-count" );
             dumpDec< sal_uInt32 >( "sst-size" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             while( !rStrm.isEof() && (rStrm.getRemaining() >= 3) )
                 dumpUniString( "#entry" );
         break;
@@ -3034,7 +3031,7 @@ void WorkbookStreamObject::dumpExtColorValue( sal_uInt32 nColorType )
 
 void WorkbookStreamObject::dumpExtColor( const String& rName )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeEmptyItem( rName( "color" ) );
     switch( extractValue< sal_uInt8 >( dumpDec< sal_uInt8 >( "flags", "EXTCOLOR-FLAGS" ), 1, 7 ) )
     {
@@ -3051,7 +3048,7 @@ void WorkbookStreamObject::dumpExtColor( const String& rName )
 
 void WorkbookStreamObject::dumpExtCfColor( const String& rName )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeEmptyItem( rName( "color" ) );
     dumpExtColorValue( dumpExtColorType< sal_uInt32 >() );
     dumpDec< double >( "tint", "CONV-FLOAT-TO-PERC" );
@@ -3094,7 +3091,7 @@ sal_uInt16 WorkbookStreamObject::dumpCellHeader( bool bBiff2Style )
 
 void WorkbookStreamObject::dumpBoolErr()
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     sal_uInt8 nValue = dumpHex< sal_uInt8 >( "value" );
     bool bErrCode = dumpBool< sal_uInt8 >( "is-errorcode" );
     if( bErrCode )
@@ -3111,7 +3108,7 @@ void WorkbookStreamObject::dumpCfRuleProp()
     if( getFlag< sal_uInt32 >( nFlags1, 0x02000000 ) )
     {
         writeEmptyItem( "numfmt-block" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         if( getFlag< sal_uInt16 >( nFlags2, 0x0001 ) )
         {
             dumpDec< sal_uInt16 >( "size" );
@@ -3126,7 +3123,7 @@ void WorkbookStreamObject::dumpCfRuleProp()
     if( getFlag< sal_uInt32 >( nFlags1, 0x04000000 ) )
     {
         writeEmptyItem( "font-block" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         sal_Int64 nRecPos = rStrm.tell();
         dumpUniString( "name", BIFF_STR_8BITLENGTH );
         dumpUnused( static_cast< sal_Int32 >( nRecPos + 64 - rStrm.tell() ) );
@@ -3152,7 +3149,7 @@ void WorkbookStreamObject::dumpCfRuleProp()
     if( getFlag< sal_uInt32 >( nFlags1, 0x08000000 ) )
     {
         writeEmptyItem( "alignment-block" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         dumpHex< sal_uInt8 >( "alignent", "CFRULE-ALIGNMENT" );
         dumpHex< sal_uInt8 >( "rotation", "TEXTROTATION" );
         dumpHex< sal_uInt16 >( "indent", "CFRULE-INDENT" );
@@ -3161,7 +3158,7 @@ void WorkbookStreamObject::dumpCfRuleProp()
     if( getFlag< sal_uInt32 >( nFlags1, 0x10000000 ) )
     {
         writeEmptyItem( "border-block" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         dumpHex< sal_uInt16 >( "border-style", "XF-BORDERSTYLE" );
         dumpHex< sal_uInt16 >( "border-color1", "XF-BORDERCOLOR1" );
         dumpHex< sal_uInt32 >( "border-color2", "CFRULE-BORDERCOLOR2" );
@@ -3169,13 +3166,13 @@ void WorkbookStreamObject::dumpCfRuleProp()
     if( getFlag< sal_uInt32 >( nFlags1, 0x20000000 ) )
     {
         writeEmptyItem( "pattern-block" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         dumpHex< sal_uInt32 >( "pattern", "CFRULE-FILLBLOCK" );
     }
     if( getFlag< sal_uInt32 >( nFlags1, 0x40000000 ) )
     {
         writeEmptyItem( "protection-block" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         dumpHex< sal_uInt16 >( "flags", "CFRULE-PROTECTION-FLAGS" );
     }
 }
@@ -3185,14 +3182,14 @@ void WorkbookStreamObject::dumpXfExtProp()
     BiffInputStream& rStrm = getBiffStream();
     for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !rStrm.isEof() && (nIndex < nCount); ++nIndex )
     {
-        out().startMultiItems();
+        mxOut->startMultiItems();
         sal_Int64 nStartPos = rStrm.tell();
         writeEmptyItem( "SUBREC" );
         sal_uInt16 nSubRecId = dumpDec< sal_uInt16 >( "id", "XFEXT-SUBREC" );
         sal_uInt16 nSubRecSize = dumpDec< sal_uInt16 >( "size" );
         sal_Int64 nEndPos = nStartPos + nSubRecSize;
-        out().endMultiItems();
-        IndentGuard aIndGuard( out() );
+        mxOut->endMultiItems();
+        IndentGuard aIndGuard( mxOut );
         switch( nSubRecId )
         {
             case 4: case 5: case 7: case 8: case 9: case 10: case 11: case 13:
@@ -3205,11 +3202,11 @@ void WorkbookStreamObject::dumpXfExtProp()
             break;
             case 6:
                 dumpExtGradientHead();
-                out().resetItemIndex();
-                for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !in().isEof(); ++nStop )
+                mxOut->resetItemIndex();
+                for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !mxStrm->isEof(); ++nStop )
                 {
                     writeEmptyItem( "#stop" );
-                    IndentGuard aIndGuard2( out() );
+                    IndentGuard aIndGuard2( mxOut );
                     sal_uInt16 nColorType = dumpExtColorType< sal_uInt16 >();
                     dumpExtColorValue( nColorType );
                     dumpDec< double >( "stop-pos" );
@@ -3233,14 +3230,14 @@ void WorkbookStreamObject::dumpDxfProp()
     dumpUnused( 2 );
     for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !rStrm.isEof() && (nIndex < nCount); ++nIndex )
     {
-        out().startMultiItems();
+        mxOut->startMultiItems();
         sal_Int64 nStartPos = rStrm.tell();
         writeEmptyItem( "SUBREC" );
         sal_uInt16 nSubRecId = dumpDec< sal_uInt16 >( "id", "DXF-SUBREC" );
         sal_uInt16 nSubRecSize = dumpDec< sal_uInt16 >( "size" );
         sal_Int64 nEndPos = nStartPos + nSubRecSize;
-        out().endMultiItems();
-        IndentGuard aIndGuard( out() );
+        mxOut->endMultiItems();
+        IndentGuard aIndGuard( mxOut );
         switch( nSubRecId )
         {
             case 0:
@@ -3330,7 +3327,7 @@ void WorkbookStreamObject::dumpDxf12Prop()
 {
     BiffInputStream& rStrm = getBiffStream();
     writeEmptyItem( "dxf-data" );
-    IndentGuard aIndGuard( out() );
+    IndentGuard aIndGuard( mxOut );
     sal_uInt32 nSize = dumpDec< sal_uInt32 >( "dxf-size" );
     if( nSize == 0 )
     {
@@ -3355,7 +3352,7 @@ void WorkbookStreamObject::dumpCfRule12Param( sal_uInt16 nSubType )
     sal_Int64 nEndPos = getBiffStream().tell() + nSize;
     {
         writeEmptyItem( "params" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         switch( nSubType )
         {
             case 5:
@@ -3385,7 +3382,7 @@ void WorkbookStreamObject::dumpCfRule12Param( sal_uInt16 nSubType )
 void WorkbookStreamObject::dumpFontRec()
 {
     sal_uInt16 nFontId = getBiffData().getFontCount();
-    out().resetItemIndex( nFontId );
+    mxOut->resetItemIndex( nFontId );
     writeEmptyItem( "#font" );
     sal_uInt16 nHeight = dumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
     sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "FONT-FLAGS" );
@@ -3425,19 +3422,19 @@ void WorkbookStreamObject::dumpFormatRec()
         case BIFF2:
         case BIFF3:
             nFormatIdx = mnFormatIdx++;
-            out().resetItemIndex( nFormatIdx );
+            mxOut->resetItemIndex( nFormatIdx );
             writeEmptyItem( "#fmt" );
         break;
         case BIFF4:
             nFormatIdx = mnFormatIdx++;
-            out().resetItemIndex( nFormatIdx );
+            mxOut->resetItemIndex( nFormatIdx );
             writeEmptyItem( "#fmt" );
             dumpUnused( 2 );
         break;
         case BIFF5:
         case BIFF8:
             getBiffStream() >> nFormatIdx;
-            out().resetItemIndex( nFormatIdx );
+            mxOut->resetItemIndex( nFormatIdx );
             writeEmptyItem( "#fmt" );
             writeDecItem( "fmt-idx", nFormatIdx );
         break;
@@ -3450,7 +3447,7 @@ void WorkbookStreamObject::dumpFormatRec()
 void WorkbookStreamObject::dumpXfRec()
 {
     sal_uInt16 nXfId = getBiffData().getXfCount();
-    out().resetItemIndex( nXfId );
+    mxOut->resetItemIndex( nXfId );
     writeEmptyItem( "#xf" );
     sal_uInt16 nFontId = dumpFontIdx( EMPTY_STRING, getBiff() >= BIFF5 );
     switch( getBiff() )
@@ -3829,7 +3826,6 @@ void WorkbookStreamObject::dumpObjRecBiff5()
 
 void WorkbookStreamObject::dumpObjRecBiff8()
 {
-    Output& rOut = out();
     BiffInputStream& rStrm = getBiffStream();
     NameListRef xRecNames = cfg().getNameList( "OBJ-RECNAMES" );
     sal_uInt16 nObjType = 0xFFFF;
@@ -3838,10 +3834,10 @@ void WorkbookStreamObject::dumpObjRecBiff8()
     bool bLoop = true;
     while( bLoop && (rStrm.getRemaining() >= 4) )
     {
-        rOut.emptyLine();
+        mxOut->emptyLine();
         sal_uInt16 nSubRecId, nSubRecSize;
         {
-            MultiItemsGuard aMultiGuard( rOut );
+            MultiItemsGuard aMultiGuard( mxOut );
             writeEmptyItem( "OBJREC" );
             writeHexItem( "pos", static_cast< sal_uInt32 >( rStrm.tell() ) );
             rStrm >> nSubRecId >> nSubRecSize;
@@ -3854,7 +3850,7 @@ void WorkbookStreamObject::dumpObjRecBiff8()
         sal_Int64 nRealRecSize = ::std::min< sal_Int64 >( nSubRecSize, rStrm.getRemaining() );
         sal_Int64 nSubRecEnd = nSubRecStart + nRealRecSize;
 
-        IndentGuard aIndGuard( rOut );
+        IndentGuard aIndGuard( mxOut );
         switch( nSubRecId )
         {
             case BIFF_ID_OBJMACRO:
@@ -3876,7 +3872,7 @@ void WorkbookStreamObject::dumpObjRecBiff8()
                 if( rStrm.tell() + 4 <= nSubRecEnd )
                 {
                     if( bControl && bCtlsStrm )
-                        dumpOcxControl();
+                        dumpControl();
                     else
                         dumpHex< sal_uInt32 >( "ole-storage-id" );
                 }
@@ -3885,7 +3881,7 @@ void WorkbookStreamObject::dumpObjRecBiff8()
                     sal_uInt32 nKeySize = dumpDec< sal_uInt32 >( "licence-key-size" );
                     if( nKeySize > 0 )
                     {
-                        IndentGuard aIndGuard2( rOut );
+                        IndentGuard aIndGuard2( mxOut );
                         sal_Int64 nKeyEnd = rStrm.tell() + nKeySize;
                         dumpArray( "licence-key", static_cast< sal_Int32 >( nKeySize ) );
                         rStrm.seek( nKeyEnd );
@@ -4057,7 +4053,7 @@ void WorkbookStreamObject::dumpObjRecPadding()
 {
     if( getBiffStream().tell() & 1 )
     {
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         dumpHex< sal_uInt8 >( "padding" );
     }
 }
@@ -4095,7 +4091,7 @@ void WorkbookStreamObject::dumpObjRecFmla( const String& rName, sal_uInt16 nFmla
     if( nFmlaSize > 0 )
     {
         writeEmptyItem( rName );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         sal_Int64 nStrmEnd = rStrm.tell() + nFmlaSize;
         dumpObjRecFmlaRaw();
         if( rStrm.isEof() || (rStrm.tell() != nStrmEnd) )
@@ -4110,7 +4106,7 @@ void WorkbookStreamObject::dumpObjRecPictFmla( sal_uInt16 nFmlaSize )
     if( nFmlaSize > 0 )
     {
         writeEmptyItem( "pic-link" );
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         sal_Int64 nStrmEnd = rStrm.tell() + nFmlaSize;
         if( (getBiff() == BIFF3) && (nStrmEnd & 1) ) ++nStrmEnd; // BIFF3 size without padding
         dumpObjRecFmlaRaw();
@@ -4157,7 +4153,7 @@ void PivotCacheStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_PCDFDISCRETEPR:
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             while( !rStrm.isEof() && (rStrm.getRemaining() >= 2) )
                 dumpDec< sal_uInt16 >( "#item-index" );
         break;
@@ -4177,12 +4173,12 @@ void PivotCacheStreamObject::implDumpRecordBody()
         case BIFF_ID_PCITEM_DATE:
         {
             DateTime aDateTime;
-            aDateTime.Year = in().readuInt16();
-            aDateTime.Month = in().readuInt16();
-            aDateTime.Day = in().readuInt8();
-            aDateTime.Hours = in().readuInt8();
-            aDateTime.Minutes = in().readuInt8();
-            aDateTime.Seconds = in().readuInt8();
+            aDateTime.Year = mxStrm->readuInt16();
+            aDateTime.Month = mxStrm->readuInt16();
+            aDateTime.Day = mxStrm->readuInt8();
+            aDateTime.Hours = mxStrm->readuInt8();
+            aDateTime.Minutes = mxStrm->readuInt8();
+            aDateTime.Seconds = mxStrm->readuInt8();
             writeDateTimeItem( "value", aDateTime );
         }
         break;
@@ -4219,8 +4215,15 @@ void RootStorageObject::implDumpStorage( const StorageRef& rxStrg, const OUStrin
 {
     if( rStrgPath.equalsAscii( "_VBA_PROJECT_CUR" ) )
         VbaProjectStorageObject( *this, rxStrg, rSysPath ).dump();
+    else if( rStrgPath.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "MBD" ) ) )
+        VbaContainerStorageObject( *this, rxStrg, rSysPath ).dump();
     else
         OleStorageObject::implDumpStorage( rxStrg, rStrgPath, rSysPath );
+}
+
+void RootStorageObject::implDumpBaseStream( const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
+{
+    WorkbookStreamObject( *this, rxStrm, rSysFileName ).dump();
 }
 
 // ============================================================================
@@ -4238,7 +4241,7 @@ Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Refere
 {
     if( rxFactory.is() && rxInStrm.is() )
     {
-        StorageRef xStrg( new OleStorage( rxFactory, rxInStrm, true ) );
+        StorageRef xStrg( new ::oox::ole::OleStorage( rxFactory, rxInStrm, true ) );
         MediaDescriptor aMediaDesc;
         ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
@@ -4247,17 +4250,7 @@ Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Refere
 
 void Dumper::implDump()
 {
-    RootStorageObject aRootStrg( *this );
-    if( aRootStrg.isValid() )
-    {
-        aRootStrg.dump();
-    }
-    else if( StorageBase* pRootStrg = cfg().getRootStorage().get() )
-    {
-        // try to dump plain BIFF stream
-        BinaryInputStreamRef xStrm( new BinaryXInputStream( pRootStrg->openInputStream( OUString() ), false ) );
-        WorkbookStreamObject( *this, xStrm, cfg().getSysFileName() ).dump();
-    }
+    RootStorageObject( *this ).dump();
 }
 
 // ============================================================================

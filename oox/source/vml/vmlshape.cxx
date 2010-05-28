@@ -195,12 +195,12 @@ Rectangle ShapeType::getRectangle( const ShapeParentAnchor* pParentAnchor ) cons
 
 Rectangle ShapeType::getAbsRectangle() const
 {
-    const XmlFilterBase& rFilter = mrDrawing.getFilter();
+    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
     return Rectangle(
-        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maMarginLeft, 0, true, true ),
-        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maMarginTop, 0, false, true ),
-        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maWidth, 0, true, true ),
-        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maHeight, 0, false, true ) );
+        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true ),
+        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginTop, 0, false, true ),
+        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maWidth, 0, true, true ),
+        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maHeight, 0, false, true ) );
 }
 
 Rectangle ShapeType::getRelRectangle() const
@@ -312,10 +312,12 @@ Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor 
 
 void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
 {
-    PropertyMap aPropMap;
+    ModelObjectHelper& rModelObjectHelper = mrDrawing.getFilter().getModelObjectHelper();
+    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
 
-    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, mrDrawing.getFilter() );
-    maTypeModel.maFillModel.pushToPropMap( aPropMap, mrDrawing.getFilter() );
+    PropertyMap aPropMap;
+    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
+    maTypeModel.maFillModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
 
     PropertySet aPropSet( rxShape );
     aPropSet.setProperties( aPropMap );
@@ -447,12 +449,12 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     if( pControlInfo && (pControlInfo->maFragmentPath.getLength() > 0) && (maTypeModel.maName.getLength() > 0) )
     {
         OSL_ENSURE( maTypeModel.maName == pControlInfo->maName, "ComplexShape::implConvertAndInsert - control name mismatch" );
-        ::oox::ole::AxControl aControl( maTypeModel.maName );
+        ::oox::ole::EmbeddedControl aControl( maTypeModel.maName );
         // load the control properties from fragment
         if( rFilter.importFragment( new ::oox::ole::AxControlFragment( rFilter, pControlInfo->maFragmentPath, aControl ) ) ) try
         {
             // create control model and insert it into the form of the draw page
-            Reference< XControlModel > xCtrlModel( aControl.convertAndInsert( mrDrawing.getControlHelper() ), UNO_SET_THROW );
+            Reference< XControlModel > xCtrlModel( mrDrawing.getControlForm().convertAndInsert( aControl ), UNO_SET_THROW );
             if( maShapeModel.mxClientData.get() )
                 mrDrawing.convertControlClientData( xCtrlModel, *maShapeModel.mxClientData );
 
