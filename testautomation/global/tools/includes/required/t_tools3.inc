@@ -1039,6 +1039,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editlinkswriter"                : EditLinksWriter
             case "editfields"                     : EditFields
 
+            case "formatframe"                    : FormatFrame
             case "formatcharttype"                : FormatChartType
             case "formatcontrol"                  : FormatControl
             case "formateditpoints"               : FormatEditPoints
