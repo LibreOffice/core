@@ -647,7 +647,7 @@ void PrintDialog::JobTabPage::setupLayout()
     // add printer fixed line
     maLayout.addWindow( &maPrinterFL );
     // add print LB
-    maLayout.addWindow( &maPrinters );
+    maLayout.addWindow( &maPrinters, 3 );
 
     // create a row for details button/text and properties button
     boost::shared_ptr< vcl::RowOrColumn > xDetRow( new vcl::RowOrColumn( &maLayout, false ) );
