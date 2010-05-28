@@ -992,7 +992,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     const RC_TIMEOUT  = -1  ' Returnvalue if slot is not available
     const CFN = "global::tools::includes::required::hUseAsyncSlot(): "
 
-    if ( GVERBOSE ) then printlog( "Execute <" & cSlot & ">" )
+    if ( GVERBOSE ) then printlog( CFN & "Execute <" & cSlot & ">" )
     WaitSlot()
 
     for iRetries = 1 to MAX_RETRIES
