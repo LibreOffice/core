@@ -232,7 +232,13 @@ namespace svt { namespace uno
 
         ::boost::shared_ptr< WizardPageController > pController( new WizardPageController( *this, m_xController, impl_stateToPageId( i_nState ) ) );
         TabPage* pPage = pController->getTabPage();
-        ENSURE_OR_RETURN( pPage != NULL, "WizardShell::createPage: illegal tab page!", NULL );
+        OSL_ENSURE( pPage != NULL, "WizardShell::createPage: illegal tab page!" );
+        if ( pPage == NULL )
+        {
+            // fallback for ill-behaved clients: empty page
+            pPage = new TabPage( this, 0 );
+            pPage->SetSizePixel( LogicToPixel( Size( 280, 185 ), MAP_APPFONT ) );
+        }
 
         m_aPageControllers[ pPage ] = pController;
         return pPage;
@@ -256,6 +262,7 @@ namespace svt { namespace uno
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+        // fallback for ill-behaved clients: the numeric state
         return String::CreateFromInt32( i_nState );
     }
 
