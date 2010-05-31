@@ -71,6 +71,11 @@ $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
 
 .ELSE
 
+.IF "$(OS)" == "WNT"
+EXTRA_CFLAGS += -mthreads
+LDFLAGS += -Wl,--enable-runtime-pseudo-reloc-v2
+.ENDIF
+
 .IF "$(USE_SYSTEM_STL)" != "YES"
 
 OOO_STLPORT_CXXFLAGS = -I$(SOLARINCDIR)/stl
