@@ -210,15 +210,15 @@ String implGetCurDir( void )
 }
 
 // TODO: -> SbiGlobals
-static Reference< XSimpleFileAccess3 > getFileAccess( void )
+static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void )
 {
-    static Reference< XSimpleFileAccess3 > xSFI;
+    static com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI;
     if( !xSFI.is() )
     {
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( xSMgr.is() )
         {
-            xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
+            xSFI = com::sun::star::uno::Reference< XSimpleFileAccess3 >( xSMgr->createInstance
                 ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
         }
     }
@@ -557,7 +557,7 @@ RTLFUNC(ChDrive) // JSM
 // Implementation of StepRENAME with UCB
 void implStepRenameUCB( const String& aSource, const String& aDest )
 {
-    Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+    com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
     if( xSFI.is() )
     {
         try
@@ -605,7 +605,7 @@ RTLFUNC(FileCopy) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -656,7 +656,7 @@ RTLFUNC(Kill) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 String aFullPath = getFullPath( aFileSpec );
@@ -703,7 +703,7 @@ RTLFUNC(MkDir) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -804,7 +804,7 @@ RTLFUNC(RmDir) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -891,7 +891,7 @@ RTLFUNC(FileLen)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -1639,7 +1639,7 @@ RTLFUNC(StrComp)
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
         if( !pTransliterationWrapper )
         {
-            Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+            com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
             pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
                 new ::utl::TransliterationWrapper( xSMgr,
                     ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
@@ -2634,7 +2634,7 @@ RTLFUNC(Dir)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 if ( nParCount >= 2 )
@@ -2997,7 +2997,7 @@ RTLFUNC(GetAttr)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -3067,7 +3067,7 @@ RTLFUNC(FileDateTime)
         Date aDate;
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -4032,7 +4032,7 @@ RTLFUNC(StrConv)
     String aNewStr( aOldStr );
     if( nType != 0 )
     {
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         ::utl::TransliterationWrapper aTransliterationWrapper( xSMgr,nType );
         com::sun::star::uno::Sequence<sal_Int32> aOffsets;
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
@@ -4360,7 +4360,7 @@ RTLFUNC(SetAttr) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -4474,7 +4474,7 @@ RTLFUNC(FileExists)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
