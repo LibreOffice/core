@@ -117,33 +117,42 @@ function hEnableDocumentEditMode() as boolean
 
     hEnableDocumentEditMode() = false
 
-    wait( 1000 )
+    dim iTry as integer
 
-    try
-        kontext "Standardbar"
-        if ( Bearbeiten.getState( 2 ) <> 1 ) then
+    ' Switch mode
+    for iTry = 1 to 20
+        printlog( "Switching to edit mode... (" & iTry & ")" )
+        try
+            kontext "Standardbar"
+            if ( Bearbeiten.getState( 2 ) <> 1 ) then
+                Bearbeiten.click()
 
-            printlog( "Switch document to edit-mode" )
-            Bearbeiten.click()
-
-            kontext "Active"
-            if ( Active.exists( 1 ) ) then
-                printlog( "Messagebox: " & Active.getText() )
-                Active.yes()
+                kontext "Active"
+                if ( Active.exists( 1 ) ) then
+                    printlog( "Switch to edit mode after: " & iTry )
+                    hCloseDialog( Active, "yes" )
+                    exit for
+                endif
             endif
+        catch
+            wait( 200 )
+        endcatch
+    next iTry
 
+    ' Verify
+    for iTry = 1 to 10
+        printlog( "Checking for standardbar/edit mode" )
+        try
             kontext "Standardbar"
             if ( Bearbeiten.getState( 2 ) = 1 ) then
-                printlog( "Successfully set document to edit-mode" )
+                printlog( "Edit button has correct state, exiting successfully" )
                 hEnableDocumentEditMode() = true
-                waitslot()
+                exit for
             endif
-         else
-             printlog( "Document is already in edit-mode, no action taken" )
-         endif
-     catch
-        warnlog( "Failed to access <Bearbeiten> button on standardbar" )
-     endcatch
+        catch
+            wait( 100 )
+        endcatch
+    next iTry
 
 end function
 
