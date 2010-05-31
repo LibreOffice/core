@@ -39,6 +39,8 @@
 #include <node.hxx>         // fuer StartNode->GetMyIndex
 #else
 class SwStartNode;
+#include <memory>
+#include <boost/noncopyable.hpp>
 #endif
 
 class Color;
