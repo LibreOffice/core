@@ -87,14 +87,15 @@
 #define IMAGE_SHADOW                    70
 #define IMAGE_INSERT_SHADOW             71
 #define IMAGE_HIDE_SLIDE_OVERLAY        72
+#define IMAGE_FOCUS_BORDER              73
 
-#define STRING_DRAG_AND_DROP_PAGES      73
-#define STRING_DRAG_AND_DROP_SLIDES     74
+#define STRING_DRAG_AND_DROP_PAGES      81
+#define STRING_DRAG_AND_DROP_SLIDES     82
 
-#define STRING_COMMAND1                 75
-#define STRING_COMMAND2_A               76
-#define STRING_COMMAND2_B               77
-#define STRING_COMMAND2_HELP            78
-#define STRING_COMMAND3                 79
+#define STRING_COMMAND1                 91
+#define STRING_COMMAND2_A               92
+#define STRING_COMMAND2_B               93
+#define STRING_COMMAND2_HELP            94
+#define STRING_COMMAND3                 95
 
 #endif

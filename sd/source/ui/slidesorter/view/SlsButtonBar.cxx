@@ -329,15 +329,9 @@ bool ButtonBar::SetPage (const model::SharedPageDescriptor& rpDescriptor)
         mpDescriptor = rpDescriptor;
 
         if (mpDescriptor)
-        {
             mbIsExcluded = mpDescriptor->HasState(model::PageDescriptor::ST_Excluded);
-
-            LayoutButtons(rpDescriptor->GetBoundingBox().GetSize());
-        }
         else
-        {
             mbIsExcluded = false;
-        }
         SetButtonUnderMouse();
         mpDownButton.reset();
 
@@ -432,9 +426,11 @@ void ButtonBar::Paint (
     if ( ! rpDescriptor)
         return;
 
-    const double nButtonAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
-    if (nButtonAlpha >= 1)
+    const double nButtonBarAlpha (rpDescriptor->GetVisualState().GetButtonBarAlpha());
+    if (nButtonBarAlpha >= 1)
         return;
+
+    LayoutButtons(rpDescriptor->GetBoundingBox().GetSize());
 
     const Point aOffset (rpDescriptor->GetBoundingBox().TopLeft());
 
@@ -448,6 +444,7 @@ void ButtonBar::Paint (
             : maRegularButtons);
 
 
+    const double nButtonAlpha (rpDescriptor->GetVisualState().GetButtonAlpha());
     for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
         rButtons[nIndex]->Paint(
             rDevice,

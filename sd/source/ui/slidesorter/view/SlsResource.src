@@ -228,6 +228,11 @@ Resource RID_SLIDESORTER_ICONS
         ImageBitmap = Bitmap { File = "slide_sorter_hide_slide_overlay.png" ; };
     };
 
+    Image IMAGE_FOCUS_BORDER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_focus_border.png" ; };
+    };
+
 
     String STRING_DRAG_AND_DROP_PAGES
     {

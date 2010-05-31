@@ -48,26 +48,9 @@ namespace sd { namespace slidesorter { namespace view {
 #define Gray 0xc0c0c0
 #define White 0xffffff
 
-// Reds
-#define Amber 0xff7e00
-
-// Greens
-#define AndroidGreen 0xa4c639
-#define AppleGreen 0x8db600
-#define Asparagus 0x87a96b
-
 // Blues
-#define Azure 0x000fff
-#define DarkCerulean 0x08457e
 #define StellaBlue 0x009ee1
 #define AirForceBlue 0x5d8aa8
-
-// Off white
-#define OldLace 0xfdf5e6
-#define AntiqueWhite 0xfaebd7
-
-// Off grays
-#define Arsenic 0x3b444b
 
 
 const static ColorData BackgroundColorData = 0xffffff;
@@ -130,7 +113,6 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maColor[Color_ButtonText] = Gray;
         maColor[Color_ButtonTextHover] = White;
         maColor[Color_MouseOverColor] = gnMouseOverColor;
-        maColor[Color_PageNumberBorder] = Azure;
         maColor[Color_PageNumber] = 0x0848a8f;
         maColor[Color_Selection] = StellaBlue;
         maColor[Color_PreviewBorder] = 0x949599;
@@ -142,11 +124,12 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maIntegerValues[Integer_ButtonPaintType] = 1;
         maIntegerValues[Integer_ButtonBorder] = 4;
         maIntegerValues[Integer_ButtonGap] = 0;
-        maIntegerValues[Integer_ButtonFadeInDelay] = 500;
-        maIntegerValues[Integer_ButtonFadeInDuration] = 400;
+        maIntegerValues[Integer_ButtonFadeInDelay] = 800;
+        maIntegerValues[Integer_ButtonFadeInDuration] = 100;
         maIntegerValues[Integer_ButtonFadeOutDelay] = 0;
-        maIntegerValues[Integer_ButtonFadeOutDuration] = 250;
+        maIntegerValues[Integer_ButtonFadeOutDuration] = 100;
         maIntegerValues[Integer_ToolTipDelay] = 1000;
+        maIntegerValues[Integer_FocusIndicatorWidth] = 3;
     }
 
     Update(rpProperties);
@@ -268,6 +251,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL);
             InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER);
         }
+        InitializeIcon(Icon_FocusBorder, IMAGE_FOCUS_BORDER);
     }
 }
 

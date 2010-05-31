@@ -149,7 +149,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       mrSlideSorter(rSlideSorter),
       mrModel(rSlideSorter.GetModel()),
       mbIsDisposed(false),
-      mpLayouter (new Layouter(rSlideSorter.GetContentWindow())),
+      mpLayouter (new Layouter(rSlideSorter.GetContentWindow(), rSlideSorter.GetTheme())),
       mbPageObjectVisibilitiesValid (false),
       mpPreviewCache(),
       mpLayeredDevice(new LayeredDevice(rSlideSorter.GetContentWindow())),
@@ -494,7 +494,9 @@ void SlideSorterView::Layout ()
             mpLayouter->GetPageObjectLayouter());
         if (pPageObjectLayouter)
         {
-            const Size aNewPreviewSize (mpLayouter->GetPageObjectLayouter()->GetPreviewSize());
+            const Size aNewPreviewSize (mpLayouter->GetPageObjectLayouter()->GetSize(
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
             if (maPreviewSize != aNewPreviewSize && GetPreviewCache())
             {
                 mpPreviewCache->ChangeSize(aNewPreviewSize, true);

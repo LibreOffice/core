@@ -29,7 +29,8 @@
 #define SD_SLIDESORTER_VIEW_LAYOUTER_HXX
 
 #include "SlideSorter.hxx"
-#include "SlsPageObjectLayouter.hxx"
+#include "view/SlsPageObjectLayouter.hxx"
+#include "view/SlsTheme.hxx"
 #include <sal/types.h>
 #include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>
@@ -44,7 +45,6 @@ class Size;
 namespace sd { namespace slidesorter { namespace view {
 
 class InsertPosition;
-
 
 
 
@@ -76,7 +76,9 @@ class Layouter
 public:
     enum Orientation { HORIZONTAL, VERTICAL, GRID };
 
-    Layouter (const SharedSdWindow& rpWindow);
+    Layouter (
+        const SharedSdWindow& rpWindow,
+        const ::boost::shared_ptr<Theme>& rpTheme);
     ~Layouter (void);
 
     ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter (void) const;
@@ -246,6 +248,7 @@ public:
     Range GetValidVerticalSizeRange (void) const;
 
     class Implementation;
+
 private:
     ::boost::scoped_ptr<Implementation> mpImplementation;
     SharedSdWindow mpWindow;

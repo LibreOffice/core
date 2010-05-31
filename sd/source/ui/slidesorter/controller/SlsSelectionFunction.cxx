@@ -1337,15 +1337,21 @@ bool NormalModeHandler::ProcessButtonDownEvent (
 
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
-            if (mrSlideSorter.GetView().GetButtonBar().IsMouseOverButton())
+            OSL_ASSERT(mrSlideSorter.GetView().GetButtonBar().IsMouseOverButton());
+
+            // Switch to button mode only when the buttons are visible
+            // (or being faded in.)
+            if (mrSlideSorter.GetView().GetButtonBar().IsVisible(rDescriptor.mpHitDescriptor))
             {
-                // Switch to button mode only when the buttons are visible
-                // (or being faded in.)
-                if (mrSlideSorter.GetView().GetButtonBar().IsVisible(rDescriptor.mpHitDescriptor))
-                {
-                    mrSelectionFunction.SwitchToButtonMode();
-                    ReprocessEvent(rDescriptor);
-                }
+                mrSelectionFunction.SwitchToButtonMode();
+                ReprocessEvent(rDescriptor);
+            }
+            else
+            {
+                // When the buttons are not (yet) visible then behave like
+                // the left button had been clicked over any other part of
+                // the slide.
+                SetCurrentPage(rDescriptor.mpHitDescriptor);
             }
             break;
 
@@ -1759,6 +1765,7 @@ void MultiSelectionModeHandler::UpdateSelection (void)
         }
     }
 }
+
 
 
 

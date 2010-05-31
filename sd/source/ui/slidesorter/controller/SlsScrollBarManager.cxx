@@ -392,36 +392,29 @@ Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
     // Test which combination of scroll bars is the best.
     bool bShowHorizontal = false;
     bool bShowVertical = false;
-    do
+    if (mrSlideSorter.GetModel().GetPageCount() == 0)
     {
-        if (mrSlideSorter.GetModel().GetPageCount() == 0)
-            // No pages => no scroll bars.
-            break;
-
-        if (TestScrollBarVisibilities(false, false, rAvailableArea))
-            break;
-        if (bIsHorizontalScrollBarAllowed
-            && TestScrollBarVisibilities(true, false, rAvailableArea))
-        {
-            bShowHorizontal = true;
-            break;
-        }
-        if (bIsVerticalScrollBarAllowed
-            && TestScrollBarVisibilities(false, true, rAvailableArea))
-        {
-            bShowVertical = true;
-            break;
-        }
-        if (bIsHorizontalScrollBarAllowed
-            && bIsVerticalScrollBarAllowed
-            && TestScrollBarVisibilities(true, true, rAvailableArea))
-        {
-            bShowHorizontal = true;
-            bShowVertical = true;
-            break;
-        }
+        // No pages => no scroll bars.
     }
-    while (false);
+    else if (TestScrollBarVisibilities(false, false, rAvailableArea))
+    {
+        // Nothing to be done.
+    }
+    else if (bIsHorizontalScrollBarAllowed
+        && TestScrollBarVisibilities(true, false, rAvailableArea))
+    {
+        bShowHorizontal = true;
+    }
+    else if (bIsVerticalScrollBarAllowed
+        && TestScrollBarVisibilities(false, true, rAvailableArea))
+    {
+        bShowVertical = true;
+    }
+    else
+    {
+        bShowHorizontal = true;
+        bShowVertical = true;
+    }
 
     // Make the visibility of the scroll bars permanent.
     mpVerticalScrollBar->Show(bShowVertical);
@@ -446,8 +439,6 @@ bool ScrollBarManager::TestScrollBarVisibilities (
     bool bVerticalScrollBarVisible,
     const Rectangle& rAvailableArea)
 {
-    bool bAreVisibilitiesOK = true;
-
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
 
     // Adapt the available size by subtracting the sizes of the scroll bars
@@ -471,15 +462,19 @@ bool ScrollBarManager::TestScrollBarVisibilities (
         Size aPageSize = mrSlideSorter.GetView().GetLayouter().GetTotalBoundingBox().GetSize();
         Size aWindowModelSize = mpContentWindow->PixelToLogic(aBrowserSize);
 
-        bool bHorizontallyClipped = (aPageSize.Width() > aWindowModelSize.Width());
-        bool bVerticallyClipped = (aPageSize.Height() > aWindowModelSize.Height());
-        bAreVisibilitiesOK = (bHorizontallyClipped == bHorizontalScrollBarVisible)
-            && (bVerticallyClipped == bVerticalScrollBarVisible);
+        // The content may be clipped, i.e. not fully visible, in one
+        // direction only when the scroll bar is visible in that direction.
+        if (aPageSize.Width() > aWindowModelSize.Width())
+            if ( ! bHorizontalScrollBarVisible)
+                return false;
+        if (aPageSize.Height() > aWindowModelSize.Height())
+            if ( ! bVerticalScrollBarVisible)
+                return false;
+
+        return true;
     }
     else
-        bAreVisibilitiesOK = false;
-
-    return bAreVisibilitiesOK;
+        return false;
 }
 
 

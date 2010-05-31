@@ -47,11 +47,10 @@ const static sal_Int32 gnLeftPageNumberOffset = 2;
 const static sal_Int32 gnRightPageNumberOffset = 5;
 const static sal_Int32 gnOuterBorderWidth = 5;
 const static sal_Int32 gnInfoAreaMinWidth = 26;
-const static Size gaButtonSize (32,32);
-const static sal_Int32 gnButtonGap (5);
 }
 
 PageObjectLayouter::PageObjectLayouter (
+    const ::boost::shared_ptr<Theme>& rpTheme,
     const Size& rPageObjectWindowSize,
     const Size& rPageSize,
     const SharedSdWindow& rpWindow,
@@ -69,12 +68,21 @@ PageObjectLayouter::PageObjectLayouter (
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
 
     const int nMaximumBorderWidth (gnOuterBorderWidth);
+    const int nFocusIndicatorWidth (rpTheme->GetIntegerValue(Theme::Integer_FocusIndicatorWidth));
 
     maPreviewBoundingBox = CalculatePreviewBoundingBox(
         maPageObjectSize,
         Size(rPageSize.Width(), rPageSize.Height()),
-        aPageNumberAreaSize.Width());
-    maPageObjectBoundingBox = Rectangle(Point(0,0), maPageObjectSize);
+        aPageNumberAreaSize.Width(),
+        nFocusIndicatorWidth);
+    maFocusIndicatorBoundingBox = Rectangle(Point(0,0), maPageObjectSize);
+    maPageObjectBoundingBox = Rectangle(
+        Point(
+            nFocusIndicatorWidth,
+            nFocusIndicatorWidth),
+        Size(
+            maPageObjectSize.Width()-2*nFocusIndicatorWidth,
+            maPageObjectSize.Height()-2*nFocusIndicatorWidth));
 
     maPageNumberAreaBoundingBox = Rectangle(
         Point(
@@ -106,7 +114,8 @@ PageObjectLayouter::~PageObjectLayouter(void)
 Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     Size& rPageObjectSize,
     const Size& rPageSize,
-    const sal_Int32 nPageNumberAreaWidth)
+    const sal_Int32 nPageNumberAreaWidth,
+    const sal_Int32 nFocusIndicatorWidth)
 {
     const sal_Int32 nIconWidth (maTransitionEffectIcon.GetSizePixel().Width());
     const sal_Int32 nLeftAreaWidth (
@@ -124,26 +133,30 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
         // Calculate height so that the preview fills the available
         // horizontal space completely while observing the aspect ratio of
         // the preview.
-        nPreviewWidth = rPageObjectSize.Width() - nLeftAreaWidth - gnOuterBorderWidth - 1;
+        nPreviewWidth = rPageObjectSize.Width()
+            - nLeftAreaWidth - gnOuterBorderWidth - 2*nFocusIndicatorWidth - 1;
         nPreviewHeight = ::basegfx::fround(nPreviewWidth / nPageAspectRatio);
-        rPageObjectSize.setHeight(nPreviewHeight + 2*gnOuterBorderWidth + 1);
+        rPageObjectSize.setHeight(nPreviewHeight + 2*gnOuterBorderWidth + 2*nFocusIndicatorWidth + 1);
     }
     else if (rPageObjectSize.Width() == 0)
     {
         // Calculate the width of the page object so that the preview fills
         // the available vertical space completely while observing the
         // aspect ratio of the preview.
-        nPreviewHeight = rPageObjectSize.Height() - 2*gnOuterBorderWidth - 1;
+        nPreviewHeight = rPageObjectSize.Height() - 2*gnOuterBorderWidth - 2*nFocusIndicatorWidth - 1;
         nPreviewWidth = ::basegfx::fround(nPreviewHeight * nPageAspectRatio);
-        rPageObjectSize.setWidth(nPreviewWidth + nLeftAreaWidth + gnOuterBorderWidth + 1);
+        rPageObjectSize.setWidth(nPreviewWidth
+            + nLeftAreaWidth + gnOuterBorderWidth + 2*nFocusIndicatorWidth + 1);
 
     }
     else
     {
         // The size of the page object is given.  Calculate the size of the
         // preview.
-        nPreviewWidth = rPageObjectSize.Width() - nLeftAreaWidth - gnOuterBorderWidth - 1;
-        nPreviewHeight = rPageObjectSize.Height() - gnOuterBorderWidth - 1;
+        nPreviewWidth = rPageObjectSize.Width()
+            - nLeftAreaWidth - gnOuterBorderWidth - 2*nFocusIndicatorWidth - 1;
+        nPreviewHeight = rPageObjectSize.Height()
+            - gnOuterBorderWidth - 2*nFocusIndicatorWidth - 1;
         if (double(nPreviewWidth)/double(nPreviewHeight) > nPageAspectRatio)
             nPreviewWidth = ::basegfx::fround(nPreviewHeight * nPageAspectRatio);
         else
@@ -151,7 +164,8 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     }
     // When the preview does not fill the available space completely then
     // place it flush right and vertically centered.
-    const int nLeft (rPageObjectSize.Width() - gnOuterBorderWidth - nPreviewWidth - 1);
+    const int nLeft (rPageObjectSize.Width()
+        - gnOuterBorderWidth - nPreviewWidth - nFocusIndicatorWidth - 1);
     const int nTop ((rPageObjectSize.Height() - nPreviewHeight)/2);
     return Rectangle(
         nLeft,
@@ -184,6 +198,10 @@ Rectangle PageObjectLayouter::GetBoundingBox (
     Rectangle aBoundingBox;
     switch (ePart)
     {
+        case FocusIndicator:
+            aBoundingBox = maFocusIndicatorBoundingBox;
+            break;
+
         case PageObject:
         case MouseOverIndicator:
             aBoundingBox = maPageObjectBoundingBox;
@@ -219,17 +237,11 @@ Rectangle PageObjectLayouter::GetBoundingBox (
 
 
 
-Size PageObjectLayouter::GetPageObjectSize (void) const
+Size PageObjectLayouter::GetSize (
+    const Part ePart,
+    const CoordinateSystem eCoordinateSystem)
 {
-    return maPageObjectSize;
-}
-
-
-
-
-Size PageObjectLayouter::GetPreviewSize (void) const
-{
-    return maPreviewBoundingBox.GetSize();
+    return GetBoundingBox(Point(0,0), ePart, eCoordinateSystem).GetSize();
 }
 
 

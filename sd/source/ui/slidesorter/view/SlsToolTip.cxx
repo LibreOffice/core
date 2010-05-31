@@ -88,7 +88,7 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
 
             msDefaultHelpText = sHelpText;
             msCurrentHelpText = sHelpText;
-            maTimer.Start();
+            Show(false);
         }
         else
         {
@@ -105,12 +105,12 @@ void ToolTip::ShowDefaultHelpText (const ::rtl::OUString& rsHelpText)
 {
     if (msDefaultHelpText != rsHelpText)
     {
-        Hide();
+        const bool bIsVisible (Hide());
 
         msDefaultHelpText = rsHelpText;
         msCurrentHelpText = rsHelpText;
 
-        Show();
+        Show(bIsVisible);
     }
 }
 
@@ -121,11 +121,11 @@ void ToolTip::ShowDefaultHelpText (void)
 {
     if (msCurrentHelpText != msDefaultHelpText)
     {
-        Hide();
+        const bool bIsVisible (Hide());
 
         msCurrentHelpText = msDefaultHelpText;
 
-        Show();
+        Show(bIsVisible);
     }
 }
 
@@ -136,18 +136,29 @@ void ToolTip::ShowHelpText (const ::rtl::OUString& rsHelpText)
 {
     if (msCurrentHelpText != rsHelpText)
     {
-        Hide();
+        const bool bIsVisible (Hide());
 
         msCurrentHelpText = rsHelpText;
 
-        Show();
+        Show(bIsVisible);
     }
 }
 
 
 
 
-void ToolTip::Show (void)
+void ToolTip::Show (const bool bNoDelay)
+{
+    if (bNoDelay)
+        DoShow();
+    else
+        maTimer.Start();
+}
+
+
+
+
+void ToolTip::DoShow (void)
 {
     if (maTimer.IsActive())
     {
@@ -164,33 +175,44 @@ void ToolTip::Show (void)
                 mpDescriptor,
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
+
+        // Do not show the help text when the (lower edge of the ) preview
+        // is not visible.  The tool tip itself may still be outside the
+        // window.
+        if (aBox.Bottom() >= pWindow->GetSizePixel().Height())
+            return;
+
         ::Window* pParent (pWindow.get());
         while (pParent!=NULL && pParent->GetParent()!=NULL)
             pParent = pParent->GetParent();
-        const Point aOffset (
-            pWindow->GetWindowExtentsRelative(pParent).TopLeft());
-        aBox.Move(aOffset.X(), aOffset.Y());
-        // We want the help text outside (below) the preview.  Therefore
-        // we have to make the box larger.
-        aBox.Bottom()+=25;
-            mnHelpWindowHandle = Help::ShowTip(
-                pWindow.get(),
-                aBox,
-                msCurrentHelpText,
-                QUICKHELP_CENTER | QUICKHELP_BOTTOM);
+        const Point aOffset (pWindow->GetWindowExtentsRelative(pParent).TopLeft());
+
+        // We do not know how high the tool tip will be but want its top
+        // edge not its bottom to be at a specific position (a little below
+        // the preview).  Therefore we use a little trick and place the tool
+        // tip at the top of a rectangle that is placed below the preview.
+        aBox.Move(aOffset.X(), aOffset.Y() + aBox.GetHeight() + 3);
+        mnHelpWindowHandle = Help::ShowTip(
+            pWindow.get(),
+            aBox,
+            msCurrentHelpText,
+            QUICKHELP_CENTER | QUICKHELP_TOP);
     }
 }
 
 
 
 
-void ToolTip::Hide (void)
+bool ToolTip::Hide (void)
 {
     if (mnHelpWindowHandle>0)
     {
         Help::HideTip(mnHelpWindowHandle);
         mnHelpWindowHandle = 0;
+        return true;
     }
+    else
+        return false;
 }
 
 
@@ -198,7 +220,7 @@ void ToolTip::Hide (void)
 
 IMPL_LINK(ToolTip, DelayTrigger, void*, EMPTYARG)
 {
-    Show();
+    DoShow();
 
     return 0;
 }

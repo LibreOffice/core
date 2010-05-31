@@ -57,6 +57,7 @@ public:
             area has to be, how many digits to except for the largest page number.
     */
     PageObjectLayouter(
+        const ::boost::shared_ptr<Theme>& rpTheme,
         const Size& rPageObjectWindowSize,
         const Size& rPreviewModelSize,
         const SharedSdWindow& rpWindow,
@@ -64,6 +65,8 @@ public:
     ~PageObjectLayouter(void);
 
     enum Part {
+        // The focus indicator is painted outside the actual page object.
+        FocusIndicator,
         // This is the outer bounding box that includes the preview, page
         // number, title.
         PageObject,
@@ -114,23 +117,17 @@ public:
         const Point& rPageObjectLocation,
         const Part ePart,
         const CoordinateSystem eCoordinateSystem);
-
-    /** Return the size in pixel of the whole page object.
-    */
-    Size GetPageObjectSize (void) const;
-
-    /** Return the size in pixel of the preview.
-    */
-    Size GetPreviewSize (void) const;
+    Size GetSize (
+        const Part ePart,
+        const CoordinateSystem eCoordinateSystem);
 
     Image GetTransitionEffectIcon (void) const;
-
-    //    void Update (void);
 
 private:
     SharedSdWindow mpWindow;
     Size maPageObjectSize;
     double mnModelToWindowScale;
+    Rectangle maFocusIndicatorBoundingBox;
     Rectangle maPageObjectBoundingBox;
     Rectangle maPageNumberAreaBoundingBox;
     Rectangle maPreviewBoundingBox;
@@ -142,7 +139,8 @@ private:
     Rectangle CalculatePreviewBoundingBox (
         Size& rPageObjectSize,
         const Size& rPreviewModelSize,
-        const sal_Int32 nPageNumberAreaWidth);
+        const sal_Int32 nPageNumberAreaWidth,
+        const sal_Int32 nFocusIndicatorWidth);
 };
 
 

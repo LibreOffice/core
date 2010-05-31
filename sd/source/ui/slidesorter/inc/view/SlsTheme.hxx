@@ -82,7 +82,6 @@ public:
         Color_ButtonText,
         Color_ButtonTextHover,
         Color_MouseOverColor,
-        Color_PageNumberBorder,
         Color_PageNumber,
         Color_Selection,
         Color_PreviewBorder,
@@ -133,6 +132,7 @@ public:
         Icon_RawShadow,
         Icon_RawInsertShadow,
         Icon_HideSlideOverlay,
+        Icon_FocusBorder,
         Icon_ButtonBarLarge,
         Icon_ButtonBarMedium,
         Icon_ButtonBarSmall,
@@ -171,6 +171,7 @@ public:
         Integer_ButtonFadeOutDelay,
         Integer_ButtonFadeOutDuration,
         Integer_ToolTipDelay,
+        Integer_FocusIndicatorWidth,
         _IntegerValueType_Size_
     };
     sal_Int32 GetIntegerValue (const IntegerValueType eType) const;

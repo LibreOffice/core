@@ -37,20 +37,21 @@
 
 #include "SlsFramePainter.hxx"
 #include <vcl/outdev.hxx>
+#include <vcl/bmpacc.hxx>
 
 
 namespace sd { namespace slidesorter { namespace view {
 
 FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
-    : maShadowTopLeft(rShadowBitmap,-1,-1),
-      maShadowTop(rShadowBitmap,0,-1),
-      maShadowTopRight(rShadowBitmap,+1,-1),
-      maShadowLeft(rShadowBitmap,-1,0),
-      maShadowRight(rShadowBitmap,+1,0),
-      maShadowBottomLeft(rShadowBitmap,-1,+1),
-      maShadowBottom(rShadowBitmap,0,+1),
-      maShadowBottomRight(rShadowBitmap,+1,+1),
-      maShadowCenter(rShadowBitmap,0,0),
+    : maTopLeft(rShadowBitmap,-1,-1),
+      maTop(rShadowBitmap,0,-1),
+      maTopRight(rShadowBitmap,+1,-1),
+      maLeft(rShadowBitmap,-1,0),
+      maRight(rShadowBitmap,+1,0),
+      maBottomLeft(rShadowBitmap,-1,+1),
+      maBottom(rShadowBitmap,0,+1),
+      maBottomRight(rShadowBitmap,+1,+1),
+      maCenter(rShadowBitmap,0,0),
       mbIsValid(false)
 {
     if (rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height()
@@ -85,23 +86,47 @@ void FramePainter::PaintFrame (
         return;
 
     // Paint the shadow.
-    maShadowTopLeft.PaintCorner(rDevice, aBox.TopLeft());
-    maShadowTopRight.PaintCorner(rDevice, aBox.TopRight());
-    maShadowBottomLeft.PaintCorner(rDevice, aBox.BottomLeft());
-    maShadowBottomRight.PaintCorner(rDevice, aBox.BottomRight());
-    maShadowLeft.PaintSide(rDevice,
-        aBox.TopLeft(), aBox.BottomLeft(),
-        maShadowTopLeft, maShadowBottomLeft);
-    maShadowRight.PaintSide(rDevice,
-        aBox.TopRight(), aBox.BottomRight(),
-        maShadowTopRight, maShadowBottomRight);
-    maShadowTop.PaintSide(rDevice,
-        aBox.TopLeft(), aBox.TopRight(),
-        maShadowTopLeft, maShadowTopRight);
-    maShadowBottom.PaintSide(rDevice,
-        aBox.BottomLeft(), aBox.BottomRight(),
-        maShadowBottomLeft, maShadowBottomRight);
-    maShadowCenter.PaintCenter(rDevice,aBox);
+    maTopLeft.PaintCorner(rDevice, aBox.TopLeft());
+    maTopRight.PaintCorner(rDevice, aBox.TopRight());
+    maBottomLeft.PaintCorner(rDevice, aBox.BottomLeft());
+    maBottomRight.PaintCorner(rDevice, aBox.BottomRight());
+    maLeft.PaintSide(rDevice, aBox.TopLeft(), aBox.BottomLeft(), maTopLeft, maBottomLeft);
+    maRight.PaintSide(rDevice, aBox.TopRight(), aBox.BottomRight(), maTopRight, maBottomRight);
+    maTop.PaintSide(rDevice, aBox.TopLeft(), aBox.TopRight(), maTopLeft, maTopRight);
+    maBottom.PaintSide(rDevice, aBox.BottomLeft(), aBox.BottomRight(), maBottomLeft, maBottomRight);
+    maCenter.PaintCenter(rDevice,aBox);
+}
+
+
+
+
+void FramePainter::AdaptColor (
+    const Color aNewColor,
+    const bool bEraseCenter)
+{
+    // Get the source color.
+    if (maCenter.maBitmap.IsEmpty())
+        return;
+    BitmapReadAccess* pReadAccess = maCenter.maBitmap.GetBitmap().AcquireReadAccess();
+    if (pReadAccess == NULL)
+        return;
+    const Color aSourceColor (pReadAccess->GetColor(0,0));
+    maCenter.maBitmap.GetBitmap().ReleaseAccess(pReadAccess);
+
+    // Erase the center bitmap.
+    if (bEraseCenter)
+        maCenter.maBitmap.SetEmpty();
+
+    // Replace the color in all bitmaps.
+    maTopLeft.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maTop.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maTopRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maLeft.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maCenter.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maBottomLeft.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maBottom.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maBottomRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
 }
 
 

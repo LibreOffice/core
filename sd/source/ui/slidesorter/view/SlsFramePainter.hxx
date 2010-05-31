@@ -52,11 +52,22 @@ public:
     */
     void PaintFrame (OutputDevice&rDevice, const Rectangle aBox) const;
 
+    /** Special functionality that takes the color from the center
+        bitmap and replaces that color in all bitmaps by the given new
+        color.  Alpha values are not modified.
+        @param bClearCenterBitmap
+            When <TRUE/> then the center bitmap is erased.
+    */
+    void AdaptColor (const Color aNewColor, const bool bClearCenterBitmap);
+
 private:
     /** Bitmap with offset that is used when the bitmap is painted.  The bitmap
     */
     class OffsetBitmap {
     public:
+        BitmapEx maBitmap;
+        Point maOffset;
+
         /** Create one of the eight shadow bitmaps from one that combines
             them all.  This larger bitmap is expected to have dimension NxN
             with N=1+2*M.  Of this larger bitmap there are created four
@@ -99,20 +110,16 @@ private:
         void PaintCenter (
             OutputDevice& rDevice,
             const Rectangle& rBox) const;
-
-    private:
-        BitmapEx maBitmap;
-        Point maOffset;
     };
-    OffsetBitmap maShadowTopLeft;
-    OffsetBitmap maShadowTop;
-    OffsetBitmap maShadowTopRight;
-    OffsetBitmap maShadowLeft;
-    OffsetBitmap maShadowRight;
-    OffsetBitmap maShadowBottomLeft;
-    OffsetBitmap maShadowBottom;
-    OffsetBitmap maShadowBottomRight;
-    OffsetBitmap maShadowCenter;
+    OffsetBitmap maTopLeft;
+    OffsetBitmap maTop;
+    OffsetBitmap maTopRight;
+    OffsetBitmap maLeft;
+    OffsetBitmap maRight;
+    OffsetBitmap maBottomLeft;
+    OffsetBitmap maBottom;
+    OffsetBitmap maBottomRight;
+    OffsetBitmap maCenter;
     bool mbIsValid;
 };
 

@@ -66,8 +66,11 @@ public:
     void ShowHelpText (const ::rtl::OUString& rsHelpText);
 
     /** Hide the tool tip.
+        @return
+            Returns whether the tool tip was visible at the time this method
+            was called.
     */
-    void Hide (void);
+    bool Hide (void);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -77,7 +80,14 @@ private:
     ULONG mnHelpWindowHandle;
     Timer maTimer;
 
-    void Show (void);
+    /** Request to show the tool tip.
+        @param bForce
+            When <TRUE/> then the tool tip is show right away.  Otherwise it
+            is shown after a short delay.
+    */
+    void Show (const bool bForce);
+    void DoShow (void);
+
     DECL_LINK(DelayTrigger, void*);
 };
 

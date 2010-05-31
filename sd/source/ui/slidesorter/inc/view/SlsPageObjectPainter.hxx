@@ -95,6 +95,7 @@ private:
     ::boost::shared_ptr<view::Theme> mpTheme;
     ::boost::shared_ptr<Font> mpPageNumberFont;
     ::boost::scoped_ptr<FramePainter> mpShadowPainter;
+    ::boost::scoped_ptr<FramePainter> mpFocusBorderPainter;
     Bitmap maNormalBackground;
     Bitmap maSelectionBackground;
     Bitmap maFocusedSelectionBackground;
@@ -119,8 +120,7 @@ private:
     void PaintBorder (
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,
-        const Rectangle& rBox,
-        const int nBorderWidth) const;
+        const Rectangle& rBox) const;
     Bitmap& GetBackgroundForState (
         const model::SharedPageDescriptor& rpDescriptor,
         const OutputDevice& rTemplateDevice);
@@ -128,11 +128,11 @@ private:
         Bitmap& rBackground,
         Theme::GradientColorType eType,
         const OutputDevice& rTemplateDevice,
-        const int nBorderWidth);
+        const bool bHasFocusBorder);
     Bitmap CreateBackgroundBitmap(
         const OutputDevice& rReferenceDevice,
         const Theme::GradientColorType eType,
-        const int nBorderWidth) const;
+        const bool bHasFocusBorder) const;
     Bitmap CreateMarkedPreview(
         const Size& rSize,
         const Bitmap& rPreview,
