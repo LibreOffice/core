@@ -52,6 +52,7 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\inc\l10ntools\directory.hxx %_DEST%\inc%_EXT%\l10ntools\directory.hxx
 ..\inc\l10ntools\file.hxx %_DEST%\inc%_EXT%\l10ntools\file.hxx
 ..\inc\l10ntools\vosapp.hxx %_DEST%\inc%_EXT%\l10ntools\vosapp.hxx
+..\source\filter\merge\FCFGMerge.cfg  %_DEST%\inc%_EXT%\l10ntools\FCFGMerge.cfg
 
 ..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\l10ntools\utf8conv.hxx
 ..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib
