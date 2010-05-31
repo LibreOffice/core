@@ -101,6 +101,7 @@ OpenOffice
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
 		}
 		active			1
 		compression		5
@@ -168,6 +169,7 @@ OpenOffice_wJRE
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
 		}
 		active			1
 		compression		5
@@ -241,6 +243,7 @@ OpenOffice_Dev
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
 		}
 		active			1
 		compression		5
@@ -285,6 +288,7 @@ URE
             STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
 			PACKAGEMAP package_names_ext.txt
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
         }
         active 1
         compression 5
@@ -329,6 +333,7 @@ OpenOffice_SDK
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
             STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
         }
         active 1
         compression 5
@@ -380,6 +385,7 @@ OpenOffice_Dev_SDK
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
             STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
         }
         active 1
         compression 5
@@ -448,6 +454,7 @@ BrOffice
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
 		}
 		active			1
 		compression		5
@@ -520,6 +527,7 @@ BrOffice_wJRE
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
 		}
 		active			1
 		compression		5
@@ -592,6 +600,7 @@ BrOffice_Dev
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT OpenOffice.org
             REGISTRATION_CID 926117
+            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
 		}
 		active			1
 		compression		5
