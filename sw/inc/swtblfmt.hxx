@@ -31,7 +31,7 @@
 
 class SwDoc;
 
-class SwTableFmt : public SwFrmFmt
+class SW_DLLPUBLIC SwTableFmt : public SwFrmFmt
 {
     friend class SwDoc;
 
