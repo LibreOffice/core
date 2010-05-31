@@ -33,10 +33,6 @@ const sal_Int32 n_ConstBufferSize = 32768;
 const sal_Int32 n_ConstMaxMemoryStreamSize = 20480;
 const sal_Int32 n_ConstDigestLength = 1024;
 
-#define PACKAGE_FORMAT  1
-#define ZIP_FORMAT      2
-#define OFOPXML_FORMAT  3
-
 // the constants related to the manifest.xml entries
 #define PKG_MNFST_MEDIATYPE 0
 #define PKG_MNFST_VERSION   1
