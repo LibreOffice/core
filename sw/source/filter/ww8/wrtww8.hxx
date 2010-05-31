@@ -763,6 +763,9 @@ protected:
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt) = 0;
 
 protected:
+    /// Output SwStartNode
+    virtual void OutputStartNode( const SwStartNode& );
+
     /// Output SwEndNode
     virtual void OutputEndNode( const SwEndNode& );
 
@@ -1017,7 +1020,7 @@ public:
                                      const SwPageDesc* pNewPgDesc = 0 );
 
     void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
-    void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox );
+    void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem * rBox );
     BYTE TransCol( const Color& rCol );
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
     WW8_BRC TranslateBorderLine(const SvxBorderLine& pLine,
