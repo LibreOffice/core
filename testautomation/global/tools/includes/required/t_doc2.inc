@@ -128,10 +128,11 @@ function hEnableDocumentEditMode() as boolean
 
                 kontext "Active"
                 if ( Active.exists( 1 ) ) then
-                    printlog( "Successfully switched to edit mode" )
+                    printlog( "Handle <Use copy message>" )
                     hCloseDialog( Active, "yes" )
+                    wait( 2000 )
+                    printlog( "Successfully switched to edit mode" )
                     hEnableDocumentEditMode() = true
-                    wait( 1000 )
                     exit for
                 endif
             endif
