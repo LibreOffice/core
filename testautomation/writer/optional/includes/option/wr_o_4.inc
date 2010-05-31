@@ -293,9 +293,8 @@ testcase tToolsOptionsWriterOther
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 
 '------------------------------------------------------------------------------
@@ -740,9 +739,8 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 
 '------------------------------------------------------------------------------
@@ -852,9 +850,8 @@ testcase tToolsOptionsWriterGeneral
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 
 '------------------------------------------------------------------------------
@@ -988,8 +985,7 @@ testcase tToolsOptionsWriterMailMerge
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
 
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 '------------------------------------------------------------------------------
