@@ -36,13 +36,17 @@ sub main
     use "framework\optional\includes\basic_vba-compat_import_nothing.inc"
     use "framework\optional\includes\basic_vba-compat_import_disabled.inc"
     use "framework\optional\includes\basic_vba-compat_import_enabled.inc"
-    use "framework\optional\includes\basic_vba-compat_security_check.inc"
-
+    use "framework\optional\includes\basic_vba-compat_thisworkbook.inc"
+    use "framework\optional\includes\basic_vba-compat_application-union.inc"
+    use "framework\optional\includes\basic_vba-compat_xlsm-xlsb.inc"
+    
     call hStatusIn( "framework" , "f_basic_vba-compat.bas" )
     call tBasicVBACompatImportNothing()
     call tBasicVBACompatImportDisabled()
     call tBasicVBACompatImportEnabled()
-    call tBasicVBACompatSecurityCheck()
+    call tBasicVBACompatThisWorkBook()
+    call tBasicVBACompatApplicationUnion()
+    call tBasicVBACompatXLSM_XLSB()
     call hStatusOut()
 
 end sub
@@ -56,6 +60,7 @@ sub LoadIncludeFiles
 
     use "global\tools\includes\optional\t_basic_organizer_tools.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
+    use "global\tools\includes\optional\t_stringtools.inc"
     use "global\tools\includes\optional\t_security_tools.inc"
     use "global\tools\includes\optional\t_macro_tools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"

@@ -49,28 +49,19 @@ testcase tGridcontrolLoad
     Kontext "ScriptSelector"
     if ( ScriptSelector.exists( 10 ) ) then
 
-        printlog( "Select the last node" )
-        hSelectTheLastNode( LibraryTreeList )
-
-        printlog( "Search for the macro within the current module" )
-        iPos = hFindInList( ScriptList, MACRO_NAME )
-        if ( iPos <> MACRO_NOT_FOUND ) then
-
-            printlog( "The requested macro was found: " & MACRO_NAME )
-            ScriptList.select( iPos )
-            hCloseDialog( ScriptSelector, "ok" )
-
-            printlog( "Probe for unexpected messagebox" )
-            kontext "Active"
-            if ( Active.exists( 5 ) ) then
-                warnlog( "Unexpected messagebox: " & Active.getText() )
-                Active.ok()
-            endif
-        else
-            warnlog( "The requested Macro could not be found: " & MACRO_NAME )
-        endif
+    printlog "Start the macro, that performs the test"
+    Kontext "GridControlDialogStarter"
+    ShowGridcontrol.typeKeys "<space>"
+    Kontext "GridControlDialog"
+    if GridControlDialog.exists(5) then
+        for i=1 to gridcontrolcontrol.getcolumncount
+        for a=1 to gridcontrolcontrol.getrowcount
+            printlog " " + i + ":"+a+": '" + gridcontrolcontrol.getitemtype (i,a) + "' '" + gridcontrolcontrol.getitemtext (i,a) + "'"
+        next a
+        next i
+        GridControlDialog.close
     else
-        warnlog( "ScriptSelector failed to open" )
+        warnlog "Gridcontrol Dialog did not come up after pressing button"
     endif
     
     printlog( "Test exit, cleanup" )

@@ -97,7 +97,7 @@ testcase tEPS
             warnlog( "No export options dialog was displayed" )
         endif
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
 
@@ -178,7 +178,7 @@ testcase tPCT
 
         if ( hWaitForOutputFile( sOutputFile ) ) then
 
-            printlog( "Save image, close file and re-insert graphics into new file" )
+            printlog( "Close file and re-insert graphics into new document" )
             hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
         else
             warnlog( "File was not saved: " & sOutputFile )
@@ -213,7 +213,7 @@ testcase tPCT
 
         sOutputFile = OutputGrafikTBO + "1" + sExt
         if ( hWaitForOutputFile( sOutputFile ) ) then
-            printlog( "Save image, close file and re-insert graphics into new file" )
+            printlog( "Close file and re-insert graphics into new document" )
             hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
         else
             warnlog( "File was not saved: " & sOutputFile )
@@ -313,7 +313,7 @@ testcase tPBM
             warnlog( "No export options dialog was displayed" )
         endif
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
 
     endif
@@ -341,7 +341,7 @@ testcase tPGM
             warnlog( "No export options dialog was displayed" )
         endif
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
 
     endif
@@ -369,7 +369,7 @@ testcase tPPM
             warnlog( "No export options dialog was displayed" )
         endif
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
 
     endif
@@ -388,7 +388,7 @@ testcase tRAS
 
     printlog "Save it"
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     else
         warnlog( "No export options dialog was displayed" )
@@ -411,7 +411,7 @@ testcase tTIFF
 
     printlog "Save it"
     if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     else
         warnlog( "No export options dialog was displayed" )
@@ -431,7 +431,7 @@ testcase tXPM
 
     printlog "save it"
     if hCallExport (OutputGrafikTBO , sFilter ) = TRUE then
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     else
         warnlog( "No export options dialog was displayed" )
@@ -461,7 +461,7 @@ testcase tGIF
             warnlog( "No export options dialog was displayed" )
         endif
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
 
     endif
@@ -479,7 +479,7 @@ testcase tJPEG
     hFileOpen( gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString )
 
     printlog " save it "
-    if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
+    if ( hCallExport( OutputGrafikTBO , sFilter ) ) then
 
         Kontext "JpegOptionen"
         if ( JpegOptionen.Exists( 2 ) ) then
@@ -490,7 +490,7 @@ testcase tJPEG
             warnlog( "No export options dialog was displayed" )
         endif
 
-        printlog( "Save image, close file and re-insert graphics into new file" )
+        printlog( "Close file and re-insert graphics into new document" )
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
         
     endif
@@ -498,15 +498,16 @@ testcase tJPEG
     call hCloseDocument
 
 endcase 'tJPEG
-'-------------------------------------------------------------------------
+
+'*******************************************************************************
 
 function hInsertGraphicsToNewFile( sOutputFile as string )
 
-    if ( not FileExists( sOutputFile ) ) then
-        warnlog( "File not saved: " & sOutputFile )
-    else
+    if ( FileExists( sOutputFile ) ) then
         hFileReOpen( "" )
-        Call hGrafikEinfuegen ( sOutputFile )
+        Call hGrafikEinfuegen( sOutputFile )
+    else
+        warnlog( "File not saved: " & sOutputFile )
     endif
 
 end function
