@@ -44,7 +44,7 @@
     For example in case it is broken one.
     </p>
  */
-exception InvalidStorageException: com::sun::star::io::IOException
+published exception InvalidStorageException: com::sun::star::io::IOException
 {
 };
 
