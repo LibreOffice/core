@@ -1975,11 +1975,14 @@ BOOL Application::IsHeadlessModeEnabled()
 void Application::ShowNativeErrorBox(const String& sTitle  ,
                                      const String& sMessage)
 {
-    ImplGetSalSystem()->ShowNativeMessageBox (
+    int btn = ImplGetSalSystem()->ShowNativeMessageBox (
             sTitle,
             sMessage,
             SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
             SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
+    if (btn != SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK) {
+        OSL_TRACE("ShowNativeMessageBox returned %d\n", btn);
+    }
 }
 
 // -----------------------------------------------------------------------

@@ -83,10 +83,10 @@ struct WSInternalData_Impl
     SotMutexHolderRef m_rSharedMutexRef;
     ::cppu::OTypeCollection* m_pTypeCollection;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
-    sal_Int16 m_nStorageType;
+    sal_Int32 m_nStorageType;
 
     // the mutex reference MUST NOT be empty
-    WSInternalData_Impl( const SotMutexHolderRef rMutexRef, sal_Int16 nStorageType )
+    WSInternalData_Impl( const SotMutexHolderRef rMutexRef, sal_Int32 nStorageType )
     : m_rSharedMutexRef( rMutexRef )
     , m_pTypeCollection( NULL )
     , m_aListenersContainer( rMutexRef->GetMutex() )
@@ -137,7 +137,7 @@ struct OWriteStream_Impl : public PreCreationStruct
 
     sal_Bool m_bHasInsertedStreamOptimization;
 
-    sal_Int16 m_nStorageType;
+    sal_Int32 m_nStorageType;
 
     // Relations info related data, stored in *.rels file in OFOPXML format
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xOrigRelInfoStream;
@@ -175,7 +175,7 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >& xPackage,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                 sal_Bool bForceEncrypted,
-                sal_Int16 nStorageType,
+                sal_Int32 nStorageType,
                 sal_Bool bDefaultCompress,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xRelInfoStream =
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >() );

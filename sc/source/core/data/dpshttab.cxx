@@ -110,12 +110,6 @@ long ScSheetDPData::GetColumnCount()
     return aCacheTable.getColSize();
 }
 
-BOOL lcl_HasQuery( const ScQueryParam& rParam )
-{
-    return rParam.GetEntryCount() > 0 &&
-            rParam.GetEntry(0).bDoQuery;
-}
-
 String ScSheetDPData::getDimensionName(long nColumn)
 {
     CreateCacheTable();

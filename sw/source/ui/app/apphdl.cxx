@@ -765,16 +765,26 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             DELETEZ(pWebToolbarConfig)  ;
             DELETEZ(pAuthorNames)       ;
             DELETEZ(pDBConfig);
-            pColorConfig->RemoveListener(this);
-            DELETEZ(pColorConfig);
-            pAccessibilityOptions->RemoveListener(this);
-            DELETEZ(pAccessibilityOptions);
-            pCTLOptions->RemoveListener(this);
-            DELETEZ(pCTLOptions);
-            pUserOptions->RemoveListener(this);
-            DELETEZ(pUserOptions);
-            pUndoOptions->RemoveListener(this);
-            DELETEZ(pUndoOptions);
+            if (pColorConfig != 0) {
+                pColorConfig->RemoveListener(this);
+                DELETEZ(pColorConfig);
+            }
+            if (pAccessibilityOptions != 0) {
+                pAccessibilityOptions->RemoveListener(this);
+                DELETEZ(pAccessibilityOptions);
+            }
+            if (pCTLOptions != 0) {
+                pCTLOptions->RemoveListener(this);
+                DELETEZ(pCTLOptions);
+            }
+            if (pUserOptions != 0) {
+                pUserOptions->RemoveListener(this);
+                DELETEZ(pUserOptions);
+            }
+            if (pUndoOptions != 0) {
+                pUndoOptions->RemoveListener(this);
+                DELETEZ(pUndoOptions);
+            }
         }
     }
 }

@@ -36,7 +36,7 @@
 
 /** describes a verb.
  */
-struct VerbDescriptor
+published struct VerbDescriptor
 {
     //------------------------------------------------------------------------
     /** specifies the id of the verb.

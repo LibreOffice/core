@@ -42,24 +42,25 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 # --- Files --------------------------------------------------------
 
-XMLSEC1VERSION=1.2.12
+XMLSEC1VERSION=1.2.14
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
-TARFILE_MD5=195d042623bcc2e1668ab8370de6dc2a
+TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 
-#xmlsec1-configure.patch: Set up the build. Straightforward
-#configuration
+#xmlsec1-configure.patch: Set up the build. Straightforward configuration
+#xmlsec1-olderlibxml2.patch: Allow build against older libxml2, for macosx
+#xmlsec1-nssdisablecallbacks.patch: Disable use of smime3 so don't need to package it
 #xmlsec1-customkeymanage.patch: Could we do this alternatively outside xmlsec
 #xmlsec1-nssmangleciphers.patch: Dubious, do we still need this ?
-#xmlsec1-nssdisablecallbacks.patch: Dubious, do we still need this ?
 #xmlsec1-noverify.patch: As per readme.txt. 
 #xmlsec1-mingw32.patch: Mingw32 support. 
 #xmlsec1-mingw-customkeymanage-addmscrypto.patch builds the custom keymanager on mingw
 PATCH_FILES=\
    xmlsec1-configure.patch \
+   xmlsec1-olderlibxml2.patch \
+   xmlsec1-nssdisablecallbacks.patch \
    xmlsec1-customkeymanage.patch \
    xmlsec1-nssmangleciphers.patch \
-   xmlsec1-nssdisablecallbacks.patch \
    xmlsec1-noverify.patch \
    xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch
@@ -96,7 +97,7 @@ xmlsec_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --enable-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --enable-mscrypto --disable-crypto-dl --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
 
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
@@ -152,7 +153,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
-CONFIGURE_FLAGS=--with-pic --disable-shared --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
+CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....

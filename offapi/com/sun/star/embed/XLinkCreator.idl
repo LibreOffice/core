@@ -62,7 +62,7 @@
     it will be detected.
     </p>
  */
-interface XLinkCreator: com::sun::star::uno::XInterface
+published interface XLinkCreator: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** creates a new object based on

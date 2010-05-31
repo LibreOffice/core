@@ -40,7 +40,7 @@
 
 /** This exception can be thrown in case specified state can not be reached.
  */
-exception UnreachableStateException: com::sun::star::uno::Exception
+published exception UnreachableStateException: com::sun::star::uno::Exception
 {
     // -----------------------------------------------------------------------
     /** The current state of the object.

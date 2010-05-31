@@ -217,6 +217,14 @@ namespace framework{
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST  "private:resource/image/commandrotateimagelist"
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST  "private:resource/image/commandmirrorimagelist"
 
+#define UICOMMANDDESCRIPTION_PROPNAME_PROPERTIES                "Properties"
+#define UICOMMANDDESCRIPTION_PROPNAME_POPUP                     "Popup"
+
+#define UICOMMANDDESCRIPTION_PROPERTIES_IMAGE                   1
+#define UICOMMANDDESCRIPTION_PROPERTIES_IMAGE_MIRRORED          2
+#define UICOMMANDDESCRIPTION_PROPERTIES_IMAGE_ROTATED           4
+#define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON            8
+
 //_______________________________________________
 /** properties for "AutoRecovery" class */
 

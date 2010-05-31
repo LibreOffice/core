@@ -105,14 +105,6 @@ namespace pcr
         static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
             createListBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl,
-                sal_Bool _bSorted
-            );
-
-        static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
-            createListBoxControl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< ::rtl::OUString >& _rInitialListEntries,
                 sal_Bool _bReadOnlyControl,
                 sal_Bool _bSorted

@@ -46,7 +46,7 @@ public:
         int layer, rtl::OUString const & defaultTemplateName,
         rtl::OUString const & templateName);
 
-    virtual rtl::Reference< Node > clone() const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
     virtual NodeMap & getMembers();
 
@@ -63,7 +63,7 @@ public:
     bool isValidTemplate(rtl::OUString const & templateName) const;
 
 private:
-    SetNode(SetNode const & other);
+    SetNode(SetNode const & other, bool keepTemplateName);
 
     virtual ~SetNode();
 

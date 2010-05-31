@@ -58,30 +58,8 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     static public final boolean DEBUG = false;
 
     static {
-        // preload shared libraries whichs import lips are linked to jpipe
-        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
-        {
-            try {
-                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "msvcr71");
-            } catch (Throwable e){} // loading twice would fail
-
-            try {
-                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "msvcr70");
-            } catch (Throwable e){} // loading twice would fail
-
-            try {
-                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "uwinapi");
-            } catch (Throwable e){} // loading twice would fail
-
-            try {
-                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "sal3");
-            } catch (Throwable e){} // loading twice would fail
-        }
-
         // load shared library for JNI code
-        try {
-            NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "jpipe");
-        } catch (Throwable e){} // loading twice would fail
+        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "jpipe");
     }
 
     protected String    _aDescription;

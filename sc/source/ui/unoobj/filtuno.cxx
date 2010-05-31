@@ -185,7 +185,9 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     }
     else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
     {
-        if (!bExport)
+        if (bExport)
+            nRet = ui::dialogs::ExecutableDialogResults::OK;    // export HTML without dialog
+        else
         {
             // HTML import.
             ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(

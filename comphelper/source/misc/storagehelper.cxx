@@ -328,12 +328,19 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             const ::rtl::OUString& aFormat,
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+            sal_Bool bRepairStorage )
     throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
     aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
     aProps[0].Value <<= aFormat;
+    if ( bRepairStorage )
+    {
+        aProps.realloc( 2 );
+        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) );
+        aProps[1].Value <<= bRepairStorage;
+    }
 
     uno::Sequence< uno::Any > aArgs( 3 );
     aArgs[0] <<= aURL;
@@ -352,12 +359,19 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStream(
             const ::rtl::OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+            sal_Bool bRepairStorage )
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
     aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
     aProps[0].Value <<= aFormat;
+    if ( bRepairStorage )
+    {
+        aProps.realloc( 2 );
+        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) );
+        aProps[1].Value <<= bRepairStorage;
+    }
 
     uno::Sequence< uno::Any > aArgs( 3 );
     aArgs[0] <<= xStream;
@@ -377,12 +391,19 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const ::rtl::OUString& aFormat,
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+            sal_Bool bRepairStorage )
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
     aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
     aProps[0].Value <<= aFormat;
+    if ( bRepairStorage )
+    {
+        aProps.realloc( 2 );
+        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) );
+        aProps[1].Value <<= bRepairStorage;
+    }
 
     uno::Sequence< uno::Any > aArgs( 3 );
     aArgs[0] <<= xStream;

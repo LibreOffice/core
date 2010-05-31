@@ -44,8 +44,8 @@ GroupNode::GroupNode(
     mandatory_(Data::NO_LAYER)
 {}
 
-rtl::Reference< Node > GroupNode::clone() const {
-    return new GroupNode(*this);
+rtl::Reference< Node > GroupNode::clone(bool keepTemplateName) const {
+    return new GroupNode(*this, keepTemplateName);
 }
 
 NodeMap & GroupNode::getMembers() {
@@ -68,11 +68,13 @@ bool GroupNode::isExtensible() const {
     return extensible_;
 }
 
-GroupNode::GroupNode(GroupNode const & other):
-    Node(other), extensible_(other.extensible_),
-    templateName_(other.templateName_), mandatory_(other.mandatory_)
+GroupNode::GroupNode(GroupNode const & other, bool keepTemplateName):
+    Node(other), extensible_(other.extensible_), mandatory_(other.mandatory_)
 {
     cloneNodeMap(other.members_, &members_);
+    if (keepTemplateName) {
+        templateName_ = other.templateName_;
+    }
 }
 
 GroupNode::~GroupNode() {}

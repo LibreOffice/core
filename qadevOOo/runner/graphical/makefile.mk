@@ -64,7 +64,8 @@ PostscriptCreator.java \
 PropertyName.java \
 TimeHelper.java \
 WrongEnvironmentException.java \
-WrongSuffixException.java
+WrongSuffixException.java \
+Tolerance.java
 
 # GraphicalComparator.java
 

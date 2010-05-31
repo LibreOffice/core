@@ -65,7 +65,7 @@ module com {  module sun {  module star {  module embed {
     from the container system window.
     </p>
 */
-service DocumentCloser : com::sun::star::lang::XComponent
+published service DocumentCloser : com::sun::star::lang::XComponent
 {
     /** is used to initialize the object on it's creation.
 

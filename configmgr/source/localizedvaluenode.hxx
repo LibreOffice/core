@@ -43,7 +43,7 @@ class LocalizedValueNode: public Node {
 public:
     LocalizedValueNode(int layer, com::sun::star::uno::Any const & value);
 
-    virtual rtl::Reference< Node > clone() const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
     virtual rtl::OUString getTemplateName() const;
 

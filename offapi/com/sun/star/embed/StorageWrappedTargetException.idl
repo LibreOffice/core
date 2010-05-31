@@ -41,7 +41,7 @@
 /** This exception can wrap an exception thrown during <type>XStorage</type>
     methods execution.
  */
-exception StorageWrappedTargetException: com::sun::star::lang::WrappedTargetException
+published exception StorageWrappedTargetException: com::sun::star::lang::WrappedTargetException
 {
 };
 

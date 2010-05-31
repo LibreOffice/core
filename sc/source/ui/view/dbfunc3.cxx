@@ -1739,6 +1739,18 @@ void lcl_MoveToEnd( ScDPSaveDimension& rDim, const String& rItemName )
     // puts it to the end of the list even if it was in the list before.
 }
 
+struct ScOUStringCollate
+{
+    CollatorWrapper* mpCollator;
+
+    ScOUStringCollate(CollatorWrapper* pColl) : mpCollator(pColl) {}
+
+    bool operator()(const rtl::OUString& rStr1, const rtl::OUString& rStr2) const
+    {
+        return ( mpCollator->compareString(rStr1, rStr2) < 0 );
+    }
+};
+
 bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -1747,7 +1759,8 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
         return false;
 
     // We need to run this to get all members later.
-    pDPObj->BuildAllDimensionMembers();
+    if ( pUserListId )
+        pDPObj->BuildAllDimensionMembers();
 
     USHORT nOrientation;
     long nDimIndex = pDPObj->GetHeaderDim(rPos, nOrientation);
@@ -1766,97 +1779,111 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     if (!pSaveDim)
         return false;
 
-    typedef ScDPSaveDimension::MemberList MemList;
-    const MemList& rDimMembers = pSaveDim->GetMembers();
-    list<OUString> aMembers;
-    hash_set<OUString, ::rtl::OUStringHash> aMemberSet;
-    size_t nMemberCount = 0;
-    for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
-          itr != itrEnd; ++itr)
+    // manual evaluation of sort order is only needed if a user list id is given
+    if ( pUserListId )
     {
-        ScDPSaveMember* pMem = *itr;
-        aMembers.push_back(pMem->GetName());
-        aMemberSet.insert(pMem->GetName());
-        ++nMemberCount;
-    }
-
-    // Sort the member list in ascending order.
-    aMembers.sort();
-
-    // Collect and rank those custom sort strings that also exist in the member name list.
-
-    typedef hash_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
-    UserSortMap aSubStrs;
-    sal_uInt16 nSubCount = 0;
-    if (pUserListId)
-    {
-        ScUserList* pUserList = ScGlobal::GetUserList();
-        if (!pUserList)
-            return false;
-
+        typedef ScDPSaveDimension::MemberList MemList;
+        const MemList& rDimMembers = pSaveDim->GetMembers();
+        list<OUString> aMembers;
+        hash_set<OUString, ::rtl::OUStringHash> aMemberSet;
+        size_t nMemberCount = 0;
+        for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
+              itr != itrEnd; ++itr)
         {
-            sal_uInt16 n = pUserList->GetCount();
-            if (!n || *pUserListId >= n)
-                return false;
+            ScDPSaveMember* pMem = *itr;
+            aMembers.push_back(pMem->GetName());
+            aMemberSet.insert(pMem->GetName());
+            ++nMemberCount;
         }
 
-        ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[*pUserListId]);
-        if (pData)
-        {
-            sal_uInt16 n = pData->GetSubCount();
-            for (sal_uInt16 i = 0; i < n; ++i)
-            {
-                OUString aSub = pData->GetSubStr(i);
-                if (!aMemberSet.count(aSub))
-                    // This string doesn't exist in the member name set.  Don't add this.
-                    continue;
+        // Sort the member list in ascending order.
+        ScOUStringCollate aCollate( ScGlobal::GetCollator() );
+        aMembers.sort(aCollate);
 
-                aSubStrs.insert(UserSortMap::value_type(aSub, nSubCount++));
+        // Collect and rank those custom sort strings that also exist in the member name list.
+
+        typedef hash_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
+        UserSortMap aSubStrs;
+        sal_uInt16 nSubCount = 0;
+        if (pUserListId)
+        {
+            ScUserList* pUserList = ScGlobal::GetUserList();
+            if (!pUserList)
+                return false;
+
+            {
+                sal_uInt16 n = pUserList->GetCount();
+                if (!n || *pUserListId >= n)
+                    return false;
+            }
+
+            ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[*pUserListId]);
+            if (pData)
+            {
+                sal_uInt16 n = pData->GetSubCount();
+                for (sal_uInt16 i = 0; i < n; ++i)
+                {
+                    OUString aSub = pData->GetSubStr(i);
+                    if (!aMemberSet.count(aSub))
+                        // This string doesn't exist in the member name set.  Don't add this.
+                        continue;
+
+                    aSubStrs.insert(UserSortMap::value_type(aSub, nSubCount++));
+                }
             }
         }
+
+        // Rank all members.
+
+        vector<OUString> aRankedNames(nMemberCount);
+        sal_uInt16 nCurStrId = 0;
+        for (list<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end();
+              itr != itrEnd; ++itr)
+        {
+            OUString aName = *itr;
+            sal_uInt16 nRank = 0;
+            UserSortMap::const_iterator itrSub = aSubStrs.find(aName);
+            if (itrSub == aSubStrs.end())
+                nRank = nSubCount + nCurStrId++;
+            else
+                nRank = itrSub->second;
+
+            if (!bAscending)
+                nRank = static_cast< sal_uInt16 >( nMemberCount - nRank - 1 );
+
+            aRankedNames[nRank] = aName;
+        }
+
+        // Re-order ScDPSaveMember instances with the new ranks.
+
+        for (vector<OUString>::const_iterator itr = aRankedNames.begin(), itrEnd = aRankedNames.end();
+              itr != itrEnd; ++itr)
+        {
+            const ScDPSaveMember* pOldMem = pSaveDim->GetExistingMemberByName(*itr);
+            if (!pOldMem)
+                // All members are supposed to be present.
+                continue;
+
+            ScDPSaveMember* pNewMem = new ScDPSaveMember(*pOldMem);
+            pSaveDim->AddMember(pNewMem);
+        }
+
+        // Set the sorting mode to manual for now.  We may introduce a new sorting
+        // mode later on.
+
+        sheet::DataPilotFieldSortInfo aSortInfo;
+        aSortInfo.Mode = sheet::DataPilotFieldSortMode::MANUAL;
+        pSaveDim->SetSortInfo(&aSortInfo);
     }
-
-    // Rank all members.
-
-    vector<OUString> aRankedNames(nMemberCount);
-    sal_uInt16 nCurStrId = 0;
-    for (list<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end();
-          itr != itrEnd; ++itr)
+    else
     {
-        OUString aName = *itr;
-        sal_uInt16 nRank = 0;
-        UserSortMap::const_iterator itrSub = aSubStrs.find(aName);
-        if (itrSub == aSubStrs.end())
-            nRank = nSubCount + nCurStrId++;
-        else
-            nRank = itrSub->second;
+        // without user list id, just apply sorting mode
 
-        if (!bAscending)
-            nRank = static_cast< sal_uInt16 >( nMemberCount - nRank - 1 );
-
-        aRankedNames[nRank] = aName;
+        sheet::DataPilotFieldSortInfo aSortInfo;
+        aSortInfo.Mode = sheet::DataPilotFieldSortMode::NAME;
+        aSortInfo.IsAscending = bAscending;
+        pSaveDim->SetSortInfo(&aSortInfo);
     }
-
-    // Re-order ScDPSaveMember instances with the new ranks.
-
-    for (vector<OUString>::const_iterator itr = aRankedNames.begin(), itrEnd = aRankedNames.end();
-          itr != itrEnd; ++itr)
-    {
-        const ScDPSaveMember* pOldMem = pSaveDim->GetExistingMemberByName(*itr);
-        if (!pOldMem)
-            // All members are supposed to be present.
-            continue;
-
-        ScDPSaveMember* pNewMem = new ScDPSaveMember(*pOldMem);
-        pSaveDim->AddMember(pNewMem);
-    }
-
-    // Set the sorting mode to manual for now.  We may introduce a new sorting
-    // mode later on.
-
-    sheet::DataPilotFieldSortInfo aSortInfo;
-    aSortInfo.Mode = sheet::DataPilotFieldSortMode::MANUAL;
-    pSaveDim->SetSortInfo(&aSortInfo);
 
     // Update the datapilot with the newly sorted field members.
 

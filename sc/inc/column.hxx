@@ -397,8 +397,8 @@ public:
     void        CompileColRowNameFormula();
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
-    xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                       SCROW nRowStart, SCROW nRowEnd ) const;
 
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);

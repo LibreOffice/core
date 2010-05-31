@@ -121,7 +121,7 @@ enum ScanState
     ssStop
 };
 
-static const sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
+static const sal_Char* pInternal[ 1 ] = { "TTT" };
 
 using namespace ::com::sun::star::i18n;
 

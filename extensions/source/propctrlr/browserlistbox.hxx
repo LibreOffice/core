@@ -163,13 +163,11 @@ namespace pcr
         void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
 
         void                        SetPropertyValue( const ::rtl::OUString& rEntryName, const ::com::sun::star::uno::Any& rValue, bool _bUnknownValue );
-        ::com::sun::star::uno::Any  GetPropertyValue( const ::rtl::OUString& rEntryName ) const;
         sal_uInt16                  GetPropertyPos( const ::rtl::OUString& rEntryName ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
                                     GetPropertyControl( const ::rtl::OUString& rEntryName );
         void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
         void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
-        sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
         sal_Int32                   GetMinimumWidth();
         sal_Int32                   GetMinimumHeight();

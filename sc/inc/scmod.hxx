@@ -74,7 +74,6 @@ class ScInputWindow;
 class ScTabViewShell;
 class ScFunctionDlg;
 class ScArgDlgBase;
-class ScTeamDlg;
 class ScEditFunctionDlg;
 class ScMessagePool;
 class EditFieldInfo;
@@ -126,7 +125,6 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     ScMessagePool*      pMessagePool;
     //  globalen InputHandler gibt's nicht mehr, jede View hat einen
     ScInputHandler*     pRefInputHandler;
-    ScTeamDlg*          pTeamDlg;
     ScViewCfg*          pViewCfg;
     ScDocCfg*           pDocCfg;
     ScAppCfg*           pAppCfg;
@@ -268,9 +266,6 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     BOOL                IsFormulaMode();
     BOOL                IsRefDialogOpen();
     BOOL                IsTableLocked();
-    void                OpenTeamDlg();
-    void                SetTeamDlg( ScTeamDlg* pDlg )           { pTeamDlg = pDlg; }
-    ScTeamDlg*          GetTeamDlg() const                      { return pTeamDlg; }
     void                SetReference( const ScRange& rRef, ScDocument* pDoc,
                                         const ScMarkData* pMarkData = NULL );
     void                AddRefEntry();

@@ -79,7 +79,7 @@
 //============================================================================
 /** This interface represents main storage functionality.
  */
-interface XStorageRawAccess
+published interface XStorageRawAccess
 {
     // -----------------------------------------------------------------------
     /** allows to get a plain raw stream representing a package stream.

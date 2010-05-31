@@ -54,3 +54,6 @@ fwk.Frame
 
 ### i90345 ###
 fwk.URLTransformer::com::sun::star::util::XURLTransformer
+
+### i111180 ###
+fwk.Desktop::com::sun::star::frame::XComponentLoader

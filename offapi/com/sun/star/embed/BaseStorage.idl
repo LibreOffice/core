@@ -44,7 +44,7 @@
 //============================================================================
 /** This is a service that allows to get access to a storage hierarchy.
  */
-service BaseStorage
+published service BaseStorage
 {
     // -----------------------------------------------------------------------
     /** This is a general interface representing storage functionality.

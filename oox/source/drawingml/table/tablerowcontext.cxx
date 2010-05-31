@@ -31,6 +31,7 @@
 #include "oox/drawingml/table/tablecellcontext.hxx"
 #include "oox/drawingml/table/tablerow.hxx"
 #include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

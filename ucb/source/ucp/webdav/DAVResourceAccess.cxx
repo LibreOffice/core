@@ -57,7 +57,6 @@ int DAVAuthListener_Impl::authenticate(
     const ::rtl::OUString & inHostName,
     ::rtl::OUString & inoutUserName,
     ::rtl::OUString & outPassWord,
-    sal_Bool bAllowPersistentStoring,
     sal_Bool bCanUseSystemCredentials )
 {
     if ( m_xEnv.is() )
@@ -79,7 +78,8 @@ int DAVAuthListener_Impl::authenticate(
                 = new ucbhelper::SimpleAuthenticationRequest(
                     m_aURL, inHostName, inRealm, inoutUserName,
                     outPassWord, ::rtl::OUString(),
-                    bAllowPersistentStoring, bCanUseSystemCredentials );
+                    true /*bAllowPersistentStoring*/,
+                    bCanUseSystemCredentials );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection

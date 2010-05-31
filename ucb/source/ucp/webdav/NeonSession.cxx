@@ -60,7 +60,6 @@
 #include <com/sun/star/security/CertificateContainerStatus.hpp>
 #include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificateContainer.hpp>
-#include <com/sun/star/task/XMasterPasswordHandling.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
@@ -330,31 +329,11 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
             ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 ) );
 #endif
 
-    // #i97003# (tkr): Ask XMasterPasswordHandling if we should store the
-    // credentials persistently and give this information to the auth listener
-    uno::Reference< task::XMasterPasswordHandling > xMasterPasswordHandling;
-    try
-    {
-        xMasterPasswordHandling =
-            uno::Reference< task::XMasterPasswordHandling >(
-                theSession->getMSF()->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.task.PasswordContainer" ) ),
-                uno::UNO_QUERY );
-    }
-    catch ( uno::Exception const & )
-    {
-    }
-
     int theRetVal = pListener->authenticate(
                             rtl::OUString::createFromAscii( inRealm ),
                             theSession->getHostName(),
                             theUserName,
                             thePassWord,
-                            xMasterPasswordHandling.is()
-                                ? xMasterPasswordHandling->
-                                    isPersistentStoringAllowed()
-                                : sal_False,
                             bCanUseSystemCreds);
 
     rtl::OString aUser(

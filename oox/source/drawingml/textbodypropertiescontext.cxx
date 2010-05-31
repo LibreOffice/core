@@ -27,7 +27,9 @@
 
 #include "oox/drawingml/textbodypropertiescontext.hxx"
 
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include "oox/drawingml/textbodyproperties.hxx"
@@ -41,8 +43,9 @@
 using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
@@ -64,21 +67,25 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     // ST_Coordinate
     OUString sValue;
     sValue = xAttributes->getOptionalValue( XML_lIns );
+    if( sValue.getLength() ) {
     sal_Int32 nLeftInset = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
     mrTextBodyProp.maPropertyMap[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( nLeftInset );
-
+    }
     sValue = xAttributes->getOptionalValue( XML_tIns );
+    if( sValue.getLength() ) {
     sal_Int32 nTopInset  = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
     mrTextBodyProp.maPropertyMap[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( nTopInset );
-
+    }
     sValue = xAttributes->getOptionalValue( XML_rIns );
+    if( sValue.getLength() ) {
     sal_Int32 nRightInset  = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
     mrTextBodyProp.maPropertyMap[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( nRightInset );
-
+    }
     sValue = xAttributes->getOptionalValue( XML_bIns );
+    if( sValue.getLength() ) {
     sal_Int32 nBottonInset = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 45720 / 360 );
     mrTextBodyProp.maPropertyMap[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( nBottonInset );
-
+    }
 
     // ST_TextAnchoringType
     drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
@@ -93,7 +100,10 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     }
     mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
 
-//   bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
+    bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
+    if( bAnchorCenter )
+    mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+        TextHorizontalAdjust_CENTER;
 
 //   bool bCompatLineSpacing = aAttribs.getBool( XML_compatLnSpc, false );
 //   bool bForceAA = aAttribs.getBool( XML_forceAA, false );
@@ -118,6 +128,18 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 
     // ST_TextVerticalType
     mrTextBodyProp.moVert = aAttribs.getToken( XML_vert );
+    bool bRtl = aAttribs.getBool( XML_rtl, false );
+    sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
+    if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert ) {
+      mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
+    <<= WritingMode_TB_RL;
+      // workaround for TB_LR as using WritingMode2 doesn't work
+        if( !bAnchorCenter )
+            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+            TextHorizontalAdjust_LEFT;
+    } else
+      mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
+    <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
 }
 
 // --------------------------------------------------------------------
@@ -143,6 +165,9 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
             case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
+                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= true;
+                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
+                break;
             case NMSP_DRAWINGML|XML_spAutoFit:
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
                 break;

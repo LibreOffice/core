@@ -52,7 +52,7 @@
 //============================================================================
 /** represents common functionality for inplace embedded objects.
  */
-interface XInplaceObject: com::sun::star::uno::XInterface
+published interface XInplaceObject: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** sets the visible part of the inplace object.

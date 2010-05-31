@@ -164,7 +164,7 @@
                     <value xml:lang="en-US">Formula Cursor</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>9</value>
                 </prop>
             </node>
         </node>

@@ -4297,17 +4297,24 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
 // ( Tabellenumrandungen fransen sonst aus )
 // Ein WW8Bytes-Ptr wird als Ausgabe-Parameter uebergeben
 
-void WW8Export::Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox )
+void WW8Export::Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem * pBox )
 {
     // moeglich und vielleicht besser waere 0xffff
     static const USHORT aBorders[] =
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
+    static const SvxBorderLine aBorderLine;
+
     const USHORT* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
-        const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
+        const SvxBorderLine* pLn;
+        if (pBox != NULL)
+            pLn = pBox->GetLine( *pBrd );
+        else
+            pLn = & aBorderLine;
+
         Out_BorderLine(rO, pLn, 0, 0, false);
     }
 }

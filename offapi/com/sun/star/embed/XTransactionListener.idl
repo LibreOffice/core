@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module embed {
 /** makes it possible to receive events when a transacted object is commited
     or reverted.
  */
-interface XTransactionListener: com::sun::star::lang::XEventListener
+published interface XTransactionListener: com::sun::star::lang::XEventListener
 {
     //------------------------------------------------------------------------
     /** is called just before the object is commited.

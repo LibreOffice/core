@@ -2856,7 +2856,7 @@ String RID_WEBWIZARDDIALOG_START +110
 
 String RID_WEBWIZARDDIALOG_START +111
 {
-    Text [ en-US  ] = "A security error acoccurred while exporting the document '%FILENAME'.";
+    Text [ en-US  ] = "A security error occurred while exporting the document '%FILENAME'.";
 };
 
 String RID_WEBWIZARDDIALOG_START +112

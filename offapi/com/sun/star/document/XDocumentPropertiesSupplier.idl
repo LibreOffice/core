@@ -52,7 +52,7 @@ module com {   module sun {   module star {   module document {
     @see XDocumentProperties
     @see DocumentProperties
  */
-interface XDocumentPropertiesSupplier
+published interface XDocumentPropertiesSupplier
 {
     //-------------------------------------------------------------------------
     /** provides the document properties object.

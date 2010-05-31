@@ -84,7 +84,7 @@ File gid_File_Lib_Cached1
   #endif
 End
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Configmgr, configmgr)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
 #ifdef WITH_LDAP
 File gid_File_Lib_Ldapbe2

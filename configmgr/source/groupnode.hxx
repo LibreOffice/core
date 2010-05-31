@@ -42,7 +42,7 @@ class GroupNode: public Node {
 public:
     GroupNode(int layer, bool extensible, rtl::OUString const & templateName);
 
-    virtual rtl::Reference< Node > clone() const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
     virtual NodeMap & getMembers();
 
@@ -55,7 +55,7 @@ public:
     bool isExtensible() const;
 
 private:
-    GroupNode(GroupNode const & other);
+    GroupNode(GroupNode const & other, bool keepTemplateName);
 
     virtual ~GroupNode();
 

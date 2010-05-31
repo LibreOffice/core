@@ -80,17 +80,7 @@ using ::std::auto_ptr;
 
 #define ADDIN_MAXSTRLEN 256
 
-// Implementiert in ui\miscdlgs\teamdlg.cxx
-
-extern void ShowTheTeam();
-
-extern BOOL bOderSo; // in GLOBAL.CXX
-
 //-----------------------------static data -----------------
-
-#if SC_SPEW_ENABLED
-ScSpew ScInterpreter::theSpew;
-#endif
 
 //-------------------------------------------------------------------------
 // Funktionen fuer den Zugriff auf das Document
@@ -3253,288 +3243,15 @@ void ScInterpreter::ScExternalRef()
 // --- internals ------------------------------------------------------------
 
 
-void ScInterpreter::ScAnswer()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAnswer" );
-    String aStr( GetString() );
-    if( aStr.EqualsIgnoreCaseAscii( "Das Leben, das Universum und der ganze Rest" ) )
-    {
-        PushInt( 42 );
-        bOderSo = TRUE;
-    }
-    else
-        PushNoValue();
-}
-
-
-void ScInterpreter::ScCalcTeam()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCalcTeam" );
-    static BOOL bShown = FALSE;
-    if( !bShown )
-    {
-        ShowTheTeam();
-        String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Nebel, Benisch, Rentz, Rathke" ) );
-        if ( (GetByte() == 1) && ::rtl::math::approxEqual( GetDouble(), 1996) )
-            aTeam.AppendAscii( "   (a word with 'B': -Olk, -Nietsch, -Daeumling)" );
-        PushString( aTeam );
-        bShown = TRUE;
-    }
-    else
-        PushInt( 42 );
-}
-
-
-void ScInterpreter::ScSpewFunc()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSpewFunc" );
-    BOOL bRefresh = FALSE;
-    BOOL bClear = FALSE;
-    // Stack aufraeumen
-    BYTE nParamCount = GetByte();
-    while ( nParamCount-- > 0)
-    {
-        switch ( GetStackType() )
-        {
-            case svString:
-            case svSingleRef:
-            case svDoubleRef:
-            {
-                const sal_Unicode ch = GetString().GetChar(0);
-                if ( !bRefresh && ch < 256 )
-                    bRefresh = (tolower( (sal_uChar) ch ) == 'r');
-                if ( !bClear && ch < 256 )
-                    bClear = (tolower( (sal_uChar) ch ) == 'c');
-            }
-            break;
-            default:
-                PopError();
-        }
-    }
-    String aStr;
-#if SC_SPEW_ENABLED
-    if ( bRefresh )
-        theSpew.Clear();        // GetSpew liest SpewRulesFile neu
-    theSpew.GetSpew( aStr );
-    if ( bClear )
-        theSpew.Clear();        // release Memory
-    xub_StrLen nPos = 0;
-    while ( (nPos = aStr.SearchAndReplace( '\n', ' ', nPos )) != STRING_NOTFOUND )
-        nPos++;
-#else
-    aStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "spitted out all spew :-(" ) );
-#endif
-    PushString( aStr );
-}
-
-
-#include "sctictac.hxx"
-#include "scmod.hxx"
-
-//extern "C" { static void SAL_CALL thisModule() {} }
-
-void ScInterpreter::ScGame()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGame" );
-    enum GameType {
-        SC_GAME_NONE,
-        SC_GAME_ONCE,
-        SC_GAME_START,
-        SC_GAME_TICTACTOE = SC_GAME_START,
-        SC_GAME_STARWARS,
-        SC_GAME_FROGGER,
-        SC_GAME_COUNT
-    };
-    // ein grep im binary laeuft ins leere
-    static sal_Char sGameNone[]         = "\14\36\6\137\10\27\36\13\100";
-    static sal_Char sGameOnce[]         = "\20\27\137\21\20\123\137\21\20\13\137\36\30\36\26\21\136";
-    static sal_Char sGameTicTacToe[]    = "\53\26\34\53\36\34\53\20\32";
-    static sal_Char sGameStarWars[]     = "\54\13\36\15\50\36\15\14";
-    static sal_Char sGameFrogger[]      = "\71\15\20\30\30\26\32";
-    sal_Char* const pGames[SC_GAME_COUNT] = {
-        sGameNone,
-        sGameOnce,
-        sGameTicTacToe,
-        sGameStarWars,
-        sGameFrogger
-    };
-#if 0
-say what?
-oh no, not again!
-TicTacToe
-StarWars
-Froggie
-// Routine um Datenblock zu erzeugen:
-#include <stdio.h>
-int main()
-{
-    int b = 1;
-    int c;
-    while ( (c = getchar()) != EOF )
-    {
-        if ( b == 1 )
-        {
-            printf( "\"" );
-            b = 0;
-        }
-        if ( c != 10 )
-        {
-            c ^= 0x7F;
-            printf( "\\%o", c );
-
-        }
-        else
-        {
-            printf( "\";\n" );
-            b = 1;
-        }
-    }
-    return 0;
-}
-#endif
-    static BOOL bRun[SC_GAME_COUNT] = { FALSE };
-    static BOOL bFirst = TRUE;
-    if ( bFirst )
-    {
-        bFirst = FALSE;
-        for ( int j = SC_GAME_NONE; j < SC_GAME_COUNT; j++ )
-        {
-            sal_Char* p = pGames[j];
-            while ( *p )
-                *p++ ^= 0x7F;
-        }
-    }
-    String aFuncResult;
-    GameType eGame = SC_GAME_NONE;
-    BYTE nParamCount = GetByte();
-    if ( nParamCount >= 1 )
-    {
-        String aStr( GetString() );
-        nParamCount--;
-        for ( int j = SC_GAME_START; j < SC_GAME_COUNT; j++ )
-        {
-            if ( aStr.EqualsAscii( pGames[j] ) )
-            {
-                eGame = (GameType) j;
-                break;  // for
-            }
-        }
-        if ( eGame != SC_GAME_NONE )
-        {
-            // jedes Game nur ein einziges Mal starten, um nicht durch Recalc
-            // o.ae. mehrere Instanzen zu haben, ideal waere eine Abfrage an den
-            // Games, ob sie bereits laufen ...
-            if ( bRun[ eGame ] && eGame != SC_GAME_TICTACTOE )
-                eGame = SC_GAME_ONCE;
-            else
-            {
-                bRun[ eGame ] = TRUE;
-                switch ( eGame )
-                {
-                    case SC_GAME_TICTACTOE :
-                    {
-                        static ScTicTacToe* pTicTacToe = NULL;
-                        static ScRange aTTTrange;
-                        static BOOL bHumanFirst = FALSE;
-                        if ( nParamCount >= 1 )
-                        {
-                            if ( GetStackType() == svDoubleRef )
-                            {
-                                ScRange aRange;
-                                PopDoubleRef( aRange );
-                                nParamCount--;
-                                if ( aRange.aEnd.Col() - aRange.aStart.Col() == 2
-                                  && aRange.aEnd.Row() - aRange.aStart.Row() == 2 )
-                                {
-                                    BOOL bOk;
-                                    if ( pTicTacToe )
-                                        bOk = (aRange == aTTTrange);
-                                    else
-                                    {
-                                        bOk =TRUE;
-                                        aTTTrange = aRange;
-                                        pTicTacToe = new ScTicTacToe( pDok,
-                                            aRange.aStart );
-                                        pTicTacToe->Initialize( bHumanFirst );
-                                    }
-                                    // nur einmal und das auf dem gleichen Range
-                                    if ( !bOk )
-                                        eGame = SC_GAME_ONCE;
-                                    else
-                                    {
-                                        Square_Type aWinner = pTicTacToe->CalcMove();
-                                        pTicTacToe->GetOutput( aFuncResult );
-                                        if ( aWinner != pTicTacToe->GetEmpty() )
-                                        {
-                                            delete pTicTacToe;
-                                            pTicTacToe = NULL;
-                                            bRun[ eGame ] = FALSE;
-                                            bHumanFirst = !bHumanFirst;
-                                        }
-                                        pDok->GetDocumentShell()->Broadcast(
-                                            SfxSimpleHint( FID_DATACHANGED ) );
-                                        pDok->ResetChanged( aRange );
-                                    }
-                                }
-                                else
-                                    SetError( errIllegalArgument );
-                            }
-                            else
-                                SetError( errIllegalParameter );
-                        }
-                        else
-                            SetError( errIllegalParameter );
-                    }
-                    break;
-                    default:
-                    {
-                        // added to avoid warnings
-                    }
-                }
-            }
-        }
-    }
-    // Stack aufraeumen
-    while ( nParamCount-- > 0)
-        Pop();
-    if ( !aFuncResult.Len() )
-        PushString( String( pGames[ eGame ], RTL_TEXTENCODING_ASCII_US ) );
-    else
-        PushString( aFuncResult );
-}
-
 void ScInterpreter::ScTTT()
 {   // Temporaerer Test-Tanz, zum auspropieren von Funktionen etc.
-    BOOL bOk = TRUE;
     BYTE nParamCount = GetByte();
     // do something, nParamCount bei Pops runterzaehlen!
 
-    if ( bOk && nParamCount )
-    {
-        bOk = GetBool();
-        --nParamCount;
-    }
     // Stack aufraeumen
     while ( nParamCount-- > 0)
         Pop();
-    static const sal_Unicode __FAR_DATA sEyes[]     = { ',',';',':','|','8','B', 0 };
-    static const sal_Unicode __FAR_DATA sGoods[]    = { ')',']','}', 0 };
-    static const sal_Unicode __FAR_DATA sBads[]     = { '(','[','{','/', 0 };
-    sal_Unicode aFace[4];
-    if ( bOk )
-    {
-        aFace[0] = sEyes[ rand() % ((sizeof( sEyes )/sizeof(sal_Unicode)) - 1) ];
-        aFace[1] = '-';
-        aFace[2] = sGoods[ rand() % ((sizeof( sGoods )/sizeof(sal_Unicode)) - 1) ];
-    }
-    else
-    {
-        aFace[0] = ':';
-        aFace[1] = '-';
-        aFace[2] = sBads[ rand() % ((sizeof( sBads )/sizeof(sal_Unicode)) - 1) ];
-    }
-    aFace[3] = 0;
-    PushStringBuffer( aFace );
+    PushError(errNoValue);
 }
 
 // -------------------------------------------------------------------------
@@ -3983,11 +3700,7 @@ StackVar ScInterpreter::Interpret()
                 case ocAsc              : ScAsc();                      break;
                 case ocUnicode          : ScUnicode();                  break;
                 case ocUnichar          : ScUnichar();                  break;
-                case ocAnswer           : ScAnswer();                   break;
-                case ocTeam             : ScCalcTeam();                 break;
                 case ocTTT              : ScTTT();                      break;
-                case ocSpew             : ScSpewFunc();                 break;
-                case ocGame             : ScGame();                     break;
                 case ocNone : nFuncFmtType = NUMBERFORMAT_UNDEFINED;    break;
                 default : PushError( errUnknownOpCode);                 break;
             }

@@ -61,6 +61,7 @@
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <ContentInfo.hxx>
@@ -183,7 +184,7 @@ ZipPackage::ZipPackage (const uno::Reference < XMultiServiceFactory > &xNewFacto
 , m_bUseManifest ( sal_True )
 , m_bForceRecovery ( sal_False )
 , m_bMediaTypeFallbackUsed ( sal_False )
-, m_nFormat( PACKAGE_FORMAT ) // package is the default format
+, m_nFormat( embed::StorageFormats::PACKAGE ) // package is the default format
 , m_bAllowRemoveOnInsert( sal_True )
 , m_eMode ( e_IMode_None )
 , m_xFactory( xNewFactory )
@@ -217,7 +218,7 @@ ZipPackage::~ZipPackage( void )
 
 void ZipPackage::parseManifest()
 {
-    if ( m_nFormat == PACKAGE_FORMAT )
+    if ( m_nFormat == embed::StorageFormats::PACKAGE )
     {
         sal_Bool bManifestParsed = sal_False;
         const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
@@ -427,7 +428,7 @@ void ZipPackage::parseManifest()
 
 void ZipPackage::parseContentType()
 {
-    if ( m_nFormat == OFOPXML_FORMAT )
+    if ( m_nFormat == embed::StorageFormats::OFOPXML )
     {
         const ::rtl::OUString aContentTypes( RTL_CONSTASCII_USTRINGPARAM ( "[Content_Types].xml" ) );
         try {
@@ -507,7 +508,14 @@ void ZipPackage::getZipFileContents()
         nIndex = nOldIndex = 0;
         pCurrent = m_pRootFolder;
         const ZipEntry & rEntry = *pEnum->nextElement();
-        const OUString & rName = rEntry.sPath;
+        OUString rName = rEntry.sPath;
+
+        if ( m_bForceRecovery )
+        {
+            // the PKZIP Application note version 6.2 does not allows to use '\' as separator
+            // unfortunately it is used by some implementations, so we have to support it in recovery mode
+            rName = rName.replace( '\\', '/' );
+        }
 
         nStreamIndex = rName.lastIndexOf ( '/' );
         if ( nStreamIndex != -1 )
@@ -551,9 +559,9 @@ void ZipPackage::getZipFileContents()
         }
     }
 
-    if ( m_nFormat == PACKAGE_FORMAT )
+    if ( m_nFormat == embed::StorageFormats::PACKAGE )
         parseManifest();
-    else if ( m_nFormat == OFOPXML_FORMAT )
+    else if ( m_nFormat == embed::StorageFormats::OFOPXML )
         parseContentType();
 }
 
@@ -593,13 +601,13 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                             }
                             else if ( aCommand.equals( OUString::createFromAscii( "purezip" ) ) )
                             {
-                                m_nFormat = ZIP_FORMAT;
+                                m_nFormat = embed::StorageFormats::ZIP;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
                             else if ( aCommand.equals( OUString::createFromAscii( "ofopxml" ) ) )
                             {
-                                m_nFormat = OFOPXML_FORMAT;
+                                m_nFormat = embed::StorageFormats::OFOPXML;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
@@ -654,20 +662,34 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     sal_Bool bPackFormat = sal_True;
                     aNamedValue.Value >>= bPackFormat;
                     if ( !bPackFormat )
-                        m_nFormat = ZIP_FORMAT;
+                        m_nFormat = embed::StorageFormats::ZIP;
 
                     m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
                 else if ( aNamedValue.Name.equalsAscii( "StorageFormat" ) )
                 {
                     ::rtl::OUString aFormatName;
-                    aNamedValue.Value >>= aFormatName;
-                    if ( aFormatName.equals( PACKAGE_STORAGE_FORMAT_STRING ) )
-                        m_nFormat = PACKAGE_FORMAT;
-                    else if ( aFormatName.equals( ZIP_STORAGE_FORMAT_STRING ) )
-                        m_nFormat = ZIP_FORMAT;
-                    else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
-                        m_nFormat = OFOPXML_FORMAT;
+                    sal_Int32 nFormatID = 0;
+                    if ( aNamedValue.Value >>= aFormatName )
+                    {
+                        if ( aFormatName.equals( PACKAGE_STORAGE_FORMAT_STRING ) )
+                            m_nFormat = embed::StorageFormats::PACKAGE;
+                        else if ( aFormatName.equals( ZIP_STORAGE_FORMAT_STRING ) )
+                            m_nFormat = embed::StorageFormats::ZIP;
+                        else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
+                            m_nFormat = embed::StorageFormats::OFOPXML;
+                        else
+                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+                    }
+                    else if ( aNamedValue.Value >>= nFormatID )
+                    {
+                        if ( nFormatID != embed::StorageFormats::PACKAGE
+                          && nFormatID != embed::StorageFormats::ZIP
+                          && nFormatID != embed::StorageFormats::OFOPXML )
+                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+
+                        m_nFormat = nFormatID;
+                    }
                     else
                         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 
@@ -1135,7 +1157,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
     try
     {
-        if ( m_nFormat == PACKAGE_FORMAT )
+        if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
             // Remove the old manifest.xml file as the
             // manifest will be re-generated and the
@@ -1157,7 +1179,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Write a magic file with mimetype
             WriteMimetypeMagicFile( aZipOut );
         }
-        else if ( m_nFormat == OFOPXML_FORMAT )
+        else if ( m_nFormat == embed::StorageFormats::OFOPXML )
         {
             // Remove the old [Content_Types].xml file as the
             // file will be re-generated
@@ -1175,7 +1197,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         const OUString sVersion ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
         const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
 
-        if ( m_nFormat == PACKAGE_FORMAT )
+        if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
             Sequence < PropertyValue > aPropSeq ( PKG_SIZE_NOENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
@@ -1204,11 +1226,11 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         // Clean up random pool memory
         rtl_random_destroyPool ( aRandomPool );
 
-        if( m_bUseManifest && m_nFormat == PACKAGE_FORMAT )
+        if( m_bUseManifest && m_nFormat == embed::StorageFormats::PACKAGE )
         {
             WriteManifest( aZipOut, aManList );
         }
-        else if( m_nFormat == OFOPXML_FORMAT )
+        else if( m_nFormat == embed::StorageFormats::OFOPXML )
         {
             WriteContentTypes( aZipOut, aManList );
         }
@@ -1618,7 +1640,7 @@ uno::Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
 void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    if ( m_nFormat != PACKAGE_FORMAT )
+    if ( m_nFormat != embed::StorageFormats::PACKAGE )
         throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") )
@@ -1643,7 +1665,7 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // TODO/LATER: Activate the check when zip-ucp is ready
-    // if ( m_nFormat != PACKAGE_FORMAT )
+    // if ( m_nFormat != embed::StorageFormats::PACKAGE )
     //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     Any aAny;

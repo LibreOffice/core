@@ -111,14 +111,27 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
     {
         sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
-        mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
-        if ( nSubType )
+        OUString sIdx( xAttribs->getOptionalValue( XML_idx ) );
+        sal_Bool bHasIdx = sIdx.getLength() > 0;
+        sal_Int32 nIdx = sIdx.toInt32();
+        mpShapePtr->setSubTypeIndex( nIdx );
+
+        if ( nSubType || bHasIdx )
         {
             PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
             if ( pPPTShapePtr )
             {
                 oox::ppt::ShapeLocation eShapeLocation = pPPTShapePtr->getShapeLocation();
-                if ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) )
+                oox::drawingml::ShapePtr pPlaceholder;
+
+                if ( bHasIdx && eShapeLocation == Slide )
+                {
+                    // TODO: use id to shape map
+                    SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
+                    if ( pMasterPersist.get() )
+                    pPlaceholder = PPTShape::findPlaceholderByIndex( nIdx, pMasterPersist->getShapes()->getChildren() );
+                }
+                if ( !pPlaceholder.get() && ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) ) )
                 {
                     // inheriting properties from placeholder objects by cloning shape
 
@@ -157,7 +170,6 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                     }
                     if ( nFirstPlaceholder )
                     {
-                        oox::drawingml::ShapePtr pPlaceholder;
                         if ( eShapeLocation == Layout )     // for layout objects the referenced object can be found within the same shape tree
                             pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, -1, mpSlidePersistPtr->getShapes()->getChildren() );
                         else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
@@ -175,6 +187,14 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                                 pPPTShape->setReferenced( sal_True );
                         }
                     }
+                }
+                if ( pPlaceholder.get() )
+                {
+                    mpShapePtr->applyShapeReference( *pPlaceholder.get() );
+                    PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
+                    if ( pPPTShape )
+                    pPPTShape->setReferenced( sal_True );
+                    pPPTShapePtr->setPlaceholder( pPlaceholder );
                 }
             }
         }

@@ -60,17 +60,17 @@ protected:
 
     sal_Bool m_bDisposed;
 
-    sal_Int16 m_nStorageType;
+    sal_Int32 m_nStorageType;
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                      sal_Int16 nStorageType );
+                      sal_Int32 nStorageType );
 
     OInputCompStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                      sal_Int16 nStorageType );
+                      sal_Int32 nStorageType );
 
     virtual ~OInputCompStream();
 

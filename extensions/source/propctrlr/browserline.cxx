@@ -320,12 +320,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_Bool OBrowserLine::IsPropertyInputEnabled( ) const
-    {
-        return ( m_nEnableFlags & PropertyLineElement::InputControl ) != 0;
-    }
-
-    //------------------------------------------------------------------
     void OBrowserLine::SetReadOnly( bool _bReadOnly )
     {
         if ( m_bReadOnly != _bReadOnly )

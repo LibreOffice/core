@@ -48,7 +48,7 @@ LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any const & value):
     Node(layer), value_(value)
 {}
 
-rtl::Reference< Node > LocalizedValueNode::clone() const {
+rtl::Reference< Node > LocalizedValueNode::clone(bool) const {
     return new LocalizedValueNode(*this);
 }
 

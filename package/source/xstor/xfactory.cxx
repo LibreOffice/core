@@ -29,9 +29,11 @@
 #include "precompiled_package.hxx"
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
+#include <comphelper/storagehelper.hxx>
 
 #include "xfactory.hxx"
 #include "xstorage.hxx"
@@ -101,7 +103,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
                                                             embed::ElementModes::READWRITE,
                                                             uno::Sequence< beans::PropertyValue >(),
                                                             m_xFactory,
-                                                            PACKAGE_STORAGE ) ),
+                                                            embed::StorageFormats::PACKAGE ) ),
                 uno::UNO_QUERY );
 }
 
@@ -184,7 +186,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     uno::Sequence< beans::PropertyValue > aDescr;
     uno::Sequence< beans::PropertyValue > aPropsToSet;
 
-    sal_Int16 nStorageType = PACKAGE_STORAGE;
+    sal_Int32 nStorageType = embed::StorageFormats::PACKAGE;
 
     if ( nArgNum >= 3 )
     {
@@ -212,15 +214,29 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                 else if ( aDescr[nInd].Name.equalsAscii( "StorageFormat" ) )
                 {
                     ::rtl::OUString aFormatName;
-                    aDescr[nInd].Value >>= aFormatName;
-                    if ( aFormatName.equalsAscii( "PackageFormat" ) )
-                        nStorageType = PACKAGE_STORAGE;
-                    else if ( aFormatName.equalsAscii( "ZipFormat" ) )
-                        nStorageType = ZIP_STORAGE;
-                    else if ( aFormatName.equalsAscii( "OFOPXMLFormat" ) )
-                        nStorageType = OFOPXML_STORAGE;
+                    sal_Int32 nFormatID = 0;
+                    if ( aDescr[nInd].Value >>= aFormatName )
+                    {
+                        if ( aFormatName.equals( PACKAGE_STORAGE_FORMAT_STRING ) )
+                            nStorageType = embed::StorageFormats::PACKAGE;
+                        else if ( aFormatName.equals( ZIP_STORAGE_FORMAT_STRING ) )
+                            nStorageType = embed::StorageFormats::ZIP;
+                        else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
+                            nStorageType = embed::StorageFormats::OFOPXML;
+                        else
+                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+                    }
+                    else if ( aDescr[nInd].Value >>= nFormatID )
+                    {
+                        if ( nFormatID != embed::StorageFormats::PACKAGE
+                          && nFormatID != embed::StorageFormats::ZIP
+                          && nFormatID != embed::StorageFormats::OFOPXML )
+                            throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
+
+                        nStorageType = nFormatID;
+                    }
                     else
-                        throw lang::IllegalArgumentException(); // TODO:
+                        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
                 }
                 else
                     OSL_ENSURE( sal_False, "Unacceptable property, will be ignored!\n" );

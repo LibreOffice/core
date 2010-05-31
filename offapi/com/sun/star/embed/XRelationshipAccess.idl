@@ -62,7 +62,7 @@
     this tag is used as a uniqued identified of an entry.
     </p>
  */
-interface XRelationshipAccess : ::com::sun::star::uno::XInterface
+published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
 {
     // -----------------------------------------------------------------------
     /** allows to detect whether there is an entry with specified value of

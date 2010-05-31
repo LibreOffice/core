@@ -148,8 +148,6 @@ const sal_Char __FAR_DATA ScHTMLExport::sIndentSource[nIndentMax+1] =
 #define OUT_SP_CSTR_ASS( s )    rStrm << ' ' << s << '='
 #define APPEND_SPACE( s )   s.AppendAscii(" ")
 
-extern BOOL bOderSo;
-
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
 
@@ -233,30 +231,6 @@ void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
     rResult = '<'; rResult += rTag; rResult += '>';
 }
 */
-
-bool SC_DLLPUBLIC ScGetWriteTeamInfo();
-
-void lcl_WriteTeamInfo( SvStream& rStrm, rtl_TextEncoding eDestEnc )
-{
-    if ( !ScGetWriteTeamInfo() ) return;
-    lcl_OUT_LF();
-    lcl_OUT_COMMENT( CREATE_STRING( "Sascha Ballach                     " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Michael Daeumling (aka Bitsau)     " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Michael Hagen                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Roland Jakobs                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Andreas Krebs                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "John Marmion                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Niklas Nebel                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Jacques Nietsch                    " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Marcus Olk                         " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Eike Rathke                        " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Daniel Rentz                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Stephan Templin                    " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Gunnar Timm                        " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "*** Man kann nicht ALLES haben! ***" ) );
-    lcl_OUT_LF();
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -416,8 +390,6 @@ void ScHTMLExport::WriteHeader()
             OUT_COMMENT( aStrOut );
         }
         //----------------------------------------------------------
-
-        lcl_WriteTeamInfo( rStrm, eDestEnc );
     }
     OUT_LF();
 

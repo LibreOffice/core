@@ -37,7 +37,7 @@ module com { module sun { module star { module embed {
 
     @see XVisualObject
 */
-constants EmbedMapUnits
+published constants EmbedMapUnits
 {
     // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-hundredth

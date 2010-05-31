@@ -63,7 +63,7 @@
 /** This interface allows access to an extended storage stream that might be
     transacted.
  */
-interface XExtendedStorageStream
+published interface XExtendedStorageStream
 {
     // INTERFACES
     //

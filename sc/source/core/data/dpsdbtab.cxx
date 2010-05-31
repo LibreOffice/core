@@ -237,15 +237,6 @@ long ScDatabaseDPData::GetColumnCount()
 
 // End Comments
 
-void lcl_Reset( const uno::Reference<sdbc::XRowSet>& xRowSet )
-                    throw(sdbc::SQLException, uno::RuntimeException)
-{
-    //  isBeforeFirst / beforeFirst is not always available
-    //! query if it is allowed
-
-    xRowSet->execute();     // restart
-}
-
 String ScDatabaseDPData::getDimensionName(long nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))

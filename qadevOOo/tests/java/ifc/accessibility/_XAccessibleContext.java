@@ -327,8 +327,7 @@ public class _XAccessibleContext extends MultiMethodTest {
         }
 
         tRes.tested("getLocale()",
-                    (loc != null) && (loc.Language.length() > 0) &&
-                    (loc.Country.length() > 0));
+                    (loc != null) && (loc.Language.length() > 0));
     }
 
     protected boolean checkStates(String[] expectedStateNames,

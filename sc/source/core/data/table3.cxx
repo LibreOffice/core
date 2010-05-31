@@ -1913,8 +1913,8 @@ sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
         return 0;
 }
 
-xub_StrLen ScTable::GetMaxNumberStringLen( USHORT& nPrecision, SCCOL nCol,
-                                SCROW nRowStart, SCROW nRowEnd ) const
+xub_StrLen ScTable::GetMaxNumberStringLen(
+    sal_uInt16& nPrecision, SCCOL nCol, SCROW nRowStart, SCROW nRowEnd ) const
 {
     if ( ValidCol(nCol) )
         return aCol[nCol].GetMaxNumberStringLen( nPrecision, nRowStart, nRowEnd );

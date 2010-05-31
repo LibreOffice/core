@@ -37,8 +37,9 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::geometry;
+using namespace ::com::sun::star::style;
 
 namespace oox {
 namespace drawingml {
@@ -125,10 +126,30 @@ sal_Int32 GetTextSpacingPoint( const OUString& sValue )
 {
     sal_Int32 nRet;
     if( ::sax::Converter::convertNumber( nRet, sValue ) )
-        nRet = ( nRet * 254 + 360 ) / 720;
+        nRet = GetTextSpacingPoint( nRet );
     return nRet;
 }
 
+sal_Int32 GetTextSpacingPoint( const sal_Int32 nValue )
+{
+    return ( nValue * 254 + 360 ) / 720;
+}
+
+TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken )
+{
+    TextVerticalAdjust rVal = TextVerticalAdjust_TOP;
+
+    switch( nToken ) {
+    case XML_b:
+        rVal = TextVerticalAdjust_BOTTOM;
+        break;
+    case XML_ctr:
+        rVal = TextVerticalAdjust_CENTER;
+        break;
+    }
+
+    return rVal;
+}
 
 float GetFontHeight( sal_Int32 nHeight )
 {

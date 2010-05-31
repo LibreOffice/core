@@ -1056,7 +1056,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
         if (state_.top().locked || finalizedLayer < valueParser_.getLayer()) {
             state_.push(State(true)); // ignored
         } else {
-            rtl::Reference< Node > member(tmpl->clone());
+            rtl::Reference< Node > member(tmpl->clone(true));
             member->setLayer(valueParser_.getLayer());
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
@@ -1070,7 +1070,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             {
                 state_.push(State(true)); // ignored
             } else {
-                rtl::Reference< Node > member(tmpl->clone());
+                rtl::Reference< Node > member(tmpl->clone(true));
                 member->setLayer(valueParser_.getLayer());
                 member->setFinalized(finalizedLayer);
                 member->setMandatory(mandatoryLayer);

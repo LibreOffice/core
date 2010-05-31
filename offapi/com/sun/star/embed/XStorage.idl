@@ -91,7 +91,7 @@
 //============================================================================
 /** This interface represents main storage functionality.
  */
-interface XStorage
+published interface XStorage
 {
     // INTERFACES
     //

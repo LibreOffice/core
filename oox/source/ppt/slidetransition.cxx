@@ -176,6 +176,39 @@ namespace oox { namespace ppt {
         return nOdpDirection;
     }
 
+    sal_Int16 SlideTransition::ooxToOdpSideDirections( ::sal_Int32 nOoxType )
+    {
+    sal_Int16 nOdpDirection;
+        switch( nOoxType )
+        {
+        case XML_d:
+        case XML_u:
+            nOdpDirection = TransitionSubType::TOPTOBOTTOM;
+            break;
+        case XML_l:
+        case XML_r:
+            nOdpDirection = TransitionSubType::LEFTTORIGHT;
+            break;
+        default:
+            nOdpDirection= 0;
+            break;
+        }
+        return nOdpDirection;
+    }
+
+    sal_Bool SlideTransition::ooxToOdpSideDirectionsDirectionNormal( ::sal_Int32 nOoxType )
+    {
+    sal_Bool nOdpDirection = true;
+        switch( nOoxType )
+        {
+        case XML_u:
+        case XML_l:
+            nOdpDirection = false;
+            break;
+        }
+        return nOdpDirection;
+    }
+
     sal_Int16 SlideTransition::ooxToOdpCornerDirections( ::sal_Int32 nOoxType )
     {
     sal_Int16 nOdpDirection;
@@ -291,7 +324,8 @@ namespace oox { namespace ppt {
             break;
         case NMSP_PPT|XML_wipe:
             mnTransitionType = TransitionType::BARWIPE;
-            mnTransitionSubType = ooxToOdpBorderDirections( param1 );
+            mnTransitionSubType = ooxToOdpSideDirections( param1 );
+            mbTransitionDirectionNormal = ooxToOdpSideDirectionsDirectionNormal( param1 );
             break;
         case NMSP_PPT|XML_split:
             mnTransitionType = TransitionType::BARNDOORWIPE;

@@ -2,4 +2,4 @@
 -o sfx.DocumentTemplates
 -o sfx.FrameLoader
 -o sfx.SfxMacroLoader
--o sfx.StandaloneDocumentInfo
+#i111283 -o sfx.StandaloneDocumentInfo

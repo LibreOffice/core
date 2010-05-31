@@ -47,7 +47,7 @@ class LocalizedPropertyNode: public Node {
 public:
     LocalizedPropertyNode(int layer, Type staticType, bool nillable);
 
-    virtual rtl::Reference< Node > clone() const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
     virtual NodeMap & getMembers();
 

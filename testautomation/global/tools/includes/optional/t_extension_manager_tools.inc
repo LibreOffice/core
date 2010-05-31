@@ -79,6 +79,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     '///+<li>-4 = Unknown messagebox before the file Open dialog exists</li>
     '///+<li>-5 = Broken dependency warning displayed</li>
     '///+<li>-6 = The File Open dialog did not pop up</li>
+    '///+<li>-7 = Unknown and unhandled messagebox. function exit</li>
     '///</ul>
     '///</ol>
 
@@ -100,6 +101,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     '///+<li>Verify that the requested extension exists (filesystem level)</li>
     if ( not FileExists( path ) ) then
         printlog( CFN & "Requested extension does not exist" )
+        printlog( CFN & path )
         hExtensionAddGUI() = -1
         exit function
     endif
@@ -233,6 +235,8 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
             else
                 printlog( CFN & "Unexpected/unknown dialog displayed" )
                 printlog( Active.getText() )
+                hExtensionAddGUI() = -7
+                exit function
             endif
         else
             if ( instr( flags , "noupdate" ) <> 0 ) then

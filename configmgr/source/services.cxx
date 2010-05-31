@@ -44,6 +44,7 @@
 #include "configurationprovider.hxx"
 #include "configurationregistry.hxx"
 #include "defaultprovider.hxx"
+#include "update.hxx"
 
 namespace {
 
@@ -67,6 +68,9 @@ static cppu::ImplementationEntry const services[] = {
     { &dummy, &configmgr::configuration_registry::getImplementationName,
       &configmgr::configuration_registry::getSupportedServiceNames,
       &configmgr::configuration_registry::createFactory, 0, 0 },
+    { &dummy, &configmgr::update::getImplementationName,
+      &configmgr::update::getSupportedServiceNames,
+      &configmgr::update::createFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
 
@@ -107,6 +111,19 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.configuration.DefaultProvider")));
+        css::uno::Reference< css::registry::XRegistryKey >(
+            (css::uno::Reference< css::registry::XRegistryKey >(
+                static_cast< css::registry::XRegistryKey * >(pRegistryKey))->
+             createKey(
+                 rtl::OUString(
+                     RTL_CONSTASCII_USTRINGPARAM(
+                         "/com.sun.star.comp.configuration.Update/UNO/"
+                         "SINGLETONS/com.sun.star.configuration.Update")))),
+            css::uno::UNO_SET_THROW)->
+            setStringValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.Update_Service")));
     } catch (css::uno::Exception & e) {
         (void) e;
         OSL_TRACE(

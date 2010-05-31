@@ -386,11 +386,7 @@ enum OpCodeEnum
         ocNumberValue       = SC_OPCODE_NUMBERVALUE,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
-        ocGame              = SC_OPCODE_GAME,
-        ocSpew              = SC_OPCODE_SPEW,
         ocTTT               = SC_OPCODE_TTT,
-        ocTeam              = SC_OPCODE_TEAM,
-        ocAnswer            = SC_OPCODE_ANSWER,
         ocInternalEnd       = SC_OPCODE_INTERNAL_END,
     // from here on ExtraData
         ocDataToken1        = SC_OPCODE_DATA_TOKEN_1,

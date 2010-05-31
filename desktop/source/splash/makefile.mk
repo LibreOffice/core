@@ -63,7 +63,6 @@ SHL1STDLIBS= \
     $(SVLLIB)           \
     $(SVTOOLLIB)        \
     $(COMPHELPERLIB)    \
-    $(CONFIGMGRLIB) \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
         $(UCBHELPERLIB)        \

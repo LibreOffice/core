@@ -494,12 +494,10 @@ void Components::parseFileList(
             try {
                 (*parseFile)(url, layer, data_, 0, 0);
             } catch (css::container::NoSuchElementException & e) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "stat'ed file does not exist: ")) +
-                     e.Message),
-                    css::uno::Reference< css::uno::XInterface >());
+                OSL_TRACE(
+                    "configmgr file does not exist: %s",
+                    rtl::OUStringToOString(
+                        e.Message, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
         if (i == -1) {

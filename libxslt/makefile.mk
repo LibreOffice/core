@@ -49,8 +49,10 @@ all:
 LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
-TARFILE_MD5=e83ec5d27fc4c10c6f612879bea9a153
-PATCH_FILES=$(TARFILE_NAME).patch $(TARFILE_NAME)_win_manifest.patch
+TARFILE_MD5=e61d0364a30146aaa3001296f853b2b9
+PATCH_FILES=libxslt-configure.patch \
+            libxslt-win_manifest.patch \
+            libxslt-gnome602728.patch
 
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"

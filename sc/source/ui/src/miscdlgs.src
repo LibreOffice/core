@@ -154,11 +154,6 @@ ModalDialog RID_SCDLG_INSCELL
     };
 };
 
-Bitmap RID_SCTEAMDLGBMP1
-{
-    File = "calcteam.bmp";
-};
-
 ModalDialog RID_SCDLG_DELCONT
 {
     OutputSize = TRUE ;
@@ -1329,18 +1324,6 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text [ en-US ] = "Insert ~All" ;
     };
     Text [ en-US ] = "Insert Name" ;
-};
-
-FloatingWindow RID_SCDLG_TEAM
-{
-    Hide = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    FixedBitmap 1 { Pos = MAP_APPFONT ( 1 , 1 ) ; };
-    Text [ en-US ] = "The %PRODUCTNAME Calc Team" ;
 };
 
 ModalDialog RID_SCDLG_CHARTCOLROW

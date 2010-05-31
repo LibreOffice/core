@@ -75,17 +75,34 @@ public class JPEGCreator extends EnhancedComplexTestCase
          {
              createSmallPictures(sJPEGNameSchema);
 
+             // read out tolerance file
+             String sFileDir = FileHelper.getPath(_sDocumentName);
+             String sBasename = FileHelper.getBasename(_sDocumentName);
+             int nTolerance = 0;
+             String sToleranceFile = FileHelper.appendPath(sFileDir, "tolerance.ini");
+             File aToleranceFile = new File(sToleranceFile);
+             if (aToleranceFile.exists())
+             {
+                 IniFile aIniFile = new IniFile(sToleranceFile);
+                 nTolerance = aIniFile.getIntValue(sBasename, "accept", 0); // default for all pages
+                 aIniFile.close();
+             }
+
              String sIndexFile = FileHelper.appendPath(_sResult, "index.ini");
              File aIndexFile = new File(sIndexFile);
              if (aIndexFile.exists())
              {
                  // store only if an index file exists
                  IniFile aIniFile = new IniFile(sIndexFile);
-                 String sBasename = FileHelper.getBasename(_sDocumentName);
                  aIniFile.insertValue(sBasename, "jpegschema", sJPEGNameSchema);
                  aIniFile.insertValue(sBasename, "pages", nPages);
+                 aIniFile.insertValue(sBasename, "tolerance", nTolerance);
                  aIniFile.close();
              }
+         }
+         else
+         {
+             assure("There are no pages in document:'" + _sDocumentName + "', maybe document currupt?", false, true);
          }
     }
 
@@ -96,6 +113,12 @@ public class JPEGCreator extends EnhancedComplexTestCase
  */
     public void createSmallPictures(String _sJPEGSchema)
     {
+        ParameterHelper aParam = new ParameterHelper(param);
+        if (! aParam.createSmallPictures())
+        {
+            return;
+        }
+
         int nPages = 0;
         if (_sJPEGSchema.length() > 0)
         {
@@ -124,6 +147,11 @@ public class JPEGCreator extends EnhancedComplexTestCase
  */
 public static void convertToNearSameFileWithWidth340(String _sJPEGFilename)
 {
+    ParameterHelper aParam = new ParameterHelper(param);
+    if (! aParam.createSmallPictures())
+    {
+        return;
+    }
     String sJPEGFilename = _sJPEGFilename.replaceAll("\\\\", "/");
 //    if (OSHelper.isWindows())
 //    {
@@ -160,7 +188,13 @@ private static void convertToWidth340(String _sFrom, String _To)
             {
                 // TODO!
                 // HACK Hard coded!
-                sConvertEXE = "C:\\Programme\\ImageMagick-6.0.3-q8\\convert.exe";
+                // sConvertEXE = "C:\\Programme\\ImageMagick-6.0.3-q8\\convert.exe";
+                sConvertEXE = "convert.exe";
+                String sConvertPath = (String)param.get("imagemagick.path");
+                if (sConvertPath != null)
+                {
+                    sConvertEXE = FileHelper.appendPath(sConvertPath, sConvertEXE);
+                }
             }
 
             String[] sCommandArray =
@@ -178,7 +212,7 @@ private static void convertToWidth340(String _sFrom, String _To)
             String sBack = aHandler.getOutputText();
             if (sBack.length() > 0)
             {
-                GlobalLogWriter.get().println("'" + sBack + "'");
+                GlobalLogWriter.println("'" + sBack + "'");
             }
             // try to interpret the result, which we get as a String
 //            try
@@ -223,7 +257,7 @@ private static void convertToWidth340(String _sFrom, String _To)
             }
             else
             {
-                GlobalLogWriter.get().println("File: '" + _sFile + "' doesn't exist.");
+                GlobalLogWriter.println("File: '" + _sFile + "' doesn't exist.");
                 return "";
             }
             String sFileDir = FileHelper.getPath(_sFile);
@@ -291,6 +325,16 @@ private static void convertToWidth340(String _sFrom, String _To)
             if (OSHelper.isWindows())
             {
                 sGhostscriptEXE = "gswin32c.exe";
+                String sGhostscriptEXE2 = (String)param.get("gs.exe");
+                if (sGhostscriptEXE2 != null)
+                {
+                    sGhostscriptEXE = sGhostscriptEXE2;
+                }
+                String sGhostscriptPath = (String)param.get("gs.path");
+                if (sGhostscriptPath != null)
+                {
+                    sGhostscriptEXE = FileHelper.appendPath(sGhostscriptPath, sGhostscriptEXE);
+                }
             }
 
 //            String sCommand = sGhostscriptEXE + " -dNOPROMPT -dBATCH -sDEVICE=jpeg -r" + String.valueOf(_nResolutionInDPI) + " -dNOPAUSE -sOutputFile=" + StringHelper.doubleQuoteIfNeed(sJPGFilename) + " " + StringHelper.doubleQuoteIfNeed(sOriginalFile);
@@ -333,6 +377,7 @@ private static void convertToWidth340(String _sFrom, String _To)
                 {
                     // return only a valid schema name if there at least one page.
                     sJPEGNameSchema = "";
+                    assure("Document '" + sPostscriptOrPDFFile + "' doesn't create pages.", false, true);
                 }
             }
             else

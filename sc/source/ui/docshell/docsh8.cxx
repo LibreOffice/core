@@ -597,7 +597,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
         else if ( nDbType == sdbc::DataType::DECIMAL )
         {   // maximale Feldbreite und Nachkommastellen bestimmen
             xub_StrLen nLen;
-            USHORT nPrec;
+            sal_uInt16 nPrec;
             nLen = pDoc->GetMaxNumberStringLen( nPrec, nTab, nCol,
                 nFirstDataRow, nLastRow );
             // dBaseIII Limit Nachkommastellen: 15

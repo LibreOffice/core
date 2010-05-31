@@ -61,48 +61,50 @@ public class _XMessageBoxFactory extends MultiMethodTest {
         final UITools tools = new UITools(
             (XMultiServiceFactory) tParam.getMSF(),
             UnoRuntime.queryInterface(XWindow.class, mb));
-        final State[] state = new State[] { State.NONE };
+        final boolean[] done = new boolean[] { false };
+        final boolean[] good = new boolean[] { false };
         XRequestCallback async = AsyncCallback.create(
             tParam.getComponentContext());
         async.addCallback(
             new XCallback() {
                 public void notify(Object aData) {
                     mb.execute();
+                    synchronized (done) {
+                        done[0] = true;
+                        done.notifyAll();
+                    }
                 }
             },
             Any.VOID);
         async.addCallback(
             new XCallback() {
                 public void notify(Object aData) {
-                    boolean ok = true;
                     try {
                         tools.clickButton("OK");
                     } catch (RuntimeException e) {
                         throw e;
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        ok = false;
+                        throw new RuntimeException(e);
                     }
-                    synchronized (state) {
-                        state[0] = ok ? State.GOOD : State.BAD;
-                        state.notifyAll();
+                    synchronized (good) {
+                        good[0] = true;
                     }
                 }
             },
             Any.VOID);
-        boolean ok;
-        synchronized (state) {
-            while (state[0] == State.NONE) {
+        synchronized (done) {
+            while (!done[0]) {
                 try {
-                    state.wait();
+                    done.wait();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
-            ok = state[0] == State.GOOD;
+        }
+        boolean ok;
+        synchronized (good) {
+            ok = good[0];
         }
         tRes.tested("createMessageBox()", ok);
     }
-
-    private enum State { NONE, GOOD, BAD };
 }

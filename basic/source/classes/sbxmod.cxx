@@ -1905,7 +1905,7 @@ void SbUserFormModule::InitObject()
             triggerInitializeEvent();
         }
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
     }
 

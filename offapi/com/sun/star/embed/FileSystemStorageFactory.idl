@@ -42,7 +42,7 @@
     create a <type>FileSystemStorage</type> based on URL. The URL must point
     to a folder.
  */
-service FileSystemStorageFactory
+published service FileSystemStorageFactory
 {
     // ----------------------------------------------------------------------
     /** A storage can be created through this interface.

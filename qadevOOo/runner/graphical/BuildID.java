@@ -93,7 +93,7 @@ public class BuildID
             }
             else
             {
-                GlobalLogWriter.get().println("soffice executable not found.");
+                GlobalLogWriter.println("soffice executable not found.");
             }
 
 //            int dummy = 0;
@@ -119,7 +119,7 @@ public class BuildID
             }
             else
             {
-                GlobalLogWriter.get().println("Property Build, can't open file '" + sOfficePath + "', please check.");
+                GlobalLogWriter.println("Property Build, can't open file '" + sOfficePath + "', please check.");
             }
             return sBuildID;
         }
@@ -144,7 +144,7 @@ public class BuildID
             }
             else
             {
-                GlobalLogWriter.get().println("Property Build, can't open file '" + sOfficePath + "', please check.");
+                GlobalLogWriter.println("Property Build, can't open file '" + sOfficePath + "', please check.");
             }
             return sBuildID;
         }

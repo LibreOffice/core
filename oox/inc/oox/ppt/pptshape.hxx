@@ -61,9 +61,15 @@ public:
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     sal_Bool isReferenced() const { return mbReferenced; };
     void setReferenced( sal_Bool bReferenced ){ mbReferenced = bReferenced; };
+        void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
+
+    static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes );
+    static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes );
+    static oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes );
 
 protected:
 
+        oox::drawingml::ShapePtr mpPlaceholder;
 };
 
 } }

@@ -56,6 +56,8 @@ namespace oox { namespace ppt {
     static sal_Int16 ooxToOdpEightDirections( ::sal_Int32 nOoxType );
     static sal_Int16 ooxToOdpCornerDirections( ::sal_Int32 nOoxType );
     static sal_Int16 ooxToOdpBorderDirections( ::sal_Int32 nOoxType );
+    static sal_Int16 ooxToOdpSideDirections( ::sal_Int32 nOoxType );
+    static sal_Bool  ooxToOdpSideDirectionsDirectionNormal( ::sal_Int32 nOoxType );
 
         void setOoxTransitionType( ::sal_Int32 OoxType,
                                                              ::sal_Int32 param1, ::sal_Int32 param2 );

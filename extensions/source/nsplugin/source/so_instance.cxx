@@ -366,14 +366,6 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
     return sal_True;
 }
 
-sal_Bool SoPluginInstance::SetSODir(char * sDir)
-{
-    if(strlen(sDir) >= NPP_PATH_MAX) return sal_False;
-
-    strcpy(sSO_Dir, sDir);
-    return sal_True;
-}
-
 sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int h)
 {
     sal_Bool bRetval(sal_True);

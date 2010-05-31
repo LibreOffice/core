@@ -420,7 +420,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty)
+    void OPropertyExport::exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType)
     {
         DBG_CHECK_PROPERTY( _sPropertyName, ::rtl::OUString );
 
@@ -432,6 +432,10 @@ namespace xmloff
         AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(_nProperty)
                     ,OAttributeMetaData::getCommonControlAttributeName(_nProperty)
                     , sTargetLocation);
+
+        // #i110911# add xlink:type="simple" if required
+        if (_bAddType)
+            AddAttribute(XML_NAMESPACE_XLINK, token::XML_TYPE, token::XML_SIMPLE);
 
         exportedProperty(_sPropertyName);
     }

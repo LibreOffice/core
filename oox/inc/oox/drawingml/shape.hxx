@@ -30,7 +30,7 @@
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/customshapeproperties.hxx"
+//#include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -41,6 +41,9 @@
 #include <map>
 
 namespace oox { namespace drawingml {
+
+class CustomShapeProperties;
+typedef boost::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
 typedef ::std::map< ::rtl::OUString, ShapePtr > ShapeIdMap;
 

@@ -30,6 +30,7 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/task/NoMasterException.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
+#include "com/sun/star/task/XMasterPasswordHandling.hpp"
 #include "com/sun/star/task/XPasswordContainer.hpp"
 #include "com/sun/star/task/XUrlContainer.hpp"
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
@@ -271,10 +272,20 @@ bool PasswordContainerHelper::addRecord(
                 return false;
 
             if ( bPersist )
+            {
+                uno::Reference< task::XMasterPasswordHandling > xMPH(
+                    m_xPasswordContainer, uno::UNO_QUERY_THROW );
+
+                // If persistent storing of passwords is not yet
+                // allowed, enable it.
+                if ( !xMPH->isPersistentStoringAllowed() )
+                    xMPH->allowPersistentStoring( sal_True );
+
                 m_xPasswordContainer->addPersistent( rURL,
                                                      rUsername,
                                                      rPasswords,
                                                      xIH );
+            }
             else
                 m_xPasswordContainer->add( rURL,
                                            rUsername,
@@ -429,7 +440,7 @@ PasswordContainerInteractionHandler::handle(
                                           // @@@ FIXME: this not able to
                                           // handle master pw request!
                                           // master pw request is never
-                                          // solvabe without UI!
+                                          // solvable without UI!
                                           this ) )
     {
         // successfully handled
