@@ -119,9 +119,8 @@ function hEnableDocumentEditMode() as boolean
 
     dim iTry as integer
 
-    ' Switch mode
+    printlog( "Try to switch document to edit mode" )
     for iTry = 1 to 20
-        printlog( "Try switching to edit-mode... (" & iTry & ")" )
         try
             kontext "Standardbar"
             if ( Bearbeiten.getState( 2 ) <> 1 ) then
@@ -129,7 +128,7 @@ function hEnableDocumentEditMode() as boolean
 
                 kontext "Active"
                 if ( Active.exists( 1 ) ) then
-                    printlog( "Switch to edit mode after: " & iTry )
+                    printlog( "Successfully switched to edit mode" )
                     hCloseDialog( Active, "yes" )
                     hEnableDocumentEditMode() = true
                     wait( 1000 )
