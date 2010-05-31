@@ -18,7 +18,7 @@
 -o sch.ChXChartView
 -o sch.ChXDataPoint 
 #i83868 -o sch.ChXDataRow
-#i87138 -o sch.ChXDiagram
+-o sch.ChXDiagram
 -o sch.ChartArea
 -o sch.ChartGrid
 -o sch.ChartLegend
