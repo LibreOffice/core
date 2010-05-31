@@ -63,6 +63,9 @@ testcase tUpdtFindBar()
         kontext "Active"
         if ( Active.exists( 1 ) ) then
             printlog( "Expected message: " & Active.getText()
+            call DialogTest( Active )
+
+            kontext "Active"
             Active.ok()
         else
             warnlog( "Messagebox missing <No matches found>" )
@@ -75,6 +78,9 @@ testcase tUpdtFindBar()
         kontext "Active"
         if ( Active.exists( 1 ) ) then
             printlog( "Expected message: " & Active.getText()
+            call DialogTest( Active )
+
+            kontext "Active"
             Active.ok()
         else
             warnlog( "Messagebox missing <No matches found>" )
@@ -85,7 +91,7 @@ testcase tUpdtFindBar()
         if ( SearchDialog.exists() ) then
             if ( SearchDialog.isVisible() ) then
                 SearchDialog.click()
-                warnlog( "Button <Search Dialog> is visible" )
+                warnlog( "Button <Search Dialog> is visible, it should be hidden by default" )
             else
                 printlog( "Button <Search Dialog> is hidden, good" )
             endif
@@ -101,6 +107,9 @@ testcase tUpdtFindBar()
 
         kontext "FindAndReplace"
         if ( FindAndReplace.exists( 1 ) ) then
+            call DialogTest( FindAndReplace )
+
+            kontext "FindAndReplace"
             if ( SearchFor.getSelText() = TEST_STRING ) then
                 printlog( "Test string has been inserted into <SearchFor> Listbox. Good." )
             else
@@ -121,6 +130,8 @@ testcase tUpdtFindBar()
     hCloseDocument()
 
 endcase
+
+'*******************************************************************************
 
 function hToggleSearchDialog()
 
