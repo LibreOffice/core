@@ -127,13 +127,8 @@ using ::rtl::OUStringBuffer;
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-#define SWVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|          \
-                      SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
-                      SFX_VIEW_CAN_PRINT|               \
+#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
-
-//MA 06. Nov. 95: Each raus in Absprache mit MI wg. Bug 21523
-//                    SFX_VIEW_OPTIMIZE_EACH|
 
 /*--------------------------------------------------------------------
     Beschreibung:   Statics
@@ -174,7 +169,7 @@ inline SfxDispatcher &SwView::GetDispatcher()
 void SwView::ImpSetVerb( int nSelType )
 {
     sal_Bool bResetVerbs = bVerbsActive;
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() &&
+    if ( !GetViewFrame()->GetFrame().IsInPlace() &&
          (nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) & nSelType )
     {
         if ( !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT) )
@@ -217,7 +212,7 @@ void SwView::GotFocus() const
         SwAnnotationShell* pAsAnnotationShell = PTR_CAST( SwAnnotationShell, pTopShell );
         if ( pAsAnnotationShell )
         {
-            mpPostItMgr->SetActivePostIt(0);
+            mpPostItMgr->SetActiveSidebarWin(0);
             const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
         }
     }
@@ -756,7 +751,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pFormShell(0),
     pHScrollbar(0),
     pVScrollbar(0),
-    pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
+    pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     pHRuler( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
@@ -928,10 +923,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( SFX_CREATE_MODE_EMBEDDED != pDocSh->GetCreateMode() )
         aBrwsBorder = GetMargin();
 
-    if( _pFrame->GetFrameType() & SFXFRAME_INTERNAL )
-        pWrtShell->SetFrameView( aBrwsBorder );
-    else
-        pWrtShell->SetBrowseBorder( aBrwsBorder );
+    pWrtShell->SetBrowseBorder( aBrwsBorder );
 
     // Im CTOR duerfen keine Shell wechsel erfolgen, die muessen ueber
     // den Timer "zwischen gespeichert" werden. Sonst raeumt der SFX
@@ -943,7 +935,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pVRuler->SetActive( sal_True );
 
     SfxViewFrame* pViewFrame = GetViewFrame();
-    if( pViewFrame->GetFrame()->GetParentFrame())
+    if( pViewFrame->GetFrame().GetParentFrame())
     {
         aUsrPref.SetViewHRuler(sal_False);
         aUsrPref.SetViewVRuler(sal_False);
@@ -1002,13 +994,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
     pWrtShell->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
-    if( UseObjectSize() )
-    {
-        //Damit der Sfx _rechtzeitig weiss_, wie gross die sheet::Border sind.
-        SvBorder aTmp;
-        CalcAndSetBorderPixel( aTmp, sal_True );
-    }
-
     if( pWrtShell->GetDoc()->IsUpdateExpFld() )
     {
         SET_CURR_SHELL( pWrtShell );
@@ -1057,10 +1042,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
 
     /*uno::Reference< awt::XWindow >  aTmpRef;
-    _pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
+    _pFrame->GetFrame().GetFrameInterface()->setComponent( aTmpRef,
                                             pViewImpl->GetUNOObject_Impl());*/
 
-   uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
+   uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
             OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
@@ -1414,11 +1399,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                pValue->Value >>= bSelectedFrame;
                bGotIsSelectedFrame = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
-            {
-                pValue->Value >>= bSelectedFrame;
-                bGotIsSelectedFrame = sal_True;
-            }
             pValue++;
         }
         if (bGotVisibleBottom)
@@ -1622,7 +1602,7 @@ void SwView::ShowCursor( FASTBOOL bOn )
 
 ErrCode SwView::DoVerb( long nVerb )
 {
-    if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
         SwWrtShell &rSh = GetWrtShell();
         const int nSel = rSh.GetSelectionType();

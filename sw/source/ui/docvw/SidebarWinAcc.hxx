@@ -2,9 +2,13 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile:  $
+ *
+ * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,29 +28,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _TBXMGR_HXX
-#define _TBXMGR_HXX
 
-#include <svx/tbxdraw.hxx>
-/*
-class SwPopupWindowTbxMgr : public SvxPopupWindowTbxMgr
+#ifndef _SIDEBARWINACC_HXX
+#define _SIDEBARWINACC_HXX
+
+#include <toolkit/awt/vclxwindow.hxx>
+
+class ViewShell;
+class SwSidebarItem;
+class SwFrm;
+
+namespace sw { namespace sidebarwindows {
+
+class SwSidebarWin;
+
+class SidebarWinAccessible : public VCLXWindow
 {
-    BOOL                bWeb:1;     //gilt der WebMode?
-    ResId               aRIdWinTemp;
-    ResId               aRIdTbxTemp;
-    WindowAlign         eAlignment;
-    SfxBindings&        mrBindings;
+    public:
+        explicit SidebarWinAccessible( SwSidebarWin& rSidebarWin,
+                                       ViewShell& rViewShell,
+                                       const SwSidebarItem& rSidebarItem );
+        virtual ~SidebarWinAccessible();
 
-public:
-    SwPopupWindowTbxMgr(    USHORT nId,
-                            WindowAlign eAlign,
-                            ResId aRIdWin,
-                            ResId aRIdTbx,
-                            SfxBindings& rBindings );
+        virtual com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext >
+                CreateAccessibleContext();
 
-    virtual void StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState);
-    virtual SfxPopupWindow* Clone() const;
+        void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );
+
+    private:
+        SwSidebarWin& mrSidebarWin;
+        ViewShell& mrViewShell;
+        const SwFrm* mpAnchorFrm;
+        bool bAccContextCreated;
 };
-*/
 
-#endif      // _TBX_DRAW_HXX
+} } // end of namespace sw::sidebarwindows
+
+#endif

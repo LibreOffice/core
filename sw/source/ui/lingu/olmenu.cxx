@@ -275,7 +275,7 @@ USHORT SwSpellPopup::fillLangPopupMenu(
 
     //6--all languages used in current document
     uno::Reference< com::sun::star::frame::XModel > xModel;
-    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface()->getController(), uno::UNO_QUERY );
+    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController(), uno::UNO_QUERY );
     if ( xController.is() )
         xModel = xController->getModel();
 
@@ -307,6 +307,9 @@ USHORT SwSpellPopup::fillLangPopupMenu(
         }
     }
 
+    bool bMultipleLanguages = (nLangTable != 0) || (curLang.compareToAscii( "*" ) == 0);
+    bool bNothingSelected = true;
+    MenuItemBits nMenuItemStyle = !bMultipleLanguages ? MIB_RADIOCHECK : 0;
     for (std::map< rtl::OUString, rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
     {
         rtl::OUString aEntryTxt( it->first );
@@ -322,22 +325,25 @@ USHORT SwSpellPopup::fillLangPopupMenu(
             else if (nLangTable == 2)   // language for document
                 aLangTable_Document[nItemId]  = aEntryTxt;
 
-            pPopupMenu->InsertItem( nItemId, aEntryTxt, MIB_RADIOCHECK );
-            if (aEntryTxt == curLang)
+            pPopupMenu->InsertItem( nItemId, aEntryTxt, nMenuItemStyle );
+            if ((nLangTable == 0) && (aEntryTxt == curLang))
             {
                 //make a check mark for the current language
                 pPopupMenu->CheckItem( nItemId, TRUE );
+                bNothingSelected = false;
             }
         }
     }
 
     //7--none
     nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
+    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_NONE )), nMenuItemStyle );
+    if (bNothingSelected && !bMultipleLanguages)
+        pPopupMenu->CheckItem( nItemId, TRUE );
 
     //More...
     nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_MORE )), MIB_RADIOCHECK );
+    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_MORE )) );
 
     return nItemId - Lang_Start;    // return number of inserted entries
 }
@@ -576,7 +582,7 @@ bGrammarResults(false)
     nNumLanguageDocEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, 2 );
     EnableItem( MN_LANGUAGE_ALL_TEXT, true );
 */
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
@@ -710,7 +716,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     nNumLanguageDocEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, 2 );
     EnableItem( MN_LANGUAGE_ALL_TEXT, true );
 */
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );

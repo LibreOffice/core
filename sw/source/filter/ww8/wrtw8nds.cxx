@@ -35,6 +35,10 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#if OSL_DEBUG_LEVEL > 0
+#   include <cstdio>
+#endif
+
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/boxitem.hxx>
@@ -102,7 +106,7 @@
 
 #include <ndgrf.hxx>
 #include <ndole.hxx>
-
+#include <cstdio>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;

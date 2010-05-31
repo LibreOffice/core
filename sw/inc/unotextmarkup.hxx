@@ -42,7 +42,6 @@ namespace com { namespace sun { namespace star { namespace container {
 } } } }
 
 class SwTxtNode;
-class SwWrongList;
 class SfxPoolItem;
 
 /** Implementation of the css::text::XTextMarkup interface

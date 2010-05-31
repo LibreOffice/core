@@ -139,8 +139,7 @@
 #include <doc.hxx>
 #include <xmloff/odffields.hxx>
 
-#include "PostItMgr.hxx"
-#include "postit.hxx"
+#include <PostItMgr.hxx>
 
 //JP 11.10.2001: enable test code for bug fix 91313
 #if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
@@ -1342,8 +1341,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             }
 
             aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
-                            KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
-                            rKEvt.GetRepeat() );
+                                  KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
+                                  rKEvt.GetRepeat() );
         }
     }
 
@@ -2262,7 +2261,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
 
                 BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
+                BOOL bRunNext = pACorr->HasRunNext();
+                if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
                         ( '*' == aCh || '_' == aCh ) ) ||
@@ -2274,14 +2274,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
                         rSh.UpdateAttr();
                 }
-                else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
+                else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                            ChgOrdinalNumber |
+                                            ChgOrdinalNumber | AddNonBrkSpace |
                                             ChgToEnEmDash | SetINetAttr |
                                             Autocorrect ) &&
-                    '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
-                    !bIsNormalChar
+                    '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh
                     )
                 {
                     FlushInBuffer();
@@ -2605,7 +2604,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     if (rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
         return;
 
-    rView.GetPostItMgr()->SetActivePostIt(0);
+    rView.GetPostItMgr()->SetActiveSidebarWin(0);
 
     GrabFocus();
 
@@ -3364,11 +3363,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     bNoInterrupt = bTmpNoInterrupt;
                 }
-                if( !bOverURLGrf && !bOnlyText )
+                if ( !bOverURLGrf && !bOnlyText )
                 {
                     const int nSelType = rSh.GetSelectionType();
-                    if( nSelType == nsSelectionType::SEL_OLE ||
-                        nSelType == nsSelectionType::SEL_GRF )
+                    // --> OD 2009-12-30 #i89920#
+                    // Check in general, if an object is selectable at given position.
+                    // Thus, also text fly frames in background become selectable via Ctrl-Click.
+                    if ( nSelType & nsSelectionType::SEL_OLE ||
+                         nSelType & nsSelectionType::SEL_GRF ||
+                         rSh.IsObjSelectable( aDocPos ) )
+                    // <--
                     {
                         MV_KONTEXT( &rSh );
                         if( !rSh.IsFrmSelected() )
@@ -4696,8 +4700,10 @@ BOOL SwEditWin::IsDrawSelMode()
 
 void SwEditWin::GetFocus()
 {
-    if (rView.GetPostItMgr()->GetActivePostIt())
-        rView.GetPostItMgr()->GetActivePostIt()->GrabFocus();
+    if ( rView.GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        rView.GetPostItMgr()->GrabFocusOnActiveSidebarWin();
+    }
     else
     {
         rView.GotFocus();
@@ -4731,7 +4737,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    if ( !rView.GetViewFrame() || !rView.GetViewFrame()->GetFrame() )
+    if ( !rView.GetViewFrame() )
     {
         //Wenn der ViewFrame in Kuerze stirbt kein Popup mehr!
         Window::Command(rCEvt);

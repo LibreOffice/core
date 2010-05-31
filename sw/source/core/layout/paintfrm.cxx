@@ -1645,7 +1645,7 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     /// Because for drawing a graphic left-top-corner and size coordinations are
     /// used, these coordinations have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
-    pGrf->Draw( pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
+    pGrf->DrawWithPDFHandling( *pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
 
     if ( bNotInside )
         pOut->Pop();
@@ -2804,7 +2804,7 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
         aAction.Action();
         ((SwRootFrm*)this)->ResetTurboFlag();
         if ( !pSh->ActionPend() )
-            pSh->Imp()->DelRegions();
+            pSh->Imp()->DelRegion();
     }
 
     SwRect aRect( rRect );
@@ -2838,7 +2838,7 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
     // <--
     {
         const bool bPaintRightShadow =  !bBookMode || (pPage == Lower()) || (!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage());
-        const bool bRightSidebar = !pPage->MarginSide();
+        const bool bRightSidebar = pPage->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
 
         if ( !pPage->IsEmptyPage() )
         {

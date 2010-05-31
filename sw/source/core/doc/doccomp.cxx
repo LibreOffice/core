@@ -966,6 +966,29 @@ BOOL SwCompareLine::Compare( const CompareLine& rLine ) const
     return CompareNode( rNode, ((SwCompareLine&)rLine).rNode );
 }
 
+namespace
+{
+    static String SimpleTableToText(const SwNode &rNode)
+    {
+        String sRet;
+        const SwNode* pEndNd = rNode.EndOfSectionNode();
+        SwNodeIndex aIdx( rNode );
+        while (&aIdx.GetNode() != pEndNd)
+        {
+            if (aIdx.GetNode().IsTxtNode())
+            {
+                if (sRet.Len())
+                {
+                    sRet.Append( '\n' );
+                }
+                sRet.Append( aIdx.GetNode().GetTxtNode()->GetExpandTxt() );
+            }
+            aIdx++;
+        }
+        return sRet;
+    }
+}
+
 BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 {
     if( rSrcNd.GetNodeType() != rDstNd.GetNodeType() )
@@ -986,6 +1009,13 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 
             bRet = ( rTSrcNd.EndOfSectionIndex() - rTSrcNd.GetIndex() ) ==
                    ( rTDstNd.EndOfSectionIndex() - rTDstNd.GetIndex() );
+
+            // --> #i107826#: compare actual table content
+            if (bRet)
+            {
+                bRet = (SimpleTableToText(rSrcNd) == SimpleTableToText(rDstNd));
+            }
+            // <--
         }
         break;
 
@@ -1040,6 +1070,15 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
     case ND_ENDNODE:
         bRet = rSrcNd.StartOfSectionNode()->GetNodeType() ==
                rDstNd.StartOfSectionNode()->GetNodeType();
+
+        // --> #i107826#: compare actual table content
+        if (bRet && rSrcNd.StartOfSectionNode()->GetNodeType() == ND_TABLENODE)
+        {
+            bRet = CompareNode(
+                *rSrcNd.StartOfSectionNode(), *rDstNd.StartOfSectionNode());
+        }
+        // <--
+
         break;
     }
     return bRet;
@@ -1056,18 +1095,7 @@ String SwCompareLine::GetText() const
 
     case ND_TABLENODE:
         {
-            const SwNode* pEndNd = rNode.EndOfSectionNode();
-            SwNodeIndex aIdx( rNode );
-            while( &aIdx.GetNode() != pEndNd )
-            {
-                if( aIdx.GetNode().IsTxtNode() )
-                {
-                    if( sRet.Len() )
-                        sRet.Append( '\n' );
-                    sRet.Append( ((SwTxtNode&)rNode).GetExpandTxt() );
-                }
-                aIdx++;
-            }
+            sRet = SimpleTableToText(rNode);
             sRet.InsertAscii( "Tabelle: ", 0 );
         }
         break;
@@ -1384,7 +1412,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
         {
             SwNodeIndex aTmpPos( pTmp->GetMark()->nNode, -1 );
-            *pCorr->GetPoint() = SwPosition( aTmpPos, 0 );
+            *pCorr->GetPoint() = SwPosition( aTmpPos );
         }
     }
 }

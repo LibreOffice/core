@@ -977,7 +977,7 @@ private:
     ANLDRuleMap maANLDRules;
     WW8_OLST* pNumOlst;         // Gliederung im Text
 
-    SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
+    SwNode* pNode_FLY_AT_PARA; // set: WW8SwFlyPara()   read: CreateSwTable()
 
     SdrModel* pDrawModel;
     SdrPage* pDrawPg;

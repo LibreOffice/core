@@ -220,25 +220,9 @@ static sal_uInt16 nBCTitleNo = 0;
             pDocSh->getIDocumentDeviceAccess()->setJobsetup(pPrt->GetJobSetup());
         }
 
-        const SfxItemSet *pArgs = rReq.GetArgs();
-        DBG_ASSERT( pArgs, "no arguments in SfxRequest");
-        const SfxPoolItem* pFrameItem = 0;
-        if(pArgs)
-            pArgs->GetItemState(SID_DOCFRAME, FALSE, &pFrameItem);
+        SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
-        SfxViewFrame* pFrame = 0;
-        if( pFrameItem )
-        {
-            SfxFrame* pFr = ((const SfxFrameItem*)pFrameItem)->GetFrame();
-            xDocSh->PutItem(SfxBoolItem(SID_HIDDEN, TRUE));
-            pFr->InsertDocument(xDocSh);
-            pFrame = pFr->GetCurrentViewFrame();
-        }
-        else
-        {
-            pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
-        }
-        SwView      *pNewView = (SwView*) pFrame->GetViewShell();
+        SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
         // Dokumenttitel setzen
@@ -255,7 +239,7 @@ static sal_uInt16 nBCTitleNo = 0;
         }
         xDocSh->SetTitle( aTmp );
 
-        pFrame->GetFrame()->Appear();
+        pViewFrame->GetFrame().Appear();
 
         // Shell ermitteln
         SwWrtShell *pSh = pNewView->GetWrtShellPtr();
@@ -394,19 +378,20 @@ static sal_uInt16 nBCTitleNo = 0;
                                 else
                                     pSh->SetMark();     // set only the mark
 
-                                SwSection aSect( CONTENT_SECTION,
-                                                String::CreateFromAscii(MASTER_LABEL));
+                                SwSectionData aSect(CONTENT_SECTION,
+                                    String::CreateFromAscii(MASTER_LABEL));
                                 pSh->InsertSection(aSect);
                             }
                         }
                         else if (rItem.bSynchron)
                         {
-                            SwSection aSect(FILE_LINK_SECTION, pSh->GetUniqueSectionName());
+                            SwSectionData aSect(FILE_LINK_SECTION,
+                                    pSh->GetUniqueSectionName());
                             String sLinkName(sfx2::cTokenSeperator);
                             sLinkName += sfx2::cTokenSeperator;
                             sLinkName += String::CreateFromAscii(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
-                            aSect.SetProtect();
+                            aSect.SetProtectFlag(true);
                             pSh->Insert(aDotStr);   // Dummytext zum Zuweisen der Section
                             pSh->SttDoc();
                             pSh->EndDoc(sal_True);  // Alles im Rahmen selektieren
@@ -457,7 +442,7 @@ static sal_uInt16 nBCTitleNo = 0;
 
         if( rItem.bSynchron )
         {
-            SfxDispatcher* pDisp = pFrame->GetDispatcher();
+            SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
             ASSERT(pDisp, "Heute kein Dispatcher am Frame?");
             pDisp->Execute(FN_SYNC_LABELS, SFX_CALLMODE_ASYNCHRON);
         }

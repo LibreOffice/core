@@ -169,12 +169,12 @@ void StartGrammarChecking( SwDoc &rDoc )
     // check for a visible view
     bool bVisible = false;
     const SwDocShell *pDocShell = rDoc.GetDocShell();
-    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
     while (pFrame && !bVisible)
     {
         if (pFrame->IsVisible())
             bVisible = true;
-        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, sal_False );
     }
 
     //!! only documents with visible views need to be checked
@@ -1407,8 +1407,8 @@ void SwDoc::Paste( const SwDoc& rSource )
 
             {
                 aIndexBefore++;
-                SwPaM aPaM(SwPosition(aIndexBefore, 0),
-                           SwPosition(rInsPos.nNode, 0));
+                SwPaM aPaM(SwPosition(aIndexBefore),
+                           SwPosition(rInsPos.nNode));
 
                 MakeUniqueNumRules(aPaM);
             }
