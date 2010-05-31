@@ -257,11 +257,11 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
         Any value = rXPropSet->getPropertyValue( props [i].Name );
 
         OUString strValue;
-        sal_Int32 intValue;
-        sal_uInt32 uintValue;
-        sal_Int16 int16Value;
-        sal_uInt16 uint16Value;
-        bool boolValue;
+        sal_Int32 intValue = 0;
+        sal_uInt32 uintValue = 0;
+        sal_Int16 int16Value = 0;
+        sal_uInt16 uint16Value = 0;
+        bool boolValue = false;
     LineSpacing spacing;
 //         RectanglePoint pointValue;
     WritingMode aWritingMode;
@@ -269,9 +269,9 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
         else if( value >>= intValue )
-            fprintf (stderr,"%d            (hex: %x)\n", intValue, intValue);
+            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", intValue, intValue);
         else if( value >>= uintValue )
-            fprintf (stderr,"%d            (hex: %x)\n", uintValue, uintValue);
+            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", uintValue, uintValue);
         else if( value >>= int16Value )
             fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
