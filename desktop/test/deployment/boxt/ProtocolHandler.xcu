@@ -1,4 +1,5 @@
-/*************************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -23,28 +24,15 @@
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
 *
-************************************************************************/
+**********************************************************************-->
 
-#include "precompiled_configmgr.hxx"
-#include "sal/config.h"
-
-#include <algorithm>
-
-#include "osl/diagnose.h"
-#include "rtl/ustring.hxx"
-
-#include "node.hxx"
-#include "nodemap.hxx"
-
-namespace configmgr {
-
-void cloneNodeMap(NodeMap const & source, NodeMap * target) {
-    OSL_ASSERT(target != 0 && target->empty());
-    NodeMap clone(source);
-    for (NodeMap::iterator i(clone.begin()); i != clone.end(); ++i) {
-        i->second = i->second->clone(true);
-    }
-    std::swap(clone, *target);
-}
-
-}
+<o:component-data xmlns:o="http://openoffice.org/2001/registry"
+    o:package="org.openoffice.Office" o:name="ProtocolHandler">
+  <node o:name="HandlerSet">
+    <node o:name="com.sun.star.test.deployment.boxt" o:op="replace">
+      <prop o:name="Protocols">
+        <value>vnd.org.openoffice.test.desktop.deployment.boxt:*</value>
+      </prop>
+    </node>
+  </node>
+</o:component-data>
