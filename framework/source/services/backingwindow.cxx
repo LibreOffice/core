@@ -65,7 +65,6 @@
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace framework;
@@ -372,7 +371,7 @@ void BackingWindow::prepareRecentFileMenu()
             else
             {
                 // Use INetURLObject to abbreviate all other URLs
-                Reference< XStringWidth > xStringLength( new RecentFilesStringLength() );
+                Reference< util::XStringWidth > xStringLength( new RecentFilesStringLength() );
                 aMenuTitle = aURLObj.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
             }
             rtl::OUStringBuffer aBuf( aMenuTitle.getLength() + 5 );
