@@ -58,6 +58,7 @@ CharFontPitchComplex
 CharHeight
 CharHeightAsian
 CharHeightComplex
+CharKerning
 CharLocale
 CharLocaleAsian
 CharLocaleComplex
@@ -380,6 +381,8 @@ Text
 TextAutoGrowHeight
 TextBreak
 TextColor
+TextFitToSize
+TextHorizontalAdjust
 TextLeftDistance
 TextLowerDistance
 TextOverlap
@@ -413,6 +416,7 @@ VertJustify
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+Visible
 VisibleSize
 VisualArea
 VisualEffect
