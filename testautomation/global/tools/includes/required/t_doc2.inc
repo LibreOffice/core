@@ -121,7 +121,7 @@ function hEnableDocumentEditMode() as boolean
 
     ' Switch mode
     for iTry = 1 to 20
-        printlog( "Switching to edit mode... (" & iTry & ")" )
+        printlog( "Try switching to edit-mode... (" & iTry & ")" )
         try
             kontext "Standardbar"
             if ( Bearbeiten.getState( 2 ) <> 1 ) then
@@ -144,7 +144,7 @@ function hEnableDocumentEditMode() as boolean
         printlog( "Checking for standardbar/edit mode" )
         try
             kontext "Standardbar"
-            if ( Bearbeiten.getState( 2 ) = 1 ) then
+            if ( ( Bearbeiten.getState( 2 ) = 1 ) or ( not Bearbeiten.isEnabled() ) ) then
                 printlog( "Edit button has correct state, exiting successfully" )
                 hEnableDocumentEditMode() = true
                 exit for
