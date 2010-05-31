@@ -912,7 +912,7 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
                 mpWindowImpl->mpBorderWindow = mpOldBorderWin;
                 SetParent( pRealParent );
                 mpWindowImpl->mpRealParent = pRealParent;
-                delete static_cast<ImplDockFloatWin*>(mpFloatWin);
+                mpFloatWin->doLazyDelete();
                 mpFloatWin = NULL;
                 SetPosPixel( maDockPos );
 
