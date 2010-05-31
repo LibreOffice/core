@@ -131,26 +131,13 @@ function hEnableDocumentEditMode() as boolean
                 if ( Active.exists( 1 ) ) then
                     printlog( "Switch to edit mode after: " & iTry )
                     hCloseDialog( Active, "yes" )
+                    hEnableDocumentEditMode() = true
+                    wait( 1000 )
                     exit for
                 endif
             endif
         catch
             wait( 200 )
-        endcatch
-    next iTry
-
-    ' Verify
-    for iTry = 1 to 10
-        printlog( "Checking for standardbar/edit mode" )
-        try
-            kontext "Standardbar"
-            if ( ( Bearbeiten.getState( 2 ) = 1 ) or ( not Bearbeiten.isEnabled() ) ) then
-                printlog( "Edit button has correct state, exiting successfully" )
-                hEnableDocumentEditMode() = true
-                exit for
-            endif
-        catch
-            wait( 100 )
         endcatch
     next iTry
 
