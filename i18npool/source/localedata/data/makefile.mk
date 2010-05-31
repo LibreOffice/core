@@ -285,7 +285,11 @@ SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 
 SHL2STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL2DEPN=$(SHL1TARGETN)
+.ELSE
+SHL2DEPN=$(SHL1IMPLIBN)
+.ENDIF
 SHL2OBJS= \
     $(SLO)$/localedata_es_AR.obj \
     $(SLO)$/localedata_es_BO.obj \
@@ -323,7 +327,11 @@ SHL3DEF=$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=$(SHL3TARGET)
 
 SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL3DEPN=$(SHL1TARGETN) $(SHL2TARGETN)
+.ELSE
+SHL3DEPN=$(SHL1IMPLIBN) $(SHL2IMPLIBN)
+.ENDIF
 SHL3OBJS=	\
     $(SLO)$/localedata_ast_ES.obj	\
     $(SLO)$/localedata_be_BY.obj	\
@@ -410,7 +418,11 @@ SHL4DEF=$(MISC)$/$(SHL4TARGET).def
 DEF4NAME=$(SHL4TARGET)
 
 SHL4STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL4DEPN=$(SHL1TARGETN)
+.ELSE
+SHL4DEPN=$(SHL1IMPLIBN)
+.ENDIF
 SHL4OBJS= \
     $(SLO)$/localedata_af_NA.obj \
     $(SLO)$/localedata_af_ZA.obj \
