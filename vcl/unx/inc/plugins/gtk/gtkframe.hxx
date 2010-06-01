@@ -185,6 +185,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
+    bool                            m_bSetFocusOnMap;
     String                          m_aTitle;
 
     IMHandler*                      m_pIMHandler;
