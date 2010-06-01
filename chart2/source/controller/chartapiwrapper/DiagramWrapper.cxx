@@ -1221,7 +1221,13 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
 {
     ::com::sun::star::chart::ChartDataRowSource eChartDataRowSource = ::com::sun::star::chart::ChartDataRowSource_ROWS;
     if( ! (rOuterValue >>= eChartDataRowSource) )
-        throw lang::IllegalArgumentException( C2U("Property DataRowSource requires ::com::sun::star::chart::ChartDataRowSource value"), 0, 0 );
+    {
+        sal_Int32 nNew = ::com::sun::star::chart::ChartDataRowSource_ROWS;
+        if( !(rOuterValue >>= nNew) )
+            throw lang::IllegalArgumentException( C2U("Property DataRowSource requires ::com::sun::star::chart::ChartDataRowSource value"), 0, 0 );
+        else
+            eChartDataRowSource = ::com::sun::star::chart::ChartDataRowSource(nNew);
+    }
 
     m_aOuterValue = rOuterValue;
 
