@@ -367,15 +367,17 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
     }
 
     Sequence< ::rtl::OUString> aBestColumnNames;
-    if ( aBestRowColumnNames.empty() )
+    if ( !aBestRowColumnNames.empty() )
     {
-        if ( xKeyColumns.is() )
-            aBestColumnNames = xKeyColumns->getElementNames();
-    }
-    else
         aBestColumnNames = Sequence< ::rtl::OUString>(&aBestRowColumnNames[0],aBestRowColumnNames.size());
+        ::dbaccess::getColumnPositions(xSup->getColumns(),aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames));
+    }
 
-    ::dbaccess::getColumnPositions(xSup->getColumns(),aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames));
+    if (m_pKeyColumnNames->empty() && xKeyColumns.is())
+    {
+        aBestColumnNames = xKeyColumns->getElementNames();
+        ::dbaccess::getColumnPositions(xSup->getColumns(),aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames));
+    }
     ::dbaccess::getColumnPositions(xSup->getColumns(),xSourceColumns->getElementNames(),m_sUpdateTableName,(*m_pColumnNames));
     ::dbaccess::getColumnPositions(xSup->getColumns(),aParameterColumns,m_sUpdateTableName,(*m_pParameterNames));
 
