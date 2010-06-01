@@ -1297,8 +1297,9 @@ BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
+    String aLibSubName;
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, GetName(), OBJ_TYPE_DIALOG );
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }
 
 void DialogWindow::SetReadOnly( BOOL b )
