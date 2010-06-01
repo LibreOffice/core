@@ -156,12 +156,32 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
     ViewShell::Deactivate(bIsMDIActivate);
 }
 
+namespace
+{
+    class LockUI
+    {
+    private:
+        void Lock(bool bLock);
+        SfxViewFrame *mpFrame;
+    public:
+        LockUI(SfxViewFrame *pFrame) : mpFrame(pFrame) { Lock(true); }
+        ~LockUI() { Lock(false); }
+
+    };
+
+    void LockUI::Lock(bool bLock)
+    {
+        if (!mpFrame)
+            return;
+        mpFrame->Enable( !bLock );
+    }
+}
+
 /*************************************************************************
 |*
 |* Wird gerufen, wenn sich der Selektionszustand der View aendert
 |*
 \************************************************************************/
-
 void DrawViewShell::SelectionHasChanged (void)
 {
     Invalidate();
@@ -215,6 +235,8 @@ void DrawViewShell::SelectionHasChanged (void)
             // we need to deselect it now
             if (!pOleObj)
             {
+                //#i47279# disable frame until after object has completed unload
+                LockUI aUILock(GetViewFrame());
                 pIPClient->DeactivateObject();
                 //HMHmpDrView->ShowMarkHdl();
             }
