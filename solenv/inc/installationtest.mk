@@ -49,12 +49,20 @@ installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation$(UPDMINOREXT)
 .END
 
 .IF "$(OS)" == "MACOSX"
-my_soffice = $(installationtest_instpath)/opt/OpenOffice.org.app/Contents/MacOS/soffice
+my_sofficepath = \
+    $(installationtest_instpath)/opt/OpenOffice.org.app/Contents/MacOS/soffice
 .ELIF "$(OS)" == "WNT"
-my_soffice = \
+my_sofficepath = \
     $(installationtest_instpath)'/opt/OpenOffice.org 3/program/soffice.exe'
 .ELSE
-my_soffice = $(installationtest_instpath)/opt/openoffice.org3/program/soffice
+my_sofficepath = \
+    $(installationtest_instpath)/opt/openoffice.org3/program/soffice
+.END
+
+.IF "$(OOO_TEST_SOFFICE)" == ""
+my_soffice = path:$(my_sofficepath)
+.ELSE
+my_soffice = '$(OOO_TEST_SOFFICE:s/'/'\''/)'
 .END
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
@@ -70,7 +78,7 @@ my_javaenv = \
 # which is removed after smoketest); can be removed once issue 50885 is fixed;
 # on other platforms, a single installation to solver is created in
 # smoketestoo_native:
-.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
 $(MISC)/$(TARGET)/installation.flag : $(shell \
         ls $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip)
     $(MKDIRHIER) $(@:d)
@@ -87,10 +95,10 @@ cpptest .PHONY : $(MISC)/$(TARGET)/services.rdb
     $(CPPUNITTESTER) \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
-        -env:arg-path=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
+        -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
         $(my_cppenv) $(OOO_CPPTEST_ARGS)
     $(RM) -r $(MISC)/$(TARGET)/user
-.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
@@ -107,12 +115,12 @@ javatest .PHONY : $(JAVATARGET)
     $(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
         '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
-        -Dorg.openoffice.test.arg.path=$(my_soffice) \
+        -Dorg.openoffice.test.arg.soffice=$(my_soffice) \
         -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
         $(my_javaenv) org.junit.runner.JUnitCore \
         $(foreach,i,$(JAVATESTFILES) $(subst,/,. $(PACKAGE)).$(i:s/.java//))
     $(RM) -r $(MISC)/$(TARGET)/user
-.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 javatest : $(MISC)/$(TARGET)/installation.flag
 .END
