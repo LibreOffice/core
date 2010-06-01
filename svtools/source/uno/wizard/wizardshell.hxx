@@ -66,7 +66,6 @@ namespace svt { namespace uno
         // OWizardMachine overridables
         virtual TabPage*    createPage( WizardState i_nState );
         virtual void        enterState( WizardState i_nState );
-        virtual sal_Bool    prepareLeaveCurrentState( CommitPageReason _eReason );
         virtual sal_Bool    leaveState( WizardState i_nState );
         virtual String      getStateDisplayName( WizardState i_nState ) const;
         virtual bool        canAdvance() const;

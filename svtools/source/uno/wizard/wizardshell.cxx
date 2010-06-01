@@ -156,30 +156,6 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool WizardShell::prepareLeaveCurrentState( CommitPageReason i_eReason )
-    {
-        if ( !WizardShell_Base::prepareLeaveCurrentState( i_eReason ) )
-            return sal_False;
-
-        if ( !m_xController.is() )
-            return sal_True;
-
-        try
-        {
-            return m_xController->confirmDeactivatePage(
-                impl_stateToPageId( getCurrentState() ),
-                convertCommitReasonToTravelType( i_eReason )
-            );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        return sal_True;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     sal_Bool WizardShell::leaveState( WizardState i_nState )
     {
         if ( !WizardShell_Base::leaveState( i_nState ) )
