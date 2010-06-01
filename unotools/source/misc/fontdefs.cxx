@@ -72,6 +72,8 @@ static sal_Unicode const aMSGothic[] = { 'm','s',       0x30B4, 0x30B7, 0x30C3, 
 static sal_Unicode const aMSPGothic[] = { 'm','s','p',  0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
 static sal_Unicode const aMSMincho[] = { 'm', 's',      0x660E, 0x671D, 0 };
 static sal_Unicode const aMSPMincho[] = { 'm','s','p',  0x660E, 0x671D, 0 };
+static sal_Unicode const aMSYaHei[] = { 0x5FAE, 0x8F6F, 0x96C5, 0x9ED1, 0 };
+static sal_Unicode const aMSJhengHei[] = { 0x5FAE, 0x8EDF, 0x6B63, 0x9ED1, 0x9AD4, 0 };
 static sal_Unicode const aMeiryo[]    = { 0x30e1, 0x30a4, 0x30ea, 0x30aa, 0 };
 static sal_Unicode const aHGMinchoL[] = { 'h','g',      0x660E, 0x671D, 'l', 0, 0 };
 static sal_Unicode const aHGGothicB[] = { 'h','g',      0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
@@ -179,7 +181,7 @@ static sal_Unicode const aHiraginoKakuGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 
 static sal_Unicode const aHiraginoKakuGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o','n',0};
 static sal_Unicode const aHiraginoMaruGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o',0};
 static sal_Unicode const aHiraginoMaruGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
-
+static sal_Unicode const aTimesNewRoman[] = { 0x5B8B, 0x4F53 };
 
 static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {
@@ -216,6 +218,8 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "mspgothic",            aMSPGothic },
 {   "msmincho",             aMSMincho },
 {   "mspmincho",            aMSPMincho },
+{   "microsoftjhenghei",    aMSJhengHei },
+{   "microsoftyahei",       aMSYaHei },
 {   "meiryo",               aMeiryo },
 {   "hgminchol",            aHGMinchoL },
 {   "hggothicb",            aHGGothicB },
@@ -314,6 +318,7 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "hiraginokakugothicpron", aHiraginoKakuGothicProN },
 {   "hiraginomarugothicpro", aHiraginoMaruGothicPro },
 {   "hiraginomarugothicpron", aHiraginoMaruGothicProN },
+{   "timesnewroman",        aTimesNewRoman },
 {   NULL,                   NULL },
 };
 
