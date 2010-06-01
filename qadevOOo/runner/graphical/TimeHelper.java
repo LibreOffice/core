@@ -29,6 +29,8 @@
 
 package graphical;
 
+import java.util.Calendar;
+
 /**
  *
  * @author ll93751
@@ -42,9 +44,48 @@ public class TimeHelper
      */
     static void waitInSeconds(int _nSeconds, String _sReason)
         {
-            GlobalLogWriter.get().println("Wait " + String.valueOf(_nSeconds) + " sec. Reason: " + _sReason);
+            GlobalLogWriter.println("Wait 0.25 * " + String.valueOf(_nSeconds) + " sec. Reason: " + _sReason);
             try {
-                java.lang.Thread.sleep(_nSeconds * 1000);
+                java.lang.Thread.sleep(_nSeconds * 250);
             } catch (java.lang.InterruptedException e2) {}
         }
+
+    private int m_nSeconds;
+    private int m_nMilliSeconds;
+    private long m_nRealMilliSeconds;
+
+    private boolean m_bIsStopped = false;
+
+    public TimeHelper()
+    {}
+
+    public void start()
+        {
+            m_bIsStopped = false;
+            Calendar cal = Calendar.getInstance();
+            m_nSeconds = cal.get(Calendar.SECOND);
+            m_nMilliSeconds = cal.get(Calendar.MILLISECOND);
+        }
+    public void stop()
+        {
+            Calendar cal = Calendar.getInstance();
+            m_bIsStopped = true;
+            int nSeconds = cal.get(Calendar.SECOND);
+            m_nSeconds = nSeconds - m_nSeconds;
+            if (m_nSeconds < 0)
+            {
+                // add a minute
+                m_nSeconds += 60;
+            }
+
+            int nMilliSeconds = cal.get(Calendar.MILLISECOND);
+            m_nMilliSeconds = nMilliSeconds - m_nMilliSeconds;
+            m_nRealMilliSeconds = m_nSeconds * 1000 + m_nMilliSeconds;
+        }
+
+    public String getTime()
+        {
+            return String.valueOf(m_nRealMilliSeconds);
+        }
+
 }
