@@ -355,8 +355,10 @@ namespace svt
         if (m_pCancel && (_nWizardButtonFlags & WZB_CANCEL))
             pNewDefButton = m_pCancel;
 
-        if (pNewDefButton)
-            defaultButton(pNewDefButton);
+        if ( pNewDefButton )
+            defaultButton( pNewDefButton );
+        else
+            implResetDefault( this );
     }
 
     //---------------------------------------------------------------------

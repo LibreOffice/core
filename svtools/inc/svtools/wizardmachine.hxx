@@ -42,6 +42,7 @@ namespace svt
 //.........................................................................
 
 // wizard buttons
+#define WZB_NONE                0x0000
 #define WZB_NEXT                0x0001
 #define WZB_PREVIOUS            0x0002
 #define WZB_FINISH              0x0004

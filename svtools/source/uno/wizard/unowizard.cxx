@@ -83,6 +83,7 @@ namespace svt { namespace uno
         {
             switch ( i_nWizardButton )
             {
+            case WizardButton::NONE:        return WZB_NONE;
             case WizardButton::NEXT:        return WZB_NEXT;
             case WizardButton::PREVIOUS:    return WZB_PREVIOUS;
             case WizardButton::FINISH:      return WZB_FINISH;
@@ -90,7 +91,7 @@ namespace svt { namespace uno
             case WizardButton::HELP:        return WZB_HELP;
             }
             OSL_ENSURE( false, "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
-            return 0;
+            return WZB_NONE;
         }
     }
 
