@@ -144,15 +144,6 @@ long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
 
 
-// ... oder so?
-
-BOOL bOderSo;
-
-bool SC_DLLPUBLIC ScGetWriteTeamInfo()
-{
-  return bOderSo;
-}
-
 class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
 USHORT nScClickMouseModifier = 0;                   //! dito
@@ -517,12 +508,6 @@ String ScGlobal::GetLongErrorString(USHORT nErrNumber)
         break;
     }
     String aRes( GetRscString( nErrNumber ) );
-    if( bOderSo )
-    {
-        String aOderSo( GetRscString( STR_ODER_SO ) );
-        aOderSo.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%s")), aRes );
-        aRes = aOderSo;
-    }
     return aRes;
 }
 

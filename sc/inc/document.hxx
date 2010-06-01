@@ -1425,9 +1425,9 @@ public:
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);
 
     BOOL            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                TypedScStrCollection& rStrings, bool bFilter = false );
+                                bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates);
     SC_DLLPUBLIC BOOL           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                SCTAB nTab, TypedScStrCollection& rStrings );
+                                SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates );
     BOOL            GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 TypedScStrCollection& rStrings, BOOL bLimit = FALSE );
     BOOL            GetFormulaEntries( TypedScStrCollection& rStrings );
@@ -1692,9 +1692,9 @@ public:
     /** Maximum string length of numerical cells of a column, e.g. for dBase export.
         @return String length in characters (!) including the decimal
                 separator, and the decimal precision needed. */
-    xub_StrLen      GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCTAB nTab, SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen      GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                           SCTAB nTab, SCCOL nCol,
+                                           SCROW nRowStart, SCROW nRowEnd ) const;
 
     void    KeyInput( const KeyEvent& rKEvt );      // TimerDelays etc.
 
@@ -1749,6 +1749,8 @@ public:
                             { return eStorageGrammar; }
 
     SfxUndoManager*     GetUndoManager();
+    bool IsInVBAMode() const;
+
 private: // CLOOK-Impl-Methoden
 
     /**

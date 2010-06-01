@@ -2424,12 +2424,15 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
 {
     ScRange* pRange;
 
-    // find an unused cell
-    while( (pRange = maVMergedCells.Find( maCurrCell.MakeAddr() )) != 0 )
+    /*  Find an unused cell by skipping all merged ranges that cover the
+        current cell position stored in maCurrCell. */
+    while( ((pRange = maVMergedCells.Find( maCurrCell.MakeAddr() )) != 0) || ((pRange = maHMergedCells.Find( maCurrCell.MakeAddr() )) != 0) )
         maCurrCell.mnCol = pRange->aEnd.Col() + 1;
     mpCurrEntryList = &maEntryMap[ maCurrCell ];
 
-    // try to find collisions, shrink existing ranges
+    /*  If the new cell is merged horizontally, try to find collisions with
+        other vertically merged ranges. In this case, shrink existing
+        vertically merged ranges (do not shrink the new cell). */
     SCCOL nColEnd = maCurrCell.mnCol + rSpanSize.mnCols;
     for( ScAddress aAddr( maCurrCell.MakeAddr() ); aAddr.Col() < nColEnd; aAddr.IncCol() )
         if( (pRange = maVMergedCells.Find( aAddr )) != 0 )
@@ -2438,14 +2441,19 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
     // insert the new range into the cell lists
     ScRange aNewRange( maCurrCell.MakeAddr() );
     aNewRange.aEnd.Move( rSpanSize.mnCols - 1, rSpanSize.mnRows - 1, 0 );
-    if( rSpanSize.mnCols > 1 )
+    if( rSpanSize.mnRows > 1 )
     {
         maVMergedCells.Append( aNewRange );
+        /*  Do not insert vertically merged ranges into maUsedCells yet,
+            because they may be shrunken (see above). The final vertically
+            merged ranges are inserted in FillEmptyCells(). */
     }
     else
     {
-        if( rSpanSize.mnRows > 1 )
+        if( rSpanSize.mnCols > 1 )
             maHMergedCells.Append( aNewRange );
+        /*  Insert horizontally merged ranges and single cells into
+            maUsedCells, they will not be changed anymore. */
         maUsedCells.Join( aNewRange );
     }
 
@@ -2562,8 +2570,9 @@ void ScHTMLTable::SetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos, SCCOLROW 
     while( nIndex >= rSizes.size() )
         rSizes.push_back( rSizes.empty() ? 1 : (rSizes.back() + 1) );
     // update size of passed position and all following
+    // #i109987# only grow, don't shrink - use the largest needed size
     SCsCOLROW nDiff = nSize - ((nIndex == 0) ? rSizes.front() : (rSizes[ nIndex ] - rSizes[ nIndex - 1 ]));
-    if( nDiff != 0 )
+    if( nDiff > 0 )
         for( ScSizeVec::iterator aIt = rSizes.begin() + nIndex, aEnd = rSizes.end(); aIt != aEnd; ++aIt )
             *aIt += nDiff;
 }
@@ -2591,6 +2600,7 @@ void ScHTMLTable::FillEmptyCells()
     for( ScHTMLTableIterator aIter( mxNestedTables.get() ); aIter.is(); ++aIter )
         aIter->FillEmptyCells();
 
+    // insert the final vertically merged ranges into maUsedCells
     for( const ScRange* pRange = maVMergedCells.First(); pRange; pRange = maVMergedCells.Next() )
         maUsedCells.Join( *pRange );
 
