@@ -35,14 +35,13 @@ $(eval $(call gb_Library_add_package_headers,sfx,\
 $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_include,sfx,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/inc/sfx2/sdi \
-    -I$(WORKDIR)/inc/sfx2 \
-    -I$(WORKDIR)/inc/ \
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/inc/sfx2 \
     -I$(SRCDIR)/sfx2/source/inc \
     -I$(SRCDIR)/sfx2/inc/pch \
+    -I$(WORKDIR)/SdiTarget/sfx2/sdi \
+    -I$(WORKDIR)/inc/ \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
     $(LIBXML_CFLAGS) \

@@ -30,14 +30,13 @@ $(eval $(call gb_Library_Library,svxcore))
 $(eval $(call gb_Library_add_sdi_headers,svx,svx/sdi/svxslots))
 
 $(eval $(call gb_Library_set_include,svxcore,\
-    $$(SOLARINC) \
-    -I$(WORKDIR)/inc/svx/ \
     -I$(SRCDIR)/svx/inc \
     -I$(SRCDIR)/svx/source/inc \
     -I$(SRCDIR)/svx/inc/pch \
+    -I$(WORKDIR)/SdiTarget/svx/sdi \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
-    -I$(WORKDIR)/inc/svx/sdi \
 ))
 
 $(eval $(call gb_Library_set_defs,svxcore,\
