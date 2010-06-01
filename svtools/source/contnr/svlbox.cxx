@@ -1775,10 +1775,14 @@ void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     DBG_CHKTHIS(SvLBox,0);
 
-    ReleaseMouse();
-    SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
     nOldDragMode = GetDragDropMode();
-    if( !pEntry || !nOldDragMode )
+    if ( !nOldDragMode )
+        return;
+
+    ReleaseMouse();
+
+    SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
+    if( !pEntry )
     {
         DragFinished( DND_ACTION_NONE );
         return;
