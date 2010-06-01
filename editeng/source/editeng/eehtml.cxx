@@ -60,6 +60,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValu
     bWasInPara = FALSE;
     nInTable = 0;
     nInCell = 0;
+    bInTitle = FALSE;
     nDefListLevel = 0;
     nBulletLevel = 0;
     nNumberingLevel = 0;
@@ -179,11 +180,14 @@ void EditHTMLParser::NextToken( int nToken )
     break;
     case HTML_TEXTTOKEN:
     {
-        if ( !bInPara )
-            StartPara( FALSE );
-
-//        if ( bInPara || pCurAnchor )
+        // #i110937# for <title> content, call aImportHdl (no SkipGroup), but don't insert the text into the EditEngine
+        if (!bInTitle)
         {
+            if ( !bInPara )
+                StartPara( FALSE );
+
+            // if ( bInPara || pCurAnchor )
+
             String aText = aToken;
             if ( aText.Len() && ( aText.GetChar( 0 ) == ' ' )
                     && ThrowAwayBlank() && !IsReadPRE() )
@@ -342,6 +346,13 @@ void EditHTMLParser::NextToken( int nToken )
 
     // #58335# kein SkipGroup on/off auf inline markup etc.
 
+    case HTML_TITLE_ON:
+        bInTitle = TRUE;
+        break;
+    case HTML_TITLE_OFF:
+        bInTitle = FALSE;
+        break;
+
     // globals
     case HTML_HTML_ON:
     case HTML_HTML_OFF:
@@ -355,8 +366,6 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_THEAD_OFF:
     case HTML_TBODY_ON:
     case HTML_TBODY_OFF:
-    case HTML_TITLE_ON:
-    case HTML_TITLE_OFF:
     // inline elements, structural markup
     // HTML 3.0
     case HTML_BANNER_ON:
