@@ -40,10 +40,10 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
         cd $(dir $<) && \
         $(gb_SdiTarget_SVIDLCOMMAND) -quiet \
             $(INCLUDE) \
-            -fs$(WORKDIR)/inc/$*.hxx \
-            -fd$(WORKDIR)/inc/$*.ilb \
-            -fl$(WORKDIR)/inc/$*.lst \
-            -fz$(WORKDIR)/inc/$*.sid \
+            -fs$@.hxx \
+            -fd$@.ilb \
+            -fl$@.lst \
+            -fz$@.sid \
             -fx$(EXPORTS) \
             -fm$@ \
             $<)
@@ -52,20 +52,13 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
 $(call gb_SdiTarget_get_clean_target,%) :
     $(call gb_Helper_announce,Cleaning up sdi $* ...)
     -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(WORKDIR)/inc/$*.hxx \
-            $(WORKDIR)/inc/$*.ilb \
-            $(WORKDIR)/inc/$*.lst \
-            $(WORKDIR)/inc/$*.sid \
+        rm -f $(foreach ext,.hxx .ilb .lst .sid,\
+            $(call gb_SdiTarget_get_target,$*)$(ext)) \
             $(call gb_SdiTarget_get_target,$*))
 
 define gb_SdiTarget_SdiTarget
 $(call gb_SdiTarget_get_target,$(1)) : INCLUDE := -I$(WORKDIR)/inc/ $$(subst -I. ,-I$$(dir $(SRCDIR)/$(1)) ,$$(SOLARINC))
 $(call gb_SdiTarget_get_target,$(1)) : EXPORTS := $(SRCDIR)/$(2).sdi
-$(WORKDIR)/inc/$(1).hxx \
-$(WORKDIR)/inc/$(1).ilb \
-$(WORKDIR)/inc/$(1).lst \
-$(WORKDIR)/inc/$(1).sid : $(call gb_SdiTarget_get_target,$(1))
-
 endef
 
 define gb_SdiTarget_set_include
