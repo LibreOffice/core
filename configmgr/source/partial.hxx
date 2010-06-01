@@ -25,17 +25,47 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_DETAIL_CONFIGMGRDLLAPI_HXX
-#define INCLUDED_CONFIGMGR_DETAIL_CONFIGMGRDLLAPI_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_PARTIAL_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_PARTIAL_HXX
 
 #include "sal/config.h"
 
-#include "sal/types.h"
+#include <map>
+#include <set>
 
-#if defined OOO_DLLIMPLEMENTATION_CONFIGMGR
-#define OOO_DLLPUBLIC_CONFIGMGR SAL_DLLPUBLIC_EXPORT
-#else
-#define OOO_DLLPUBLIC_CONFIGMGR SAL_DLLPUBLIC_IMPORT
-#endif
+#include "boost/noncopyable.hpp"
+
+#include "path.hxx"
+
+namespace rtl { class OUString; }
+
+namespace configmgr {
+
+class Partial: private boost::noncopyable {
+public:
+    enum Containment { CONTAINS_NOT, CONTAINS_SUBNODES, CONTAINS_NODE };
+
+    Partial(
+        std::set< rtl::OUString > const & includedPaths,
+        std::set< rtl::OUString > const & excludedPaths);
+
+    ~Partial();
+
+    Containment contains(Path const & path) const;
+
+private:
+    struct Node {
+        typedef std::map< rtl::OUString, Node > Children;
+
+        Node(): startInclude(false) {}
+
+        Children children;
+        bool startInclude;
+    };
+
+    Node root_;
+};
+
+}
 
 #endif
