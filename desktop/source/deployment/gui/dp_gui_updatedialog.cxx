@@ -280,7 +280,6 @@ private:
         dp_gui::UpdateData const & data, ::rtl::OUString const & version = ::rtl::OUString()) const;
 
     void prepareUpdateData(
-        ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > const & package,
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & updateInfo,
         UpdateDialog::DisabledUpdate & out_du,
         dp_gui::UpdateData & out_data) const;
@@ -415,7 +414,7 @@ void UpdateDialog::Thread::execute()
     for (Map::iterator i(map.begin()); i != map.end(); ++i)
     {
         //determine if online updates meet the requirements
-        prepareUpdateData(i->second.package, i->second.info,
+        prepareUpdateData(i->second.info,
                           i->second.disableUpdate, i->second.updateData);
 
         //determine if the update is installed in the user or shared repository
@@ -613,7 +612,6 @@ void UpdateDialog::Thread::getOwnUpdateInformation(
 /** out_data will only be filled if all dependencies are ok.
  */
 void UpdateDialog::Thread::prepareUpdateData(
-    css::uno::Reference< css::deployment::XPackage > const & package,
     css::uno::Reference< css::xml::dom::XNode > const & updateInfo,
     UpdateDialog::DisabledUpdate & out_du,
     dp_gui::UpdateData & out_data) const
@@ -648,21 +646,22 @@ bool UpdateDialog::Thread::update(
     UpdateDialog::DisabledUpdate const & du,
     dp_gui::UpdateData const & data) const
 {
+    bool ret = false;
     if (du.unsatisfiedDependencies.getLength() == 0)
     {
         vos::OGuard g(Application::GetSolarMutex());
         if (!m_stop) {
             m_dialog.addEnabledUpdate(getUpdateDisplayString(data), data);
         }
-        return !m_stop;
+        ret = !m_stop;
     } else {
         vos::OGuard g(Application::GetSolarMutex());
         if (!m_stop) {
                 m_dialog.addDisabledUpdate(du);
         }
-        return !m_stop;
+        ret = !m_stop;
     }
-    return true;
+    return ret;
 }
 
 // UpdateDialog ----------------------------------------------------------

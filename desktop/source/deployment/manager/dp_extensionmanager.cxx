@@ -251,7 +251,7 @@ void ExtensionManager::addExtensionsToMap(
 ::std::list<Reference<deploy::XPackage> >
     ExtensionManager::getExtensionsWithSameId(
         OUString const & identifier, OUString const & fileName,
-        Reference< ucb::XCommandEnvironment> const & xCmdEnv)
+        Reference< ucb::XCommandEnvironment> const & /*xCmdEnv*/)
 
 {
     ::std::list<Reference<deploy::XPackage> > extensionList;
