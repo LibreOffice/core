@@ -242,8 +242,8 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "Alignment" ),
                   PROP_LEGEND_ALIGNMENT,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendPosition * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()

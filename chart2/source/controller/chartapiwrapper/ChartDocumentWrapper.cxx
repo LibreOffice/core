@@ -170,20 +170,20 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "HasMainTitle" ),
                   PROP_DOCUMENT_HAS_MAIN_TITLE,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "HasSubTitle" ),
                   PROP_DOCUMENT_HAS_SUB_TITLE,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "HasLegend" ),
                   PROP_DOCUMENT_HAS_LEGEND,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     // really needed?
     rOutProperties.push_back(
@@ -196,8 +196,8 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "DataSourceLabelsInFirstColumn" ),
                   PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //add-in
     rOutProperties.push_back(
@@ -223,7 +223,8 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "RefreshAddInAllowed" ),
                   PROP_DOCUMENT_UPDATE_ADDIN,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::TRANSIENT ));
 
     // table:null-date // i99104
     rOutProperties.push_back(

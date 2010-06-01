@@ -1,7 +1,5 @@
 #i83851
 sch.ChXChartDocument::com::sun::star::frame::XModel
-#i83832
-sch.ChXChartDocument::com::sun::star::beans::XPropertySet
 #i83833
 sch.ChXChartDocument::com::sun::star::chart::XChartDocument
 #i83834
