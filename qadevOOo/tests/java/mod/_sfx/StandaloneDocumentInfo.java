@@ -87,7 +87,7 @@ public class StandaloneDocumentInfo extends TestCase {
         destUrl = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) +
             "SfxStandaloneDocInfoObject.sdw";
 
-        utils.overwriteFile((XMultiServiceFactory)tParam.getMSF(), srcUrl, destUrl) ;
+        utils.doOverwriteFile((XMultiServiceFactory)tParam.getMSF(), srcUrl, destUrl) ;
     }
 
     /**
