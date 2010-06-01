@@ -59,7 +59,7 @@ public class HTMLResult
             catch (java.io.IOException e)
             {
                 e.printStackTrace();
-                GlobalLogWriter.get().println("ERROR: Can't create HTML Outputter");
+                GlobalLogWriter.println("ERROR: Can't create HTML Outputter");
                 // return null;
             }
             // m_sFilename = sFilename;
