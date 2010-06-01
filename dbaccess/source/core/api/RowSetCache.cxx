@@ -170,6 +170,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     catch(const Exception&)
     {
     }
+    _xRs->beforeFirst();
 
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
