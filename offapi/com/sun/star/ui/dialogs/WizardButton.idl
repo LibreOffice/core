@@ -37,6 +37,8 @@ module com { module sun { module star { module ui { module dialogs {
  */
 constants WizardButton
 {
+    /// denotes none of the buttons in the wizard
+    const short NONE = 0;
     /// denotes the button used to travel forward through the wizard
     const short NEXT = 1;
     /// denotes the button used to travel backward through the wizard
