@@ -32,6 +32,7 @@
 #include "oox/drawingml/color.hxx"
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <boost/shared_ptr.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "tokens.hxx"
 #include <vector>
 #include <map>
@@ -43,9 +44,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
-#ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
@@ -69,19 +68,19 @@ public:
     virtual ~CustomShapeProperties();
 
     void apply( const CustomShapePropertiesPtr& );
-    void pushToPropSet( const ::oox::core::FilterBase& rFilterBase,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
+    void pushToPropSet( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape) const;
 
     void setShapePresetType( const rtl::OUString& rShapePresetType ){ maShapePresetType = rShapePresetType; };
     std::vector< CustomShapeGuide >& getAdjustmentValues(){ return maAdjustmentValues; };
 
     double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
-
+    ::basegfx::B2DPolyPolygon& getPolygon() { return maPolygon; }
 private:
 
     rtl::OUString                   maShapePresetType;
     std::vector< CustomShapeGuide > maAdjustmentValues;
+    ::basegfx::B2DPolyPolygon maPolygon;
 };
 
 } }

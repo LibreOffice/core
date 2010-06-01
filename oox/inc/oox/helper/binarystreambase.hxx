@@ -38,7 +38,8 @@ typedef ::com::sun::star::uno::Sequence< sal_Int8 > StreamDataSequence;
 
 // ============================================================================
 
-/** Base interface for seekable binary stream classes. */
+/** Base interface for binary stream classes. Implemenetations may or may not
+    support seeking the stream. */
 class BinaryStreamBase
 {
 public:
@@ -46,11 +47,14 @@ public:
 
     /** Derived classes return whether the stream is seekable. Default: false. */
     virtual bool        isSeekable() const;
-    /** Derived classes returns the size of the stream, if seekable, otherwise/default: -1. */
+    /** Derived classes return the size of the stream, if possible,
+        otherwise/default: -1. May return something for unseekable streams. */
     virtual sal_Int64   getLength() const;
-    /** Derived classes return the current stream position, if seekable, otherwise/default: -1. */
+    /** Derived classes return the current stream position, if possible,
+        otherwise/default: -1. May return something for unseekable streams. */
     virtual sal_Int64   tell() const;
-    /** Derived classes implement seeking the stream to the passed position, if seekable. */
+    /** Derived classes implement seeking the stream to the passed position, if
+        the stream is seekable. */
     virtual void        seek( sal_Int64 nPos );
 
     /** Returns true, if the stream position is invalid (EOF). This flag turns
@@ -63,6 +67,9 @@ public:
     inline void         seekToStart() { seek( 0 ); }
     /** Seeks the stream to the end, if stream is seekable. */
     inline void         seekToEnd() { seek( getLength() ); }
+    /** Seeks the stream forward to a position that is a multiple of the passed
+        block size, relative to the passed stream position, if stream is seekable. */
+    void                alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos = 0 );
 
 protected:
     inline explicit     BinaryStreamBase() : mbEof( false ) {}
