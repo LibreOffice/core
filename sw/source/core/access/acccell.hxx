@@ -26,12 +26,12 @@
  ************************************************************************/
 #ifndef _ACCCELL_HXX
 #define _ACCCELL_HXX
-#ifndef _ACCCONTEXT_HXX
+
 #include "acccontext.hxx"
-#endif
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
 class SwCellFrm;
+class SwFrmFmt;
 
 class SwAccessibleCell : public SwAccessibleContext,
                   ::com::sun::star::accessibility::XAccessibleValue
