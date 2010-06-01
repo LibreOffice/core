@@ -27,7 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <memory>
+
 #include "unointerfacetouniqueidentifiermapper.hxx"
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -43,9 +47,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "PropertySetMerger.hxx"
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include "sdxmlexp_impl.hxx"
 #include <xmloff/families.hxx>
@@ -75,6 +77,8 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
 :   mrExport( rExp ),
     mnNextUniqueShapeId(1),
+    maShapesInfos(),
+    maCurrentShapesIter(maShapesInfos.end()),
     mbExportLayer( sal_False ),
     // #88546# init to FALSE
     mbHandleProgressBar( sal_False ),
@@ -539,6 +543,38 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+
+
+    ::std::auto_ptr< SvXMLElementExport >  mpHyperlinkElement;
+
+    // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
+    // does not support document events
+    if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::E_DRAW) ) try
+    {
+        presentation::ClickAction eAction = presentation::ClickAction_NONE;
+        xSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("OnClick"))) >>= eAction;
+
+        if( (eAction == presentation::ClickAction_DOCUMENT) ||
+            (eAction == presentation::ClickAction_BOOKMARK) )
+        {
+            OUString sURL;
+            xSet->getPropertyValue(msBookmark) >>= sURL;
+
+            if( sURL.getLength() )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                mpHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, sal_True, sal_True) );
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR("XMLShapeExport::exportShape(): exception during hyperlink export");
+    }
+
+
     if( xSet.is() )
         xSet->getPropertyValue(msZIndex) >>= nZIndex;
 
@@ -640,7 +676,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
         if( rShapeId.getLength() )
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, rShapeId );
+        {
+            mrExport.AddAttributeIdLegacy(XML_NAMESPACE_DRAW, rShapeId);
+        }
     }
 
     // --------------------------
@@ -847,6 +885,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
     }
+
+    mpHyperlinkElement.reset();
 
     // #97489# #97111#
     // if there was an error and no element for the shape was exported

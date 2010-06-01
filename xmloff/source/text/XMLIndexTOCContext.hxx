@@ -73,9 +73,6 @@ class XMLIndexTOCContext : public SvXMLImportContext
 
     enum IndexTypeEnum eIndexType;
 
-    /** source element name (for CreateChildContext) */
-    const sal_Char* pSourceElementName;
-
     sal_Bool bValid;
 
     SvXMLImportContextRef xBodyContextRef;

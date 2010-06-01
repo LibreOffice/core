@@ -181,6 +181,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
 
         void RemoveControllers();
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
+        sal_Int32 RetrievePropertiesFromCommand( const rtl::OUString& aCmdURL );
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropsForCommand( const ::rtl::OUString& rCmdURL );
         void CreateControllers();
         void UpdateControllers();
         void AddFrameActionListener();
