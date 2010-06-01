@@ -139,6 +139,7 @@
     $html = '';
     @ignored_errors = ();
     %incompatibles = ();
+    %skip_modules = ();
     %exclude_branches = ();
     $only_platform = ''; # the only platform to prepare
     $only_common = ''; # the only common output tree to delete when preparing
@@ -574,10 +575,7 @@ sub get_parent_deps {
     my @unresolved_parents = ($prj_dir);
     my %skipped_branches = ();
     while (my $module = pop(@unresolved_parents)) {
-        if (defined $exclude_branches{$module}) {
-            $skipped_branches{$module}++;
-            next;
-        };
+        next if (defined $$deps_hash{$module});
         my %parents_deps_hash = ();
         foreach (get_parents_array($module)) {
             if (defined $exclude_branches{$_}) {
@@ -596,6 +594,11 @@ sub get_parent_deps {
     check_deps_hash($deps_hash);
     foreach (keys %skipped_branches) {
         print $echo . "Skipping module's $_ branch\n";
+        delete $exclude_branches{$_};
+    };
+    my @missing_branches = keys %exclude_branches;
+    if (scalar @missing_branches) {
+        print_error("For $prj_dir branche(s): \"@missing_branches\" not found\n");
     };
 };
 
@@ -629,18 +632,18 @@ sub expand_dependencies {
 };
 
 #
-# This procedure fills out the %reversed_dependencies hash,
-# the hash contaninig the info about modules "waiting" for the module
+# This procedure fills the second hash with reversed dependencies,
+# ie, with info about modules "waiting" for the module
 #
 sub reverse_dependensies {
-    my $deps_hash = shift;
+    my ($deps_hash, $reversed) = @_;
     foreach my $module (keys %$deps_hash) {
         foreach (keys %{$$deps_hash{$module}}) {
-            if (defined $reversed_dependencies{$_}) {
-                ${$reversed_dependencies{$_}}{$module}++
+            if (defined $$reversed{$_}) {
+                ${$$reversed{$_}}{$module}++
             } else {
                 my %single_module_dep_hash = ($module => 1);
-                $reversed_dependencies{$_} = \%single_module_dep_hash;
+                $$reversed{$_} = \%single_module_dep_hash;
             };
         };
     };
@@ -659,8 +662,12 @@ sub build_all {
         };
         modules_classify(keys %global_deps_hash);
         expand_dependencies (\%global_deps_hash);
-#        prepare_build_from(\%global_deps_hash) if (scalar keys %incompatibles);
-        prepare_incompatible_build(\%global_deps_hash) if ($incompatible);
+        prepare_incompatible_build(\%global_deps_hash) if ($incompatible && (!$build_from_with_branches));
+        if ($build_from_with_branches) {
+            my %reversed_full_deps_hash = ();
+            reverse_dependensies(\%global_deps_hash, \%reversed_full_deps_hash);
+            prepare_build_from_with_branches(\%global_deps_hash, \%reversed_full_deps_hash);
+        }
         if ($build_all_cont || $build_since) {
             prepare_build_all_cont(\%global_deps_hash);
         };
@@ -677,13 +684,13 @@ sub build_all {
                 print_error("There are modules:\n@missing_modules\n\nthat should be built, but they are not activated. Please, verify your $source_config_file.\n");
             };
         };
-        foreach my $module (%dead_parents) {
+        foreach my $module (keys %dead_parents, keys %skip_modules) {
             remove_from_dependencies($module, \%global_deps_hash);
             delete ($global_deps_hash{$module}) if (defined $global_deps_hash{$module});
         };
         store_weights(\%global_deps_hash);
         backup_deps_hash(\%global_deps_hash, \%global_deps_hash_backup);
-        reverse_dependensies(\%global_deps_hash_backup);
+        reverse_dependensies(\%global_deps_hash_backup, \%reversed_dependencies);
         $modules_number = scalar keys %global_deps_hash;
         initialize_html_info($_) foreach (keys %global_deps_hash);
         if ($processes_to_run) {
@@ -1416,7 +1423,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
@@ -1432,7 +1439,8 @@ sub usage {
     print STDERR "        --exclude_branch_from    - exclude module(s) and its branch from the build\n";
     print STDERR "        --mode OOo   - build only projects needed for OpenOffice.org\n";
     print STDERR "        --prepare    - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
-    print STDERR "        --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
+    print STDERR "        --with_branches- the same as \"--from\" but with build all projects in neighbour branches\n";
+    print STDERR "        --skip       - do not build certain module(s)\n";
     print STDERR "        --since      - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
     print STDERR "        --checkmodules      - check if all required parent projects are availlable\n";
     print STDERR "        --show       - show what is going to be built\n";
@@ -1487,12 +1495,14 @@ sub get_options {
         $arg =~ /^--dlv_switch$/    and $dlv_switch = shift @ARGV    and next;
         $arg =~ /^--file$/        and $cmd_file = shift @ARGV             and next;
         $arg =~ /^-F$/        and $cmd_file = shift @ARGV             and next;
+        $arg =~ /^--skip$/    and get_modules_passed(\%skip_modules)      and next;
 
-        $arg =~ /^--with_branches$/        and $build_all_parents = 1
-                                and $build_from_with_branches = shift @ARGV         and next;
-        $arg =~ /^-b$/        and $build_all_parents = 1
-                                and $build_from_with_branches = shift @ARGV         and next;
-
+        if ($arg =~ /^--with_branches$/ || $arg =~ /^-b$/) {
+                                    $build_from_with_branches = 1;
+                                    $build_all_parents = 1;
+                                    get_modules_passed(\%incompatibles);
+                                    next;
+        };
         $arg =~ /^--all:(\S+)$/ and $build_all_parents = 1
                                 and $build_all_cont = $1            and next;
         $arg =~ /^-a:(\S+)$/ and $build_all_parents = 1
@@ -1556,8 +1566,12 @@ sub get_options {
         print_error("\"--html_path\" switch is used only with \"--html\"") if ($html_path);
         print_error("\"--dontgraboutput\" switch is used only with \"--html\"") if ($dont_grab_output);
     };
+    if ((scalar keys %exclude_branches) && !$build_all_parents) {
+        print_error("\"--exclude_branch_from\" is not applicable for one module builds!!");
+    };
     $grab_output = 0 if ($dont_grab_output);
     print_error('Switches --with_branches and --all collision') if ($build_from_with_branches && $build_all_cont);
+    print_error('Switch --skip is for building multiple modules only!!') if (!$build_all_parents);
 #    print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
     print_error('Switches --with_branches and --since collision') if ($build_from_with_branches && $build_since);
     if ($show) {
@@ -2143,12 +2157,12 @@ sub modules_classify {
 
 #
 # This procedure provides consistency for cws
-# and optimized build (ie in case of -with_branches, -all:prj_name
+# and optimized build (ie in case of --with_branches, -all:prj_name
 # and -since switches)
 #
 sub provide_consistency {
     check_dir();
-    foreach $var_ref (\$build_from_with_branches, \$build_all_cont, \$build_since) {
+    foreach $var_ref (\$build_all_cont, \$build_since) {
         if ($$var_ref) {
             return if (defined $module_paths{$$var_ref});
             print_error("Cannot find module '$$var_ref'", 9);
@@ -2293,6 +2307,20 @@ sub fix_permissions {
      chmod '0664', $file;
 };
 
+sub prepare_build_from_with_branches {
+    ($full_deps_hash, $reversed_full_deps_hash) = @_;
+    foreach my $prerequisite (keys %$full_deps_hash) {
+        foreach my $dependent_module (keys %incompatibles) {
+            if (defined ${$$reversed_full_deps_hash{$prerequisite}}{$dependent_module}) {
+                remove_from_dependencies($prerequisite, $full_deps_hash);
+                delete $$full_deps_hash{$prerequisite};
+#                print "Removed $prerequisite\n";
+                last;
+            };
+        };
+    };
+};
+
 #
 # Removes projects which it is not necessary to build
 # in incompatible build
@@ -2364,21 +2392,6 @@ sub prepare_incompatible_build {
     }
     do_exit(0) if ($prepare);
 };
-
-#
-# Removes projects which it is not necessary to build
-# with -with_branches switch
-#
-#sub prepare_build_from {
-#    my ($prj, $deps_hash);
-#    $deps_hash = shift;
-#    my %from_deps_hash = ();   # hash of dependencies of the -from project
-#    get_parent_deps($build_from_with_branches, \%from_deps_hash);
-#    foreach $prj (keys %from_deps_hash) {
-#        delete $$deps_hash{$prj};
-#        remove_from_dependencies($prj, $deps_hash);
-#    };
-#};
 
 #
 # Removes projects which it is not necessary to build
