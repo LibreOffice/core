@@ -32,6 +32,7 @@
 #include "oox/drawingml/color.hxx"
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <boost/shared_ptr.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "tokens.hxx"
 #include <vector>
 #include <map>
@@ -74,11 +75,12 @@ public:
     std::vector< CustomShapeGuide >& getAdjustmentValues(){ return maAdjustmentValues; };
 
     double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
-
+    ::basegfx::B2DPolyPolygon& getPolygon() { return maPolygon; }
 private:
 
     rtl::OUString                   maShapePresetType;
     std::vector< CustomShapeGuide > maAdjustmentValues;
+    ::basegfx::B2DPolyPolygon maPolygon;
 };
 
 } }
