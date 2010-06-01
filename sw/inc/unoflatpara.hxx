@@ -29,6 +29,7 @@
 #define _UNOFLATPARA_HXX
 
 #include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <calbck.hxx>
@@ -51,9 +52,10 @@ class SwDoc;
  ******************************************************************************/
 
 class SwXFlatParagraph:
-    public ::cppu::WeakImplHelper1
+    public ::cppu::WeakImplHelper2
     <
-        css::text::XFlatParagraph
+        css::text::XFlatParagraph,
+        css::lang::XUnoTunnel
     >,
     public SwXTextMarkup
 {
@@ -84,6 +86,12 @@ public:
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getLanguagePortions() throw (css::uno::RuntimeException);
 
     const SwTxtNode* getTxtNode() const;
+
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence< sal_Int8 >& rId)
+        throw (css::uno::RuntimeException);
 
 private:
     SwXFlatParagraph( const SwXFlatParagraph & ); // not defined
