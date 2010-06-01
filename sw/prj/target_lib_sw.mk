@@ -35,8 +35,8 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/inc/pch \
     -I$(SRCDIR)/sw/inc \
-    -I$(WORKDIR)/inc/sw/sdi \
-    -I$(WORKDIR)/inc/sw/ \
+    -I$(WORKDIR)/SdiTarget/sw/sdi \
+    -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \

@@ -28,14 +28,14 @@
 $(eval $(call gb_Library_Library,swui))
 
 $(eval $(call gb_Library_set_include,swui,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/inc/sw/sdi \
-    -I$(WORKDIR)/inc/sw/ \
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/inc/pch \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(WORKDIR)/SdiTarget/sw/sdi \
+    -I$(WORKDIR)/Misc/sw \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/sw \
     -I$(OUTDIR)/inc/offuh \
 ))
@@ -166,21 +166,21 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/utlui/swrenamexnameddlg \
 ))
 
-$(WORKDIR)/inc/sw/swuilib.hxx :
+$(WORKDIR)/Misc/sw/swuilib.hxx :
     $(call gb_Helper_announce,Creating swuilib.hxx ...)
     mkdir -p `dirname $@` && echo "#define DLL_NAME \"$(notdir $(call gb_Library_get_target,swui))\"" > $@
 
-.PHONY : $(WORKDIR)/Clean/inc/sw/swuilib.hxx
+.PHONY : $(WORKDIR)/Clean/Misc/sw/swuilib.hxx
 $(WORKDIR)/Clean/inc/sw/swuilib.hxx :
     $(call gb_Helper_announce,Cleaning up swuilib.hxx ...)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(WORKDIR)/inc/sw/swuilib.hxx)
 
 
-$(call gb_CxxObject_get_dep_target,sw/source/ui/dialog/swabstdlg) : $(WORKDIR)/inc/sw/swuilib.hxx
-$(call gb_CxxObject_get_target,sw/source/ui/dialog/swabstdlg) : $(WORKDIR)/inc/sw/swuilib.hxx
+$(call gb_CxxObject_get_dep_target,sw/source/ui/dialog/swabstdlg) : $(WORKDIR)/Misc/sw/swuilib.hxx
+$(call gb_CxxObject_get_target,sw/source/ui/dialog/swabstdlg) : $(WORKDIR)/Misc/sw/swuilib.hxx
 
-$(call gb_Library_get_clean_target,swui) : $(WORKDIR)/Clean/inc/sw/swuilib.hxx
+$(call gb_Library_get_clean_target,swui) : $(WORKDIR)/Clean/Misc/sw/swuilib.hxx
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,swui,\
