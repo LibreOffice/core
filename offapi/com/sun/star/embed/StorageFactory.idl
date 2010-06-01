@@ -41,7 +41,7 @@
 /** The <type>StorageFactory</type> is a service that allows to create
     a storage based on either stream or URL.
  */
-service StorageFactory
+published service StorageFactory
 {
     // ----------------------------------------------------------------------
     /** A storage can be created through this interface.
@@ -82,13 +82,22 @@ service StorageFactory
 
             <dt>parameter 3</dt>
             <dd>
-                      allowes to provide
+                      this paramenter represents
+                      <type scope="com::sun::star::uno">Any</type>
+                      containing a sequence of
+                      <type scope="com::sun::star::beans">PropertyValue</type>.<br>
+                      The parameter can contain entries from
                       <type scope="com::sun::star::document">MediaDescryptor</type>
-                      to the storage so some parts can be used for
+                      to transport some document info during the storage
                       initialization, it can be for example
                       <type scope="com::sun::star::task">XInteractionHandler</type>
                       implementation, password for the storage and repair
-                      package flag.
+                      package flag.<br>
+                      Additionaly the parameter might contain property with the name
+                      "StorageFormat" that can take values from
+                      <type scope="com::sun::star::embed">StorageFormats</type>.
+                      If the property is not provided a storage of package format
+                      is created.
             </dd>
         </dl>
 

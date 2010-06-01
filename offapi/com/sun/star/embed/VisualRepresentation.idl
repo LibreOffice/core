@@ -39,7 +39,7 @@
 
 /** can contain a graphical representation in an arbitrary format.
  */
-struct VisualRepresentation
+published struct VisualRepresentation
 {
     //-------------------------------------------------------------------------
     /** The format of the visual representation.
