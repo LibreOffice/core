@@ -1,6 +1,0 @@
-# 
-# Spreadsheet sheet reference test.
-# 
-TEST||MINICALC|c_sheetreference
-MINICALC_ENTER_CELL|2|0|=Sheet3.B1\n
-SLEEP|5
