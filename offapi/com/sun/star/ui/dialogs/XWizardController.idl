@@ -65,18 +65,6 @@ interface XWizardController
     */
     void    onActivatePage( [in] short PageId );
 
-    /** called when the current page is about to be left
-
-        <p>In opposite to <member>XWizardPage::commitPage</member>, <code>confirmDeactivatePage</code> is intended for checking
-        conditions which involve more than the state of the currently active page.</p>
-
-        @param PageId
-            the ID of the page which is about to be left.
-        @param Reason
-            is one of the <type>WizardTravelType</type> contants denoting the reason why the page is about to be left.
-    */
-    boolean confirmDeactivatePage( [in] short PageId, [in] short Reason );
-
     /** called when a page in the wizard is being deactivated
     */
     void    onDeactivatePage( [in] short PageId );
