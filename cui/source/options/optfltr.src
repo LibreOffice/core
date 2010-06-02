@@ -147,19 +147,19 @@ TabPage RID_OFAPAGE_MSFILTEROPT2
     };
     String ST_CHG_MATH
     {
-        Text [ en-US ] = "MathType to %PRODUCTNAME Math / %PRODUCTNAME Math to MathType";
+        Text [ en-US ] = "MathType to %PRODUCTNAME Math or reverse";
     };
     String ST_CHG_WRITER
     {
-        Text [ en-US ] = "WinWord to %PRODUCTNAME Writer / %PRODUCTNAME Writer to WinWord";
+        Text [ en-US ] = "WinWord to %PRODUCTNAME Writer or reverse";
     };
     String ST_CHG_CALC
     {
-        Text [ en-US ] = "Excel to %PRODUCTNAME Calc / %PRODUCTNAME Calc to Excel";
+        Text [ en-US ] = "Excel to %PRODUCTNAME Calc or reverse";
     };
     String ST_CHG_IMPRESS
     {
-        Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress / %PRODUCTNAME Impress to PowerPoint";
+        Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse";
     };
 };
 
