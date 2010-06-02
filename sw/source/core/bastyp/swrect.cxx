@@ -242,7 +242,7 @@ void SwRect::Justify()
     }
     if ( m_Size.getWidth() < 0 )
     {
-        m_Point.Y() += m_Size.getWidth() + 1;
+        m_Point.X() += m_Size.getWidth() + 1;
         m_Size.setWidth(-m_Size.getWidth());
     }
 }
