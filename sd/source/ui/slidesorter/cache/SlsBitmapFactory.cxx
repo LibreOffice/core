@@ -35,11 +35,12 @@
 #include "view/SlideSorterView.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
+#include <drawdoc.hxx>
+#include "DrawDocShell.hxx"
 #include <svx/svdtypes.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
-
 #include <vcl/pngwrite.hxx>
 
 const static sal_Int32 gnSuperSampleFactor (2);
@@ -80,7 +81,12 @@ Bitmap BitmapFactory::CreateBitmap (
         aSize.Height() *= gnSuperSampleFactor;
     }
 
-    Bitmap aPreview (maRenderer.RenderPage (&rPage, aSize, String()).GetBitmapEx().GetBitmap());
+    Bitmap aPreview (maRenderer.RenderPage (
+        &rPage,
+        aSize,
+        String(),
+        true,
+        false).GetBitmapEx().GetBitmap());
     if (bDoSuperSampling && gbAllowSuperSampling)
     {
         aPreview.Scale(rPixelSize, BMP_SCALE_INTERPOLATE);

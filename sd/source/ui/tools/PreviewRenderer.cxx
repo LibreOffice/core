@@ -42,6 +42,8 @@
 #include <editeng/editstat.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -51,6 +53,26 @@ namespace sd {
 
 const int PreviewRenderer::snSubstitutionTextSize = 11;
 const int PreviewRenderer::snFrameWidth = 1;
+
+namespace {
+    /** This incarnation of the ViewObjectContactRedirector filters away all
+        PageObj objects, unconditionally.
+    */
+    class ViewRedirector : public ::sdr::contact::ViewObjectContactRedirector
+    {
+    public:
+        ViewRedirector (void);
+        virtual ~ViewRedirector (void);
+        virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+            const sdr::contact::ViewObjectContact& rOriginal,
+                const sdr::contact::DisplayInfo& rDisplayInfo);
+    };
+}
+
+
+
+
+//===== PreviewRenderer =======================================================
 
 PreviewRenderer::PreviewRenderer (
     OutputDevice* pTemplate,
@@ -90,7 +112,8 @@ Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     const sal_Int32 nWidth,
     const String& rSubstitutionText,
-    const bool bObeyHighContrastMode)
+    const bool bObeyHighContrastMode,
+    const bool bDisplayPresentationObjects)
 {
     if (pPage != NULL)
     {
@@ -100,7 +123,12 @@ Image PreviewRenderer::RenderPage (
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         const sal_Int32 nHeight (sal::static_int_cast<sal_Int32>(
             (nWidth - 2*nFrameWidth) / nAspectRatio + 2*nFrameWidth + 0.5));
-        return RenderPage (pPage, Size(nWidth,nHeight), rSubstitutionText, bObeyHighContrastMode);
+        return RenderPage (
+            pPage,
+            Size(nWidth,nHeight),
+            rSubstitutionText,
+            bObeyHighContrastMode,
+            bDisplayPresentationObjects);
     }
     else
         return Image();
@@ -113,7 +141,8 @@ Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     Size aPixelSize,
     const String& rSubstitutionText,
-    const bool bObeyHighContrastMode)
+    const bool bObeyHighContrastMode,
+    const bool bDisplayPresentationObjects)
 {
     Image aPreview;
 
@@ -121,10 +150,10 @@ Image PreviewRenderer::RenderPage (
     {
         try
         {
-            if (Initialize (pPage, aPixelSize, bObeyHighContrastMode))
+            if (Initialize(pPage, aPixelSize, bObeyHighContrastMode))
             {
-                PaintPage (pPage);
-                PaintSubstitutionText (rSubstitutionText);
+                PaintPage(pPage, bDisplayPresentationObjects);
+                PaintSubstitutionText(rSubstitutionText);
                 PaintFrame();
 
                 Size aSize (mpPreviewDevice->GetOutputSizePixel());
@@ -165,7 +194,7 @@ Image PreviewRenderer::RenderSubstitution (
             ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ViewShell::OUTPUT_DRAWMODE_COLOR);
 
-        // Set a map mode makes a typical substitution text completely
+        // Set a map mode that makes a typical substitution text completely
         // visible.
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
         aMapMode.SetMapUnit(MAP_100TH_MM);
@@ -287,7 +316,9 @@ void PreviewRenderer::Cleanup (void)
 
 
 
-void PreviewRenderer::PaintPage (const SdPage* pPage)
+void PreviewRenderer::PaintPage (
+    const SdPage* pPage,
+    const bool bDisplayPresentationObjects)
 {
     // Paint the page.
     Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
@@ -295,18 +326,22 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
 
     // Turn off online spelling and redlining.
     SdrOutliner* pOutliner = NULL;
-    ULONG nOriginalControlWord = 0;
+    ULONG nSavedControlWord (0);
     if (mpDocShellOfView!=NULL && mpDocShellOfView->GetDoc()!=NULL)
     {
         pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
-        nOriginalControlWord = pOutliner->GetControlWord();
-        pOutliner->SetControlWord(
-            (nOriginalControlWord & ~EE_CNTRL_ONLINESPELLING));
+        nSavedControlWord = pOutliner->GetControlWord();
+        pOutliner->SetControlWord((nSavedControlWord & ~EE_CNTRL_ONLINESPELLING));
     }
+
+    // Use a special redirector to prevent PresObj shapes from being painted.
+    boost::scoped_ptr<ViewRedirector> pRedirector;
+    if ( ! bDisplayPresentationObjects)
+        pRedirector.reset(new ViewRedirector());
 
     try
     {
-        mpView->CompleteRedraw(mpPreviewDevice.get(), aRegion);
+        mpView->CompleteRedraw(mpPreviewDevice.get(), aRegion, pRedirector.get());
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
@@ -315,7 +350,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
 
     // Restore the previous online spelling and redlining states.
     if (pOutliner != NULL)
-        pOutliner->SetControlWord(nOriginalControlWord);
+        pOutliner->SetControlWord(nSavedControlWord);
 }
 
 
@@ -514,6 +549,58 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
+
+
+
+//===== ViewRedirector ========================================================
+
+namespace {
+
+ViewRedirector::ViewRedirector (void)
+{
+}
+
+
+
+
+ViewRedirector::~ViewRedirector (void)
+{
+}
+
+
+
+
+drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::DisplayInfo& rDisplayInfo)
+{
+    SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
+
+    if (pObject==NULL || pObject->GetPage() == NULL)
+    {
+        // not a SdrObject visualisation (maybe e.g. page) or no page
+        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+            rOriginal,
+            rDisplayInfo);
+    }
+
+    const bool bDoCreateGeometry (pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true));
+
+    if ( ! bDoCreateGeometry
+        && (pObject->GetObjInventor() != SdrInventor || pObject->GetObjIdentifier() != OBJ_PAGE))
+    {
+        return drawinglayer::primitive2d::Primitive2DSequence();
+    }
+
+    if (pObject->IsEmptyPresObj())
+        return drawinglayer::primitive2d::Primitive2DSequence();
+
+    return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+        rOriginal,
+        rDisplayInfo);
+}
+
+} // end of anonymous namespace
 
 
 } // end of namespace ::sd
