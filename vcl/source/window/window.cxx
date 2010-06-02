@@ -5333,7 +5333,6 @@ long Window::Notify( NotifyEvent& rNEvt )
         }
     }
 
-
     if ( !nRet )
     {
         if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
