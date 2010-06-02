@@ -68,7 +68,8 @@ SHL1STDLIBS= \
         $(RTLLIB)		\
         $(SALLIB)		\
         $(BASEGFXLIB)	\
-        $(SAXLIB)
+        $(SAXLIB)       \
+        $(XMLSCRIPTLIB)
 
 # link openssl, copied this bit from ucb/source/ucp/webdav/makefile.mk
 .IF "$(GUI)"=="WNT"
