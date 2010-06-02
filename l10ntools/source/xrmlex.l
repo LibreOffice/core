@@ -55,53 +55,54 @@ int bText=0;
 
 %%
 
-"<Readme"[^\>]*\> {
-	WorkOnTokenSet( XRM_README_START, yytext );
+"<p "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
-"</Readme>" {
-	WorkOnTokenSet( XRM_README_END, yytext );
-}
-
-"<apochelp"[^\>]*\> {
-	WorkOnTokenSet( XRM_README_START, yytext );
-}
-
-"</apochelp>" {
-	WorkOnTokenSet( XRM_README_END, yytext );
-}
-
-"<Section"[^\>]*\> {
-	WorkOnTokenSet( XRM_SECTION_START, yytext );
-}
-
-"</Section>" {
-	WorkOnTokenSet( XRM_SECTION_END, yytext );
-}
-
-"<Paragraph"[^\>]*\> {
-	WorkOnTokenSet( XRM_PARAGRAPH_START, yytext );
-}
-
-"</Paragraph>" {
-	WorkOnTokenSet( XRM_PARAGRAPH_END, yytext );
-}
-
-"<Text"[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START, yytext );
-}
-
-"</Text>" {
+"</p>" {
 	WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 
-"<List"[^\>]*\> {
-	WorkOnTokenSet( XRM_LIST_START, yytext );
+"<h1 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
-"</List>" {
-	WorkOnTokenSet( XRM_LIST_END, yytext );
+"</h1>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
+"<h2 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h2>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+"<h3 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h3>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+"<h4 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h4>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+"<h5 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h5>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+
+
+
+
+
 
 "<!--"	{
 	char c1 = 0, c2 = 0, c3 = input();

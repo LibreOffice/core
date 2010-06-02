@@ -268,7 +268,7 @@ extern FILE *GetXrmFile()
 int WorkOnTokenSet( int nTyp, char *pTokenText )
 /*****************************************************************************/
 {
-//  printf("Typ = %d , text = '%s'\n",nTyp , pTokenText );
+    //printf("Typ = %d , text = '%s'\n",nTyp , pTokenText );
     pParser->Execute( nTyp, pTokenText );
 
     return 1;
@@ -370,6 +370,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case XRM_TEXT_START:
 //          if ( sLocalized.GetChar( sLocalized.Len() - 1 ) == '1' ) {
+            //printf("hello world\n");
             if ( sLocalized ) {
 
                 ByteString sNewLID = GetAttribute( rToken, "id" );
@@ -605,8 +606,12 @@ void XRMResExport::EndOfText(
                 sOutput += sPath;
                 sOutput += "\t0\t";
                 sOutput += "readmeitem\t";
-                sOutput += pResData->sGId; sOutput += "\t";
-                sOutput += pResData->sId; sOutput += "\t\t\t0\t";
+                sOutput += pResData->sId;
+                // USE LID AS GID OR MERGE DON'T WORK
+                //sOutput += pResData->sGId;
+                sOutput += "\t";
+                sOutput += pResData->sId;
+                sOutput += "\t\t\t0\t";
                 sOutput += sCur;
                 sOutput += "\t";
 
@@ -662,17 +667,25 @@ void XRMResMerge::WorkOnText(
 /*****************************************************************************/
 {
     ByteString sLang( GetAttribute( rOpenTag, "xml:lang" ));
+    //ByteString gid("a");
 
     if ( pMergeDataFile ) {
         if ( !pResData ) {
             ByteString sPlatform( "" );
-            pResData = new ResData( sPlatform, GetGID() , sFilename );
+//          pResData = new ResData( sPlatform, GetGID() , sFilename );
+            pResData = new ResData( sPlatform, GetLID() , sFilename );
             pResData->sId = GetLID();
+
+//          pResData = new ResData( sPlatform, GetGID() , sFilename );
+//            pResData->sId = GetLID();
             pResData->sResTyp = "readmeitem";
         }
 
-            PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        //printf("xrmmerge:: Search gid=%s lid=%s filename=%s \n", pResData->sGId.GetBuffer(),pResData->sId.GetBuffer(),pResData->sFilename.GetBuffer()  );
+        //pMergeDataFile->Dump();
+        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
             if ( pEntrys ) {
+                //printf("found!!!\n");
                 ByteString sContent;
                 if ( Export::isAllowed( sLang ) &&
                     ( pEntrys->GetText(
