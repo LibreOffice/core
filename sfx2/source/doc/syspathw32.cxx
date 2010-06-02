@@ -36,6 +36,9 @@
 using namespace ::rtl;
 
 #ifdef WNT
+#ifdef _MSC_VER
+#pragma warning(disable:4917)
+#endif
 #include <shlobj.h>
 
 #define ALLOC(type, n) ((type *) HeapAlloc(GetProcessHeap(), 0, sizeof(type) * n ))
