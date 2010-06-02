@@ -353,8 +353,9 @@ SalXLib::SalXLib()
         nFDs_ = m_pTimeoutFDS[0] + 1;
     }
 
-    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
     m_bHaveSystemChildFrames        = false;
+    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
 }
 
 SalXLib::~SalXLib()
@@ -364,6 +365,7 @@ SalXLib::~SalXLib()
     close (m_pTimeoutFDS[1]);
 
     PopXErrorLevel();
+    XSetIOErrorHandler (m_aOrigXIOErrorHandler);
 }
 
 void SalXLib::PushXErrorLevel( bool bIgnore )
@@ -458,8 +460,6 @@ void SalXLib::Init()
         std::fflush( stderr );
         exit(0);
     }
-
-    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
 
     SalDisplay *pSalDisplay = new SalX11Display( pDisp );
 

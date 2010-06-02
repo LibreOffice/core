@@ -99,13 +99,16 @@ class JPEGWriter
     sal_Bool            bGreys;
     sal_Int32           nQuality;
 
+    bool*               pExpWasGrey;
+
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
 
     void*               GetScanline( long nY );
 
-                        JPEGWriter( SvStream& rOStm, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+                        JPEGWriter( SvStream& rOStm, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
+                                    bool* pExportWasGrey = NULL );
                         ~JPEGWriter() {};
 
     BOOL                Write( const Graphic& rGraphic );
@@ -119,6 +122,10 @@ public:
 
 BOOL ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 
-BOOL ExportJPEG( SvStream& rStream, const Graphic& rGraphic, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+BOOL ExportJPEG( SvStream& rStream,
+                 const Graphic& rGraphic,
+                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
+                 bool* pExportWasGrey = NULL
+                );
 
 #endif // _JPEG_HXX
