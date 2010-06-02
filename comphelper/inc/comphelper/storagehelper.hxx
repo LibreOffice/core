@@ -136,7 +136,8 @@ public:
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >(),
+            sal_Bool bRepairStorage = sal_False )
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
@@ -144,7 +145,8 @@ public:
             const ::rtl::OUString& aFormat,
             const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >(),
+            sal_Bool bRepairStorage = sal_False )
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
@@ -153,7 +155,8 @@ public:
             const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream,
             sal_Int32 nStorageMode = ::com::sun::star::embed::ElementModes::READWRITE,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >(),
+            sal_Bool bRepairStorage = sal_False )
         throw ( ::com::sun::star::uno::Exception );
 
     static sal_Bool IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed );

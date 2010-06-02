@@ -519,8 +519,10 @@ bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
 // =======================================================================
 
 ImplServerFontEntry::ImplServerFontEntry( ImplFontSelectData& rFSD )
-:   ImplFontEntry( rFSD ),
-    mpServerFont( NULL )
+:   ImplFontEntry( rFSD )
+,   mpServerFont( NULL )
+,   mbGotFontOptions( false )
+,   mbValidFontOptions( false )
 {}
 
 // -----------------------------------------------------------------------
