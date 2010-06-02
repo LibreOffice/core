@@ -299,6 +299,27 @@ namespace drawinglayer
                                     mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniTransparenceCandidate.getTransparence());
                                     bDrawTransparentUsed = true;
                                 }
+
+                                if(!bDrawTransparentUsed)
+                                {
+                                    const primitive2d::PolygonHairlinePrimitive2D* pPoHair = dynamic_cast< const primitive2d::PolygonHairlinePrimitive2D* >(xReference.get());
+
+                                    if(pPoHair && PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D == pPoHair->getPrimitive2DID())
+                                    {
+                                        // single transparent Hairline identified, use directly
+                                        const basegfx::BColor aHairColor(maBColorModifierStack.getModifiedColor(pPoHair->getBColor()));
+                                        mpOutputDevice->SetFillColor();
+                                        mpOutputDevice->SetLineColor(Color(aHairColor));
+
+                                        basegfx::B2DPolygon aLocalPolygon(pPoHair->getB2DPolygon());
+                                        aLocalPolygon.transform(maCurrentTransformation);
+
+                                        mpOutputDevice->DrawTransparent(
+                                            basegfx::B2DPolyPolygon(aLocalPolygon),
+                                            rUniTransparenceCandidate.getTransparence());
+                                        bDrawTransparentUsed = true;
+                                    }
+                                }
                             }
 
                             if(!bDrawTransparentUsed)

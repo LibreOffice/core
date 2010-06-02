@@ -943,14 +943,17 @@ namespace
             default : // case HATCH_SINGLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
+                break;
             }
             case HATCH_DOUBLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
+                break;
             }
             case HATCH_TRIPLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE;
+                break;
             }
         }
 
