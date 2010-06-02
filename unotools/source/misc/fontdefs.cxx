@@ -37,6 +37,7 @@ struct ImplLocalizedFontName
     const sal_Unicode*  mpLocalizedNames;
 };
 
+// TODO: where did the 0,0 delimiters come from? A single 0 should suffice...
 static sal_Unicode const aBatang[] = { 0xBC14, 0xD0D5, 0, 0 };
 static sal_Unicode const aBatangChe[] = { 0xBC14, 0xD0D5, 0xCCB4, 0, 0 };
 static sal_Unicode const aGungsuh[] = { 0xAD81, 0xC11C, 0, 0 };
@@ -181,7 +182,6 @@ static sal_Unicode const aHiraginoKakuGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 
 static sal_Unicode const aHiraginoKakuGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o','n',0};
 static sal_Unicode const aHiraginoMaruGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o',0};
 static sal_Unicode const aHiraginoMaruGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
-static sal_Unicode const aTimesNewRoman[] = { 0x5B8B, 0x4F53 };
 
 static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {
@@ -318,7 +318,6 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "hiraginokakugothicpron", aHiraginoKakuGothicProN },
 {   "hiraginomarugothicpro", aHiraginoMaruGothicPro },
 {   "hiraginomarugothicpron", aHiraginoMaruGothicProN },
-{   "timesnewroman",        aTimesNewRoman },
 {   NULL,                   NULL },
 };
 
@@ -517,8 +516,6 @@ void AddTokenFontName( String& rName, const String& rNewToken )
     if ( !ImplIsFontToken( rName, rNewToken ) )
         ImplAppendFontToken( rName, rNewToken );
 }
-
-
 
 // =======================================================================
 
