@@ -40,6 +40,7 @@ testcase tExtensionPublisher
         goto endsub
     endif
 
+    const EXTENSION_LIST_OFFSET = 1 ' French dictionary is usually listed before the test extensions
     ' Specification document
     ' http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt
     ' http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt
@@ -190,7 +191,7 @@ testcase tExtensionPublisher
                         cHasPublisher = hGetValueForKeyAsString( cConfigArray() , "has_publisher" )
                         cPublisher    = hGetValueForKeyAsString( cConfigArray() , "publisher" )
                         
-                        AvailableUpdatesList.select( iCurrentFile )
+                        AvailableUpdatesList.select( iCurrentFile + EXTENSION_LIST_OFFSET )
                         
                         if ( AvailableUpdatesList.getText() = cCurrentFileName ) then
                             printlog( "Testing extension: " & cCurrentFileName )
