@@ -403,7 +403,7 @@ bool PspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fT
         return false;
 }
 
-bool PspGraphics::drawPolyLine( const basegfx::B2DPolygon&, const basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/)
+bool PspGraphics::drawPolyLine( const basegfx::B2DPolygon&, double /*fTranspareny*/, const basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/)
 {
     // TODO: a PS printer can draw B2DPolyLines almost directly
     return false;

@@ -1089,7 +1089,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // draw a poly-polygon
-bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency)
+bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {
     // nothing to do for empty polypolygons
     const int nOrigPolyCount = rOrigPolyPoly.count();
@@ -1203,7 +1203,7 @@ bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTr
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin)
+bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double fTransparency, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin)
 {
     const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
 
@@ -1239,7 +1239,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
 
         // draw tesselation result
         const int nTrapCount = aB2DTrapVector.size();
-        const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, 0.0 );
+        const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
 
         // restore the original brush GC
         nBrushColor_ = aKeepBrushColor;
@@ -1271,7 +1271,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
-        bDrawOk = drawPolyPolygon( aOnePoly, 0.0 );
+        bDrawOk = drawPolyPolygon( aOnePoly, fTransparency );
         if( !bDrawOk )
             break;
     }
