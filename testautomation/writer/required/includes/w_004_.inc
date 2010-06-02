@@ -1162,34 +1162,169 @@ endcase
 '-----------------------------------------------------------
 
 testcase tInsertAllGraphicsFromFile
-    Dim i as integer
-    Dim quellpfad as string
-    Dim DieDatei as string
-    Dim Ziel( 5000 ) as String
-    printlog "Insert / Graphics / From File (all Formats)"
 
-    printlog " Open new document"
+    printlog( "Load files of all known graphics formats" )
+
+    dim iCurrentFile as integer
+    dim GraphicFile as String
+    dim Filtername as String
+
+    printlog( "Insert a sample of commonly used file formats into a writer document (not linked)" )
+
+    gApplication = "WRITER"
     Call hNewDocument
 
-    printlog " Insert all graphic formats from directory: global\input\graf_inp\"
-    quellpfad = ConvertPath(gtesttoolpath + "global\input\graf_inp\")
+    for iCurrentFile = 1 to 25
 
-    GetFileList(quellpfad, "*.*" , Ziel())
-    for i=1 to ListCount(Ziel())
-        if (gPlatform = "osx") AND (right(ziel(i),3) = "eps") then
-            qaerrorlog "#i100253# skipping eps"
-            i=i+1
+        ' MODIFY and ENABLE this SAMPLE snippet to exclude one fileformat from testing
+        '         if ( iCurrentFile = 7 ) AND (gtPlatform="x86") then
+        '             qaErrorLog("#<issue-id># crash on <platform> on loading <image-file>")
+        '             goto skipformat
+        '         endif
+        ' Note: Can be locale dependent!
+        if (iCurrentFile = 4) AND (gPlatform="osx") then
+            qaerrorlog("#i100253# crash on MacOS X on loading ball.eps")
+            goto skipformat
         endif
-        printlog "- Graphic: " + Right(Ziel(i),3) + "-Format"
-        Call hGrafikEinfuegen ( Ziel(i) )
-        Sleep 5
-        Call wTypeKeys("<Delete>")
-        Call gMouseDoubleClick (10,10)
-        Sleep 5
-    next i
 
-    printlog " Close active document"
+        Kontext "GrafikEinfuegenDlg"
+        if ( not GrafikEinfuegenDlg.exists() ) then
+            InsertGraphicsFromFile
+            Kontext "GrafikEinfuegenDlg"
+        endif
+
+        if ( GrafikEinfuegenDlg.Exists( 2 ) ) then
+            ' the list of files expected to be found in the samples directory
+            select case iCurrentFile
+                case 1  :  GraphicFile = "desp.bmp"
+                case 2  :  GraphicFile = "columbia.dxf"
+                case 3  :  GraphicFile = "extrud.emf"
+                case 4  :  GraphicFile = "ball.eps"
+                case 5  :  GraphicFile = "airshw.met"
+                case 6  :  GraphicFile = "eface.gif"
+                case 7  :  GraphicFile = "purzel.gif"         ' Animated Gif
+                case 8  :  GraphicFile = "borabora.jpg"
+                case 9  :  GraphicFile = "grafix1.pbm"
+                case 10 :  GraphicFile = "circle.pcx"
+                case 11 :  GraphicFile = "papagei1.pcd"
+                case 12 :  GraphicFile = "newtonme.pct"
+                case 13 :  GraphicFile = "grafix2.pgm"
+                case 14 :  GraphicFile = "obst.png"
+                case 15 :  GraphicFile = "london.ppm"
+                case 16 :  GraphicFile = "tiger.psd"
+                case 17 :  GraphicFile = "grafix3.ras"
+                case 18 :  GraphicFile = "mickym.sgf"
+                case 19 :  GraphicFile = "faxpfeil.sgv"
+                case 20 :  GraphicFile = "picture.svm"
+                case 21 :  GraphicFile = "pilz.tga"
+                case 22 :  GraphicFile = "stabler.tif"
+                case 23 :  GraphicFile = "krokodil.wmf"
+                case 24 :  GraphicFile = "grafix4.xbm"
+                case 25 :  GraphicFile = "papagei2.xpm"
+            end select
+
+            GraphicFile = ConvertPath (gTesttoolPath & "global\input\graf_inp\" & GraphicFile)
+            printlog( "Current file " + iCurrentFile + ": " & GraphicFile )
+            printlog( " * Set filter to <All formats>" )
+            DateiName.SetText( GraphicFile )
+            DateiTyp.Select( 1 )
+            WaitSlot()
+
+            printlog( " * Uncheck Preview- and Link-checkbox, load the file" )
+            Vorschau.unCheck
+            Verknuepfen.unCheck()
+            Oeffnen.click()
+            WaitSlot( 2000 )
+
+            Kontext "Active"
+            if ( Active.Exists() ) then
+                Warnlog( "Unexpected messagebox: " & Active.GetText() )
+                Warnlog( "Affected file: " & GraphicFile )
+                Active.OK
+            else
+                try
+                    EditCopy
+                    WaitSlot( 2000 )
+                    EditDeleteContents
+                    WaitSlot( 2000 )
+                catch
+                    Warnlog( "Graphic file not selected/Copy or Delete is disabled: " & GraphicFile )
+                    gMouseClick (90, 90)
+                endcatch
+            endif
+        else
+            warnlog( "Insert Graphics Dialog is not open, aborting" )
+            goto endsub
+        endif
+
+    skipformat:
+    next iCurrentFile
+
+    printlog( "" )
+    printlog( "Test the PCD-Filters directly (3 samples)" )
+
+    for iCurrentFile = 1 to 3
+
+        printlog( "" )
+
+        Kontext "GrafikEinfuegenDlg"
+        if ( not GrafikEinfuegenDlg.exists() ) then
+            InsertGraphicsFromFile
+            Kontext "GrafikEinfuegenDlg"
+        endif
+
+        if ( GrafikEinfuegenDlg.exists( 2 ) ) then
+
+            select case iCurrentFile
+            case 1 : Filtername = "PCD - Kodak Photo CD (768x512) (*.pcd)"
+            case 2 : Filtername = "PCD - Kodak Photo CD (384x256) (*.pcd)"
+            case 3 : Filtername = "PCD - Kodak Photo CD (192x128) (*.pcd)"
+            end select
+
+            GraphicFile = ConvertPath( gTesttoolPath & "global\input\graf_inp\papagei1.pcd" )
+
+            printlog( "Current filter: " & Filtername )
+            printlog( "Current file..: " & GraphicFile )
+            DateiName.SetText ( GraphicFile )
+            DateiTyp.Select( Filtername )
+
+            printlog( " * Uncheck Preview- and Link-checkbox, load the file" )
+            Vorschau.Uncheck()
+            Verknuepfen.unCheck()
+            Oeffnen.click()
+            WaitSlot( 2000 )
+
+            Kontext "Active"
+            if ( Active.Exists() )then
+                Warnlog( "Unexpected messagebox: " & Active.GetText() )
+                Warnlog( "Affected file..: " & GraphicFile )
+                Warnlog( "Affected filter: " & Filtername )
+                Active.OK()
+            else
+                try
+                    EditCopy
+                    WaitSlot( 2000 )
+                    EditDeleteContents
+                    WaitSlot( 2000 )
+                catch
+                    Warnlog( "Problems with filtertype : " & Filtername )
+                    gMouseClick (90, 90)
+                endcatch
+            endif
+        else
+            warnlog( "Insert Graphics Dialog is not open. Aborting" )
+            goto endsub
+        endif
+
+    next iCurrentFile
+
+    Kontext "GrafikEinfuegenDlg"
+    if GrafikEinfuegenDlg.Exists then
+        GrafikEinfuegenDlg.Cancel
+    endif
+
     Call hCloseDocument
+
 endcase
 
 '-----------------------------------------------------------

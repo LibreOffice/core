@@ -75,7 +75,7 @@ testcase tFileNewLabels
         cBrandList( 10 ) = "Sigel"
 
     PrintLog "Open Labels-dialog with File / New / Labels"
-    if ( hCreateLabels ) then 
+    if ( hCreateLabels() ) then
 
         Call DialogTest( TabEtiketten )
         
@@ -83,7 +83,8 @@ testcase tFileNewLabels
         PrintLog "Check number of brands and types (see #i44801# for details)"
         
         For iSheetFormat = 1 to 2
-            
+
+            kontext "TabEtiketten"
             Select Case( iSheetFormat )
             Case 1
                 Endlos.Check
@@ -353,7 +354,7 @@ testcase tFileNewBusinessCards
 
         Kontext "Active"
         if ( Active.GetRT = 304 ) then
-            Warnlog( "UNexpected messagebox: " & Active.GetText() )
+            Warnlog( "Unexpected messagebox: " & Active.GetText() )
             Active.Ok
         end if
 
