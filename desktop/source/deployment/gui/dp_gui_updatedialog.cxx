@@ -112,6 +112,7 @@
 #include "dp_identifier.hxx"
 #include "dp_version.hxx"
 #include "dp_misc.h"
+#include "dp_update.hxx"
 
 #include "dp_gui.h"
 #include "dp_gui.hrc"
@@ -254,7 +255,7 @@ private:
     };
 
     // A multimap in case an extension is installed in "user", "shared" or "bundled"
-    typedef std::multimap< rtl::OUString, Entry > Map;
+    typedef std::map< rtl::OUString, Entry > Map;
 
     virtual ~Thread();
 
@@ -357,78 +358,44 @@ UpdateDialog::Thread::~Thread()
 
 void UpdateDialog::Thread::execute()
 {
-    OSL_ASSERT( ! m_vExtensionList.empty() );
-    Map map;
-
-    typedef std::vector< css::uno::Reference< css::deployment::XPackage > >::const_iterator ITER;
-    for ( ITER iIndex = m_vExtensionList.begin(); iIndex < m_vExtensionList.end(); ++iIndex )
     {
-        css::uno::Reference< css::deployment::XPackage >        p = *iIndex;
-        if ( p.is() )
-        {
-            {
-                vos::OGuard g( Application::GetSolarMutex() );
-                if ( m_stop ) {
-                    return;
-                }
-            }
-            getOwnUpdateInformation( p, &map );
+        vos::OGuard g( Application::GetSolarMutex() );
+        if ( m_stop ) {
+            return;
         }
     }
-
-    const rtl::OUString sDefaultURL(dp_misc::getExtensionDefaultUpdateURL());
-    if (sDefaultURL.getLength())
-    {
-        css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
-            infos(
-                getUpdateInformation(
-                    css::uno::Reference< css::deployment::XPackage >(),
-                    css::uno::Sequence< rtl::OUString >(&sDefaultURL, 1), rtl::OUString()));
-        for (sal_Int32 i = 0; i < infos.getLength(); ++i) {
-            css::uno::Reference< css::xml::dom::XNode > node(
-                infos[i], css::uno::UNO_QUERY_THROW);
-            dp_misc::DescriptionInfoset infoset(m_context, node);
-            boost::optional< rtl::OUString > id(infoset.getIdentifier());
-            if (!id) {
-                continue;
-            }
-            Map::iterator end(map.upper_bound(*id));
-            for (Map::iterator j(map.lower_bound(*id)); j != end; ++j) {
-                //skip those extension which provide its own update urls
-                if (j->second.bProvidesOwnUpdate)
-                    continue;
-                rtl::OUString v(infoset.getVersion());
-                //look for the highest version in the online repository
-                if (dp_misc::compareVersions(v, j->second.version) ==
-                    dp_misc::GREATER)
-                {
-                    j->second.version = v;
-                    j->second.info = node;
-                }
-            }
-        }
-    }
-
     css::uno::Reference<css::deployment::XExtensionManager> extMgr =
         css::deployment::ExtensionManager::get(m_context);
-    for (Map::iterator i(map.begin()); i != map.end(); ++i)
+
+    std::vector<std::pair<css::uno::Reference<css::deployment::XPackage>, css::uno::Any > > errors;
+
+    dp_misc::UpdateInfoMap updateInfoMap = dp_misc::getOnlineUpdateInfos(
+        m_context, extMgr, m_updateInformation, &m_vExtensionList, errors);
+
+    typedef std::vector<std::pair<css::uno::Reference<css::deployment::XPackage>,
+        css::uno::Any> >::const_iterator ITERROR;
+    for (ITERROR ite = errors.begin(); ite != errors.end(); ite ++)
+        handleSpecificError(ite->first, ite->second);
+
+    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); i++)
     {
+        dp_misc::UpdateInfo const & info = i->second;
+        UpdateData updateData(info.extension);
+        DisabledUpdate disableUpdate;
         //determine if online updates meet the requirements
-        prepareUpdateData(i->second.info,
-                          i->second.disableUpdate, i->second.updateData);
+        prepareUpdateData(info.info, disableUpdate, updateData);
 
         //determine if the update is installed in the user or shared repository
         rtl::OUString sOnlineVersion;
-        if (i->second.updateData.aUpdateInfo.is())
-            sOnlineVersion = i->second.version;
-
+        if (info.info.is())
+            sOnlineVersion = info.version;
         rtl::OUString sVersionUser;
         rtl::OUString sVersionShared;
         rtl::OUString sVersionBundled;
         css::uno::Sequence< css::uno::Reference< css::deployment::XPackage> > extensions;
         try {
             extensions = extMgr->getExtensionsWithSameIdentifier(
-                dp_misc::getIdentifier(i->second.package), i->second.package->getName(),
+                dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 css::uno::Reference<css::ucb::XCommandEnvironment>());
         } catch (css::lang::IllegalArgumentException& ) {
             OSL_ASSERT(0);
@@ -453,15 +420,15 @@ void UpdateDialog::Thread::execute()
         {
             if (sourceUser == dp_misc::UPDATE_SOURCE_SHARED)
             {
-                i->second.updateData.aUpdateSource = extensions[1];
-                i->second.updateData.updateVersion = extensions[1]->getVersion();
+                updateData.aUpdateSource = extensions[1];
+                updateData.updateVersion = extensions[1]->getVersion();
             }
             else if (sourceUser == dp_misc::UPDATE_SOURCE_BUNDLED)
             {
-                i->second.updateData.aUpdateSource = extensions[2];
-                i->second.updateData.updateVersion = extensions[2]->getVersion();
+                updateData.aUpdateSource = extensions[2];
+                updateData.updateVersion = extensions[2]->getVersion();
             }
-            if (!update(i->second.disableUpdate, i->second.updateData))
+            if (!update(disableUpdate, updateData))
                 return;
         }
 
@@ -469,11 +436,11 @@ void UpdateDialog::Thread::execute()
         {
             if (sourceShared == dp_misc::UPDATE_SOURCE_BUNDLED)
             {
-                i->second.updateData.aUpdateSource = extensions[2];
-                i->second.updateData.updateVersion = extensions[2]->getVersion();
+                updateData.aUpdateSource = extensions[2];
+                updateData.updateVersion = extensions[2]->getVersion();
             }
-            i->second.updateData.bIsShared = true;
-            if (!update(i->second.disableUpdate, i->second.updateData))
+            updateData.bIsShared = true;
+            if (!update(disableUpdate, updateData))
                 return;
         }
     }
@@ -517,71 +484,6 @@ void UpdateDialog::Thread::handleSpecificError(
     }
 }
 
-css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
-UpdateDialog::Thread::getUpdateInformation(
-    css::uno::Reference< css::deployment::XPackage > const & package,
-    css::uno::Sequence< rtl::OUString > const & urls,
-    rtl::OUString const & identifier) const
-{
-    try {
-        return m_updateInformation->getUpdateInformation(urls, identifier);
-    } catch (css::uno::RuntimeException &) {
-        throw;
-    } catch (css::ucb::CommandFailedException & e) {
-        handleSpecificError(package, e.Reason);
-    } catch (css::ucb::CommandAbortedException &) {
-    } catch (css::uno::Exception & e) {
-        handleSpecificError(package, css::uno::makeAny(e));
-    }
-    return
-        css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >();
-}
-
-void UpdateDialog::Thread::getOwnUpdateInformation(
-    css::uno::Reference< css::deployment::XPackage > const & package,
-    Map * map)
-{
-    rtl::OUString id(dp_misc::getIdentifier(package));
-    css::uno::Sequence< rtl::OUString > urls(
-        package->getUpdateInformationURLs());
-    if (urls.getLength() == 0) {
-        map->insert(
-            Map::value_type(
-                id, Entry(package, OUSTR(""))));
-    } else {
-        css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
-            infos(getUpdateInformation(package, urls, id));
-        rtl::OUString latestVersion;
-        sal_Int32 latestIndex = -1;
-        for (sal_Int32 i = 0; i < infos.getLength(); ++i) {
-            dp_misc::DescriptionInfoset infoset(
-                m_context,
-                css::uno::Reference< css::xml::dom::XNode >(
-                    infos[i], css::uno::UNO_QUERY_THROW));
-            boost::optional< rtl::OUString > id2(infoset.getIdentifier());
-            if (!id2) {
-                continue;
-            }
-            if (*id2 == id) {
-                rtl::OUString v(infoset.getVersion());
-                if (dp_misc::compareVersions(v, latestVersion) ==
-                    dp_misc::GREATER)
-                {
-                    latestVersion = v;
-                    latestIndex = i;
-                }
-            }
-        }
-        if (latestIndex != -1) {
-            Entry e(package, latestVersion);
-            e.info = css::uno::Reference< css::xml::dom::XNode >(
-                    infos[latestIndex], css::uno::UNO_QUERY_THROW);
-            e.bProvidesOwnUpdate = true;
-            map->insert(Map::value_type(id, e));
-        }
-    }
-}
-
 ::rtl::OUString UpdateDialog::Thread::getUpdateDisplayString(
     dp_gui::UpdateData const & data, ::rtl::OUString const & version) const
 {
@@ -590,7 +492,8 @@ void UpdateDialog::Thread::getOwnUpdateInformation(
     b.append(static_cast< sal_Unicode >(' '));
     {
         vos::OGuard g( Application::GetSolarMutex() );
-        b.append(m_dialog.m_version);
+        if(!m_stop)
+            b.append(m_dialog.m_version);
     }
     b.append(static_cast< sal_Unicode >(' '));
     if (version.getLength())
@@ -603,7 +506,8 @@ void UpdateDialog::Thread::getOwnUpdateInformation(
         b.append(static_cast< sal_Unicode >(' '));
         {
             vos::OGuard g( Application::GetSolarMutex() );
-            b.append(m_dialog.m_browserbased);
+            if(!m_stop)
+                b.append(m_dialog.m_browserbased);
         }
     }
     return  b.makeStringAndClear();

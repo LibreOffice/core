@@ -42,6 +42,7 @@
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_theextmgr.hxx"
 #include "dp_identifier.hxx"
+#include "dp_update.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 

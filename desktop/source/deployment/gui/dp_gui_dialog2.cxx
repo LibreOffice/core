@@ -39,6 +39,7 @@
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_misc.h"
+#include "dp_update.hxx"
 #include "dp_identifier.hxx"
 
 #include "vcl/ctrl.hxx"
