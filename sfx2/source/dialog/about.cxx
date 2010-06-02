@@ -109,28 +109,11 @@ static bool impl_loadBitmap(
     return false;
 }
 
-AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr ) :
-
-    SfxModalDialog  ( pParent,  rId ),
-
-    aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
-    aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
-    aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
-    aBuildData      ( this ),
-    aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
-    aDevVersionStr  ( rVerStr ),
-    aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
-    aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
-    aTimer          (),
-    nOff            ( 0 ),
-    m_nDeltaWidth   ( 0 ),
-    m_nPendingScrolls( 0 ),
-    bNormal         ( TRUE )
+/** loads the application logo as used in the about dialog and impress slideshow pause screen */
+Image SfxApplication::GetApplicationLogo()
 {
-    rtl::OUString sProduct;
-    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
+    Image aAppLogo;
 
-    // load image from module path
     rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
     bool bLoaded = false;
     sal_Int32 nIndex = 0;
@@ -164,6 +147,33 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
                 rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
                 rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
     }
+
+    return aAppLogo;
+}
+
+AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr ) :
+
+    SfxModalDialog  ( pParent,  rId ),
+
+    aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
+    aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
+    aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
+    aBuildData      ( this ),
+    aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
+    aDevVersionStr  ( rVerStr ),
+    aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
+    aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
+    aTimer          (),
+    nOff            ( 0 ),
+    m_nDeltaWidth   ( 0 ),
+    m_nPendingScrolls( 0 ),
+    bNormal         ( TRUE )
+{
+    rtl::OUString sProduct;
+    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
+
+    // load image from module path
+    aAppLogo = SfxApplication::GetApplicationLogo();
 
     // Transparenter Font
     Font aFont = GetFont();

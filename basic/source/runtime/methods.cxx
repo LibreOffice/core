@@ -61,6 +61,7 @@
 #else
 #include <osl/file.hxx>
 #endif
+#include "errobject.hxx"
 
 #ifdef _USE_UNO
 #include <comphelper/processfactory.hxx>
@@ -119,6 +120,10 @@ using namespace com::sun::star::io;
 #ifdef WNT
 #include <io.h>
 #endif
+
+using namespace rtl;
+
+#include <basic/sbobjmod.hxx>
 
 static void FilterWhiteSpace( String& rStr )
 {
@@ -256,6 +261,7 @@ RTLFUNC(Error)
     {
         String aErrorMsg;
         SbError nErr = 0L;
+        INT32 nCode = 0;
         if( rPar.Count() == 1 )
         {
             nErr = StarBASIC::GetErrBasic();
@@ -263,14 +269,34 @@ RTLFUNC(Error)
         }
         else
         {
-            INT32 nCode = rPar.Get( 1 )->GetLong();
+            nCode = rPar.Get( 1 )->GetLong();
             if( nCode > 65535L )
                 StarBASIC::Error( SbERR_CONVERSION );
             else
                 nErr = StarBASIC::GetSfxFromVBError( (USHORT)nCode );
         }
-        pBasic->MakeErrorText( nErr, aErrorMsg );
-        rPar.Get( 0 )->PutString( pBasic->GetErrorText() );
+
+        bool bVBA = SbiRuntime::isVBAEnabled();
+        String tmpErrMsg;
+        if( bVBA && aErrorMsg.Len() > 0 )
+        {
+            tmpErrMsg = aErrorMsg;
+        }
+        else
+        {
+            pBasic->MakeErrorText( nErr, aErrorMsg );
+            tmpErrMsg = pBasic->GetErrorText();
+        }
+        // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
+        // current err then  return the description for the error message if it is set
+        // ( complicated isn't it ? )
+        if ( bVBA && rPar.Count() > 1 )
+        {
+            com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
+            if ( xErrObj.is() && xErrObj->getNumber() == nCode && xErrObj->getDescription().getLength() )
+                tmpErrMsg = xErrObj->getDescription();
+        }
+        rPar.Get( 0 )->PutString( tmpErrMsg );
     }
 }
 
@@ -4106,12 +4132,20 @@ RTLFUNC(Load)
 
     // Diesen Call einfach an das Object weiterreichen
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
-    if( pObj && pObj->IsA( TYPE( SbxObject ) ) )
+    if ( pObj )
     {
-        SbxVariable* pVar = ((SbxObject*)pObj)->
-            Find( String( RTL_CONSTASCII_USTRINGPARAM("Load") ), SbxCLASS_METHOD );
-        if( pVar )
-            pVar->GetInteger();
+        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        {
+            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
+            pFormModule->load();
+        }
+        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        {
+            SbxVariable* pVar = ((SbxObject*)pObj)->
+                Find( String( RTL_CONSTASCII_USTRINGPARAM("Load") ), SbxCLASS_METHOD );
+            if( pVar )
+                pVar->GetInteger();
+        }
     }
 }
 
@@ -4129,12 +4163,20 @@ RTLFUNC(Unload)
 
     // Diesen Call einfach an das Object weitereichen
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
-    if( pObj && pObj->IsA( TYPE( SbxObject ) ) )
+    if ( pObj )
     {
-        SbxVariable* pVar = ((SbxObject*)pObj)->
-            Find( String( RTL_CONSTASCII_USTRINGPARAM("Unload") ), SbxCLASS_METHOD );
-        if( pVar )
-            pVar->GetInteger();
+        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        {
+            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
+            pFormModule->Unload();
+        }
+        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        {
+            SbxVariable* pVar = ((SbxObject*)pObj)->
+                Find( String( RTL_CONSTASCII_USTRINGPARAM("Unload") ), SbxCLASS_METHOD );
+            if( pVar )
+                pVar->GetInteger();
+        }
     }
 }
 
