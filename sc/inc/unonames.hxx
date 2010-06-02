@@ -610,7 +610,6 @@
 // --> PB 2004-08-23 #i33095# Security Options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 // <--
-#define SC_UNO_MODIFYPASSWORDHASH   "ModifyPasswordHash"
 
 // FormulaParser
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
