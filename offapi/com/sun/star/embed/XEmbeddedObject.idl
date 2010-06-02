@@ -92,7 +92,7 @@
 //============================================================================
 /** represents common functionality for embedded objects.
  */
-interface XEmbeddedObject
+published interface XEmbeddedObject
 {
     // INTERFACES
     //
