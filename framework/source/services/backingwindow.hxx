@@ -31,6 +31,7 @@
 #include "rtl/ustring.hxx"
 
 #include "vcl/button.hxx"
+#include "vcl/menubtn.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
@@ -77,6 +78,12 @@ namespace framework
 
     class BackingWindow : public Window
     {
+        struct LoadRecentFile
+        {
+            rtl::OUString                                                             aTargetURL;
+            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >     aArgSeq;
+        };
+
         com::sun::star::uno::Reference<com::sun::star::frame::XDesktop>                  mxDesktop;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
         com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
@@ -89,7 +96,7 @@ namespace framework
         ImageButton                     maWriterButton;
         ImageButton                     maCalcButton;
         ImageButton                     maImpressButton;
-        ImageButton                     maOpenButton;
+        MenuButton                      maOpenButton;
         ImageButton                     maDrawButton;
         ImageButton                     maDBButton;
         ImageButton                     maMathButton;
@@ -123,6 +130,9 @@ namespace framework
         long                            mnBtnPos;
         long                            mnBtnTop;
 
+        PopupMenu*                      mpRecentMenu;
+        std::vector< LoadRecentFile >   maRecentFiles;
+
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;
         static const int nItemId_Info = 3;
@@ -132,11 +142,11 @@ namespace framework
         static const int nShadowRight = 45;
         static const int nShadowBottom = 50;
 
-        void loadImage( const ResId& i_rId, ImageButton& i_rButton );
+        void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
         void layoutButton( const char* i_pURL, int nColumn, const std::set<rtl::OUString>& i_rURLS,
                            SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
-                           ImageButton& i_rBtn,
+                           PushButton& i_rBtn,
                            MnemonicGenerator& i_rMnemonicGen,
                            const String& i_rStr = String()
                            );
@@ -148,10 +158,12 @@ namespace framework
                           );
 
         DECL_LINK( ClickHdl, Button* );
+        DECL_LINK( SelectHdl, Button* );
         DECL_LINK( ToolboxHdl, void* );
 
         void initControls();
         void initBackground();
+        void prepareRecentFileMenu();
         public:
         BackingWindow( Window* pParent );
         ~BackingWindow();
@@ -160,7 +172,7 @@ namespace framework
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void        GetFocus();
+        virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };
