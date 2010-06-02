@@ -1325,6 +1325,8 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
             pDim->Refresh( xSource, deletedDims );
 
         }
+
+        mbDimensionMembersBuilt = false;    // there may be new members
     }
     catch(uno::Exception&)
     {
