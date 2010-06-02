@@ -844,6 +844,9 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
                 aConfig->clearUpdateFound();
 
                 m_aUpdateInfo = UpdateInfo();
+                // Remove outdated release notes
+                storeReleaseNote( 1, rtl::OUString() );
+                storeReleaseNote( 2, rtl::OUString() );
             }
             else
             {
