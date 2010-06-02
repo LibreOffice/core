@@ -33,7 +33,6 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <sfx2/topfrm.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -54,6 +53,7 @@
 #include "sdiocmpt.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <comphelper/processfactory.hxx>
+#include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -100,8 +100,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             ULONG nSdViewShellCount = 0;
             ViewShellBase* pBase = NULL;
             SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell,
-                                                                 TYPE(SfxTopViewFrame));
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
 
             while (pSfxViewFrame)
             {
@@ -142,8 +141,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                     }
                 }
 
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, pDocShell,
-                                                      TYPE(SfxTopViewFrame));
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, pDocShell);
             }
 
             SdDrawDocument* pDoc = pDocShell->GetDoc();
