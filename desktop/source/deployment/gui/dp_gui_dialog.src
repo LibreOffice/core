@@ -72,6 +72,11 @@ String RID_STR_DISABLING_PACKAGES
     Text [ en-US ] = "Disabling %EXTENSION_NAME";
 };
 
+String RID_STR_ACCEPT_LICENSE
+{
+    Text [ en-US ] = "Accept license for %EXTENSION_NAME";
+};
+
 String RID_STR_INSTALL_FOR_ALL
 {
     Text [ en-US ] = "~For all users";
@@ -107,6 +112,11 @@ String RID_STR_NO_ADMIN_PRIVILEGE
 String RID_STR_ERROR_MISSING_DEPENDENCIES
 {
     Text [ en-US ] = "The extension cannot be enabled as the following system dependencies are not fulfilled:";
+};
+
+String RID_STR_ERROR_MISSING_LICENSE
+{
+    Text [ en-US ] = "This extension is disabled because you haven't accepted the license yet.\n";
 };
 
 // Dialog layout

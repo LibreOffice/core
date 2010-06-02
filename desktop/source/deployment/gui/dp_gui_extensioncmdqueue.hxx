@@ -85,6 +85,7 @@ public:
                           const bool bEnable );
     void checkForUpdates(const std::vector< ::com::sun::star::uno::Reference<
                          ::com::sun::star::deployment::XPackage > > &vList );
+    void acceptLicense( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
     /**
        This call does not block. It signals the internal thread
        that it should install the remaining extensions and then terminate.

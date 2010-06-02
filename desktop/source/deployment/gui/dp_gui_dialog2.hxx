@@ -81,7 +81,8 @@ public:
     virtual void    updateProgress( const long nProgress ) = 0;
 
     virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) = 0;
-    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) = 0;
+    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+                                      bool bLicenseMissing = false ) = 0;
 
     virtual void    prepareChecking() = 0;
     virtual void    checkEntries() = 0;
@@ -157,11 +158,13 @@ public:
     virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
     void            setGetExtensionsURL( const ::rtl::OUString &rURL );
-    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &);
+    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+                                      bool bLicenseMissing = false );
     bool enablePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
                         bool bEnable );
     bool removePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool updatePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    bool acceptLicense(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
     virtual void    prepareChecking();
     virtual void    checkEntries();
@@ -228,7 +231,8 @@ public:
     virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
     void            selectEntry( long nPos );
-    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > & );
+    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+                                      bool bLicenseMissing = false );
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage, bool bEnable );
     bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 

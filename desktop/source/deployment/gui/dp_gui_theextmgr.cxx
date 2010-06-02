@@ -67,7 +67,8 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     m_xContext( xContext ),
     m_pParent( pParent ),
     m_pExtMgrDialog( NULL ),
-    m_pUpdReqDialog( NULL )
+    m_pUpdReqDialog( NULL ),
+    m_pExecuteCmdQueue( NULL )
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
     m_xExtensionManager->addModifyListener( this );
@@ -117,6 +118,8 @@ TheExtensionManager::~TheExtensionManager()
         delete m_pUpdReqDialog;
     if ( m_pExtMgrDialog )
         delete m_pExtMgrDialog;
+    if ( m_pExecuteCmdQueue )
+        delete m_pExecuteCmdQueue;
 }
 
 //------------------------------------------------------------------------------
@@ -129,14 +132,16 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
         if ( !m_pUpdReqDialog )
         {
             m_pUpdReqDialog = new UpdateRequiredDialog( NULL, this );
-            m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( (DialogHelper*) m_pUpdReqDialog, this, m_xContext ) );
+            delete m_pExecuteCmdQueue;
+            m_pExecuteCmdQueue = new ExtensionCmdQueue( (DialogHelper*) m_pUpdReqDialog, this, m_xContext );
             createPackageList();
         }
     }
     else if ( !m_pExtMgrDialog )
     {
         m_pExtMgrDialog = new ExtMgrDialog( m_pParent, this );
-        m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( (DialogHelper*) m_pExtMgrDialog, this, m_xContext ) );
+        delete m_pExecuteCmdQueue;
+        m_pExecuteCmdQueue = new ExtensionCmdQueue( (DialogHelper*) m_pExtMgrDialog, this, m_xContext );
         m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
         createPackageList();
     }
@@ -232,32 +237,6 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
 }
 
 //------------------------------------------------------------------------------
-bool TheExtensionManager::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
-                                         bool bEnable )
-{
-    m_pExecuteCmdQueue->enableExtension( xPackage, bEnable );
-
-    return true;
-}
-
-//------------------------------------------------------------------------------
-bool TheExtensionManager::removePackage( const uno::Reference< deployment::XPackage > &xPackage )
-{
-    m_pExecuteCmdQueue->removeExtension( xPackage );
-
-    return true;
-}
-
-//------------------------------------------------------------------------------
-bool TheExtensionManager::updatePackages(
-    const std::vector< uno::Reference< deployment::XPackage >  > &vList )
-{
-    m_pExecuteCmdQueue->checkForUpdates( vList );
-
-    return true;
-}
-
-//------------------------------------------------------------------------------
 bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWarnUser )
 {
     if ( rPackageURL.getLength() == 0 )
@@ -341,6 +320,18 @@ void TheExtensionManager::createPackageList()
                 if ( ( eState == REGISTERED ) || ( eState == NOT_AVAILABLE ) )
                     break;
             }
+        }
+    }
+
+    uno::Sequence< uno::Reference< deployment::XPackage > > xNoLicPackages;
+    xNoLicPackages = m_xExtensionManager->getExtensionsWithUnacceptedLicenses( SHARED_PACKAGE_MANAGER,
+                                                                               uno::Reference< ucb::XCommandEnvironment >() );
+    for ( sal_Int32 i = 0; i < xNoLicPackages.getLength(); ++i )
+    {
+        uno::Reference< deployment::XPackage > xPackage = xNoLicPackages[i];
+        if ( xPackage.is() )
+        {
+            getDialogHelper()->addPackageToList( xPackage, true );
         }
     }
 }

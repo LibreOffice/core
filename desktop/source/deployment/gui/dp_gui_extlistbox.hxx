@@ -73,6 +73,7 @@ struct Entry_Impl
     bool            m_bChecked      :1;
     bool            m_bMissingDeps  :1;
     bool            m_bHasButtons   :1;
+    bool            m_bMissingLic   :1;
     PackageState    m_eState;
     String          m_sTitle;
     String          m_sVersion;
@@ -205,7 +206,8 @@ public:
 
     //-----------------
     virtual void    selectEntry( const long nPos );
-    long            addEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    long            addEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+                              bool bLicenseMissing = false );
     void            updateEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     void            removeEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 

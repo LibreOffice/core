@@ -37,6 +37,7 @@
 #include "dp_gui_extlistbox.hxx"
 #include "dp_gui_shared.hxx"
 #include "dp_gui_theextmgr.hxx"
+#include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_misc.h"
 #include "dp_identifier.hxx"
 
@@ -291,7 +292,8 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
 
-    if ( !pEntry->m_bUser || ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
+    if ( ( !pEntry->m_bUser || ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
+         && !pEntry->m_bMissingLic )
         m_pEnableBtn->Hide();
     else
     {
@@ -511,9 +513,14 @@ IMPL_LINK( ExtBoxWithBtns_Impl, HandleEnableBtn, void*, EMPTYARG )
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = GetEntryData( nActive );
-        const bool bEnable( pEntry->m_eState != REGISTERED );
 
-        m_pParent->enablePackage( pEntry->m_xPackage, bEnable );
+        if ( pEntry->m_bMissingLic )
+            m_pParent->acceptLicense( pEntry->m_xPackage );
+        else
+        {
+            const bool bEnable( pEntry->m_eState != REGISTERED );
+            m_pParent->enablePackage( pEntry->m_xPackage, bEnable );
+        }
     }
 
     return 1;
@@ -760,10 +767,11 @@ void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 }
 
 //------------------------------------------------------------------------------
-long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage )
+long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
+                                     bool bLicenseMissing )
 {
     m_aUpdateBtn.Enable( true );
-    return m_pExtensionBox->addEntry( xPackage );
+    return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
 }
 
 //------------------------------------------------------------------------------
@@ -810,7 +818,7 @@ bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &
             return false;
     }
 
-    m_pManager->enablePackage( xPackage, bEnable );
+    m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
 
     return true;
 }
@@ -830,7 +838,7 @@ bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &
     if ( ! continueOnSharedExtension( xPackage, this, RID_WARNINGBOX_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
         return false;
 
-    m_pManager->removePackage( xPackage );
+    m_pManager->getCmdQueue()->removeExtension( xPackage );
 
     return true;
 }
@@ -851,7 +859,18 @@ bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
     std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries;
     vEntries.push_back(extension);
 
-    m_pManager->updatePackages( vEntries );
+    m_pManager->getCmdQueue()->checkForUpdates( vEntries );
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &xPackage )
+{
+    if ( !xPackage.is() )
+        return false;
+
+    m_pManager->getCmdQueue()->acceptLicense( xPackage );
 
     return true;
 }
@@ -1300,10 +1319,11 @@ UpdateRequiredDialog::~UpdateRequiredDialog()
 }
 
 //------------------------------------------------------------------------------
-long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage )
+long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
+                                             bool bLicenseMissing )
 {
     // We will only add entries to the list with unsatisfied dependencies
-    if ( !checkDependencies( xPackage ) )
+    if ( !bLicenseMissing && !checkDependencies( xPackage ) )
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
         m_aUpdateBtn.Enable( true );
@@ -1335,7 +1355,7 @@ void UpdateRequiredDialog::checkEntries()
 bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
                                           bool bEnable )
 {
-    m_pManager->enablePackage( xPackage, bEnable );
+    m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
 
     return true;
 }
@@ -1462,7 +1482,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleUpdateBtn, void*, EMPTYARG )
 
     aGuard.clear();
 
-    m_pManager->updatePackages( vUpdateEntries );
+    m_pManager->getCmdQueue()->checkForUpdates( vUpdateEntries );
 
     return 1;
 }
