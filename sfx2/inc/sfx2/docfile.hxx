@@ -328,7 +328,7 @@ public:
     static sal_Bool CallApproveHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler, ::com::sun::star::uno::Any aRequest, sal_Bool bAllowAbort );
 
     static sal_Bool     SetWritableForUserOnly( const ::rtl::OUString& aURL );
-    static sal_uInt16   CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd, sal_Bool bMSType );
+    static sal_uInt32   CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd, sal_Bool bWriter );
 };
 
 SV_DECL_IMPL_REF( SfxMedium )

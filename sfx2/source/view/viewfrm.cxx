@@ -170,7 +170,7 @@ TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
 //=========================================================================
 
 //-------------------------------------------------------------------------
-static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const ::rtl::OUString& aPath, const SfxFilter* pFilter, sal_uInt16 nPasswordHash )
+static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const ::rtl::OUString& aPath, const SfxFilter* pFilter, sal_uInt32 nPasswordHash )
 {
     sal_Bool bResult = !nPasswordHash;
 
@@ -196,7 +196,7 @@ static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteracti
             xHandler->handle( rRequest );
 
             if ( pPasswordRequest->isPassword() )
-                bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), bMSType ) == nPasswordHash );
+                bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
             else
                 bCancel = sal_True;
 

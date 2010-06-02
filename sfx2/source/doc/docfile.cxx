@@ -2576,15 +2576,20 @@ void SfxMedium::SetOrigFilter_Impl( const SfxFilter* pOrigFilter )
 
 //------------------------------------------------------------------
 
-sal_uInt16 SfxMedium::CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd, sal_Bool bMSType )
+sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd, sal_Bool bWriter )
 {
-    sal_uInt16 nHash = 0;
+    sal_uInt32 nHash = 0;
 
     if ( aPasswd.getLength() )
     {
-        rtl_TextEncoding nEncoding = RTL_TEXTENCODING_UTF8;
-        if ( bMSType )
+        if ( bWriter )
         {
+            nHash = ::comphelper::DocPasswordHelper::GetWordHashAsUINT32( aPasswd );
+        }
+        else
+        {
+            rtl_TextEncoding nEncoding = RTL_TEXTENCODING_UTF8;
+
             // if the MS-filter should be used
             // use the inconsistent algorithm to find the encoding specified by MS
             nEncoding = osl_getThreadTextEncoding();
@@ -2612,9 +2617,9 @@ sal_uInt16 SfxMedium::CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd
                     nEncoding = RTL_TEXTENCODING_MS_1250;
                     break;
             }
-        }
 
-        nHash = ::comphelper::DocPasswordHelper::GetXLHashAsUINT16( aPasswd, nEncoding );
+            nHash = ::comphelper::DocPasswordHelper::GetXLHashAsUINT16( aPasswd, nEncoding );
+        }
     }
 
     return nHash;

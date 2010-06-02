@@ -1242,12 +1242,12 @@ void SfxObjectShell::SetSaveVersionOnClose( sal_Bool bNew )
     pImp->bSaveVersionOnClose = bNew;
 }
 
-sal_uInt16 SfxObjectShell::GetModifyPasswordHash() const
+sal_uInt32 SfxObjectShell::GetModifyPasswordHash() const
 {
     return pImp->m_nModifyPasswordHash;
 }
 
-sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt16 nHash )
+sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
 {
 // Commented out before the solution for Saving process is found
 //    if ( ( !IsReadOnly() && !IsReadOnlyUI() )

@@ -74,6 +74,7 @@
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
 #include <tools/urlobj.hxx>
@@ -2731,6 +2732,12 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     uno::Reference< uno::XInterface >() );
         }
 
+        SFX_ITEMSET_ARG( aParams, pModifyPasswordHashItem, SfxInt32Item, SID_MODIFYPASSWORDHASH, sal_False );
+        sal_uInt32 nModifyPasswordHash = pModifyPasswordHashItem ? pModifyPasswordHashItem->GetValue() : 0;
+        aParams->ClearItem( SID_MODIFYPASSWORDHASH );
+        sal_uInt32 nOldModifyPasswordHash = m_pData->m_pObjectShell->GetModifyPasswordHash();
+        m_pData->m_pObjectShell->SetModifyPasswordHash( nModifyPasswordHash );
+
         // since saving a document modifies its DocumentInfo, the current
         // DocumentInfo must be saved on "SaveTo", so it can be restored
         // after saving
@@ -2809,10 +2816,14 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
             if ( !bSaveTo )
             {
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
+                m_pData->m_pObjectShell->SetModifyPasswordEntered();
+
                 SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEASDOCDONE), m_pData->m_pObjectShell ) );
             }
             else
             {
+                m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
+
                 SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVETODOCDONE), m_pData->m_pObjectShell ) );
             }
         }
@@ -2821,6 +2832,9 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
             // let the logring be stored to the related file
             m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Storing failed!" ) ) );
             m_pData->m_pObjectShell->StoreLog();
+
+            m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
+
 
             SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOCFAILED : STR_EVENT_SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell ) );

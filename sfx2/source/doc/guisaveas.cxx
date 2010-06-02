@@ -180,18 +180,13 @@ class DocumentSettingsGuard
 {
     uno::Reference< beans::XPropertySet > m_xDocumentSettings;
     sal_Bool m_bPreserveReadOnly;
-    sal_uInt16 m_nPreserveHash;
-
     sal_Bool m_bReadOnlySupported;
-    sal_Bool m_bModifyPasswordHashSupported;
 
     sal_Bool m_bRestoreSettings;
 public:
-    DocumentSettingsGuard( const uno::Reference< frame::XModel >& xModel, sal_Bool bReadOnly, sal_uInt16 nHash, sal_Bool bRestore )
+    DocumentSettingsGuard( const uno::Reference< frame::XModel >& xModel, sal_Bool bReadOnly, sal_Bool bRestore )
     : m_bPreserveReadOnly( sal_False )
-    , m_nPreserveHash( 0 )
     , m_bReadOnlySupported( sal_False )
-    , m_bModifyPasswordHashSupported( sal_False )
     , m_bRestoreSettings( bRestore )
     {
         try
@@ -203,7 +198,6 @@ public:
                 uno::UNO_QUERY_THROW );
 
             ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
-            ::rtl::OUString aModifyPasswordHashString( RTL_CONSTASCII_USTRINGPARAM( "ModifyPasswordHash" ) );
 
             try
             {
@@ -213,20 +207,11 @@ public:
             }
             catch( uno::Exception& )
             {}
-
-            try
-            {
-                m_xDocumentSettings->getPropertyValue( aModifyPasswordHashString ) >>= m_nPreserveHash;
-                m_xDocumentSettings->setPropertyValue( aModifyPasswordHashString, uno::makeAny( nHash ) );
-                m_bModifyPasswordHashSupported = sal_True;
-            }
-            catch( uno::Exception& )
-            {}
         }
         catch( uno::Exception& )
         {}
 
-        if ( ( bReadOnly && !m_bReadOnlySupported ) || ( nHash  && !m_bModifyPasswordHashSupported ) )
+        if ( ( bReadOnly && !m_bReadOnlySupported ) )
             throw uno::RuntimeException(); // the user could provide the data, so it must be stored
     }
 
@@ -235,15 +220,11 @@ public:
         if ( m_bRestoreSettings )
         {
             ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
-            ::rtl::OUString aModifyPasswordHashString( RTL_CONSTASCII_USTRINGPARAM( "ModifyPasswordHash" ) );
 
             try
             {
                 if ( m_bReadOnlySupported )
                     m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( m_bPreserveReadOnly ) );
-
-                if ( m_bModifyPasswordHashSupported )
-                    m_xDocumentSettings->setPropertyValue( aModifyPasswordHashString, uno::makeAny( m_nPreserveHash ) );
             }
             catch( uno::Exception& )
             {
@@ -272,7 +253,6 @@ class ModelData_Impl
     ::comphelper::SequenceAsHashMap m_aMediaDescrHM;
 
     sal_Bool m_bRecommendReadOnly;
-    sal_uInt16 m_nPasswordToModifyHash;
 
 public:
     ModelData_Impl( SfxStoringHelper& aOwner,
@@ -291,7 +271,6 @@ public:
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
 
     sal_Bool IsRecommendReadOnly() { return m_bRecommendReadOnly; }
-    sal_uInt16 GetPasswordToModifyHash() { return m_nPasswordToModifyHash; }
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
@@ -346,8 +325,6 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 , m_pModulePropsHM( NULL )
 , m_aMediaDescrHM( aMediaDescr )
 , m_bRecommendReadOnly( sal_False )
-, m_nPasswordToModifyHash( 0 )
-
 {
     CheckInteractionHandler();
 }
@@ -1018,11 +995,6 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
-    SFX_ITEMSET_ARG( pDialogParams, pPassToModifyItem, SfxUInt16Item, SID_PASSWORDTOMODIFYHASH, sal_False );
-    if ( pPassToModifyItem )
-        m_nPasswordToModifyHash = pPassToModifyItem->GetValue();
-    pDialogParams->ClearItem( SID_PASSWORDTOMODIFYHASH );
-
     uno::Sequence< beans::PropertyValue > aPropsFromDialog;
     TransformItems( nSlotID, *pDialogParams, aPropsFromDialog, NULL );
     GetMediaDescr() << aPropsFromDialog;
@@ -1607,7 +1579,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     // store the document and handle it's docinfo
     SvtSaveOptions aOptions;
 
-    DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), aModelData.GetPasswordToModifyHash(), nStoreMode & EXPORT_REQUESTED );
+    DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
 
     if ( aOptions.IsDocInfoSave()
       && ( !aModelData.GetStorable()->hasLocation()
