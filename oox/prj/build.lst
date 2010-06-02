@@ -1,4 +1,4 @@
-oox	oox : vos cppu cppuhelper comphelper sal offapi sax basegfx tools vcl BOOST:boost OPENSSL:openssl NULL
+oox	oox : vos cppu cppuhelper comphelper sal offapi sax basegfx xmlscript tools vcl BOOST:boost OPENSSL:openssl NULL
 oox	oox				usr1	-   all	oox_mkout NULL
 oox	oox\prj				get	-   all	oox_prj NULL
 oox	oox\source\token		nmake	-   all	oox_token NULL

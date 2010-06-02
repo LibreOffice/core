@@ -92,6 +92,10 @@ public:
     template< typename Type >
     inline bool         getProperty( Type& orValue, sal_Int32 nPropId ) const;
 
+    /** Gets the specified property from the property set.
+        @return  the property value, or an empty Any, if the property is missing. */
+    ::com::sun::star::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
+
     /** Gets the specified boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occured. */
     bool                getBoolProperty( sal_Int32 nPropId ) const;
@@ -122,6 +126,10 @@ public:
     /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropertyMap  The property map. */
     void                setProperties( const PropertyMap& rPropertyMap );
+
+#if OSL_DEBUG_LEVEL > 0
+    void dump();
+#endif
 
     // ------------------------------------------------------------------------
 private:
