@@ -307,8 +307,8 @@ void WorkbookSettings::finalizeImport()
         PropertySet aSettingsProp( xDocumentSettings );
         if( maFileSharing.mbRecommendReadOnly )
             aSettingsProp.setProperty( PROP_LoadReadonly, true );
-        if( maFileSharing.mnPasswordHash != 0 )
-            aSettingsProp.setProperty( PROP_ModifyPasswordHash, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
+//        if( maFileSharing.mnPasswordHash != 0 )
+//            aSettingsProp.setProperty( PROP_ModifyPasswordHash, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
     }
     catch( Exception& )
     {

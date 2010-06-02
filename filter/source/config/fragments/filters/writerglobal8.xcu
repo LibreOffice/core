@@ -1,5 +1,5 @@
     <node oor:name="writerglobal8" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED ENCRYPTION PASSWORDTOMODIFY</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED ENCRYPTION</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>CXML</value></prop>

@@ -1,5 +1,5 @@
     <node oor:name="calc8" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT ENCRYPTION PASSWORDTOMODIFY</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT ENCRYPTION</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
