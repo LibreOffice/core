@@ -363,7 +363,7 @@ void OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl
         implPushBackPropertyValue( aNewValue );
     }
 #if OSL_DEBUG_LEVEL > 0
-    else
+    else if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
     {
         ::rtl::OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
         sMessage += ::rtl::OString( "  Attribute name: " );
