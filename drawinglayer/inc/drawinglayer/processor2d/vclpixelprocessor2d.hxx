@@ -32,34 +32,39 @@
 #include <vcl/outdev.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// predefines
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
     namespace processor2d
     {
+        /** VclPixelProcessor2D class
+
+            This processor derived from VclProcessor2D is the base class for rendering
+            all feeded primitives to a VCL Window. It is the currently used renderer
+            for all VCL editing output from the DrawingLayer.
+         */
         class VclPixelProcessor2D : public VclProcessor2D
         {
         private:
-            // The Pixel renderer resets the original MapMode from the OutputDevice.
-            // For some situations it is necessary to get it again, so it is rescued here
+            /*  The Pixel renderer resets the original MapMode from the OutputDevice.
+                For some situations it is necessary to get it again, so it is rescued here
+             */
             MapMode                             maOriginalMapMode;
 
         protected:
-            // the local processor for BasePrinitive2D-Implementation based primitives,
-            // called from the common process()-implementation
+            /*  the local processor for BasePrinitive2D-Implementation based primitives,
+                called from the common process()-implementation
+             */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
-            // constructor/destructor
+            /// constructor/destructor
             VclPixelProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
             virtual ~VclPixelProcessor2D();
 
-            // data access
+            /// data read access
             const MapMode& getOriginalMapMode() const { return maOriginalMapMode; }
         };
     } // end of namespace processor2d

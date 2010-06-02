@@ -55,6 +55,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/config.hxx>
 
@@ -62,6 +63,7 @@ using namespace rtl;
 using namespace osl;
 using namespace utl;
 using namespace svt;
+using namespace com::sun::star;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
@@ -305,12 +307,46 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // -------------------------------------------------------------------
 
-MigrationPage::MigrationPage( svt::OWizardMachine* parent, const ResId& resid)
+class MigrationThread : public ::osl::Thread
+{
+    public:
+        MigrationThread();
+
+        virtual void SAL_CALL run();
+        virtual void SAL_CALL onTerminated();
+};
+
+MigrationThread::MigrationThread()
+{
+}
+
+void MigrationThread::run()
+{
+    try
+    {
+        Migration::doMigration();
+    }
+    catch ( uno::Exception& )
+    {
+    }
+}
+
+void MigrationThread::onTerminated()
+{
+}
+
+// -------------------------------------------------------------------
+
+MigrationPage::MigrationPage(
+    svt::OWizardMachine* parent,
+    const ResId& resid,
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber)
     : OWizardPage(parent, resid)
     , m_ftHead(this, WizardResId(FT_MIGRATION_HEADER))
     , m_ftBody(this, WizardResId(FT_MIGRATION_BODY))
     , m_cbMigration(this, WizardResId(CB_MIGRATION))
     , m_bMigrationDone(sal_False)
+    , m_xThrobber(xThrobber)
 {
     FreeResource();
     _setBold(m_ftHead);
@@ -325,9 +361,28 @@ sal_Bool MigrationPage::commitPage( CommitPageReason _eReason )
 {
     if (_eReason == eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
     {
-        EnterWait();
-        Migration::doMigration();
-        LeaveWait();
+        GetParent()->EnterWait();
+        FirstStartWizard* pWizard = dynamic_cast< FirstStartWizard* >( GetParent() );
+        if ( pWizard )
+            pWizard->DisableButtonsWhileMigration();
+
+        uno::Reference< awt::XWindow > xWin( m_xThrobber, uno::UNO_QUERY );
+        xWin->setVisible( true );
+        m_xThrobber->start();
+        MigrationThread* pMigThread = new MigrationThread();
+        pMigThread->create();
+
+        while ( pMigThread->isRunning() )
+        {
+            Application::Reschedule();
+        }
+
+        m_xThrobber->stop();
+        GetParent()->LeaveWait();
+        // Next state will enable buttons - so no EnableButtons necessary!
+        xWin->setVisible( false );
+        pMigThread->join();
+        delete pMigThread;
         m_bMigrationDone = sal_True;
     }
     else

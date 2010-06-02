@@ -142,13 +142,11 @@ private:
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
 
-    // BaseProperties section
-    SVX_DLLPRIVATE virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
-    // DrawContact section
-private:
+protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
+private:
     // This method is only allowed for sdr::properties::TextProperties
     SVX_DLLPRIVATE SdrOutliner* GetTextEditOutliner() const
     {
