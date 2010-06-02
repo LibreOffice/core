@@ -1,4 +1,5 @@
-/*************************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -23,19 +24,16 @@
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
 *
-************************************************************************/
+**********************************************************************-->
 
-#ifndef INCLUDED_CONFIGMGR_DETAIL_CONFIGMGRDLLAPI_HXX
-#define INCLUDED_CONFIGMGR_DETAIL_CONFIGMGRDLLAPI_HXX
-
-#include "sal/config.h"
-
-#include "sal/types.h"
-
-#if defined OOO_DLLIMPLEMENTATION_CONFIGMGR
-#define OOO_DLLPUBLIC_CONFIGMGR SAL_DLLPUBLIC_EXPORT
-#else
-#define OOO_DLLPUBLIC_CONFIGMGR SAL_DLLPUBLIC_IMPORT
-#endif
-
-#endif
+<d:description xmlns:d="http://openoffice.org/extensions/description/2006">
+  <d:identifier value="org.openoffice/framework/desktop/test/deployment/boxt"/>
+  <d:version value="@VERSION@"/>
+  <d:platform value="@PLATFORM@"/>
+  <d:dependencies>
+    <d:OpenOffice.org-minimal-version d:name="OpenOffice.org @VERSION@"
+        value="@VERSION@"/>
+    <d:OpenOffice.org-maximal-version d:name="OpenOffice.org @VERSION@ or older"
+        d:OpenOffice.org-minimal-version="2.3" value="@VERSION@"/>
+  </d:dependencies>
+</d:description>

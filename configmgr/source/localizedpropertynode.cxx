@@ -51,7 +51,7 @@ LocalizedPropertyNode::LocalizedPropertyNode(
     Node(layer), staticType_(staticType), nillable_(nillable)
 {}
 
-rtl::Reference< Node > LocalizedPropertyNode::clone() const {
+rtl::Reference< Node > LocalizedPropertyNode::clone(bool) const {
     return new LocalizedPropertyNode(*this);
 }
 
