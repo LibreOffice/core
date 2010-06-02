@@ -3,7 +3,7 @@
 -o xmloff.Chart.XMLExporter
 -o xmloff.Chart.XMLImporter
 -o xmloff.Chart.XMLStylesExporter
--o xmloff.Chart.XMLStylesImporter
+#i112047 -o xmloff.Chart.XMLStylesImporter
 -o xmloff.Draw.XMLContentExporter
 -o xmloff.Draw.XMLContentImporter
 -o xmloff.Draw.XMLExporter
@@ -16,7 +16,7 @@
 -o xmloff.Draw.XMLStylesImporter
 #i111224 -o xmloff.Impress.XMLContentExporter
 -o xmloff.Impress.XMLContentImporter
--o xmloff.Impress.XMLExporter
+#i112048 -o xmloff.Impress.XMLExporter
 #i111111# -o xmloff.Impress.XMLImporter
 -o xmloff.Impress.XMLMetaExporter
 -o xmloff.Impress.XMLMetaImporter
