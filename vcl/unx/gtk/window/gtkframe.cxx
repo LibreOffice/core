@@ -566,6 +566,7 @@ void GtkSalFrame::InitCommon()
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
     m_ePointerStyle     = 0xffff;
+    m_bSetFocusOnMap    = false;
 
     gtk_widget_set_app_paintable( m_pWindow, TRUE );
     gtk_widget_set_double_buffered( m_pWindow, FALSE );
@@ -690,7 +691,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         XFree( pHints );
 
         if (GetX11SalData()->GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz"))
-        return;
+            return;
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the
          *  right thing, but gtk handles it internally whereas we
@@ -803,11 +804,6 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         ( ! (nStyle & SAL_FRAME_STYLE_FLOAT) ||
           (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE) ) );
 
-    /* #i100116# metacity has a peculiar behavior regarding WM_HINT accept focus and _NET_WM_USER_TIME
-        at some point that may be fixed in metacity and we will have to revisit this
-    */
-    bool bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") &&
-                                   (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
     if( bDecoHandling )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
@@ -823,8 +819,6 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
             gtk_window_set_skip_taskbar_hint( GTK_WINDOW(m_pWindow), true );
-            if( bMetaCityToolWindowHack )
-                lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
         }
         else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
@@ -837,7 +831,8 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
         }
 
-        if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
+        if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN )
+            && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), true );
@@ -874,7 +869,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     if( bDecoHandling )
     {
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? TRUE : FALSE );
-        if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) || bMetaCityToolWindowHack )
+        if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, false );
     }
 
@@ -1297,7 +1292,8 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( m_pWindow )
     {
-        if( m_pParent && (m_pParent->m_nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN) )
+        if( m_pParent && (m_pParent->m_nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN)
+            && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), bVisible );
         if( bVisible )
         {
@@ -1357,9 +1353,9 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             //
             // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
             // awesome.
+            bool bMetaCity = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity");
             if( nUserTime == 0 &&
-               (
-                 getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
+               ( bMetaCity ||
                  (
                     getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz") &&
                     (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION))
@@ -1371,8 +1367,10 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
                 nUserTime= getDisplay()->GetLastUserEventTime( true );
                 //nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
             }
-
             lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
+
+            if( bMetaCity && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
+                m_bSetFocusOnMap = true;
 
             gtk_widget_show( m_pWindow );
 
@@ -1457,6 +1455,12 @@ void GtkSalFrame::setMinMaxSize()
                 aGeo.max_height = maGeometry.nHeight;
                 aHints |= GDK_HINT_MAX_SIZE;
             }
+        }
+        if( m_bFullscreen )
+        {
+            aGeo.max_width = m_aMaxSize.Width();
+            aGeo.max_height = m_aMaxSize.Height();
+            aHints |= GDK_HINT_MAX_SIZE;
         }
         if( aHints )
             gtk_window_set_geometry_hints( GTK_WINDOW(m_pWindow),
@@ -1809,8 +1813,6 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             {
                 m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                                                Size( maGeometry.nWidth, maGeometry.nHeight ) );
-                // workaround different window managers have different opinions about
-                // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
                 bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
                 if( bVisible )
                     Show( FALSE );
@@ -1827,12 +1829,22 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
                 gtk_window_move( GTK_WINDOW(m_pWindow),
                                  maGeometry.nX = aNewPosSize.Left(),
                                  maGeometry.nY = aNewPosSize.Top() );
+                // #i110881# for the benefit of compiz set a max size here
+                // else setting to fullscreen fails for unknown reasons
+                m_aMaxSize.Width() = aNewPosSize.GetWidth()+100;
+                m_aMaxSize.Height() = aNewPosSize.GetHeight()+100;
+                // workaround different legacy version window managers have different opinions about
+                // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
+                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                    gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
                 if( bVisible )
                     Show( TRUE );
             }
             else
             {
                 bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
+                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                    gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
                 if( bVisible )
                     Show( FALSE );
                 m_nStyle &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
@@ -1855,8 +1867,11 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
         {
             if( bFullScreen )
             {
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                {
+                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+                }
                 gtk_window_fullscreen( GTK_WINDOW(m_pWindow) );
                 moveToScreen( nScreen );
                 Size aScreenSize = pDisp->GetScreenSize( m_nScreen );
@@ -1868,8 +1883,11 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             else
             {
                 gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
+                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                {
+                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
+                }
                 moveToScreen( nScreen );
             }
         }
@@ -2081,7 +2099,14 @@ void GtkSalFrame::ToTop( USHORT nFlags )
              *  is set to false.
              */
             if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE)) )
+            {
+                // sad but true: this can cause an XError, we need to catch that
+                // to do this we need to synchronize with the XServer
+                getDisplay()->GetXLib()->PushXErrorLevel( true );
                 XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( m_pWindow->window ), RevertToParent, CurrentTime );
+                XSync( getDisplay()->GetDisplay(), False );
+                getDisplay()->GetXLib()->PopXErrorLevel();
+            }
         }
         else
         {
@@ -2834,6 +2859,8 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
 
     GTK_YIELD_GRAB();
 
+    bool bSetFocus = pThis->m_bSetFocusOnMap;
+    pThis->m_bSetFocusOnMap = false;
     if( ImplGetSVData()->mbIsTestTool )
     {
         /* #i76541# testtool needs the focus to be in a new document
@@ -2843,9 +2870,14 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
         *  so this is done when running in testtool only
         */
         if( ! pThis->m_pParent && (pThis->m_nStyle & SAL_FRAME_STYLE_MOVEABLE) != 0 )
-            XSetInputFocus( pThis->getDisplay()->GetDisplay(),
-                            GDK_WINDOW_XWINDOW( GTK_WIDGET(pThis->m_pWindow)->window),
-                            RevertToParent, CurrentTime );
+            bSetFocus = true;
+    }
+
+    if( bSetFocus )
+    {
+        XSetInputFocus( pThis->getDisplay()->GetDisplay(),
+                        GDK_WINDOW_XWINDOW( GTK_WIDGET(pThis->m_pWindow)->window),
+                        RevertToParent, CurrentTime );
     }
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
@@ -3169,6 +3201,15 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
                        Size( pThis->maGeometry.nWidth, pThis->maGeometry.nHeight ) );
     }
     pThis->m_nState = pEvent->window_state.new_window_state;
+
+    #if OSL_DEBUG_LEVEL > 1
+    if( (pEvent->window_state.changed_mask & GDK_WINDOW_STATE_FULLSCREEN) )
+    {
+        fprintf( stderr, "window %p %s full screen state\n",
+            pThis,
+            (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? "enters" : "leaves");
+    }
+    #endif
 
     return FALSE;
 }

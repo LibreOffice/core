@@ -502,6 +502,13 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         }
     }
 
+    static const char* pEnvHC = getenv( "SAL_FORCE_HC" );
+    if( pEnvHC && *pEnvHC )
+    {
+        aStyleSettings.SetHighContrastMode( TRUE );
+        rSettings.SetStyleSettings( aStyleSettings );
+    }
+
 #ifdef DBG_UTIL
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
@@ -8147,7 +8154,7 @@ const XubString& Window::GetHelpText() const
         {
             rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
             aTxt.append( mpWindowImpl->maHelpText );
-            aTxt.appendAscii( "\n+++++++++++++++\n" );
+            aTxt.appendAscii( "\n------------------\n" );
             if( bStrHelpId )
                 aTxt.append( rtl::OUString( aStrHelpId ) );
             else

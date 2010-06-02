@@ -40,17 +40,14 @@ bool InitAtkBridge(void)
 {
     const char* pVersion = atk_get_toolkit_version();
     if( ! pVersion )
-    {
-        g_warning( "unable to get gail version number" );
         return false;
-    }
 
     unsigned int major, minor, micro;
 
     /* check gail minimum version requirements */
     if( sscanf( pVersion, "%u.%u.%u", &major, &minor, &micro) < 3 )
     {
-        g_warning( "unable to parse gail version number" );
+        // g_warning( "unable to parse gail version number" );
         return false;
     }
 
