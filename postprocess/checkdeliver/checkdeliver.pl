@@ -53,7 +53,8 @@ my $source_config    = SourceConfig -> new($ENV{SOLARSRC});
 my @exceptionmodlist = (
                         "postprocess",
                         "instset.*native",
-                        "smoketest.*native"
+                        "smoketest.*native",
+                        "testgraphical"
                        ); # modules not yet delivered
 
 #### main #####
