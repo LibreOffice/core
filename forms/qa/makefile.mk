@@ -32,8 +32,6 @@ PRJNAME = forms
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-
-.IF "$(BUILD_QADEVOOO)" == "YES"
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
@@ -54,7 +52,6 @@ JARCOMPRESS 	= TRUE
 # classpath and argument list
 RUNNER_CLASSPATH = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar"
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
-.END
 
 # --- Targets ------------------------------------------------------
 
@@ -72,7 +69,6 @@ ALL: 	ALLDEP
 test:
     echo $(SOLARBINDIR)
 
-.IF "$(BUILD_QADEVOOO)" == "YES"
 show_targets:
     +@$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
 
@@ -81,11 +77,3 @@ run:
 
 run_%:
     +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
-
-.ELSE
-run: show_targets
-
-show_targets:
-    +@echo "Built without qadevOOo, no QA tests"
-
-.ENDIF
