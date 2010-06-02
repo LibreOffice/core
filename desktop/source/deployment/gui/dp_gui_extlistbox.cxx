@@ -1020,13 +1020,13 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
             (*iIndex)->m_sVersion = xPackage->getVersion();
             (*iIndex)->m_sDescription = xPackage->getDescription();
 
-            if ( eState == AMBIGUOUS )
-                (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-            else
-                (*iIndex)->m_sErrorText = String();
-
             if ( eState == REGISTERED )
                 (*iIndex)->m_bMissingLic = false;
+
+            if ( eState == AMBIGUOUS )
+                (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
+            else if ( ! (*iIndex)->m_bMissingLic )
+                (*iIndex)->m_sErrorText = String();
 
             if ( IsReallyVisible() )
                 Invalidate();
