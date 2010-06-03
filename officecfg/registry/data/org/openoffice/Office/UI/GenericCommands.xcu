@@ -3420,7 +3420,12 @@
                     <value>9</value>
                 </prop>
             </node>
-            <node oor:name=".uno:RestoreEditingView" oor:op="replace">
+      <node oor:name=".uno:TaskPane" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Task Pane</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RestoreEditingView" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Restore Editing View</value>
                 </prop>
