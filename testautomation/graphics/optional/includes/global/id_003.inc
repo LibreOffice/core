@@ -29,14 +29,6 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiViewNavigator
-' #1 tiViewZoom
-' #1 tiViewToolbar
-' #1 tiViewDisplayQuality
-' #1 tiViewLayer
-' #1 tViewSnapLines
-' #1 tViewGrid
 '\**********************************************************************************
 
 testcase tiViewNavigator

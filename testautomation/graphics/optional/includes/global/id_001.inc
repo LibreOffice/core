@@ -29,20 +29,6 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiFileSaveAs
-' #1 tiFileReload (sFileIn as string)
-' #1 tiFileVersion (sFileIn as string)
-' #1 tiFilePassword
-' #1 tiFileTemplates
-' #1 tmFileNewFromTemplate
-' #1 tmFileOpen
-' #1 tmFileClose
-' #1 tmFileSave
-' #1 tmFileSaveAs
-' #1 tmFileSaveAll
-' #1 tmFileProperties
-' #1 tmFilePrinterSetting
 '\**********************************************************************************
 
 

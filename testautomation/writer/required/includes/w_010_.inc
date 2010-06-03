@@ -74,6 +74,9 @@ end sub
 '-----------------------------------------------------------
 
 testcase tFormatting
+
+    GLOBAL_USE_NEW_SLEEP = TRUE
+
     printlog "- Objectbar ( normal ) : Formatting"
     Call hNewDocument
     printlog " Open new document"
@@ -147,6 +150,9 @@ testcase tFormatting
     Sleep 1
     Call hCloseDocument
     printlog " Close active document"
+
+    GLOBAL_USE_NEW_SLEEP = FALSE
+    
 endcase
 
 '-----------------------------------------------------------

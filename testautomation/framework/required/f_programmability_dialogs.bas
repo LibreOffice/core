@@ -38,13 +38,17 @@ sub main
     use "framework\required\includes\basic_organizer.inc"
     use "framework\required\includes\basic_dialog_export.inc"
     use "framework\required\includes\basic_dialog_i18n_import.inc"
+    use "framework\required\includes\scripting_basics.inc"
+    use "framework\required\includes\script_organizers.inc"
 
-    call hStatusIn( "framework" , "f_basic_dialogs.bas" )
+    call hStatusIn( "framework" , "f_programmability_dialogs.bas" )
     call tUpdtMacroAssignment()
     call tUpdtBasicDialogI18n()
     call tUpdtBasicOrganizer()
     call tUpdtDialogExport()
     call tBasicDialogI18nImport()
+    call tScripting()       ' script organizer nodes if no documents are open
+    call tUpdtScriptCount() ' script organizer nodes with one open document
     call hStatusOut()
 
 end sub
