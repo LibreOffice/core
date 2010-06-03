@@ -95,7 +95,7 @@
     opened ( it is locked by hierarchical access ).
     </p>
  */
-interface XHierarchicalStorageAccess
+published interface XHierarchicalStorageAccess
 {
     // METHODS
     //
