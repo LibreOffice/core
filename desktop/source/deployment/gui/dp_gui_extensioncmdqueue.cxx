@@ -76,6 +76,7 @@
 #include "comphelper/anytostring.hxx"
 #include "vcl/msgbox.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
+#include "comphelper/processfactory.hxx"
 
 #include "dp_gui.h"
 #include "dp_gui_thread.hxx"
@@ -1183,6 +1184,11 @@ void ExtensionCmdQueue::checkForUpdates( const std::vector<uno::Reference<deploy
 void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackage > &rPackage )
 {
     m_thread->acceptLicense( rPackage );
+}
+
+void ExtensionCmdQueue::syncRepositories( const uno::Reference< uno::XComponentContext > &xContext )
+{
+    dp_misc::syncRepositories( new ProgressCmdEnv( xContext, NULL, OUSTR("Extension Manager") ) );
 }
 
 void ExtensionCmdQueue::stop()
