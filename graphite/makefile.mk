@@ -105,12 +105,12 @@ EXTRA_GR_CXX_FLAGS=-mthreads -nostdinc
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 EXTRA_GR_CXX_FLAGS+=-shared-libgcc
 .ENDIF
-EXTRA_GR_LD_FLAGS+=-no-undefined
+EXTRA_GR_LD_FLAGS+=-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2
 .ENDIF
 
 # don't use SOLARLIB for LDFLAGS because it pulls in system graphite so build will fail
 # 
-CONFIGURE_ACTION=bash -c 'CXXFLAGS="$(INCLUDE) $(CFLAGSCXX) $(CFLAGSCOBJ) $(CDEFS) $(CDEFSOBJ) $(SOLARINC) $(LFS_CFLAGS) $(EXTRA_GR_CXX_FLAGS)" $(GR_LIB_PATH) LDFLAGS="-L$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT) $(EXTRA_GR_LD_FLAGS) -Wl,--enable-runtime-pseudo-reloc-v2" ./configure $(GR_CONFIGURE_FLAGS)'
+CONFIGURE_ACTION=bash -c 'CXXFLAGS="$(INCLUDE) $(CFLAGSCXX) $(CFLAGSCOBJ) $(CDEFS) $(CDEFSOBJ) $(SOLARINC) $(LFS_CFLAGS) $(EXTRA_GR_CXX_FLAGS)" $(GR_LIB_PATH) LDFLAGS="-L$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT) $(EXTRA_GR_LD_FLAGS)" ./configure $(GR_CONFIGURE_FLAGS)'
 .ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)
