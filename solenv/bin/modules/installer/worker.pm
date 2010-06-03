@@ -402,11 +402,6 @@ sub create_installation_directory
     else
     {
         $installdir = installer::systemactions::create_directories("install", $languageref);
-        if ( $installer::globals::localinstalldir )
-        {
-            $installdir = $installer::globals::localinstalldir;
-            $installer::globals::localinstalldirset = 1;
-        }
         installer::logger::print_message( "... creating installation set in $installdir ...\n" );
         remove_old_installation_sets($installdir);
         my $inprogressinstalldir = $installdir . "_inprogress";
@@ -490,6 +485,12 @@ sub analyze_and_save_logfile
     if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
 
     if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
+
+    # Exiting the packaging process, if an error occured.
+    # This is important, to get an error code "-1", if an error was found in the log file,
+    # that did not break the packaging process
+
+    if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
 
     return ($is_success, $finalinstalldir);
 }
@@ -3132,7 +3133,8 @@ sub put_license_into_setup
 
     # find and read english license file
     my $licenselanguage = "en-US";                  # always english !
-    my $licensefilename = "LICENSE_" . $licenselanguage;
+    # my $licensefilename = "LICENSE_" . $licenselanguage;
+    my $licensefilename = "license_" . $licenselanguage . ".txt";
     my $licenseincludepatharrayref = get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
 
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $licenseincludepatharrayref, 0);

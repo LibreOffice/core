@@ -28,8 +28,10 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:oor="http://openoffice.org/2001/registry">
+  <xsl:param name="prefix"/>
   <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="value"/>
+  <xsl:preserve-space elements="value it"/>
+    <!-- TODO: strip space from "value" elements that have "it" children -->
   <xsl:template match="/">
     <oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -44,12 +46,13 @@
       (e.g., xcs files preceeding xcu files).
 -->
       <xsl:for-each select="list/filename">
+        <xsl:variable name="doc" select="document(concat($prefix, .))"/>
         <xsl:choose>
-          <xsl:when test="count(document(.)/oor:component-schema) = 1">
-            <xsl:apply-templates select="document(.)/oor:component-schema"/>
+          <xsl:when test="count($doc/oor:component-schema) = 1">
+            <xsl:apply-templates select="$doc/oor:component-schema"/>
           </xsl:when>
-          <xsl:when test="count(document(.)/oor:component-data) = 1">
-            <xsl:apply-templates select="document(.)/oor:component-data"/>
+          <xsl:when test="count($doc/oor:component-data) = 1">
+            <xsl:apply-templates select="$doc/oor:component-data"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:message terminate="yes">
@@ -63,19 +66,25 @@
   </xsl:template>
   <xsl:template
      match="oor:component-schema|oor:component-data|templates|component|group|
-            set|node-ref|prop|item|value|node">
+            set|node-ref|prop|item|value|it|unicode|node">
     <xsl:copy copy-namespaces="no">
       <!-- prune oor:component-data xmlns:install="..." namespaces (would only
            work in XSLT 2.0, however) -->
-      <xsl:for-each select="@*">
-        <xsl:attribute name="{name()}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
+      <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+  <xsl:template match="value[it]">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="*"/>
+        <!-- ignore text elements (which must be whitespace only) -->
     </xsl:copy>
   </xsl:template>
   <xsl:template match="info|import|uses|constraints"/>
     <!-- TODO: no longer strip elements when they are eventually read by
          configmgr implementation -->
+  <xsl:template match="@*">
+    <xsl:copy/>
+  </xsl:template>
 </xsl:stylesheet>
