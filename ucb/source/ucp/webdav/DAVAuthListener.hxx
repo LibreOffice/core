@@ -30,9 +30,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
 
-#ifndef _COM_SUN_STAR_UCB_XREFERENCE_HPP_
 #include <com/sun/star/uno/XReference.hpp>
-#endif
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 namespace webdav_ucp
@@ -46,7 +44,6 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
             const ::rtl::OUString & inHostName,
             ::rtl::OUString & inoutUserName,
             ::rtl::OUString & outPassWord,
-            sal_Bool bAllowPersistentStoring,
             sal_Bool bCanUseSystemCredentials ) = 0;
 };
 

@@ -1271,6 +1271,10 @@ void SchXMLAxisContext::CreateAxis()
     // set properties
     if( xProp.is())
     {
+        // #i109879# the line color is black as default, in the model it is a light gray
+        xProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )),
+                                     uno::makeAny( COL_BLACK ));
+
         xProp->setPropertyValue( rtl::OUString::createFromAscii( "DisplayLabels" ), aFalseBool );
 
         // #88077# AutoOrigin 'on' is default
