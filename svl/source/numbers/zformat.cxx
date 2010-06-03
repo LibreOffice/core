@@ -54,6 +54,9 @@
 #include "numhead.hxx"
 #include <unotools/digitgroupingiterator.hxx>
 #include "nfsymbol.hxx"
+
+#include <cmath>
+
 using namespace svt;
 
 namespace {
@@ -63,6 +66,10 @@ struct Gregorian
         return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gregorian"));
     }
 };
+
+const sal_uInt16 UPPER_PRECISION = 300; // entirely arbitrary...
+const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this value.
+
 }
 
 const double _D_MAX_U_LONG_ = (double) 0xffffffff;      // 4294967295.0
@@ -675,7 +682,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     xub_StrLen nAnzChars = ImpGetNumber(rString, nPos, sStr);
                     if (nAnzChars > 0)
                     {
-                        short F_Type;
+                        short F_Type = NUMBERFORMAT_UNDEFINED;
                         if (!pISc->IsNumberFormat(sStr,F_Type,fNumber) ||
                             ( F_Type != NUMBERFORMAT_NUMBER &&
                             F_Type != NUMBERFORMAT_SCIENTIFIC) )
@@ -1774,47 +1781,62 @@ void SvNumberformat::Build50Formatstring( String& rStr ) const
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
 {
-    USHORT nStandardPrec = rScan.GetStandardPrec();
+    sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
+
     if ( fabs(fNumber) > 1.0E15 )       // #58531# war E16
+    {
+        nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
         OutString = ::rtl::math::doubleToUString( fNumber,
                 rtl_math_StringFormat_E, nStandardPrec /*2*/,
                 GetFormatter().GetNumDecimalSep().GetChar(0));
+    }
     else
-    {
+        ImpGetOutputStdToPrecision(fNumber, OutString, nStandardPrec);
+}
+
+void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutString, sal_uInt16 nPrecision) const
+{
+    // Make sure the precision doesn't go over the maximum allowable precision.
+    nPrecision = ::std::min(UPPER_PRECISION, nPrecision);
+
 #if 0
 {
-        // debugger test case for ANSI standard correctness
-        ::rtl::OUString aTest;
-        // expect 0.00123   OK
-        aTest = ::rtl::math::doubleToUString( 0.001234567,
-                rtl_math_StringFormat_G, 3, '.', sal_True );
-        // expect 123       OK
-        aTest = ::rtl::math::doubleToUString( 123.4567,
-                rtl_math_StringFormat_G, 3, '.', sal_True );
-        // expect 123.5     OK
-        aTest = ::rtl::math::doubleToUString( 123.4567,
-                rtl_math_StringFormat_G, 4, '.', sal_True );
-        // expect 1e+03 (as 999.6 rounded to 3 significant digits results in
-        // 1000 with an exponent equal to significant digits)
-        // Currently (24-Jan-2003) we do fail in this case and output 1000
-        // instead, negligible.
-        aTest = ::rtl::math::doubleToUString( 999.6,
-                rtl_math_StringFormat_G, 3, '.', sal_True );
-        // expect what? result is 1.2e+004
-        aTest = ::rtl::math::doubleToUString( 12345.6789,
-                rtl_math_StringFormat_G, -3, '.', sal_True );
+    // debugger test case for ANSI standard correctness
+    ::rtl::OUString aTest;
+    // expect 0.00123   OK
+    aTest = ::rtl::math::doubleToUString( 0.001234567,
+            rtl_math_StringFormat_G, 3, '.', sal_True );
+    // expect 123       OK
+    aTest = ::rtl::math::doubleToUString( 123.4567,
+            rtl_math_StringFormat_G, 3, '.', sal_True );
+    // expect 123.5     OK
+    aTest = ::rtl::math::doubleToUString( 123.4567,
+            rtl_math_StringFormat_G, 4, '.', sal_True );
+    // expect 1e+03 (as 999.6 rounded to 3 significant digits results in
+    // 1000 with an exponent equal to significant digits)
+    // Currently (24-Jan-2003) we do fail in this case and output 1000
+    // instead, negligible.
+    aTest = ::rtl::math::doubleToUString( 999.6,
+            rtl_math_StringFormat_G, 3, '.', sal_True );
+    // expect what? result is 1.2e+004
+    aTest = ::rtl::math::doubleToUString( 12345.6789,
+            rtl_math_StringFormat_G, -3, '.', sal_True );
 }
 #endif
 
-        OutString = ::rtl::math::doubleToUString( fNumber,
-                rtl_math_StringFormat_F, nStandardPrec /*2*/,
-                GetFormatter().GetNumDecimalSep().GetChar(0), sal_True );
-        if (OutString.GetChar(0) == '-' &&
-            OutString.GetTokenCount('0') == OutString.Len())
-            OutString.EraseLeadingChars('-');            // nicht -0
-    }
-    ImpTransliterate( OutString, NumFor[0].GetNatNum() );
-    return;
+    // We decided to strip trailing zeros unconditionally, since binary
+    // double-precision rounding error makes it impossible to determine e.g.
+    // whether 844.10000000000002273737 is what the user has typed, or the
+    // user has typed 844.1 but IEEE 754 represents it that way internally.
+
+    rOutString = ::rtl::math::doubleToUString( rNumber,
+            rtl_math_StringFormat_F, nPrecision /*2*/,
+            GetFormatter().GetNumDecimalSep().GetChar(0), true );
+    if (rOutString.GetChar(0) == '-' &&
+        rOutString.GetTokenCount('0') == rOutString.Len())
+        rOutString.EraseLeadingChars('-');            // nicht -0
+
+    ImpTransliterate( rOutString, NumFor[0].GetNatNum() );
 }
 
 void SvNumberformat::ImpGetOutputInputLine(double fNumber, String& OutString)
@@ -1955,6 +1977,71 @@ ULONG SvNumberformat::ImpGGTRound(ULONG x, ULONG y)
     }
 }
 
+namespace {
+
+void lcl_GetOutputStringScientific(
+    double fNumber, sal_uInt16 nCharCount, const SvNumberFormatter& rFormatter, String& rOutString)
+{
+    bool bSign = ::rtl::math::isSignBitSet(fNumber);
+
+    // 1.000E+015 (one digit and the decimal point, and the five chars for the exponential part, totalling 7).
+    sal_uInt16 nPrec = nCharCount > 7 ? nCharCount - 7 : 0;
+    if (nPrec && bSign)
+        // Make room for the negative sign.
+        --nPrec;
+
+    nPrec = ::std::min(nPrec, static_cast<sal_uInt16>(14)); // limit to 14 decimals.
+
+    rOutString = ::rtl::math::doubleToUString(
+        fNumber, rtl_math_StringFormat_E, nPrec, rFormatter.GetNumDecimalSep().GetChar(0));
+}
+
+}
+
+bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, String& rOutString) const
+{
+    using namespace std;
+
+    if (eType != NUMBERFORMAT_NUMBER)
+        return false;
+
+    double fTestNum = fNumber;
+    bool bSign = ::rtl::math::isSignBitSet(fTestNum);
+    if (bSign)
+        fTestNum = -fTestNum;
+
+    if (fTestNum < EXP_LOWER_BOUND)
+    {
+        lcl_GetOutputStringScientific(fNumber, nCharCount, GetFormatter(), rOutString);
+        return true;
+    }
+
+    double fExp = log10(fTestNum);
+    // Values < 1.0 always have one digit before the decimal point.
+    sal_uInt16 nDigitPre = fExp >= 0.0 ? static_cast<sal_uInt16>(ceil(fExp)) : 1;
+
+    if (nDigitPre > 15)
+    {
+        lcl_GetOutputStringScientific(fNumber, nCharCount, GetFormatter(), rOutString);
+        return true;
+    }
+
+    sal_uInt16 nPrec = nCharCount >= nDigitPre ? nCharCount - nDigitPre : 0;
+    if (nPrec && bSign)
+        // Subtract the negative sign.
+        --nPrec;
+    if (nPrec)
+        // Subtract the decimal point.
+        --nPrec;
+
+    ImpGetOutputStdToPrecision(fNumber, rOutString, nPrec);
+    if (rOutString.Len() > nCharCount)
+        // String still wider than desired.  Switch to scientific notation.
+        lcl_GetOutputStringScientific(fNumber, nCharCount, GetFormatter(), rOutString);
+
+    return true;
+}
+
 BOOL SvNumberformat::GetOutputString(double fNumber,
                                      String& OutString,
                                      Color** ppColor)
@@ -1978,16 +2065,43 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
     BOOL bHadStandard = FALSE;
     if (bStandard)                              // einzelne Standardformate
     {
-        if (rScan.GetStandardPrec() == 300)     // alle Zahlformate InputLine
+        if (rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION)     // alle Zahlformate InputLine
         {
             ImpGetOutputInputLine(fNumber, OutString);
-            return FALSE;
+            return false;
         }
         switch (eType)
         {
             case NUMBERFORMAT_NUMBER:                   // Standardzahlformat
+            {
+                if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
+                {
+                    bool bSign = ::rtl::math::isSignBitSet(fNumber);
+                    if (bSign)
+                        fNumber = -fNumber;
+                    ImpGetOutputStdToPrecision(fNumber, OutString, 10); // Use 10 decimals for general 'unlimited' format.
+                    if (fNumber < EXP_LOWER_BOUND)
+                    {
+                        xub_StrLen nLen = OutString.Len();
+                        if (!nLen)
+                            return false;
+
+                        if (nLen > 11)
+                        {
+                            sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
+                            nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
+                            OutString = ::rtl::math::doubleToUString( fNumber,
+                                    rtl_math_StringFormat_E, nStandardPrec /*2*/,
+                                    GetFormatter().GetNumDecimalSep().GetChar(0), true);
+                        }
+                    }
+                    if (bSign)
+                        OutString.Insert('-', 0);
+                    return false;
+                }
                 ImpGetOutputStandard(fNumber, OutString);
                 bHadStandard = TRUE;
+            }
             break;
             case NUMBERFORMAT_DATE:
                 bRes |= ImpGetDateOutput(fNumber, 0, OutString);
