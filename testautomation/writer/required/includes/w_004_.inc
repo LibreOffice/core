@@ -36,49 +36,24 @@ sub w_004_
     printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
     gApplication = "WRITER"
 
-    Call tInsertManualBreak
-    Call tInsertFields
-
-    Call tInsertFieldsOther
-    Call tInsertSpecialCharacter
-
-    Call tInsertSection
-    Call tInsertHyperlink
-
-    Call tInsertFootnote
-    Call tInsertCaption
-    Call tInsertBookmark
-    Call tInsertCrossReference
-    Call tInsertComment
-    Call tInsertScript
-    Call tInsertIndexesEntry
-    Call tInsertIndexesIndex
-    Call tInsertIndexesBibliographyEntry
-
-    Call tInsertEnvelope
-
-    Call tInsertFrame
-    Call tInsertTable
-    Call tInsertHorizontalLine
-    Call tInsertGraphicsFromFile
-    Call tInsertAllGraphicsFromFile
-
-    Call tInsertObjectOLEObject
-    Call tInsertObjectPlugIn
-    Call tInsertObjectSound
-    Call tInsertObjectVideo
-    Call tInsertObjectFormula
-    Call tInsertObjectChart
-    Call tInsertFile
-
-    'Writer Web
-    gApplication = "HTML"
-    Call tHtmlDocInsertFields
-    Call tHtmlDocInsertFieldsOther
-    Call tHtmlDocInsertSection
-    Call tHtmlDocInsertFrame
-    Call tHtmlDocInsertGraphicsFromFile
-    gApplication = "WRITER"
+    call tInsertManualBreak
+    call tInsertFields
+    call tInsertFieldsOther
+    call tInsertSpecialCharacter
+    call tInsertSection
+    call tInsertHyperlink
+    call tInsertFootnote
+    call tInsertCaption
+    call tInsertBookmark
+    call tInsertComment
+    call tInsertCrossReference
+    call tInsertScript
+    call tInsertIndexesEntry
+    call tInsertIndexesIndex
+    call tInsertIndexesBibliographyEntry
+    call tInsertEnvelope
+    call tInsertFrame
+    call tInsertTable
 
 end sub
 

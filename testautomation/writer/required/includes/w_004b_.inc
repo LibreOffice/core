@@ -31,6 +31,32 @@
 '*
 '\***********************************************************************
 
+sub w_004b_
+
+    printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
+
+    gApplication = "WRITER"
+    call tInsertHorizontalLine
+    call tInsertGraphicsFromFile
+    call tInsertAllGraphicsFromFile
+    call tInsertObjectOLEObject
+    call tInsertObjectPlugIn
+    call tInsertObjectSound
+    call tInsertObjectVideo
+    call tInsertObjectFormula
+    call tInsertObjectChart
+    call tInsertFile
+
+    gApplication = "HTML"
+    call tHtmlDocInsertFields
+    call tHtmlDocInsertFieldsOther
+    call tHtmlDocInsertSection
+    call tHtmlDocInsertFrame
+    call tHtmlDocInsertGraphicsFromFile
+    gApplication = "WRITER"
+
+end sub
+
 testcase tInsertHorizontalLine
     PrintLog "- Insert / Horizontal Line"
 
