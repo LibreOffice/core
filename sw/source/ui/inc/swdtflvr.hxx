@@ -93,6 +93,7 @@ class SwTransferable : public TransferableHelper
     void DeleteSelection();
 
     // helper methods for the paste
+    static SwTransferable* GetSwTransferable( const TransferableDataHelper& rData );
     static void SetSelInShell( SwWrtShell& , BOOL , const Point* );
     static BOOL _CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                 String& rFileName, String* pTitle = 0 );
