@@ -37,19 +37,19 @@ testcase tiInsertSlideExpandSummary
     Call hNewDocument
     printlog "View->Master View->Outline View "
     ViewWorkspaceOutlineView
-    Sleep 1
+    WaitSlot()
     Kontext "DocumentImpressOutlineView"
     printlog "Type 2 rows "
     DocumentImpressOutlineView.TypeKeys "Herbert<Return>Rudi"
     printlog "View->Master View->Drawing View "
     ViewWorkspaceDrawingView
-    Sleep 1
+    WaitSlot()
     printlog "Insert->Summery Slide "
     InsertSummerySlide
-    Sleep 1
+    WaitSlot()
     printlog "Insert->Expand Slide "
     InsertExpandSlide
-    Sleep 2
+    WaitSlot( 3000 )
     printlog "close application "
     Call  hCloseDocument
 endcase
