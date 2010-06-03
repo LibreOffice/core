@@ -100,7 +100,8 @@ $(call gb_SrsTarget_get_clean_target,%) :
         rm -f $(call gb_SrsTarget_get_target,$*) \
             $(call gb_SrsTarget_get_dep_target,$*) \
             $(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_target,$(part))) \
-            $(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
+            $(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))) \
+            $(foreach part,$(PARTS),$(call gb_SrsPartMergeTarget_get_target,$(part))))
 
 
 define gb_SrsTarget__command_dep
