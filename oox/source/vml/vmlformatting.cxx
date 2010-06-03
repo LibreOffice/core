@@ -31,7 +31,6 @@
 #include "oox/token/tokenmap.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
@@ -475,7 +474,7 @@ void FillModel::assignUsed( const FillModel& rSource )
     moRotate.assignIfUsed( rSource.moRotate );
 }
 
-void FillModel::pushToPropMap( PropertyMap& rPropMap, ::oox::core::FilterBase& rFilter,
+void FillModel::pushToPropMap( PropertyMap& rPropMap,
         ModelObjectHelper& rModelObjectHelper, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML fill formatting to DrawingML fill formatting and let the
@@ -569,7 +568,7 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap, ::oox::core::FilterBase& r
             {
                 if( moBitmapPath.has() && moBitmapPath.get().getLength() > 0 )
                 {
-                    aFillProps.maBlipProps.mxGraphic = rFilter.importEmbeddedGraphic( moBitmapPath.get() );
+                    aFillProps.maBlipProps.mxGraphic = rGraphicHelper.importEmbeddedGraphic( moBitmapPath.get() );
                     if( aFillProps.maBlipProps.mxGraphic.is() )
                     {
                         aFillProps.moFillType = XML_blipFill;

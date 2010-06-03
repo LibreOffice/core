@@ -35,6 +35,7 @@
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
@@ -189,7 +190,7 @@ OUString CreateOleObjectCallback::onCreateXShape( const OUString&, const awt::Re
     // import and store the graphic
     if( aGraphicPath.getLength() > 0 )
     {
-        Reference< graphic::XGraphic > xGraphic = mrFilter.importEmbeddedGraphic( aGraphicPath );
+        Reference< graphic::XGraphic > xGraphic = mrFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
         if( xGraphic.is() )
             maShapeProps[ PROP_Graphic ] <<= xGraphic;
     }

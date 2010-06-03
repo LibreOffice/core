@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include "properties.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -99,7 +100,7 @@ Reference< XShape > lclCreateXShape( const XmlFilterBase& rFilter, const OUStrin
     Reference< XShape > xShape;
     try
     {
-        Reference< XMultiServiceFactory > xFactory( rFilter.getModel(), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rFilter.getModelFactory(), UNO_SET_THROW );
         xShape.set( xFactory->createInstance( rService ), UNO_QUERY_THROW );
     }
     catch( Exception& )
@@ -317,7 +318,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
 
     PropertyMap aPropMap;
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
-    maTypeModel.maFillModel.pushToPropMap( aPropMap, mrDrawing.getFilter(), rModelObjectHelper, rGraphicHelper );
+    maTypeModel.maFillModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
 
     PropertySet aPropSet( rxShape );
     aPropSet.setProperties( aPropMap );
@@ -431,7 +432,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 // set the replacement graphic
                 if( aGraphicPath.getLength() > 0 )
                 {
-                    Reference< XGraphic > xGraphic = rFilter.importEmbeddedGraphic( aGraphicPath );
+                    Reference< XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
                     if( xGraphic.is() )
                         aOleProps[ PROP_Graphic ] <<= xGraphic;
                 }
@@ -478,7 +479,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         Reference< XShape > xShape = lclCreateAndInsertXShape( rFilter, rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.GraphicObjectShape" ), rShapeRect );
         if( xShape.is() )
         {
-            OUString aGraphicUrl = rFilter.importEmbeddedGraphicObject( aGraphicPath );
+            OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( aGraphicPath );
             if( aGraphicUrl.getLength() > 0 )
             {
                 PropertySet aPropSet( xShape );
