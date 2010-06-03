@@ -2,6 +2,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %COMMON_DEST%\res%_EXT%
 mkdir: %_DEST%\inc%_EXT%\svtools
 mkdir: %_DEST%\inc%_EXT%\svtools\toolpanel
+mkdir: %_DEST%\inc%_EXT%\svtools\table
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\srs\ehdl.srs %_DEST%\res%_EXT%\svtools.srs
@@ -26,6 +27,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools\toolpanel
 ..\inc\svtools\*.hxx %_DEST%\inc%_EXT%\svtools\*.hxx
 ..\inc\svtools\*.h %_DEST%\inc%_EXT%\svtools\*.h
 ..\inc\svtools\*.hrc %_DEST%\inc%_EXT%\svtools\*.hrc
+..\inc\svtools\table\*.hxx %_DEST%\inc%_EXT%\svtools\table\*.hxx
 ..\inc\*.hxx %_DEST%\inc%_EXT%\svtools\*.hxx
 ..\inc\*.h %_DEST%\inc%_EXT%\svtools\*.h
 ..\inc\*.hrc %_DEST%\inc%_EXT%\svtools\*.hrc
