@@ -667,99 +667,101 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariablesDDEFieldManual
-    qaerrorlog "#i93906# - tVariablesDDEFieldManual outcommented due to a problem with copying field-contents outside the office."
+    warnlog "#i112079#testcase must be reworked"
     goto endsub
 
-  Dim sDDEFile        as String
-  Dim sContent        as String
-  Dim sName           as String
-  Dim sDDEStatement   as String
-  Dim sSectionName    as String
+    Dim sDDEFile        as String
+    Dim sContent        as String
+    Dim sName           as String
+    Dim sDDEStatement   as String
+    Dim sSectionName    as String
 
-  sDDEFile = Convertpath ( gNetzOfficePath + "dde_test.oxt")
-  sContent = "DDE"
-  sName    = "myTest"
-  sSectionName  = "Section1"
-  sDDEStatement = "soffice " & sDDEFile & " " & sSectionName
+    sDDEFile = Convertpath ( gOfficePath + "\user\work\dde_test.odt")
+    sContent = "DDE"
+    sName    = "myTest"
+    sSectionName  = "Section1"
+    sDDEStatement = "soffice " & sDDEFile & " " & sSectionName
 
-  printlog "DDE field - manual"
- '/// <b> DDE field - manual </b>
+    printlog "DDE field - manual"
+    '/// <b> DDE field - manual </b>
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+    if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
-  Call hNewDocument
+    Call hNewDocument
 
-  '/// Input something , insert a section , then save it and close the file
-   Call wTypeKeys sContent
-   Call wTypeKeys "<Shift Home>"
-   Call fInsertSection("TabBereiche")
-     Bereichsliste.Settext sSectionName
-   TabBereiche.OK
-   Sleep 1
-   Call hFileSaveAsKill(sDDEFile)
-  Call hCloseDocument
+    '/// Input something , insert a section , then save it and close the file
+    Call wTypeKeys sContent
+    Call wTypeKeys "<Shift Home>"
+    Call fInsertSection("TabBereiche")
+    Bereichsliste.Settext sSectionName
+    TabBereiche.OK
+    Sleep 1
+    Call hFileSaveAsKill(sDDEFile)
+    Call hCloseDocument
 
-  '/// Opan a new document
-   Call hNewDocument
+    '/// Opan a new document
+    Call hNewDocument
+    '/// Insert/Fields/Other/Variables / Select "DDE Field"
+    '/// Set DDE name and DDE statement , select "DDE manual"
+    Call fInsertFieldsOther("TabVariablen")
+    Feldtyp.Select 3
+    Sleep 1
+    NameText.SetText sName
+    Wert.SetText sDDEStatement
+    Formatliste.Select 1
+    Einfuegen.Click
+    Sleep 2
+    TabVariablen.Close
+    Sleep 2
 
-  '/// Insert/Fields/Other/Variables / Select "DDE Field"
-  '/// Set DDE name and DDE statement , select "DDE manual"
-   Call fInsertFieldsOther("TabVariablen")
-     Feldtyp.Select 3
-     Sleep 1
-     NameText.SetText sName
-     Wert.SetText     sDDEStatement
-     Formatliste.Select 1
-     Einfuegen.Click
-     Sleep 2
-   TabVariablen.Close
-   Sleep 2
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
+    if fGetFieldContent() <> sContent then
+        Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
+    end if
 
-   Call wTypeKeys "<MOD1 Home>"
-   Call wTypeKeys "<Shift End>"
-   if fGetFieldContent() <> sContent then
-       Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
-   end if
-
-  '/// Open the test file which you just closed , add something ,
-  '/// Save the file
-   Call hFileOpen(sDDEFile)
+    '/// Open the test file which you just closed , add something ,
+    '/// Save the file
+    Call hFileOpen(sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave
-   Call hCloseDocument
+    Call hCloseDocument
 
-  '/// Check if the content is changed -- Should NOT
-   Sleep 2
-   Call wTypeKeys "<F9>"
-   Call wTypeKeys "<MOD1 Home><Shift End>"
-   if fGetFieldContent() <> sContent then
-       Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
-   end if
+    '/// Check if the content is changed -- Should NOT
+    Sleep 2
+    Call wTypeKeys "<F9>"
+    Call wTypeKeys "<MOD1 Home><Shift End>"
+    if fGetFieldContent() <> sContent then
+        Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
+    end if
 
-  '/// Edit/Fields , press update button
-   EditFields
-   Kontext "VerknuepfungenBearbeiten"
-     Aktualisieren.Click
-   VerknuepfungenBearbeiten.Close
+    '/// Edit/Fields , press update button
+    EditFields
+    Kontext "VerknuepfungenBearbeiten"
+    Aktualisieren.Click
+    VerknuepfungenBearbeiten.Close
 
-  '/// Check if the content is changed -- Should NOT
-   Sleep 1
-   Call wTypeKeys "<F9>"
-   Call wTypeKeys "<MOD1 Home><Shift End>"
-   if fGetFieldContent() <> ("XYZ" & sContent) then
-       Warnlog "Should get XYZ" & sContent & " but get " & fGetFieldContent()
-   end if
+    '/// Check if the content is changed -- Should NOT
+    Sleep 1
+    Call wTypeKeys "<F9>"
+    Call wTypeKeys "<MOD1 Home><Shift End>"
+    if fGetFieldContent() <> ("XYZ" & sContent) then
+        Warnlog "Should get XYZ" & sContent & " but get " & fGetFieldContent()
+    end if
 
-  Call hCloseDocument
+    Call hCloseDocument
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+    if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tVariablesDDEFieldAutomatic
+    warnlog "#i112079#testcase must be reworked"
+    goto endsub
+
     qaerrorlog "#i102792# - tVariablesDDEFieldAutomatic outcommented. Fields not updated."
     goto endsub
 
