@@ -510,12 +510,12 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
         // ueberhaupt eigene Attribute gibt !
         SvMemoryStream aTmpStrm;
         SvStream* pSaveStrm = &rRTFWrt.Strm();
-        rRTFWrt.SetStrm( aTmpStrm );
+        rRTFWrt.SetStream( &aTmpStrm );
 
         rRTFWrt.bRTFFlySyntax = false;
         OutRTF_SwFmt( rRTFWrt, *rRTFWrt.pFlyFmt );
 
-        rRTFWrt.SetStrm( *pSaveStrm );  // Stream-Pointer wieder zurueck
+        rRTFWrt.SetStream( pSaveStrm );   // Stream-Pointer wieder zurueck
 
         if ( aTmpStrm.GetEndOfData() ) // gibt es SWG spezifische Attribute?
         {

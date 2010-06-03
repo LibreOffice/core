@@ -169,7 +169,14 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     SwASC_AttrIter aAttrIter( (SwASCWriter&)rWrt, rNd, nStrPos );
 
     if( !nStrPos && rWrt.bExportPargraphNumbering )
-        rWrt.Strm().WriteUnicodeOrByteText( rNd.GetNumString() );
+    {
+        String numString( rNd.GetNumString() );
+        if (numString.Len())
+        {
+            numString.Append(' ');
+            rWrt.Strm().WriteUnicodeOrByteText(numString);
+        }
+    }
 
     String aStr( rNd.GetTxt() );
     if( rWrt.bASCII_ParaAsBlanc )

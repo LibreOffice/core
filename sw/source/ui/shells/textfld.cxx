@@ -80,8 +80,7 @@
 
 #include <app.hrc>
 
-#include "PostItMgr.hxx"
-#include "postit.hxx"
+#include <PostItMgr.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -315,8 +314,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
             case FN_DELETE_NOTE:
-                if ( GetView().GetPostItMgr() && GetView().GetPostItMgr()->GetActivePostIt() )
-                    GetView().GetPostItMgr()->GetActivePostIt()->Delete();
+                if ( GetView().GetPostItMgr() &&
+                     GetView().GetPostItMgr()->HasActiveSidebarWin() )
+                {
+                    GetView().GetPostItMgr()->DeleteActiveSidebarWin();
+                }
             break;
             case FN_DELETE_ALL_NOTES:
                 if ( GetView().GetPostItMgr() )
@@ -330,8 +332,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
             case FN_HIDE_NOTE:
-                if ( GetView().GetPostItMgr() && GetView().GetPostItMgr()->GetActivePostIt() )
-                    GetView().GetPostItMgr()->GetActivePostIt()->Hide();
+                if ( GetView().GetPostItMgr() &&
+                     GetView().GetPostItMgr()->HasActiveSidebarWin() )
+                {
+                    GetView().GetPostItMgr()->HideActiveSidebarWin();
+                }
             break;
             case FN_HIDE_ALL_NOTES:
                 if ( GetView().GetPostItMgr() )
@@ -627,7 +632,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     SwPostItMgr* pPostItMgr = GetView().GetPostItMgr();
                     if ( !pPostItMgr )
                         rSet.InvalidateItem( nWhich );
-                    else if ( !pPostItMgr->GetActivePostIt() )
+                    else if ( !pPostItMgr->HasActiveSidebarWin() )
                     {
                         rSet.InvalidateItem( FN_DELETE_NOTE );
                         rSet.InvalidateItem( FN_HIDE_NOTE );
