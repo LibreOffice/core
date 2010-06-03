@@ -2726,3 +2726,160 @@ void SwTableBox_Impl::SetNewCol( Color** ppCol, const Color* pNewCol )
     }
 }
 
+struct SwTableCellInfo::Impl
+{
+    const SwTable * m_pTable;
+    const SwCellFrm * m_pCellFrm;
+    const SwTabFrm * m_pTabFrm;
+    typedef ::std::set<const SwTableBox *> TableBoxes_t;
+    TableBoxes_t m_HandledTableBoxes;
+
+public:
+    Impl()
+        : m_pTable(NULL), m_pCellFrm(NULL), m_pTabFrm(NULL)
+    {
+    }
+
+    ~Impl() {}
+
+    void setTable(const SwTable * pTable) {
+        m_pTable = pTable;
+        SwFrmFmt * pFrmFmt = m_pTable->GetFrmFmt();
+        SwClientIter aIter(*pFrmFmt);
+
+        m_pTabFrm =
+            static_cast<const SwTabFrm *>(aIter.First(TYPE(SwTabFrm)));
+
+        if (m_pTabFrm->IsFollow())
+            m_pTabFrm = m_pTabFrm->FindMaster(true);
+    }
+    const SwTable * getTable() const { return m_pTable; }
+
+    const SwCellFrm * getCellFrm() const { return m_pCellFrm; }
+
+    const SwFrm * getNextFrmInTable(const SwFrm * pFrm);
+    const SwCellFrm * getNextCellFrm(const SwFrm * pFrm);
+    const SwCellFrm * getNextTableBoxsCellFrm(const SwFrm * pFrm);
+    bool getNext();
+};
+
+const SwFrm * SwTableCellInfo::Impl::getNextFrmInTable(const SwFrm * pFrm)
+{
+    const SwFrm * pResult = NULL;
+
+    if (((! pFrm->IsTabFrm()) || pFrm == m_pTabFrm) && pFrm->GetLower())
+        pResult = pFrm->GetLower();
+    else if (pFrm->GetNext())
+        pResult = pFrm->GetNext();
+    else
+    {
+        while (pFrm->GetUpper() != NULL)
+        {
+            pFrm = pFrm->GetUpper();
+
+            if (pFrm->IsTabFrm())
+            {
+                m_pTabFrm = static_cast<const SwTabFrm *>(pFrm)->GetFollow();
+                pResult = m_pTabFrm;
+                break;
+            }
+            else if (pFrm->GetNext())
+            {
+                pResult = pFrm->GetNext();
+                break;
+            }
+        }
+    }
+
+    return pResult;
+}
+
+const SwCellFrm * SwTableCellInfo::Impl::getNextCellFrm(const SwFrm * pFrm)
+{
+    const SwCellFrm * pResult = NULL;
+
+    while ((pFrm = getNextFrmInTable(pFrm)) != NULL)
+    {
+        if (pFrm->IsCellFrm())
+        {
+            pResult = static_cast<const SwCellFrm *>(pFrm);
+            break;
+        }
+    }
+
+    return pResult;
+}
+
+const SwCellFrm * SwTableCellInfo::Impl::getNextTableBoxsCellFrm(const SwFrm * pFrm)
+{
+    const SwCellFrm * pResult = NULL;
+
+    while ((pFrm = getNextCellFrm(pFrm)) != NULL)
+    {
+        const SwCellFrm * pCellFrm = static_cast<const SwCellFrm *>(pFrm);
+        const SwTableBox * pTabBox = pCellFrm->GetTabBox();
+        TableBoxes_t::const_iterator aIt = m_HandledTableBoxes.find(pTabBox);
+
+        if (aIt == m_HandledTableBoxes.end())
+        {
+            pResult = pCellFrm;
+            m_HandledTableBoxes.insert(pTabBox);
+            break;
+        }
+    }
+
+    return pResult;
+}
+
+const SwCellFrm * SwTableCellInfo::getCellFrm() const
+{
+    return m_pImpl->getCellFrm();
+}
+
+bool SwTableCellInfo::Impl::getNext()
+{
+    if (m_pCellFrm == NULL)
+    {
+        if (m_pTabFrm != NULL)
+            m_pCellFrm = Impl::getNextTableBoxsCellFrm(m_pTabFrm);
+    }
+    else
+        m_pCellFrm = Impl::getNextTableBoxsCellFrm(m_pCellFrm);
+
+    return m_pCellFrm != NULL;
+}
+
+SwTableCellInfo::SwTableCellInfo(const SwTable * pTable)
+{
+    m_pImpl.reset(new Impl());
+    m_pImpl->setTable(pTable);
+}
+
+SwTableCellInfo::~SwTableCellInfo()
+{
+}
+
+bool SwTableCellInfo::getNext()
+{
+    return m_pImpl->getNext();
+}
+
+SwRect SwTableCellInfo::getRect() const
+{
+    SwRect aRet;
+
+    if (getCellFrm() != NULL)
+        aRet = getCellFrm()->Frm();
+
+    return aRet;
+}
+
+const SwTableBox * SwTableCellInfo::getTableBox() const
+{
+    const SwTableBox * pRet = NULL;
+
+    if (getCellFrm() != NULL)
+        pRet = getCellFrm()->GetTabBox();
+
+    return pRet;
+}

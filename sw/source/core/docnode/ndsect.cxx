@@ -137,7 +137,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
     return true;
 }
 
-void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
+void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
@@ -151,12 +151,16 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
             !CheckNodesRange( rEnd, aIdx, TRUE ) ||
             // OD 04.11.2003 #i21457#
             !lcl_IsInSameTblBox( rNds, rEnd, false ))
-            rSect.SetHidden( FALSE );
+        {
+            rSectionData.SetHidden( false );
+        }
     }
 }
 
-SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
-                            const SfxItemSet* pAttr, bool bUpdate )
+SwSection *
+SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
+                       SwTOXBase const*const pTOXBase,
+                       SfxItemSet const*const pAttr, bool const bUpdate)
 {
     const SwNode* pPrvNd = 0;
     USHORT nRegionRet = 0;
@@ -169,14 +173,15 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
 
     // Teste ob das gesamte Dokument versteckt werden soll,
     // koennen wir zur Zeit nicht !!!!
-    if( rNew.IsHidden() && rRange.HasMark() )
+    if (rNewData.IsHidden() && rRange.HasMark())
     {
         const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
         if( !pStt->nContent.GetIndex() &&
             pEnd->nNode.GetNode().GetCntntNode()->Len() ==
             pEnd->nContent.GetIndex() )
         {
-            ::lcl_CheckEmptyLayFrm( GetNodes(), const_cast<SwSection&>(rNew),
+            ::lcl_CheckEmptyLayFrm( GetNodes(),
+                                    rNewData,
                                     pStt->nNode.GetNode(),
                                     pEnd->nNode.GetNode() );
         }
@@ -186,7 +191,7 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
     if( DoesUndo() )
     {
         ClearRedo();
-        pUndoInsSect = new SwUndoInsSection( rRange, rNew, pAttr );
+        pUndoInsSect = new SwUndoInsSection(rRange, rNewData, pAttr, pTOXBase);
         AppendUndo( pUndoInsSect );
         DoUndo( FALSE );
     }
@@ -216,7 +221,8 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
                 aEnd++;
 
             --aEnd;     // im InsertSection ist Ende inclusive
-            pNewSectNode = GetNodes().InsertSection( aStt, *pFmt, rNew, &aEnd );
+            pNewSectNode = GetNodes().InsertTextSection(
+                        aStt, *pFmt, rNewData, pTOXBase, & aEnd);
         }
         else
         {
@@ -287,8 +293,8 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
                     pEndPos->nContent.Assign( pTNd, nCntnt );
                 }
             }
-            pNewSectNode = GetNodes().InsertSection( pSttPos->nNode, *pFmt, rNew,
-                                                    &pEndPos->nNode );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pSttPos->nNode, *pFmt, rNewData, pTOXBase, &pEndPos->nNode);
         }
     }
     else
@@ -297,11 +303,13 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
         const SwCntntNode* pCNd = pPos->nNode.GetNode().GetCntntNode();
         if( !pPos->nContent.GetIndex() )
         {
-            pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, TRUE );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pPos->nNode, *pFmt, rNewData, pTOXBase, 0, true);
         }
         else if( pPos->nContent.GetIndex() == pCNd->Len() )
         {
-            pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, FALSE );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pPos->nNode, *pFmt, rNewData, pTOXBase, 0, false);
         }
         else
         {
@@ -310,7 +318,8 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
                 pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, TRUE );
             }
             SplitNode( *pPos, false );
-            pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, TRUE );
+            pNewSectNode = GetNodes().InsertTextSection(
+                pPos->nNode, *pFmt, rNewData, pTOXBase, 0, true);
         }
     }
 
@@ -334,7 +343,7 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
     }
 
     // ist eine Condition gesetzt
-    if( rNew.IsHidden() && rNew.GetCondition().Len() )
+    if (rNewData.IsHidden() && rNewData.GetCondition().Len())
     {
         // dann berechne bis zu dieser Position
         SwCalc aCalc( *this );
@@ -368,7 +377,7 @@ SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
         DoUndo( TRUE );
     }
 
-    if( rNew.IsLinkType() )
+    if (rNewData.IsLinkType())
     {
         pNewSectNode->GetSection().CreateLink( bUpdate ? CREATE_UPDATE : CREATE_CONNECT );
     }
@@ -549,7 +558,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
                 EndUndo(UNDO_DELSECTION, NULL);
                 return ;
             }
-            AppendUndo( new SwUndoDelSection( *pFmt ) );
+            AppendUndo( MakeUndoDelSection( *pFmt ) );
         }
         else if( bDelNodes && pIdx && &GetNodes() == &pIdx->GetNodes() &&
                 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
@@ -609,9 +618,8 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
     SetModified();
 }
 
-void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
-                        const SfxItemSet* pAttr,
-                        sal_Bool bPreventLinkUpdate )
+void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
+        SfxItemSet const*const pAttr, bool const bPreventLinkUpdate)
 {
     SwSectionFmt* pFmt = (*pSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();
@@ -619,7 +627,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     /// remember hidden condition flag of SwSection before changes
     bool bOldCondHidden = pSection->IsCondHidden() ? true : false;
 
-    if( *pSection == rSect )
+    if (pSection->DataEquals(rNewData))
     {
         // die Attribute ueberpruefen
         BOOL bOnlyAttrChg = FALSE;
@@ -647,7 +655,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
             if( DoesUndo() )
             {
                 ClearRedo();
-                AppendUndo( new SwUndoChgSection( *pFmt, TRUE ) );
+                AppendUndo( MakeUndoUpdateSection( *pFmt, true ) );
                 // --> FME 2004-10-13 #i32968#
                 // Inserting columns in the section causes MakeFrmFmt to put two
                 // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
@@ -668,12 +676,19 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     // versteckt werden soll, koennen wir zur Zeit nicht !!!!
     const SwNodeIndex* pIdx = 0;
     {
-        const SwSectionNode* pSectNd;
-        if( rSect.IsHidden() && 0 != (pIdx = pFmt->GetCntnt().GetCntntIdx() )
-            && 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ) )
+        if (rNewData.IsHidden())
         {
-            ::lcl_CheckEmptyLayFrm( GetNodes(), (SwSection&)rSect,
+            pIdx = pFmt->GetCntnt().GetCntntIdx();
+            if (pIdx)
+            {
+                const SwSectionNode* pSectNd =
+                    pIdx->GetNode().GetSectionNode();
+                if (pSectNd)
+                {
+                    ::lcl_CheckEmptyLayFrm( GetNodes(), rNewData,
                                 *pSectNd, *pSectNd->EndOfSectionNode() );
+                }
+            }
         }
     }
 
@@ -681,7 +696,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     if( DoesUndo() )
     {
         ClearRedo();
-        AppendUndo( new SwUndoChgSection( *pFmt, FALSE ) );
+        AppendUndo( MakeUndoUpdateSection( *pFmt, false ) );
         // --> FME 2004-10-13 #i32968#
         // Inserting columns in the section causes MakeFrmFmt to put two
         // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
@@ -692,14 +707,14 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
     String sCompareString = sfx2::cTokenSeperator;
     sCompareString += sfx2::cTokenSeperator;
-    BOOL bUpdate = ( !pSection->IsLinkType() && rSect.IsLinkType() ) ||
-                        ( rSect.GetLinkFileName().Len() &&
-                            rSect.GetLinkFileName() != sCompareString &&
-                            rSect.GetLinkFileName() !=
-                            pSection->GetLinkFileName());
+    const bool bUpdate =
+           (!pSection->IsLinkType() && rNewData.IsLinkType())
+        || (    rNewData.GetLinkFileName().Len()
+            &&  (rNewData.GetLinkFileName() != sCompareString)
+            &&  (rNewData.GetLinkFileName() != pSection->GetLinkFileName()));
 
-    String sSectName( rSect.GetName() );
-    if( sSectName != pSection->GetName() )
+    String sSectName( rNewData.GetSectionName() );
+    if (sSectName != pSection->GetSectionName())
         GetUniqueSectionName( &sSectName );
     else
         sSectName.Erase();
@@ -711,13 +726,15 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     /// or it is set to the value of SwSection which is assigned to it.
     /// Discussion with AMA results that the adjustment to the assignment operator
     /// could be very risky -> see notes in bug #102894#.
-    *pSection = rSect;
+    pSection->SetSectionData(rNewData);
 
     if( pAttr )
         pSection->GetFmt()->SetFmtAttr( *pAttr );
 
     if( sSectName.Len() )
-        pSection->SetName( sSectName );
+    {
+        pSection->SetSectionName( sSectName );
+    }
 
     // ist eine Condition gesetzt
     if( pSection->IsHidden() && pSection->GetCondition().Len() )
@@ -729,7 +746,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
         FldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
         /// OD 04.10.2002 #102894#
         /// Because on using SwSection::operator=() to set up <pSection>
-        /// with <rSect> and the above given note, the hidden condition flag
+        /// with <rNewData> and the above given note, the hidden condition flag
         /// has to be set to FALSE, if hidden condition flag of <pFmt->GetSection()>
         /// (SwSection before the changes) is FALSE (already saved in <bOldCondHidden>)
         /// and new calculated condition is TRUE.
@@ -800,17 +817,18 @@ void lcl_DeleteFtn( SwSectionNode *pNd, ULONG nStt, ULONG nEnd )
     }
 }
 
-inline BOOL lcl_IsTOXSection( const SwSection& rSection )
+static inline bool lcl_IsTOXSection(SwSectionData const& rSectionData)
 {
-    return TOX_CONTENT_SECTION == rSection.GetType() ||
-            TOX_HEADER_SECTION == rSection.GetType();
+    return (TOX_CONTENT_SECTION == rSectionData.GetType())
+        || (TOX_HEADER_SECTION  == rSectionData.GetType());
 }
 
-SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
+SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionFmt& rSectionFmt,
-                                const SwSection& rSection,
-                                const SwNodeIndex* pEnde,
-                                BOOL bInsAtStart, BOOL bCreateFrms )
+                                SwSectionData const& rSectionData,
+                                SwTOXBase const*const pTOXBase,
+                                SwNodeIndex const*const pEnde,
+                                bool const bInsAtStart, bool const bCreateFrms)
 {
     SwNodeIndex aInsPos( rNdIdx );
     if( !pEnde )        // kein Bereich also neue Section davor/hinter anlegen
@@ -821,7 +839,7 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
 
         if( bInsAtStart )
         {
-            if( !lcl_IsTOXSection( rSection ))
+            if (!lcl_IsTOXSection(rSectionData))
             {
                 do {
                     aInsPos--;
@@ -833,15 +851,20 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
         {
             SwNode* pNd;
             aInsPos++;
-            if( !lcl_IsTOXSection( rSection ))
+            if (!lcl_IsTOXSection(rSectionData))
+            {
                 while( aInsPos.GetIndex() < Count() - 1 &&
                         ( pNd = &aInsPos.GetNode())->IsEndNode() &&
                         pNd->StartOfSectionNode()->IsSectionNode())
+                {
                     aInsPos++;
+                }
+            }
         }
     }
 
-    SwSectionNode* pSectNd = new SwSectionNode( aInsPos, rSectionFmt );
+    SwSectionNode *const pSectNd =
+            new SwSectionNode(aInsPos, rSectionFmt, pTOXBase);
     if( pEnde )
     {
         // Sonderfall fuer die Reader/Writer
@@ -908,7 +931,7 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
     }
     new SwEndNode( aInsPos, *pSectNd );
 
-    pSectNd->GetSection() = rSection;
+    pSectNd->GetSection().SetSectionData(rSectionData);
     SwSectionFmt* pSectFmt = pSectNd->GetSection().GetFmt();
 
     // Hier bietet sich als Optimierung an, vorhandene Frames nicht zu
@@ -998,17 +1021,28 @@ SwSectionNode* SwNode::FindSectionNode()
 // SwSectionNode
 //---------
 
-SwSectionNode::SwSectionNode( const SwNodeIndex& rIdx, SwSectionFmt& rFmt )
-    : SwStartNode( rIdx, ND_SECTIONNODE )
+// ugly hack to make m_pSection const
+static SwSectionFmt &
+lcl_initParent(SwSectionNode & rThis, SwSectionFmt & rFmt)
 {
-    SwSectionNode* pParent = StartOfSectionNode()->FindSectionNode();
+    SwSectionNode *const pParent =
+        rThis.StartOfSectionNode()->FindSectionNode();
     if( pParent )
     {
         // das Format beim richtigen Parent anmelden.
         rFmt.SetDerivedFrom( pParent->GetSection().GetFmt() );
     }
-    pSection = new SwSection( CONTENT_SECTION, rFmt.GetName(), &rFmt );
+    return rFmt;
+}
 
+SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
+        SwSectionFmt & rFmt, SwTOXBase const*const pTOXBase)
+    : SwStartNode( rIdx, ND_SECTIONNODE )
+    , m_pSection( (pTOXBase)
+        ? new SwTOXBaseSection(*pTOXBase, lcl_initParent(*this, rFmt))
+        : new SwSection( CONTENT_SECTION, rFmt.GetName(),
+                lcl_initParent(*this, rFmt) ) )
+{
     // jetzt noch die Verbindung von Format zum Node setzen
     // Modify unterdruecken, interresiert keinen
     rFmt.LockModify();
@@ -1049,7 +1083,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
 SwSectionNode::~SwSectionNode()
 {
     {
-        SwClientIter aIter( *(pSection->GetFmt()) );
+        SwClientIter aIter( *(m_pSection->GetFmt()) );
         SwClient *pLast = aIter.GoStart();
         while ( pLast )
         {
@@ -1065,7 +1099,7 @@ SwSectionNode::~SwSectionNode()
     }
     SwDoc* pDoc = GetDoc();
 
-    SwSectionFmt* pFmt = pSection->GetFmt();
+    SwSectionFmt* pFmt = m_pSection->GetFmt();
     if( pFmt )
     {
         // das Attribut entfernen, weil die Section ihr Format loescht
@@ -1079,41 +1113,14 @@ SwSectionNode::~SwSectionNode()
     // verhinder beim Loeschen aus der Undo/Redo-History einen rekursiven Aufruf
     if( bUndo && &pDoc->GetNodes() != &GetNodes() )
         pDoc->DoUndo( FALSE );
-    DELETEZ( pSection );
     pDoc->DoUndo( bUndo );
 }
 
-// setze ein neues SectionObject. Erstmal nur gedacht fuer die
-// neuen VerzeichnisSections. Der geht ueber in den Besitz des Nodes!
-void SwSectionNode::SetNewSection( SwSection* pNewSection )
-{
-    ASSERT( pNewSection, "ohne Pointer geht hier nichts" );
-    if( pNewSection )
-    {
-        SwNode2Layout aN2L( *this );
-
-        // einige Flags sollten ueber nommen werden!
-        pNewSection->bProtectFlag = pSection->bProtectFlag;
-        pNewSection->bHiddenFlag = pSection->bHiddenFlag;
-        pNewSection->bHidden = pSection->bHidden;
-        pNewSection->bCondHiddenFlag = pSection->bCondHiddenFlag;
-
-        // The section frame contains a pointer to the section. That for,
-        // the frame must be destroyed before deleting the section.
-        DelFrms();
-
-        delete pSection;
-        pSection = pNewSection;
-
-        ULONG nIdx = GetIndex();
-        aN2L.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
-    }
-}
 
 SwFrm *SwSectionNode::MakeFrm()
 {
-    pSection->bHiddenFlag = FALSE;
-    return new SwSectionFrm( *pSection );
+    m_pSection->m_Data.SetHiddenFlag(false);
+    return new SwSectionFrm( *m_pSection );
 }
 
 //Methode erzeugt fuer den vorhergehenden Node alle Ansichten vom
@@ -1240,7 +1247,7 @@ void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 
     *pIdxBehind = *this;
 
-    pSection->bHiddenFlag = TRUE;
+    m_pSection->m_Data.SetHiddenFlag(true);
 
     if( rNds.IsDocNodes() )
     {
@@ -1264,10 +1271,10 @@ void SwSectionNode::DelFrms()
     }
 
     SwNodes& rNds = GetNodes();
-    pSection->GetFmt()->DelFrms();
+    m_pSection->GetFmt()->DelFrms();
 
     // unser Flag muessen wir noch aktualisieren
-    pSection->bHiddenFlag = TRUE;
+    m_pSection->m_Data.SetHiddenFlag(true);
 
     // Bug 30582: falls der Bereich in Fly oder TabellenBox ist, dann
     //              kann er nur "gehiddet" werden, wenn weiterer Content
@@ -1285,7 +1292,9 @@ void SwSectionNode::DelFrms()
                 !CheckNodesRange( *EndOfSectionNode(), aIdx, TRUE ) ||
                 // OD 04.11.2003 #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
-                pSection->bHiddenFlag = FALSE;
+            {
+                m_pSection->m_Data.SetHiddenFlag(false);
+            }
         }
     }
 }
@@ -1299,37 +1308,35 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
     pSectFmt->CopyAttrs( *GetSection().GetFmt() );
 
-    SwSectionNode* pSectNd = new SwSectionNode( rIdx, *pSectFmt );
+    ::std::auto_ptr<SwTOXBase> pTOXBase;
+    if (TOX_CONTENT_SECTION == GetSection().GetType())
+    {
+        ASSERT( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+        SwTOXBaseSection const& rTBS(
+            dynamic_cast<SwTOXBaseSection const&>(GetSection()));
+        pTOXBase.reset( new SwTOXBase(rTBS, pDoc) );
+    }
+
+    SwSectionNode *const pSectNd =
+        new SwSectionNode(rIdx, *pSectFmt, pTOXBase.get());
     SwEndNode* pEndNd = new SwEndNode( rIdx, *pSectNd );
     SwNodeIndex aInsPos( *pEndNd );
 
     // Werte uebertragen
-    SwSection* pNewSect = pSectNd->pSection;
+    SwSection *const pNewSect = pSectNd->m_pSection.get();
 
-    switch( GetSection().GetType() )
+    if (TOX_CONTENT_SECTION != GetSection().GetType())
     {
-    case TOX_CONTENT_SECTION:
-        {
-            ASSERT( GetSection().ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
-            SwTOXBaseSection& rTOXSect = (SwTOXBaseSection&)GetSection();
-            SwTOXBase aTmp( rTOXSect, pDoc );
-
-            SwTOXBaseSection* pNew = new SwTOXBaseSection( aTmp );
-
-            pNewSect = pNew;
-            pSectFmt->Add( pNewSect );
-            pSectNd->SetNewSection( pNew );
-        }
-        break;
-
-    default:
         // beim Move den Namen beibehalten
         if( rNds.GetDoc() == pDoc && pDoc->IsCopyIsMove() )
-            pNewSect->SetName( GetSection().GetName() );
+        {
+            pNewSect->SetSectionName( GetSection().GetSectionName() );
+        }
         else
-            pNewSect->SetName( pDoc->GetUniqueSectionName(
-                                        &GetSection().GetName() ) );
-        break;
+        {
+            pNewSect->SetSectionName(
+                pDoc->GetUniqueSectionName( &GetSection().GetSectionName() ));
+        }
     }
 
 
@@ -1358,18 +1365,22 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
                                                  : CREATE_NONE );
 
     // falls als Server aus dem Undo kopiert wird, wieder eintragen
-    if( pSection->IsServer() && pDoc->GetUndoNds() == &rNds )
+    if (m_pSection->IsServer() && (pDoc->GetUndoNds() == &rNds))
     {
-        pNewSect->SetRefObject( pSection->GetObject() );
+        pNewSect->SetRefObject( m_pSection->GetObject() );
         pDoc->GetLinkManager().InsertServer( pNewSect->GetObject() );
     }
+
+    // METADATA: copy xml:id; must be done after insertion of node
+    pSectFmt->RegisterAsCopyOf(*GetSection().GetFmt());
 
     return pSectNd;
 }
 
 BOOL SwSectionNode::IsCntntHidden() const
 {
-    ASSERT( !pSection->IsHidden(), "That's simple: Hidden Section => Hidden Content" );
+    ASSERT( !m_pSection->IsHidden(),
+            "That's simple: Hidden Section => Hidden Content" );
     SwNodeIndex aTmp( *this, 1 );
     ULONG nEnd = EndOfSectionIndex();
     while( aTmp < nEnd )
@@ -1395,7 +1406,7 @@ BOOL SwSectionNode::IsCntntHidden() const
 
 void SwSectionNode::NodesArrChgd()
 {
-    SwSectionFmt* pFmt = pSection->GetFmt();
+    SwSectionFmt *const pFmt = m_pSection->GetFmt();
     if( pFmt )
     {
         SwNodes& rNds = GetNodes();
@@ -1431,20 +1442,28 @@ void SwSectionNode::NodesArrChgd()
         {
             ASSERT( pDoc == GetDoc(),
                     "verschieben in unterschiedliche Documente?" );
-            if( pSection->IsLinkType() )        // den Link austragen
-                pSection->CreateLink( pDoc->GetRootFrm() ? CREATE_CONNECT
+            if (m_pSection->IsLinkType())
+            {
+                m_pSection->CreateLink( pDoc->GetRootFrm() ? CREATE_CONNECT
                                                          : CREATE_NONE );
+            }
 
-            if( pSection->IsServer() )                  // als Server austragen
-                pDoc->GetLinkManager().InsertServer( pSection->GetObject() );
+            if (m_pSection->IsServer())
+            {
+                pDoc->GetLinkManager().InsertServer( m_pSection->GetObject() );
+            }
         }
         else
         {
-            if( CONTENT_SECTION != pSection->GetType() )        // den Link austragen
-                pDoc->GetLinkManager().Remove( &pSection->GetBaseLink() );
+            if (CONTENT_SECTION != m_pSection->GetType())
+            {
+                pDoc->GetLinkManager().Remove( &m_pSection->GetBaseLink() );
+            }
 
-            if( pSection->IsServer() )                  // als Server austragen
-                pDoc->GetLinkManager().RemoveServer( pSection->GetObject() );
+            if (m_pSection->IsServer())
+            {
+                pDoc->GetLinkManager().RemoveServer( m_pSection->GetObject() );
+            }
         }
     }
 }
@@ -1467,7 +1486,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     for( n = 0; n < pSectionFmtTbl->Count(); ++n )
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) ))
         {
-            const String& rNm = pSectNd->GetSection().GetName();
+            const String& rNm = pSectNd->GetSection().GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen

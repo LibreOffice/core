@@ -151,3 +151,22 @@ sw.SwXTextPortion::com::sun::star::style::CharacterProperties
 
 ### i94977 ###
 sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
+
+### i109917 ###
+sw.SwXTextDocument::com::sun::star::document::XEventBroadcaster
+
+### i111186 ###
+sw.PageStyle::com::sun::star::beans::XPropertySet
+
+### i111218 ###
+sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i111220 ###
+sw.XMLContentExporter::com::sun::star::document::XFilter
+sw.XMLSettingsExporter::com::sun::star::document::XFilter
+
+### i111273 ###
+sw.SwXTextEmbeddedObject::com::sun::star::document::XEmbeddedObjectSupplier
+
+### i111332 ###
+sw.XMLStylesExporter::com::sun::star::document::XFilter
