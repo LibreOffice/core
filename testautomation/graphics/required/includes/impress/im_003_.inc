@@ -29,22 +29,18 @@
 '*
 '* short description : Impress Resource Test: View Menu
 '*
-'***********************************************************************************
-' #1 tiViewPanes
-' #1 tiViewMasterView
-' #1 tiViewSlideMaster
-' #1 tiViewToolbar_1
-'\**********************************************************************************
+'\******************************************************************************
 testcase tiViewPanes
 
+    qaerrorlog( "This test is disabled, it needs rewriting" )
     goto endsub 'TODO WG, tiViewPanes outcommented due to reconstruction of test
     dim bState as boolean
     printlog "open application "
     Call hCloseDocument
     Call hNewDocument
-    sleep 1
+
     kontext "Tasks"
-    if (NOT Tasks.exists) then
+    if ( not Tasks.exists( 2 ) ) then
         warnlog "Tasks Panel not visible on opening application. Opening now."
         ViewTaskPane
     endif
@@ -127,26 +123,26 @@ testcase tiViewMasterView
 
     printlog "open application"
     Call hNewDocument
+
     printlog "View->Master View->Drawing View"
-    sleep 1
-    ViewWorkspaceDrawingView
-    sleep 5
+    hUseAsyncSlot( "ViewWorkspaceDrawingView" )
+
     printlog "View->Master View->Outline View "
-    ViewWorkspaceOutlineView
-    sleep 1
+    hUseAsyncSlot( "ViewWorkspaceOutlineView" )
+
     printlog "View->Master View->Slides View "
-    ViewWorkspaceSlidesView
-    sleep 1
+    hUseAsyncSlot( "ViewWorkspaceSlidesView" )
+
     printlog "View->Master View->Notes View "
-    ViewWorkspaceNotesView
-    sleep 1
+    hUseAsyncSlot( "ViewWorkspaceNotesView" )
+
     printlog "View->Master View->Handout View "
-    ViewWorkspaceHandoutView
-    sleep 1
+    hUseAsyncSlot( "ViewWorkspaceHandoutView" )
+
     printlog "View->Master View->Drawing View "
-    ViewWorkspaceDrawingView
+    hUseAsyncSlot( "ViewWorkspaceDrawingView" )
+
     printlog "close application "
-    sleep 1
     Call hCloseDocument
 
 endcase 'tiViewMasterView
@@ -155,26 +151,29 @@ testcase tiViewSlideMaster
 
     printlog "open application with : File->Autopilot->Presentation; OK; OK "
     FileAutopilotPresentation                ' to get a title :-)
-    sleep 2
     Kontext "AutopilotPraesentation1"
-    AutopilotPraesentation1.Ok
-    sleep 1
-    Kontext "Seitenlayout"  ' aka: Modify Slide
-    if Seitenlayout.exists(5) then
-        warnlog "Slidelayout has to vanish; moved to sidebar"
-        Seitenlayout.OK
+    if ( AutopilotPraesentation1.exists( 2 ) ) then
+        hCloseDialog( AutopilotPraesentation1, "ok" )
+    else
+        warnlog( "Dialog <AutopilotPraesentation1> did not open" )
     endif
+    Kontext "Seitenlayout"  ' aka: Modify Slide
+
+    if ( Seitenlayout.exists( 5 ) ) then
+        warnlog "Slidelayout has to vanish; moved to sidebar"
+        hCloseDialog( Seitenlayout, "ok" )
+    endif
+
     kontext "DocumentImpress"
-    sleep 1
     printlog "View->Slide "
-    ViewSlide
-    Sleep 1
+    hUseAsyncSlot( "ViewSlide" )
+    
     printlog "View->Master->Drawing "
-    ViewDrawing
-    Sleep 1
+    hUseAsyncSlot( "ViewDrawing" )
+
     printlog "View->Slide "
-    ViewSlide
-    Sleep 1
+    hUseAsyncSlot( "ViewSlide" )
+
     printlog "View->Master->Title "
     try
         ViewTitle
@@ -182,22 +181,20 @@ testcase tiViewSlideMaster
     catch
         printlog "View - Master - Title Slide Master not accessable - good"
     endcatch
-    Sleep 1
+
     printlog "View->Slide "
-    ViewSlide
-    Sleep 1
+    hUseAsyncSlot( "ViewSlide" )
+
     printlog "View->Master->Handout "
-    ViewHandout
-    Sleep 1
-    '   ViewSlide
-    Sleep 1
+    hUseAsyncSlot( "ViewHandout" )
+
     printlog "View->Master->Notes "
-    ViewNotes
+    hUseAsyncSlot( "ViewNotes" )
     kontext "DocumentImpress"
-    Sleep 1
+
     printlog "View->Slide "
-    ViewSlide
-    Sleep 1
+    hUseAsyncSlot( "ViewSlide" )
+
     printlog "close application "
     Call  hCloseDocument
 
