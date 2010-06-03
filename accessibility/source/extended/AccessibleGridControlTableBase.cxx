@@ -53,8 +53,6 @@ namespace accessibility {
 
 // ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
-
 DBG_NAME( AccessibleGridControlTableBase )
 
 AccessibleGridControlTableBase::AccessibleGridControlTableBase(
@@ -63,12 +61,10 @@ AccessibleGridControlTableBase::AccessibleGridControlTableBase(
         AccessibleTableControlObjType eObjType ) :
     GridControlAccessibleElement( rxParent, rTable, eObjType )
 {
-    DBG_CTOR( AccessibleGridControlTableBase, NULL );
 }
 
 AccessibleGridControlTableBase::~AccessibleGridControlTableBase()
 {
-    DBG_DTOR( AccessibleGridControlTableBase, NULL );
 }
 
 // XAccessibleContext ---------------------------------------------------------
