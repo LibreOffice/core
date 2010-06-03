@@ -152,6 +152,7 @@ const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_ISCHANGEREADONLYENABLED), 0, &getBooleanCppuType(),                              0, 0},
         {MAP_CHAR_LEN(SC_UNO_REFERENCEDEVICE),   0, &getCppuType((uno::Reference<awt::XDevice>*)0),           beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN("BuildId"),                0, &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_CODENAME),        0, &getCppuType(static_cast< const rtl::OUString * >(0)),    0, 0},
 
         {0,0,0,0,0,0}
     };
@@ -1038,18 +1039,21 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     Size aTwips = aFunc.GetPageSize();
     awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
 
-    long nPropCount = bWasCellRange ? 2 : 1;
+    long nPropCount = bWasCellRange ? 3 : 2;
     uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
     beans::PropertyValue* pArray = aSequence.getArray();
     pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_PAGESIZE );
     pArray[0].Value <<= aPageSize;
+    // #i111158# all positions are relative to the whole page, including non-printable area
+    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_INC_NP_AREA );
+    pArray[1].Value = uno::makeAny( sal_True );
     if ( bWasCellRange )
     {
         table::CellRangeAddress aRangeAddress( nTab,
                         aCellRange.aStart.Col(), aCellRange.aStart.Row(),
                         aCellRange.aEnd.Col(), aCellRange.aEnd.Row() );
-        pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
-        pArray[1].Value <<= aRangeAddress;
+        pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
+        pArray[2].Value <<= aRangeAddress;
     }
 
     #if 0
@@ -1391,7 +1395,8 @@ void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabled )
 void SAL_CALL ScModelObj::protect( const rtl::OUString& aPassword ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if (pDocShell)
+    // #i108245# if already protected, don't change anything
+    if ( pDocShell && !pDocShell->GetDocument()->IsDocProtected() )
     {
         String aString(aPassword);
 
@@ -1409,9 +1414,9 @@ void SAL_CALL ScModelObj::unprotect( const rtl::OUString& aPassword )
         String aString(aPassword);
 
         ScDocFunc aFunc(*pDocShell);
-        aFunc.Unprotect( TABLEID_DOC, aString, TRUE );
-
-        //! Rueckgabewert auswerten, Exception oder so
+        BOOL bDone = aFunc.Unprotect( TABLEID_DOC, aString, TRUE );
+        if (!bDone)
+            throw lang::IllegalArgumentException();
     }
 }
 
@@ -1650,6 +1655,12 @@ void SAL_CALL ScModelObj::setPropertyValue(
                 pDoc->SetLanguage( eLatin, eCjk, eCtl );
             }
         }
+        else if ( aString.EqualsAscii( SC_UNO_CODENAME ) )
+        {
+            rtl::OUString sCodeName;
+            if ( aValue >>= sCodeName )
+                pDoc->SetCodeName( sCodeName );
+        }
         else if ( aString.EqualsAscii( SC_UNO_CJK_CLOCAL ) )
         {
             lang::Locale aLocale;
@@ -1774,6 +1785,12 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
             ScUnoConversion::FillLocale( aLocale, eLatin );
             aRet <<= aLocale;
         }
+        else if ( aString.EqualsAscii( SC_UNO_CODENAME ) )
+        {
+            rtl::OUString sCodeName = pDoc->GetCodeName();
+            aRet <<= sCodeName;
+        }
+
         else if ( aString.EqualsAscii( SC_UNO_CJK_CLOCAL ) )
         {
             LanguageType eLatin, eCjk, eCtl;
@@ -2056,6 +2073,13 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
+
+    if ( rId.getLength() == 16 &&
+          0 == rtl_compareMemory( SfxObjectShell::getUnoTunnelId().getConstArray(),
+                                    rId.getConstArray(), 16 ) )
+        {
+            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
+        }
 
     //  aggregated number formats supplier has XUnoTunnel, too
     //  interface from aggregated object must be obtained via queryAggregation
