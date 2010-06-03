@@ -55,7 +55,9 @@ SLOFILES= \
             $(SLO)$/unoevent.obj \
             $(SLO)$/unoiface.obj \
             $(SLO)$/unoimap.obj \
-            $(SLO)$/svtxgridcontrol.obj 
+            $(SLO)$/svtxgridcontrol.obj \
+            $(SLO)$/popupwindowcontroller.obj \
+            $(SLO)$/popupmenucontrollerbase.obj
 
 # --- Targets ------------------------------------------------------
 

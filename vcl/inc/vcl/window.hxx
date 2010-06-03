@@ -124,6 +124,8 @@ namespace dnd {
 
 namespace vcl { struct ControlLayoutData; }
 
+namespace svt { class PopupWindowControllerImpl; }
+
 // ---------------
 // - WindowTypes -
 // ---------------
@@ -361,6 +363,8 @@ class VCL_DLLPUBLIC Window : public OutputDevice
     friend class ImplDockingWindowWrapper;
     friend class ImplPopupFloatWin;
     friend class MenuFloatingWindow;
+
+    friend class svt::PopupWindowControllerImpl;
 
 private:
     // NOTE: to remove many dependencies of other modules
