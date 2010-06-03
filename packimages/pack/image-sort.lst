@@ -89,7 +89,13 @@ uiconfig/modules/dbquery/toolbar/toolbar.xml
 uiconfig/modules/dbrelation/toolbar/toolbar.xml
 uiconfig/modules/dbtable/toolbar/toolbar.xml
 uiconfig/modules/StartModule/toolbar/standardbar.xml
+uiconfig/modules/schart/toolbar/arrowshapes.xml
+uiconfig/modules/schart/toolbar/basicshapes.xml
+uiconfig/modules/schart/toolbar/calloutshapes.xml
+uiconfig/modules/schart/toolbar/flowchartshapes.xml
 uiconfig/modules/schart/toolbar/standardbar.xml
+uiconfig/modules/schart/toolbar/starshapes.xml
+uiconfig/modules/schart/toolbar/symbolshapes.xml
 uiconfig/modules/schart/toolbar/toolbar.xml
 uiconfig/modules/scalc/toolbar/alignmentbar.xml
 uiconfig/modules/scalc/toolbar/arrowshapes.xml
