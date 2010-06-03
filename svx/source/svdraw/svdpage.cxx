@@ -1225,8 +1225,19 @@ SdrPageProperties::SdrPageProperties(const SdrPageProperties& rCandidate)
 :   SfxListener(),
     mpSdrPage(rCandidate.mpSdrPage),
     mpStyleSheet(0),
-    mpProperties(new SfxItemSet(*rCandidate.mpProperties))
+    mpProperties(0)
 {
+    if(&mpSdrPage->GetModel()->GetItemPool() == rCandidate.mpProperties->GetPool())
+    {
+        mpProperties = new SfxItemSet(*rCandidate.mpProperties);
+    }
+    else
+    {
+        // #i111122# in doubt, use the ItemPool from the page, not the
+        // ItemSet. This is e.g. used to set a new Model
+        mpProperties = rCandidate.mpProperties->Clone(true, &mpSdrPage->GetModel()->GetItemPool());
+    }
+
     if(rCandidate.GetStyleSheet())
     {
         ImpAddStyleSheet(*rCandidate.GetStyleSheet());
@@ -1659,6 +1670,8 @@ void SdrPage::SetModel(SdrModel* pNewModel)
         }
         pLayerAdmin->SetModel(pNewModel);
 
+        // #i111122# re-create SdrPageProperties to migrate it's items to the
+        // new model
         SdrPageProperties *pNew = new SdrPageProperties(getSdrPageProperties());
         delete mpSdrPageProperties;
         mpSdrPageProperties = pNew;
