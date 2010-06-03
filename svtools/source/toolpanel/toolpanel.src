@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,83 +24,34 @@
  *
  ************************************************************************/
 
+#include "svtools/svtools.hrc"
 
-
-#ifndef _SVT_UNO_UNOIFAC_HRC_
-#include <unoifac2.hrc>
-#endif
-
-
-Menu RID_CONTEXTMENU
+String STR_SVT_TOOL_PANEL_BUTTON_FWD
 {
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = RID_OPEN_LINK ;
-            HelpId = HID_TEXTCPNT_OPEN_LINK ;
-            Text [ en-US ] = "~Open";
-        };
-        MenuItem
-        {
-            Identifier = RID_OPEN_LINK_NEW ;
-            HelpId = HID_TEXTCPNT_OPEN_LINK_NEW ;
-            Text [ en-US ] = "Open in New ~Window";
-        };
-        MenuItem
-        {
-            Identifier = RID_DOWNLOAD ;
-            HelpId = HID_TEXTCPNT_DOWNLOAD ;
-            Text [ en-US ] = "~Download...";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = RID_ADD_BOOKMARK ;
-            HelpId = HID_TEXTCPNT_ADD_BOOKMARK ;
-            Text [ en-US ] = "Add ~Link";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = RID_COPY_LINK ;
-            HelpId = HID_TEXTCPNT_COPY_LINK ;
-            Text [ en-US ] = "Cop~y Link" ;
-        };
-    };
+    Text [ en-US ] = "Tab Panel Scroll Button, backward";
 };
 
+String STR_SVT_TOOL_PANEL_BUTTON_BACK
+{
+    Text [ en-US ] = "Tab Panel Scroll Button, forward";
+};
 
+Image IMG_TRIANGLE_RIGHT
+{
+    ImageBitmap = Bitmap { File = "triangle_right.png"; };
+};
 
+Image IMG_TRIANGLE_RIGHT_HC
+{
+    ImageBitmap = Bitmap { File = "triangle_right_hc.png"; };
+};
 
+Image IMG_TRIANGLE_DOWN
+{
+    ImageBitmap = Bitmap { File = "triangle_down.png"; };
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Image IMG_TRIANGLE_DOWN_HC
+{
+    ImageBitmap = Bitmap { File = "plus.png"; } ;
+};

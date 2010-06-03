@@ -848,7 +848,7 @@ public:
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
     virtual String                  GetAccessibleCellText(long _nRow, USHORT _nColPos) const;
     virtual BOOL                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
-    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow );
+    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
     virtual XACC                    GetAccessible( BOOL bCreate = TRUE );
     virtual Window*                 GetAccessibleParentWindow() const;
