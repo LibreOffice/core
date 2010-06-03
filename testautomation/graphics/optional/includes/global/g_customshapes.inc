@@ -40,6 +40,7 @@ testcase tCustomshapes
 
    '/// Create new document ///'
    Call hNewDocument
+   Call sSelectEmptyLayout
      if gApplication = "DRAW" then
         Kontext "Documentdraw"
      else '(Impress)

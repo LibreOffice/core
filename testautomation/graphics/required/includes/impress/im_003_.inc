@@ -227,7 +227,7 @@ testcase tiViewToolbar_1
     end if
     Kontext "DocumentImpress"
     printlog "select graphic "
-    EditSelectAll
+    hTypeKeys "<TAB>", 3
     sleep 2
     Kontext "GraphicObjectbar"
     sleep 1

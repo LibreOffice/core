@@ -36,6 +36,7 @@ sub main
     Call hStatusIn ( "Graphics","g_group.bas"  )
 
     use "graphics\tools\id_tools.inc"
+    use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_group.inc"
 
     PrintLog "-------------------------" + gApplication + "-------------------"

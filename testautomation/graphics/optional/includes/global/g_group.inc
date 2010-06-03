@@ -36,7 +36,8 @@
 testcase tiGruppierung
  Dim PosX 		 'Variable fuer PositionX
 
- Call hNewDocument								   '/// new document  ///'
+    Call hNewDocument
+    Call sSelectEmptyLayout								   '/// new document  ///'
   sleep 3
   Kontext "DocumentImpress"
   sleep 2

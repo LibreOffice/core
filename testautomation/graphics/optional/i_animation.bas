@@ -36,6 +36,7 @@ sub main
     Call hStatusIn ( "Graphics","i_animation.bas")
 
     use "graphics\tools\id_tools.inc"
+    use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\impress\i_animation.inc"
 
     Call tExtrasAnimation

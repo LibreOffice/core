@@ -44,6 +44,7 @@ testcase t_Introduction
     '///Open new presentation
     printlog "Open new presentation"
     Call hNewDocument
+    Call sSelectEmptyLayout
     
     '///Open the Gallery
     printlog "Open the Gallery"
