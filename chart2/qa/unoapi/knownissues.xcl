@@ -36,4 +36,5 @@ sch.ChXDataPoint::com::sun::star::xml::UserDefinedAttributeSupplier
 
 #i83865
 sch.ChXDataPoint::com::sun::star::drawing::LineProperties
-
+#112078
+sch.ChartLegend::com::sun::star::beans::XPropertySet
