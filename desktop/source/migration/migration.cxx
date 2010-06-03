@@ -29,6 +29,7 @@
 #include "precompiled_desktop.hxx"
 
 #include <map>
+#include <new>
 #include <set>
 
 #include "migration.hxx"
@@ -38,7 +39,6 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <configmgr/update.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
@@ -51,6 +51,7 @@
 #include <osl/security.hxx>
 #include <unotools/configmgr.hxx>
 
+#include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -540,6 +541,21 @@ bool getComponent(rtl::OUString const & path, rtl::OUString * component) {
     return true;
 }
 
+uno::Sequence< rtl::OUString > setToSeq(std::set< rtl::OUString > const & set) {
+    std::set< rtl::OUString >::size_type n = set.size();
+    if (n > SAL_MAX_INT32) {
+        throw std::bad_alloc();
+    }
+    uno::Sequence< rtl::OUString > seq(static_cast< sal_Int32 >(n));
+    sal_Int32 i = 0;
+    for (std::set< rtl::OUString >::const_iterator j(set.begin());
+         j != set.end(); ++j)
+    {
+        seq[i++] = *j;
+    }
+    return seq;
+}
+
 }
 
 void MigrationImpl::copyConfig() {
@@ -587,9 +603,11 @@ void MigrationImpl::copyConfig() {
                 buf.append(enc);
             } while (n >= 0);
             buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(".xcu"));
-            configmgr::update::insertModificationXcuFile(
-                buf.makeStringAndClear(), i->second.includedPaths,
-                i->second.excludedPaths);
+            configuration::Update::get(
+                comphelper::getProcessComponentContext())->
+                insertModificationXcuFile(
+                    buf.makeStringAndClear(), setToSeq(i->second.includedPaths),
+                    setToSeq(i->second.excludedPaths));
         } else {
             OSL_TRACE(
                 ("configuration migration component %s ignored (only excludes,"

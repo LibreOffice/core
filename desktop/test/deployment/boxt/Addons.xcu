@@ -1,4 +1,5 @@
-/*************************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -23,19 +24,27 @@
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
 *
-************************************************************************/
+**********************************************************************-->
 
-#ifndef INCLUDED_CONFIGMGR_DETAIL_CONFIGMGRDLLAPI_HXX
-#define INCLUDED_CONFIGMGR_DETAIL_CONFIGMGRDLLAPI_HXX
-
-#include "sal/config.h"
-
-#include "sal/types.h"
-
-#if defined OOO_DLLIMPLEMENTATION_CONFIGMGR
-#define OOO_DLLPUBLIC_CONFIGMGR SAL_DLLPUBLIC_EXPORT
-#else
-#define OOO_DLLPUBLIC_CONFIGMGR SAL_DLLPUBLIC_IMPORT
-#endif
-
-#endif
+<o:component-data xmlns:o="http://openoffice.org/2001/registry"
+    o:package="org.openoffice.Office" o:name="Addons">
+  <node o:name="AddonUI">
+    <node o:name="OfficeMenuBar">
+      <node o:name="org.openoffice.test.desktop.deployment.boxt" o:op="replace">
+        <prop o:name="Title" xml:lang="en-US">
+          <value>boxt</value>
+        </prop>
+        <node o:name="Submenu">
+          <node o:name="1" o:op="replace">
+            <prop o:name="URL">
+              <value>vnd.org.openoffice.test.desktop.deployment.boxt:</value>
+            </prop>
+            <prop o:name="Title" xml:lang="en-US">
+              <value>boxt</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+    </node>
+  </node>
+</o:component-data>

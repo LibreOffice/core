@@ -448,6 +448,18 @@ getCurrentDocCtx( const rtl::OUString& ctxName, const uno::Reference< uno::XComp
      return xModel;
 }
 
+uno::Reference< frame::XModel >
+getThisExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+{
+    return getCurrentDocCtx( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ExcelDocumentContext" ) ), xContext );
+}
+
+uno::Reference< frame::XModel >
+getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+{
+    return getCurrentDocCtx( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WordDocumentContext" ) ), xContext );
+}
+
  uno::Reference< frame::XModel >
 getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
@@ -459,7 +471,7 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) t
     }
     catch( uno::Exception& e )
     {
-        xModel = getCurrentDocCtx( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ExcelDocumentContext" ) ), xContext );
+        xModel = getThisExcelDoc( xContext );
     }
     return xModel;
 }
@@ -475,7 +487,7 @@ getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) th
     }
     catch( uno::Exception& e )
     {
-        xModel = getCurrentDocCtx( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WordDocumentContext" ) ), xContext );
+        xModel = getThisWordDoc( xContext );
     }
     return xModel;
 }

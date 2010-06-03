@@ -41,9 +41,7 @@
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 
-#ifndef _SVTOOLS_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/families.hxx>
@@ -1526,8 +1524,11 @@ void SchXMLExportHelper::exportTable()
             // to allow a correct re-association when copying via clipboard
             if( !bHasOwnData && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd )
             {
-                if( (*aColumnDescriptions_RangeIter).getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aColumnDescriptions_RangeIter );
+                if ((*aColumnDescriptions_RangeIter).getLength())
+                {
+                    mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
+                        *aColumnDescriptions_RangeIter);
+                }
                 ++aColumnDescriptions_RangeIter;
             }
             exportText( *aIt );
@@ -1559,7 +1560,10 @@ void SchXMLExportHelper::exportTable()
                     // write the original range name as id into the local table
                     // to allow a correct re-association when copying via clipboard
                     if( !bHasOwnData && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd )
-                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aRowDescriptions_RangeIter++ );
+                    {
+                        mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
+                            *aRowDescriptions_RangeIter++);
+                    }
                     exportText( *aRowDescriptionsIter );
                     ++aRowDescriptionsIter;
                     if( nC < nComplexCount )
@@ -1581,8 +1585,11 @@ void SchXMLExportHelper::exportTable()
                 if( ( !bHasOwnData && aDataRangeIter != aDataRangeEndIter ) &&
                     ( mbRowSourceColumns || (aColIt == aRowIt->begin())) )
                 {
-                    if( (*aDataRangeIter).getLength())
-                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aDataRangeIter );
+                    if ((*aDataRangeIter).getLength())
+                    {
+                        mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
+                            *aDataRangeIter);
+                    }
                     ++aDataRangeIter;
                 }
                 exportText( msString, false ); // do not convert tabs and lfs

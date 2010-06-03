@@ -776,6 +776,7 @@ void SdXMLShapeContext::SetThumbnail()
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
+    bool bHaveXmlId( false );
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_ZINDEX ) )
@@ -784,7 +785,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         }
         else if( IsXMLToken( rLocalName, XML_ID ) )
         {
-            maShapeId = rValue;
+            if (!bHaveXmlId) { maShapeId = rValue; };
         }
         else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
@@ -877,6 +878,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         if( IsXMLToken( rLocalName, XML_ID ) )
         {
             maShapeId = rValue;
+            bHaveXmlId = true;
         }
     }
 }
