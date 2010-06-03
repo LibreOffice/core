@@ -94,6 +94,7 @@ EXCEPTIONSFILES =   \
         $(SLO)$/mathmlimport.obj \
         $(SLO)$/mathmlexport.obj \
         $(SLO)$/mathtype.obj \
+        $(SLO)$/smdll.obj \
         $(SLO)$/view.obj \
         $(SLO)$/unomodel.obj \
         $(SLO)$/smdetect.obj \
