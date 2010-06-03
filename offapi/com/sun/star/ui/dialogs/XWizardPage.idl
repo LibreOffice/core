@@ -1,0 +1,86 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_dialogs_XWizardPage_idl__
+#define __com_sun_star_ui_dialogs_XWizardPage_idl__
+
+#include <com/sun/star/awt/XWindow.idl>
+
+//==================================================================================================================
+
+module com { module sun { module star { module ui { module dialogs {
+
+//==================================================================================================================
+
+/** is a single page of a <type>Wizard</type>
+ */
+interface XWizardPage : ::com::sun::star::lang::XComponent
+{
+    /** provides read-only access to the window of the page
+    */
+    [attribute, readonly]   ::com::sun::star::awt::XWindow  Window;
+
+    /** denotes the ID of the page.
+
+        <p>Within a wizard, no two pages are allowed to have the same ID.</p>
+    */
+    [attribute, readonly]   short PageId;
+
+    /** called when the page is activated
+    */
+    void    activatePage();
+
+    /** is called when the page is about to be left
+
+        <p>An implementation can veto the leave by returning <FALSE/> here. Usually, the decision about this
+        depends on the current state of the page.</p>
+
+        @param Reason
+            is one of the <type>WizardTravelType</type> contants denoting the reason why the page should be
+            committed.
+    */
+    boolean commitPage( [in] short Reason );
+
+    /** determines whether it is allowed to travel to a later page in the wizard
+
+        <p>You should base this decision on the state of the page only, not on a global state of the wizard. Usually,
+        you return <FALSE/> here if and only if not all necessary input on the page has been provided by the user,
+        or the provided input is not valid.</p>
+
+        <p>If checked for validity is expensive, or if you prefer giving your user more detailed feedback on validity
+        than a disabled <code>Next</code> button in the wizard, then move your checks to the <member>commitPage</member>
+        method.</p>
+    */
+    boolean canAdvance();
+};
+
+//==================================================================================================================
+
+}; }; }; }; };
+
+//==================================================================================================================
+
+#endif

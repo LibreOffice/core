@@ -219,6 +219,17 @@ interface XTreeControl
     */
     XTreeNode getClosestNodeForLocation( [in] long x, [in] long y );
 
+    /** returns the rectangle occupied by the visual representation of the given node
+
+        @param Node
+            the node whose geometry should be obtained
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given node is <NULL/>, or does not belong to the tree's data model
+    */
+    ::com::sun::star::awt::Rectangle
+        getNodeRect( [in] XTreeNode Node )
+            raises( ::com::sun::star::lang::IllegalArgumentException );
+
     // ------------
     // tree editing
     // ------------
