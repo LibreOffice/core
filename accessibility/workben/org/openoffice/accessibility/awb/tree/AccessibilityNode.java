@@ -75,8 +75,7 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
         if (xAccessibleContext != null) {
             try {
                 XAccessibleEventBroadcaster xAccessibleEventBroadcaster =
-                    (XAccessibleEventBroadcaster) UnoRuntime.queryInterface(
-                        XAccessibleEventBroadcaster.class, xAccessibleContext);
+                    UnoRuntime.queryInterface( XAccessibleEventBroadcaster.class, xAccessibleContext );
                 if (xAccessibleEventBroadcaster != null) {
                     if (attach) {
                         xAccessibleEventBroadcaster.addEventListener(this);
@@ -91,9 +90,9 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
     }
 
     public void disposing(com.sun.star.lang.EventObject eventObject) {
-        XAccessibleEventListener listener = this.listener;
-        if (listener != null) {
-            listener.disposing(eventObject);
+        XAccessibleEventListener localListener = this.listener;
+        if (localListener != null) {
+            localListener.disposing(eventObject);
         }
 
         treeModel.removeNode(userObject);
@@ -135,22 +134,20 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
 
     public void notifyEvent(AccessibleEventObject accessibleEventObject) {
         if (accessibleEventObject.EventId == AccessibleEventId.CHILD) {
-            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface(
-                XAccessible.class, accessibleEventObject.OldValue);
+            XAccessible xAccessible = UnoRuntime.queryInterface( XAccessible.class, accessibleEventObject.OldValue );
             if (xAccessible != null) {
                 handleChildRemoved(xAccessible);
             }
 
-            xAccessible = (XAccessible) UnoRuntime.queryInterface(
-                XAccessible.class, accessibleEventObject.NewValue);
+            xAccessible = UnoRuntime.queryInterface( XAccessible.class, accessibleEventObject.NewValue );
             if (xAccessible != null) {
                 handleChildAdded(xAccessible);
             }
         }
 
-        XAccessibleEventListener listener = this.listener;
-        if (listener != null) {
-            listener.notifyEvent(accessibleEventObject);
+        XAccessibleEventListener localListener = this.listener;
+        if (localListener != null) {
+            localListener.notifyEvent(accessibleEventObject);
         }
     }
 
