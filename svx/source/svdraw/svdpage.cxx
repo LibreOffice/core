@@ -1221,29 +1221,6 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
     }
 }
 
-SdrPageProperties::SdrPageProperties(const SdrPageProperties& rCandidate)
-:   SfxListener(),
-    mpSdrPage(rCandidate.mpSdrPage),
-    mpStyleSheet(0),
-    mpProperties(0)
-{
-    if(&mpSdrPage->GetModel()->GetItemPool() == rCandidate.mpProperties->GetPool())
-    {
-        mpProperties = new SfxItemSet(*rCandidate.mpProperties);
-    }
-    else
-    {
-        // #i111122# in doubt, use the ItemPool from the page, not the
-        // ItemSet. This is e.g. used to set a new Model
-        mpProperties = rCandidate.mpProperties->Clone(true, &mpSdrPage->GetModel()->GetItemPool());
-    }
-
-    if(rCandidate.GetStyleSheet())
-    {
-        ImpAddStyleSheet(*rCandidate.GetStyleSheet());
-    }
-}
-
 SdrPageProperties::~SdrPageProperties()
 {
     ImpRemoveStyleSheet();
@@ -1376,6 +1353,8 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     // Warning: this leads to slicing (see issue 93186) and has to be
     // removed as soon as possible.
     *this = rSrcPage;
+    OSL_ENSURE(mpSdrPageProperties,
+        "SdrPage::SdrPage: operator= did not create needed SdrPageProperties (!)");
 
     // be careful and correct eListKind, a member of SdrObjList which
     // will be changed by the SdrOIbjList::operator= before...
@@ -1393,8 +1372,6 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
         mxUnoPage = NULL;
         xComponent->dispose();
     }
-
-    mpSdrPageProperties = new SdrPageProperties(rSrcPage.getSdrPageProperties());
 }
 
 SdrPage::~SdrPage()
@@ -1489,8 +1466,28 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
     mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
     {
-        delete mpSdrPageProperties;
-        mpSdrPageProperties = new SdrPageProperties(rSrcPage.getSdrPageProperties());
+        // #i111122# delete SdrPageProperties when model is different
+        if(mpSdrPageProperties && GetModel() != rSrcPage.GetModel())
+        {
+            delete mpSdrPageProperties;
+            mpSdrPageProperties = 0;
+        }
+
+        if(!mpSdrPageProperties)
+        {
+            mpSdrPageProperties = new SdrPageProperties(*this);
+        }
+        else
+        {
+            mpSdrPageProperties->ClearItem(0);
+        }
+
+        if(!IsMasterPage())
+        {
+            mpSdrPageProperties->PutItemSet(rSrcPage.getSdrPageProperties().GetItemSet());
+        }
+
+        mpSdrPageProperties->SetStyleSheet(rSrcPage.getSdrPageProperties().GetStyleSheet());
     }
 
     // Now copy the contained obejcts (by cloning them)
@@ -1670,9 +1667,17 @@ void SdrPage::SetModel(SdrModel* pNewModel)
         }
         pLayerAdmin->SetModel(pNewModel);
 
-        // #i111122# re-create SdrPageProperties to migrate it's items to the
-        // new model
-        SdrPageProperties *pNew = new SdrPageProperties(getSdrPageProperties());
+        // create new SdrPageProperties with new model (due to SfxItemSet there)
+        // and copy ItemSet and StyleSheet
+        SdrPageProperties *pNew = new SdrPageProperties(*this);
+
+        if(!IsMasterPage())
+        {
+            pNew->PutItemSet(getSdrPageProperties().GetItemSet());
+        }
+
+        pNew->SetStyleSheet(getSdrPageProperties().GetStyleSheet());
+
         delete mpSdrPageProperties;
         mpSdrPageProperties = pNew;
     }

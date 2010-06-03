@@ -469,11 +469,22 @@ namespace drawinglayer
                         // This is wrong in principle, but looks nicer. This could also be done here directly
                         // without VCL usage if needed
                         const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive = static_cast< const primitive2d::FillHatchPrimitive2D& >(rCandidate);
+                        const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
 
                         // create hatch polygon in range size and discrete coordinates
                         basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getObjectRange());
                         aHatchRange.transform(maCurrentTransformation);
                         const basegfx::B2DPolygon aHatchPolygon(basegfx::tools::createPolygonFromRect(aHatchRange));
+
+                        if(rFillHatchAttributes.isFillBackground())
+                        {
+                            // #i111846# background fill is active; draw fill polygon
+                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
+
+                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                            mpOutputDevice->SetLineColor();
+                            mpOutputDevice->DrawPolygon(aHatchPolygon);
+                        }
 
                         // set hatch line color
                         const basegfx::BColor aHatchColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
@@ -481,7 +492,6 @@ namespace drawinglayer
                         mpOutputDevice->SetLineColor(Color(aHatchColor));
 
                         // get hatch style
-                        const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
                         HatchStyle eHatchStyle(HATCH_SINGLE);
 
                         switch(rFillHatchAttributes.getStyle())
