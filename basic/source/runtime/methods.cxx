@@ -121,8 +121,6 @@ using namespace com::sun::star::io;
 #include <io.h>
 #endif
 
-using namespace rtl;
-
 #include <basic/sbobjmod.hxx>
 
 static void FilterWhiteSpace( String& rStr )
