@@ -108,7 +108,7 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     mnNullDate( lclGetDays( Date( 30, 12, 1899 ) ) )
 {
     // initialize constant and default coefficients
-    const DeviceInfo& rDeviceInfo = getBaseFilter().getDeviceInfo();
+    const DeviceInfo& rDeviceInfo = getBaseFilter().getGraphicHelper().getDeviceInfo();
     maCoeffs[ UNIT_INCH ]    = MM100_PER_INCH;
     maCoeffs[ UNIT_POINT ]   = MM100_PER_POINT;
     maCoeffs[ UNIT_TWIP ]    = MM100_PER_TWIP;

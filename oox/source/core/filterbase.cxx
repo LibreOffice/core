@@ -27,8 +27,6 @@
 
 #include "oox/core/filterbase.hxx"
 #include <set>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -57,10 +55,7 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::awt::DeviceInfo;
-using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::frame::XFramesSupplier;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
@@ -139,12 +134,10 @@ struct FilterBaseImpl
     typedef ::boost::shared_ptr< ModelObjectHelper >        ModelObjHelperRef;
     typedef ::boost::shared_ptr< OleObjectHelper >          OleObjHelperRef;
     typedef ::std::map< OUString, Reference< XGraphic > >   EmbeddedGraphicMap;
-    typedef ::std::map< sal_Int32, sal_Int32 >              SystemPalette;
 
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
     MediaDescriptor     maMediaDesc;
-    DeviceInfo          maDeviceInfo;
     OUString            maFileUrl;
     StorageRef          mxStorage;
 
@@ -152,11 +145,11 @@ struct FilterBaseImpl
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
     OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
     EmbeddedGraphicMap  maEmbeddedGraphics;     /// Maps all imported embedded graphics by their path.
-    SystemPalette       maSystemPalette;        /// Maps system colors (XML tokens) to RGB color values.
 
     Reference< XMultiServiceFactory >   mxGlobalFactory;
     Reference< XModel >                 mxModel;
     Reference< XMultiServiceFactory >   mxModelFactory;
+    Reference< XFrame >                 mxTargetFrame;
     Reference< XInputStream >           mxInStream;
     Reference< XStream >                mxOutStream;
     Reference< XStatusIndicator >       mxStatusIndicator;
@@ -178,53 +171,6 @@ FilterBaseImpl::FilterBaseImpl( const Reference< XMultiServiceFactory >& rxGloba
     mxGlobalFactory( rxGlobalFactory )
 {
     OSL_ENSURE( mxGlobalFactory.is(), "FilterBaseImpl::FilterBaseImpl - missing service factory" );
-    if( mxGlobalFactory.is() )
-    {
-        // get the metric of the output device
-        try
-        {
-            Reference< XFramesSupplier > xFramesSupp( mxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
-            Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), UNO_SET_THROW );
-            Reference< XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
-            maDeviceInfo = xDevice->getInfo();
-        }
-        catch( Exception& )
-        {
-            OSL_ENSURE( false, "FilterBaseImpl::FilterBaseImpl - cannot get output device info" );
-        }
-    }
-
-    //! TODO: get colors from system
-    maSystemPalette[ XML_3dDkShadow ]               = 0x716F64;
-    maSystemPalette[ XML_3dLight ]                  = 0xF1EFE2;
-    maSystemPalette[ XML_activeBorder ]             = 0xD4D0C8;
-    maSystemPalette[ XML_activeCaption ]            = 0x0054E3;
-    maSystemPalette[ XML_appWorkspace ]             = 0x808080;
-    maSystemPalette[ XML_background ]               = 0x004E98;
-    maSystemPalette[ XML_btnFace ]                  = 0xECE9D8;
-    maSystemPalette[ XML_btnHighlight ]             = 0xFFFFFF;
-    maSystemPalette[ XML_btnShadow ]                = 0xACA899;
-    maSystemPalette[ XML_btnText ]                  = 0x000000;
-    maSystemPalette[ XML_captionText ]              = 0xFFFFFF;
-    maSystemPalette[ XML_gradientActiveCaption ]    = 0x3D95FF;
-    maSystemPalette[ XML_gradientInactiveCaption ]  = 0xD8E4F8;
-    maSystemPalette[ XML_grayText ]                 = 0xACA899;
-    maSystemPalette[ XML_highlight ]                = 0x316AC5;
-    maSystemPalette[ XML_highlightText ]            = 0xFFFFFF;
-    maSystemPalette[ XML_hotLight ]                 = 0x000080;
-    maSystemPalette[ XML_inactiveBorder ]           = 0xD4D0C8;
-    maSystemPalette[ XML_inactiveCaption ]          = 0x7A96DF;
-    maSystemPalette[ XML_inactiveCaptionText ]      = 0xD8E4F8;
-    maSystemPalette[ XML_infoBk ]                   = 0xFFFFE1;
-    maSystemPalette[ XML_infoText ]                 = 0x000000;
-    maSystemPalette[ XML_menu ]                     = 0xFFFFFF;
-    maSystemPalette[ XML_menuBar ]                  = 0xECE9D8;
-    maSystemPalette[ XML_menuHighlight ]            = 0x316AC5;
-    maSystemPalette[ XML_menuText ]                 = 0x000000;
-    maSystemPalette[ XML_scrollBar ]                = 0xD4D0C8;
-    maSystemPalette[ XML_window ]                   = 0xFFFFFF;
-    maSystemPalette[ XML_windowFrame ]              = 0x000000;
-    maSystemPalette[ XML_windowText ]               = 0x000000;
 }
 
 void FilterBaseImpl::setDocumentModel( const Reference< XComponent >& rxComponent )
@@ -306,6 +252,11 @@ const Reference< XModel >& FilterBase::getModel() const
 const Reference< XMultiServiceFactory >& FilterBase::getModelFactory() const
 {
     return mxImpl->mxModelFactory;
+}
+
+const Reference< XFrame >& FilterBase::getTargetFrame() const
+{
+    return mxImpl->mxTargetFrame;
 }
 
 const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
@@ -400,9 +351,9 @@ StorageRef FilterBase::getStorage() const
     return mxImpl->mxStorage;
 }
 
-StorageRef FilterBase::openSubStorage( const OUString& rStorageName, bool bCreate ) const
+StorageRef FilterBase::openSubStorage( const OUString& rStorageName, bool bCreateMissing ) const
 {
-    return mxImpl->mxStorage->openSubStorage( rStorageName, bCreate );
+    return mxImpl->mxStorage->openSubStorage( rStorageName, bCreateMissing );
 }
 
 Reference< XInputStream > FilterBase::openInputStream( const OUString& rStreamName ) const
@@ -425,7 +376,7 @@ void FilterBase::commitStorage() const
 GraphicHelper& FilterBase::getGraphicHelper() const
 {
     if( !mxImpl->mxGraphicHelper )
-        mxImpl->mxGraphicHelper.reset( new GraphicHelper( mxImpl->mxGlobalFactory ) );
+        mxImpl->mxGraphicHelper.reset( implCreateGraphicHelper() );
     return *mxImpl->mxGraphicHelper;
 }
 
@@ -441,42 +392,6 @@ OleObjectHelper& FilterBase::getOleObjectHelper() const
     if( !mxImpl->mxOleObjHelper )
         mxImpl->mxOleObjHelper.reset( new OleObjectHelper( mxImpl->mxModelFactory ) );
     return *mxImpl->mxOleObjHelper;
-}
-
-const DeviceInfo& FilterBase::getDeviceInfo() const
-{
-    return mxImpl->maDeviceInfo;
-}
-
-sal_Int32 FilterBase::convertScreenPixelX( double fPixelX ) const
-{
-    return (mxImpl->maDeviceInfo.PixelPerMeterX > 0) ?
-        static_cast< sal_Int32 >( (fPixelX * 100000.0) / mxImpl->maDeviceInfo.PixelPerMeterX ) : 0;
-}
-
-sal_Int32 FilterBase::convertScreenPixelY( double fPixelY ) const
-{
-    return (mxImpl->maDeviceInfo.PixelPerMeterY > 0) ?
-        static_cast< sal_Int32 >( (fPixelY * 100000.0) / mxImpl->maDeviceInfo.PixelPerMeterY ) : 0;
-}
-
-sal_Int32 FilterBase::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) const
-{
-    FilterBaseImpl::SystemPalette::const_iterator aIt = mxImpl->maSystemPalette.find( nToken );
-    OSL_ENSURE( aIt != mxImpl->maSystemPalette.end(), "FilterBase::getSystemColor - invalid token identifier" );
-    return (aIt == mxImpl->maSystemPalette.end()) ? nDefaultRgb : aIt->second;
-}
-
-sal_Int32 FilterBase::getSchemeColor( sal_Int32 /*nToken*/ ) const
-{
-    OSL_ENSURE( false, "FilterBase::getSchemeColor - scheme colors not implemented" );
-    return API_RGB_TRANSPARENT;
-}
-
-sal_Int32 FilterBase::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
-{
-    OSL_ENSURE( false, "FilterBase::getPaletteColor - palette colors not implemented" );
-    return API_RGB_TRANSPARENT;
 }
 
 OUString FilterBase::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
@@ -500,7 +415,7 @@ bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString
 
     // copy the entire stream to the passed sequence
     SequenceOutputStream aOutStrm( orDataSeq );
-    aOutStrm.copyStream( aInStrm );
+    aInStrm.copyToStream( aOutStrm );
     return true;
 }
 
@@ -660,10 +575,16 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     }
 
     mxImpl->maFileUrl = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
+    mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FRAME(), Reference< XFrame >() );
     mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >() );
     mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
 }
 
+GraphicHelper* FilterBase::implCreateGraphicHelper() const
+{
+    // default: return base implementation without any special behaviour
+    return new GraphicHelper( mxImpl->mxGlobalFactory, mxImpl->mxTargetFrame );
+}
 
 // ============================================================================
 

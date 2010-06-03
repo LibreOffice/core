@@ -35,10 +35,10 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/olestorage.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/ole/olestorage.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -484,7 +484,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         }
 
         // try to decrypt an encrypted OLE package
-        OleStorage aOleStorage( mxFactory, xInStrm, false );
+        ::oox::ole::OleStorage aOleStorage( mxFactory, xInStrm, false );
         if( aOleStorage.isStorage() ) try
         {
             // open the required input streams in the encrypted package

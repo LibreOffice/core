@@ -27,6 +27,7 @@
 
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

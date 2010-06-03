@@ -53,8 +53,6 @@ public:
     virtual bool importDocument() throw();
     virtual bool exportDocument() throw();
 
-    virtual sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
-
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
     virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
@@ -66,7 +64,10 @@ public:
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
+    sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
+
 private:
+    virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 
 private:
