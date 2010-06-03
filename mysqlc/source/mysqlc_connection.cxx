@@ -26,12 +26,6 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#include <cppconn/driver.h>
-#include <cppconn/connection.h>
-#include <cppconn/statement.h>
-#include <cppconn/metadata.h>
-#include <cppconn/exception.h>
-
 #include "mysqlc_connection.hxx"
 #include "mysqlc_databasemetadata.hxx"
 
@@ -40,6 +34,14 @@
 #include "mysqlc_statement.hxx"
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_general.hxx"
+
+#include <tools/preextstl.h>
+#include <cppconn/driver.h>
+#include <cppconn/connection.h>
+#include <cppconn/statement.h>
+#include <cppconn/metadata.h>
+#include <cppconn/exception.h>
+#include <tools/postextstl.h>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -186,10 +188,10 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     if (bEmbedded == sal_False) {
         try {
             sql::ConnectOptionsMap connProps;
-            std::string host_str = OUStringToOString(aHostName, m_settings.encoding).getStr();
-            std::string user_str = OUStringToOString(aUser, m_settings.encoding).getStr();
-            std::string pass_str = OUStringToOString(aPass, m_settings.encoding).getStr();
-            std::string schema_str = OUStringToOString(aDbName, m_settings.encoding).getStr();
+            ext_std::string host_str = OUStringToOString(aHostName, m_settings.encoding).getStr();
+            ext_std::string user_str = OUStringToOString(aUser, m_settings.encoding).getStr();
+            ext_std::string pass_str = OUStringToOString(aPass, m_settings.encoding).getStr();
+            ext_std::string schema_str = OUStringToOString(aDbName, m_settings.encoding).getStr();
             connProps["hostName"] = sql::ConnectPropertyVal(host_str);
             connProps["userName"] = sql::ConnectPropertyVal(user_str);
             connProps["password"] = sql::ConnectPropertyVal(pass_str);
