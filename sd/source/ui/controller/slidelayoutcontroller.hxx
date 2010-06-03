@@ -25,30 +25,30 @@
  *
  ************************************************************************/
 
-#ifndef SD_UNO_PRES_VIEW_HXX
-#define SD_UNO_PRES_VIEW_HXX
+#ifndef __SD_SLIDELAYOUTCONTROLLER_HXX_
+#define __SD_SLIDELAYOUTCONTROLLER_HXX_
 
-#include "SdUnoDrawView.hxx"
+#include <svtools/popupwindowcontroller.hxx>
 
-namespace sd {
+namespace sd
+{
 
-/** The sub controller for the slide show (or preview?)  It formerly reduced
-    the property set inherited from SdUnoDrawView to just 'CurrentPage'.
-    Now that we have to always support the whole set, we can as well try to
-    do that as best as we can.  Therefore the inherited functionality is
-    provided as is.
-*/
-class SdUnoPresView
-    : public SdUnoDrawView
+class SlideLayoutController : public svt::PopupWindowController
 {
 public:
-    SdUnoPresView (
-        DrawController& rController,
-        DrawViewShell& rViewShell,
-        View& rView) throw();
-    virtual ~SdUnoPresView (void) throw();
+    SlideLayoutController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, const rtl::OUString& sCommandURL, bool bInsertPage );
+
+    virtual ::Window* createPopupWindow( ::Window* pParent );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+
+    using svt::PopupWindowController::createPopupWindow;
+private:
+    bool mbInsertPage;
 };
 
-} // end of namespace sd
+}
 
-#endif
+#endif // __SD_SLIDELAYOUTCONTROLLER_HXX_
