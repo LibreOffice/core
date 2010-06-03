@@ -37,7 +37,7 @@ testcase tiFormatModifyLayout
     Call  hNewDocument
     printlog "Impress: Format->Modify Layout "
     printlog "Draw   : kontext menu: Slide-> Modify Slide (always disabled :-( ?"
-    FormatPage 
+    FormatPage
     Kontext "SeitenLayout"
     DialogTest ( SeitenLayout )
     sleep 1
@@ -45,5 +45,5 @@ testcase tiFormatModifyLayout
     SeitenLayout.Cancel
     printlog "close application "
     Call hCloseDocument
-    
+
 endcase 'tiFormatModifyLayout

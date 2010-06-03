@@ -110,7 +110,7 @@ testcase tiViewPanes
         endif
     catch
         warnlog "View->Slide Pane couldn't get executed"
-    endcatch 
+    endcatch
 
     printlog "Reactivate all pages in the Task-panel "
     kontext "Tasks"
@@ -120,7 +120,7 @@ testcase tiViewPanes
     hMenuSelectNr (3)
     View.OpenMenu
     hMenuSelectNr (4)
-    
+
 endcase 'tiViewPanes
 '---------------------------------------------------------
 testcase tiViewMasterView
@@ -130,29 +130,29 @@ testcase tiViewMasterView
     printlog "View->Master View->Drawing View"
     sleep 1
     ViewWorkspaceDrawingView
-     sleep 5
+    sleep 5
     printlog "View->Master View->Outline View "
     ViewWorkspaceOutlineView
-     sleep 1
+    sleep 1
     printlog "View->Master View->Slides View "
     ViewWorkspaceSlidesView
-     sleep 1
+    sleep 1
     printlog "View->Master View->Notes View "
     ViewWorkspaceNotesView
-      sleep 1
+    sleep 1
     printlog "View->Master View->Handout View "
     ViewWorkspaceHandoutView
-      sleep 1
+    sleep 1
     printlog "View->Master View->Drawing View "
     ViewWorkspaceDrawingView
     printlog "close application "
-      sleep 1
+    sleep 1
     Call hCloseDocument
-   
+
 endcase 'tiViewMasterView
 '---------------------------------------------------------
 testcase tiViewSlideMaster
-    
+
     printlog "open application with : File->Autopilot->Presentation; OK; OK "
     FileAutopilotPresentation                ' to get a title :-)
     sleep 2
@@ -177,10 +177,10 @@ testcase tiViewSlideMaster
     Sleep 1
     printlog "View->Master->Title "
     try
-    ViewTitle
-    Errorlog "View - Master - Title Slide Master should NOT be accessable"
+        ViewTitle
+        Errorlog "View - Master - Title Slide Master should NOT be accessable"
     catch
-    printlog "View - Master - Title Slide Master not accessable - good"
+        printlog "View - Master - Title Slide Master not accessable - good"
     endcatch
     Sleep 1
     printlog "View->Slide "
@@ -200,18 +200,18 @@ testcase tiViewSlideMaster
     Sleep 1
     printlog "close application "
     Call  hCloseDocument
-   
+
 endcase 'tiViewSlideMaster
 '--------------------------------------------------------
 testcase tiViewToolbar_1
 
     const DEFAULT_DELAY = 3
-    
+
     Dim NumberOfGraphicModes as integer
     Dim iCurrentGraphicsMode as integer
 
     dim TestFile as string
-        TestFile = ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
+    TestFile = ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
 
     printlog "open application "
     Call hNewDocument
@@ -252,8 +252,8 @@ testcase tiViewToolbar_1
     else
         warnlog( "Insert Graphics dialog did not open" )
     endif
-    
+
     printlog "close application "
     Call hCloseDocument
-    
+
 endcase 'tiViewToolbar_1
