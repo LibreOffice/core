@@ -94,7 +94,7 @@ testcase tUndoFindAndReplaceLong
 	'/// Type 'ThisIsAboutALongTextThatHadToBeReplaced' in 'Replace with' field
 	ReplaceWith.Settext "ThisIsAboutALongTextThatHadToBeReplaced"
 	'/// Choose Button 'Replace' and close dialog
-	Replace.Click
+	ReplaceBtn.Click
 	wait 500
 	Kontext "Active"
 	if Active.Exists then
@@ -452,7 +452,7 @@ testcase tUndoStyles
 	Sleep 1
 	ReplaceWithStyle.Select 4
 	wait 500
-	Replace.Click
+	ReplaceBtn.Click
 	NewStyle = ReplaceWithStyle.GetSelText
 	Select Case iSprache
 		Case 01: StyleText = "Replace style: AUndoHistory -> " & NewStyle

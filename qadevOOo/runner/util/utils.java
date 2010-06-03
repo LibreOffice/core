@@ -38,11 +38,14 @@ import java.util.ArrayList;
 import java.io.RandomAccessFile;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.ucb.InteractiveAugmentedIOException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.lang.XServiceInfo;
 
@@ -364,18 +367,13 @@ public class utils {
      *
      */
     public static String getOfficeTemp(XMultiServiceFactory msf) {
-        String tmpDir = util.utils.getUsersTempDir();
+        String url = getOfficeUserPath(msf) + "/test-temp/";
         try {
-            String tmp = (String) getOfficeSettingsValue(msf, "Temp");
-            if (!tmp.endsWith(System.getProperty("file.separator"))) {
-                tmp += System.getProperty("file.separator");
-            }
-            tmpDir = getFullURL(tmp);
-        } catch (Exception e) {
-            System.out.println("Couldn't get Office TEMP");
-            e.printStackTrace();
+            new File(new URI(url)).mkdir();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
-        return tmpDir;
+        return url;
     }
 
     /**
@@ -545,16 +543,10 @@ public class utils {
         return res;
     }
 
-    /**
-     * Copies file to a new location using OpenOffice.org features. If the target
-     * file already exists, the file is deleted.
-     *
-     * @returns <code>true</code> if the file was successfully copied,
-     * <code>false</code> if some errors occured (e.g. file is locked, used
-     * by another process).
-     */
-    public static boolean overwriteFile(XMultiServiceFactory xMsf, String oldF, String newF) {
-        boolean res = false;
+    private static void overwriteFile_impl(
+        XMultiServiceFactory xMsf, String oldF, String newF)
+        throws InteractiveAugmentedIOException
+    {
         try {
             Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
 
@@ -564,15 +556,42 @@ public class utils {
                 simpleAccess.kill(newF);
             }
             simpleAccess.copy(oldF, newF);
-            res = true;
-        } catch (com.sun.star.ucb.InteractiveAugmentedIOException e) {
-            return false;
+        } catch (InteractiveAugmentedIOException e) {
+            throw e;
         } catch (com.sun.star.uno.Exception e) {
-            System.out.println("Couldn't copy " + oldF + " to " + newF + ".");
+            System.out.println("Couldn't copy " + oldF + " to " + newF + ":");
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
+    }
 
-        return res;
+    /**
+     * Copies file to a new location using OpenOffice.org features. If the target
+     * file already exists, the file is deleted.
+     *
+     * @returns <code>true</code> if the file was successfully copied,
+     * <code>false</code> if some errors occured (e.g. file is locked, used
+     * by another process).
+     */
+    public static boolean tryOverwriteFile(
+        XMultiServiceFactory xMsf, String oldF, String newF)
+    {
+        try {
+            overwriteFile_impl(xMsf, oldF, newF);
+        } catch (InteractiveAugmentedIOException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static void doOverwriteFile(
+        XMultiServiceFactory xMsf, String oldF, String newF)
+    {
+        try {
+            overwriteFile_impl(xMsf, oldF, newF);
+        } catch (InteractiveAugmentedIOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static boolean hasPropertyByName(XPropertySet props, String aName) {

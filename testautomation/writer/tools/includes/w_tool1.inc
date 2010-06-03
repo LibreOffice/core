@@ -434,6 +434,8 @@ end sub
 '----------------------------------------------------------------
 
 sub sAutopilot_ListboxCombobox(WhichBox as String)
+    Dim iCount as integer
+    iCount = 1
     Kontext "AutoPilotListComboBox"
     if AutoPilotListComboBox.Exists then
         printlog "  -Autopilot-Listbox Page 1"
@@ -441,6 +443,18 @@ sub sAutopilot_ListboxCombobox(WhichBox as String)
         if TabListboxData.Exists then
             Call DialogTest( TabListBoxData )
             DataSource.Select 1
+            Do
+                if iCount >= 15 then exit do
+                try
+                    Table.Select 1
+                    exit do
+                catch
+                    wait 500
+                    printlog "  - attempt " & i & " to select table"
+                    iCount = iCount + 1
+                endcatch
+            Loop
+            
             if Table.GetItemCount > 0 then
                 Table.Select 1
             else

@@ -2,4 +2,5 @@
 Oracle Open Office=3.2
 OpenOffice.org=3.1
 BrOffice.org=3.1
+Oracle Open Office=3.2
 
