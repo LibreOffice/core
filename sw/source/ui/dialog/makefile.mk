@@ -81,23 +81,3 @@ LIB1OBJFILES =  \
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-$(INCCOM)$/swuilib.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    $(RM) $@
-    echo \#define DLL_NAME \"libswui$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE
-.IF "$(USE_SHELL)"!="4nt"
-    echo \#define DLL_NAME \"swui$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE          # "$(USE_SHELL)"!="4nt"
-    echo #define DLL_NAME "swui$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
-.ENDIF
-
-$(SLO)$/swabstdlg.obj : $(INCCOM)$/swuilib.hxx
-
-
-
-
-
-
-

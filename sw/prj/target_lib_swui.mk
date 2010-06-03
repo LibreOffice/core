@@ -166,22 +166,6 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/utlui/swrenamexnameddlg \
 ))
 
-$(WORKDIR)/Misc/sw/swuilib.hxx :
-    $(call gb_Helper_announce,Creating swuilib.hxx ...)
-    mkdir -p `dirname $@` && echo "#define DLL_NAME \"$(notdir $(call gb_Library_get_target,swui))\"" > $@
-
-.PHONY : $(WORKDIR)/Clean/Misc/sw/swuilib.hxx
-$(WORKDIR)/Clean/Misc/sw/swuilib.hxx :
-    $(call gb_Helper_announce,Cleaning up swuilib.hxx ...)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(WORKDIR)/Misc/sw/swuilib.hxx)
-
-
-$(call gb_CxxObject_get_dep_target,sw/source/ui/dialog/swabstdlg) \
-$(call gb_CxxObject_get_target,sw/source/ui/dialog/swabstdlg) : $(WORKDIR)/Misc/sw/swuilib.hxx
-
-$(call gb_Library_get_clean_target,swui) : $(WORKDIR)/Clean/Misc/sw/swuilib.hxx
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,swui,\
     advapi32 \
