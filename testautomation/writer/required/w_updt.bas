@@ -42,6 +42,7 @@ sub main
     use "writer\required\includes\w_002_.inc"
     use "writer\required\includes\w_003_.inc"
     use "writer\required\includes\w_004_.inc"
+    use "writer\required\includes\w_004b_.inc"
     use "writer\required\includes\w_005_.inc"
     use "writer\required\includes\w_005b_.inc"
     use "writer\required\includes\w_006_.inc"
