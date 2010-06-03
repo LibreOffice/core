@@ -75,14 +75,14 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:PageMode"/>
-      <menu:menuitem menu:id=".uno:MasterPage"/>
+      <menu:menuitem menu:id=".uno:PageMode" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:MasterPage" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:DisplayQualityMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:OutputQualityColor"/>
-          <menu:menuitem menu:id=".uno:OutputQualityGrayscale"/>
-          <menu:menuitem menu:id=".uno:OutputQualityBlackWhite"/>
+          <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
