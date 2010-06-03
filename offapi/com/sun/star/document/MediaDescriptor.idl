@@ -51,6 +51,10 @@
 #include <com/sun/star/task/XStatusIndicator.idl>
 #endif
 
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module document {
@@ -594,6 +598,11 @@ published service MediaDescriptor
         @since OOo 3.0
      */
     [optional,property] string ViewControllerName;
+    //-------------------------------------------------------------------------
+
+    /** specifies the frame containing the document. May be empty.
+     */
+    [optional,property] com::sun::star::frame::XFrame Frame;
 };
 
 //=============================================================================

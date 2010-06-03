@@ -67,7 +67,7 @@
     an embedded object based on system clipboard.
     </p>
  */
-interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterface
+published interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterface
 {
     // -----------------------------------------------------------------------
     /** creates a new object and initializes it from the system clipboard.
