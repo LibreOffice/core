@@ -196,6 +196,7 @@ void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
 
 void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const String& rTemplateName )
 {
+    static const int nMaxPathSize = 16000;
     static ::rtl::OUString SERVICE_FILTER_FACTORY = ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" );
     static ::rtl::OUString SERVICE_TYPE_DECTECTION = ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" );
     static ::rtl::OUString SERVICE_SIMPLE_ACCESS = ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" );
@@ -207,8 +208,12 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
 
     static ::rtl::OUString DEF_TPL_STR = ::rtl::OUString::createFromAscii("/soffice.");
 
-    String sURL;
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( SystemPath::GetUserTemplateLocation()), sURL );
+    String      sURL;
+    String      sPath;
+    sal_Unicode aPathBuffer[nMaxPathSize];
+    if ( SystemPath::GetUserTemplateLocation( aPathBuffer, nMaxPathSize ))
+        sPath = String( aPathBuffer );
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, sURL );
 
     ::rtl::OUString aUserTemplateURL( sURL );
     if ( aUserTemplateURL.getLength() != 0)

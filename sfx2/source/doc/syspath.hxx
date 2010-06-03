@@ -32,13 +32,12 @@
 #define __SYSPATH_HXX__
 //#pragma warning(disable:4917)
 
-#include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 
 class SFX2_DLLPUBLIC SystemPath
 {
 public:
-    static ::rtl::OUString GetUserTemplateLocation();
+    static bool GetUserTemplateLocation(sal_Unicode*, int nSize);
 };
 
 #endif

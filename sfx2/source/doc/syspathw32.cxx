@@ -41,24 +41,19 @@ using namespace ::rtl;
 #endif
 #include <shlobj.h>
 
-#define ALLOC(type, n) ((type *) HeapAlloc(GetProcessHeap(), 0, sizeof(type) * n ))
-#define FREE(p) HeapFree(GetProcessHeap(), 0, p)
-
-static OUString _SHGetSpecialFolderW32( int nFolderID )
+static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 {
     LPITEMIDLIST    pidl;
     HRESULT         hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
-    OUString        aFolder;
 
     if( hHdl == NOERROR )
     {
-        WCHAR *lpFolderA;
-        lpFolderA = ALLOC( WCHAR, 16000 );
+        WCHAR *lpFolder = static_cast< WCHAR* >( HeapAlloc( GetProcessHeap(), 0, 16000 ));
 
-        SHGetPathFromIDListW( pidl, lpFolderA );
-        aFolder = OUString( reinterpret_cast<const sal_Unicode*>(lpFolderA) );
+        SHGetPathFromIDListW( pidl, lpFolder );
+        wcsncpy( pszFolder, lpFolder, nSize );
 
-        FREE( lpFolderA );
+        HeapFree( GetProcessHeap(), 0, lpFolder );
         IMalloc *pMalloc;
         if( NOERROR == SHGetMalloc(&pMalloc) )
         {
@@ -66,17 +61,16 @@ static OUString _SHGetSpecialFolderW32( int nFolderID )
             pMalloc->Release();
         }
     }
-    return aFolder;
+    return true;
 }
 
 #endif
 
-OUString SystemPath::GetUserTemplateLocation()
+bool SystemPath::GetUserTemplateLocation(sal_Unicode* pFolder, int nSize )
 {
 #ifdef WNT
-    return _SHGetSpecialFolderW32(CSIDL_TEMPLATES);
-#endif
-#ifdef UNX
-    return OUString();
+    return _SHGetSpecialFolderW32(CSIDL_TEMPLATES, pFolder, nSize );
+#else
+    return false;
 #endif
 }
