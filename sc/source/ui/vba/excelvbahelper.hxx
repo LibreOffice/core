@@ -30,7 +30,7 @@
 #include<vbahelper/vbahelper.hxx>
 #include <docsh.hxx>
 
-class ScCellRangeObj;
+class ScCellRangesBase;
 
 namespace ooo
 {
@@ -51,7 +51,7 @@ namespace ooo
             class ScVbaCellRangeAccess
             {
             public:
-                static SfxItemSet* GetDataSet( ScCellRangeObj* pRangeObj );
+                static SfxItemSet* GetDataSet( ScCellRangesBase* pRangeObj );
             };
 }
 }

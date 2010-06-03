@@ -785,7 +785,8 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc, BOOL bIncludeDraw )
+                                    ScDocument* pUndoDoc, BOOL bIncludeDraw,
+                                    bool bUpdateNoteCaptionPos )
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -829,7 +830,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             if (pTab[i])
                 pTab[i]->UpdateReference(
                     eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw );
+                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw, bUpdateNoteCaptionPos );
 
         if ( bIsEmbedded )
         {
@@ -1262,7 +1263,8 @@ BOOL ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
 //
 
-BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScStrCollection& rStrings, bool bFilter )
+BOOL ScDocument::GetFilterEntries(
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && pTab[nTab] && pDBCollection )
     {
@@ -1299,11 +1301,11 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScSt
 
             if ( bFilter )
             {
-                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings );
+                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings, rHasDates );
             }
             else
             {
-                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
             }
 
             return TRUE;
@@ -1318,11 +1320,11 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScSt
 //
 
 BOOL ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                        SCTAB nTab, TypedScStrCollection& rStrings )
+                                        SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
     {
-        pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+        pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
         return TRUE;
     }
 
@@ -1900,10 +1902,10 @@ void ScDocument::IncSizeRecalcLevel( SCTAB nTab )
         pTab[nTab]->IncRecalcLevel();
 }
 
-void ScDocument::DecSizeRecalcLevel( SCTAB nTab )
+void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
-        pTab[nTab]->DecRecalcLevel();
+        pTab[nTab]->DecRecalcLevel( bUpdateNoteCaptionPos );
 }
 
 // Wang Xu Ming -- 2009-8-17

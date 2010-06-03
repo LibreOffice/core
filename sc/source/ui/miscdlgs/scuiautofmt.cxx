@@ -369,7 +369,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
                                          aStrRename,
                                          aStrLabel,
                                          aFormatName,
-                                         HID_SC_RENAME_AUTOFMT );
+                                         HID_SC_REN_AFMT_DLG );
         if( pDlg->Execute() == RET_OK )
         {
             BOOL bFmtRenamed = FALSE;
