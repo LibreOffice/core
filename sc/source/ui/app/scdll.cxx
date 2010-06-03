@@ -40,6 +40,7 @@
 #include <svx/tbxcolor.hxx>
 
 #include <sot/clsids.hxx>
+#include <sfx2/taskpane.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
@@ -262,6 +263,9 @@ void ScDLL::Init()
 
     //Media Controller
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
+
+    // common SFX controller
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pMod );
 
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
