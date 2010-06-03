@@ -59,10 +59,10 @@ using namespace ::com::sun::star::lang;
 //  using namespace ::cppu;
 using namespace ::osl;
 
-void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet)
+void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::construct" );
-    OCacheSet::construct(_xDriverSet);
+    OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
     m_xRowLocate.set(_xDriverSet,UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
