@@ -88,10 +88,6 @@ PATCH_FILES = \
     patches/arm_build_fix.patch \
     patches/link_fontconfig.patch
 
-.IF "$(OUTPATH)"=="unxlngi6"
-PATCH_FILES += patches/linux_libc2.5.patch
-.ENDIF
-
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
 .IF "$(COM)"=="GCC"
