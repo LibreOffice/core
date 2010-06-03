@@ -72,12 +72,12 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 # Help variables.
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
-     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $SHELL_PATH, $XLIB, $XINC,
+     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
      $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
-my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
+my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
@@ -89,7 +89,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
-	 $PROEXT,
+	 $PROEXT, $TARFILE_LOCATION,
      $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
@@ -197,6 +197,7 @@ $ENABLEUNICODE        = "TRUE";
 $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
 $comment              = "#";           # UNIX script comment character
+$TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ ) 
@@ -509,9 +510,9 @@ elsif ( $platform =~ m/linux/ )
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
-      $CPU            = "A";
-      $CPUNAME        = "ALPHA_";
-      $OUTPATH        = "unxlnga";
+      $CPU            = "L";
+      $CPUNAME        = "AXP";
+      $OUTPATH        = "unxlngaxp";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
@@ -796,21 +797,7 @@ if ( $platform =~ m/cygwin|os2/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
 # 3. shell path.
-# Check whether autoconf found a valid shell path.
-if ("@USE_SHELL@" eq "tcsh")
-{  # SHELL as argument from autoconf.
-   $SHELL_PATH = '@SHELLPATH@';
-   $SHELL = '@SHELLPATH@'."\/tcsh";
-}
-elsif ("@USE_SHELL@" eq "bash")
-{
-   $SHELL_PATH = '@SHELLPATH@';
-   $SHELL = '@SHELLPATH@'."\/bash";
-}
-else {
-   die "Not a recognized shell: @USE_SHELL@ !";
-}
-
+$OOO_SHELL = '@SHELLPATH@'."\/bash";
 
 if ( '@STLPORT4@' eq $no_stl )
 {
@@ -955,6 +942,12 @@ $SOLARSRC             = '$SRC_ROOT';
 my @splitlist = split( /\//, $SRC_ROOT );
 pop @splitlist;
 $SOURCE_ROOT_DIR      = join("/", @splitlist);
+
+# default TARFILE_LOCATION
+if ('@TARFILE_LOCATION@' eq "DEFAULT")
+{	$TARFILE_LOCATION="$SOURCE_ROOT_DIR/ext_sources";
+}
+
 #
 $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
@@ -1094,7 +1087,6 @@ if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
    $PATH              = GetCorrectPath ($PATH,
                                         $COMPATH, $CC,
                                         $PERL_PATH, 'perl',
-                                        $SHELL_PATH, '@USE_SHELL@',
                                         @javaBits);
 }
 
@@ -1179,11 +1171,6 @@ elsif ($platform =~ m/cygwin/)
    if ( ! ( $PATH =~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
    {
       $PATH          .= $ps.$tmppath;
-   }
-   # Check if $SHELL_PATH is already set in PATH
-   $tmppath = CygFormat($SHELL_PATH);
-   if ( ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
-   {   $PATH          .= $ps.$tmppath;
    }
    # Check if $CYGWIN_PATH is already set in PATH
    $tmppath = CygFormat($CYGWIN_PATH);
@@ -1500,7 +1487,7 @@ CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
-ToFile( "SHELL",             $SHELL,             "e" );
+ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
 ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
 ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
@@ -1599,6 +1586,7 @@ ToFile( "ENABLE_MINIMIZER",   "@ENABLE_MINIMIZER@","e" );
 ToFile( "ENABLE_PRESENTER_SCREEN","@ENABLE_PRESENTER_SCREEN@","e" );
 ToFile( "ENABLE_REPORTBUILDER","@ENABLE_REPORTBUILDER@","e" );
 ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
+ToFile( "OOO_JUNIT_JAR",     "@OOO_JUNIT_JAR@",    "e" );
 ToFile( "SAC_JAR",           "@SAC_JAR@",          "e" );
 ToFile( "LIBXML_JAR",        "@LIBXML_JAR@",       "e" );
 ToFile( "FLUTE_JAR",         "@FLUTE_JAR@",        "e" );
@@ -1633,6 +1621,8 @@ ToFile( "MOC4",              "@MOC4@",             "e" );
 ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
+ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
+ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 #
 # Writing the platform dependent constant values to file.
 # (c = comment, e = environment variable, a = alias )
@@ -1721,6 +1711,7 @@ if ( '@JDK@' ne '' )
    ToFile( "JDK",             "@JDK@",           "e" );
    ToFile( "JAVAFLAGS",             "@JAVAFLAGS@",           "e" );
    ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
+   ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
    ToFile( "JAVAAOTCOMPILER", PathFormat("@JAVAAOTCOMPILER@"), "e" );
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
@@ -1827,6 +1818,9 @@ ToFile( "XRANDR_DLOPEN",     "@XRANDR_DLOPEN@",    "e" );
 ToFile( "SYSTEM_LIBWPD",     "@SYSTEM_LIBWPD@",    "e" );
 ToFile( "LIBWPD_CFLAGS",     "@LIBWPD_CFLAGS@",    "e" );
 ToFile( "LIBWPD_LIBS",       "@LIBWPD_LIBS@",      "e" );
+ToFile( "SYSTEM_CPPUNIT",    "@SYSTEM_CPPUNIT@",   "e" );
+ToFile( "CPPUNIT_CFLAGS",    "@CPPUNIT_CFLAGS@",   "e" );
+ToFile( "CPPUNIT_LIBS",      "@CPPUNIT_LIBS@",     "e" );
 ToFile( "SYSTEM_LIBXML",     "@SYSTEM_LIBXML@",    "e" );
 ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
@@ -1942,8 +1936,6 @@ ToFile( "DELIVER",       $perlpre."deliver.pl",     "e" );
 ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
 ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 
-ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
-
 #
 # Writing the aliases to file.
 ToFile( "Aliases.",          $empty,             "c" );
@@ -1992,6 +1984,7 @@ if ($platform =~ m/os2/)
   ToFile( "SWITCHAR",   "-",	"e");
 }
 ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
+ToFile( "DBGSV_INIT", "$SOLARENV/bin/dbgsv.ini", "e");
 #
 # Writing unset variables you might not need to file.
 # 

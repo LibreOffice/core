@@ -78,6 +78,7 @@ BEGIN
         "dgo",
         "kok",
         "mni",
+        "ca-XV",
         "sat",
         "ug",
         "om",
@@ -136,7 +137,9 @@ BEGIN
     $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
+    $isfreebsdbuild = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacbuild = 0;
     $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
@@ -268,7 +271,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "";
+    $sundirname = "Oracle";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
@@ -513,13 +516,12 @@ BEGIN
         if ( $plat =~ /darwin/i )
         {
             $libextension = "\.dylib";
-            $archiveformat = ".dmg";
         }
         else
         {
             $libextension = "\.so";
-            $archiveformat = ".tar.gz";
         }
+        $archiveformat = ".tar.gz";
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;

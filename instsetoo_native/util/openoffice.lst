@@ -37,7 +37,10 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 6
-			OPENSOURCE 1
+			OOODOWNLOADNAME 1
+			STARTCENTER_LAYOUT_STYLE 0
+			BUILDIDCWS {buildidcws}
+            OPENSOURCE 1
 		}
 	}
 }
@@ -137,6 +140,7 @@ OpenOffice_wJRE
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -353,6 +357,7 @@ OpenOffice_Dev_SDK
             UREPACKAGEPREFIX ooodev
             SOLSUREPACKAGEPREFIX ooodev
             REGISTRYLAYERNAME LayerDev
+			DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
@@ -432,6 +437,7 @@ BrOffice
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
@@ -445,7 +451,7 @@ BrOffice
 		script			setup_osl
 		downloadname	BrOo_{productversion}_{os}_install_{languages}
 		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/broffice,{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
@@ -483,6 +489,7 @@ BrOffice_wJRE
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			WITHJREPRODUCT 1
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -502,6 +509,7 @@ BrOffice_wJRE
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
@@ -514,7 +522,7 @@ BrOffice_wJRE
 		compression		5
 		script			setup_osljre
 		downloadname	BrOo_{productversion}_{os}_installwjre_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/broffice,{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
@@ -537,11 +545,6 @@ BrOffice_Dev
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.3.0
 			DEVELOPMENTPRODUCT 1
-			PROGRESSBARCOLOR 
-			PROGRESSSIZE 
-			PROGRESSPOSITION 
-			PROGRESSFRAMECOLOR 
-			NATIVEPROGRESS
 			BASISPACKAGEPREFIX ooobasis-dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
@@ -577,6 +580,7 @@ BrOffice_Dev
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
@@ -591,6 +595,6 @@ BrOffice_Dev
 		script			setup_osljre
 		downloadname	BrOo-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/broffice_dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice_dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/broffice,{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
