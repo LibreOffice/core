@@ -175,9 +175,9 @@ void SwMailMergeAddressBlockPage::ActivatePage()
 /*-- 27.05.2004 13:59:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool    SwMailMergeAddressBlockPage::commitPage( CommitPageReason _eReason )
+sal_Bool    SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
-    if ( eTravelForward == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is() )
+    if ( ::svt::WizardTypes::eTravelForward == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is() )
         return sal_False;
     return sal_True;
 }
