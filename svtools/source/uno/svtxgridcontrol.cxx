@@ -129,6 +129,18 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
     TableControl* pTable = (TableControl*)GetWindow();
     switch( GetPropertyId( PropertyName ) )
     {
+        case BASEPROPERTY_BACKGROUNDCOLOR:
+        {
+            // let the base class handle this for the TableControl
+            VCLXWindow::setProperty( PropertyName, aValue );
+            // and forward to the grid control's data window
+            if ( pTable->IsBackground() )
+                pTable->getDataWindow()->SetBackground( pTable->GetBackground() );
+            else
+                pTable->getDataWindow()->SetBackground();
+        }
+        break;
+
         case BASEPROPERTY_GRID_SELECTIONMODE:
         {
             SelectionType eSelectionType;
@@ -425,6 +437,8 @@ void SAL_CALL SVTXGridControl::setFocus() throw(::com::sun::star::uno::RuntimeEx
 }
 void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( GetMutex() );
+
     std::vector< Any > newRow;
     Sequence< Any > rawRowData = Event.rowData;
     int colCount = m_xColumnModel->getColumnCount();
@@ -471,6 +485,8 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 
 void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( GetMutex() );
+
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.index == -1)
     {
@@ -478,6 +494,7 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
             deselectAllRows();
         if(m_pTableModel->hasRowHeaders())
             m_pTableModel->getRowHeaderName().clear();
+        pTable->clearSelection();
         m_pTableModel->getCellContent().clear();
         if(pTable->isAccessibleAlive())
         {
@@ -511,6 +528,8 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
 
 void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid::GridColumnEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( GetMutex() );
+
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.valueName == rtl::OUString::createFromAscii("ColumnResize"))
     {
@@ -558,6 +577,8 @@ void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid:
 }
 void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( GetMutex() );
+
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.valueName == rtl::OUString::createFromAscii("RowHeight"))
     {
