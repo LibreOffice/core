@@ -5359,6 +5359,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
                             delete pOut, aTextRule.pOut = NULL;
                         }
+                        if ( aExtBu.Tell() )
+                        {
+                            if ( !pClientData )
+                                pClientData = new SvMemoryStream( 0x200, 0x200 );
+                            ImplProgTagContainer( pClientData, &aExtBu );
+                        }
                     }
                 }
             }
