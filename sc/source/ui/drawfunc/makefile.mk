@@ -75,7 +75,9 @@ SLOFILES =  \
         $(SLO)$/mediash.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/fuins2.obj
+        $(SLO)$/fuins2.obj \
+        $(SLO)$/graphsh.obj	\
+        $(SLO)$/mediash.obj
 
 NOOPTFILES=\
     $(SLO)$/fusel.obj
