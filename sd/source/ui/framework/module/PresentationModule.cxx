@@ -31,7 +31,6 @@
 
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
-#include "TaskPaneModule.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -155,12 +155,6 @@
 #define BMP_GROUP_H                         RID_SD_START+226
 #define BMP_WAIT_ICON_H                     RID_SD_START+229
 
-#define BMP_CLOSE_DOC                       RID_SD_START+325
-#define BMP_CLOSE_DOC_H                     RID_SD_START+326
-#define BMP_TRIANGLE_RIGHT                  RID_SD_START+327
-#define BMP_TRIANGLE_RIGHT_H                RID_SD_START+328
-#define BMP_TRIANGLE_DOWN                   RID_SD_START+329
-#define BMP_TRIANGLE_DOWN_H                 RID_SD_START+330
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
 #define BMP_FADE_EFFECT_INDICATOR_H         RID_SD_START+332
 
