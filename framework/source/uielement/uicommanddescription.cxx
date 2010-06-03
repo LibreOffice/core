@@ -340,7 +340,7 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const ::rtl::OUString& 
         if ( !pIter->second.bCommandNameCreated )
             fillInfoFromResult( pIter->second, pIter->second.aLabel );
 
-        Sequence< PropertyValue > aPropSeq( 3 );
+        Sequence< PropertyValue > aPropSeq( 4 );
         aPropSeq[0].Name  = m_aPropLabel;
         aPropSeq[0].Value = pIter->second.aContextLabel.getLength() ?
                 makeAny( pIter->second.aContextLabel ): makeAny( pIter->second.aLabel );
@@ -348,6 +348,8 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const ::rtl::OUString& 
         aPropSeq[1].Value <<= pIter->second.aCommandName;
         aPropSeq[2].Name  = m_aPropPopup;
         aPropSeq[2].Value <<= pIter->second.bPopup;
+        aPropSeq[3].Name  = m_aPropProperties;
+        aPropSeq[3].Value <<= pIter->second.nProperties;
         return makeAny( aPropSeq );
     }
 
