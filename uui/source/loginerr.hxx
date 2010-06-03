@@ -32,12 +32,13 @@
 
 //=========================================================================
 
-#define LOGINERROR_FLAG_SET_SAVE_PASSWORD    1
-#define LOGINERROR_FLAG_MODIFY_ACCOUNT        2
-#define LOGINERROR_FLAG_MODIFY_USER_NAME    4
-#define LOGINERROR_FLAG_PERSISTENT_PASSWORD    8
-#define LOGINERROR_FLAG_CAN_USE_SYSCREDS    16
-#define LOGINERROR_FLAG_IS_USE_SYSCREDS        32
+#define LOGINERROR_FLAG_MODIFY_ACCOUNT         1
+#define LOGINERROR_FLAG_MODIFY_USER_NAME       2
+#define LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD  4
+#define LOGINERROR_FLAG_IS_REMEMBER_PASSWORD   8
+#define LOGINERROR_FLAG_CAN_USE_SYSCREDS      16
+#define LOGINERROR_FLAG_IS_USE_SYSCREDS       32
+#define LOGINERROR_FLAG_REMEMBER_PERSISTENT   64
 
 class LoginErrorInfo
 {
@@ -61,34 +62,34 @@ public:
                     {
                     }
 
-    const String&     GetTitle() const          { return m_aTitle; }
-    const String&     GetServer() const          { return m_aServer; }
-    const String&     GetAccount() const      { return m_aAccount; }
-    const String&     GetUserName() const      { return m_aUserName; }
-    const String&   GetPassword() const     { return m_aPassword; }
-    const String&   GetPasswordToModify() const  { return m_aPasswordToModify; }
-    const bool      IsRecommendToOpenReadonly() const { return m_bRecommendToOpenReadonly; }
-    const String&     GetPath() const          { return m_aPath; }
-    const String&     GetErrorText() const    { return m_aErrorText; }
-    BOOL             GetIsPersistentPassword() const
-                    { return ( m_nFlags & LOGINERROR_FLAG_PERSISTENT_PASSWORD ); }
-    BOOL              GetIsSavePassword() const
-                    { return ( m_nFlags & LOGINERROR_FLAG_SET_SAVE_PASSWORD ); }
+    const String&   GetTitle() const                    { return m_aTitle; }
+    const String&   GetServer() const                   { return m_aServer; }
+    const String&   GetAccount() const                  { return m_aAccount; }
+    const String&   GetUserName() const                 { return m_aUserName; }
+    const String&   GetPassword() const                 { return m_aPassword; }
+    const String&   GetPasswordToModify() const         { return m_aPasswordToModify; }
+    const bool      IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
+    const String&   GetPath() const                     { return m_aPath; }
+    const String&   GetErrorText() const                { return m_aErrorText; }
+    BOOL            GetCanRememberPassword() const      { return ( m_nFlags & LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD ); }
+    BOOL            GetIsRememberPersistent() const     { return ( m_nFlags & LOGINERROR_FLAG_REMEMBER_PERSISTENT ); }
+    BOOL            GetIsRememberPassword() const       { return ( m_nFlags & LOGINERROR_FLAG_IS_REMEMBER_PASSWORD ); }
+
     BOOL            GetCanUseSystemCredentials() const
                     { return ( m_nFlags & LOGINERROR_FLAG_CAN_USE_SYSCREDS ); }
     BOOL            GetIsUseSystemCredentials() const
                     { return ( m_nFlags & LOGINERROR_FLAG_IS_USE_SYSCREDS ) ==
                              LOGINERROR_FLAG_IS_USE_SYSCREDS; }
     BYTE            GetFlags() const        { return m_nFlags; }
-    USHORT             GetResult() const        { return m_nRet; }
+    USHORT          GetResult() const        { return m_nRet; }
 
-    void             SetTitle( const String& aTitle )
+    void            SetTitle( const String& aTitle )
                     { m_aTitle = aTitle; }
-    void             SetServer( const String& aServer )
+    void            SetServer( const String& aServer )
                     { m_aServer = aServer; }
-    void             SetAccount( const String& aAccount )
+    void            SetAccount( const String& aAccount )
                     { m_aAccount = aAccount; }
-    void             SetUserName( const String& aUserName )
+    void            SetUserName( const String& aUserName )
                     { m_aUserName = aUserName; }
     void            SetPassword( const String& aPassword )
                     { m_aPassword = aPassword; }
@@ -96,36 +97,48 @@ public:
                     { m_aPasswordToModify = aPassword; }
     void            SetRecommendToOpenReadonly( bool bVal )
                     { m_bRecommendToOpenReadonly = bVal; }
-    void             SetPath( const String& aPath )
+    void            SetPath( const String& aPath )
                     { m_aPath = aPath; }
-    void             SetErrorText( const String& aErrorText )
+    void            SetErrorText( const String& aErrorText )
                     { m_aErrorText = aErrorText; }
     void            SetFlags( BYTE nFlags )
                     { m_nFlags = nFlags; }
-    inline void        SetSavePassword( BOOL bSet );
-    inline void        SetPersistentPassword( BOOL bSet );
+
+    inline void     SetCanRememberPassword( BOOL bSet );
+    inline void     SetIsRememberPassword( BOOL bSet );
+    inline void     SetIsRememberPersistent( BOOL bSet );
+
     inline void     SetCanUseSystemCredentials( BOOL bSet );
     inline void     SetIsUseSystemCredentials( BOOL bSet );
-    inline void        SetModifyAccount( BOOL bSet );
-    inline void        SetModifyUserName( BOOL bSet );
+    inline void     SetModifyAccount( BOOL bSet );
+    inline void     SetModifyUserName( BOOL bSet );
+
     void            SetResult( USHORT nRet )
                     { m_nRet = nRet; }
 };
 
-inline void LoginErrorInfo::SetSavePassword( BOOL bSet )
+inline void LoginErrorInfo::SetCanRememberPassword( BOOL bSet )
 {
     if ( bSet )
-        m_nFlags |= LOGINERROR_FLAG_SET_SAVE_PASSWORD;
+        m_nFlags |= LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD;
     else
-        m_nFlags &= ~LOGINERROR_FLAG_SET_SAVE_PASSWORD;
+        m_nFlags &= ~LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD;
 }
 
-inline void LoginErrorInfo::SetPersistentPassword( BOOL bSet )
+inline void LoginErrorInfo::SetIsRememberPassword( BOOL bSet )
 {
     if ( bSet )
-        m_nFlags |= LOGINERROR_FLAG_PERSISTENT_PASSWORD;
+        m_nFlags |= LOGINERROR_FLAG_IS_REMEMBER_PASSWORD;
     else
-        m_nFlags &= ~LOGINERROR_FLAG_PERSISTENT_PASSWORD;
+        m_nFlags &= ~LOGINERROR_FLAG_IS_REMEMBER_PASSWORD;
+}
+
+inline void LoginErrorInfo::SetIsRememberPersistent( BOOL bSet )
+{
+    if ( bSet )
+        m_nFlags |= LOGINERROR_FLAG_REMEMBER_PERSISTENT;
+    else
+        m_nFlags &= ~LOGINERROR_FLAG_REMEMBER_PERSISTENT;
 }
 
 inline void LoginErrorInfo::SetCanUseSystemCredentials( BOOL bSet )
@@ -161,3 +174,5 @@ inline void LoginErrorInfo::SetModifyUserName( BOOL bSet )
 }
 
 #endif
+
+

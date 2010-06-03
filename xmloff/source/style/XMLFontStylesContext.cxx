@@ -28,25 +28,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _COM_SUN_STAR_AWT_FONTFAMILY_HPP
 #include <com/sun/star/awt/FontFamily.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP
 #include <com/sun/star/awt/FontPitch.hpp>
-#endif
+
+#include <rtl/logfile.hxx>
+
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
-#endif
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/maptype.hxx>
-
-#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
 #include <xmloff/XMLFontStylesContext.hxx>
-#endif
-#include <rtl/logfile.hxx>
+
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 

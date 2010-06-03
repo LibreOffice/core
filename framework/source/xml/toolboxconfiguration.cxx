@@ -30,7 +30,6 @@
 #include "precompiled_framework.hxx"
 #include <xml/toolboxconfiguration.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
-#include <xml/toolboxlayoutdocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 #include <services.h>
 

@@ -909,9 +909,16 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     ::rtl::OUString aAdjustToType;
 
-    // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
-    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) &&
-        ( bSetStandardName || GetStorable()->hasLocation() ))
+    if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
+    {
+        // it is export, set the preselected filter
+        ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
+                                        ::rtl::OUString::createFromAscii( "UIName" ),
+                                        ::rtl::OUString() );
+        pFileDlg->SetCurrentFilter( aFilterUIName );
+    }
+    // it is no export, bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
+    else if ( bSetStandardName || GetStorable()->hasLocation() )
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
         ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
@@ -1317,6 +1324,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     // parse the slot name
     sal_Int8 nStoreMode = getStoreModeFromSlotName( aSlotName );
+    sal_Int8 nStatusSave = STATUS_NO_ACTION;
 
     // handle the special cases
     if ( nStoreMode & SAVEAS_REQUESTED )
@@ -1338,7 +1346,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     else if ( nStoreMode & SAVE_REQUESTED )
     {
         // if saving is not acceptable by the configuration the warning must be shown
-        sal_Int8 nStatusSave = aModelData.CheckSaveAcceptable( STATUS_SAVE );
+        nStatusSave = aModelData.CheckSaveAcceptable( STATUS_SAVE );
 
         if ( nStatusSave == STATUS_NO_ACTION )
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
@@ -1352,32 +1360,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         {
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
         }
-        else if ( nStatusSave == STATUS_SAVE )
-        {
-            // Document properties can contain streams that should be freed before storing
-            aModelData.FreeDocumentProps();
-
-            if ( aModelData.GetStorable2().is() )
-            {
-                try
-                {
-                    aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
-                }
-                catch( lang::IllegalArgumentException& )
-                {
-                    OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
-                    aModelData.GetStorable()->store();
-                }
-            }
-            else
-            {
-                OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
-                aModelData.GetStorable()->store();
-            }
-
-            return sal_False;
-        }
-        else
+        else if ( nStatusSave != STATUS_SAVE )
         {
             // this should be a usual SaveAs operation
             nStoreMode = SAVEAS_REQUESTED;
@@ -1402,6 +1385,32 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                                   ERRCODE_IO_ABORT );
             }
         }
+    }
+
+    if ( nStoreMode & SAVE_REQUESTED && nStatusSave == STATUS_SAVE )
+    {
+        // Document properties can contain streams that should be freed before storing
+        aModelData.FreeDocumentProps();
+
+        if ( aModelData.GetStorable2().is() )
+        {
+            try
+            {
+                aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
+            }
+            catch( lang::IllegalArgumentException& )
+            {
+                OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
+                aModelData.GetStorable()->store();
+            }
+        }
+        else
+        {
+            OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
+            aModelData.GetStorable()->store();
+        }
+
+        return sal_False;
     }
 
     // preselect a filter for the storing process
@@ -1498,13 +1507,13 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                 ::rtl::OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
                                                                                 aFilterNameString,
                                                                                 ::rtl::OUString() );
-                sal_Int8 nStatusSave = aModelData.CheckFilter( aSelFilterName );
-                if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
+                sal_Int8 nStatusFilterSave = aModelData.CheckFilter( aSelFilterName );
+                if ( nStatusFilterSave == STATUS_SAVEAS_STANDARDNAME )
                 {
                     // switch to best filter
                     bSetStandardName = sal_True;
                 }
-                else if ( nStatusSave == STATUS_SAVE )
+                else if ( nStatusFilterSave == STATUS_SAVE )
                 {
                     // user confirmed alien filter or "good" filter is used
                     bExit = sal_True;
@@ -1651,8 +1660,10 @@ uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
     uno::Reference< container::XEnumeration > xFilterEnum =
                                             xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
 
-    // use the first filter that is found
+    // the first default filter will be taken,
+    // if there is no filter with flag default the first acceptable filter will be taken
     if ( xFilterEnum.is() )
+    {
         while ( xFilterEnum->hasMoreElements() )
         {
             uno::Sequence< beans::PropertyValue > aProps;
@@ -1663,11 +1674,17 @@ uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
                                                                         (sal_Int32)0 );
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {
-                    aFilterProps = aProps;
-                    break;
+                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
+                    {
+                        aFilterProps = aProps;
+                        break;
+                    }
+                    else if ( !aFilterProps.getLength() )
+                        aFilterProps = aProps;
                 }
             }
         }
+    }
 
     return aFilterProps;
 }

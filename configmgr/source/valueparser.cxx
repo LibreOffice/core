@@ -270,6 +270,10 @@ XmlReader::Text ValueParser::getTextMode() const {
     if (node_.is()) {
         switch (state_) {
         case STATE_TEXT:
+            if (!items_.empty()) {
+                break;
+            }
+            // fall through
         case STATE_IT:
             return
                 (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
@@ -294,7 +298,9 @@ bool ValueParser::startElement(
             name.equals(RTL_CONSTASCII_STRINGPARAM("it")) &&
             isListType(type_) && separator_.getLength() == 0)
         {
-            checkEmptyPad(reader);
+            pad_.clear();
+                // before first <it>, characters are not ignored; assume they
+                // are only whitespace
             state_ = STATE_IT;
             return true;
         }
@@ -351,7 +357,7 @@ bool ValueParser::startElement(
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool ValueParser::endElement(XmlReader const & reader) {
+bool ValueParser::endElement() {
     if (!node_.is()) {
         return false;
     }
@@ -363,7 +369,6 @@ bool ValueParser::endElement(XmlReader const & reader) {
                 value = parseValue(separator_, pad_.get(), type_);
                 pad_.clear();
             } else {
-                checkEmptyPad(reader);
                 switch (type_) {
                 case TYPE_BOOLEAN_LIST:
                     value = convertItems< sal_Bool >();
@@ -452,17 +457,6 @@ void ValueParser::start(
 
 int ValueParser::getLayer() const {
     return layer_;
-}
-
-void ValueParser::checkEmptyPad(XmlReader const & reader) const {
-    if (pad_.is()) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "mixed text and <it> elements in ")) +
-             reader.getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
-    }
 }
 
 template< typename T > css::uno::Any ValueParser::convertItems() {
