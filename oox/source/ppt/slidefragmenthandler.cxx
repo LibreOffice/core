@@ -32,6 +32,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include "tokens.hxx"
+#include "properties.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -86,6 +87,18 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
     case NMSP_PPT|XML_sldMaster:        // CT_SlideMaster
     case NMSP_PPT|XML_handoutMaster:    // CT_HandoutMaster
     case NMSP_PPT|XML_sld:              // CT_CommonSlideData
+    {
+        AttributeList attribs( xAttribs );
+
+        Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
+        PropertyMap aPropMap;
+        PropertySet aSlideProp( xSlide );
+
+        aPropMap[ PROP_Visible ] = Any( attribs.getBool( XML_show, sal_True ) );
+        aSlideProp.setProperties( aPropMap );
+
+        break;
+    }
     case NMSP_PPT|XML_notes:            // CT_NotesSlide
     case NMSP_PPT|XML_notesMaster:      // CT_NotesMaster
         break;
