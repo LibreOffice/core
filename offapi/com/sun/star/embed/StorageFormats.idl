@@ -24,38 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-#ifndef INCLUDED_cppu_test_EnvStack_tester_hxx
-#define INCLUDED_cppu_test_EnvStack_tester_hxx
-
-#include "uno/environment.hxx"
+#ifndef __com_sun_star_embed_StorageFormats_idl__
+#define __com_sun_star_embed_StorageFormats_idl__
 
 
-#ifdef CPPU_test_EnvStack_tester_IMPL
-# define CPPU_test_EnvStack_tester_EXPORT SAL_DLLPUBLIC_EXPORT
+//============================================================================
 
-#elif defined(CPPU_test_EnvStack_Test_LIB)
-# define CPPU_test_EnvStack_tester_EXPORT extern
+module com { module sun { module star { module embed {
 
-#elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
-# define CPPU_test_EnvStack_tester_EXPORT extern __attribute__ ((weak))
+//============================================================================
+/** The constant set contains IDs of formats that are supported by
+    <type>StorageFactory</type>.
 
-#elif defined(__SUNPRO_CC)
-# define CPPU_test_EnvStack_tester_EXPORT extern
-  extern rtl::OUString g_commentStack;
-  extern com::sun::star::uno::Environment g_env;
+    @see <type>StorageFactory</type>
+    @since OOo 3.3
+*/
+published constants StorageFormats
+{
+    //------------------------------------------------------------------------
+    /** specifies package format
+     */
+    const long PACKAGE = 1;
 
-# pragma weak  g_commentStack
-# pragma weak  g_env
+    //------------------------------------------------------------------------
+    /** specifies zip format
+     */
+    const long ZIP = 2;
 
-#else
-# define CPPU_test_EnvStack_tester_EXPORT SAL_DLLPUBLIC_IMPORT
+    //------------------------------------------------------------------------
+    /** specifies Office Open XML format
+     */
+    const long OFOPXML = 3;
+};
+
+//============================================================================
+
+}; }; }; };
 
 #endif
 
-CPPU_test_EnvStack_tester_EXPORT rtl::OUString    g_commentStack;
-CPPU_test_EnvStack_tester_EXPORT com::sun::star::uno::Environment g_env;
-
-
-
-#endif
