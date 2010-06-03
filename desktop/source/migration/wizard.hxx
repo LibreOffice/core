@@ -97,7 +97,7 @@ protected:
     virtual TabPage* createPage(WizardState _nState);
     virtual sal_Bool prepareLeaveCurrentState( CommitPageReason _eReason );
     virtual sal_Bool leaveState(WizardState _nState );
-    virtual sal_Bool onFinish(sal_Int32 _nResult);
+    virtual sal_Bool onFinish();
     virtual void     enterState(WizardState _nState);
 
     // from svt::RoadmapWizard
