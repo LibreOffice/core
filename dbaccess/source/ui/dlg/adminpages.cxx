@@ -201,9 +201,14 @@ namespace dbaui
             Reset(*m_pItemSetHelper->getOutputSet());
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::commitPage( CommitPageReason )
+    sal_Bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
     {
         return sal_True;
+    }
+    // -----------------------------------------------------------------------
+    bool OGenericAdministrationPage::canAdvance() const
+    {
+        return true;
     }
     // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )

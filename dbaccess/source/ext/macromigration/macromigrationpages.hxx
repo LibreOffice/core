@@ -109,11 +109,10 @@ namespace dbmm
                                 m_aLocationController;
 
     protected:
-        // OWizardPage overridables
-        virtual void    initializePage();
-        virtual bool    canAdvance() const;
-        // IWizardPage overridables
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        // IWizardPageController overridables
+        virtual void        initializePage();
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool        canAdvance() const;
 
     private:
         DECL_LINK( OnLocationModified, Edit* );
