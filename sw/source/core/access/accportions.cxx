@@ -173,6 +173,17 @@ void SwAccessiblePortionData::Special(
             sDisplay = aTmpBuffer.makeStringAndClear();
             break;
         }
+        // --> OD 2010-06-04 #i111768# - apply patch from kstribley:
+        // Include the control characters.
+        case POR_CONTROLCHAR:
+        {
+            OUStringBuffer aTmpBuffer( rText.Len() + 1 );
+            aTmpBuffer.append( rText );
+            aTmpBuffer.append( pTxtNode->GetTxt().GetChar(nModelPosition) );
+            sDisplay = aTmpBuffer.makeStringAndClear();
+            break;
+        }
+        // <--
         default:
             sDisplay = rText;
             break;
