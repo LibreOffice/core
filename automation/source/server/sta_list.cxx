@@ -174,7 +174,8 @@ void StatementList::SendProfile( String aText )
                 pRet->GenReturn( RET_ProfileInfo, rtl::OString(), pProfiler->GetProfileLine( aText ) );
 
             if ( pProfiler->IsPartitioning() )
-                pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileTime ), static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() ULONG != comm_ULONG on 64bit
+                                // FIXME: HELPID
+                pRet->GenReturn( RET_ProfileInfo, rtl::OString( /*S_ProfileTime*/ ), static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() ULONG != comm_ULONG on 64bit
         }
 
         if ( pProfiler->IsAutoProfiling() )
@@ -1086,7 +1087,9 @@ void StatementList::ReportError(String aMessage, ULONG nWhatever)
 void StatementList::DirectLog( ULONG nType, String aMessage )
 {
     if ( pRet )
-        pRet->GenReturn( RET_DirectLoging, rtl::OString(nType), aMessage );
+                // FIXME: HELPID
+        pRet->GenReturn( RET_DirectLoging, rtl::OString(/*nType*/), aMessage );
+        (void) nType;
 }
 
 

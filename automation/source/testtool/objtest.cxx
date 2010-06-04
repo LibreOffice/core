@@ -1184,7 +1184,8 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
         }
 
         aLongname = aLine.GetToken(0,cMyDelim);
-        aUId = rtl::OString( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
+        // FIXME: HELPID
+        aUId = rtl::OUStringToOString( aLine.GetToken(1,cMyDelim), RTL_TEXTENCODING_UTF8 );
 
         if ( bSortByName )
             pNewItem = new ControlDef( aLongname, aUId );
@@ -1233,7 +1234,8 @@ void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames )
 
     while ( String::CreateFromAscii(arWas[nIndex].Kurzname).Len() > 0 )
     {
-        rtl::OString aUId (arWas[nIndex].nUId);
+        // FIXME: HELPID
+        rtl::OString aUId;// (arWas[nIndex].nUId);
         const ControlItem *pX = new ControlDef( arWas[nIndex].Kurzname, aUId);
         pNames->C40_PTR_INSERT(ControlItem, pX);
         nIndex++;
@@ -1541,7 +1543,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
         {
             comm_ULONG nUId;
             aStream >> nUId;
-            aUId = rtl::OString( nUId );
+            aUId = rtl::OString();// nUId;
         }
 
         if (aName.GetChar(0) == '*' || bIsFlat )     // Globaler Kurzname (Dialogname oder SId)
@@ -2218,7 +2220,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if ( !IsError() && ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                         {
                             pImpl->pNextReturn = ((SbxTransportMethod*)pVar);
-                            aNextReturnId = rtl::OString( ((SbxTransportMethod*)pVar)->nValue );
+                                                        // FIXME: HELPID
+                            aNextReturnId = rtl::OString();// ((SbxTransportMethod*)pVar)->nValue );
                         }
                         if ( SingleCommandBlock )
                             EndBlock();
@@ -2291,7 +2294,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 {
                                     In->GenCmdControl (pMember->GetULong(),
                                         (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                                    aNextReturnId = rtl::OString( pMember->GetULong() );
+                                                                // FIXME: HELPID
+                                    aNextReturnId = rtl::OString();// pMember->GetULong() );
                                 }
                                 else
                                 {
@@ -3789,7 +3793,8 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             if ( m_pReverseControls )
                             {
                                 USHORT nNr;
-                                ControlItem *pNewItem = new ControlItemUId( String(), rtl::OString( nLNr1 ) );
+                                                    // FIXME: HELPID
+                                ControlItem *pNewItem = new ControlItemUId( String(), rtl::OString( /*nLNr1*/ ) );
                                 if ( m_pReverseControls->Seek_Entry(pNewItem,&nNr) )
                                     aULongNames = m_pReverseControls->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
@@ -4144,7 +4149,8 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
         bFound = FALSE;
         if ( aType.CompareTo(UIdKenn) == COMPARE_EQUAL )
         {
-            aResult = pShortNames->GetName(rtl::OString(nNumber));
+                // FIXME: HELPID
+            aResult = pShortNames->GetName(rtl::OString(/*nNumber*/));
             bFound = TRUE;
         }
         if ( aType.CompareTo(MethodKenn ) == COMPARE_EQUAL )
@@ -4198,7 +4204,8 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
         }
         if ( aType.CompareTo(SlotKenn ) == COMPARE_EQUAL )
         {
-            aResult = pShortNames->GetName(rtl::OString(nNumber));
+                // FIXME: HELPID
+            aResult = pShortNames->GetName(rtl::OString(/*nNumber*/));
             bFound = TRUE;
         }
         if ( aType.CompareTo(TabKenn ) == COMPARE_EQUAL )
