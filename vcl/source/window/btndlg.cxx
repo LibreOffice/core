@@ -530,22 +530,19 @@ XubString ButtonDialog::GetButtonHelpText( USHORT nId ) const
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::SetButtonHelpId( USHORT nId, ULONG nHelpId )
+void ButtonDialog::SetButtonHelpId( USHORT nId, const rtl::OString& rHelpId )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
     if ( pItem )
-        pItem->mpPushButton->SetHelpId( nHelpId );
+        pItem->mpPushButton->SetHelpId( rHelpId );
 }
 
 // -----------------------------------------------------------------------
 
-ULONG ButtonDialog::GetButtonHelpId( USHORT nId ) const
+rtl::OString ButtonDialog::GetButtonHelpId( USHORT nId ) const
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
-    if ( pItem )
-        return pItem->mpPushButton->GetHelpId();
-    else
-        return 0;
+    return pItem ? rtl::OString( pItem->mpPushButton->GetHelpId() ) : rtl::OString();
 }

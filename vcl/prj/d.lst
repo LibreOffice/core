@@ -144,7 +144,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\pdfextoutdevdata.hxx %_DEST%\inc%_EXT%\vcl\pdfextoutdevdata.hxx
 ..\inc\vcl\pngread.hxx %_DEST%\inc%_EXT%\vcl\pngread.hxx
 ..\inc\vcl\pngwrite.hxx %_DEST%\inc%_EXT%\vcl\pngwrite.hxx
-..\inc\vcl\smartid.hxx %_DEST%\inc%_EXT%\vcl\smartid.hxx
 ..\inc\vcl\configsettings.hxx %_DEST%\inc%_EXT%\vcl\configsettings.hxx
 ..\inc\vcl\ImageListProvider.hxx %_DEST%\inc%_EXT%\vcl\ImageListProvider.hxx
 ..\inc\vcl\fontmanager.hxx %_DEST%\inc%_EXT%\vcl\fontmanager.hxx

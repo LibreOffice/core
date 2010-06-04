@@ -208,11 +208,14 @@ void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star
 
 void VCLXDialog::setHelpId( sal_Int32 id ) throw(::com::sun::star::uno::RuntimeException)
 {
+    // no more numerical help id
+    #if 0
     ::vos::OGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetHelpId( id );
+    #endif
 }
 
 ::rtl::OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException)

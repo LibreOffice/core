@@ -62,12 +62,7 @@ Help::~Help()
 
 // -----------------------------------------------------------------------
 
-BOOL Help::Start( ULONG, const Window* )
-{
-    return FALSE;
-}
-
-void Help::OpenHelpAgent( ULONG )
+void Help::OpenHelpAgent( const String& )
 {
 }
 
@@ -76,13 +71,6 @@ void Help::OpenHelpAgent( ULONG )
 BOOL Help::Start( const XubString&, const Window* )
 {
     return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-XubString Help::GetHelpText( ULONG, const Window* )
-{
-    return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------

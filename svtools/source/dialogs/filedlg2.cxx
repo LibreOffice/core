@@ -68,9 +68,9 @@ DECLARE_LIST( UniStringList, UniString* )
 //      #define STD_BTN_WIDTH   90
 //      #define STD_BTN_HEIGHT  35
 
-#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, nHelpId ) \
+#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, rHelpId ) \
     p = new ControlClass( GetPathDialog(), WinBits( nBits ) ); \
-    p->SetHelpId( nHelpId ); \
+    p->SetHelpId( rHelpId ); \
     p->SetPosSizePixel( aPos, aSize ); \
     p->SetText( aTitel ); \
     p->Show();
@@ -132,7 +132,8 @@ ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreat
             pNewDirBtn->Enable( bCreateDir );
     }
 
-    pDlg->SetHelpId( HID_FILEDLG_PATHDLG );
+    // FIXME: HELPID
+    pDlg->SetHelpId( ""/*HID_FILEDLG_PATHDLG*/ );
 
     lang::Locale aLocale = Application::GetSettings().GetLocale();
     xCollator = ::vcl::unohelper::CreateCollator();
@@ -173,29 +174,35 @@ void ImpPathDialog::InitControls()
     long nH = 0;
     UniString aEmptyStr;
 
+    // FIXME: HELPID
     INITCONTROL( pDirTitel, FixedText, 0,
-                 aPnt, aFTSiz, UniString( SvtResId( STR_FILEDLG_DIR ) ), HID_FILEDLG_DIR );
+                 aPnt, aFTSiz, UniString( SvtResId( STR_FILEDLG_DIR ) ), ""/*HID_FILEDLG_DIR*/ );
     aPnt.Y() += aFTSiz.Height() + a3Siz.Height();
 
-    INITCONTROL( pEdit, Edit, WB_BORDER, aPnt, aEDSiz, aPath.GetFull(), HID_FILEDLG_EDIT );
+    // FIXME: HELPID
+    INITCONTROL( pEdit, Edit, WB_BORDER, aPnt, aEDSiz, aPath.GetFull(), ""/*HID_FILEDLG_EDIT*/ );
 
     aPnt.Y() += aEDSiz.Height() + a3Siz.Height();
 #ifndef UNX
     long nLbH2 = pDlg->LogicToPixel( Size( 0, 60 ), MAP_APPFONT ).Height();
+    // FIXME: HELPID
     INITCONTROL( pDirList, KbdListBox, WB_AUTOHSCROLL | WB_BORDER,
-        aPnt, Size( aEDSiz.Width(), nLbH1 ), aEmptyStr, HID_FILEDLG_DIRS );
+        aPnt, Size( aEDSiz.Width(), nLbH1 ), aEmptyStr, ""/*HID_FILEDLG_DIRS*/ );
     aPnt.Y() += nLbH1 + a6Siz.Height();
+    // FIXME: HELPID
     INITCONTROL( pDriveTitle, FixedText, 0,
-                 aPnt, aFTSiz, UniString( SvtResId( STR_FILEDLG_DRIVES ) ), HID_FILEDLG_DRIVE );
+                 aPnt, aFTSiz, UniString( SvtResId( STR_FILEDLG_DRIVES ) ), ""/*HID_FILEDLG_DRIVE*/ );
     aPnt.Y() += aFTSiz.Height() + a3Siz.Height();
+    // FIXME: HELPID
     INITCONTROL( pDriveList, ListBox, WB_DROPDOWN,
-                 aPnt, Size( aEDSiz.Width(), nLbH2 ), aEmptyStr, HID_FILEDLG_DRIVES );
+                 aPnt, Size( aEDSiz.Width(), nLbH2 ), aEmptyStr, ""/*HID_FILEDLG_DRIVES*/ );
     nH = aPnt.Y() + aEDSiz.Height() + a6Siz.Height();
 #else
     long nNewH = nLbH1 + 3 * a3Siz.Height() +
                  aFTSiz.Height() + aEDSiz.Height();
+    // FIXME: HELPID
     INITCONTROL( pDirList, KbdListBox, WB_AUTOHSCROLL | WB_BORDER,
-                 aPnt, Size( aEDSiz.Width(), nNewH ), aEmptyStr, HID_FILEDLG_DIRS );
+                 aPnt, Size( aEDSiz.Width(), nNewH ), aEmptyStr, ""/*HID_FILEDLG_DIRS*/ );
     nH = aPnt.Y() + nNewH + a6Siz.Height();
     pDriveTitle = NULL;
     pDriveList = NULL;
@@ -226,17 +233,19 @@ void ImpPathDialog::InitControls()
     aPnt.X() = 2 * a6Siz.Width() + aEDSiz.Width();
     aPnt.Y() = a6Siz.Height();
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, aOkStr, 0 );
+                 aPnt, aBtnSiz, aOkStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pCancelBtn, CancelButton, 0,
-                 aPnt, aBtnSiz, aCancelStr, 0 );
+                 aPnt, aBtnSiz, aCancelStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
+    // FIXME: HELPID
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
+                 aPnt, aBtnSiz, aNewDirStr, ""/*HID_FILEDLG_NEWDIR*/ );
 #if defined(UNX) || defined(OS2)
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
+    // FIXME: HELPID
     INITCONTROL( pHomeBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, aHomeDirStr, HID_FILEDLG_HOME );
+                 aPnt, aBtnSiz, aHomeDirStr, ""/*HID_FILEDLG_HOME*/ );
 #else
     pHomeBtn = NULL;
 #endif
@@ -714,7 +723,8 @@ ImpFileDialog::ImpFileDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE 
     if ( nType == WINDOW_FILEDIALOG )
         InitControls();
 
-    pDlg->SetHelpId( HID_FILEDLG_OPENDLG );
+    // FIXME: HELPID
+    pDlg->SetHelpId( ""/*HID_FILEDLG_OPENDLG*/ );
 
 }
 
@@ -742,36 +752,47 @@ void ImpFileDialog::InitControls()
     const int nW = 160;
     const int nH = 48; // Um den Dialog in eine akzeptable Form zu bringen
 
+    // FIXME: HELPID
     INITCONTROL( pFileTitel, FixedText, 0,
-        Point(10, 12), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_FILE ) ), HID_FILEDLG_FILE );
+        Point(10, 12), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_FILE ) ), ""/*HID_FILEDLG_FILE*/ );
+    // FIXME: HELPID
     INITCONTROL( pEdit, Edit, WB_BORDER,
-        Point(10, 31), Size(nW, 20), aEmptyStr, HID_FILEDLG_EDIT ); // aMask()
+        Point(10, 31), Size(nW, 20), aEmptyStr, ""/*HID_FILEDLG_EDIT*/ ); // aMask()
+    // FIXME: HELPID
     INITCONTROL( pFileList, ListBox, WB_SORT | WB_AUTOHSCROLL | WB_BORDER,
-        Point(10, 58), Size(nW, 180-nH), aEmptyStr, HID_FILEDLG_FILES );
+        Point(10, 58), Size(nW, 180-nH), aEmptyStr, ""/*HID_FILEDLG_FILES*/ );
 
+    // FIXME: HELPID
     INITCONTROL( pDirTitel, FixedText, 0,
-        Point(nW+20, 12), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_DIR ) ), HID_FILEDLG_DIR );
+        Point(nW+20, 12), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_DIR ) ), ""/*HID_FILEDLG_DIR*/ );
+    // FIXME: HELPID
     INITCONTROL( pDirPath, FixedInfo, WB_PATHELLIPSIS,
-        Point(nW+20, 33), Size(nW, 20), aPath.GetFull(), HID_FILEDLG_PATH );
+        Point(nW+20, 33), Size(nW, 20), aPath.GetFull(), ""/*HID_FILEDLG_PATH*/ );
+    // FIXME: HELPID
     INITCONTROL( pDirList, KbdListBox, WB_AUTOHSCROLL | WB_BORDER,
-        Point(nW+20, 58), Size(nW, 180-nH ), aEmptyStr, HID_FILEDLG_DIRS );
+        Point(nW+20, 58), Size(nW, 180-nH ), aEmptyStr, ""/*HID_FILEDLG_DIRS*/ );
 
+    // FIXME: HELPID
     INITCONTROL( pTypeTitel, FixedText, 0,
-        Point(10, 246-nH), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_TYPE ) ), HID_FILEDLG_TYPE );
+        Point(10, 246-nH), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_TYPE ) ), ""/*HID_FILEDLG_TYPE*/ );
 
 #ifndef UNX
+    // FIXME: HELPID
     INITCONTROL( pTypeList, ListBox, WB_DROPDOWN,
-        Point(10, 265-nH ), Size(nW, 100 ), aEmptyStr, HID_FILEDLG_TYPES );
+        Point(10, 265-nH ), Size(nW, 100 ), aEmptyStr, ""/*HID_FILEDLG_TYPES*/ );
 
+    // FIXME: HELPID
     INITCONTROL( pDriveTitle, FixedText, 0,
-        Point(nW+20, 246-nH), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_DRIVES ) ), HID_FILEDLG_DRIVE );
+        Point(nW+20, 246-nH), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_DRIVES ) ), ""/*HID_FILEDLG_DRIVE*/ );
+    // FIXME: HELPID
     INITCONTROL( pDriveList, ListBox, WB_DROPDOWN,
-        Point(nW+20, 265-nH ), Size(nW, 100 ), aEmptyStr, HID_FILEDLG_DRIVES );
+        Point(nW+20, 265-nH ), Size(nW, 100 ), aEmptyStr, ""/*HID_FILEDLG_DRIVES*/ );
     pNewDirBtn = NULL;
     pHomeBtn   = NULL;
 #else
+    // FIXME: HELPID
     INITCONTROL( pTypeList, ListBox, WB_DROPDOWN,
-        Point(10, 265-nH ), Size(2*nW+20, 100 ), aEmptyStr, HID_FILEDLG_TYPES );
+        Point(10, 265-nH ), Size(2*nW+20, 100 ), aEmptyStr, ""/*HID_FILEDLG_TYPES*/ );
 
     pDriveTitle = NULL;
     pDriveList = NULL;
@@ -782,10 +803,10 @@ void ImpFileDialog::InitControls()
     const long nButtonStartX = 2*nW+20+15;
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
         Point(nButtonStartX, 10), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_OK ), 0 );
+        Button::GetStandardText( BUTTON_OK ), "" );
     INITCONTROL( pCancelBtn, CancelButton, 0,
         Point(nButtonStartX, 45 ), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_CANCEL ), 0 );
+        Button::GetStandardText( BUTTON_CANCEL ), "" );
 
     pLoadBtn = 0;
 

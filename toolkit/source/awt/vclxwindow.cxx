@@ -1708,17 +1708,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             ::rtl::OUString aURL;
             if ( Value >>= aURL )
             {
-                String aHelpURL(  aURL );
-                String aPattern( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-                if ( aHelpURL.CompareIgnoreCaseToAscii( aPattern, aPattern.Len() ) == COMPARE_EQUAL )
-                {
-                    String aID = aHelpURL.Copy( aPattern.Len() );
-                    pWindow->SetHelpId( aID.ToInt32() );
-                }
-                else
-                {
-                    pWindow->SetSmartHelpId( SmartId( aHelpURL ) );
-                }
+                pWindow->SetHelpId( rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );
             }
         }
         break;
@@ -2189,19 +2179,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_HELPURL:
             {
-                SmartId aSmartId = GetWindow()->GetSmartHelpId();
-                if( aSmartId.HasString() )
-                {
-                    String aStrHelpId = aSmartId.GetStr();
-                    aProp <<= ::rtl::OUString( aStrHelpId );
-                }
-                else
-                {
-                    ::rtl::OUStringBuffer aURL;
-                    aURL.appendAscii( "HID:" );
-                    aURL.append( (sal_Int32) GetWindow()->GetHelpId() );
-                    aProp <<= aURL.makeStringAndClear();
-                }
+                rtl::OUString aHelpId( rtl::OStringToOUString( GetWindow()->GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+                aProp <<= ::rtl::OUString( aHelpId );
             }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:

@@ -109,7 +109,8 @@ namespace svt
         AlwaysEnableInput( TRUE, TRUE );
 
         // unique id for the testtool
-        SetUniqueId( HID_HELPAGENT_WINDOW );
+        // FIXME: HELPID
+        SetUniqueId( ""/*HID_HELPAGENT_WINDOW*/ );
     }
 
     //--------------------------------------------------------------------

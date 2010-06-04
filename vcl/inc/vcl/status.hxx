@@ -183,8 +183,8 @@ public:
     using Window::GetQuickHelpText;
     const XubString&    GetQuickHelpText( USHORT nItemId ) const;
 
-    void                SetHelpId( USHORT nItemId, ULONG nHelpId );
-    ULONG               GetHelpId( USHORT nItemId ) const;
+    void                SetHelpId( USHORT nItemId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( USHORT nItemId ) const;
 
     void                SetBottomBorder( BOOL bBottomBorder = TRUE );
     BOOL                IsBottomBorder() const { return mbBottomBorder; }
@@ -205,9 +205,9 @@ public:
     const XubString&    GetHelpText() const
                             { return Window::GetHelpText(); }
 
-    void                SetHelpId( ULONG nId )
-                            { Window::SetHelpId( nId ); }
-    ULONG               GetHelpId() const
+    void                SetHelpId( const rtl::OString& rId )
+                            { Window::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                             { return Window::GetHelpId(); }
 
     Size                CalcWindowSizePixel() const;

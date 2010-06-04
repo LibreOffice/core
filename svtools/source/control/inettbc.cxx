@@ -858,7 +858,8 @@ SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
 void SvtURLBox::ImplInit()
 {
     pImp = new SvtURLBox_Impl();
-    SetHelpId( SID_OPENURL );
+    // FIXME: HELPID
+    SetHelpId( ""/*SID_OPENURL*/ );
     EnableAutocomplete( FALSE );
 
     SetText( String() );
