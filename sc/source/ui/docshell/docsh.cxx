@@ -68,6 +68,9 @@
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/task/XJob.hpp>
 
 
 #include "scabstdlg.hxx" //CHINA001
@@ -580,6 +583,46 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 SC_MOD()->SetAppOptions( aAppOptions );
                             }
                         }
+                    }
+
+                    try
+                    {
+                        uno::Reference< uno::XComponentContext > xContext;
+                        uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< beans::XPropertySet > xProp( xServiceManager, uno::UNO_QUERY_THROW );
+                        xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ) >>= xContext;
+                        if ( xContext.is() )
+                        {
+                            uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xServiceManager, uno::UNO_QUERY_THROW );
+                            uno::Reference< container::XEnumeration> xEnum = xEnumAccess->createContentEnumeration(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocumentJob" ) ) );
+                            if ( xEnum.is() )
+                            {
+                                while ( xEnum->hasMoreElements() )
+                                {
+                                    uno::Any aAny = xEnum->nextElement();
+                                    uno::Reference< lang::XSingleComponentFactory > xFactory;
+                                    aAny >>= xFactory;
+                                    if ( xFactory.is() )
+                                    {
+                                        uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
+                                        uno::Sequence< beans::NamedValue > aArgsForJob(1);
+                                        ScViewData* pViewData = GetViewData();
+                                        SfxViewShell* pViewShell = ( pViewData ? pViewData->GetViewShell() : NULL );
+                                        SfxViewFrame* pViewFrame = ( pViewShell ? pViewShell->GetViewFrame() : NULL );
+                                        SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : NULL );
+                                        uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : 0 );
+                                        uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
+                                        aArgsForJob[0] = beans::NamedValue( ::rtl::OUString::createFromAscii( "SpreadsheetView" ),
+                                            uno::makeAny( xSpreadsheetView ) );
+                                        xJob->execute( aArgsForJob );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch ( uno::Exception & )
+                    {
                     }
                 }
                 break;
