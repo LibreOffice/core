@@ -71,8 +71,8 @@ ToolboxController::ToolboxController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
     const ::rtl::OUString& aCommandURL ) :
-    OWeakObject()
-    ,OPropertyContainer(GetBroadcastHelper())//shizhoubo
+    OPropertyContainer(GetBroadcastHelper())
+    ,   OWeakObject()
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_xFrame(xFrame)
@@ -98,8 +98,8 @@ ToolboxController::ToolboxController(
 }
 
 ToolboxController::ToolboxController() :
-    OWeakObject()
-    ,OPropertyContainer(GetBroadcastHelper())//shizhoubo
+    OPropertyContainer(GetBroadcastHelper())
+    ,   OWeakObject()
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
@@ -779,17 +779,19 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
 
 
 }
-void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(sal_Int32  nHandle,
-                                                         const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception)
+
+void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(
+    sal_Int32                       nHandle,
+    const com::sun::star::uno::Any& aValue )
+throw( com::sun::star::uno::Exception)
 {
     OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
     if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE == nHandle)
-    {   sal_Bool rValue;
-        aValue >>= rValue;
-        if (m_bInitialized)
-            this->setSupportVisiableProperty(rValue);
+    {
+        sal_Bool rValue(sal_False);
+        if (( aValue >>= rValue ) && m_bInitialized)
+            this->setSupportVisiableProperty( rValue );
     }
-
 }
 //end
 
