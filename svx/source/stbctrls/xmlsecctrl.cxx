@@ -112,6 +112,7 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
     GetStatusBar().SetHelpText( GetId(), String() );// necessary ?
 
     // FIXME: HELPID
+    (void)nSID;
     GetStatusBar().SetHelpId( GetId(), ""/*nSID*/ );      // necessary ?
 
     if( SFX_ITEM_AVAILABLE != eState )
