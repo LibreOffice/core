@@ -5311,13 +5311,13 @@ BOOL StatementControl::Execute()
                             {           // Wir fälschen einen Parameter
                                 if ( aUId.HasNumeric() )
                                 {
-                                    nParams = PARAM_ULONG_1;
+                                    nParams |= PARAM_ULONG_1;
                                     nLNr1 = USHORT( aUId.GetNum() );
                                     DBG_ASSERT( nLNr1 <= 0xFFFF, "ID on ToolBox > 0xFFFF" );
                                 }
                                 else
                                 {
-                                    nParams = PARAM_STR_1;
+                                    nParams |= PARAM_STR_1;
                                     aString1 = aUId.GetStr();
                                 }
                             }
@@ -5330,9 +5330,9 @@ BOOL StatementControl::Execute()
     BOOL bItemFound = FALSE;\
     {\
         SmartId aButtonId;\
-        if( nParams == PARAM_STR_1 )\
+        if( nParams & PARAM_STR_1 )\
             aButtonId = SmartId( aString1 );\
-        if( nParams == PARAM_ULONG_1 )\
+        if( nParams & PARAM_ULONG_1 )\
             aButtonId = SmartId( nLNr1 );\
         for ( nItemPos = 0; nItemPos < pTB->GetItemCount() && !aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos))) &&\
                                                       !aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos))) ; nItemPos++ ) {}\
