@@ -63,7 +63,8 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
 {
     FreeResource();
 
-    maTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
+    // FIXME: HELPID
+    maTabCtrl.SetHelpId( ""/*HID_XML_FILTER_TABPAGE_CTRL*/ );
 
     mpOldInfo = pInfo;
     mpNewInfo = new filter_info_impl( *mpOldInfo );

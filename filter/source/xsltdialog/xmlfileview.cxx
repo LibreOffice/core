@@ -524,8 +524,10 @@ XMLSourceFileDialog::XMLSourceFileDialog( Window* pParent, ResMgr& rResMgr, cons
     maPBValidate.SetClickHdl(LINK( this, XMLSourceFileDialog, ClickHdl_Impl ) );
     maLBOutput.SetSelectHdl(LINK(this, XMLSourceFileDialog, SelectHdl_Impl ) );
     mpTextWindow = new XMLFileWindow( this );
-    mpTextWindow->SetHelpId( HID_XML_FILTER_OUTPUT_WINDOW );
-    maLBOutput.SetHelpId( HID_XML_FILTER_TEST_VALIDATE_OUPUT );
+    // FIXME: HELPID
+    mpTextWindow->SetHelpId( ""/*HID_XML_FILTER_OUTPUT_WINDOW*/ );
+    // FIXME: HELPID
+    maLBOutput.SetHelpId( ""/*HID_XML_FILTER_TEST_VALIDATE_OUPUT*/ );
 
     Resize();
 }
