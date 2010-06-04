@@ -492,7 +492,8 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
 {
     USHORT i;
 
-    aToolBox.SetHelpId(HID_NAVI_VS);
+    // FIXME: HELPID
+    aToolBox.SetHelpId(""/*HID_NAVI_VS*/);
     aToolBox.SetLineCount( 2 );
     aToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
     for( i = 0; i < NID_COUNT; i++)
@@ -508,7 +509,8 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
             nTbxBits = TIB_CHECKABLE;
         }
         aToolBox.InsertItem(nNaviId, sText, nTbxBits);
-        aToolBox.SetHelpId( nNaviId, aNavigationHelpIds[i] );
+        // FIXME: HELPID
+        aToolBox.SetHelpId( nNaviId, ""/*aNavigationHelpIds[i]*/ );
     }
     ApplyImageList();
     aToolBox.InsertBreak(NID_COUNT/2);

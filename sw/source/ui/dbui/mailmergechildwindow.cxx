@@ -384,7 +384,8 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_nStatusHeight =  m_aSeparatorFL.GetPosPixel().Y() - m_aStatusLB.GetPosPixel().Y();
     String sTask(SW_RES(ST_TASK));
     String sStatus(SW_RES(ST_STATUS));
-    m_aStatusLB.SetHelpId(HID_MM_SENDMAILS_STATUSLB);
+    // FIXME: HELPID
+    m_aStatusLB.SetHelpId(""/*HID_MM_SENDMAILS_STATUSLB*/);
 
     FreeResource();
 
@@ -413,10 +414,12 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_aStatusHB.InsertItem( ITEMID_STATUS, sStatus,
                             nPos2,
                             HIB_LEFT | HIB_VCENTER );
-    m_aStatusHB.SetHelpId(HID_MM_ADDRESSLIST_HB );
+    // FIXME: HELPID
+    m_aStatusHB.SetHelpId(""/*HID_MM_ADDRESSLIST_HB*/ );
     m_aStatusHB.Show();
 
-    m_aStatusLB.SetHelpId(HID_MM_MAILSTATUS_TLB);
+    // FIXME: HELPID
+    m_aStatusLB.SetHelpId(""/*HID_MM_MAILSTATUS_TLB*/);
     static long nTabs[] = {3, 0, nPos1, aSz.Width() };
     m_aStatusLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );

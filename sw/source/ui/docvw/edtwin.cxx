@@ -4558,7 +4558,8 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     nKS_NUMDOWN_Count(0), // #i23725#
     nKS_NUMINDENTINC_Count(0) // #i23725#
 {
-    SetHelpId(HID_EDIT_WIN);
+    // FIXME: HELPID
+    SetHelpId(""/*HID_EDIT_WIN*/);
     EnableChildTransparentMode();
     SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
 

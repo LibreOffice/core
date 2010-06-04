@@ -103,12 +103,14 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_aTableHB.InsertItem( 2, m_sType,
                             aSz.Width()/2,
                             HIB_LEFT | HIB_VCENTER /*| HIB_CLICKABLE | HIB_UPARROW */);
-    m_aTableHB.SetHelpId(HID_MM_ADDRESSLIST_HB );
+    // FIXME: HELPID
+    m_aTableHB.SetHelpId(""/*HID_MM_ADDRESSLIST_HB*/ );
     m_aTableHB.Show();
 
     static long nTabs[] = {3, 0, aSz.Width()/2, aSz.Width() };
     m_aTableLB.SetTabs(&nTabs[0], MAP_PIXEL);
-    m_aTableLB.SetHelpId(HID_MM_SELECTDBTABLEDDIALOG_LISTBOX);
+    // FIXME: HELPID
+    m_aTableLB.SetHelpId(""/*HID_MM_SELECTDBTABLEDDIALOG_LISTBOX*/);
     m_aTableLB.SetWindowBits( WB_CLIPCHILDREN );
     m_aTableLB.SetSpaceBetweenEntries(3);
     m_aTableLB.SetSelectionMode( SINGLE_SELECTION );

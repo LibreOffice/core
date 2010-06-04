@@ -253,7 +253,8 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     bDoSyntaxHighlight(TRUE),
     bHighlighting(FALSE)
 {
-    SetHelpId(HID_SOURCE_EDITWIN);
+    // FIXME: HELPID
+    SetHelpId(""/*HID_SOURCE_EDITWIN*/);
     CreateTextEngine();
     pSourceViewConfig->AddListener(this);
 }

@@ -775,7 +775,9 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
     DBG_ASSERT(aEmptyText.Len() == 0, "Sm: Ooops...");
 #endif
 
-    rField.SetHelpId(nHelpId);
+    // FIXME: HELPID
+    (void)nHelpId;
+    rField.SetHelpId(""/*nHelpId*/);
     rField.SetHelpText(aEmptyText);
 
     // since MetricField inherits from SpinField which has a sub Edit field
@@ -783,7 +785,9 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
     // for it too.
     Edit *pSubEdit = rField.GetSubEdit();
     if (pSubEdit)
-    {   pSubEdit->SetHelpId(nHelpId);
+    {
+        // FIXME: HELPID
+        pSubEdit->SetHelpId(""/*nHelpId*/);
         pSubEdit->SetHelpText(aEmptyText);
     }
 }

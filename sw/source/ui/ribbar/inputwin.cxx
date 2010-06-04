@@ -90,7 +90,8 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     InsertSeparator ( 1 );
     InsertSeparator ();
     InsertWindow( ED_FORMULA, &aEdit);
-    SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
+    // FIXME: HELPID
+    SetHelpId(ED_FORMULA, ""/*HID_EDIT_FORMULA*/);
 
     BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, bHC ));

@@ -141,7 +141,8 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     aNextBT.SetClickHdl(LINK(this, SwFldEditDlg, NextPrevHdl));
 
     aAddressBT.SetClickHdl(LINK(this, SwFldEditDlg, AddressHdl));
-    aAddressBT.SetHelpId(HID_FLDEDT_ADDRESS);
+    // FIXME: HELPID
+    aAddressBT.SetHelpId(""/*HID_FLDEDT_ADDRESS*/);
 
     Init();
 }
@@ -247,7 +248,8 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
             break;
 
     }
-    pTabPage->SetHelpId(nHelpId);
+    // FIXME: HELPID
+    pTabPage->SetHelpId(""/*nHelpId*/);
     static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
 
     SetTabPage(pTabPage);

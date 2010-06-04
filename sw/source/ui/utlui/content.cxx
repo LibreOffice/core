@@ -933,7 +933,8 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
 {
     sal_uInt16 i;
 
-    SetHelpId(HID_NAVIGATOR_TREELIST);
+    // FIXME: HELPID
+    SetHelpId(""/*HID_NAVIGATOR_TREELIST*/);
 
     SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));

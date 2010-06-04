@@ -433,7 +433,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             for (USHORT i = 0; i <= REGION_MODE_EMBEDDED; i++)
             {
                 pMenu->InsertItem( i + 1, aContextArr[i] );
-                pMenu->SetHelpId(i + 1, HID_NAVI_DRAG_HYP + i);
+                // FIXME: HELPID
+                pMenu->SetHelpId(i + 1, ""/*HID_NAVI_DRAG_HYP + i*/);
                     /*HID_NAVI_DRAG_HYP
                     HID_NAVI_DRAG_LINK
                     HID_NAVI_DRAG_COPY  */
@@ -456,7 +457,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             for (USHORT i = 101; i <= 100 + MAXLEVEL; i++)
             {
                 pMenu->InsertItem( i, String::CreateFromInt32(i - 100) );
-                pMenu->SetHelpId( i, HID_NAVI_OUTLINES );
+                // FIXME: HELPID
+                pMenu->SetHelpId( i, ""/*HID_NAVI_OUTLINES*/ );
             }
             pMenu->CheckItem( aContentTree.GetOutlineLevel() + 100 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
@@ -792,9 +794,12 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     GetCreateView();
     InitImageList();
 
-    aContentToolBox.SetHelpId(HID_NAVIGATOR_TOOLBOX );
-    aGlobalToolBox.SetHelpId(HID_NAVIGATOR_GLOBAL_TOOLBOX);
-    aDocListBox.SetHelpId(HID_NAVIGATOR_LISTBOX );
+    // FIXME: HELPID
+    aContentToolBox.SetHelpId(""/*HID_NAVIGATOR_TOOLBOX*/ );
+    // FIXME: HELPID
+    aGlobalToolBox.SetHelpId(""/*HID_NAVIGATOR_GLOBAL_TOOLBOX*/);
+    // FIXME: HELPID
+    aDocListBox.SetHelpId(""/*HID_NAVIGATOR_LISTBOX*/ );
 
     nDocLBIniHeight = aDocListBox.GetSizePixel().Height();
     nZoomOutInit = nZoomOut = Resource::ReadShortRes();
@@ -821,7 +826,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentToolBox.InsertSeparator(4);
     aContentToolBox.InsertWindow( FN_PAGENUMBER, pEdit, 0, 4);
     aContentToolBox.InsertSeparator(4);
-    aContentToolBox.SetHelpId(FN_PAGENUMBER, HID_NAVI_TBX16);
+    // FIXME: HELPID
+    aContentToolBox.SetHelpId(FN_PAGENUMBER, ""/*HID_NAVI_TBX16*/);
     aContentToolBox.ShowItem( FN_PAGENUMBER );
 
     for( USHORT i = 0; i <= REGION_MODE_EMBEDDED; i++  )

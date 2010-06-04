@@ -325,10 +325,12 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
                             aSz.Width()/2,
                             HIB_LEFT | HIB_VCENTER );
 
-    m_aStatusHB.SetHelpId(HID_MM_TESTACCOUNTSETTINGS_HB  );
+    // FIXME: HELPID
+    m_aStatusHB.SetHelpId(""/*HID_MM_TESTACCOUNTSETTINGS_HB*/  );
     m_aStatusHB.Show();
 
-    m_aStatusLB.SetHelpId(HID_MM_TESTACCOUNTSETTINGS_TLB);
+    // FIXME: HELPID
+    m_aStatusLB.SetHelpId(""/*HID_MM_TESTACCOUNTSETTINGS_TLB*/);
     static long nTabs[] = {2, 0, aSz.Width()/2 };
     m_aStatusLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );

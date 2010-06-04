@@ -453,7 +453,9 @@ String AbstractInsFootNoteDlg_Impl::GetStr()
 }
 void AbstractInsFootNoteDlg_Impl::SetHelpId( ULONG nHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    // FIXME: HELPID
+    (void)nHelpId;
+    pDlg->SetHelpId( ""/*nHelpId*/ );
 }
 void AbstractInsFootNoteDlg_Impl::SetText( const XubString& rStr )
 {

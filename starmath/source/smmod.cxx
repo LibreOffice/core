@@ -342,7 +342,8 @@ void SmModule::FillStatusBar(StatusBar &rBar)
     rBar.InsertItem(SID_ATTR_ZOOM, rBar.GetTextWidth(C2S(" 100% ")));
     rBar.InsertItem(SID_MODIFYSTATUS, rBar.GetTextWidth(C2S(" * ")));
     rBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rBar ), SIB_USERDRAW );
-    rBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+    // FIXME: HELPID
+    rBar.SetHelpId(SID_SIGNATURE, ""/*SID_SIGNATURE*/);
 
 }
 

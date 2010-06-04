@@ -105,7 +105,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         0, 160
     };
 
-    aGroupTLB.SetHelpId(HID_GLOS_GROUP_TREE);
+    // FIXME: HELPID
+    aGroupTLB.SetHelpId(""/*HID_GLOS_GROUP_TREE*/);
     aGroupTLB.SetTabs( &nTabs[0], MAP_APPFONT );
     aGroupTLB.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aGroupTLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, SelectHdl));

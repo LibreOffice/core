@@ -308,14 +308,22 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     m_pNeutralCB    = &m_aNeutralCB;
     m_bIsTabPage = true;
 
-    m_pPersonalizedCB->SetHelpId(   HID_MM_GREETINGS_CB_PERSONALIZED);
-    m_pFemaleLB->SetHelpId(         HID_MM_GREETINGS_LB_FEMALE      );
-    m_pFemalePB->SetHelpId(         HID_MM_GREETINGS_PB_FEMALE      );
-    m_pMaleLB->SetHelpId(           HID_MM_GREETINGS_LB_MALE        );
-    m_pMalePB->SetHelpId(           HID_MM_GREETINGS_PB_MALE        );
-    m_pFemaleColumnLB->SetHelpId(   HID_MM_GREETINGS_LB_FEMALECOLUMN);
-    m_pFemaleFieldCB->SetHelpId(    HID_MM_GREETINGS_CB_FEMALEFIELD );
-    m_pNeutralCB->SetHelpId(        HID_MM_GREETINGS_CB_NEUTRAL     );
+    // FIXME: HELPID
+    m_pPersonalizedCB->SetHelpId(   ""/*HID_MM_GREETINGS_CB_PERSONALIZED*/);
+    // FIXME: HELPID
+    m_pFemaleLB->SetHelpId(         ""/*HID_MM_GREETINGS_LB_FEMALE*/      );
+    // FIXME: HELPID
+    m_pFemalePB->SetHelpId(         ""/*HID_MM_GREETINGS_PB_FEMALE*/      );
+    // FIXME: HELPID
+    m_pMaleLB->SetHelpId(           ""/*HID_MM_GREETINGS_LB_MALE*/        );
+    // FIXME: HELPID
+    m_pMalePB->SetHelpId(           ""/*HID_MM_GREETINGS_PB_MALE*/        );
+    // FIXME: HELPID
+    m_pFemaleColumnLB->SetHelpId(   ""/*HID_MM_GREETINGS_LB_FEMALECOLUMN*/);
+    // FIXME: HELPID
+    m_pFemaleFieldCB->SetHelpId(    ""/*HID_MM_GREETINGS_CB_FEMALEFIELD*/ );
+    // FIXME: HELPID
+    m_pNeutralCB->SetHelpId(        ""/*HID_MM_GREETINGS_CB_NEUTRAL*/     );
 
     FreeResource();
     m_aGreetingLineCB.SetClickHdl(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
@@ -524,14 +532,22 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     m_pNeutralCB    = &m_aNeutralCB;
     m_bIsTabPage = false;
 
-    m_pPersonalizedCB->SetHelpId(   HID_MM_BODY_CB_PERSONALIZED     );
-    m_pFemaleLB->SetHelpId(         HID_MM_BODY_LB_FEMALE           );
-    m_pFemalePB->SetHelpId(         HID_MM_BODY_PB_FEMALE           );
-    m_pMaleLB->SetHelpId(           HID_MM_BODY_LB_MALE             );
-    m_pMalePB->SetHelpId(           HID_MM_BODY_PB_MALE             );
-    m_pFemaleColumnLB->SetHelpId(   HID_MM_BODY_LB_FEMALECOLUMN     );
-    m_pFemaleFieldCB->SetHelpId(    HID_MM_BODY_CB_FEMALEFIELD      );
-    m_pNeutralCB->SetHelpId(        HID_MM_BODY_CB_NEUTRAL          );
+    // FIXME: HELPID
+    m_pPersonalizedCB->SetHelpId(   ""/*HID_MM_BODY_CB_PERSONALIZED*/     );
+    // FIXME: HELPID
+    m_pFemaleLB->SetHelpId(         ""/*HID_MM_BODY_LB_FEMALE*/           );
+    // FIXME: HELPID
+    m_pFemalePB->SetHelpId(         ""/*HID_MM_BODY_PB_FEMALE*/           );
+    // FIXME: HELPID
+    m_pMaleLB->SetHelpId(           ""/*HID_MM_BODY_LB_MALE*/             );
+    // FIXME: HELPID
+    m_pMalePB->SetHelpId(           ""/*HID_MM_BODY_PB_MALE*/             );
+    // FIXME: HELPID
+    m_pFemaleColumnLB->SetHelpId(   ""/*HID_MM_BODY_LB_FEMALECOLUMN*/     );
+    // FIXME: HELPID
+    m_pFemaleFieldCB->SetHelpId(    ""/*HID_MM_BODY_CB_FEMALEFIELD*/      );
+    // FIXME: HELPID
+    m_pNeutralCB->SetHelpId(        ""/*HID_MM_BODY_CB_NEUTRAL*/          );
 
     FreeResource();
     m_aGreetingLineCB.SetClickHdl(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));

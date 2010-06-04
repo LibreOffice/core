@@ -84,11 +84,13 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     RemoveResetButton();
 
     GetOKButton().SetText(String(SW_RES(STR_FLD_INSERT)));
-    GetOKButton().SetHelpId(HID_FIELD_INSERT);
+    // FIXME: HELPID
+    GetOKButton().SetHelpId(""/*HID_FIELD_INSERT*/);
     GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
 
     GetCancelButton().SetText(String(SW_RES(STR_FLD_CLOSE)));
-    GetCancelButton().SetHelpId(HID_FIELD_CLOSE);
+    // FIXME: HELPID
+    GetCancelButton().SetHelpId(""/*HID_FIELD_CLOSE*/);
     GetCancelButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
 
     FreeResource();

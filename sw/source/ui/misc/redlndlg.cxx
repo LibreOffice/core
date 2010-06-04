@@ -244,7 +244,8 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     bRedlnAutoFmt   (bAutoFmt),
     bInhibitActivate( false )
 {
-    aTabPagesCTRL.SetHelpId(HID_REDLINE_CTRL);
+    // FIXME: HELPID
+    aTabPagesCTRL.SetHelpId(""/*HID_REDLINE_CTRL*/);
     pTPView = aTabPagesCTRL.GetViewPage();
     pTable = pTPView->GetTableControl();
 

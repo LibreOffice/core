@@ -89,8 +89,10 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
     enableButtons(WZB_FINISH, sal_False);
 
     m_pFinish->SetText(m_sFinish);
-    m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);
-    m_pPrevPage->SetHelpId(HID_MM_PREV_PAGE);
+    // FIXME: HELPID
+    m_pNextPage->SetHelpId(""/*HID_MM_NEXT_PAGE*/);
+    // FIXME: HELPID
+    m_pPrevPage->SetHelpId(""/*HID_MM_PREV_PAGE*/);
 
     //#i51949# no output type page visible if e-Mail is not supported
     if(rItem.IsMailAvailable())

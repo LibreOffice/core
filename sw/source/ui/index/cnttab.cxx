@@ -1036,7 +1036,8 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
         aFromObjCLB.InsertEntry(rNames.GetString(i));
         aFromObjCLB.SetEntryData( i, (void*)rNames.GetValue(i) );
     }
-    aFromObjCLB.SetHelpId(HID_OLE_CHECKLB);
+    // FIXME: HELPID
+    aFromObjCLB.SetHelpId(""/*HID_OLE_CHECKLB*/);
 
     SetExchangeSupport();
     aTypeLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
@@ -1791,7 +1792,8 @@ public:
         bNextControl(sal_False),
         m_pParent( pTokenWin )
     {
-        SetHelpId( HID_TOX_ENTRY_EDIT );
+        // FIXME: HELPID
+        SetHelpId( ""/*HID_TOX_ENTRY_EDIT*/ );
     }
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
@@ -1876,7 +1878,8 @@ public:
         bNextControl(sal_False),
         m_pParent(pTokenWin)
     {
-        SetHelpId(HID_TOX_ENTRY_BUTTON);
+        // FIXME: HELPID
+        SetHelpId(""/*HID_TOX_ENTRY_BUTTON*/);
     }
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
@@ -2128,7 +2131,8 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aLevelLB.SetSpaceBetweenEntries(0);
     aLevelLB.SetSelectionMode( SINGLE_SELECTION );
     aLevelLB.SetHighlightRange();   // select full width
-    aLevelLB.SetHelpId(HID_INSERT_INDEX_ENTRY_LEVEL_LB);
+    // FIXME: HELPID
+    aLevelLB.SetHelpId(""/*HID_INSERT_INDEX_ENTRY_LEVEL_LB*/);
     aLevelLB.Show();
 
     aLastTOXType.eType = (TOXTypes)USHRT_MAX;
@@ -3094,7 +3098,8 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         m_pParent(pParent)
 {
     SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
-    SetHelpId(HID_TOKEN_WINDOW);
+    // FIXME: HELPID
+    SetHelpId(""/*HID_TOKEN_WINDOW*/);
     for(sal_uInt16 i = 0; i < TOKEN_END; i++)
     {
         sal_uInt16 nTextId = STR_BUTTON_TEXT_START + i;

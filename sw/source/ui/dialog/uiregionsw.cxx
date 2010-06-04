@@ -157,7 +157,8 @@ public:
         SwTestPasswdDlg(Window* pParent) :
         SfxPasswordDialog(pParent)
         {
-            SetHelpId(HID_DLG_PASSWD_SECTION);
+            // FIXME: HELPID
+            SetHelpId(""/*HID_DLG_PASSWD_SECTION*/);
         }
 };
 
@@ -430,7 +431,8 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aSubRegionED.AddEventListener( LINK( this, SwEditRegionDlg, SubRegionEventHdl ));
     aSubRegionED.EnableAutocomplete( sal_True, sal_True );
 
-    aTree.SetHelpId(HID_REGION_TREE);
+    // FIXME: HELPID
+    aTree.SetHelpId(""/*HID_REGION_TREE*/);
     aTree.SetSelectionMode( MULTIPLE_SELECTION );
     aTree.SetWindowBits(WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
     aTree.SetSpaceBetweenEntries(0);

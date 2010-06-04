@@ -214,10 +214,12 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aListHB.InsertItem( ITEMID_TABLE, m_sTable,
                             aSz.Width()/2,
                             HIB_LEFT | HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS /*| HIB_CLICKABLE | HIB_UPARROW */);
-    m_aListHB.SetHelpId(HID_MM_ADDRESSLIST_HB );
+    // FIXME: HELPID
+    m_aListHB.SetHelpId(""/*HID_MM_ADDRESSLIST_HB*/ );
     m_aListHB.Show();
 
-    m_aListLB.SetHelpId(HID_MM_ADDRESSLIST_TLB);
+    // FIXME: HELPID
+    m_aListLB.SetHelpId(""/*HID_MM_ADDRESSLIST_TLB*/);
     static long nTabs[] = {2, 0, aSz.Width()/2 };
     m_aListLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aListLB.SetSelectionMode( SINGLE_SELECTION );

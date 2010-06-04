@@ -37,7 +37,8 @@ SwFldRefTreeListBox::SwFldRefTreeListBox( Window* pParent,
                                           const ResId& rResId)
     : SvTreeListBox( pParent, rResId )
 {
-    SetHelpId( HID_REFSELECTION_TOOLTIP );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_REFSELECTION_TOOLTIP*/ );
 }
 
 SwFldRefTreeListBox::~SwFldRefTreeListBox()

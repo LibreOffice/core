@@ -179,27 +179,47 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
 
     SetStyle(GetStyle()|WB_DIALOGCONTROL);
     FreeResource();
-    aOKBT           .SetHelpId(HID_INSERT_IDX_MRK_OK        );
-    aCancelBT       .SetHelpId(HID_INSERT_IDX_MRK_CLOSE     );
-    aDelBT          .SetHelpId(HID_INSERT_IDX_MRK_DELETE    );
-    aNewBT          .SetHelpId(HID_INSERT_IDX_MRK_NEW       );
-    aPrevBT         .SetHelpId(HID_INSERT_IDX_MRK_PREV      );
-    aPrevSameBT     .SetHelpId(HID_INSERT_IDX_MRK_PREV_SAME );
-    aNextBT         .SetHelpId(HID_INSERT_IDX_MRK_NEXT      );
-    aNextSameBT     .SetHelpId(HID_INSERT_IDX_MRK_NEXT_SAME );
-    aTypeDCB        .SetHelpId(HID_INSERT_IDX_MRK_TYPE      );
-    aEntryED        .SetHelpId(HID_INSERT_IDX_MRK_ENTRY     );
-    aKeyDCB         .SetHelpId(HID_INSERT_IDX_MRK_PRIM_KEY  );
-    aKey2DCB        .SetHelpId(HID_INSERT_IDX_MRK_SEC_KEY   );
-    aLevelED        .SetHelpId(HID_INSERT_IDX_MRK_LEVEL     );
-    aMainEntryCB    .SetHelpId(HID_INSERT_IDX_MRK_MAIN_ENTRY);
-    aApplyToAllCB   .SetHelpId(HID_INSERT_IDX_MRK_APPLY_ALL );
-    aPhoneticED0    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
-    aPhoneticED1    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
-    aPhoneticED2    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
+    // FIXME: HELPID
+    aOKBT           .SetHelpId(""/*HID_INSERT_IDX_MRK_OK*/          );
+    // FIXME: HELPID
+    aCancelBT       .SetHelpId(""/*HID_INSERT_IDX_MRK_CLOSE*/       );
+    // FIXME: HELPID
+    aDelBT          .SetHelpId(""/*HID_INSERT_IDX_MRK_DELETE*/  );
+    // FIXME: HELPID
+    aNewBT          .SetHelpId(""/*HID_INSERT_IDX_MRK_NEW*/     );
+    // FIXME: HELPID
+    aPrevBT         .SetHelpId(""/*HID_INSERT_IDX_MRK_PREV*/        );
+    // FIXME: HELPID
+    aPrevSameBT     .SetHelpId(""/*HID_INSERT_IDX_MRK_PREV_SAME*/   );
+    // FIXME: HELPID
+    aNextBT         .SetHelpId(""/*HID_INSERT_IDX_MRK_NEXT*/        );
+    // FIXME: HELPID
+    aNextSameBT     .SetHelpId(""/*HID_INSERT_IDX_MRK_NEXT_SAME*/   );
+    // FIXME: HELPID
+    aTypeDCB        .SetHelpId(""/*HID_INSERT_IDX_MRK_TYPE*/        );
+    // FIXME: HELPID
+    aEntryED        .SetHelpId(""/*HID_INSERT_IDX_MRK_ENTRY*/       );
+    // FIXME: HELPID
+    aKeyDCB         .SetHelpId(""/*HID_INSERT_IDX_MRK_PRIM_KEY*/    );
+    // FIXME: HELPID
+    aKey2DCB        .SetHelpId(""/*HID_INSERT_IDX_MRK_SEC_KEY*/ );
+    // FIXME: HELPID
+    aLevelED        .SetHelpId(""/*HID_INSERT_IDX_MRK_LEVEL*/       );
+    // FIXME: HELPID
+    aMainEntryCB    .SetHelpId(""/*HID_INSERT_IDX_MRK_MAIN_ENTRY*/);
+    // FIXME: HELPID
+    aApplyToAllCB   .SetHelpId(""/*HID_INSERT_IDX_MRK_APPLY_ALL*/   );
+    // FIXME: HELPID
+    aPhoneticED0    .SetHelpId(""/*HID_INSERT_IDX_MRK_PHONETIC_READING*/ );
+    // FIXME: HELPID
+    aPhoneticED1    .SetHelpId(""/*HID_INSERT_IDX_MRK_PHONETIC_READING*/ );
+    // FIXME: HELPID
+    aPhoneticED2    .SetHelpId(""/*HID_INSERT_IDX_MRK_PHONETIC_READING*/ );
 
-    aSearchCaseSensitiveCB.SetHelpId(   HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE   );
-    aSearchCaseWordOnlyCB.SetHelpId(    HID_INSERT_IDX_MRK_SRCH_WORDONLY        );
+    // FIXME: HELPID
+    aSearchCaseSensitiveCB.SetHelpId(   ""/*HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE*/ );
+    // FIXME: HELPID
+    aSearchCaseWordOnlyCB.SetHelpId(    ""/*HID_INSERT_IDX_MRK_SRCH_WORDONLY*/      );
 
 
     GetParent()->SetText( SW_RESSTR( bNewMark ? STR_IDXMRK_INSERT : STR_IDXMRK_EDIT));
@@ -1275,21 +1295,30 @@ SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
     SetStyle(GetStyle()|WB_DIALOGCONTROL);
     FreeResource();
 
-    aFromComponentRB.SetHelpId(HID_AUTH_MARK_DLG_FROM_COMP_RB);
-    aFromDocContentRB.SetHelpId(HID_AUTH_MARK_DLG_FROM_DOC_RB );
-    aEntryED.SetHelpId(HID_AUTH_MARK_DLG_ID_LISTBOX           );
-    aEntryLB.SetHelpId(HID_AUTH_MARK_DLG_ID_LISTBOX           );
+    // FIXME: HELPID
+    aFromComponentRB.SetHelpId(""/*HID_AUTH_MARK_DLG_FROM_COMP_RB*/);
+    // FIXME: HELPID
+    aFromDocContentRB.SetHelpId(""/*HID_AUTH_MARK_DLG_FROM_DOC_RB*/ );
+    // FIXME: HELPID
+    aEntryED.SetHelpId(""/*HID_AUTH_MARK_DLG_ID_LISTBOX*/           );
+    // FIXME: HELPID
+    aEntryLB.SetHelpId(""/*HID_AUTH_MARK_DLG_ID_LISTBOX*/           );
 
     aFromComponentRB.Show(bNewEntry);
     aFromDocContentRB.Show(bNewEntry);
     aFromComponentRB.Check(bIsFromComponent);
     aFromDocContentRB.Check(!bIsFromComponent);
 
-    aOKBT       .SetHelpId(HID_INSERT_AUTH_MRK_OK   );
-    aCancelBT   .SetHelpId(HID_INSERT_AUTH_MRK_CLOSE);
-    aEntryED        .SetHelpId(HID_INSERT_AUTH_MRK_ENTRY        );
-    aCreateEntryPB  .SetHelpId(HID_INSERT_AUTH_MRK_CREATE_ENTRY );
-    aEditEntryPB    .SetHelpId(HID_INSERT_AUTH_MRK_EDIT_ENTRY   );
+    // FIXME: HELPID
+    aOKBT       .SetHelpId(""/*HID_INSERT_AUTH_MRK_OK*/   );
+    // FIXME: HELPID
+    aCancelBT   .SetHelpId(""/*HID_INSERT_AUTH_MRK_CLOSE*/);
+    // FIXME: HELPID
+    aEntryED        .SetHelpId(""/*HID_INSERT_AUTH_MRK_ENTRY*/      );
+    // FIXME: HELPID
+    aCreateEntryPB  .SetHelpId(""/*HID_INSERT_AUTH_MRK_CREATE_ENTRY*/   );
+    // FIXME: HELPID
+    aEditEntryPB    .SetHelpId(""/*HID_INSERT_AUTH_MRK_EDIT_ENTRY*/ );
 
     aOKBT.SetClickHdl(LINK(this,SwAuthMarkDlg, InsertHdl));
     aCancelBT.SetClickHdl(LINK(this,SwAuthMarkDlg, CloseHdl));
@@ -1741,7 +1770,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pTypeListBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pTypeListBox->Show();
             pTypeListBox->SetSelectHdl(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
-            pTypeListBox->SetHelpId(aCurInfo.nHelpId);
+            // FIXME: HELPID
+            pTypeListBox->SetHelpId(""/*aCurInfo.nHelpId*/);
 
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
@@ -1769,7 +1799,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pIdentifierBox->SetSizePixel(aTmp);
             pIdentifierBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pIdentifierBox->Show();
-            pIdentifierBox->SetHelpId(aCurInfo.nHelpId);
+            // FIXME: HELPID
+            pIdentifierBox->SetHelpId(""/*aCurInfo.nHelpId*/);
         }
         else
         {
@@ -1780,7 +1811,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pEdits[nIndex]->SetPosPixel(bLeft ? aTR1 : aTR2);
             pEdits[nIndex]->SetText(pFields[aCurInfo.nToxField]);
             pEdits[nIndex]->Show();
-            pEdits[nIndex]->SetHelpId(aCurInfo.nHelpId);
+            // FIXME: HELPID
+            pEdits[nIndex]->SetHelpId(""/*aCurInfo.nHelpId*/);
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
                 pEdits[nIndex]->SetModifyHdl(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));

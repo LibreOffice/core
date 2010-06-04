@@ -107,7 +107,8 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     pVScrollBar         (0),
     pScrollBox          (0)
 {
-    SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
+    // FIXME: HELPID
+    SetHelpId(""/*HID_SMA_COMMAND_WIN_EDIT*/);
     SetMapMode(MAP_PIXEL);
 
     // Even RTL languages don't use RTL for math

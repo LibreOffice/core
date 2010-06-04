@@ -447,13 +447,15 @@ bGrammarResults(false)
         {
             const String aEntry = aSuggestions[ i ];
             InsertItem( nPos, aEntry, 0, i );
-            SetHelpId( nPos, HID_LINGU_REPLACE);
+            // FIXME: HELPID
+            SetHelpId( nPos, ""/*HID_LINGU_REPLACE*/);
 
             if (aSuggestionImageUrl.getLength() > 0)
                 SetItemImage( nPos, aImage );
 
             pMenu->InsertItem( nId, aEntry );
-            pMenu->SetHelpId( nPos, HID_LINGU_AUTOCORR);
+            // FIXME: HELPID
+            pMenu->SetHelpId( nPos, ""/*HID_LINGU_AUTOCORR*/);
         }
     }
 
@@ -462,7 +464,8 @@ bGrammarResults(false)
     SetItemText( MN_SPELLING, aSpellingAndGrammar );
     USHORT nItemPos = GetItemPos( MN_IGNORE );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
-    SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
+    // FIXME: HELPID
+    SetHelpId( MN_IGNORE_SELECTION, ""/*HID_LINGU_IGNORE_SELECTION*/);
 
     EnableItem( MN_AUTOCORR, bEnable );
 
@@ -632,7 +635,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
         {
             const String aEntry = aSuggestions[ i ];
             InsertItem( nItemId, aEntry, 0, nPos++ );
-            SetHelpId( nItemId, HID_LINGU_REPLACE );
+            // FIXME: HELPID
+            SetHelpId( nItemId, ""/*HID_LINGU_REPLACE*/ );
 
             if (aSuggestionImageUrl.getLength() > 0)
                 SetItemImage( nItemId, aImage );
@@ -647,7 +651,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
     SetItemText( MN_SPELLING, aSpellingAndGrammar );
     USHORT nItemPos = GetItemPos( MN_IGNORE );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
-    SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
+    // FIXME: HELPID
+    SetHelpId( MN_IGNORE_SELECTION, ""/*HID_LINGU_IGNORE_SELECTION*/);
 
     EnableItem( MN_AUTOCORR, false );
 

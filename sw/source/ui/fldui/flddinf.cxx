@@ -87,7 +87,8 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
 {
     FreeResource();
 
-    aTypeTLB.SetHelpId(HID_FIELD_DINF_TYPE);
+    // FIXME: HELPID
+    aTypeTLB.SetHelpId(""/*HID_FIELD_DINF_TYPE*/);
     aTypeTLB.SetSelectionMode(SINGLE_SELECTION);
     aTypeTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     // Font nicht setzen, damit der Font des Controls uebernommen wird!
