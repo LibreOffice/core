@@ -111,7 +111,7 @@ testcase tiEditPasteSpecial
     hUseAsyncSlot( "EditPasteSpecial" )
 
     Kontext "InhaltEinfuegen"
-    if ( InhalteEinfuege.exists( 2 ) ) then
+    if ( InhaltEinfuegen.exists( 2 ) ) then
         DialogTest ( InhaltEinfuegen )
 
         printlog " close the dialog without inserting something"
