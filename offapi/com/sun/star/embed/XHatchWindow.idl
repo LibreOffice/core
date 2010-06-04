@@ -56,7 +56,7 @@
     Thus the window can not resize/move itself.
     </p>
  */
-interface XHatchWindow: com::sun::star::lang::XComponent
+published interface XHatchWindow: com::sun::star::lang::XComponent
 {
     //------------------------------------------------------------------------
     /** sets the object that will control resizing/moving, if the object is
