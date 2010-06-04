@@ -192,7 +192,7 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
 
     if ( rStatus.hasValue() && ( rStatus >>= sText) )
     {
-        if ( mnLevel <= 2 )
+        if ( mnLevel <= 3 )
             mpDesktop->SetSplashScreenText( sText );
         else
             mpDesktop->SetSplashScreenProgress( ++mnProgress );
