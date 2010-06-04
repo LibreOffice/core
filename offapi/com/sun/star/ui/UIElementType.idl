@@ -73,9 +73,14 @@ constants UIElementType
     const short PROGRESSBAR     = 6;
 
     //-------------------------------------------------------------------------
+    /** specifies a tool panel
+    */
+    const short TOOLPANEL       = 7;
+
+    //-------------------------------------------------------------------------
     /** specifies the number of constants.
     */
-    const short COUNT           = 7;
+    const short COUNT           = 8;
 };
 
 }; }; }; };
