@@ -972,7 +972,7 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
     }
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::readDefaults( bool supportPrintable )
+void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible )
 {
     Any a( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) );
     addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ),
@@ -995,7 +995,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable )
     }
 
     sal_Bool bVisible = sal_True;
-    try
+    if (supportVisible) try
     {
         if (_xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("EnableVisible") ) ) >>= bVisible)
         {

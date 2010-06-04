@@ -117,7 +117,7 @@ public:
     inline bool readProp( T * ret, ::rtl::OUString const & rPropName );
     css::uno::Any readProp( ::rtl::OUString const & rPropName );
     //
-    void readDefaults( bool supportPrintable = true );
+    void readDefaults( bool supportPrintable = true, bool supportVisible = true );
     //
     void readStringAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );

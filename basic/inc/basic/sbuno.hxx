@@ -41,5 +41,7 @@ void createAllObjectProperties( SbxObject* pObj );
 
 ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 
+void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
+
 #endif
 
