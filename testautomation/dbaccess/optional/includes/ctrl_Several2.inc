@@ -234,12 +234,9 @@ testcase tImageButton
          printlog "set properties" 
     'to activate property: scale, following properties must be active: Graphics (with choosen path)
     Kontext "TabGeneralControl"	
-    if gNetzInst = false then
-        fsetControlProperty("ImageButton","Graphics", gOfficePath + ConvertPath("share/gallery/bullets/blkpearl.gif"))
-    else
-        fsetControlProperty("ImageButton","Graphics", gNetzOfficePath + ConvertPath("share/gallery/bullets/blkpearl.gif"))
-    endif
-	    sleep(1)
+    fsetControlProperty("ImageButton","Graphics", gOfficePath + ConvertPath("share/gallery/bullets/blkpearl.gif"))
+    
+    sleep(1)
         TabGeneralControl.TypeKeys "<RETURN>" , true
         fsetControlProperty("ImageControl","Scale","1")          'listbox content: no   
         'fsetControlProperty("ImageControl","Frame","4")
