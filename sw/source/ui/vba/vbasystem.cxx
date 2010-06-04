@@ -37,11 +37,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-PrivateProfileStringListener::PrivateProfileStringListener( const rtl::OUString& rFileName, const ByteString& rGroupName, const ByteString& rKey )
-    :maFileName( rFileName ), maGroupName( rGroupName ), maKey( rKey )
-{
-}
-
 PrivateProfileStringListener::~PrivateProfileStringListener()
 {
 }

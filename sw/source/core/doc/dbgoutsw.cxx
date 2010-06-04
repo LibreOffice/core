@@ -52,6 +52,7 @@
 #include <dbgoutsw.hxx>
 #include <SwRewriter.hxx>
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 

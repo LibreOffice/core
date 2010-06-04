@@ -77,7 +77,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
-
+#include <cstdio>
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
@@ -276,6 +276,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -373,7 +374,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     nIdx = nNewIdx;
     nLen = nNewLen;
     bNotEOL = sal_False;
-    bStopUnderFlow = bFtnInside = sal_False;
+    bStopUnderFlow = bFtnInside = bOtherThanFtnInside = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
 
@@ -400,6 +401,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -1321,8 +1323,8 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
     if( aIntersect.HasArea() )
     {
         SwTxtNode *pNd = (SwTxtNode*)GetTxtFrm()->GetTxtNode();
-        SwIndex aIndex( pNd, GetIdx() );
-        SwTxtAttr *pAttr = pNd->GetTxtAttr( aIndex, RES_TXTATR_INETFMT );
+        SwTxtAttr *const pAttr =
+            pNd->GetTxtAttrAt(GetIdx(), RES_TXTATR_INETFMT);
         if( pAttr )
         {
             const SwFmtINetFmt& rFmt = pAttr->GetINetFmt();

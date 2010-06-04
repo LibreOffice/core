@@ -559,9 +559,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
     case RES_FLTR_SECTION:
         MakePoint(pEntry, pDoc, aRegion);   // bislang immer Point==Mark
         pDoc->InsertSwSection(aRegion,
-                *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSection(),
-                0, false);
-        delete(((SwFltSection*)pEntry->pAttr)->GetSection());
+                *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSectionData(),
+                0, 0, false);
+        delete (((SwFltSection*)pEntry->pAttr)->GetSectionData());
         break;
     case RES_FLTR_REDLINE:
         {
@@ -865,19 +865,21 @@ SfxPoolItem* SwFltTOX::Clone(SfxItemPool*) const
 
 //------ hier stehen die Methoden von SwFltSwSection -----------
 
-SwFltSection::SwFltSection(SwSection *pSect) :
-    SfxPoolItem(RES_FLTR_SECTION), pSection(pSect)
+SwFltSection::SwFltSection(SwSectionData *const pSect)
+    : SfxPoolItem(RES_FLTR_SECTION)
+    , m_pSection(pSect)
 {
 }
 
-SwFltSection::SwFltSection(const SwFltSection& rCpy) :
-    SfxPoolItem(RES_FLTR_SECTION), pSection(rCpy.pSection)
+SwFltSection::SwFltSection(const SwFltSection& rCpy)
+    : SfxPoolItem(RES_FLTR_SECTION)
+    , m_pSection(rCpy.m_pSection)
 {
 }
 
 int SwFltSection::operator==(const SfxPoolItem& rItem) const
 {
-    return pSection == ((SwFltSection&)rItem).pSection;
+    return m_pSection == ((SwFltSection&)rItem).m_pSection;
 }
 
 SfxPoolItem* __EXPORT SwFltSection::Clone(SfxItemPool*) const
@@ -962,9 +964,9 @@ SwFltShell::~SwFltShell()
         SwDoc& rDoc = GetDoc();
                         // 1. SectionFmt und Section anlegen
         SwSectionFmt* pSFmt = rDoc.MakeSectionFmt( 0 );
-        SwSection aS( CONTENT_SECTION, String::CreateFromAscii(
+        SwSectionData aSectionData( CONTENT_SECTION, String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM("PMW-Protect") ));
-        aS.SetProtect( TRUE );
+        aSectionData.SetProtectFlag( true );
                         // 2. Start- und EndIdx suchen
         const SwNode* pEndNd = &rDoc.GetNodes().GetEndOfContent();
         SwNodeIndex aEndIdx( *pEndNd, -1L );
@@ -972,7 +974,8 @@ SwFltShell::~SwFltShell()
         SwNodeIndex aSttIdx( *pSttNd, 1L );         // +1 -> hinter StartNode
                                                     // Section einfuegen
                         // Section einfuegen
-        rDoc.GetNodes().InsertSection( aSttIdx, *pSFmt, aS, &aEndIdx, FALSE );
+        rDoc.GetNodes().InsertTextSection(
+                aSttIdx, *pSFmt, aSectionData, 0, &aEndIdx, false );
 
         if( !IsFlagSet(SwFltControlStack::DONT_HARD_PROTECT) ){
             SwDocShell* pDocSh = rDoc.GetDocShell();
@@ -1676,7 +1679,7 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
     return p;
 }
 
-BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet*
 #ifdef DBG_UTIL
@@ -1728,7 +1731,7 @@ SwFrmFmt* SwFltOutDoc::MakeFly( RndStdIds eAnchor, SfxItemSet* pSet )
     return pFly;
 }
 
-BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet* pMoreAttrs /*= 0*/ )
 
@@ -1834,7 +1837,7 @@ void SwFltOutDoc::EndFly()
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }
 
-BOOL SwFltFormatCollection::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltFormatCollection::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet* pMoreAttrs /*= 0*/ )
 
@@ -1862,7 +1865,7 @@ BOOL SwFltFormatCollection::BeginStyleFly( SwFltOutDoc* pOutDoc )
 // Flys in SwFltShell
 //-----------------------------------------------------------------------------
 
-BOOL SwFltShell::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
+BOOL SwFltShell::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            BOOL bAbsolutePos /*= FALSE*/ )
 
 {
@@ -1934,8 +1937,8 @@ void SwFltShell::BeginFootnote()
     pSavedPos = new SwPosition(*pPaM->GetPoint());
     pPaM->Move(fnMoveBackward, fnGoCntnt);
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
-    SwTxtAttr* pFN = pTxt->GetTxtAttr(pPaM->GetPoint()->nContent,
-     RES_TXTATR_FTN);
+    SwTxtAttr *const pFN = pTxt->GetTxtAttrForCharAt(
+        pPaM->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( !pFN ){         // Passiert z.B. bei Fussnote in Fly
         ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
         return;

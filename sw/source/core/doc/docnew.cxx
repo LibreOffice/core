@@ -1192,8 +1192,8 @@ void SwDoc::Paste( const SwDoc& rSource )
 
             {
                 aIndexBefore++;
-                SwPaM aPaM(SwPosition(aIndexBefore, 0),
-                           SwPosition(rInsPos.nNode, 0));
+                SwPaM aPaM(SwPosition(aIndexBefore),
+                           SwPosition(rInsPos.nNode));
 
                 MakeUniqueNumRules(aPaM);
             }

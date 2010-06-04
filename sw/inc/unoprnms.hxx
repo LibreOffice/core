@@ -805,7 +805,8 @@ enum SwPropNameIds
 /* 0737 */  UNO_NAME_DESCRIPTION,
 // <--
 /* 0738 */  UNO_NAME_META,       // #i91565#
-/* 0739 */  SW_PROPNAME_END
+/* 0739 */  UNO_NAME_NESTED_TEXT_CONTENT, // #i109601#
+/* 0740 */  SW_PROPNAME_END
 };
 
 

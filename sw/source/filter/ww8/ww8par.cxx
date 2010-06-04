@@ -3245,7 +3245,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     nSwNumLevel = nWwNumType = 0xff;
     pTableDesc = 0;
     pNumOlst = 0;
-    pNode_FLY_AT_CNTNT = 0;
+    pNode_FLY_AT_PARA = 0;
     pDrawModel = 0;
     pDrawPg = 0;
     mpDrawEditEngine = 0;
