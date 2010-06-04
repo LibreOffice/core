@@ -47,11 +47,11 @@
 #include "DrawController.hxx"
 #include "FactoryIds.hxx"
 #include "slideshow.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShellHint.hxx"
+#include "taskpane/PanelId.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 #include <sfx2/bindings.hxx>
@@ -195,12 +195,12 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             // Make the layout menu visible in the tool pane.
             SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
             SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
+                ::sd::toolpanel::PID_LAYOUT);
             SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
             if (pFrame!=NULL && pFrame->GetDispatcher()!=NULL)
             {
                 pFrame->GetDispatcher()->Execute (
-                    SID_TASK_PANE,
+                    SID_SHOW_TOOL_PANEL,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                     &aMakeToolPaneVisible,
                     &aPanelId,

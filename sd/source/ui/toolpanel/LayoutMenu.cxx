@@ -47,6 +47,7 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "taskpane/ScrollPanel.hxx"
 #include "tools/SlotStateListener.hxx"
 #include "EventMultiplexer.hxx"
@@ -84,38 +85,30 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace toolpanel {
 
-/** This factory class stores references to ViewShellBase and DrawDocShell
-    and passes them to new LayoutMenu objects.
-*/
-class LayoutMenuFactory
+class LayoutMenuRootFactory
     : public ControlFactory
 {
 public:
-    LayoutMenuFactory (ViewShellBase& rBase, DrawDocShell& rDocShell)
-        : mrBase(rBase),
-          mrDocShell(rDocShell)
-    {}
+    LayoutMenuRootFactory (ToolPanelViewShell& i_rPanelViewShell)
+        :mrPanelViewShell(i_rPanelViewShell)
+    {
+    }
 
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        ScrollPanel* pScrollPanel = new ScrollPanel (pTreeNode);
+        ScrollPanel* pScrollPanel = new ScrollPanel (i_rParent);
         ::std::auto_ptr<TreeNode> pMenu (
             new LayoutMenu (
                 pScrollPanel,
-                mrDocShell,
-                mrBase,
-                false));
+                mrPanelViewShell));
         pScrollPanel->AddControl(pMenu);
         return pScrollPanel;
     }
 
 private:
-    ViewShellBase& mrBase;
-    DrawDocShell& mrDocShell;
+    ToolPanelViewShell& mrPanelViewShell;
 };
-
-
 
 
 SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
@@ -182,22 +175,29 @@ static snewfoil_value_info standard[] =
     {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-LayoutMenu::LayoutMenu (
-    TreeNode* pParent,
-    DrawDocShell& rDocumentShell,
-    ViewShellBase& rViewShellBase,
-    bool bUseOwnScrollBar)
+LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
     : ValueSet (pParent->GetWindow()),
       TreeNode(pParent),
       DragSourceHelper(this),
       DropTargetHelper(this),
-      mrBase (rViewShellBase),
-      mbUseOwnScrollBar (bUseOwnScrollBar),
+      mrBase( i_rPanelViewShell.GetViewShellBase() ),
+      mpShellManager (&i_rPanelViewShell.GetSubShellManager()),
+      mbUseOwnScrollBar( false ),
       mnPreferredColumnCount(3),
       mxListener(NULL),
       mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false)
 {
+    implConstruct( *mrBase.GetDocument()->GetDocSh() );
+}
+
+
+void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
+{
+    OSL_ENSURE( mrBase.GetDocument()->GetDocSh() == &rDocumentShell,
+        "LayoutMenu::implConstruct: hmm?" );
+    // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
+
     SetStyle (
         ( GetStyle()  & ~(WB_ITEMBORDER) )
         | WB_TABSTOP
@@ -236,7 +236,6 @@ LayoutMenu::LayoutMenu (
 
 
 
-
 LayoutMenu::~LayoutMenu (void)
 {
     // Tell the shell factory that this object is no longer available.
@@ -256,10 +255,9 @@ LayoutMenu::~LayoutMenu (void)
 
 
 ::std::auto_ptr<ControlFactory> LayoutMenu::CreateControlFactory (
-    ViewShellBase& rBase,
-    DrawDocShell& rDocShell)
+    ToolPanelViewShell& i_rPanelViewShell )
 {
-    return ::std::auto_ptr<ControlFactory>(new LayoutMenuFactory(rBase, rDocShell));
+    return ::std::auto_ptr<ControlFactory>(new LayoutMenuRootFactory(i_rPanelViewShell));
 }
 
 
@@ -590,6 +588,13 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 
 
 
+
+TaskPaneShellManager* LayoutMenu::GetShellManager()
+{
+    if ( mpShellManager )
+        return mpShellManager;
+    return TreeNode::GetShellManager();
+}
 
 void LayoutMenu::InvalidateContent (void)
 {

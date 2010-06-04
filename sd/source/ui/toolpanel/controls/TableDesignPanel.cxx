@@ -31,6 +31,7 @@
 #include "TableDesignPanel.hxx"
 
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -44,10 +45,11 @@ namespace sd
 namespace toolpanel { namespace controls {
 
 
-TableDesignPanel::TableDesignPanel(TreeNode* pParent, ViewShellBase& rBase)
-    : SubToolPanel (pParent)
+TableDesignPanel::TableDesignPanel( ::Window& i_rParentWindow, ToolPanelViewShell& i_rPanelViewShell )
+    :SubToolPanel( i_rParentWindow )
+    ,m_pPanelViewShell( &i_rPanelViewShell )
 {
-    mpWrappedControl = createTableDesignPanel( pParent->GetWindow(), rBase );
+    mpWrappedControl = createTableDesignPanel( &i_rParentWindow, i_rPanelViewShell.GetViewShellBase() );
     mpWrappedControl->Show();
 }
 
@@ -56,10 +58,17 @@ TableDesignPanel::~TableDesignPanel()
     delete mpWrappedControl;
 }
 
-std::auto_ptr<ControlFactory> TableDesignPanel::CreateControlFactory (ViewShellBase& rBase)
+std::auto_ptr< ControlFactory > TableDesignPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )
 {
-    return std::auto_ptr<ControlFactory>(
-        new ControlFactoryWithArgs1<TableDesignPanel,ViewShellBase>(rBase));
+    return std::auto_ptr< ControlFactory >(
+        new RootControlFactoryWithArg< TableDesignPanel, ToolPanelViewShell >( i_rToolPanelShell ) );
+}
+
+TaskPaneShellManager* TableDesignPanel::GetShellManager()
+{
+    if ( m_pPanelViewShell )
+        return &m_pPanelViewShell->GetSubShellManager();
+    return SubToolPanel::GetShellManager();
 }
 
 Size TableDesignPanel::GetPreferredSize()

@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,30 +22,28 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+************************************************************************/
 
-#include "app.hrc"
-#include "ToolPanelChildWindow.hrc"
+#ifndef SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
+#define SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
 
-DockingWindow FLT_WIN_TOOLPANEL
+#include "ResourceManager.hxx"
+
+#include <rtl/ref.hxx>
+
+namespace sd { namespace framework {
+
+class ReadOnlyModeObserver;
+
+/** This module is responsible for showing the task pane.
+*/
+class ToolPanelModule
 {
-    HelpID = SID_TOOLPANEL ;
-    Border = TRUE ;
-    Hide = FALSE ;
-    SVLook = TRUE ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
-    Size = MAP_APPFONT ( 140 , 120 ) ;
-    Text = "Tool Panel" ;
-
-    Control TOOLPANEL
-    {
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 69, 150 ) ;
-        Border = FALSE;
-    };
+public:
+    static void Initialize (
+        const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
 };
+
+} } // end of namespace sd::framework
+
+#endif
