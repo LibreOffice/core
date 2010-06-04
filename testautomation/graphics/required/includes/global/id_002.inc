@@ -101,22 +101,15 @@ testcase tiEditCutPasteCopySelectall
 
     call hTBOtypeInDoc
 
-    EditCut
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditCopy
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditSelectAll
-    sleep (1)
-    EditCut
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditDeleteContents
-    sleep (1)
+    hUseAsyncSlot( "EditCut" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditCopy" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditSelectAll" )
+    hUseAsyncSlot( "EditCut" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditDeleteContents" )
+
     printlog " close application"
     Call hCloseDocument
     
@@ -131,14 +124,18 @@ testcase tiEditPasteSpecial
     SetClipboard "This is a Text in the Clipboard"
 
     printlog " Edit->PasteSpecial"
-    EditPasteSpecial
-    WaitSlot (1000)
+    hUseAsyncSlot( "EditPasteSpecial" )
+
     Kontext "InhaltEinfuegen"
+    if ( InhalteEinfuege.exists( 2 ) ) then
         DialogTest ( InhaltEinfuegen )
 
         printlog " close the dialog without inserting something"
-        InhaltEinfuegen.Cancel
-    WaitSlot (1000)
+        hCloseDialog( InhaltEinfuegen, "Cancel" )
+    else
+        warnlog( "Dialog <InhalteEinfuegen> did not open" )
+    endif
+
     printlog " close application"
     Call hCloseDocument
     
