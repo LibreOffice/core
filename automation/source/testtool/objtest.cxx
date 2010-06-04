@@ -240,6 +240,8 @@ void ControlDef::Write( SvStream &aStream )
     if ( pSons )
         for ( USHORT i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
+    #else
+    (void)aStream;
     #endif
 }
 
@@ -4092,6 +4094,7 @@ String TestToolObj::GetMethodName( ULONG nMethodId )
                 return Controls::pClasses->GetObject(nElement)->pData->Kurzname;
         #else
         (void)nElement;
+        (void)nMethodId;
         #endif
     }
     return String();
@@ -4111,6 +4114,7 @@ String TestToolObj::GetKeyName( USHORT nKeyCode )
                 return CmdStream::pKeyCodes->GetObject(nElement)->pData->Kurzname;
         #else
         (void)nElement;
+        (void)nKeyCode;
         #endif
     }
     return CUniString( "UnknownKeyCode" );

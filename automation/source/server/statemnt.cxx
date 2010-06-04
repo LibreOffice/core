@@ -327,6 +327,7 @@ static short ImpGetRType( Window *pWin, rtl::OString aUId )
     }
     #else
     short nRT = 0;
+        (void)aUId;
     #endif
 
 #ifdef DBG_UTIL

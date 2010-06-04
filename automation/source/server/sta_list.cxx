@@ -454,6 +454,8 @@ BOOL SearchUID::IsWinOK( Window *pWin )
         return FALSE;
     }
     else
+    #else
+    (void)pWin;
     #endif
         return FALSE;
 }

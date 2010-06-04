@@ -105,6 +105,8 @@ void RetStream::Write( rtl::OString* pId )
     }
     else
         Write( static_cast<comm_ULONG>(pId->GetNum()) ); ////GetNum() ULONG != comm_ULONG on 64bit
+    #else
+    (void)pId;
     #endif
 }
 
