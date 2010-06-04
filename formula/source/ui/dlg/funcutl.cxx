@@ -758,8 +758,10 @@ EditBox::EditBox( Window* pParent, const ResId& rResId )
 
     //  #105582# the HelpId from the resource must be set for the MultiLineEdit,
     //  not for the control that contains it.
-    pMEdit->SetSmartHelpId( GetSmartHelpId() );
-    SetSmartHelpId( SmartId() );
+    // FIXME: HELPID
+    pMEdit->SetHelpId( GetHelpId() );
+    // FIXME: HELPID
+    SetHelpId( "" );
 }
 
 EditBox::~EditBox()

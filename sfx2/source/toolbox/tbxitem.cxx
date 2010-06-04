@@ -1520,7 +1520,8 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl( USHORT nSlotId, USHORT nId
     , bBigImages( FALSE )
     , pMenu( 0 )
 {
-    rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
+    // FIXME: HELPID
+    rBox.SetHelpId( nId, ""/*HID_TBXCONTROL_FILENEW*/ );
     rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
 
     // Determine the current background color of the menus

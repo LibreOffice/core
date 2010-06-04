@@ -1797,7 +1797,9 @@ void MenuBarManager::FillMenu(
 
                     sal_Int32 nHelpId = aHelpURL.toInt32();
                     if ( nHelpId > 0 )
-                        pMenu->SetHelpId( nId, (USHORT)nHelpId );
+                        // FIXME: HELPID
+                        // (should set aHelpURL ?
+                        pMenu->SetHelpId( nId, ""/*(USHORT)nHelpId*/ );
                     if ( nStyle )
                     {
                         MenuItemBits nBits = pMenu->GetItemBits( nId );

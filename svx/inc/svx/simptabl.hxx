@@ -172,7 +172,8 @@ public:
     void            SetHeaderBarDblClickHdl( const Link& rLink ) { aHeaderBarDblClickLink = rLink; }
     const Link&     GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
 
-    void            SetHeaderBarHelpId(ULONG nHelpId) {aHeaderBar.SetHelpId(nHelpId);}
+    // FIXME: HELPID
+    void            SetHeaderBarHelpId(ULONG nHelpId) {aHeaderBar.SetHelpId(""/*nHelpId*/);}
 };
 
 

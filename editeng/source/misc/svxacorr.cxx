@@ -1416,7 +1416,8 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         if( nHelpId )
         {
             nHelpId += HID_AUTOCORR_HELP_START - 1;
-            Application::GetHelp()->OpenHelpAgent( nHelpId );
+            // FIXME: HELPID
+            Application::GetHelp()->OpenHelpAgent( String()/*nHelpId*/ );
         }
     }
 

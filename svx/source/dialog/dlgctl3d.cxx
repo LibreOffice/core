@@ -1009,9 +1009,12 @@ SvxLightCtl3D::SvxLightCtl3D( Window* pParent, WinBits nStyle )
 void SvxLightCtl3D::Init()
 {
     // #i58240# set HelpIDs for scrollbars and switcher
-    maHorScroller.SetHelpId(HID_CTRL3D_HSCROLL);
-    maVerScroller.SetHelpId(HID_CTRL3D_VSCROLL);
-    maSwitcher.SetHelpId(HID_CTRL3D_SWITCHER);
+    // FIXME: HELPID
+    maHorScroller.SetHelpId(""/*HID_CTRL3D_HSCROLL*/);
+    // FIXME: HELPID
+    maVerScroller.SetHelpId(""/*HID_CTRL3D_VSCROLL*/);
+    // FIXME: HELPID
+    maSwitcher.SetHelpId(""/*HID_CTRL3D_SWITCHER*/);
 
     // Light preview
     maLightControl.Show();

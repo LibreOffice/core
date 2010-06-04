@@ -361,7 +361,8 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
-    SetHelpId( HID_WIN_FONTWORK_ALIGN );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_WIN_FONTWORK_ALIGN*/ );
     implInit();
 }
 
@@ -386,18 +387,21 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
-    SetHelpId( HID_WIN_FONTWORK_ALIGN );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_WIN_FONTWORK_ALIGN*/ );
     implInit();
 }
 
 void FontWorkAlignmentWindow::implInit()
 {
-    SetHelpId( HID_POPUP_FONTWORK_ALIGN );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_POPUP_FONTWORK_ALIGN*/ );
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_POPUP_FONTWORK_ALIGN );
+    // FIXME: HELPID
+    mpMenu->SetHelpId( ""/*HID_POPUP_FONTWORK_ALIGN*/ );
     mpMenu->SetSelectHdl( LINK( this, FontWorkAlignmentWindow, SelectHdl ) );
 
     mpMenu->appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
@@ -610,7 +614,8 @@ FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
-    SetHelpId( HID_WIN_FONTWORK_CHARSPACE );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_WIN_FONTWORK_CHARSPACE*/ );
     implInit();
 }
 
@@ -626,18 +631,21 @@ FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
-    SetHelpId( HID_WIN_FONTWORK_CHARSPACE );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_WIN_FONTWORK_CHARSPACE*/ );
     implInit();
 }
 
 void FontWorkCharacterSpacingWindow::implInit()
 {
-    SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_POPUP_FONTWORK_CHARSPACE*/ );
 
 //  bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
+    // FIXME: HELPID
+    mpMenu->SetHelpId( ""/*HID_POPUP_FONTWORK_CHARSPACE*/ );
     mpMenu->SetSelectHdl( LINK( this, FontWorkCharacterSpacingWindow, SelectHdl ) );
 
     mpMenu->appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_RADIOCHECK );

@@ -464,7 +464,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     pSVMenu->SetPopupMenu( nSlotId, pPopup );
                 }
 */
-                pSVMenu->SetHelpId( nSlotId, 0L );
+                // FIXME: HELPID
+                pSVMenu->SetHelpId( nSlotId, ""/*0L*/ );
                 pMnuCtrl = pItems+nPos;
 
                 // normalerweise jetzt erst im Activate-Handler

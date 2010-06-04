@@ -233,7 +233,8 @@ void SvxPosSizeStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
     // da Kombi-Controller, immer die aktuelle Id als HelpId setzen
     // gecachten HelpText vorher l"oschen
     GetStatusBar().SetHelpText( GetId(), String() );
-    GetStatusBar().SetHelpId( GetId(), nSID );
+    // FIXME: HELPID
+    GetStatusBar().SetHelpId( GetId(), ""/*nSID*/ );
 
     if ( nSID == SID_PSZ_FUNCTION )
     {

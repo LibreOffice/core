@@ -353,8 +353,9 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
 
     maImage.Show();
 
-    maField.SetHelpId( nSlotId );
-    maField.SetSmartHelpId( SmartId( rCmd ));
+    // FIXME: HELPID
+    // maField.SetHelpId( nSlotId );
+    maField.SetHelpId( rtl::OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
     maField.Show();
 }
 

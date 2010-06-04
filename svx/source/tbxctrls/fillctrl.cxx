@@ -504,8 +504,10 @@ Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
         pFillAttrLB = (SvxFillAttrBox*)pFillControl->pLbFillAttr;
         pFillTypeLB = (SvxFillTypeBox*)pFillControl->pLbFillType;
 
-        pFillAttrLB->SetUniqueId( HID_FILL_ATTR_LISTBOX );
-        pFillTypeLB->SetUniqueId( HID_FILL_TYPE_LISTBOX );
+        // FIXME: HELPID
+        pFillAttrLB->SetUniqueId( ""/*HID_FILL_ATTR_LISTBOX*/ );
+        // FIXME: HELPID
+        pFillTypeLB->SetUniqueId( ""/*HID_FILL_TYPE_LISTBOX */);
 
         return pFillControl;
     }

@@ -366,13 +366,20 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
     m_aLastBtn.SetSymbol(SYMBOL_LAST);
     m_aNewBtn.SetModeImage(((DbGridControl*)pParent)->GetImage(DbGridControl_Base::NEW));
 
-    m_aFirstBtn.SetHelpId(HID_GRID_TRAVEL_FIRST);
-    m_aPrevBtn.SetHelpId(HID_GRID_TRAVEL_PREV);
-    m_aNextBtn.SetHelpId(HID_GRID_TRAVEL_NEXT);
-    m_aLastBtn.SetHelpId(HID_GRID_TRAVEL_LAST);
-    m_aNewBtn.SetHelpId(HID_GRID_TRAVEL_NEW);
-    m_aAbsolute.SetHelpId(HID_GRID_TRAVEL_ABSOLUTE);
-    m_aRecordCount.SetHelpId(HID_GRID_NUMBEROFRECORDS);
+    // FIXME: HELPID
+    m_aFirstBtn.SetHelpId(""/*HID_GRID_TRAVEL_FIRST*/);
+    // FIXME: HELPID
+    m_aPrevBtn.SetHelpId(""/*HID_GRID_TRAVEL_PREV*/);
+    // FIXME: HELPID
+    m_aNextBtn.SetHelpId(""/*HID_GRID_TRAVEL_NEXT*/);
+    // FIXME: HELPID
+    m_aLastBtn.SetHelpId(""/*HID_GRID_TRAVEL_LAST*/);
+    // FIXME: HELPID
+    m_aNewBtn.SetHelpId(""/*HID_GRID_TRAVEL_NEW*/);
+    // FIXME: HELPID
+    m_aAbsolute.SetHelpId(""/*HID_GRID_TRAVEL_ABSOLUTE*/);
+    // FIXME: HELPID
+    m_aRecordCount.SetHelpId(""/*HID_GRID_NUMBEROFRECORDS*/);
 
     // Handler fuer Buttons einrichten
     m_aFirstBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));

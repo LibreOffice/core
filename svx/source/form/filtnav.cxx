@@ -1168,7 +1168,8 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   ,m_aTimerCounter( 0 )
                   ,m_aDropActionType( DA_SCROLLUP )
 {
-    SetHelpId( HID_FILTER_NAVIGATOR );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_FILTER_NAVIGATOR*/ );
 
     {
         {
@@ -1941,7 +1942,8 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
                      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
                      ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
 {
-    SetHelpId( HID_FILTER_NAVIGATOR_WIN );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_FILTER_NAVIGATOR_WIN*/ );
 
     m_pNavigator = new FmFilterNavigator( this );
     m_pNavigator->Show();

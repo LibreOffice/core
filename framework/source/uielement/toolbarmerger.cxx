@@ -701,7 +701,9 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, sal_uInt16 nPos, sal_u
     pToolbar->SetItemState( nItemId, STATE_NOCHECK );
 
     // Use obsolete help id to transport the width of the item
-    pToolbar->SetHelpId( nItemId, rItem.nWidth );
+    // FIXME: HELPID
+    // this looks broken
+    pToolbar->SetHelpId( nItemId, ""/*rItem.nWidth*/ );
 
     // Use the user data to store add-on specific data with the toolbar item
     AddonsParams* pAddonParams = new AddonsParams;

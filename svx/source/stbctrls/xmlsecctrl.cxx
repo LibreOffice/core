@@ -111,7 +111,8 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
 {
     GetStatusBar().SetHelpText( GetId(), String() );// necessary ?
 
-    GetStatusBar().SetHelpId( GetId(), nSID );      // necessary ?
+    // FIXME: HELPID
+    GetStatusBar().SetHelpId( GetId(), ""/*nSID*/ );      // necessary ?
 
     if( SFX_ITEM_AVAILABLE != eState )
     {

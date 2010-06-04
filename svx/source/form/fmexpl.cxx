@@ -592,7 +592,8 @@ namespace svxform
       ,SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *_pBindings )
     {
         DBG_CTOR(NavigatorFrame,NULL);
-        SetHelpId( HID_FORM_NAVIGATOR_WIN );
+        // FIXME: HELPID
+        SetHelpId( ""/*HID_FORM_NAVIGATOR_WIN*/ );
 
         m_pNavigatorTree = new NavigatorTree(comphelper::getProcessServiceFactory(), this );
         m_pNavigatorTree->Show();

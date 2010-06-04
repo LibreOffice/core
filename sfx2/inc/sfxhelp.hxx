@@ -45,12 +45,14 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
     SfxHelp_Impl*   pImp;
 
 private:
-    SAL_DLLPRIVATE virtual BOOL Start( ULONG nHelpId, const Window* pWindow );
+    // FIXME: HELPID
+    // SAL_DLLPRIVATE virtual BOOL Start( const String& rURL, const Window* pWindow );
     SAL_DLLPRIVATE virtual BOOL Start( const String& rURL, const Window* pWindow );
     SAL_DLLPRIVATE virtual void OpenHelpAgent( ULONG nHelpId );
 
     SAL_DLLPRIVATE String GetHelpModuleName_Impl();
-    SAL_DLLPRIVATE String CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName );
+    // FIXME: HELPID
+    // SAL_DLLPRIVATE String CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName );
     SAL_DLLPRIVATE String CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName );
 
 public:
@@ -60,10 +62,12 @@ public:
     inline void             SetTicket( const String& rTicket )  { aTicket = rTicket; }
     inline void             SetUser( const String& rUser )      { aUser = rUser; }
 
-    virtual XubString       GetHelpText( ULONG nHelpId, const Window* pWindow );
+    // FIXME: HELPID
+    //virtual XubString       GetHelpText( ULONG nHelpId, const Window* pWindow );
     virtual XubString       GetHelpText( const String&, const Window* pWindow );
 
-    static String           CreateHelpURL( ULONG nHelpId, const String& rModuleName );
+    // FIXME: HELPID
+    // static String           CreateHelpURL( ULONG nHelpId, const String& rModuleName );
     static String           CreateHelpURL( const String& aCommandURL, const String& rModuleName );
     static void             OpenHelpAgent( SfxFrame* pFrame, ULONG nHelpId );
     static String           GetDefaultHelpModule();

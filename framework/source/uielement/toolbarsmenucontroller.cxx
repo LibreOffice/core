@@ -216,7 +216,8 @@ void ToolbarsMenuController::addCommand(
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
         if ( !!aImage )
             pVCLPopupMenu->SetItemImage( nItemId, aImage );
-        pVCLPopupMenu->SetHelpId( nItemId, nHelpId );
+        // FIXME: HELPID
+        pVCLPopupMenu->SetHelpId( nItemId, ""/*nHelpId*/ );
     }
 
     m_aCommandVector.push_back( rCommandURL );

@@ -276,7 +276,8 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = String( pHelp->GetHelpText( nHelpId, NULL ) );
+        // FIXME: HELPID
+        aHelpText = String( pHelp->GetHelpText( String()/*nHelpId*/, NULL ) );
     return aHelpText;
 }
 

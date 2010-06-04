@@ -186,7 +186,8 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_pScrollBar( NULL ),
     m_pManager( pManager )
 {
-    SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_EXTENSION_MANAGER_LISTBOX*/ );
 
     m_pScrollBar = new ScrollBar( this, WB_VERT );
     m_pScrollBar->SetScrollHdl( LINK( this, ExtensionBox_Impl, ScrollHdl ) );

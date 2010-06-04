@@ -143,7 +143,7 @@ namespace formula
         void            PreNotify( NotifyEvent& rNEvt );
 
         RefEdit*        GetCurrRefEdit();
-        ULONG           FindFocusWin(Window *pWin);
+        rtl::OString    FindFocusWin(Window *pWin);
 
         const FormulaHelper& GetFormulaHelper() const;
         uno::Reference< sheet::XFormulaOpCodeMapper > GetFormulaOpCodeMapper() const;
@@ -226,11 +226,15 @@ namespace formula
         FormulaHelper
                         m_aFormulaHelper;
 
-        SmartId         m_aSmartEditHelpId;
+        // FIXME: HELPID
+        rtl::OString    m_aEditHelpId;
 
-        ULONG           nOldHelp;
-        ULONG           nOldUnique;
-        ULONG           nActivWinId;
+        // FIXME: HELPID
+        rtl::OString    aOldHelp;
+        // FIXME: HELPID
+        rtl::OString    aOldUnique;
+        // FIXME: HELPID
+        rtl::OString    aActivWinId;
         BOOL            bIsShutDown;
 
 
@@ -300,7 +304,6 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aTxtOk          ( aBtnEnd.GetText() ),
     m_aFormulaHelper(_pFunctionMgr),
     //
-    nActivWinId     (0),
     bIsShutDown     (FALSE),
     nEdFocus        (0),
     pFuncDesc       (NULL),
@@ -314,8 +317,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aRefBtn.Hide();
 
     pMEdit = aMEFormula.GetEdit();
-    m_aSmartEditHelpId = pMEdit->GetSmartHelpId();
-    pMEdit->SetSmartUniqueId(m_aSmartEditHelpId);
+    m_aEditHelpId = pMEdit->GetHelpId();
+    pMEdit->SetUniqueId( m_aEditHelpId );
 
     bEditFlag=FALSE;
     bStructUpdate=TRUE;
@@ -331,8 +334,10 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aTabCtrl.SetTabPage( TP_FUNCTION, pFuncPage);
     aTabCtrl.SetTabPage( TP_STRUCT, pStructPage);
 
-    nOldHelp = pParent->GetHelpId();                // HelpId aus Resource immer fuer "Seite 1"
-    nOldUnique = pParent->GetUniqueId();
+    // FIXME: HELPID
+    aOldHelp = pParent->GetHelpId();                // HelpId aus Resource immer fuer "Seite 1"
+    // FIXME: HELPID
+    aOldUnique = pParent->GetUniqueId();
 
     aFtResult.Show( _bSupportResult );
     aWndResult.Show( _bSupportResult );
@@ -408,27 +413,30 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
         Window* pWin=rNEvt.GetWindow();
         if(pWin!=NULL)
         {
-            nActivWinId = pWin->GetUniqueId();
-            if(nActivWinId==0)
+            aActivWinId = pWin->GetUniqueId();
+            // FIXME: HELPID
+            if(aActivWinId.getLength()==0)
             {
                 Window* pParent=pWin->GetParent();
                 while(pParent!=NULL)
                 {
-                    nActivWinId=pParent->GetUniqueId();
+                    aActivWinId=pParent->GetUniqueId();
 
-                    if(nActivWinId!=0) break;
+                    // FIXME: HELPID
+                    if(aActivWinId.getLength()!=0) break;
 
                     pParent=pParent->GetParent();
                 }
             }
-            if(nActivWinId!=0)
+            // FIXME: HELPID
+            if(aActivWinId!=0)
             {
 
                 FormEditData* pData = m_pHelper->getFormEditData();
 
                 if (pData && !aTimer.IsActive()) // wird nicht ueber Close zerstoert;
                 {
-                    pData->SetUniqueId(nActivWinId);
+                    pData->SetUniqueId(aActivWinId);
                 }
             }
         }
@@ -825,8 +833,10 @@ void FormulaDlg_Impl::FillListboxes()
     aNewTitle = aTitle1;
 
     //  HelpId fuer 1. Seite ist die aus der Resource
-    m_pParent->SetHelpId( nOldHelp );
-    m_pParent->SetUniqueId( nOldUnique );
+    // FIXME: HELPID
+    m_pParent->SetHelpId( aOldHelp );
+    // FIXME: HELPID
+    m_pParent->SetUniqueId( aOldUnique );
 }
 // -----------------------------------------------------------------------------
 void FormulaDlg_Impl::FillControls(BOOL &rbNext, BOOL &rbPrev)
@@ -862,9 +872,12 @@ void FormulaDlg_Impl::FillControls(BOOL &rbNext, BOOL &rbPrev)
             aFtEditName.SetText( pFuncDesc->getFunctionName() );
             aFtEditName.Show();
             pParaWin->Show();
+            // FIXME: HELPID
+            #if 0
             const long nHelpId = pFuncDesc->getHelpId();
             if ( nHelpId )
                 pMEdit->SetSmartHelpId(SmartId(nHelpId));
+            #endif
         }
 
         xub_StrLen nOldStart, nOldEnd;
@@ -920,7 +933,8 @@ void FormulaDlg_Impl::FillControls(BOOL &rbNext, BOOL &rbPrev)
     else
     {
         aFtEditName.SetText(String());
-        pMEdit->SetSmartHelpId(m_aSmartEditHelpId);
+        // FIXME: HELPID
+        pMEdit->SetHelpId( m_aEditHelpId );
     }
         //  Test, ob vorne/hinten noch mehr Funktionen sind
 
@@ -1790,20 +1804,21 @@ BOOL FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
     }
     return pTheRefEdit == NULL;
 }
-ULONG FormulaDlg_Impl::FindFocusWin(Window *pWin)
+rtl::OString FormulaDlg_Impl::FindFocusWin(Window *pWin)
 {
-    ULONG nUniqueId=0;
+    rtl::OString aUniqueId;
     if(pWin->HasFocus())
     {
-        nUniqueId=pWin->GetUniqueId();
-        if(nUniqueId==0)
+        // FIXME: HELPID
+        aUniqueId=pWin->GetUniqueId();
+        if(aUniqueId.getLength()==0)
         {
             Window* pParent=pWin->GetParent();
             while(pParent!=NULL)
             {
-                nUniqueId=pParent->GetUniqueId();
+                aUniqueId=pParent->GetUniqueId();
 
-                if(nUniqueId!=0) break;
+                if(aUniqueId.getLength()!=0) break;
 
                 pParent=pParent->GetParent();
             }
@@ -1816,11 +1831,11 @@ ULONG FormulaDlg_Impl::FindFocusWin(Window *pWin)
         for(USHORT i=0;i<nCount;i++)
         {
             Window* pChild=pWin->GetChild(i);
-            nUniqueId=FindFocusWin(pChild);
-            if(nUniqueId>0) break;
+            aUniqueId=FindFocusWin(pChild);
+            if(aUniqueId.getLength()>0) break;
         }
     }
-    return nUniqueId;
+    return aUniqueId;
 }
 
 void FormulaDlg_Impl::SetEdSelection()
@@ -1925,13 +1940,15 @@ void FormulaModalDialog::RefInputDoneAfter( BOOL bForced )
     m_pImpl->RefInputDoneAfter( bForced );
 }
 
-ULONG FormulaModalDialog::FindFocusWin(Window *pWin)
+rtl::OString FormulaModalDialog::FindFocusWin(Window *pWin)
 {
+    // FIXME: HELPID
     return m_pImpl->FindFocusWin( pWin );
 }
 
-void FormulaModalDialog::SetFocusWin(Window *pWin,ULONG nUniqueId)
+void FormulaModalDialog::SetFocusWin(Window *pWin,const rtl::OString& nUniqueId)
 {
+    // FIXME: HELPID
     if(pWin->GetUniqueId()==nUniqueId)
     {
         pWin->GrabFocus();
@@ -2007,10 +2024,13 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                             ,_pHelper,_pFunctionMgr,_pDlg))
 {
     FreeResource();
+    // FIXME: HELPID
+    #if 0
     if(GetHelpId()==0)              //Hack, da im SfxModelessDialog die HelpId
         SetHelpId(GetUniqueId());   //fuer einen ModelessDialog entfernt und
                                     //in eine UniqueId gewandelt wird, machen
                                     //wir das an dieser Stelle rueckgaengig.
+    #endif
     SetText(m_pImpl->aTitle1);
 }
 
@@ -2080,13 +2100,15 @@ void FormulaDlg::RefInputDoneAfter( BOOL bForced )
     m_pImpl->RefInputDoneAfter( bForced );
 }
 
-ULONG FormulaDlg::FindFocusWin(Window *pWin)
+rtl::OString FormulaDlg::FindFocusWin(Window *pWin)
 {
+    // FIXME: HELPID
     return m_pImpl->FindFocusWin( pWin );
 }
 
-void FormulaDlg::SetFocusWin(Window *pWin,ULONG nUniqueId)
+void FormulaDlg::SetFocusWin(Window *pWin,const rtl::OString& nUniqueId)
 {
+    // FIXME: HELPID
     if(pWin->GetUniqueId()==nUniqueId)
     {
         pWin->GrabFocus();
@@ -2156,7 +2178,8 @@ IMPL_LINK( FormulaDlg, UpdateFocusHdl, Timer*, EMPTYARG )
     if (pData) // wird nicht ueber Close zerstoert;
     {
         m_pImpl->m_pHelper->setReferenceInput(pData);
-        ULONG nUniqueId=pData->GetUniqueId();
+        // FIXME: HELPID
+        rtl::OString nUniqueId(pData->GetUniqueId());
         SetFocusWin(this,nUniqueId);
     }
     return 0;
@@ -2182,7 +2205,7 @@ void FormEditData::Reset()
     nOffset = 0;
     nEdFocus = 0;
     bMatrix =FALSE;
-    nUniqueId=0;
+    aUniqueId=rtl::OString();
     aSelection.Min()=0;
     aSelection.Max()=0;
     aUndoStr.Erase();
@@ -2211,7 +2234,7 @@ const FormEditData& FormEditData::operator=( const FormEditData& r )
     nEdFocus        = r.nEdFocus;
     aUndoStr        = r.aUndoStr;
     bMatrix         = r.bMatrix ;
-    nUniqueId       = r.nUniqueId;
+    aUniqueId       = r.aUniqueId;
     aSelection      = r.aSelection;
     return *this;
 }

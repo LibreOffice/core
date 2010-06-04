@@ -294,22 +294,28 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         {
             SetEditDesc(aDefaultString);
         }
-        long nHelpId = pFuncDesc->getHelpId();
         nArgs = pFuncDesc->getSuppressedArgumentCount();
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
         aSlider.Hide();
+        // FIXME: HELPID
+        #if 0
+        long nHelpId = pFuncDesc->getHelpId();
         SetHelpId( nHelpId );
         aEdArg1.SetHelpId( nHelpId );
         aEdArg2.SetHelpId( nHelpId );
         aEdArg3.SetHelpId( nHelpId );
         aEdArg4.SetHelpId( nHelpId );
+        #endif
 
         //  Unique-IDs muessen gleich bleiben fuer Automatisierung
-        SetUniqueId( HID_FORMULA_FAP_PAGE );
+        // FIXME: HELPID
+        #if 0
+        SetUniqueId( ""/*HID_FORMULA_FAP_PAGE*/ );
         aEdArg1.SetUniqueId( HID_FORMULA_FAP_EDIT1 );
         aEdArg2.SetUniqueId( HID_FORMULA_FAP_EDIT2 );
         aEdArg3.SetUniqueId( HID_FORMULA_FAP_EDIT3 );
         aEdArg4.SetUniqueId( HID_FORMULA_FAP_EDIT4 );
+        #endif
         SetActiveLine(0);
     }
     else

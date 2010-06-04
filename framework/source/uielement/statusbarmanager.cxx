@@ -537,7 +537,8 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                         rtl::OUString aId( aHelpURL.copy( HELPID_PREFIX_LENGTH ));
                         sal_uInt16    nHelpId = (sal_uInt16)(aId.toInt32());
                         if ( nHelpId > 0 )
-                            m_pStatusBar->SetHelpId( nId, nHelpId );
+                            // FIXME: HELPID
+                            m_pStatusBar->SetHelpId( nId, ""/*nHelpId*/ );
                     }
 
                     ++nId;

@@ -200,7 +200,8 @@ namespace svxform
         ,m_bKeyboardCut( sal_False )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::NavigatorTree" );
-        SetHelpId( HID_FORM_NAVIGATOR );
+        // FIXME: HELPID
+        SetHelpId( ""/*HID_FORM_NAVIGATOR*/ );
 
         m_aNavigatorImages = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
         m_aNavigatorImagesHC = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );

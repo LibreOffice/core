@@ -98,7 +98,8 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
     //pPopupMenu->SetHelpId( 2, HID_SVX_BASIC_MACRO_ORGANIZER );
-    pPopupMenu->SetHelpId( 2, 40012 );
+    // FIXME: HELPID
+    pPopupMenu->SetHelpId( 2, ""/*40012*/ );
 
     // insert providers but not basic or java
     addScriptItems( pPopupMenu, 4);
@@ -219,7 +220,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
                     //pPopupMenu->SetHelpId( itemId, HID_SVX_COMMON_MACRO_ORGANIZER );
-                    pPopupMenu->SetHelpId( itemId, 40014 );
+                    // FIXME: HELPID
+                    pPopupMenu->SetHelpId( itemId, ""/*40014*/ );
                     itemId++;
                     break;
                 }

@@ -191,10 +191,14 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     SetPageSizePixel(LogicToPixel(aTPSize, MAP_APPFONT));
 
     //set help id
-    m_pPrevPage->SetHelpId(HID_FIRSTSTART_PREV);
-    m_pNextPage->SetHelpId(HID_FIRSTSTART_NEXT);
-    m_pCancel->SetHelpId(HID_FIRSTSTART_CANCEL);
-    m_pFinish->SetHelpId(HID_FIRSTSTART_FINISH);
+    // FIXME: HELPID
+    m_pPrevPage->SetHelpId(""/*HID_FIRSTSTART_PREV*/);
+    // FIXME: HELPID
+    m_pNextPage->SetHelpId(""/*HID_FIRSTSTART_NEXT*/);
+    // FIXME: HELPID
+    m_pCancel->SetHelpId(""/*HID_FIRSTSTART_CANCEL*/);
+    // FIXME: HELPID
+    m_pFinish->SetHelpId(""/*HID_FIRSTSTART_FINISH*/);
     // m_pHelp->SetUniqueId(UID_FIRSTSTART_HELP);
     m_pHelp->Hide();
     m_pHelp->Disable();

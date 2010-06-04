@@ -778,8 +778,10 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     bHierarchical           ( FALSE ),
     bBindingUpdate          ( TRUE )
 {
-    aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
-    aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
+    // FIXME: HELPID
+    aFmtLb.SetHelpId( ""/*HID_TEMPLATE_FMT*/ );
+    // FIXME: HELPID
+    aFilterLb.SetHelpId( ""/*HID_TEMPLATE_FILTER*/ );
     aFmtLb.SetWindowBits( WB_SORT | WB_HIDESELECTION );
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
@@ -2359,7 +2361,8 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     Font aFont=aFilterLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
-    m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
+    // FIXME: HELPID
+    m_aActionTbL.SetHelpId( ""/*HID_TEMPLDLG_TOOLBOX_LEFT*/ );
 }
 
 // ------------------------------------------------------------------------
@@ -2384,7 +2387,8 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyIte
         default: DBG_ERROR("unbekannte StyleFamily"); break;
     }
     m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
-    m_aActionTbL.SetHelpId( nId, nHelpId );
+    // FIXME: HELPID
+    m_aActionTbL.SetHelpId( nId, ""/*nHelpId*/ );
 }
 
 // ------------------------------------------------------------------------
@@ -2683,18 +2687,21 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
             uno::Any aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleNewByExample"));
             ::rtl::OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
-            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
+            // FIXME: HELPID
+            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, ""/*HID_TEMPLDLG_NEWBYEXAMPLE*/);
 
             aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleUpdateByExample"));
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
-            pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
+            // FIXME: HELPID
+            pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, ""/*HID_TEMPLDLG_UPDATEBYEXAMPLE*/);
 
             aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:LoadStyles"));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
-            pMenu->SetHelpId(SID_TEMPLATE_LOAD, SID_TEMPLATE_LOAD);
+            // FIXME: HELPID
+            pMenu->SetHelpId(SID_TEMPLATE_LOAD, ""/*SID_TEMPLATE_LOAD*/);
 
             pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
             pMenu->Execute( pBox,

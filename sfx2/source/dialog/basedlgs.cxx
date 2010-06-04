@@ -373,9 +373,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    // FIXME: HELPID
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -393,9 +393,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    // FIXME: HELPID
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -421,7 +421,8 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            // FIXME: HELPID
+            nHelpId = 0; // pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
@@ -523,7 +524,8 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            // FIXME: HELPID
+            nHelpId = 0; //pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
@@ -561,9 +563,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    // FIXME: HELPID
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -582,9 +584,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    // FIXME: HELPID
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);

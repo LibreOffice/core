@@ -318,7 +318,8 @@ void SvxFmTbxCtlAbsRec::StateChanged( USHORT nSID, SfxItemState eState, const Sf
 Window* SvxFmTbxCtlAbsRec::CreateItemWindow( Window* pParent )
 {
     SvxFmAbsRecWin* pWin = new SvxFmAbsRecWin( pParent, this );
-    pWin->SetUniqueId( UID_ABSOLUTE_RECORD_WINDOW );
+    // FIXME: HELPID
+    pWin->SetUniqueId( ""/*UID_ABSOLUTE_RECORD_WINDOW*/ );
     return pWin;
 }
 

@@ -636,7 +636,8 @@ SvxTPView::SvxTPView( Window * pParent)
 {
     FreeResource();
 
-    aViewData.SetHelpId(HID_REDLINING_VIEW_DG_VIEW_TABLE);
+    // FIXME: HELPID
+    aViewData.SetHelpId(""/*HID_REDLINING_VIEW_DG_VIEW_TABLE*/);
     aViewData.SetHeaderBarHelpId(HID_REDLINING_VIEW_DG_VIEW_HEADER);
 
     aMinSize=GetSizePixel();
@@ -1177,13 +1178,15 @@ void SvxTPFilter::ShowAction(BOOL bShow)
     {
         aCbRange.Hide();
         aLbAction.Hide();
-        aCbRange.SetHelpId(HID_REDLINING_FILTER_CB_RANGE);
+        // FIXME: HELPID
+        aCbRange.SetHelpId(""/*HID_REDLINING_FILTER_CB_RANGE*/);
     }
     else
     {
         HideRange();
         aCbRange.SetText(aActionStr);
-        aCbRange.SetHelpId(HID_REDLINING_FILTER_CB_ACTION);
+        // FIXME: HELPID
+        aCbRange.SetHelpId(""/*HID_REDLINING_FILTER_CB_ACTION*/);
         aCbRange.Show();
         aLbAction.Show();
 
@@ -1399,7 +1402,8 @@ SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle)
     aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
     aTCAccept.SetTabPage( TP_VIEW,   pTPView);
     aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
-    aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
+    // FIXME: HELPID
+    aTCAccept.SetHelpId(""/*HID_REDLINING_TABCONTROL*/);
 
     aTCAccept.SetTabPageSizePixel(aMinSize);
     Size aSize=aTCAccept.GetSizePixel();
@@ -1426,7 +1430,8 @@ SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, const ResId& rResId )
     aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
     aTCAccept.SetTabPage( TP_VIEW,   pTPView);
     aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
-    aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
+    // FIXME: HELPID
+    aTCAccept.SetHelpId(""/*HID_REDLINING_TABCONTROL*/);
 
     aTCAccept.SetTabPageSizePixel(aMinSize);
     Size aSize=aTCAccept.GetSizePixel();

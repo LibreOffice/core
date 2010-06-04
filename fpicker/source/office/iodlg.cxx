@@ -600,7 +600,8 @@ void SvtFileDialog::Init_Impl
     bool bSaveMode = ( FILEDLG_MODE_SAVE == _pImp->_eMode );
     pURLBox->SetNoURLSelection( bSaveMode );
 
-    _pImp->_pEdFileName->SetHelpId( HID_FILEDLG_AUTOCOMPLETEBOX );
+    // FIXME: HELPID
+    _pImp->_pEdFileName->SetHelpId( ""/*HID_FILEDLG_AUTOCOMPLETEBOX*/ );
 
     _pImp->_pFtFileType = new FixedText( this, SvtResId( FT_EXPLORERFILE_FILETYPE ) );
     _pImp->CreateFilterListControl( this, SvtResId( LB_EXPLORERFILE_FILETYPE ) );
@@ -649,7 +650,8 @@ void SvtFileDialog::Init_Impl
     _pFileView->SetUrlFilter( &m_aURLFilter );
     _pFileView->EnableAutoResize();
 
-    _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
+    // FIXME: HELPID
+    _pFileView->SetHelpId( ""/*HID_FILEDLG_STANDARD*/ );
     _pFileView->SetStyle( _pFileView->GetStyle() | WB_TABSTOP );
 
     // Positionen und Groessen der Knoepfe bestimmen.
@@ -701,7 +703,8 @@ void SvtFileDialog::Init_Impl
     if ( nStyle & SFXWB_READONLY )
     {
         _pCbReadOnly = new CheckBox( this, SvtResId( CB_EXPLORERFILE_READONLY ) );
-        _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
+        // FIXME: HELPID
+        _pCbReadOnly->SetHelpId( ""/*HID_FILEOPEN_READONLY*/ );
         _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
         AddControl( _pCbReadOnly );
         ReleaseOwnerShip( _pCbReadOnly );
@@ -810,15 +813,23 @@ void SvtFileDialog::Init_Impl
     {
         // different help ids if in save-as mode
         // 90744 - 09.08.2001 - frank.schoenheit@sun.com
-        SetHelpId( HID_FILESAVE_DIALOG );
+        // FIXME: HELPID
+        SetHelpId( ""/*HID_FILESAVE_DIALOG*/ );
 
-        _pImp->_pEdFileName->SetHelpId( HID_FILESAVE_FILEURL );
-        _pImp->_pBtnFileOpen->SetHelpId( HID_FILESAVE_DOSAVE );
-        _pImp->_pBtnNewFolder->SetHelpId( HID_FILESAVE_CREATEDIRECTORY );
-        _pImp->_pBtnStandard->SetHelpId( HID_FILESAVE_DEFAULTDIRECTORY );
-        _pImp->_pBtnUp->SetHelpId( HID_FILESAVE_LEVELUP );
-        _pImp->GetFilterListControl()->SetHelpId( HID_FILESAVE_FILETYPE );
-        _pFileView->SetHelpId( HID_FILESAVE_FILEVIEW );
+        // FIXME: HELPID
+        _pImp->_pEdFileName->SetHelpId( ""/*HID_FILESAVE_FILEURL*/ );
+        // FIXME: HELPID
+        _pImp->_pBtnFileOpen->SetHelpId( ""/*HID_FILESAVE_DOSAVE*/ );
+        // FIXME: HELPID
+        _pImp->_pBtnNewFolder->SetHelpId( ""/*HID_FILESAVE_CREATEDIRECTORY*/ );
+        // FIXME: HELPID
+        _pImp->_pBtnStandard->SetHelpId( ""/*HID_FILESAVE_DEFAULTDIRECTORY*/ );
+        // FIXME: HELPID
+        _pImp->_pBtnUp->SetHelpId( ""/*HID_FILESAVE_LEVELUP*/ );
+        // FIXME: HELPID
+        _pImp->GetFilterListControl()->SetHelpId( ""/*HID_FILESAVE_FILETYPE*/ );
+        // FIXME: HELPID
+        _pFileView->SetHelpId( ""/*HID_FILESAVE_FILEVIEW*/ );
 
         // formerly, there was only _pLbFileVersion, which was used for 3 different
         // use cases. For reasons of maintainability, I introduced extra members (_pLbTemplates, _pLbImageTemplates)
@@ -827,16 +838,23 @@ void SvtFileDialog::Init_Impl
         // tests I made lead to a dialog where _no_ of the three list boxes was present.
         // 96930 - 15.08.2002 - fs@openoffice.org
         if ( _pImp->_pLbFileVersion )
-            _pImp->_pLbFileVersion->SetHelpId( HID_FILESAVE_TEMPLATE );
+            // FIXME: HELPID
+            _pImp->_pLbFileVersion->SetHelpId( ""/*HID_FILESAVE_TEMPLATE*/ );
         if ( _pImp->_pLbTemplates )
-            _pImp->_pLbTemplates->SetHelpId( HID_FILESAVE_TEMPLATE );
+            // FIXME: HELPID
+            _pImp->_pLbTemplates->SetHelpId( ""/*HID_FILESAVE_TEMPLATE*/ );
         if ( _pImp->_pLbImageTemplates )
-            _pImp->_pLbImageTemplates->SetHelpId( HID_FILESAVE_TEMPLATE );
+            // FIXME: HELPID
+            _pImp->_pLbImageTemplates->SetHelpId( ""/*HID_FILESAVE_TEMPLATE*/ );
 
-        if ( _pImp->_pCbPassword ) _pImp->_pCbPassword->SetHelpId( HID_FILESAVE_SAVEWITHPASSWORD );
-        if ( _pImp->_pCbAutoExtension ) _pImp->_pCbAutoExtension->SetHelpId( HID_FILESAVE_AUTOEXTENSION );
-        if ( _pImp->_pCbOptions ) _pImp->_pCbOptions->SetHelpId( HID_FILESAVE_CUSTOMIZEFILTER );
-        if ( _pCbSelection ) _pCbSelection->SetHelpId( HID_FILESAVE_SELECTION );
+        // FIXME: HELPID
+        if ( _pImp->_pCbPassword ) _pImp->_pCbPassword->SetHelpId( ""/*HID_FILESAVE_SAVEWITHPASSWORD*/ );
+        // FIXME: HELPID
+        if ( _pImp->_pCbAutoExtension ) _pImp->_pCbAutoExtension->SetHelpId( ""/*HID_FILESAVE_AUTOEXTENSION*/ );
+        // FIXME: HELPID
+        if ( _pImp->_pCbOptions ) _pImp->_pCbOptions->SetHelpId( ""/*HID_FILESAVE_CUSTOMIZEFILTER*/ );
+        // FIXME: HELPID
+        if ( _pCbSelection ) _pCbSelection->SetHelpId( ""/*HID_FILESAVE_SELECTION*/ );
     }
 
     // correct the z-order of the controls
@@ -2981,7 +2999,8 @@ void SvtFileDialog::AddControls_Impl( )
     {
         _pCbLinkBox = new CheckBox( this );
         _pCbLinkBox ->SetText( SvtResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
-        _pCbLinkBox ->SetHelpId( HID_FILEDLG_LINK_CB );
+        // FIXME: HELPID
+        _pCbLinkBox ->SetHelpId( ""/*HID_FILEDLG_LINK_CB*/ );
         AddControl( _pCbLinkBox  );
         ReleaseOwnerShip( _pCbLinkBox );
         _pCbLinkBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
@@ -2998,7 +3017,8 @@ void SvtFileDialog::AddControls_Impl( )
         // "Vorschau"
         _pCbPreviewBox = new CheckBox( this );
         _pCbPreviewBox->SetText( SvtResId( STR_SVT_FILEPICKER_SHOW_PREVIEW ) );
-        _pCbPreviewBox->SetHelpId( HID_FILEDLG_PREVIEW_CB );
+        // FIXME: HELPID
+        _pCbPreviewBox->SetHelpId( ""/*HID_FILEDLG_PREVIEW_CB*/ );
         AddControl( _pCbPreviewBox );
         ReleaseOwnerShip( _pCbPreviewBox );
         _pCbPreviewBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
@@ -3046,7 +3066,8 @@ void SvtFileDialog::AddControls_Impl( )
     {
         _pPbPlay = new PushButton( this );
         _pPbPlay->SetText( SvtResId( STR_SVT_FILEPICKER_PLAY ) );
-        _pPbPlay->SetHelpId( HID_FILESAVE_DOPLAY );
+        // FIXME: HELPID
+        _pPbPlay->SetHelpId( ""/*HID_FILESAVE_DOPLAY*/ );
         AddControl( _pPbPlay );
         ReleaseOwnerShip( _pPbPlay );
         _pPbPlay->SetClickHdl( LINK( this, SvtFileDialog, PlayButtonHdl_Impl ) );
@@ -3058,7 +3079,8 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pFtFileVersion->SetText( SvtResId( STR_SVT_FILEPICKER_VERSION ) );
 
         _pImp->_pLbFileVersion = new ListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
-        _pImp->_pLbFileVersion->SetHelpId( HID_FILEOPEN_VERSION );
+        // FIXME: HELPID
+        _pImp->_pLbFileVersion->SetHelpId( ""/*HID_FILEOPEN_VERSION*/ );
     }
     else if ( _nExtraBits & SFX_EXTRA_TEMPLATES )
     {
@@ -3066,7 +3088,8 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pFtTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_TEMPLATES ) );
 
         _pImp->_pLbTemplates = new ListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
-        _pImp->_pLbTemplates->SetHelpId( HID_FILEOPEN_VERSION );
+        // FIXME: HELPID
+        _pImp->_pLbTemplates->SetHelpId( ""/*HID_FILEOPEN_VERSION*/ );
             // This is strange. During the re-factoring during 96930, I discovered that this help id
             // is set in the "Templates mode". This was hidden in the previous implementation.
             // Shouldn't this be a more meaningfull help id.
@@ -3078,7 +3101,8 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pFtImageTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
 
         _pImp->_pLbImageTemplates = new ListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
-        _pImp->_pLbImageTemplates->SetHelpId( HID_FILEOPEN_IMAGE_TEMPLATE );
+        // FIXME: HELPID
+        _pImp->_pLbImageTemplates->SetHelpId( ""/*HID_FILEOPEN_IMAGE_TEMPLATE*/ );
     }
 }
 

@@ -130,7 +130,8 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            // FIXME: HELPID
+            // nHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 

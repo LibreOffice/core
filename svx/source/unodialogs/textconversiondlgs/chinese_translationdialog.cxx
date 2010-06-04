@@ -72,9 +72,12 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
 {
     FreeResource();
 
-    m_aRB_To_Simplified.SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED );
-    m_aRB_To_Traditional.SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL );
-    m_aCB_Use_Variants.SetHelpId( HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS );
+    // FIXME: HELPID
+    m_aRB_To_Simplified.SetHelpId( ""/*HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED*/ );
+    // FIXME: HELPID
+    m_aRB_To_Traditional.SetHelpId( ""/*HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL*/ );
+    // FIXME: HELPID
+    m_aCB_Use_Variants.SetHelpId( ""/*HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS*/ );
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();

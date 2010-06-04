@@ -41,7 +41,8 @@ QueryTemplateBox::QueryTemplateBox( Window* pParent, const String& rMessage ) :
     MessBox ( pParent, 0, Application::GetDisplayName(), rMessage )
 {
     SetImage( QueryBox::GetStandardImage() );
-    SetHelpId( MSG_QUERY_LOAD_TEMPLATE );
+    // FIXME: HELPID
+    SetHelpId( ""/*MSG_QUERY_LOAD_TEMPLATE*/ );
 
     AddButton( String( SfxResId( STR_QRYTEMPL_UPDATE_BTN ) ), RET_YES,
             BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );

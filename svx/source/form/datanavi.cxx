@@ -2388,7 +2388,8 @@ namespace svxform
     {
         DBG_CTOR(DataNavigator,NULL);
 
-        SetHelpId( HID_DATA_NAVIGATOR_WIN );
+        // FIXME: HELPID
+        SetHelpId( ""/*HID_DATA_NAVIGATOR_WIN*/ );
         SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
 
         Size aSize = m_aDataWin.GetOutputSizePixel();

@@ -80,8 +80,10 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( BOOL bForced = FALSE );
-    ULONG           FindFocusWin(Window *pWin);
-    void            SetFocusWin(Window *pWin,ULONG nUniqueId);
+    // FIXME: HELPID
+    rtl::OString    FindFocusWin(Window *pWin);
+    // FIXME: HELPID
+    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
     void            HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);
@@ -129,12 +131,14 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( BOOL bForced = FALSE );
-    ULONG           FindFocusWin(Window *pWin);
-    void            SetFocusWin(Window *pWin,ULONG nUniqueId);
+    // FIXME: HELPID
+    rtl::OString    FindFocusWin(Window *pWin);
+    // FIXME: HELPID
+    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
     void            HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);
-    FormulaDlgMode SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,BOOL bMatrix,BOOL _bSelect,BOOL _bUpdate);
+    FormulaDlgMode  SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,BOOL bMatrix,BOOL _bSelect,BOOL _bUpdate);
     void            Update();
     BOOL            CheckMatrix(String& aFormula /*IN/OUT*/);
     String          GetMeText() const;

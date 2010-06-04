@@ -206,14 +206,13 @@ namespace svt
         String sHelpURL( _rURL );
         if ( COMPARE_EQUAL == sHelpURL.CompareIgnoreCaseToAscii( "HID:", sizeof( "HID:" ) - 1 ) )
         {
-            String sID = sHelpURL.Copy( sizeof( "HID:" ) - 1 );
-            sal_Int32 nHelpId = sID.ToInt32();
-
+            // FIXME: HELPID
+            rtl::OString sID( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
             if ( _bFileView )
                 // the file view "overloaded" the SetHelpId
-                static_cast< SvtFileView* >( _pControl )->SetHelpId( nHelpId );
+                static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
             else
-                _pControl->SetHelpId( nHelpId );
+                _pControl->SetHelpId( sID );
         }
         else
         {
@@ -224,13 +223,13 @@ namespace svt
     //---------------------------------------------------------------------
     ::rtl::OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
     {
-        sal_Int32 nHelpId = _pControl->GetHelpId();
+        // FIXME: HELPID
+        rtl::OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
             // the file view "overloaded" the SetHelpId
-            nHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
+            aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
 
-        ::rtl::OUString sHelpURL( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-        sHelpURL += ::rtl::OUString::valueOf( (sal_Int32)nHelpId );
+        rtl::OUString sHelpURL( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
 
         return sHelpURL;
     }

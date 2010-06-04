@@ -354,7 +354,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( 66056 == nHelpId )
                 {
                     // show Support page with new URL
-                    String sHelpURL = SfxHelp::CreateHelpURL( nHelpId, String() );
+                    // FIXME: HELPID
+                    String sHelpURL = SfxHelp::CreateHelpURL( String()/*nHelpId*/, String() );
                     String sParams = sHelpURL.Copy( sHelpURL.Search( '?' ) );
                     sHelpURL = String::CreateFromAscii("vnd.sun.star.help://shared/text/shared/05/00000001.xhp");
                     sHelpURL += sParams;
@@ -362,7 +363,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     pHelp->Start( sHelpURL, NULL );
                 }
                 else
-                    pHelp->Start( nHelpId, NULL ); // show start page
+                    // FIXME: HELPID
+                    pHelp->Start( String()/*nHelpId*/, NULL ); // show start page
                 bDone = TRUE;
             }
             break;

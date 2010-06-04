@@ -918,11 +918,13 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 
 {
-    ULONG nId = GetHelpId();
+    // FIXME: HELPID
+    ULONG nId = 0;// GetHelpId();
     if ( !nId && pCW )
         nId = pCW->GetType();
-    SetHelpId( 0 );
-    SetUniqueId( nId );
+    SetHelpId( "" );
+    // FIXME: HELPID
+    SetUniqueId( ""/*nId*/ );
 
     pImp = new SfxDockingWindow_Impl;
     pImp->bConstructed = FALSE;
@@ -960,9 +962,9 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 
 {
-    ULONG nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    // FIXME: HELPID
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
 
     pImp = new SfxDockingWindow_Impl;
     pImp->bConstructed = FALSE;
@@ -1847,7 +1849,8 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            // FIXME: HELPID
+            //nHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 

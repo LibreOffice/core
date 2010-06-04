@@ -51,7 +51,8 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
-    pWindow->SetHelpId ( HID_NAVIGATOR_WINDOW );
+    // FIXME: HELPID
+    pWindow->SetHelpId ( ""/*HID_NAVIGATOR_WINDOW*/ );
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );

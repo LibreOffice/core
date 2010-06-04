@@ -325,12 +325,14 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
 
     maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
-    maViewBox.SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
+    // FIXME: HELPID
+    maViewBox.SetHelpId( TBX_ID_ICON, ""/*HID_GALLERY_ICONVIEW*/ );
     maViewBox.SetQuickHelpText( TBX_ID_ICON, String( GAL_RESID( RID_SVXSTR_GALLERY_ICONVIEW ) ) );
 
     maViewBox.InsertItem( TBX_ID_LIST, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_LIST, TIB_RADIOCHECK | TIB_AUTOCHECK );
-    maViewBox.SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
+    // FIXME: HELPID
+    maViewBox.SetHelpId( TBX_ID_LIST, ""/*HID_GALLERY_LISTVIEW*/ );
     maViewBox.SetQuickHelpText( TBX_ID_LIST, String( GAL_RESID( RID_SVXSTR_GALLERY_LISTVIEW ) ) );
 
     maViewBox.SetBorder( 0, 1 );

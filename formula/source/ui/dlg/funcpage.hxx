@@ -82,7 +82,8 @@ private:
                     m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
-    SmartId         m_aSmartHelpId;
+    // FIXME: HELPID
+    rtl::OString    m_aHelpId;
 
 
     void impl_addFunctions(const IFunctionCategory* _pCategory);

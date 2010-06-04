@@ -223,7 +223,8 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     ::Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetMinOutputSizePixel(::Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
     SetOutputSizePixel(aPropWinSize);
-    SetUniqueId(UID_FORMPROPBROWSER_FRAME);
+    // FIXME: HELPID
+    SetUniqueId(""/*UID_FORMPROPBROWSER_FRAME*/);
 
     try
     {

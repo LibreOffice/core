@@ -179,7 +179,8 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
 {
-    maChildWindow.SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
+    // FIXME: HELPID
+    maChildWindow.SetHelpId( ""/*HID_AVMEDIA_PLAYERWINDOW*/ );
     maChildWindow.Hide();
 
     if( mpMediaWindowControl )

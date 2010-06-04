@@ -485,13 +485,18 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 {
     FreeResource();
 
-    m_aRB_To_Simplified.SetHelpId( HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED );
-    m_aRB_To_Traditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL );
+    // FIXME: HELPID
+    m_aRB_To_Simplified.SetHelpId( ""/*HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED*/ );
+    // FIXME: HELPID
+    m_aRB_To_Traditional.SetHelpId( ""/*HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL*/ );
 
-    m_aCB_Reverse.SetHelpId( HID_SVX_CHINESE_DICTIONARY_CB_REVERSE );
+    // FIXME: HELPID
+    m_aCB_Reverse.SetHelpId( ""/*HID_SVX_CHINESE_DICTIONARY_CB_REVERSE*/ );
 
-    m_aCT_DictionaryToSimplified.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED );
-    m_aCT_DictionaryToTraditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL );
+    // FIXME: HELPID
+    m_aCT_DictionaryToSimplified.SetHelpId( ""/*HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED*/ );
+    // FIXME: HELPID
+    m_aCT_DictionaryToTraditional.SetHelpId( ""/*HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL*/ );
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
@@ -578,7 +583,8 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 
         m_pHeaderBar = m_aCT_DictionaryToSimplified.createHeaderBar( aColumn1, aColumn2, aColumn3, nWidth1, nWidth2, nWidth3 );
         if(m_pHeaderBar)
-            m_pHeaderBar->SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_HEADER );
+            // FIXME: HELPID
+            m_pHeaderBar->SetHelpId( ""/*HID_SVX_CHINESE_DICTIONARY_LB_HEADER*/ );
 
         long pTabs[] = { 3, 0, nWidth1, nWidth1 + nWidth2 };
         m_aCT_DictionaryToSimplified.SetTabs( &pTabs[0], MAP_PIXEL );

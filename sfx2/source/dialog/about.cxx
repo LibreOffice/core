@@ -298,7 +298,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     FreeResource();
 
     // explizite Help-Id
-    SetHelpId( SID_ABOUT );
+    // FIXME: HELPID
+    SetHelpId( ""/*SID_ABOUT*/ );
 
     //#112429# replace occurences of "StarOffice" in the "StarSuite" version
     String sCopyright( aCopyrightText.GetText() );

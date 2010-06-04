@@ -326,7 +326,8 @@ public:
     ~SfxHelp_Impl();
 
     SfxHelpOptions_Impl*    GetOptions();
-    String                  GetHelpText( ULONG nHelpId, const String& rModule );    // get "Active Help"
+    // FIXME: HELPID
+    // String                   GetHelpText( ULONG nHelpId, const String& rModule );    // get "Active Help"
     String                  GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
     sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
     sal_Bool                IsHelpInstalled();                                      // module list not empty
@@ -370,6 +371,8 @@ void SfxHelp_Impl::Load()
     }
 }
 
+#if 0
+// FIXME: HELPID
 String SfxHelp_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
 {
     // create help url
@@ -379,6 +382,7 @@ String SfxHelp_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
     // load help string
     return SfxContentHelper::GetActiveHelpString( aHelpURL );
 }
+#endif
 
 String SfxHelp_Impl::GetHelpText( const rtl::OUString& aCommandURL, const String& rModule )
 {
@@ -581,6 +585,8 @@ String SfxHelp::GetHelpModuleName_Impl()
     return sModuleName;
 }
 
+#if 0
+// FIXME: HELPID
 String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
 {
     String aModuleName( rModuleName );
@@ -650,6 +656,7 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
 
     return aHelpURL;
 }
+#endif
 
 String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName )
 {
@@ -802,7 +809,8 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         }
         else
         {
-            aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
+            // FIXME: HELPID
+            aHelpURL  = CreateHelpURL_Impl( String()/*0*/, GetHelpModuleName_Impl( ) );
 
             // pb i91715: strings begin with ".HelpId:" are not words of the basic ide
             // they are helpid-strings used by the testtool -> so we ignore them
@@ -851,6 +859,8 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     return TRUE;
 }
 
+#if 0
+// FIXME: HELPID
 BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 {
     String aHelpModuleName( GetHelpModuleName_Impl() );
@@ -878,7 +888,10 @@ BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 
     return Start( aHelpURL, pWindow );
 }
+#endif
 
+#if 0
+// FIXME: HELPID
 XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 {
     String aModuleName = GetHelpModuleName_Impl();
@@ -919,6 +932,7 @@ XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 
     return aHelpText;
 }
+#endif
 
 XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* )
 {
@@ -937,6 +951,8 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* )
     return sHelpText;
 }
 
+#if 0
+// FIXME: HELPID
 String SfxHelp::CreateHelpURL( ULONG nHelpId, const String& rModuleName )
 {
     String aURL;
@@ -945,6 +961,7 @@ String SfxHelp::CreateHelpURL( ULONG nHelpId, const String& rModuleName )
         aURL = pHelp->CreateHelpURL_Impl( nHelpId, rModuleName );
     return aURL;
 }
+#endif
 
 String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleName )
 {
@@ -976,7 +993,8 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
             try
             {
                 URL aURL;
-                aURL.Complete = CreateHelpURL_Impl( nHelpId, GetHelpModuleName_Impl() );
+                // FIXME: HELPID
+                aURL.Complete = CreateHelpURL_Impl( String()/*nHelpId*/, GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);

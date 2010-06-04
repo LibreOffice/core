@@ -124,7 +124,8 @@ void MediaFloater::ToggleFloatingMode()
     Window* pWindow = mpMediaWindow->getWindow();
 
     if( pWindow )
-        pWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
+        // FIXME: HELPID
+        pWindow->SetHelpId( ""/*HID_AVMEDIA_PLAYERWINDOW*/ );
 
     mpMediaWindow->show();
 }

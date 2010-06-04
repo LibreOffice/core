@@ -152,7 +152,8 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
 {
     StartListening( *mpGallery );
 
-    maNewTheme.SetHelpId( HID_GALLERY_NEWTHEME );
+    // FIXME: HELPID
+    maNewTheme.SetHelpId( ""/*HID_GALLERY_NEWTHEME*/ );
     maNewTheme.SetText( String( GAL_RESID( RID_SVXSTR_GALLERY_CREATETHEME ) ) );
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
@@ -160,7 +161,8 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     if( mpGallery->GetUserURL().GetProtocol() == INET_PROT_NOT_VALID )
         maNewTheme.Disable();
 
-    mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
+    // FIXME: HELPID
+    mpThemes->SetHelpId( ""/*HID_GALLERY_THEMELIST*/ );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
 
     for( ULONG i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )

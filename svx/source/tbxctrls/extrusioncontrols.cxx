@@ -111,7 +111,8 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
 void ExtrusionDirectionWindow::implInit()
 {
-    SetHelpId( HID_POPUP_EXTRUSION_DIRECTION );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_POPUP_EXTRUSION_DIRECTION*/ );
 
     USHORT i;
     for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
@@ -124,12 +125,15 @@ void ExtrusionDirectionWindow::implInit()
 //  mpProjectionForewarder = new SfxStatusForwarder( SID_EXTRUSION_PROJECTION, *this );
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
+    // FIXME: HELPID
+    mpMenu->SetHelpId( ""/*HID_MENU_EXTRUSION_DIRECTION*/ );
     mpMenu->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
-    mpDirectionSet->SetHelpId( HID_VALUESET_EXTRUSION_DIRECTION );
+    // FIXME: HELPID
+    mpDirectionSet->SetHelpId( ""/*HID_VALUESET_EXTRUSION_DIRECTION*/ );
 
-    mpDirectionSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
+    // FIXME: HELPID
+    mpDirectionSet->SetHelpId( ""/*HID_POPUP_LINEEND_CTRL*/ );
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet->SetColCount( 3 );
     mpDirectionSet->EnableFullItemMode( FALSE );
@@ -501,13 +505,15 @@ ExtrusionDepthWindow::ExtrusionDepthWindow( USHORT nId,
 
 void ExtrusionDepthWindow::implInit()
 {
-    SetHelpId( HID_POPUP_EXTRUSION_DEPTH );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_POPUP_EXTRUSION_DEPTH*/ );
 
 //  mpDepthForewarder = new SfxStatusForwarder( SID_EXTRUSION_DEPTH, *this );
 //  mpMetricForewarder = new SfxStatusForwarder( SID_ATTR_METRIC, *this );
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_DEPTH );
+    // FIXME: HELPID
+    mpMenu->SetHelpId( ""/*HID_MENU_EXTRUSION_DEPTH*/ );
 
     mpMenu->SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
@@ -848,7 +854,8 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(
 
 void ExtrusionLightingWindow::implInit()
 {
-    SetHelpId( HID_POPUP_EXTRUSION_LIGHTING );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_POPUP_EXTRUSION_LIGHTING*/ );
 
     USHORT i;
     for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
@@ -868,13 +875,16 @@ void ExtrusionLightingWindow::implInit()
 //  mpLightingIntensityForewarder = new SfxStatusForwarder( SID_EXTRUSION_LIGHTING_INTENSITY, *this );
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_LIGHTING );
+    // FIXME: HELPID
+    mpMenu->SetHelpId( ""/*HID_MENU_EXTRUSION_LIGHTING*/ );
     mpMenu->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
 
     mpLightingSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
-    mpLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
+    // FIXME: HELPID
+    mpLightingSet->SetHelpId( ""/*HID_VALUESET_EXTRUSION_LIGHTING*/ );
 
-    mpLightingSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
+    // FIXME: HELPID
+    mpLightingSet->SetHelpId( ""/*HID_POPUP_LINEEND_CTRL*/ );
     mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
     mpLightingSet->SetColCount( 3 );
     mpLightingSet->EnableFullItemMode( FALSE );
@@ -1226,14 +1236,16 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
 
 void ExtrusionSurfaceWindow::implInit()
 {
-    SetHelpId( HID_POPUP_EXTRUSION_SURFACE );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_POPUP_EXTRUSION_SURFACE*/ );
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
 //  mpSurfaceForewarder = new SfxStatusForwarder( SID_EXTRUSION_SURFACE, *this );
 
     mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_SURFACE );
+    // FIXME: HELPID
+    mpMenu->SetHelpId( ""/*HID_MENU_EXTRUSION_SURFACE*/ );
     mpMenu->SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 
     mpMenu->appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
