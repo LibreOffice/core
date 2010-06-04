@@ -215,6 +215,8 @@ void VCLXDialog::setHelpId( sal_Int32 id ) throw(::com::sun::star::uno::RuntimeE
     Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetHelpId( id );
+    #else
+    (void)id;
     #endif
 }
 
