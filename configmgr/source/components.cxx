@@ -46,6 +46,7 @@
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "rtl/bootstrap.hxx"
+#include "rtl/logfile.h"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/textenc.h"
@@ -58,6 +59,7 @@
 #include "modifications.hxx"
 #include "node.hxx"
 #include "parsemanager.hxx"
+#include "partial.hxx"
 #include "rootaccess.hxx"
 #include "writemodfile.hxx"
 #include "xcdparser.hxx"
@@ -82,26 +84,29 @@ struct UnresolvedListItem {
 
 typedef std::list< UnresolvedListItem > UnresolvedList;
 
-void parseXcsFile(rtl::OUString const & url, int layer, Data * data,
+void parseXcsFile(
+    rtl::OUString const & url, int layer, Data & data, Partial const * partial,
     Modifications * modifications)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
-    OSL_ASSERT(modifications == 0); (void) modifications;
+    OSL_ASSERT(partial == 0 && modifications == 0);
+    (void) partial; (void) modifications;
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
             new ParseManager(url, new XcsParser(layer, data)))->parse());
 }
 
 void parseXcuFile(
-    rtl::OUString const & url, int layer, Data * data,
+    rtl::OUString const & url, int layer, Data & data, Partial const * partial,
     Modifications * modifications)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
-            new ParseManager(url, new XcuParser(layer, data, modifications)))->
+            new ParseManager(
+                url, new XcuParser(layer, data, partial, modifications)))->
         parse());
 }
 
@@ -112,7 +117,7 @@ rtl::OUString expand(rtl::OUString const & str) {
 }
 
 static bool singletonCreated = false;
-static Components * singleton; // leaks
+static Components * singleton = 0;
 
 }
 
@@ -122,7 +127,8 @@ void Components::initSingleton(
     OSL_ASSERT(context.is());
     if (!singletonCreated) {
         singletonCreated = true;
-        singleton = new Components(context);
+        static Components theSingleton(context);
+        singleton = &theSingleton;
     }
 }
 
@@ -211,7 +217,7 @@ void Components::insertExtensionXcsFile(
     bool shared, rtl::OUString const & fileUri)
 {
     try {
-        parseXcsFile(fileUri, shared ? 9 : 13, &data_, 0);
+        parseXcsFile(fileUri, shared ? 9 : 13, data_, 0, 0);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -227,7 +233,7 @@ void Components::insertExtensionXcuFile(
 {
     OSL_ASSERT(modifications != 0);
     try {
-        parseXcuFile(fileUri, shared ? 10 : 14, &data_, modifications);
+        parseXcuFile(fileUri, shared ? 10 : 14, data_, 0, modifications);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -235,6 +241,24 @@ void Components::insertExtensionXcuFile(
                     "insertExtensionXcuFile does not exist: ")) +
              e.Message),
             css::uno::Reference< css::uno::XInterface >());
+    }
+}
+
+void Components::insertModificationXcuFile(
+    rtl::OUString const & fileUri,
+    std::set< rtl::OUString > const & includedPaths,
+    std::set< rtl::OUString > const & excludedPaths,
+    Modifications * modifications)
+{
+    OSL_ASSERT(modifications != 0);
+    try {
+        Partial part(includedPaths, excludedPaths);
+        parseXcuFile(fileUri, Data::NO_LAYER, data_, &part, modifications);
+    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
+        OSL_TRACE(
+            "configmgr error inserting %s: %s",
+            rtl::OUStringToOString(fileUri, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
 }
 
@@ -315,7 +339,7 @@ Components::Components(
     context_(context)
 {
     OSL_ASSERT(context.is());
-/*SB*/try{
+    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "begin parsing");
     parseXcsXcuLayer(
         0,
         expand(
@@ -380,24 +404,22 @@ Components::Components(
                     ":UNO_USER_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))));
-/*SB*/}catch(css::uno::Exception&e){fprintf(stderr,"caught <%s>\n",rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_UTF8).getStr());throw;}
     try {
         parseModificationLayer();
     } catch (css::uno::Exception & e) { //TODO: more specific exception catching
-        // Silently ignore unreadable parts of a corrupted
-        // registrymodifications.xcu file, instead of completely preventing OOo
-        // from starting:
+        // Silently ignore unreadable parts of a corrupted user modification
+        // layer, instead of completely preventing OOo from starting:
         OSL_TRACE(
             "configmgr error reading user modification layer: %s",
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
+    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "end parsing");
 }
 
 Components::~Components() {}
 
 void Components::parseFiles(
-    int layer, rtl::OUString const & extension,
-    void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
+    int layer, rtl::OUString const & extension, FileParser * parseFile,
     rtl::OUString const & url, bool recursive)
 {
     osl::Directory dir(url);
@@ -447,7 +469,7 @@ void Components::parseFiles(
                 file.match(extension, file.getLength() - extension.getLength()))
             {
                 try {
-                    (*parseFile)(stat.getFileURL(), layer, &data_, 0);
+                    (*parseFile)(stat.getFileURL(), layer, data_, 0, 0);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -462,23 +484,20 @@ void Components::parseFiles(
 }
 
 void Components::parseFileList(
-    int layer,
-    void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
-    rtl::OUString const & urls, rtl::Bootstrap const & ini)
+    int layer, FileParser * parseFile, rtl::OUString const & urls,
+    rtl::Bootstrap const & ini)
 {
     for (sal_Int32 i = 0;;) {
         rtl::OUString url(urls.getToken(0, ' ', i));
         if (url.getLength() != 0) {
             ini.expandMacrosFrom(url); //TODO: detect failure
             try {
-                (*parseFile)(url, layer, &data_, 0);
+                (*parseFile)(url, layer, data_, 0, 0);
             } catch (css::container::NoSuchElementException & e) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "stat'ed file does not exist: ")) +
-                     e.Message),
-                    css::uno::Reference< css::uno::XInterface >());
+                OSL_TRACE(
+                    "configmgr file does not exist: %s",
+                    rtl::OUStringToOString(
+                        e.Message, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
         if (i == -1) {
@@ -539,7 +558,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                 rtl::Reference< ParseManager > manager;
                 try {
                     manager = new ParseManager(
-                        stat.getFileURL(), new XcdParser(layer, deps, &data_));
+                        stat.getFileURL(), new XcdParser(layer, deps, data_));
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -630,7 +649,7 @@ rtl::OUString Components::getModificationFileUrl() const {
 
 void Components::parseModificationLayer() {
     try {
-        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, &data_, 0);
+        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, data_, 0, 0);
     } catch (css::container::NoSuchElementException &) {
         OSL_TRACE(
             "configmgr user registrymodifications.xcu does not (yet) exist");

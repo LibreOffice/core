@@ -95,11 +95,6 @@ RDFaExportHelper::RDFaExportHelper(SvXMLExport & i_rExport)
     OSL_ENSURE(xRS.is(), "AddRDFa: model is no rdf::XRepositorySupplier");
     if (!xRS.is()) throw uno::RuntimeException();
     m_xRepository.set(xRS->getRDFRepository(), uno::UNO_QUERY_THROW);
-
-    const uno::Reference<rdf::XURI> xLabel(
-        rdf::URI::createKnown(m_rExport.GetComponentContext(),
-            rdf::URIs::RDFS_LABEL));
-    m_RDFsLabel = xLabel->getStringValue();
 }
 
 ::rtl::OUString
@@ -128,19 +123,21 @@ RDFaExportHelper::AddRDFa(
 {
     try
     {
-        uno::Sequence<rdf::Statement> stmts(
-            m_xRepository->getStatementRDFa(i_xMetadatable) );
+        beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > const
+            RDFaResult( m_xRepository->getStatementRDFa(i_xMetadatable) );
 
-        if (0 == stmts.getLength())
+        uno::Sequence<rdf::Statement> const & rStatements( RDFaResult.First );
+
+        if (0 == rStatements.getLength())
         {
             return; // no RDFa
         }
 
         // all stmts have the same subject, so we only handle first one
-        const uno::Reference<rdf::XURI> xSubjectURI(stmts[0].Subject,
+        const uno::Reference<rdf::XURI> xSubjectURI(rStatements[0].Subject,
             uno::UNO_QUERY);
-        const uno::Reference<rdf::XBlankNode> xSubjectBNode(stmts[0].Subject,
-            uno::UNO_QUERY);
+        const uno::Reference<rdf::XBlankNode> xSubjectBNode(
+            rStatements[0].Subject, uno::UNO_QUERY);
         if (!xSubjectURI.is() && !xSubjectBNode.is())
         {
             throw uno::RuntimeException();
@@ -154,47 +151,31 @@ RDFaExportHelper::AddRDFa(
                     .makeStringAndClear()
             );
 
-        rdf::Statement* const iter
-            ( ::std::partition( ::comphelper::stl_begin(stmts),
-                ::comphelper::stl_end(stmts),
-                ::boost::bind(&::rtl::OUString::equals, m_RDFsLabel,
-                    ::boost::bind(&rdf::XNode::getStringValue,
-                        ::boost::bind(&rdf::Statement::Predicate, _1))) ) );
-
-        if (iter != ::comphelper::stl_end(stmts))
+        const uno::Reference<rdf::XLiteral> xContent(
+            rStatements[0].Object, uno::UNO_QUERY_THROW );
+        const uno::Reference<rdf::XURI> xDatatype(xContent->getDatatype());
+        if (xDatatype.is())
         {
-            // from iter to end, all stmts should have same object
-            const uno::Reference<rdf::XLiteral> xContent(
-                (*iter).Object, uno::UNO_QUERY_THROW );
-            const uno::Reference<rdf::XURI> xDatatype(xContent->getDatatype());
-            if (xDatatype.is())
-            {
-                const ::rtl::OUString datatype(
-                    makeCURIE(&m_rExport, xDatatype) );
-                m_rExport.AddAttribute(XML_NAMESPACE_XHTML,
-                    token::XML_DATATYPE, datatype);
-            }
-            if (iter != ::comphelper::stl_begin(stmts)) // there is rdfs:label
-            {
-                m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_CONTENT,
-                    xContent->getValue());
-            }
+            const ::rtl::OUString datatype(
+                makeCURIE(&m_rExport, xDatatype) );
+            m_rExport.AddAttribute(XML_NAMESPACE_XHTML,
+                token::XML_DATATYPE, datatype);
         }
-        else
+        if (RDFaResult.Second) // there is xhtml:content
         {
-            OSL_ENSURE(false,"invalid RDFa: every property is rdfs:label");
-            return;
+            m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_CONTENT,
+                xContent->getValue());
         }
 
         ::rtl::OUStringBuffer property;
         ::comphelper::intersperse(
             ::boost::make_transform_iterator(
-                iter, // omit RDFsLabel predicates!
+                ::comphelper::stl_begin(rStatements),
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
             // argh, this must be the same type :(
             ::boost::make_transform_iterator(
-                ::comphelper::stl_end(stmts),
+                ::comphelper::stl_end(rStatements),
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
             ::comphelper::OUStringBufferAppender(property),

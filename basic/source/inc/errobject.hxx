@@ -25,27 +25,28 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_UPDATE_HXX
-#define INCLUDED_CONFIGMGR_UPDATE_HXX
+#ifndef ERROBJECT_HXX
+#define ERROBJECT_HXX
+#include "sbunoobj.hxx"
+#include <ooo/vba/XErrObject.hpp>
 
-#include "sal/config.h"
 
-#include "configmgr/detail/configmgrdllapi.hxx"
+class SbxErrObject : public SbUnoObject
+{
+    class ErrObject* m_pErrObject;
+    com::sun::star::uno::Reference< ooo::vba::XErrObject > m_xErr;
 
-namespace rtl { class OUString; }
+    SbxErrObject( const String& aName_, const com::sun::star::uno::Any& aUnoObj_ );
+    ~SbxErrObject();
 
-namespace configmgr {
+    class ErrObject* getImplErrObject( void )
+        { return m_pErrObject; }
 
-namespace update {
+public:
+    static SbxVariableRef getErrObject();
+    static com::sun::star::uno::Reference< ooo::vba::XErrObject > getUnoErrObject();
 
-OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcsFile(
-    bool shared, rtl::OUString const & fileUri);
-
-OOO_DLLPUBLIC_CONFIGMGR void insertExtensionXcuFile(
-    bool shared, rtl::OUString const & fileUri);
-
-}
-
-}
-
+    void setNumberAndDescription( ::sal_Int32 _number, const ::rtl::OUString& _description )
+        throw (com::sun::star::uno::RuntimeException);
+};
 #endif
