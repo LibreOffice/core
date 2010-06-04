@@ -117,7 +117,8 @@ sal_uInt32 ToolPanel::AddControl (
         rFocusManager.RegisterLink(pChild->GetWindow(),pFirst, KEY_DOWN);
     }
 
-    pTitledControl->GetWindow()->SetHelpId(nHelpId);
+    // FIXME: HELPID
+    pTitledControl->GetWindow()->SetHelpId(""/*nHelpId*/);
 
     return mpControlContainer->AddControl (pChild);
 }

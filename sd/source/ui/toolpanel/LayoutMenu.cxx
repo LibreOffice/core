@@ -261,7 +261,8 @@ LayoutMenu::LayoutMenu (
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
 
-    SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
+    // FIXME: HELPID
+    Window::SetHelpId(""/*HID_SD_TASK_PANE_PREVIEW_LAYOUTS*/);
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));

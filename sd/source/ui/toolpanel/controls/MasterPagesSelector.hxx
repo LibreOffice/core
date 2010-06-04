@@ -121,7 +121,7 @@ public:
     */
     void ClearPageSet (void);
 
-    void SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
+    void SetHelpId( const rtl::OString& aId );
 
     /** Mark the preview that belongs to the given index as not up-to-date
         anymore with respect to page content or preview size.

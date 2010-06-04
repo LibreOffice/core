@@ -270,7 +270,9 @@ void AbstractSdInsertLayerDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 }
 void AbstractSdInsertLayerDlg_Impl::SetHelpId( ULONG nHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    // FIXME: HELPID
+    (void)nHelpId;
+    pDlg->SetHelpId( ""/*nHelpId*/ );
 }
 // AbstractSdInsertLayerDlg_Impl end
 

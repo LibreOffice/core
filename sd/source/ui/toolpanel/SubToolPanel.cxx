@@ -112,7 +112,8 @@ void SubToolPanel::AddControl (
         TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     pTitledControl->GetWindow()->SetParent(this);
-    pTitledControl->GetWindow()->SetHelpId(nHelpId);
+    // FIXME: HELPID
+    pTitledControl->GetWindow()->SetHelpId(""/*nHelpId*/);
     ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
     // Add a down link only for the first control so that when

@@ -144,7 +144,8 @@ PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, Window* pParent, c
     mpControl = new ListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX*/ );
 
     setValue( rValue, aPresetId );
 
@@ -230,7 +231,8 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
     mpControl = new ColorListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX*/ );
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
@@ -322,7 +324,8 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const
     mpControl = new FontNameBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( rModifyHdl );
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX*/ );
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem;
@@ -501,7 +504,8 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, Window* pP
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
     mpControl->SetModifyHdl( rModifyHdl );
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX*/ );
 
     OUString aPresetId;
     setValue( rValue, aPresetId );
@@ -603,7 +607,8 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
 
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX*/ );
 
     Link aLink( LINK( this, TransparencyPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
@@ -719,7 +724,8 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, Window* pParen
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX*/ );
 
     Link aLink( LINK( this, RotationPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
@@ -860,7 +866,8 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, Window* pParent, con
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX*/ );
 
     Link aLink( LINK( this, ScalePropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
@@ -1039,7 +1046,8 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, Window* pPar
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpEdit, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, FontStylePropertyBox, implMenuSelectHdl ));
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX );
+    // FIXME: HELPID
+    mpControl->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX*/ );
 
     OUString aPresetId;
     setValue( rValue, aPresetId );

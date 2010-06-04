@@ -478,7 +478,8 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     SetDefaults();
 
-    SetHelpId(aPageHelpIds[0]);
+    // FIXME: HELPID
+    SetHelpId(""/*aPageHelpIds[0]*/);
 
     aNextPageButton.GrabFocus();
 }
@@ -1286,7 +1287,9 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
 void SdPublishingDlg::ChangePage()
 {
     int nPage = aAssistentFunc.GetCurrentPage();
-    SetHelpId(aPageHelpIds[nPage-1]);
+    // FIXME: HELPID
+    (void)nPage;
+    SetHelpId(""/*aPageHelpIds[nPage-1]*/);
 
     UpdatePage();
 

@@ -66,7 +66,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         rBase,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_CURRENT) );
+    // FIXME: HELPID
+    pSelector->SetHelpId( ""/*HID_SD_TASK_PANE_PREVIEW_CURRENT*/ );
     GetShellManager()->AddSubShell(
         HID_SD_TASK_PANE_PREVIEW_CURRENT,
         pSelector.get(),
@@ -83,7 +84,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         rBase,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_RECENT) );
+    // FIXME: HELPID
+    pSelector->SetHelpId( ""/*HID_SD_TASK_PANE_PREVIEW_RECENT*/ );
     GetShellManager()->AddSubShell(
         HID_SD_TASK_PANE_PREVIEW_RECENT,
         pSelector.get(),
@@ -101,7 +103,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         *pDrawViewShell,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_ALL) );
+    // FIXME: HELPID
+    pSelector->SetHelpId( ""/*HID_SD_TASK_PANE_PREVIEW_ALL*/ );
     GetShellManager()->AddSubShell(
         HID_SD_TASK_PANE_PREVIEW_ALL,
         pSelector.get(),

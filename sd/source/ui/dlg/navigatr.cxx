@@ -317,8 +317,9 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
                 if( nRId > 0 )
                 {
                     pMenu->InsertItem( nID, String( SdResId( nRId ) ) );
-                    pMenu->SetHelpId( nID, HID_SD_NAVIGATOR_MENU1 +
-                                            nID - NAVIGATOR_DRAGTYPE_URL );
+                    // FIXME: HELPID
+                    pMenu->SetHelpId( nID, ""/*HID_SD_NAVIGATOR_MENU1 +
+                                            nID - NAVIGATOR_DRAGTYPE_URL*/ );
                 }
 
             }

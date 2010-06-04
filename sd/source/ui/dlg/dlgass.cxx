@@ -1119,7 +1119,11 @@ void AssistentDlgImpl::ChangePage()
     USHORT nPage = (USHORT)maAssistentFunc.GetCurrentPage();
 
     if( mpWindow )
-        mpWindow->SetHelpId( PageHelpIds[nPage-1]);
+    {
+        // FIXME: HELPID
+        (void)nPage;
+        mpWindow->SetHelpId( ""/*PageHelpIds[nPage-1]*/);
+    }
 
     UpdatePage();
 

@@ -282,7 +282,8 @@ USHORT PaneDockingWindow::AddMenu (
         rsMenuName,
         TIB_DROPDOWNONLY,
         nItemCount>0 ? nItemCount-1 : (USHORT)-1);
-    mpTitleToolBox->SetHelpId( nItemId, nHelpId );
+    // FIXME: HELPID
+    mpTitleToolBox->SetHelpId( nItemId, ""/*nHelpId*/ );
     mpTitleToolBox->SetClickHdl (rCallback);
     mpTitleToolBox->SetDropdownClickHdl (rCallback);
 

@@ -100,7 +100,8 @@ Window::Window(::Window* pParent)
 
     // Hilfe-ID setzen
     // SetHelpId(HID_SD_WIN_DOCUMENT);
-    SetUniqueId(HID_SD_WIN_DOCUMENT);
+    // FIXME: HELPID
+    SetUniqueId(""/*HID_SD_WIN_DOCUMENT*/);
 
     // #i78183# Added after discussed with AF
     EnableRTL(FALSE);

@@ -597,20 +597,26 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
         if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
+            // FIXME: HELPID
+            GetActiveWindow()->SetHelpId( ""/*SID_NOTESMODE*/ );
+            // FIXME: HELPID
+            GetActiveWindow()->SetUniqueId( ""/*SID_NOTESMODE*/ );
         }
         else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
+            // FIXME: HELPID
+            GetActiveWindow()->SetHelpId( ""/*SID_HANDOUTMODE*/ );
+            // FIXME: HELPID
+            GetActiveWindow()->SetUniqueId( ""/*SID_HANDOUTMODE*/ );
         }
         else
         {
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
+            // FIXME: HELPID
+            GetActiveWindow()->SetHelpId( ""/*SD_IF_SDDRAWVIEWSHELL*/ );
+            // FIXME: HELPID
+            GetActiveWindow()->SetUniqueId( ""/*SD_IF_SDDRAWVIEWSHELL*/ );
         }
     }
 

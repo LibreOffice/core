@@ -347,16 +347,20 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     if( eDocType == DOCUMENT_TYPE_DRAW )
     {
         SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
-        GetActiveWindow()->SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
-        GetActiveWindow()->SetUniqueId( SD_IF_SDGRAPHICVIEWSHELL );
+        // FIXME: HELPID
+        GetActiveWindow()->SetHelpId( ""/*SD_IF_SDGRAPHICVIEWSHELL*/ );
+        // FIXME: HELPID
+        GetActiveWindow()->SetUniqueId( ""/*SD_IF_SDGRAPHICVIEWSHELL*/ );
     }
     else
     {
         if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
+            // FIXME: HELPID
+            GetActiveWindow()->SetHelpId( ""/*SID_NOTESMODE*/ );
+            // FIXME: HELPID
+            GetActiveWindow()->SetUniqueId( ""/*SID_NOTESMODE*/ );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
@@ -364,8 +368,10 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
+            // FIXME: HELPID
+            GetActiveWindow()->SetHelpId( ""/*SID_HANDOUTMODE*/ );
+            // FIXME: HELPID
+            GetActiveWindow()->SetUniqueId( ""/*SID_HANDOUTMODE*/ );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
@@ -373,8 +379,10 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         else
         {
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
+            // FIXME: HELPID
+            GetActiveWindow()->SetHelpId( ""/*SD_IF_SDDRAWVIEWSHELL*/ );
+            // FIXME: HELPID
+            GetActiveWindow()->SetUniqueId( ""/*SD_IF_SDDRAWVIEWSHELL*/ );
         }
     }
 

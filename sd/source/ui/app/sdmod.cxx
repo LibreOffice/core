@@ -192,7 +192,8 @@ void SdModule::FillStatusBar(StatusBar& rStatusBar)
 
     // signatures
     rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
-    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+    // FIXME: HELPID
+    rStatusBar.SetHelpId(SID_SIGNATURE, ""/*SID_SIGNATURE*/);
 
 
 

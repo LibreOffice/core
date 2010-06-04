@@ -95,8 +95,10 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
 {
     FreeResource();
 
-    SetHelpId( HID_SD_UNDODELETEWARNING_DLG );
-    maDisableCB.SetHelpId( HID_SD_UNDODELETEWARNING_CBX );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_SD_UNDODELETEWARNING_DLG*/ );
+    // FIXME: HELPID
+    maDisableCB.SetHelpId( ""/*HID_SD_UNDODELETEWARNING_CBX*/ );
 
     maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
     maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));

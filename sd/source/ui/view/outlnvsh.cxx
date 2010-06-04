@@ -179,8 +179,10 @@ void OutlineViewShell::Construct(DrawDocShell* )
     SetName (aName);
 
     SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
-    GetActiveWindow()->SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
-    GetActiveWindow()->SetUniqueId( SD_IF_SDOUTLINEVIEWSHELL );
+    // FIXME: HELPID
+    GetActiveWindow()->SetHelpId( ""/*SD_IF_SDOUTLINEVIEWSHELL*/ );
+    // FIXME: HELPID
+    GetActiveWindow()->SetUniqueId( ""/*SD_IF_SDOUTLINEVIEWSHELL*/ );
 }
 
 
