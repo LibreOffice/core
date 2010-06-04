@@ -29,11 +29,10 @@
 ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
+// Comment out precompiled statement due to redefinition errors
+//#include "precompiled_sfx2.hxx"
 
 #include "syspath.hxx"
-
-using namespace ::rtl;
 
 #ifdef WNT
 #ifdef _MSC_VER
