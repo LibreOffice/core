@@ -172,6 +172,11 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             cDec = pTabStop->GetDecimal();
             eAdj = pTabStop->GetAdjustment();
             nNextPos = pTabStop->GetTabPos();
+            if(!bTabsRelativeToIndent && eAdj == SVX_TAB_ADJUST_DEFAULT && nSearchPos < 0)
+            {
+                //calculate default tab position of default tabs in negative indent
+                nNextPos = ( nSearchPos / nNextPos ) * nNextPos;
+            }
         }
         else
         {
