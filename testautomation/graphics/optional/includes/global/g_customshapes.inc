@@ -647,15 +647,15 @@ testcase tFormatPaintbrush
          sleep 1
       else '(Impress)
          Kontext "DocumentImpress"
-         DocumentImpress.Mousedown 20, 20
-         DocumentImpress.Mouseup 20, 20
+         DocumentImpress.typekeys("<F6>",true)
+         DocumentImpress.typekeys("<ESCAPE>",true)
+         DocumentImpress.typekeys("<TAB>",true)
          sleep 1
          kontext "Standardbar"
          FormatPaintbrush.Click
          kontext "DocumentImpress"
          sleep 1
-         DocumentImpress.Mousedown 80, 80
-         DocumentImpress.Mouseup 80, 80
+         DocumentImpress.typekeys("<TAB>",true)
          sleep 1
       endif
 
