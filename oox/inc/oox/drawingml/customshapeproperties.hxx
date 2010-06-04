@@ -25,244 +25,132 @@
  *
  ************************************************************************/
 
-#include "oox/drawingml/customshapeproperties.hxx"
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/namespaces.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/graphic/XGraphicTransformer.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#ifndef OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
+#define OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
 
-using rtl::OUString;
-using namespace ::oox::core;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::graphic;
-using namespace ::com::sun::star::drawing;
+#include "oox/helper/propertymap.hxx"
+#include "oox/drawingml/color.hxx"
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <boost/shared_ptr.hpp>
+#include "oox/helper/helper.hxx"
+#include "tokens.hxx"
+#include <vector>
+#include <map>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#ifndef __com_sun_star_beans_PropertyValues_hpp__
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 namespace oox { namespace drawingml {
 
-CustomShapeProperties::CustomShapeProperties()
+class CustomShapeProperties;
+
+typedef boost::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
+
+struct CustomShapeGuide
 {
-}
-CustomShapeProperties::~CustomShapeProperties()
+    rtl::OUString   maName;
+    rtl::OUString   maFormula;
+};
+
+struct AdjustHandle
 {
-}
+    sal_Bool                                polar;
+    com::sun::star::drawing::EnhancedCustomShapeParameterPair
+                                            pos;
 
-sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide )
+    // depending to the type (polar or not):
+    OptValue< rtl::OUString >               gdRef1; // gdRefX   or gdRefR
+    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+                                            min1;   // minX     or minR
+    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+                                            max1;   // maxX     or maxR
+    OptValue< rtl::OUString >               gdRef2; // gdRefY   or gdRefAng
+    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+                                            min2;   // minX     or minAng
+    OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
+                                            max2;   // maxY     or maxAng
+
+    AdjustHandle( sal_Bool bPolar ) : polar( bPolar ) {};
+};
+
+struct ConnectionSite
 {
-    sal_uInt32 nIndex = 0;
-    for( ; nIndex < rGuideList.size(); nIndex++ )
-    {
-        if ( rGuideList[ nIndex ].maName == rGuide.maName )
-            break;
-    }
-    if ( nIndex == rGuideList.size() )
-        rGuideList.push_back( rGuide );
-    return static_cast< sal_Int32 >( nIndex );
-}
+    com::sun::star::drawing::EnhancedCustomShapeParameterPair
+                                pos;
+    com::sun::star::drawing::EnhancedCustomShapeParameter
+                                ang;
+};
 
-// returns the index into the guidelist for a given formula name,
-// if the return value is < 0 then the guide value could not be found
-sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName )
+struct GeomRect
 {
-    sal_Int32 nIndex = 0;
-    for( ; nIndex < static_cast< sal_Int32 >( rGuideList.size() ); nIndex++ )
-    {
-        if ( rGuideList[ nIndex ].maName == rFormulaName )
-            break;
-    }
-    if ( nIndex == static_cast< sal_Int32 >( rGuideList.size() ) )
-        nIndex = -1;
-    return nIndex;
-}
+    com::sun::star::drawing::EnhancedCustomShapeParameter   l;
+    com::sun::star::drawing::EnhancedCustomShapeParameter   t;
+    com::sun::star::drawing::EnhancedCustomShapeParameter   r;
+    com::sun::star::drawing::EnhancedCustomShapeParameter   b;
+};
 
-void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCustomShapeProperties */ )
+struct Path2D
 {
-    // not sure if this needs to be implemented
-}
+    sal_Int64   w;
+    sal_Int64   h;
+    sal_Int32   fill;
+    sal_Bool    stroke;
+    sal_Bool    extrusionOk;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > parameter;
 
-void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
-    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
+    Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( sal_True ), extrusionOk( sal_True ) {};
+};
+
+class CustomShapeProperties
 {
-    if ( maShapePresetType.getLength() )
-    {
-        //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
-        Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
-        if( xDefaulter.is() )
-            xDefaulter->createCustomShapeDefaults( maShapePresetType );
+public:
 
-        if ( maAdjustmentGuideList.size() )
-        {
-            const OUString sType = CREATE_OUSTRING( "Type" );
-            const OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
-            uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
-            uno::Sequence< beans::PropertyValue > aGeoPropSeq;
-            if ( aGeoPropSet >>= aGeoPropSeq )
-            {
-                sal_Int32 i, nCount = aGeoPropSeq.getLength();
-                for ( i = 0; i < nCount; i++ )
-                {
-                    const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
-                    if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
-                    {
-                        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-                        if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
-                        {
-                            std::vector< CustomShapeGuide >::const_iterator aIter( maAdjustmentGuideList.begin() );
-                            while( aIter != maAdjustmentGuideList.end() )
-                            {
-                                if ( (*aIter).maName.getLength() > 3 )
-                                {
-                                    sal_Int32 nAdjustmentIndex = (*aIter).maName.copy( 3 ).toInt32() - 1;
-                                    if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
-                                    {
-                                        EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-                                        aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
-                                        aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
-                                        aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
-                                    }
-                                }
-                                aIter++;
-                            }
-                            aGeoPropSeq[ i ].Value <<= aAdjustmentSeq;
-                            xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
-                        }
-                    }
-                    else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
-                    {
-                        aGeoPropSeq[ i ].Value <<= maShapePresetType;
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        sal_uInt32 i;
-        PropertyMap aPropertyMap;
-        aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
+    CustomShapeProperties();
+    virtual ~CustomShapeProperties();
 
-        awt::Size aSize( xShape->getSize() );
-        awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
-        if ( maPath2DList.size() )
-        {   // TODO: each polygon may have its own size, but I think it is rather been used
-            // so we are only taking care of the first
-            if ( maPath2DList[ 0 ].w )
-                aViewBox.Width = static_cast< sal_Int32 >( maPath2DList[ 0 ].w );
-            if ( maPath2DList[ 0 ].h )
-                aViewBox.Height = static_cast< sal_Int32 >( maPath2DList[ 0 ].h );
-        }
-        aPropertyMap[ PROP_ViewBox ] <<= aViewBox;
+    void apply( const CustomShapePropertiesPtr& );
+    void pushToPropSet( const ::oox::core::FilterBase& rFilterBase,
+            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
+                        const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape) const;
 
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
-        for ( i = 0; i < maAdjustmentGuideList.size(); i++ )
-        {
-            EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-            aAdjustmentVal.Value <<= maAdjustmentGuideList[ i ].maFormula.toInt32();
-            aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
-            aAdjustmentValues[ i ] = aAdjustmentVal;
-        }
-        aPropertyMap[ PROP_AdjustmentValues ] <<= aAdjustmentValues;
+    void setShapePresetType( const rtl::OUString& rShapePresetType ){ maShapePresetType = rShapePresetType; };
 
-        Sequence< rtl::OUString > aEquations( maGuideList.size() );
-        for ( i = 0; i < maGuideList.size(); i++ )
-            aEquations[ i ] = maGuideList[ i ].maFormula;
-        aPropertyMap[ PROP_Equations ] <<= aEquations;
+    std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
+    std::vector< CustomShapeGuide >&    getGuideList(){ return maGuideList; };
+    std::vector< AdjustHandle >&        getAdjustHandleList(){ return maAdjustHandleList; };
+    std::vector< ConnectionSite >&      getConnectionSiteList(){ return maConnectionSiteList; };
+    OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
+    std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
 
-        PropertyMap aPath;
-        Sequence< EnhancedCustomShapeSegment > aSegments( maSegments.size() );
-        for ( i = 0; i < maSegments.size(); i++ )
-            aSegments[ i ] = maSegments[ i ];
-        aPath[ PROP_Segments ] <<= aSegments;
-        sal_uInt32 j, k, nParameterPairs = 0;
-        for ( i = 0; i < maPath2DList.size(); i++ )
-            nParameterPairs += maPath2DList[ i ].parameter.size();
-        Sequence< EnhancedCustomShapeParameterPair > aParameterPairs( nParameterPairs );
-        for ( i = 0, k = 0; i < maPath2DList.size(); i++ )
-            for ( j = 0; j < maPath2DList[ i ].parameter.size(); j++ )
-                aParameterPairs[ k++ ] = maPath2DList[ i ].parameter[ j ];
-        aPath[ PROP_Coordinates ] <<= aParameterPairs;
-        Sequence< PropertyValue > aPathSequence = aPath.makePropertyValueSequence();
-        aPropertyMap[ PROP_Path ] <<= aPathSequence;
+    double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
+    static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
+    static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName );
 
-        Sequence< PropertyValues > aHandles( maAdjustHandleList.size() );
-        for ( i = 0; i < maAdjustHandleList.size(); i++ )
-        {
-            PropertyMap aHandle;
-            // maAdjustmentHandle[ i ].gdRef1 ... maAdjustmentHandle[ i ].gdRef2 ... :(
-            // gdRef1 && gdRef2 -> we do not offer such reference, so it is difficult
-            // to determine the correct adjustment handle that should be updated with the adjustment
-            // position. here is the solution: the adjustment value that is used within the position
-            // has to be updated, in case the position is a formula the first usage of a
-            // adjument value is decisive
-            if ( maAdjustHandleList[ i ].polar )
-            {
-                aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
-                if ( maAdjustHandleList[ i ].min1.has() )
-                    aHandle[ PROP_RadiusRangeMinimum ] <<= maAdjustHandleList[ i ].min1.get();
-                if ( maAdjustHandleList[ i ].max1.has() )
-                    aHandle[ PROP_RadiusRangeMaximum ] <<= maAdjustHandleList[ i ].max1.get();
+private:
 
-                /* TODO: AngleMin & AngleMax
-                if ( maAdjustHandleList[ i ].min2.has() )
-                    aHandle[ PROP_ ] = maAdjustHandleList[ i ].min2.get();
-                if ( maAdjustHandleList[ i ].max2.has() )
-                    aHandle[ PROP_ ] = maAdjustHandleList[ i ].max2.get();
-                */
-            }
-            else
-            {
-                aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
-                if ( maAdjustHandleList[ i ].gdRef1.has() )
-                {
-                    // TODO: PROP_RefX and PROP_RefY are not yet part of our file format,
-                    // so the handles will not work after save/reload
-                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.get() );
-                    if ( nIndex >= 0 )
-                        aHandle[ PROP_RefX ] <<= nIndex;
-                }
-                if ( maAdjustHandleList[ i ].gdRef2.has() )
-                {
-                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.get() );
-                    if ( nIndex >= 0 )
-                        aHandle[ PROP_RefY ] <<= nIndex;
-                }
-                if ( maAdjustHandleList[ i ].min1.has() )
-                    aHandle[ PROP_RangeXMinimum ] <<= maAdjustHandleList[ i ].min1.get();
-                if ( maAdjustHandleList[ i ].max1.has() )
-                    aHandle[ PROP_RangeXMaximum ] <<= maAdjustHandleList[ i ].max1.get();
-                if ( maAdjustHandleList[ i ].min2.has() )
-                    aHandle[ PROP_RangeYMinimum ] <<= maAdjustHandleList[ i ].min2.get();
-                if ( maAdjustHandleList[ i ].max2.has() )
-                    aHandle[ PROP_RangeYMaximum ] <<= maAdjustHandleList[ i ].max2.get();
-            }
-            aHandles[ i ] = aHandle.makePropertyValueSequence();
-        }
-        aPropertyMap[ PROP_Handles ] <<= aHandles;
+    rtl::OUString                   maShapePresetType;
+    std::vector< CustomShapeGuide > maAdjustmentGuideList;
+    std::vector< CustomShapeGuide > maGuideList;
+    std::vector< AdjustHandle >     maAdjustHandleList;
+    std::vector< ConnectionSite >   maConnectionSiteList;
+    OptValue< GeomRect >            maTextRect;
+    std::vector< Path2D >           maPath2DList;
 
-        // converting the vector to a sequence
-        Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
-        PropertySet aPropSet( xPropSet );
-        aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
-    }
-}
-
-double CustomShapeProperties::getValue( const std::vector< CustomShapeGuide >& rGuideList, sal_uInt32 nIndex ) const
-{
-    double fRet = 0.0;
-    if ( nIndex < rGuideList.size() )
-    {
-
-    }
-    return fRet;
-}
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >
+                                    maSegments;
+};
 
 } }
+
+#endif  //  OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX

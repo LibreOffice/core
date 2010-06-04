@@ -27,6 +27,7 @@
 
 #include "oox/xls/worksheetsettings.hxx"
 #include <com/sun/star/util/XProtectable.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -293,6 +294,11 @@ void WorksheetSettings::importSheetProtection( BiffInputStream& rStrm )
     maSheetProt.mbSelectUnlocked   = !getFlag( nFlags, BIFF_SHEETPROT_SELECT_UNLOCKED );
 }
 
+void WorksheetSettings::importCodeName( BiffInputStream& rStrm )
+{
+    maSheetSettings.maCodeName = rStrm.readUniString();
+}
+
 void WorksheetSettings::importPhoneticPr( BiffInputStream& rStrm )
 {
     maPhoneticSett.importPhoneticPr( rStrm );
@@ -300,6 +306,7 @@ void WorksheetSettings::importPhoneticPr( BiffInputStream& rStrm )
 
 void WorksheetSettings::finalizeImport()
 {
+    // sheet protection
     if( maSheetProt.mbSheet ) try
     {
         Reference< XProtectable > xProtectable( getSheet(), UNO_QUERY_THROW );
@@ -308,6 +315,10 @@ void WorksheetSettings::finalizeImport()
     catch( Exception& )
     {
     }
+
+    // VBA code name
+    PropertySet aPropSet( getSheet() );
+    aPropSet.setProperty( PROP_CodeName, maSheetSettings.maCodeName );
 }
 
 // ============================================================================

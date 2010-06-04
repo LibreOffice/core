@@ -25,18 +25,18 @@
  *
  ************************************************************************/
 
-#ifndef OOX_HELPER_OLESTORAGE_HXX
-#define OOX_HELPER_OLESTORAGE_HXX
+#ifndef OOX_OLE_OLESTORAGE_HXX
+#define OOX_OLE_OLESTORAGE_HXX
 
 #include "oox/helper/storagebase.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace container { class XNameContainer; }
-    namespace container { class XNameAccess; }
 } } }
 
 namespace oox {
+namespace ole {
 
 // ============================================================================
 
@@ -51,7 +51,7 @@ public:
 
     explicit            OleStorage(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
     virtual             ~OleStorage();
@@ -59,8 +59,18 @@ public:
 private:
     explicit            OleStorage(
                             const OleStorage& rParentStorage,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxElementsAccess,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxStorage,
+                            const ::rtl::OUString& rElementName,
+                            bool bReadOnly );
+    explicit            OleStorage(
+                            const OleStorage& rParentStorage,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream,
                             const ::rtl::OUString& rElementName );
+
+    /** Initializes the API storage object for input. */
+    void                initStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream );
+    /** Initializes the API storage object for input/output. */
+    void                initStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream );
 
     /** Returns true, if the object represents a valid storage. */
     virtual bool        implIsStorage() const;
@@ -77,7 +87,7 @@ private:
     virtual void        implGetElementNames( ::std::vector< ::rtl::OUString >& orElementNames ) const;
 
     /** Opens and returns the specified sub storage from the storage. */
-    virtual StorageRef  implOpenSubStorage( const ::rtl::OUString& rElementName, bool bCreate );
+    virtual StorageRef  implOpenSubStorage( const ::rtl::OUString& rElementName, bool bCreateMissing );
 
     /** Opens and returns the specified input stream from the storage. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
@@ -87,17 +97,20 @@ private:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         implOpenOutputStream( const ::rtl::OUString& rElementName );
 
-private:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > XNameContainerRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    XNameAccessRef;
+    /** Commits the current storage. */
+    virtual void        implCommit() const;
 
-    XNameContainerRef   mxStorage;      /// Complete storage based on input or output stream.
-    XNameAccessRef      mxElements;     /// Access to elements of current sub storage.
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        mxFactory;          /// Factory for storage/stream creation.
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                        mxStorage;          /// Access to elements of this sub storage.
+    const OleStorage*   mpParentStorage;    /// Parent OLE storage that contains this storage.
 };
 
 // ============================================================================
 
+} // namespace ole
 } // namespace oox
 
 #endif
-

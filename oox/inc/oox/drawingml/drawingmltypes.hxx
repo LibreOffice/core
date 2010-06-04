@@ -30,6 +30,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -118,6 +119,9 @@ float GetTextSize( const ::rtl::OUString& rValue );
 
 /** converts the ST_TextSpacingPoint to 1/100mm */
 sal_Int32 GetTextSpacingPoint(  const ::rtl::OUString& sValue );
+sal_Int32 GetTextSpacingPoint(  const sal_Int32 nValue );
+
+::com::sun::star::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
 
 /** */
 ::com::sun::star::style::TabAlign GetTabAlign( ::sal_Int32 aToken );

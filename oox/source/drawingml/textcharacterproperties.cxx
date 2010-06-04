@@ -59,6 +59,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
     moHeight.assignIfUsed( rSourceProps.moHeight );
+    moSpacing.assignIfUsed( rSourceProps.moSpacing );
     moUnderline.assignIfUsed( rSourceProps.moUnderline );
     moStrikeout.assignIfUsed( rSourceProps.moStrikeout );
     moCaseMap.assignIfUsed( rSourceProps.moCaseMap );
@@ -98,7 +99,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     // symbol font not supported
 
     if( maCharColor.isUsed() )
-        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter );
+        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );
 
     if( moLang.has() && (moLang.get().getLength() > 0) )
     {
@@ -126,6 +127,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap[ PROP_CharHeightComplex ] <<= fHeight;
     }
 
+    rPropMap[ PROP_CharKerning ] <<= (sal_Int16) GetTextSpacingPoint( moSpacing.get( 0 ) );
+
     rPropMap[ PROP_CharUnderline ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
     rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
     rPropMap[ PROP_CharCaseMap ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
@@ -144,7 +147,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
         rPropMap[ PROP_CharUnderlineHasColor ] <<= true;
-        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter );
+        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter.getGraphicHelper() );
     }
 }
 

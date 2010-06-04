@@ -86,6 +86,8 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbExportNotesPages( sal_False ),
     mbUseTransitionEffects( sal_False ),
     mbIsSkipEmptyPages( sal_True ),
+    mbAddStream( sal_False ),
+    mbEmbedStandardFonts( sal_False ),
     mnFormsType( 0 ),
     mbExportFormFields( sal_True ),
     mbAllowDuplicateFieldNames( sal_False ),
@@ -195,6 +197,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbUseTransitionEffects = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True );
     mbIsSkipEmptyPages = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages"  ) ), sal_False );
     mbAddStream = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), sal_False );
+    mbEmbedStandardFonts = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ), sal_False );
 
     mnFormsType = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
     mbExportFormFields = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
@@ -332,6 +335,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), mbUseTransitionEffects );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), mbIsSkipEmptyPages );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), mbAddStream );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ), mbEmbedStandardFonts );
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -435,6 +439,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
 
     maCbExportFormFields( this, PDFFilterResId( CB_EXPORTFORMFIELDS ) ),
     mbExportFormFieldsUserSelection( sal_False ),
+    mbEmbedStandardFontsUserSelection( sal_False ),
     maFtFormsFormat( this, PDFFilterResId( FT_FORMSFORMAT ) ),
     maLbFormsFormat( this, PDFFilterResId( LB_FORMSFORMAT ) ),
     maCbAllowDuplicateFieldNames( this, PDFFilterResId( CB_ALLOWDUPLICATEFIELDNAMES ) ),
@@ -444,6 +449,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCbExportNotesPages( this, PDFFilterResId( CB_EXPORTNOTESPAGES ) ),
     maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
     maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
+    maCbEmbedStandardFonts( this, PDFFilterResId( CB_EMBEDSTANDARDFONTS ) ),
     mbIsPresentation( sal_False ),
     mbIsWriter( sal_False),
     mpaParent( 0 )
@@ -461,7 +467,11 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
         Point aNewPos = maCbAddStream.GetPosPixel();
         aNewPos.Y() -= nDelta;
         maCbAddStream.SetPosPixel( aNewPos );
+        aNewPos = maCbEmbedStandardFonts.GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        maCbEmbedStandardFonts.SetPosPixel( aNewPos );
     }
+    maCbExportEmptyPages.SetStyle( maCbExportEmptyPages.GetStyle() | WB_VCENTER );
 }
 
 // -----------------------------------------------------------------------------
@@ -524,11 +534,13 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 // get the form values, for use with PDF/A-1 selection interface
     mbTaggedPDFUserSelection = paParent->mbUseTaggedPDF;
     mbExportFormFieldsUserSelection = paParent->mbExportFormFields;
+    mbEmbedStandardFontsUserSelection = paParent->mbEmbedStandardFonts;
 
     if( !maCbPDFA1b.IsChecked() )
     {// the value for PDF/A set by the ToggleExportPDFAHdl method called before
         maCbTaggedPDF.Check( mbTaggedPDFUserSelection  );
         maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
+        maCbEmbedStandardFonts.Check( mbEmbedStandardFontsUserSelection );
     }
 
     maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
@@ -554,6 +566,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
         maCbExportEmptyPages.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
         aPos = maCbAddStream.GetPosPixel();
         maCbAddStream.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
+        aPos = maCbEmbedStandardFonts.GetPosPixel();
+        maCbEmbedStandardFonts.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
         maCbExportNotesPages.Show( FALSE );
         maCbExportNotesPages.Check( FALSE );
     }
@@ -614,11 +628,13 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
         paParent->mnPDFTypeSelection = 1;
         paParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
         paParent->mbExportFormFields = mbExportFormFieldsUserSelection;
+        paParent->mbEmbedStandardFonts = mbEmbedStandardFontsUserSelection;
     }
     else
     {
         paParent->mbUseTaggedPDF =  maCbTaggedPDF.IsChecked();
         paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
+        paParent->mbEmbedStandardFonts = maCbEmbedStandardFonts.IsChecked();
     }
 
     /*
@@ -711,6 +727,9 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
         mbExportFormFieldsUserSelection = maCbExportFormFields.IsChecked();
         maCbExportFormFields.Check( sal_False );
         maCbExportFormFields.Enable( sal_False );
+        mbEmbedStandardFontsUserSelection = maCbEmbedStandardFonts.IsChecked();
+        maCbEmbedStandardFonts.Check( sal_True );
+        maCbEmbedStandardFonts.Enable( sal_False );
     }
     else
     {
@@ -719,6 +738,8 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
         maCbTaggedPDF.Check( mbTaggedPDFUserSelection );
         maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
         maCbExportFormFields.Enable();
+        maCbEmbedStandardFonts.Check( mbEmbedStandardFontsUserSelection );
+        maCbEmbedStandardFonts.Enable();
     }
 // PDF/A-1 doesn't allow launch action, so enable/disable the selection on
 // Link page
