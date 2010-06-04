@@ -244,19 +244,23 @@ namespace dbaui
         {
             case  ::dbaccess::DST_DBASE:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_DBASE_PATH_OR_FILE)));
-                m_aConnectionURL.SetHelpId(HID_DSADMIN_DBASE_PATH);
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId(""/*HID_DSADMIN_DBASE_PATH*/);
                 break;
             case  ::dbaccess::DST_FLAT:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_FLAT_PATH_OR_FILE)));
-                m_aConnectionURL.SetHelpId(HID_DSADMIN_FLAT_PATH);
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId(""/*HID_DSADMIN_FLAT_PATH*/);
                 break;
             case  ::dbaccess::DST_CALC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_CALC_PATH_OR_FILE)));
-                m_aConnectionURL.SetHelpId(HID_DSADMIN_CALC_PATH);
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId(""/*HID_DSADMIN_CALC_PATH*/);
                 break;
             case  ::dbaccess::DST_ADABAS:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_ADABAS_DATABASE_NAME)));
-                m_aConnectionURL.SetHelpId(HID_DSADMIN_ADABAS_DATABASE);
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId(""/*HID_DSADMIN_ADABAS_DATABASE*/);
                 break;
             case  ::dbaccess::DST_ADO:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
@@ -264,33 +268,40 @@ namespace dbaui
             case  ::dbaccess::DST_MSACCESS:
             case  ::dbaccess::DST_MSACCESS_2007:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MSACCESS_MDB_FILE)));
-                m_aConnectionURL.SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId(""/*HID_DSADMIN_MSACCESS_MDB_FILE*/);
                 break;
             case  ::dbaccess::DST_MYSQL_NATIVE:
             case  ::dbaccess::DST_MYSQL_JDBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MYSQL_DATABASE_NAME)));
-                m_aConnectionURL.SetHelpId( HID_DSADMIN_MYSQL_DATABASE );
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId( ""/*HID_DSADMIN_MYSQL_DATABASE*/ );
                 break;
             case  ::dbaccess::DST_ORACLE_JDBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_ORACLE_DATABASE_NAME)));
-                m_aConnectionURL.SetHelpId(HID_DSADMIN_ORACLE_DATABASE);
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId(""/*HID_DSADMIN_ORACLE_DATABASE*/);
                 break;
             case  ::dbaccess::DST_MYSQL_ODBC:
             case  ::dbaccess::DST_ODBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_NAME_OF_ODBC_DATASOURCE)));
-                m_aConnectionURL.SetHelpId( eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId( ""/*eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE*/);
                 break;
             case  ::dbaccess::DST_LDAP:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_HOSTNAME)));
-                m_aConnectionURL.SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId( ""/*HID_DSADMIN_LDAP_HOSTNAME*/ );
                 break;
             case  ::dbaccess::DST_MOZILLA:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MOZILLA_PROFILE_NAME)));
-                m_aConnectionURL.SetHelpId( HID_DSADMIN_MOZILLA_PROFILE_NAME );
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId( ""/*HID_DSADMIN_MOZILLA_PROFILE_NAME*/ );
                 break;
             case  ::dbaccess::DST_THUNDERBIRD:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_THUNDERBIRD_PROFILE_NAME)));
-                m_aConnectionURL.SetHelpId( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
+                // FIXME: HELPID
+                m_aConnectionURL.SetHelpId( ""/*HID_DSADMIN_THUNDERBIRD_PROFILE_NAME*/ );
                 break;
             case  ::dbaccess::DST_OUTLOOK:
             case  ::dbaccess::DST_OUTLOOKEXP:
@@ -320,7 +331,8 @@ namespace dbaui
         bool bShowUserAuthenfication = ( eAuthMode != AuthNone );
         bool bShowUser = ( eAuthMode == AuthUserPwd );
 
-        m_aPB_Connection.SetHelpId(HID_DSADMIN_BROWSECONN);
+        // FIXME: HELPID
+        m_aPB_Connection.SetHelpId(""/*HID_DSADMIN_BROWSECONN*/);
         m_aFL2.Show( bShowUserAuthenfication );
         m_aUserNameLabel.Show( bShowUser && bShowUserAuthenfication );
         m_aUserName.Show( bShowUser && bShowUserAuthenfication );

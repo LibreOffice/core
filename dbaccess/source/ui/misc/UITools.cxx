@@ -1651,7 +1651,8 @@ sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Boo
     if ( _bAll )
     {
         aAsk.AddButton(String(ModuleRes(STR_BUTTON_TEXT_ALL)), RET_ALL, 0);
-        aAsk.GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
+        // FIXME: HELPID
+        aAsk.GetPushButton(RET_ALL)->SetHelpId(""/*HID_CONFIRM_DROP_BUTTON_ALL*/);
     }
     return aAsk.Execute();
 }

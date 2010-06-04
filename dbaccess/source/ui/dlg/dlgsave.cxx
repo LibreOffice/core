@@ -470,7 +470,8 @@ void OSaveAsDlg::implInit()
     else if ( SAD_TITLE_RENAME == ( m_pImpl->m_nFlags & SAD_TITLE_RENAME ) )
     {
         SetText( String( ModuleRes( STR_TITLE_RENAME ) ) );
-        m_pImpl->m_aTitle.SetHelpId(HID_DLG_RENAME);
+        // FIXME: HELPID
+        m_pImpl->m_aTitle.SetHelpId(""/*HID_DLG_RENAME*/);
     }
 
     m_pImpl->m_aPB_OK.SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));

@@ -185,7 +185,8 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
 {
     DBG_CTOR( rpt_OViewsWindow,NULL);
     SetPaintTransparent(TRUE);
-    SetUniqueId(UID_RPT_VIEWSWINDOW);
+    // FIXME: HELPID
+    SetUniqueId(""/*UID_RPT_VIEWSWINDOW*/);
     SetMapMode( MapMode( MAP_100TH_MM ) );
     m_aColorConfig.AddListener(this);
     ImplInitSettings();

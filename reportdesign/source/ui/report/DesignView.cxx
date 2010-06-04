@@ -163,7 +163,8 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_bDeleted( FALSE )
 {
     DBG_CTOR( rpt_ODesignView,NULL);
-    SetHelpId(UID_RPT_RPT_APP_VIEW);
+    // FIXME: HELPID
+    SetHelpId(""/*UID_RPT_RPT_APP_VIEW*/);
     ImplInitSettings();
 
     SetMapMode( MapMode( MAP_100TH_MM ) );

@@ -393,7 +393,8 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
         m_pTreeView->getListBox().setContextMenuProvider( this );
         m_pTreeView->getListBox().setControlActionListener( this );
-        m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
+        // FIXME: HELPID
+        m_pTreeView->SetHelpId(""/*HID_CTL_TREEVIEW*/);
 
         // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
         m_pSplitter->SetSplitPosPixel( getBrowserView()->LogicToPixel( ::Size( 80, 0 ), MAP_APPFONT ).Width() );
@@ -409,11 +410,15 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView->setSelChangeHdl( LINK( this, SbaTableQueryBrowser, OnSelectionChange ) );
 
         // TODO
-        getBrowserView()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
-        getBrowserView()->getVclControl()->SetHelpId(HID_CTL_TABBROWSER);
-        getBrowserView()->SetUniqueId(UID_CTL_CONTENT);
+        // FIXME: HELPID
+        getBrowserView()->getVclControl()->GetDataWindow().SetUniqueId(""/*UID_DATABROWSE_DATAWINDOW*/);
+        // FIXME: HELPID
+        getBrowserView()->getVclControl()->SetHelpId(""/*HID_CTL_TABBROWSER*/);
+        // FIXME: HELPID
+        getBrowserView()->SetUniqueId(""/*UID_CTL_CONTENT*/);
         if (getBrowserView()->getVclControl()->GetHeaderBar())
-            getBrowserView()->getVclControl()->GetHeaderBar()->SetHelpId(HID_DATABROWSE_HEADER);
+            // FIXME: HELPID
+            getBrowserView()->getVclControl()->GetHeaderBar()->SetHelpId(""/*HID_DATABROWSE_HEADER*/);
         InvalidateFeature(ID_BROWSER_EXPLORER);
     }
 

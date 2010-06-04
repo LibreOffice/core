@@ -1072,7 +1072,10 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 // -----------------------------------------------------------------------------
 void OFieldDescControl::InitializeControl(Control* _pControl,ULONG _nHelpId,bool _bAddChangeHandler)
 {
+    // FIXME: HELPID
+    #if 0
     _pControl->SetHelpId(_nHelpId);
+    #endif
     if ( _bAddChangeHandler )
         ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 

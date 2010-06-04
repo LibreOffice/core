@@ -147,8 +147,10 @@ OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
 ,m_nSlotId(0)
 ,m_aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) )
 {
-    m_aColorSet.SetHelpId( HID_RPT_POPUP_COLOR_CTRL );
-    SetHelpId( HID_RPT_POPUP_COLOR );
+    // FIXME: HELPID
+    m_aColorSet.SetHelpId( ""/*HID_RPT_POPUP_COLOR_CTRL*/ );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_RPT_POPUP_COLOR*/ );
     const Size aSize12( 13, 13 );
     ::std::auto_ptr<XColorTable> pColorTable(new XColorTable( SvtPathOptions().GetPalettePath() ));
     short i = 0;

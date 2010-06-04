@@ -367,7 +367,10 @@ namespace dbaui
                 m_pListCell->SelectEntry( sName );
             }
 
+            // FIXME: HELPID
+            #if 0
             m_pListCell->SetHelpId(nHelpId);
+            #endif
         }
     }
 
@@ -505,7 +508,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
      , m_pParentDialog(_pParentDialog)
     {
         m_pRC_Tables = new ORelationControl( this,m_pTableMap );
-        m_pRC_Tables->SetHelpId(HID_RELDLG_KEYFIELDS);
+        // FIXME: HELPID
+        m_pRC_Tables->SetHelpId(""/*HID_RELDLG_KEYFIELDS*/);
         m_pRC_Tables->Init( );
         m_pRC_Tables->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
 

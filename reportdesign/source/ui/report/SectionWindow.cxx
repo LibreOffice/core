@@ -64,7 +64,8 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 ,m_aEndMarker( this,_sColorEntry)
 {
     DBG_CTOR( rpt_OSectionWindow,NULL);
-    SetUniqueId(UID_RPT_SECTIONSWINDOW);
+    // FIXME: HELPID
+    SetUniqueId(""/*UID_RPT_SECTIONSWINDOW*/);
     const MapMode& rMapMode = _pParent->GetMapMode();
     SetMapMode( rMapMode );
     ImplInitSettings();

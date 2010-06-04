@@ -81,7 +81,8 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
 
     m_aIconControl.SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
     m_aIconControl.setControlActionListener( &m_rBorderWin.getView()->getAppController() );
-    m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
+    // FIXME: HELPID
+    m_aIconControl.SetHelpId(""/*HID_APP_SWAP_ICONCONTROL*/);
     m_aIconControl.Show();
     //m_aIconControl.Enable(TRUE);
 }

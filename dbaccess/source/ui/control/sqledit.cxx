@@ -52,7 +52,8 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     ,m_bStopTimer(sal_False )
 {
     DBG_CTOR(OSqlEdit,NULL);
-    SetHelpId( HID_CTL_QRYSQLEDIT );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_CTL_QRYSQLEDIT*/ );
     SetModifyHdl( LINK(this, OSqlEdit, ModifyHdl) );
 
     m_timerUndoActionCreation.SetTimeout(1000);

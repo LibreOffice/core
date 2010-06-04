@@ -310,7 +310,8 @@ OQueryTableView::OQueryTableView( Window* pParent,OQueryDesignView* pView)
     : OJoinTableView( pParent,pView)
 {
     DBG_CTOR(OQueryTableView,NULL);
-    SetHelpId(HID_CTL_QRYDGNTAB);
+    // FIXME: HELPID
+    SetHelpId(""/*HID_CTL_QRYDGNTAB*/);
 }
 
 //------------------------------------------------------------------------

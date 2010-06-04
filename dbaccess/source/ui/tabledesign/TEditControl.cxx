@@ -246,8 +246,10 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
 {
     DBG_CTOR(OTableEditorCtrl,NULL);
 
-    SetHelpId(HID_TABDESIGN_BACKGROUND);
-    GetDataWindow().SetHelpId(HID_CTL_TABLEEDIT);
+    // FIXME: HELPID
+    SetHelpId(""/*HID_TABDESIGN_BACKGROUND*/);
+    // FIXME: HELPID
+    GetDataWindow().SetHelpId(""/*HID_CTL_TABLEEDIT*/);
 
     m_pRowList = GetView()->getController().getRows();
     m_nDataPos = 0;
@@ -342,9 +344,12 @@ void OTableEditorCtrl::InitCellController()
     pDescrCell = new Edit( &GetDataWindow(), WB_LEFT );
     pDescrCell->SetMaxTextLen( MAX_DESCR_LEN );
 
-    pNameCell->SetHelpId(HID_TABDESIGN_NAMECELL);
-    pTypeCell->SetHelpId(HID_TABDESIGN_TYPECELL);
-    pDescrCell->SetHelpId(HID_TABDESIGN_COMMENTCELL);
+    // FIXME: HELPID
+    pNameCell->SetHelpId(""/*HID_TABDESIGN_NAMECELL*/);
+    // FIXME: HELPID
+    pTypeCell->SetHelpId(""/*HID_TABDESIGN_TYPECELL*/);
+    // FIXME: HELPID
+    pDescrCell->SetHelpId(""/*HID_TABDESIGN_COMMENTCELL*/);
 
     Size aHeight;
     const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell};

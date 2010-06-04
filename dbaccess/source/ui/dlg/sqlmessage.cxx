@@ -689,11 +689,8 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     {
         lcl_addButton( *this, BUTTON_HELP, false );
 
-        SmartId aHelpId( m_sHelpURL );
-        if ( m_sHelpURL.indexOfAsciiL( "HID:", 4 ) == 0 )
-            aHelpId = SmartId( m_sHelpURL.copy( 4 ).toInt32() );
-
-        SetSmartHelpId( aHelpId );
+        // FIXME: HELPID
+        SetHelpId( rtl::OUStringToOString( m_sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }
 }
 
@@ -726,7 +723,8 @@ void OSQLMessageBox::impl_addDetailsButton()
         PushButton* pButton = GetPushButton( BUTTONID_MORE );
         OSL_ENSURE( pButton, "OSQLMessageBox::impl_addDetailsButton: just added this button, why isn't it there?" );
         pButton->SetClickHdl( LINK( this, OSQLMessageBox, ButtonClickHdl ) );
-        pButton->SetUniqueId( UID_SQLERROR_BUTTONMORE );
+        // FIXME: HELPID
+        pButton->SetUniqueId( ""/*UID_SQLERROR_BUTTONMORE*/ );
     }
 }
 

@@ -65,13 +65,16 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
 ,m_bShowRuler(sal_True)
 {
     DBG_CTOR( rpt_OStartMarker,NULL);
-    SetUniqueId(HID_RPT_STARTMARKER);
+    // FIXME: HELPID
+    SetUniqueId(""/*HID_RPT_STARTMARKER*/);
 
     osl_incrementInterlockedCount(&s_nImageRefCount);
     initDefaultNodeImages();
     ImplInitSettings();
-    m_aText.SetHelpId(HID_RPT_START_TITLE);
-    m_aImage.SetHelpId(HID_RPT_START_IMAGE);
+    // FIXME: HELPID
+    m_aText.SetHelpId(""/*HID_RPT_START_TITLE*/);
+    // FIXME: HELPID
+    m_aImage.SetHelpId(""/*HID_RPT_START_IMAGE*/);
     m_aText.Show();
     m_aImage.Show();
     m_aVRuler.Show();

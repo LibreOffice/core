@@ -318,11 +318,16 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
     declarePath( static_cast<PathId>(m_pCollection->size()+1), aPath);
 
-    m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
-    m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);
-    m_pCancel->SetHelpId(HID_DBWIZ_CANCEL);
-    m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
-    m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
+    // FIXME: HELPID
+    m_pPrevPage->SetHelpId(""/*HID_DBWIZ_PREVIOUS*/);
+    // FIXME: HELPID
+    m_pNextPage->SetHelpId(""/*HID_DBWIZ_NEXT*/);
+    // FIXME: HELPID
+    m_pCancel->SetHelpId(""/*HID_DBWIZ_CANCEL*/);
+    // FIXME: HELPID
+    m_pFinish->SetHelpId(""/*HID_DBWIZ_FINISH*/);
+    // FIXME: HELPID
+    m_pHelp->SetUniqueId(""/*UID_DBWIZ_HELP*/);
     SetRoadmapInteractive( sal_True );
     ActivatePage();
 }

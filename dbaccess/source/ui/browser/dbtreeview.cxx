@@ -64,7 +64,8 @@ DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
     m_pTreeListBox->EnableInplaceEditing( sal_True );
-    m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);
+    // FIXME: HELPID
+    m_pTreeListBox->SetHelpId(""/*HID_TLB_TREELISTBOX*/);
     m_pTreeListBox->Show();
 }
 

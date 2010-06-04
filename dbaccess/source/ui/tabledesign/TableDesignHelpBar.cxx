@@ -52,7 +52,8 @@ OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
 {
     DBG_CTOR(OTableDesignHelpBar,NULL);
     m_pTextWin = new MultiLineEdit( this, WB_VSCROLL | WB_LEFT | WB_BORDER | WB_NOTABSTOP | WB_READONLY);
-    m_pTextWin->SetHelpId(HID_TABLE_DESIGN_HELP_WINDOW);
+    // FIXME: HELPID
+    m_pTextWin->SetHelpId(""/*HID_TABLE_DESIGN_HELP_WINDOW*/);
     m_pTextWin->SetReadOnly();
     m_pTextWin->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
     m_pTextWin->Show();

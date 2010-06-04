@@ -72,7 +72,8 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 ,m_pObjFac( new DlgEdFactory() )
 {
     DBG_CTOR( rpt_OReportWindow,NULL);
-    SetHelpId(UID_RPT_REPORTWINDOW);
+    // FIXME: HELPID
+    SetHelpId(""/*UID_RPT_REPORTWINDOW*/);
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
     m_aViewsWindow.Show();

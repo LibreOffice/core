@@ -90,7 +90,8 @@ OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORD
     m_pEditorCtrl   = new OTableEditorCtrl( this);
     m_pFieldDescWin = new OTableFieldDescWin( this );
 
-    m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
+    // FIXME: HELPID
+    m_pFieldDescWin->SetHelpId(""/*HID_TAB_DESIGN_DESCWIN*/);
 
     // set depending windows and controls
     m_pEditorCtrl->SetDescrWin(m_pFieldDescWin);

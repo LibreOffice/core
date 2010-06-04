@@ -406,11 +406,15 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
     ,m_pDetailView(_pDetailView)
 {
     DBG_CTOR(OTasksWindow,NULL);
-    SetUniqueId(UID_APP_TASKS_WINDOW);
-    m_aCreation.SetHelpId(HID_APP_CREATION_LIST);
+    // FIXME: HELPID
+    SetUniqueId(""/*UID_APP_TASKS_WINDOW*/);
+    // FIXME: HELPID
+    m_aCreation.SetHelpId(""/*HID_APP_CREATION_LIST*/);
     m_aCreation.SetSelectHdl(LINK(this, OTasksWindow, OnEntrySelectHdl));
-    m_aHelpText.SetHelpId(HID_APP_HELP_TEXT);
-    m_aDescription.SetHelpId(HID_APP_DESCRIPTION_TEXT);
+    // FIXME: HELPID
+    m_aHelpText.SetHelpId(""/*HID_APP_HELP_TEXT*/);
+    // FIXME: HELPID
+    m_aDescription.SetHelpId(""/*HID_APP_DESCRIPTION_TEXT*/);
     m_aDescription.SetText(ModuleRes(STR_DESCRIPTION));
     ImplInitSettings(sal_True,sal_True,sal_True);
 }
@@ -600,7 +604,8 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     ,m_rBorderWin(_rParent)
 {
     DBG_CTOR(OApplicationDetailView,NULL);
-    SetUniqueId(UID_APP_DETAIL_VIEW);
+    // FIXME: HELPID
+    SetUniqueId(""/*UID_APP_DETAIL_VIEW*/);
     ImplInitSettings( sal_True, sal_True, sal_True );
 
     m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,m_rBorderWin,_ePreviewMode);
@@ -611,10 +616,12 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     pTasks->Show();
     pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
     m_aTasks.setChildWindow(pTasks);
-    m_aTasks.SetUniqueId(UID_APP_TASKS_VIEW);
+    // FIXME: HELPID
+    m_aTasks.SetUniqueId(""/*UID_APP_TASKS_VIEW*/);
     m_aTasks.Show();
 
-    m_aContainer.SetUniqueId(UID_APP_CONTAINER_VIEW);
+    // FIXME: HELPID
+    m_aContainer.SetUniqueId(""/*UID_APP_CONTAINER_VIEW*/);
     m_aContainer.Show();
 
     const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
@@ -623,7 +630,8 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     set(&m_aContainer,&m_aTasks);
 
     m_aHorzSplitter.Show();
-    m_aHorzSplitter.SetUniqueId(UID_APP_VIEW_HORZ_SPLIT);
+    // FIXME: HELPID
+    m_aHorzSplitter.SetUniqueId(""/*UID_APP_VIEW_HORZ_SPLIT*/);
     setSplitter(&m_aHorzSplitter);
 }
 // -----------------------------------------------------------------------------
