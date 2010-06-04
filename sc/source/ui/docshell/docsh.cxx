@@ -457,7 +457,7 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
-    InitOptions();
+    InitOptions(true);
 
     GetUndoManager()->Clear();
 
