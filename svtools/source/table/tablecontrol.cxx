@@ -70,6 +70,7 @@ namespace svt { namespace table
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
         ,m_bSelectionChanged(false)
+        ,m_bTooltip(false)
     {
         TableDataWindow* aTableData = m_pImpl->getDataWindow();
         aTableData->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
@@ -546,11 +547,17 @@ void TableControl::setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUSt
 {
     m_aText = aText;
     m_nCols = nCols;
+    m_bTooltip = true;
 }
 // -----------------------------------------------------------------------
 void TableControl::selectionChanged(bool _bChanged)
 {
     m_bSelectionChanged = _bChanged;
+}
+// -----------------------------------------------------------------------
+bool TableControl::isTooltip()
+{
+    return m_bTooltip;
 }
 // -----------------------------------------------------------------------
 IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )
