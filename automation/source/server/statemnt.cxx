@@ -6282,6 +6282,8 @@ protected:
                                                                 MouseEvent aMEvnt(aPos,1,MOUSE_SIMPLECLICK|MOUSE_SELECT,MOUSE_LEFT,KEY_MOD1);
                                                                 pTC->getSelEngine()->SelMouseButtonDown( aMEvnt );
                                                                 pTC->getSelEngine()->SelMouseButtonUp( aMEvnt );
+                                                                if ( pTC->IsRowSelected( nNr1-1 ) )
+                                                                    pTC->Select();
                                                             }
                                                             else
                                                                 ReportError( aUId, GEN_RES_STR2c2( S_METHOD_FAILED, MethodString( nMethodId ), "find pos" ) );
