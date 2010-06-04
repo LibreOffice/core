@@ -9,7 +9,7 @@
 # there is a java which is available for use by all
 #_____________________________________________
 
-import sys, string, os.path
+import sys, string, os.path 
 
 CFGFILE = "../../../../l10ntools/source/filter/merge/FCFGMerge.cfg"
 
