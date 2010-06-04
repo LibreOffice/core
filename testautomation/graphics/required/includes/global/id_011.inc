@@ -1130,7 +1130,7 @@ testcase tdBezierToolbar
         '/// Click button 'Delete points' on 'Object Toolbar' ///'
     Kontext "Bezierobjectbar"
         Printlog "- Break curve"
-        if ( hClickButton( Loeschen ) ) = -1 ) then
+        if ( hClickButton( Loeschen ) = -1 ) then
             warnlog( "Unable to click button <Loeschen>" )
         endif
         'try
