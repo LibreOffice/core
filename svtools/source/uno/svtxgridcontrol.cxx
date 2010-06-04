@@ -180,7 +180,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
         {
-            sal_Int32 colorHeader = 0x000000;
+            sal_Int32 colorHeader = 0xFFFFFF;
             if( aValue >>= colorHeader )
             {
                 m_pTableModel->setHeaderBackgroundColor(colorHeader);
@@ -189,7 +189,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_LINE_COLOR:
         {
-            sal_Int32 colorLine = 0x000000;
+            sal_Int32 colorLine = 0xFFFFFF;
             if( aValue >>= colorLine )
             {
                 m_pTableModel->setLineColor(colorLine);
@@ -198,7 +198,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
         {
-            sal_Int32 colorEvenRow = 0x000000;
+            sal_Int32 colorEvenRow = 0xFFFFFF;
             if( aValue >>= colorEvenRow )
             {
                 m_pTableModel->setEvenRowBackgroundColor(colorEvenRow);
@@ -207,7 +207,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_ROW_BACKGROUND:
         {
-            sal_Int32 colorBackground = 0x000000;
+            sal_Int32 colorBackground = 0xFFFFFF;
             if( aValue >>= colorBackground )
             {
                 m_pTableModel->setOddRowBackgroundColor(colorBackground);
@@ -216,10 +216,20 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_TEXTCOLOR:
         {
-            sal_Int32 colorText = 0xFFFFFF;
+            sal_Int32 colorText = 0x000000;
             if( aValue >>= colorText )
             {
                 m_pTableModel->setTextColor(colorText);
+            }
+            break;
+        }
+        case BASEPROPERTY_BACKGROUNDCOLOR:
+        {
+            sal_Int32 color = 0xFFFFFF;
+            if( aValue >>= color )
+            {
+                pTable->getDataWindow()->SetBackground( color );
+                pTable->getDataWindow()->SetControlBackground( color );
             }
             break;
         }

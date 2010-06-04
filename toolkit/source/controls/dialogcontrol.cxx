@@ -492,7 +492,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
     static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 21 );
+        pNamesSeq = new Sequence< ::rtl::OUString >( 22 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -515,7 +515,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
         pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
         pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
         pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
-        pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
+        pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
 
     }
     return *pNamesSeq;

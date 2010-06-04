@@ -79,6 +79,7 @@ namespace svt { namespace table
         ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aText;
         Link m_aSelectHdl;
         bool m_bSelectionChanged;
+        bool m_bTooltip;
     public:
         ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
 
@@ -222,6 +223,7 @@ namespace svt { namespace table
     ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
     void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
     void selectionChanged(bool _bChanged);
+    bool isTooltip();
 
 
     protected:
