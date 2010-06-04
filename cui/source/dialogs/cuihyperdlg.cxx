@@ -107,6 +107,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbReadOnly      ( sal_False ),
     mbIsHTMLDoc     ( sal_False )
 {
+    SetUniqueId( SID_HYPERLINK_DIALOG );
     mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
