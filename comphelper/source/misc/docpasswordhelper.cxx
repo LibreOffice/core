@@ -1,4 +1,4 @@
-/*************************************************************************
+/***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -103,7 +103,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
         sal_uInt16 nLowResult = 0;
 
         const sal_Unicode* pStr = aUString.getStr();
-        for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
+        for ( sal_uInt32 nInd = 0; nInd < nLen; nInd++ )
         {
             // NO Encoding during conversion!
             // The specification says that the low byte should be used in case it is not NULL
