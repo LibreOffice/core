@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,17 +24,16 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
-#include <sfx2/filedlghelper.hxx>
-#include <sfxresid.hxx>
-#include <dialog.hrc>
+#include <sfx2/sfx.hrc>
+#include "sfxlocal.hrc"
 
-SfxUrlDialog::SfxUrlDialog( Window *pParent )
-    : ModalDialog( pParent, SfxResId( RID_URLOPEN ) ),
-      aEdit( this, SfxResId(RID_URLOPEN_URL) ),
-      aOk( this, SfxResId(RID_URLOPEN_OK) ),
-      aCancel( this, SfxResId(RID_URLOPEN_CANCEL) )
+Image SFX_IMG_CLOSE_DOC
 {
-    FreeResource();
-}
+    ImageBitmap = Bitmap { File = "closedoc.png" ; };
+};
+
+Image SFX_IMG_CLOSE_DOC_HC
+{
+    ImageBitmap = Bitmap { File = "closedochc.png" ; };
+};
+

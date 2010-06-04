@@ -46,15 +46,12 @@
 #include "svtools/fileview.hxx"
 #include "svtools/inettbc.hxx"
 #include "iodlg.hxx"
-#ifndef _SVTOOLS_IODLGIMPL_HRC
 #include "iodlg.hrc"
-#endif
 #include "svtools/imagemgr.hxx"
 #include <unotools/localfilehelper.hxx>
 #include "unotools/useroptions.hxx"
-#ifndef _RTL_INSTANCE_HXX_
 #include "rtl/instance.hxx"
-#endif
+#include <svl/svl.hrc>
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSDTOR

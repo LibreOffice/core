@@ -941,7 +941,6 @@ void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( Ru
 void FmXFormShell::disposing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::disposing" );
-    OSL_TRACE( "--- FmXFormShell::disposing      : %p, ........, ........", this );
     impl_checkDisposed();
 
     FmXFormShell_BASE::disposing();
@@ -3793,7 +3792,6 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::viewDeactivated" );
-    OSL_TRACE( "--- FmXFormShell::viewDeactivated: %p, %p, ........", this, &_rCurrentView );
 
     if ( _rCurrentView.GetImpl() && !_rCurrentView.IsDesignMode() )
     {
@@ -3828,7 +3826,6 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
     // remove callbacks at the page
     if ( pPage )
     {
-        OSL_TRACE( "--- FmXFormShell::resetHandler   : %p, ........, %p", this, pPage );
         pPage->GetImpl().SetFormsCreationHdl( Link() );
     }
     UpdateForms( sal_True );
@@ -3867,7 +3864,6 @@ IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
 void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::viewActivated" );
-    OSL_TRACE( "--- FmXFormShell::viewActivated  : %p, %p, ........", this, &_rCurrentView );
 
     FmFormPage* pPage = _rCurrentView.GetCurPage();
 
@@ -3897,7 +3893,6 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncActi
     // set callbacks at the page
     if ( pPage )
     {
-        OSL_TRACE( "--- FmXFormShell::setHandler     : %p, ........, %p", this, pPage );
         pPage->GetImpl().SetFormsCreationHdl( LINK( this, FmXFormShell, OnFormsCreated ) );
     }
 
