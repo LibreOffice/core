@@ -528,6 +528,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         Atom a[4];
         int  n = 0;
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
+        if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
+            a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
         if( ! s_pSaveYourselfFrame && ! mpParent)
         {
             // at all times have only one frame with SaveYourself
@@ -549,10 +551,22 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         pHints->win_gravity = GetDisplay()->getWMAdaptor()->getPositionWinGravity();
         pHints->x           = 0;
         pHints->y           = 0;
+        if( mbFullScreen )
+        {
+            pHints->flags |= PMaxSize | PMinSize;
+            pHints->max_width = w+100;
+            pHints->max_height = h+100;
+            pHints->min_width  = w;
+            pHints->min_height = h;
+        }
         XSetWMNormalHints( GetXDisplay(),
                            GetShellWindow(),
                            pHints );
         XFree (pHints);
+
+        // set PID and WM_CLIENT_MACHINE
+        pDisplay_->getWMAdaptor()->setClientMachine( this );
+        pDisplay_->getWMAdaptor()->setPID( this );
 
         // set client leader
         if( aClientLeader )
@@ -605,7 +619,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
             eType = WMAdaptor::windowType_Utility;
         if( nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION )
             eType = WMAdaptor::windowType_Toolbar;
-        if( nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN )
+        if(    (nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN)
+            && GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
             eType = WMAdaptor::windowType_Dock;
 
         GetDisplay()->getWMAdaptor()->
@@ -735,6 +750,8 @@ void X11SalFrame::passOnSaveYourSelf()
             int  n = 0;
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
+            if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
+                a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
             XSetWMProtocols( GetXDisplay(), s_pSaveYourselfFrame->GetShellWindow(), a, n );
         }
     }
@@ -1130,7 +1147,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     // even though transient frames should be kept above their parent
     // this does not necessarily hold true for DOCK type windows
     // so artificially set ABOVE and remove it again on hide
-    if( mpParent && (mpParent->nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
+    if( mpParent && (mpParent->nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) && pDisplay_->getWMAdaptor()->isLegacyPartialFullscreen())
         pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bVisible );
 
     bMapped_   = bVisible;
@@ -1322,11 +1339,6 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     }
     else
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION )
-            fprintf( stderr, "hide on ownerdraw\n" );
-#endif
-
         if( getInputContext() )
             getInputContext()->Unmap( this );
 
@@ -1616,6 +1628,7 @@ void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
     }
     else
         SetPosSize( aPosSize );
+
     bDefaultPosition_ = False;
 }
 
@@ -2042,6 +2055,12 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
             pHints->y           = values.y;
             pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
         }
+        if( mbFullScreen )
+        {
+            pHints->max_width   = 10000;
+            pHints->max_height  = 10000;
+            pHints->flags |= PMaxSize;
+        }
         XSetWMNormalHints( GetXDisplay(),
                            GetShellWindow(),
                            pHints );
@@ -2199,28 +2218,15 @@ void X11SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             maGeometry.nWidth = aRect.GetWidth();
             maGeometry.nHeight = aRect.GetHeight();
             mbMaximizedHorz = mbMaximizedVert = false;
+            mbFullScreen = true;
             createNewWindow( None, m_nScreen );
-            GetDisplay()->getWMAdaptor()->enableAlwaysOnTop( this, true );
-            #if 0
-            // this would give additional intent to the window
-            // manager to force the positioning of the window;
-            // alas all other windows will be expunged from that
-            // region, leaving us in a pity state afterwards
-            Size aScreenSize = pDisplay_->GetScreenSize( m_nScreen );
-            pDisplay_->getWMAdaptor()->setFrameStruts( this,
-                    aRect.Left(), aRect.Top(),
-                    aScreenSize.Width() - aRect.Right(),
-                    aScreenSize.Height() - aRect.Bottom(),
-                    aRect.Left(), aRect.Right(),
-                    aRect.Top(), aRect.Bottom(),
-                    aRect.Left(), aRect.Right(),
-                    aRect.Top(), aRect.Bottom()
-                    );
-            #endif
-
+            if( GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                GetDisplay()->getWMAdaptor()->enableAlwaysOnTop( this, true );
+            else
+                GetDisplay()->getWMAdaptor()->showFullScreen( this, true );
             if( bVisible )
                 Show(TRUE);
-            mbFullScreen = true;
+
         }
         else
         {
@@ -3927,52 +3933,56 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
         Close(); // ???
         return 1;
     }
-    else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS )
-             && ! ( nStyle_ & SAL_FRAME_STYLE_PLUG )
-             && ! (( nStyle_ & SAL_FRAME_STYLE_FLOAT ) && (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
-             )
+    else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS ) )
     {
-        if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
+        if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::NET_WM_PING ) )
+            rWMAdaptor.answerPing( this, pEvent );
+        else if( ! ( nStyle_ & SAL_FRAME_STYLE_PLUG )
+              && ! (( nStyle_ & SAL_FRAME_STYLE_FLOAT ) && (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+             )
         {
-            Close();
-            return 1;
-        }
-        else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_TAKE_FOCUS ) )
-        {
-            // do nothing, we set the input focus in ToTop() if necessary
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "got WM_TAKE_FOCUS on %s window\n",
-                     (nStyle_&SAL_FRAME_STYLE_OWNERDRAWDECORATION) ?
-                     "ownerdraw" : "NON OWNERDRAW" );
-#endif
-        }
-        else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
-        {
-            bool bSession = rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" );
-
-            if( ! bSession )
+            if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
             {
-                if( this == s_pSaveYourselfFrame )
+                Close();
+                return 1;
+            }
+            else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_TAKE_FOCUS ) )
+            {
+                // do nothing, we set the input focus in ToTop() if necessary
+    #if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "got WM_TAKE_FOCUS on %s window\n",
+                         (nStyle_&SAL_FRAME_STYLE_OWNERDRAWDECORATION) ?
+                         "ownerdraw" : "NON OWNERDRAW" );
+    #endif
+            }
+            else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
+            {
+                bool bSession = rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" );
+
+                if( ! bSession )
                 {
-                    ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
-                    const char* argv[2];
-                    argv[0] = "/bin/sh";
-                    argv[1] = const_cast<char*>(aExec.GetBuffer());
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
-#endif
-                    XSetCommand( GetXDisplay(), GetShellWindow(), (char**)argv, 2 );
+                    if( this == s_pSaveYourselfFrame )
+                    {
+                        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+                        const char* argv[2];
+                        argv[0] = "/bin/sh";
+                        argv[1] = const_cast<char*>(aExec.GetBuffer());
+    #if OSL_DEBUG_LEVEL > 1
+                        fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
+    #endif
+                        XSetCommand( GetXDisplay(), GetShellWindow(), (char**)argv, 2 );
+                    }
+                    else
+                        // can only happen in race between WM and window closing
+                        XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
                 }
                 else
-                    // can only happen in race between WM and window closing
-                    XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
-            }
-            else
-            {
-                // save open documents; would be good for non Dtwm, too,
-                // but there is no real Shutdown message in the ancient
-                // SM protocol; on Dtwm SaveYourself really means Shutdown, too.
-                IceSalSession::handleOldX11SaveYourself( this );
+                {
+                    // save open documents; would be good for non Dtwm, too,
+                    // but there is no real Shutdown message in the ancient
+                    // SM protocol; on Dtwm SaveYourself really means Shutdown, too.
+                    IceSalSession::handleOldX11SaveYourself( this );
+                }
             }
         }
     }
