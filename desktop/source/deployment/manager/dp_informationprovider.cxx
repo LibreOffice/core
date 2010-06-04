@@ -246,7 +246,14 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
 
         rtl::OUString sOnlineVersion;
         if (info.info.is())
-            sOnlineVersion = info.version;
+        {
+            // check, if there are unsatisfied dependencies and ignore this online update
+            dp_misc::DescriptionInfoset infoset(mxContext, info.info);
+            uno::Sequence< uno::Reference< xml::dom::XElement > >
+                ds( dp_misc::Dependencies::check( infoset ) );
+            if ( ! ds.getLength() )
+                sOnlineVersion = info.version;
+        }
 
         rtl::OUString sVersionUser;
         rtl::OUString sVersionShared;
