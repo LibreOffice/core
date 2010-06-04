@@ -31,6 +31,14 @@
 '*
 '\*****************************************************************
 
+sub im_002_
+
+    call tiEditDeleteSlide()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiEditDeleteSlide
 printlog "open application"
    Call hNewDocument

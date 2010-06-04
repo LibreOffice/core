@@ -31,6 +31,14 @@
 '*
 '\*****************************************************************
 
+sub im_004_
+
+    call tiInsertSlideExpandSummary()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiInsertSlideExpandSummary
 
 printlog "open application "

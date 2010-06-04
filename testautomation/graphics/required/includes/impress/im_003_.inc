@@ -29,12 +29,19 @@
 '*
 '* short description : Impress Resource Test: View Menu
 '*
-'***********************************************************************************
-' #1 tiViewPanes
-' #1 tiViewMasterView
-' #1 tiViewSlideMaster
-' #1 tiViewToolbar_1
 '\**********************************************************************************
+
+sub im_003_
+
+    call tiViewPanes()
+    call tiViewMasterView()
+    call tiViewSlideMaster()
+    call tiViewToolbar_1()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiViewPanes
 
     goto endsub 'TODO WG, tiViewPanes outcommented due to reconstruction of test
