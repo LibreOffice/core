@@ -135,8 +135,10 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); //#106611#
     SetBackground();
 
-    SetHelpId( HID_SC_WIN_PREVIEW );
-    SetUniqueId( HID_SC_WIN_PREVIEW );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_SC_WIN_PREVIEW*/ );
+    // FIXME: HELPID
+    SetUniqueId( ""/*HID_SC_WIN_PREVIEW*/ );
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
 }

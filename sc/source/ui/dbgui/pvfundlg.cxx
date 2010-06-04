@@ -651,7 +651,8 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
 
     // *** HIDDEN ITEMS ***
 
-    maLbHide.SetHelpId( HID_SC_DPSUBT_HIDE );
+    // FIXME: HELPID
+    maLbHide.SetHelpId( ""/*HID_SC_DPSUBT_HIDE*/ );
     InitHideListBox();
 
     // *** HIERARCHY ***

@@ -66,8 +66,10 @@ void ScShowTabDlg::SetDescription(
 {
     SetText( rTitle );
     aFtLbTitle.SetText( rFixedText );
-    SetHelpId( nDlgHelpId );
-    aLb.SetHelpId( nLbHelpId );
+    // FIXME: HELPID
+    SetHelpId( ""/*nDlgHelpId*/ );
+    // FIXME: HELPID
+    aLb.SetHelpId( ""/*nLbHelpId*/ );
 }
 
 void ScShowTabDlg::Insert( const String& rString, BOOL bSelected )

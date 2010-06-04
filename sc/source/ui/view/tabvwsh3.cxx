@@ -1015,8 +1015,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
                         pDlg->SetText( ScResId(SCSTR_UNPROTECTDOC) );
                         pDlg->SetMinLen( 0 );
-                        pDlg->SetHelpId( FID_PROTECT_DOC );
-                        pDlg->SetEditHelpId( HID_PASSWD_DOC );
+                        // FIXME: HELPID
+                        pDlg->SetHelpId( ""/*FID_PROTECT_DOC*/ );
+                        // FIXME: HELPID
+                        pDlg->SetEditHelpId( ""/*HID_PASSWD_DOC*/ );
 
                         if (pDlg->Execute() == RET_OK)
                             aPassword = pDlg->GetPassword();
@@ -1038,8 +1040,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
                     pDlg->SetText( ScResId(SCSTR_PROTECTDOC) );
                     pDlg->SetMinLen( 0 );
-                    pDlg->SetHelpId( FID_PROTECT_DOC );
-                    pDlg->SetEditHelpId( HID_PASSWD_DOC );
+                    // FIXME: HELPID
+                    pDlg->SetHelpId( ""/*FID_PROTECT_DOC*/ );
+                    // FIXME: HELPID
+                    pDlg->SetEditHelpId( ""/*HID_PASSWD_DOC*/ );
                     pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
 
                     if (pDlg->Execute() == RET_OK)
@@ -1161,8 +1165,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
                     pDlg->SetMinLen( 0 );
-                    pDlg->SetHelpId( FID_PROTECT_TABLE );
-                    pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+                    // FIXME: HELPID
+                    pDlg->SetHelpId( ""/*FID_PROTECT_TABLE*/ );
+                    // FIXME: HELPID
+                    pDlg->SetEditHelpId( ""/*HID_PASSWD_TABLE*/ );
 
                     if (pDlg->Execute() == RET_OK)
                         aPassword = pDlg->GetPassword();
@@ -1183,8 +1189,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
                 pDlg->SetText( ScResId(SCSTR_PROTECTTAB) );
                 pDlg->SetMinLen( 0 );
-                pDlg->SetHelpId( FID_PROTECT_TABLE );
-                pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+                // FIXME: HELPID
+                pDlg->SetHelpId( ""/*FID_PROTECT_TABLE*/ );
+                // FIXME: HELPID
+                pDlg->SetEditHelpId( ""/*HID_PASSWD_TABLE*/ );
                 pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
 
                 if (pDlg->Execute() == RET_OK)

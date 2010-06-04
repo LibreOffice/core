@@ -1156,7 +1156,8 @@ void CombiColumnLineChartDialogController::showExtraControls( Window* pParent, c
         m_pMF_NumberOfLines->SetLast( 100, FUNIT_CUSTOM );
         m_pMF_NumberOfLines->SetMin( 1, FUNIT_CUSTOM );
         m_pMF_NumberOfLines->SetMax( 100, FUNIT_CUSTOM );
-        m_pMF_NumberOfLines->SetHelpId( HID_SCH_NUM_OF_LINES );
+        // FIXME: HELPID
+        m_pMF_NumberOfLines->SetHelpId( ""/*HID_SCH_NUM_OF_LINES*/ );
 
         m_pMF_NumberOfLines->SetModifyHdl( LINK( this, CombiColumnLineChartDialogController, ChangeLineCountHdl ) );
     }

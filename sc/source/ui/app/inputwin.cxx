@@ -177,22 +177,28 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     InsertWindow    ( 7, &aTextWindow, 0,                                 6 );
 
     aWndPos    .SetQuickHelpText( ScResId( SCSTR_QHELP_POSWND ) );
-    aWndPos    .SetHelpId       ( HID_INSWIN_POS );
+    // FIXME: HELPID
+    aWndPos    .SetHelpId       ( ""/*HID_INSWIN_POS*/ );
     aTextWindow.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
-    aTextWindow.SetHelpId       ( HID_INSWIN_INPUT );
+    // FIXME: HELPID
+    aTextWindow.SetHelpId       ( ""/*HID_INSWIN_INPUT*/ );
 
     //  kein SetHelpText, die Hilfetexte kommen aus der Hilfe
 
     SetItemText ( SID_INPUT_FUNCTION, ScResId( SCSTR_QHELP_BTNCALC ) );
-    SetHelpId   ( SID_INPUT_FUNCTION, HID_INSWIN_CALC );
+    // FIXME: HELPID
+    SetHelpId   ( SID_INPUT_FUNCTION, ""/*HID_INSWIN_CALC*/ );
 
     SetItemText ( SID_INPUT_SUM, aTextSum );
-    SetHelpId   ( SID_INPUT_SUM, HID_INSWIN_SUMME );
+    // FIXME: HELPID
+    SetHelpId   ( SID_INPUT_SUM, ""/*HID_INSWIN_SUMME*/ );
 
     SetItemText ( SID_INPUT_EQUAL, aTextEqual );
-    SetHelpId   ( SID_INPUT_EQUAL, HID_INSWIN_FUNC );
+    // FIXME: HELPID
+    SetHelpId   ( SID_INPUT_EQUAL, ""/*HID_INSWIN_FUNC*/ );
 
-    SetHelpId( HID_SC_INPUTWIN );   // fuer die ganze Eingabezeile
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_SC_INPUTWIN*/ ); // fuer die ganze Eingabezeile
 
     aWndPos     .Show();
     aTextWindow .Show();
@@ -560,9 +566,11 @@ void ScInputWindow::SetOkCancelMode()
         InsertItem( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ), 0, 3 );
         InsertItem( SID_INPUT_OK,     IMAGE( SID_INPUT_OK ),     0, 4 );
         SetItemText ( SID_INPUT_CANCEL, aTextCancel );
-        SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
+        // FIXME: HELPID
+        SetHelpId   ( SID_INPUT_CANCEL, ""/*HID_INSWIN_CANCEL*/ );
         SetItemText ( SID_INPUT_OK,     aTextOk );
-        SetHelpId   ( SID_INPUT_OK,     HID_INSWIN_OK );
+        // FIXME: HELPID
+        SetHelpId   ( SID_INPUT_OK,     ""/*HID_INSWIN_OK*/ );
         bIsOkCancelMode = TRUE;
     }
 }
@@ -585,9 +593,11 @@ void ScInputWindow::SetSumAssignMode()
         InsertItem( SID_INPUT_SUM,   IMAGE( SID_INPUT_SUM ),     0, 3 );
         InsertItem( SID_INPUT_EQUAL, IMAGE( SID_INPUT_EQUAL ),   0, 4 );
         SetItemText ( SID_INPUT_SUM,   aTextSum );
-        SetHelpId   ( SID_INPUT_SUM,   HID_INSWIN_SUMME );
+        // FIXME: HELPID
+        SetHelpId   ( SID_INPUT_SUM,   ""/*HID_INSWIN_SUMME*/ );
         SetItemText ( SID_INPUT_EQUAL, aTextEqual );
-        SetHelpId   ( SID_INPUT_EQUAL, HID_INSWIN_FUNC );
+        // FIXME: HELPID
+        SetHelpId   ( SID_INPUT_EQUAL, ""/*HID_INSWIN_FUNC*/ );
         bIsOkCancelMode = FALSE;
 
         SetFormulaMode(FALSE);      // kein editieren -> keine Formel

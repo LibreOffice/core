@@ -240,7 +240,8 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     maStartHelper   ( maRbAutoStart, maRbManStart, maEdStart, rNullDate ),
     maEndHelper     ( maRbAutoEnd, maRbManEnd, maEdEnd, rNullDate )
 {
-    maLbUnits.SetHelpId( HID_SC_DPDATEGROUP_LB );
+    // FIXME: HELPID
+    maLbUnits.SetHelpId( ""/*HID_SC_DPDATEGROUP_LB*/ );
     ResStringArray aArr( ScResId( STR_UNITS ) );
     for( USHORT nIdx = 0, nCount = sal::static_int_cast<USHORT>(aArr.Count()); nIdx < nCount; ++nIdx )
         maLbUnits.InsertEntry( aArr.GetString( nIdx ) );

@@ -1182,8 +1182,10 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
             _pParent ? _pParent : GetActiveDialogParent(), &aText );
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );
-        pDlg->SetHelpId( SID_CHG_PROTECT );
-        pDlg->SetEditHelpId( HID_CHG_PROTECT );
+        // FIXME: HELPID
+        pDlg->SetHelpId( ""/*SID_CHG_PROTECT*/ );
+        // FIXME: HELPID
+        pDlg->SetEditHelpId( ""/*HID_CHG_PROTECT*/ );
         if ( !bProtected )
             pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
         if ( pDlg->Execute() == RET_OK )

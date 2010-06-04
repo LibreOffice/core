@@ -383,25 +383,29 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
     rStatusBar.InsertItem( SID_STATUS_DOCPOS,
                             TEXT_WIDTH( String().Fill( 10, 'X' ) ),
                             SIB_LEFT|SIB_AUTOSIZE );
-    rStatusBar.SetHelpId( SID_STATUS_DOCPOS, SID_STATUS_DOCPOS );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_STATUS_DOCPOS, ""/*SID_STATUS_DOCPOS*/ );
 
     // Seitenvorlage
     rStatusBar.InsertItem( SID_STATUS_PAGESTYLE,
                             TEXT_WIDTH( String().Fill( 15, 'X' ) ),
                             SIB_LEFT|SIB_AUTOSIZE );
-    rStatusBar.SetHelpId( SID_STATUS_PAGESTYLE, SID_STATUS_PAGESTYLE );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_STATUS_PAGESTYLE, ""/*SID_STATUS_PAGESTYLE*/ );
 
     // Einfuege-/Ueberschreibmodus
     rStatusBar.InsertItem( SID_ATTR_INSERT,
                             SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
                             SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_INSERT, SID_ATTR_INSERT );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_ATTR_INSERT, ""/*SID_ATTR_INSERT*/ );
 
     // Selektionsmodus
     rStatusBar.InsertItem( SID_STATUS_SELMODE,
                             SvxSelectionModeControl::GetDefItemWidth(rStatusBar),
                             SIB_CENTER );
-    rStatusBar.SetHelpId( SID_STATUS_SELMODE, SID_STATUS_SELMODE );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_STATUS_SELMODE, ""/*SID_STATUS_SELMODE*/ );
 
     // Dokument geaendert
     rStatusBar.InsertItem( SID_DOC_MODIFIED,
@@ -409,28 +413,33 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
 
     // signatures
     rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
-    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+    // FIXME: HELPID
+    rStatusBar.SetHelpId(SID_SIGNATURE, ""/*SID_SIGNATURE*/);
 
 
-    rStatusBar.SetHelpId( SID_DOC_MODIFIED, SID_DOC_MODIFIED );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_DOC_MODIFIED, ""/*SID_DOC_MODIFIED*/ );
 
     // den aktuellen Kontext anzeigen Uhrzeit / FramePos / TabellenInfo / Errors
     rStatusBar.InsertItem( SID_ATTR_SIZE,
                             SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),
                             SIB_AUTOSIZE|SIB_LEFT|SIB_USERDRAW);
-    rStatusBar.SetHelpId( SID_ATTR_SIZE, SID_ATTR_SIZE );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_ATTR_SIZE, ""/*SID_ATTR_SIZE*/ );
 
     // Ma"sstab
     rStatusBar.InsertItem( SID_ATTR_ZOOM,
         SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
         SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_ZOOM, SID_ATTR_ZOOM );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_ATTR_ZOOM, ""/*SID_ATTR_ZOOM*/ );
 
     // ZoomSlider
     rStatusBar.InsertItem( SID_ATTR_ZOOMSLIDER,
         TEXT_WIDTH( String().Fill( 15, 'X' ) ),
         SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_ZOOMSLIDER, SID_ATTR_ZOOMSLIDER );
+    // FIXME: HELPID
+    rStatusBar.SetHelpId( SID_ATTR_ZOOMSLIDER, ""/*SID_ATTR_ZOOMSLIDER*/ );
 }
 
 #undef TEXT_WIDTH

@@ -75,9 +75,12 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
     aFont.SetWeight( WEIGHT_BOLD );
     m_aFT_TitleDescription.SetControlFont( aFont );
 
-    m_aCB_Grid_X.SetHelpId( HID_SCH_CB_XGRID );
-    m_aCB_Grid_Y.SetHelpId( HID_SCH_CB_YGRID );
-    m_aCB_Grid_Z.SetHelpId( HID_SCH_CB_ZGRID );
+    // FIXME: HELPID
+    m_aCB_Grid_X.SetHelpId( ""/*HID_SCH_CB_XGRID*/ );
+    // FIXME: HELPID
+    m_aCB_Grid_Y.SetHelpId( ""/*HID_SCH_CB_YGRID*/ );
+    // FIXME: HELPID
+    m_aCB_Grid_Z.SetHelpId( ""/*HID_SCH_CB_ZGRID*/ );
 
     m_apTitleResources->SetUpdateDataHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
     m_apLegendPositionResources->SetChangeHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));

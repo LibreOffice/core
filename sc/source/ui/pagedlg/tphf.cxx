@@ -98,9 +98,11 @@ ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
     aTurnOnBox.SetClickHdl  ( LINK( this, ScHFPage, TurnOnHdl ) );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
-        aBtnEdit.SetHelpId( HID_SC_HEADER_EDIT );
+        // FIXME: HELPID
+        aBtnEdit.SetHelpId( ""/*HID_SC_HEADER_EDIT*/ );
     else
-        aBtnEdit.SetHelpId( HID_SC_FOOTER_EDIT );
+        // FIXME: HELPID
+        aBtnEdit.SetHelpId( ""/*HID_SC_FOOTER_EDIT*/ );
 }
 
 //------------------------------------------------------------------

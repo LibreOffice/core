@@ -64,7 +64,8 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
-    SetHelpId( nHelpId );
+    // FIXME: HELPID
+    SetHelpId( ""/*nHelpId*/ );
     SetText( rTitle );
     aFtEditTitle.SetText( rEditTitle );
     aEdInput.SetText( rDefault );
@@ -73,18 +74,24 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
     //  HelpId for Edit different for different uses
 
     if ( nHelpId == FID_TAB_APPEND )
-        aEdInput.SetHelpId( HID_SC_APPEND_NAME );
+        // FIXME: HELPID
+        aEdInput.SetHelpId( ""/*HID_SC_APPEND_NAME*/ );
     else if ( nHelpId == FID_TAB_RENAME )
-        aEdInput.SetHelpId( HID_SC_RENAME_NAME );
+        // FIXME: HELPID
+        aEdInput.SetHelpId( ""/*HID_SC_RENAME_NAME*/ );
     else if ( nHelpId == HID_SC_ADD_AUTOFMT )
-        aEdInput.SetHelpId( HID_SC_AUTOFMT_NAME );
+        // FIXME: HELPID
+        aEdInput.SetHelpId( ""/*HID_SC_AUTOFMT_NAME*/ );
     else if ( nHelpId == HID_SC_REN_AFMT_DLG )
-        aEdInput.SetHelpId( HID_SC_REN_AFMT_NAME );
+        // FIXME: HELPID
+        aEdInput.SetHelpId( ""/*HID_SC_REN_AFMT_NAME*/ );
     else if ( nHelpId == SID_RENAME_OBJECT )
-        aEdInput.SetHelpId( HID_SC_RENAME_OBJECT );
+        // FIXME: HELPID
+        aEdInput.SetHelpId( ""/* HID_SC_RENAME_OBJECT*/ );
     // #i68101#
     else if ( nHelpId == SID_TITLE_DESCRIPTION_OBJECT )
-        aEdInput.SetHelpId( HID_SC_TITLE_DESCRIPTION_OBJECT );
+        // FIXME: HELPID
+        aEdInput.SetHelpId( ""/*HID_SC_TITLE_DESCRIPTION_OBJECT*/ );
     else
         DBG_ERRORFILE( "unknown ID" );
 
