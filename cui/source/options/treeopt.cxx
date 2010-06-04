@@ -889,7 +889,8 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
         aPageImagesHC = ImageList( ResId( RID_IMGLIST_TREEOPT_HC, *pIsoRes ) );
     delete pIsoRes;
 
-    aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
+    // FIXME: HELPID
+    aTreeLB.SetHelpId( ""/*HID_OFADLG_TREELISTBOX*/ );
     aTreeLB.SetWindowBits( WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                            WB_HASLINES | WB_HASLINESATROOT |
                            WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );

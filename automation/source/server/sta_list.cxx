@@ -77,15 +77,15 @@ EditWindow *StatementList::m_pDbgWin;
 #endif
 
 
-SmartId StatementList::aWindowWaitUId = SmartId();
+rtl::OString StatementList::aWindowWaitUId = rtl::OString();
 Window *StatementList::pWindowWaitPointer = NULL;
-SmartId StatementList::aWindowWaitOldHelpId = SmartId();
-SmartId StatementList::aWindowWaitOldUniqueId = SmartId();
+rtl::OString StatementList::aWindowWaitOldHelpId = rtl::OString();
+rtl::OString StatementList::aWindowWaitOldUniqueId = rtl::OString();
 USHORT StatementList::nUseBindings = 0;
 
-SmartId StatementList::aSubMenuId1 = SmartId(); // Untermenüs bei PopupMenus
-SmartId StatementList::aSubMenuId2 = SmartId(); // erstmal 2-Stufig
-SmartId StatementList::aSubMenuId3 = SmartId(); // and now even 3 levels #i31512#
+rtl::OString StatementList::aSubMenuId1 = rtl::OString();   // Untermenüs bei PopupMenus
+rtl::OString StatementList::aSubMenuId2 = rtl::OString();   // erstmal 2-Stufig
+rtl::OString StatementList::aSubMenuId3 = rtl::OString();   // and now even 3 levels #i31512#
 SystemWindow *StatementList::pMenuWindow = NULL;
 TTProperties *StatementList::pTTProperties = NULL;
 
@@ -129,7 +129,8 @@ TTSettings* GetTTSettings()
 
 
 
-#define IS_WINP_CLOSING(pWin) (pWin->GetSmartHelpId().Matches( 4321 ) && pWin->GetSmartUniqueId().Matches( 1234 ))
+// FIXME: HELPID
+#define IS_WINP_CLOSING(pWin) (pWin->GetHelpId().equals( "4321" ) && pWin->GetUniqueId().equals( "1234" ))
 
 /*
 UniString GEN_RES_STR0( ULONG nResId ) { return ResString( nResId ); }
@@ -154,7 +155,7 @@ void StatementList::InitProfile()
 
 #if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement != NULL && pCurrentProfileStatement != this )
-            pRet->GenReturn( RET_ProfileInfo, SmartId(), CUniString("InitProfile von anderem Statement gerufen ohne SendProfile\n") );
+            pRet->GenReturn( RET_ProfileInfo, rtl::OString(), CUniString("InitProfile von anderem Statement gerufen ohne SendProfile\n") );
 #endif
         pCurrentProfileStatement = this;
     }
@@ -170,18 +171,18 @@ void StatementList::SendProfile( String aText )
                 pProfiler->EndProfileInterval();
 
             if ( pProfiler->IsProfilingPerCommand() )
-                pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileLine( aText ) );
+                pRet->GenReturn( RET_ProfileInfo, rtl::OString(), pProfiler->GetProfileLine( aText ) );
 
             if ( pProfiler->IsPartitioning() )
-                pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileTime ), static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() ULONG != comm_ULONG on 64bit
+                pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileTime ), static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() ULONG != comm_ULONG on 64bit
         }
 
         if ( pProfiler->IsAutoProfiling() )
-            pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetAutoProfiling() );
+            pRet->GenReturn( RET_ProfileInfo, rtl::OString(), pProfiler->GetAutoProfiling() );
 
 #if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement == NULL )
-            pRet->GenReturn( RET_ProfileInfo, SmartId(), CUniString("SendProfile ohne InitProfile\n") );
+            pRet->GenReturn( RET_ProfileInfo, rtl::OString(), CUniString("SendProfile ohne InitProfile\n") );
 #endif
         pCurrentProfileStatement = NULL;
     }
@@ -389,7 +390,9 @@ Window* StatementList::SearchClientWin( Window *pBase, Search &aSearch, BOOL May
 
 BOOL SearchUID::IsWinOK( Window *pWin )
 {
-    if ( aUId.Matches( pWin->GetSmartUniqueOrHelpId() ) )
+    // FIXME: HELPID
+    #if 0
+    if ( aUId.Matches( pWin->GetUniqueOrHelpId() ) )
     {
         if ( ( pWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pWin->IsVisible() )
             return TRUE;
@@ -451,10 +454,11 @@ BOOL SearchUID::IsWinOK( Window *pWin )
         return FALSE;
     }
     else
+    #endif
         return FALSE;
 }
 
-Window* StatementList::SearchTree( SmartId aUId ,BOOL bSearchButtonOnToolbox )
+Window* StatementList::SearchTree( rtl::OString aUId ,BOOL bSearchButtonOnToolbox )
 {
     SearchUID aSearch(aUId,bSearchButtonOnToolbox);
 
@@ -973,7 +977,8 @@ String StatementList::ClientTree(Window *pBase, int Indent)
 
     WRITE(sIndent);
     WRITEc("UId : ");
-    WRITE(UIdString(pBase->GetSmartUniqueOrHelpId()));
+    // FIXME: HELPID
+    WRITE(String(rtl::OStringToOUString(pBase->GetUniqueOrHelpId(), RTL_TEXTENCODING_UTF8)));
     WRITEc(":0x");
     WRITE(
         String::CreateFromInt64(
@@ -1038,10 +1043,11 @@ BOOL StatementList::CheckWindowWait()
 #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Close timed out. Going on!! " );
 #endif
-                pWindowWaitPointer->SetSmartHelpId(aWindowWaitOldHelpId, SMART_SET_ALL);
-                pWindowWaitPointer->SetSmartUniqueId(aWindowWaitOldUniqueId, SMART_SET_ALL);
+                // FIXME: HELPID
+                pWindowWaitPointer->SetHelpId(aWindowWaitOldHelpId);
+                pWindowWaitPointer->SetUniqueId(aWindowWaitOldUniqueId);
 
-                aWindowWaitUId = SmartId();
+                aWindowWaitUId = rtl::OString();
                 pWindowWaitPointer = NULL;
                 StartTime = Time(0L);
                 return TRUE;
@@ -1050,7 +1056,7 @@ BOOL StatementList::CheckWindowWait()
             return FALSE;
         }
         pWindowWaitPointer = NULL;
-        aWindowWaitUId = SmartId();
+        aWindowWaitUId = rtl::OString();
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Closed, Going on.\n" );
 #endif
@@ -1061,10 +1067,10 @@ BOOL StatementList::CheckWindowWait()
 
 void StatementList::ReportError(String aMessage)
 {
-    ReportError ( SmartId(), aMessage );
+    ReportError ( rtl::OString(), aMessage );
 }
 
-void StatementList::ReportError(SmartId aUId, String aMessage)
+void StatementList::ReportError(rtl::OString aUId, String aMessage)
 {
     pRet->GenError ( aUId, aMessage );
     IsError = TRUE;
@@ -1078,7 +1084,7 @@ void StatementList::ReportError(String aMessage, ULONG nWhatever)
 void StatementList::DirectLog( ULONG nType, String aMessage )
 {
     if ( pRet )
-        pRet->GenReturn( RET_DirectLoging, SmartId(nType), aMessage );
+        pRet->GenReturn( RET_DirectLoging, rtl::OString(nType), aMessage );
 }
 
 

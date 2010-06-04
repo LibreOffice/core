@@ -198,7 +198,8 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     ,pBibMod(NULL)
 {
     Window* pParent = VCLUnoHelper::GetWindow( xWindow );
-    pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
+    // FIXME: HELPID
+    pParent->SetUniqueId(""/*UID_BIB_FRAME_WINDOW*/);
     bDisposing=sal_False;
     bHierarchical=sal_True;
     pImp = new BibFrameCtrl_Impl;

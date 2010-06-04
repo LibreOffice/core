@@ -67,10 +67,14 @@ namespace dbp
     {
         initControlSettings(&m_aSettings);
 
-        m_pPrevPage->SetHelpId(HID_LISTWIZARD_PREVIOUS);
-        m_pNextPage->SetHelpId(HID_LISTWIZARD_NEXT);
-        m_pCancel->SetHelpId(HID_LISTWIZARD_CANCEL);
-        m_pFinish->SetHelpId(HID_LISTWIZARD_FINISH);
+        // FIXME: HELPID
+        m_pPrevPage->SetHelpId(""/*HID_LISTWIZARD_PREVIOUS*/);
+        // FIXME: HELPID
+        m_pNextPage->SetHelpId(""/*HID_LISTWIZARD_NEXT*/);
+        // FIXME: HELPID
+        m_pCancel->SetHelpId(""/*HID_LISTWIZARD_CANCEL*/);
+        // FIXME: HELPID
+        m_pFinish->SetHelpId(""/*HID_LISTWIZARD_FINISH*/);
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())

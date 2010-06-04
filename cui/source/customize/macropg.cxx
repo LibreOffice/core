@@ -170,7 +170,8 @@ _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId ) :
     maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
 {
-    maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
+    // FIXME: HELPID
+    maListBox.SetHelpId( ""/*HID_MACRO_HEADERTABLISTBOX*/ );
 }
 
 _HeaderTabListBox::~_HeaderTabListBox()
@@ -874,7 +875,8 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
     // must be done after FreeResource is called
     InitResources();
 
-    mpImpl->pEventLB->GetListBox().SetHelpId( HID_SVX_MACRO_LB_EVENT );
+    // FIXME: HELPID
+    mpImpl->pEventLB->GetListBox().SetHelpId( ""/*HID_SVX_MACRO_LB_EVENT*/ );
 
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(0), Reference< util::XModifiable >(0));
     DisplayAppEvents(true);

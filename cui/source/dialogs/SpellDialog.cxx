@@ -249,13 +249,20 @@ SpellDialog::SpellDialog(
     pImpl = new SpellDialog_Impl;
 
     //HelpIds
-    aClosePB.       SetHelpId(HID_SPLDLG_BUTTON_CLOSE    );
-    aIgnorePB.      SetHelpId(HID_SPLDLG_BUTTON_IGNORE   );
-    aIgnoreAllPB.   SetHelpId(HID_SPLDLG_BUTTON_IGNOREALL);
-    aIgnoreRulePB.  SetHelpId(HID_SPLDLG_BUTTON_IGNORERULE);
-    aChangePB.      SetHelpId(HID_SPLDLG_BUTTON_CHANGE   );
-    aChangeAllPB.   SetHelpId(HID_SPLDLG_BUTTON_CHANGEALL);
-    aExplainPB.     SetHelpId(HID_SPLDLG_BUTTON_EXPLAIN );
+    // FIXME: HELPID
+    aClosePB.       SetHelpId(""/*HID_SPLDLG_BUTTON_CLOSE*/    );
+    // FIXME: HELPID
+    aIgnorePB.      SetHelpId(""/*HID_SPLDLG_BUTTON_IGNORE*/   );
+    // FIXME: HELPID
+    aIgnoreAllPB.   SetHelpId(""/*HID_SPLDLG_BUTTON_IGNOREALL*/);
+    // FIXME: HELPID
+    aIgnoreRulePB.  SetHelpId(""/*HID_SPLDLG_BUTTON_IGNORERULE*/);
+    // FIXME: HELPID
+    aChangePB.      SetHelpId(""/*HID_SPLDLG_BUTTON_CHANGE*/   );
+    // FIXME: HELPID
+    aChangeAllPB.   SetHelpId(""/*HID_SPLDLG_BUTTON_CHANGEALL*/);
+    // FIXME: HELPID
+    aExplainPB.     SetHelpId(""/*HID_SPLDLG_BUTTON_EXPLAIN*/ );
     Init_Impl();
 
     // disable controls if service is missing

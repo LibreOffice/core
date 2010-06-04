@@ -323,7 +323,8 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
     if ( m_pLocalizationMgr->isLibraryLocalized() )
     {
         // change to "Add Interface Language" mode
-        SetHelpId( HID_BASICIDE_ADDNEW_LANGUAGE );
+        // FIXME: HELPID
+        SetHelpId( ""/*HID_BASICIDE_ADDNEW_LANGUAGE*/ );
         m_pCheckLangLB = new SvxCheckListBox( this, IDEResId( LB_ADD_LANGUAGE ) );
         SetText( String( IDEResId( STR_ADDLANG_TITLE ) ) );
         m_aLanguageFT.SetText( String( IDEResId( STR_ADDLANG_LABEL ) ) );

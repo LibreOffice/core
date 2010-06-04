@@ -137,7 +137,7 @@ CErrors *TestToolObj::pFehlerListe = NULL;      // Hier werden die Fehler des Te
 DBG_NAME( ControlItem )
 DBG_NAME( ControlDef )
 
-ControlItem::ControlItem( const sal_Char *Name, SmartId aUIdP )
+ControlItem::ControlItem( const sal_Char *Name, rtl::OString aUIdP )
 {
 DBG_CTOR(ControlItem,0);
     InitData();
@@ -145,7 +145,7 @@ DBG_CTOR(ControlItem,0);
     pData->aUId = aUIdP;
 }
 
-ControlItem::ControlItem( const String &Name, SmartId aUIdP )
+ControlItem::ControlItem( const String &Name, rtl::OString aUIdP )
 {
 DBG_CTOR(ControlItem,0);
     InitData();
@@ -196,7 +196,7 @@ ControlSon::~ControlSon()
     }
 }
 
-ControlItemSon::ControlItemSon(const String &Name, SmartId aUIdP )
+ControlItemSon::ControlItemSon(const String &Name, rtl::OString aUIdP )
 : ControlItem( Name, aUIdP )
 {}
 
@@ -226,6 +226,8 @@ BOOL ControlDef::operator == (const ControlItem &rPar)
 
 void ControlDef::Write( SvStream &aStream )
 {
+    // FIXME: HELPID
+    #if 0
     if ( pSons )
         aStream.WriteByteString( String('*').Append( pData->Kurzname ), RTL_TEXTENCODING_UTF8 );
     else
@@ -238,9 +240,10 @@ void ControlDef::Write( SvStream &aStream )
     if ( pSons )
         for ( USHORT i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
+    #endif
 }
 
-ControlDef::ControlDef(const String &Name, SmartId aUIdP )
+ControlDef::ControlDef(const String &Name, rtl::OString aUIdP )
 : ControlItemSon( Name, aUIdP)
 {
     DBG_CTOR(ControlDef,0);
@@ -292,7 +295,7 @@ BOOL ControlItemUId::operator == (const ControlItem &rPar)
 
 SV_IMPL_OP_PTRARR_SORT( CNames, ControlItem* )
 
-void CRevNames::Insert( String aName, SmartId aUId, ULONG nSeq )
+void CRevNames::Insert( String aName, rtl::OString aUId, ULONG nSeq )
 {
     ControlItem *pRN = new ReverseName(aName,aUId,nSeq);
     USHORT nPos;
@@ -307,7 +310,7 @@ void CRevNames::Insert( String aName, SmartId aUId, ULONG nSeq )
 
 }
 
-String CRevNames::GetName( SmartId aUId )
+String CRevNames::GetName( rtl::OString aUId )
 {
     ReverseName *pRN = new ReverseName(UniString(),aUId,0);
     USHORT nPos;
@@ -318,10 +321,15 @@ String CRevNames::GetName( SmartId aUId )
         return GetObject(nPos)->pData->Kurzname;
     else
     {
+        // FIXME: HELPID
+        #if 0
         if ( aUId.Matches( UID_ACTIVE ) )
             return CUniString("Active");
         else
             return GEN_RES_STR1( S_NAME_NOT_THERE, aUId.GetText() );
+        #else
+        return String();
+        #endif
     }
 }
 
@@ -686,7 +694,12 @@ void TestToolObj::InitTestToolObj()
         SbxTransportMethod *pMeth = new SbxTransportMethod( SbxVARIANT );
         pMeth->SetName( pRCommands->GetObject( i )->pData->Kurzname );
         pMeth->SetUserData( ID_RemoteCommand );
+        // FIXME: HELPID
+        #if 0
         pMeth->nValue = pRCommands->GetObject( i )->pData->aUId.GetNum();
+        #else
+        pMeth->nValue = 0;
+        #endif
         Insert( pMeth );
         StartListening( pMeth->GetBroadcaster(), TRUE );
     }
@@ -866,7 +879,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
 
     SvFileStream Stream;
     String       aLine,aShortname,aLongname;
-    SmartId      aUId;
+    rtl::OString      aUId;
     xub_StrLen   nLineNr;
     USHORT       nElement;
     ControlDef   *pNewDef, *pNewDef2;
@@ -884,7 +897,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         ReadFlat( aFileName ,pUIds, TRUE );
         if ( !pUIds )
             return;
-        pNewDef = new ControlDef("Active",SmartId(0));
+        pNewDef = new ControlDef("Active",rtl::OString());
         const ControlItem *pItem = pNewDef;
         if (! pUIds->Insert(pItem))
         {
@@ -986,7 +999,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         if ( aShortname.GetChar(0) == '+' )          // Kompletten Eintrag kopieren
         {
             aShortname.Erase(0,1);
-            ControlDef WhatName(aLongname,SmartId());
+            ControlDef WhatName(aLongname,rtl::OString());
             ControlDef *OldTree;
             if (pNames->Seek_Entry(&WhatName,&nElement))
             {
@@ -1015,11 +1028,15 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         else
         {
 
+            // FIXME: HELPID
+            #if 0
             if (aShortname.CompareIgnoreCaseToAscii("*Active") == COMPARE_EQUAL)
-                aUId = SmartId( UID_ACTIVE );
-            else if ( !bUnoName && !bMozillaName )
+                aUId = rtl::OString( UID_ACTIVE );
+            else
+            #endif
+                if ( !bUnoName && !bMozillaName )
             {   // Bestimmen der ID aus der Hid.Lst
-                ControlDef WhatName(aLongname,SmartId());
+                ControlDef WhatName(aLongname,rtl::OString());
                 if (pUIds->Seek_Entry(&WhatName,&nElement))
                     aUId = pUIds->GetObject(nElement)->pData->aUId;
                 else
@@ -1030,14 +1047,17 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
             }
             else
             {
+                // FIXME: HELPID
+                #if 0
                 if ( bUnoName )
-                    aUId = SmartId( aLongname );
+                    aUId = rtl::OString( aLongname );
                 else if ( bMozillaName )
-                    aUId = SmartId( aLongname );
+                    aUId = rtl::OString( aLongname );
                 else
                 {
                     DBG_ERROR("Unknown URL schema");
                 }
+                #endif
             }
 
 
@@ -1121,7 +1141,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
 {
     SvFileStream Stream;
     String       aLine,aLongname;
-    SmartId      aUId;
+    rtl::OString      aUId;
     xub_StrLen   nLineNr;
     ControlItem  *pNewItem;
     USHORT       nDoubleCount = 0;
@@ -1162,7 +1182,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
         }
 
         aLongname = aLine.GetToken(0,cMyDelim);
-        aUId = SmartId( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
+        aUId = rtl::OString( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
 
         if ( bSortByName )
             pNewItem = new ControlDef( aLongname, aUId );
@@ -1211,7 +1231,7 @@ void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames )
 
     while ( String::CreateFromAscii(arWas[nIndex].Kurzname).Len() > 0 )
     {
-        SmartId aUId (arWas[nIndex].nUId);
+        rtl::OString aUId (arWas[nIndex].nUId);
         const ControlItem *pX = new ControlDef( arWas[nIndex].Kurzname, aUId);
         pNames->C40_PTR_INSERT(ControlItem, pX);
         nIndex++;
@@ -1472,7 +1492,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
 {
     SvFileStream aStream;
     String       aName,aURL;
-    SmartId      aUId;
+    rtl::OString      aUId;
     ControlDef   *pNewDef, *pNewDef2;
     ControlDef   *pFatherDef = NULL;
 
@@ -1510,13 +1530,16 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
         {
             String aStrId;
             aStream.ReadByteString( aStrId, RTL_TEXTENCODING_UTF8 );
-            aUId = SmartId( aStrId );
+            // FIXME: HELPID
+            #if 0
+            aUId = rtl::OString( aStrId );
+            #endif
         }
         else
         {
             comm_ULONG nUId;
             aStream >> nUId;
-            aUId = SmartId( nUId );
+            aUId = rtl::OString( nUId );
         }
 
         if (aName.GetChar(0) == '*' || bIsFlat )     // Globaler Kurzname (Dialogname oder SId)
@@ -1661,7 +1684,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         USHORT nElement;
                         SbxVariableRef pArg = rPar->Get( 1 );
                         String aKontext = pArg->GetString();
-                        ControlDef WhatName(aKontext,SmartId());
+                        ControlDef WhatName(aKontext,rtl::OString());
                         if (m_pControls && m_pControls->Seek_Entry(&WhatName,&nElement))
                         {
                             m_pNameKontext = ((ControlDef*)m_pControls->GetObject(nElement))->GetSons();
@@ -2154,7 +2177,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         ((Controls*)pVar)->PutULong( ((Controls*)pVar)->pMethodVar->GetULong() );
                         ((Controls*)pVar)->pMethodVar->SetUserData(ID_Control);
 
-                        pShortNames->Insert( CUniString("xxx"), SmartId( ((Controls*)pVar)->pMethodVar->nValue ), nSequence );
+                        pShortNames->Insert( CUniString("xxx"), rtl::OString( ((Controls*)pVar)->pMethodVar->nValue ), nSequence );
 
                         nOldValue = ((Controls*)pVar)->GetULong();
 
@@ -2193,7 +2216,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if ( !IsError() && ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                         {
                             pImpl->pNextReturn = ((SbxTransportMethod*)pVar);
-                            aNextReturnId = SmartId( ((SbxTransportMethod*)pVar)->nValue );
+                            aNextReturnId = rtl::OString( ((SbxTransportMethod*)pVar)->nValue );
                         }
                         if ( SingleCommandBlock )
                             EndBlock();
@@ -2266,13 +2289,16 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 {
                                     In->GenCmdControl (pMember->GetULong(),
                                         (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                                    aNextReturnId = SmartId( pMember->GetULong() );
+                                    aNextReturnId = rtl::OString( pMember->GetULong() );
                                 }
                                 else
                                 {
                                     In->GenCmdControl (pMember->GetString(),
                                         (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                                    aNextReturnId = SmartId( pMember->GetString() );
+                                    // FIXME: HELPID
+                                    #if 0
+                                    aNextReturnId = rtl::OString( pMember->GetString() );
+                                    #endif
                                 }
                             }
 
@@ -2283,7 +2309,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             else
                             {
                                 pImpl->pNextReturn = NULL;
-                                aNextReturnId = SmartId();
+                                aNextReturnId = rtl::OString();
                             }
 
                         }
@@ -2839,7 +2865,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
     {
 
         USHORT nElement;
-        ControlDef *pWhatName = new ControlDef(aStr,SmartId());
+        ControlDef *pWhatName = new ControlDef(aStr,rtl::OString());
 
         /// nach Controls suchen
         if (m_pNameKontext && m_pNameKontext->Seek_Entry(pWhatName,&nElement))
@@ -2854,9 +2880,12 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 
             // Will be set on method-child further down
+            // FIXME: HELPID
+            #if 0
             if ( pWhatName->pData->aUId.HasNumeric() )
                 pImpl->pControlsObj->SetUserData( ID_Control );
             else
+            #endif
                 pImpl->pControlsObj->SetUserData( ID_StringControl );
 
             pShortNames->Insert(pWhatName->pData->Kurzname,pWhatName->pData->aUId,nSequence);
@@ -2869,10 +2898,13 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
                 pImpl->pControlsObj->SetDfltProperty(pID);
                 pMember = pID;
             }
+            // FIXME: HELPID
+            #if 0
             if ( pWhatName->pData->aUId.HasNumeric() )
                 pMember->PutULong(pWhatName->pData->aUId.GetNum());
             else
                 pMember->PutString(pWhatName->pData->aUId.GetStr());
+            #endif
 
             pMember = pImpl->pControlsObj->Find(CUniString("name"),SbxCLASS_DONTCARE);
             if ( pMember != NULL )
@@ -2892,6 +2924,8 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
             pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
             pMyVar->SetName( pWhatName->pData->Kurzname );
 
+            // FIXME: HELPID
+            #if 0
             if ( pWhatName->pData->aUId.HasNumeric() )
             {
                 pMyVar->SetUserData( ID_Dispatch );
@@ -2903,6 +2937,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
                 pMyVar->SetUserData( ID_UNODispatch );
                 pMyVar->aUnoSlot = pWhatName->pData->aUId.GetStr();
             }
+            #endif
             return pMyVar;
         }
 
@@ -2910,7 +2945,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
         if ( aStr.Copy( aStr.Len()-3, 3 ).CompareIgnoreCaseToAscii("_ID") == COMPARE_EQUAL && m_pSIds )
         {
             delete pWhatName;
-            pWhatName = new ControlDef( aStr.Copy( 0, aStr.Len()-3 ), SmartId() );
+            pWhatName = new ControlDef( aStr.Copy( 0, aStr.Len()-3 ), rtl::OString() );
             if ( m_pSIds->Seek_Entry( pWhatName, &nElement ) )
             {   // Nach slots suchen
                 SbxVariable *pReturn = new SbxVariable;
@@ -2918,10 +2953,13 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
                 pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
                 pReturn->SetName( pWhatName->pData->Kurzname );
 
+                // FIXME: HELPID
+                #if 0
                 if ( pWhatName->pData->aUId.HasNumeric() )
                     pReturn->PutULong(pWhatName->pData->aUId.GetNum());
                 else
                     pReturn->PutString(pWhatName->pData->aUId.GetStr());
+                #endif
                 return pReturn;
             }
         }
@@ -3320,7 +3358,8 @@ void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
         }
         if ( !bIncludeActive )
         {
-            ControlItem *pZeroItem = new ControlItemUId( UniString(), SmartId(0) );
+            // FIXME: HELPID
+            ControlItem *pZeroItem = new ControlItemUId( UniString(), rtl::OString() );
             USHORT nNr;
             if ( m_pReverseControls->Seek_Entry( pZeroItem, &nNr ) )
             {
@@ -3356,19 +3395,25 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
         case SIReturn:
         {
             USHORT nRet,nParams;
-            SmartId aUId;
+            rtl::OString aUId;
             pRetStream->Read(nRet);
             if ( pRetStream->GetNextType() == BinString )
             {
                 String aUStrId;     // UniqueStringID Used for Mozilla Integration
                 pRetStream->Read( aUStrId );
-                aUId = SmartId( aUStrId );
+                // FIXME: HELPID
+                #if 0
+                aUId = rtl::OString( aUStrId );
+                #endif
             }
             else
             {
                 comm_ULONG nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
-                aUId = SmartId( nUId );
+                // FIXME: HELPID
+                #if 0
+                aUId = rtl::OString( nUId );
+                #endif
             }
             pRetStream->Read(nParams);
 
@@ -3397,6 +3442,8 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
             {
                 case RET_Sequence:
                     {
+                        // FIXME: HELPID
+                        #if 0
                         ULONG nUId = aUId.GetNum();
                         if ( nSequence != nUId )
                         {
@@ -3407,6 +3454,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             nClearSequence = nUId;
                         }
+                        #endif
                     }
                     break;
                 case RET_Value:
@@ -3415,6 +3463,8 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 //                                              ULONG nHintUserData = pImpl->pNextReturn->GetParent()->GetUserData();
 //                                              pImpl->pNextReturn->GetParent()->SetUserData(0);
 //                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
+                        // FIXME: HELPID
+                        #if 0
                         if ( aNextReturnId.Matches( aUId ) )
                         {
                             if( nParams & PARAM_ULONG_1 )
@@ -3438,6 +3488,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             ADD_ERROR(SbxERR_BAD_ACTION, GEN_RES_STR0(S_RETURNED_VALUE_ID_MISSMATCH) )
                         }
+                        #endif
 //                                              pImpl->pNextReturn->GetParent()->SetUserData(nHintUserData);
                         pImpl->pNextReturn = NULL;
                     }
@@ -3468,7 +3519,10 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         WinInfoRec *pWinInfo = new WinInfoRec;
+                        // FIXME: HELPID
+                        #if 0
                         pWinInfo->aUId = aUId.GetText();
+                        #endif
                         pWinInfo->nRType = (USHORT)nLNr1;   // just ULONG for Transport, data is always USHORT
                         pWinInfo->aRName = aString1;
                         pWinInfo->bIsReset = bBool1;
@@ -3504,7 +3558,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                             if ( pReverseControlsKontext->Seek_Entry(pNewItem,&nNr) )
                             {
-//                                SmartId aID = pReverseControlsKontext->GetObject(nNr)->pData->aUId;
+//                                rtl::OString aID = pReverseControlsKontext->GetObject(nNr)->pData->aUId;
                                 pWinInfo->aKurzname += pReverseControlsKontext->GetObject(nNr)->pData->Kurzname;
                             }
                             delete pNewItem;
@@ -3521,6 +3575,8 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         // Langname feststellen
+                        // FIXME: HELPID
+                        #if 0
                         if ( aUId.HasString() )
                         {   // use the String ID since there is no LongName in hid.lst
                             pWinInfo->aLangname = aUId.GetStr();
@@ -3536,6 +3592,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                 delete pNewItem;
                             }
                         }
+                        #endif
 
                         aWinInfoHdl.Call( pWinInfo );
 
@@ -3544,6 +3601,8 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                     break;
                 case RET_ProfileInfo:
                     {
+                        // FIXME: HELPID
+                        #if 0
                         ULONG nUId = aUId.GetNum();
                         if ( nParams & PARAM_STR_1 )
                         {
@@ -3672,10 +3731,13 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                     break;
                             }
                         }
+                        #endif
                     }
                     break;
                 case RET_DirectLoging:
                     {
+                        // FIXME: HELPID
+                        #if 0
                         ULONG nUId = aUId.GetNum();
                         switch ( nUId )
                         {
@@ -3694,6 +3756,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         default:
                             ;
                         }
+                        #endif
                     }
                     break;
                 case RET_MacroRecorder:
@@ -3724,7 +3787,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             if ( m_pReverseControls )
                             {
                                 USHORT nNr;
-                                ControlItem *pNewItem = new ControlItemUId( String(), SmartId( nLNr1 ) );
+                                ControlItem *pNewItem = new ControlItemUId( String(), rtl::OString( nLNr1 ) );
                                 if ( m_pReverseControls->Seek_Entry(pNewItem,&nNr) )
                                     aULongNames = m_pReverseControls->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
@@ -3959,18 +4022,24 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
         case SIReturnError:
         {
             String aString;
-            SmartId aUId;
+            rtl::OString aUId;
             if ( pRetStream->GetNextType() == BinString )
             {
                 String aUStrId;     // UniqueStringID Used for Mozilla Integration
                 pRetStream->Read( aUStrId );
-                aUId = SmartId( aUStrId );
+                // FIXME: HELPID
+                #if 0
+                aUId = rtl::OString( aUStrId );
+                #endif
             }
             else
             {
                 comm_ULONG nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
-                aUId = SmartId( nUId );
+                // FIXME: HELPID
+                #if 0
+                aUId = rtl::OString( nUId );
+                #endif
             }
             pRetStream->Read( aString );
             ReplaceNumbers (aString);
@@ -4016,9 +4085,14 @@ String TestToolObj::GetMethodName( ULONG nMethodId )
         ReadFlatArray( Controls::arClasses, Controls::pClasses );
     if ( Controls::pClasses )
     {
+        // FIXME: HELPID
+        #if 0
         for ( nElement = 0 ; nElement < Controls::pClasses->Count() ; nElement++ )
             if ( Controls::pClasses->GetObject(nElement)->pData->aUId.Matches( nMethodId ) )
                 return Controls::pClasses->GetObject(nElement)->pData->Kurzname;
+        #else
+        (void)nElement;
+        #endif
     }
     return String();
 }
@@ -4030,9 +4104,14 @@ String TestToolObj::GetKeyName( USHORT nKeyCode )
         ReadFlatArray( CmdStream::arKeyCodes, CmdStream::pKeyCodes );
     if ( CmdStream::pKeyCodes )
     {
+        // FIXME: HELPID
+        #if 0
         for ( nElement = 0 ; nElement < CmdStream::pKeyCodes->Count() ; nElement++ )
             if ( CmdStream::pKeyCodes->GetObject(nElement)->pData->aUId.Matches( nKeyCode ) )
                 return CmdStream::pKeyCodes->GetObject(nElement)->pData->Kurzname;
+        #else
+        (void)nElement;
+        #endif
     }
     return CUniString( "UnknownKeyCode" );
 }
@@ -4061,7 +4140,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
         bFound = FALSE;
         if ( aType.CompareTo(UIdKenn) == COMPARE_EQUAL )
         {
-            aResult = pShortNames->GetName(SmartId(nNumber));
+            aResult = pShortNames->GetName(rtl::OString(nNumber));
             bFound = TRUE;
         }
         if ( aType.CompareTo(MethodKenn ) == COMPARE_EQUAL )
@@ -4078,12 +4157,17 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
             USHORT nElement;
             if ( pRCommands )
             {
+                // FIXME: HELPID
+                #if 0
                 for ( nElement = 0 ; nElement < pRCommands->Count() ; nElement++ )
                     if ( pRCommands->GetObject(nElement)->pData->aUId.Matches( nNumber ) )
                     {
                         aResult = pRCommands->GetObject(nElement)->pData->Kurzname;
                         nElement = pRCommands->Count();
                     }
+                #else
+                (void)nElement;
+                #endif
             }
         }
         if ( aType.CompareTo(TypeKenn ) == COMPARE_EQUAL )
@@ -4095,17 +4179,22 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
             USHORT nElement;
             if ( pRTypes )
             {
+                // FIXME: HELPID
+                #if 0
                 for ( nElement = 0 ; nElement < pRTypes->Count() ; nElement++ )
                     if ( pRTypes->GetObject(nElement)->pData->aUId.Matches( nNumber ) )
                     {
                         aResult = pRTypes->GetObject(nElement)->pData->Kurzname;
                         nElement = pRTypes->Count();
                     }
+                #else
+                (void)nElement;
+                #endif
             }
         }
         if ( aType.CompareTo(SlotKenn ) == COMPARE_EQUAL )
         {
-            aResult = pShortNames->GetName(SmartId(nNumber));
+            aResult = pShortNames->GetName(rtl::OString(nNumber));
             bFound = TRUE;
         }
         if ( aType.CompareTo(TabKenn ) == COMPARE_EQUAL )
@@ -4142,7 +4231,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
     }
 
 
-    ControlDef WhatName( rSymbol, SmartId() );
+    ControlDef WhatName( rSymbol, rtl::OString() );
 
     if ( bWasControl )
     {
@@ -4233,11 +4322,12 @@ SbxVariable* Controls::Find( const String& aStr, SbxClassType aType)
 
 
     USHORT nElement;
-    ControlDef WhatName(aStr,SmartId());
+    ControlDef WhatName(aStr,rtl::OString());
     if (pClasses && pClasses->Seek_Entry(&WhatName,&nElement))
     {
         pMethodVar->SetName(aStr);
-        ULONG nUId = pClasses->GetObject(nElement)->pData->aUId.GetNum();
+        // FIXME: HELPID
+        ULONG nUId = 0;//pClasses->GetObject(nElement)->pData->aUId.GetNum();
         pMethodVar->nValue = nUId;
 
          pMethodVar->SetUserData( GetUserData() );

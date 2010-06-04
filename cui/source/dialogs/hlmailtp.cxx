@@ -74,7 +74,8 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
                                     LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
 
     maCbbReceiver.Show();
-    maCbbReceiver.SetHelpId( HID_HYPERDLG_MAIL_PATH );
+    // FIXME: HELPID
+    maCbbReceiver.SetHelpId( ""/*HID_HYPERDLG_MAIL_PATH*/ );
 
     SetExchangeSupport ();
 

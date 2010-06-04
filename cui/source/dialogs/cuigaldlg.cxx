@@ -678,7 +678,8 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     String              aType( CUI_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     BOOL                bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
 
-    aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
+    // FIXME: HELPID
+    aEdtMSName.SetHelpId( ""/*HID_GALLERY_EDIT_MSNAME*/ );
     aEdtMSName.SetText( pThm->GetName() );
     aEdtMSName.SetReadOnly( bReadOnly );
 

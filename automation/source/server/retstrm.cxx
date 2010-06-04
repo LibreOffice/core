@@ -47,17 +47,17 @@ RetStream::~RetStream()
     delete pSammel;
 }
 
-void RetStream::GenError ( SmartId aUId, String aString )
+void RetStream::GenError ( rtl::OString aUId, String aString )
 {
     CmdBaseStream::GenError ( &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, SmartId aUId, String aString )
+void RetStream::GenReturn ( USHORT nRet, rtl::OString aUId, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, SmartId aUId, SbxValue &aValue )
+void RetStream::GenReturn ( USHORT nRet, rtl::OString aUId, SbxValue &aValue )
 {
     Write(USHORT(SIReturn));
     Write(nRet);
@@ -66,17 +66,17 @@ void RetStream::GenReturn ( USHORT nRet, SmartId aUId, SbxValue &aValue )
     Write(aValue);
 }
 
-void RetStream::GenReturn ( USHORT nRet, SmartId aUId, comm_ULONG nNr, String aString, BOOL bBool )
+void RetStream::GenReturn ( USHORT nRet, rtl::OString aUId, comm_ULONG nNr, String aString, BOOL bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nNr, &aString, bBool );
 }
 
-void RetStream::GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString )
+void RetStream::GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString );
 }
 
-void RetStream::GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString, BOOL bBool )
+void RetStream::GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, BOOL bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString, bBool );
 }
@@ -93,9 +93,11 @@ void RetStream::Write( SbxValue &aValue )
     aValue.Store( *pSammel );
 }
 
-void RetStream::Write( SmartId* pId )
+void RetStream::Write( rtl::OString* pId )
 {
-    DBG_ASSERT( !pId->HasString() || !pId->HasNumeric(), "SmartId contains Number and String. using String only." );
+    // FIXME: HELPID
+    #if 0
+    DBG_ASSERT( !pId->HasString() || !pId->HasNumeric(), "rtl::OString contains Number and String. using String only." );
     if ( pId->HasString() )
     {
         String aTmp( pId->GetStr() );
@@ -103,6 +105,7 @@ void RetStream::Write( SmartId* pId )
     }
     else
         Write( static_cast<comm_ULONG>(pId->GetNum()) ); ////GetNum() ULONG != comm_ULONG on 64bit
+    #endif
 }
 
 

@@ -1141,7 +1141,8 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     pCheckButtonData = NULL;
 
     aLinguModulesCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-    aLinguModulesCLB.SetHelpId(HID_CLB_LINGU_MODULES );
+    // FIXME: HELPID
+    aLinguModulesCLB.SetHelpId(""/*HID_CLB_LINGU_MODULES*/ );
     aLinguModulesCLB.SetHighlightRange();
     aLinguModulesCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     aLinguModulesCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
@@ -1151,7 +1152,8 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguOptionsEditPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
     aLinguDicsCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-    aLinguDicsCLB.SetHelpId(HID_CLB_EDIT_MODULES_DICS );
+    // FIXME: HELPID
+    aLinguDicsCLB.SetHelpId(""/*HID_CLB_EDIT_MODULES_DICS*/ );
     aLinguDicsCLB.SetHighlightRange();
     aLinguDicsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     aLinguDicsCLB.SetCheckButtonHdl(LINK(this, SvxLinguTabPage, BoxCheckButtonHdl_Impl));
@@ -1161,7 +1163,8 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguDicsDelPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
     aLinguOptionsCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-    aLinguOptionsCLB.SetHelpId(HID_CLB_LINGU_OPTIONS );
+    // FIXME: HELPID
+    aLinguOptionsCLB.SetHelpId(""/*HID_CLB_LINGU_OPTIONS*/ );
     aLinguOptionsCLB.SetHighlightRange();
     aLinguOptionsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     aLinguOptionsCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
@@ -2052,7 +2055,8 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
 
     aModulesCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aModulesCLB.SetHighlightRange();
-    aModulesCLB.SetHelpId(HID_CLB_EDIT_MODULES_MODULES );
+    // FIXME: HELPID
+    aModulesCLB.SetHelpId(""/*HID_CLB_EDIT_MODULES_MODULES*/ );
     aModulesCLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
     aModulesCLB.SetCheckButtonHdl( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl) );
 

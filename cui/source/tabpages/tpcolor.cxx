@@ -488,7 +488,8 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     {
         WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
             String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-        aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+        // FIXME: HELPID
+        aWarningBox.SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -574,7 +575,8 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         {
             WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
                 String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-            aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+            // FIXME: HELPID
+            aWarningBox.SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -1036,9 +1038,12 @@ IMPL_LINK( SvxColorTabPage, SelectColorModelHdl_Impl, void *, EMPTYARG )
                 aMtrFldColorModel4.Hide();
                 aMtrFldColorModel4.SetValue( 0L );
 
-                aMtrFldColorModel1.SetHelpId( HID_TPCOLOR_RGB_1 );
-                aMtrFldColorModel2.SetHelpId( HID_TPCOLOR_RGB_2 );
-                aMtrFldColorModel3.SetHelpId( HID_TPCOLOR_RGB_3 );
+                // FIXME: HELPID
+                aMtrFldColorModel1.SetHelpId( ""/*HID_TPCOLOR_RGB_1*/ );
+                // FIXME: HELPID
+                aMtrFldColorModel2.SetHelpId( ""/*HID_TPCOLOR_RGB_2*/ );
+                // FIXME: HELPID
+                aMtrFldColorModel3.SetHelpId( ""/*HID_TPCOLOR_RGB_3*/ );
 
                 // Da der alte HelpText noch am Control steht wuerde
                 // ein Umsetzen der HelpID alleine nichts bewirken
@@ -1082,9 +1087,12 @@ IMPL_LINK( SvxColorTabPage, SelectColorModelHdl_Impl, void *, EMPTYARG )
                 aFtColorModel4.Show();
                 aMtrFldColorModel4.Show();
 
-                aMtrFldColorModel1.SetHelpId( HID_TPCOLOR_CMYK_1 );
-                aMtrFldColorModel2.SetHelpId( HID_TPCOLOR_CMYK_2 );
-                aMtrFldColorModel3.SetHelpId( HID_TPCOLOR_CMYK_3 );
+                // FIXME: HELPID
+                aMtrFldColorModel1.SetHelpId( ""/*HID_TPCOLOR_CMYK_1*/ );
+                // FIXME: HELPID
+                aMtrFldColorModel2.SetHelpId( ""/*HID_TPCOLOR_CMYK_2*/ );
+                // FIXME: HELPID
+                aMtrFldColorModel3.SetHelpId( ""/*HID_TPCOLOR_CMYK_3*/ );
 
                 // s.o.
                 aMtrFldColorModel1.SetHelpText( String() );

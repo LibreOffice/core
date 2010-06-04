@@ -105,20 +105,25 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetComponentHelpIds( const SmartId& _rHelpId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId )
+    void OBrowserLine::SetComponentHelpIds( const rtl::OString& _rHelpId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId )
     {
         if ( m_pControlWindow )
-            m_pControlWindow->SetSmartHelpId( _rHelpId );
+            // FIXME: HELPID
+            m_pControlWindow->SetHelpId( _rHelpId );
 
         if ( m_pBrowseButton )
         {
-            m_pBrowseButton->SetSmartHelpId( _rHelpId );
-            m_pBrowseButton->SetUniqueId( _bPrimaryButtonId );
+            // FIXME: HELPID
+            m_pBrowseButton->SetHelpId( _rHelpId );
+            // FIXME: HELPID
+            m_pBrowseButton->SetUniqueId( ""/*_bPrimaryButtonId*/ );
 
             if ( m_pAdditionalBrowseButton )
             {
-                m_pAdditionalBrowseButton->SetSmartHelpId( _rHelpId );
-                m_pAdditionalBrowseButton->SetUniqueId( _nSecondaryButtonId );
+                // FIXME: HELPID
+                m_pAdditionalBrowseButton->SetHelpId( _rHelpId );
+                // FIXME: HELPID
+                m_pAdditionalBrowseButton->SetUniqueId( ""/*_nSecondaryButtonId*/ );
             }
         }
     }

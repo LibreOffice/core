@@ -197,7 +197,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     sHeader += '\t';
     m_aJavaList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
 
-    m_aJavaList.SetHelpId( HID_OPTIONS_JAVA_LIST );
+    // FIXME: HELPID
+    m_aJavaList.SetHelpId( ""/*HID_OPTIONS_JAVA_LIST*/ );
 
     FreeResource();
 

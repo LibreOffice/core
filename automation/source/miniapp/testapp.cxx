@@ -122,7 +122,8 @@ void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent)
     aText.SearchAndReplaceAllAscii("\n",CUniString("\\n"));
 
     aEditWin->AddText(String(sIndent).AppendAscii("Text: ").Append(aText).AppendAscii("\n"));
-    aEditWin->AddText(String(sIndent).AppendAscii("Help: ").Append(String::CreateFromInt64(pBase->GetHelpId())).AppendAscii(":").Append(pBase->GetQuickHelpText()).AppendAscii(":").Append(pBase->GetHelpText()).AppendAscii("\n"));
+    // FIXME: HELPID
+    aEditWin->AddText(String(sIndent).AppendAscii("Help: ").Append(String(rtl::OStringToOUString(pBase->GetHelpId(), RTL_TEXTENCODING_UTF8))).AppendAscii(":").Append(pBase->GetQuickHelpText()).AppendAscii(":").Append(pBase->GetHelpText()).AppendAscii("\n"));
 
     USHORT i;
     for (i = 0 ; i < pBase->GetChildCount() ; i++)

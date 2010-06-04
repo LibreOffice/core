@@ -2629,7 +2629,8 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
             String aDesc = CUI_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
-            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
+            // FIXME: HELPID
+            pNameDialog->SetHelpId( ""/*HID_SVX_CONFIG_RENAME_MENU*/ );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
             bool ret = pNameDialog->Execute();
@@ -2687,7 +2688,8 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
             String aDesc = CUI_RESSSTR( RID_SVXSTR_SUBMENU_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
-            pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
+            // FIXME: HELPID
+            pNameDialog->SetHelpId( ""/*HID_SVX_CONFIG_NAME_SUBMENU*/ );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
 
             bool ret = pNameDialog->Execute();
@@ -2733,7 +2735,8 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
             String aDesc = CUI_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
-            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
+            // FIXME: HELPID
+            pNameDialog->SetHelpId( ""/*HID_SVX_CONFIG_RENAME_MENU_ITEM*/ );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
             bool ret = pNameDialog->Execute();
@@ -3129,16 +3132,21 @@ SvxConfigEntry::GetHelpText()
 {
     if ( aHelpText.getLength() == 0 )
     {
+        #if 0
         OUString helpid = OUString::createFromAscii( "helpid:" );
         if ( aHelpURL.indexOf( helpid ) != -1 )
         {
             aHelpURL = aHelpURL.copy( helpid.getLength() );
         }
+        #endif
 
         Help* pHelp = Application::GetHelp();
+        #if 0
         if ( aHelpURL.toInt32() != 0 )
+        #endif
         {
-            aHelpText = pHelp->GetHelpText( aHelpURL.toInt32(), NULL );
+            // FIXME: HELPID
+            aHelpText = pHelp->GetHelpText( aHelpURL/*.toInt32()*/, NULL );
         }
 
         if ( aHelpText.getLength() == 0 && aCommand.getLength() != 0 )
@@ -3343,19 +3351,26 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     :
     SvxConfigPage( pParent, rSet )
 {
-    SetHelpId( HID_SVX_CONFIG_TOOLBAR );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_SVX_CONFIG_TOOLBAR*/ );
 
     aContentsListBox = new SvxToolbarEntriesListBox(this, CUI_RES(BOX_ENTRIES));
     FreeResource();
     PositionContentsListBox();
     aContentsListBox->SetZOrder( &aAddCommandsButton, WINDOW_ZORDER_BEFOR );
 
-    aContentsListBox->SetHelpId( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
-    aNewTopLevelButton.SetHelpId( HID_SVX_NEW_TOOLBAR );
-    aModifyTopLevelButton.SetHelpId( HID_SVX_MODIFY_TOOLBAR );
-    aAddCommandsButton.SetHelpId( HID_SVX_NEW_TOOLBAR_ITEM );
-    aModifyCommandButton.SetHelpId( HID_SVX_MODIFY_TOOLBAR_ITEM );
-    aSaveInListBox.SetHelpId( HID_SVX_SAVE_IN );
+    // FIXME: HELPID
+    aContentsListBox->SetHelpId( ""/*HID_SVX_CONFIG_TOOLBAR_CONTENTS*/ );
+    // FIXME: HELPID
+    aNewTopLevelButton.SetHelpId( ""/*HID_SVX_NEW_TOOLBAR*/ );
+    // FIXME: HELPID
+    aModifyTopLevelButton.SetHelpId( ""/*HID_SVX_MODIFY_TOOLBAR*/ );
+    // FIXME: HELPID
+    aAddCommandsButton.SetHelpId( ""/*HID_SVX_NEW_TOOLBAR_ITEM*/ );
+    // FIXME: HELPID
+    aModifyCommandButton.SetHelpId( ""/*HID_SVX_MODIFY_TOOLBAR_ITEM*/ );
+    // FIXME: HELPID
+    aSaveInListBox.SetHelpId( ""/*HID_SVX_SAVE_IN*/ );
 
     aTopLevelSeparator.SetText(
         CUI_RES ( RID_SVXSTR_PRODUCTNAME_TOOLBARS ) );
@@ -3571,7 +3586,8 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             String aDesc = CUI_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
-            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
+            // FIXME: HELPID
+            pNameDialog->SetHelpId( ""/*HID_SVX_CONFIG_RENAME_TOOLBAR*/ );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
             bool ret = pNameDialog->Execute();
@@ -3662,7 +3678,8 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             String aDesc = CUI_RESSSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
-            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
+            // FIXME: HELPID
+            pNameDialog->SetHelpId( ""/*HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM*/ );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
             bool ret = pNameDialog->Execute();

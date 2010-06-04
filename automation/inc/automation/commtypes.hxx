@@ -52,6 +52,7 @@
 
 #include <sal/types.h>
 typedef sal_Unicode comm_UniChar;
+#include "rtl/string.hxx"
 
 // this is a trick to be sure the SO types are unknown, so the compiler will yell at us in case we use them
 #ifndef _SOLAR_H
@@ -93,7 +94,7 @@ typedef UINT32 comm_UINT32;
 typedef sal_uInt16      comm_WORD;
 typedef sal_uInt32      comm_DWORD;
 
-class SmartId;
+class rtl::OString;
 class String;
 #define comm_String String
 

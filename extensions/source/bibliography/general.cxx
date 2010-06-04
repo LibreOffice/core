@@ -245,7 +245,8 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     pDatMan(pMan)
 {
     aControlParentWin.Show();
-    aControlParentWin.SetHelpId(HID_BIB_CONTROL_PARENT);
+    // FIXME: HELPID
+    aControlParentWin.SetHelpId(""/*HID_BIB_CONTROL_PARENT*/);
     aStdSize = GetOutputSizePixel();
 
     aBibTypeArr[0] = String(BibResId(ST_TYPE_ARTICLE));

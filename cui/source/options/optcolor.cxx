@@ -815,7 +815,8 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
             else
                 aCheckBoxes[i]->Hide();
             aCheckBoxes[i]->SetBackground(aTransparentWall);
-            aCheckBoxes[i]->SetHelpId(HID_COLORPAGE_CHECKBOX_START + i);
+            // FIXME: HELPID
+            aCheckBoxes[i]->SetHelpId(""/*HID_COLORPAGE_CHECKBOX_START + i*/);
             if(bSetTextColor)
                 aCheckBoxes[i]->SetTextColor(aRCheckCol);
         }
@@ -854,13 +855,15 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         XColorEntry* pEntry = aColorTable.GetColor(i);
         aColorBoxes[0]->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
-    aColorBoxes[0]->SetHelpId(HID_COLORPAGE_LISTBOX_START);
+    // FIXME: HELPID
+    aColorBoxes[0]->SetHelpId(""/*HID_COLORPAGE_LISTBOX_START*/);
     for( sal_Int32 i = 1; i < nCount; i++ )
     {
         if(aColorBoxes[i])
         {
             aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
-            aColorBoxes[i]->SetHelpId(HID_COLORPAGE_LISTBOX_START + i);
+            // FIXME: HELPID
+            aColorBoxes[i]->SetHelpId(""/*HID_COLORPAGE_LISTBOX_START + i*/);
         }
     }
 }
@@ -1018,7 +1021,8 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     aScrollWindow.SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
-    aScrollWindow.SetHelpId( HID_OPTIONS_COLORCONFIG_COLORLIST_WIN );
+    // FIXME: HELPID
+    aScrollWindow.SetHelpId( ""/*HID_OPTIONS_COLORCONFIG_COLORLIST_WIN*/ );
     aVScroll.EnableDrag();
     aVScroll.Show();
     aHeaderHB.SetPosSizePixel(

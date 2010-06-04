@@ -169,8 +169,10 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     pPathBox->InitHeaderBar( pHeaderBar );
     pPathBox->SetHighlightRange();
 
-    pPathBox->SetHelpId( HID_DBPATH_CTL_PATH );
-    pHeaderBar->SetHelpId( HID_DBPATH_HEADERBAR );
+    // FIXME: HELPID
+    pPathBox->SetHelpId( ""/*HID_DBPATH_CTL_PATH*/ );
+    // FIXME: HELPID
+    pHeaderBar->SetHelpId( ""/*HID_DBPATH_HEADERBAR*/ );
 
     pPathBox->Show();
     pHeaderBar->Show();

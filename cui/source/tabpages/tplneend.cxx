@@ -372,7 +372,8 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         {
             WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
                 String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-            aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+            // FIXME: HELPID
+            aWarningBox.SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -520,7 +521,8 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             else
             {
                 WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                // FIXME: HELPID
+                aBox.SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
                 aBox.Execute();
             }
         }

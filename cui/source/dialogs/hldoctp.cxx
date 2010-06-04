@@ -78,7 +78,8 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maCbbPath.Show();
     String aFileScheme( INET_FILE_SCHEME, RTL_TEXTENCODING_ASCII_US );
     maCbbPath.SetBaseURL(aFileScheme);
-    maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
+    // FIXME: HELPID
+    maCbbPath.SetHelpId( ""/*HID_HYPERDLG_DOC_PATH*/ );
 
     SetExchangeSupport ();
 

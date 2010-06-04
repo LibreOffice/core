@@ -263,8 +263,10 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     pPathBox->SetTabs( &nTabs[0], MAP_APPFONT );
     pPathBox->InitHeaderBar( pHeaderBar );
     pPathBox->SetHighlightRange();
-    pPathBox->SetHelpId( HID_OPTPATH_CTL_PATH );
-    pHeaderBar->SetHelpId( HID_OPTPATH_HEADERBAR );
+    // FIXME: HELPID
+    pPathBox->SetHelpId( ""/*HID_OPTPATH_CTL_PATH*/ );
+    // FIXME: HELPID
+    pHeaderBar->SetHelpId( ""/*HID_OPTPATH_HEADERBAR*/ );
     pPathBox->Show();
     pHeaderBar->Show();
 

@@ -639,7 +639,8 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         else
         {
             WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-            aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+            // FIXME: HELPID
+            aBox.SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
             aBox.Execute();
         }
     }
@@ -720,7 +721,8 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             else
             {
                 WarningBox aBox( DLGWIN, WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                // FIXME: HELPID
+                aBox.SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
                 aBox.Execute();
             }
         }

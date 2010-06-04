@@ -729,7 +729,8 @@ void AbstractSvxNameDialog_Impl::SetEditHelpId(ULONG nHelpId)
 }
 void AbstractSvxNameDialog_Impl::SetHelpId( ULONG nHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    // FIXME: HELPID
+    pDlg->SetHelpId( ""/*nHelpId*/ );
 }
 void AbstractSvxNameDialog_Impl::SetText( const XubString& rStr )
 {
@@ -843,7 +844,8 @@ void AbstractSvxMultiFileDialog_Impl::SetTitle( const String& rNewTitle )
 
 void AbstractSvxMultiFileDialog_Impl::SetHelpId( ULONG nHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    // FIXME: HELPID
+    pDlg->SetHelpId( ""/*nHelpId*/ );
 }
 
 Window * AbstractSvxHpLinkDlg_Impl::GetWindow()
@@ -1889,7 +1891,8 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
 
     if ( pDlg )
     {
-        pDlg->SetHelpId( nSlotId );
+        // FIXME: HELPID
+        pDlg->SetHelpId( ""/*nSlotId*/ );
         return new AbstractInsertObjectDialog_Impl( pDlg );
     }
     return 0;
@@ -1908,7 +1911,8 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* p
 
     if ( pDlg )
     {
-        pDlg->SetHelpId( nSlotId );
+        // FIXME: HELPID
+        pDlg->SetHelpId( ""/*nSlotId*/ );
         return new VclAbstractDialog_Impl( pDlg );
     }
     return 0;

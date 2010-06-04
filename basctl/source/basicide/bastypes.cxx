@@ -521,7 +521,8 @@ BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
 {
     EnableEditMode( TRUE );
 
-    SetHelpId( HID_BASICIDE_TABBAR );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_BASICIDE_TABBAR*/ );
 }
 
 void __EXPORT BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )

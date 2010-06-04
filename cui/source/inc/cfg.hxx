@@ -744,7 +744,8 @@ public:
             aBtnOK.Enable( rLink.Call( this ) > 0 );
     }
 
-    void    SetEditHelpId(ULONG nHelpId) {aEdtName.SetHelpId(nHelpId);}
+    // FIXME: HELPID
+    void    SetEditHelpId(ULONG /*nHelpId*/) {aEdtName.SetHelpId(""/*nHelpId*/);}
 };
 
 class SvxIconSelectorDialog : public ModalDialog

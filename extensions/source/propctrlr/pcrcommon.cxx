@@ -51,12 +51,17 @@ namespace pcr
     //= HelpIdUrl
     //========================================================================
     //------------------------------------------------------------------------
-    SmartId HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
+    rtl::OString HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
     {
+    // FIXME: HELPID
+        #if 0
         SmartId aSmartHelpId( _rHelpURL );
         if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
             aSmartHelpId = SmartId( _rHelpURL.copy( sizeof( "HID:" ) - 1 ).toInt32() );
         return aSmartHelpId;
+        #else
+        return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+        #endif
     }
 
     //------------------------------------------------------------------------

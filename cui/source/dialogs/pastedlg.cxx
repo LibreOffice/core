@@ -63,8 +63,10 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     aSObject( CUI_RES( S_OBJECT ) )
 {
     FreeResource();
-    SetHelpId( HID_PASTE_DLG );
-    SetUniqueId( HID_PASTE_DLG );
+    // FIXME: HELPID
+    SetHelpId( ""/*HID_PASTE_DLG*/ );
+    // FIXME: HELPID
+    SetUniqueId( ""/*HID_PASTE_DLG*/ );
 
     Font aFont = aFtObjectSource.GetFont();
     aFont.SetWeight( WEIGHT_LIGHT );

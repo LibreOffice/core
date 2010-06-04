@@ -482,7 +482,8 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             pWarnBox = new WarningBox( DLGWIN,
                                        WinBits( WB_OK_CANCEL ),
                                        String( ResId( nError, rMgr ) ) );
-            pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
+            // FIXME: HELPID
+            pWarnBox->SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
         }
 
         if( pWarnBox->Execute() != RET_OK )
@@ -599,7 +600,8 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             else
             {
                 WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                // FIXME: HELPID
+                aBox.SetHelpId( ""/*HID_WARN_NAME_DUPLICATE*/ );
                 aBox.Execute();
             }
 

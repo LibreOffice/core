@@ -109,7 +109,8 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, BOOL bHtml 
 {
     FreeResource();
 
-    aTbLinks.SetHelpId(HID_LINKDLG_TABLB);
+    // FIXME: HELPID
+    aTbLinks.SetHelpId(""/*HID_LINKDLG_TABLB*/);
     aTbLinks.SetSelectionMode( MULTIPLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
     aTbLinks.Resize();  // OS: Hack fuer richtige Selektion

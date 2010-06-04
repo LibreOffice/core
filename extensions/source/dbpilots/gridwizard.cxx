@@ -65,10 +65,14 @@ namespace dbp
     {
         initControlSettings(&m_aSettings);
 
-        m_pPrevPage->SetHelpId(HID_GRIDWIZARD_PREVIOUS);
-        m_pNextPage->SetHelpId(HID_GRIDWIZARD_NEXT);
-        m_pCancel->SetHelpId(HID_GRIDWIZARD_CANCEL);
-        m_pFinish->SetHelpId(HID_GRIDWIZARD_FINISH);
+        // FIXME: HELPID
+        m_pPrevPage->SetHelpId(""/*HID_GRIDWIZARD_PREVIOUS*/);
+        // FIXME: HELPID
+        m_pNextPage->SetHelpId(""/*HID_GRIDWIZARD_NEXT*/);
+        // FIXME: HELPID
+        m_pCancel->SetHelpId(""/*HID_GRIDWIZARD_CANCEL*/);
+        // FIXME: HELPID
+        m_pFinish->SetHelpId(""/*HID_GRIDWIZARD_FINISH*/);
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())

@@ -152,13 +152,14 @@ pfunc_osl_printDebugMessage StatementCommand::pOriginal_osl_DebugMessageFunc = N
 #define RESET_APPLICATION_TO_BACKING_WINDOW
 
 
+// FIXME: HELPID
 #define SET_WINP_CLOSING(pWin) \
     pWindowWaitPointer = pWin; \
-    aWindowWaitUId = pControl->GetSmartUniqueOrHelpId(); \
-    aWindowWaitOldHelpId = pWin->GetSmartHelpId(); \
-    aWindowWaitOldUniqueId = pWin->GetSmartUniqueId(); \
-    pWin->SetSmartHelpId( SmartId(4321) ); \
-    pWin->SetSmartUniqueId( SmartId(1234) );
+    aWindowWaitUId = pControl->GetUniqueOrHelpId(); \
+    aWindowWaitOldHelpId = pWin->GetHelpId(); \
+    aWindowWaitOldUniqueId = pWin->GetUniqueId(); \
+    pWin->SetHelpId( rtl::OString("4321") ); \
+    pWin->SetUniqueId( rtl::OString("1234") );
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -299,8 +300,10 @@ BOOL StatementFlow::Execute()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // neue Hilfsfunktion, die stetig erweitert werden muss
-static short ImpGetRType( Window *pWin, SmartId aUId )
+static short ImpGetRType( Window *pWin, rtl::OString aUId )
 {
+    // FIXME: HELPID
+    #if 0
     ULONG nUId = aUId.GetNum(); // GetNum() is always zero if no num is defined
     // GGGg gggg::gggg gggg::ggLL LLLl::llll llll
     DBG_ASSERT( pWin, "missing Parameter" );
@@ -322,6 +325,9 @@ static short ImpGetRType( Window *pWin, SmartId aUId )
 #endif
         }
     }
+    #else
+    short nRT = 0;
+    #endif
 
 #ifdef DBG_UTIL
     short n = nRT;
@@ -588,9 +594,9 @@ BOOL StatementSlot::Execute()
         if ( !bMenuClosed )
         {
             pPopup->EndExecute(0);
-            aSubMenuId1 = SmartId();
-            aSubMenuId2 = SmartId();
-            aSubMenuId3 = SmartId();
+            aSubMenuId1 = rtl::OString();
+            aSubMenuId2 = rtl::OString();
+            aSubMenuId3 = rtl::OString();
             pMenuWindow = NULL;
             bMenuClosed = TRUE;
 #if OSL_DEBUG_LEVEL > 1
@@ -712,12 +718,12 @@ BOOL StatementSlot::Execute()
             {
             case TT_PR_ERR_NODISPATCHER:
                 {
-                    ReportError( SmartId(nFunctionId), GEN_RES_STR0( S_SID_EXECUTE_FAILED_NO_DISPATCHER ) );
+                    ReportError( rtl::OString(nFunctionId), GEN_RES_STR0( S_SID_EXECUTE_FAILED_NO_DISPATCHER ) );
                 }
                 break;
             case TT_PR_ERR_NOEXECUTE:
                 {
-                    ReportError(SmartId(nFunctionId), GEN_RES_STR0( S_SID_EXECUTE_FAILED ) );
+                    ReportError(rtl::OString(nFunctionId), GEN_RES_STR0( S_SID_EXECUTE_FAILED ) );
                 }
                 break;
             }
@@ -769,7 +775,7 @@ StatementCommand::StatementCommand( StatementList *pAfterThis, USHORT MethodId, 
 , bBool2(FALSE)
 {
     QueStatement( pAfterThis );
-    aSmartMethodId = SmartId( nMethodId );
+    aSmartMethodId = rtl::OString( nMethodId );
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Directly adding Conmmand:" );
@@ -806,7 +812,7 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
 {
     QueStatement( NULL );
     pCmdIn->Read( nMethodId );
-    aSmartMethodId = SmartId( nMethodId );
+    aSmartMethodId = rtl::OString( nMethodId );
     pCmdIn->Read( nParams );
 
     if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nNr1 );
@@ -863,7 +869,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
         return;
 
     if ( bFirst )
-        pRet->GenReturn ( RET_WinInfo, SmartId(), (comm_ULONG)nConf | DH_MODE_DATA_VALID, UniString(), TRUE );
+        pRet->GenReturn ( RET_WinInfo, rtl::OString(), (comm_ULONG)nConf | DH_MODE_DATA_VALID, UniString(), TRUE );
 
     {   // Klammerung, so daß der String nicht während der Rekursion bestehen bleibt
         String aName;
@@ -933,8 +939,12 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                 break;
 
             default:
-                if ( pBase->GetSmartUniqueOrHelpId().Equals( SmartId() ) && !( nConf & DH_MODE_ALLWIN ) )
+                // FIXME: HELPID
+                #if 0
+                if ( pBase->GetSmartUniqueOrHelpId().Equals( rtl::OString() ) && !( nConf & DH_MODE_ALLWIN ) )
                     bSkip = TRUE;
+                #endif
+                break;
         }
 
         if ( !bSkip )
@@ -962,13 +972,16 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                     aTypeSuffix.AppendAscii( "/Unknown", 8 );
             }
 
-            SmartId aId = pBase->GetSmartUniqueOrHelpId();
+            // FIXME: HELPID
+            rtl::OString aId = pBase->GetUniqueOrHelpId();
+            #if 0
             if ( aId.HasString() || ( nConf & DH_MODE_ALLWIN ) )
-                pRet->GenReturn ( RET_WinInfo, SmartId( aId.GetStr() ), (comm_ULONG)pBase->GetType(),
+                pRet->GenReturn ( RET_WinInfo, rtl::OString( aId.GetStr() ), (comm_ULONG)pBase->GetType(),
                     TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), FALSE );
             if ( !aId.HasString() || ( nConf & DH_MODE_ALLWIN ) )
-                pRet->GenReturn ( RET_WinInfo, SmartId( aId.GetNum() ), (comm_ULONG)pBase->GetType(),
+                pRet->GenReturn ( RET_WinInfo, rtl::OString( aId.GetNum() ), (comm_ULONG)pBase->GetType(),
                     TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), FALSE );
+            #endif
 
 
             if ( pBase->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
@@ -989,26 +1002,32 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                     pItemWin = pTB->GetItemWindow( pTB->GetItemId( i ) );
                     if ( pTB->GetItemType( i ) == TOOLBOXITEM_BUTTON && ( !pItemWin || !pItemWin->IsVisible() ) )
                     {
+                        // FIXME: HELPID
+                        #if 0
                         if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BUTTON,
+                            pRet->GenReturn ( RET_WinInfo, rtl::OString( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BUTTON,
                                 TypeString(WINDOW_BUTTON).AppendAscii(": ").Append(aName), FALSE );
                         if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetHelpId(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BUTTON,
+                            pRet->GenReturn ( RET_WinInfo, rtl::OString( pTB->GetHelpId(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BUTTON,
                                 TypeString(WINDOW_BUTTON).AppendAscii(": ").Append(aName), FALSE );
+                        #endif
                     }
                     else
                     {
                         if ( pItemWin )
                         {
+                            // FIXME: HELPID
+                            #if 0
                             if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)pItemWin->GetType(),
+                                pRet->GenReturn ( RET_WinInfo, rtl::OString( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)pItemWin->GetType(),
                                     TypeString(pItemWin->GetType()).AppendAscii(": ").Append(aName), FALSE );
                             if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetHelpId(pTB->GetItemId( i )) ), (comm_ULONG)pItemWin->GetType(),
+                                pRet->GenReturn ( RET_WinInfo, rtl::OString( pTB->GetHelpId(pTB->GetItemId( i )) ), (comm_ULONG)pItemWin->GetType(),
                                     TypeString(pItemWin->GetType()).AppendAscii(": ").Append(aName), FALSE );
                             USHORT ii;
                             for( ii = 0 ; ii < pItemWin->GetChildCount(); ii++ )
                                 WriteControlData( pItemWin->GetChild(ii), nConf, FALSE );
+                            #endif
                         }
                         else
                         {
@@ -1035,12 +1054,15 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                                 default:
                                     DBG_ERROR1( "Unknown TOOLBOXITEM %i", pTB->GetItemType( i ) );
                                 }
+                                // FIXME: HELPID
+                                #if 0
                                 if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                    pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BASE,
+                                    pRet->GenReturn ( RET_WinInfo, rtl::OString( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BASE,
                                         aToolBoxItemType.AppendAscii(": ").Append(aName), FALSE );
                                 if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                    pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetHelpId(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BASE,
+                                    pRet->GenReturn ( RET_WinInfo, rtl::OString( pTB->GetHelpId(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BASE,
                                         aToolBoxItemType.AppendAscii(": ").Append(aName), FALSE );
+                                #endif
                             }
                         }
                     }
@@ -1090,9 +1112,12 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                             break;
                     }
 
-                    pRet->GenReturn ( RET_WinInfo, SmartId( aID ), (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),    // So daß der Text angezeigt wird!
+                    // FIXME: HELPID
+                    #if 0
+                    pRet->GenReturn ( RET_WinInfo, rtl::OString( aID ), (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),   // So daß der Text angezeigt wird!
                         TypeString(pBD->GetPushButton( pBD->GetButtonId(i) )->GetType()).AppendAscii(": ").Append(aName)
                         .AppendAscii(" ButtonId = ").Append(aID), FALSE );
+                    #endif
                 }
 
                 return; // ButtonDialog ist hier schon komplett abgehandelt.
@@ -1138,12 +1163,15 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                         default:
                             DBG_ERROR1( "Unknown MENUITEM %i", pMenu->GetItemType( i ) );
                         }
+                        // FIXME: HELPID
+                        #if 0
                         if ( pMenu->GetItemCommand(nID).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, SmartId( pMenu->GetItemCommand(nID) ), (comm_ULONG)0,
+                            pRet->GenReturn ( RET_WinInfo, rtl::OString( pMenu->GetItemCommand(nID) ), (comm_ULONG)0,
                                 aMenuItemType.AppendAscii(": ").Append(aName), FALSE );
                         if ( !pMenu->GetItemCommand(nID).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, SmartId( nID ), (comm_ULONG)0,
+                            pRet->GenReturn ( RET_WinInfo, rtl::OString( nID ), (comm_ULONG)0,
                                 aMenuItemType.AppendAscii(": ").Append(aName), FALSE );
+                        #endif
                     }
                 }
 
@@ -1559,12 +1587,15 @@ BOOL StatementCommand::DisplayHID()
                 if ( GetTTSettings()->Act )
                 {
                     SET_WIN(GetTTSettings()->Act);
+                    // FIXME: HELPID
+                    #if 0
                     GetTTSettings()->pDisplayHidWin->SetDisplayText(GetTTSettings()->Act->GetSmartUniqueOrHelpId().GetText().AppendAscii(" WinType: ")
                         .Append(UniString::CreateFromInt64(GetTTSettings()->Act->GetType())).AppendAscii("  ").Append(GetTTSettings()->Act->GetText()));
                     if ( GetTTSettings()->Act && !GetTTSettings()->Act->GetSmartUniqueId().Equals( GetTTSettings()->Act->GetSmartHelpId() ) )
                         GetTTSettings()->pDisplayHidWin->SetText(UniString( TTProperties::GetSvtResId( TT_ALTERNATE_CAPTION ) ).Append(GetTTSettings()->Act->GetSmartHelpId().GetText()));
                     else
                         GetTTSettings()->pDisplayHidWin->SetText( GetTTSettings()->aOriginalCaption );
+                    #endif
                 }
                 else
                     GetTTSettings()->pDisplayHidWin->SetDisplayText(CUniString("Kein Window/Control gefunden"));
@@ -1574,8 +1605,11 @@ BOOL StatementCommand::DisplayHID()
 //              SET_WIN(GetTTSettings()->Act);
                 if ( GetTTSettings()->pDisplayHidWin->IsDisplayTextModified() && GetTTSettings()->pDisplayHidWin->GetDisplayText().Len() > 0 )
                 {
-                    GetTTSettings()->Act->SetSmartUniqueId( SmartId( GetTTSettings()->pDisplayHidWin->GetDisplayText().ToInt32() ) );
+                    // FIXME: HELPID
+                    #if 0
+                    GetTTSettings()->Act->SetSmartUniqueId( rtl::OString( GetTTSettings()->pDisplayHidWin->GetDisplayText().ToInt32() ) );
                     GetTTSettings()->pDisplayHidWin->ClearDisplayTextModified();
+                    #endif
                 }
             }
 /*          if ( Application::GetLastInputInterval() > 5000 )   // 5 Sekunden lang nix geschehen
@@ -2113,7 +2147,7 @@ void StatementCommand::Translate()
     if( (nParams & PARAM_ULONG_1) && nLNr1 )
     {
         String aDouble;
-        Window *pWin = SearchTree( SmartId( nLNr1 ) ,FALSE );
+        Window *pWin = SearchTree( rtl::OString( nLNr1 ) ,FALSE );
         if ( pWin )
         {
             pWin = pWin->GetWindow( WINDOW_OVERLAP );
@@ -2152,14 +2186,16 @@ void StatementCommand::Translate()
             {
                 Window* pNew = pTranslationWindow->GetWindow( WINDOW_CLIENT );
                 // Bei Dockingwindoes das kanze Geraffel von Docking Floating überspringen
-                while ( IsDialog( pNew ) && !pNew->GetSmartUniqueOrHelpId().HasAny() && pNew->GetChildCount() == 1 )
+                // FIXME: HELPID
+                while ( IsDialog( pNew ) && !pNew->GetUniqueOrHelpId().getLength() && pNew->GetChildCount() == 1 )
                     pNew = pNew->GetChild( 0 );
                 pTranslationWindow = pNew;
             }
 
             aTranslation = CUniString("0;");
 
-            aTranslation += pTranslationWindow->GetSmartUniqueOrHelpId().GetText();
+            // FIXME: HELPID
+            aTranslation += String(rtl::OStringToOUString( pTranslationWindow->GetUniqueOrHelpId(), RTL_TEXTENCODING_UTF8 ));
             aTranslation += ';';
 
             aTranslation += TypeString( pTranslationWindow->GetType() );
@@ -2173,7 +2209,8 @@ void StatementCommand::Translate()
 
             if ( pParentDialog )
             {
-                aTranslation += pParentDialog->GetSmartUniqueOrHelpId().GetText();
+                // FIXME: HELPID
+                aTranslation += String(rtl::OStringToOUString(pParentDialog->GetUniqueOrHelpId(), RTL_TEXTENCODING_UTF8));
                 aTranslation += ';';
                 aTranslation += TypeString( pParentDialog->GetType() );
             }
@@ -2334,10 +2371,11 @@ BOOL StatementCommand::Execute()
 
 
 
+// FIXME: HELPID
 #if OSL_DEBUG_LEVEL > 1
 #define REPORT_WIN_CLOSED(pControl, aInfo)          \
     _REPORT_WIN_CLOSED(pControl, aInfo)             \
-    m_pDbgWin->AddText( aInfo.AppendAscii(" \"").Append( pControl->GetText() ).AppendAscii("\" geschlossen, RType = ").Append( TypeString(pControl->GetType()) ).AppendAscii(", UId = ").Append( UIdString(pControl->GetSmartUniqueOrHelpId()) ) );
+    m_pDbgWin->AddText( aInfo.AppendAscii(" \"").Append( pControl->GetText() ).AppendAscii("\" geschlossen, RType = ").Append( TypeString(pControl->GetType()) ).AppendAscii(", UId = ").Append( rtl::OStringToOUString( pControl->GetUniqueOrHelpId(), RTL_TEXTENCODING_UTF8) ) );
 #else
 #define REPORT_WIN_CLOSED(pControl, aInfo) _REPORT_WIN_CLOSED(pControl, aInfo)
 #endif
@@ -2345,6 +2383,7 @@ BOOL StatementCommand::Execute()
 #define REPORT_WIN_CLOSEDc(pControl, aInfo )        \
     REPORT_WIN_CLOSED(pControl, CUniString(aInfo) )
 
+// FIXME: HELPID
 #define _REPORT_WIN_CLOSED(pControl, aInfo)         \
     if ( aString1.Len() )                           \
         aString1 += '\n';                           \
@@ -2354,7 +2393,7 @@ BOOL StatementCommand::Execute()
     aString1.AppendAscii("\" geschlossen, RType = ");\
     aString1 += TypeString(pControl->GetType());    \
     aString1.AppendAscii(", UId = ");               \
-    aString1 += UIdString(pControl->GetSmartUniqueOrHelpId());
+    aString1 += String(rtl::OStringToOUString(pControl->GetUniqueOrHelpId(), RTL_TEXTENCODING_UTF8));
 
 
     switch ( nMethodId )
@@ -2387,9 +2426,9 @@ BOOL StatementCommand::Execute()
                     bCatchGPF = TRUE;
                     bUsePostEvents = TRUE;
 
-                    aSubMenuId1 = SmartId();
-                    aSubMenuId2 = SmartId();
-                    aSubMenuId3 = SmartId();
+                    aSubMenuId1 = rtl::OString();
+                    aSubMenuId2 = rtl::OString();
+                    aSubMenuId3 = rtl::OString();
                     pMenuWindow = NULL;
                 }
                 if ( !nRetryCount )
@@ -2410,12 +2449,14 @@ BOOL StatementCommand::Execute()
                          && pControl->GetType() != WINDOW_BORDERWINDOW
                          && nRetryCount-- )
                     {
-                        short nRT = ImpGetRType( pControl, pControl->GetSmartUniqueOrHelpId() );
+                        // FIXME: HELPID
+                        short nRT = ImpGetRType( pControl, pControl->GetUniqueOrHelpId() );
 
                         if ( nRT == C_TabControl && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
                         {   // Bei Tabcontrol den zugehörigen Tabdialog nehmen
                             pControl = pControl->GET_REAL_PARENT();
-                            nRT = ImpGetRType( pControl, pControl->GetSmartUniqueOrHelpId() );
+                            // FIXME: HELPID
+                            nRT = ImpGetRType( pControl, pControl->GetUniqueOrHelpId() );
                         }
 
                         switch( nRT )
@@ -2692,7 +2733,12 @@ BOOL StatementCommand::Execute()
                 else if ( !IsDialog(pWin) )
                     ReportError( GEN_RES_STR0( S_NO_DIALOG_IN_GETACTIVE ) );
                 else
-                    pRet->GenReturn( RET_Value, aSmartMethodId, static_cast<comm_ULONG>(pWin->GetSmartUniqueOrHelpId().GetNum())); //GetNum() ULONG != comm_ULONG on 64bit
+                {
+                    // FIXME: HELPID
+                    #if 0
+                    pRet->GenReturn( RET_Value, aSmartMethodId, static_cast<comm_ULONG>(pWin->GetUniqueOrHelpId().GetNum())); //GetNum() ULONG != comm_ULONG on 64bit
+                    #endif
+                }
             }
             break;
         case RC_UseBindings:
@@ -2725,7 +2771,7 @@ BOOL StatementCommand::Execute()
                     pProfiler->StartAutoProfiling( nNr1 );
 
                     // Der Header ist abhängig vom Modus
-                    pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileHeader() );
+                    pRet->GenReturn( RET_ProfileInfo, rtl::OString(), pProfiler->GetProfileHeader() );
                 }
                 else if ( nParams & PARAM_USHORT_1 )
                 {   // Partitioning initialisieren: Profile true [,nNr][,nNr][,nNr][,nNr]
@@ -2738,32 +2784,32 @@ BOOL StatementCommand::Execute()
                     // Hier werden die Parameter ans Testtool zurück übertragen.
                     // Das ist zwar etwas eigenartig, aber ansonsten müsste man im Testtool
                     // die einfache Struktur der Remotebefehle aufbrechen.
-                    pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileReset ), nAnzahl );
+                    pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileReset ), nAnzahl );
 
                     // Und die einzelnen Grenzen
-                    if ( nParams & PARAM_USHORT_1 ) { pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileBorder1 ), (comm_ULONG)nNr1 ); };
-                    if ( nParams & PARAM_USHORT_2 ) { pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileBorder2 ), (comm_ULONG)nNr2 ); };
-                    if ( nParams & PARAM_USHORT_3 ) { pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileBorder3 ), (comm_ULONG)nNr3 ); };
-                    if ( nParams & PARAM_USHORT_4 ) { pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileBorder4 ), (comm_ULONG)nNr4 ); };
+                    if ( nParams & PARAM_USHORT_1 ) { pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileBorder1 ), (comm_ULONG)nNr1 ); };
+                    if ( nParams & PARAM_USHORT_2 ) { pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileBorder2 ), (comm_ULONG)nNr2 ); };
+                    if ( nParams & PARAM_USHORT_3 ) { pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileBorder3 ), (comm_ULONG)nNr3 ); };
+                    if ( nParams & PARAM_USHORT_4 ) { pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileBorder4 ), (comm_ULONG)nNr4 ); };
 
                     pProfiler->StartPartitioning();
                 }
                 else if( nParams == PARAM_STR_1 )   // Genau ein String!
                 {   // Nur einen String ins Profiling aufnehmen
                     aString1 += '\n';
-                    pRet->GenReturn( RET_ProfileInfo, SmartId(), aString1 );
+                    pRet->GenReturn( RET_ProfileInfo, rtl::OString(), aString1 );
                 }
                 else
                 {   // Normales Profiling je Kommando: profile
                     if ( pProfiler->IsAutoProfiling() )
                     {
-                        pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetAutoProfiling() );
+                        pRet->GenReturn( RET_ProfileInfo, rtl::OString(), pProfiler->GetAutoProfiling() );
                         pProfiler->StopAutoProfiling();
                     }
                     pProfiler->StartProfilingPerCommand();
 
                     // Der Header ist abhängig vom Modus
-                    pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileHeader() );
+                    pRet->GenReturn( RET_ProfileInfo, rtl::OString(), pProfiler->GetProfileHeader() );
                 }
             }
             else        // Profiling wieder ausschalten: Profile false
@@ -2774,13 +2820,13 @@ BOOL StatementCommand::Execute()
 
                     if ( pProfiler->IsAutoProfiling() )
                     {
-                        pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetAutoProfiling() );
+                        pRet->GenReturn( RET_ProfileInfo, rtl::OString(), pProfiler->GetAutoProfiling() );
                         pProfiler->StopAutoProfiling();
                     }
 
                     if ( pProfiler->IsPartitioning() )
                     {
-                        pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileDump ), (comm_ULONG)0 );
+                        pRet->GenReturn( RET_ProfileInfo, rtl::OString( S_ProfileDump ), (comm_ULONG)0 );
                         pProfiler->StopPartitioning();
                     }
 
@@ -2944,12 +2990,15 @@ BOOL StatementCommand::Execute()
                         {
                             if ( pMenu->GetPopupMenu(nNr1) )
                             {
+                                // FIXME: HELPID
+                                #if 0
                                 if ( !aSubMenuId1.GetNum() )
-                                    aSubMenuId1 = SmartId(nNr1);
+                                    aSubMenuId1 = rtl::OString(nNr1);
                                 else if ( !aSubMenuId2.GetNum() )
-                                    aSubMenuId2 = SmartId(nNr1);
+                                    aSubMenuId2 = rtl::OString(nNr1);
                                 else if ( !aSubMenuId3.GetNum() )
-                                    aSubMenuId3 = SmartId(nNr1);
+                                    aSubMenuId3 = rtl::OString(nNr1);
+                                #endif
 
                                 if ( pPopup )
                                     pPopup->SelectEntry(nNr1);
@@ -2961,17 +3010,17 @@ BOOL StatementCommand::Execute()
                                 if ( pPopup )
                                 {
                                     pPopup->EndExecute(nNr1);
-                                    aSubMenuId1 = SmartId();
-                                    aSubMenuId2 = SmartId();
-                                    aSubMenuId3 = SmartId();
+                                    aSubMenuId1 = rtl::OString();
+                                    aSubMenuId2 = rtl::OString();
+                                    aSubMenuId3 = rtl::OString();
                                     pMenuWindow = NULL;
                                 }
                                 else
                                 {
                                     pMenuBar->SelectEntry(nNr1);
-                                    aSubMenuId1 = SmartId();
-                                    aSubMenuId2 = SmartId();
-                                    aSubMenuId3 = SmartId();
+                                    aSubMenuId1 = rtl::OString();
+                                    aSubMenuId2 = rtl::OString();
+                                    aSubMenuId3 = rtl::OString();
                                     pMenuWindow = NULL;
                                 }
                             }
@@ -3582,13 +3631,14 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlIdType )
     {
         comm_ULONG nId;
         pCmdIn->Read( nId );
-        aUId = SmartId( nId );
+        aUId = rtl::OString( nId );
     }
     else if ( nControlIdType == SIStringControl )
     {
         String aId;
         pCmdIn->Read( aId );
-        aUId = SmartId( aId );
+        // FIXME: HELPID
+        aUId = rtl::OUStringToOString( aId, RTL_TEXTENCODING_UTF8 );
     }
     else
     {
@@ -3697,11 +3747,14 @@ static Window*ImpGetButton( Window *pBase, WinBits nMask, WinBits nWinBits )
 
 BOOL StatementControl::ControlOK( Window *pControl, const sal_Char* cBezeichnung )
 {
+    // FIXME: HELPID
+    #if 0
     if ( pControl && ( ( ( IsAccessable(pControl) || (nMethodId & M_WITH_RETURN) ) &&
                          pControl->IsVisible() ) ||
                          aUId.Matches( UID_ACTIVE ) ) )
         return TRUE;
     else
+    #endif
     {
         UniString aBezeichnung( cBezeichnung, RTL_TEXTENCODING_ASCII_US );
         if ( aBezeichnung.Len() > 0 )
@@ -3722,7 +3775,7 @@ BOOL StatementControl::ControlOK( Window *pControl, const sal_Char* cBezeichnung
 }
 
 
-BOOL StatementList::ValueOK( SmartId aId, String aBezeichnung, ULONG nValue, ULONG nMax )
+BOOL StatementList::ValueOK( rtl::OString aId, String aBezeichnung, ULONG nValue, ULONG nMax )
 {
 
     if ( nMax < nValue )
@@ -3756,6 +3809,8 @@ USHORT StatementList::GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, 
     if ( !pMenu )
         return 1;
 
+    // FIXME: HELPID
+    #if 0
     if ( aSubMenuId1.GetNum() )
     {
         pPopup = pMenu->GetPopupMenu(
@@ -3776,6 +3831,7 @@ USHORT StatementList::GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, 
             sal::static_int_cast< USHORT >(aSubMenuId3.GetNum()));
         pMenu = pPopup;
     }
+    #endif
 
     return 0;
 }
@@ -4016,7 +4072,10 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
         default:
             return FALSE;
         }
+        // FIXME: HELPID
+        #if 0
         SendProfile( UIdString( aUId ).Append('.').Append( MethodString( nMethodId ) ) );
+        #endif
         return TRUE;
     }
     return FALSE;
@@ -4301,9 +4360,9 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
             break;
         case M_OpenContextMenu:
             {
-                aSubMenuId1 = SmartId();
-                aSubMenuId2 = SmartId();
-                aSubMenuId3 = SmartId();
+                aSubMenuId1 = rtl::OString();
+                aSubMenuId2 = rtl::OString();
+                aSubMenuId3 = rtl::OString();
                 pMenuWindow = NULL;
                 Point aPos;
                 ToolBox* pTB = (ToolBox*)pControl;
@@ -4337,9 +4396,9 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
             break;
         case M_UseMenu:
             {
-                aSubMenuId1 = SmartId();
-                aSubMenuId2 = SmartId();
-                aSubMenuId3 = SmartId();
+                aSubMenuId1 = rtl::OString();
+                aSubMenuId2 = rtl::OString();
+                aSubMenuId3 = rtl::OString();
                 pMenuWindow = NULL;
 
                 while ( pControl && !( ( pControl->GetType() == WINDOW_SYSWINDOW || pControl->GetType() == WINDOW_WORKWINDOW ) && ControlOK( pControl, "" ) ) )
@@ -4430,7 +4489,10 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                     default:
                         ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
                 }
+                // FIXME: HELPID
+                #if 0
                 SendProfile( UIdString( aUId ).Append('.').Append( MethodString( nMethodId ) ) );
+                #endif
             }
             break;
         case M_StatusGetText:
@@ -4585,9 +4647,12 @@ BOOL StatementControl::Execute()
 #endif
 
 
+    // FIXME: HELPID
+    #if 0
     if ( aUId.Matches( UID_ACTIVE ) )
         pControl = GetAnyActive();
     else
+    #endif
     {
         BOOL bSearchButtonOnToolbox = (nParams == PARAM_NONE) && ((M_Click == nMethodId) || (M_TearOff == nMethodId) || (M_IsEnabled == nMethodId) || (M_OpenMenu == nMethodId));
         bSearchButtonOnToolbox |= (nParams == PARAM_USHORT_1) && (M_GetState == nMethodId);
@@ -4606,6 +4671,8 @@ BOOL StatementControl::Execute()
 
     if ( pControl && pControl->GetType() == WINDOW_TOOLBOX )
     {
+        // FIXME: HELPID
+        #if 0
         if ( !aUId.Matches( pControl->GetSmartUniqueOrHelpId() ) )
         {   // Also wenn wir irgendwas auf einer Toolbox gefunden haben
             switch ( nMethodId )
@@ -4622,6 +4689,7 @@ BOOL StatementControl::Execute()
                     pControl = NULL;
             }
         }
+        #endif
     }
 
 
@@ -4808,22 +4876,27 @@ BOOL StatementControl::Execute()
                             }
                             break;
                         case M_GetPage:
+                            // FIXME: HELPID
+                            #if 0
                             pRet->GenReturn ( RET_Value, aUId, ((TabControl*)pControl)->GetTabPage(((TabControl*)pControl)->GetCurPageId())->GetSmartUniqueOrHelpId().GetText());
+                            #endif
                             break;
                         case M_SetPage :
                             {       // Wegen lokaler Variablen
+                                // FIXME: HELPID
+                                #if 0
                                 TabControl *pTControl = ((TabControl*)pControl);
                                 USHORT nActive = pTControl->GetCurPageId();
                                 USHORT i,anz;
-                                SmartId aID;
-                                SmartId aWantedID;
+                                rtl::OString aID;
+                                rtl::OString aWantedID;
                                 if ( (nParams & PARAM_ULONG_1) )
                                 {
-                                    aWantedID = SmartId( nLNr1 );
+                                    aWantedID = rtl::OString( nLNr1 );
                                 }
                                 else if ( (nParams & PARAM_STR_1) )
                                 {
-                                    aWantedID = SmartId( aString1 );
+                                    aWantedID = rtl::OString( aString1 );
                                 }
                                 else
                                     ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
@@ -4852,6 +4925,7 @@ BOOL StatementControl::Execute()
                                     pTControl->ActivatePage();*/
                                     ReportError( aWantedID, GEN_RES_STR1( S_TABPAGE_NOT_FOUND, MethodString( nMethodId ) ) );
                                 }
+                                #endif
                             }
                             break;
                         default:
@@ -5279,9 +5353,9 @@ BOOL StatementControl::Execute()
 
                                 ImplMouseButtonUp  ( pControl, aMEvnt, FORCE_DIRECT_CALL );
 
-                                aSubMenuId1 = SmartId();
-                                aSubMenuId2 = SmartId();
-                                aSubMenuId3 = SmartId();
+                                aSubMenuId1 = rtl::OString();
+                                aSubMenuId2 = rtl::OString();
+                                aSubMenuId3 = rtl::OString();
                                 pMenuWindow = NULL;
                             }
                             break;
@@ -5293,7 +5367,9 @@ BOOL StatementControl::Execute()
                 case C_ToolBox:
                     {
                         ToolBox *pTB = ((ToolBox*)pControl);
-                        if ( !aUId.Matches( pTB->GetSmartUniqueOrHelpId() ) )   // Also Button auf der ToolBox gefunden
+                        // FIXME: HELPID
+                        #if 0
+                        if ( !aUId.Matches( pTB->GetUniqueOrHelpId() ) )    // Also Button auf der ToolBox gefunden
                         {
                             if ( (nParams == PARAM_NONE) || (nParams == PARAM_USHORT_1) )
                             {           // Wir fälschen einen Parameter
@@ -5312,19 +5388,21 @@ BOOL StatementControl::Execute()
                             else
                                 ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
                         }
+                        #endif
 
+// FIXME: HELPID
 #define FIND_ITEM\
     USHORT nItemPos = 0;\
     BOOL bItemFound = FALSE;\
     {\
-        SmartId aButtonId;\
+        rtl::OString aButtonId;\
         if( nParams == PARAM_STR_1 )\
-            aButtonId = SmartId( aString1 );\
+            aButtonId = rtl::OString( rtl::OUStringToOString( aString1, RTL_TEXTENCODING_UTF8 ) );\
         if( nParams == PARAM_ULONG_1 )\
-            aButtonId = SmartId( nLNr1 );\
-        for ( nItemPos = 0; nItemPos < pTB->GetItemCount() && !aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos))) &&\
-                                                      !aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos))) ; nItemPos++ ) {}\
-        bItemFound = aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos))) || aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos)));\
+            aButtonId = rtl::OString( ""/*nLNr1*/ );\
+        for ( nItemPos = 0; nItemPos < pTB->GetItemCount() && 1/*!aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos)))*/ &&\
+                                                      1/*!aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos)))*/ ; nItemPos++ ) {}\
+        bItemFound = 1/*aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos)))*/ || 1/*aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos)))*/;\
         if ( !bItemFound )\
             ReportError( aUId, GEN_RES_STR1( S_HELPID_ON_TOOLBOX_NOT_FOUND, MethodString( nMethodId ) ) );\
         else\
@@ -5386,9 +5464,9 @@ BOOL StatementControl::Execute()
                                             MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonDown( pTB, aMEvnt );*/
 
-                                            aSubMenuId1 = SmartId();
-                                            aSubMenuId2 = SmartId();
-                                            aSubMenuId3 = SmartId();
+                                            aSubMenuId1 = rtl::OString();
+                                            aSubMenuId2 = rtl::OString();
+                                            aSubMenuId3 = rtl::OString();
                                             pMenuWindow = NULL;
 
                                             new StatementCommand( this, RC_MenuSelect, PARAM_USHORT_1, pTB->GetItemId(nItemPos) + TOOLBOX_MENUITEM_START );
@@ -5451,9 +5529,9 @@ BOOL StatementControl::Execute()
                                         ImplMouseButtonUp( pTB, aMEvnt);
 
                                         // Das Fenster ist offen.
-                                        aSubMenuId1 = SmartId();
-                                        aSubMenuId2 = SmartId();
-                                        aSubMenuId3 = SmartId();
+                                        aSubMenuId1 = rtl::OString();
+                                        aSubMenuId2 = rtl::OString();
+                                        aSubMenuId3 = rtl::OString();
                                         pMenuWindow = NULL;
                                     }
                                 }
@@ -5475,7 +5553,10 @@ BOOL StatementControl::Execute()
                                         switch (nNr1)
                                         {
                                         case 0:
+                                            // FIXME: HELPID
+                                            #if 0
                                             pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetHelpId(pTB->GetItemId(nItemPos)));
+                                            #endif
                                             break;
                                         case 1:
                                             pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemType(nItemPos));
@@ -6194,7 +6275,10 @@ protected:
                             break;
                         case M_Close:
                                 //aWindowWaitUId = aUId;
-                            DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            // FIXME: HELPID
+                            #if 0
+                            DBG_ASSERT( aUId.Matches( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            #endif
                             SET_WINP_CLOSING(pControl);
                             ((DockingWindow*)pControl)->Close();
                             break;
@@ -6270,7 +6354,10 @@ protected:
                             break;
                         }
                         case M_Close:
-                            DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            // FIXME_ HELPID
+                            #if 0
+                            DBG_ASSERT( aUId.Matches( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            #endif
                             SET_WINP_CLOSING(pControl);
                             ((FloatingWindow*)pControl)->Close();
                             break;
@@ -6293,7 +6380,10 @@ protected:
                             AnimateMouse( pControl, MitteOben);
                             break;
                         case M_Close:
+                            // FIXME: HELPID
+                            #if 0
                             DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            #endif
                             SET_WINP_CLOSING(pControl);
                             ((SystemWindow*)pControl)->Close();
                             break;
@@ -6302,7 +6392,10 @@ protected:
                             Window *pChild = GetWinByRT( pControl, WINDOW_OKBUTTON );
                             if( ControlOK( pChild, "OK Button" ) )
                             {
+                                // FIXME: HELPID
+                                #if 0
                                 DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                                #endif
                                 SET_WINP_CLOSING(pControl);
                                 ((Button*)pChild)->Click();
                             }
@@ -6313,7 +6406,10 @@ protected:
                             Window *pChild = GetWinByRT( pControl, WINDOW_CANCELBUTTON );
                             if( ControlOK( pChild, "Cancel Button" ) )
                             {
+                                // FIXME: HELPID
+                                #if 0
                                 DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                                #endif
                                 SET_WINP_CLOSING(pControl);
                                 ((Button*)pChild)->Click();
                             }
@@ -6350,7 +6446,10 @@ protected:
                             AnimateMouse( pControl, MitteOben);
                             break;
                         case M_Close:
+                            // FIXME: HELPID
+                            #if 0
                             DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            #endif
                             SET_WINP_CLOSING(pControl);
                             ((WorkWindow*)pControl)->Close();
                             break;
@@ -6575,7 +6674,10 @@ protected:
 #endif
     if ( bStatementDone )
     {
+        // FIXME: HELPID
+        #if 0
         SendProfile( UIdString( aUId ).Append('.').Append( MethodString( nMethodId ) ) );
+        #endif
         delete this;
     }
     else

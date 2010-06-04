@@ -1065,14 +1065,16 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
             AdjustPosSizePixel( Point( 0, 0 ), GetViewFrame()->GetWindow().GetOutputSizePixel() );
             if( pCurWin->IsA( TYPE( ModulWindow ) ) )
             {
-                GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
+                // FIXME: HELPID
+                GetViewFrame()->GetWindow().SetHelpId( ""/*HID_BASICIDE_MODULWINDOW*/ );
                 pModulLayout->SetModulWindow( (ModulWindow*)pCurWin );
                 pModulLayout->Show();
             }
             else
             {
                 pModulLayout->Hide();
-                GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_DIALOGWINDOW );
+                // FIXME: HELPID
+                GetViewFrame()->GetWindow().SetHelpId( ""/*HID_BASICIDE_DIALOGWINDOW*/ );
             }
 
             if ( bRememberAsCurrent )
@@ -1121,7 +1123,8 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         else
         {
             SetWindow( pModulLayout );
-            GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
+            // FIXME: HELPID
+            GetViewFrame()->GetWindow().SetHelpId( ""/*HID_BASICIDE_MODULWINDOW*/ );
             SfxObjectShell::SetCurrentComponent( NULL );
         }
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );

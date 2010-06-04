@@ -105,7 +105,8 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
 
     aLanguageFT.SetZOrder(0, WINDOW_ZORDER_FIRST);
     aLanguageLB.SetZOrder(&aLanguageFT, WINDOW_ZORDER_BEHIND);
-    aLanguageLB.SetHelpId(HID_AUTOCORR_LANGUAGE);
+    // FIXME: HELPID
+    aLanguageLB.SetHelpId(""/*HID_AUTOCORR_LANGUAGE*/);
     FreeResource();
 
     AddTabPage(RID_OFAPAGE_AUTOCORR_OPTIONS, OfaAutocorrOptionsPage::Create, 0);
@@ -228,7 +229,8 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
 {
     FreeResource();
 
-    aCheckLB.SetHelpId(HID_OFAPAGE_AUTOCORR_CLB);
+    // FIXME: HELPID
+    aCheckLB.SetHelpId(""/*HID_OFAPAGE_AUTOCORR_CLB*/);
 }
 
 /*-----------------14.10.96 15.58-------------------
@@ -492,7 +494,8 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     //typ. Anfuehrungszeichen einsetzen
     SvtSysLocale aSysLcl;
 
-    aCheckLB.SetHelpId(HID_OFAPAGE_AUTOFORMAT_CLB);
+    // FIXME: HELPID
+    aCheckLB.SetHelpId(""/*HID_OFAPAGE_AUTOFORMAT_CLB*/);
     aCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
 
     aCheckLB.SetSelectHdl(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
@@ -2062,8 +2065,10 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     BOOL bShowSWOptions = FALSE;
 
-    aCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_CLB );
-    aSwCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_SW_CLB );
+    // FIXME: HELPID
+    aCheckLB.SetHelpId( ""/*HID_OFAPAGE_QUOTE_CLB*/ );
+    // FIXME: HELPID
+    aSwCheckLB.SetHelpId( ""/*HID_OFAPAGE_QUOTE_SW_CLB*/ );
 
     SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, FALSE );
     if ( pItem && pItem->GetValue() )
