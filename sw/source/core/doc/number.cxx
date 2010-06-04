@@ -998,7 +998,15 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
         for ( aIter = maTxtNodeList.begin(); aIter != maTxtNodeList.end(); ++aIter )
         {
             const SwTxtNode* pTxtNode = *aIter;
-            aLists.insert( pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() ) );
+            // --> OD 2010-06-04 #i111681# - applying patch from cmc
+//            aLists.insert( pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() ) );
+            SwList* pList = pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() );
+            ASSERT( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
+            if ( pList )
+            {
+                aLists.insert( pList );
+            }
+            // <--
         }
         std::for_each( aLists.begin(), aLists.end(),
                        std::mem_fun( &SwList::InvalidateListTree ) );
