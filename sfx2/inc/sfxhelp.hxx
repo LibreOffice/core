@@ -48,7 +48,8 @@ private:
     // FIXME: HELPID
     // SAL_DLLPRIVATE virtual BOOL Start( const String& rURL, const Window* pWindow );
     SAL_DLLPRIVATE virtual BOOL Start( const String& rURL, const Window* pWindow );
-    SAL_DLLPRIVATE virtual void OpenHelpAgent( ULONG nHelpId );
+    // FIXME: HELPID
+    // SAL_DLLPRIVATE virtual void OpenHelpAgent( ULONG nHelpId );
 
     SAL_DLLPRIVATE String GetHelpModuleName_Impl();
     // FIXME: HELPID
@@ -69,6 +70,7 @@ public:
     // FIXME: HELPID
     // static String           CreateHelpURL( ULONG nHelpId, const String& rModuleName );
     static String           CreateHelpURL( const String& aCommandURL, const String& rModuleName );
+    using Help::OpenHelpAgent;
     static void             OpenHelpAgent( SfxFrame* pFrame, ULONG nHelpId );
     static String           GetDefaultHelpModule();
     static ::rtl::OUString  GetCurrentModuleIdentifier();

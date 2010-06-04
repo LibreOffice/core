@@ -974,11 +974,18 @@ String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleN
 
 void SfxHelp::OpenHelpAgent( SfxFrame*, ULONG nHelpId )
 {
+// FIXME HELPID
+#if 0
         SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
         if ( pHelp )
             pHelp->OpenHelpAgent( nHelpId );
+#else
+(void)nHelpId;
+#endif
 }
 
+// FIXME: HELPID
+#if 0
 void SfxHelp::OpenHelpAgent( ULONG nHelpId )
 {
     if ( SvtHelpOptions().IsHelpAgentAutoStartMode() )
@@ -1023,6 +1030,7 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
 //      }
     }
 }
+#endif
 
 String SfxHelp::GetDefaultHelpModule()
 {
