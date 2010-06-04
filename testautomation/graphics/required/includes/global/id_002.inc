@@ -29,23 +29,7 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiEditUndoRedo
-' #1 tiEditRepeat
-' #1 tiEditCutPasteCopySelectall
-' #1 tiEditPasteSpecial
-' #1 tiEditSearchAndReplace
-' #1 tiEditDuplicate
-' #1 tiEditFields
-' #1 tdEditDeleteSlide
-' #1 tiEditLinks
-' #1 tiEditImageMap
-' #1 tiEditObjectProperties
-' #1 tiEditObjectEdit
-' #1 tiEditPlugIn
-' #1 tiEditHyperlink
-' #1 tEditPoints
-'\**********************************************************************************
+'\******************************************************************************
 testcase tiEditUndoRedo
 
     printlog " open application"
