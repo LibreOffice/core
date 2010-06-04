@@ -11,7 +11,7 @@
 
 import sys, string, os.path 
 
-CFGFILE = "../../../../l10ntools/source/filter/merge/FCFGMerge.cfg"
+CFGFILE             = os.environ["SOLARVER"] + "/" + os.environ["INPATH"] + "/inc/l10ntools/FCFGMerge.cfg"
 
 PROP_XMLVERSION      = "xmlversion"               # // <= global cfg file
 PROP_XMLENCODING     = "xmlencoding"              # // <= global cfg file
