@@ -41,8 +41,8 @@ EXTENSION_VERSION_BASE=1.2.1
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 # calready set in util$/makefile.pmk
-# EXTENSIONNAME:=oracle-report-builder
-EXTENSION_ZIPNAME:=oracle-report-builder
+# EXTENSIONNAME:=report-builder
+EXTENSION_ZIPNAME:=report-builder
 
 # create Extension -----------------------------
 
@@ -76,8 +76,8 @@ COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
     
 COMPONENT_IMAGES= \
-    $(EXTENSIONDIR)$/images$/em47.png \
-    $(EXTENSIONDIR)$/images$/em47_hc.png
+    $(EXTENSIONDIR)$/images$/extension_32.png \
+    $(EXTENSIONDIR)$/images$/extension_32_h.png
 
 COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
             $(EXTENSIONDIR)$/readme_en-US.html \
@@ -133,7 +133,7 @@ $(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(EXTENSIONDIR)$/images$/%.png : $(PRJ)$/images$/%.png
+$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
