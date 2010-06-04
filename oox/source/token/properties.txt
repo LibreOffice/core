@@ -5,6 +5,7 @@ ActiveTable
 Adjust
 AdjustContrast
 AdjustLuminance
+AdjustmentValues
 Align
 ArrangeOrder
 Aspect
@@ -79,6 +80,7 @@ CompileEnglish
 ConditionalFormat
 ConnectBars
 ContainsHeader
+Coordinates
 CopyBack
 CopyFormulas
 CopyStyles
@@ -109,6 +111,7 @@ Dropdown
 EchoChar
 Enabled
 EndPosition
+Equations
 ErrorAlertStyle
 ErrorBarStyle
 ErrorBarX
@@ -159,6 +162,7 @@ GraphicURL
 GridColor
 GroupInfo
 HScroll
+Handles
 HasAutoShowInfo
 HasColumnRowHeaders
 HasHorizontalScrollBar
@@ -270,6 +274,7 @@ ParaLineSpacing
 ParaRightMargin
 ParaTabStops
 ParaTopMargin
+Path
 PercentageNumberFormat
 PersistName
 Perspective
@@ -288,6 +293,16 @@ PrintGrid
 PrintHeaders
 Printable
 Protected
+RadiusRangeMaximum
+RadiusRangeMinimum
+RangeXMaximum
+RangeXMinimum
+RangeYMaximum
+RangeYMinimum
+RefAngle
+RefR
+RefX
+RefY
 Reference
 ReferenceDevice
 RegularExpressions
@@ -314,6 +329,7 @@ ScaleToPagesX
 ScaleToPagesY
 ScrollValueMax
 ScrollValueMin
+Segments
 SelectedPage
 Show
 ShowBorder
@@ -395,6 +411,7 @@ VertJustify
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+ViewBox
 VisibleSize
 VisualArea
 VisualEffect
