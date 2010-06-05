@@ -2721,6 +2721,8 @@ void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,c
         // da TextCell in verschiedenen Kontexten verwendet wird, muss ich den gecachten HelpText loeschen
         m_pTextCell->SetHelpText(String());
     m_pTextCell->SetHelpId(_nHelpId);
+    #else
+    (void)_nHelpId;
     #endif
 }
 // -----------------------------------------------------------------------------

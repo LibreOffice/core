@@ -891,6 +891,8 @@ DBTreeListBox* OAppDetailPageHelper::createSimpleTree( ULONG _nHelpId, const Ima
     // FIXME: HELPID
     #if 0
     pTreeView->SetHelpId(_nHelpId);
+    #else
+    (void)_nHelpId;
     #endif
     return createTree( pTreeView, _rImage, _rImageHC );
 }

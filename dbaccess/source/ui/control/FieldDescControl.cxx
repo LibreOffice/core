@@ -1075,6 +1075,8 @@ void OFieldDescControl::InitializeControl(Control* _pControl,ULONG _nHelpId,bool
     // FIXME: HELPID
     #if 0
     _pControl->SetHelpId(_nHelpId);
+    #else
+    (void)_nHelpId;
     #endif
     if ( _bAddChangeHandler )
         ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
