@@ -68,7 +68,9 @@ private:
     TypedScStrCollection*       pColumnData;
     TypedScStrCollection*       pFormulaData;
     TypedScStrCollection*       pFormulaDataPara;
+    Window*                 pTipVisibleParent;
     ULONG                   nTipVisible;
+    Window*                 pTipVisibleSecParent;
     ULONG                   nTipVisibleSec;
     String                  aManualTip;
     String                  aAutoSearch;
@@ -149,6 +151,8 @@ private:
     BOOL            CursorAtClosingPar();
     void            SkipClosingPar();
     DECL_LINK( ModifyHdl, void* );
+    DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
+    DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent* );
 #endif
 
 public:
