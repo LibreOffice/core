@@ -136,6 +136,9 @@ public:
     */
     void StartSpelling (void);
 
+    /** Proxy for method from base class to avoid compiler warning */
+    void StartSpelling(EditView&, unsigned char);
+
     /** Initiate a find and/or replace on the next relevant text object.
         @return
             Returns </TRUE> when the search/replace is finished (as
