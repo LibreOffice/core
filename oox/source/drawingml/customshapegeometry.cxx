@@ -117,7 +117,6 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
                 if ( rParameter.Value >>= nValue )
                     aRet = rtl::OUString::valueOf( nValue );
             }
-            break;
         }
         break;
         case EnhancedCustomShapeParameterType::EQUATION :
@@ -419,7 +418,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 }
                 else
                 {
-                    sal_Int32 nGuideIndex = CustomShapeProperties::GetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), rValue );
+                    nGuideIndex = CustomShapeProperties::GetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), rValue );
                     if ( nGuideIndex >= 0 )
                     {
                         aRet.Value = Any( nGuideIndex );
