@@ -2403,6 +2403,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
 {
+    // SYNCHRONIZED ----->
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
     Reference<XForm>  xParentForm(getParent(), UNO_QUERY);
@@ -2447,14 +2448,15 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
         }
     }
 
+    Reference< XPropertySet > xAggregateProperties( m_xAggregateSet );
+    aGuard.clear();
+    // <----- SYNCHRONIZED
+
     Reference< XConnection > xOuterConnection;
     sal_Bool bIsEmbedded = ::dbtools::isEmbeddedInDatabase( Parent, xOuterConnection );
 
-    // clear the guard before setting property values, because of the notifications
-    // which are triggered there
-    aGuard.clear();
     if ( bIsEmbedded )
-        m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE, makeAny( ::rtl::OUString() ) );
+        xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCE, makeAny( ::rtl::OUString() ) );
 }
 
 //==============================================================================
