@@ -119,6 +119,7 @@ sal_uInt32 ToolPanel::AddControl (
 
     // FIXME: HELPID
     pTitledControl->GetWindow()->SetHelpId(""/*nHelpId*/);
+    (void)nHelpId;
 
     return mpControlContainer->AddControl (pChild);
 }

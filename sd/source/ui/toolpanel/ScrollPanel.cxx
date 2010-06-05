@@ -134,6 +134,7 @@ TitledControl* ScrollPanel::AddControl (
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     // FIXME: HELPID
     pTitledControl->GetTitleBar()->SetHelpId(""/*nHelpId*/);
+    (void)nHelpId;
 
     AddControl(::std::auto_ptr<TreeNode>(pTitledControl));
 
