@@ -49,7 +49,7 @@
     rectangle size.
     </p>
  */
-interface XHatchWindowController: com::sun::star::uno::XInterface
+published interface XHatchWindowController: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** requests window owner to resize/move the window.
