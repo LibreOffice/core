@@ -30,6 +30,7 @@
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/color.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/helper.hxx"

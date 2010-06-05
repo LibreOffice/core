@@ -30,7 +30,7 @@
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-//#include "oox/drawingml/customshapeproperties.hxx"
+#include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
