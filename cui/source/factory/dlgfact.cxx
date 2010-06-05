@@ -731,6 +731,7 @@ void AbstractSvxNameDialog_Impl::SetHelpId( ULONG nHelpId )
 {
     // FIXME: HELPID
     pDlg->SetHelpId( ""/*nHelpId*/ );
+    (void)nHelpId;
 }
 void AbstractSvxNameDialog_Impl::SetText( const XubString& rStr )
 {
@@ -846,6 +847,7 @@ void AbstractSvxMultiFileDialog_Impl::SetHelpId( ULONG nHelpId )
 {
     // FIXME: HELPID
     pDlg->SetHelpId( ""/*nHelpId*/ );
+    (void)nHelpId;
 }
 
 Window * AbstractSvxHpLinkDlg_Impl::GetWindow()

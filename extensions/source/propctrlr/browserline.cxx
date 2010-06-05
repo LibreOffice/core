@@ -117,6 +117,7 @@ namespace pcr
             m_pBrowseButton->SetHelpId( _rHelpId );
             // FIXME: HELPID
             m_pBrowseButton->SetUniqueId( ""/*_bPrimaryButtonId*/ );
+            (void)_bPrimaryButtonId;
 
             if ( m_pAdditionalBrowseButton )
             {
@@ -124,6 +125,7 @@ namespace pcr
                 m_pAdditionalBrowseButton->SetHelpId( _rHelpId );
                 // FIXME: HELPID
                 m_pAdditionalBrowseButton->SetUniqueId( ""/*_nSecondaryButtonId*/ );
+                (void)_nSecondaryButtonId;
             }
         }
     }

@@ -72,6 +72,7 @@ SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, ULONG nHelpId )
     SetText( aTmp );
     // FIXME: HELPID
     SetHelpId( ""/*nHelpId*/ );
+    (void)nHelpId;
 }
 
 short SvxInsRowColDlg::Execute(void)
