@@ -318,6 +318,11 @@ void Outliner::StartSpelling (void)
     mpSearchItem = NULL;
 }
 
+/** Proxy for method from base class to avoid compiler warning */
+void Outliner::StartSpelling(EditView& rView, unsigned char c)
+{
+    SdrOutliner::StartSpelling( rView, c );
+}
 
 /** Free all resources acquired during the search/spell check.  After a
     spell check the start position is restored here.
