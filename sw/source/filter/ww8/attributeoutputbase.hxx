@@ -552,9 +552,7 @@ protected:
 
     virtual bool AnalyzeURL( const String& rUrl, const String& rTarget, String* pLinkURL, String* pMark );
 
-    std::vector<SwTwips> GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
-    void GetTablePageSize( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32& rPageSize, bool& rRelBoxSize );
+    ww8::GridColsPtr GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
 public:
     AttributeOutputBase() {}
@@ -571,6 +569,11 @@ public:
 
     /// Output frames.
     void OutputFlyFrame( const sw::Frame& rFmt );
+
+    void GetTablePageSize
+    ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner,
+      sal_uInt32& rPageSize, bool& rRelBoxSize );
+
 };
 
 #endif // _ATTRIBUTEOUTPUTBASE_HXX_
