@@ -29,13 +29,7 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiTextToolbar
-' #1 tiDrawObjectBar
-' #1 tiGraphicsObjectBar
-' #1 tiGluepointToolbar
-' #1 tdBezierToolbar
-'\**********************************************************************************
+'\******************************************************************************
 
 testcase tiTextToolbar
 
@@ -1136,12 +1130,15 @@ testcase tdBezierToolbar
         '/// Click button 'Delete points' on 'Object Toolbar' ///'
     Kontext "Bezierobjectbar"
         Printlog "- Break curve"
-        try 
-            Loeschen.Click
-            sleep 2
-        catch
-            warnlog "Delete didn't work... why?"
-        endcatch
+        if ( hClickButton( Loeschen ) = -1 ) then
+            warnlog( "Unable to click button <Loeschen>" )
+        endif
+        'try
+        '    Loeschen.Click
+        '    sleep 2
+        'catch
+        '    warnlog "Delete didn't work... why?"
+        'endcatch
 
         '/// Uncheck on the symbol 'Curve' on the toolbar 'Main Toolbar' ///'
     Kontext "Toolbar"

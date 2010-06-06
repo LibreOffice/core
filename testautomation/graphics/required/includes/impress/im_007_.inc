@@ -31,6 +31,21 @@
 '*
 '\*****************************************************************
 
+sub im_007_
+
+    call tSlideShowSlideShow()
+    call tSlideShowRehearseTimings()
+    call tSlideShowSlideShowSettings()
+    call tSlideShowCustomSlideShow()
+    call tSlideShowSlideTransition()
+    call tSlideShowShowHideSlide()
+    call tSlideShowCustomAnimation()
+    call tSlideShowInteraction()
+
+end sub
+
+'*******************************************************************************
+
 testcase tSlideShowSlideShow
 
     printlog "open application "

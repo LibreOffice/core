@@ -29,17 +29,6 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiToolsSpellchecking
-' #1 tiToolsSpellcheckingAutomatic
-' #1 tiToolsThesaurus
-' #1 tiToolsHyphenation
-' #1 tiToolsAutoCorrect
-' #1 tChineseTranslation
-' #1 tiToolsMacro
-' #1 tiToolsGallery
-' #1 tiToolsEyedropper
-' #1 tiToolsOptions
 '\**********************************************************************************
 
 

@@ -29,26 +29,7 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiInsertSlide
-' #1 tiInsertDuplicateSlide
-' #1 tiInsertField
-' #1 tiInsertSpecialCharacter
-' #1 tiInsertHyperlink
-' #1 tiInsertGraphic
-' #1 tiInsertObjectSound
-' #1 tiInsertObjectVideo
-' #1 tiInsertChart
-' #1 tiInsertObjectOLEObjects
-' #1 tiInsertSpreadsheet
-' #1 tiInsertFormula
-' #1 tiInsertFloatingFrame
-' #1 tiInsertFile
-' #1 tiInsertPlugin
-' #1 tiInsertScan
-' #1 tiInsertSnappointLine
-' #1 tdInsertLayer
-'\**********************************************************************************
+'\******************************************************************************
 testcase tiInsertSlide
 
     printlog "Dateiname.settext Convertpath (gTesttoolPath + global\input\graf_inp\stabler.tif) "

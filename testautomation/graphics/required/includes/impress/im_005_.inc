@@ -31,6 +31,14 @@
 '*
 '\*****************************************************************
 
+sub im_005_
+
+    call tiFormatModifyLayout()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiFormatModifyLayout
 
     printlog "open application "

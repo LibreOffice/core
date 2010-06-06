@@ -29,20 +29,7 @@
 '*
 '* short description : Global Required/resource test: Checking the gallery
 '*
-'*******************************************************************
-'*
-' #1   tGallery_DialogTest                           ' Open gallery, pin - unpin, dock - undock, close gallery
-' #1   tGallery_ActivateAndUpdateAllThemes           ' Activate all gallery-themes and update this theme
-' #1   tGallery_CheckNames                           ' Check the names for all themes depends on language
-' #1   tGallery_CheckContextMenuForGalleryThemes     ' Test the context menu on themes window
-' #1   tGallery_CreateAndWorkWithANewGalleryThemes   ' Create a new theme, add graphics and work with it
-' #1   tGallery_GalleryView_Preview                  ' Preview-feature in Gallery Beamer-window
-' #1   tGallery_GalleryView_Insert                   ' Insert gallery objects in all applications
-' #1   tGallery_GalleryView_Delete                   ' Delete gallery objects out of Beamer window
-' #0   hOpenGallery                                  ' Open the gallery
-' #1   tGallery_Quick_check
-'*
-'\******************************************************************
+'\******************************************************************************
 testcase tGallery_DialogTest
     '///Open a new Writer document
     '///Tools / Gallery

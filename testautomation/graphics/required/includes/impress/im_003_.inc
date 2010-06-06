@@ -30,6 +30,18 @@
 '* short description : Impress Resource Test: View Menu
 '*
 '\******************************************************************************
+
+sub im_003_
+
+    call tiViewPanes()
+    call tiViewMasterView()
+    call tiViewSlideMaster()
+    call tiViewToolbar_1()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiViewPanes
 
     qaerrorlog( "This test is disabled, it needs rewriting" )
