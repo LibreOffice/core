@@ -22,3 +22,14 @@
  #include <libxml/xmlversion.h>
  #endif
  
+--- misc/libxml2-2.7.6/include/libxml/xmlexports.h	2009-09-25 00:31:59.000000000 +0900
++++ misc/build/libxml2-2.7.6/include/libxml/xmlexports.h	2010-06-06 11:15:54.160750000 +0900
+@@ -113,7 +113,7 @@
+    * _imp__xmlFree listed as missing. Try to workaround the problem
+    * by also making that declaration when compiling client code.
+    */
+-  #if !defined(LIBXML_STATIC)
++  #if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
+     #define XMLPUBFUN __declspec(dllexport)
+     #define XMLPUBVAR __declspec(dllexport)
+   #else
