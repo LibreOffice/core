@@ -116,3 +116,14 @@ forms.OListBoxModel::com::sun::star::form::XUpdateBroadcaster
 forms.OFormattedFieldWrapper::com::sun::star::form::XUpdateBroadcaster
 forms.ODateModel::com::sun::star::form::XUpdateBroadcaster
 forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster
+
+### i111006 ###
+forms.OFileControlModel::com::sun::star::beans::XFastPropertySet
+forms.OFileControlModel::com::sun::star::form::FormControlModel
+
+### i111148 ###
+forms.OImageControlModel::com::sun::star::beans::XMultiPropertySet
+forms.OImageControlModel::com::sun::star::beans::XPropertySet
+
+### i111333 ###
+forms.OImageControlControl::com::sun::star::awt::XControl

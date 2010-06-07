@@ -56,8 +56,6 @@ namespace accessibility {
 
 // ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
-
 DBG_NAME( AccessibleGridControlHeader )
 
 AccessibleGridControlHeader::AccessibleGridControlHeader(
@@ -66,15 +64,12 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
         ::svt::table::AccessibleTableControlObjType      eObjType):
         AccessibleGridControlTableBase( rxParent, rTable, eObjType )
 {
-//    DBG_CTOR( AccessibleGridControlHeaderBar, NULL );
-
     DBG_ASSERT( isRowBar() || isColumnBar(),
         "accessibility/extended/AccessibleGridControlHeaderBar - invalid object type" );
 }
 
 AccessibleGridControlHeader::~AccessibleGridControlHeader()
 {
-//    DBG_DTOR( AccessibleGridControlHeader, NULL );
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -83,11 +78,11 @@ Reference< XAccessible > SAL_CALL
 AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-   TCSolarGuard aSolarGuard;
+    TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
-        throw IndexOutOfBoundsException();
+    throw IndexOutOfBoundsException();
     ensureIsAlive();
     Reference< XAccessible > xChild;
     if(m_eObjType == svt::table::TCTYPE_COLUMNHEADERBAR)
@@ -106,11 +101,11 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
 sal_Int32 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
     throw ( uno::RuntimeException )
 {
-    ensureIsAlive();
-    if(m_eObjType == svt::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
-        return 1;
-    else
-        return 0;
+     ensureIsAlive();
+     if(m_eObjType == svt::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
+         return 1;
+     else
+         return 0;
 }
 
 // XAccessibleComponent -------------------------------------------------------
@@ -126,8 +121,8 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
     sal_Bool bConverted = isRowBar() ?
-        m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) :
-        m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) );
+    m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) :
+    m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) );
 
     return bConverted ? implGetChild( nRow, nColumnPos ) : Reference< XAccessible >();
 }
@@ -181,35 +176,24 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
     ensureIsAlive();
     return NULL;        // no headers in headers
 }
-
+//not selectable
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleRows()
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
-    ensureIsAlive();
-
-    Sequence< sal_Int32 > aSelSeq;
-    // row of column header bar not selectable
-    if( isRowBar() )
-        implGetSelectedRows( aSelSeq );
+    Sequence< sal_Int32 > aSelSeq(0);
     return aSelSeq;
 }
 //columns aren't selectable
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleColumns()
     throw ( uno::RuntimeException )
 {
-    return NULL;
+    Sequence< sal_Int32 > aSelSeq(0);
+    return aSelSeq;
 }
-//To Do - not yet implemented
-sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 nRow )
+//row headers not selectable
+sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
-    ensureIsAlive();
-    ensureIsValidRow( nRow );
-    //return isRowBar() ? implIsRowSelected( nRow ) : sal_False;
     return sal_False;
 }
 //columns aren't selectable
@@ -219,28 +203,19 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_I
     (void)nColumn;
     return sal_False;
 }
-
+//not implemented
 Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCellAt(
-        sal_Int32 nRow, sal_Int32 nColumn )
+        sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
-    ensureIsAlive();
-    ensureIsValidAddress( nRow, nColumn );
-    return implGetChild( nRow, implToVCLColumnPos( nColumn ) );
+    return NULL;
 }
-// TO DO - not implemented yet
+// not selectable
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
-        sal_Int32 nRow, sal_Int32 nColumn )
+        sal_Int32 /*nRow*/, sal_Int32 /*nColumn */)
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
-    ensureIsAlive();
-    ensureIsValidAddress( nRow, nColumn );
-    return FALSE;
-   // return isRowBar() ? implIsRowSelected( nRow ) : implIsColumnSelected( nColumn );
+    return sal_False;
 }
 
 // XServiceInfo ---------------------------------------------------------------

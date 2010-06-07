@@ -305,7 +305,7 @@
 #define RC_Profile          ( M_SOFFICE | M_MOZILLA | 9 )
 // (Popup)Menu
 #define RC_MenuSelect       ( M_SOFFICE | M_MOZILLA | 10 )
-#define RC_SetControlType   ( M_SOFFICE             | 11 )
+#define RC_SetControlType   ( M_SOFFICE             | 11 )    // deprecated since RTTI
 // RemoteFileAccess
 #define RC_Kill             ( M_SOFFICE             | 12 )
 #define RC_RmDir            ( M_SOFFICE             | 13 )
@@ -429,14 +429,14 @@
 
 
 
-// Konstanten die im Basic zur Verfügung stehen sollen
+// Constants which are available in VCLTestTool scripts
 
-// Verschiedene Typen von Controls für den Befehl SetControlType
-// !!!!!!!!!!!  Müssen alle bei SetControlType eingetragen werden  !!!!!!!!!!!!
+// Different types of controls recognized via RTTI
 #define CONST_CTBrowseBox       100
 #define CONST_CTValueSet        103
 #define CONST_CTORoadmap        104
 #define CONST_CTIExtensionListBox 105
+#define CONST_CTTableControl    106
 #define CONST_CTUnknown         199
 
 // Konstanten für das ALignment des gesuchten Splitters
