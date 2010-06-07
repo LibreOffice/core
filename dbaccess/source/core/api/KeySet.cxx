@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2000, 2010 Oracle andor its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -338,18 +338,6 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
     Reference<XColumnsSupplier> xSup(m_xComposer,UNO_QUERY);
     Reference<XNameAccess> xSourceColumns = m_xTable->getColumns();
-    // locate parameter in select columns
-    Reference<XParametersSupplier> xParaSup(m_xComposer,UNO_QUERY);
-    Reference<XIndexAccess> xQueryParameters = xParaSup->getParameters();
-    const sal_Int32 nParaCount = xQueryParameters->getCount();
-    Sequence< ::rtl::OUString> aParameterColumns(nParaCount);
-    for(sal_Int32 i = 0; i< nParaCount;++i)
-    {
-        Reference<XPropertySet> xPara(xQueryParameters->getByIndex(i),UNO_QUERY_THROW);
-        xPara->getPropertyValue(PROPERTY_REALNAME) >>= aParameterColumns[i];
-    }
-
-
     // locate parameter in select columns
     Reference<XParametersSupplier> xParaSup(m_xComposer,UNO_QUERY);
     Reference<XIndexAccess> xQueryParameters = xParaSup->getParameters();
