@@ -24,53 +24,39 @@
  *
 ************************************************************************/
 
-#ifndef SVTOOLS_INC_TABLE_TABLETYPES_HXX
-#define SVTOOLS_INC_TABLE_TABLETYPES_HXX
+#ifndef SVTOOLS_SOURCE_INC_ACCESSIBLETABLEIMP_HXX
+#define SVTOOLS_SOURCE_INC_ACCESSIBLETABLEIMP_HXX
 
-#include <sal/types.h>
+#include "svtaccessiblefactory.hxx"
 
-//........................................................................
 namespace svt { namespace table
 {
 //........................................................................
-    /// a value denoting the size of a table
-    typedef sal_Int32   TableSize;
 
-    /// a value denoting a column position within a table
-    typedef sal_Int32   ColPos;
-    /// a value denoting a row position within a table
-    typedef sal_Int32   RowPos;
 
-    /** a value denoting an arbitrary coordinate value of a position within
-        a table
+    class AccessibleTableControl_Impl
+    {
+        public:
+            AccessibleFactoryAccess m_aFactoryAccess;
+            IAccessibleTableControl*   m_pAccessible;
 
-        Values of this type are guaranteed to be large enough to hold column
-        positions as well as row positions.
-    */
-    typedef sal_Int32   AnyPos;
+        public:
+            AccessibleTableControl_Impl() : m_pAccessible(NULL)
+            {
+            }
 
-    /// the ID of a column in a table
-    typedef sal_Int32   ColumnID;
 
-    typedef sal_Int32   TableMetrics;
-/** special column width value which indicates that the column should be
-    automatically resized to fit the view
-*/
-#define COLWIDTH_FIT_TO_VIEW    ((::svt::table::TableMetrics)-1)
+            /// @see AccessibleTableControl::getTableRowHeader
+            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                getAccessibleTableHeader( AccessibleTableControlObjType _eObjType );
+            /// @see AccessibleTableControl::getTable
+            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                getAccessibleTable( );
 
-/// denotes the column containing the row headers
-#define COL_ROW_HEADERS         ((::svt::table::ColPos)-1)
-/// denotes the row containing the column headers
-#define ROW_COL_HEADERS         ((::svt::table::RowPos)-1)
-
-/// denotes an invalid column index
-#define COL_INVALID             ((::svt::table::ColPos)-2)
-/// denotes an invalid row index
-#define ROW_INVALID             ((::svt::table::RowPos)-2)
-
+    };
 
 //........................................................................
 } } // namespace svt::table
 //........................................................................
 
-#endif // SVTOOLS_INC_TABLE_TABLETYPES_HXX
+#endif // SVTOOLS_SOURCE_INC_ACCESSIBLETABLEIMP_HXX

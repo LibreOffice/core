@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -64,13 +65,16 @@ public:
     virtual ::sal_Int32 SAL_CALL getRowCount() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowHeaders() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & value) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & data) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & data) throw (::com::sun::star::uno::RuntimeException);
+       virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeAll() throw (RuntimeException);
-
+    virtual void SAL_CALL setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateCell( ::sal_Int32 row, ::sal_Int32 column, const ::com::sun::star::uno::Any& value ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateRow( ::sal_Int32 row, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& values ) throw (::com::sun::star::uno::RuntimeException);
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (RuntimeException);
     virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
@@ -83,14 +87,15 @@ public:
 
 private:
 
-    void broadcast( broadcast_type eType, const GridDataEvent& aEvent );
-    void broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue );
-    void broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rowData );
-    void broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rowData );
+    void broadcast( broadcast_type eType, const GridDataEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    void broadcast_changed( ::rtl::OUString name, sal_Int32 index, Any oldValue, Any newValue ) throw (::com::sun::star::uno::RuntimeException);
+    void broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,  const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
+    void broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
 
     sal_Int32 rowHeight;
-    std::vector< std::vector < ::rtl::OUString > > data;
+    std::vector< std::vector < Any > > data;
     std::vector< ::rtl::OUString > rowHeaders;
+    sal_Int32 m_nRowHeaderWidth;
 };
 
 }
