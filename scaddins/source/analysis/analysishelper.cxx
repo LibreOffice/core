@@ -2530,8 +2530,8 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "ly3",        1.1810108125623799E-51, CDC_Volume ); // *** Cubic light-year
     NEWD( "MTON",       1.4125866688595436E00,  CDC_Volume ); // *** Measurement ton
     NEWD( "tspm",       5.0000000000000000E02,  CDC_Volume ); // *** Modern teaspoon
-    NEWD( "uk_gal",     2.6411458333333333E-01, CDC_Volume ); // U.K. / Imperial gallon ??
-    NEWD( "uk_qt",      1.0564583333333333E00,  CDC_Volume ); // U.K. / Imperial quart  ??
+    NEWD( "uk_gal",     2.199694619402070E-01,  CDC_Volume ); // U.K. / Imperial gallon
+    NEWD( "uk_qt",      8.798778477608300E-01,  CDC_Volume ); // U.K. / Imperial quart
 
     // 1 Square Meter is...
     NEWDP( "m2",        1.0000000000000000E00,  CDC_Area ); // *** Square Meter
