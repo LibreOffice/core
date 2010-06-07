@@ -25,12 +25,26 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = ExtensionsComplexTests
-PRJNAME = extensions
-PACKAGE = complex$/$(PRJNAME)
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-RES_TARGET = orl
+PRJ = ../../..
+PRJNAME = extensions
+TARGET = qa_complex_extensions
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/extensions
+JAVATESTFILES = \
+    OfficeResourceLoader.java
+
+JAVAFILES = $(JAVATESTFILES)
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar ConnectivityTools.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
+
+
 
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
@@ -38,11 +52,11 @@ command_seperator=&&
 command_seperator=;
 .ENDIF
 
-# --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
 
+.INCLUDE: settings.mk
 
 #----- resource files for the OfficeResourceLoader test ------------
+RES_TARGET = orl
 
 SRS1NAME=$(RES_TARGET)_A_
 SRC1FILES= \
@@ -66,36 +80,19 @@ RES2FILELIST=\
 RESLIB2NAME=$(RES_TARGET)_B_
 RESLIB2SRSFILES=$(RES2FILELIST)
 
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-#----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
-JAVAFILES       = $(shell @$(FIND) .$/*.java)
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+#----- resource files for the OfficeResourceLoader test ------------
 
-#----- make a jar from compiled files ------------------------------
 
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
-RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
-
-run:copy_resources
-    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_all.sce
-
-run_%:copy_resources
-    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
-
+ALLTAR : copy_resources javatest
 
 copy_resources: $(RESLIB1TARGETN) $(RESLIB2TARGETN)
-    @$(foreach,i,$(RESLIB1TARGETN) $(COPY) $i $(i:s/de/invalid/:s/_A_//) $(command_seperator)) echo.
-    @$(foreach,i,$(RESLIB2TARGETN) $(COPY) $i $(i:s/en-US/invalid/:s/_B_//) $(command_seperator)) echo.
+    $(foreach,i,$(RESLIB1TARGETN) $(COPY) $i $(i:s/de/invalid/:s/_A_//) $(command_seperator)) echo
+    $(foreach,i,$(RESLIB2TARGETN) $(COPY) $i $(i:s/en-US/invalid/:s/_B_//) $(command_seperator)) echo
+
+
+.END
 
