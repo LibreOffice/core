@@ -51,7 +51,8 @@
 
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>
-#include "sfx2/docfile.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/app.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 
@@ -2220,9 +2221,9 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
     PopupMenu* pPageMenu = pMenu->GetPopupMenu( CM_GOTO );
 
     SfxViewFrame* pViewFrame = getViewFrame();
-    if( pViewFrame && pViewFrame->GetFrame() )
+    if( pViewFrame )
     {
-        Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
+        Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
             pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), FALSE, FALSE ) );
@@ -2845,12 +2846,12 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
             // this is a plugin/activex mode, no toolbars should be visible during slide show
             // after the end of slide show they should be visible again
             SfxViewFrame* pViewFrame = getViewFrame();
-            if( pViewFrame && pViewFrame->GetFrame() && pViewFrame->GetFrame()->GetTopFrame() )
+            if( pViewFrame )
             {
                 try
                 {
                     Reference< frame::XLayoutManager > xLayoutManager;
-                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetTopFrame().GetFrameInterface(), UNO_QUERY_THROW );
                     if ( ( xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) )
                                 >>= xLayoutManager )
                       && xLayoutManager.is() )
@@ -3474,39 +3475,11 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
                 {
                     if( maPresSettings.mnPauseTimeout )
                     {
-                        boost::scoped_ptr< Graphic > pGraphic;
-
-                        if( maPresSettings.mbShowPauseLogo )
-                        {
-                            // load about image from module path
-                            String aBmpFileName( RTL_CONSTASCII_USTRINGPARAM("about.bmp") );
-                            INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
-                            aObj.insertName( aBmpFileName );
-                            SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-                            if ( !aStrm.GetError() )
-                            {
-                                Bitmap aBmp;
-                                aStrm >> aBmp;
-                                pGraphic.reset( new Graphic(aBmp) );
-                                pGraphic->SetPrefMapMode(MAP_PIXEL);
-                            }
-                            else
-                            {
-                                //if no image is located in the module path
-                                //use default logo from iso resource:
-
-                                String aMgrName( RTL_CONSTASCII_USTRINGPARAM( "iso" ) );
-                                boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( U2S( aMgrName )) );
-                                DBG_ASSERT(pResMgr,"No ResMgr found");
-                                if(pResMgr.get())
-                                {
-                                    pGraphic.reset( new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, *pResMgr ) ) ) );
-                                    pGraphic->SetPrefMapMode(MAP_PIXEL);
-                                }
-                            }
-                        }
                         if( mpShowWindow )
-                            mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, pGraphic.get() );
+                        {
+                            Graphic aGraphic( SfxApplication::GetApplicationLogo().GetBitmapEx() );
+                            mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, &aGraphic );
+                        }
                     }
                     else
                     {
