@@ -179,7 +179,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra variable to be set
-    m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,0)));
+    m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,::std::pair<sal_Int32,Reference<XRow> >(0,NULL))));
     m_aKeyIter = m_aKeyMap.begin();
 
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
@@ -619,7 +619,7 @@ void OptimisticSet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OU
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >(m_pKeyColumnNames->size());
         copyRowValue(_rInsertRow,aKeyRow,aKeyIter->first + 1);
 
-        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(aKeyIter->first + 1,OKeySetValue(aKeyRow,1))).first;
+        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(aKeyIter->first + 1,OKeySetValue(aKeyRow,::std::pair<sal_Int32,Reference<XRow> >(1,NULL)))).first;
         // now we set the bookmark for this row
         (_rInsertRow->get())[0] = makeAny((sal_Int32)m_aKeyIter->first);
     }
@@ -1005,7 +1005,7 @@ sal_Bool OptimisticSet::fetchRow()
             const SelectColumnDescription& rColDesc = aPosIter->second;
             aIter->fill(rColDesc.nPosition,rColDesc.nType,rColDesc.bNullable,m_xDriverRow);
         }
-        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,0))).first;
+        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,::std::pair<sal_Int32,Reference<XRow> >(0,NULL)))).first;
     }
     else
         m_bRowCountFinal = sal_True;
@@ -1164,13 +1164,13 @@ Reference< XArray > SAL_CALL OptimisticSet::getArray( sal_Int32 columnIndex ) th
 sal_Bool SAL_CALL OptimisticSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::rowUpdated" );
-    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 2;
+    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 2;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OptimisticSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::rowInserted" );
-    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 1;
+    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 1;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OptimisticSet::rowDeleted(  ) throw(SQLException, RuntimeException)
@@ -1404,7 +1404,7 @@ void OptimisticSet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRo
     {
         const sal_Int32 nBookmark = ::comphelper::getINT32((_rInsertRow->get())[0].getAny());
         m_aKeyIter = m_aKeyMap.find(nBookmark);
-        m_aKeyIter->second.second = 2;
+        m_aKeyIter->second.second.first = 2;
         copyRowValue(_rInsertRow,m_aKeyIter->second.first,nBookmark);
     }
 }
@@ -1480,7 +1480,7 @@ void OptimisticSet::reset(const Reference< XResultSet>& _xDriverSet)
     OCacheSet::construct(_xDriverSet,::rtl::OUString());
     m_bRowCountFinal = sal_False;
     m_aKeyMap.clear();
-    m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,0)));
+    m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,::std::pair<sal_Int32,Reference<XRow> >(0,NULL))));
     m_aKeyIter = m_aKeyMap.begin();
 }
 // -----------------------------------------------------------------------------
