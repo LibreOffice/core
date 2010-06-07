@@ -1825,7 +1825,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     {
                         // #i107225# the combined characters need to be inserted first
                         // the selected text has to be removed afterwards
-                        xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
+                        m_pImpl->m_xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
 
                         if( xRange->getString().getLength() )
                         {
