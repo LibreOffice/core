@@ -121,6 +121,7 @@ public:
     */
     void ClearPageSet (void);
 
+    using SfxShell::SetHelpId;
     void SetHelpId( const rtl::OString& aId );
 
     /** Mark the preview that belongs to the given index as not up-to-date
