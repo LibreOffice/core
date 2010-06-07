@@ -54,6 +54,9 @@
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>
 #include <memory>
@@ -204,12 +207,13 @@ private:
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
     String                  msAccessibleDescText;
-    Strin                   msFolder;
+    String                  msFolder;
     String                  msFile;
     sal_uInt32              mnSearchIndex;
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
     sal_Bool                mbEnableDelete          : 1;
+    sal_Bool                mbEnableRename          : 1;
 
     void            DeleteEntries();
     void            DoQuickSearch( const xub_Unicode& rChar );
@@ -232,6 +236,7 @@ public:
 
     void            EnableAutoResize() { mbAutoResize = sal_True; }
     void            EnableDelete( sal_Bool bEnable ) { mbEnableDelete = bEnable; }
+    void            EnableRename( sal_Bool bEnable ) { mbEnableRename = bEnable; }
     sal_Bool        IsDeleteOrContextMenuEnabled() { return mbEnableDelete || IsContextMenuHandlingEnabled(); }
 
     Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
@@ -613,7 +618,7 @@ public:
 
     ULONG                   GetEntryPos( const OUString& rURL );
 
-    inline voi              EnableContextMenu( sal_Bool bEnable );
+    inline void             EnableContextMenu( sal_Bool bEnable );
     inline void             EnableDelete( sal_Bool bEnable );
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
@@ -661,6 +666,8 @@ inline void SvtFileView_Impl::EnableDelete( sal_Bool bEnable )
 
 inline sal_Bool SvtFileView_Impl::EnableNameReplacing( sal_Bool bEnable )
 {
+    mpView->EnableRename( bEnable );
+
     sal_Bool bRet;
     if( mpView->IsDeleteOrContextMenuEnabled() )
     {
@@ -744,7 +751,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mnSearchIndex       ( 0 ),
     mbResizeDisabled    ( sal_False ),
     mbAutoResize        ( sal_False ),
-    mbEnableDelete      ( sal_True )
+    mbEnableDelete      ( sal_True ),
+    mbEnableRename      ( sal_True )
 
 {
     Size aBoxSize = pParentWin->GetSizePixel();
@@ -870,20 +878,90 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 
 PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
 {
-    PopupMenu* pRet;
-    sal_Int32 nSelectedEntries = GetSelectionCount();
+    bool bEnableDelete = mbEnableDelete;
+    bool bEnableRename = mbEnableRename;
 
-    if ( nSelectedEntries )
+    if ( bEnableDelete || bEnableRename )
     {
-        pRet = new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
-        pRet->EnableItem( MID_FILEVIEW_DELETE, 0 < nSelectedEntries );
-        pRet->EnableItem( MID_FILEVIEW_RENAME, 1 == nSelectedEntries );
-        pRet->RemoveDisabledEntries( sal_True, sal_True );
+        sal_Int32 nSelectedEntries = GetSelectionCount();
+        bEnableDelete &= nSelectedEntries > 0;
+        bEnableRename &= nSelectedEntries == 1;
     }
-    else
-        pRet = NULL;
 
-    return pRet;
+    if ( bEnableDelete || bEnableRename )
+    {
+        SvLBoxEntry* pEntry = FirstSelected();
+        while ( pEntry )
+        {
+            ::ucbhelper::Content aCnt;
+            try
+            {
+                OUString aURL( static_cast< SvtContentEntry * >(
+                    pEntry->GetUserData() )->maURL );
+                aCnt = ::ucbhelper::Content( aURL, mxCmdEnv );
+            }
+            catch( Exception const & )
+            {
+                bEnableDelete = bEnableRename = false;
+            }
+
+            if ( bEnableDelete )
+            {
+                try
+                {
+                    Reference< XCommandInfo > aCommands = aCnt.getCommands();
+                    if ( aCommands.is() )
+                        bEnableDelete
+                            = aCommands->hasCommandByName(
+                                OUString::createFromAscii( "delete" ) );
+                    else
+                        bEnableDelete = false;
+                }
+                catch( Exception const & )
+                {
+                    bEnableDelete = false;
+                }
+            }
+
+            if ( bEnableRename )
+            {
+                try
+                {
+                    Reference< XPropertySetInfo > aProps = aCnt.getProperties();
+                    if ( aProps.is() )
+                    {
+                        Property aProp
+                            = aProps->getPropertyByName(
+                                OUString::createFromAscii( "Title" ) );
+                        bEnableRename
+                            = !( aProp.Attributes & PropertyAttribute::READONLY );
+                    }
+                    else
+                        bEnableRename = false;
+                }
+                catch( Exception const & )
+                {
+                    bEnableRename = false;
+                }
+            }
+
+            pEntry = ( bEnableDelete || bEnableRename )
+                ? NextSelected( pEntry )
+                : 0;
+        }
+    }
+
+    if ( bEnableDelete || bEnableRename )
+    {
+        PopupMenu * pRet
+            = new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
+        pRet->EnableItem( MID_FILEVIEW_DELETE, bEnableDelete );
+        pRet->EnableItem( MID_FILEVIEW_RENAME, bEnableRename );
+        pRet->RemoveDisabledEntries( sal_True, sal_True );
+        return pRet;
+    }
+
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
