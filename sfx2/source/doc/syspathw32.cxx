@@ -70,6 +70,8 @@ bool SystemPath::GetUserTemplateLocation(sal_Unicode* pFolder, int nSize )
 #ifdef WNT
     return _SHGetSpecialFolderW32(CSIDL_TEMPLATES, pFolder, nSize );
 #else
+    (void)pFolder;
+    (void)nSize;
     return false;
 #endif
 }
