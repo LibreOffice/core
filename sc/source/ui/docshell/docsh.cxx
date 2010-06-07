@@ -354,6 +354,20 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                     // else;  nothing has to happen, because it is a user given name
                 }
             }
+
+            // #i94570# DataPilot table names have to be unique, or the tables can't be accessed by API.
+            // If no name (or an invalid name, skipped in ScXMLDataPilotTableContext::EndElement) was set, create a new name.
+            ScDPCollection* pDPCollection = aDocument.GetDPCollection();
+            if ( pDPCollection )
+            {
+                USHORT nDPCount = pDPCollection->GetCount();
+                for (USHORT nDP=0; nDP<nDPCount; nDP++)
+                {
+                    ScDPObject* pDPObj = (*pDPCollection)[nDP];
+                    if ( !pDPObj->GetName().Len() )
+                        pDPObj->SetName( pDPCollection->CreateNewName() );
+                }
+            }
         }
         ScColumn::bDoubleAlloc = sal_False;
     }
