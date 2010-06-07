@@ -39,8 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
 
-#define USE_SYSTEM_SELECTION_COLOR
-
 namespace sd { namespace slidesorter { namespace view {
 
 // Grays
@@ -147,32 +145,15 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
     maGradients.resize(_GradientColorType_Size_);
 
-#ifdef USE_SYSTEM_SELECTION_COLOR
+    maColor[Color_Background] = maBackgroundColor;
     const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
+    maColor[Color_Selection] = aSelectionColor;
 
     SetGradient(Gradient_SelectedPage, aSelectionColor, 50, 50, +100,+100, +50,+25);
     SetGradient(Gradient_MouseOverPage, aSelectionColor, 75, 75, +100,+100, +50,+25);
     SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +100,+100, -50,-75);
     SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 75, 75, +100,+100, -50,-75);
     SetGradient(Gradient_FocusedPage, aSelectionColor, -1,-1, 0,0, -50,-75);
-
-#else
-
-    maSelectedGradient.maFillColor1 = 0xb7daf0;
-    maSelectedGradient.maFillColor2 = 0x6db5e1;
-    maSelectedGradient.maBorderColor1 = 0x6db5e1;
-    maSelectedGradient.maBorderColor2 = 0x0e85cd;
-
-    maSelectedAndFocusedGradient.maFillColor1 = 0xb7daf0;
-    maSelectedAndFocusedGradient.maFillColor2 = 0x6db5e1;
-    maSelectedAndFocusedGradient.maBorderColor1 = 0x6db5e1;
-    maSelectedAndFocusedGradient.maBorderColor2 = 0x0e85cd;
-
-    maMouseOverGradient.maFillColor1 = 0x0e85cd;
-    maMouseOverGradient.maFillColor2 = 0x044c99;
-    maMouseOverGradient.maBorderColor1 = 0x6db5e1;
-    maMouseOverGradient.maBorderColor2 = 0x0e85cd;
-#endif
 
     SetGradient(Gradient_ButtonBackground, 0x000000, -1,-1, 0,0, 0,0);
     SetGradient(Gradient_NormalPage, maBackgroundColor, -1,-1, 0,0, 0,0);
