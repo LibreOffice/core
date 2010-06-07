@@ -31,6 +31,8 @@
 #include "address.hxx"
 #include <svl/lstner.hxx>
 #include <tools/string.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainer.hxx>
 
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/table/XTableCharts.hpp>
@@ -39,6 +41,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/implbase4.hxx>
 
 
@@ -113,12 +116,20 @@ public:
 };
 
 
-class ScChartObj : public cppu::WeakImplHelper4<
-                            com::sun::star::table::XTableChart,
-                            com::sun::star::document::XEmbeddedObjectSupplier,
-                            com::sun::star::container::XNamed,
-                            com::sun::star::lang::XServiceInfo >,
-                        public SfxListener
+typedef ::cppu::WeakComponentImplHelper4<
+    ::com::sun::star::table::XTableChart,
+    ::com::sun::star::document::XEmbeddedObjectSupplier,
+    ::com::sun::star::container::XNamed,
+    ::com::sun::star::lang::XServiceInfo > ScChartObj_Base;
+
+typedef ::comphelper::OPropertyContainer ScChartObj_PBase;
+typedef ::comphelper::OPropertyArrayUsageHelper< ScChartObj > ScChartObj_PABase;
+
+class ScChartObj : public ::comphelper::OBaseMutex
+                  ,public ScChartObj_Base
+                  ,public ScChartObj_PBase
+                  ,public ScChartObj_PABase
+                  ,public SfxListener
 {
 private:
     ScDocShell*             pDocShell;
@@ -128,11 +139,31 @@ private:
     void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
     void    GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
 
+protected:
+    // ::comphelper::OPropertySetHelper
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+        throw (::com::sun::star::uno::Exception);
+    using ::cppu::OPropertySetHelper::getFastPropertyValue;
+    virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+
+    // ::comphelper::OPropertyArrayUsageHelper
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+
 public:
                             ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
     virtual                 ~ScChartObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    // XInterface
+    DECLARE_XINTERFACE()
+
+    // XTypeProvider
+    DECLARE_XTYPEPROVIDER()
+
+    // XComponent
+    virtual void SAL_CALL disposing();
 
                             // XTableChart
     virtual sal_Bool SAL_CALL getHasColumnHeaders() throw(::com::sun::star::uno::RuntimeException);
@@ -163,6 +194,10 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+    // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

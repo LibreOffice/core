@@ -3064,32 +3064,69 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                 if ( sCLSID.equalsIgnoreAsciiCase(GetChartExport()->getChartCLSID()) )
                 {
                     // we have a chart
-                    uno::Reference< frame::XModel > xChartModel;
-                    if( ( xShapeProps->getPropertyValue( sPropModel ) >>= xChartModel ) &&
-                        xChartModel.is())
+                    ::rtl::OUString sRanges;
+                    if ( pDoc )
                     {
-                        uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
-                        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartModel, uno::UNO_QUERY );
-                        if( xChartDoc.is() && xReceiver.is() &&
-                            ! xChartDoc->hasInternalDataProvider())
+                        ::rtl::OUString aChartName;
+                        xShapeProps->getPropertyValue( sPersistName ) >>= aChartName;
+                        ScRange aEmptyRange;
+                        ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
+                        USHORT nIndex = 0;
+                        ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
+                        if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
                         {
-                            // we have a chart that gets its data from Calc
-                            bIsChart = true;
-                            uno::Sequence< ::rtl::OUString > aRepresentations(
-                                xReceiver->getUsedRangeRepresentations());
-                            SvXMLAttributeList* pAttrList = 0;
-                            if(aRepresentations.getLength())
+                            ScChartListener* pListener = static_cast< ScChartListener* >( pCollection->At( nIndex ) );
+                            if ( pListener )
                             {
-                                // add the ranges used by the chart to the shape
-                                // element to be able to start listening after
-                                // load (when the chart is not yet loaded)
-                                uno::Reference< chart2::data::XRangeXMLConversion > xRangeConverter( xChartDoc->getDataProvider(), uno::UNO_QUERY );
-                                ::rtl::OUString sRanges( lcl_RangeSequenceToString( aRepresentations, xRangeConverter ));
-                                pAttrList = new SvXMLAttributeList();
-                                pAttrList->AddAttribute(
-                                    GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
+                                const ScRangeListRef& rRangeList = pListener->GetRangeList();
+                                if ( rRangeList.Is() )
+                                {
+                                    ScRangeStringConverter::GetStringFromRangeList( sRanges, rRangeList, pDoc, FormulaGrammar::CONV_OOO );
+                                    if ( sRanges.getLength() > 0 )
+                                    {
+                                        bIsChart = true;
+                                        SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
+                                        if ( pAttrList )
+                                        {
+                                            pAttrList->AddAttribute(
+                                                GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken( XML_NOTIFY_ON_UPDATE_OF_RANGES ) ), sRanges );
+                                        }
+                                        GetShapeExport()->exportShape( xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList );
+                                    }
+                                }
                             }
-                            GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+                        }
+                    }
+
+                    if ( sRanges.getLength() == 0 )
+                    {
+                        uno::Reference< frame::XModel > xChartModel;
+                        if( ( xShapeProps->getPropertyValue( sPropModel ) >>= xChartModel ) &&
+                            xChartModel.is())
+                        {
+                            uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
+                            uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartModel, uno::UNO_QUERY );
+                            if( xChartDoc.is() && xReceiver.is() &&
+                                ! xChartDoc->hasInternalDataProvider())
+                            {
+                                // we have a chart that gets its data from Calc
+                                bIsChart = true;
+                                uno::Sequence< ::rtl::OUString > aRepresentations(
+                                    xReceiver->getUsedRangeRepresentations());
+                                SvXMLAttributeList* pAttrList = 0;
+                                if(aRepresentations.getLength())
+                                {
+                                    // add the ranges used by the chart to the shape
+                                    // element to be able to start listening after
+                                    // load (when the chart is not yet loaded)
+                                    uno::Reference< chart2::data::XRangeXMLConversion > xRangeConverter( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+                                    sRanges = lcl_RangeSequenceToString( aRepresentations, xRangeConverter );
+                                    pAttrList = new SvXMLAttributeList();
+                                    pAttrList->AddAttribute(
+                                        GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
+                                }
+                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+                            }
                         }
                     }
 
