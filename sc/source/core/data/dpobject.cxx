@@ -2429,6 +2429,14 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
     }
 }
 
+ScDPObject* ScDPCollection::GetByName(const String& rName) const
+{
+    for (USHORT i=0; i<nCount; i++)
+        if (static_cast<const ScDPObject*>(pItems[i])->GetName() == rName)
+            return static_cast<ScDPObject*>(pItems[i]);
+    return NULL;
+}
+
 String ScDPCollection::CreateNewName( USHORT nMin ) const
 {
     String aBase = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DataPilot"));

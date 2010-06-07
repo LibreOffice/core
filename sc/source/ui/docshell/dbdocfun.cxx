@@ -1275,6 +1275,13 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 //  output range must be set at pNewObj
 
                 pDestObj = new ScDPObject( *pNewObj );
+
+                // #i94570# When changing the output position in the dialog, a new table is created
+                // with the settings from the old table, including the name.
+                // So we have to check for duplicate names here (before inserting).
+                if ( pDoc->GetDPCollection()->GetByName(pDestObj->GetName()) )
+                    pDestObj->SetName( String() );      // ignore the invalid name, create a new name below
+
                 pDestObj->SetAlive(TRUE);
                 if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {
