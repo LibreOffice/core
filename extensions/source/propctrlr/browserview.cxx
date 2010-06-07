@@ -56,7 +56,8 @@ namespace pcr
         DBG_CTOR(OPropertyBrowserView,NULL);
 
         m_pPropBox = new OPropertyEditor( this );
-        m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
+                // FIXME: HELPID
+        m_pPropBox->SetHelpId(""/*HID_FM_PROPDLG_TABCTR*/);
         m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
 
         m_pPropBox->Show();

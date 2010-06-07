@@ -246,6 +246,8 @@ namespace pcr
         return nId;
     }
 
+// FIXME: HELPID
+#if 0
     //------------------------------------------------------------------
     void OPropertyEditor::SetHelpId( sal_uInt32 nHelpId )
     {
@@ -257,6 +259,7 @@ namespace pcr
         (void)nHelpId;
         #endif
     }
+#endif
 
     //------------------------------------------------------------------
     void OPropertyEditor::RemovePage(sal_uInt16 nID)
