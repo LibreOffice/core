@@ -103,7 +103,7 @@ public:
         marked as out-of-date and will be re-created when they are requested
         the next time.
     */
-    void InvalidatePreviewBitmap (
+    bool InvalidatePreviewBitmap (
         DocumentKey pDocument,
         const SdrPage* pPage);
 

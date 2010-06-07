@@ -353,10 +353,12 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 
 
 
-void PageCacheManager::InvalidatePreviewBitmap (
+bool PageCacheManager::InvalidatePreviewBitmap (
     DocumentKey pDocument,
     const SdrPage* pKey)
 {
+    bool bHasChanged (false);
+
     if (pDocument!=NULL)
     {
         // Iterate over all caches that are currently in use and invalidate
@@ -364,7 +366,7 @@ void PageCacheManager::InvalidatePreviewBitmap (
         PageCacheContainer::iterator iCache;
         for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
             if (iCache->first.mpDocument == pDocument)
-                iCache->second->InvalidateBitmap(pKey);
+                bHasChanged |= iCache->second->InvalidateBitmap(pKey);
 
         // Invalidate the previews in the recently used caches belonging to
         // the given document.
@@ -373,9 +375,11 @@ void PageCacheManager::InvalidatePreviewBitmap (
         {
             RecentlyUsedQueue::const_iterator iCache2;
             for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
-                iCache2->mpCache->InvalidateBitmap(pKey);
+                bHasChanged |= iCache2->mpCache->InvalidateBitmap(pKey);
         }
     }
+
+    return bHasChanged;
 }
 
 

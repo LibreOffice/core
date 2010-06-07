@@ -141,7 +141,8 @@ public:
     void RequestPreviewBitmap (const CacheKey aKey);
 
     /** Tell the cache that the bitmap associated with the given request
-        data is not up-to-date anymore.
+        data is not up-to-date anymore.  This will invalidate all previews
+        in other caches that represent the same page as well.
         @param bRequestPreview
             When <TRUE/> then a new preview is requested and will lead
             eventually to a repaint of the associated page object.

@@ -252,7 +252,14 @@ void GenericPageCache::RequestPreviewBitmap (
 
 bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
 {
-    if (mpBitmapCache.get() != NULL)
+    // Invalidate the page in all caches that reference it, not just this one.
+    ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (
+        cache::PageCacheManager::Instance());
+    if (pCacheManager)
+        return pCacheManager->InvalidatePreviewBitmap(
+            mpCacheContext->GetModel(),
+            aKey);
+    else if (mpBitmapCache.get() != NULL)
         return mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
     else
         return false;
