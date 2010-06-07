@@ -229,7 +229,7 @@
           <value>com.sun.star.comp.chart.ElementSelectorToolbarController</value>
         </prop>
       </node>
-      <node oor:name="c4" oor:op="replace">
+      <node oor:name="com.sun.star.chart2.BasicShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:BasicShapes</value>
         </prop>
@@ -237,10 +237,10 @@
           <value>com.sun.star.chart2.ChartDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.chart2.comp.ShapeToolbarController</value>
+          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
         </prop>
       </node>
-      <node oor:name="c5" oor:op="replace">
+      <node oor:name="com.sun.star.chart2.SymbolShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:SymbolShapes</value>
         </prop>
@@ -248,10 +248,10 @@
           <value>com.sun.star.chart2.ChartDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.chart2.comp.ShapeToolbarController</value>
+          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
         </prop>
       </node>
-      <node oor:name="c6" oor:op="replace">
+      <node oor:name="com.sun.star.chart2.ArrowShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ArrowShapes</value>
         </prop>
@@ -259,10 +259,10 @@
           <value>com.sun.star.chart2.ChartDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.chart2.comp.ShapeToolbarController</value>
+          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
         </prop>
       </node>
-      <node oor:name="c7" oor:op="replace">
+      <node oor:name="com.sun.star.chart2.FlowChartShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FlowChartShapes</value>
         </prop>
@@ -270,10 +270,10 @@
           <value>com.sun.star.chart2.ChartDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.chart2.comp.ShapeToolbarController</value>
+          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
         </prop>
       </node>
-      <node oor:name="c8" oor:op="replace">
+      <node oor:name="com.sun.star.chart2.CalloutShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:CalloutShapes</value>
         </prop>
@@ -281,10 +281,10 @@
           <value>com.sun.star.chart2.ChartDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.chart2.comp.ShapeToolbarController</value>
+          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
         </prop>
       </node>
-      <node oor:name="c9" oor:op="replace">
+      <node oor:name="com.sun.star.chart2.StarShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:StarShapes</value>
         </prop>
@@ -292,7 +292,7 @@
           <value>com.sun.star.chart2.ChartDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.chart2.comp.ShapeToolbarController</value>
+          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
         </prop>
       </node>
     </node>

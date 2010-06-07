@@ -27,7 +27,7 @@
 #include "vbacommandbarcontrol.hxx"
 #include "vbacommandbarcontrols.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <vbahelper/msvbahelper.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

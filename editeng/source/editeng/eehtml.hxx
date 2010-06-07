@@ -57,6 +57,7 @@ private:
     BOOL                    bFieldsInserted;
     BYTE                    nInTable;
     BYTE                    nInCell;
+    BOOL                    bInTitle;
 
     BYTE                    nDefListLevel;
     BYTE                    nBulletLevel;
