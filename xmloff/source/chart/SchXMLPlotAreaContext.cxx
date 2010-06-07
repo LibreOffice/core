@@ -1249,18 +1249,23 @@ void SchXMLAxisContext::CreateAxis()
 
         case SCH_XML_AXIS_Z:
             {
+                bool bSettingZAxisSuccedded = false;
                 try
                 {
-                    xDiaProp->setPropertyValue(
-                        rtl::OUString::createFromAscii( "HasZAxis" ), aTrueBool );
+                    rtl::OUString sHasZAxis( rtl::OUString::createFromAscii( "HasZAxis" ) );
+                    xDiaProp->setPropertyValue( sHasZAxis, aTrueBool );
+                    xDiaProp->getPropertyValue( sHasZAxis ) >>= bSettingZAxisSuccedded;
                 }
                 catch( beans::UnknownPropertyException & )
                 {
                     DBG_ERROR( "Couldn't turn on z axis" );
                 }
-                uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                    xProp = xSuppl->getZAxis();
+                if( bSettingZAxisSuccedded )
+                {
+                    uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                    if( xSuppl.is())
+                        xProp = xSuppl->getZAxis();
+                }
             }
             break;
         case SCH_XML_AXIS_UNDEF:
