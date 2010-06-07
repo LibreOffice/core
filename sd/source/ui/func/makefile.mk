@@ -157,7 +157,6 @@ LIB3OBJFILES= \
         $(SLO)$/fuolbull.obj 	\
         $(SLO)$/fucopy.obj		\
         $(SLO)$/fulink.obj		\
-        $(SLO)$/fuspell.obj		\
         $(SLO)$/futhes.obj		\
         $(SLO)$/fusearch.obj 	\
         $(SLO)$/fuinsfil.obj 	\

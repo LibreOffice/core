@@ -1387,6 +1387,8 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
 
 //      EndListening( *mpDoc );
         mpDoc = 0;
+
+        Clear();
     }
 }
 
@@ -1422,6 +1424,18 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     }
 
     return aResult;
+}
+
+// --------------------------------------------------------------------
+
+void SAL_CALL SdStyleSheetPool::acquire (void) throw ()
+{
+    SdStyleSheetPoolBase::acquire();
+}
+
+void SAL_CALL SdStyleSheetPool::release (void) throw ()
+{
+    SdStyleSheetPoolBase::release();
 }
 
 // --------------------------------------------------------------------
