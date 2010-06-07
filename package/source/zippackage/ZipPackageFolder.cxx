@@ -34,6 +34,7 @@
 #include <PackageConstants.hxx>
 #include <ZipPackageFolderEnumeration.hxx>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <vos/diagnose.hxx>
 #include <osl/time.h>
 #include <rtl/digest.h>
@@ -61,7 +62,7 @@ using vos::ORef;
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
-                                     sal_Int16 nFormat,
+                                     sal_Int32 nFormat,
                                      sal_Bool bAllowRemoveOnInsert )
 : m_xFactory( xFactory )
 , m_nFormat( nFormat )
@@ -317,7 +318,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
-    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != OFOPXML_FORMAT )
+    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
@@ -539,11 +540,11 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if ( !bUseNonSeekableAccess &&
-                ( bRawStream || bTransportOwnEncrStreamAsRaw ||
-                    ( pStream->IsPackageMember()          && !bToBeEncrypted &&
-                        ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
-                        ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) ) )
+            if ( !bUseNonSeekableAccess
+              && ( bRawStream || bTransportOwnEncrStreamAsRaw
+                || ( pStream->IsPackageMember() && !bToBeEncrypted
+                  && ( ( pStream->aEntry.nMethod == DEFLATED && bToBeCompressed )
+                    || ( pStream->aEntry.nMethod == STORED && !bToBeCompressed ) ) ) ) )
             {
                 // If it's a PackageMember, then it's an unbuffered stream and we need
                 // to get a new version of it as we can't seek backwards.
@@ -689,7 +690,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         }
 
         // folder can have a mediatype only in package format
-        if ( m_nFormat == PACKAGE_FORMAT || ( m_nFormat == OFOPXML_FORMAT && !rInfo.bFolder ) )
+        if ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) )
             rManList.push_back( aPropSet );
     }
 
@@ -741,7 +742,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
         // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != PACKAGE_FORMAT )
+        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         aValue >>= sMediaType;
@@ -759,7 +760,7 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
     {
         // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != PACKAGE_FORMAT )
+        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         return makeAny ( sMediaType );
