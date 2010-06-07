@@ -78,6 +78,8 @@ public:
 
     virtual void SAL_CALL release() throw ();
 
+    rtl::OUString getAbsolutePathRepresentation();
+
     rtl::OUString getLocale() const;
 
     bool isUpdate() const;

@@ -53,6 +53,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/rcid.h>
+#include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
@@ -1538,6 +1539,16 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     }
 }
 
+bool SfxWorkWindow::AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const
+{
+    // or checking the availability of child windows, we need access to the module
+    const SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+    const SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
+    const SfxModule* pModule = pShell ? pShell->GetModule() : NULL;
+    ENSURE_OR_RETURN( pModule, "SfxWorkWindow::UpdateChildWindows_Impl: did not find an SfxModule to ask for the child win availability!", true );
+    return pModule->IsChildWindowAvailable( i_rCW.nId, pViewFrame );
+}
+
 void SfxWorkWindow::UpdateChildWindows_Impl()
 {
     // alle vorhandenen oder in den Kontext gekommenen ChildWindows
@@ -1550,7 +1561,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
         {
             // Im Kontext ist ein geeignetes ChildWindow erlaubt;
             // ist es auch eingeschaltet ?
-            if ( pChildWin == 0 && pCW->bCreate )
+            if ( pChildWin == NULL && pCW->bCreate )
             {
                 // Internal docking is only used for embedding into another
                 // container. We force the floating state of all floatable
@@ -1571,6 +1582,9 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 else
                     bCreate = TRUE;
 
+                if ( bCreate )
+                    bCreate = AllowChildWindowCreation_Impl( *pCW );
+
                 // Momentan kein Fenster da, aber es ist eingeschaltet; Fenster
                 // und ggf. Context erzeugen
                 if ( bCreate )
@@ -1588,19 +1602,25 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 if ( ( !bIsFullScreen || pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT ) && bAllChildsVisible )
                 {
                     // Updatemode ist kompatibel; auf jeden Fall wieder einschalten
-                    bCreate = TRUE;
-                    if ( pCW->pCli )
+                    bCreate = AllowChildWindowCreation_Impl( *pCW );
+                    if ( bCreate )
                     {
-                        // Fenster ist direktes Child
-                        if ( bAllChildsVisible && ( (IsDockingAllowed() && bInternalDockingAllowed) || pCW->pCli->eAlign == SFX_ALIGN_NOALIGNMENT ) )
-                            pCW->pCli->nVisible |= CHILD_NOT_HIDDEN;
-                    }
-                    else if ( pCW->bCreate && IsDockingAllowed() && bInternalDockingAllowed )
-                        // Fenster liegt in einem SplitWindow
-                        ((SfxDockingWindow*)pChildWin->GetWindow())->Reappear_Impl();
+                        if ( pCW->pCli )
+                        {
+                            // Fenster ist direktes Child
+                            if ( bAllChildsVisible && ( (IsDockingAllowed() && bInternalDockingAllowed) || pCW->pCli->eAlign == SFX_ALIGN_NOALIGNMENT ) )
+                                pCW->pCli->nVisible |= CHILD_NOT_HIDDEN;
+                        }
+                        else
+                        {
+                            if ( pCW->bCreate && IsDockingAllowed() && bInternalDockingAllowed )
+                                // Fenster liegt in einem SplitWindow
+                                ((SfxDockingWindow*)pChildWin->GetWindow())->Reappear_Impl();
+                        }
 
-                    if ( pCW->nInterfaceId != pChildWin->GetContextId() )
-                        pChildWin->CreateContext( pCW->nInterfaceId, GetBindings() );
+                        if ( pCW->nInterfaceId != pChildWin->GetContextId() )
+                            pChildWin->CreateContext( pCW->nInterfaceId, GetBindings() );
+                    }
                 }
             }
         }
@@ -2225,7 +2245,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
         SfxChildWin_Impl *pCW = (*pChildWins)[n];
         SfxChildWindow *pChild = pCW->pWin;
 
-        bool bCreationAllowed( sal_True );
+        bool bCreationAllowed( true );
         if ( !bInternalDockingAllowed )
         {
             // Special case for all non-floatable child windows. We have
@@ -2233,43 +2253,51 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
             bCreationAllowed = !( pCW->aInfo.nFlags & SFX_CHILDWIN_FORCEDOCK );
         }
 
-        if ( pChild && pCW->bCreate && bCreationAllowed )
+        if ( bCreationAllowed )
         {
-            if ( pChild->QueryClose() )
+            if ( pCW->bCreate )
             {
-                if ( pChild && pChild->IsHideAtToggle() )
+                if ( pChild )
                 {
-                    pCW->bCreate = !pCW->bCreate;
-                    ShowChildWindow_Impl( nId, pCW->bCreate, bSetFocus );
+                    if ( pChild->QueryClose() )
+                    {
+                        pCW->bCreate = FALSE;
+                        if ( pChild->IsHideAtToggle() )
+                        {
+                            ShowChildWindow_Impl( nId, FALSE, bSetFocus );
+                        }
+                        else
+                        {
+                            // Fenster soll ausgeschaltet werdem
+                            pChild->SetVisible_Impl( FALSE );
+                            RemoveChildWin_Impl( pCW );
+                        }
+                    }
                 }
                 else
                 {
-                    // Fenster soll ausgeschaltet werdem
+                    // no actual Window exists, yet => just remember the "switched off" state
                     pCW->bCreate = FALSE;
-                    pChild->SetVisible_Impl( FALSE );
-                    RemoveChildWin_Impl( pCW );
                 }
-            }
-        }
-        else if ( pCW->bCreate && bCreationAllowed )
-        {
-            pCW->bCreate = FALSE;
-        }
-        else if ( bCreationAllowed )
-        {
-            pCW->bCreate = TRUE;
-
-            if ( pChild )
-            {
-                ShowChildWindow_Impl( nId, pCW->bCreate, bSetFocus );
             }
             else
             {
-                // Fenster erzeugen
-                CreateChildWin_Impl( pCW, bSetFocus );
-                if ( !pCW->pWin )
-                    // Erzeugung war erfolglos
-                    pCW->bCreate = FALSE;
+                pCW->bCreate = AllowChildWindowCreation_Impl( *pCW );
+                if ( pCW->bCreate )
+                {
+                    if ( pChild )
+                    {
+                        ShowChildWindow_Impl( nId, TRUE, bSetFocus );
+                    }
+                    else
+                    {
+                        // create actual Window
+                        CreateChildWin_Impl( pCW, bSetFocus );
+                        if ( !pCW->pWin )
+                            // no success
+                            pCW->bCreate = FALSE;
+                    }
+                }
             }
         }
 
@@ -2488,7 +2516,6 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible, BOOL bSetFoc
         SfxChildWindow *pChildWin = pCW->pWin;
         if ( pChildWin )
         {
-//          pCW->bCreate = bVisible;
             if ( bVisible )
             {
                 if ( pCW->pCli )

@@ -647,7 +647,12 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 }
 
                 aInitialValues.push_back( NamedValue( PROPERTY_CONTROLSOURCE, makeAny( *pIter ) ) );
-                aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( *pIter ) ) );
+                ::rtl::OUString sLabel;
+                xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+                if ( sLabel.getLength() )
+                    aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( sLabel ) ) );
+                else
+                    aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( *pIter ) ) );
 
                 Reference< XPropertySet > xGridCol( xColFactory->createColumn( aCurrentModelType ), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xGridColPSI( xGridCol->getPropertySetInfo(), UNO_SET_THROW );
@@ -678,8 +683,12 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 Any aDescription;
                 if ( xColPSI->hasPropertyByName( PROPERTY_HELPTEXT ) )
                     aDescription = xColumn->getPropertyValue( PROPERTY_HELPTEXT );
-                if ( !aDescription.hasValue() )
-                    aDescription <<= ::rtl::OUString();
+                ::rtl::OUString sTemp;
+                aDescription >>= sTemp;
+                if ( !sTemp.getLength() )
+                    xColumn->getPropertyValue( PROPERTY_DESCRIPTION ) >>= sTemp;
+
+                aDescription <<= sTemp;
                 aInitialValues.push_back( NamedValue( PROPERTY_HELPTEXT, aDescription ) );
 
                 // ... horizontal justify
@@ -1096,7 +1105,11 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
             {
                 // expand if required so
                 if (_bExpandAncestors)
+                {
+                    m_sToBeLoaded = _rCommand;
                     m_pTreeView->getListBox().Expand(pCommandType);
+                    m_sToBeLoaded = ::rtl::OUString();
+                }
 
                 // look for the object
                 ::rtl::OUString sCommand = _rCommand;
@@ -2041,7 +2054,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
         const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
         for (; pIter != pEnd; ++pIter)
         {
-            if(!m_pTreeView->getListBox().GetEntryPosByName(*pIter,_pParent))
+            if( (!m_sToBeLoaded.getLength() || m_sToBeLoaded == *pIter) && !m_pTreeView->getListBox().GetEntryPosByName(*pIter,_pParent))
             {
                 Reference<XNameAccess> xChild(_xNameAccess->getByName(*pIter),UNO_QUERY);
                 DBTreeListUserData* pEntryData = new DBTreeListUserData;

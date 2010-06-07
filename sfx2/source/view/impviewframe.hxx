@@ -31,6 +31,8 @@
 #include <svtools/asynclink.hxx>
 #include <vcl/window.hxx>
 
+#include <boost/optional.hpp>
+
 struct SfxViewFrame_Impl
 {
     SvBorder            aBorder;
@@ -56,6 +58,8 @@ struct SfxViewFrame_Impl
     sal_Bool            bWindowWasEnabled:1;
     sal_Bool            bActive;
     String              aFactoryName;
+    ::boost::optional< bool >
+                        aHasToolPanels;
 
                         SfxViewFrame_Impl( SfxFrame& i_rFrame )
                         : rFrame( i_rFrame )

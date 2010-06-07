@@ -46,7 +46,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"

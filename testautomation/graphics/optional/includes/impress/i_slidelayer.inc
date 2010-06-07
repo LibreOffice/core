@@ -49,6 +49,7 @@ testcase tiInsertExpandSlide
 
    '/// open application ///'
    Call hNewDocument
+   Call sSelectEmptyLayout
    '/// create presupposition ///
    '///+ View->Master View->Outline View ///'
    ViewWorkspaceOutlineView

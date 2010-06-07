@@ -149,11 +149,12 @@ bool Components::allLocales(rtl::OUString const & locale) {
 }
 
 rtl::Reference< Node > Components::resolvePathRepresentation(
-    rtl::OUString const & pathRepresentation, Path * path,
-    int * finalizedLayer) const
+    rtl::OUString const & pathRepresentation,
+    rtl::OUString * canonicRepresentation, Path * path, int * finalizedLayer)
+    const
 {
     return data_.resolvePathRepresentation(
-        pathRepresentation, path, finalizedLayer);
+        pathRepresentation, canonicRepresentation, path, finalizedLayer);
 }
 
 rtl::Reference< Node > Components::getTemplate(

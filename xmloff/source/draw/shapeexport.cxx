@@ -471,6 +471,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
             break;
         }
+        case XmlShapeTypePresTableShape:
         case XmlShapeTypeDrawTableShape:
         {
             try
@@ -797,6 +798,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypePresTableShape:
         case XmlShapeTypeDrawTableShape:
         {
             ImpExportTableShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
@@ -866,6 +868,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypePresMediaShape:
         case XmlShapeTypeDrawMediaShape:
         {
             ImpExportMediaShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
@@ -1125,7 +1128,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     // get info about presentation shape
                     uno::Reference <beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
-                    if(xPropSet.is())
+                    if(xPropSet.is()) try
                     {
                         rtl::OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sCLSID)
@@ -1137,16 +1140,22 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             }
                         }
                     }
+                    catch( uno::Exception& )
+                    {
+                        DBG_ERROR( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
+                    }
                 }
                 else if(aType.EqualsAscii("Chart", 26, 5)) { eShapeType = XmlShapeTypePresChartShape;  }
                 else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
-                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresSheetShape; }
+                else if(aType.EqualsAscii("CalcShape", 26, 9)) { eShapeType = XmlShapeTypePresSheetShape; }
+                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresTableShape; }
                 else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
                 else if(aType.EqualsAscii("HandoutShape", 26, 12)) { eShapeType = XmlShapeTypeHandoutShape; }
                 else if(aType.EqualsAscii("HeaderShape", 26, 11)) { eShapeType = XmlShapeTypePresHeaderShape; }
                 else if(aType.EqualsAscii("FooterShape", 26, 11)) { eShapeType = XmlShapeTypePresFooterShape; }
                 else if(aType.EqualsAscii("SlideNumberShape", 26, 16)) { eShapeType = XmlShapeTypePresSlideNumberShape; }
                 else if(aType.EqualsAscii("DateTimeShape", 26, 13)) { eShapeType = XmlShapeTypePresDateTimeShape; }
+                else if(aType.EqualsAscii("MediaShape", 26, 10)) { eShapeType = XmlShapeTypePresMediaShape; }
             }
         }
     }

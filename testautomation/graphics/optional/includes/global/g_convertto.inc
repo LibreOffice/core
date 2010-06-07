@@ -58,6 +58,7 @@ testcase tiModifyConvertToPolygon
    Dim Minanzahl as string
 
    Call hNewDocument
+   Call sSelectEmptyLayout
    sleep 3
    hTextrahmenErstellen ("This is a text that will be transformed into a Polygon-object", 10,10,60,30)
    sleep 1
@@ -207,6 +208,7 @@ testcase tiAendernUmwandelnInKurve
     Printlog "  ----- ContextConvertIntoCurve testen"
 
  Call hNewDocument							'/// New impress document///'
+    Call sSelectEmptyLayout
 
   Call hTextrahmenErstellen ("I test,test,test,test only, if it works for you",20,20,60,30)	'/// create textbox///'
    sleep 2
@@ -236,6 +238,7 @@ testcase tiAendernUmwandelnInPolygonGrafik
     Printlog "- Context/ConvertIntoPolygon"
 
  Call hNewDocument									'/// new document ///'
+    Call sSelectEmptyLayout
 
   InsertGraphicsFromFile								'/// insert graphic (desp.bmp) ///'
 

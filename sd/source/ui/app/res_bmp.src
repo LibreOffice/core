@@ -30,274 +30,236 @@
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
-Bitmap BMP_FOIL_00
+// preview bitmaps for layouts
+Bitmap BMP_LAYOUT_EMPTY
 {
-    File = "foil00.bmp" ;
+    File = "layout_empty.png";
 };
-Bitmap BMP_FOIL_00_H
+Bitmap BMP_LAYOUT_EMPTY_H
 {
-    File = "foil00_h.bmp" ;
+    File = "layout_empty_h.png";
 };
-Bitmap BMP_FOIL_01
+Bitmap BMP_LAYOUT_HEAD01
 {
-    File = "foil01.bmp" ;
+    File = "layout_head01.png";
 };
-Bitmap BMP_FOIL_01_H
+Bitmap BMP_LAYOUT_HEAD01_H
 {
-    File = "foil01_h.bmp" ;
+    File = "layout_head01_h.png";
 };
-Bitmap BMP_FOIL_02
+Bitmap BMP_LAYOUT_HEAD02
 {
-    File = "foil02.bmp" ;
+    File = "layout_head02.png";
 };
-Bitmap BMP_FOIL_02_H
+Bitmap BMP_LAYOUT_HEAD02_H
 {
-    File = "foil02_h.bmp" ;
+    File = "layout_head02_h.png";
 };
-Bitmap BMP_FOIL_03
+Bitmap BMP_LAYOUT_HEAD02A
 {
-    File = "foil03.bmp" ;
+    File = "layout_head02a.png";
 };
-Bitmap BMP_FOIL_03_H
+Bitmap BMP_LAYOUT_HEAD02A_H
 {
-    File = "foil03_h.bmp" ;
+    File = "layout_head02a_h.png";
 };
-Bitmap BMP_FOIL_04
+Bitmap BMP_LAYOUT_HEAD02B
 {
-    File = "foil04.bmp" ;
+    File = "layout_head02b.png";
 };
-Bitmap BMP_FOIL_04_H
+Bitmap BMP_LAYOUT_HEAD02B_H
 {
-    File = "foil04_h.bmp" ;
+    File = "layout_head02b_h.png";
 };
-Bitmap BMP_FOIL_05
+Bitmap BMP_LAYOUT_HEAD03
 {
-    File = "foil05.bmp" ;
+    File = "layout_head03.png";
 };
-Bitmap BMP_FOIL_06
+Bitmap BMP_LAYOUT_HEAD03_H
 {
-    File = "foil06.bmp" ;
+    File = "layout_head03_h.png";
 };
-Bitmap BMP_FOIL_06_H
+Bitmap BMP_LAYOUT_HEAD03A
 {
-    File = "foil06_h.bmp" ;
+    File = "layout_head03a.png";
 };
-Bitmap BMP_FOIL_07
+Bitmap BMP_LAYOUT_HEAD03A_H
 {
-    File = "foil07.bmp" ;
+    File = "layout_head03a_h.png";
 };
-Bitmap BMP_FOIL_07_H
+Bitmap BMP_LAYOUT_HEAD03B
 {
-    File = "foil07_h.bmp" ;
+    File = "layout_head03b.png";
 };
-Bitmap BMP_FOIL_08
+Bitmap BMP_LAYOUT_HEAD03B_H
 {
-    File = "foil08.bmp" ;
+    File = "layout_head03b_h.png";
 };
-Bitmap BMP_FOIL_08_H
+Bitmap BMP_LAYOUT_HEAD03C
 {
-    File = "foil08_h.bmp" ;
+    File = "layout_head03c.png";
 };
-Bitmap BMP_FOIL_09
+Bitmap BMP_LAYOUT_HEAD03C_H
 {
-    File = "foil09.bmp" ;
+    File = "layout_head03c_h.png";
 };
-Bitmap BMP_FOIL_09_H
+Bitmap BMP_LAYOUT_HEAD04
 {
-    File = "foil09_h.bmp" ;
+    File = "layout_head04.png";
 };
-Bitmap BMP_FOIL_10
+Bitmap BMP_LAYOUT_HEAD04_H
 {
-    File = "foil10.bmp" ;
+    File = "layout_head04_h.png";
 };
-Bitmap BMP_FOIL_10_H
+Bitmap BMP_LAYOUT_HEAD06
 {
-    File = "foil10_h.bmp" ;
+    File = "layout_head06.png";
 };
-Bitmap BMP_FOIL_11
+Bitmap BMP_LAYOUT_HEAD06_H
 {
-    File = "foil11.bmp" ;
+    File = "layout_head06_h.png";
 };
-Bitmap BMP_FOIL_11_H
+Bitmap BMP_LAYOUT_TEXTONLY
 {
-    File = "foil11_h.bmp" ;
+    File = "layout_textonly.png";
 };
-Bitmap BMP_FOIL_12
+Bitmap BMP_LAYOUT_TEXTONLY_H
 {
-    File = "foil12.bmp" ;
+    File = "layout_textonly_h.png";
 };
-Bitmap BMP_FOIL_12_H
+Bitmap BMP_LAYOUT_VERTICAL01
 {
-    File = "foil12_h.bmp" ;
+    File = "layout_vertical01.png";
 };
-Bitmap BMP_FOIL_13
+Bitmap BMP_LAYOUT_VERTICAL01_H
 {
-    File = "foil13.bmp" ;
+    File = "layout_vertical01_h.png";
 };
-Bitmap BMP_FOIL_13_H
+Bitmap BMP_LAYOUT_VERTICAL02
 {
-    File = "foil13_h.bmp" ;
+    File = "layout_vertical02.png";
 };
-Bitmap BMP_FOIL_14
+Bitmap BMP_LAYOUT_VERTICAL02_H
 {
-    File = "foil14.bmp" ;
+    File = "layout_vertical02_h.png";
 };
-Bitmap BMP_FOIL_14_H
-{
-    File = "foil14_h.bmp" ;
-};
-Bitmap BMP_FOIL_15
-{
-    File = "foil15.bmp" ;
-};
-Bitmap BMP_FOIL_15_H
-{
-    File = "foil15_h.bmp" ;
-};
-Bitmap BMP_FOIL_16
-{
-    File = "foil16.bmp" ;
-};
-Bitmap BMP_FOIL_16_H
-{
-    File = "foil16_h.bmp" ;
-};
-Bitmap BMP_FOIL_17
-{
-    File = "foil17.bmp" ;
-};
-Bitmap BMP_FOIL_17_H
-{
-    File = "foil17_h.bmp" ;
-};
-Bitmap BMP_FOIL_18
-{
-    File = "foil18.bmp" ;
-};
-Bitmap BMP_FOIL_18_H
-{
-    File = "foil18_h.bmp" ;
-};
-Bitmap BMP_FOIL_19
-{
-    File = "foil19.bmp" ;
-};
-Bitmap BMP_FOIL_19_H
-{
-    File = "foil19_h.bmp" ;
-};
-Bitmap BMP_FOIL_20
-{
-    File = "foil20.bmp" ;
-};
-Bitmap BMP_FOIL_20_H
-{
-    File = "foil20_h.bmp" ;
-};
-Bitmap BMP_FOIL_21
-{
-    File = "foil21.bmp" ;
-};
-Bitmap BMP_FOIL_21_H
-{
-    File = "foil21_h.bmp" ;
-};
-Bitmap BMP_FOIL_22
-{
-    File = "foil22.bmp" ;
-};
-Bitmap BMP_FOIL_22_H
-{
-    File = "foil22_h.bmp" ;
-};
-Bitmap BMP_FOIL_23
-{
-    File = "foil23.bmp" ;
-};
-Bitmap BMP_FOIL_23_H
-{
-    File = "foil23_h.bmp" ;
-};
-Bitmap BMP_FOIL_24
-{
-    File = "foil24.bmp" ;
-};
-Bitmap BMP_FOIL_24_H
-{
-    File = "foil24_h.bmp" ;
-};
-Bitmap BMP_FOIL_25
-{
-    File = "foil25.bmp" ;
-};
-Bitmap BMP_FOIL_25_H
-{
-    File = "foil25_h.bmp" ;
-};
-Bitmap BMP_FOIL_26
-{
-    File = "foil26.bmp" ;
-};
-Bitmap BMP_FOIL_26_H
-{
-    File = "foil26_h.bmp" ;
-};
-Bitmap BMP_FOIL_27
-{
-    File = "foil27.bmp" ;
-};
-Bitmap BMP_FOIL_27_H
-{
-    File = "foil27_h.bmp" ;
-};
+
 Bitmap BMP_FOILH_01
 {
-    File = "foilh01.bmp" ;
+    File = "foilh01.png";
 };
 Bitmap BMP_FOILH_01_H
 {
-    File = "foilh01_h.bmp" ;
+    File = "foilh01_h.png";
 };
 Bitmap BMP_FOILH_02
 {
-    File = "foilh02.bmp" ;
+    File = "foilh02.png";
 };
 Bitmap BMP_FOILH_02_H
 {
-    File = "foilh02_h.bmp" ;
+    File = "foilh02_h.png";
 };
 Bitmap BMP_FOILH_03
 {
-    File = "foilh03.bmp" ;
+    File = "foilh03.png";
 };
 Bitmap BMP_FOILH_03_H
 {
-    File = "foilh03_h.bmp" ;
+    File = "foilh03_h.png";
 };
 Bitmap BMP_FOILH_04
 {
-    File = "foilh04.bmp" ;
+    File = "foilh04.png";
 };
 Bitmap BMP_FOILH_04_H
 {
-    File = "foilh04_h.bmp" ;
+    File = "foilh04_h.png";
 };
 Bitmap BMP_FOILH_06
 {
-    File = "foilh06.bmp" ;
+    File = "foilh06.png";
 };
 Bitmap BMP_FOILH_06_H
 {
-    File = "foilh06_h.bmp" ;
+    File = "foilh06_h.png";
 };
 Bitmap BMP_FOILH_09
 {
-    File = "foilh09.bmp" ;
+    File = "foilh09.png";
 };
 Bitmap BMP_FOILH_09_H
 {
-    File = "foilh09_h.bmp" ;
+    File = "foilh09_h.png";
 };
+
+
+Bitmap BMP_PLACEHOLDER_CHART_SMALL
+{
+    File = "placeholder_chart_small.png";
+};
+Bitmap BMP_PLACEHOLDER_CHART_SMALL_HOVER
+{
+    File = "placeholder_chart_small_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_IMAGE_SMALL
+{
+    File = "placeholder_image_small.png";
+};
+Bitmap BMP_PLACEHOLDER_IMAGE_SMALL_HOVER
+{
+    File = "placeholder_image_small_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_SMALL
+{
+    File = "placeholder_movie_small.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_SMALL_HOVER
+{
+    File = "placeholder_movie_small_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_SMALL
+{
+    File = "placeholder_table_small.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_SMALL_HOVER
+{
+    File = "placeholder_table_small_hover.png";
+};
+
+Bitmap BMP_PLACEHOLDER_CHART_LARGE
+{
+    File = "placeholder_chart_large.png";
+};
+Bitmap BMP_PLACEHOLDER_CHART_LARGE_HOVER
+{
+    File = "placeholder_chart_large_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_IMAGE_LARGE
+{
+    File = "placeholder_image_large.png";
+};
+Bitmap BMP_PLACEHOLDER_IMAGE_LARGE_HOVER
+{
+    File = "placeholder_image_large_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_LARGE
+{
+    File = "placeholder_movie_large.png";
+};
+Bitmap BMP_PLACEHOLDER_MOVIE_LARGE_HOVER
+{
+    File = "placeholder_movie_large_hover.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_LARGE
+{
+    File = "placeholder_table_large.png";
+};
+Bitmap BMP_PLACEHOLDER_TABLE_LARGE_HOVER
+{
+    File = "placeholder_table_large_hover.png";
+};
+
 Bitmap BMP_FOILN_01
 {
     File = "foiln01.bmp" ;
@@ -305,10 +267,6 @@ Bitmap BMP_FOILN_01
 Bitmap BMP_FOILN_01_H
 {
     File = "foiln01_h.bmp" ;
-};
-Bitmap BMP_FOIL_NONE
-{
-    File = "foilnone.bmp" ;
 };
 Bitmap BMP_PAGE
 {
@@ -519,30 +477,6 @@ Bitmap BMP_WAIT_ICON
 
 // ----------------------------------------
 
-Bitmap BMP_CLOSE_DOC
-{
-    File = "closedoc.bmp";
-};
-Bitmap BMP_CLOSE_DOC_H
-{
-    File = "closedochc.bmp";
-};
-Bitmap BMP_TRIANGLE_RIGHT
-{
-    File = "triangle_right.bmp";
-};
-Bitmap BMP_TRIANGLE_RIGHT_H
-{
-    File = "triangle_right_hc.bmp";
-};
-Bitmap BMP_TRIANGLE_DOWN
-{
-    File = "triangle_down.bmp";
-};
-Bitmap BMP_TRIANGLE_DOWN_H
-{
-    File = "triangle_down_hc.bmp";
-};
 Bitmap BMP_FADE_EFFECT_INDICATOR
 {
     File = "fade_effect_indicator.bmp";

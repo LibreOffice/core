@@ -31,6 +31,12 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
 
 module com { module sun { module star { module drawing { module framework {
 
@@ -65,7 +71,10 @@ interface XResourceFactory
             when the given URL is not supported by the factory.
     */
     XResource createResource (
-        [in] XResourceId xResourceId);
+            [in] XResourceId xResourceId)
+        raises  (   ::com::sun::star::lang::IllegalArgumentException,
+                    ::com::sun::star::lang::WrappedTargetException
+                );
 
     /** Call this method to tell a factory that the given resource is no
         longer in use.  The factory can decide whether to destroy the

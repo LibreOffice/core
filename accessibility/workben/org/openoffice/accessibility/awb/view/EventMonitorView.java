@@ -64,6 +64,7 @@ class EventMonitorView
     public EventMonitorView (ObjectViewContainer aContainer)
     {
         super (aContainer);
+        mnLineNo = 0;
         Layout();
     }
 
@@ -85,7 +86,7 @@ class EventMonitorView
         maScrollPane = new JScrollPane (maText,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        maScrollPane.setPreferredSize (new Dimension (300,80));
+        maScrollPane.setPreferredSize (new Dimension (300,200));
 
         GridBagConstraints aConstraints = new GridBagConstraints ();
         aConstraints.weightx = 1;
@@ -112,7 +113,7 @@ class EventMonitorView
 
     public void notifyEvent (AccessibleEventObject aEvent)
     {
-        maText.append (NameProvider.getEventName (aEvent.EventId) + " : "
+        maText.append ((mnLineNo++) + ". " + NameProvider.getEventName (aEvent.EventId) + " : "
             + aEvent.OldValue.toString()
             + " -> "
             + aEvent.NewValue.toString() + "\n");
@@ -120,5 +121,6 @@ class EventMonitorView
     }
 
     private JTextArea maText;
+    private int mnLineNo;
     private JScrollPane maScrollPane;
 }

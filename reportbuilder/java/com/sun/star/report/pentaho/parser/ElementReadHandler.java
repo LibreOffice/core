@@ -27,7 +27,9 @@
 package com.sun.star.report.pentaho.parser;
 
 import org.jfree.report.structure.Element;
+
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 

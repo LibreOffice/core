@@ -55,6 +55,7 @@ class SdrHdlList;
 class SdrMarkView;
 class SdrObject;
 class SdrPageView;
+class MouseEvent;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -184,6 +185,9 @@ protected:
     // cleanup marker if one exists
     void GetRidOfIAObject();
 
+private:
+    bool                        mbMouseOver;    // is true if the mouse is over this handle
+
 protected:
     ::sdr::overlay::OverlayObject* CreateOverlayObject(
         const basegfx::B2DPoint& rPos,
@@ -241,6 +245,16 @@ public:
     virtual BOOL IsFocusHdl() const;
 
     void SetMoveOutside( bool bMoveOutside );
+
+    /** is called when the mouse enters the area of this handle. If the handle changes his
+        visualisation during mouse over it must override this method and call Touch(). */
+    virtual void onMouseEnter(const MouseEvent& rMEvt);
+
+    /** is called when the mouse leaves the area of this handle. If the handle changes his
+        visualisation during mouse over it must override this method and call Touch(). */
+    virtual void onMouseLeave();
+
+    bool isMouseOver() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

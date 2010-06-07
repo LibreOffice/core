@@ -56,6 +56,7 @@ namespace dbaui
     {
         enum ChildFocusState
         {
+            HELPTEXT,
             DESCRIPTION,
             NAME,
             ROW,
@@ -67,6 +68,7 @@ namespace dbaui
 
         OSQLNameEdit*               pNameCell;
         ::svt::ListBoxControl*      pTypeCell;
+        Edit*                       pHelpTextCell;
         Edit*                       pDescrCell;
         OTableFieldDescWin*         pDescrWin;          // properties of one column
 

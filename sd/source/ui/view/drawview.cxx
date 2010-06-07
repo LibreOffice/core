@@ -1,4 +1,4 @@
-/*************************************************************************
+    /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -578,6 +578,8 @@ void DrawView::HideSdrPage()
 
 void DrawView::DeleteMarked()
 {
+    OSL_TRACE( "DrawView::DeleteMarked() - enter" );
+
     sd::UndoManager* pUndoManager = mpDoc->GetUndoManager();
     DBG_ASSERT( pUndoManager, "sd::DrawView::DeleteMarked(), ui action without undo manager!?" );
 
@@ -590,33 +592,60 @@ void DrawView::DeleteMarked()
     }
 
     SdPage* pPage = 0;
+    bool bResetLayout = false;
 
-    const SdrMarkList& rList = GetMarkedObjectList();
-    ULONG nMarkCount         = rList.GetMarkCount();
-    for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
+    const ULONG nMarkCount = GetMarkedObjectList().GetMarkCount();
+    if( nMarkCount )
     {
-        SdrObject* pObj = rList.GetMark(nMark)->GetMarkedSdrObj();
-        if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
+        SdrMarkList aList( GetMarkedObjectList() );
+        for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
         {
-            pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
-            PresObjKind ePresObjKind;
-            if( pPage && ((ePresObjKind = pPage->GetPresObjKind(pObj)) != PRESOBJ_NONE))
+            SdrObject* pObj = aList.GetMark(nMark)->GetMarkedSdrObj();
+            if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
             {
-                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
-                bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
-                Rectangle aRect( pObj->GetLogicRect() );
-                pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
+                pPage = static_cast< SdPage* >( pObj->GetPage() );
+                PresObjKind ePresObjKind;
+                if( pPage && ((ePresObjKind = pPage->GetPresObjKind(pObj)) != PRESOBJ_NONE))
+                {
+                    switch( ePresObjKind )
+                    {
+                    case PRESOBJ_GRAPHIC:
+                    case PRESOBJ_OBJECT:
+                    case PRESOBJ_CHART:
+                    case PRESOBJ_ORGCHART:
+                    case PRESOBJ_TABLE:
+                    case PRESOBJ_CALC:
+                    case PRESOBJ_IMAGE:
+                    case PRESOBJ_MEDIA:
+                        ePresObjKind = PRESOBJ_OUTLINE;
+                        break;
+                    default:
+                        break;
+                    }
+                    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                    bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
+                    Rectangle aRect( pObj->GetLogicRect() );
+                    SdrObject* pNewObj = pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
+
+                    pPage->SetObjectOrdNum( pNewObj->GetOrdNum(), pObj->GetOrdNum() );
+
+                    bResetLayout = true;
+
+                    OSL_TRACE( "DrawView::InsertAutoLayoutShape() - InsertAutoLayoutShape" );
+                }
             }
         }
     }
 
     ::sd::View::DeleteMarked();
 
-    if( pPage )
+    if( pPage && bResetLayout )
         pPage->SetAutoLayout( pPage->GetAutoLayout() );
 
     if( pUndoManager )
         pUndoManager->LeaveListAction();
+
+    OSL_TRACE( "DrawView::InsertAutoLayoutShape() - leave" );
 }
 
 } // end of namespace sd

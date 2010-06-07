@@ -131,8 +131,8 @@ namespace accessibility
                     break;
 
                 // --> OD 2009-04-01 #i92103#
-                case VCLEVENT_LISTBOX_ENTRY_EXPANDED :
-                case VCLEVENT_LISTBOX_ENTRY_COLLAPSED :
+                case VCLEVENT_ITEM_EXPANDED :
+                case VCLEVENT_ITEM_COLLAPSED :
                 {
                     SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
@@ -141,7 +141,7 @@ namespace accessibility
                             new AccessibleListBoxEntry( *getListBox(), pEntry, this );
                         Reference< XAccessible > xChild = pAccListBoxEntry;
                         const short nAccEvent =
-                                ( rVclWindowEvent.GetId() == VCLEVENT_LISTBOX_ENTRY_EXPANDED )
+                                ( rVclWindowEvent.GetId() == VCLEVENT_ITEM_EXPANDED )
                                 ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
                                 : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
                         uno::Any aListBoxEntry;

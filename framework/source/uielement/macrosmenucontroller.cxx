@@ -48,6 +48,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include "helper/mischelper.hxx"
+#include <vos/mutex.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -70,7 +71,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   MacrosMenuController                
 DEFINE_INIT_SERVICE                     (   MacrosMenuController, {} )
 
 MacrosMenuController::MacrosMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_xServiceManager( xServiceManager)
 {
 }
@@ -109,7 +110,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     OSL_TRACE("disposing");
     m_xFrame.clear();
     m_xDispatch.clear();
@@ -126,7 +127,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
 // XStatusListener
 void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     if ( m_xPopupMenu.is() )
     {
         fillPopupMenu( m_xPopupMenu );

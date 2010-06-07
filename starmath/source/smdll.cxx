@@ -40,6 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/taskpane.hxx>
 
 #ifndef _SMDLL_HXX
 #include <smdll.hxx>
@@ -94,6 +95,8 @@ void SmDLL::Init()
 
     SmToolBoxWrapper::RegisterChildWindow(TRUE);
     SmCmdBoxWrapper::RegisterChildWindow(TRUE);
+
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pp );
 }
 
 /*************************************************************************

@@ -52,6 +52,7 @@
 #endif
 #include <classes/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
+#include <helper/acceleratorinfo.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -75,6 +76,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -97,10 +99,13 @@
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <boost/bind.hpp>
+#include <svtools/acceleratorexecute.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
+
+using rtl::OUString;
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -258,7 +263,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_xFrame( rFrame ),
     m_aListenerContainer( m_aLock.getShareableOslMutex() ),
     m_xServiceManager( rServiceManager ),
-    m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
+    m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() ),
+    m_bAcceleratorCfg( sal_False )
 {
     Window* pWindow = m_pToolBar;
     while ( pWindow && !pWindow->IsSystemWindow() )
@@ -664,6 +670,9 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
 
         m_xFrame.clear();
         m_xServiceManager.clear();
+        m_xGlobalAcceleratorManager.clear();
+        m_xModuleAcceleratorManager.clear();
+        m_xDocAcceleratorManager.clear();
 
         m_bDisposed = sal_True;
     }
@@ -1050,6 +1059,10 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                aPropValue.Value <<= m_aModuleIdentifier;
+                aPropertyVector.push_back( makeAny( aPropValue ));
+
                 if ( nWidth > 0 )
                 {
                     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
@@ -1279,13 +1292,31 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
                     if ( aTooltip.getLength() )
+                    {
                         m_pToolBar->SetQuickHelpText( nId, aTooltip );
+                    }
                     else
-                    m_pToolBar->SetQuickHelpText( nId, aString );
+                    {
+                         ::rtl::OUString sQuickHelp( aString );
+                         ::rtl::OUString sShortCut;
+                         if( RetrieveShortcut( aCommandURL, sShortCut ) )
+                         {
+                             sQuickHelp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+                             sQuickHelp += sShortCut;
+                             sQuickHelp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+                         }
+
+                        m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
+                    }
+
                     if ( aLabel.getLength() > 0 )
+                    {
                         m_pToolBar->SetItemText( nId, aLabel );
+                    }
                     else
+                    {
                         m_pToolBar->SetItemText( nId, aString );
+                    }
                     m_pToolBar->EnableItem( nId, sal_True );
                     m_pToolBar->SetItemState( nId, STATE_NOCHECK );
 
@@ -2126,6 +2157,121 @@ Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool
 {
     Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages, bHiContrast );
     return aImage;
+}
+
+bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
+    const Reference< XAcceleratorConfiguration >& rAccelCfg,
+    const rtl::OUString& rCommand,
+    rtl::OUString& rShortCut )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ToolBarManager::impl_RetrieveShortcutsFromConfiguration" );
+    if ( rAccelCfg.is() )
+    {
+        try
+        {
+            com::sun::star::awt::KeyEvent aKeyEvent;
+            Sequence< OUString > aCommands(1);
+            aCommands[0] = rCommand;
+
+            Sequence< Any > aSeqKeyCode( rAccelCfg->getPreferredKeyEventsForCommandList( aCommands ) );
+            if( aSeqKeyCode.getLength() == 1 )
+            {
+                if ( aSeqKeyCode[0] >>= aKeyEvent )
+                {
+                    rShortCut = svt::AcceleratorExecute::st_AWTKey2VCLKey( aKeyEvent ).GetName();
+                    return true;
+                }
+            }
+        }
+        catch ( IllegalArgumentException& )
+        {
+        }
+    }
+
+    return false;
+}
+
+bool ToolBarManager::RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OUString& rShortCut )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ToolBarManager::RetrieveShortcuts" );
+    if ( m_bModuleIdentified )
+    {
+        Reference< XAcceleratorConfiguration > xDocAccelCfg( m_xDocAcceleratorManager );
+        Reference< XAcceleratorConfiguration > xModuleAccelCfg( m_xModuleAcceleratorManager );
+        Reference< XAcceleratorConfiguration > xGlobalAccelCfg( m_xGlobalAcceleratorManager );
+
+        if ( !m_bAcceleratorCfg )
+        {
+            // Retrieve references on demand
+            m_bAcceleratorCfg = sal_True;
+            if ( !xDocAccelCfg.is() )
+            {
+                Reference< XController > xController = m_xFrame->getController();
+                Reference< XModel > xModel;
+                if ( xController.is() )
+                {
+                    xModel = xController->getModel();
+                    if ( xModel.is() )
+                    {
+                        Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
+                        if ( xSupplier.is() )
+                        {
+                            Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                            if ( xDocUICfgMgr.is() )
+                            {
+                                xDocAccelCfg = Reference< XAcceleratorConfiguration >( xDocUICfgMgr->getShortCutManager(), UNO_QUERY );
+                                m_xDocAcceleratorManager = xDocAccelCfg;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( !xModuleAccelCfg.is() )
+            {
+                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( m_xServiceManager->createInstance(
+                                                                                            SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
+                                                                                        UNO_QUERY );
+                try
+                {
+                    Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
+                    if ( xUICfgMgr.is() )
+                    {
+                        xModuleAccelCfg = Reference< XAcceleratorConfiguration >( xUICfgMgr->getShortCutManager(), UNO_QUERY );
+                        m_xModuleAcceleratorManager = xModuleAccelCfg;
+                    }
+                }
+                catch ( RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+
+            if ( !xGlobalAccelCfg.is() )
+            {
+                xGlobalAccelCfg = Reference< XAcceleratorConfiguration >( m_xServiceManager->createInstance(
+                                                                            SERVICENAME_GLOBALACCELERATORCONFIGURATION ),
+                                                                          UNO_QUERY );
+                m_xGlobalAcceleratorManager = xGlobalAccelCfg;
+            }
+        }
+
+        bool bFound = false;
+
+        if ( m_xGlobalAcceleratorManager.is() )
+            bFound  = impl_RetrieveShortcutsFromConfiguration( xGlobalAccelCfg, rCommandURL, rShortCut );
+        if ( !bFound && m_xModuleAcceleratorManager.is() )
+            bFound = impl_RetrieveShortcutsFromConfiguration( xModuleAccelCfg, rCommandURL, rShortCut );
+        if ( !bFound && m_xDocAcceleratorManager.is() )
+            impl_RetrieveShortcutsFromConfiguration( xGlobalAccelCfg, rCommandURL, rShortCut );
+
+        if( bFound )
+            return true;
+    }
+    return false;
 }
 
 }

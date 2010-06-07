@@ -187,7 +187,7 @@
 #include "svtools/svmedit.hxx"
 #include "svl/svstdarr.hxx"
 #include "svtools/svtdata.hxx"
-#include "svl/svtools.hrc"
+#include "svtools/svtools.hrc"
 #include "svtools/svtreebx.hxx"
 #include "unotools/syslocale.hxx"
 #include "svtools/taskbar.hxx"

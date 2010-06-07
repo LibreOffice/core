@@ -4391,7 +4391,7 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem AssignLayout SID_ASSIGN_LAYOUT
+SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
 (SfxUInt32Item WhatPage ID_VAL_WHATPAGE, SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT)
 [
     /* flags: */

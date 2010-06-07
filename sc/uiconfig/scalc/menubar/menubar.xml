@@ -122,7 +122,8 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
-            <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TaskPane"/>
+      <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
             <menu:menuitem menu:id=".uno:Zoom"/>
         </menu:menupopup>

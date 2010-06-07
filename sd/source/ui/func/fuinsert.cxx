@@ -93,6 +93,7 @@
 #include "sdgrffilter.hxx"
 #include "sdxfer.hxx"
 #include <vcl/svapp.hxx>
+#include "undo/undoobjects.hxx"
 
 using namespace com::sun::star;
 
@@ -143,34 +144,15 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
             if( mpViewShell && mpViewShell->ISA(DrawViewShell))
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
-                SdrGrafObj* pEmptyGrafObj = NULL;
-
-                if ( mpView->AreObjectsMarked() )
-                {
-                    /**********************************************************
-                    * Is an empty graphic object available?
-                    **********************************************************/
-                    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
-                    if (rMarkList.GetMarkCount() == 1)
-                    {
-                        SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                        if (pObj->GetObjInventor() == SdrInventor &&
-                            pObj->GetObjIdentifier() == OBJ_GRAF)
-                        {
-                            nAction = DND_ACTION_LINK;
-                            pEmptyGrafObj = (SdrGrafObj*) pObj;
-                        }
-                    }
-                }
+                SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
+                if( pPickObj )
+                    nAction = DND_ACTION_LINK;
 
                 Point aPos;
                 Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
                 aPos = aRect.Center();
                 aPos = mpWindow->PixelToLogic(aPos);
-                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pEmptyGrafObj, NULL);
+                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, NULL);
 
                 if(pGrafObj && aDlg.IsAsLink())
                 {
@@ -299,6 +281,10 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
          nSlotId == SID_INSERT_DIAGRAM ||
          nSlotId == SID_INSERT_MATH )
     {
+        PresObjKind ePresObjKind = (nSlotId == SID_INSERT_DIAGRAM) ? PRESOBJ_CHART : PRESOBJ_OBJECT;
+
+        SdrObject* pPickObj = mpView->GetEmptyPresentationObject( ePresObjKind );
+
         /**********************************************************************
         * Diagramm oder StarCalc-Tabelle einfuegen
         **********************************************************************/
@@ -317,42 +303,78 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         if ( xObj.is() )
         {
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-            awt::Size aSz;
-            try
-            {
-                aSz = xObj->getVisualAreaSize( nAspect );
-            }
-            catch ( embed::NoVisualAreaSizeException& )
-            {
-                // the default size will be set later
-            }
-
-            Size aSize( aSz.Width, aSz.Height );
 
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-            if (aSize.Height() == 0 || aSize.Width() == 0)
+
+            Rectangle aRect;
+            if( pPickObj )
             {
-                // Rechteck mit ausgewogenem Kantenverhaeltnis
-                aSize.Width()  = 14100;
-                aSize.Height() = 10000;
-                Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
-                aSz.Width = aTmp.Width();
-                aSz.Height = aTmp.Height();
+                aRect = pPickObj->GetLogicRect();
+
+                awt::Size aSz;
+                aSz.Width = aRect.GetWidth();
+                aSz.Height = aRect.GetHeight();
                 xObj->setVisualAreaSize( nAspect, aSz );
             }
             else
-                aSize = OutputDevice::LogicToLogic(aSize, aUnit, MAP_100TH_MM);
+            {
+                awt::Size aSz;
+                try
+                {
+                    aSz = xObj->getVisualAreaSize( nAspect );
+                }
+                catch ( embed::NoVisualAreaSizeException& )
+                {
+                    // the default size will be set later
+                }
 
-            Point aPos;
-            Rectangle aWinRect(aPos, mpWindow->GetOutputSizePixel() );
-            aPos = aWinRect.Center();
-            aPos = mpWindow->PixelToLogic(aPos);
-            aPos.X() -= aSize.Width() / 2;
-            aPos.Y() -= aSize.Height() / 2;
-            Rectangle aRect (aPos, aSize);
+                Size aSize( aSz.Width, aSz.Height );
+
+                if (aSize.Height() == 0 || aSize.Width() == 0)
+                {
+                    // Rechteck mit ausgewogenem Kantenverhaeltnis
+                    aSize.Width()  = 14100;
+                    aSize.Height() = 10000;
+                    Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
+                    aSz.Width = aTmp.Width();
+                    aSz.Height = aTmp.Height();
+                    xObj->setVisualAreaSize( nAspect, aSz );
+                }
+                else
+                {
+                    aSize = OutputDevice::LogicToLogic(aSize, aUnit, MAP_100TH_MM);
+                }
+
+                Point aPos;
+                Rectangle aWinRect(aPos, mpWindow->GetOutputSizePixel() );
+                aPos = aWinRect.Center();
+                aPos = mpWindow->PixelToLogic(aPos);
+                aPos.X() -= aSize.Width() / 2;
+                aPos.Y() -= aSize.Height() / 2;
+                aRect = Rectangle(aPos, aSize);
+            }
+
             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aObjName, aRect );
             SdrPageView* pPV = mpView->GetSdrPageView();
-            if( mpView->InsertObjectAtView(pOleObj, *pPV, SDRINSERT_SETDEFLAYER) )
+
+            // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
+            if( pPickObj )
+            {
+                SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+                if(pPage && pPage->IsPresObj(pPickObj))
+                {
+                    pPage->InsertPresObj( pOleObj, ePresObjKind );
+                    pOleObj->SetUserCall(pPickObj->GetUserCall());
+                }
+            }
+
+            bool bRet = true;
+            if( pPickObj )
+                mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj, TRUE );
+            else
+                bRet = mpView->InsertObjectAtView(pOleObj, *pPV, SDRINSERT_SETDEFLAYER);
+
+            if( bRet )
             {
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
@@ -369,10 +391,11 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 //HMHmpView->HideMarkHdl();
                 pOleObj->SetLogicRect(aRect);
-                Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aUnit );
-                aSz.Width = aTmp.Width();
-                aSz.Height = aTmp.Height();
-                xObj->setVisualAreaSize( nAspect, aSz );
+                Size aTmp( OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aUnit ) );
+                awt::Size aVisualSize;
+                aVisualSize.Width = aTmp.Width();
+                aVisualSize.Height = aTmp.Height();
+                xObj->setVisualAreaSize( nAspect, aVisualSize );
                 mpViewShell->ActivateObject(pOleObj, SVVERB_SHOW);
 
                 if (nSlotId == SID_INSERT_DIAGRAM)

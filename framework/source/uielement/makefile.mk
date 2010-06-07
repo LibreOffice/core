@@ -79,6 +79,7 @@ SLOFILES=           \
                     $(SLO)$/toolbarmerger.obj                   \
                     $(SLO)$/toolbarsmenucontroller.obj          \
                     $(SLO)$/toolbarwrapper.obj                  \
+                    $(SLO)$/popupmenucontroller.obj				\
                     $(SLO)$/uicommanddescription.obj            \
 
 # --- Targets ------------------------------------------------------

@@ -382,6 +382,7 @@ private:
 public:
     WW8PLCFx(ww::WordVersion eVersion, bool bSprm)
         : meVer(eVersion), bIsSprm(bSprm), bDirty(false) {}
+    virtual ~WW8PLCFx() {}
     bool IsSprm() const { return bIsSprm; }
     virtual ULONG GetIdx() const = 0;
     virtual void SetIdx( ULONG nIdx ) = 0;

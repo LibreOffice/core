@@ -159,7 +159,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     printlog "File opened: " + sFileName
     Sleep 3
 
-    Call sMakeReadOnlyDocumentEditable
+    call fMakeDocumentWritable
 
     if bSimple then
         Printlog "- Tools/Autocorrect -single quotes"

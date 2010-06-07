@@ -205,7 +205,8 @@ rtl::Reference< Node > Data::findNode(
 }
 
 rtl::Reference< Node > Data::resolvePathRepresentation(
-    rtl::OUString const & pathRepresentation, Path * path, int * finalizedLayer)
+    rtl::OUString const & pathRepresentation,
+    rtl::OUString * canonicRepresentation, Path * path, int * finalizedLayer)
     const
 {
     if (pathRepresentation.getLength() == 0 || pathRepresentation[0] != '/') {
@@ -216,6 +217,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     }
     rtl::OUString seg;
     bool setElement;
+    rtl::OUString templateName;
     sal_Int32 n = parseSegment(pathRepresentation, 1, &seg, &setElement, 0);
     if (n == -1 || setElement)
     {
@@ -225,6 +227,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             css::uno::Reference< css::uno::XInterface >());
     }
     NodeMap::const_iterator i(components.find(seg));
+    rtl::OUStringBuffer canonic;
     if (path != 0) {
         path->clear();
     }
@@ -233,6 +236,10 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     for (rtl::Reference< Node > p(i == components.end() ? 0 : i->second);;) {
         if (!p.is()) {
             return p;
+        }
+        if (canonicRepresentation != 0) {
+            canonic.append(sal_Unicode('/'));
+            canonic.append(createSegment(templateName, seg));
         }
         if (path != 0) {
             path->push_back(seg);
@@ -248,13 +255,16 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
         }
         // for backwards compatibility, ignore a final slash
         if (n == pathRepresentation.getLength()) {
+            if (canonicRepresentation != 0) {
+                *canonicRepresentation = canonic.makeStringAndClear();
+            }
             if (finalizedLayer != 0) {
                 *finalizedLayer = finalized;
             }
             return p;
         }
         parent = p;
-        rtl::OUString templateName;
+        templateName = rtl::OUString();
         n = parseSegment(
             pathRepresentation, n, &seg, &setElement, &templateName);
         if (n == -1) {

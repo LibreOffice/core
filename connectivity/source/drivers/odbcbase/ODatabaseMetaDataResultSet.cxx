@@ -97,7 +97,7 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
     }
-    delete m_pRowStatusArray;
+    delete [] m_pRowStatusArray;
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::disposing(void)

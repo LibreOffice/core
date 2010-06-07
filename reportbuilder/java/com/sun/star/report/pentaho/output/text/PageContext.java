@@ -26,8 +26,9 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.output.text;
 
-import org.jfree.layouting.input.style.values.CSSNumericValue;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
+
+import org.jfree.layouting.input.style.values.CSSNumericValue;
 
 /**
  * Todo: Document me!

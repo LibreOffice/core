@@ -24,4 +24,4 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>

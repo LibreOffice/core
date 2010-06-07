@@ -29,22 +29,32 @@
 
 #include "framework/ViewShellWrapper.hxx"
 #include "framework/Pane.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
 
 #include <com/sun/star/drawing/framework/XPane.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <rtl/uuid.h>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
+using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::rendering::XCanvas;
+using ::com::sun::star::lang::DisposedException;
+
 using ::rtl::OUString;
+using ::sd::toolpanel::ToolPanelViewShell;
 
 namespace sd { namespace framework {
 
@@ -79,6 +89,8 @@ ViewShellWrapper::~ViewShellWrapper (void)
 
 void SAL_CALL ViewShellWrapper::disposing (void)
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     OSL_TRACE("disposing ViewShellWrapper %x", this);
     Reference<awt::XWindow> xWindow (mxWindow);
     if (xWindow.is())
@@ -96,14 +108,6 @@ void SAL_CALL ViewShellWrapper::disposing (void)
 ::boost::shared_ptr<ViewShell> ViewShellWrapper::GetViewShell (void)
 {
     return mpViewShell;
-}
-
-
-
-
-bool ViewShellWrapper::IsUnique (void)
-{
-    return m_refCount==1;
 }
 
 
@@ -177,7 +181,7 @@ const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId (void)
     static Sequence<sal_Int8>* pSequence = NULL;
     if (pSequence == NULL)
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (pSequence == NULL)
         {
             static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);

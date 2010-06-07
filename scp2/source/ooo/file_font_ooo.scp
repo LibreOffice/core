@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+// OpenSymbol
+
 STD_FONT_FILE( gid_File_Fnt_Opensymb, opens___.ttf, OpenSymbol)
 
 // DejaVu fonts
@@ -34,17 +36,8 @@ STD_FONT_FILE( gid_File_Fnt_Opensymb, opens___.ttf, OpenSymbol)
 // DejaVuSans Proportional
 #ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSans, DejaVuSans.ttf, DejaVu Sans) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSans_Bold, DejaVuSans-Bold.ttf, DejaVu Sans Bold) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSans_Oblique, DejaVuSans-Oblique.ttf, DejaVu Sans Oblique) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSans_BoldOblique, DejaVuSans-BoldOblique.ttf, DejaVu Sans Bold Oblique) 
 #endif 
 
@@ -56,51 +49,24 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSansExtraLight, DejaVuSans-ExtraLight.ttf, Dej
 // DejaVuSans Condensed
 #ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed, DejaVuSansCondensed.ttf, DejaVu Sans Condensed) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_Bold, DejaVuSansCondensed-Bold.ttf, DejaVu Sans Condensed Bold) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_Oblique, DejaVuSansCondensed-Oblique.ttf, DejaVu Sans Condensed Oblique) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_BoldOblique, DejaVuSansCondensed-BoldOblique.ttf, DejaVu Sans Condensed Bold Oblique) 
 #endif 
 
 // DejaVuSans Mono
 #ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono, DejaVuSansMono.ttf, DejaVu Sans Mono) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_Bold, DejaVuSansMono-Bold.ttf, DejaVu Sans Mono Bold) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_Oblique, DejaVuSansMono-Oblique.ttf, DejaVu Sans Mono Oblique) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_BoldOblique, DejaVuSansMono-BoldOblique.ttf, DejaVu Sans Mono Bold Oblique) 
 #endif
 
 // DejaVuSerif Proportional
 #ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerif, DejaVuSerif.ttf, DejaVu Serif) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_Bold, DejaVuSerif-Bold.ttf, DejaVu Serif Bold) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_Italic, DejaVuSerif-Italic.ttf, DejaVu Serif Italic) 
-#endif 
-
-#ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_BoldItalic, DejaVuSerif-BoldItalic.ttf, DejaVu Serif Bold Italic) 
 #endif 
 
@@ -115,27 +81,20 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondense
 
 // Liberation fonts
 
+// Liberation Sans Narrow
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Regular, LiberationSansNarrow-Regular.ttf, Liberation Sans Narrow Regular) 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Bold, LiberationSansNarrow-Bold.ttf, Liberation Sans Narrow Bold) 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Italic, LiberationSansNarrow-Italic.ttf, Liberation Sans Narrow Italic) 
+STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_BoldItalic, LiberationSansNarrow-BoldItalic.ttf, Liberation Sans Narrow Bold Italic) 
+#endif
+
 // Liberation Mono
 #ifndef WITHOUT_FONTS 
 #ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_Regular, LiberationMono-Regular.ttf, Liberation Mono Regular) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_Bold, LiberationMono-Bold.ttf, Liberation Mono Bold) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_Italic, LiberationMono-Italic.ttf, Liberation Mono Italic) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_BoldItalic, LiberationMono-BoldItalic.ttf, Liberation Mono Bold Italic) 
 #endif
 #endif
@@ -144,23 +103,8 @@ STD_FONT_FILE( gid_File_Fnt_LiberationMono_BoldItalic, LiberationMono-BoldItalic
 #ifndef WITHOUT_FONTS 
 #ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Regular, LiberationSans-Regular.ttf, Liberation Sans Regular) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Italic, LiberationSans-Italic.ttf, Liberation Sans Italic) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Bold, LiberationSans-Bold.ttf, Liberation Serif Bold) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_BoldItalic, LiberationSans-BoldItalic.ttf, Liberation Sans Bold Italic) 
 #endif
 #endif
@@ -169,23 +113,8 @@ STD_FONT_FILE( gid_File_Fnt_LiberationSans_BoldItalic, LiberationSans-BoldItalic
 #ifndef WITHOUT_FONTS 
 #ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Regular, LiberationSerif-Regular.ttf, Liberation Serif Regular) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Bold, LiberationSerif-Bold.ttf, Liberation Serif Bold) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Italic, LiberationSerif-Italic.ttf, Liberation Serif Italic) 
-#endif
-#endif
-
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_BoldItalic, LiberationSerif-BoldItalic.ttf, Liberation Serif Bold Italic) 
 #endif
 #endif
@@ -205,4 +134,17 @@ STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBold, GenBkBasB.ttf, Gentium Book Ba
 STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicItalic, GenBkBasI.ttf, Gentium Book Basic Bold)
 STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium Book Basic Bold Italic)
 #endif 
+
+// fontconfig updates to allow proper use of local fonts
+
+#ifdef UNX
+#ifndef WITHOUT_FONTS 
+File gid_File_FcLocal_Conf
+    Dir = gid_Dir_Fonts_Truetype;
+    USER_FILE_BODY;
+#   Styles = ();
+    Name = "fc_local.conf";
+End
+#endif
+#endif
 

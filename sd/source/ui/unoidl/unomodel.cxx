@@ -1071,9 +1071,13 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        else if( aType.EqualsAscii( "CalcShape", 26, 9 ) )
         {
             nType = OBJ_OLE2;
+        }
+        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        {
+            nType = OBJ_TABLE;
         }
         else if( aType.EqualsAscii( "OrgChartShape", 26, 13 ) )
         {
@@ -1103,9 +1107,9 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        else if( aType.EqualsAscii( "MediaShape", 26, 10 ) )
         {
-            nType = OBJ_TABLE;
+            nType = OBJ_MEDIA;
         }
         else
         {
@@ -1156,7 +1160,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? (34) : (19) );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? (36) : (19) );
 
     sal_uInt16 i(0);
 
@@ -1199,6 +1203,8 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
         aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HeaderShape"));
         aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlideNumberShape"));
         aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.DateTimeShape"));
+        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.CalcShape"));
+        aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.MediaShape"));
     }
     else
     {

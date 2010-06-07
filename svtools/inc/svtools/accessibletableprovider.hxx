@@ -132,7 +132,7 @@ public:
     virtual BOOL                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
 
     // Window
-    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) = 0;
+    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void                    GrabFocus() = 0;
     virtual XACC                    GetAccessible( BOOL bCreate = TRUE ) = 0;
     virtual Window*                 GetAccessibleParentWindow() const = 0;

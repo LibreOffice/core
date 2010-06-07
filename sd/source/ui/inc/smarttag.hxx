@@ -163,6 +163,7 @@ private:
 
     ::sd::View& mrView;
     SmartTagReference mxSelectedTag;
+    SmartTagReference mxMouseOverTag;
 };
 
 /** a derivation from this handle is the visual representation for a smart tag.

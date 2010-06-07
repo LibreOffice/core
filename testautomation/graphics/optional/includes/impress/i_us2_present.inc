@@ -168,6 +168,7 @@ testcase i_us2_pres1
       SlidesControl.TypeKeys "<HOME>"
       SlidesControl.TypeKeys "<PAGEDOWN>", 10
       SlidesControl.TypeKeys "<RETURN>"
+call sSelectEmptyLayout
    printlog "Insert Smiley, + two circles around the eyes, + two new pupils,"
    printlog "placed at some interesteing place inside the circles."
       Kontext "Toolbar"
@@ -228,8 +229,6 @@ testcase i_us2_pres1
    InsertSlide
    printlog "   Inserted new slide."
    kontext "DocumentImpress"
-   EditSelectAll
-   DocumentImpress.TypeKeys "<DELETE>"
    printlog "Bla bla about everything..."
    call hTextrahmenErstellen ("Bla bla about everything...",20,20,70,30)
 
@@ -237,8 +236,6 @@ testcase i_us2_pres1
    InsertSlide
    printlog "   Inserted new slide."
    kontext "DocumentImpress"
-   EditSelectAll
-   DocumentImpress.TypeKeys "<DELETE>"
    printlog "Write text:  Q & A"
    call hTextrahmenErstellen ("Q & A",20,20,70,30)
    DocumentImpress.TypeKeys "<SHIFT HOME>"
@@ -247,8 +244,7 @@ testcase i_us2_pres1
    printlog "Add a new slide."
    InsertSlide
    kontext "DocumentImpress"
-   EditSelectAll
-   DocumentImpress.TypeKeys "<DELETE>"
+
    printlog "Thanks for listening, time for coffee... (ending)"
    call hTextrahmenErstellen ("Class dismissed...",20,20,70,30)
 

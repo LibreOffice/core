@@ -40,68 +40,102 @@
 '\********************************************************************
 
 testcase i_us_presentation1
-    dim iPictures as integer
+ dim iPictures as integer
     dim PresentationFile1 as string
     PresentationFile1 = ConvertPath ((ConvertPath (gOfficePath + "user\work\PowerPes1.odp")))
     printlog "New impress document"
     Call hNewDocument
-   WaitSlot (2000)
-   kontext "DocumentImpress"
+    Call sSelectEmptyLayout
+    WaitSlot (2000)
+    kontext "DocumentImpress"
+    printlog "Add second Master-Page "
+    ViewMasterPage
+    kontext "Slides"
+    SlidesControl.OpenContextMenu(true)
+    sleep (2)
+    printlog "New master"
+    MenuSelect(MenuGetItemID(1))
+    sleep (1)
+    ViewMasterPage
+    kontext "Slides"
+    SlidesControl.OpenContextMenu(true)
+    sleep (2)
+    MenuSelect(MenuGetItemID(1)) 'New Master
+    sleep (1)
+    printlog "   Inserted second Master-Slide"
 
-   printlog "Add second Master-Page"
-   ViewMasterPage
-   kontext "Slides"
-      SlidesControl.OpenContextMenu(true)
-      sleep (2)
-      MenuSelect(MenuGetItemID(1)) 'New Master
-      sleep (1)
-      printlog "   Inserted second Master-Slide"
+    printlog "set background to picture(Gallery)"
+    Kontext "Gallery"
+    if Gallery.Exists(2) then
+        warnlog "   The Gallery was already visible. Check earlier ran tests for inconsistency."
+        sleep (2)
+    else
+        ToolsGallery
+        WaitSlot (2000)
+    end if
 
-   printlog "Background: picture (Gallery)"
-   Kontext "Gallery"
-   if Gallery.Exists(2) then
-      warnlog "   The Gallery was already visible. Check earlier ran tests for inconsistency."
-      sleep (2)
-   else
-      ToolsGallery
-      WaitSlot (2000)
+    if gOOO = TRUE then   'OpenOffice.org
+        select case iSprache
+            case 01   : iPictures = 1 'English
+            case else : iPictures = 1 'Unknown
+                           warnlog "Please insert the entrienumbers for 'Backgrounds'. Language: " + iSprache
+        end select
+
+    else  ' StarOffice...
+        select case iSprache
+             case 01   : iPictures = 21 'English
+             case 07   : iPictures = 28 'Russian
+             case 31   : iPictures = 04 'Netherlands
+             case 33   : iPictures = 22 'French
+             case 34   : iPictures = 12 'Spanish
+             case 36   : iPictures = 17 'Hungaria
+             case 39   : iPictures = 23 'Italian
+             case 46   : iPictures = 09 'Swedish
+             case 48   : iPictures = 20 'Polish
+             case 49   : iPictures = 11 'German
+             case 55   : iPictures = 16 'Portuguese
+             case 81   : iPictures = 22 'Japanese
+             case 82   : iPictures = 04 'Korean
+             case 86   : iPictures = 06 'Simplified
+             case 88   : iPictures = 17 'Traditional
+             case else : iPictures = 21 'Unknown
+             warnlog "Please insert the entrienumbers for 'Backgrounds'. Language: " + iSprache
+        end select
    end if
 
-   if gOOO = TRUE then   'OpenOffice.org
-      select case iSprache
-         case 01   : iPictures = 1 'English
-         case else : iPictures = 1 'Unknown
-                           warnlog "Please insert the entrienumbers for 'Backgrounds'. Language: " + iSprache
-      end select
+    kontext "Gallery"
+    Gallerys.Select (iPictures)
+    View.TypeKeys "<HOME><RIGHT><RIGHT>"
+    printlog "OpenContextMenu"
+    View.TypeKeys "<SHIFT F10>"
+    sleep (2)
+    MenuSelect(MenuGetItemID(1))
+    sleep (2)
+    MenuSelect(MenuGetItemID(1))
+    sleep (2)
+    printlog "Check that we really got a copy of the object"
+    kontext "DocumentImpress"
+    DocumentImpress.OpenContextMenu(true)
+    sleep (2)
+    MenuSelect 27353
+    sleep (2)
+    Kontext "ExportierenDlg"
+    if ExportierenDlg.IsVisible(5) then
+        printlog "   Gallery-object correctly copied into Slide."
+        ExportierenDlg.Close
+    else
+        warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
+    end if
+    kontext "GraphicObjectbar"
+    if GraphicObjectbar.Exists(5) = FALSE then
+        kontext "DocumentImpress"
+        ViewToolbarsPicture
+    end if
 
-   else  ' StarOffice...
-      select case iSprache
-         case 01   : iPictures = 21 'English
-         case 07   : iPictures = 28 'Russian
-         case 31   : iPictures = 04 'Netherlands
-         case 33   : iPictures = 22 'French
-         case 34   : iPictures = 12 'Spanish
-         case 36   : iPictures = 17 'Hungaria
-         case 39   : iPictures = 23 'Italian
-         case 46   : iPictures = 09 'Swedish
-         case 48   : iPictures = 20 'Polish
-         case 49   : iPictures = 11 'German
-         case 55   : iPictures = 16 'Portuguese
-         case 81   : iPictures = 22 'Japanese
-         case 82   : iPictures = 04 'Korean
-         case 86   : iPictures = 06 'Simplified
-         case 88   : iPictures = 17 'Traditional
-         case else : iPictures = 21 'Unknown
-                           warnlog "Please insert the entrienumbers for 'Backgrounds'. Language: " + iSprache
-      end select
-   end if
-   
-   kontext "Gallery"
-   Gallerys.Select (iPictures)
-
+    Kontext "Gallery"
    View.TypeKeys "<HOME><RIGHT><RIGHT>"
    printlog "'OpenContextMenu"
-   View.TypeKeys "<SHIFT F10>"    
+   View.TypeKeys "<SHIFT F10>"
    sleep (2)
    MenuSelect(MenuGetItemID(1))   'Insert
    sleep (2)
@@ -126,30 +160,31 @@ testcase i_us_presentation1
          ViewToolbarsPicture
       end if
 
-      printlog "50% Transparency"
-      WaitSlot (2000)
-      kontext "GraphicObjectbar" ' the one with Transparency
-      Transparenz.SetText "50"
-      sleep (1)
+    printlog " 50% Transparency"
+    WaitSlot (2000)
+    kontext "GraphicObjectbar"
+    Transparenz.SetText "50"
+    sleep (1)
 
-      printlog "Mosaic 16px x 16px"
-      Filter.TearOff
-      sleep (1)
-      kontext "GraphicFilterBar"
-      Mosaic.Click
-      WaitSlot (2000)
-      kontext "Mosaic"
-         Width.SetText "16"
-         Height.SetText "16"
-         Mosaic.OK
+    printlog "Mosaic 16px x 16px"
+    Filter.TearOff
+    sleep (1)
+    kontext "GraphicFilterBar"
+    Mosaic.Click
+    WaitSlot (2000)
+    kontext "Mosaic"
+    Width.SetText "16"
+    Height.SetText "16"
+    Mosaic.OK
 
-      kontext "GraphicFilterBar"
-      GraphicFilterBar.Close
+    kontext "GraphicFilterBar"
+    GraphicFilterBar.Close
 
-   ToolsGallery
-   WaitSlot (1000)
-   kontext "DocumentImpress"
-   gMouseClick 50,50
+    ToolsGallery
+    WaitSlot (1000)
+    kontext "DocumentImpress"
+    hTypeKeys "<TAB>"
+
     sleep (1)
     FormatPositionAndSize
     WaitSlot (1000)

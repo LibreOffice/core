@@ -124,9 +124,7 @@ public:
         @param pPage
             If a NULL pointer is given then this call is ignored.
     */
-    void AssignLayout (
-        SdPage* pPage,
-        AutoLayout aLayout);
+    void AssignLayout ( SfxRequest& rRequest, PageKind ePageKind );
 
     /** Determine the view id of the view shell.  This corresponds to the
         view id stored in the SfxViewFrame class.

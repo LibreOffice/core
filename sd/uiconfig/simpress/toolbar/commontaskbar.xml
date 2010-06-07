@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:InsertPage" toolbar:helpid="27014"/>
- <toolbar:toolbaritem xlink:href=".uno:ModifyPage" toolbar:visible="false" toolbar:helpid="27046"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertPage" toolbar:helpid="27014" toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:AssignLayout" toolbar:helpid="27435" toolbar:style="dropdownonly"/>
  <toolbar:toolbaritem xlink:href=".uno:PresentationLayout" toolbar:helpid="27064"/>
  <toolbar:toolbaritem xlink:href=".uno:DuplicatePage" toolbar:visible="false" toolbar:helpid="27342"/>
  <toolbar:toolbaritem xlink:href=".uno:ExpandPage" toolbar:visible="false" toolbar:helpid="27343"/>

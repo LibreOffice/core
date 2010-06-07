@@ -93,6 +93,8 @@ public:
     virtual void                Invalidate(USHORT nId = 0);
     BOOL                        IsActive() const;
 
+    /*virtual*/ bool            IsChildWindowAvailable( const USHORT i_nId, const SfxViewFrame* i_pViewFrame ) const;
+
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=NULL );
     static FieldUnit            GetCurrentFieldUnit();
     FieldUnit                   GetFieldUnit() const;

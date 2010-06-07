@@ -62,6 +62,7 @@
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
 
+#include "view/viewoverlaymanager.hxx"
 #include "app.hrc"
 #include "helpids.h"
 #include "strings.hrc"
@@ -171,7 +172,8 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ::Window* pParentWindow, con
 
 DrawViewShell::~DrawViewShell()
 {
-    mpAnnotationManager.release();
+    mpAnnotationManager.reset();
+    mpViewOverlayManager.reset();
 
     OSL_ASSERT (GetViewShell()!=NULL);
 
@@ -416,6 +418,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     }
 
     mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
+    mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
 }
 
 

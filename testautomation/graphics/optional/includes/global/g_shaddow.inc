@@ -63,6 +63,7 @@ testcase tiShaddow
 
    '/// Open application ///'
    Call hNewDocument
+   Call sSelectEmptyLayout
    sleep 1
 
    '/// Import picture ///'

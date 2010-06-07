@@ -322,6 +322,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
         ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
+        ::framework::SetActivateToolPanel( &SfxViewFrame::ActivateToolPanel );
 
         SfxHelp* pSfxHelp = new SfxHelp;
         Application::SetHelp( pSfxHelp );

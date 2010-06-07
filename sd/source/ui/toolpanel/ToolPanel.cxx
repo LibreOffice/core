@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,265 +24,90 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include "taskpane/ToolPanel.hxx"
+#include "ToolPanel.hxx"
+#include "MethodGuard.hxx"
+#include <taskpane/TaskPaneTreeNode.hxx>
 
-#include "TaskPaneFocusManager.hxx"
-#include "taskpane/TitleBar.hxx"
-#include "taskpane/TitledControl.hxx"
-#include "taskpane/ControlContainer.hxx"
-#include "TaskPaneViewShell.hxx"
-#include "taskpane/TaskPaneControlFactory.hxx"
-#include "AccessibleTaskPane.hxx"
+/** === begin UNO includes === **/
+#include <com/sun/star/lang/DisposedException.hpp>
+/** === end UNO includes === **/
 
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include <vcl/decoview.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
-namespace sd { namespace toolpanel {
-
-
-/** Use WB_DIALOGCONTROL as argument for the Control constructor to
-    let VCL handle focus traveling.  In addition the control
-    descriptors have to use WB_TABSTOP.
-*/
-ToolPanel::ToolPanel (
-    Window* pParentWindow,
-    TaskPaneViewShell& rViewShell)
-    : Control (pParentWindow, WB_DIALOGCONTROL),
-      TreeNode (NULL),
-      mrViewShell(rViewShell),
-      mbRearrangeActive(false)
+//......................................................................................................................
+namespace sd { namespace toolpanel
 {
-    SetBackground (Wallpaper ());
-}
+//......................................................................................................................
 
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::lang::DisposedException;
+    using ::com::sun::star::awt::XWindow;
+    using ::com::sun::star::accessibility::XAccessible;
+    /** === end UNO using === **/
 
+    typedef MethodGuard< ToolPanel > ToolPanelGuard;
 
-
-ToolPanel::~ToolPanel (void)
-{
-}
-
-
-
-
-sal_uInt32 ToolPanel::AddControl (
-    ::std::auto_ptr<ControlFactory> pControlFactory,
-    const String& rTitle,
-    ULONG nHelpId,
-    const TitledControl::ClickHandler& rClickHandler)
-{
-    TitledControl* pTitledControl = new TitledControl (
-        this,
-        pControlFactory,
-        rTitle,
-        rClickHandler,
-        TitleBar::TBT_CONTROL_TITLE);
-    ::std::auto_ptr<TreeNode> pChild (pTitledControl);
-
-    // Get the (grand) parent window which is focus-wise our parent.
-    Window* pParent = GetParent();
-    if (pParent != NULL)
-        pParent = pParent->GetParent();
-
-    FocusManager& rFocusManager (FocusManager::Instance());
-    int nControlCount (mpControlContainer->GetControlCount());
-
-    // Add a link up from every control to the parent.  A down link is added
-    // only for the first control so that when entering the sub tool panel
-    // the focus is set to the first control.
-    if (pParent != NULL)
+    //==================================================================================================================
+    //= ToolPanel
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    ToolPanel::ToolPanel( ::std::auto_ptr< TreeNode >& i_rControl )
+        :ToolPanel_Base( m_aMutex )
+        ,m_pControl( i_rControl )
     {
-        if (nControlCount == 1)
-            rFocusManager.RegisterDownLink(pParent, pChild->GetWindow());
-        rFocusManager.RegisterUpLink(pChild->GetWindow(), pParent);
     }
 
-    // Replace the old links for cycling between first and last child by
-    // current ones.
-    if (nControlCount > 0)
+    //------------------------------------------------------------------------------------------------------------------
+    ToolPanel::~ToolPanel()
     {
-        ::Window* pFirst = mpControlContainer->GetControl(0)->GetWindow();
-        ::Window* pLast = mpControlContainer->GetControl(nControlCount-1)->GetWindow();
-        rFocusManager.RemoveLinks(pFirst,pLast);
-        rFocusManager.RemoveLinks(pLast,pFirst);
-
-        rFocusManager.RegisterLink(pFirst,pChild->GetWindow(), KEY_UP);
-        rFocusManager.RegisterLink(pChild->GetWindow(),pFirst, KEY_DOWN);
     }
 
-    pTitledControl->GetWindow()->SetHelpId(nHelpId);
-
-    return mpControlContainer->AddControl (pChild);
-}
-
-
-
-
-void ToolPanel::ListHasChanged (void)
-{
-    mpControlContainer->ListHasChanged ();
-    Rearrange ();
-}
-
-
-
-
-void ToolPanel::Resize (void)
-{
-    Control::Resize();
-    Rearrange ();
-}
-
-
-
-
-void ToolPanel::RequestResize (void)
-{
-    Invalidate();
-    Rearrange ();
-}
-
-
-
-
-/** Subtract the space for the title bars from the available space and
-    give the remaining space to the active control.
-*/
-void ToolPanel::Rearrange (void)
-{
-    // Prevent recursive calls.
-    if ( ! mbRearrangeActive && mpControlContainer->GetVisibleControlCount()>0)
+    //------------------------------------------------------------------------------------------------------------------
+    void ToolPanel::checkDisposed()
     {
-        mbRearrangeActive = true;
+        if ( m_pControl.get() == NULL )
+            throw DisposedException( ::rtl::OUString(), *this );
+    }
 
-        SetBackground (Wallpaper ());
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XWindow > SAL_CALL ToolPanel::getWindow() throw (RuntimeException)
+    {
+        ToolPanelGuard aGuard( *this );
+        return Reference< XWindow >( m_pControl->GetWindow()->GetComponentInterface(), UNO_QUERY_THROW );
+    }
 
-        // Make the area that is covered by the children a little bit
-        // smaller so that a frame is visible arround them.
-        Rectangle aAvailableArea (Point(0,0), GetOutputSizePixel());
-
-        int nWidth = aAvailableArea.GetWidth();
-        sal_uInt32 nControlCount (mpControlContainer->GetControlCount());
-        sal_uInt32 nActiveControlIndex (
-            mpControlContainer->GetActiveControlIndex());
-
-        // Place title bars of controls above the active control and thereby
-        // determine the top of the active control.
-        sal_uInt32 nIndex;
-        for (nIndex=mpControlContainer->GetFirstIndex();
-             nIndex<nActiveControlIndex;
-             nIndex=mpControlContainer->GetNextIndex(nIndex))
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XAccessible > SAL_CALL ToolPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
+    {
+        ToolPanelGuard aGuard( *this );
+        Reference< XAccessible > xAccessible( m_pControl->GetWindow()->GetAccessible( FALSE ) );
+        if ( !xAccessible.is() )
         {
-            TreeNode* pChild = mpControlContainer->GetControl(nIndex);
-            if (pChild != NULL)
-            {
-                sal_uInt32 nHeight = pChild->GetPreferredHeight (nWidth);
-                pChild->GetWindow()->SetPosSizePixel (
-                    aAvailableArea.TopLeft(),
-                    Size(nWidth, nHeight));
-                aAvailableArea.Top() += nHeight;
-            }
+            xAccessible.set( m_pControl->CreateAccessibleObject( i_rParentAccessible ) );
+            m_pControl->GetWindow()->SetAccessible( xAccessible );
         }
-
-        // Place title bars of controls below the active control and thereby
-        // determine the bottom of the active control.
-        for (nIndex=mpControlContainer->GetLastIndex();
-             nIndex<nControlCount && nIndex!=nActiveControlIndex;
-             nIndex=mpControlContainer->GetPreviousIndex(nIndex))
-        {
-            TreeNode* pChild = mpControlContainer->GetControl(nIndex);
-            if (pChild != NULL)
-            {
-                sal_uInt32 nHeight = pChild->GetPreferredHeight (nWidth);
-                pChild->GetWindow()->SetPosSizePixel (
-                    Point(aAvailableArea.Left(),
-                        aAvailableArea.Bottom()-nHeight+1),
-                        Size(nWidth, nHeight));
-                aAvailableArea.Bottom() -= nHeight;
-            }
-        }
-
-        // Finally place the active control.
-        TreeNode* pChild = mpControlContainer->GetControl(nActiveControlIndex);
-        if (pChild != NULL)
-            pChild->GetWindow()->SetPosSizePixel (
-                aAvailableArea.TopLeft(),
-                aAvailableArea.GetSize());
-
-        mbRearrangeActive = false;
+        return xAccessible;
     }
-    else
-        SetBackground (
-            Application::GetSettings().GetStyleSettings().GetDialogColor());
-}
 
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL ToolPanel::disposing()
+    {
+        m_pControl.reset();
+    }
 
-
-
-Size ToolPanel::GetPreferredSize (void)
-{
-    return Size(300,300);
-}
-
-
-
-
-sal_Int32 ToolPanel::GetPreferredWidth (sal_Int32 )
-{
-    return 300;
-}
-
-
-
-
-sal_Int32 ToolPanel::GetPreferredHeight (sal_Int32 )
-{
-    return 300;
-}
-
-
-
-
-bool ToolPanel::IsResizable (void)
-{
-    return true;
-}
-
-
-
-
-::Window* ToolPanel::GetWindow (void)
-{
-    return this;
-}
-
-
-
-
-TaskPaneShellManager* ToolPanel::GetShellManager (void)
-{
-    return &mrViewShell.GetSubShellManager();
-}
-
-
-
-
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible> ToolPanel::CreateAccessibleObject (
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent)
-{
-    return new ::accessibility::AccessibleTaskPane (
-        rxParent,
-        String(SdResId(STR_RIGHT_PANE_TITLE)),
-        String(SdResId(STR_RIGHT_PANE_TITLE)),
-        *this);
-}
-
-} } // end of namespace ::sd::toolpanel
+//......................................................................................................................
+} } // namespace sd::toolpanel
+//......................................................................................................................

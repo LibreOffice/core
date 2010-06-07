@@ -557,7 +557,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
     ExitRestartTheOffice
     printlog "opening new doc to get the Options"
     Call hNewDocument
-    hTypeKeys "OpenNewDoc!"
+    
     printlog "checking states"
     ToolsOptions
     hToolsOptions (sApplication,"Grid")

@@ -70,3 +70,7 @@ String RID_STR_ACC_NAME_BROWSEBUTTON
     Text [ en-US ] = "Browse";
 };
 
+String RID_STR_ACC_DESC_PANELDECL_TABBAR
+{
+    Text [ en-US ] = "Panel Deck Tab Bar";
+};

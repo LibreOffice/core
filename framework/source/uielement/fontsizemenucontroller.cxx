@@ -64,6 +64,7 @@
 #include <svtools/ctrltool.hxx>
 #endif
 #include <dispatch/uieventloghelper.hxx>
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -90,7 +91,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   FontSizeMenuController              
 DEFINE_INIT_SERVICE                     (   FontSizeMenuController, {} )
 
 FontSizeMenuController::FontSizeMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_pHeightArray( 0 ),
     m_bRebuildMenu( sal_True )
 {
@@ -280,7 +281,7 @@ void SAL_CALL FontSizeMenuController::disposing( const EventObject& ) throw ( Ru
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xCurrentFontDispatch.clear();
@@ -297,7 +298,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 
     if ( Event.State >>= aFontDescriptor )
     {
-        ResetableGuard aLock( m_aLock );
+        osl::MutexGuard aLock( m_aMutex );
         m_aFontDescriptor = aFontDescriptor;
 
         if ( m_xPopupMenu.is() )
@@ -306,7 +307,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
     }
     else if ( Event.State >>= aFontHeight )
     {
-        ResetableGuard aLock( m_aLock );
+        osl::MutexGuard aLock( m_aMutex );
         m_aFontHeight = aFontHeight;
 
         if ( m_xPopupMenu.is() )
@@ -341,16 +342,15 @@ void FontSizeMenuController::impl_setPopupMenu()
 
 void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" ));
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.unlock();
+    aLock.clear();
 
     if ( xDispatch.is() )
     {
@@ -358,6 +358,6 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
         xDispatch->removeStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
     }
 
-    PopupMenuControllerBase::updatePopupMenu();
+    svt::PopupMenuControllerBase::updatePopupMenu();
 }
 }

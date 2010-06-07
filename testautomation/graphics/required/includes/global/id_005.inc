@@ -964,6 +964,7 @@ testcase tiFormatGroup
 
     printlog "open application"
     Call hNewDocument
+    Call sSelectEmptyLayout
     printlog "create 2 rectangles"
     hRechteckErstellen ( 10, 10, 20, 20 )
     hRechteckErstellen ( 30, 30, 40, 40 )

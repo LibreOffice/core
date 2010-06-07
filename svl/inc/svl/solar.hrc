@@ -99,8 +99,8 @@
 #define RID_GOODIES_START           (RID_LIB_START+7400)
 #define RID_GOODIES_END             (RID_LIB_START+7449)
 
-#define RID_CHANNEL_START           (RID_LIB_START+7450)
-#define RID_CHANNEL_END             (RID_LIB_START+7899)
+#define RID_SVL_START               (RID_LIB_START+7450)
+#define RID_SVL_END                 (RID_LIB_START+7899)
 
 #define RID_CHAOS_START             (RID_LIB_START+7900)
 #define RID_CHAOS_END               (RID_LIB_START+7999)

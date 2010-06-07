@@ -44,7 +44,6 @@ LIB1OBJFILES= \
         $(SLO)$/fontworkgallery.obj\
         $(SLO)$/extrusioncontrols.obj \
         $(SLO)$/tbcontrl.obj	\
-        $(SLO)$/toolbarmenu.obj \
         $(SLO)$/tbxcolorupdate.obj
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib

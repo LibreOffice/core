@@ -190,12 +190,12 @@ protected:
     MSWordSections& operator=( const MSWordSections& );
 public:
     MSWordSections( MSWordExportBase& rExport );
-    ~MSWordSections();
+    virtual ~MSWordSections();
 
-    void AppendSep( const SwPageDesc* pPd,
+    void AppendSection( const SwPageDesc* pPd,
                     const SwSectionFmt* pSectionFmt = 0,
                     ULONG nLnNumRestartNo = 0 );
-    void AppendSep( const SwFmtPageDesc& rPd,
+    void AppendSection( const SwFmtPageDesc& rPd,
                     const SwNode& rNd,
                     const SwSectionFmt* pSectionFmt,
                     ULONG nLnNumRestartNo );

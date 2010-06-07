@@ -26,8 +26,8 @@
  ************************************************************************/
 package com.sun.star.report;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A repository for writing. Providing a repository always assumes,

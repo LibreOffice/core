@@ -219,6 +219,36 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
     */
     string getQueryWithSubstitution()
         raises (com::sun::star::sdbc::SQLException);
+
+    /** sets a new query for the composer, which may be expanded by filters, group by, having
+        and sort criteria.
+        @param Command
+            is the command which should be executed, the type of command depends
+            on the CommandType.
+
+            <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
+            means in case the <member>Command</member> specifies an SQL statement, the inherited
+            <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+            becomes relevant:<br/>
+            It then can be to used to specify whether the SQL statement should be analyzed on the
+            client side before sending it to the database server.<br/>
+            The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+            is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+            which are not standard SQL, to your database.</p>
+
+            @see com::sun::star::sdb::CommandType
+            @see com::sun::star::sdbc::RowSet::EscapeProcessing
+        @param  CommandType
+            is the type of the command.
+            @see com::sun::star::sdb::CommandType
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't a single select statement
+            or the statement isn't valid
+            or the statement can not be parsed.
+     */
+    void setCommand([in] string Command ,[in] long CommandType)
+            raises (com::sun::star::sdbc::SQLException);
 };
 
 //=============================================================================

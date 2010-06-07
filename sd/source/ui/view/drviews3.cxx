@@ -90,6 +90,7 @@
 #include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
 #include <sfx2/ipclient.hxx>
+#include <tools/diagnose_ex.h>
 #include "ViewShellBase.hxx"
 #include "FormShellManager.hxx"
 #include "LayerTabBar.hxx"
@@ -413,7 +414,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
             catch (RuntimeException&)
             {
-                DBG_ASSERT(false, "caught exception while handline SID_RELOAD");
+                DBG_UNHANDLED_EXCEPTION();
             }
 
             // We have to return immediately to avoid accessing this object.

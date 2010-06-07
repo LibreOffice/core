@@ -87,7 +87,7 @@ public:
 // Wang Xu Ming -- 2009-8-17
 // DataPilot Migration - Cache&&Performance
     const SCROW* GetNameIds() const    { return pData; }
-    const SCROW   GetNameIdForIndex( long nIndexValue ) const;
+    SCROW   GetNameIdForIndex( long nIndexValue ) const;
 // End Comments
 };
 

@@ -30,7 +30,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <svtools/filter.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>

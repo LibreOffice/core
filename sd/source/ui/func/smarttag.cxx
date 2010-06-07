@@ -172,6 +172,12 @@ void SmartTagSet::add( const SmartTagReference& xTag )
 {
     maSet.insert( xTag );
     mrView.InvalidateAllWin();
+
+    if( xTag == mxMouseOverTag )
+        mxMouseOverTag.clear();
+
+    if( xTag == mxSelectedTag )
+        mxSelectedTag.clear();
 }
 
 // --------------------------------------------------------------------
@@ -182,6 +188,12 @@ void SmartTagSet::remove( const SmartTagReference& xTag )
     if( aIter != maSet.end() )
         maSet.erase( aIter );
     mrView.InvalidateAllWin();
+
+    if( xTag == mxMouseOverTag )
+        mxMouseOverTag.clear();
+
+    if( xTag == mxSelectedTag )
+        mxSelectedTag.clear();
 }
 
 // --------------------------------------------------------------------
@@ -193,6 +205,8 @@ void SmartTagSet::Dispose()
     for( std::set< SmartTagReference >::iterator aIter( aSet.begin() ); aIter != aSet.end(); )
         (*aIter++)->Dispose();
     mrView.InvalidateAllWin();
+    mxMouseOverTag.clear();
+    mxSelectedTag.clear();
 }
 
 // --------------------------------------------------------------------

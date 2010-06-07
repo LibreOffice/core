@@ -290,7 +290,7 @@ void ScDPInitState::RemoveMember()
         --nCount;
 }
 
-const SCROW ScDPInitState::GetNameIdForIndex( long nIndexValue ) const
+SCROW ScDPInitState::GetNameIdForIndex( long nIndexValue ) const
 {
     for (long i=0; i<nCount; i++)
         if ( pIndex[i] == nIndexValue )

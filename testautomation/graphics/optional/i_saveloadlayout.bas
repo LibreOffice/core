@@ -41,11 +41,7 @@ sub main
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tSaveLoadLayoutEmpty
     Call tSaveLoadLayoutText
-    Call tSaveLoadLayoutPicture
-    Call tSaveLoadLayoutOutline
-    Call tSaveLoadLayoutChart
-    Call tSaveLoadLayoutSpreadsheet
-    Call tSaveLoadLayoutOLE
+    Call tSaveLoadLayoutContent
 
     Call hStatusOut
 end sub

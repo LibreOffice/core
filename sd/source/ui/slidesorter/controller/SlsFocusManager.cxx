@@ -317,7 +317,7 @@ void FocusManager::SetFocusToToolBox (void)
         {
             PaneDockingWindow* pPaneDockingWindow = dynamic_cast<PaneDockingWindow*>(pDockingWindow);
             if (pPaneDockingWindow != NULL)
-                pPaneDockingWindow->GetTitleToolBox()->GrabFocus();
+                pPaneDockingWindow->GetToolBox().GrabFocus();
         }
     }
 }

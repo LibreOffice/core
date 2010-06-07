@@ -331,6 +331,7 @@ testcase tLineConnect
     end if
     
     Call hNewDocument   '/// New Impress / Draw document ///'
+    Call sSelectEmptyLayout
     sleep 3
     kontext "GraphicObjectbar"
     if GraphicObjectbar.Exists then

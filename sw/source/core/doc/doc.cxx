@@ -477,6 +477,16 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
             delete pPrt;
         pPrt = pP;
 
+        // our printer should always use TWIP. Don't rely on this being set in ViewShell::InitPrt, there
+        // are situations where this isn't called.
+        // #i108712# / 2010-02-26 / frank.schoenheit@sun.com
+        if ( pPrt )
+        {
+            MapMode aMapMode( pPrt->GetMapMode() );
+            aMapMode.SetMapUnit( MAP_TWIP );
+            pPrt->SetMapMode( aMapMode );
+        }
+
         if ( pDrawModel && !get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
             pDrawModel->SetRefDevice( pPrt );
     }

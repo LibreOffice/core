@@ -50,12 +50,14 @@ SLOFILES =      								\
     $(SLO)$/TitleBar.obj 						\
     $(SLO)$/TitleToolBox.obj					\
     $(SLO)$/TitledControl.obj 					\
-    $(SLO)$/ToolPanel.obj						\
     $(SLO)$/TaskPaneControlFactory.obj 			\
     $(SLO)$/TaskPaneFocusManager.obj 			\
     $(SLO)$/TaskPaneShellManager.obj 			\
     $(SLO)$/TaskPaneTreeNode.obj 			    \
-    $(SLO)$/TaskPaneViewShell.obj 				\
+    $(SLO)$/ToolPanel.obj                       \
+    $(SLO)$/ToolPanelViewShell.obj              \
+    $(SLO)$/ToolPanelFactory.obj                \
+    $(SLO)$/ToolPanelUIElement.obj              \
                                                 \
     $(SLO)$/EmptyWindow.obj						\
     $(SLO)$/LayoutMenu.obj                      \

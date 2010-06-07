@@ -36,6 +36,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module ui {
@@ -64,7 +68,26 @@ interface XUIElement : com::sun::star::uno::XInterface
             a special purpose interface which depends on the type of the user
             interface element.
     */
-    com::sun::star::uno::XInterface getRealInterface();
+    ::com::sun::star::uno::XInterface getRealInterface();
+
+    /** determines the document frame to which this element is bound to.
+
+        <p>The life time of a user interface element does not explicitly depend on the
+        frame itself but on the visible component attached to the frame. It is possible
+        to exchange the visible component of a frame and that will lead to the end of
+        life of all user interface elements.</p>
+    */
+    [readonly, attribute] ::com::sun::star::frame::XFrame Frame;
+
+    /** a resource URL which is a unique identifier of a user interface element.
+    */
+    [readonly, attribute] string ResourceURL;
+
+    /** determines the type of the user interface element.
+
+        @see UIElementType
+    */
+    [readonly, attribute] short  Type;
 };
 
 }; }; }; };

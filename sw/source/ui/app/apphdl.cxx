@@ -765,6 +765,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             DELETEZ(pWebToolbarConfig)  ;
             DELETEZ(pAuthorNames)       ;
             DELETEZ(pDBConfig);
+
             if (pColorConfig != 0) {
                 pColorConfig->RemoveListener(this);
                 DELETEZ(pColorConfig);

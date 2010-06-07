@@ -1096,7 +1096,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         args.push_back(std::string( argv[i]) );
 
     for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
-        delete argv[iXhp + 3];
+        delete[] argv[iXhp + 3];
     delete[] argv;
 
     rtl::OString aOExtensionLanguageRoot = rtl::OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );

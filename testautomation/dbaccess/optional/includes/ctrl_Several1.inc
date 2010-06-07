@@ -586,7 +586,7 @@ testcase tComboBox
 endcase
 '--------------------------------------------------------------------------------------
 
-testcase tLabelField	
+testcase tLabelField
     
     '/// Open a new document,
     printlog "Open a new document,"

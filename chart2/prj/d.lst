@@ -4,8 +4,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\accelerator
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\accelerator\en-US
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
@@ -20,7 +18,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\statusbar
 
 ..\uiconfig\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\schart\menubar\*.xml
 ..\uiconfig\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\schart\toolbar\*.xml
-..\uiconfig\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\schart\accelerator\en-US\*.xml
 ..\uiconfig\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\schart\statusbar\*.xml
 
 mkdir: %_DEST%\inc%_EXT%\chart2

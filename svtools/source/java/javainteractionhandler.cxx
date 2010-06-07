@@ -30,7 +30,7 @@
 
 
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <tools/resid.hxx>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>

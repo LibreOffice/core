@@ -244,6 +244,7 @@ testcase tOLE_SaveLoad
     filename = ConvertPath (gOfficePath + "user\work\oletest." & ExtensionString)
     printlog "Create a new document."
     Call hNewDocument
+    Call sSelectEmptyLayout
     printlog "Insert->Object->OLE Object..."
     InsertObjectOLEObject
     Kontext "OLEObjektInsert"

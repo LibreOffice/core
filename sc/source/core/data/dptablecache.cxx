@@ -243,7 +243,7 @@ BOOL ScDPItemData::operator==( const ScDPItemData& r ) const
 {
     if ( IsValue() )
     {
-        if( HasDatePart() != r.HasDatePart()  || HasDatePart() && mnDatePart != r.mnDatePart )
+        if( (HasDatePart() != r.HasDatePart())  || (HasDatePart() && mnDatePart != r.mnDatePart) )
             return FALSE;
 
 // Wang Xu Ming -- 1/9/2009

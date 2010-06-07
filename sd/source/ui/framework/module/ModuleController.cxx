@@ -35,6 +35,8 @@
 #include <boost/bind.hpp>
 #include <hash_map>
 
+#include <tools/diagnose_ex.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -168,7 +170,7 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
     }
     catch (Exception&)
     {
-        OSL_TRACE("ERROR in ModuleController::LoadFactories");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

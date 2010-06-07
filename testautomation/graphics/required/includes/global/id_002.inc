@@ -232,7 +232,7 @@ testcase tiEditFields
 
     hTypeKeys "<ESCAPE>"
     printlog "With a Tab we catch always the Object"
-    hTypeKeys "<Tab>"                  
+    hTypeKeys "<Tab>",3
     printlog "Here we enter Edit-Mode and therefore also the right place"
     hTypeKeys "<F2>"
     printlog "Here we enter Edit-Mode and therefore also the right place"
@@ -406,7 +406,7 @@ testcase tiEditObjectProperties
     gMouseDoubleClick 1,1
 
     printlog " select frame "
-    hTypekeys "<tab>"
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Properties "
     kontext
@@ -448,7 +448,7 @@ testcase tiEditObjectEdit
     gMouseClick 20,1
 
     printlog " select object "
-    hTypekeys "<tab>"
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Edit "
     EditObjectEdit
@@ -464,7 +464,7 @@ testcase tiEditObjectEdit
     endcatch
 
     printlog " select object "
-    EditSelectAll
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Save Copy As "
     EditObjectSaveCopyAs
@@ -531,6 +531,7 @@ testcase tiEditHyperlink
 
     printlog " open application"
     hNewDocument
+    Call sSelectEmptyLayout
     printlog " Insert->Hyperlink"
     InsertHyperlink
     WaitSlot (5000)
@@ -555,7 +556,9 @@ testcase tiEditHyperlink
         Uebernehmen.Click
         Hyperlink.Close
         printlog " presupposition to enable edit->hyperlink: <TAB><F2><STRG+a>"
-        hTypeKeys "<TAB><F2>"
+        hTypeKeys "<TAB>"
+        hTypeKeys "<F2>"
+        hTypeKeys "<MOD1 SHIFT RIGHT>"
     EditSelectAll
     try
         printlog " Edit->Hyperlink "

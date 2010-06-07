@@ -276,4 +276,5 @@ UDK_3.6 { # OOo 3.3
     global:
         ?disposeWeakConnectionPoint@OWeakObject@cppu@@IAEXXZ;
         ?clear@WeakReferenceHelper@uno@star@sun@com@@QAAXXZ;
+        ?createOneInstanceComponentFactory@cppu@@YA?AV?$Reference@VXSingleComponentFactory@lang@star@sun@com@@@uno@star@sun@com@@P6A?AV?$Reference@VXInterface@uno@star@sun@com@@@3456@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@3456@@ZABVOUString@rtl@@ABV?$Sequence@VOUString@rtl@@@3456@PAU_rtl_ModuleCount@@@Z;
 } UDK_3.5;

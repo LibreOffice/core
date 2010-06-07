@@ -80,7 +80,7 @@ public:
         createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxToolBarId)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException);
 
     virtual void SAL_CALL
         releaseResource (

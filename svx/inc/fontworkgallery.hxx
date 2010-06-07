@@ -29,16 +29,16 @@
 #ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
 #define _SVX_FONTWORK_GALLERY_DIALOG_HXX
 
-#ifndef _FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
-#endif
-#include <svtools/valueset.hxx>
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#include <vcl/dialog.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
+
+#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/field.hxx>
+
+#include <svtools/valueset.hxx>
+
+#include <sfx2/tbxctrl.hxx>
 
 #include <vector>
 
@@ -50,137 +50,12 @@ class SdrObject;
 class SdrModel;
 
 class SfxBindings;
-class ToolbarMenu;
 class SfxStatusForwarder;
 
 //------------------------------------------------------------------------
 
 namespace svx
 {
-
-class FontWorkAlignmentWindow : public SfxPopupWindow
-{
-    using FloatingWindow::StateChanged;
-private:
-    ToolbarMenu* mpMenu;
-
-    Image maImgAlgin1;
-    Image maImgAlgin2;
-    Image maImgAlgin3;
-    Image maImgAlgin4;
-    Image maImgAlgin5;
-    Image maImgAlgin1h;
-    Image maImgAlgin2h;
-    Image maImgAlgin3h;
-    Image maImgAlgin4h;
-    Image maImgAlgin5h;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
-
-    bool        mbPopupMode;
-
-    DECL_LINK( SelectHdl, void * );
-
-    void    implSetAlignment( int nAlignmentMode, bool bEnabled );
-    void    implInit();
-
-protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
-    /** This function is called when the window gets the focus.  It grabs
-        the focus to the line ends value set so that it can be controlled with
-        the keyboard.
-    */
-    virtual void GetFocus (void);
-
-public:
-    FontWorkAlignmentWindow( USHORT nId,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-    FontWorkAlignmentWindow( USHORT nId,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                             Window* pParentWindow );
-    ~FontWorkAlignmentWindow();
-
-    void            StartSelection();
-
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-};
-
-class SVX_DLLPUBLIC FontWorkAlignmentControl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    FontWorkAlignmentControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
-    ~FontWorkAlignmentControl();
-
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-};
-
-//------------------------------------------------------------------------
-
-class FontWorkCharacterSpacingWindow : public SfxPopupWindow
-{
-    using FloatingWindow::StateChanged;
-private:
-    ToolbarMenu* mpMenu;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
-
-    bool        mbPopupMode;
-
-    DECL_LINK( SelectHdl, void * );
-
-    void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
-    void    implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
-    void    implInit();
-
-protected:
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
-
-    /** This function is called when the window gets the focus.  It grabs
-        the focus to the line ends value set so that it can be controlled with
-        the keyboard.
-    */
-    virtual void GetFocus (void);
-
-public:
-    FontWorkCharacterSpacingWindow( USHORT nId,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-    FontWorkCharacterSpacingWindow( USHORT nId,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                            Window* pParentWindow );
-    ~FontWorkCharacterSpacingWindow();
-
-    void            StartSelection();
-
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-};
-
-class SVX_DLLPUBLIC FontWorkCharacterSpacingControl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    FontWorkCharacterSpacingControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
-    ~FontWorkCharacterSpacingControl();
-
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-};
-
-//------------------------------------------------------------------------
 
 class SVX_DLLPUBLIC FontWorkShapeTypeControl : public SfxToolBoxControl
 {
@@ -192,8 +67,6 @@ public:
     ~FontWorkShapeTypeControl();
 
     virtual void                Select( BOOL bMod1 = FALSE );
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 };

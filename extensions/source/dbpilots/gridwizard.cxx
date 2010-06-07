@@ -33,6 +33,7 @@
 #include <comphelper/stl_types.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/debug.hxx>
 #include "dbptools.hxx"
@@ -52,6 +53,7 @@ namespace dbp
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::awt;
     using namespace ::svt;
 
     //=====================================================================
@@ -111,6 +113,7 @@ namespace dbp
         static const ::rtl::OUString s_sDataFieldProperty   = ::rtl::OUString::createFromAscii("DataField");
         static const ::rtl::OUString s_sLabelProperty       = ::rtl::OUString::createFromAscii("Label");
         static const ::rtl::OUString s_sWidthProperty       = ::rtl::OUString::createFromAscii("Width");
+        static const ::rtl::OUString s_sMouseWheelBehavior  = ::rtl::OUString::createFromAscii("MouseWheelBehavior");
         static const ::rtl::OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
@@ -202,23 +205,24 @@ namespace dbp
                 // create a (grid)column for the (resultset)column
                 try
                 {
-                    Reference< XPropertySet > xColumn = xColumnFactory->createColumn(*pColumnServiceName);
+                    Reference< XPropertySet > xColumn( xColumnFactory->createColumn(*pColumnServiceName), UNO_SET_THROW );
+                    Reference< XPropertySetInfo > xColumnPSI( xColumn->getPropertySetInfo(), UNO_SET_THROW );
 
                     ::rtl::OUString sColumnName(*pColumnServiceName);
                     disambiguateName(xExistenceChecker, sColumnName);
 
-                    if (xColumn.is())
-                    {
-                        // the data field the column should be bound to
-                        xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
-                        // the label
-                        xColumn->setPropertyValue(s_sLabelProperty, makeAny(::rtl::OUString(*pFormFieldName) += *pColumnLabelPostfix));
-                        // the width (<void/> => column will be auto-sized)
-                        xColumn->setPropertyValue(s_sWidthProperty, Any());
+                    // the data field the column should be bound to
+                    xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
+                    // the label
+                    xColumn->setPropertyValue(s_sLabelProperty, makeAny(::rtl::OUString(*pFormFieldName) += *pColumnLabelPostfix));
+                    // the width (<void/> => column will be auto-sized)
+                    xColumn->setPropertyValue(s_sWidthProperty, Any());
 
-                        // insert the column
-                        xColumnContainer->insertByName(sColumnName, makeAny(xColumn));
-                    }
+                    if ( xColumnPSI->hasPropertyByName( s_sMouseWheelBehavior ) )
+                        xColumn->setPropertyValue( s_sMouseWheelBehavior, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
+
+                    // insert the column
+                    xColumnContainer->insertByName(sColumnName, makeAny(xColumn));
                 }
                 catch(Exception&)
                 {

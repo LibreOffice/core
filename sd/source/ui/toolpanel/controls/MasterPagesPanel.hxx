@@ -37,6 +37,7 @@ class ViewShellBase;
 namespace sd { namespace toolpanel {
 class ControlFactory;
 class TreeNode;
+class ToolPanelViewShell;
 } }
 
 namespace sd { namespace toolpanel { namespace controls {
@@ -50,11 +51,20 @@ class MasterPagesPanel
 {
 public:
     MasterPagesPanel (
-        TreeNode* pParent,
-        ViewShellBase& rBase);
+        ::Window& i_rParentWindow,
+        ToolPanelViewShell& i_rPanelViewShell);
     virtual ~MasterPagesPanel (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
+    // TreeNode overridables
+    virtual TaskPaneShellManager* GetShellManager (void);
+
+    static std::auto_ptr<ControlFactory> CreateControlFactory (ToolPanelViewShell& i_rToolPanelShell);
+
+private:
+    void    impl_construct( ViewShellBase& rBase );
+
+private:
+    ToolPanelViewShell* m_pPanelViewShell;
 };
 
 } } } // end of namespace ::sd::toolpanel::controls

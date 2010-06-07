@@ -209,6 +209,24 @@ namespace svt
             {
                 return NULL;
             }
+
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+                createAccessibleToolPanelDeck(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*i_rAccessibleParent*/,
+                    ::svt::ToolPanelDeck& /*i_rPanelDeck*/
+                )
+            {
+                return NULL;
+            }
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+                createAccessibleToolPanelTabBar(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*i_rAccessibleParent*/,
+                    ::svt::IToolPanelDeck& /*i_rPanelDeck*/,
+                    ::svt::PanelTabBar& /*i_rTabBar*/
+                )
+            {
+                return NULL;
+            }
         };
 
         //----------------------------------------------------------------

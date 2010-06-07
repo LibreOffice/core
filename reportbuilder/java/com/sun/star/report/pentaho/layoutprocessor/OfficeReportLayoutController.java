@@ -28,6 +28,7 @@ package com.sun.star.report.pentaho.layoutprocessor;
 
 import com.sun.star.report.pentaho.model.OfficeReport;
 import com.sun.star.report.pentaho.model.VariablesDeclarationSection;
+
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;

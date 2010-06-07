@@ -566,7 +566,7 @@
 #include "svl/svdde.hxx"
 #include "svl/svstdarr.hxx"
 #include "svtools/svtdata.hxx"
-#include "svl/svtools.hrc"
+#include "svtools/svtools.hrc"
 #include "unotools/syslocale.hxx"
 #include "unotools/syslocaleoptions.hxx"
 #include "svl/szitem.hxx"

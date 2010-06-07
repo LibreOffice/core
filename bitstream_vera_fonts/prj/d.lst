@@ -1,8 +1,0 @@
-mkdir: %COMMON_DEST%\pck%_EXT%
-..\%__SRC%\misc\build\dejavu-fonts-ttf-2.30\ttf\*.ttf             %COMMON_DEST%\pck%_EXT%\*.ttf
-..\%__SRC%\misc\build\dejavu-ttf-2.30\LICENSE           %COMMON_DEST%\pck%_EXT%\LICENSE_dejavu
-..\%__SRC%\misc\build\liberation-fonts-1.05\*.ttf            %COMMON_DEST%\pck%_EXT%\*.ttf
-..\%__SRC%\misc\build\liberation-fonts-1.05\License          %COMMON_DEST%\pck%_EXT%\LICENSE_liberation
-..\%__SRC%\misc\build\gentiumbasic-fonts-1.10\*.ttf          %COMMON_DEST%\pck%_EXT%\*.ttf
-..\%__SRC%\misc\build\gentiumbasic-fonts-1.10\OFL.txt        %COMMON_DEST%\pck%_EXT%\LICENSE_gentium
-

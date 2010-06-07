@@ -401,7 +401,7 @@ void TableControl::FillAccessibleStateSet(
     }
 }
 
-Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }

@@ -50,7 +50,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -65,6 +64,7 @@
 #include <rtl/ustrbuf.hxx>
 //#include <tools/solar.hrc>
 #include <dispatch/uieventloghelper.hxx>
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -97,7 +97,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   HeaderMenuController                
 DEFINE_INIT_SERVICE                     (   HeaderMenuController, {} )
 
 HeaderMenuController::HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool _bFooter ) :
-    PopupMenuControllerBase( xServiceManager )
+    svt::PopupMenuControllerBase( xServiceManager )
     ,m_bFooter(_bFooter)
 {
 }
@@ -221,7 +221,7 @@ void SAL_CALL HeaderMenuController::disposing( const EventObject& ) throw ( Runt
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
@@ -238,7 +238,7 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 
     if ( Event.State >>= xModel )
     {
-        ResetableGuard aLock( m_aLock );
+        osl::MutexGuard aLock( m_aMutex );
         m_xModel = xModel;
         if ( m_xPopupMenu.is() )
             fillPopupMenu( xModel, m_xPopupMenu );
@@ -258,18 +258,17 @@ void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,
 
 void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
     Reference< com::sun::star::frame::XModel > xModel( m_xModel );
-    aLock.unlock();
+    aLock.clear();
 
     if ( !xModel.is() )
-        PopupMenuControllerBase::updatePopupMenu();
+        svt::PopupMenuControllerBase::updatePopupMenu();
 
-    aLock.lock();
+    aLock.reset();
     if ( m_xPopupMenu.is() && m_xModel.is() )
         fillPopupMenu( m_xModel, m_xPopupMenu );
 }

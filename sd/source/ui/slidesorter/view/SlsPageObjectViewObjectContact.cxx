@@ -61,6 +61,7 @@
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::sdr::contact;
 using namespace ::sd::slidesorter::model;
@@ -1166,7 +1167,7 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PageObjectViewObjectContact::GetPreview: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aBitmap;

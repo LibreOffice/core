@@ -51,7 +51,9 @@ EXCEPTIONSFILES=\
         $(SLO)$/scriptedtext.obj\
         $(SLO)$/fmtfield.obj \
         $(SLO)$/inettbc.obj \
-        $(SLO)$/valueacc.obj
+        $(SLO)$/valueacc.obj \
+        $(SLO)$/toolbarmenu.obj \
+        $(SLO)$/toolbarmenuacc.obj
 
 SLOFILES=\
       $(EXCEPTIONSFILES) \

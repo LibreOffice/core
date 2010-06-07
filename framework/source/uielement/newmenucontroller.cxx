@@ -67,6 +67,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -326,7 +327,7 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
 }
 
 NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_bShowImages( sal_True ),
     m_bHiContrast( sal_False ),
     m_bNewMenu( sal_False ),
@@ -399,7 +400,7 @@ void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( Runtime
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
@@ -423,12 +424,12 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
     Reference< XMultiServiceFactory > xServiceManager;
     Reference< XURLTransformer >      xURLTransformer;
 
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu          = m_xPopupMenu;
     xDispatchProvider   = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
     xServiceManager     = m_xServiceManager;
     xURLTransformer     = m_xURLTransformer;
-    aLock.unlock();
+    aLock.clear();
 
     css::util::URL aTargetURL;
     Sequence< PropertyValue > aArgsList( 1 );
@@ -548,12 +549,12 @@ void NewMenuController::impl_setPopupMenu()
 // XInitialization
 void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
-        PopupMenuControllerBase::initialize( aArguments );
+        svt::PopupMenuControllerBase::initialize( aArguments );
 
         if ( m_bInitialized )
         {

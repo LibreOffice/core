@@ -3,22 +3,26 @@
  */
 package com.sun.star.report.pentaho.parser.text;
 
-import java.util.ArrayList;
-
+import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.FixedContentReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.FormattedTextReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.ImageReadHandler;
-import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.parser.rpt.SubDocumentReadHandler;
+
+import java.util.ArrayList;
 import java.util.List;
-import org.jfree.report.structure.Section;
+
 import org.jfree.report.structure.Element;
+import org.jfree.report.structure.Section;
 import org.jfree.report.structure.StaticText;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
 
 /**
  * This is a generic implementation that accepts all input and adds special

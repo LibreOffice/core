@@ -26,11 +26,13 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.model;
 
-import java.util.HashMap;
-
 import com.sun.star.report.pentaho.OfficeNamespaces;
+
+import java.util.HashMap;
 import java.util.Map;
+
 import org.jfree.report.structure.Element;
+
 
 /**
  * Todo: Document me!

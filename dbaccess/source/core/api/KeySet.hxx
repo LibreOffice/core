@@ -51,28 +51,30 @@ namespace dbaccess
 {
     struct SelectColumnDescription
     {
+        ::rtl::OUString sRealName;      // may be empty
+        ::rtl::OUString sTableName;      // may be empty
+        ::rtl::OUString sDefaultValue;
         sal_Int32       nPosition;
         sal_Int32       nType;
         sal_Int32       nScale;
         sal_Bool        bNullable;
 
-        ::rtl::OUString sDefaultValue;
+
 
         SelectColumnDescription()
             :nPosition( 0 )
             ,nType( 0 )
             ,nScale( 0 )
             ,bNullable(sal_False)
-            ,sDefaultValue()
         {
         }
 
         SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, sal_Int32 _nScale,sal_Bool _bNullable, const ::rtl::OUString& _rDefaultValue )
-            :nPosition( _nPosition )
+            :sDefaultValue( _rDefaultValue )
+            ,nPosition( _nPosition )
             ,nType( _nType )
             ,nScale( _nScale )
             ,bNullable(_bNullable)
-            ,sDefaultValue( _rDefaultValue )
         {
         }
     };
@@ -82,7 +84,8 @@ namespace dbaccess
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
                             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
-                            SelectColumnsMetaData& _rColumnAssignments /* out */);
+                            SelectColumnsMetaData& o_rColumnNames /* out */,
+                            bool i_bAppendTableName = false);
 
     typedef ::std::pair<ORowSetRow,::std::pair<sal_Int32,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow> > > OKeySetValue;
     typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;

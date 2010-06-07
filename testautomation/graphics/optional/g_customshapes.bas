@@ -36,6 +36,7 @@ sub main
     Call hStatusIn ( "Graphics","g_customshapes.bas"  )
 
     use "graphics\tools\id_tools.inc"
+    use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_customshapes.inc"
 
     PrintLog "--------------------- " + gApplication + " -------------------"

@@ -120,6 +120,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svdundo.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdrobjectfilter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1684,6 +1685,11 @@ const Rectangle& SdrObject::GetLogicRect() const
 void SdrObject::NbcSetLogicRect(const Rectangle& rRect)
 {
     NbcSetSnapRect(rRect);
+}
+
+void SdrObject::AdjustToMaxRect( const Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
+{
+    SetLogicRect( rMaxRect );
 }
 
 void SdrObject::SetSnapRect(const Rectangle& rRect)
@@ -3263,6 +3269,13 @@ void SdrObjFactory::RemoveMakeUserDataHdl(const Link& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
     rLL.RemoveLink(rLink);
+}
+
+namespace svx
+{
+    ISdrObjectFilter::~ISdrObjectFilter()
+    {
+    }
 }
 
 // eof

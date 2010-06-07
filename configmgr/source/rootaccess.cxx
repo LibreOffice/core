@@ -113,6 +113,11 @@ void RootAccess::release() throw () {
     Access::release();
 }
 
+rtl::OUString RootAccess::getAbsolutePathRepresentation() {
+    getNode(); // turn pathRepresentation_ into canonic form
+    return pathRepresentation_;
+}
+
 rtl::OUString RootAccess::getLocale() const {
     return locale_;
 }
@@ -136,9 +141,10 @@ rtl::OUString RootAccess::getRelativePathRepresentation() {
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
+        rtl::OUString canonic;
         int finalizedLayer;
         node_ = getComponents().resolvePathRepresentation(
-            pathRepresentation_, &path_, &finalizedLayer);
+            pathRepresentation_, &canonic, &path_, &finalizedLayer);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
@@ -150,6 +156,7 @@ rtl::Reference< Node > RootAccess::getNode() {
                 // queryInterface on it would cause trouble; therefore,
                 // RuntimeException.Context is left null here
         }
+        pathRepresentation_ = canonic;
         OSL_ASSERT(!path_.empty());
         name_ = path_.back();
         finalized_ = finalizedLayer != Data::NO_LAYER;
@@ -285,7 +292,7 @@ void RootAccess::commitChanges()
         Modifications globalMods;
         commitChildChanges(
             ((getComponents().resolvePathRepresentation(
-                  pathRepresentation_, 0, &finalizedLayer)
+                  pathRepresentation_, 0, 0, &finalizedLayer)
               == node_) &&
              finalizedLayer == Data::NO_LAYER),
             &globalMods);

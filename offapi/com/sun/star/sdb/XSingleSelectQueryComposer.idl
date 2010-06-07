@@ -96,14 +96,16 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         The value property must be supported by the <type scope="com::sun::star::sdb">DataColumn</type>.
         @param column
             the column which is used to create a filter
-        @paran  andCriteria
+        @param  andCriteria
             If <TRUE/> the filter condition will be appended as an AND condition, otherwise
             the new filter condition will be appended as OR criteria.
             E.g. (xx AND bb AND cc) OR newCriteria
+        @param  filterOperator
+            The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
-    void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria)
+    void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
             raises (com::sun::star::sdbc::SQLException);
 
     //-------------------------------------------------------------------------
@@ -170,14 +172,16 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         providing the name and the value for the filter.
         @param column
             the column which is used to create a filter
-        @paran  andCriteria
+        @param  andCriteria
             If <TRUE/> the filter condition will be appended as an AND condition, otherwise
             the new filter condition will be appended as OR criteria.
             E.g. (xx AND bb AND cc) OR newCriteria
+        @param  filterOperator
+            The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
-    void appendHavingClauseByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria)
+    void appendHavingClauseByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
             raises (com::sun::star::sdbc::SQLException);
 
     //-------------------------------------------------------------------------

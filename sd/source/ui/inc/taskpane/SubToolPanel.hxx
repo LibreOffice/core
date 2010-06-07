@@ -40,8 +40,6 @@ class Window;
 
 namespace sd { namespace toolpanel {
 
-class ToolPanel;
-
 /** The sub tool panel is in function similar to the tool panel.  It
     differes in two points.  First, it is a control that can be used
     as element in a tool panel and thus is actually a nested tool
@@ -67,6 +65,7 @@ public:
         parent.  This will usually be a child window.
     */
     SubToolPanel (TreeNode* pParent);
+    SubToolPanel (Window& i_rParentWindow);
     virtual ~SubToolPanel (void);
 
     /** Add a control to the sub panel.

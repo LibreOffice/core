@@ -64,9 +64,9 @@
 #include "OutlineViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "PresentationViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
+#include "taskpane/PanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "DocumentRenderer.hxx"
@@ -91,6 +91,7 @@
 #include <svl/whiter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "fubullet.hxx"
 
@@ -808,7 +809,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
-        case SID_RIGHT_PANE:
+        case SID_TASKPANE:
             mpImpl->SetPaneVisibility(
                 rRequest,
                 framework::FrameworkHelper::msRightPaneURL,
@@ -829,7 +830,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             // The full screen mode is not supported.  Ignore the request.
             break;
 
-        case SID_TASK_PANE:
+        case SID_SHOW_TOOL_PANEL:
             mpImpl->ProcessTaskPaneSlot(rRequest);
             break;
 
@@ -1257,7 +1258,7 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
     return *mpImpl->mpCustomHandleManager.get();
 }
 
-::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const ::rtl::OUString& aCmdURL )
 {
     ::rtl::OUString aLabel;
 
@@ -1266,7 +1267,7 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
         Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
-        Reference< XInterface > xIfac( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY_THROW );
+        Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
 
@@ -1296,6 +1297,12 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
     }
 
     return aLabel;
+}
+
+::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+{
+    Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
+    return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
 }
 
 
@@ -1487,9 +1494,9 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xConfigurationController->requestResourceDeactivation(
                 xPaneId);
     }
-    catch (RuntimeException&)
+    catch (const Exception &)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::SetPaneVisibility(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1534,7 +1541,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
                         break;
 
-                    case SID_RIGHT_PANE:
+                    case SID_TASKPANE:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msRightPaneURL);
                         break;
@@ -1625,7 +1632,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::GetSlotState(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 }
@@ -1638,8 +1645,8 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
     BOOL bShowToolPanel = TRUE;
-    toolpanel::TaskPaneViewShell::PanelId nPanelId (
-        toolpanel::TaskPaneViewShell::PID_UNKNOWN);
+    toolpanel::PanelId nPanelId (
+        toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
 
     // Extract the given arguments.
@@ -1660,7 +1667,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
             if (pPanelId != NULL)
             {
                 nPanelId = static_cast<
-                    toolpanel::TaskPaneViewShell::PanelId>(
+                    toolpanel::PanelId>(
                         pPanelId->GetValue());
                 bPanelIdGiven = true;
             }
@@ -1670,7 +1677,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Ignore the request for some combinations of panels and view
     // shell types.
     if (bPanelIdGiven
-        && ! (nPanelId==toolpanel::TaskPaneViewShell::PID_LAYOUT
+        && ! (nPanelId==toolpanel::PID_LAYOUT
             && mrBase.GetMainViewShell()!=NULL
             && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
     {

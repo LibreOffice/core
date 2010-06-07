@@ -259,7 +259,9 @@ STDMETHODIMP VistaFilePickerEventHandler::OnSelectionChange(IFileDialog* /*pDial
 
 //-----------------------------------------------------------------------------------------
 STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*                 /*pDialog*/  ,
-                                                           IShellItem*                  /*pItem*/   ,
+
+                                                           IShellItem*                  /*pItem*/    ,
+
                                                            FDE_SHAREVIOLATION_RESPONSE* /*pResponse*/)
 {
     impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
@@ -308,9 +310,12 @@ STDMETHODIMP VistaFilePickerEventHandler::OnOverwrite(IFileDialog*            /*
 
 //-----------------------------------------------------------------------------------------
 STDMETHODIMP VistaFilePickerEventHandler::OnItemSelected(IFileDialogCustomize* /*pCustomize*/,
-                                                         DWORD                 nIDCtl    ,
+
+                                                         DWORD                   nIDCtl      ,
+
                                                          DWORD                 /*nIDItem*/   )
 {
+
     impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl ));
     return S_OK;
 }
@@ -319,6 +324,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnItemSelected(IFileDialogCustomize* /
 STDMETHODIMP VistaFilePickerEventHandler::OnButtonClicked(IFileDialogCustomize* /*pCustomize*/,
                                                           DWORD                 nIDCtl    )
 {
+
     impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl));
     return S_OK;
 }
@@ -353,7 +359,9 @@ STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustom
     if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)
         m_pInternalNotify->onAutoExtensionChanged(bChecked);
 
+
     impl_sendEvent(E_CONTROL_STATE_CHANGED, static_cast<sal_Int16>( nIDCtl));
+
     return S_OK;
 }
 

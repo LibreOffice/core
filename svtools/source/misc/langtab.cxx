@@ -39,7 +39,7 @@
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/syslocale.hxx>

@@ -189,7 +189,7 @@ namespace svt { namespace table
         ::utl::AccessibleStateSetHelper& rStateSet,
     AccessibleTableControlObjType eObjType ) const;
     //// Window
-    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow );
+    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void GrabFocus();
     virtual XACC GetAccessible( BOOL bCreate = TRUE );
     virtual Window* GetAccessibleParentWindow() const;
@@ -222,7 +222,6 @@ namespace svt { namespace table
     ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
     void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
     void selectionChanged(bool _bChanged);
-
 
     protected:
     /// retrieves the XAccessible implementation associated with the GridControl instance
