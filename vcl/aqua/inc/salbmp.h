@@ -36,7 +36,6 @@
 #include "salconst.h"
 #include "vcl/salvd.hxx"
 #include "salcolorutils.hxx"
-#include "salpixmaputils.hxx"
 #include "vcl/salbmp.hxx"
 #include "salgdi.h"
 #include "basebmp/bitmapdevice.hxx"
