@@ -1999,7 +1999,7 @@ End
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ku_Tr
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr;
 	Name = "dict-ku-TR.oxt";
 	Styles = (PACKED, PATCH, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;

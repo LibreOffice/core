@@ -43,7 +43,6 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_C05_Faq,
             gid_Brand_Dir_Share_Config,
             gid_Brand_Dir_Share_Extension,
-            gid_Brand_Dir_Share_Extension_Install,
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Registry,
@@ -295,6 +294,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_It
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-it";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-ku-TR";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Lt
