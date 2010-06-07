@@ -55,7 +55,7 @@ module com { module sun { module star { module deployment {
     removed from the repository.
     </p>
     <p>
-    All interface methods do neither register or revoke an extension.
+    All interface methods do neither register nor revoke an extension.
     This happens exclusively by <type>XExtensionManager</type>.
     </p>
     <p>
@@ -82,7 +82,8 @@ interface XPackageManager
     */
     interface com::sun::star::util::XModifyBroadcaster;
 
-    /** returns the underlying deployment context.
+    /** returns the underlying deployment context, that is,
+        the name of the repository..
 
         @return
                 underlying deployment context

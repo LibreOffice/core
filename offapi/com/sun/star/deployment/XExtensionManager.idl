@@ -41,27 +41,10 @@
 
 module com { module sun { module star { module deployment {
 
-/** The <type>XExtensionManager</type> interface is used to add or remove
-    packages to a specific deployment context.
-    Packages are deployable files, e.g. scripts or UNO components.
-    <p>
-    Adding an UNO package means that a copy of the package is stored
-    with respect to the context of the manager and the package is registered,
-    thus activated.
-    </p>
-    <p>
-    Removing an UNO package means that the previously added package is revoked,
-    thus deactivated, first and then removed from the context.
-    </p>
-    <p>
-    Objects of this interface are created using the
-    <type>XPackageManagerFactory</type> service resp. the singleton
-    <code>
-    /singletons/com.sun.star.deployment.thePackageManagerFactory
-    </code>.
-    </p>
+/** The <type>XExtensionManager</type> interface is used to manage extensions
+    in the user, shared and bundled repository.
 
-    @see thePackageManagerFactory
+    @see ExtensionManager
     @since OOo 3.3.0
 */
 interface XExtensionManager
@@ -90,7 +73,7 @@ interface XExtensionManager
     */
     com::sun::star::task::XAbortChannel createAbortChannel();
 
-    /** adds an UNO package.
+    /** adds an extension.
 
         The properties argument is currently only used to suppress the license information
         for shared extensions.
@@ -120,7 +103,7 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** removes an UNO package.
+    /** removes an extension.
 
         @param identifier
                package identifier
@@ -190,7 +173,7 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets all currently deployed extensions, including disabled
+    /** gets all currently installed extensions, including disabled
         user extensions.
 
         @param repository
@@ -201,7 +184,7 @@ interface XExtensionManager
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               all currently deployed packages
+               all currently installed packages
     */
     sequence<XPackage> getDeployedExtensions(
         [in] string repository,
@@ -213,18 +196,18 @@ interface XExtensionManager
                 com::sun::star::lang::IllegalArgumentException);
 
 
-    /** gets a deployed extensions.
+    /** gets an installed extensions.
 
         @param repositroy
                the name of the repository
         @param identifier
-               package identifier
+               extension identifier
         @param fileName
-               package file name
+               extension file name
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <type>XPackage</type> handle
+               <type>XPackage</type> object
     */
     XPackage getDeployedExtension(
         [in] string repository,
@@ -271,7 +254,7 @@ interface XExtensionManager
 
 
     /** Expert feature: erases the underlying registry cache and reinstalls
-        all previously added packages.  Please keep in mind that all
+        all previously added extensions.  Please keep in mind that all
         registration status get lost.
         <p>
         Please use this in case of suspected cache inconsistencies only.
@@ -294,7 +277,7 @@ interface XExtensionManager
 
 
     /** synchronizes the extension database with the contents of the extensions
-       folder.
+       folder of shared and bundled extensinos.
 
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
@@ -323,6 +306,12 @@ interface XExtensionManager
         Extensions which allow the license to be suppressed, that is, it does not
         need to be displayed, and which are installed with the corresponding option,
         are also not returned.
+
+        Extensions returned by this functions are not returned by
+        <member>XExtensionManger::getDeployedExtension</member>
+        <member>XExtensionManger::getDeployedExtensions</member>
+        <member>XExtensionManger::getAllExtensions</member>
+        <member>XExtensionManger::getExtensionsWithSameIdentifier</member>
     */
     sequence<XPackage> getExtensionsWithUnacceptedLicenses(
         [in] string repository,
@@ -331,8 +320,7 @@ interface XExtensionManager
                 com::sun::star::lang::IllegalArgumentException);
 
     /** check if all prerequisites for the extension are fulfilled
-        and registeres it if possible.
-        See also <member>XPackageManager::checkPrerequisites</member>
+        and activates it, if possible.
     */
     long checkPrerequisitesAndEnable(
         [in] XPackage extension,
