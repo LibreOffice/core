@@ -120,7 +120,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
             nLowResult = ( ( ( nLowResult >> 14 ) & 0x0001 ) | ( ( nLowResult << 1 ) & 0x7FFF ) ) ^ nChar;
         }
 
-        nLowResult = ( ( ( nLowResult >> 14 ) & 0x001 ) | ( ( nLowResult << 1 ) & 0x7FF ) ) ^ nLen ^ 0xCE4B;
+        nLowResult = (sal_uInt16)( ( ( ( nLowResult >> 14 ) & 0x001 ) | ( ( nLowResult << 1 ) & 0x7FF ) ) ^ nLen ^ 0xCE4B );
 
         nResult = ( nHighResult << 16 ) | nLowResult;
     }
@@ -135,8 +135,8 @@ Sequence< sal_Int8 > DocPasswordHelper::GetWordHashAsSequence(
     sal_uInt32 nHash = GetWordHashAsUINT32( aUString );
     Sequence< sal_Int8 > aResult( 4 );
     aResult[0] = ( nHash >> 24 );
-    aResult[1] = ( nHash & 0xFF0000 );
-    aResult[2] = ( nHash & 0xFF00 );
+    aResult[1] = ( ( nHash >> 16 ) & 0xFF );
+    aResult[2] = ( ( nHash >> 8 ) & 0xFF );
     aResult[3] = ( nHash & 0xFF );
 
     return aResult;
