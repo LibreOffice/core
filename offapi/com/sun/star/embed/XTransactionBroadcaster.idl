@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module embed {
 
 /** broadcasts messege in case transacted object is commited or reverted.
  */
-interface XTransactionBroadcaster: com::sun::star::uno::XInterface
+published interface XTransactionBroadcaster: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** adds the specified listener to receive events about commits and
