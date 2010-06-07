@@ -5324,7 +5324,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
     DffRecordHeader aTextHd;
     rIn >> aTextHd;
     sal_uInt32 nMaxLen = aTextHd.nRecLen;
-    if ( nMaxLen > 0xFFFF )
+    if ( nMaxLen >= 0xFFFF )
         nMaxLen = 0xFFFE;
 
     if( aTextHd.nRecType == PPT_PST_TextCharsAtom )
