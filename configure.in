@@ -5134,7 +5134,7 @@ if test "$_os" = "Linux"; then
    fi
 fi
 
-if "$_os" != "WNT"; then
+if test "$_os" != "WNT"; then
   AC_CHECK_FUNCS(getopt, HAVE_GETOPT=YES, [HAVE_GETOPT=NO])
   AC_CHECK_FUNCS(readdir_r, HAVE_READDIR_R=YES, [HAVE_READDIR_R=NO])
   if test "$HAVE_GETOPT" = "YES" -a "$HAVE_READDIR_R" = "YES"; then
