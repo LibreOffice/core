@@ -25,52 +25,35 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_LOCALIZEDPROPERTYNODE_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_LOCALIZEDPROPERTYNODE_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_UPDATE_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_UPDATE_HXX
 
 #include "sal/config.h"
 
-#include "rtl/ref.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/factory.hxx"
+#include "rtl/unload.h"
+#include "sal/types.h"
 
-#include "node.hxx"
-#include "nodemap.hxx"
-#include "type.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
+namespace com { namespace sun { namespace star { namespace lang {
+    class XSingleComponentFactory;
 } } } }
 namespace rtl { class OUString; }
 
-namespace configmgr {
+namespace configmgr { namespace update {
 
-class LocalizedPropertyNode: public Node {
-public:
-    LocalizedPropertyNode(int layer, Type staticType, bool nillable);
+rtl::OUString SAL_CALL getImplementationName();
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+getSupportedServiceNames();
 
-    virtual NodeMap & getMembers();
+com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
+SAL_CALL createFactory(
+    cppu::ComponentFactoryFunc, rtl::OUString const &,
+    com::sun::star::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
+    SAL_THROW(());
 
-    Type getStaticType() const;
-
-    bool isNillable() const;
-
-private:
-    LocalizedPropertyNode(LocalizedPropertyNode const & other);
-
-    virtual ~LocalizedPropertyNode();
-
-    virtual Kind kind() const;
-
-    virtual void clear();
-
-    Type staticType_;
-        // as specified in the component-schema (TYPE_ANY, ...,
-        // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
-    bool nillable_;
-    NodeMap members_;
-};
-
-}
+} }
 
 #endif

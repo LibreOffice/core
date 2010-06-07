@@ -81,8 +81,10 @@ executeLoginDialog(
             nFlags |= LF_NO_ACCOUNT;
         if (!(rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_USER_NAME))
             nFlags |= LF_USERNAME_READONLY;
+
         if (!bSavePassword)
             nFlags |= LF_NO_SAVEPASSWORD;
+
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
@@ -137,8 +139,7 @@ executeLoginDialog(
     }
 }
 
-void
-getRememberModes(
+void getRememberModes(
     uno::Sequence< ucb::RememberAuthentication > const & rRememberModes,
     ucb::RememberAuthentication & rPreferredMode,
     ucb::RememberAuthentication & rAlternateMode )
@@ -276,7 +277,7 @@ handleAuthenticationRequest_(
         ePreferredRememberMode == ucb::RememberAuthentication_PERSISTENT);
 
     aInfo.SetCanUseSystemCredentials(bCanUseSystemCredentials);
-    aInfo.SetIsUseSystemCredentials(bDefaultUseSystemCredentials);
+    aInfo.SetIsUseSystemCredentials( bDefaultUseSystemCredentials );
     aInfo.SetModifyAccount(rRequest.HasAccount
                            && xSupplyAuthentication.is()
                            && xSupplyAuthentication->canSetAccount());
@@ -331,54 +332,76 @@ handleAuthenticationRequest_(
         //////////////////////////
         // Third, store credentials in password container.
 
-        if (aInfo.GetIsUseSystemCredentials())
-        {
-            if (aInfo.GetIsRememberPassword() ||
-                (eAlternateRememberMode == ucb::RememberAuthentication_SESSION))
-            {
-                if (!aPwContainerHelper.addRecord(
-                        rURL.getLength() ? rURL : rRequest.ServerName,
-                        rtl::OUString(), // empty u/p -> sys creds
-                        uno::Sequence< rtl::OUString >(),
-                        xIH,
-                        !aInfo.GetIsRememberPassword()
-                            ? false /* SESSION */
-                            : ePreferredRememberMode
-                                == ucb::RememberAuthentication_PERSISTENT))
-                {
-                    xSupplyAuthentication->setRememberPassword(
-                        ucb::RememberAuthentication_NO);
-                }
-            }
-        }
-        // Empty user name can not be valid:
-        else if (aInfo.GetUserName().Len() != 0)
-        {
-            if (aInfo.GetIsRememberPassword() ||
-                (eAlternateRememberMode == ucb::RememberAuthentication_SESSION))
-            {
-                uno::Sequence< rtl::OUString >
-                    aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
-                aPassList[0] = aInfo.GetPassword();
-                if (aInfo.GetAccount().Len() != 0)
-                    aPassList[1] = aInfo.GetAccount();
+          if ( aInfo.GetIsUseSystemCredentials() )
+          {
+              if (aInfo.GetIsRememberPassword())
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          rtl::OUString(), // empty u/p -> sys creds
+                          uno::Sequence< rtl::OUString >(),
+                          xIH,
+                          ePreferredRememberMode
+                              == ucb::RememberAuthentication_PERSISTENT))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+              else if (eAlternateRememberMode
+                           == ucb::RememberAuthentication_SESSION)
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          rtl::OUString(), // empty u/p -> sys creds
+                          uno::Sequence< rtl::OUString >(),
+                          xIH,
+                          false /* SESSION */))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+          }
+          // Empty user name can not be valid:
+          else if (aInfo.GetUserName().Len() != 0)
+          {
+              uno::Sequence< rtl::OUString >
+                  aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
+              aPassList[0] = aInfo.GetPassword();
+              if (aInfo.GetAccount().Len() != 0)
+                  aPassList[1] = aInfo.GetAccount();
 
-                if (!aPwContainerHelper.addRecord(
-                        rURL.getLength() ? rURL : rRequest.ServerName,
-                        aInfo.GetUserName(),
-                        aPassList,
-                        xIH,
-                        !aInfo.GetIsRememberPassword()
-                            ? false /* SESSION */
-                            : ePreferredRememberMode
-                                == ucb::RememberAuthentication_PERSISTENT))
-                {
-                    xSupplyAuthentication->setRememberPassword(
-                        ucb::RememberAuthentication_NO);
-                }
-            }
-        }
-        break;
+              if (aInfo.GetIsRememberPassword())
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          aInfo.GetUserName(),
+                          aPassList,
+                          xIH,
+                          ePreferredRememberMode
+                              == ucb::RememberAuthentication_PERSISTENT))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+              else if (eAlternateRememberMode
+                           == ucb::RememberAuthentication_SESSION)
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          aInfo.GetUserName(),
+                          aPassList,
+                          xIH,
+                          false /* SESSION */))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+          }
+          break;
 
     case ERRCODE_BUTTON_RETRY:
         if (xRetry.is())
