@@ -28,17 +28,22 @@
 *
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-// Comment out precompiled statement due to redefinition errors
-//#include "precompiled_sfx2.hxx"
-
-#include "syspath.hxx"
-
 #ifdef WNT
 #ifdef _MSC_VER
 #pragma warning(disable:4917)
 #endif
 #include <shlobj.h>
+
+// Copied from sal/types.h to circumvent problems with precompiled headers
+// and redefinitions of BOOL, INT32 and other types. Unfortunately tools
+// also define these type incompatible with Win32 types which leads from
+// time to time to very nasty compilation errors. If someone finds a better
+// way to solve these probs please remove this copied part!
+#if ( defined(WIN32) && !defined(__MINGW32__) )
+    typedef wchar_t             sal_Unicode;
+#else
+    typedef sal_uInt16          sal_Unicode;
+#endif
 
 static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 {
@@ -65,10 +70,10 @@ static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 
 #endif
 
-bool SystemPath::GetUserTemplateLocation(sal_Unicode* pFolder, int nSize )
+extern "C" bool GetUserTemplateLocation(sal_Unicode* pFolder, int nSize)
 {
 #ifdef WNT
-    return _SHGetSpecialFolderW32(CSIDL_TEMPLATES, pFolder, nSize );
+    return _SHGetSpecialFolderW32( CSIDL_TEMPLATES, pFolder, nSize );
 #else
     (void)pFolder;
     (void)nSize;

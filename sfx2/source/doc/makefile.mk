@@ -84,6 +84,7 @@ SLOFILES =	\
         $(SLO)$/sfxacldetect.obj \
         $(SLO)$/docstoragemodifylistener.obj \
         $(SLO)$/querytemplate.obj \
+        $(SLO)$/syspath.obj \
         $(SLO)$/syspathw32.obj
 
 #                $(SLO)$/applet.obj \
