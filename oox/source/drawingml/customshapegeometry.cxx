@@ -30,8 +30,9 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <comphelper/stl_types.hxx>
 #include <hash_map>
-
 #include "oox/helper/helper.hxx"
+#include "oox/helper/attributelist.hxx"
+#include "oox/token/tokenmap.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
@@ -39,6 +40,8 @@
 using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
@@ -94,25 +97,376 @@ typedef std::hash_map< rtl::OUString, FormularCommand, comphelper::UStringHash, 
 
 static const FormulaCommandHMap* pCommandHashMap;
 
+//
+rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
+{
+    rtl::OUString aRet;
+    switch( rParameter.Type )
+    {
+        case EnhancedCustomShapeParameterType::NORMAL :
+        {
+            if ( rParameter.Value.getValueTypeClass() == TypeClass_DOUBLE )
+            {
+                double fValue;
+                if ( rParameter.Value >>= fValue )
+                    aRet = rtl::OUString::valueOf( fValue );
+            }
+            else
+            {
+                sal_Int32 nValue;
+                if ( rParameter.Value >>= nValue )
+                    aRet = rtl::OUString::valueOf( nValue );
+            }
+        }
+        break;
+        case EnhancedCustomShapeParameterType::EQUATION :
+        {
+            if ( rParameter.Value.getValueTypeClass() == TypeClass_LONG )
+            {
+                sal_Int32 nFormulaIndex;
+                if ( rParameter.Value >>= nFormulaIndex )
+                {
+                    aRet = CREATE_OUSTRING( "?" )
+                        + rtl::OUString::valueOf( nFormulaIndex )
+                            + CREATE_OUSTRING( " " );
+                }
+            }
+            else
+            {
+                // ups... we should have an index here and not the formula name
+                sal_Bool bNoGood = sal_True;
+            }
+        }
+        break;
+        case EnhancedCustomShapeParameterType::ADJUSTMENT :
+        {
+            if ( rParameter.Value.getValueTypeClass() == TypeClass_LONG )
+            {
+                sal_Int32 nAdjustmentIndex;
+                if ( rParameter.Value >>= nAdjustmentIndex )
+                {
+                    aRet = CREATE_OUSTRING( "$" )
+                        + rtl::OUString::valueOf( nAdjustmentIndex )
+                            + CREATE_OUSTRING( " " );
+                }
+            }
+            else
+            {
+                // ups... we should have an index here and not the formula name
+                sal_Bool bNotGood = sal_True;
+            }
+        }
+        break;
+        case EnhancedCustomShapeParameterType::LEFT :
+        {
+            const rtl::OUString sLeft( CREATE_OUSTRING( "left" ) );
+            aRet = sLeft;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::TOP :
+        {
+            const rtl::OUString sTop( CREATE_OUSTRING( "top" ) );
+            aRet = sTop;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::RIGHT :
+        {
+            const rtl::OUString sRight( CREATE_OUSTRING( "right" ) );
+            aRet = sRight;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::BOTTOM :
+        {
+            const rtl::OUString sBottom( CREATE_OUSTRING( "bottom" ) );
+            aRet = sBottom;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::XSTRETCH :
+        {
+            const rtl::OUString sXStretch( CREATE_OUSTRING( "xstretch" ) );
+            aRet = sXStretch;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::YSTRETCH :
+        {
+            const rtl::OUString sYStretch( CREATE_OUSTRING( "ystretch" ) );
+            aRet = sYStretch;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::HASSTROKE :
+        {
+            const rtl::OUString sHasStroke( CREATE_OUSTRING( "hasstroke" ) );
+            aRet = sHasStroke;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::HASFILL :
+        {
+            const rtl::OUString sHasFill( CREATE_OUSTRING( "hasfill" ) );
+            aRet = sHasFill;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::WIDTH :
+        {
+            const rtl::OUString sWidth( CREATE_OUSTRING( "width" ) );
+            aRet = sWidth;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::HEIGHT :
+        {
+            const rtl::OUString sHeight( CREATE_OUSTRING( "height" ) );
+            aRet = sHeight;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::LOGWIDTH :
+        {
+            const rtl::OUString sLogWidth( CREATE_OUSTRING( "logwidth" ) );
+            aRet = sLogWidth;
+        }
+        break;
+        case EnhancedCustomShapeParameterType::LOGHEIGHT :
+        {
+            const rtl::OUString sLogHeight( CREATE_OUSTRING( "logheight" ) );
+            aRet = sLogHeight;
+        }
+        break;
+    }
+    return aRet;
+}
+
+// ---------------------------------------------------------------------
+
+static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const::rtl::OUString& rValue, sal_Bool bNoSymbols )
+{
+    com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
+    if ( rValue.getLength() )
+    {
+        sal_Bool    bConstant = sal_True;
+        sal_Int32   nConstant = 0;
+        sal_Char    nVal = 0;
+
+        // first check if its a constant value
+        switch( StaticTokenMap::get().getTokenFromUnicode( rValue ) )
+        {
+            case XML_3cd4 : nConstant = 270 * 60000; break;
+            case XML_3cd8 : nConstant = 135 * 60000; break;
+            case XML_5cd8 : nConstant = 225 * 60000; break;
+            case XML_7cd8 : nConstant = 315 * 60000; break;
+            case XML_cd2  : nConstant = 180 * 60000; break;
+            case XML_cd4  : nConstant =  90 * 60000; break;
+            case XML_cd8  : nConstant =  45 * 60000; break;
+
+            case XML_b :    // variable height of the shape defined in spPr
+            case XML_h :
+            {
+                if ( bNoSymbols )
+                {
+                    CustomShapeGuide aGuide;
+                    aGuide.maName = rValue;
+                    aGuide.maFormula = CREATE_OUSTRING( "height" );
+
+                    aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
+                    aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                }
+                else
+                    aRet.Type = EnhancedCustomShapeParameterType::HEIGHT;   // TODO: HEIGHT needs to be implemented
+            }
+            break;
+
+
+            case XML_hd8 :  // !!PASSTHROUGH INTENDED
+                nVal += 2;  // */ h 1.0 8.0
+            case XML_hd6 :  // */ h 1.0 6.0
+                nVal++;
+            case XML_hd5 :  // */ h 1.0 5.0
+                nVal++;
+            case XML_hd4 :  // */ h 1.0 4.0
+                nVal += 2;
+            case XML_hd2 :  // */ h 1.0 2.0
+            case XML_vc :   // */ h 1.0 2.0
+            {
+                nVal += '2';
+
+                CustomShapeGuide aGuide;
+                aGuide.maName = rValue;
+                aGuide.maFormula = CREATE_OUSTRING( "height/" ) + rtl::OUString( nVal );
+
+                aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
+                aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+            }
+            break;
+
+            case XML_t :
+            case XML_l :
+            {
+                nConstant = 0;
+                aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
+            }
+            break;
+
+            case XML_ls :   // longest side: max w h
+            {
+                CustomShapeGuide aGuide;
+                aGuide.maName = rValue;
+                aGuide.maFormula = CREATE_OUSTRING( "max(width,height)" );
+
+                aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
+                aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+            }
+            break;
+            case XML_ss :   // shortest side: min w h
+            {
+                CustomShapeGuide aGuide;
+                aGuide.maName = rValue;
+                aGuide.maFormula = CREATE_OUSTRING( "min(width,height)" );
+
+                aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
+                aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+            }
+            break;
+            case XML_ssd8 : // */ ss 1.0 8.0
+                nVal += 2;
+            case XML_ssd6 : // */ ss 1.0 6.0
+                nVal += 2;
+            case XML_ssd4 : // */ ss 1.0 4.0
+                nVal += 2;
+            case XML_ssd2 : // */ ss 1.0 2.0
+            {
+                nVal += '2';
+
+                CustomShapeGuide aGuide;
+                aGuide.maName = rValue;
+                aGuide.maFormula = CREATE_OUSTRING( "min(width,height)/" ) + rtl::OUString( nVal );
+
+                aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
+                aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+            }
+            break;
+
+            case XML_r :    // variable width of the shape defined in spPr
+            case XML_w :
+            {
+                if ( bNoSymbols )
+                {
+                    CustomShapeGuide aGuide;
+                    aGuide.maName = rValue;
+                    aGuide.maFormula = CREATE_OUSTRING( "width" );
+
+                    aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
+                    aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                }
+                else
+                    aRet.Type = EnhancedCustomShapeParameterType::WIDTH;
+            }
+            break;
+
+            case XML_wd10 : // */ w 1.0 10.0
+                nVal += 2;
+            case XML_wd8 :  // */ w 1.0 8.0
+                nVal += 2;
+            case XML_wd6 :  // */ w 1.0 6.0
+                nVal++;
+            case XML_wd5 :  // */ w 1.0 5.0
+                nVal++;
+            case XML_wd4 :  // */ w 1.0 4.0
+                nVal += 2;
+            case XML_hc :   // */ w 1.0 2.0
+            case XML_wd2 :  // */ w 1.0 2.0
+            {
+                nVal += '2';
+
+                CustomShapeGuide aGuide;
+                aGuide.maName = rValue;
+                aGuide.maFormula = CREATE_OUSTRING( "width/" ) + rtl::OUString( nVal );
+
+                aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
+                aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+            }
+            break;
+
+            default:
+                bConstant = sal_False;
+            break;
+        }
+        if ( bConstant )
+        {
+            if ( nConstant )
+            {
+                aRet.Value = Any( nConstant );
+                aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
+            }
+        }
+        else
+        {
+            sal_Unicode n = rValue[ 0 ];
+            if ( ( n == '+' ) || ( n == '-' ) )
+            {
+                if ( rValue.getLength() > 0 )
+                    n = rValue[ 1 ];
+            }
+            if ( ( n >= '0' ) && ( n <= '9' ) )
+            {   // seems to be a ST_Coordinate
+                aRet.Value = Any( rValue.toInt32() );
+                aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
+            }
+            else
+            {
+                sal_Int32 nGuideIndex = CustomShapeProperties::GetCustomShapeGuideValue( rCustomShapeProperties.getAdjustmentGuideList(), rValue );
+                if ( nGuideIndex >= 0 )
+                {
+                    aRet.Value = Any( nGuideIndex );
+                    aRet.Type = EnhancedCustomShapeParameterType::ADJUSTMENT;
+                }
+                else
+                {
+                    nGuideIndex = CustomShapeProperties::GetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), rValue );
+                    if ( nGuideIndex >= 0 )
+                    {
+                        aRet.Value = Any( nGuideIndex );
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                    }
+                    else
+                        aRet.Value = Any( rValue );
+                }
+            }
+        }
+    }
+    return aRet;
+}
+
+static EnhancedCustomShapeParameter GetAdjAngle( CustomShapeProperties& rCustomShapeProperties, const ::rtl::OUString& rValue )
+{
+    EnhancedCustomShapeParameter aAngle( GetAdjCoordinate( rCustomShapeProperties, rValue, sal_True ) );
+    if ( aAngle.Type == EnhancedCustomShapeParameterType::NORMAL )
+    {
+        sal_Int32 nValue = 0;
+        aAngle.Value >>= nValue;
+        double fValue = ( static_cast< double >( nValue ) / 60000.0 ) * 360.0;
+        aAngle.Value <<= fValue;
+    }
+    return aAngle;
+}
+
 // ---------------------------------------------------------------------
 // CT_GeomGuideList
-class AdjustmentValueContext : public ContextHandler
+class GeomGuideListContext : public ContextHandler
 {
 public:
-    AdjustmentValueContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    GeomGuideListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    CustomShapeProperties& mrCustomShapeProperties;
+    std::vector< CustomShapeGuide >&    mrGuideList;
+    CustomShapeProperties&              mrCustomShapeProperties;
 };
 
-AdjustmentValueContext::AdjustmentValueContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties )
+GeomGuideListContext::GeomGuideListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList )
 : ContextHandler( rParent )
+, mrGuideList( rGuideList )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
 }
 
-static rtl::OUString convertToOOEquation( const rtl::OUString& rSource )
+static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperties, const rtl::OUString& rSource )
 {
     if ( !pCommandHashMap )
     {
@@ -135,28 +489,140 @@ static rtl::OUString convertToOOEquation( const rtl::OUString& rSource )
     rtl::OUString aEquation;
     if ( aTokens.size() )
     {
+        sal_Int32 i, nParameters = aTokens.size() - 1;
+        if ( nParameters > 3 )
+            nParameters = 3;
+
+        rtl::OUString sParameters[ 3 ];
+
+        for ( i = 0; i < nParameters; i++ )
+            sParameters[ i ] = GetFormulaParameter( GetAdjCoordinate( rCustomShapeProperties, aTokens[ i + 1 ], sal_False ) );
+
         const FormulaCommandHMap::const_iterator aIter( pCommandHashMap->find( aTokens[ 0 ] ) );
         if ( aIter != pCommandHashMap->end() )
         {
             switch( aIter->second )
             {
                 case FC_MULDIV :
+                {
+                    if ( nParameters == 3 )
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*" ) + sParameters[ 1 ]
+                            + CREATE_OUSTRING( "/" ) + sParameters[ 2 ];
+                }
+                break;
                 case FC_PLUSMINUS :
+                {
+                    if ( nParameters == 3 )
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "+" ) + sParameters[ 1 ]
+                            + CREATE_OUSTRING( "-" ) + sParameters[ 2 ];
+                }
+                break;
                 case FC_PLUSDIV :
+                {
+                    if ( nParameters == 3 )
+                        aEquation = CREATE_OUSTRING( "(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "+" )
+                            + sParameters[ 1 ] + CREATE_OUSTRING( ")/" ) + sParameters[ 2 ];
+                }
+                break;
                 case FC_IFELSE :
+                {
+                    if ( nParameters == 3 )
+                        aEquation = CREATE_OUSTRING( "if(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," )
+                            + sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_ABS :
+                {
+                    if ( nParameters == 1 )
+                        aEquation = CREATE_OUSTRING( "abs(" ) + sParameters[ 0 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_AT2 :
+                {
+                    if ( nParameters == 2 )
+                        aEquation = CREATE_OUSTRING( "atan2(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," )
+                        + sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_CAT2 :
+                {
+                    if ( nParameters == 3 )
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(cos(arctan(" ) +
+                            sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( ")))" );
+                }
+                break;
                 case FC_COS :
+                {
+                    if ( nParameters == 2 )
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*cos(" ) +
+                        sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_MAX :
+                {
+                    if ( nParameters == 2 )
+                        aEquation = CREATE_OUSTRING( "max(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," ) +
+                            sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_MIN :
+                {
+                    if ( nParameters == 2 )
+                        aEquation = CREATE_OUSTRING( "min(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," ) +
+                            sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_MOD :
+                {
+                    if ( nParameters == 3 )
+                        aEquation = CREATE_OUSTRING( "sqrt(" )
+                            + sParameters[ 0 ] + CREATE_OUSTRING( "*" ) + sParameters[ 0 ] + CREATE_OUSTRING( "+" )
+                            + sParameters[ 1 ] + CREATE_OUSTRING( "*" ) + sParameters[ 1 ] + CREATE_OUSTRING( "+" )
+                            + sParameters[ 2 ] + CREATE_OUSTRING( "*" ) + sParameters[ 2 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_PIN :
+                {
+                    if ( nParameters == 3 ) // if(x-y,x,if(y-z,z,y))
+                        aEquation = CREATE_OUSTRING( "if(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "-" ) + sParameters[ 1 ]
+                            + CREATE_OUSTRING( "," ) + sParameters[ 0 ] + CREATE_OUSTRING( ",if(" ) + sParameters[ 2 ]
+                            + CREATE_OUSTRING( "-" ) + sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 1 ]
+                            + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( "))" );
+                }
+                break;
                 case FC_SAT2 :
+                {
+                    if ( nParameters == 3 )
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(sin(arctan(" ) +
+                            sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( ")))" );
+                }
+                break;
                 case FC_SIN :
+                {
+                    if ( nParameters == 2 )
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*sin(" ) +
+                        sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_SQRT :
+                {
+                    if ( nParameters == 1 )
+                        aEquation = CREATE_OUSTRING( "sqrt(" ) + sParameters[ 0 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_TAN :
+                {
+                    if ( nParameters == 2 )
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*tan(" ) +
+                        sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                }
+                break;
                 case FC_VAL :
+                {
+                    if ( nParameters == 1 )
+                        aEquation = sParameters[ 0 ];
+                }
+                break;
                 default :
                     break;
             }
@@ -165,17 +631,544 @@ static rtl::OUString convertToOOEquation( const rtl::OUString& rSource )
     return aEquation;
 }
 
-Reference< XFastContextHandler > AdjustmentValueContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > GeomGuideListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     if ( aElementToken == ( NMSP_DRAWINGML | XML_gd ) ) // CT_GeomGuide
     {
         CustomShapeGuide aGuide;
         aGuide.maName = xAttribs->getOptionalValue( XML_name );
-        aGuide.maFormula = convertToOOEquation( xAttribs->getOptionalValue( XML_fmla ) );
-        std::vector< CustomShapeGuide >& rAdjustmentValues( mrCustomShapeProperties.getAdjustmentValues() );
-        rAdjustmentValues.push_back( aGuide );
+        aGuide.maFormula = convertToOOEquation( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_fmla ) );
+        mrGuideList.push_back( aGuide );
     }
     return this;
+}
+
+// ---------------------------------------------------------------------
+
+static const rtl::OUString GetGeomGuideName( const ::rtl::OUString& rValue )
+{
+    return rValue;
+}
+
+// ---------------------------------------------------------------------
+// CT_AdjPoint2D
+class AdjPoint2DContext : public ContextHandler
+{
+public:
+    AdjPoint2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+};
+
+AdjPoint2DContext::AdjPoint2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+: ContextHandler( rParent )
+{
+    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_x ), sal_True );
+    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_y ), sal_True );
+}
+
+// ---------------------------------------------------------------------
+// CT_XYAdjustHandle
+class XYAdjustHandleContext : public ContextHandler
+{
+public:
+    XYAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    AdjustHandle& mrAdjustHandle;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
+: ContextHandler( rParent )
+, mrAdjustHandle( rAdjustHandle )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+    const rtl::OUString aEmptyDefault;
+    AttributeList aAttribs( xAttribs );
+    if ( aAttribs.hasAttribute( XML_gdRefX ) )
+    {
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( aAttribs.getString( XML_gdRefX, aEmptyDefault ) );
+    }
+    if ( aAttribs.hasAttribute( XML_minX ) )
+    {
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minX, aEmptyDefault ), sal_True );
+    }
+    if ( aAttribs.hasAttribute( XML_maxX ) )
+    {
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxX, aEmptyDefault ), sal_True );
+    }
+    if ( aAttribs.hasAttribute( XML_gdRefY ) )
+    {
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( aAttribs.getString( XML_gdRefY, aEmptyDefault ) );
+    }
+    if ( aAttribs.hasAttribute( XML_minY ) )
+    {
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minY, aEmptyDefault ), sal_True );
+    }
+    if ( aAttribs.hasAttribute( XML_maxY ) )
+    {
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxY, aEmptyDefault ), sal_True );
+    }
+}
+
+Reference< XFastContextHandler > XYAdjustHandleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_PolarAdjustHandle
+class PolarAdjustHandleContext : public ContextHandler
+{
+public:
+    PolarAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    AdjustHandle& mrAdjustHandle;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
+: ContextHandler( rParent )
+, mrAdjustHandle( rAdjustHandle )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+    const rtl::OUString aEmptyDefault;
+    AttributeList aAttribs( xAttribs );
+    if ( aAttribs.hasAttribute( XML_gdRefR ) )
+    {
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( aAttribs.getString( XML_gdRefR, aEmptyDefault ) );
+    }
+    if ( aAttribs.hasAttribute( XML_minR ) )
+    {
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minR, aEmptyDefault ), sal_True );
+    }
+    if ( aAttribs.hasAttribute( XML_maxR ) )
+    {
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxR, aEmptyDefault ), sal_True );
+    }
+    if ( aAttribs.hasAttribute( XML_gdRefAng ) )
+    {
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( aAttribs.getString( XML_gdRefAng, aEmptyDefault ) );
+    }
+    if ( aAttribs.hasAttribute( XML_minAng ) )
+    {
+        mrAdjustHandle.min2 = GetAdjAngle( mrCustomShapeProperties, aAttribs.getString( XML_minAng, aEmptyDefault ) );
+    }
+    if ( aAttribs.hasAttribute( XML_maxAng ) )
+    {
+        mrAdjustHandle.max2 = GetAdjAngle( mrCustomShapeProperties, aAttribs.getString( XML_maxAng, aEmptyDefault ) );
+    }
+}
+
+Reference< XFastContextHandler > PolarAdjustHandleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_AdjustHandleList
+class AdjustHandleListContext : public ContextHandler
+{
+public:
+    AdjustHandleListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    std::vector< AdjustHandle >& mrAdjustHandleList;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+AdjustHandleListContext::AdjustHandleListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList )
+: ContextHandler( rParent )
+, mrAdjustHandleList( rAdjustHandleList )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+}
+
+Reference< XFastContextHandler > AdjustHandleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_ahXY ) )           // CT_XYAdjustHandle
+    {
+        AdjustHandle aAdjustHandle( sal_False );
+        mrAdjustHandleList.push_back( aAdjustHandle );
+        xContext = new XYAdjustHandleContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
+    }
+    else if ( aElementToken == ( NMSP_DRAWINGML | XML_ahPolar ) )   // CT_PolarAdjustHandle
+    {
+        AdjustHandle aAdjustHandle( sal_True );
+        mrAdjustHandleList.push_back( aAdjustHandle );
+        xContext = new PolarAdjustHandleContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
+    }
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_ConnectionSite
+class ConnectionSiteContext : public ContextHandler
+{
+public:
+    ConnectionSiteContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    ConnectionSite& mrConnectionSite;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+ConnectionSiteContext::ConnectionSiteContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite )
+: ContextHandler( rParent )
+, mrConnectionSite( rConnectionSite )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+    mrConnectionSite.ang = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_ang ) );
+}
+
+Reference< XFastContextHandler > ConnectionSiteContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_Path2DMoveTo
+class Path2DMoveToContext : public ContextHandler
+{
+public:
+    Path2DMoveToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    EnhancedCustomShapeParameterPair& mrAdjPoint2D;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+Path2DMoveToContext::Path2DMoveToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+: ContextHandler( rParent )
+, mrAdjPoint2D( rAdjPoint2D )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+}
+
+Reference< XFastContextHandler > Path2DMoveToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_Path2DLineTo
+class Path2DLineToContext : public ContextHandler
+{
+public:
+    Path2DLineToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    EnhancedCustomShapeParameterPair& mrAdjPoint2D;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+Path2DLineToContext::Path2DLineToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+: ContextHandler( rParent )
+, mrAdjPoint2D( rAdjPoint2D )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+}
+
+Reference< XFastContextHandler > Path2DLineToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_Path2DQuadBezierTo
+class Path2DQuadBezierToContext : public ContextHandler
+{
+public:
+    Path2DQuadBezierToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rPt1, EnhancedCustomShapeParameterPair& rPt2 );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    EnhancedCustomShapeParameterPair& mrPt1;
+    EnhancedCustomShapeParameterPair& mrPt2;
+    int nCount;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler& rParent,
+    CustomShapeProperties& rCustomShapeProperties,
+        EnhancedCustomShapeParameterPair& rPt1,
+            EnhancedCustomShapeParameterPair& rPt2 )
+: ContextHandler( rParent )
+, mrPt1( rPt1 )
+, mrPt2( rPt2 )
+, nCount( 0 )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+}
+
+Reference< XFastContextHandler > Path2DQuadBezierToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_Path2DCubicBezierTo
+class Path2DCubicBezierToContext : public ContextHandler
+{
+public:
+    Path2DCubicBezierToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties,
+        EnhancedCustomShapeParameterPair&, EnhancedCustomShapeParameterPair&, EnhancedCustomShapeParameterPair& );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    CustomShapeProperties& mrCustomShapeProperties;
+    EnhancedCustomShapeParameterPair& mrControlPt1;
+    EnhancedCustomShapeParameterPair& mrControlPt2;
+    EnhancedCustomShapeParameterPair& mrEndPt;
+    int nCount;
+};
+
+Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties,
+    EnhancedCustomShapeParameterPair& rControlPt1,
+        EnhancedCustomShapeParameterPair& rControlPt2,
+            EnhancedCustomShapeParameterPair& rEndPt )
+: ContextHandler( rParent )
+, mrCustomShapeProperties( rCustomShapeProperties )
+, mrControlPt1( rControlPt1 )
+, mrControlPt2( rControlPt2 )
+, mrEndPt( rEndPt )
+, nCount( 0 )
+{
+}
+
+Reference< XFastContextHandler > Path2DCubicBezierToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties,
+            nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   // CT_AdjPoint2D
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_Path2DContext
+class Path2DContext : public ContextHandler
+{
+public:
+    Path2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
+    virtual ~Path2DContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs )
+            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    Path2D& mrPath2D;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& mrSegments;
+    CustomShapeProperties& mrCustomShapeProperties;
+};
+
+Path2DContext::Path2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
+: ContextHandler( rParent )
+, mrSegments( rSegments )
+, mrPath2D( rPath2D )
+, mrCustomShapeProperties( rCustomShapeProperties )
+{
+    const rtl::OUString aEmptyString;
+
+    AttributeList aAttribs( xAttribs );
+    rPath2D.w = aAttribs.getString( XML_w, aEmptyString ).toInt64();
+    rPath2D.h = aAttribs.getString( XML_h, aEmptyString ).toInt64();
+    rPath2D.fill = aAttribs.getToken( XML_fill, XML_norm );
+    rPath2D.stroke = aAttribs.getBool( XML_stroke, sal_True );
+    rPath2D.extrusionOk = aAttribs.getBool( XML_extrusionOk, sal_True );
+}
+
+Path2DContext::~Path2DContext()
+{
+    EnhancedCustomShapeSegment aNewSegment;
+    if ( mrPath2D.fill == XML_none )
+    {
+        aNewSegment.Command = EnhancedCustomShapeSegmentCommand::NOFILL;
+        aNewSegment.Count = 0;
+        mrSegments.push_back( aNewSegment );
+    }
+    aNewSegment.Command = EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+    aNewSegment.Count = 0;
+    mrSegments.push_back( aNewSegment );
+}
+
+Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int32 aElementToken,
+    const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+{
+    Reference< XFastContextHandler > xContext;
+    switch( aElementToken )
+    {
+        case NMSP_DRAWINGML | XML_close :
+        {
+            EnhancedCustomShapeSegment aNewSegment;
+            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+            aNewSegment.Count = 0;
+            mrSegments.push_back( aNewSegment );
+        }
+        break;
+        case NMSP_DRAWINGML | XML_moveTo :
+        {
+            EnhancedCustomShapeSegment aNewSegment;
+            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::MOVETO;
+            aNewSegment.Count = 1;
+            mrSegments.push_back( aNewSegment );
+
+            EnhancedCustomShapeParameterPair aAdjPoint2D;
+            mrPath2D.parameter.push_back( aAdjPoint2D );
+            xContext = new Path2DMoveToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
+        }
+        break;
+        case NMSP_DRAWINGML | XML_lnTo :
+        {
+
+            if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::LINETO ) )
+                mrSegments.back().Count++;
+            else
+            {
+                EnhancedCustomShapeSegment aSegment;
+                aSegment.Command = EnhancedCustomShapeSegmentCommand::LINETO;
+                aSegment.Count = 1;
+                mrSegments.push_back( aSegment );
+            }
+            EnhancedCustomShapeParameterPair aAdjPoint2D;
+            mrPath2D.parameter.push_back( aAdjPoint2D );
+            xContext = new Path2DLineToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
+        }
+        break;
+        case NMSP_DRAWINGML | XML_arcTo :   // CT_Path2DArcTo
+        {
+            if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::ARCTO ) )
+                mrSegments.back().Count++;
+            else
+            {
+                EnhancedCustomShapeSegment aSegment;
+                aSegment.Command = EnhancedCustomShapeSegmentCommand::ARCTO;
+                aSegment.Count = 1;
+                mrSegments.push_back( aSegment );
+            }
+            EnhancedCustomShapeParameter aWidth = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_wR ), sal_True );
+            EnhancedCustomShapeParameter aHeight = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_hR ), sal_True );
+            EnhancedCustomShapeParameter aStartAngle = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_stAng ) );
+            EnhancedCustomShapeParameter swAngle = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_swAng ) );
+
+            EnhancedCustomShapeParameterPair aPt1;  // TODO: conversion from (wr hr stAng swAng)
+            EnhancedCustomShapeParameterPair aPt2;  // to (x1 y1 x2 y2 x3 y3 x y) needed
+            EnhancedCustomShapeParameterPair aPt3;
+            EnhancedCustomShapeParameterPair aPt;
+            mrPath2D.parameter.push_back( aPt1 );
+            mrPath2D.parameter.push_back( aPt2 );
+            mrPath2D.parameter.push_back( aPt3 );
+            mrPath2D.parameter.push_back( aPt );
+        }
+        break;
+        case NMSP_DRAWINGML | XML_quadBezTo :
+        {
+            if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO ) )
+                mrSegments.back().Count++;
+            else
+            {
+                EnhancedCustomShapeSegment aSegment;
+                aSegment.Command = EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO;
+                aSegment.Count = 1;
+                mrSegments.push_back( aSegment );
+            }
+            EnhancedCustomShapeParameterPair aPt1;
+            EnhancedCustomShapeParameterPair aPt2;
+            mrPath2D.parameter.push_back( aPt1 );
+            mrPath2D.parameter.push_back( aPt2 );
+            xContext = new Path2DQuadBezierToContext( *this, mrCustomShapeProperties,
+                            mrPath2D.parameter[ mrPath2D.parameter.size() - 2 ],
+                                mrPath2D.parameter.back() );
+        }
+        break;
+        case NMSP_DRAWINGML | XML_cubicBezTo :
+        {
+            if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::CURVETO ) )
+                mrSegments.back().Count++;
+            else
+            {
+                EnhancedCustomShapeSegment aSegment;
+                aSegment.Command = EnhancedCustomShapeSegmentCommand::CURVETO;
+                aSegment.Count = 1;
+                mrSegments.push_back( aSegment );
+            }
+            EnhancedCustomShapeParameterPair aControlPt1;
+            EnhancedCustomShapeParameterPair aControlPt2;
+            EnhancedCustomShapeParameterPair aEndPt;
+            mrPath2D.parameter.push_back( aControlPt1 );
+            mrPath2D.parameter.push_back( aControlPt2 );
+            mrPath2D.parameter.push_back( aEndPt );
+            xContext = new Path2DCubicBezierToContext( *this, mrCustomShapeProperties,
+                            mrPath2D.parameter[ mrPath2D.parameter.size() - 3 ],
+                                mrPath2D.parameter[ mrPath2D.parameter.size() - 2 ],
+                                    mrPath2D.parameter.back() );
+        }
+        break;
+    }
+    return xContext;
+}
+
+// ---------------------------------------------------------------------
+// CT_Path2DList
+class Path2DListContext : public ContextHandler
+{
+public:
+    Path2DListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
+        std::vector< Path2D >& rPath2DList );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+
+    CustomShapeProperties& mrCustomShapeProperties;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& mrSegments;
+    std::vector< Path2D >& mrPath2DList;
+};
+
+Path2DListContext::Path2DListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
+                                        std::vector< Path2D >& rPath2DList )
+: ContextHandler( rParent )
+, mrCustomShapeProperties( rCustomShapeProperties )
+, mrSegments( rSegments )
+, mrPath2DList( rPath2DList )
+{
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL Path2DListContext::createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
+{
+    Reference< XFastContextHandler > xContext;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_path ) )
+    {
+        Path2D aPath2D;
+        mrPath2DList.push_back( aPath2D );
+        xContext = new Path2DContext( *this, xAttribs, mrCustomShapeProperties,  mrSegments, mrPath2DList.back() );
+    }
+    return xContext;
 }
 
 // ---------------------------------------------------------------------
@@ -987,22 +1980,47 @@ CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler& rParent,
 {
 }
 
-Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
+    Reference< XFastContextHandler > xContext;
     switch( aElementToken )
     {
-    // todo
-    case NMSP_DRAWINGML|XML_avLst:      // CT_GeomGuideList adjust value list
-    case NMSP_DRAWINGML|XML_gdLst:      // CT_GeomGuideList guide list
-    case NMSP_DRAWINGML|XML_ahLst:      // CT_AdjustHandleList adjust handle list
-    case NMSP_DRAWINGML|XML_cxnLst: // CT_ConnectionSiteList connection site list
-    case NMSP_DRAWINGML|XML_rect:   // CT_GeomRectList geometry rect list
-    case NMSP_DRAWINGML|XML_pathLst:    // CT_Path2DList 2d path list
+        case NMSP_DRAWINGML|XML_avLst:          // CT_GeomGuideList adjust value list
+            xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
+        break;
+        case NMSP_DRAWINGML|XML_gdLst:          // CT_GeomGuideList guide list
+            xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getGuideList() );
+        break;
+        case NMSP_DRAWINGML|XML_ahLst:          // CT_AdjustHandleList adjust handle list
+            xContext = new AdjustHandleListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustHandleList() );
+        break;
+        case NMSP_DRAWINGML|XML_cxnLst:         // CT_ConnectionSiteList connection site list
+            xContext = this;
+        break;
+        case NMSP_DRAWINGML|XML_rect:           // CT_GeomRectList geometry rect list
+        {
+            GeomRect aGeomRect;
+            aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_l ), sal_True );
+            aGeomRect.t = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_t ), sal_True );
+            aGeomRect.r = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_r ), sal_True );
+            aGeomRect.b = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_b ), sal_True );
+            mrCustomShapeProperties.getTextRect() = aGeomRect;
+        }
+        break;
+        case NMSP_DRAWINGML|XML_pathLst:        // CT_Path2DList 2d path list
+            xContext = new Path2DListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getSegments(), mrCustomShapeProperties.getPath2DList() );
+        break;
+
+        // from cxnLst:
+        case NMSP_DRAWINGML|XML_cxn:                // CT_ConnectionSite
+        {
+            ConnectionSite aConnectionSite;
+            mrCustomShapeProperties.getConnectionSiteList().push_back( aConnectionSite );
+            xContext = new ConnectionSiteContext( *this, xAttribs, mrCustomShapeProperties, mrCustomShapeProperties.getConnectionSiteList().back() );
+        }
         break;
     }
-
-    Reference< XFastContextHandler > xEmpty;
-    return xEmpty;
+    return xContext;
 }
 
 // ---------------------------------------------------------------------
@@ -1022,7 +2040,7 @@ PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler& rParent,
 Reference< XFastContextHandler > PresetShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
 {
     if ( aElementToken == ( NMSP_DRAWINGML | XML_avLst ) )
-        return new AdjustmentValueContext( *this, mrCustomShapeProperties );
+        return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
     else
         return this;
 }
@@ -1043,20 +2061,10 @@ PresetTextShapeContext::PresetTextShapeContext( ContextHandler& rParent, const R
 
 Reference< XFastContextHandler > PresetTextShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
 {
-    switch( aElementToken )
-    {
-    // todo
-    case NMSP_DRAWINGML|XML_avLst:      // CT_GeomGuideList adjust value list
-    case NMSP_DRAWINGML|XML_gdLst:      // CT_GeomGuideList guide list
-    case NMSP_DRAWINGML|XML_ahLst:      // CT_AdjustHandleList adjust handle list
-    case NMSP_DRAWINGML|XML_cxnLst: // CT_ConnectionSiteList connection site list
-    case NMSP_DRAWINGML|XML_rect:   // CT_GeomRectList geometry rect list
-    case NMSP_DRAWINGML|XML_pathLst:    // CT_Path2DList 2d path list
-        break;
-    }
-
-    Reference< XFastContextHandler > xEmpty;
-    return xEmpty;
+    if ( aElementToken == ( NMSP_DRAWINGML | XML_avLst ) )
+        return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
+    else
+        return this;
 }
 
 } }
