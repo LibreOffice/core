@@ -79,6 +79,8 @@
 #include "docsh.hxx"
 #include <cstdio>
 
+#include <stdio.h>
+
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
 
