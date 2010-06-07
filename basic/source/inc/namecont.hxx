@@ -58,7 +58,7 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase8.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/script/XVBACompat.hpp>
 
@@ -67,7 +67,7 @@ class BasicManager;
 namespace basic
 {
 
-typedef ::cppu::WeakComponentImplHelper7<
+typedef ::cppu::WeakComponentImplHelper8<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::script::XStorageBasedLibraryContainer,
     ::com::sun::star::script::XLibraryContainerPassword,
