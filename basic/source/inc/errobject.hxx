@@ -25,52 +25,28 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_LOCALIZEDPROPERTYNODE_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_LOCALIZEDPROPERTYNODE_HXX
+#ifndef ERROBJECT_HXX
+#define ERROBJECT_HXX
+#include "sbunoobj.hxx"
+#include <ooo/vba/XErrObject.hpp>
 
-#include "sal/config.h"
 
-#include "rtl/ref.hxx"
+class SbxErrObject : public SbUnoObject
+{
+    class ErrObject* m_pErrObject;
+    com::sun::star::uno::Reference< ooo::vba::XErrObject > m_xErr;
 
-#include "node.hxx"
-#include "nodemap.hxx"
-#include "type.hxx"
+    SbxErrObject( const String& aName_, const com::sun::star::uno::Any& aUnoObj_ );
+    ~SbxErrObject();
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
-namespace rtl { class OUString; }
+    class ErrObject* getImplErrObject( void )
+        { return m_pErrObject; }
 
-namespace configmgr {
-
-class LocalizedPropertyNode: public Node {
 public:
-    LocalizedPropertyNode(int layer, Type staticType, bool nillable);
+    static SbxVariableRef getErrObject();
+    static com::sun::star::uno::Reference< ooo::vba::XErrObject > getUnoErrObject();
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
-
-    virtual NodeMap & getMembers();
-
-    Type getStaticType() const;
-
-    bool isNillable() const;
-
-private:
-    LocalizedPropertyNode(LocalizedPropertyNode const & other);
-
-    virtual ~LocalizedPropertyNode();
-
-    virtual Kind kind() const;
-
-    virtual void clear();
-
-    Type staticType_;
-        // as specified in the component-schema (TYPE_ANY, ...,
-        // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
-    bool nillable_;
-    NodeMap members_;
+    void setNumberAndDescription( ::sal_Int32 _number, const ::rtl::OUString& _description )
+        throw (com::sun::star::uno::RuntimeException);
 };
-
-}
-
 #endif

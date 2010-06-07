@@ -6,4 +6,4 @@ Icon=extension
 Type=MimeType
 Patterns=*.oxt
 MimeType=application/vnd.openofficeorg.extension
-Comment=Extension
+Comment=%PRODUCTNAME Extension

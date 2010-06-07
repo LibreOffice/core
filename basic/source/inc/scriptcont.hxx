@@ -30,6 +30,8 @@
 
 #include "namecont.hxx"
 #include <basic/basmgr.hxx>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <comphelper/uno3.hxx>
 
 class BasicManager;
 
@@ -134,13 +136,19 @@ public:
 };
 
 //============================================================================
+typedef std::hash_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInfoMap;
+
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::script::XVBAModuleInfo
+                            >   SfxScriptLibrary_BASE;
 
 class SfxScriptLibrary : public SfxLibrary
+                       , public SfxScriptLibrary_BASE
 {
     friend class SfxScriptLibraryContainer;
 
     sal_Bool mbLoadedSource;
     sal_Bool mbLoadedBinary;
+    ModuleInfoMap mModuleInfos;
 
     // Provide modify state including resources
     virtual sal_Bool isModified( void );
@@ -166,6 +174,15 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xSFI,
         const ::rtl::OUString& aLibInfoFileURL, const ::rtl::OUString& aStorageURL, sal_Bool ReadOnly
     );
+
+    DECLARE_XINTERFACE()
+    DECLARE_XTYPEPROVIDER()
+
+    // XVBAModuleInfo
+    virtual ::com::sun::star::script::ModuleInfo SAL_CALL getModuleInfo( const ::rtl::OUString& ModuleName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasModuleInfo( const ::rtl::OUString& ModuleName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertModuleInfo( const ::rtl::OUString& ModuleName, const ::com::sun::star::script::ModuleInfo& ModuleInfo ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModuleInfo( const ::rtl::OUString& ModuleName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     static bool containsValidModule( const ::com::sun::star::uno::Any& _rElement );
 
