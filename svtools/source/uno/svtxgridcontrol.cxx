@@ -79,7 +79,6 @@ SVTXGridControl::SVTXGridControl()
 //--------------------------------------------------------------------
 SVTXGridControl::~SVTXGridControl()
 {
-    DELETEZ(m_pTableModel);
 }
 
 ::com::sun::star::uno::Any SVTXGridControl::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
