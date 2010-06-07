@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Logging" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <templates>
+    <group oor:name="LoggerSettings">
+      <group oor:name="HandlerSettings" oor:extensible="true">
+        <info>
+          <desc>Enthält zusätzliche Optionen für den TVS-UILogHandler</desc>
+        </info>
+        <prop oor:name="UITitle" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="UIId" oor:type="xs:string">
+          <value/>
+        </prop>
+      </group>
+    </group>
+  </templates>
+  <component/>
+</oor:component-schema>

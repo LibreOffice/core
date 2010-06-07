@@ -103,8 +103,6 @@ testcase t_updt_spadmin
             warnlog( "SpAdmin is not open, the test cannot continue" )
             goto endsub
         endif
-
-        call TestFonts( CPRINTER )   
         
         ' wait for the spadmin to open, on failure we end the test
         brc = hWaitForSpAdmin()
@@ -269,43 +267,5 @@ sub TestRename( cPrinter as string )
     SPRenamePrinterDLG.cancel()
     
     printlog( "" )
-
-end sub
-
-'*******************************************************************************
-
-sub TestFonts( cPrinter as string )
-
-    
-    printlog( " * Open 'Fonts...' dialog" )
-    
-    Kontext "SpAdmin"
-    if ( PBFonts.isEnabled() ) then
-        PBFonts.click()
-        waitslot
-          
-        printlog( "   * Test the font-dialog" )
-        Kontext "SPFontNameDLG"
-        call dialogtest( SPFontNameDLG )
-          
-        printlog( "   * Press 'Add ...'" )
-        PBAdd.click()
-        waitslot
-          
-        printlog( "   * Test the import-dialog" )
-        kontext "SPFontImportDLG"
-        call dialogtest( SPFontImportDLG )
-          
-        printlog( "   * close import dialog" )
-        SPFontImportDLG.cancel()
-          
-        Kontext "SPFontNameDLG"
-        printlog( "   * close fonts-dialog" )
-        SPFontNameDLG.ok()
-        waitslot
-    else
-        printlog( "Fonts... not available, skipping." )
-    endif
-        
 
 end sub
