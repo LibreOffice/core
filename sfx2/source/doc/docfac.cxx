@@ -284,6 +284,14 @@ const SvGlobalName& SfxObjectFactory::GetClassId() const
     return pImpl->aClassName;
 }
 
+String SfxObjectFactory::GetFactoryURL() const
+{
+    ::rtl::OUStringBuffer aURLComposer;
+    aURLComposer.appendAscii( "private:factory/" );
+    aURLComposer.appendAscii( GetShortName() );
+    return aURLComposer.makeStringAndClear();
+}
+
 String SfxObjectFactory::GetModuleName() const
 {
     static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
@@ -302,10 +310,36 @@ String SfxObjectFactory::GetModuleName() const
         ::rtl::OUString sModuleName = aPropSet.getUnpackedValueOrDefault(PROP_MODULEUINAME, ::rtl::OUString());
         return String(sModuleName);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 
     return String();
+}
+
+
+sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const
+{
+    for ( sal_uInt16 curViewNo = 0; curViewNo < GetViewFactoryCount(); ++curViewNo )
+    {
+        const sal_uInt16 curViewId = GetViewFactory( curViewNo ).GetOrdinal();
+        if ( i_nViewId == curViewId )
+           return curViewNo;
+    }
+    return i_nFallback;
+}
+
+SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const String& i_rViewName ) const
+{
+    for (   USHORT nViewNo = 0;
+            nViewNo < GetViewFactoryCount();
+            ++nViewNo
+        )
+    {
+        SfxViewFactory& rViewFac( GetViewFactory( nViewNo ) );
+        if ( rViewFac.GetViewName() == i_rViewName )
+            return &rViewFac;
+    }
+    return NULL;
 }

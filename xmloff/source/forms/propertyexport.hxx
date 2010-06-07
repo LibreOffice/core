@@ -69,7 +69,7 @@ namespace xmloff
         StringSet       m_aRemainingProps;
             // see examinePersistence
 
-        void exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty);
+        void exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType);
 
     protected:
         IFormsExportContext&    m_rContext;
@@ -230,8 +230,10 @@ namespace xmloff
             <p>The value of this attribute is extracted from the TargetURL property of the object given.</p>
 
             <p>The property needs a special handling because the URL's need to be made relative</p>
+
+            <p>If _bAddType is set, an additional xlink:type="simple" attribute is also added.</p>
         */
-        inline void exportTargetLocationAttribute() { exportRelativeTargetLocation(PROPERTY_TARGETURL,CCA_TARGET_LOCATION); }
+        inline void exportTargetLocationAttribute(bool _bAddType) { exportRelativeTargetLocation(PROPERTY_TARGETURL,CCA_TARGET_LOCATION,_bAddType); }
 
         /** add the form:image attribute to the export context.
 
@@ -239,7 +241,7 @@ namespace xmloff
 
             <p>The property needs a special handling because the URL's need to be made relative</p>
         */
-        inline void exportImageDataAttribute() { exportRelativeTargetLocation(PROPERTY_IMAGEURL,CCA_IMAGE_DATA); }
+        inline void exportImageDataAttribute() { exportRelativeTargetLocation(PROPERTY_IMAGEURL,CCA_IMAGE_DATA,false); }
 
         /** flag the style properties as 'already exported'
 

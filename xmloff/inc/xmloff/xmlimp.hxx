@@ -77,6 +77,10 @@ class XMLErrors;
 class StyleMap;
 class String;
 
+namespace xmloff {
+    class RDFaImportHelper;
+}
+
 #define IMPORT_META         0x0001
 #define IMPORT_STYLES       0x0002
 #define IMPORT_MASTERSTYLES 0x0004
@@ -431,6 +435,9 @@ public:
         ::rtl::OUString const & i_rProperty,
         ::rtl::OUString const & i_rContent,
         ::rtl::OUString const & i_rDatatype);
+
+    /// do not dllexport this; only for advanced cases (bookmark-start)
+    SAL_DLLPRIVATE ::xmloff::RDFaImportHelper & GetRDFaImportHelper();
 
     // #i31958# XForms helper method
     // (to be implemented by applications suporting XForms)

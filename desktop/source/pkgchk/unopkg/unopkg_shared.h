@@ -163,7 +163,8 @@ css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     ::rtl::OUString const & logFile,
     bool option_force_overwrite,
     bool option_verbose,
-    bool option_bundled);
+    bool option_bundled,
+    bool option_suppressLicense);
 
 //==============================================================================
 void printf_packages(

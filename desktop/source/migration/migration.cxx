@@ -28,14 +28,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include <map>
+#include <new>
+#include <set>
+
 #include "migration.hxx"
 #include "migration_impl.hxx"
 #include "cfgfilter.hxx"
 
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/uri.hxx>
 #include <tools/config.hxx>
 #include <i18npool/lang.h>
 #include <tools/urlobj.hxx>
@@ -45,12 +51,11 @@
 #include <osl/security.hxx>
 #include <unotools/configmgr.hxx>
 
+#include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/configuration/backend/XLayer.hpp>
-#include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -63,8 +68,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::container;
-using namespace com::sun::star::configuration;
-using namespace com::sun::star::configuration::backend;
 using com::sun::star::uno::Exception;
 using namespace com::sun::star;
 
@@ -90,7 +93,6 @@ static void releaseImpl()
         pImpl = 0;
     }
 }
-
 
 // static main entry point for the migration process
 void Migration::doMigration()
@@ -140,11 +142,11 @@ sal_Bool MigrationImpl::checkMigration()
 MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
     : m_vrVersions(new strings_v)
     , m_xFactory(xFactory)
-    , m_vrMigrations(readMigrationSteps())
-    , m_aInfo(findInstallation())
-    , m_vrFileList(compileFileList())
-    , m_vrServiceList(compileServiceList())
 {
+    readAvailableMigrations(m_vMigrationsAvailable);
+    sal_Int32 nIndex = findPreferedMigrationProcess(m_vMigrationsAvailable);
+    if ( nIndex >= 0 )
+        m_vrMigrations = readMigrationSteps(m_vMigrationsAvailable[nIndex].name);
 }
 
 MigrationImpl::~MigrationImpl()
@@ -154,14 +156,15 @@ MigrationImpl::~MigrationImpl()
 
 sal_Bool MigrationImpl::doMigration()
 {
+    // compile file list for migration
+    m_vrFileList = compileFileList();
+
     sal_Bool result = sal_False;
     try{
         copyFiles();
 
         // execute the migration items from Setup.xcu
-        // and refresh the cache
         copyConfig();
-        refresh();
 
         // execute custom migration services from Setup.xcu
         // and refresh the cache
@@ -218,20 +221,62 @@ sal_Bool MigrationImpl::checkMigrationCompleted()
     return bMigrationCompleted;
 }
 
-
-migrations_vr MigrationImpl::readMigrationSteps()
+static void insertSorted(migrations_available& rAvailableMigrations, supported_migration& aSupportedMigration)
 {
+    bool                           bInserted( false );
+    migrations_available::iterator pIter = rAvailableMigrations.begin();
+    while ( !bInserted && pIter != rAvailableMigrations.end())
+    {
+        if ( pIter->nPriority < aSupportedMigration.nPriority )
+        {
+            rAvailableMigrations.insert(pIter, aSupportedMigration );
+            bInserted = true;
+            break; // i111193: insert invalidates iterator!
+        }
+        ++pIter;
+    }
+    if ( !bInserted )
+        rAvailableMigrations.push_back( aSupportedMigration );
+}
 
+bool MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigrations)
+{
     // get supported version names
-    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration"), uno::UNO_QUERY_THROW);
-    uno::Sequence< OUString > seqVersions;
-    aMigrationAccess->getByName(OUString::createFromAscii("SupportedVersions")) >>= seqVersions;
-    for (sal_Int32 i=0; i<seqVersions.getLength(); i++)
-        m_vrVersions->push_back(seqVersions[i].trim());
+    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
+    uno::Sequence< OUString > seqSupportedVersions = aMigrationAccess->getElementNames();
+
+    const OUString aVersionIdentifiers( RTL_CONSTASCII_USTRINGPARAM( "VersionIdentifiers" ));
+    const OUString aPriorityIdentifier( RTL_CONSTASCII_USTRINGPARAM( "Priority" ));
+
+    for (sal_Int32 i=0; i<seqSupportedVersions.getLength(); i++)
+    {
+        sal_Int32                 nPriority( 0 );
+        uno::Sequence< OUString > seqVersions;
+        uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(seqSupportedVersions[i]), uno::UNO_QUERY_THROW );
+        xMigrationData->getByName( aVersionIdentifiers ) >>= seqVersions;
+        xMigrationData->getByName( aPriorityIdentifier ) >>= nPriority;
+
+        supported_migration aSupportedMigration;
+        aSupportedMigration.name      = seqSupportedVersions[i];
+        aSupportedMigration.nPriority = nPriority;
+        for (sal_Int32 j=0; j<seqVersions.getLength(); j++)
+            aSupportedMigration.supported_versions.push_back(seqVersions[j].trim());
+        insertSorted( rAvailableMigrations, aSupportedMigration );
+    }
+
+    return true;
+}
+
+migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigrationName)
+{
+    // get migration access
+    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
+    uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(rMigrationName), uno::UNO_QUERY_THROW );
 
     // get migration description from from org.openoffice.Setup/Migration
     // and build vector of migration steps
-    uno::Reference< XNameAccess > theNameAccess(getConfigAccess("org.openoffice.Setup/Migration/MigrationSteps"), uno::UNO_QUERY_THROW);
+    OUString aMigrationSteps( RTL_CONSTASCII_USTRINGPARAM( "MigrationSteps" ));
+    uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName(aMigrationSteps), uno::UNO_QUERY_THROW);
     uno::Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
     uno::Reference< XNameAccess > tmpAccess;
     uno::Reference< XNameAccess > tmpAccess2;
@@ -273,13 +318,19 @@ migrations_vr MigrationImpl::readMigrationSteps()
                 tmpStep.excludeConfig.push_back(tmpSeq[j]);
         }
 
-        // config components
-        if (tmpAccess->getByName(OUString::createFromAscii("ServiceConfigComponents")) >>= tmpSeq)
+        // included extensions...
+        if (tmpAccess->getByName(OUString::createFromAscii("IncludedExtensions")) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
-                tmpStep.configComponents.push_back(tmpSeq[j]);
+                tmpStep.includeExtensions.push_back(tmpSeq[j]);
         }
 
+        // excluded extensions...
+        if (tmpAccess->getByName(OUString::createFromAscii("ExcludedExtensions")) >>= tmpSeq)
+        {
+            for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
+                tmpStep.excludeExtensions.push_back(tmpSeq[j]);
+        }
 
         // generic service
         tmpAccess->getByName(OUString::createFromAscii("MigrationService")) >>= tmpStep.service;
@@ -302,7 +353,7 @@ static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
         return result;
 }
 
-install_info MigrationImpl::findInstallation()
+install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 {
     rtl::OUString aProductName;
     uno::Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
@@ -310,9 +361,9 @@ install_info MigrationImpl::findInstallation()
     aProductName = aProductName.toAsciiLowerCase();
 
     install_info aInfo;
-    strings_v::const_iterator i_ver = m_vrVersions->begin();
+    strings_v::const_iterator i_ver = rVersions.begin();
     uno::Reference < util::XStringSubstitution > xSubst( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.PathSubstitution")), uno::UNO_QUERY );
-    while (i_ver != m_vrVersions->end())
+    while (i_ver != rVersions.end())
     {
         ::rtl::OUString aVersion, aProfileName;
         sal_Int32 nSeparatorIndex = (*i_ver).indexOf('=');
@@ -330,7 +381,7 @@ install_info MigrationImpl::findInstallation()
             osl::Security().getConfigDir( aUserInst );
             if ( aUserInst.getLength() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
                 aUserInst += ::rtl::OUString::createFromAscii("/");
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
             // tribute to whoever had the "great" idea to use different names on Windows and Unix
             aUserInst += ::rtl::OUString::createFromAscii(".");
 #endif
@@ -345,10 +396,32 @@ install_info MigrationImpl::findInstallation()
             }
             catch( uno::Exception& ){}
         }
-        i_ver++;
+        ++i_ver;
     }
 
     return aInfo;
+}
+
+sal_Int32 MigrationImpl::findPreferedMigrationProcess(const migrations_available& rAvailableMigrations)
+{
+    sal_Int32    nIndex( -1 );
+    sal_Int32    i( 0 );
+
+    migrations_available::const_iterator rIter = rAvailableMigrations.begin();
+    while ( rIter != rAvailableMigrations.end() )
+    {
+        install_info aInstallInfo = findInstallation(rIter->supported_versions);
+        if (aInstallInfo.productname.getLength() > 0 )
+        {
+            m_aInfo = aInstallInfo;
+            nIndex  = i;
+            break;
+        }
+        ++i;
+        ++rIter;
+    }
+
+    return nIndex;
 }
 
 strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const
@@ -445,80 +518,105 @@ strings_vr MigrationImpl::compileFileList()
     return vrResult;
 }
 
+namespace {
 
-void MigrationImpl::copyConfig()
-{
-    try {
-        // 1. get a list of all components from hierachy browser
-        uno::Reference< XJob > xBrowser(m_xFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.backend.LocalHierarchyBrowser")), uno::UNO_QUERY_THROW);
+struct componentParts {
+    std::set< rtl::OUString > includedPaths;
+    std::set< rtl::OUString > excludedPaths;
+};
 
-        uno::Sequence< NamedValue > seqArgs(2);
-        seqArgs[0] = NamedValue(
-            OUString::createFromAscii("LayerDataUrl"),
-            uno::makeAny(m_aInfo.userdata + OUString::createFromAscii("/user/registry")));
-        seqArgs[1] = NamedValue(
-            OUString::createFromAscii("FetchComponentNames"),
-            uno::makeAny(sal_True));
+typedef std::map< rtl::OUString, componentParts > Components;
 
-        // execute the search
-        uno::Any aResult = xBrowser->execute(seqArgs);
-        uno::Sequence< OUString > seqComponents;
-        aResult >>= seqComponents;
-        OSL_ENSURE(seqComponents.getLength()>0, "MigrationImpl::copyConfig(): no config components available");
+bool getComponent(rtl::OUString const & path, rtl::OUString * component) {
+    OSL_ASSERT(component != 0);
+    if (path.getLength() == 0 || path[0] != '/') {
+        OSL_TRACE(
+            ("configuration migration in/exclude path %s ignored (does not"
+             " start with slash)"),
+            rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8).getStr());
+        return false;
+    }
+    sal_Int32 i = path.indexOf('/', 1);
+    *component = i < 0 ? path.copy(1) : path.copy(1, i - 1);
+    return true;
+}
 
-        // 2. create an importer
-        uno::Reference< XJob > xImporter(m_xFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.backend.LocalDataImporter")), uno::UNO_QUERY_THROW);
+uno::Sequence< rtl::OUString > setToSeq(std::set< rtl::OUString > const & set) {
+    std::set< rtl::OUString >::size_type n = set.size();
+    if (n > SAL_MAX_INT32) {
+        throw std::bad_alloc();
+    }
+    uno::Sequence< rtl::OUString > seq(static_cast< sal_Int32 >(n));
+    sal_Int32 i = 0;
+    for (std::set< rtl::OUString >::const_iterator j(set.begin());
+         j != set.end(); ++j)
+    {
+        seq[i++] = *j;
+    }
+    return seq;
+}
 
-        // 3. for each migration step...
-        uno::Sequence< NamedValue > importerArgs(3);
-        importerArgs[0] = NamedValue(
-            OUString::createFromAscii("LayerDataUrl"),
-            uno::makeAny(m_aInfo.userdata + OUString::createFromAscii("/user/registry")));
-        importerArgs[1] = NamedValue(
-            OUString::createFromAscii("LayerFilter"),
-            uno::Any());
-        importerArgs[2] = NamedValue(
-            OUString::createFromAscii("Component"),
-            uno::Any());
+}
 
-        migrations_v::const_iterator i_mig = m_vrMigrations->begin();
-        while (i_mig != m_vrMigrations->end())
+void MigrationImpl::copyConfig() {
+    Components comps;
+    for (migrations_v::const_iterator i(m_vrMigrations->begin());
+         i != m_vrMigrations->end(); ++i)
+    {
+        for (strings_v::const_iterator j(i->includeConfig.begin());
+             j != i->includeConfig.end(); ++j)
         {
-            //   a. create config filter for step
-            uno::Reference< XInitialization > xFilter(
-                new CConfigFilter(&(i_mig->includeConfig), &(i_mig->excludeConfig)));
-            importerArgs[1].Value = uno::makeAny(xFilter);
-
-            //   b. run each importer with config filter
-            for (sal_Int32 i=0; i<seqComponents.getLength(); i++)
-            {
-                OUString component = seqComponents[i];
-                importerArgs[2].Value = uno::makeAny(seqComponents[i]);
-                try {
-                    aResult = xImporter->execute(importerArgs);
-                    Exception myException;
-                    if (aResult >>= myException) throw myException;
-                } catch(Exception& aException) {
-                    OString aMsg("Exception in config layer import.\ncomponent: ");
-                    aMsg += OUStringToOString(seqComponents[i], RTL_TEXTENCODING_ASCII_US);
-                    aMsg += "\nmessage: ";
-                    aMsg += OUStringToOString(aException.Message, RTL_TEXTENCODING_ASCII_US);
-                    OSL_ENSURE(sal_False, aMsg.getStr());
-                }
+            rtl::OUString comp;
+            if (getComponent(*j, &comp)) {
+                comps[comp].includedPaths.insert(*j);
             }
-            i_mig++;
+        }
+        for (strings_v::const_iterator j(i->excludeConfig.begin());
+             j != i->excludeConfig.end(); ++j)
+        {
+            rtl::OUString comp;
+            if (getComponent(*j, &comp)) {
+                comps[comp].excludedPaths.insert(*j);
+            }
         }
     }
-    catch (Exception& e)
-    {
-        OString aMsg("Exception in config layer import.\nmessage: ");
-        aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+    for (Components::const_iterator i(comps.begin()); i != comps.end(); ++i) {
+        if (!i->second.includedPaths.empty()) {
+            rtl::OUStringBuffer buf(m_aInfo.userdata);
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/user/registry/data"));
+            sal_Int32 n = 0;
+            do {
+                rtl::OUString seg(i->first.getToken(0, '.', n));
+                rtl::OUString enc(
+                    rtl::Uri::encode(
+                        seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
+                        RTL_TEXTENCODING_UTF8));
+                if (enc.getLength() == 0 && seg.getLength() != 0) {
+                    OSL_TRACE(
+                        ("configuration migration component %s ignored (cannot"
+                         " be encoded as file path)"),
+                        rtl::OUStringToOString(
+                            i->first, RTL_TEXTENCODING_UTF8).getStr());
+                    goto next;
+                }
+                buf.append(sal_Unicode('/'));
+                buf.append(enc);
+            } while (n >= 0);
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(".xcu"));
+            configuration::Update::get(
+                comphelper::getProcessComponentContext())->
+                insertModificationXcuFile(
+                    buf.makeStringAndClear(), setToSeq(i->second.includedPaths),
+                    setToSeq(i->second.excludedPaths));
+        } else {
+            OSL_TRACE(
+                ("configuration migration component %s ignored (only excludes,"
+                 " no includes)"),
+                rtl::OUStringToOString(
+                    i->first, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    next:;
     }
-
-
 }
 
 // removes elements of vector 2 in vector 1
@@ -626,16 +724,6 @@ void MigrationImpl::copyFiles()
 
 void MigrationImpl::runServices()
 {
-
-    //create stratum for old user layer
-    OUString aOldLayerURL = m_aInfo.userdata;
-    aOldLayerURL += OUString::createFromAscii("/user/registry");
-    OUString aStratumSvc = OUString::createFromAscii("com.sun.star.configuration.backend.LocalSingleStratum");
-    uno::Sequence< uno::Any > stratumArgs(1);
-    stratumArgs[0] = uno::makeAny(aOldLayerURL);
-    uno::Reference< XSingleLayerStratum> xStartum( m_xFactory->createInstanceWithArguments(
-        aStratumSvc, stratumArgs), uno::UNO_QUERY);
-
     // Build argument array
     uno::Sequence< uno::Any > seqArguments(3);
     seqArguments[0] = uno::makeAny(NamedValue(
@@ -658,25 +746,15 @@ void MigrationImpl::runServices()
 
             try
             {
-                // create access to old configuration components in the user layer
-                // that were requested by the migration service
-                uno::Sequence< NamedValue > seqComponents(i_mig->configComponents.size());
-                strings_v::const_iterator i_comp = i_mig->configComponents.begin();
-                sal_Int32 i = 0;
-                while (i_comp != i_mig->configComponents.end() && xStartum.is())
-                {
-                    // create Layer for i_comp
-                    seqComponents[i] =  NamedValue(
-                        *i_comp, uno::makeAny(xStartum->getLayer(*i_comp, OUString())));
-
-                    // next component
-                    i_comp++;
-                    i++;
-                }
-                // set old config argument
+                // set black list for extension migration
+                uno::Sequence< rtl::OUString > seqExtBlackList;
+                sal_uInt32 nSize = i_mig->excludeExtensions.size();
+                if ( nSize > 0 )
+                    seqExtBlackList = comphelper::arrayToSequence< ::rtl::OUString >(
+                        &i_mig->excludeExtensions[0], nSize );
                 seqArguments[2] = uno::makeAny(NamedValue(
-                    OUString::createFromAscii("OldConfiguration"),
-                    uno::makeAny(seqComponents)));
+                    OUString::createFromAscii("ExtensionBlackList"),
+                    uno::makeAny( seqExtBlackList )));
 
                 xMigrationJob = uno::Reference< XJob >(m_xFactory->createInstanceWithArguments(
                     i_mig->service, seqArguments), uno::UNO_QUERY_THROW);
@@ -701,19 +779,6 @@ void MigrationImpl::runServices()
         }
         i_mig++;
     }
-}
-
-
-strings_vr MigrationImpl::compileServiceList()
-{
-    strings_vr vrResult(new strings_v);
-    migrations_v::const_iterator i_migr = m_vrMigrations->begin();
-    while (i_migr != m_vrMigrations->end())
-    {
-        vrResult->push_back(i_migr->service);
-        i_migr++;
-    }
-    return vrResult;
 }
 
 } // namespace desktop

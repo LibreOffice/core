@@ -30,12 +30,6 @@
 #include <MNSINIParser.hxx>
 #include <rtl/byteseq.hxx>
 
-ini_Section *  IniParser::getSection(OUString const & secName)
-{
-    if (mAllSection.find(secName) != mAllSection.end())
-        return &mAllSection[secName];
-    return NULL;
-}
 IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException )
 {
     OUString iniUrl;

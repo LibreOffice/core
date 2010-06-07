@@ -41,6 +41,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
+#include <basic/sbobjmod.hxx>
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
@@ -65,6 +66,9 @@
 #include <com/sun/star/script/XStarBasicDialogInfo.hpp>
 #include <com/sun/star/script/XStarBasicLibraryInfo.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -97,19 +101,12 @@ typedef WeakImplHelper1< XStarBasicAccess > StarBasicAccessHelper;
 //  + BOOL      bReference
 
 static const char* szStdLibName = "Standard";
-static const char* szBasicStorage = "StarBASIC";
+static const char szBasicStorage[] = "StarBASIC";
 static const char* szOldManagerStream = "BasicManager";
-static const char* szManagerStream = "BasicManager2";
+static const char szManagerStream[] = "BasicManager2";
 static const char* szImbedded = "LIBIMBEDDED";
 static const char* szCryptingKey = "CryptedBasic";
 static const char* szScriptLanguage = "StarBasic";
-
-static const String BasicStreamName( String::CreateFromAscii(szBasicStorage) );
-static const String ManagerStreamName( String::CreateFromAscii(szManagerStream) );
-
-
-#define DEFINE_CONST_UNICODE(CONSTASCII)    UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-
 
 TYPEINIT1( BasicManager, SfxBroadcaster );
 DBG_NAME( BasicManager );
@@ -243,7 +240,15 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             Any aElement = xLibNameAccess->getByName( aModuleName );
             ::rtl::OUString aMod;
             aElement >>= aMod;
-            pLib->MakeModule32( aModuleName, aMod );
+            Reference< XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, UNO_QUERY );
+            if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
+            {
+                ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
+                OSL_TRACE("#addLibraryModulesImpl - aMod");
+                pLib->MakeModule32( aModuleName, mInfo, aMod );
+            }
+            else
+        pLib->MakeModule32( aModuleName, aMod );
         }
     }
 
@@ -277,11 +282,16 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
     {
         Reference< XLibraryContainer > xScriptCont( Event.Source, UNO_QUERY );
         insertLibraryImpl( xScriptCont, mpMgr, Event.Element, aName );
+        StarBASIC* pLib = mpMgr->GetLib( aName );
+        if ( pLib )
+        {
+            Reference<XVBACompat> xVBACompat( xScriptCont, UNO_QUERY );
+            if ( xVBACompat.is() )
+                pLib->SetVBAEnabled( xVBACompat->getVBACompatModeOn() );
+        }
     }
     else
     {
-        ::rtl::OUString aMod;
-        Event.Element >>= aMod;
 
         StarBASIC* pLib = mpMgr->GetLib( maLibName );
         DBG_ASSERT( pLib, "BasMgrContainerListenerImpl::elementInserted: Unknown lib!");
@@ -290,7 +300,16 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
             SbModule* pMod = pLib->FindModule( aName );
             if( !pMod )
             {
-                pLib->MakeModule32( aName, aMod );
+            ::rtl::OUString aMod;
+            Event.Element >>= aMod;
+                Reference< XVBAModuleInfo > xVBAModuleInfo( Event.Source, UNO_QUERY );
+                if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aName ) )
+                {
+                    ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aName );
+                    pLib->MakeModule32( aName, mInfo, aMod );
+                }
+                else
+                    pLib->MakeModule32( aName, aMod );
                 pLib->SetModified( FALSE );
             }
         }
@@ -319,10 +338,11 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const ContainerEvent
         SbModule* pMod = pLib->FindModule( aName );
         ::rtl::OUString aMod;
         Event.Element >>= aMod;
+
         if( pMod )
-            pMod->SetSource32( aMod );
+                pMod->SetSource32( aMod );
         else
-            pLib->MakeModule32( aName, aMod );
+                pLib->MakeModule32( aName, aMod );
 
         pLib->SetModified( FALSE );
     }
@@ -666,7 +686,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
     // DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     // If there is no Manager Stream, no further actions are necessary
-    if ( rStorage.IsStream( ManagerStreamName ) )
+    if ( rStorage.IsStream( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)) ) )
     {
         LoadBasicManager( rStorage, rBaseURL );
         // StdLib contains Parent:
@@ -707,12 +727,12 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
         // #91626 Save all stream data to save it unmodified if basic isn't modified
         // in an 6.0+ office. So also the old basic dialogs can be saved.
         SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
-            ( ManagerStreamName, eStreamReadMode );
+            ( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)), eStreamReadMode );
         mpImpl->mpManagerStream = new SvMemoryStream();
         *static_cast<SvStream*>(&xManagerStream) >> *mpImpl->mpManagerStream;
 
         SotStorageRef xBasicStorage = rStorage.OpenSotStorage
-                                ( BasicStreamName, eStorageReadMode, FALSE );
+                                ( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)), eStorageReadMode, FALSE );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
         {
             USHORT nLibs = GetLibCount();
@@ -921,7 +941,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 //  StreamMode eStreamMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE;
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
-        ( ManagerStreamName, eStreamReadMode );
+        ( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)), eStreamReadMode );
 
     String aStorName( rStorage.GetName() );
     // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -1169,7 +1189,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
         xStorage = new SotStorage( FALSE, aStorageName, eStorageReadMode );
 
     SotStorageRef xBasicStorage = xStorage->OpenSotStorage
-                            ( BasicStreamName, eStorageReadMode, FALSE );
+                            ( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)), eStorageReadMode, FALSE );
 
     if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
     {
@@ -1422,10 +1442,10 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
         else
             xStorage = new SotStorage( FALSE, pLibInfo->GetStorageName() );
 
-        if ( xStorage->IsStorage( BasicStreamName ) )
+        if ( xStorage->IsStorage( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)) ) )
         {
             SotStorageRef xBasicStorage = xStorage->OpenSotStorage
-                            ( BasicStreamName, STREAM_STD_READWRITE, FALSE );
+                            ( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)), STREAM_STD_READWRITE, FALSE );
 
             if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
             {
@@ -1445,7 +1465,7 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
                 if ( !aInfoList.Count() )
                 {
                     xBasicStorage.Clear();
-                    xStorage->Remove( BasicStreamName );
+                    xStorage->Remove( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)) );
                     xStorage->Commit();
                     // If no further Streams or SubStorages available,
                     // delete the Storage, too.
