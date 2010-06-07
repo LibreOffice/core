@@ -2021,6 +2021,10 @@ sub do_custom_job {
                 $error_code = run_job($job, $module_paths{$module}, $module_job);
             };
         };
+        if ($error_code && $ignore) {
+            push(@ignored_errors, $module_job);
+            $error_code = 0;
+        };
         if ($error_code) {
             $modules_with_errors{$dependencies_hash}++;
             $broken_build{$module} = $error_code;
