@@ -231,7 +231,7 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
                 aPage);
         }
     }
-    catch (beans::UnknownPropertyException aException)
+    catch (Exception aException)
     {
         // We have not been able to set the current page at the main view.
         // This is sad but still leaves us in a valid state.  Therefore,

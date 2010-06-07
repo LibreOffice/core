@@ -642,46 +642,6 @@ void Listener::UpdateEditMode (void)
 
 
 
-void Listener::HandleObjectModification (void)
-{
-    ::boost::shared_ptr<cache::PageCacheManager> pInstance (
-        cache::PageCacheManager::Instance());
-    if ( ! pInstance)
-        break;
-    SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-    if (pDocument == NULL)
-    {
-        OSL_ASSERT(pDocument!=NULL);
-        break;
-    }
-    pInstance->InvalidatePreviewBitmap(pDocument->getUnoModel(), rSdrHint.GetPage());
-    mrSlideSorter.GetView().GetPreviewCache()->RequestPreviewBitmap(rSdrHint.GetPage());
-
-    // When the modified page is a master page then we have to
-    // invalidate all pages that depend on it.
-    if (rSdrHint.GetPage()->IsMasterPage())
-    {
-        for (USHORT nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
-             nIndex<nCount;
-             ++nIndex)
-        {
-            const SdPage* pPage = pDocument->GetSdPage(nIndex, PK_STANDARD);
-            if (pPage!=NULL && pPage->TRG_HasMasterPage())
-            {
-                if (&pPage->TRG_GetMasterPage() == rSdrHint.GetPage())
-                    pInstance->InvalidatePreviewBitmap(pDocument->getUnoModel(), pPage);
-            }
-            else
-            {
-                OSL_ASSERT(pPage!=NULL && pPage->TRG_HasMasterPage());
-            }
-        }
-    }
-}
-
-
-
-
 void Listener::HandleShapeModification (const SdrPage* pPage)
 {
     if (pPage == NULL)
@@ -691,15 +651,15 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     // it.)
     ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (cache::PageCacheManager::Instance());
     if ( ! pCacheManager)
-        break;
+        return;
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
     if (pDocument == NULL)
     {
         OSL_ASSERT(pDocument!=NULL);
-        break;
+        return;
     }
-    pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), rSdrHint.GetPage());
-    mrSlideSorter.GetView().GetPreviewCache()->RequestPreviewBitmap(rSdrHint.GetPage());
+    pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pPage);
+    mrSlideSorter.GetView().GetPreviewCache()->RequestPreviewBitmap(pPage);
 
     // When the page is a master page then invalidate the previews of all
     // pages that are linked to this master page.
@@ -709,15 +669,15 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
              nIndex<nCount;
              ++nIndex)
         {
-            const SdPage* pPage = pDocument->GetSdPage(nIndex, PK_STANDARD);
-            if (pPage!=NULL && pPage->TRG_HasMasterPage())
+            const SdPage* pCandidate = pDocument->GetSdPage(nIndex, PK_STANDARD);
+            if (pCandidate!=NULL && pCandidate->TRG_HasMasterPage())
             {
-                if (&pPage->TRG_GetMasterPage() == rSdrHint.GetPage())
-                    pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pPage);
+                if (&pCandidate->TRG_GetMasterPage() == pPage)
+                    pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pCandidate);
             }
             else
             {
-                OSL_ASSERT(pPage!=NULL && pPage->TRG_HasMasterPage());
+                OSL_ASSERT(pCandidate!=NULL && pCandidate->TRG_HasMasterPage());
             }
         }
     }
