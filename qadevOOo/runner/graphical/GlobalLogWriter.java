@@ -33,11 +33,22 @@ import stats.SimpleLogWriter;
 public class GlobalLogWriter
 {
     private static LogWriter m_aGlobalLogWriter = null;
-    public static synchronized void println(String _sMsg)
+
+    /**
+     * This is just a helper to get clearer code.
+     * use this GlobalLogWriter.println(...)
+     * @param _sMsg
+     */
+    protected static synchronized void println(String _sMsg)
     {
         get().println(_sMsg);
     }
-    public static synchronized LogWriter get()
+
+    /**
+     * @deprecated use GlobalLogWriter.println(...) direct
+     * @return
+     */
+    protected static synchronized LogWriter get()
         {
             if (m_aGlobalLogWriter == null)
             {
@@ -52,7 +63,7 @@ public class GlobalLogWriter
 //             get().initialize(null, true);
 //         }
 
-    public static synchronized void set(LogWriter _aLog)
+    protected static synchronized void set(LogWriter _aLog)
         {
             m_aGlobalLogWriter = _aLog;
         }

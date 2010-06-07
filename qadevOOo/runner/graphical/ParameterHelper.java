@@ -193,7 +193,7 @@ public class ParameterHelper
                 String sReferenceType = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_REFERENCE_TYPE );
                 if (sReferenceType == null || sReferenceType.length() == 0)
                 {
-                    m_sReferenceType = "OOo";
+                    m_sReferenceType = "ps";
                 }
                 else
                 {
@@ -241,6 +241,7 @@ public class ParameterHelper
     /**
      * Helper function to get the buildid of the current used OpenOffice.org
      * out of the AppExecutionCommand the build ID
+     * @return
      */
     public String getBuildID()
         {
@@ -265,11 +266,12 @@ public class ParameterHelper
 
             // check if MultiServiceFactory is given
             if (getReferenceType().toLowerCase().equals("pdf") ||
+                getReferenceType().toLowerCase().equals("ps") ||
                 getReferenceType().toLowerCase().equals("ooo"))
             {
                 if (xMSF == null)
                 {
-                    GlobalLogWriter.get().println("ERROR! MultiServiceFactory not given.");
+                    GlobalLogWriter.println("ERROR! MultiServiceFactory not given.");
                 }
             }
             return xMSF;
@@ -417,5 +419,15 @@ public class ParameterHelper
         return m_sHTMLPrefix;
     }
 
+    public boolean createSmallPictures()
+        {
+            // boolean bCreateSmallPictures = true;
+            boolean bNoSmallPictures = m_aCurrentParams.getBool( PropertyName.NO_SMALL_PICTURES);
+            if (bNoSmallPictures == true)
+            {
+                return false;
+            }
+            return true;
+        }
 
 }
