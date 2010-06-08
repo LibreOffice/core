@@ -241,7 +241,7 @@ sub remove_office_start_language_files
         else
         {
             my $infoline = "INFO: Flag SET_OFFICE_LANGUAGE \-\> Removing $oneitem->{'gid'} from file list.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            push( @installer::globals::logfileinfo, $infoline);
         }
     }
 
