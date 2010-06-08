@@ -93,7 +93,8 @@ SLOFILES =	\
 
 #HACK TO DISABLE PCH
 NOOPTFILES= \
-        $(SLO)$/sfxacldetect.obj
+        $(SLO)$/sfxacldetect.obj \
+        $(SLO)$/syspathw32.obj
 .ENDIF        
 
 
