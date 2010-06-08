@@ -54,6 +54,7 @@ TabPage TP_DOCINFOSECURITY
     };
     Edit PASSWORD_TO_OPEN_ED
     {
+        HelpId = HID_SECURITYTAB_PASSWORD_TO_OPEN;
         Pos = MAP_APPFONT( 100, 18 );
         Size = MAP_APPFONT( 88, RSC_CD_TEXTBOX_HEIGHT );
         Border = TRUE;
@@ -67,6 +68,7 @@ TabPage TP_DOCINFOSECURITY
     };
     Edit CONFIRM_PASSWORD_TO_OPEN_ED
     {
+        HelpId = HID_SECURITYTAB_CONFIRM_PASSWORD_TO_OPEN;
         Pos = MAP_APPFONT( 100, 32 );
         Size = MAP_APPFONT( 88, RSC_CD_TEXTBOX_HEIGHT );
         Border = TRUE;
@@ -76,9 +78,11 @@ TabPage TP_DOCINFOSECURITY
     {
         Pos = MAP_APPFONT( 12, 48 );
         Size = MAP_APPFONT( 236, 3 * RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ en-US ] = "Note: If you lose or forget the password, it cannot be recovered."\
-                "It is advisable to keep passwords in a safe place."\
-                "Passwords are case-sensitive.";
+        Text [ en-US ] =
+                "Note: After a password has been set, the document will only open "\
+                "with the password. Should you lose the password, there will be "\
+                "no way to recover the document. Please also note that this password "\
+                "is case-sensitive.";
         WordBreak = TRUE;
     };
     FixedLine PASSWORD_TO_MODIFY_FL
@@ -95,6 +99,7 @@ TabPage TP_DOCINFOSECURITY
     };
     Edit PASSWORD_TO_MODIFY_ED
     {
+        HelpId = HID_SECURITYTAB_PASSWORD_TO_MODIFY;
         Pos = MAP_APPFONT( 100, 90 );
         Size = MAP_APPFONT( 88, RSC_CD_TEXTBOX_HEIGHT );
         Border = TRUE;
@@ -108,6 +113,7 @@ TabPage TP_DOCINFOSECURITY
     };
     Edit CONFIRM_PASSWORD_TO_MODIFY_ED
     {
+        HelpId = HID_SECURITYTAB_CONFIRM_PASSWORD_TO_MODIFY;
         Pos = MAP_APPFONT( 100, 104 );
         Size = MAP_APPFONT( 88, RSC_CD_TEXTBOX_HEIGHT );
         Border = TRUE;
@@ -121,18 +127,21 @@ TabPage TP_DOCINFOSECURITY
     };
     CheckBox OPEN_READONLY_CB
     {
+        HelpId = HID_SECURITYTAB_OPEN_FILE_READONLY;
         Pos = MAP_APPFONT( 12, 133 );
         Size = MAP_APPFONT( 176, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Open file read-only";
     };
     CheckBox RECORD_CHANGES_CB
     {
+        HelpId = HID_SECURITYTAB_RECORD_CHANGES;
         Pos = MAP_APPFONT( 12, 147 );
         Size = MAP_APPFONT( 176, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Record ~changes";
     };
     PushButton CHANGE_PROTECTION_PB
     {
+        HelpId = HID_SECURITYTAB_PROTECTION;
         Pos = MAP_APPFONT( 194, 145 );
         Size = MAP_APPFONT( 60, RSC_CD_PUSHBUTTON_HEIGHT );
     };
