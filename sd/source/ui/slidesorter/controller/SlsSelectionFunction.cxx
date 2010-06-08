@@ -596,7 +596,7 @@ void SelectionFunction::MoveFocus (
             mnShiftKeySelectionAnchor = pFocusedDescriptor->GetPageIndex();
         }
     }
-    else
+    else if ( ! bIsControlDown)
         mnShiftKeySelectionAnchor = -1;
 
     mrController.GetFocusManager().MoveFocus(eDirection);
@@ -909,6 +909,9 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     mnEventCode |= EncodeMouseEvent(rEvent);
     mnEventCode |= EncodeState();
 
+    // Detect the mouse leaving the window.  When not button is pressed then
+    // we can call IsLeaveWindow at the event.  Otherwise we have to make an
+    // explicit test.
     mbIsLeaving = rEvent.IsLeaveWindow()
         || ! Rectangle(Point(0,0),
              rSlideSorter.GetContentWindow()->GetOutputSizePixel()).IsInside(maMousePosition);
@@ -941,6 +944,9 @@ SelectionFunction::EventDescriptor::EventDescriptor (
 
     mnEventCode |= EncodeState();
 
+    // Detect the mouse leaving the window.  When not button is pressed then
+    // we can call IsLeaveWindow at the event.  Otherwise we have to make an
+    // explicit test.
     mbIsLeaving = rEvent.mbLeaving
         || ! Rectangle(Point(0,0),
              rSlideSorter.GetContentWindow()->GetOutputSizePixel()).IsInside(maMousePosition);
@@ -1151,9 +1157,6 @@ bool SelectionFunction::ModeHandler::ProcessMotionEvent (EventDescriptor& rDescr
             (rDescriptor.mnEventCode & LEFT_BUTTON) != 0,
             true);
 
-    // Detect the mouse leaving the window.  When not button is pressed then
-    // we can call IsLeaveWindow at the event.  Otherwise we have to make an
-    // explicit test.
     if (rDescriptor.mbIsLeaving)
     {
         mrSelectionFunction.SwitchToNormalMode();
