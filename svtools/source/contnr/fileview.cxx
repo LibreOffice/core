@@ -1006,12 +1006,31 @@ void ViewTabListBox_Impl::DeleteEntries()
             aURL = ( (SvtContentEntry*)pCurEntry->GetUserData() )->maURL;
 
         if ( !aURL.Len() )
-            return;
+            continue;
 
-        INetURLObject aObj( aURL );
+        bool canDelete = true;
+        try
+        {
+            ::ucbhelper::Content aCnt( aURL, mxCmdEnv );
+            Reference< XCommandInfo > aCommands = aCnt.getCommands();
+            if ( aCommands.is() )
+                canDelete
+                    = aCommands->hasCommandByName(
+                        OUString::createFromAscii( "delete" ) );
+            else
+                canDelete = false;
+        }
+        catch( Exception const & )
+        {
+            canDelete = false;
+        }
+
+        if (!canDelete)
+            continue; // process next entry
 
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
+            INetURLObject aObj( aURL );
             svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
             if ( sDialogPosition.Len() )
                 aDlg.SetWindowState( sDialogPosition );
@@ -1057,22 +1076,44 @@ BOOL ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
 
     try
     {
+        OUString aPropName = OUString::createFromAscii( "Title" );
+        bool canRename = true;
         ::ucbhelper::Content aContent( aURL, mxCmdEnv );
 
-        OUString aPropName = OUString::createFromAscii( "Title" );
-        Any aValue;
-        aValue <<= OUString( rNewText );
-        aContent.setPropertyValue( aPropName, aValue );
-        mpParent->EntryRenamed( aURL, rNewText );
+        try
+        {
+            Reference< XPropertySetInfo > aProps = aContent.getProperties();
+            if ( aProps.is() )
+            {
+                Property aProp = aProps->getPropertyByName( aPropName );
+                canRename = !( aProp.Attributes & PropertyAttribute::READONLY );
+            }
+            else
+            {
+                canRename = false;
+            }
+        }
+        catch ( Exception const & )
+        {
+            canRename = false;
+        }
 
-        pData->maURL = aURL;
-        pEntry->SetUserData( pData );
+        if ( canRename )
+        {
+            Any aValue;
+            aValue <<= OUString( rNewText );
+            aContent.setPropertyValue( aPropName, aValue );
+            mpParent->EntryRenamed( aURL, rNewText );
 
-        bRet = TRUE;
+            pData->maURL = aURL;
+            pEntry->SetUserData( pData );
+
+            bRet = TRUE;
+        }
     }
-    //catch( ::com::sun::star::ucb::ContentCreationException const & ) {}
-    //catch( ::com::sun::star::ucb::CommandAbortedException const & ) {}
-    catch( Exception const & ) {}
+    catch( Exception const & )
+    {
+    }
 
     return bRet;
 }
