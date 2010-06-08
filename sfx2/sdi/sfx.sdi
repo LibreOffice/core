@@ -3594,7 +3594,7 @@ SfxVoidItem MacroOrganizer SID_MACROORGANIZER
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item PasswordToModifyHash SID_MODIFYPASSWORDHASH
+SfxInt32Item PasswordToModifyHash SID_MODIFYPASSWORDHASH
 
 [
     /* flags: */
