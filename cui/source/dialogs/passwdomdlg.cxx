@@ -135,7 +135,8 @@ struct PasswordToOpenModifyDialog_Impl
 //    DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( OkBtnClickHdl, OKButton * );
 
-    PasswordToOpenModifyDialog_Impl( PasswordToOpenModifyDialog * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen );
+    PasswordToOpenModifyDialog_Impl( PasswordToOpenModifyDialog * pParent,
+            sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
     ~PasswordToOpenModifyDialog_Impl();
 };
 
@@ -143,7 +144,8 @@ struct PasswordToOpenModifyDialog_Impl
 PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         PasswordToOpenModifyDialog * pParent,
         sal_uInt16 nMinPasswdLen,
-        sal_uInt16 nMaxPasswdLen ) :
+        sal_uInt16 nMaxPasswdLen,
+        bool bIsPasswordToModify ) :
     m_pParent( pParent ),
     m_aFileEncryptionFL         ( pParent, CUI_RES( FL_FILE_ENCRYPTION ) ),
     m_aPasswdToOpenFT           ( pParent, CUI_RES( FT_PASSWD_TO_OPEN ) ),
@@ -202,6 +204,8 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
     m_aPasswdToOpenED.GrabFocus();
 
 //    ModifyHdl( NULL );
+
+    m_aMoreFewerOptionsBTN.Enable( bIsPasswordToModify );
 }
 
 
@@ -287,11 +291,12 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
         Window * pParent,
         sal_uInt16 nMinPasswdLen,
-        sal_uInt16 nMaxPasswdLen ) :
+        sal_uInt16 nMaxPasswdLen,
+        bool bIsPasswordToModify ) :
     SfxModalDialog( pParent, CUI_RES( RID_DLG_PASSWORD_TO_OPEN_MODIFY ) )
 {
     m_pImpl = std::auto_ptr< PasswordToOpenModifyDialog_Impl >(
-            new PasswordToOpenModifyDialog_Impl( this, nMinPasswdLen, nMaxPasswdLen ) );
+            new PasswordToOpenModifyDialog_Impl( this, nMinPasswdLen, nMaxPasswdLen, bIsPasswordToModify ) );
 
     FreeResource();
 }
