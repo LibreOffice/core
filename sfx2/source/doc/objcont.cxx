@@ -1262,9 +1262,9 @@ sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
 //    return sal_False;
 }
 
-void SfxObjectShell::SetModifyPasswordEntered()
+void SfxObjectShell::SetModifyPasswordEntered( sal_Bool bEntered )
 {
-    pImp->m_bModifyPasswordEntered = sal_True;
+    pImp->m_bModifyPasswordEntered = bEntered;
 }
 
 sal_Bool SfxObjectShell::IsModifyPasswordEntered()

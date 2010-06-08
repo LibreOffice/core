@@ -1389,7 +1389,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !IsAbortingImport() )
             PositionView_Impl();
 
-        if ( GetModifyPasswordHash() )
+        if ( GetModifyPasswordHash() && !IsModifyPasswordEntered() )
             SetReadOnly();
 
         // Salvage

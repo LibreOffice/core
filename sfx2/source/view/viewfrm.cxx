@@ -714,6 +714,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
 
                 xNewObj = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_STANDARD );
+
+                if ( xOldObj->IsModifyPasswordEntered() )
+                    xNewObj->SetModifyPasswordEntered();
+
                 uno::Sequence < beans::PropertyValue > aLoadArgs;
                 TransformItems( SID_OPENDOC, *pNewSet, aLoadArgs );
                 try
@@ -769,6 +773,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
                 else
                 {
+                    if ( xNewObj->GetModifyPasswordHash() && xNewObj->GetModifyPasswordHash() != xOldObj->GetModifyPasswordHash() )
+                    {
+                        xNewObj->SetModifyPasswordEntered( sal_False );
+                        xNewObj->SetReadOnly();
+                    }
+
                     if ( xNewObj->IsDocShared() )
                     {
                         // the file is shared but the closing can change the sharing control file
@@ -781,10 +791,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     TransformItems( SID_OPENDOC, *xNewObj->GetMedium()->GetItemSet(), aLoadArgs );
 
                     UpdateDocument_Impl();
-                }
 
-                if ( xNewObj.Is() )
-                {
                     try
                     {
                         while ( !aViewFrames.empty() )

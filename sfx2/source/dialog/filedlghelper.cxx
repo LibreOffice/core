@@ -1528,7 +1528,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             mbPwdCheckBoxState = ( pPassItem != NULL );
 
             // in case the document has password to modify, the dialog should be shown
-            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUInt32Item, SID_MODIFYPASSWORDHASH, FALSE );
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxInt32Item, SID_MODIFYPASSWORDHASH, FALSE );
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue() );
         }
 
@@ -1660,9 +1660,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                 rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
 
                             // the empty password has 0 as Hash
-                            sal_uInt16 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pCurrentFilter->GetServiceName() ) );
+                            sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pCurrentFilter->GetServiceName() ) );
                             if ( nHash )
-                                rpSet->Put( SfxInt32Item( SID_MODIFYPASSWORDHASH, (sal_Int32)nHash ) );
+                                rpSet->Put( SfxInt32Item( SID_MODIFYPASSWORDHASH, nHash ) );
                         }
                         else
                             return ERRCODE_ABORT;
