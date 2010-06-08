@@ -107,13 +107,13 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
         {
             if ( rParameter.Value.getValueTypeClass() == TypeClass_DOUBLE )
             {
-                double fValue;
+                double fValue = 0.0;
                 if ( rParameter.Value >>= fValue )
                     aRet = rtl::OUString::valueOf( fValue );
             }
             else
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if ( rParameter.Value >>= nValue )
                     aRet = rtl::OUString::valueOf( nValue );
             }
@@ -134,7 +134,6 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
             else
             {
                 // ups... we should have an index here and not the formula name
-                sal_Bool bNoGood = sal_True;
             }
         }
         break;
@@ -153,7 +152,6 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
             else
             {
                 // ups... we should have an index here and not the formula name
-                sal_Bool bNotGood = sal_True;
             }
         }
         break;
@@ -989,8 +987,8 @@ protected:
 
 Path2DContext::Path2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
 : ContextHandler( rParent )
-, mrSegments( rSegments )
 , mrPath2D( rPath2D )
+, mrSegments( rSegments )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
     const rtl::OUString aEmptyString;
