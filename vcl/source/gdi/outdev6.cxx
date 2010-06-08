@@ -306,9 +306,8 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         const double fTransparency = 0.01 * nTransparencePercent;
         if( mbFillColor )
         {
-            // make sure filled polygons are closed
-            aB2DPolyPolygon.setClosed( true );
             // draw the transparent polygon
+            // NOTE: filled polygons are assumed to be drawn as if they were always closed
             bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
         }
 
@@ -322,7 +321,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const ::basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                /*bDrawn =*/ mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, this );
+                bDrawn = mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, this );
             }
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;
