@@ -78,19 +78,19 @@ void merge(
         case Node::KIND_LOCALIZED_VALUE:
             break; //TODO: merge certain parts?
         case Node::KIND_GROUP:
-            if (dynamic_cast< GroupNode * >(original.get())->isExtensible()) {
-                for (NodeMap::iterator i2(update->getMembers().begin());
-                     i2 != update->getMembers().end(); ++i2)
-                {
-                    NodeMap::iterator i1(
-                        original->getMembers().find(i2->first));
-                    if (i1 == original->getMembers().end()) {
-                        if (i2->second->kind() == Node::KIND_PROPERTY) {
-                            original->getMembers().insert(*i2);
-                        }
-                    } else if (i2->second->kind() == i1->second->kind()) {
-                        merge(i1->second, i2->second);
+            for (NodeMap::iterator i2(update->getMembers().begin());
+                 i2 != update->getMembers().end(); ++i2)
+            {
+                NodeMap::iterator i1(original->getMembers().find(i2->first));
+                if (i1 == original->getMembers().end()) {
+                    if (i2->second->kind() == Node::KIND_PROPERTY &&
+                        dynamic_cast< GroupNode * >(
+                            original.get())->isExtensible())
+                    {
+                        original->getMembers().insert(*i2);
                     }
+                } else if (i2->second->kind() == i1->second->kind()) {
+                    merge(i1->second, i2->second);
                 }
             }
             break;
@@ -119,7 +119,7 @@ void merge(
 
 }
 
-XcsParser::XcsParser(int layer, Data * data):
+XcsParser::XcsParser(int layer, Data & data):
     valueParser_(layer), data_(data), state_(STATE_START)
 {}
 
@@ -266,7 +266,7 @@ bool XcsParser::startElement(
 }
 
 void XcsParser::endElement(XmlReader const & reader) {
-    if (valueParser_.endElement(reader)) {
+    if (valueParser_.endElement()) {
         return;
     }
     if (ignoring_ > 0) {
@@ -279,9 +279,9 @@ void XcsParser::endElement(XmlReader const & reader) {
                 switch (state_) {
                 case STATE_TEMPLATES:
                     {
-                        NodeMap::iterator i(data_->templates.find(top.name));
-                        if (i == data_->templates.end()) {
-                            data_->templates.insert(
+                        NodeMap::iterator i(data_.templates.find(top.name));
+                        if (i == data_.templates.end()) {
+                            data_.templates.insert(
                                 NodeMap::value_type(top.name, top.node));
                         } else {
                             merge(i->second, top.node);
@@ -290,9 +290,9 @@ void XcsParser::endElement(XmlReader const & reader) {
                     break;
                 case STATE_COMPONENT:
                     {
-                        NodeMap::iterator i(data_->components.find(top.name));
-                        if (i == data_->components.end()) {
-                            data_->components.insert(
+                        NodeMap::iterator i(data_.components.find(top.name));
+                        if (i == data_.components.end()) {
+                            data_.components.insert(
                                 NodeMap::value_type(top.name, top.node));
                         } else {
                             merge(i->second, top.node);
@@ -443,7 +443,7 @@ void XcsParser::handleNodeRef(XmlReader & reader) {
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< Node > tmpl(
-        data_->getTemplate(
+        data_.getTemplate(
             valueParser_.getLayer(),
             xmldata::parseTemplateReference(
                 component, hasNodeType, nodeType, 0)));
@@ -456,7 +456,7 @@ void XcsParser::handleNodeRef(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::Reference< Node > node(tmpl->clone());
+    rtl::Reference< Node > node(tmpl->clone(false));
     node->setLayer(valueParser_.getLayer());
     elements_.push(Element(node, name));
 }

@@ -1929,7 +1929,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
              tmplName),
             static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::Reference< Node > node(tmpl->clone());
+    rtl::Reference< Node > node(tmpl->clone(true));
     node->setLayer(Data::NO_LAYER);
     return static_cast< cppu::OWeakObject * >(
         new ChildAccess(components_, getRootAccess(), node));

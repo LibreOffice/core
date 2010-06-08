@@ -1140,7 +1140,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     }
 
     // collect elements
-    readDefaults( false );
+    readDefaults( false, false );
     readBoolAttr(
         OUString( RTL_CONSTASCII_USTRINGPARAM("Closeable") ),
         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":closeable") ) );

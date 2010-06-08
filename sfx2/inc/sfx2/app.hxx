@@ -33,6 +33,7 @@
 #include <tools/solar.h>
 #include <svl/smplhint.hxx>
 #include <svl/poolitem.hxx>
+#include <vcl/image.hxx>
 #include <tools/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -316,6 +317,9 @@ public:
     SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
     SAL_DLLPRIVATE ResMgr*      GetOffResManager_Impl();
 //#endif
+
+    /** loads the application logo as used in the about dialog and impress slideshow pause screen */
+    static Image GetApplicationLogo();
 };
 
 #define SFX_APP() SfxGetpApp()
