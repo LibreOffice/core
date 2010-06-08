@@ -22,7 +22,7 @@
   <platform value="UPDATED_PLATFORM" />
 
   <publisher>
-      <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Oracle</name>
+      <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
   </publisher>
 
   <display-name>
@@ -30,8 +30,8 @@
   </display-name>
 
   <icon>
-    <default xlink:href="bitmaps/em47.png" />
-    <high-contrast xlink:href="bitmaps/em47_hc.png" />
+    <default xlink:href="bitmaps/extension_32.png" />
+    <high-contrast xlink:href="bitmaps/extension_32_h.png" />
   </icon>
 
 </description>

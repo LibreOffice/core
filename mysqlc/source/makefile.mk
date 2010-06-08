@@ -116,6 +116,9 @@ CDEFS+=-DCPPDBC_EXPORTS -DCPPCONN_LIB_BUILD
 CDEFS += -DCPPCONN_LIB=\"$(DLLPRE)mysqlcppconn$(DLLPOST)\"
 .ELSE
 CDEFS += -DCPPCONN_LIB=\"$(shell readlink /usr/lib/libmysqlcppconn.so)\"
+.IF "$(USE_SYSTEM_STL)"!="YES"
+CDEFS += -DADAPT_EXT_STL
+.ENDIF
 .ENDIF
 
 # --------------- MySQL settings ------------------
@@ -222,8 +225,8 @@ COMPONENT_LIBRARIES=\
             $(COMPONENT_LIBRARY)
 
 COMPONENT_IMAGES= \
-    $(EXTENSIONDIR)$/images$/sun_extension.png \
-    $(EXTENSIONDIR)$/images$/sun_extension_hc.png
+    $(EXTENSIONDIR)$/images$/extension_32.png \
+    $(EXTENSIONDIR)$/images$/extension_32_h.png
 
 
 # ........ component description ........
@@ -264,9 +267,9 @@ EXTENSION_PACKDEPS+=$(COMPONENT_MYSQL_CPPCONN_FILE)
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
-$(EXTENSIONDIR)$/images$/%.png : $(PRJ)$/images$/%.png
+$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@ > $(NULLDEV)
+    $(COPY) $< $@
 
 # existing descriptions: just copy
 $(EXTENSIONDIR)$/description$/%.txt: .$/description$/%.txt

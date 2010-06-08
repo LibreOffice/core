@@ -35,7 +35,9 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 
 #include <cppuhelper/implbase1.hxx>
+#include <tools/preextstl.h>
 #include <cppconn/resultset_metadata.h>
+#include <tools/postextstl.h>
 
 namespace connectivity
 {
@@ -62,7 +64,7 @@ namespace connectivity
             {
             }
 
-            inline ::rtl::OUString convert( const ::std::string& _string ) const
+            inline ::rtl::OUString convert( const ::ext_std::string& _string ) const
             {
                 return ::rtl::OUString( _string.c_str(), _string.size(), m_encoding );
             }

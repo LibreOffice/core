@@ -77,7 +77,7 @@ SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=	exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
@@ -103,8 +103,8 @@ COMPONENT_BITMAPS= \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
 
 COMPONENT_IMAGES=\
-    $(EXTENSIONDIR)$/bitmaps$/em47.png \
-    $(EXTENSIONDIR)$/bitmaps$/em47_hc.png
+    $(EXTENSIONDIR)$/bitmaps$/extension_32.png \
+    $(EXTENSIONDIR)$/bitmaps$/extension_32_h.png
 
 # rather freestyle or common to all?
 COMPONENT_HELP= \
@@ -129,7 +129,7 @@ $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_IMAGES) : images$/$$(@:f)
+$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
