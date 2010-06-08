@@ -62,7 +62,7 @@
 //=============================================================================
 /** allows to create and initialize a new embedded object using GUI dialog.
  */
-interface XInsertObjectDialog: com::sun::star::uno::XInterface
+published interface XInsertObjectDialog: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** creates a new object using GUI dialog.
