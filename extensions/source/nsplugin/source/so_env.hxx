@@ -69,9 +69,6 @@
 // return the install path of staroffice, return value like "/home/build/staroffice"
 const char* findInstallDir();
 
-// return original system library path + "/home/build/staroffice/program"
-const char* getNewLibraryPath();
-
 // return SO program dir absolute path, like "/home/build/staroffice/program"
 const char* findProgramDir();
 
