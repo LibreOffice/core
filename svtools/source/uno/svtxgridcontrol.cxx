@@ -421,6 +421,7 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 void SAL_CALL SVTXGridControl::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( GetMutex() );
     TableControl* pTable = (TableControl*)GetWindow();
     if ( pTable )
     {
