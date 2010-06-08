@@ -41,9 +41,7 @@
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 
-#ifndef _SVTOOLS_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/families.hxx>
@@ -649,7 +647,12 @@ lcl_TableData lcl_getDataForLocalTable(
         SchXMLExportHelper::tDataSequenceCont::const_iterator aIt( aBegin );
 
         size_t nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
-        nMaxSequenceLength = std::max( nMaxSequenceLength, size_t( aSimpleCategories.getLength() ) );
+        size_t nCategoriesLength( aSimpleCategories.getLength() );
+        if( nCategoriesLength > nMaxSequenceLength )
+        {
+            aSimpleCategories.realloc(nMaxSequenceLength);//#i110617#
+            nCategoriesLength = nMaxSequenceLength;
+        }
         size_t nNumColumns( bSeriesFromColumns ? nNumSequences : nMaxSequenceLength );
         size_t nNumRows( bSeriesFromColumns ? nMaxSequenceLength : nNumSequences );
 
@@ -1084,6 +1087,7 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
                     aDataProviderURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) );
             }
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         }
 
         OUString sChartType( xDiagram->getDiagramType() );
@@ -1520,8 +1524,11 @@ void SchXMLExportHelper::exportTable()
             // to allow a correct re-association when copying via clipboard
             if( !bHasOwnData && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd )
             {
-                if( (*aColumnDescriptions_RangeIter).getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aColumnDescriptions_RangeIter );
+                if ((*aColumnDescriptions_RangeIter).getLength())
+                {
+                    mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
+                        *aColumnDescriptions_RangeIter);
+                }
                 ++aColumnDescriptions_RangeIter;
             }
             exportText( *aIt );
@@ -1553,7 +1560,10 @@ void SchXMLExportHelper::exportTable()
                     // write the original range name as id into the local table
                     // to allow a correct re-association when copying via clipboard
                     if( !bHasOwnData && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd )
-                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aRowDescriptions_RangeIter++ );
+                    {
+                        mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
+                            *aRowDescriptions_RangeIter++);
+                    }
                     exportText( *aRowDescriptionsIter );
                     ++aRowDescriptionsIter;
                     if( nC < nComplexCount )
@@ -1575,8 +1585,11 @@ void SchXMLExportHelper::exportTable()
                 if( ( !bHasOwnData && aDataRangeIter != aDataRangeEndIter ) &&
                     ( mbRowSourceColumns || (aColIt == aRowIt->begin())) )
                 {
-                    if( (*aDataRangeIter).getLength())
-                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aDataRangeIter );
+                    if ((*aDataRangeIter).getLength())
+                    {
+                        mrExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
+                            *aDataRangeIter);
+                    }
                     ++aDataRangeIter;
                 }
                 exportText( msString, false ); // do not convert tabs and lfs

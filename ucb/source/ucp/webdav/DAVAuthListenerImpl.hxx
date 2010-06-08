@@ -61,7 +61,6 @@ namespace webdav_ucp
                                   const ::rtl::OUString & inHostName,
                                   ::rtl::OUString & inoutUserName,
                                   ::rtl::OUString & outPassWord,
-                                  sal_Bool bAllowPersistentStoring,
                                   sal_Bool bCanUseSystemCredentials );
     private:
 

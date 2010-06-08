@@ -7,9 +7,9 @@ Third Party Code. Additional copyright notices and license terms applicable to p
 All trademarks and registered trademarks mentioned herein are the property of their respective owners.  
 
 ------------------------------------
-Copyright 2002,2008 Sun Microsystems, Inc.
+Copyright (c) 2000,2010 Oracle and/or it affiliates. All rights reserved.
 
-This product has been created with contributions from the OpenOffice.org community, of which Sun Microsystems Inc. is the founding member. OpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.
+This product has been created with contributions from the OpenOffice.org community, of which Oracle is a principal member. OpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.
 
 ------------------------------------
 

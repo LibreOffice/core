@@ -113,7 +113,8 @@
 <!ELEMENT oor:items (item*)>
 <!ATTLIST oor:items>
 
-<!ELEMENT item ((prop | node)*)>
+<!ELEMENT item ((node | prop | value)*)>
 <!ATTLIST item
     oor:path CDATA #REQUIRED>
-        <!-- the absolute path representation of a set or group node -->
+        <!-- the absolute path representation of a localized property or a group
+             or set node -->

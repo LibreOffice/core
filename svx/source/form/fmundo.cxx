@@ -90,25 +90,7 @@ class ScriptEventListenerWrapper : public ScriptEventListener_BASE
 public:
     ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException ) : pModel(&_rModel)
     {
-        Reference < XPropertySet > xProps(
-            ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-        if ( xProps.is() )
-        {
-            Reference< XComponentContext > xCtx( xProps->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
-            if ( xCtx.is() )
-            {
-                Reference< XMultiComponentFactory > xMFac(
-                    xCtx->getServiceManager(), UNO_QUERY );
-                if ( xMFac.is() )
-                {
-                    m_vbaListener.set( xMFac->createInstanceWithContext(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "ooo.vba.EventListener"  ) ), xCtx ),
-                                UNO_QUERY_THROW );
-                }
-            }
-        }
+
     }
     // XEventListener
     virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException ){}
@@ -136,6 +118,33 @@ public:
 private:
     void setModel()
     {
+        if ( !m_vbaListener.is() )
+                {
+            Reference < XPropertySet > xProps(
+            ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+            if ( xProps.is() )
+            {
+                Reference< XComponentContext > xCtx( xProps->getPropertyValue(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
+                if ( xCtx.is() )
+                {
+                    Reference< XMultiComponentFactory > xMFac(
+                    xCtx->getServiceManager(), UNO_QUERY );
+                    SfxObjectShellRef xObjSh = pModel->GetObjectShell();
+                    Reference< XMultiServiceFactory > xDocFac;
+                    if ( xObjSh.Is() )
+                        xDocFac.set( xObjSh->GetModel(), UNO_QUERY );
+
+                    if ( xMFac.is() )
+                    {
+                        m_vbaListener.set( xMFac->createInstanceWithContext(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "ooo.vba.EventListener"  ) ), xCtx ),
+                                    UNO_QUERY_THROW );
+                    }
+                }
+            }
+        }
         Reference< XPropertySet > xProps( m_vbaListener, UNO_QUERY );
         if ( xProps.is() )
         {

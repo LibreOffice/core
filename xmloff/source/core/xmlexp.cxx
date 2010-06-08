@@ -1314,6 +1314,23 @@ void SvXMLExport::SetBodyAttributes()
 {
 }
 
+static void
+lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 nExportMode)
+{
+    // check version >= 1.2
+    switch (rExport.getDefaultVersion()) {
+        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_010: return;
+        default: break;
+    }
+
+    if (EXPORT_SETTINGS != nExportMode) // meta, content, styles
+    {
+        rExport.AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
+            OUString::createFromAscii(s_grddl_xsl) );
+    }
+}
+
 sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
     bool bOwnGraphicResolver = false;
@@ -1449,11 +1466,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
         const sal_Int32 nExportMode = mnExportFlags & (EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS);
 
-        if ( EXPORT_SETTINGS != nExportMode ) // meta, content, styles
-        {
-            AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
-                OUString::createFromAscii(s_grddl_xsl) );
-        }
+        lcl_AddGrddl(*this, nExportMode);
 
         if( EXPORT_META == nExportMode )
         {
@@ -2519,6 +2532,22 @@ SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
 ::rtl::OUString SvXMLExport::GetStreamName() const
 {
     return mpImpl->mStreamName;
+}
+
+void
+SvXMLExport::AddAttributeIdLegacy(
+        sal_uInt16 const nLegacyPrefix, ::rtl::OUString const& rValue)
+{
+    switch (getDefaultVersion()) {
+        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_010: break;
+        default: // ODF 1.2: xml:id
+            AddAttribute(XML_NAMESPACE_XML, XML_ID, rValue);
+    }
+    // in ODF 1.1 this was form:id, anim:id, draw:id, or text:id
+    // backward compatibility: in ODF 1.2 write _both_ id attrs
+    AddAttribute(nLegacyPrefix, XML_ID, rValue);
+    // FIXME: this function simply assumes that rValue is unique
 }
 
 void
