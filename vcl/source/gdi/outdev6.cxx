@@ -300,13 +300,17 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
         // get the polygon in device coordinates
         basegfx::B2DPolyPolygon aB2DPolyPolygon( rPolyPoly.getB2DPolyPolygon() );
-        aB2DPolyPolygon.setClosed( true );
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
 
-        // draw the transparent polygon
         const double fTransparency = 0.01 * nTransparencePercent;
-        bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+        if( mbFillColor )
+        {
+            // make sure filled polygons are closed
+            aB2DPolyPolygon.setClosed( true );
+            // draw the transparent polygon
+            bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+        }
 
         if( mbLineColor )
         {
