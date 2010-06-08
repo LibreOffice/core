@@ -69,6 +69,7 @@ public class HelpIndexerTool
         String aModule = "";
         String aTargetZipFileStr = "";
         String aCfsName = "";
+        String aSegmentName = "";
 
         // Scan arguments
         boolean bLang = false;
@@ -77,6 +78,7 @@ public class HelpIndexerTool
         boolean bSrcDir = false;
         boolean bOutput = false;
         boolean bCfsName = false;
+        boolean bSegmentName = false;
 
         int nArgCount = args.length;
         for( int i = 0 ; i < nArgCount ; i++ )
@@ -126,7 +128,7 @@ public class HelpIndexerTool
                 }
                 i++;
             }
-            else if( "-checkcfsname".equals(args[i]) )
+            else if( "-checkcfsandsegname".equals(args[i]) )
             {
                 if( i + 1 < nArgCount )
                 {
@@ -134,6 +136,17 @@ public class HelpIndexerTool
                     bCfsName = true;
                 }
                 i++;
+                if( i + 1 < nArgCount )
+                {
+                    aSegmentName = "segments" + args[i + 1];
+                    bSegmentName = true;
+                }
+                i++;
+        if (!(bCfsName && bSegmentName))
+        {
+            System.out.println("Usage: HelpIndexer -checkcfsandsegname _0 _3 (2 arguments needed)");
+            System.exit( -1 );
+        }
             }
         }
 
@@ -173,12 +186,17 @@ public class HelpIndexerTool
             writer.close();
 
             boolean bCfsFileOk = true;
-            if( bCfsName && !bExtensionMode && nRet != -1 )
+            boolean bSegmentFileOk = true;
+            if( bCfsName && bSegmentName && !bExtensionMode && nRet != -1 )
             {
                 String aCompleteCfsFileName = aDirToZipStr + File.separator + aIndexDirName + File.separator + aCfsName;
+                String aCompleteSegmentFileName = aDirToZipStr + File.separator + aIndexDirName + File.separator + aSegmentName;
                 File aCfsFile = new File( aCompleteCfsFileName );
+                File aSegmentFile = new File( aCompleteSegmentFileName );
                 bCfsFileOk = aCfsFile.exists();
+                bSegmentFileOk = aSegmentFile.exists();
                 System.out.println( "Checking cfs file " + aCfsName+ ": " + (bCfsFileOk ? "Found" : "Not found") );
+                System.out.println( "Checking segment file " + aSegmentName+ ": " + (bSegmentFileOk ? "Found" : "Not found") );
             }
 
             if( bExtensionMode )
@@ -194,7 +212,7 @@ public class HelpIndexerTool
                 if( nRet == -1 )
                     deleteRecursively( aIndexDir );
 
-                if( bCfsFileOk )
+                if( bCfsFileOk && bSegmentFileOk )
                     System.out.println( "Zipping ..." );
                 File aDirToZipFile = new File( aDirToZipStr );
                 createZipFile( aDirToZipFile, aTargetZipFileStr );
@@ -204,6 +222,12 @@ public class HelpIndexerTool
             if( !bCfsFileOk )
             {
                 System.out.println( "cfs file check failed, terminating..." );
+                System.exit( -1 );
+            }
+
+            if( !bSegmentFileOk )
+            {
+                System.out.println( "segment file check failed, terminating..." );
                 System.exit( -1 );
             }
 

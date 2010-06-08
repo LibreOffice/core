@@ -129,6 +129,7 @@ namespace svt { namespace uno
         using WizardShell_Base::skipUntil;
         using WizardShell_Base::skipBackwardUntil;
         using WizardShell_Base::getCurrentState;
+        using WizardShell_Base::activatePath;
 
     private:
         typedef ::std::map< TabPage*, PWizardPageController > Page2ControllerMap;
