@@ -93,12 +93,14 @@ ModalDialog DLG_UUI_LOGIN
 
     Edit ED_LOGIN_PATH
     {
+        HelpId = HID_LOGIN_DLG_PATH;
         Border = TRUE ;
         Pos = MAP_APPFONT( 6 , 95 ) ;
         Size = MAP_APPFONT( 112 , 12 ) ;
     };
     PushButton BTN_LOGIN_PATH
     {
+        HelpId = HID_LOGIN_DLG_BROWSE;
         Pos = MAP_APPFONT( 121 , 94 ) ;
         Size = MAP_APPFONT( 50 , 14 ) ;
         Text = "~Browse..." ;
@@ -113,6 +115,7 @@ ModalDialog DLG_UUI_LOGIN
 
     Edit ED_LOGIN_USERNAME
     {
+        HelpId = HID_LOGIN_DLG_USER_NAME;
         Border = TRUE ;
         Pos = MAP_APPFONT( 6 , 121 ) ;
         Size = MAP_APPFONT( 165 , 12 ) ;
@@ -127,6 +130,7 @@ ModalDialog DLG_UUI_LOGIN
 
     Edit ED_LOGIN_PASSWORD
     {
+        HelpId = HID_LOGIN_DLG_PASSWORD;
         Border = TRUE ;
         Pos = MAP_APPFONT( 6 , 147 ) ;
         Size = MAP_APPFONT( 165 , 12 ) ;
@@ -142,6 +146,7 @@ ModalDialog DLG_UUI_LOGIN
 
     Edit ED_LOGIN_ACCOUNT
     {
+        HelpId = HID_LOGIN_DLG_ACCOUNT;
         Border = TRUE ;
         Pos = MAP_APPFONT( 6 , 173 ) ;
         Size = MAP_APPFONT( 165 , 12 ) ;
@@ -150,6 +155,7 @@ ModalDialog DLG_UUI_LOGIN
 
     CheckBox CB_LOGIN_SAVEPASSWORD
     {
+        HelpId = HID_LOGIN_DLG_REMEMBER_PASSWORD;
         Pos = MAP_APPFONT( 6 , 190 ) ;
         Size = MAP_APPFONT( 165 , 10 ) ;
         Text [ en-US ] = "~Remember password" ;
@@ -157,6 +163,7 @@ ModalDialog DLG_UUI_LOGIN
 
     CheckBox CB_LOGIN_USESYSCREDS
     {
+        HelpId = HID_LOGIN_DLG_USE_SYSTEM_CREDENTIALS;
         Pos = MAP_APPFONT( 6 , 203 ) ;
         Size = MAP_APPFONT( 165 , 10 ) ;
         Text [ en-US ] = "~Use system credentials" ;
