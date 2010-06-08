@@ -40,7 +40,6 @@ all:
 .INCLUDE :  target.mk
 .ELSE
 
-.IF "$(BUILD_QADEVOOO)" == "YES"
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
@@ -75,9 +74,5 @@ run: $(CLASSDIR)$/$(JARTARGET)
 
 run_%: $(CLASSDIR)$/$(JARTARGET)
     +$(RUNNER_CALL) $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
-
-.ELSE
-.INCLUDE :  target.mk
-.ENDIF # "$(BUILD_QADEVOOO)" == "YES"
 
 .ENDIF # "$(SOLAR_JAVA)" == ""

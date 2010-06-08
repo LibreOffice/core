@@ -59,10 +59,10 @@
         <menu:menupopup>
             <menu:menu menu:id=".uno:DBDatabaseObjectsMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DBViewTables"/>
-                    <menu:menuitem menu:id=".uno:DBViewQueries"/>
-                    <menu:menuitem menu:id=".uno:DBViewForms"/>
-                    <menu:menuitem menu:id=".uno:DBViewReports"/>
+                    <menu:menuitem menu:id=".uno:DBViewTables" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBViewQueries" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBViewForms" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBViewReports" menu:style="radio"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
@@ -70,9 +70,9 @@
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menu menu:id=".uno:DBPreview">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DBDisablePreview"/>
-                    <menu:menuitem menu:id=".uno:DBShowDocInfoPreview"/>
-                    <menu:menuitem menu:id=".uno:DBShowDocPreview"/>
+                    <menu:menuitem menu:id=".uno:DBDisablePreview" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBShowDocInfoPreview" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBShowDocPreview" menu:style="radio"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
