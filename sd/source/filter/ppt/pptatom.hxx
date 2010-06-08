@@ -49,17 +49,11 @@ public:
     /** returns true if at least one atim with the given nRecType is found */
     inline bool hasChildAtom( sal_uInt16 nRecType ) const;
 
-    /** returns true if at least one atim with the given nRecType and nRecInstnace is found */
-    inline bool hasChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const;
-
     /** returns the first child atom with nRecType or NULL */
     inline const Atom* findFirstChildAtom( sal_uInt16 nRecType ) const;
 
     /** returns the next child atom after pLast with nRecType or NULL */
     const Atom* findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) const;
-
-    /** returns the first child atom with nRecType and nRecInstance or NULL */
-    inline const Atom* findFirstChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const;
 
     /** returns the first child atom or NULL */
     inline const Atom* findFirstChildAtom() const;
@@ -94,11 +88,6 @@ private:
 inline bool Atom::hasChildAtom( sal_uInt16 nRecType ) const
 {
     return findFirstChildAtom( nRecType ) != NULL;
-}
-
-inline bool Atom::hasChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const
-{
-    return findFirstChildAtom( nRecType, nRecInstance ) != NULL;
 }
 
 inline const Atom* Atom::findFirstChildAtom( sal_uInt16 nRecType ) const
