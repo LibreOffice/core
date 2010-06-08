@@ -32,7 +32,7 @@ import org.openoffice.test.OfficeFileUrl;
 
 final class TestDocument {
     public static String getUrl(String name) {
-        return OfficeFileUrl.getAbsolute(new File("testdocuments", name));
+        return OfficeFileUrl.getAbsolute(new File("test_documents", name));
     }
 
     private TestDocument() {}
