@@ -170,8 +170,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertFieldsPageNumber
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
   Dim sPage1 , sPage2 as String
 
@@ -216,8 +214,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertFieldsPageCount
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
   Dim sPage1 , sPage2  as  String
 
@@ -273,8 +269,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertFieldsSubject
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
   Dim sSubject  as  String
   sSubject = "This is a Subject"
@@ -306,8 +300,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertFieldsTitle
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
   Dim sTitle  as  String
 
@@ -340,8 +332,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertFieldsAuthor
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
   Dim sFirstName  , sLastName  as String
   Dim sFirstName1 , sLastName1 as String
