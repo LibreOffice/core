@@ -1647,7 +1647,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                             ::comphelper::DocPasswordRequestType_MS :
                             ::comphelper::DocPasswordRequestType_STANDARD;
 
-                        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ) ) );
+                        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ) != 0 ) );
 
                         uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
                         xInteractionHandler->handle( rRequest );
