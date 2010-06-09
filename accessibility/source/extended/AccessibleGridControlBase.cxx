@@ -57,8 +57,6 @@ namespace accessibility {
 using namespace com::sun::star::accessibility::AccessibleStateType;
 // ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
-
 DBG_NAME( AccessibleGridControlBase )
 
 AccessibleGridControlBase::AccessibleGridControlBase(
@@ -73,13 +71,10 @@ AccessibleGridControlBase::AccessibleGridControlBase(
     m_aDescription( rTable.GetAccessibleObjectDescription( eObjType ) ),
     m_aClientId(0)
 {
-    DBG_CTOR( AccessibleGridControlBase, NULL );
 }
 
 AccessibleGridControlBase::~AccessibleGridControlBase()
 {
-//    DBG_DTOR( AccessibleGridControlBase, NULL );
-
     if( isAlive() )
     {
         // increment ref count to prevent double call of Dtor
@@ -122,19 +117,18 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
             xParentContext( m_xParent->getAccessibleContext() );
         if( xParentContext.is() )
         {
-            Reference< uno::XInterface > xChild;
+        Reference< uno::XInterface > xChild;
 
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
             for( sal_Int32 nChild = 0; nChild < nChildCount; ++nChild )
             {
-                xChild = xChild.query( xParentContext->getAccessibleChild( nChild ) );
-
-                if ( xMeMyselfAndI.get() == xChild.get() )
-                {
-                    nRet = nChild;
-                    break;
-                }
+            xChild = xChild.query( xParentContext->getAccessibleChild( nChild ) );
+            if ( xMeMyselfAndI.get() == xChild.get() )
+            {
+                nRet = nChild;
+                break;
             }
+        }
         }
    }
    return nRet;
@@ -160,9 +154,9 @@ Reference< XAccessibleRelationSet > SAL_CALL
 AccessibleGridControlBase::getAccessibleRelationSet()
     throw ( uno::RuntimeException )
 {
-    ensureIsAlive();
-    // GridControl does not have relations.
-       return new utl::AccessibleRelationSetHelper;
+   ensureIsAlive();
+   // GridControl does not have relations.
+   return new utl::AccessibleRelationSetHelper;
 }
 
 Reference< XAccessibleStateSet > SAL_CALL
@@ -185,7 +179,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
         Reference< XAccessibleContext >
             xParentContext( m_xParent->getAccessibleContext() );
         if( xParentContext.is() )
-            return xParentContext->getLocale();
+        return xParentContext->getLocale();
     }
     throw IllegalAccessibleComponentStateException();
 }
@@ -268,19 +262,18 @@ void SAL_CALL AccessibleGridControlBase::removeEventListener(
 {
     if( _rxListener.is() && getClientId( ) )
     {
-        ::osl::MutexGuard aGuard( getOslMutex() );
+    ::osl::MutexGuard aGuard( getOslMutex() );
         sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-
-            AccessibleEventNotifier::TClientId nId( getClientId( ) );
-            setClientId( 0 );
-            AccessibleEventNotifier::revokeClient( nId );
-        }
+    if ( !nListenerCount )
+    {
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        AccessibleEventNotifier::TClientId nId( getClientId( ) );
+        setClientId( 0 );
+        AccessibleEventNotifier::revokeClient( nId );
+    }
     }
 }
 
@@ -310,7 +303,6 @@ sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
 
     for( ; ( pString != pArrEnd ) && ( rServiceName != *pString ); ++pString )
         ;
-
     return pString != pArrEnd;
 }
 
@@ -351,7 +343,6 @@ sal_Bool AccessibleGridControlBase::implIsShowing()
     }
     else
         pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
-
     return pStateSetHelper;
 }
 
@@ -382,7 +373,7 @@ Rectangle AccessibleGridControlBase::getBoundingBox()
     }
     return aRect;
 }
-//
+
 Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
@@ -436,22 +427,22 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     switch ( m_eObjType )
     {
         case TCTYPE_ROWHEADERCELL:
-            nRole = AccessibleRole::ROW_HEADER;
-            break;
-        case TCTYPE_COLUMNHEADERCELL:
-            nRole = AccessibleRole::COLUMN_HEADER;
-            break;
-        case TCTYPE_COLUMNHEADERBAR:
-        case TCTYPE_ROWHEADERBAR:
-        case TCTYPE_TABLE:
-            nRole = AccessibleRole::TABLE;
-            break;
-        case TCTYPE_TABLECELL:
-            nRole = AccessibleRole::TABLE_CELL;
-            break;
-        case TCTYPE_GRIDCONTROL:
-            nRole = AccessibleRole::PANEL;
-            break;
+        nRole = AccessibleRole::ROW_HEADER;
+        break;
+    case TCTYPE_COLUMNHEADERCELL:
+        nRole = AccessibleRole::COLUMN_HEADER;
+        break;
+    case TCTYPE_COLUMNHEADERBAR:
+    case TCTYPE_ROWHEADERBAR:
+    case TCTYPE_TABLE:
+        nRole = AccessibleRole::TABLE;
+        break;
+    case TCTYPE_TABLECELL:
+        nRole = AccessibleRole::TABLE_CELL;
+        break;
+    case TCTYPE_GRIDCONTROL:
+        nRole = AccessibleRole::PANEL;
+        break;
     }
     return nRole;
 }
@@ -480,17 +471,16 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
     {
         if ( pInst->IsControlForeground() )
             nColor = pInst->GetControlForeground().GetColor();
+    else
+    {
+        Font aFont;
+        if ( pInst->IsControlFont() )
+            aFont = pInst->GetControlFont();
         else
-        {
-            Font aFont;
-            if ( pInst->IsControlFont() )
-                aFont = pInst->GetControlFont();
-            else
-                aFont = pInst->GetFont();
-            nColor = aFont.GetColor().GetColor();
-        }
+            aFont = pInst->GetFont();
+        nColor = aFont.GetColor().GetColor();
     }
-
+    }
     return nColor;
 }
 // -----------------------------------------------------------------------------
@@ -505,20 +495,18 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::su
     {
         if ( pInst->IsControlBackground() )
             nColor = pInst->GetControlBackground().GetColor();
-        else
+    else
             nColor = pInst->GetBackground().GetColor().GetColor();
     }
-
     return nColor;
 }
 
 //// ============================================================================
 GridControlAccessibleElement::GridControlAccessibleElement( const Reference< XAccessible >& rxParent,
-                                                           IAccessibleTable& rTable,
-                                                            AccessibleTableControlObjType  eObjType )
+                        IAccessibleTable& rTable,
+                        AccessibleTableControlObjType  eObjType )
     :AccessibleGridControlBase( rxParent, rTable, eObjType )
 {
-//  DBG_CTOR( GridControlAccessibleElement, NULL );
 }
 
 // XInterface -----------------------------------------------------------------
@@ -537,7 +525,6 @@ Reference< XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccess
 // ----------------------------------------------------------------------------
 GridControlAccessibleElement::~GridControlAccessibleElement( )
 {
-//  DBG_DTOR( GridControlAccessibleElement, NULL );
 }
 
 // ============================================================================
