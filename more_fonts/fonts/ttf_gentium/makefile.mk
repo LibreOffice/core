@@ -27,8 +27,8 @@
 
 PRJ=..$/..
 
-PRJNAME=bitstream_vera_fonts
-TARGET=ttf_dejavu
+PRJNAME=more_fonts
+TARGET=ttf_gentium
 
 # --- Settings -----------------------------------------------------
 
@@ -36,9 +36,9 @@ TARGET=ttf_dejavu
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=dejavu-fonts-ttf-2.30
-TARFILE_MD5=fe5b3e2b7c4577f30dc001054365653e
-TARFILE_ROOTDIR=dejavu-fonts-ttf-2.30
+TARFILE_NAME=gentiumbasic-fonts-1.10
+TARFILE_MD5=35efabc239af896dfb79be7ebdd6e6b9
+TARFILE_ROOTDIR=gentiumbasic-fonts-1.10
 
 PATCH_FILES=
 
