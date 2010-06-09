@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 //=============================================================================
 
-interface XGridControlListener: com::sun::star::uno::XInterface
+interface XGridControlListener
 {
 
 };

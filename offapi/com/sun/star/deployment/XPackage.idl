@@ -137,7 +137,9 @@ interface XPackage
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
 
-    /** registers this <type>XPackage</type>, thus activating the package.
+    /** registers this <type>XPackage</type>.
+
+        NEVER call this directly. This is done by the extension manager if necessary.
 
         @param startup
                indicates that registration is adapted to the particular
@@ -160,6 +162,8 @@ interface XPackage
                 com::sun::star::lang::IllegalArgumentException);
 
     /** revokes this <type>XPackage</type>.
+
+        NEVER call this directly. This is done by the extension manager if necessary.
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,

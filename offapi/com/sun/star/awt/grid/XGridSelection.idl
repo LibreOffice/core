@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 /** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
  */
-interface XGridSelection: com::sun::star::uno::XInterface
+interface XGridSelection
 {
     /** Returns the lowest index of the selection.
         @returns
@@ -53,21 +53,25 @@ interface XGridSelection: com::sun::star::uno::XInterface
     */
     long getMaxSelectionIndex();
 
-    /** Adds a selection intervall.
-        @param start
-                the start row index.
-        @param length
-                the number of rows to be selected.
+    /** Selects all rows.
     */
-    [oneway] void insertIndexIntervall( [in] long start, [in] long length);
+    [oneway] void selectAllRows();
 
-    /** Removes a selection intervall.
-        @param start
-                the start row index.
-        @param length
-                the number of rows to be selected.
+    /** Selects multiple rows. Previous selections will be removed.
+        @param rangeOfRows
+                array of rows indexes, which will be selected.
     */
-    [oneway] void removeIndexIntervall( [in] long start, [in] long length);
+    [oneway] void selectRows( [in] sequence< long > rangeOfRows);
+
+    /** Deselects all selected rows.
+    */
+    [oneway] void deselectAllRows();
+
+    /** Deselects selected rows. Selected rows, which aren't in the range remain selected.
+        @param rangeOfRows
+                array of rows indexes, which will be deselected.
+    */
+    [oneway] void deselectRows( [in] sequence< long > rangeOfRows);
 
     /** Returns the indicies of all selected rows.
         @returns
@@ -90,17 +94,17 @@ interface XGridSelection: com::sun::star::uno::XInterface
     boolean isSelectedIndex( [in] long index);
 
     /** Marks a row as selected.
-        @param
+        @param index
             the index of a row.
     */
-    [oneway] void selectRow( [in] long y);
+    [oneway] void selectRow( [in] long index);
 
     /*
     [oneway] void selectColumn( [in] long x);
     */
 
     /** Adds a listener for the <type>GridSelectionEvent</type> posted after the grid changes.
-        @param Listener
+        @param listener
             the listener to add.
     */
     [oneway] void addSelectionListener( [in] XGridSelectionListener  listener);
@@ -108,7 +112,7 @@ interface XGridSelection: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** Removes a listener previously added with <method>addSelectionListener()</method>.
-        @param Listener
+        @param listener
             the listener to remove.
     */
     [oneway] void removeSelectionListener( [in] XGridSelectionListener listener);

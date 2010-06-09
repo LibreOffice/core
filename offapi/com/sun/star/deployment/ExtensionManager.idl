@@ -33,14 +33,12 @@
 
 module com { module sun { module star { module deployment {
 
-/** <type>thePackageManagerFactory</type> denotes the one and only
-    <type>XPackageManagerFactory</type> object to be used.
-    <p>
+/** the ExtensionManager service.
+
     The component context entry is
     <code>
-    /singletons/com.sun.star.deployment.thePackageManagerFactory
+    /singletons/com.sun.star.deployment.ExtensionManager
     </code>.
-    </p>
 
     @since OOo 3.3.0
 */
