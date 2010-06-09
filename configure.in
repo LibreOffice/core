@@ -6045,7 +6045,7 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
           [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-codec.jar, 
-              [ COMMONS_CODEC_JAR=/usr/share/java/commons-codecs.jar ],
+              [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
               [AC_MSG_ERROR(commons-codec.jar replacement not found.)]
             )
           ]
@@ -6415,11 +6415,11 @@ fi
 dnl ===================================================================
 dnl Test whether to include fonts
 dnl ===================================================================
-AC_MSG_CHECKING([whether to include Bitstream Vera fonts])
+AC_MSG_CHECKING([whether to include third-party fonts])
 if test "$with_fonts" != "no" ; then
   AC_MSG_RESULT([yes])
   WITH_FONTS=YES
-  BUILD_TYPE="$BUILD_TYPE BITSTREAM_VERA_FONTS"
+  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
 else
   AC_MSG_RESULT([no])
   WITH_FONTS=NO

@@ -27204,7 +27204,7 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_commons_codec_jar" >&5
 echo "${ECHO_T}$ac_cv_file__usr_share_java_commons_codec_jar" >&6
 if test $ac_cv_file__usr_share_java_commons_codec_jar = yes; then
-   COMMONS_CODEC_JAR=/usr/share/java/commons-codecs.jar
+   COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar
 else
   { { echo "$as_me:$LINENO: error: commons-codec.jar replacement not found." >&5
 echo "$as_me: error: commons-codec.jar replacement not found." >&2;}
@@ -28054,13 +28054,13 @@ echo "${ECHO_T}no" >&6
   SCPDEFS="$SCPDEFS -DWITHOUT_MATHMLDTD"
 fi
 
-echo "$as_me:$LINENO: checking whether to include Bitstream Vera fonts" >&5
-echo $ECHO_N "checking whether to include Bitstream Vera fonts... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether to include third-party fonts" >&5
+echo $ECHO_N "checking whether to include third-party fonts... $ECHO_C" >&6
 if test "$with_fonts" != "no" ; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   WITH_FONTS=YES
-  BUILD_TYPE="$BUILD_TYPE BITSTREAM_VERA_FONTS"
+  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
