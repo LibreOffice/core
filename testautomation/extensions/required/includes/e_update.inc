@@ -131,7 +131,7 @@ testcase tExtensionManagerResources()
                 printlog( "Button <Disable> is hidden" )
             endif
         else
-            warnlog( "The control <Disable> is not defined in this context" )
+            printlog( "The control <Disable> is not defined in this context" )
         endif
 
         if ( remove.exists() ) then
@@ -141,7 +141,7 @@ testcase tExtensionManagerResources()
                 printlog( "Button <Remove> is hidden" )
             endif
         else
-            warnlog( "The control <Remove> is not defined in this context" )
+            printlog( "The control <Remove> is not defined in this context" )
         endif
 
         kontext "PackageManager"
