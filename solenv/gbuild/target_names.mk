@@ -79,12 +79,14 @@ gb_AllLangResTarget_get_target = $(OUTDIR)/misc/AllLangRes/$(1)
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Package_get_target = $(OUTDIR)/misc/Package/$(1)
 gb_Module_get_target = $(OUTDIR)/misc/Module/$(1)
+gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(1)
 
 $(eval $(call gb_Helper_make_clean_targets,\
     LinkTarget \
     PackagePart \
     SdiTarget \
     SrsTarget \
+    PrecompiledHeader \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
@@ -103,6 +105,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
     LinkTarget \
     SrsPartTarget \
     SrsTarget \
+    PrecompiledHeader \
 ))
 
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
