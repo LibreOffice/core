@@ -594,7 +594,7 @@
                     <value>GenericCategories</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryUIName">
-                    <value xml:lang="en-US">Base: Table Data View</value>
+                    <value>Base: Table Data View</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
@@ -616,7 +616,7 @@
                     <value >GenericCategories</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryUIName">
-                    <value xml:lang="en-US">Bibliography</value>
+                    <value>Bibliography</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
