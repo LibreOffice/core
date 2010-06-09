@@ -226,7 +226,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
 
             ::rtl::OUString aActualFilter;
             ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_ACTUAL_FILTER ) >>= aActualFilter;
-            sal_Bool bChanged;
+            sal_Bool bChanged(sal_False);
             ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
 
             uno::Reference< container::XNameAccess > xFilterFactory(

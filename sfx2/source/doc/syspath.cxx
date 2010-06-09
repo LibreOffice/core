@@ -41,6 +41,8 @@ bool SystemPath::GetUserTemplateLocation(sal_Unicode* pFolder, int nSize )
 #ifdef WNT
     return ::GetUserTemplateLocation( pFolder, nSize );
 #else
+    (void)pFolder;
+    (void)nSize;
     return false;
 #endif
 }
