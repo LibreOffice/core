@@ -59,9 +59,7 @@ EXCEPTIONSFILES= \
 
 SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/condedit.obj \
-        $(SLO)$/content.obj \
         $(SLO)$/gloslst.obj \
-        $(SLO)$/glbltree.obj \
         $(SLO)$/initui.obj \
         $(SLO)$/navicfg.obj \
         $(SLO)$/numfmtlb.obj \
