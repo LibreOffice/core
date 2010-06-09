@@ -5341,12 +5341,12 @@ BOOL StatementControl::Execute()
             ReportError( aUId, GEN_RES_STR1( S_HELPID_ON_TOOLBOX_NOT_FOUND, MethodString( nMethodId ) ) );\
         else\
         {\
-            if ( !pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) && nMethodId != _M_IsEnabled )\
+            if ( !pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) && nMethodId != _M_IsEnabled && nMethodId != M_GetState )\
             {\
                 ReportError( aUId, GEN_RES_STR1( S_BUTTON_DISABLED_ON_TOOLBOX, MethodString( nMethodId ) ) );\
                 bItemFound = FALSE;\
             }\
-            else if ( !pTB->IsItemVisible( pTB->GetItemId(nItemPos) ) )\
+            else if ( !pTB->IsItemVisible( pTB->GetItemId(nItemPos) ) && nMethodId != M_GetState )\
             {\
                 ReportError( aUId, GEN_RES_STR1( S_BUTTON_HIDDEN_ON_TOOLBOX, MethodString( nMethodId ) ) );\
                 bItemFound = FALSE;\
@@ -5738,19 +5738,28 @@ BOOL StatementControl::Execute()
                                                     pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
                                                     break;
                                                 case M_Check :
-                                                    pItem->SetStateChecked();
-                                                    pTree->CheckButtonHdl();
-                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    if ( !pItem->IsStateChecked() )
+                                                    {
+                                                        pItem->SetStateChecked();
+                                                        pTree->CheckButtonHdl();
+                                                        pTree->InvalidateEntry( pThisEntry );
+                                                    }
                                                     break;
                                                 case M_UnCheck :
-                                                    pItem->SetStateUnchecked();
-                                                    pTree->CheckButtonHdl();
-                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    if ( pItem->IsStateChecked() || pItem->IsStateTristate() )
+                                                    {
+                                                        pItem->SetStateUnchecked();
+                                                        pTree->CheckButtonHdl();
+                                                        pTree->InvalidateEntry( pThisEntry );
+                                                    }
                                                     break;
                                                 case M_TriState :
-                                                    pItem->SetStateTristate();
-                                                    pTree->CheckButtonHdl();
-                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    if ( !pItem->IsStateTristate() )
+                                                    {
+                                                        pItem->SetStateTristate();
+                                                        pTree->CheckButtonHdl();
+                                                        pTree->InvalidateEntry( pThisEntry );
+                                                    }
                                                     break;
                                                 default:
                                                     ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
