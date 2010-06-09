@@ -386,7 +386,7 @@ void BackingWindow::prepareRecentFileMenu()
                 aBuf.append( i+1 );
             aBuf.appendAscii( ": " );
             aBuf.append( aMenuTitle );
-            mpRecentMenu->InsertItem( i+1, aBuf.makeStringAndClear() );
+            mpRecentMenu->InsertItem( static_cast<USHORT>(i+1), aBuf.makeStringAndClear() );
         }
         maOpenButton.SetPopupMenu( mpRecentMenu );
     }
