@@ -76,6 +76,7 @@
 #include <dispatch/uieventloghelper.hxx>
 
 #include "helper/mischelper.hxx"
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -101,7 +102,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LanguageSelectionMenuController     
 DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} )
 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_bShowMenu( sal_True )
     ,m_aLangGuessHelper(xServiceManager)
 {
@@ -116,7 +117,7 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& ) t
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xLanguageDispatch.clear();
@@ -132,7 +133,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
 
-    if ( m_bDisposed )
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
 
     m_bShowMenu = sal_True;
@@ -386,15 +387,15 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
 void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
 {
-    PopupMenuControllerBase::updatePopupMenu();
+    svt::PopupMenuControllerBase::updatePopupMenu();
 
     // Force status update to get information about the current languages
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xLanguageDispatch );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = m_aLangStatusCommandURL;
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.unlock();
+    aLock.clear();
 
     if ( xDispatch.is() )
     {
@@ -421,12 +422,12 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
 // XInitialization
 void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
-        PopupMenuControllerBase::initialize(aArguments);
+        svt::PopupMenuControllerBase::initialize(aArguments);
 
         if ( m_bInitialized )
         {
