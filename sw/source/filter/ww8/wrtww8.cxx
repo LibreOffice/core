@@ -1023,7 +1023,8 @@ bool WW8_WrFkp::Combine()
         return false;
     if( nIMax )
         memcpy( pFkp + ( nIMax + 1 ) * 4, pOfs, nIMax * nItemSize );
-    DELETEZ( pOfs );
+    delete[] pOfs;
+    pOfs = 0;
     ((BYTE*)pFkp)[511] = nIMax;
     bCombined = true;
 

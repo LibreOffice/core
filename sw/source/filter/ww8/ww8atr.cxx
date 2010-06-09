@@ -5261,9 +5261,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         default:
-#if OSL_DEBUG_LEVEL > 0
-            fprintf( stderr, "Unhandled SfxPoolItem with id %d.\n", rHt.Which() );
-#endif
+            OSL_TRACE("Unhandled SfxPoolItem with id %d.\n", rHt.Which() );
             break;
     }
 }

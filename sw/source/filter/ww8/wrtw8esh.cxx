@@ -280,25 +280,10 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     sal_Int16 nTemp = 0;
     xPropSet->getPropertyValue(C2U("DefaultState")) >>= nTemp;
-    sal_uInt32 nIsDefaultChecked(nTemp);
+    aFFData.setDefaultResult(nTemp);
 
     xPropSet->getPropertyValue(C2U("State")) >>= nTemp;
-    sal_uInt32 nIsChecked(nTemp);
-
-    if (nIsDefaultChecked != nIsChecked)
-    {
-        switch (nIsChecked)
-        {
-            case false:
-                aFFData.setResult(0);
-                break;
-            case true:
-                aFFData.setResult(1);
-                break;
-            default:
-                ASSERT(!this, "how did that happen");
-        }
-    }
+    aFFData.setResult(nTemp);
 
     ::rtl::OUString aStr;
     static ::rtl::OUString sName(C2U("Name"));

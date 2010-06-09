@@ -1083,7 +1083,7 @@ private:
                             //     the very 1st Line Numbering and ignore the rest)
 
     bool bFirstPara;        // first paragraph?
-
+    bool bFirstParaOfPage;//cs2c--xushanchuan add for bug11210
     bool bParaAutoBefore;
     bool bParaAutoAfter;
 
@@ -1108,6 +1108,8 @@ private:
     void Read_HdFtText(long nStartCp, long nLen, SwFrmFmt* pHdFtFmt);
     void Read_HdFtTextAsHackedFrame(long nStart, long nLen,
         SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth);
+
+    bool isValid_HdFt_CP(WW8_CP nHeaderCP) const;
 
     bool HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt, int nSect);
 
