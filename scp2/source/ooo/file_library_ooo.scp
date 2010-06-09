@@ -1581,15 +1581,18 @@ STD_UNO_LIB_FILE( gid_File_Lib_Unoxml, unoxml )
 // AVMedia
 STD_UNO_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
-#if defined UNX
-#ifdef SOLAR_JAVA
+if defined UNX 
+if defined ENABLE_GSTREAMER
+SPECIAL_UNO_LIB_FILE( gid_File_Lib_AVMediaGst, avmediagst )
+endif
+ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
-#endif
-#elif defined WNT
-#ifdef ENABLE_DIRECTX
+endif
+elif defined WNT
+ifdef ENABLE_DIRECTX
 SPECIAL_UNO_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
-#endif
-#endif
+endif
+endif
 
 #ifndef WITHOUT_MOZILLA
 File gid_File_Lib_XSec_Framework
