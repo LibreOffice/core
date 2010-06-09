@@ -47,6 +47,7 @@ all:
 REDLANDVERSION=1.0.8
 
 TARFILE_NAME=redland-$(REDLANDVERSION)
+TARFILE_MD5=ca66e26082cab8bb817185a116db809b
 
 ADDITIONAL_FILES=librdf/makefile.mk librdf/rdf_config.h
 
@@ -58,9 +59,7 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.win32
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
-    $(TARFILE_NAME).patch.free_null \
-    $(TARFILE_NAME).patch.storage_hashes_context_serialize_get_statement \
-    $(TARFILE_NAME).patch.storage_hashes_list_duplicates
+
 
 .IF "$(OS)"=="OS2"
 BUILD_ACTION=dmake

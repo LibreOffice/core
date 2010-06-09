@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,47 +23,28 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=.
+PRJ = @BACKPATH@../..
+PRJNAME = cppunit
+TARGET = DllPlugInTester
 
-PRJNAME=fondu
-TARGET=fondu
+ENABLE_EXCEPTIONS = TRUE
+nodep = TRUE
 
-# --- Settings -----------------------------------------------------
+.INCLUDE: settings.mk
 
-.INCLUDE : settings.mk
+CDEFS += -DCPPUNIT_DLL
+CFLAGSCXX += -I../../include
+UWINAPILIB =
 
-# --- Files --------------------------------------------------------
+OBJFILES = $(APP1OBJS)
 
-TARFILE_NAME=fondu_src-051010
+APP1OBJS = \
+   $(OBJ)/CommandLineParser.obj \
+   $(OBJ)/DllPlugInTester.obj
+APP1RPATH = NONE
+APP1STDLIBS = icppunit_dll.lib
+APP1TARGET = DllPlugInTester_dll
 
-.IF "$(OS)"!="MACOSX" || "$(GUIBASE)"=="aqua"
-dummy:
-    @echo "Nothing to build for OS $(OS)"
-.ENDIF # "$(OS)"!="MACOSX" || "$(GUIBASE)"=="aqua"
-
-CONFIGURE_DIR=.
-
-#relative to CONFIGURE_DIR
-CONFIGURE_ACTION=configure
-
-CONFIGURE_FLAGS=
-
-BUILD_DIR=$(CONFIGURE_DIR)
-
-BUILD_ACTION=$(GNUMAKE) fondu
-
-OUT2BIN=$(BUILD_DIR)$/fondu
-
-# --- Targets ------------------------------------------------------
-
-# contains some necessary variables.
-
-.INCLUDE : set_ext.mk
-
-.INCLUDE : target.mk
-
-# contains the "magic" to create targets out of the set variables.
-
-.INCLUDE : tg_ext.mk
+.INCLUDE: target.mk
