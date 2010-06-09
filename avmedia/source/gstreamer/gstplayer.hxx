@@ -33,8 +33,21 @@
 
 #include "gstcommon.hxx"
 #include <glib.h>
-#include <gst/gst.h>
+#include <glib/gatomic.h>
 
+// necessary for older GLib versions
+#ifndef G_GNUC_NULL_TERMINATED
+#if __GNUC__ >= 4
+#define G_GNUC_NULL_TERMINATED __attribute__((__sentinel__))
+#else
+#define G_GNUC_NULL_TERMINATED
+#endif
+#endif
+
+// necessary for older GLib versions
+struct GOptionGroup;
+
+#include <gst/gst.h>
 #include "com/sun/star/media/XPlayer.hdl"
 
 namespace avmedia
@@ -140,7 +153,9 @@ public:
      throw( ::com::sun::star::uno::RuntimeException );
 
 
-protected: Player( GString* pURI = NULL );
+protected:
+
+    Player( GString* pURI = NULL );
 
     virtual gboolean busCallback( GstBus* pBus,
                                   GstMessage* pMsg );
@@ -162,12 +177,11 @@ protected: Player( GString* pURI = NULL );
     }
 
 
-private: Player( const Player& ) {}
+private:
 
-    Player & operator=( const Player& )
-    {
-        return( *this );
-    }
+    Player( const Player& );
+
+    Player& operator=( const Player& );
 
     static gboolean implBusPrepare( GSource* pSource,
                                     gint* pTimeout );
@@ -209,14 +223,14 @@ protected:
 private:
 
     ::avmedia::gst::Window* mpPlayerWindow;
-    volatile gint mnIsVideoSource;
-    volatile gint mnVideoWidth;
-    volatile gint mnVideoHeight;
-    volatile gint mnInitialized;
-    volatile gint mnVolumeDB;
-    volatile gint mnLooping;
-    volatile gint mnQuit;
-    volatile gint mnVideoWindowSet;
+    gint mnIsVideoSource;
+    gint mnVideoWidth;
+    gint mnVideoHeight;
+    gint mnInitialized;
+    gint mnVolumeDB;
+    gint mnLooping;
+    gint mnQuit;
+    gint mnVideoWindowSet;
 };
 }     // namespace gst
 } // namespace avmedia

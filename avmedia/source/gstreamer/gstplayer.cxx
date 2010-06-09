@@ -326,7 +326,10 @@ double SAL_CALL Player::getRate()
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
      throw( uno::RuntimeException )
 {
-    g_atomic_int_set( &mnLooping, bSet ? 1 : 0 );
+    if( bSet && !isPlaybackLoop() )
+        g_atomic_int_inc( &mnLooping );
+    else if( !bSet && isPlaybackLoop() )
+        g_atomic_int_dec_and_test( &mnLooping );
 }
 
 // ------------------------------------------------------------------------------
@@ -371,10 +374,12 @@ sal_Bool SAL_CALL Player::isMute()
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
      throw( uno::RuntimeException )
 {
-    g_atomic_int_set( &mnVolumeDB, nVolumeDB );
-
     if( implInitPlayer() )
     {
+        g_mutex_lock( mpMutex );
+        mnVolumeDB = nVolumeDB;
+        g_mutex_unlock( mpMutex );
+
         // maximum gain for gstreamer volume is 10
         double fGstVolume = pow( 10.0, static_cast< double >( ::std::min(
                                                                   nVolumeDB, static_cast< sal_Int16 >( 20 ) ) / 20.0 ) );
@@ -528,7 +533,7 @@ void Player::implQuitThread()
     {
         // set quit flag to 1 so that the main loop will be quit in idle
         // handler the next time it is called from the thread's main loop
-        g_atomic_int_add( &mnQuit, 1 );
+        g_atomic_int_inc( &mnQuit );
 
         // wait until loop and as such the thread has quit
         g_thread_join( mpThread );
@@ -758,7 +763,7 @@ void Player::implHandleNewPadFunc( GstElement* pElement,
                     // just look for structures having 'video' in their names
                     if( ::std::string( pStructName ).find( "video" ) != ::std::string::npos )
                     {
-                        g_atomic_int_set( &pPlayer->mnIsVideoSource, 1 );
+                        g_atomic_int_inc( &pPlayer->mnIsVideoSource );
 
                         for( gint n = 0, nFields = gst_structure_n_fields( pStruct ); n < nFields; ++n )
                         {
@@ -768,15 +773,14 @@ void Player::implHandleNewPadFunc( GstElement* pElement,
                             if( ( ::std::string( pFieldName ).find( "width" ) != ::std::string::npos ) &&
                                gst_structure_get_int( pStruct, pFieldName, &nValue ) )
                             {
-                                g_atomic_int_set( &pPlayer->mnVideoWidth,
-                                                 ::std::max( (gint) g_atomic_int_get(
-                                                                &pPlayer->mnVideoWidth ), nValue ) );
+                                const gint nDiff = nValue - g_atomic_int_get( &pPlayer->mnVideoWidth );
+                                g_atomic_int_add( &pPlayer->mnVideoWidth, ::std::max( nDiff, 0 ) );
                             }
                             else if( ( ::std::string( pFieldName ).find( "height" ) != ::std::string::npos ) &&
                                     gst_structure_get_int( pStruct, pFieldName, &nValue ) )
                             {
-                                g_atomic_int_set( &pPlayer->mnVideoHeight,
-                                                 ::std::max( g_atomic_int_get( &pPlayer->mnVideoHeight ), nValue ) );
+                                const gint nDiff = nValue - g_atomic_int_get( &pPlayer->mnVideoHeight );
+                                g_atomic_int_add( &pPlayer->mnVideoHeight, ::std::max( nDiff, 0 ) );
                             }
                         }
                     }
@@ -800,7 +804,7 @@ gboolean Player::idle()
         // in case Player::idle() is called again later;
         // the flag should have been set only once within Ctor called from
         // the application thread
-        g_atomic_int_add( &mnQuit, -1 );
+        g_atomic_int_dec_and_test( &mnQuit );
         g_main_loop_quit( mpLoop );
     }
 
