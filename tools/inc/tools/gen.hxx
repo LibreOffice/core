@@ -420,6 +420,7 @@ public:
     Point               Center() const;
 
     void                Move( long nHorzMove, long nVertMove );
+    inline void         Transpose();
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;
@@ -576,6 +577,20 @@ inline void Rectangle::Move( long nHorzMove, long nVertMove )
         nRight += nHorzMove;
     if ( nBottom != RECT_EMPTY )
         nBottom += nVertMove;
+}
+
+void Rectangle::Transpose()
+{
+    if ( !IsEmpty() )
+    {
+        long swap( nLeft );
+        nLeft = nTop;
+        nTop = swap;
+
+        swap = nRight;
+        nRight = nBottom;
+        nBottom = swap;
+    }
 }
 
 inline void Rectangle::SetPos( const Point& rPoint )

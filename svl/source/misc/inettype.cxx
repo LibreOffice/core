@@ -31,9 +31,7 @@
 #include <tools/wldcrd.hxx>
 #include <svl/inettype.hxx>
 #include <svl/svldata.hxx>
-#ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
-#endif
+#include <svl/svl.hrc>
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
 #define _SVSTDARR_STRINGSSORT

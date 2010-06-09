@@ -1,0 +1,10 @@
+#!/bin/sh
+if [ x${SOLARENV}x = xx ]; then
+    echo No environment found, please use 'configure' or 'setsolar'
+    exit 1
+fi
+if [ x${JAVA_HOME}x = xx ]; then
+    echo No Java found!
+    exit 1
+fi
+exec java -DSOLARSRC=${SOLARSRC} -DWORK_STAMP=${WORK_STAMP} -DUSE_SHELL=  -jar ${SOLARVER}/${INPATH}/bin${UPDMINOREXT}/jpropex.jar "$@"
