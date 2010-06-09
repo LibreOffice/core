@@ -36,7 +36,6 @@
 #include <svx/svxids.hrc>
 
 #include <editeng/outliner.hxx>
-
 #include <editeng/editview.hxx>
 
 #include "app.hrc"
