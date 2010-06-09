@@ -250,6 +250,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_True );
         }
 
+        rSet.DisableItem( SID_TRANSLITERATE_SENTENCE_CASE );
+        rSet.DisableItem( SID_TRANSLITERATE_TITLE_CASE );
+        rSet.DisableItem( SID_TRANSLITERATE_TOGGLE_CASE );
         rSet.DisableItem( SID_TRANSLITERATE_UPPER );
         rSet.DisableItem( SID_TRANSLITERATE_LOWER );
         rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
