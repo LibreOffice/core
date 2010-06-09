@@ -35,21 +35,11 @@
 #include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#ifndef __SGI_STL_STACK
 #include <stack>
-#endif
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
-#ifndef __SGI_STL_UTILITY
 #include <utility>
-#endif
 
 #include "tracer.hxx"
 #include "ww8struc.hxx"     // WW8_BRC
@@ -977,7 +967,7 @@ private:
     ANLDRuleMap maANLDRules;
     WW8_OLST* pNumOlst;         // Gliederung im Text
 
-    SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
+    SwNode* pNode_FLY_AT_PARA; // set: WW8SwFlyPara()   read: CreateSwTable()
 
     SdrModel* pDrawModel;
     SdrPage* pDrawPg;

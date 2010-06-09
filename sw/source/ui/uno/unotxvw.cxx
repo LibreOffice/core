@@ -710,7 +710,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
     SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
     Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
-    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
+    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::getFormController: how could I?" );
 
     uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pDrawView && pWindow )
@@ -905,12 +905,12 @@ void SAL_CALL SwXTextView::setRubyList(
   -----------------------------------------------------------------------*/
 SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/ )
 {
-    SwWrtShell* pOldSh = &m_pView->GetWrtShell();
-    SfxPrinter *pPrt = pOldSh->getIDocumentDeviceAccess()->getPrinter( false );
+    SwWrtShell& rOldSh = m_pView->GetWrtShell();
+    SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess()->getPrinter( false );
     SwDocShell* pDocSh;
     SfxObjectShellRef xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
-    pOldSh->FillPrtDoc(pDocSh->GetDoc(),  pPrt);
+    rOldSh.FillPrtDoc(pDocSh->GetDoc(),  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.
@@ -919,21 +919,18 @@ SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/
     IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
     SfxPrinter* pTempPrinter = pIDDA->getPrinter( true );
 
-    if( pOldSh )
+    const SwPageDesc& rCurPageDesc = rOldSh.GetPageDesc(rOldSh.GetCurPageDesc());
+
+    IDocumentDeviceAccess* pIDDA_old = rOldSh.getIDocumentDeviceAccess();
+
+    if( pIDDA_old->getPrinter( false ) )
     {
-        const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
-
-        IDocumentDeviceAccess* pIDDA_old = pOldSh->getIDocumentDeviceAccess();
-
-        if( pIDDA_old->getPrinter( false ) )
-        {
-            pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
-            //#69563# if it isn't the same printer then the pointer has been invalidated!
-            pTempPrinter = pIDDA->getPrinter( true );
-        }
-
-        pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
+        pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
+        //#69563# if it isn't the same printer then the pointer has been invalidated!
+        pTempPrinter = pIDDA->getPrinter( true );
     }
+
+    pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
 
     return xDocSh;
 }
