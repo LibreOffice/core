@@ -942,7 +942,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 try {
                     xElementRootStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                                                                     aElementPath,
-                                                                    embed::ElementModes::READWRITE );
+                                                                    embed::ElementModes::READ );
                 } catch( uno::Exception& )
                 {
                     // TODO: error handling
@@ -1165,6 +1165,45 @@ bool SAL_CALL SfxScriptLibrary::isLibraryElementValid( ::com::sun::star::uno::An
 {
     return SfxScriptLibrary::containsValidModule( aElement );
 }
+
+IMPLEMENT_FORWARD_XINTERFACE2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
+
+script::ModuleInfo SAL_CALL
+SfxScriptLibrary::getModuleInfo( const ::rtl::OUString& ModuleName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    if ( !hasModuleInfo( ModuleName ) )
+        throw NoSuchElementException();
+    return mModuleInfos[ ModuleName ];
+}
+
+sal_Bool SAL_CALL
+SfxScriptLibrary::hasModuleInfo( const ::rtl::OUString& ModuleName ) throw (RuntimeException)
+{
+    sal_Bool bRes = sal_False;
+    ModuleInfoMap::iterator it = mModuleInfos.find( ModuleName );
+
+    if ( it != mModuleInfos.end() )
+        bRes = sal_True;
+
+    return bRes;
+}
+
+void SAL_CALL SfxScriptLibrary::insertModuleInfo( const ::rtl::OUString& ModuleName, const script::ModuleInfo& ModuleInfo ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+{
+    if ( hasModuleInfo( ModuleName ) )
+        throw ElementExistException();
+    mModuleInfos[ ModuleName ] = ModuleInfo;
+}
+
+void SAL_CALL SfxScriptLibrary::removeModuleInfo( const ::rtl::OUString& ModuleName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+        // #FIXME add NoSuchElementException to the spec
+    if ( !hasModuleInfo( ModuleName ) )
+        throw NoSuchElementException();
+    mModuleInfos.erase( mModuleInfos.find( ModuleName ) );
+}
+
 
 //============================================================================
 

@@ -313,10 +313,8 @@ namespace xmloff
         if (CCA_CONTROL_ID & m_nIncludeCommon)
         {
             OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportInnerAttributes: have no control id for the control!");
-            AddAttribute(
-                OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CONTROL_ID),
-                OAttributeMetaData::getCommonControlAttributeName(CCA_CONTROL_ID),
-                m_sControlId);
+            m_rContext.getGlobalContext().AddAttributeIdLegacy(
+                XML_NAMESPACE_FORM, m_sControlId);
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_CONTROL_ID;
@@ -693,7 +691,7 @@ namespace xmloff
 
         if (m_nIncludeCommon & CCA_TARGET_LOCATION)
         {
-            exportTargetLocationAttribute();
+            exportTargetLocationAttribute(false);
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_LOCATION;
@@ -2035,6 +2033,9 @@ namespace xmloff
                     OAttributeMetaData::getFormAttributeNamespace(eStringPropertyIds[i]),
                     OAttributeMetaData::getFormAttributeName(eStringPropertyIds[i]),
                     aStringPropertyNames[i]);
+
+            // #i112082# xlink:type is added as part of exportTargetLocationAttribute
+
             // now export the data source name or databaselocation or connection resource
             ::rtl::OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
@@ -2134,7 +2135,7 @@ namespace xmloff
         // the target frame
         exportTargetFrameAttribute();
         // the target URL
-        exportTargetLocationAttribute();
+        exportTargetLocationAttribute(true);    // #i110911# add type attribute (for form, but not for control)
 
         // master fields
         exportStringSequenceAttribute(

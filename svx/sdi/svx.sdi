@@ -11775,7 +11775,7 @@ SfxVoidItem ZoomVisArea SID_SIZE_VISAREA
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem GrabControlFocus SID_FM_GRABCONTROLFOCUS
+SfxVoidItem ToggleControlFocus SID_FM_TOGGLECONTROLFOCUS
 ()
 [
     /* flags: */

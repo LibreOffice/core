@@ -299,10 +299,14 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ControlHolder::invalidate() const
     {
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
-        OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
-        if ( pWindow )
-            pWindow->Invalidate();
+        Reference< XWindowPeer > xPeer( m_xControl->getPeer() );
+        if ( xPeer.is() )
+        {
+            Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
+            OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
+            if ( pWindow )
+                pWindow->Invalidate();
+        }
     }
 
     //--------------------------------------------------------------------
@@ -1685,6 +1689,9 @@ namespace sdr { namespace contact {
         const ViewContactOfUnoControl& rViewContactOfUnoControl( m_pVOCImpl->getViewContact() );
         Reference< XControlModel > xControlModel( rViewContactOfUnoControl.GetSdrUnoObj().GetUnoControlModel() );
         const ControlHolder& rControl( m_pVOCImpl->getExistentControl() );
+
+        if ( !bHadControl && rControl.is() && rControl.isVisible() )
+            rControl.invalidate();
 
         if ( !bHadControl && rControl.is() && rControl.isVisible() )
             rControl.invalidate();

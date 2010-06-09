@@ -453,6 +453,8 @@ XMLTextListsHelper::MakeNumRule(
     sal_Bool* o_pRestartNumbering,
     sal_Bool* io_pSetDefaults)
 {
+    static ::rtl::OUString s_NumberingRules(
+        RTL_CONSTASCII_USTRINGPARAM("NumberingRules"));
     uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
     if ( i_StyleName.getLength() &&
          i_StyleName != i_ParentStyleName )
@@ -479,8 +481,7 @@ XMLTextListsHelper::MakeNumRule(
 
             uno::Reference< beans::XPropertySet > xPropSet( xStyle,
                 uno::UNO_QUERY );
-            any = xPropSet->getPropertyValue(
-                i_rImport.GetTextImport()->sNumberingRules );
+            any = xPropSet->getPropertyValue(s_NumberingRules);
             any >>= xNumRules;
         }
         else

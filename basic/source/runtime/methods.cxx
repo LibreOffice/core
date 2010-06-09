@@ -61,6 +61,7 @@
 #else
 #include <osl/file.hxx>
 #endif
+#include "errobject.hxx"
 
 #ifdef _USE_UNO
 #include <comphelper/processfactory.hxx>
@@ -119,6 +120,8 @@ using namespace com::sun::star::io;
 #ifdef WNT
 #include <io.h>
 #endif
+
+#include <basic/sbobjmod.hxx>
 
 static void FilterWhiteSpace( String& rStr )
 {
@@ -205,15 +208,15 @@ String implGetCurDir( void )
 }
 
 // TODO: -> SbiGlobals
-static Reference< XSimpleFileAccess3 > getFileAccess( void )
+static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void )
 {
-    static Reference< XSimpleFileAccess3 > xSFI;
+    static com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI;
     if( !xSFI.is() )
     {
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( xSMgr.is() )
         {
-            xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
+            xSFI = com::sun::star::uno::Reference< XSimpleFileAccess3 >( xSMgr->createInstance
                 ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
         }
     }
@@ -256,6 +259,7 @@ RTLFUNC(Error)
     {
         String aErrorMsg;
         SbError nErr = 0L;
+        INT32 nCode = 0;
         if( rPar.Count() == 1 )
         {
             nErr = StarBASIC::GetErrBasic();
@@ -263,14 +267,34 @@ RTLFUNC(Error)
         }
         else
         {
-            INT32 nCode = rPar.Get( 1 )->GetLong();
+            nCode = rPar.Get( 1 )->GetLong();
             if( nCode > 65535L )
                 StarBASIC::Error( SbERR_CONVERSION );
             else
                 nErr = StarBASIC::GetSfxFromVBError( (USHORT)nCode );
         }
-        pBasic->MakeErrorText( nErr, aErrorMsg );
-        rPar.Get( 0 )->PutString( pBasic->GetErrorText() );
+
+        bool bVBA = SbiRuntime::isVBAEnabled();
+        String tmpErrMsg;
+        if( bVBA && aErrorMsg.Len() > 0 )
+        {
+            tmpErrMsg = aErrorMsg;
+        }
+        else
+        {
+            pBasic->MakeErrorText( nErr, aErrorMsg );
+            tmpErrMsg = pBasic->GetErrorText();
+        }
+        // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
+        // current err then  return the description for the error message if it is set
+        // ( complicated isn't it ? )
+        if ( bVBA && rPar.Count() > 1 )
+        {
+            com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
+            if ( xErrObj.is() && xErrObj->getNumber() == nCode && xErrObj->getDescription().getLength() )
+                tmpErrMsg = xErrObj->getDescription();
+        }
+        rPar.Get( 0 )->PutString( tmpErrMsg );
     }
 }
 
@@ -531,7 +555,7 @@ RTLFUNC(ChDrive) // JSM
 // Implementation of StepRENAME with UCB
 void implStepRenameUCB( const String& aSource, const String& aDest )
 {
-    Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+    com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
     if( xSFI.is() )
     {
         try
@@ -579,7 +603,7 @@ RTLFUNC(FileCopy) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -630,7 +654,7 @@ RTLFUNC(Kill) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 String aFullPath = getFullPath( aFileSpec );
@@ -677,7 +701,7 @@ RTLFUNC(MkDir) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -778,7 +802,7 @@ RTLFUNC(RmDir) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -865,7 +889,7 @@ RTLFUNC(FileLen)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -1613,7 +1637,7 @@ RTLFUNC(StrComp)
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
         if( !pTransliterationWrapper )
         {
-            Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+            com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
             pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
                 new ::utl::TransliterationWrapper( xSMgr,
                     ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
@@ -2608,7 +2632,7 @@ RTLFUNC(Dir)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 if ( nParCount >= 2 )
@@ -2971,7 +2995,7 @@ RTLFUNC(GetAttr)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -3041,7 +3065,7 @@ RTLFUNC(FileDateTime)
         Date aDate;
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -4006,7 +4030,7 @@ RTLFUNC(StrConv)
     String aNewStr( aOldStr );
     if( nType != 0 )
     {
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         ::utl::TransliterationWrapper aTransliterationWrapper( xSMgr,nType );
         com::sun::star::uno::Sequence<sal_Int32> aOffsets;
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
@@ -4106,12 +4130,20 @@ RTLFUNC(Load)
 
     // Diesen Call einfach an das Object weiterreichen
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
-    if( pObj && pObj->IsA( TYPE( SbxObject ) ) )
+    if ( pObj )
     {
-        SbxVariable* pVar = ((SbxObject*)pObj)->
-            Find( String( RTL_CONSTASCII_USTRINGPARAM("Load") ), SbxCLASS_METHOD );
-        if( pVar )
-            pVar->GetInteger();
+        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        {
+            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
+            pFormModule->load();
+        }
+        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        {
+            SbxVariable* pVar = ((SbxObject*)pObj)->
+                Find( String( RTL_CONSTASCII_USTRINGPARAM("Load") ), SbxCLASS_METHOD );
+            if( pVar )
+                pVar->GetInteger();
+        }
     }
 }
 
@@ -4129,12 +4161,20 @@ RTLFUNC(Unload)
 
     // Diesen Call einfach an das Object weitereichen
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
-    if( pObj && pObj->IsA( TYPE( SbxObject ) ) )
+    if ( pObj )
     {
-        SbxVariable* pVar = ((SbxObject*)pObj)->
-            Find( String( RTL_CONSTASCII_USTRINGPARAM("Unload") ), SbxCLASS_METHOD );
-        if( pVar )
-            pVar->GetInteger();
+        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        {
+            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
+            pFormModule->Unload();
+        }
+        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        {
+            SbxVariable* pVar = ((SbxObject*)pObj)->
+                Find( String( RTL_CONSTASCII_USTRINGPARAM("Unload") ), SbxCLASS_METHOD );
+            if( pVar )
+                pVar->GetInteger();
+        }
     }
 }
 
@@ -4318,7 +4358,7 @@ RTLFUNC(SetAttr) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -4432,7 +4472,7 @@ RTLFUNC(FileExists)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try

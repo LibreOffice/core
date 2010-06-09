@@ -227,6 +227,7 @@ throw (::com::sun::star::uno::RuntimeException)
             {
                 //make a sign for the current language
                 xPopupMenu->checkItem( nItemId, TRUE );
+                bNothingSelected = false;
             }
             aLangMap[ nItemId ] = rStr;
             ++nItemId;
@@ -244,8 +245,8 @@ throw (::com::sun::star::uno::RuntimeException)
     {
         const OUString & rStr( *it );
         if( rStr != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
-            rStr != OUString::createFromAscii( "*" ) &&
-            rStr != OUString::createFromAscii( ""  ))
+            rStr != sAsterix &&
+            rStr != sEmpty)
         {
             DBG_ASSERT( MID_LANG_PARA_1 <= nItemId && nItemId <= MID_LANG_PARA_9,
                     "nItemId outside of expected range!" );
