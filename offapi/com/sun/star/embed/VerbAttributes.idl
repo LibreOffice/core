@@ -37,7 +37,7 @@ module com { module sun { module star { module embed {
 
     @see VerbDescriptor
 */
-constants VerbAttributes
+published constants VerbAttributes
 {
     // -----------------------------------------------------------------------
     /** Execution of the verb with this attribute must not modify the

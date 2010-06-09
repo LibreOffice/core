@@ -41,30 +41,25 @@ module com {  module sun {  module star {  module awt { module grid {
 /** An interface to a control that displays a tabular data.
 
     @see UnoControlGrid
+
+    @since OOo 3.3.0
  */
 interface XGridControl: XGridSelection
 {
-    /** Specifies the <type>XGridColumnModel</type> of the control.
-    */
-    [attribute] XGridColumnModel ColumnModel;
-
-    /** Specifies the <type>XGridDataModel</type> of the control.
-    */
-    [attribute] XGridDataModel DataModel;
-
-
     /** Converting
     */
 
     long getItemIndexAtPoint( [in] long x, [in] long y);
 
-    /** registers a listener for mouse events.
-     */
-    //[oneway] void addMouseListener( [in] com::sun::star::awt::XMouseListener listener );
-
-    /** unregisters a listener for mouse events.
-     */
-    //[oneway] void removeMouseListener( [in] com::sun::star::awt::XMouseListener listener );
+    /** Sets tooltip for row
+        @param textForTooltip
+            text, which will be shown as tooltip.
+            If only cell content should be displayed, leave sequence empty.
+        @param columnsForTooltip
+            column numbers, which define the cell content that should be shown in the tooltip.
+            If only text should be shown, leave this sequence empty.
+    */
+    void setToolTip( [in] sequence< string > textForTooltip, [in] sequence< long > columnsForTooltip);
 
 };
 
