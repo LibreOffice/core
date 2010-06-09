@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: player.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <glib.h>
 #include <glib/gatomic.h>
 
-// necessary for older GLib versions
+// necessary for mixed environments with GStreamer-0.10 and GLib versions < 2.8
 #ifndef G_GNUC_NULL_TERMINATED
 #if __GNUC__ >= 4
 #define G_GNUC_NULL_TERMINATED __attribute__((__sentinel__))
@@ -44,8 +41,8 @@
 #endif
 #endif
 
-// necessary for older GLib versions
-struct GOptionGroup;
+struct _GOptionGroup;
+typedef struct _GOptionGroup GOptionGroup;
 
 #include <gst/gst.h>
 #include "com/sun/star/media/XPlayer.hdl"
