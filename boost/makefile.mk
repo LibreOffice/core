@@ -49,6 +49,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=boost_1_39_0
+TARFILE_MD5=fcc6df1160753d0b8c835d17fdeeb0a7
 PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
@@ -90,6 +91,8 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/pending $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/pool $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/preprocessor $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/ptr_container $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/range $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/spirit $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/smart_ptr $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/tuple $(INCCOM)$/$(PRJNAME)

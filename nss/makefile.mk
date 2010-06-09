@@ -42,6 +42,7 @@ all:
 .ENDIF	
 
 TARFILE_NAME=nss_3_12_5
+TARFILE_MD5=6244eb0b6e2647ee50470951fa6efb47
 TARFILE_ROOTDIR=mozilla
 PATCH_FILES=nss.patch
 
@@ -134,12 +135,8 @@ OUT2LIB= \
 .ELSE			# "$(COM)"=="GCC"
 MOZ_MSVCVERSION= 9
 .EXPORT : MOZ_MSVCVERSION
-.IF "$(USE_SHELL)"=="4nt"
-PATH!:=$(MOZILLABUILD)/msys/bin;$(MOZILLABUILD)/moztools/bin;$(PATH)
-.ELSE			# $(USE_SHELL)"=="4nt"
 moz_build:=$(shell cygpath -p $(MOZILLABUILD))
 PATH!:=$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)
-.ENDIF			# $(USE_SHELL)"=="4nt"
 .EXPORT : PATH
 
 #Using WINNT will cause at least that nspr4.dll, plc4.dll, plds4.dll 
