@@ -385,4 +385,5 @@ UDK_3.7 { # OOo 3.3
         __1cEcppuLOWeakObjectbAdisposeWeakConnectionPoint6M_v_;
         __1cDcomDsunEstarDunoTWeakReferenceHelper2G6Mrkn0DJReference4n0DKXInterface____r4_;
         __1cDcomDsunEstarDunoTWeakReferenceHelperFclear6M_v_;
+        __1cEcppubHcreateOneInstanceComponentFactory6FpFrknDcomDsunEstarDunoJReference4n0ERXComponentContext____n0EJReference4n0EKXInterface___rknDrtlIOUString_rkn0EISequence4n0K___pnQ_rtl_ModuleCount__n0EJReference4n0DElangXXSingleComponentFactory____;
 } UDK_3.6;

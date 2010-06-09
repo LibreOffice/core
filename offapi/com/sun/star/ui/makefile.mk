@@ -84,7 +84,8 @@ IDLFILES=\
     XUIElementFactory.idl                       \
     XUIElementFactoryRegistration.idl           \
     XUIElementSettings.idl                      \
-    XUIFunctionListener.idl
+    XUIFunctionListener.idl                     \
+    XToolPanel.idl
 
 # ------------------------------------------------------------------
 
