@@ -124,7 +124,8 @@ LIB3FILES=      \
             $(SLB)$/cgm.lib			\
             $(SLB)$/uitable.lib		\
             $(SLB)$/uiannotations.lib\
-            $(SLB)$/grf.lib
+            $(SLB)$/grf.lib \
+            $(SLB)$/controller.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib
 LIB5FILES=      \

@@ -166,6 +166,7 @@ String STR_HANDOUT_MODE
 {
     Text [ en-US ] = "Handout" ;
 };
+
 String STR_AUTOLAYOUT_NONE
 {
     Text [ en-US ] = "Blank Slide" ;
@@ -182,77 +183,41 @@ String STR_AUTOLAYOUT_TITLE
 {
     Text [ en-US ] = "Title Slide" ;
 };
-String STR_AUTOLAYOUT_OBJ
+String STR_AUTOLAYOUT_CONTENT
 {
-    Text [ en-US ] = "Title, Object" ;
+    Text [ en-US ] = "Title, Content" ;
 };
-String STR_AUTOLAYOUT_ENUM
+String STR_AUTOLAYOUT_2CONTENT
 {
-    Text [ en-US ] = "Title, Text" ;
+    Text [ en-US ] = "Title and 2 Content" ;
 };
-String STR_AUTOLAYOUT_CHART
+String STR_AUTOLAYOUT_CONTENT_2CONTENT
 {
-    Text [ en-US ] = "Title, Chart" ;
+    Text [ en-US ] = "Title, Content and 2 Content" ;
 };
-String STR_AUTOLAYOUT_TAB
+String STR_AUTOLAYOUT_2CONTENT_CONTENT
 {
-    Text [ en-US ] = "Title, Spreadsheet" ;
+    Text [ en-US ] = "Title, 2 Content and Content" ;
 };
-String STR_AUTOLAYOUT_CLIPTEXT
+String STR_AUTOLAYOUT_CONTENT_OVER_2CONTENT
 {
-    Text [ en-US ] = "Title, Clipart, Text" ;
+    Text [ en-US ] = "Title, Content over 2 Content" ;
 };
-String STR_AUTOLAYOUT_2TEXT
+String STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT
 {
-    Text [ en-US ] = "Title, 2 Text Blocks" ;
+    Text [ en-US ] = "Title, 2 Content over Content" ;
 };
-String STR_AUTOLAYOUT_TEXTCHART
+String STR_AUTOLAYOUT_CONTENT_OVER_CONTENT
 {
-    Text [ en-US ] = "Title, Text, Chart" ;
+    Text [ en-US ] = "Title, Content over Content" ;
 };
-String STR_AUTOLAYOUT_TEXTCLIP
+String STR_AUTOLAYOUT_4CONTENT
 {
-    Text [ en-US ] = "Title, Text, Clipart" ;
+    Text [ en-US ] = "Title, 4 Content" ;
 };
-String STR_AUTOLAYOUT_CHARTTEXT
+String STR_AUTOLAYOUT_6CONTENT
 {
-    Text [ en-US ] = "Title, Chart, Text" ;
-};
-String STR_AUTOLAYOUT_TEXTOBJ
-{
-    Text [ en-US ] = "Title, Text, Object" ;
-};
-String STR_AUTOLAYOUT_TEXT2OBJ
-{
-    Text [ en-US ] = "Title, Text, 2 Objects" ;
-};
-String STR_AUTOLAYOUT_OBJTEXT
-{
-    Text [ en-US ] = "Title, Object, Text" ;
-};
-String STR_AUTOLAYOUT_OBJOVERTEXT
-{
-    Text [ en-US ] = "Title, Object Above Text" ;
-};
-String STR_AUTOLAYOUT_2OBJTEXT
-{
-    Text [ en-US ] = "Title, 2 Objects, Text" ;
-};
-String STR_AUTOLAYOUT_2OBJOVERTEXT
-{
-    Text [ en-US ] = "Title, 2 Objects Above Text" ;
-};
-String STR_AUTOLAYOUT_TEXTOVEROBJ
-{
-    Text [ en-US ] = "Title, Text Above Object" ;
-};
-String STR_AUTOLAYOUT_4OBJ
-{
-    Text [ en-US ] = "Title, 4 Objects" ;
-};
-String STR_AUTOLAYOUT_4CLIPART
-{
-    Text [ en-US ] = "Title, 4 Cliparts" ;
+    Text [ en-US ] = "Title, 6 Content" ;
 };
 String STR_AL_TITLE_VERT_OUTLINE
 {
@@ -269,10 +234,6 @@ String STR_AL_VERT_TITLE_TEXT_CHART
 String STR_AL_VERT_TITLE_VERT_OUTLINE
 {
     Text [ en-US ] = "Vertical Title, Vertical Text" ;
-};
-String STR_AUTOLAYOUT_6CLIPART
-{
-    Text [ en-US ] = "Title, 6 Cliparts" ;
 };
 
 String STR_AUTOLAYOUT_HANDOUT1
@@ -1250,6 +1211,14 @@ String DLG_TABLEDESIGNPANE
 {
     Text [ en-US ] = "Table Designs";
 };
+String STR_CUSTOMANIMATIONPANE
+{
+    Text [ en-US ] = "Custom Animation";
+};
+String STR_SLIDE_TRANSITION_PANE
+{
+    Text [ en-US ] = "Slide Transition";
+};
 String STR_NAVIGATOR_SHOW_NAMED_SHAPES
 {
     Text [ en-US ] = "Named shapes";
@@ -1269,4 +1238,28 @@ String STR_SET_BACKGROUND_PICTURE
 String RID_ANNOTATIONS_START
 {
      Text [ en-US ] = "Comments";
+};
+String STR_RESET_LAYOUT
+{
+    Text[ en-US ] = "Reset Slide Layout";
+};
+
+String STR_INSERT_TABLE
+{
+     Text [ en-US ] = "Insert Table";
+};
+
+String STR_INSERT_CHART
+{
+     Text [ en-US ] = "Insert Chart";
+};
+
+String STR_INSERT_PICTURE
+{
+     Text [ en-US ] = "Insert Picture";
+};
+
+String STR_INSERT_MOVIE
+{
+     Text [ en-US ] = "Insert Movie";
 };

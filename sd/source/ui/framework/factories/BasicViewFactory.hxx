@@ -96,7 +96,7 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XResource>
         SAL_CALL createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException);
 
     virtual void SAL_CALL releaseResource (
         const css::uno::Reference<css::drawing::framework::XResource>& xView)
