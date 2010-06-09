@@ -2443,6 +2443,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         {
             rPos = WW8_CP_MAX-10;     // -> eof or other error
             sPlainCharsBuf.ReleaseBufferAccess( 0 );
+            delete [] p8Bits;
             return true;
         }
 
