@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/soerr.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <unotools/saveopt.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <tools/config.hxx>

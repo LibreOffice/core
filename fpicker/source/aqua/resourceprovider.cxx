@@ -38,7 +38,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
 #ifndef _SVTOOLS_SVTOOLS_HRC_
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 
 #ifndef _SVTOOLS_FILEDLG2_HRC_
