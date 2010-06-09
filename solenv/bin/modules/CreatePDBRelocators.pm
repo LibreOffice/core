@@ -106,8 +106,8 @@ sub create_pdb_relocators
     }
 
     # collect files
-    my @pdb_files;
     foreach my $repository (@{$self->{REPOSITORIES}}) {
+        my @pdb_files;
         my $o = $self->{SOLARVERSION} . "/$repository";
         $repository =~ s/(.*?)\.(.*)/$1/;
         $self->collect_files( $o, $inpath, \@pdb_files);
