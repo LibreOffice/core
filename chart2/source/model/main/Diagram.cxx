@@ -71,6 +71,7 @@ enum
 {
     PROP_DIAGRAM_REL_POS,
     PROP_DIAGRAM_REL_SIZE,
+    PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS,
     PROP_DIAGRAM_SORT_BY_X_VALUES,
     PROP_DIAGRAM_CONNECT_BARS,
     PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
@@ -99,6 +100,13 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "PosSizeExcludeAxes" ),
+                  PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "SortByXValues" ),
@@ -171,6 +179,7 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );

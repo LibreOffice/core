@@ -50,6 +50,7 @@
 #include "RegressionCurveHelper.hxx"
 #include "ShapeController.hxx"
 #include "DiagramHelper.hxx"
+#include "ObjectNameProvider.hxx"
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -242,6 +243,7 @@ void ChartController::executeDispatch_NewArrangement()
             Reference< beans::XPropertyState > xState( xDiagram, uno::UNO_QUERY_THROW );
             xState->setPropertyToDefault( C2U("RelativeSize"));
             xState->setPropertyToDefault( C2U("RelativePosition"));
+            xState->setPropertyToDefault( C2U("PosSizeExcludeAxes"));
 
             // 3d rotation
             ThreeDHelper::set3DSettingsToDefault( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ) );
@@ -468,6 +470,8 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
             m_aSelection.applySelection( m_pDrawViewWrapper );
 
             m_pDrawViewWrapper->EndUndo();
+
+            impl_switchDiagramPositioningToExcludingPositioning();
         }
     }
 }
@@ -514,6 +518,8 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
                     m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
                     m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pObj ) );
                     m_pDrawViewWrapper->EndUndo();
+
+                    impl_switchDiagramPositioningToExcludingPositioning();
                 }
             }
             catch ( const uno::Exception& ex )
@@ -900,6 +906,16 @@ void ChartController::impl_ShapeControllerDispatch( const util::URL& rURL, const
     {
         xDispatch->dispatch( rURL, rArgs );
     }
+}
+
+void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
+{
+    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
+        ActionDescriptionProvider::POS_SIZE,
+        ObjectNameProvider::getName( OBJECTTYPE_DIAGRAM)),
+        m_xUndoManager, m_aModel->getModel() );
+    if( DiagramHelper::switchDiagramPositioningToExcludingPositioning( m_aModel->getModel(), true, true ) )
+        aUndoGuard.commitAction();
 }
 
 } //  namespace chart
