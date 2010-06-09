@@ -55,7 +55,7 @@ PropertyNode::PropertyNode(
     extension_(extension)
 {}
 
-rtl::Reference< Node > PropertyNode::clone() const {
+rtl::Reference< Node > PropertyNode::clone(bool) const {
     return new PropertyNode(*this);
 }
 

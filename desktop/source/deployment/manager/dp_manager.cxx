@@ -927,7 +927,7 @@ void PackageManagerImpl::removePackage(
             //the flag file it will then recognize, that the extension was
             //deleted and can then update the extnesion database of the shared
             //extensions in the user installation.
-            if (! m_readOnly && !xPackage->isRemoved() && m_context.equals(OUSTR("shared")))
+            if ( xPackage.is() && !m_readOnly && !xPackage->isRemoved() && m_context.equals(OUSTR("shared")))
             {
                 ActivePackages::Data val;
                 m_activePackagesDB->get( & val, id, fileName);

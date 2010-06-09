@@ -30,6 +30,7 @@
 
 
 #include "dp_misc.h"
+#include "dp_version.hxx"
 #include "dp_interact.h"
 #include "rtl/uri.hxx"
 #include "rtl/digest.h"
@@ -475,17 +476,6 @@ Reference<XInterface> resolveUnoURL(
         }
     }
 }
-
-OUString getExtensionDefaultUpdateURL()
-{
-    ::rtl::OUString sUrl(
-        RTL_CONSTASCII_USTRINGPARAM(
-        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
-        ":Version:ExtensionUpdateURL}"));
-    ::rtl::Bootstrap::expandMacros(sUrl);
-    return sUrl;
-}
-
 
 #ifdef WNT
 void writeConsoleWithStream(::rtl::OUString const & sText, HANDLE stream)

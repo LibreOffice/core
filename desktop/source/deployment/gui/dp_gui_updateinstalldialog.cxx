@@ -380,13 +380,12 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         {
             UpdateData & curData = *i;
 
-            OSL_ASSERT(curData.aUpdateInfo.is());
+            if (!curData.aUpdateInfo.is() || curData.aUpdateSource.is())
+                continue;
             //We assume that m_aVecUpdateData contains only information about extensions which
             //can be downloaded directly.
             OSL_ASSERT(curData.sWebsiteURL.getLength() == 0);
 
-            if (!curData.aUpdateInfo.is())
-                continue;
             //update the name of the extension which is to be downloaded
             {
                 ::vos::OGuard g(Application::GetSolarMutex());
@@ -491,13 +490,11 @@ void UpdateInstallDialog::Thread::installExtensions()
 //       osl::Thread::wait(v);
         bool bError = false;
         bool bLicenseDeclined = false;
-        cssu::Reference<css::deployment::XPackage> xPackage;
+        cssu::Reference<css::deployment::XPackage> xExtension;
         UpdateData & curData = *i;
         cssu::Exception exc;
         try
         {
-            if (curData.sLocalURL.getLength() == 0)
-                continue;
             cssu::Reference< css::task::XAbortChannel > xAbortChannel(
                 curData.aInstalledPackage->createAbortChannel() );
             {
@@ -507,9 +504,35 @@ void UpdateInstallDialog::Thread::installExtensions()
                 }
                 m_abort = xAbortChannel;
             }
-            xPackage = m_dialog.getExtensionManager()->addExtension(
-                curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(),
-                curData.aInstalledPackage->getRepositoryName(), xAbortChannel, m_updateCmdEnv.get());
+            if (!curData.aUpdateSource.is() && curData.sLocalURL.getLength())
+            {
+                css::beans::NamedValue prop(OUSTR("EXTENSION_UPDATE"), css::uno::makeAny(OUSTR("1")));
+                if (!curData.bIsShared)
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        OUSTR("user"), xAbortChannel, m_updateCmdEnv.get());
+                else
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        OUSTR("shared"), xAbortChannel, m_updateCmdEnv.get());
+            }
+            else if (curData.aUpdateSource.is())
+            {
+                OSL_ASSERT(curData.aUpdateSource.is());
+                //I am not sure if we should obtain the install properties and pass them into
+                //add extension. Currently it contains only "SUPPRESS_LICENSE". So it it could happen
+                //that a license is displayed when updating from the shared repository, although the
+                //shared extension was installed using "SUPPRESS_LICENSE".
+                css::beans::NamedValue prop(OUSTR("EXTENSION_UPDATE"), css::uno::makeAny(OUSTR("1")));
+                if (!curData.bIsShared)
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        OUSTR("user"), xAbortChannel, m_updateCmdEnv.get());
+                else
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        OUSTR("shared"), xAbortChannel, m_updateCmdEnv.get());
+            }
         }
         catch (css::deployment::DeploymentException & de)
         {
@@ -538,7 +561,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             m_dialog.setError(UpdateInstallDialog::ERROR_LICENSE_DECLINED,
                 curData.aInstalledPackage->getDisplayName(), OUString());
         }
-        else if (!xPackage.is() || bError)
+        else if (!xExtension.is() || bError)
         {
             ::vos::OGuard g(Application::GetSolarMutex());
             if (m_stop) {

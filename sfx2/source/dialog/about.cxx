@@ -109,6 +109,48 @@ static bool impl_loadBitmap(
     return false;
 }
 
+/** loads the application logo as used in the about dialog and impress slideshow pause screen */
+Image SfxApplication::GetApplicationLogo()
+{
+    Image aAppLogo;
+
+    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
+    bool bLoaded = false;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
+    }
+    while ( !bLoaded && ( nIndex >= 0 ) );
+
+    // fallback to "about.bmp"
+    if ( !bLoaded )
+    {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+    }
+
+    if ( !bLoaded )
+    {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+    }
+
+    return aAppLogo;
+}
+
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr ) :
 
     SfxModalDialog  ( pParent,  rId ),
@@ -145,39 +187,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     }
 
     // load image from module path
-    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
-    bool bLoaded = false;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
-    }
-    while ( !bLoaded && ( nIndex >= 0 ) );
-
-    // fallback to "about.bmp"
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
-    }
-
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
-    }
+    aAppLogo = SfxApplication::GetApplicationLogo();
 
     // Transparenter Font
     Font aFont = GetFont();

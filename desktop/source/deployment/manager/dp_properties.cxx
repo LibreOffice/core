@@ -50,6 +50,8 @@ using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
 #define PROP_SUPPRESS_LICENSE "SUPPRESS_LICENSE"
+#define PROP_EXTENSION_UPDATE "EXTENSION_UPDATE"
+
 namespace dp_manager {
 
 //Reading the file
@@ -89,17 +91,11 @@ ExtensionProperties::ExtensionProperties(
         css::beans::NamedValue const & v = properties[i];
         if (v.Name.equals(OUSTR(PROP_SUPPRESS_LICENSE)))
         {
-            OUString value;
-            if (v.Value >>= value)
-            {
-                if (value.equals(OUSTR("1")))
-                    m_prop_suppress_license = OUSTR("1");
-            }
-            else
-            {
-                throw lang::IllegalArgumentException(
-                    OUSTR("Extension Manager: wrong property value"), 0, -1);
-            }
+            m_prop_suppress_license = getPropertyValue(v);
+        }
+        else if (v.Name.equals(OUSTR(PROP_EXTENSION_UPDATE)))
+        {
+            m_prop_extension_update = getPropertyValue(v);
         }
         else
         {
@@ -109,6 +105,21 @@ ExtensionProperties::ExtensionProperties(
     }
 }
 
+OUString ExtensionProperties::getPropertyValue(css::beans::NamedValue const & v)
+{
+    OUString value(OUSTR("0"));
+    if (v.Value >>= value)
+    {
+        if (value.equals(OUSTR("1")))
+            value = OUSTR("1");
+    }
+    else
+    {
+        throw lang::IllegalArgumentException(
+            OUSTR("Extension Manager: wrong property value"), 0, -1);
+    }
+    return value;
+}
 void ExtensionProperties::write()
 {
     ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv);
@@ -137,6 +148,17 @@ bool ExtensionProperties::isSuppressedLicense()
     if (m_prop_suppress_license)
     {
         if (m_prop_suppress_license->equals(OUSTR("1")))
+            ret = true;
+    }
+    return ret;
+}
+
+bool ExtensionProperties::isExtensionUpdate()
+{
+    bool ret = false;
+    if (m_prop_extension_update)
+    {
+        if (m_prop_extension_update->equals(OUSTR("1")))
             ret = true;
     }
     return ret;

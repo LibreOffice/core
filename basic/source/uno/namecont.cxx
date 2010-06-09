@@ -73,7 +73,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
 
-
 namespace basic
 {
 
@@ -327,6 +326,7 @@ DBG_NAME( SfxLibraryContainer )
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer( void )
     : LibraryContainerHelper( maMutex )
+    , mbVBACompat( sal_False )
     , maModifiable( *this, maMutex )
     , maNameContainer( getCppuType( (Reference< XNameAccess >*) NULL ) )
     , mbOldInfoFormat( sal_False )
@@ -2789,6 +2789,7 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     }
 }
 
+
 //XLibraryContainer3
 OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
     throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
@@ -2800,6 +2801,29 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
         throw IllegalArgumentException();
     OUString aRetStr = pImplLib->maOrignialStorageURL;
     return aRetStr;
+}
+
+
+::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatModeOn() throw (RuntimeException)
+{
+    return mbVBACompat;
+}
+
+void SAL_CALL SfxLibraryContainer::setVBACompatModeOn( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
+{
+    BasicManager* pBasMgr = getBasicManager();
+    if( pBasMgr )
+    {
+        // get the standard library
+        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                if ( pBasMgr->GetName().Len() )
+                    aLibName = pBasMgr->GetName();
+
+        StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+        if( pBasic )
+            pBasic->SetVBAEnabled( _vbacompatmodeon );
+    }
+        mbVBACompat = _vbacompatmodeon;
 }
 
 // Methods XServiceInfo

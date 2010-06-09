@@ -83,7 +83,10 @@ public:
     void removeExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
     void enableExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage,
                           const bool bEnable );
-    void checkForUpdates( const std::vector< TUpdateListEntry > &vList );
+    void checkForUpdates(const std::vector< ::com::sun::star::uno::Reference<
+                         ::com::sun::star::deployment::XPackage > > &vList );
+    void acceptLicense( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
+    static void syncRepositories( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext );
     /**
        This call does not block. It signals the internal thread
        that it should install the remaining extensions and then terminate.

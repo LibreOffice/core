@@ -39,6 +39,7 @@
 #include "vcl/timer.hxx"
 
 #include <unotools/configmgr.hxx>
+#include "toolkit/helper/vclunohelper.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -48,10 +49,14 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "com/sun/star/deployment/XPackage.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
+#include "com/sun/star/deployment/LicenseException.hpp"
+#include "com/sun/star/deployment/ui/LicenseDialog.hpp"
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include "app.hxx"
@@ -132,21 +137,47 @@ Reference<ucb::XProgressHandler> SilentCommandEnv::getProgressHandler()
 void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRequest )
     throw (uno::RuntimeException)
 {
+    deployment::LicenseException licExc;
+
     uno::Any request( xRequest->getRequest() );
+    bool bApprove = true;
+
+    if ( request >>= licExc )
+    {
+        uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
+        uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
+            deployment::ui::LicenseDialog::create(
+            xContext, VCLUnoHelper::GetInterface( NULL ),
+            licExc.ExtensionName, licExc.Text ) );
+        sal_Int16 res = xDialog->execute();
+        if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
+            bApprove = false;
+        else if ( res == ui::dialogs::ExecutableDialogResults::OK )
+            bApprove = true;
+        else
+        {
+            OSL_ASSERT(0);
+        }
+    }
 
     // We approve everything here
-    uno::Sequence< Reference< task::XInteractionContinuation > > conts(
-        xRequest->getContinuations() );
-    Reference< task::XInteractionContinuation > const * pConts =
-        conts.getConstArray();
+    uno::Sequence< Reference< task::XInteractionContinuation > > conts( xRequest->getContinuations() );
+    Reference< task::XInteractionContinuation > const * pConts = conts.getConstArray();
     sal_Int32 len = conts.getLength();
+
     for ( sal_Int32 pos = 0; pos < len; ++pos )
     {
-
-        Reference< task::XInteractionApprove > xInteractionApprove(
-            pConts[ pos ], uno::UNO_QUERY );
-        if (xInteractionApprove.is()) {
-            xInteractionApprove->select();
+        if ( bApprove )
+        {
+            uno::Reference< task::XInteractionApprove > xInteractionApprove( pConts[ pos ], uno::UNO_QUERY );
+            if ( xInteractionApprove.is() )
+                xInteractionApprove->select();
+        }
+        else
+        {
+            uno::Reference< task::XInteractionAbort > xInteractionAbort( pConts[ pos ], uno::UNO_QUERY );
+            if ( xInteractionAbort.is() )
+                xInteractionAbort->select();
         }
     }
 }
@@ -161,7 +192,7 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
 
     if ( rStatus.hasValue() && ( rStatus >>= sText) )
     {
-        if ( mnLevel <= 2 )
+        if ( mnLevel <= 3 )
             mpDesktop->SetSplashScreenText( sText );
         else
             mpDesktop->SetSplashScreenProgress( ++mnProgress );

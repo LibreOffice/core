@@ -250,7 +250,8 @@ void ExtensionManager::addExtensionsToMap(
  */
 ::std::list<Reference<deploy::XPackage> >
     ExtensionManager::getExtensionsWithSameId(
-        OUString const & identifier, OUString const & fileName)
+        OUString const & identifier, OUString const & fileName,
+        Reference< ucb::XCommandEnvironment> const & /*xCmdEnv*/)
 
 {
     ::std::list<Reference<deploy::XPackage> > extensionList;
@@ -282,13 +283,70 @@ void ExtensionManager::addExtensionsToMap(
     return extensionList;
 }
 
+uno::Sequence<Reference<deploy::XPackage> >
+ExtensionManager::getExtensionsWithSameIdentifier(
+        OUString const & identifier,
+        OUString const & fileName,
+        Reference< ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (
+            deploy::DeploymentException,
+            ucb::CommandFailedException,
+            lang::IllegalArgumentException,
+            uno::RuntimeException)
+{
+    try
+    {
+        ::std::list<Reference<deploy::XPackage> > listExtensions =
+            getExtensionsWithSameId(
+                identifier, fileName, xCmdEnv);
+        sal_Bool bHasExtension = false;
+
+        //throw an IllegalArgumentException if there is no extension at all.
+        typedef  ::std::list<Reference<deploy::XPackage> >::const_iterator CIT;
+        for (CIT i = listExtensions.begin(); i != listExtensions.end(); i++)
+            bHasExtension |= i->is();
+        if (!bHasExtension)
+            throw lang::IllegalArgumentException(
+                OUSTR("Could not find extension: ") + identifier + OUSTR(", ") + fileName,
+                static_cast<cppu::OWeakObject*>(this), -1);
+
+        return comphelper::containerToSequence<
+            Reference<deploy::XPackage>,
+            ::std::list<Reference<deploy::XPackage> >
+            > (listExtensions);
+    }
+    catch (deploy::DeploymentException & )
+    {
+        throw;
+    }
+    catch ( ucb::CommandFailedException & )
+    {
+        throw;
+    }
+    catch (lang::IllegalArgumentException &)
+    {
+        throw;
+    }
+    catch (...)
+    {
+        uno::Any exc = ::cppu::getCaughtException();
+        throw deploy::DeploymentException(
+            OUSTR("Extension Manager: exception during getExtensionsWithSameIdentifier"),
+            static_cast<OWeakObject*>(this), exc);
+    }
+}
+
 
 
 bool ExtensionManager::isUserDisabled(
     OUString const & identifier, OUString const & fileName)
 {
-    ::std::list<Reference<deploy::XPackage> > listExtensions =
-        getExtensionsWithSameId(identifier, fileName);
+    ::std::list<Reference<deploy::XPackage> > listExtensions;
+
+    try {
+        listExtensions = getExtensionsWithSameId(identifier, fileName);
+    } catch (lang::IllegalArgumentException & ) {
+    }
     OSL_ASSERT(listExtensions.size() == 3);
 
     return isUserDisabled( ::comphelper::containerToSequence<
@@ -339,8 +397,11 @@ void ExtensionManager::activateExtension(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
-    ::std::list<Reference<deploy::XPackage> > listExtensions =
-        getExtensionsWithSameId(identifier, fileName);
+    ::std::list<Reference<deploy::XPackage> > listExtensions;
+    try {
+        listExtensions = getExtensionsWithSameId(identifier, fileName);
+    } catch (lang::IllegalArgumentException &) {
+    }
     OSL_ASSERT(listExtensions.size() == 3);
 
     activateExtension(
@@ -510,9 +571,11 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
             ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>());
             if (licenseAttributes && licenseAttributes->suppressIfRequired
                 && props.isSuppressedLicense())
-                _xCmdEnv = Reference<ucb::XCommandEnvironment>(new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
+                _xCmdEnv = Reference<ucb::XCommandEnvironment>(
+                    new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
+
             bCanInstall = xTmpExtension->checkPrerequisites(
-                xAbortChannel, _xCmdEnv, xOldExtension.is()) == 0 ? true : false;
+                xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0 ? true : false;
         }
         catch (deploy::DeploymentException& ) {
             excOccurred1 = ::cppu::getCaughtException();

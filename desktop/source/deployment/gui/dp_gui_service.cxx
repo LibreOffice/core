@@ -46,6 +46,7 @@
 #include "boost/bind.hpp"
 #include "license_dialog.hxx"
 #include "dp_gui_dialog2.hxx"
+#include "dp_gui_extensioncmdqueue.hxx"
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -256,6 +257,7 @@ void ServiceImpl::startExecuteModal(
                                 + ::utl::ConfigManager::GetDirectConfigProperty(
                                     ::utl::ConfigManager::PRODUCTVERSION).get<OUString>();
             app->SetDisplayName(sTitle);
+            ExtensionCmdQueue::syncRepositories( m_xComponentContext );
         }
     }
     else

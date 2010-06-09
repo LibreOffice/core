@@ -53,6 +53,9 @@ protected:
     ::rtl::OUString m_propFileUrl;
     const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
     ::boost::optional< ::rtl::OUString> m_prop_suppress_license;
+    ::boost::optional< ::rtl::OUString> m_prop_extension_update;
+
+    ::rtl::OUString getPropertyValue(css::beans::NamedValue const & v);
 public:
 
     virtual ~ExtensionProperties() {};
@@ -66,6 +69,8 @@ public:
     void write();
 
     bool isSuppressedLicense();
+
+    bool isExtensionUpdate();
 };
 }
 

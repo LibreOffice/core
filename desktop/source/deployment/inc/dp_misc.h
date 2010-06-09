@@ -117,11 +117,6 @@ oslProcess raiseProcess( ::rtl::OUString const & appURL,
                          ::com::sun::star::uno::Sequence< ::rtl::OUString > const & args );
 
 //==============================================================================
-/** returns the default update URL (for the update information) which
-    is used when an extension does not provide its own URL.
-*/
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString getExtensionDefaultUpdateURL();
 
 /** writes the argument string to the console.
     On Linux/Unix/etc. it converts the UTF16 string to an ANSI string using
@@ -178,7 +173,6 @@ void TRACE(::rtl::OString const & sText);
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void syncRepositories(::com::sun::star::uno::Reference<
                       ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
-
 
 }
 

@@ -163,6 +163,17 @@ public:
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
 
+    virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
+    SAL_CALL getExtensionsWithSameIdentifier(
+        ::rtl::OUString const & identifier,
+        ::rtl::OUString const & filename,
+        css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (
+            css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
+            css::lang::IllegalArgumentException,
+            css::uno::RuntimeException);
+
     virtual css::uno::Sequence< css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > >
         SAL_CALL getAllExtensions(
         css::uno::Reference<css::task::XAbortChannel> const &,
@@ -252,7 +263,9 @@ private:
 
     ::std::list<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameId(::rtl::OUString  const & identifier,
-                            ::rtl::OUString const & fileName);
+                            ::rtl::OUString const & fileName,
+                            css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv =
+                            css::uno::Reference< css::ucb::XCommandEnvironment>());
 
     css::uno::Reference<css::deployment::XPackage> backupExtension(
         ::rtl::OUString const & identifier, ::rtl::OUString const & fileName,

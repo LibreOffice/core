@@ -76,6 +76,7 @@
 #include "comphelper/anytostring.hxx"
 #include "vcl/msgbox.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
+#include "comphelper/processfactory.hxx"
 
 #include "dp_gui.h"
 #include "dp_gui_thread.hxx"
@@ -195,14 +196,14 @@ public:
 //------------------------------------------------------------------------------
 struct ExtensionCmd
 {
-    enum E_CMD_TYPE { ADD, ENABLE, DISABLE, REMOVE, CHECK_FOR_UPDATES };
+    enum E_CMD_TYPE { ADD, ENABLE, DISABLE, REMOVE, CHECK_FOR_UPDATES, ACCEPT_LICENSE };
 
     E_CMD_TYPE  m_eCmdType;
     bool        m_bWarnUser;
     OUString    m_sExtensionURL;
     OUString    m_sRepository;
     uno::Reference< deployment::XPackage > m_xPackage;
-    std::vector< TUpdateListEntry >        m_vExtensionList;
+    std::vector< uno::Reference< deployment::XPackage > >        m_vExtensionList;
 
     ExtensionCmd( const E_CMD_TYPE eCommand,
                   const OUString &rExtensionURL,
@@ -218,7 +219,7 @@ struct ExtensionCmd
           m_bWarnUser( false ),
           m_xPackage( rPackage ) {};
     ExtensionCmd( const E_CMD_TYPE eCommand,
-                  const std::vector< TUpdateListEntry > &vExtensionList )
+                  const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
         : m_eCmdType( eCommand ),
           m_bWarnUser( false ),
           m_vExtensionList( vExtensionList ) {};
@@ -240,7 +241,8 @@ public:
     void removeExtension( const uno::Reference< deployment::XPackage > &rPackage );
     void enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                           const bool bEnable );
-    void checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList );
+    void checkForUpdates( const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList );
+    void acceptLicense( const uno::Reference< deployment::XPackage > &rPackage );
     void stop();
     bool isBusy();
 
@@ -266,7 +268,9 @@ private:
                            const uno::Reference< deployment::XPackage > &xPackage );
     void _disableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                             const uno::Reference< deployment::XPackage > &xPackage );
-    void _checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList );
+    void _checkForUpdates( const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList );
+    void _acceptLicense( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+                           const uno::Reference< deployment::XPackage > &xPackage );
 
     enum Input { NONE, START, STOP };
 
@@ -281,6 +285,7 @@ private:
     const OUString   m_sAddingPackages;
     const OUString   m_sRemovingPackages;
     const OUString   m_sDefaultCmd;
+    const OUString   m_sAcceptLicense;
     osl::Condition   m_wakeup;
     osl::Mutex       m_mutex;
     Input            m_eInput;
@@ -626,6 +631,7 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
     m_sAddingPackages( DialogHelper::getResourceString( RID_STR_ADDING_PACKAGES ) ),
     m_sRemovingPackages( DialogHelper::getResourceString( RID_STR_REMOVING_PACKAGES ) ),
     m_sDefaultCmd( DialogHelper::getResourceString( RID_STR_ADD_PACKAGES ) ),
+    m_sAcceptLicense( DialogHelper::getResourceString( RID_STR_ACCEPT_LICENSE ) ),
     m_eInput( NONE ),
     m_bTerminated( false ),
     m_bStopped( false ),
@@ -675,6 +681,25 @@ void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deploymen
 }
 
 //------------------------------------------------------------------------------
+void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment::XPackage > &rPackage )
+{
+    ::osl::MutexGuard aGuard( m_mutex );
+
+    //If someone called stop then we do not remove the extension -> game over!
+    if ( m_bStopped )
+        return;
+
+    if ( rPackage.is() )
+    {
+        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ACCEPT_LICENSE, rPackage ) );
+
+        m_queue.push( pEntry );
+        m_eInput = START;
+        m_wakeup.set();
+    }
+}
+
+//------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                                                  const bool bEnable )
 {
@@ -696,7 +721,8 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
 }
 
 //------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList )
+void ExtensionCmdQueue::Thread::checkForUpdates(
+    const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
     ::osl::MutexGuard aGuard( m_mutex );
 
@@ -814,6 +840,9 @@ void ExtensionCmdQueue::Thread::execute()
                 case ExtensionCmd::CHECK_FOR_UPDATES :
                     _checkForUpdates( pEntry->m_vExtensionList );
                     break;
+                case ExtensionCmd::ACCEPT_LICENSE :
+                    _acceptLicense( currentCmdEnv, pEntry->m_xPackage );
+                    break;
                 }
             }
             //catch ( deployment::DeploymentException &)
@@ -924,10 +953,8 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
 
     try
     {
-        uno::Reference< deployment::XPackage > xPackage(
-            xExtMgr->addExtension(rPackageURL, uno::Sequence<beans::NamedValue>(),
-                                  rRepository, xAbortChannel, rCmdEnv.get() ) );
-        OSL_ASSERT( xPackage.is() );
+        xExtMgr->addExtension(rPackageURL, uno::Sequence<beans::NamedValue>(),
+                              rRepository, xAbortChannel, rCmdEnv.get() );
     }
     catch ( ucb::CommandFailedException & )
     {
@@ -969,7 +996,8 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 }
 
 //------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::_checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList )
+void ExtensionCmdQueue::Thread::_checkForUpdates(
+    const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
     UpdateDialog* pUpdateDialog;
     std::vector< UpdateData > vData;
@@ -1066,6 +1094,28 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
 }
 
 //------------------------------------------------------------------------------
+void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+                                                const uno::Reference< deployment::XPackage > &xPackage )
+{
+    if ( !xPackage.is() )
+        return;
+
+    uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
+    uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
+    OUString sTitle = searchAndReplaceAll( m_sAcceptLicense, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
+    rCmdEnv->progressSection( sTitle, xAbortChannel );
+
+    try
+    {
+        xExtMgr->checkPrerequisitesAndEnable( xPackage, xAbortChannel, rCmdEnv.get() );
+        if ( m_pDialogHelper )
+            m_pDialogHelper->updatePackageInfo( xPackage );
+    }
+    catch ( ::ucb::CommandAbortedException & )
+    {}
+}
+
+//------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::onTerminated()
 {
     ::osl::MutexGuard g(m_mutex);
@@ -1126,9 +1176,19 @@ void ExtensionCmdQueue::enableExtension( const uno::Reference< deployment::XPack
     m_thread->enableExtension( rPackage, bEnable );
 }
 
-void ExtensionCmdQueue::checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList )
+void ExtensionCmdQueue::checkForUpdates( const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
     m_thread->checkForUpdates( vExtensionList );
+}
+
+void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackage > &rPackage )
+{
+    m_thread->acceptLicense( rPackage );
+}
+
+void ExtensionCmdQueue::syncRepositories( const uno::Reference< uno::XComponentContext > &xContext )
+{
+    dp_misc::syncRepositories( new ProgressCmdEnv( xContext, NULL, OUSTR("Extension Manager") ) );
 }
 
 void ExtensionCmdQueue::stop()

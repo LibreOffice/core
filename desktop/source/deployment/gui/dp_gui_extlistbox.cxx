@@ -66,6 +66,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     m_bChecked( false ),
     m_bMissingDeps( false ),
     m_bHasButtons( false ),
+    m_bMissingLic( false ),
     m_eState( eState ),
     m_pPublisher( NULL ),
     m_xPackage( xPackage )
@@ -372,6 +373,8 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     aSize.Height() = 10000;
 
     rtl::OUString aText( m_vEntries[ nPos ]->m_sErrorText );
+    if ( aText.getLength() )
+        aText += OUSTR("\n");
     aText += m_vEntries[ nPos ]->m_sDescription;
 
     Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ), aText,
@@ -634,7 +637,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         else
             DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
     }
-    if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps )
+    if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps || pEntry->m_bMissingLic )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
         DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
@@ -952,7 +955,8 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
 }
 
 //------------------------------------------------------------------------------
-long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage )
+long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
+                                  bool bLicenseMissing )
 {
     long         nPos = 0;
     PackageState eState = m_pManager->getPackageState( xPackage );
@@ -982,6 +986,10 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
     pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
     pEntry->m_bNew        = m_bInCheckMode;
+    pEntry->m_bMissingLic = bLicenseMissing;
+
+    if ( bLicenseMissing )
+        pEntry->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_MISSING_LICENSE );
 
     //access to m_nActive must be guarded
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
@@ -1012,9 +1020,12 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
             (*iIndex)->m_sVersion = xPackage->getVersion();
             (*iIndex)->m_sDescription = xPackage->getDescription();
 
+            if ( eState == REGISTERED )
+                (*iIndex)->m_bMissingLic = false;
+
             if ( eState == AMBIGUOUS )
                 (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-            else
+            else if ( ! (*iIndex)->m_bMissingLic )
                 (*iIndex)->m_sErrorText = String();
 
             if ( IsReallyVisible() )

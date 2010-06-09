@@ -61,11 +61,10 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
 
-    ::std::auto_ptr< ExtensionCmdQueue > m_pExecuteCmdQueue;
-
     Window                  *m_pParent;
     ExtMgrDialog            *m_pExtMgrDialog;
     UpdateRequiredDialog    *m_pUpdReqDialog;
+    ExtensionCmdQueue       *m_pExecuteCmdQueue;
 
     ::rtl::OUString          m_sGetExtensionsURL;
 
@@ -83,6 +82,7 @@ public:
 
     Dialog* getDialog() { return m_pExtMgrDialog ? (Dialog*) m_pExtMgrDialog : (Dialog*) m_pUpdReqDialog; }
     DialogHelper* getDialogHelper() { return m_pExtMgrDialog ? (DialogHelper*) m_pExtMgrDialog : (DialogHelper*) m_pUpdReqDialog; }
+    ExtensionCmdQueue* getCmdQueue() const { return m_pExecuteCmdQueue; }
 
     void SetText( const ::rtl::OUString &rTitle );
     void Show();
@@ -92,11 +92,6 @@ public:
 
     //-----------------
     bool checkUpdates( bool showUpdateOnly, bool parentVisible );
-    bool updatePackages( const std::vector< TUpdateListEntry > &vList );
-
-    bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                        bool bEnable );
-    bool removePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool installPackage( const ::rtl::OUString &rPackageURL, bool bWarnUser = false );
 
     bool queryTermination();
