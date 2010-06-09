@@ -211,6 +211,10 @@ protected:
     void                dumpRect( const String& rName,
                             const NameListWrapper& rListWrp = NO_LIST,
                             FormatType eFmtType = FORMATTYPE_DEC );
+    template< typename Type >
+    void                dumpRectWithGaps( const String& rName, sal_Int32 nGap,
+                            const NameListWrapper& rListWrp = NO_LIST,
+                            FormatType eFmtType = FORMATTYPE_DEC );
 
     sal_uInt16          dumpRepeatedRecId();
     void                dumpFrHeader( bool bWithFlags, bool bWithRange );
@@ -256,6 +260,22 @@ void BiffObjectBase::dumpRect( const String& rName,
 {
     Type nLeft, nTop, nWidth, nHeight;
     *mxBiffStrm >> nLeft >> nTop >> nWidth >> nHeight;
+    writeRectItem( rName, nLeft, nTop, nWidth, nHeight, rListWrp, eFmtType );
+}
+
+template< typename Type >
+void BiffObjectBase::dumpRectWithGaps( const String& rName, sal_Int32 nGap,
+        const NameListWrapper& rListWrp, FormatType eFmtType )
+{
+    Type nLeft, nTop, nWidth, nHeight;
+    *mxBiffStrm >> nLeft;
+    mxBiffStrm->skip( nGap );
+    *mxBiffStrm >> nTop;
+    mxBiffStrm->skip( nGap );
+    *mxBiffStrm >> nWidth;
+    mxBiffStrm->skip( nGap );
+    *mxBiffStrm >> nHeight;
+    mxBiffStrm->skip( nGap );
     writeRectItem( rName, nLeft, nTop, nWidth, nHeight, rListWrp, eFmtType );
 }
 
@@ -459,6 +479,11 @@ private:
     void                dumpObjRecFmlaRaw();
     void                dumpObjRecFmla( const String& rName, sal_uInt16 nFmlaSize );
     void                dumpObjRecPictFmla( sal_uInt16 nFmlaSize );
+
+    typedef ::std::pair< sal_uInt8, ::rtl::OUString > ChFrExtPropInfo;
+
+    void                dumpChFrExtProps();
+    ChFrExtPropInfo     dumpChFrExtPropHeader();
 
 private:
     NameListRef         mxColors;
