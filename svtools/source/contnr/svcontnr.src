@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 Image RID_IMG_TREENODE_COLLAPSED
 {
