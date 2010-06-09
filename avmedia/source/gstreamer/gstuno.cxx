@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: xineuno.cxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,8 +28,8 @@
  *
  ************************************************************************/
 
-#include "wincommon.hxx"
-#include "manager.hxx"
+#include "gstcommon.hxx"
+#include "gstmanager.hxx"
 
 using namespace ::com::sun::star;
 
@@ -36,14 +39,14 @@ using namespace ::com::sun::star;
 
 static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
 {
-    return uno::Reference< uno::XInterface >( *new ::avmedia::win::Manager( rxFact ) );
+    return uno::Reference< uno::XInterface >( *new ::avmedia::gst::Manager( rxFact ) );
 }
 
 // ------------------------------------------
 // - component_getImplementationEnvironment -
 // ------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
+extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -52,7 +55,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
 // - component_writeInfo -
 // -----------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
 {
     sal_Bool bRet = sal_False;
 
@@ -62,7 +65,9 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                 static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                ::rtl::OUString::createFromAscii( "/com.sun.star.comp.avmedia.Manager_DirectX/UNO/SERVICES/com.sun.star.media.Manager_DirectX" ) ) );
+                ::rtl::OUString::createFromAscii(
+                    "/" AVMEDIA_GSTREAMER_MANAGER_IMPLEMENTATIONNAME "/UNO/SERVICES/"
+                    AVMEDIA_GSTREAMER_MANAGER_SERVICENAME ) ) );
 
             bRet = sal_True;
         }
@@ -79,18 +84,18 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
 // - component_getFactory -
 // ------------------------
 
-extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* )
+extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = 0;
 
-    if( rtl_str_compare( pImplName, "com.sun.star.comp.avmedia.Manager_DirectX" ) == 0 )
+    if( rtl_str_compare( pImplName, AVMEDIA_GSTREAMER_MANAGER_IMPLEMENTATIONNAME ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( "com.sun.star.media.Manager_DirectX" ) );
+        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( AVMEDIA_GSTREAMER_MANAGER_SERVICENAME ) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString::createFromAscii( "com.sun.star.comp.avmedia.Manager_DirectX" ),
+                        ::rtl::OUString::createFromAscii( AVMEDIA_GSTREAMER_MANAGER_IMPLEMENTATIONNAME ),
                         create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
     }
 

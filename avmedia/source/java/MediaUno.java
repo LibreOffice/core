@@ -34,7 +34,7 @@ import com.sun.star.lang.XInitialization;
 
 public class MediaUno
 {
-    private static final String s_implName = "com.sun.star.comp.media.Manager_Java";
+    private static final String s_implName = "com.sun.star.comp.avmedia.Manager_Java";
     private static final String s_serviceName = "com.sun.star.media.Manager_Java";
 
     // -------------------------------------------------------------------------

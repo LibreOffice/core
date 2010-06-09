@@ -143,10 +143,7 @@ void MediaWindowBaseImpl::stopPlayingInternal( bool bStop )
 {
     if( isPlaying() )
     {
-        if( bStop )
-            mxPlayer->stop();
-        else
-            mxPlayer->start();
+        bStop ? mxPlayer->stop() : mxPlayer->start();
     }
 }
 

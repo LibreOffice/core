@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: mediawindow_impl.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +32,7 @@
 #define _AVMEDIA_MEDIAWINDOW_IMPL_HXX
 
 #include <svtools/transfer.hxx>
-#include <vcl/javachild.hxx>
+#include <vcl/syschild.hxx>
 
 #include "mediawindowbase_impl.hxx"
 #include "mediacontrol.hxx"
@@ -61,7 +64,7 @@ namespace avmedia
         // - MediaChildWindow -
         // --------------------
 
-        class MediaChildWindow : public JavaChildWindow
+        class MediaChildWindow : public SystemChildWindow
         {
         public:
 
