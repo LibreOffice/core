@@ -5271,7 +5271,7 @@ $as_echo "ok ($build_cpu)" >&6; }
       			as_fn_error "only sparc and i386 processors are supported" "$LINENO" 5
    		fi
 		;;
-	linux-gnu*)
+	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
 		test_kde=yes
@@ -9731,7 +9731,13 @@ $as_echo_n "checking what the default STL should be... " >&6; }
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
        i?86)
-         DEFAULT_TO_STLPORT="yes"
+	 case "$build_os" in k*bsd*-gnu*)
+	 	DEFAULT_TO_STLPORT="no"
+		;;
+	 *)
+         	DEFAULT_TO_STLPORT="yes"
+		;;
+	  esac
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
