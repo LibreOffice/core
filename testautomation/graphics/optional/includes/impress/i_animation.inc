@@ -39,7 +39,8 @@
 testcase tExtrasAnimation
     Printlog "- Tools/Animation"
  Dim i
- Call hNewDocument									'/// New impress document ///'
+ Call hNewDocument
+    Call sSelectEmptyLayout									'/// New impress document ///'
  sleep 2
  InsertGraphicsFromFile									'/// insert graphic file (sample.bmp) ///'
  sleep 1
