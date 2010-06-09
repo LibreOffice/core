@@ -1817,7 +1817,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
 
 bool wwSectionManager::SectionIsProtected(const wwSection &rSection) const
 {
-    return (mrReader.pWDop->fProtEnabled && !rSection.IsNotProtected());
+    return (!rSection.IsNotProtected());
 }
 
 void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
