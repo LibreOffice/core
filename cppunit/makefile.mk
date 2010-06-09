@@ -91,6 +91,8 @@ OOO_STLPORT_LIBS = $(LIBSTLPORT)
 # reference to `_rtld_global_ro@GLIBC_PRIVATE'" unless -lm is also specified:
 .IF "$(OS)" == "LINUX" && "$(COM)" == "GCC" && "$(CPU)" == "I"
 OOO_STLPORT_LIBS += -lm
+# #i112124# furthermore, STLPort seems to require libstdc++
+OOO_STLPORT_LIBS += -lstdc++
 .END
 
 # And later, when "checking whether the C compiler works" configure tries to
