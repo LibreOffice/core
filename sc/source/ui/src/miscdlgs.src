@@ -154,11 +154,6 @@ ModalDialog RID_SCDLG_INSCELL
     };
 };
 
-Bitmap RID_SCTEAMDLGBMP1
-{
-    File = "calcteam.bmp";
-};
-
 ModalDialog RID_SCDLG_DELCONT
 {
     OutputSize = TRUE ;
@@ -233,7 +228,7 @@ ModalDialog RID_SCDLG_DELCONT
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ en-US ] = "Not~es" ;
+        Text [ en-US ] = "~Comments" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_DELOBJECTS
@@ -326,14 +321,14 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ en-US ] = "O~bjects" ;
+        Text [ en-US ] = "~Objects" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_INSNOTES
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ en-US ] = "N~otes" ;
+        Text [ en-US ] = "~Comments" ;
         TabStop = TRUE ;
     };
     FixedLine FL_FRAME
@@ -358,7 +353,7 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 111 , 44 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ en-US ] = "S~ubtract" ;
+        Text [ en-US ] = "~Subtract" ;
     };
     RadioButton BTN_OP_MUL
     {
@@ -1329,18 +1324,6 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text [ en-US ] = "Insert ~All" ;
     };
     Text [ en-US ] = "Insert Name" ;
-};
-
-FloatingWindow RID_SCDLG_TEAM
-{
-    Hide = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    FixedBitmap 1 { Pos = MAP_APPFONT ( 1 , 1 ) ; };
-    Text [ en-US ] = "The %PRODUCTNAME Calc Team" ;
 };
 
 ModalDialog RID_SCDLG_CHARTCOLROW

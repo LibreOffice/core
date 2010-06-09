@@ -340,7 +340,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScNamedRangeObj::getReferredCells()
     ScUnoGuard aGuard;
     ScRange aRange;
     ScRangeData* pData = GetRangeData_Impl();
-    if ( pData && pData->IsReference( aRange ) )
+    if ( pData && pData->IsValidReference( aRange ) )
     {
         //! static Funktion um ScCellObj/ScCellRangeObj zu erzeugen am ScCellRangeObj ???
 

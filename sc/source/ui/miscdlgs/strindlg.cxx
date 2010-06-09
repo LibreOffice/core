@@ -72,25 +72,21 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
 
     //  HelpId for Edit different for different uses
 
-    DBG_ASSERT( nHelpId == FID_TAB_APPEND || nHelpId == FID_TAB_RENAME ||
-                nHelpId == HID_SC_ADD_AUTOFMT || nHelpId == HID_SC_RENAME_AUTOFMT ||
-                nHelpId == SID_RENAME_OBJECT ||
-                // #i68101#
-                nHelpId == SID_TITLE_DESCRIPTION_OBJECT,
-                "unknown ID" );
     if ( nHelpId == FID_TAB_APPEND )
         aEdInput.SetHelpId( HID_SC_APPEND_NAME );
     else if ( nHelpId == FID_TAB_RENAME )
         aEdInput.SetHelpId( HID_SC_RENAME_NAME );
     else if ( nHelpId == HID_SC_ADD_AUTOFMT )
         aEdInput.SetHelpId( HID_SC_AUTOFMT_NAME );
-    else if ( nHelpId == HID_SC_RENAME_AUTOFMT )
+    else if ( nHelpId == HID_SC_REN_AFMT_DLG )
         aEdInput.SetHelpId( HID_SC_REN_AFMT_NAME );
     else if ( nHelpId == SID_RENAME_OBJECT )
         aEdInput.SetHelpId( HID_SC_RENAME_OBJECT );
     // #i68101#
     else if ( nHelpId == SID_TITLE_DESCRIPTION_OBJECT )
         aEdInput.SetHelpId( HID_SC_TITLE_DESCRIPTION_OBJECT );
+    else
+        DBG_ERRORFILE( "unknown ID" );
 
     //-------------
     FreeResource();

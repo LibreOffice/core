@@ -243,7 +243,7 @@ BOOL ScDPItemData::operator==( const ScDPItemData& r ) const
 {
     if ( IsValue() )
     {
-        if( HasDatePart() != r.HasDatePart()  || HasDatePart() && mnDatePart != r.mnDatePart )
+        if( (HasDatePart() != r.HasDatePart())  || (HasDatePart() && mnDatePart != r.mnDatePart) )
             return FALSE;
 
 // Wang Xu Ming -- 1/9/2009
@@ -304,7 +304,7 @@ void    ScDPItemData::dump() const
     DBG_TRACE1( "Numberformat= %o",  nNumFormat );
     DBG_TRACESTR(aString );
     DBG_TRACE1( "fValue= %f", fValue );
-    DBG_TRACE1( "bHasValue= %d", bHasValue ? 1:0);
+    DBG_TRACE1( "mbFlag= %d", mbFlag);
 }
 #endif
 //End
@@ -489,8 +489,40 @@ bool  ScDPTableDataCache::IsValid() const
 }
 
 // -----------------------------------------------------------------------
+
+namespace {
+
+/**
+ * While the macro interpret level is incremented, the formula cells are
+ * (semi-)guaranteed to be interpreted.
+ */
+class MacroInterpretIncrementer
+{
+public:
+    MacroInterpretIncrementer(ScDocument* pDoc) :
+        mpDoc(pDoc)
+    {
+        mpDoc->IncMacroInterpretLevel();
+    }
+    ~MacroInterpretIncrementer()
+    {
+        mpDoc->DecMacroInterpretLevel();
+    }
+private:
+    ScDocument* mpDoc;
+};
+
+}
+
+// -----------------------------------------------------------------------
 bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
 {
+    // Make sure the formula cells within the data range are interpreted
+    // during this call, for this method may be called from the interpretation
+    // of GETPIVOTDATA, which disables nested formula interpretation without
+    // increasing the macro level.
+    MacroInterpretIncrementer aMacroInc(pDoc);
+
     //
     SCROW nStartRow = rRange.aStart.Row();  // start of data
     SCROW nEndRow = rRange.aEnd.Row();

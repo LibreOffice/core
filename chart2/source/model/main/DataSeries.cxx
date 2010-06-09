@@ -116,13 +116,6 @@ void lcl_CloneAttributedDataPoints(
     }
 }
 
-bool lcl_isInternalData( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
-{
-    Reference< lang::XServiceInfo > xServiceInfo( xLSeq, uno::UNO_QUERY );
-    return ( xServiceInfo.is() && xServiceInfo->getImplementationName().equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.chart2.LabeledDataSequence")));
-}
-
 } // anonymous namespace
 
 // ----------------------------------------
@@ -146,11 +139,8 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
 {
     if( ! rOther.m_aDataSequences.empty())
     {
-        if( lcl_isInternalData( rOther.m_aDataSequences.front()))
-            CloneHelper::CloneRefVector< tDataSequenceContainer::value_type >(
-                rOther.m_aDataSequences, m_aDataSequences );
-        else
-            m_aDataSequences = rOther.m_aDataSequences;
+        CloneHelper::CloneRefVector< tDataSequenceContainer::value_type >(
+            rOther.m_aDataSequences, m_aDataSequences );
         ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
     }
 

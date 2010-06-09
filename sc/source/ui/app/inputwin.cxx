@@ -768,8 +768,9 @@ __EXPORT ScTextWnd::~ScTextWnd()
 {
     delete pEditView;
     delete pEditEngine;
-    for( AccTextDataVector::reverse_iterator aIt = maAccTextDatas.rbegin(), aEnd = maAccTextDatas.rend(); aIt != aEnd; ++aIt )
-        (*aIt)->Dispose();
+    while (!maAccTextDatas.empty()) {
+        maAccTextDatas.back()->Dispose();
+    }
 }
 
 void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )

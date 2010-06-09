@@ -45,7 +45,10 @@
 #include "vbafont.hxx"
 #include "vbainterior.hxx"
 
-#include "unonames.hxx"
+#include <unonames.hxx>
+#include <cellsuno.hxx>
+#include <scitems.hxx>
+#include <attrib.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -571,14 +574,24 @@ ScVbaFormat<Ifc1>::getLocked(  ) throw (script::BasicErrorException, uno::Runtim
     uno::Any aCellProtection = aNULL();
     try
     {
-
         rtl::OUString sCellProt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLPRO ) );
+
         if (!isAmbiguous(sCellProt))
         {
-            util::CellProtection cellProtection;
-            mxPropertySet->getPropertyValue(sCellProt) >>= cellProtection;
-
-            aCellProtection = uno::makeAny( cellProtection.IsLocked );
+            SfxItemSet* pDataSet = getCurrentDataSet();
+            if ( pDataSet )
+            {
+                const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, TRUE);
+                SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, TRUE, NULL);
+                if(eState != SFX_ITEM_DONTCARE)
+                    aCellProtection =  uno::makeAny(rProtAttr.GetProtection());
+            }
+            else // fallback to propertyset
+            {
+                util::CellProtection cellProtection;
+                mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
+                aCellProtection = uno::makeAny( cellProtection.IsLocked );
+            }
         }
     }
     catch (uno::Exception& )
@@ -598,9 +611,20 @@ ScVbaFormat<Ifc1>::getFormulaHidden(  ) throw (script::BasicErrorException, uno:
         rtl::OUString sCellProt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLPRO ) );
         if (!isAmbiguous(sCellProt))
         {
-            util::CellProtection aCellProtection;
-            mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
-            aBoolRet = uno::makeAny( aCellProtection.IsFormulaHidden );
+            SfxItemSet* pDataSet = getCurrentDataSet();
+            if ( pDataSet )
+            {
+                const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, TRUE);
+                SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, TRUE, NULL);
+                if(eState != SFX_ITEM_DONTCARE)
+                    aBoolRet = uno::makeAny(rProtAttr.GetHideFormula());
+            }
+            else
+            {
+                util::CellProtection aCellProtection;
+                mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
+                aBoolRet = uno::makeAny( aCellProtection.IsFormulaHidden );
+            }
         }
     }
     catch (uno::Exception e)
@@ -793,6 +817,24 @@ ScVbaFormat<Ifc1>::getServiceNames()
         }
         return aServiceNames;
 }
+
+template< typename Ifc1 >
+ScCellRangesBase*
+ScVbaFormat<Ifc1>::getCellRangesBase() throw ( ::uno::RuntimeException )
+{
+    return ScCellRangesBase::getImplementation( mxPropertySet );
+}
+
+template< typename Ifc1 >
+SfxItemSet*
+ScVbaFormat<Ifc1>::getCurrentDataSet( ) throw ( uno::RuntimeException )
+{
+    SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
+    if ( !pDataSet )
+        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't access Itemset for XPropertySet" ) ), uno::Reference< uno::XInterface >() );
+    return pDataSet;
+}
+
 
 template class ScVbaFormat< excel::XStyle >;
 template class ScVbaFormat< excel::XRange >;
