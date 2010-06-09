@@ -244,6 +244,7 @@ testcase tOLE_SaveLoad
     filename = ConvertPath (gOfficePath + "user\work\oletest." & ExtensionString)
     printlog "Create a new document."
     Call hNewDocument
+    Call sSelectEmptyLayout
     printlog "Insert->Object->OLE Object..."
     InsertObjectOLEObject
     Kontext "OLEObjektInsert"
@@ -341,7 +342,7 @@ testcase tiOpenOLECrash
     FileOpen
     sleep 1
     Kontext "OeffnenDlg"
-    printlog " Use file: graphics\\optional\\input\\generic_de.ppt "
+    printlog " Use file: graphics\optional\input\generic_de.ppt "
     oFile = ConvertPath (gTesttoolPath + "graphics\required\input\generic_de.ppt")
     Printlog "file:    '" + oFile + "'"
     Dateiname.SetText (oFile)
@@ -425,7 +426,7 @@ testcase tiOpenOLECrash
     
     printlog "8. Choose OpenOffice.org 2.0 Formular"
     Kontext "OLEObjektInsert"
-    Objekttyp.Select (3)
+    Objekttyp.Select (4)
     sleep (2)
     PrintLog "    Object: " + Objekttyp.GetSelText + "  will be inserted."
     printlog "Leave dialog 'Insert OLE Object' with OK"

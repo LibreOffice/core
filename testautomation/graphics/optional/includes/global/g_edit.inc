@@ -100,39 +100,49 @@ endcase 'tEditDuplicate
 '---------------------------------------------------------
 testcase tEditFields
 
- Call hNewDocument
-  sleep 3
-  InsertFieldsDateFix						'/// Insert Date-Fix ///'
-  EditSelectAll                                                 '/// Select inserted field ///'
-  sleep 1
-  hTypeKeys "<F2>"				'/// Go into edit mode (F2) ///'
-  sleep 2
-  EditSelectAll				        '/// Select the date///'
-  sleep 2
-  EditfieldsDraw						'/// Edit -fields///'
-  Kontext "FeldbefehlBearbeitenDraw"
-  sleep 2
-  FeldtypFix.Check						'/// check field type fix ///'
-   If	FeldtypFix.Ischecked then
-    Printlog "OK   FieldtypeFix checkable"
-   else
-      warnlog "FieldtypeFix not checkable"
-   end if
-  FeldtypVariabel.Check						'/// check field type variabel///'
-  sleep 1
-   If	FeldtypVariabel.Ischecked then
-    Printlog "OK   FieldtypeVariabel enabled"
-   else
+    Call hNewDocument
+    Call sSelectEmptyLayout
+    sleep 3
+    printlog "insert date-fix"
+    InsertFieldsDateFix
+    printlog "select inserted field"
+    EditSelectAll
+    sleep 1
+    printlog "go into edit mode"
+    hTypeKeys "<F2>"
+    sleep 2
+    printlog "select date"
+    EditSelectAll
+    sleep 2
+    printlog "edit fields"
+    EditfieldsDraw
+    Kontext "FeldbefehlBearbeitenDraw"
+    sleep 2
+    printlog "check field type fix"
+    FeldtypFix.Check
+    If	FeldtypFix.Ischecked then
+        Printlog "OK   FieldtypeFix checkable"
+    else
+        warnlog "FieldtypeFix not checkable"
+    end if
+    printlog "check field type variable 1"
+    FeldtypVariabel.Check
+    sleep 1
+    If	FeldtypVariabel.Ischecked then
+        Printlog "OK   FieldtypeVariabel enabled"
+    else
         warnlog "FieldtypeVariabel not enabled"
-   end if
-'   For Zaehler = 1 to FeldtypFormat.GetItemCount
-'    FeldTypFormat.Select Zaehler
-'    printlog "OK   Format ", Zaehler, " = ", FeldtypFormat.GetSelText
-'   Next Zaehler
-  FeldbefehlBearbeitenDraw.OK					'/// close edit fields dialog ///'
-  sleep 2
- Call hCloseDocument						'/// close document ///'
-  sleep 2
+    end if
+    '   For Zaehler = 1 to FeldtypFormat.GetItemCount
+    '    FeldTypFormat.Select Zaehler
+    '    printlog "OK   Format ", Zaehler, " = ", FeldtypFormat.GetSelText
+    '   Next Zaehler
+    printlog "close edit fields dialog"
+    FeldbefehlBearbeitenDraw.OK
+    sleep 2
+    printlog "Close Document"
+    Call hCloseDocument
+    sleep 2
   
 endcase 'tEditFields
 '--------------------------------------------------------

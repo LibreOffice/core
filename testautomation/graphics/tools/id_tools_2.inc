@@ -1046,3 +1046,18 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
 end sub
 
 '---------------------------------------------------------------------------------------
+sub sSelectEmptyLayout
+    if gApplication = "IMPRESS" then
+        printlog "Changing focus to TaskPane."
+        kontext "Tasks"
+        sleep (1)
+        printlog "Selecting first and empty layout."
+        LayoutsPreview.TypeKeys "<HOME>"
+        sleep (1)
+        LayoutsPreview.TypeKeys "<RETURN>"
+        sleep (1)
+        kontext "DocumentImpress"
+    else
+        printlog "No change of Layout needed."
+    endif
+end sub

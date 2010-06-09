@@ -311,7 +311,7 @@ public class ODatabaseForm extends TestCase {
                 oldF = utils.getFullURL(origDB);
                 newF = utils.getOfficeTemp((XMultiServiceFactory) tParam.getMSF()) + tableName +
                        ".dbf";
-            } while (!utils.overwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) &&
+            } while (!utils.tryOverwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) &&
                      (uniqueSuffix++ < 50));
         }
     }
