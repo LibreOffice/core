@@ -264,7 +264,7 @@ namespace svt { namespace table
                 aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
                 break;
             case TCTYPE_TABLECELL:
-                aRetText = GetRowName(_nRow);
+                aRetText = GetAccessibleCellText(_nRow, _nCol);
                 break;
             case TCTYPE_ROWHEADERCELL:
                 aRetText = GetRowName(_nRow);
@@ -347,9 +347,9 @@ namespace svt { namespace table
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos)
+::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
 {
-    ::com::sun::star::uno::Any cellContent = GetCellContent(_nRowPos, _nColPos);
+    const ::com::sun::star::uno::Any cellContent = GetCellContent(_nRowPos, _nColPos);
     return m_pImpl->convertToString(cellContent);
 }
 // -----------------------------------------------------------------------------

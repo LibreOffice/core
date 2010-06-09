@@ -1040,6 +1040,7 @@ namespace svt { namespace table
                     --aInters.Top();
                     --aInters.Bottom();
                 }
+                --aInters.Right();
                 pRenderer->PaintHeaderArea(
                     *m_pDataWindow, aInters, true, true, rStyle
                 );

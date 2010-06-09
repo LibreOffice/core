@@ -109,7 +109,10 @@ namespace svt { namespace table
         DBG_ASSERT( !!pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
         if ( !!pColumn )
             sHeaderText = pColumn->getName();
-        _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        if(m_pImpl->rModel.getTextColor() != 0x000000)
+            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        else
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
         ULONG nHorFlag = TEXT_DRAW_LEFT;
         ULONG nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
@@ -146,6 +149,11 @@ namespace svt { namespace table
         Color aRowBackground = m_pImpl->rModel.getOddRowBackgroundColor();
         Color line =  m_pImpl->rModel.getLineColor();
         Color aRowBackground2 = m_pImpl->rModel.getEvenRowBackgroundColor();
+        Color fieldColor = _rStyle.GetFieldColor();
+        if(aRowBackground == 0xFFFFFF)
+            aRowBackground = fieldColor;
+        if(aRowBackground2 == 0xFFFFFF)
+            aRowBackground2 = fieldColor;
         //if row is selected background color becomes blue, and lines should be also blue
         //if they aren't user defined
         if(_bSelected)
@@ -161,7 +169,7 @@ namespace svt { namespace table
         //and set line color to be the same
         else
         {
-            if(aRowBackground2 != 0xFFFFFF && _nRow%2)
+            if(aRowBackground2 != fieldColor && _nRow%2)
             {
                 aRowBackground = aRowBackground2;
                 if(line == 0xFFFFFF)
@@ -170,7 +178,7 @@ namespace svt { namespace table
                     _rDevice.SetLineColor(line);
             }
             //fill the rows with alternating background colors if second background color is specified
-            else if(aRowBackground != 0xFFFFFF && line == 0xFFFFFF)
+            else if(aRowBackground != fieldColor && line == 0xFFFFFF)
                 _rDevice.SetLineColor(aRowBackground);
             else
             {
@@ -195,7 +203,10 @@ namespace svt { namespace table
         _rDevice.Push( PUSH_LINECOLOR);
         _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
-        _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        if(m_pImpl->rModel.getTextColor() != 0x000000)
+            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        else
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
         ULONG nHorFlag = TEXT_DRAW_LEFT;
         ULONG nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
@@ -326,11 +337,11 @@ namespace svt { namespace table
         ++aRect.Left(); --aRect.Right();
         aRect.Top(); aRect.Bottom();
         if(_bSelected)
-        {
             _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());
-        }
-        else
+        else if(m_pImpl->rModel.getTextColor() != 0x000000)
             _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        else
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
         ULONG nHorFlag = TEXT_DRAW_LEFT;
         ULONG nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
@@ -344,7 +355,7 @@ namespace svt { namespace table
         Rectangle textRect(_rArea);
         textRect.Left()+=4; textRect.Right()-=4;
         textRect.Bottom()-=2;
-            _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
 
         _rDevice.Pop();
         (void)_bActive;
