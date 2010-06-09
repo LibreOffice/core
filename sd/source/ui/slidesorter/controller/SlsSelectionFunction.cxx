@@ -457,17 +457,29 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
     switch (rCode.GetCode())
     {
         case KEY_RETURN:
-            if (rFocusManager.HasFocus())
+        {
+            model::SharedPageDescriptor pDescriptor (rFocusManager.GetFocusedPageDescriptor());
+            ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+            if (rFocusManager.HasFocus() && pDescriptor && pViewShell!=NULL)
             {
-                model::SharedPageDescriptor pDescriptor (rFocusManager.GetFocusedPageDescriptor());
-                if (pDescriptor.get() != NULL)
+                // The Return key triggers different functions depending on
+                // whether the slide sorter is the main view or displayed in
+                // the right pane.
+                if (pViewShell->IsMainViewShell())
                 {
                     mpModeHandler->SetCurrentPage(pDescriptor);
                     mpModeHandler->SwitchView(pDescriptor);
                 }
+                else
+                {
+                    pViewShell->GetDispatcher()->Execute(
+                        SID_INSERTPAGE,
+                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                }
                 bResult = TRUE;
             }
             break;
+        }
 
         case KEY_TAB:
             if ( ! rFocusManager.IsFocusShowing())
@@ -597,7 +609,7 @@ void SelectionFunction::MoveFocus (
         }
     }
     else if ( ! bIsControlDown)
-        mnShiftKeySelectionAnchor = -1;
+        ResetShiftKeySelectionAnchor();
 
     mrController.GetFocusManager().MoveFocus(eDirection);
 
@@ -727,7 +739,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
         sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
         GotoPage(nIndex + nOffset);
     }
-    mnShiftKeySelectionAnchor = -1;
+    ResetShiftKeySelectionAnchor();
 }
 
 
@@ -751,7 +763,7 @@ void SelectionFunction::GotoPage (int nIndex)
     {
         OSL_ASSERT(pNextPageDescriptor.get() != NULL);
     }
-    mnShiftKeySelectionAnchor = -1;
+    ResetShiftKeySelectionAnchor();
 }
 
 

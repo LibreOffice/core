@@ -216,6 +216,8 @@ private:
 
     void CountSelectedPages (void);
     void UpdateCurrentPage (const bool bUpdateOnlyWhenPending = false);
+
+    void CheckConsistency (void) const;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

@@ -195,6 +195,8 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
         else
             mrController.GetSelectionManager()->SelectionHasChanged();
         UpdateCurrentPage();
+
+        CheckConsistency();
     }
 }
 
@@ -244,6 +246,27 @@ void PageSelector::DeselectPage (
             mrController.GetSelectionManager()->SelectionHasChanged();
         if (bUpdateCurrentPage)
             UpdateCurrentPage();
+
+        CheckConsistency();
+    }
+}
+
+
+
+
+void PageSelector::CheckConsistency (void) const
+{
+    int nSelectionCount (0);
+    for (int nPageIndex=0,nPageCount=mrModel.GetPageCount(); nPageIndex<nPageCount; nPageIndex++)
+    {
+        SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+        assert(pDescriptor);
+        if (pDescriptor->HasState(PageDescriptor::ST_Selected))
+            ++nSelectionCount;
+    }
+    if (nSelectionCount!=mnSelectedPageCount)
+    {
+        assert(nSelectionCount==mnSelectedPageCount);
     }
 }
 

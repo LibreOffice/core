@@ -746,6 +746,7 @@ void ScrollBarManager::Scroll(
                 }
         }
     }
+    mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     SetTopLeft(aNewTopLeft);
 }
 

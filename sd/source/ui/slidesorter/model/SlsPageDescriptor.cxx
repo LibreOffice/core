@@ -65,8 +65,6 @@ PageDescriptor::PageDescriptor (
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
     if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
         mpMasterPage = &mpPage->TRG_GetMasterPage();
-
-    GetCoreSelection();
 }
 
 
