@@ -124,7 +124,8 @@ LIB3FILES=      \
             $(SLB)$/cgm.lib			\
             $(SLB)$/uitable.lib		\
             $(SLB)$/uiannotations.lib\
-            $(SLB)$/grf.lib
+            $(SLB)$/grf.lib \
+            $(SLB)$/controller.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib
 LIB5FILES=      \
@@ -156,7 +157,7 @@ LIB6FILES=      								\
 # sdd
 SHL2TARGET= sdd$(DLLPOSTFIX)
 SHL2IMPLIB= sddimp
-SHL2VERSIONMAP= sdd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=		$(SHL2TARGET)
 

@@ -74,7 +74,6 @@ SRC1FILES =\
     layeroptionsdlg.src \
     printdialog.src
 
-
 SLOFILES =  \
         $(SLO)$/inspagob.obj \
         $(SLO)$/ins_paste.obj \
