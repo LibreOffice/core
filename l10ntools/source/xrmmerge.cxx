@@ -369,6 +369,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
         break;
 
         case XRM_TEXT_START:{
+                //printf("->XRM_TEXT_START\n");
                 ByteString sNewLID = GetAttribute( rToken, "id" );
                 if ( sNewLID != sLID ) {
                     //EndOfText( sCurrentOpenTag, sCurrentCloseTag );
@@ -378,18 +379,21 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 sCurrentText = "";
                 sCurrentOpenTag = rToken;
                 Output( rToken );
+                //printf("<-XRM_TEXT_START\n");
             }
         break;
 
         case XRM_TEXT_END: {
                 sCurrentCloseTag = rToken;
-
+                //printf("->XRM_TEXT_END\n");
                 ByteString sLang = GetAttribute( sCurrentOpenTag, "xml:lang" );
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );// <---
                 bText = FALSE;
                 rToken = ByteString("");
+                sCurrentText  = ByteString("");
+                //printf("<-XRM_TEXT_END");
         }
         break;
 
@@ -680,7 +684,8 @@ void XRMResMerge::WorkOnText(
 void XRMResMerge::Output( const ByteString& rOutput )
 /*****************************************************************************/
 {
-    if ( pOutputStream )
+    //printf("W: %s\n",rOutput.GetBuffer());
+    if ( pOutputStream && rOutput.Len() > 0 )
         pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
 }
 
