@@ -1175,9 +1175,6 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
             Rectangle aBoxRect( rControlRegion.GetBoundRect() );
             Rectangle aRect( ImplGetThemeRect( hTheme, hDC, CP_DROPDOWNBUTTON,
                                                CBXS_NORMAL, aBoxRect ) );
-            Rectangle aBrdRect( ImplGetThemeRect( hTheme, hDC, CP_BORDER,
-                                                  CBB_HOT, aBoxRect ) );
-            aRect.Top() -= aBrdRect.GetHeight();
             if( aRect.GetHeight() > aBoxRect.GetHeight() )
                 aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
             if( aRect.GetWidth() > aBoxRect.GetWidth() )
