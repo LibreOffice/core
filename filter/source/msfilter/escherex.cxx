@@ -1106,7 +1106,7 @@ sal_Bool EscherPropertyContainer::CreateShapeProperties( const ::com::sun::star:
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
     if ( aXPropSet.is() )
     {
-        sal_Bool bVal;
+        sal_Bool bVal = false;
         ::com::sun::star::uno::Any aAny;
         sal_uInt32 nShapeAttr = 0;
         EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ), sal_True );
@@ -4225,7 +4225,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
             nRule = GetClosestPoint( aPoly, aRefPoint );
 
             if ( aType == "drawing.Ellipse" )
-                nRule <<= 1;    // In PPT hat eine Ellipse 8 Möglichkeiten sich zu connecten
+                nRule <<= 1;    // In PPT hat eine Ellipse 8 M?glichkeiten sich zu connecten
         }
     }
     return nRule;
