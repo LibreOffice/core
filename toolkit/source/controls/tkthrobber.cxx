@@ -46,8 +46,13 @@ namespace toolkit
     //--------------------------------------------------------------------
     UnoThrobberControlModel::UnoThrobberControlModel()
     {
-        ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+        ImplRegisterProperty( BASEPROPERTY_BORDER );
+        ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+        ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+        ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
+        ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+        ImplRegisterProperty( BASEPROPERTY_HELPURL );
     }
 
     //--------------------------------------------------------------------
@@ -63,6 +68,8 @@ namespace toolkit
         {
         case BASEPROPERTY_DEFAULTCONTROL:
             return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl ) );
+        case BASEPROPERTY_BORDER:
+            return uno::makeAny( (sal_Int16) 0 );
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
         }
