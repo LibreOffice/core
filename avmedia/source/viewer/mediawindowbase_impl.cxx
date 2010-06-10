@@ -47,8 +47,18 @@ namespace avmedia { namespace priv {
 // - MediaWindowBaseImpl -
 // -----------------------
 
+struct ServiceManager
+{
+    const char* pServiceName;
+    sal_Bool    bIsJavaBased;
+};
+
+// ---------------------------------------------------------------------
+
+
 MediaWindowBaseImpl::MediaWindowBaseImpl( MediaWindow* pMediaWindow ) :
-    mpMediaWindow( pMediaWindow )
+    mpMediaWindow( pMediaWindow ),
+    mbIsMediaWindowJavaBased( sal_False )
 {
 }
 
@@ -61,28 +71,53 @@ MediaWindowBaseImpl::~MediaWindowBaseImpl()
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL, sal_Bool& rbJavaBased )
 {
     uno::Reference< lang::XMultiServiceFactory >    xFactory( ::comphelper::getProcessServiceFactory() );
     uno::Reference< media::XPlayer >                xPlayer;
 
+    rbJavaBased = sal_False;
+
     if( xFactory.is() )
     {
-        try
+        static const ServiceManager aServiceManagers[] =
         {
+            { "AVMEDIA_MANAGER_SERVICE_NAME", AVMEDIA_MANAGER_SERVICE_IS_JAVABASED },
+            { "AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1", AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1 }
+        };
 
-            uno::Reference< ::com::sun::star::media::XManager > xManager(
-                xFactory->createInstance( ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
-                uno::UNO_QUERY );
+        uno::Reference< media::XManager > xManager;
 
-            if( xManager.is() )
+        for( sal_uInt32 i = 0; ( i < ( sizeof( aServiceManagers ) / sizeof( ServiceManager ) ) ) && !xManager.is(); ++i )
+        {
+            const String aServiceName( aServiceManagers[ i ].pServiceName, RTL_TEXTENCODING_ASCII_US );
+
+            if( aServiceName.Len() )
             {
-                xPlayer = uno::Reference< ::com::sun::star::media::XPlayer >(
-                    xManager->createPlayer( rURL ), uno::UNO_QUERY );
+                try
+                {
+                    xManager = uno::Reference< media::XManager >( xFactory->createInstance( aServiceName ),
+                                                                  uno::UNO_QUERY );
+
+                    if( xManager.is() )
+                    {
+                        xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ),
+                                                                    uno::UNO_QUERY );
+                    }
+                }
+                catch( ... )
+                {
+                }
             }
-        }
-        catch( ... )
-        {
+
+            if( !xPlayer.is() )
+            {
+                xManager.clear();
+            }
+            else
+            {
+                rbJavaBased = aServiceManagers[ i ].bIsJavaBased;
+            }
         }
     }
 
@@ -112,7 +147,7 @@ void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL )
         if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
             maFileURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
-        mxPlayer = createPlayer( maFileURL );
+        mxPlayer = createPlayer( maFileURL, mbIsMediaWindowJavaBased );
         onURLChanged();
     }
 }

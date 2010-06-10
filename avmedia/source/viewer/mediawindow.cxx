@@ -469,8 +469,10 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
         {
             try
             {
+                sal_Bool bIsJavaBasedMediaWindow;
                 uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
-                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) );
+                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ),
+                                                            bIsJavaBasedMediaWindow ) );
 
                 if( xPlayer.is() )
                 {
@@ -515,7 +517,8 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
 
 uno::Reference< media::XPlayer > MediaWindow::createPlayer( const ::rtl::OUString& rURL )
 {
-    return priv::MediaWindowImpl::createPlayer( rURL );
+    sal_Bool bJavaBased = sal_False;
+    return priv::MediaWindowImpl::createPlayer( rURL, bJavaBased );
 }
 
 // -------------------------------------------------------------------------

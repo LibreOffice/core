@@ -231,10 +231,10 @@ void MediaWindowImpl::onURLChanged()
     if( getPlayer().is() )
     {
         uno::Reference< media::XPlayerWindow > xPlayerWindow;
-        const Point                            aPoint;
-        const Size                             aSize( maChildWindow.GetSizePixel() );
-        const sal_IntPtr                       nWndHandle = (sal_IntPtr) maChildWindow.
-                                                    GetParentWindowHandle( AVMEDIA_MANAGER_SERVICE_IS_JAVABASED );
+
+        const Point         aPoint;
+        const Size          aSize( maChildWindow.GetSizePixel() );
+        const sal_IntPtr    nWndHandle = (sal_IntPtr) maChildWindow.GetParentWindowHandle( isMediaWindowJavaBased() );
 
         try
         {

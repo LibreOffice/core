@@ -67,9 +67,7 @@ public class PlayerWindow implements java.awt.event.KeyListener,
 
                 maFrame = new WindowAdapter( AnyConverter.toInt( aArgs[ 0 ] ) );
                 maFrame.setPosSize( aBoundRect.X, aBoundRect.Y, aBoundRect.Width, aBoundRect.Height, (short) 0 );
-
-                if( aArgs.length > 2 )
-                    mbShowControls = AnyConverter.toBoolean( aArgs[ 2 ] );
+                mbShowControls = false;
 
                 java.awt.Panel aPanel = new java.awt.Panel( new java.awt.BorderLayout() );
 
