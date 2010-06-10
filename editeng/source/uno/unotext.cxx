@@ -260,12 +260,14 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const Sv
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
 
     mpEditSource = pSource->Clone();
-    ESelection aSelection;
-    ::GetSelection( aSelection, mpEditSource->GetTextForwarder() );
-    SetSelection( aSelection );
+    if (mpEditSource != NULL)
+    {
+        ESelection aSelection;
+        ::GetSelection( aSelection, mpEditSource->GetTextForwarder() );
+        SetSelection( aSelection );
 
-    if( mpEditSource )
         mpEditSource->addRange( this );
+    }
 #ifdef DEBUG
     gNumRanges.add(this);
 #endif
@@ -348,7 +350,8 @@ void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
     OGuard aGuard( Application::GetSolarMutex() );
 
     maSelection = rSelection;
-    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+    if (mpEditSource != NULL)
+        CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
 }
 
 // Interface XTextRange ( XText )
