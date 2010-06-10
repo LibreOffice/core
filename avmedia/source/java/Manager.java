@@ -89,7 +89,7 @@ public class Manager implements com.sun.star.lang.XServiceInfo,
     // - XServiceInfo -
     // ----------------
 
-    private static final String s_implName = "com.sun.star.comp.avmedia.Manager_Java";
+    private static final String s_implName = "com.sun.star.comp.media.Manager_Java";
     private static final String s_serviceName = "com.sun.star.media.Manager_Java";
 
     public synchronized String getImplementationName()
