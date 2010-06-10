@@ -917,7 +917,7 @@ void XMLSectionExport::ExportBaseIndexSource(
 
 void XMLSectionExport::ExportBaseIndexBody(
     SectionTypeEnum
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
     eType
     #endif
     ,

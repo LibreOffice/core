@@ -226,6 +226,11 @@ namespace connectivity
             concatenation,
             char_factor,
             bit_value_fct,
+            comparison_predicate_part_2,
+            parenthesized_boolean_value_expression,
+            character_string_type,
+            other_like_predicate_part_2,
+            between_predicate_part_2,
             rule_count,             // letzter_wert
             UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };

@@ -74,8 +74,9 @@ struct Data: private boost::noncopyable {
         int layer, NodeMap const & map, rtl::OUString const & name);
 
     rtl::Reference< Node > resolvePathRepresentation(
-        rtl::OUString const & pathRepresentation, Path * path,
-        int * finalizedLayer) const;
+        rtl::OUString const & pathRepresentation,
+        rtl::OUString * canonicRepresenation, Path * path, int * finalizedLayer)
+        const;
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;

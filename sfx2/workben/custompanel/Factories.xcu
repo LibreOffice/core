@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data oor:name="Factories" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="Registered">
+    <node oor:name="UIElementFactories">
+      <node oor:name="org.openoffice.example.CustomToolPanel" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>org.openoffice.example.colorpanel</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>org.openoffice.example.colorpanel.ToolPanelFactory</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+</oor:component-data>
