@@ -33,10 +33,14 @@ ENABLE_EXCEPTIONS := TRUE
 VISIBILITY_HIDDEN=TRUE
 # --- Settings -----------------------------------------------------
 
+.IF "$(ENABLE_VBA)" == "NO"
+dummy:
+    @echo "Nothing to build"
+.ENDIF
+
 .INCLUDE :  settings.mk
 
 SLOFILES=\
-    $(SLO)$/msvbahelper.obj \
     $(SLO)$/vbahelper.obj \
     $(SLO)$/vbapropvalue.obj \
     $(SLO)$/vbacommandbars.obj \

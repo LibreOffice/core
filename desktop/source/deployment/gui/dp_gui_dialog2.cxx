@@ -30,7 +30,7 @@
 
 #include "dp_gui.hrc"
 #include "svtools/controldims.hrc"
-#include "svl/svtools.hrc"
+#include "svtools/svtools.hrc"
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"

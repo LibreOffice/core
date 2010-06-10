@@ -34,6 +34,10 @@ TARGET=vbahelper
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_VBA)" == "NO"
+dummy:
+    @echo "Nothing to build"
+.ENDIF
 
 TARGET_HELPER=vbahelper
 
@@ -56,6 +60,7 @@ SHL1STDLIBS=       \
         $(SVLLIB) \
         $(VCLLIB) \
         $(SVTOOLLIB)    \
+        $(MSFILTERLIB)    \
         $(TKLIB)
 
 SHL1DEPN=

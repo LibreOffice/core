@@ -76,6 +76,7 @@
 #include <dispatch/uieventloghelper.hxx>
 
 #include "helper/mischelper.hxx"
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -101,7 +102,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LanguageSelectionMenuController     
 DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} )
 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_bShowMenu( sal_True )
     ,m_aLangGuessHelper(xServiceManager)
 {
@@ -116,7 +117,7 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& ) t
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xLanguageDispatch.clear();
@@ -132,7 +133,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
 
-    if ( m_bDisposed )
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
 
     m_bShowMenu = sal_True;
@@ -344,6 +345,9 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     std::map< sal_Int16, ::rtl::OUString > LangTable;
 
     const ::rtl::OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));
+    bool bMultipleLanguages = (eMode != MODE_SetLanguageSelectionMenu) || m_aCurLang.compareToAscii( "*" ) == 0;
+    bool bNothingSelected = true;
+    MenuItemBits nItemBits = !bMultipleLanguages ? MIB_RADIOCHECK : 0;
     for(std::map< ::rtl::OUString, ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
     {
         if(it->first != ::rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
@@ -351,12 +355,13 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
            it->first.getLength())
         {
             ++nItemId;
-            pPopupMenu->InsertItem( nItemId,it->first);
+            pPopupMenu->InsertItem( nItemId,it->first,nItemBits );
             LangTable[nItemId] = it->first;
             if(it->first == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
                 //make a sign for the current language
                 pPopupMenu->CheckItem(nItemId,TRUE);
+                bNothingSelected = false;
             }
             aCmd=aCmd_Language;
             aCmd+=(String)it->first;
@@ -366,7 +371,9 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     //7--none
     nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )) );
+    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )), nItemBits );
+    if (bNothingSelected && !bMultipleLanguages)
+        pPopupMenu->CheckItem(nItemId,TRUE);
     aCmd=aCmd_Language;
     aCmd+=String::CreateFromAscii("LANGUAGE_NONE");
     pPopupMenu->SetItemCommand(nItemId,aCmd);
@@ -380,15 +387,15 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
 void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
 {
-    PopupMenuControllerBase::updatePopupMenu();
+    svt::PopupMenuControllerBase::updatePopupMenu();
 
     // Force status update to get information about the current languages
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xLanguageDispatch );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = m_aLangStatusCommandURL;
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.unlock();
+    aLock.clear();
 
     if ( xDispatch.is() )
     {
@@ -415,12 +422,12 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
 // XInitialization
 void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
-        PopupMenuControllerBase::initialize(aArguments);
+        svt::PopupMenuControllerBase::initialize(aArguments);
 
         if ( m_bInitialized )
         {

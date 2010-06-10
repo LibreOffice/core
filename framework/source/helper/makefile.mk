@@ -53,7 +53,6 @@ SLOFILES= 			$(SLO)$/ocomponentaccess.obj					\
                     $(SLO)$/networkdomain.obj						\
                     $(SLO)$/acceleratorinfo.obj                     \
                     $(SLO)$/uielementwrapperbase.obj                \
-                    $(SLO)$/popupmenucontrollerbase.obj             \
                     $(SLO)$/dockingareadefaultacceptor.obj          \
                     $(SLO)$/uiconfigelementwrapperbase.obj          \
                     $(SLO)$/shareablemutex.obj                      \
