@@ -183,7 +183,8 @@ void PackageManagerImpl::initActivationLayer(
         OSL_ASSERT( m_activePackages.getLength() > 0 );
         m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
         m_registrationData_expanded = expandUnoRcUrl(m_registrationData);
-        create_folder( 0, m_activePackages_expanded, xCmdEnv, true);
+        if (!m_readOnly)
+            create_folder( 0, m_activePackages_expanded, xCmdEnv, true);
 
         OUString dbName;
         if (m_context.equals(OUSTR("user")))
@@ -1341,9 +1342,14 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
 {
     bool bModified = false;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
-
+    //check if the folder exist at all. The shared extension folder
+    //may not exist for a normal user.
+    if (!create_ucb_content(
+            NULL, m_activePackages_expanded, Reference<css::ucb::XCommandEnvironment>(), false))
+        return bModified;
     ::ucbhelper::Content tempFolder(
         m_activePackages_expanded, xCmdEnv );
+
     Reference<sdbc::XResultSet> xResultSet(
         tempFolder.createCursor(
             Sequence<OUString>( &StrTitle::get(), 1 ),

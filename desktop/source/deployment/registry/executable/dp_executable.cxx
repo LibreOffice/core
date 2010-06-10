@@ -254,9 +254,8 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
                 OSL_ASSERT(0);
 
             //This won't have affect on Windows
-            if (osl::File::E_None != osl::File::setAttributes(
-                    dp_misc::expandUnoRcUrl(m_url), attributes))
-                OSL_ENSURE(0, "Extension Manager: Could not set executable file attribute.");
+            osl::File::setAttributes(
+                    dp_misc::expandUnoRcUrl(m_url), attributes);
         }
         getMyBackend()->addDataToDb(getURL());
     }

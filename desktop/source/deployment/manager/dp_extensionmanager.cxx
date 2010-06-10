@@ -1174,7 +1174,7 @@ sal_Bool ExtensionManager::synchronize(
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
         throw deploy::DeploymentException(
-            OUSTR("Extension Manager: exception during enableExtension"),
+            OUSTR("Extension Manager: exception in synchronize"),
             static_cast<OWeakObject*>(this), exc);
     }
 }
