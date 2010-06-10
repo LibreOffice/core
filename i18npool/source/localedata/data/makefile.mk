@@ -200,6 +200,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_pt_BR.cxx  \
     $(MISC)$/localedata_pt_PT.cxx  \
     $(MISC)$/localedata_ro_RO.cxx  \
+    $(MISC)$/localedata_rue_SK.cxx  \
     $(MISC)$/localedata_ru_RU.cxx  \
     $(MISC)$/localedata_rw_RW.cxx  \
     $(MISC)$/localedata_sg_CF.cxx  \
@@ -378,8 +379,9 @@ SHL3OBJS=	\
     $(SLO)$/localedata_pl_PL.obj	\
     $(SLO)$/localedata_pt_BR.obj	\
     $(SLO)$/localedata_pt_PT.obj	\
-    $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_ro_RO.obj	\
+    $(SLO)$/localedata_rue_SK.obj	\
+    $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_sc_IT.obj	\
     $(SLO)$/localedata_sh_ME.obj	\
     $(SLO)$/localedata_sh_RS.obj	\
