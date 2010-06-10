@@ -382,12 +382,17 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // Speichern und Readonly Reloaden
                 if( pSh->IsModified() )
                 {
-                    if ( !pSh->PrepareClose() )
+                    if ( pSh->PrepareClose() )
+                    {
+                        // the storing could let the medium be changed
+                        pMed = pSh->GetMedium();
+                        bNeedsReload = sal_True;
+                    }
+                    else
                     {
                         rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), sal_False ) );
                         return;
                     }
-                    else bNeedsReload = sal_True;
                 }
                 nOpenMode = SFX_STREAM_READONLY;
             }
