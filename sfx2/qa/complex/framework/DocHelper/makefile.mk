@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..
-TARGET  = CheckGlobalEventBroadcaster_writer1
+PRJ = ../../../..
+TARGET  = DocHelper
 PRJNAME = $(TARGET)
-PACKAGE = complex$/framework
+PACKAGE = complex/framework/dochelper
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -37,25 +37,13 @@ PACKAGE = complex$/framework
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = CheckGlobalEventBroadcaster_writer1.java \
-                  DocumentMetaData.java \
-                  DocumentMetadataAccessTest.java
+JAVAFILES       = \
+    DialogThread.java \
+    WriterHelper.java
 
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-SUBDIRS         = DocHelper
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-
-run:
-    +java -cp $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -sce tests.sce -tdoc $(PWD)$/testdocuments

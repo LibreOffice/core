@@ -73,19 +73,20 @@ public class WriterHelper {
      * @return if an error occurs the errormessage is returned and an empty String if not
      */
     public String closeDoc(XTextDocument xTextDoc) {
-        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                    XCloseable.class, xTextDoc);
+        XCloseable closer = UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
         String err = "";
 
         try {
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
             err = "couldn't close document " + e;
+            System.out.println(err);
         }
 
         return err;
     }
 
+    private XTextDocument xLocalDoc = null;
     /** a TextDocument is opened by pressing a button in a dialog given by uno-URL
      * @param url the uno-URL of the dialog to be opened
      * @param createButton the language dependend label of the button to be pressed
@@ -95,9 +96,8 @@ public class WriterHelper {
      */
     public XTextDocument openFromDialog(String url, String createButton,
                                         boolean destroyLocal) {
-        XTextDocument xLocalDoc = WriterTools.createTextDoc(m_xMSF);
-        XComponent comp = (XComponent) UnoRuntime.queryInterface(
-                                  XComponent.class, xLocalDoc);
+        xLocalDoc = WriterTools.createTextDoc(m_xMSF);
+        XComponent comp = UnoRuntime.queryInterface(XComponent.class, xLocalDoc);
         DialogThread diagThread = new DialogThread(comp, m_xMSF, url);
         diagThread.start();
         shortWait();
@@ -107,8 +107,7 @@ public class WriterHelper {
             AccessibilityTools at = new AccessibilityTools();
             Object atw = tk.getActiveTopWindow();
 
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(
-                                      XWindow.class, atw);
+            XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
             XAccessible xRoot = at.getAccessibleObject(xWindow);
             XAccessibleContext buttonContext = at.getAccessibleObjectForRole(
@@ -116,9 +115,7 @@ public class WriterHelper {
                                                        AccessibleRole.PUSH_BUTTON,
                                                        createButton);
 
-            XAccessibleAction buttonAction = (XAccessibleAction) UnoRuntime.queryInterface(
-                                                     XAccessibleAction.class,
-                                                     buttonContext);
+            XAccessibleAction buttonAction = UnoRuntime.queryInterface(XAccessibleAction.class, buttonContext);
 
             try {
                 System.out.println("Name: " +
@@ -133,16 +130,26 @@ public class WriterHelper {
 
         XDesktop xDesktop = getDesktop();
 
-        XTextDocument returnDoc = (XTextDocument) UnoRuntime.queryInterface(
-                                          XTextDocument.class,
-                                          xDesktop.getCurrentComponent());
+        XTextDocument returnDoc = UnoRuntime.queryInterface(XTextDocument.class, xDesktop.getCurrentComponent());
 
         if (destroyLocal) {
             closeDoc(xLocalDoc);
+            xLocalDoc = null;
         }
 
         return returnDoc;
     }
+    public void closeFromDialog()
+    {
+        closeDoc(xLocalDoc);
+        xLocalDoc = null;
+    }
+    public void kill()
+    {
+        XDesktop xDesktop = getDesktop();
+        xDesktop.terminate();
+    }
+
 
     public XTextDocument DocByAutopilot(XMultiServiceFactory msf,
                                         int[] indexes, boolean destroyLocal,
@@ -156,8 +163,7 @@ public class WriterHelper {
             e.printStackTrace();
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, toolkit);
+        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, toolkit);
 
         shortWait();
 
@@ -165,15 +171,13 @@ public class WriterHelper {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
-                                                              atw);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         XAccessibleContext ARoot = at.getAccessibleObjectForRole(xRoot,
                                                                  AccessibleRole.MENU_BAR);
-        XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(
-                                           XAccessibleSelection.class, ARoot);
+        XAccessibleSelection sel = UnoRuntime.queryInterface(XAccessibleSelection.class, ARoot);
 
         for (int k = 0; k < indexes.length; k++) {
             try {
@@ -181,8 +185,7 @@ public class WriterHelper {
                 shortWait();
                 ARoot = ARoot.getAccessibleChild(indexes[k])
                              .getAccessibleContext();
-                sel = (XAccessibleSelection) UnoRuntime.queryInterface(
-                              XAccessibleSelection.class, ARoot);
+                sel = UnoRuntime.queryInterface(XAccessibleSelection.class, ARoot);
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             }
         }
@@ -191,17 +194,13 @@ public class WriterHelper {
 
         atw = tk.getActiveTopWindow();
 
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
+        xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
         xRoot = at.getAccessibleObject(xWindow);
 
         //at.printAccessibleTree(new PrintWriter(System.out),xRoot);
 
-        XAccessibleAction action = (XAccessibleAction) UnoRuntime.queryInterface(
-                                           XAccessibleAction.class,
-                                           at.getAccessibleObjectForRole(xRoot,
-                                                                         AccessibleRole.PUSH_BUTTON,
-                                                                         bName));
+        XAccessibleAction action = UnoRuntime.queryInterface(XAccessibleAction.class, at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, bName));
 
         try {
             action.doAccessibleAction(0);
@@ -212,17 +211,13 @@ public class WriterHelper {
 
         atw = tk.getActiveTopWindow();
 
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
+        xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
         xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(new PrintWriter(System.out),xRoot);
 
-        action = (XAccessibleAction) UnoRuntime.queryInterface(
-                                           XAccessibleAction.class,
-                                           at.getAccessibleObjectForRole(xRoot,
-                                                                         AccessibleRole.PUSH_BUTTON,
-                                                                         "Yes"));
+        action = UnoRuntime.queryInterface(XAccessibleAction.class, at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, "Yes"));
 
         try {
             if (action != null) action.doAccessibleAction(0);
@@ -233,9 +228,7 @@ public class WriterHelper {
 
         XDesktop xDesktop = getDesktop();
 
-        XTextDocument returnDoc = (XTextDocument) UnoRuntime.queryInterface(
-                                          XTextDocument.class,
-                                          xDesktop.getCurrentComponent());
+        XTextDocument returnDoc = UnoRuntime.queryInterface(XTextDocument.class, xDesktop.getCurrentComponent());
 
         if (destroyLocal) {
             closeDoc(xLocalDoc);
@@ -269,8 +262,7 @@ public class WriterHelper {
             e.printStackTrace();
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, toolkit);
+        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, toolkit);
 
         return tk;
     }
@@ -288,8 +280,7 @@ public class WriterHelper {
             e.printStackTrace();
         }
 
-        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
-                                    XDesktop.class, desk);
+        XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, desk);
 
         return xDesktop;
     }
