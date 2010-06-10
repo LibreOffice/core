@@ -223,7 +223,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_DEP_PROP_3 ( "ScrollValue",            SCROLLVALUE,        sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "ScrollValueMax",         SCROLLVALUE_MAX,    sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ScrollValueMin",         SCROLLVALUE_MIN,    sal_Int32,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "SelectedItems",          SELECTEDITEMS,      Sequence<sal_Int16>, BOUND, MAYBEDEFAULT ),
+            DECL_DEP_PROP_2 ( "SelectedItems",          SELECTEDITEMS,      Sequence<sal_Int16>, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ShowThousandsSeparator", NUMSHOWTHOUSANDSEP,     bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Sizeable",               SIZEABLE,               bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Spin",                   SPIN,                   bool,           BOUND, MAYBEDEFAULT ),
