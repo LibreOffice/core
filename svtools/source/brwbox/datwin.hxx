@@ -142,7 +142,6 @@ public:
     FASTBOOL        bAutoVScroll;   // autohide horizontaler Scrollbar
     FASTBOOL        bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
     FASTBOOL        bAutoSizeLastCol;// last column always fills up window
-    FASTBOOL        bHighlightAuto; // new auto-highlight by SetFont() etc.
     FASTBOOL        bResizeOnPaint; // outstanding resize-event
     FASTBOOL        bUpdateOnUnlock;    // Update() while locked
     FASTBOOL        bInUpdateScrollbars;    // Rekursionsschutz
