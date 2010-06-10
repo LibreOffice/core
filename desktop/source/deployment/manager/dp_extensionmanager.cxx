@@ -853,7 +853,7 @@ void ExtensionManager::enableExtension(
 
 /**
  */
-long ExtensionManager::checkPrerequisitesAndEnable(
+sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
     Reference<deploy::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
