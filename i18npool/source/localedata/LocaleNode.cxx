@@ -493,6 +493,14 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aDoubleQuoteStart == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
                 "DoubleQuotationStart equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
+    /* TODO: should equalness of single and double quotes be an error? Would
+     * need to adapt quite some locales' data. */
+    if (aQuoteStart == aDoubleQuoteStart)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationStart equals DoubleQuotationStart. Not necessarily an error, but unusual.");
+    if (aQuoteEnd == aDoubleQuoteEnd)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationEnd equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
 
     writeParameterCheckLen( of, "TimeAM", "timeAM", 1, -1);
     writeParameterCheckLen( of, "TimePM", "timePM", 1, -1);
