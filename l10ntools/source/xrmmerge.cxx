@@ -670,7 +670,7 @@ void XRMResMerge::WorkOnText(
                 {
                     rText = sContent;
                     ConvertStringToXMLFormat( rText );
-                    Export::QuotHTMLXRM( rText );
+                    //Export::QuotHTMLXRM( rText );
                 }
             }
     }
@@ -706,7 +706,7 @@ void XRMResMerge::EndOfText(
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
-                    Export::QuotHTMLXRM( sText );
+                    //Export::QuotHTMLXRM( sText );
 
                     ByteString sAdditionalLine( "\t" );
                     sAdditionalLine += rOpenTag;
