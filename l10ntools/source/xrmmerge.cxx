@@ -580,7 +580,7 @@ void XRMResExport::EndOfText(
             sCur = aLanguages[ n ];
 
             ByteString sAct = pResData->sText[ sCur ];
-                Export::UnquotHTML( sAct );
+                //Export::UnquotHTML( sAct );
                 sAct.EraseAllChars( 0x0A );
 
                 ByteString sOutput( sPrj ); sOutput += "\t";
