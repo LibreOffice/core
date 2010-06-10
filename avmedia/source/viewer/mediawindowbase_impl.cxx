@@ -82,27 +82,25 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
     {
         static const ServiceManager aServiceManagers[] =
         {
-            { "AVMEDIA_MANAGER_SERVICE_NAME", AVMEDIA_MANAGER_SERVICE_IS_JAVABASED },
-            { "AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1", AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1 }
+            { AVMEDIA_MANAGER_SERVICE_NAME, AVMEDIA_MANAGER_SERVICE_IS_JAVABASED },
+            { AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1, AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1 }
         };
 
-        uno::Reference< media::XManager > xManager;
-
-        for( sal_uInt32 i = 0; ( i < ( sizeof( aServiceManagers ) / sizeof( ServiceManager ) ) ) && !xManager.is(); ++i )
+        for( sal_uInt32 i = 0; !xPlayer.is() && ( i < ( sizeof( aServiceManagers ) / sizeof( ServiceManager ) ) ); ++i )
         {
             const String aServiceName( aServiceManagers[ i ].pServiceName, RTL_TEXTENCODING_ASCII_US );
 
             if( aServiceName.Len() )
             {
+                OSL_TRACE( "Trying to create media manager service %s", aServiceManagers[ i ].pServiceName );
+
                 try
                 {
-                    xManager = uno::Reference< media::XManager >( xFactory->createInstance( aServiceName ),
-                                                                  uno::UNO_QUERY );
+                    uno::Reference< media::XManager > xManager( xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
 
                     if( xManager.is() )
                     {
-                        xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ),
-                                                                    uno::UNO_QUERY );
+                        xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ), uno::UNO_QUERY );
                     }
                 }
                 catch( ... )
@@ -110,11 +108,7 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
                 }
             }
 
-            if( !xPlayer.is() )
-            {
-                xManager.clear();
-            }
-            else
+            if( xPlayer.is() )
             {
                 rbJavaBased = aServiceManagers[ i ].bIsJavaBased;
             }
@@ -123,7 +117,6 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
 
     return xPlayer;
 }
-
 
 // ---------------------------------------------------------------------
 
