@@ -130,6 +130,9 @@ struct PasswordToOpenModifyDialog_Impl
     String                      m_aOneMismatch;
     String                      m_aTwoMismatch;
     String                      m_aInvalidStateForOkButton;
+    String                      m_aInvalidStateForOkButton_v2;
+
+    bool                        m_bIsPasswordToModify;
 
 
 //    DECL_LINK( ModifyHdl, Edit * );
@@ -167,7 +170,9 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
 //    m_aPasswdToModifyMatchFI    ( pParent, CUI_RES( FI_PASSWD_TO_MODIFY_MATCH ) )
     m_aOneMismatch( CUI_RES( STR_ONE_PASSWORD_MISMATCH ) ),
     m_aTwoMismatch( CUI_RES( STR_TWO_PASSWORDS_MISMATCH ) ),
-    m_aInvalidStateForOkButton( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON ) )
+    m_aInvalidStateForOkButton( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON ) ),
+    m_aInvalidStateForOkButton_v2( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON_V2 ) ),
+    m_bIsPasswordToModify( bIsPasswordToModify )
 {
 /*
     const sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -206,6 +211,8 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
 //    ModifyHdl( NULL );
 
     m_aMoreFewerOptionsBTN.Enable( bIsPasswordToModify );
+    if (!bIsPasswordToModify)
+        m_aMoreFewerOptionsBTN.Hide( TRUE );
 }
 
 
@@ -246,7 +253,8 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
             m_aPasswdToModifyED.GetText().Len() == 0;
     if (bInvalidState)
     {
-        ErrorBox aErrorBox( m_pParent, WB_OK, m_aInvalidStateForOkButton );
+        ErrorBox aErrorBox( m_pParent, WB_OK,
+            m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2 );
         aErrorBox.Execute();
     }
     else // check for mismatched passwords...

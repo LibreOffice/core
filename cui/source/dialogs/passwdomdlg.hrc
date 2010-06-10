@@ -49,12 +49,13 @@
 #define FI_PASSWD_TO_MODIFY_MATCH       28
 #define CB_OPEN_READONLY                29
 
-#define STR_MORE_OPTIONS                51
-#define STR_FEWER_OPTIONS               52
-#define STR_PASSWD_MUST_BE_CONFIRMED    53
-#define STR_ONE_PASSWORD_MISMATCH       54
-#define STR_TWO_PASSWORDS_MISMATCH      55
-#define STR_INVALID_STATE_FOR_OK_BUTTON 56
+#define STR_MORE_OPTIONS                    51
+#define STR_FEWER_OPTIONS                   52
+#define STR_PASSWD_MUST_BE_CONFIRMED        53
+#define STR_ONE_PASSWORD_MISMATCH           54
+#define STR_TWO_PASSWORDS_MISMATCH          55
+#define STR_INVALID_STATE_FOR_OK_BUTTON     56
+#define STR_INVALID_STATE_FOR_OK_BUTTON_V2  57
 
 #endif
 
