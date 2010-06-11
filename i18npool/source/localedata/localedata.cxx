@@ -180,6 +180,7 @@ static const struct {
     { "zh_MO",  lcl_DATA_OTHERS },
 
     { "ar_EG",  lcl_DATA_OTHERS },
+    { "ar_DZ",  lcl_DATA_OTHERS },
     { "ar_LB",  lcl_DATA_OTHERS },
     { "ar_SA",  lcl_DATA_OTHERS },
     { "ar_TN",  lcl_DATA_OTHERS },
