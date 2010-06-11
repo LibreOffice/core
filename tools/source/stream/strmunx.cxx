@@ -209,7 +209,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { 0,            SVSTREAM_OK },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
         { EBADF,        SVSTREAM_INVALID_HANDLE },
-#if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX)
+#if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX) || defined(__FreeBSD_kernel__)
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else
         { EDEADLOCK,    SVSTREAM_LOCKING_VIOLATION },
@@ -223,7 +223,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { EAGAIN,       SVSTREAM_LOCKING_VIOLATION },
         { EISDIR,       SVSTREAM_PATH_NOT_FOUND },
         { ELOOP,        SVSTREAM_PATH_NOT_FOUND },
-#if ! defined( RS6000 ) && ! defined( ALPHA ) && ! defined( NETBSD ) && ! defined (FREEBSD) && ! defined (MACOSX)
+#if ! defined( RS6000 ) && ! defined( ALPHA ) && ! defined( NETBSD ) && ! defined (FREEBSD) && ! defined (MACOSX) && ! defined(__FreeBSD_kernel__)
         { EMULTIHOP,    SVSTREAM_PATH_NOT_FOUND },
         { ENOLINK,      SVSTREAM_PATH_NOT_FOUND },
 #endif
