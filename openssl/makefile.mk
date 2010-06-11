@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8l
+OPENSSL_NAME=openssl-0.9.8o
 
 TARFILE_NAME=$(OPENSSL_NAME)
-TARFILE_MD5=05a0ece1372392a2cf310ebb96333025
+TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
@@ -65,8 +65,8 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8l.map \
-        libssl_OOo_0_9_8l.map
+        libcrypto_OOo_0_9_8o.map \
+        libssl_OOo_0_9_8o.map
     .IF "$(CPU)" == "I"
         CONFIGURE_ACTION=Configure linux-elf
     .ELIF "$(BUILD64)" == "1"
@@ -81,8 +81,8 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8l.map \
-        libssl_OOo_0_9_8l.map
+        libcrypto_OOo_0_9_8o.map \
+        libssl_OOo_0_9_8o.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
     # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
@@ -131,11 +131,7 @@ OUT2BIN += out/libeay32.dll
             # The env. vars CC and PERL are used by nmake, and nmake insists on '\'s
             # If WRAPCMD is set it is prepended before the compiler, don't touch that.
             .IF "$(WRAPCMD)"==""
-                # relace / with \ first word only
-                cc_first_repl = $(subst,/,\ $(normpath,1 $(CC:1)))
-                cc_first = $(normpath,1 $(CC:1))
-                CC!:=$(subst,$(cc_first),$(cc_first_repl) $(normpath,1 $(CC)))
-#				CC!:=$(subst,/,\ $(normpath,1 $(CC)))
+                CC!:=$(subst,/,\ $(normpath,1 $(CC)))
                 .EXPORT : CC
             .ENDIF
             PERL_bak:=$(PERL)
