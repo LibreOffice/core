@@ -32,9 +32,9 @@
 
 ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
 {
-    Size = MAP_APPFONT( 200, 155 );
+    Size = MAP_APPFONT( 171, 150 );
     Text [ en-US ] = "Set Password";
-//    HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY;
+    HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY;
     Border = TRUE ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
@@ -43,22 +43,23 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     FixedLine FL_FILE_ENCRYPTION
     {
         Pos = MAP_APPFONT( 3, 3 );
-        Size = MAP_APPFONT( 194, 8 );
+        Size = MAP_APPFONT( 165, 8 );
         Text [ en-US ] = "File encryption password";
     };
 
     FixedText FT_PASSWD_TO_OPEN
     {
         Pos = MAP_APPFONT( 6, 17 );
-        Size = MAP_APPFONT( 188, 8 );
+        Size = MAP_APPFONT( 159, 8 );
         Text [ en-US ] = "~Enter password to open";
         WordBreak = TRUE;
     };
 
     Edit ED_PASSWD_TO_OPEN
     {
+        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN;
         Pos = MAP_APPFONT( 6, 28 );
-        Size = MAP_APPFONT( 188, 12 );
+        Size = MAP_APPFONT( 159, 12 );
         Border = TRUE ;
         PassWord = TRUE ;
     };
@@ -66,15 +67,16 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     FixedText FT_REENTER_PASSWD_TO_OPEN
     {
         Pos = MAP_APPFONT( 6, 45 );
-        Size = MAP_APPFONT( 188, 8 );
+        Size = MAP_APPFONT( 159, 8 );
         Text [ en-US ] = "Confirm password";
         WordBreak = TRUE;
     };
 
     Edit ED_REENTER_PASSWD_TO_OPEN
     {
+        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN;
         Pos = MAP_APPFONT( 6, 56 );
-        Size = MAP_APPFONT( 188, 12 );
+        Size = MAP_APPFONT( 159, 12 );
         Border = TRUE ;
         PassWord = TRUE ;
     };
@@ -87,8 +89,8 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
 */
     FixedText FT_PASSWD_NOTE
     {
-        Pos = MAP_APPFONT( 6, 74 );
-        Size = MAP_APPFONT( 188, 5*8 );     // some extra space for translation in other languages
+        Pos = MAP_APPFONT( 6, 80 );
+        Size = MAP_APPFONT( 159, 4*8 );     // some extra space for translation in other languages
         Text [ en-US ] = "Note: After a password has been set, the document will only open with "\
                 "the password. Should you lose the password, there will be no way to "\
                 "recover the document. Please also note that this password is case-sensitive.";
@@ -97,75 +99,80 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
 
     FixedLine FL_BUTTONS
     {
-        Pos = MAP_APPFONT( 0, 125 );
-        Size = MAP_APPFONT( 200, 8 );
+        Pos = MAP_APPFONT( 0, 117 );
+        Size = MAP_APPFONT( 171, 8 );
     };
 
     MoreButton BTN_MORE_FEWER_OPTIONS
     {
-        Pos = MAP_APPFONT( 6 , 136 );
-        Size = MAP_APPFONT( 50 , 14 );
-        Delta = 90;
-        MapUnit = MAP_APPFONT;
-        State = FALSE;
+        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE;
+        Pos = MAP_APPFONT( 6 , 130 ) ;
+        Size = MAP_APPFONT( 50 , 14 ) ;
+        Delta = 92 ;
+        MapUnit = MAP_APPFONT ;
+        State = FALSE ;
     };
 
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT( 88, 136 );
+        Pos = MAP_APPFONT( 62, 130 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE ;
     };
 
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT( 144, 136 );
+        Pos = MAP_APPFONT( 115, 130 );
         Size = MAP_APPFONT( 50, 14 );
     };
 
     FixedLine FL_FILE_SHARING_OPTIONS
     {
-        Pos = MAP_APPFONT( 3, 153 );
-        Size = MAP_APPFONT( 194, 8 );
+        Pos = MAP_APPFONT( 3, 154 );
+        Size = MAP_APPFONT( 165, 8 );
         Text [ en-US ] = "File sharing password";
     };
 
     CheckBox CB_OPEN_READONLY
     {
-        Pos = MAP_APPFONT( 6, 169 );
-        Size = MAP_APPFONT( 188, 8 );
+        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY;
+        Pos = MAP_APPFONT( 6, 170 );
+        Size = MAP_APPFONT( 159, 8 );
 
         Text [ en-US ] = "Open file read-only";
     };
 
     FixedText FT_PASSWD_TO_MODIFY
     {
-        Pos = MAP_APPFONT( 6, 187 );
-        Size = MAP_APPFONT( 188, 8 );
+        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY;
+        Pos = MAP_APPFONT( 6, 186 );
+        Size = MAP_APPFONT( 159, 8 );
         Text [ en-US ] = "Enter password to allow editing";
         WordBreak = TRUE;
     };
 
     Edit ED_PASSWD_TO_MODIFY
     {
-        Pos = MAP_APPFONT( 6, 197 );
-        Size = MAP_APPFONT( 188, 12 );
+        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY;
+        Pos = MAP_APPFONT( 6, 196 );
+        Size = MAP_APPFONT( 159, 12 );
         Border = TRUE ;
         PassWord = TRUE ;
     };
 
     FixedText FT_REENTER_PASSWD_TO_MODIFY
     {
-        Pos = MAP_APPFONT( 6, 215 );
-        Size = MAP_APPFONT( 188, 8 );
+        Pos = MAP_APPFONT( 6, 214 );
+        Size = MAP_APPFONT( 159, 8 );
         Text [ en-US ] = "Confirm password";
         WordBreak = TRUE;
     };
 
     Edit ED_REENTER_PASSWD_TO_MODIFY
     {
-        Pos = MAP_APPFONT( 6, 225 );
-        Size = MAP_APPFONT( 188, 12 );
+        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY;
+        Pos = MAP_APPFONT( 6, 224 );
+        Size = MAP_APPFONT( 159, 12 );
         Border = TRUE ;
         PassWord = TRUE ;
     };
@@ -204,12 +211,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
 
     String STR_INVALID_STATE_FOR_OK_BUTTON
     {
-        Text [ en-US ] = "Please enter a password." ;
-    };
-
-    String STR_INVALID_STATE_FOR_OK_BUTTON_V2
-    {
-        Text [ en-US ] = "Please enter a password for file encryption." ;
+        Text [ en-US ] = "Please enter a password to open or to modify, or check the open read-only option to continue." ;
     };
 /*
     Image IMG_PASSWD_MATCH
