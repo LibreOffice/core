@@ -2713,7 +2713,7 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
             break;
         default:
 #if OSL_DEBUG_LEVEL > 0
-            fprintf( stderr, "Unhandled node, type == %d\n", rNode.GetNodeType() );
+            OSL_TRACE("Unhandled node, type == %d\n", rNode.GetNodeType() );
 #endif
             break;
     }
