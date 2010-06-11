@@ -55,19 +55,24 @@ namespace svt { namespace table
         m_rTableControl.doPaintContent( rUpdateRect );
     }
     //--------------------------------------------------------------------
-    void TableDataWindow::SetBackground( const Color& rColor )
+    void TableDataWindow::SetBackground( const Wallpaper& rColor )
     {
-        Window::SetBackground( rColor );
+        SetBackground( rColor );
     }
     //--------------------------------------------------------------------
     void TableDataWindow::SetControlBackground( const Color& rColor )
     {
-        Window::SetControlBackground( rColor );
+        SetControlBackground( rColor );
     }
     //--------------------------------------------------------------------
-    Color TableDataWindow::GetControlBackground()
+    void TableDataWindow::SetBackground()
     {
-        return Window::GetControlBackground();
+        SetBackground();
+    }
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetControlBackground()
+    {
+        SetControlBackground();
     }
     //--------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )

@@ -74,9 +74,11 @@ namespace svt { namespace table
         virtual void        CaptureMouse();
         virtual void        ReleaseMouse();
         virtual long        Notify(NotifyEvent& rNEvt);
-        virtual void        SetBackground(const Color& rColor);
         virtual void        SetControlBackground(const Color& rColor);
-        virtual Color       GetControlBackground();
+        virtual void        SetControlBackground();
+
+        void                SetBackground(const Wallpaper& rColor);
+        void                SetBackground();
     };
 //........................................................................
 } } // namespace svt::table
