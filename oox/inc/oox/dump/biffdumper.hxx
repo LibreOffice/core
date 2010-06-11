@@ -32,6 +32,7 @@
 #include "oox/dump/dffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/xls/richstring.hxx"
+#include "oox/xls/biffinputstream.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
