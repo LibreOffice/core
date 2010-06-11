@@ -25,28 +25,17 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sw,\
-    $(call gb_PrecompiledHeader_get_target,precompiled_sw) \
-))
-    #$(call gb_AllLangResTarget_get_target,sw) \
-    $(call gb_Library_get_target,msword) \
-    $(call gb_Library_get_target,sw) \
-    $(call gb_Library_get_target,swd) \
-    $(call gb_Library_get_target,swui) \
-    $(call gb_Library_get_target,vbaswobj) \
-    $(call gb_Package_get_target,sw_uiconfig) \
-    $(call gb_Package_get_target,sw_xml) \
-    $(call gb_Package_get_target,sw_misc) \
+$(eval $(call gb_PrecompiledHeader_PrecompiledHeader,precompiled_sw,$(SRCDIR)/sw/inc/pch/precompiled_sw))
 
-$(eval $(call gb_Module_read_includes,sw,\
-    pch_sw \
+$(eval $(call gb_PrecompiledHeader_set_include,precompiled_sw,\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/offuh \
+    -I$(OUTDIR)/inc \
 ))
-    #lib_sw \
-    lib_swd \
-    lib_swui \
-    lib_msword \
-    lib_vbaswobj \
-    package_misc \
-    package_uiconfig \
-    package_xml \
-    res_sw \
+
+$(eval $(call gb_PrecompiledHeader_set_defs,precompiled_sw,\
+    $$(DEFS) \
+    -DACCESSIBLE_LAYOUT \
+))
+
+# vim: set noet sw=4 ts=4:
