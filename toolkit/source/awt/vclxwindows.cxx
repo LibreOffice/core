@@ -1547,6 +1547,7 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_LINECOUNT,
                      BASEPROPERTY_MULTISELECTION,
                      BASEPROPERTY_MULTISELECTION_SIMPLEMODE,
+                     BASEPROPERTY_ITEM_SEPARATOR_POS,
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_SELECTEDITEMS,
                      BASEPROPERTY_STRINGITEMLIST,
@@ -1916,6 +1917,13 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+            {
+                sal_Int16 nSeparatorPos(0);
+                if ( Value >>= nSeparatorPos )
+                    pListBox->SetSeparatorPos( nSeparatorPos );
+            }
+            break;
             case BASEPROPERTY_READONLY:
             {
                 sal_Bool b = sal_Bool();
@@ -1987,6 +1995,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+                aProp <<= sal_Int16( pListBox->GetSeparatorPos() );
+                break;
             case BASEPROPERTY_READONLY:
             {
                  aProp <<= (sal_Bool) pListBox->IsReadOnly();

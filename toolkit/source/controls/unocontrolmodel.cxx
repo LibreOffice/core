@@ -263,6 +263,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                 aDefault <<= Reference< awt::XDevice >();
                 break;
 
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
             case BASEPROPERTY_VERTICALALIGN:
             case BASEPROPERTY_BORDERCOLOR:
             case BASEPROPERTY_SYMBOL_COLOR:
