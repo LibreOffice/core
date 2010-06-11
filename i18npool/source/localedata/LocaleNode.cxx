@@ -697,7 +697,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                             incErrorInt( "ThousandSeparator not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
-                    if (nDec <= nGrp)
+                    if (nDec >= 0 && nGrp >= 0 && nDec <= nGrp)
                         incErrorInt( "Ordering of ThousandSeparator and DecimalSeparator not correct in formatindex=\"%d\".",
                                 formatindex);
                 }
@@ -732,7 +732,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                             incErrorInt( "Time100SecSeparator+00 not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
-                    if (n100s <= nTime)
+                    if (n100s >= 0 && nTime >= 0 && n100s <= nTime)
                         incErrorInt( "Ordering of Time100SecSeparator and TimeSeparator not correct in formatindex=\"%d\".",
                                 formatindex);
                 }
