@@ -57,22 +57,22 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     void TableDataWindow::SetBackground( const Wallpaper& rColor )
     {
-        SetBackground( rColor );
+        Window::SetBackground( rColor );
     }
     //--------------------------------------------------------------------
     void TableDataWindow::SetControlBackground( const Color& rColor )
     {
-        SetControlBackground( rColor );
+        Window::SetControlBackground( rColor );
     }
     //--------------------------------------------------------------------
     void TableDataWindow::SetBackground()
     {
-        SetBackground();
+        Window::SetBackground();
     }
     //--------------------------------------------------------------------
     void TableDataWindow::SetControlBackground()
     {
-        SetControlBackground();
+        Window::SetControlBackground();
     }
     //--------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
