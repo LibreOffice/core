@@ -28,8 +28,10 @@
 
 # PrecompiledHeader class
 
-$(call gb_PrecompiledHeader_get_target,%) : $(SRCDIR)/%.cxx
-    $(call gb_PrecompiledHeader__command,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+gb_PrecompiledHeader_DEFAULTDEFS := -DPRECOMPILED_HEADERS $(gb_GLOBALDEFS)
+
+$(call gb_PrecompiledHeader_get_target,%) :
+    $(call gb_PrecompiledHeader__command,$@,$*,$<,$(DEFS),$(CXXFLAGS) $(EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 .PHONY : $(call gb_PrecompiledHeader_get_clean_target,%)
 $(call gb_PrecompiledHeader_get_clean_target,%) :
@@ -39,14 +41,20 @@ $(call gb_PrecompiledHeader_get_clean_target,%) :
 
 define gb_PrecompiledHeader_PrecompiledHeader
 $(call gb_PrecompiledHeader_get_dep_target,$(1)) \
+$(call gb_PrecompiledHeader_get_target,$(1)) : $(2).cxx $(2).hxx
+
+$(call gb_PrecompiledHeader_get_dep_target,$(1)) \
 $(call gb_PrecompiledHeader_get_target,$(1)) : CXXFLAGS := $$(gb_PrecompiledHeader_CXXFLAGS)
+
 $(call gb_PrecompiledHeader_get_dep_target,$(1)) \
 $(call gb_PrecompiledHeader_get_target,$(1)) : DEFS := $$(gb_PrecompiledHeader_DEFAULTDEFS)
+
 $(call gb_PrecompiledHeader_get_dep_target,$(1)) \
 $(call gb_PrecompiledHeader_get_target,$(1)) : INCLUDE := $$(gb_PrecompiledHeader_INCLUDE)
 $(call gb_PrecompiledHeader_get_dep_target,$(1)) \
 $(call gb_PrecompiledHeader_get_target,$(1)) : INCLUDE_STL := $$(gb_PrecompiledHeader_INCLUDE_STL)
-
+$(call gb_PrecompiledHeader_get_dep_target,$(1)) \
+$(call gb_PrecompiledHeader_get_target,$(1)) : EXCEPTIONFLAGS := $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)
 endef
 
 define gb_PrecompiledHeader_set_defs
@@ -69,4 +77,8 @@ $(call gb_PrecompiledHeader_get_target,$(1)) \
 $(call gb_PrecompiledHeader_get_dep_target,$(1)) : INCLUDE_STL := $(2)
 endef
 
+define gb_PrecompiledHeader_set_exceptionflags
+$(call gb_PrecompiledHeader_get_dep_target,$(1)) \
+$(call gb_PrecompiledHeader_get_target,$(1)) : EXCEPTIONFLAGS := $(2)
+endef
 # vim: set noet sw=4 ts=4:
