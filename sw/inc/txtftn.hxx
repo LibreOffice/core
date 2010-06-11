@@ -49,7 +49,7 @@ public:
     inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }
     void SetStartNode( const SwNodeIndex *pNode, BOOL bDelNodes = TRUE );
     void SetNumber( const USHORT nNumber, const String* = 0 );
-    void CopyFtn( SwTxtFtn *pDest ) const;
+    void CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const;
 
     // get and set TxtNode pointer
     inline const SwTxtNode& GetTxtNode() const;

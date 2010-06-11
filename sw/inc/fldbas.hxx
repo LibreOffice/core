@@ -305,11 +305,16 @@ inline void SwFieldType::UpdateFlds() const
 
 class SW_DLLPUBLIC SwField
 {
+private:
+    mutable String      m_Cache; /// #i85766# cached expansion (for clipboard)
     USHORT              nLang;  // Immer ueber SetLanguage aendern!
     BOOL                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
 
     SwFieldType*        pType;
+
+    virtual String      Expand() const = 0;
+    virtual SwField*    Copy() const = 0;
 
 protected:
     void                SetFormat(sal_uInt32 nSet) {nFormat = nSet;}
@@ -325,12 +330,16 @@ public:
     // neuen Typ setzen (wird fuer das Kopieren zwischen Dokumenten benutzt)
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
-    // Expandierung fuer die Anzeige
-    virtual String      Expand() const = 0;
+    /** expand the field.
+        @param  bInClipboard    field is in clipboard document?
+        @return     the generated text (suitable for display)
+      */
+    String              ExpandField(bool const bInClipboard) const;
 
     // liefert den Namen oder den Inhalt
     virtual String      GetCntnt(BOOL bName = FALSE) const;
-    virtual SwField*    Copy() const = 0;
+
+    SwField *           CopyField() const;
 
     // ResId
     USHORT              Which() const

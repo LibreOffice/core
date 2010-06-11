@@ -46,6 +46,12 @@
 #undef HAVE_STATFS_H
 #endif
 
+#if defined(LINUX) && defined(__FreeBSD_kernel__)
+#undef LINUX
+#define FREEBSD 1
+#endif
+
+
 #if defined(SOLARIS)
 
 #include <sys/mnttab.h>

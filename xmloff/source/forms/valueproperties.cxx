@@ -116,7 +116,7 @@ namespace xmloff
     void OValuePropertiesMetaData::getValueLimitPropertyNames(sal_Int16 _nFormComponentType,
         sal_Char const * & _rpMinValuePropertyName, sal_Char const * & _rpMaxValuePropertyName)
     {
-        _rpMinValuePropertyName = _rpMinValuePropertyName = NULL;
+        _rpMinValuePropertyName = _rpMaxValuePropertyName = NULL;
         switch (_nFormComponentType)
         {
             case FormComponentType::DATEFIELD:

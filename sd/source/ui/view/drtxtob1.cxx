@@ -30,8 +30,12 @@
 
 #include "TextObjectBar.hxx"
 
+
 #include <svx/svxids.hrc>
 
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/unolingu.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -331,6 +335,16 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_THES:
+        {
+            String aReplaceText;
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            if (pItem2)
+                aReplaceText = pItem2->GetValue();
+            if (aReplaceText.Len() > 0)
+                ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
+        }
+        break;
 
         default:
         {

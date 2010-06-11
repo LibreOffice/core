@@ -110,6 +110,8 @@ public:
 
     virtual ::com::sun::star::awt::Rectangle getRectangleOfObject( const rtl::OUString& rObjectCID, bool bSnapRect=false );
 
+    virtual ::com::sun::star::awt::Rectangle getDiagramRectangleExcludingAxes();
+
     ::boost::shared_ptr< DrawModelWrapper > getDrawModelWrapper();
 
     // ___XTransferable___
@@ -196,11 +198,13 @@ private: //methods
 
     void impl_updateView();
 
-    void impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
+    ::com::sun::star::awt::Rectangle impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes>& xDiagramPlusAxes_Shapes
         , const ::com::sun::star::awt::Point& rAvailablePos
         , const ::com::sun::star::awt::Size& rAvailableSize
-        , const ::com::sun::star::awt::Size& rPageSize );
+        , const ::com::sun::star::awt::Size& rPageSize
+        , bool bUseFixedInnerSize
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& xDiagram_MarkHandles );
 
 
 private: //member
@@ -246,6 +250,8 @@ private: //member
     sal_Int32 m_nScaleYDenominator;
 
     sal_Bool m_bSdrViewIsInEditMode;
+
+    ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 };
 
 //.............................................................................

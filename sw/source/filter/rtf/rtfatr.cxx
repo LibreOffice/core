@@ -2902,7 +2902,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
 
     case RES_HIDDENTXTFLD:
             if( TYP_CONDTXTFLD == ((SwHiddenTxtField*)pFld)->GetSubType() )
-                RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
+                RTFOutFuncs::Out_String( rWrt.Strm(),
+                    pFld->ExpandField(rWrt.pDoc->IsClipBoard()),
                                         rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
             else
             {
@@ -2958,7 +2959,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() >> cCh;
             if( ' ' != cCh )            // vorweg immer einen Trenner
                 rWrt.Strm() << ' ';
-            RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
+            RTFOutFuncs::Out_String( rWrt.Strm(),
+                pFld->ExpandField(rWrt.pDoc->IsClipBoard()),
                                         rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
         }
         break;
@@ -2967,7 +2969,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     if( aFldStt.Len() )
     {
         rWrt.Strm() << "}{" << OOO_STRING_SVTOOLS_RTF_FLDRSLT << ' ';
-        RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
+        RTFOutFuncs::Out_String( rWrt.Strm(),
+                pFld->ExpandField(rWrt.pDoc->IsClipBoard()),
                                         rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
         rWrt.Strm() << "}}";
         rRTFWrt.bOutFmtAttr = FALSE;

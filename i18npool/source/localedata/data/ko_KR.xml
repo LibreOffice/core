@@ -564,8 +564,11 @@
     <Transliteration unoid="IGNORE_WIDTH"/>
     <Transliteration unoid="FULLWIDTH_HALFWIDTH"/>
     <Transliteration unoid="HALFWIDTH_FULLWIDTH"/>
-    <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="SENTENCE_CASE"/>
     <Transliteration unoid="LOWERCASE_UPPERCASE"/>
+    <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="TITLE_CASE"/>
+    <Transliteration unoid="TOGGLE_CASE"/>
     <Transliteration unoid="NumToTextFormalHangul_ko"/>
     <Transliteration unoid="NumToTextFormalLower_ko"/>
     <Transliteration unoid="NumToTextFormalUpper_ko"/>

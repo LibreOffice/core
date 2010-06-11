@@ -100,6 +100,18 @@ private:
 
 // ============================================================================
 
+class TrendlineLabelConverter : public ConverterBase< TrendlineLabelModel >
+{
+public:
+    explicit            TrendlineLabelConverter( const ConverterRoot& rParent, TrendlineLabelModel& rModel );
+    virtual             ~TrendlineLabelConverter();
+
+    /** Converts the OOXML trendline label. */
+    void                convertFromModel( PropertySet& rPropSet );
+};
+
+// ============================================================================
+
 class TrendlineConverter : public ConverterBase< TrendlineModel >
 {
 public:

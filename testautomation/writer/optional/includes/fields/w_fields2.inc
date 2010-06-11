@@ -451,8 +451,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocumentPage
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
   Dim sTestFile as String
   Dim sPage()   as String
@@ -867,35 +865,32 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocumentStatistics
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
   Dim sTestFile     as String
+  Dim sOriginalFile as string
   Dim sStatistics() as String
+  Dim sType as string
   Dim i             as Integer
 
-  sStatistics = Array( _
-                      "2"         , _
-                      "2"         , _
-                      "2"         , _
-                      "12"        , _
-                      "2"         , _
-                      "2"         , _
-                      "1"         , _
-                      )
+  sStatistics = Array( "2", "2", "3", "13", "2", "2", "1" )
 
-  sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\statisticsTest.sxw")
+    sTestFile    = Convertpath (gOfficepath + "user\work\statisticsTest.sxw")
+    sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\statisticsTest.sxw")
+    ' document has to be copied to local file system to avoid opening a read-only file
+    ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+    FileCopy (sOriginalFile, sTestFile)
+    if hFileExists ( sTestFile ) = false then
+        Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+        goto endsub
+    end if
 
   printlog "Insert/Fields/Other/Document / Statistics"
  '/// <b> Insert/Fields/Other/Document / Statistics </b>
-
-  Call hNewDocument
 
   '/// Open test file statisticsTest.sxw which includes
   '/// 2 tables , 2 pictures , 22 paragraph , 1 object ,
   '/// 2 words , 12 characters and 2 pages
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 Home><Down>"
 
@@ -904,6 +899,7 @@ goto endsub
   '/// Check if the insertion is correct
    Call fInsertFieldsOther("TabDokumentFeldbefehle")
      Feldtyp.Select fGetType("Statistics")
+     sType = Auswahl.GetSelText
      for i = 0 to UBound(sStatistics)
          Kontext "TabDokumentFeldbefehle"
          Auswahl.Select i+1
@@ -916,7 +912,7 @@ goto endsub
          Sleep 1
          EditCopy
          if GetClipboard <> sStatistics(i) then
-             Warnlog i &" - Should get " & sStatistics(i) & " but get " & GetClipboard
+             Warnlog "- " & sType & ": Should get " & sStatistics(i) & " but get " & GetClipboard
          end if
          Call wTypeKeys "<Delete>"
      next i
@@ -930,35 +926,39 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocumentTemplate
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
-    Dim  sTestFile     as String
-    Dim  sDirectory    as String
-    Dim  oDirectory    as String
-    Dim  sLanguage     as String
-    Dim  sFormat()     as String
-    Dim  sResult(6)    as String
-    Dim  i             as Integer
+    Dim sTestFile     as String
+    Dim sOriginalFile as string
+    Dim sDirectory    as String
+    Dim oDirectory    as String
+    Dim sLanguage     as String
+    Dim sFormat()     as String
+    Dim sResult(6)    as String
+    Dim i             as Integer
     
     sLanguage    = fGetDirLanguage()
-    sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\diploma.ott")
+    sTestFile    = Convertpath (gOfficepath + "user\work\diploma.ott")
+    sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\diploma.ott")
+    ' document has to be copied to local file system to avoid opening a read-only file
+    ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+    FileCopy (sOriginalFile, sTestFile)
+    if hFileExists ( sTestFile ) = false then
+        Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+        goto endsub
+    end if
     
     sResult(0)   = fGetCateGory()
     sResult(1)   = "diploma.ott"
     sResult(2)   = "diploma"
-    sResult(3)   = Convertpath (gTesttoolpath + "writer\optional\input\fields\") 
+    sResult(3)   = Convertpath (gOfficepath + "user\work")
     sResult(4)   = sTestFile
     sResult(5)   = fGetStyle()
     
     printlog "Insert/Fields/Other/Document / Template"
     '/// <b> Insert/Fields/Other/Document / Template </b>
-    
-    Call hNewDocument
-    
+     
     '/// Open test file diploma.ott
     Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
     
     Call wTypeKeys "<MOD1 Home>"
     

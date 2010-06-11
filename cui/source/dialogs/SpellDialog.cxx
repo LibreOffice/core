@@ -473,7 +473,7 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     }
     else
     {
-        if( SvtLinguConfig().HasAnyVendorImages() )
+        if( SvtLinguConfig().HasVendorImages( "SpellAndGrammarDialogImage" ) )
         {
             pThis->aVendorImageFI.Show();
             Size aVendorSize = pThis->aVendorImageFI.GetSizePixel();

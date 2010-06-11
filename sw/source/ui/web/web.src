@@ -138,8 +138,8 @@ ToolBox RID_WEBTOOLS_TOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = FN_THESAURUS_DLG;
-            HelpID = FN_THESAURUS_DLG;
+            Identifier = SID_THESAURUS;
+            HelpID = SID_THESAURUS;
             Hide = TRUE;
         };
         ToolBoxItem

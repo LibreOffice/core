@@ -375,10 +375,6 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefInsertTable(nPos);
-
                 SetDirty();
                 bValid = TRUE;
             }
@@ -466,11 +462,6 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 }
                 // #81844# sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
-
-
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefDeleteTable(nTab);
 
                 SetAutoCalc( bOldAutoCalc );
                 bValid = TRUE;
@@ -694,6 +685,10 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
     if (nRow2 < rEndRow)
         rEndRow = nRow2;
 
+    if (rStartCol > rEndCol || rStartRow > rEndRow)
+        // invalid range.
+        return false;
+
     return true;  // success!
 }
 
@@ -708,11 +703,10 @@ bool ScDocument::ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol,
 //  zusammenhaengender Bereich
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown )
+                              SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown ) const
 {
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
+    if (ValidTab(nTab) && pTab[nTab])
+        pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
 

@@ -275,7 +275,6 @@ public:
     void        CalcAfterLoad();
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
-    bool        MarkUsedExternalReferences();
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 

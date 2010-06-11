@@ -102,22 +102,34 @@ private:
     DECL_LINK( SelectHdl, void * );
     Menu*               pSVMenu;
 
-private:
-                        // only declared, but not defined: don't allow copying
-                        SfxPopupMenuManager( const SfxPopupMenuManager& );
-                        SfxPopupMenuManager& operator=( const SfxPopupMenuManager& );
+    // when #i107205 gets fixed this one should be superfluous.
+    // But right now we want to avoid the memory leak that would otherwise occur,
+    // if we don't delete the pointer that got created in SfxPopupMenuManager::Popup
+    static PopupMenu *  pStaticThesSubMenu;
+
+    // only declared, but not defined: don't allow copying
+    SfxPopupMenuManager( const SfxPopupMenuManager& );
+    SfxPopupMenuManager& operator=( const SfxPopupMenuManager& );
 
 public:
                         SfxPopupMenuManager( const ResId&, SfxBindings& );
                         SfxPopupMenuManager( PopupMenu*, SfxBindings& );
                         ~SfxPopupMenuManager();
     static void         ExecutePopup( const ResId&, SfxViewFrame* pViewFrame, const Point& rPoint, Window* pWindow );
+    // @deprecated!!
+    // Don't use this method any longer. The whole class will be removed in the future.
+    // Changing code which relies on Popup would need much more effort.
+    // Please contact cd@openoffice.org if you have questions or need help
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
     USHORT              Execute( const Point& rPos, Window *pWindow );
     USHORT              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
     USHORT              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
 
+    // @deprecated (start)!!
+    // Don't use these methods any longer. The whole class will be removed in the future.
+    // Changing code which relies on these methods would need much more effort!
+    // Please contact cd@openoffice.org if you have questions or need help
     void                StartInsert();
     void                EndInsert();
     void                CheckItem( USHORT, BOOL );
@@ -125,6 +137,8 @@ public:
     void                InsertItem( USHORT, const String&, MenuItemBits,
                                 USHORT nPos = MENU_APPEND );
     void                InsertSeparator( USHORT nPos = MENU_APPEND );
+    // @deprecated (end)
+
     void                RemoveDisabledEntries();
     void                AddClipboardFunctions();
     Menu*                   GetSVMenu();

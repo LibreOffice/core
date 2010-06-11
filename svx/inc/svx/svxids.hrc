@@ -383,6 +383,7 @@
 #define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hard space */
 #define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)   /* hyphen withou break*/
 
+//!! be aware to not overwrite something that is used in sw/inc/cmdid.h already !!
 #define FN_FORMAT               (SID_SW_START +  400)
 #define FN_SET_JUSTIFY_PARA     (FN_FORMAT + 21)
 #define FN_FORMAT_RESET         (FN_FORMAT + 69)
@@ -1239,6 +1240,7 @@
 #define SID_TABLE_STYLE_SETTINGS                        (SID_SVX_START+1089)
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
+
 #define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
 #define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
@@ -1250,8 +1252,12 @@
 #define SID_DELETEALLBYAUTHOR_POSTIT                    (SID_SVX_START+1100)
 #define SID_INSERT_POSTIT                               (SID_SVX_START+1101)
 
+#define SID_TRANSLITERATE_SENTENCE_CASE                 (SID_SVX_START+1102)
+#define SID_TRANSLITERATE_TITLE_CASE                    (SID_SVX_START+1103)
+#define SID_TRANSLITERATE_TOGGLE_CASE                   (SID_SVX_START+1104)
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               SID_INSERT_POSTIT + 1
+#define SID_SVX_FIRSTFREE                               (SID_TRANSLITERATE_TOGGLE_CASE + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

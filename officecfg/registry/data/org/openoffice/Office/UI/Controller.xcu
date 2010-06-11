@@ -383,6 +383,39 @@
           <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
         </prop>
       </node>
+      <node oor:name="com.sun.star.svx.FindTextToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FindText</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.FindTextToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.DownSearchToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DownSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.DownSearchToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.UpSearchToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:UpSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.UpSearchToolboxController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="StatusBar">
       <node oor:name="c1" oor:op="replace">

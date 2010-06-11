@@ -63,5 +63,10 @@
         <value>vnd.sun.star.popup:*</value>
       </prop>
     </node>
+    <node oor:name="com.sun.star.comp.svx.FindbarDispatcher" oor:op="replace">
+      <prop oor:name="Protocols">
+        <value>vnd.sun.star.findbar:*</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>

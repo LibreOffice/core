@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
+#include <cppuhelper/factory.hxx>
+#include <i18npool/mslangid.hxx>
 #include <osl/file.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
@@ -46,6 +48,11 @@
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+
+#include "defs.hxx"
+#include "dlistimp.hxx"
+#include "dicimp.hxx"
+#include "lngopt.hxx"
 
 #include "defs.hxx"
 #include "dlistimp.hxx"

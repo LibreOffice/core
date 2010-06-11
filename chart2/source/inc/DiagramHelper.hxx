@@ -46,6 +46,13 @@
 namespace chart
 {
 
+enum DiagramPositioningMode
+{
+    DiagramPositioningMode_AUTO,
+    DiagramPositioningMode_EXCLUDING,
+    DiagramPositioningMode_INCLUDING
+};
+
 class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
 public:
@@ -317,6 +324,19 @@ public:
                 ::com::sun::star::chart2::XDiagram > & xDiagram,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xChartType );
+
+    static DiagramPositioningMode getDiagramPositioningMode( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDiagram > & xDiagram );
+
+    static bool setDiagramPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
+        const ::com::sun::star::awt::Rectangle& rPosRect /*100th mm*/ );
+
+    static ::com::sun::star::awt::Rectangle getDiagramRectangleFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
+
+    static bool switchDiagramPositioningToExcludingPositioning( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XModel >& xChartModel
+        , bool bResetModifiedState //set model back to unchanged if it was unchanged before
+        , bool bConvertAlsoFromAutoPositioning );
 
 private:
     // not implemented

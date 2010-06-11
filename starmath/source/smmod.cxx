@@ -98,7 +98,7 @@ const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName )
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
@@ -119,7 +119,7 @@ const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName )
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
@@ -140,7 +140,7 @@ const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportNam
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
@@ -161,7 +161,7 @@ const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiNam
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
@@ -311,9 +311,9 @@ SmConfig * SmModule::GetConfig()
     return pConfig;
 }
 
-SmSymSetManager & SmModule::GetSymSetManager()
+SmSymbolManager & SmModule::GetSymbolManager()
 {
-    return GetConfig()->GetSymSetManager();
+    return GetConfig()->GetSymbolManager();
 }
 
 SmLocalizedSymbolData & SmModule::GetLocSymbolData() const

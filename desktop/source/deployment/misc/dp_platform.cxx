@@ -39,6 +39,8 @@
 #define PLATFORM_WIN_X86            "windows_x86"
 #define PLATFORM_LINUX_X86          "linux_x86"
 #define PLATFORM_LINUX_X86_64       "linux_x86_64"
+#define PLATFORM_KFREEBSD_X86       "kfreebsd_x86"
+#define PLATFORM_KFREEBSD_X86_64    "kfreebsd_x86_64"
 #define PLATFORM_LINUX_SPARC        "linux_sparc"
 #define PLATFORM_LINUX_POWERPC      "linux_powerpc"
 #define PLATFORM_LINUX_POWERPC64    "linux_powerpc64"
@@ -129,6 +131,10 @@ namespace
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86_64)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("X86_64"));
+        else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86)))
+            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86_64)))
+            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("X86_64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_SPARC)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("SPARC"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_POWERPC)))

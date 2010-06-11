@@ -725,6 +725,8 @@ private:
     void impl_SetMousePointer( const MouseEvent & rEvent );
 
     void impl_ClearSelection();
+
+    void impl_switchDiagramPositioningToExcludingPositioning();
 };
 
 //.............................................................................

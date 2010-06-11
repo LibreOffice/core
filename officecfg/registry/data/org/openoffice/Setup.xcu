@@ -801,13 +801,13 @@
           <node oor:name="Common" oor:op="replace">
             <prop oor:name="IncludedFiles">
               <value>
-                .*/autotext/.*
-                .*/autocorr/.*
-                .*/config/.*\.so[bcdegh]
-                .*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml
-                .*/config/soffice.cfg/modules/.*/images/.*
-                .*/gallery/.*
-                .*/template/.*
+                <it>.*/autotext/.*</it>
+                <it>.*/autocorr/.*</it>
+                <it>.*/config/.*\.so[bcdegh]</it>
+                <it>.*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml</it>
+                <it>.*/config/soffice.cfg/modules/.*/images/.*</it>
+                <it>.*/gallery/.*</it>
+                <it>.*/template/.*</it>
               </value>
             </prop>
             <prop oor:name="IncludedNodes">

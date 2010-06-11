@@ -121,10 +121,12 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
 //-----------------------------------------------------------------------------
 
 PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
-                   , sal_Int32 nDimensionCount )
+                   , sal_Int32 nDimensionCount
+                   , bool bExcludingPositioning )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
         , m_pPosHelper( new PiePositionHelper( NormalAxis_Z, (m_nDimension==3)?0.0:90.0 ) )
         , m_bUseRings(false)
+        , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
 {
     ::rtl::math::setNan(&m_fMaxOffset);
 
@@ -178,6 +180,11 @@ bool PieChart::keepAspectRatio() const
 {
     if( m_nDimension == 3 )
         return false;
+    return true;
+}
+
+bool PieChart::shouldSnapRectToUsedArea()
+{
     return true;
 }
 
@@ -273,18 +280,21 @@ double PieChart::getMaxOffset()
     if(fExplodePercentage>m_fMaxOffset)
         m_fMaxOffset=fExplodePercentage;
 
-    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+    if(!m_bSizeExcludesLabelsAndExplodedSegments)
     {
-        for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+        if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
         {
-            uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
-            if(xPointProp.is())
+            for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
             {
-                fExplodePercentage=0.0;
-                xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
-                if(fExplodePercentage>m_fMaxOffset)
-                    m_fMaxOffset=fExplodePercentage;
+                uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
+                if(xPointProp.is())
+                {
+                    fExplodePercentage=0.0;
+                    xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+                    if(fExplodePercentage>m_fMaxOffset)
+                        m_fMaxOffset=fExplodePercentage;
+                }
             }
         }
     }
@@ -396,7 +406,8 @@ void PieChart::createShapes()
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
             double fLogicInnerRadius, fLogicOuterRadius;
-            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, getMaxOffset() );
+            double fOffset = getMaxOffset();
+            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
             if( !bIsVisible )
                 continue;
 

@@ -98,9 +98,11 @@
 #include "scui_def.hxx" //CHINA001
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
+#include "externalrefmgr.hxx"
 
 #include <memory>
 #include <basic/basmgr.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -1042,6 +1044,10 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
     {
         if ( bEnglish )
         {
+            ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
+            if (bApi)
+                pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
+
             //  code moved to own method InterpretEnglishString because it is also used in
             //  ScCellRangeObj::setFormulaArray
 

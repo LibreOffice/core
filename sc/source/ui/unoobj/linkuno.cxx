@@ -1605,12 +1605,16 @@ ScExternalDocLinkObj::~ScExternalDocLinkObj()
 }
 
 Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetCache(
-    const OUString& aSheetName )
+    const OUString& aSheetName, sal_Bool bDynamicCache )
         throw (RuntimeException)
 {
     ScUnoGuard aGuard;
     size_t nIndex = 0;
     ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aSheetName, true, &nIndex);
+    if (!bDynamicCache)
+        // Set the whole table cached to prevent access to the source document.
+        pTable->setWholeTableCached();
+
     Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
     return aSheetCache;
 }

@@ -46,7 +46,11 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_LOADER_PYTHONHOME";
+  #ifdef MACOSX
+    Value = CONCAT2($ORIGIN,"OOoPython.framework");
+  #else
     Value = CONCAT2($ORIGIN/python-core-,PYVERSION);
+  #endif
 End
 #endif
 
@@ -60,11 +64,19 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     Value = "$ORIGIN";
 #else
   #ifdef UNX
+    #ifdef MACOSX
+    #define FRAMEWORKLIB CONCAT4($ORIGIN/OOoPython.framework/Versions/,PYMAJMIN,/lib/python,PYMAJMIN)
+    Value = CONCAT4(FRAMEWORKLIB FRAMEWORKLIB,
+		   /lib-dynload FRAMEWORKLIB,
+		   /lib-tk FRAMEWORKLIB,
+		   /site-packages $ORIGIN);
+    #else
     Value = CONCAT9($ORIGIN/python-core-,PYVERSION,
 		   /lib $ORIGIN/python-core-,PYVERSION,
 		   /lib/lib-dynload $ORIGIN/python-core-,PYVERSION,
 		   /lib/lib-tk $ORIGIN/python-core-,PYVERSION,
 		   /lib/site-packages $ORIGIN);
+    #endif
   #else
    #ifdef _gcc3
     Value = STRING(CONCAT9($ORIGIN/python-core-,PYVERSION,

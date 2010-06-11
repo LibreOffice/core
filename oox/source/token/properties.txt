@@ -6,6 +6,7 @@ Adjust
 AdjustContrast
 AdjustLuminance
 Align
+AnchorPosition
 ArrangeOrder
 Aspect
 AttachedAxisIndex
@@ -121,6 +122,7 @@ ErrorBarX
 ErrorBarY
 ErrorMessage
 ErrorTitle
+Expansion
 ExternalDocLinks
 ExternalLinks
 FileFormat
@@ -169,10 +171,16 @@ HasAutoShowInfo
 HasColumnRowHeaders
 HasHorizontalScrollBar
 HasLayoutInfo
+HasMainTitle
 HasReference
+HasSecondaryXAxisTitle
+HasSecondaryYAxisTitle
 HasSheetTabs
 HasSortInfo
 HasVerticalScrollBar
+HasXAxisTitle
+HasYAxisTitle
+HasZAxisTitle
 HeaderBodyDistance
 HeaderHeight
 HeaderIsDynamicHeight
@@ -304,6 +312,7 @@ ReferenceDevice
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
+RelativePosition
 Repeat
 RepeatDelay
 Representation

@@ -3,3 +3,4 @@ ax	sax										usr1	-	all	ax_mkout NULL
 ax	sax\source\expatwrap					nmake	-	all	ax_expatwrap NULL
 ax	sax\source\tools						nmake	-	all ax_tools  NULL
 ax  sax\source\fastparser					nmake	-	all ax_fastparser ax_expatwrap ax_tools NULL
+ax  sax\qa\cppunit							nmake	-	all ax_qa_cppunit ax_tools NULL

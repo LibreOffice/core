@@ -146,9 +146,9 @@ endcase
 
 testcase tiToolsHyphenation
     Call hNewDocument
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     WaitSlot (2000)    'sleep 2
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     Call hCloseDocument
 endcase
 

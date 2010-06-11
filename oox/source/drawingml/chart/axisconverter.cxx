@@ -301,11 +301,12 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 
         // axis title ---------------------------------------------------------
 
-        if( mrModel.mxTitle.is() )
+        // in radar charts, title objects may exist, but are not shown
+        if( mrModel.mxTitle.is() && (rTypeGroup.getTypeInfo().meTypeCategory != TYPECATEGORY_RADAR) )
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
-            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ), OBJECTTYPE_AXISTITLE );
+            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ), OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
         }
     }
     catch( Exception& )

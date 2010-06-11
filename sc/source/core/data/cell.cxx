@@ -819,6 +819,10 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 ScFormulaCell::~ScFormulaCell()
 {
     pDocument->RemoveFromFormulaTree( this );
+
+    if (pDocument->HasExternalRefManager())
+        pDocument->GetExternalRefManager()->removeRefCell(this);
+
     delete pCode;
 #ifdef DBG_UTIL
     eCellType = CELLTYPE_DESTROYED;

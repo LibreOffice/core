@@ -250,10 +250,6 @@ class SwFrm: public SwClient
     friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart = NULL );
     friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
-    //Checkt ob sich beim MakePos die Pos des Frm aendert oder nicht
-    //layact.cxx
-    friend BOOL CheckPos( SwFrm *pFrm );
-
 #if OSL_DEBUG_LEVEL > 1
     //entfernt leere SwSectionFrms aus einer Kette
     friend SwFrm* SwClearDummies( SwFrm* pFrm );

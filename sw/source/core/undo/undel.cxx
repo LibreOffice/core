@@ -868,7 +868,15 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
     SetPaM( rPam );
 
     if( pRedlSaveData )
-        rDoc.DeleteRedline( rPam, false, USHRT_MAX );
+    {
+        bool bSuccess = FillSaveData(rPam, *pRedlSaveData, TRUE);
+        OSL_ENSURE(bSuccess,
+            "SwUndoDelete::Redo: used to have redline data, but now none?");
+        if (!bSuccess)
+        {
+            delete pRedlSaveData, pRedlSaveData = 0;
+        }
+    }
 
     if( !bDelFullPara )
     {

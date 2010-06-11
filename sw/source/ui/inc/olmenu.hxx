@@ -51,23 +51,22 @@ class SwSpellPopup : public PopupMenu
         ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
 
     ::com::sun::star::uno::Sequence< rtl::OUString >  aSuggestions;
-    LanguageType                nCheckedLanguage;
 
+    LanguageType                nCheckedLanguage;
     LanguageType                nGuessLangWord;
     LanguageType                nGuessLangPara;
 
-    USHORT nNumLanguageTextEntries;
-    USHORT nNumLanguageParaEntries;
-    USHORT nNumLanguageDocEntries;
     std::map< sal_Int16, ::rtl::OUString > aLangTable_Text;
     std::map< sal_Int16, ::rtl::OUString > aLangTable_Paragraph;
-    std::map< sal_Int16, ::rtl::OUString > aLangTable_Document;
+//    std::map< sal_Int16, ::rtl::OUString > aLangTable_Document;
 
     bool    bGrammarResults;    // show grammar results? Or show spellcheck results?
 
     Image   aInfo16;
 
-    USHORT fillLangPopupMenu( PopupMenu *pPopupMenu , USHORT Lang_Start, ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq,SwWrtShell* pWrtSh, USHORT nLangTable);
+    void fillLangPopupMenu( PopupMenu *pPopupMenu, USHORT nLangStart,
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq, SwWrtShell* pWrtSh,
+            std::map< sal_Int16, ::rtl::OUString > &rLangTable );
 
     using PopupMenu::Execute;
 

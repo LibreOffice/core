@@ -29,6 +29,7 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawController.hxx"
+#include "DrawDocShell.hxx"
 
 #include "DrawSubController.hxx"
 #include "sdpage.hxx"
@@ -54,6 +55,7 @@
 #include <svx/fmshell.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/shared_ptr.hpp>
 
 using namespace ::std;
 using ::rtl::OUString;
@@ -163,6 +165,16 @@ void SAL_CALL DrawController::dispose (void)
         if( !mbDisposing )
         {
             mbDisposing = true;
+
+            boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+            if ( pViewShell )
+            {
+                pViewShell->DeactivateCurrentFunction();
+                DrawDocShell* pDocShell = pViewShell->GetDocSh();
+                if ( pDocShell != NULL )
+                    pDocShell->SetDocShellFunction(0);
+            }
+            pViewShell.reset();
 
             // When the controller has not been detached from its view
             // shell, i.e. mpViewShell is not NULL, then tell PaneManager

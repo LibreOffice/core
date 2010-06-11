@@ -870,8 +870,9 @@ USHORT SwTOXAuthority::GetLevel() const
   -----------------------------------------------------------------------*/
 void SwTOXAuthority::_GetText( String& rTxt, String& )
 {
-    //
-    rTxt = m_rField.GetFld()->Expand();
+    bool const isClipBoard(
+        m_rField.GetTxtFld()->GetTxtNode().GetDoc()->IsClipBoard());
+    rTxt = m_rField.GetFld()->ExpandField(isClipBoard);
 }
 
 /* -----------------21.09.99 12:50-------------------

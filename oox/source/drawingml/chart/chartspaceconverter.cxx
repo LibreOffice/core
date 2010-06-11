@@ -26,12 +26,12 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartdrawingfragment.hxx"
@@ -147,14 +147,23 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         aDiaProp.setProperty( PROP_MissingValueTreatment, nMissingValues );
     }
 
-    Reference< com::sun::star::chart::XChartDocument > xOldChartDoc( getChartDocument(), UNO_QUERY );
-    if( xOldChartDoc.is() )
+    /*  Following all conversions needing the old Chart1 API that involves full
+        initialization of the chart view. */
+    namespace cssc = ::com::sun::star::chart;
+    Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY );
+    if( xChart1Doc.is() )
     {
         /*  Set the IncludeHiddenCells property via the old API as only this
             ensures that the data provider and all created sequences get this
             flag correctly. */
-        PropertySet aOldDiaProp( xOldChartDoc->getDiagram() );
-        aOldDiaProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
+        PropertySet aDiaProp( xChart1Doc->getDiagram() );
+        aDiaProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
+
+        // plot area position and size
+        aPlotAreaConv.convertPositionFromModel();
+
+        // positions of main title and all axis titles
+        convertTitlePositions();
     }
 
     // embedded drawing shapes

@@ -480,7 +480,6 @@ SfxNumRanges& SfxNumRanges::operator -=
     NUMTYPE nThisSize = Count_Impl(_pRanges);
     NUMTYPE nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
     NUMTYPE *pTarget = new NUMTYPE[ nTargetSize ];
-    memset( pTarget, sizeof(NUMTYPE)*nTargetSize, 0 );
     memcpy( pTarget, _pRanges, sizeof(NUMTYPE)*nThisSize );
 
     NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;
@@ -690,7 +689,6 @@ SfxNumRanges& SfxNumRanges::operator /=
     NUMTYPE nThisSize = Count_Impl(_pRanges);
     NUMTYPE nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
     NUMTYPE *pTarget = new NUMTYPE[ nTargetSize ];
-    memset( pTarget, sizeof(NUMTYPE)*nTargetSize, 0 );
     memcpy( pTarget, _pRanges, sizeof(NUMTYPE)*nThisSize );
 
     NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;

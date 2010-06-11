@@ -835,24 +835,6 @@ sub id_005
 '        tiFormatLayer ' not in impress
 end sub
 
-'------------------------------------------------------------------------------
-sub id_006
-
-    printLog Chr(13) + "---------    id_006    ----------"
-
-    call tiToolsSpellchecking
-    call tiToolsSpellcheckingAutomatic
-    call tiToolsThesaurus
-   call tiToolsHyphenation
-   call tiToolsAutoCorrect
-   call tChineseTranslation
-   call tiToolsMacro
-   call tiToolsGallery
-   call tiToolsEyedropper
-   call tiToolsOptions ' get just called one time here...
-   Call tToolsOptionsTest ' global one
-end sub
-
 '-------------------------------------------------------------------------------
 sub id_007
 

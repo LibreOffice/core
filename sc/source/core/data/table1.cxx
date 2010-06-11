@@ -678,7 +678,7 @@ BOOL ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 }
 
 void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-                            BOOL bIncludeOld, bool bOnlyDown ) const
+                           BOOL bIncludeOld, bool bOnlyDown ) const
 {
     BOOL bLeft       = FALSE;
     BOOL bRight  = FALSE;

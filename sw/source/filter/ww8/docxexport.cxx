@@ -342,9 +342,7 @@ void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const St
 
 void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "TODO DocxExport::WriteFormData()\n" );
-#endif
+    OSL_TRACE( "TODO DocxExport::WriteFormData()\n" );
 }
 
 void DocxExport::DoComboBox(const rtl::OUString& rName,
@@ -404,9 +402,7 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
 
 void DocxExport::DoFormText(const SwInputField* /*pFld*/)
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "TODO DocxExport::ForFormText()\n" );
-#endif
+    OSL_TRACE( "TODO DocxExport::ForFormText()\n" );
 }
 
 void DocxExport::ExportDocument_Impl()
@@ -430,9 +426,7 @@ void DocxExport::ExportDocument_Impl()
 
 void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "TODO DocxExport::OutputPageSectionBreaks( const SwTxtNode& )\n" );
-#endif
+    OSL_TRACE( "TODO DocxExport::OutputPageSectionBreaks( const SwTxtNode& )\n" );
 }
 
 
@@ -480,23 +474,17 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 
 void DocxExport::OutputTableNode( const SwTableNode& )
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "TODO DocxExport::OutputTableNode( const SwTableNode& )\n" );
-#endif
+    OSL_TRACE( "TODO DocxExport::OutputTableNode( const SwTableNode& )\n" );
 }
 
 void DocxExport::OutputGrfNode( const SwGrfNode& )
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "TODO DocxExport::OutputGrfNode( const SwGrfNode& )\n" );
-#endif
+    OSL_TRACE( "TODO DocxExport::OutputGrfNode( const SwGrfNode& )\n" );
 }
 
 void DocxExport::OutputOLENode( const SwOLENode& )
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "TODO DocxExport::OutputOLENode( const SwOLENode& )\n" );
-#endif
+    OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )\n" );
 }
 
 ULONG DocxExport::ReplaceCr( BYTE )

@@ -84,7 +84,8 @@ public:
     /** Creates a title text object and attaches it at the passed interface. */
     void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
-                            const ::rtl::OUString& rAutoTitle, ObjectType eObjType );
+                            const ::rtl::OUString& rAutoTitle, ObjectType eObjType,
+                            sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
 };
 
 // ============================================================================

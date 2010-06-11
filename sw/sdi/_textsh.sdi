@@ -1485,6 +1485,24 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_TRANSLITERATE_SENTENCE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_TITLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_TOGGLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     SID_TRANSLITERATE_UPPER
     [
         ExecMethod = ExecTransliteration;
@@ -1585,6 +1603,12 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
     ]
 
+    SID_THES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
 
 }  //ende interface text
 

@@ -844,13 +844,35 @@ long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
     return nExtraListIndent > 0 ? nExtraListIndent : 0;
 }
 
-void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
+// --> OD 2010-05-06 #i103711#
+// --> OD 2010-05-11 #i105414#
+void SyncIndentWithList( SvxLRSpaceItem &rLR,
+                         const SwNumFmt &rFmt,
+                         const bool bFirstLineOfstSet,
+                         const bool bLeftIndentSet )
 {
-    long nWantedFirstLinePos;
-    long nExtraListIndent = lcl_GetTrueMargin(rLR, rFmt, nWantedFirstLinePos);
-    rLR.SetTxtLeft(nWantedFirstLinePos - nExtraListIndent);
-    rLR.SetTxtFirstLineOfst(0);
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        long nWantedFirstLinePos;
+        long nExtraListIndent = lcl_GetTrueMargin(rLR, rFmt, nWantedFirstLinePos);
+        rLR.SetTxtLeft(nWantedFirstLinePos - nExtraListIndent);
+        rLR.SetTxtFirstLineOfst(0);
+    }
+    else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        if ( !bFirstLineOfstSet && bLeftIndentSet &&
+             rFmt.GetFirstLineIndent() != 0 )
+        {
+            rLR.SetTxtFirstLineOfst( rFmt.GetFirstLineIndent() );
+        }
+        else if ( bFirstLineOfstSet && !bLeftIndentSet &&
+                  rFmt.GetIndentAt() != 0 )
+        {
+            rLR.SetTxtLeft( rFmt.GetIndentAt() );
+        }
+    }
 }
+// <--
 
 const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     const SwTxtNode &rTxtNode)
@@ -907,16 +929,24 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
                             *pTxtNode);
                         if (!pNum)
-                            pNum = GetNumFmtFromTxtNode(*pTxtNode);
-
-                        // --> OD 2008-06-03 #i86652#
-//                        if (pNum)
-                        if ( pNum &&
-                             pNum->GetPositionAndSpaceMode() ==
-                               SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-                        // <--
                         {
-                            SyncIndentWithList(aNewLR, *pNum);
+                            pNum = GetNumFmtFromTxtNode(*pTxtNode);
+                        }
+
+                        if ( pNum )
+                        {
+                            // --> OD 2010-05-06 #i103711#
+                            const bool bFirstLineIndentSet =
+                                ( rReader.maTxtNodesHavingFirstLineOfstSet.end() !=
+                                    rReader.maTxtNodesHavingFirstLineOfstSet.find( pNode ) );
+                            // --> OD 2010-05-11 #i105414#
+                            const bool bLeftIndentSet =
+                                (  rReader.maTxtNodesHavingLeftIndentSet.end() !=
+                                    rReader.maTxtNodesHavingLeftIndentSet.find( pNode ) );
+                            SyncIndentWithList( aNewLR, *pNum,
+                                                bFirstLineIndentSet,
+                                                bLeftIndentSet );
+                            // <--
                         }
 
                         if (aNewLR == aOldLR)
@@ -1681,6 +1711,13 @@ void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
     *pPaM->GetPoint() = aTmpPos;
 }
 
+
+bool SwWW8ImplReader::isValid_HdFt_CP(WW8_CP nHeaderCP) const
+{
+    //each CP of Plcfhdd MUST be less than FibRgLw97.ccpHdd
+    return (nHeaderCP < pWwFib->ccpHdr) ? true : false;
+}
+
 bool SwWW8ImplReader::HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt,
     int nSect)
 {
@@ -1700,7 +1737,7 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt,
                 else
                 {
                     pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), start, nLen);
-                    bOk = ( 2 <= nLen );
+                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(start);
                 }
 
                 if (bOk)
@@ -1752,7 +1789,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                 else
                 {
                     pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), start, nLen);
-                    bOk = ( 2 <= nLen );
+                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(start);
                 }
 
                 bool bUseLeft
@@ -2589,6 +2626,16 @@ bool SwWW8ImplReader::HandlePageBreakChar()
     //itself ignores them in this case.
     if (!nInTable)
     {
+        //xushanchuan add for issue106569
+        BOOL IsTemp=TRUE;
+        SwTxtNode* pTemp = pPaM->GetNode()->GetTxtNode();
+        if ( pTemp && !( pTemp->GetTxt().Len() ) && ( bFirstPara || bFirstParaOfPage ) )
+        {
+            IsTemp = FALSE;
+            AppendTxtNode(*pPaM->GetPoint());
+            pTemp->SetAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
+        }
+        //xushanchuan end
         bPgSecBreak = true;
         pCtrlStck->KillUnlockedAttrs(*pPaM->GetPoint());
         /*
@@ -2597,7 +2644,9 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         paragraph end, but nevertheless, numbering (and perhaps other
         similiar constructs) do not exist on the para.
         */
-        if (!bWasParaEnd)
+        //xushanchuan add for issue106569
+        if (!bWasParaEnd && IsTemp)
+        //xushanchuan end
         {
             bParaEndAdded = true;
             if (0 >= pPaM->GetPoint()->nContent.GetIndex())
@@ -2633,6 +2682,10 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
 
     sal_Char cInsert = '\x0';
     bool bRet = false;
+    //xushanchuan add for issue106569
+    if ( 0xc != nWCharVal )
+        bFirstParaOfPage = false;
+    //xushanchuan end
     switch (nWCharVal)
     {
         case 0:
@@ -3149,6 +3202,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                 // <--
                 rDoc.InsertPoolItem(*pPaM,
                     SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+                bFirstParaOfPage = true;//xushanchuan add for issue106569
                 bPgSecBreak = false;
             }
         }
@@ -3186,6 +3240,12 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     maGrfNameGenerator(bNewDoc,String('G')),
     maParaStyleMapper(rD),
     maCharStyleMapper(rD),
+    // --> OD 2010-05-06 #i103711#
+    maTxtNodesHavingFirstLineOfstSet(),
+    // <--
+    // --> OD 2010-05-11 #i105414#
+    maTxtNodesHavingLeftIndentSet(),
+    // <--
     pMSDffManager(0),
     mpAtnNames(0),
     pAuthorInfos(0),
@@ -3240,6 +3300,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     bWasParaEnd = false;
     bDropCap = false;
     bFirstPara = true;
+      bFirstParaOfPage = false;//xushanchuan add for issue106569
     bParaAutoBefore = false;
     bParaAutoAfter = false;
     nProgress = 0;

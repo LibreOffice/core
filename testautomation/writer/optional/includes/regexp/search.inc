@@ -1190,7 +1190,7 @@ function wSelectAttributeName(aNumber as integer, AsianSupport as boolean, SetSt
 
   Case 31
    Select Case iSprache
-    Case 49: aSelectIt = "Silbentrennung"
+    Case 49: aSelectIt = "Hyphenation"
     Case else: Warnlog "Language not supported. No test"
                exit function
    end select
@@ -1469,7 +1469,7 @@ sub wCheckAttribute(aNumber as integer)
   Case 28    '"Schriftstellung asiatische Schrift"
   Case 29    '"Schusterjungen"
   Case 30    '"Seitenvorlage"
-  Case 31    '"Silbentrennung"
+  Case 31    '"Hyphenation"
   Case 32    '"Skalierung"
   Case 33    '"Sprache"
   Case 34    '"Sprache asiatische Schrift"

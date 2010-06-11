@@ -40,49 +40,55 @@
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurus
 
- Dim DasWort$
- Dim ZaehlerBedeutung
+    Dim sWord as string
+    Dim sChangedWord as string
+    Dim sReplaceWord as string
+    Dim sAlternativeText as string
+    Dim sExt as string
+    Dim ZaehlerBedeutung
 
-'/// for normal text, the thesaurus is enabled, if the format->character->language of the word has a thesaurus///'
-'///+ unfortunately in textboxes this doesn't work, you can give the word a langauge, but this is been ignored by///'
-'///+ our thesaurus :-(((///'
-'/// so especially for asian languages you have to set a default language in the options, to be able to use///'
-'///+ the thesaurus there - fallback to englisch, because there is no ? thesaurus for cjk languages ??///'
+    'for normal text, the thesaurus is enabled,
+    'if the format->character->language of the word has a thesaurus
+    'unfortunately in textboxes this doesn't work, you can give the word a langauge,
+    'but this is been ignored by our thesaurus
+    'so especially for asian languages you have to set a default language in the options,
+    'to be able to use the thesaurus there - fallback to englisch,
+    'because there is no thesaurus for cjk languages
+    
+    'As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No spellchecking in OOo"
+        goto endsub
+    endif
 
-    '/// First we make sure we test a language where Thesa
-	' As long as OOo has no modules for that, disabled
-	if gOOO = True then
-		printlog "No spellchecking in OOo"
-		goto endsub
-	endif
-
+    'First we make sure we test a language where Thesaurus
     select case iSprache
-       case 01 : DasWort$ = "Hello"
-       case 03 : DasWort$ = "Alo"
+       case 01 : sWord = "Hello"
+       case 03 : sWord = "Alo"
        case 07 : printlog "- No Thesaur for Russian available"
                  goto endsub
        case 30 : Printlog "- No Thesaurus available !"
                  goto endsub
-       case 31 : DasWort$ = "Guiten"
-       case 33 : DasWort$ = "Bonjour"
-       case 34 : DasWort$ = "Hola"
+       case 31 : sWord = "Guiten"
+       case 33 : sWord = "Bonjour"
+       case 34 : sWord = "Hola"
        case 35 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 36 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 37 : Printlog "- No Thesaurus available !"
                  goto endsub
-       case 39 : DasWort$ = "Ciao"
+       case 39 : sWord = "Ciao"
        case 42 : Printlog "- No Thesaurus available !"
                  goto endsub
-       case 45 : DasWort$ = "Hej"
-       case 46 : DasWort$ = "Välkommen"
+       case 45 : sWord = "Hej"
+       case 46 : sWord = "Välkommen"
        case 47 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 48 : Printlog "- No Thesaurus in Polish!"
                  goto endsub
-       case 49 : DasWort$ = "Hallo"
-       case 50 : DasWort$ = "Prosojnica"
+       case 49 : sWord = "Hallo"
+       case 50 : sWord = "Prosojnica"
        case 51 : Printlog "- No Thesaurus available !"
                  goto endsub
        case 55 : Printlog "- No Thesaurus in Brazilian!"
@@ -92,83 +98,237 @@ testcase tiToolsThesaurus
 
        case else : if bAsianLan then
                      hSetSpellHypLanguage
-                     DasWort$ = "Hello"
+                     sWord = "Hello"
                   else
                      Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-                     DasWort$ = "Hello"
+                     sWord = "Hello"
+                  endif
+    end select
+    
+    PrintLog "Thesaurus with 1 word: " + sWord
+
+    if( Ucase(gApplication) = "DRAW" ) then
+        sExt = ".odg"
+    elseif( Ucase(gApplication) = "IMPRESS" ) then
+        sExt = ".odp"
+    endif
+
+    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
+    Call sMakeReadOnlyDocumentEditable()
+    Call hTextrahmenErstellen (sWord,20,20,50,30)
+    sleep 1
+
+    printlog "select the word"
+    hTypeKeys "<Home><SHIFT END>"
+    
+    try
+        ExtrasThesaurusDraw
+    catch
+        warnlog "No Thesaurus available."
+        hCloseDocument()
+        goto endsub
+    endcatch
+
+    Kontext "Thesaurus"
+    if Thesaurus.Exists(3) then
+
+        if CurrentWord.GetSelText <> sWord Then
+            WarnLog "marked word should be:" + sWord + " but it is:" + CurrentWord.GetSelText
+        else
+            PrintLog "Marked word is correctly changed"
+        endif
+
+        if Alternatives.GetItemCount = 0 Then
+            warnlog "There are no alternative for this word"
+            sleep 1
+        else
+            printlog "select the first alternative"
+            Alternatives.Select 1
+
+            printlog "check if the selected alternative apprear in the ReplaceWith field."
+
+            sAlternativeText = Alternatives.getSeltext(1,3)
+            'remove the part in the () if there is any
+            if( Instr(sAlternativeText, "(") <> 0 ) then
+                sAlternativeText = left(sAlternativeText, Instr(sAlternativeText, "(") - 2 )
+            endif
+
+            if ( ReplaceWith.getText() <> sAlternativeText ) then
+                warnlog "the text is no transfered to the ReplaceWith field. " +_
+                "ReplaceWith = "  + ReplaceWith.getText() + ", Alternative = " + sAlternativeText
+            else
+                printlog "the text is transfered to the ReplaceWith field."
+            endif
+
+            sReplaceWord = ReplaceWith.getText()
+            sleep 1
+        endif
+        Thesaurus.OK
+
+        if(Ucase(gApplication) = "DRAW") then
+            Kontext "Draw"
+        elseif(Ucase(gApplication) = "IMPRESS") then
+            Kontext "Impress"
+        else ' fallback
+            warnlog "gApplication is wrong"
+            goto endsub
+        endif
+
+        hTypeKeys "<Home><SHIFT END>"
+        EditCopy
+        sChangedWord = getClipboard()
+        printlog "sChangedWord = " + sChangedWord
+        if(sChangedWord <> sReplaceWord) then
+            warnlog "the text was not replaced"
+        else
+            printlog "the text was successfull replaced"
+        endif
+    else
+        warnlog "thesaurus didn't come up."
+    end if
+    
+    Call hCloseDocument
+
+endcase
+'-------------------------------------------------------------------------------
+testcase tiToolsThesaurusWithoutText
+
+    printlog "Thesaurus without any word in the document"
+    Call hNewDocument
+    try
+        ExtrasThesaurusDraw
+    catch
+        printlog "the Thesaurus is correctly not available"
+        call hCloseDocument
+        goto endsub
+    endcatch
+
+    WarnLog "If no word is in the document, Thesaurus shouldn't be available"
+    Kontext "Thesaurus"
+    if Thesaurus.Exists then
+        Thesaurus.Cancel
+    endif
+
+    Call hCloseDocument
+    
+
+endcase
+'-------------------------------------------------------------------------------
+testcase tiToolsThesaurusContextMenu
+
+    Dim sWord as string
+    Dim sExt as string
+    Dim iItemCount as Integer
+
+    'for normal text, the thesaurus is enabled,
+    'if the format->character->language of the word has a thesaurus
+    'unfortunately in textboxes this doesn't work, you can give the word a langauge,
+    'but this is been ignored by our thesaurus
+    'so especially for asian languages you have to set a default language in the options,
+    'to be able to use the thesaurus there - fallback to englisch,
+    'because there is no thesaurus for cjk languages
+
+    'As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No spellchecking in OOo"
+        goto endsub
+    endif
+
+    'First we make sure we test a language where Thesaurus
+    select case iSprache
+       case 01 : sWord = "Hello"
+       case 03 : sWord = "Alo"
+       case 07 : printlog "- No Thesaur for Russian available"
+                 goto endsub
+       case 30 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 31 : sWord = "Guiten"
+       case 33 : sWord = "Bonjour"
+       case 34 : sWord = "Hola"
+       case 35 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 36 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 37 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 39 : sWord = "Ciao"
+       case 42 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 45 : sWord = "Hej"
+       case 46 : sWord = "Välkommen"
+       case 47 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 48 : Printlog "- No Thesaurus in Polish!"
+                 goto endsub
+       case 49 : sWord = "Hallo"
+       case 50 : sWord = "Prosojnica"
+       case 51 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 55 : Printlog "- No Thesaurus in Brazilian!"
+                 goto endsub
+       case 90 : Printlog "- No Thesaurus available !"
+                 goto endsub
+
+       case else : if bAsianLan then
+                     hSetSpellHypLanguage
+                     sWord = "Hello"
+                  else
+                     Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
+                     sWord = "Hello"
                   endif
     end select
 
-   printlog "    Thesaurus without any word in the document"
- Call hNewDocument		'/// New document ///'
-  try
-     ExtrasThesaurusDraw							'/// try thesaurus in empty document ///'
-     Kontext "Thesaurus"
-     Thesaurus.Cancel
-     WarnLog " If no word is in the document, Thesaurus shouldn't be available"
-  catch
-     PrintLog " No Thesaurus available"
-  endcatch
+    PrintLog "Thesaurus with 1 word: " + sWord
 
-  PrintLog "    Thesaurus with 1 word:  " + DasWort$
+    if( Ucase(gApplication) = "DRAW" ) then
+        sExt = ".odg"
+        Kontext "DrawDocument"
+    elseif( Ucase(gApplication) = "IMPRESS" ) then
+        sExt = ".odp"
+        Kontext "ImpressDocument"
+    endif
 
-  Call hTextrahmenErstellen (DasWort$,20,20,50,30)
-  sleep 1
+    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
 
-  hTypeKeys "<Home><SHIFT END>"
-  '------------------------
-ToolsOptions
-Kontext "ExtrasOptionenDlg"
-hToolsOptions("LANGUAGESETTINGS","Languages")
-Westlich.Select 34
-Kontext "ExtrasOptionenDlg"
-ExtrasOptionenDlg.OK
-sleep 1
-  '------------------------
-  try
-     ExtrasThesaurusDraw							'/// Thesaurus with only 1 word ///'
-     Kontext "Thesaurus"
-     if Thesaurus.Exists(3) then
-        if Wort.GetSelText <> DasWort$ Then WarnLog "marked word should be:" + DasWort$ + " but it is:" + Wort.GetSelText
-        if Wort.GetSelText = DasWort$ Then PrintLog "  Marked word is correctly changed"	'/// Control if word has changed ///'
-        ZaehlerBedeutung=Bedeutung.GetItemCount
-        if Bedeutung.GetItemCount = 0 Then
-           PrintLog "  There are no suggestions for this word"
-           sleep 1
-        else
-           if ZaehlerBedeutung=1 Then
-              Bedeutung.Select ZaehlerBedeutung
-           else
-              Bedeutung.Select (ZaehlerBedeutung - 1)
-           end if
-           sleep 1
-           Synonym.Select 1									'/// Select synonym 1///'
-           sleep 1
-            if Ersetzen.GetText=Synonym.GetSelText Then PrintLog "  Meaning transfered into Replace edit field"
-            if Ersetzen.GetText<>Synonym.GetSelText Then WarnLog "  Replacement should have been: '" + Bedeutung.GetSelText + "' but it is '" + Ersetzen.GetText+"'"
-       endif
-       Thesaurus.Cancel
-     else
-        warnlog " thesaurus didn't come up, that's bad :-("
-     end if
-  catch
-     warnLog " No Thesaurus available ??! check if options western has smth selected !! !TL!"
-  endcatch
- Call hCloseDocument									'/// Close document ///'
+    Call hTextrahmenErstellen (sWord,20,20,50,30)
+    sleep 1
 
-endcase 'tiToolsThesaurus
+    printlog "select the word"
+    hTypeKeys "<Home><SHIFT END>"
+    
+    hOpenContextMenu
 
+    hMenuSelectNr(14) ' the synonyms
+    iItemCount = hMenuItemGetCount
+    printlog iItemCount
+    if(iItemCount <= 2 ) then ' none and Thesaurus item
+        warnlog "There should be a synonymus display for the word '" + sWord + "' but it isn't."
+    endif
+
+    hMenuSelectNr(iItemCount) ' the last item
+
+    Kontext "Thesaurus"
+    if Thesaurus.Exists(5) then
+        printlog "Thesaurus dialog appear from the context menu"
+        Thesaurus.Cancel
+    else
+        warnlog "the thesaurus dialog does not appear fro mthe context menu of a selected word"
+    endif
+
+    call hCloseDocument
+
+endcase
 '-------------------------------------------------------------------------------
 testcase tiToolsHyphenation1
 
    printlog "   - Hyphenation without any text"
    Call hNewDocument									'/// New impress document ///'
    sleep 3
-   ExtrasSilbentrennungDraw								'/// Try Silbentrennung with empty document ///'
-   Kontext "Silbentrennung"
-    if Silbentrennung.Exists(1) = True Then
+   ToolsLanguageHyphenationDraw								'/// Try  with empty document ///'
+   Kontext "Hyphenation"
+    if Hyphenation.Exists(1) = True Then
        Warnlog "  - Dialog ist da"
-       Silbentrennung.Cancel
+       Hyphenation.Cancel
     else
        Printlog "  - Hyphenation activated"
     end if
@@ -200,11 +360,11 @@ testcase tiToolsHyphenation1
                   endif
    end select
    hTypeKeys "<Home>"
-   ExtrasSilbentrennungDraw								'/// Try Silbentrennung ///'
-   Kontext "Silbentrennung"
-   if Silbentrennung.Exists =True Then
+   ToolsLanguageHyphenationDraw								'/// Try  ///'
+   Kontext "Hyphenation"
+   if Hyphenation.Exists =True Then
       Warnlog "Dialog exists"
-      Silbentrennung.Cancel
+      Hyphenation.Cancel
    else
       Kontext "Active"
       if Active.Exists then Active.OK
@@ -219,7 +379,8 @@ testcase tiToolsHyphenation2
 
   dim iWaitIndex as integer
   dim sExt as string
-  Dim i : Dim DasWort : Dim DasWort2 : Dim DasWort3 : Dim DasWort4 : Dim DasWort5 : Dim DasWort6 : Dim DasWort7
+  Dim i : Dim DasWort2 : Dim DasWort3 : Dim DasWort4 : Dim DasWort5 : Dim DasWort6 : Dim DasWort7
+  Dim DasWort as string
   dim sDraw as string
   dim sFile as string
   PrintLog "- Tools/Hyphenation2"
@@ -275,7 +436,7 @@ testcase tiToolsHyphenation2
    EditCopy
    sDraw = GetClipboardText()
    EditSelectAll						'/// Select whole text ///'
-   ExtrasSilbentrennungDraw					'/// Run Hyphenation ///'
+   ToolsLanguageHyphenationDraw					'/// Run Hyphenation ///'
    gMouseClick 50,50
    hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		'/// Select part of text and compare it with original text at this place ///'
    sleep 3

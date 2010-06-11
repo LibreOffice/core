@@ -1604,17 +1604,9 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
     }
     // <--
     {
-        // dann eine Kopie vom Cursor erzeugen um alle Pams aus den
-        // anderen Sichten aus dem Loeschbereich zu verschieben
-        // ABER NICHT SICH SELBST !!
-        SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
-        ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
-
-        const bool bSuccess( DeleteRangeImpl( aDelPam ) );
+        bool const bSuccess( DeleteRangeImpl( rPam ) );
         if (!bSuccess)
             return false;
-
-        *rPam.GetPoint() = *aDelPam.GetPoint();
     }
 
     if( bJoinTxt )
@@ -1625,7 +1617,24 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
     return true;
 }
 
-bool SwDoc::DeleteRangeImpl( SwPaM & rPam, const bool )
+bool SwDoc::DeleteRangeImpl(SwPaM & rPam, const bool)
+{
+    // move all cursors out of the deleted range.
+    // but first copy the given PaM, because it could be a cursor that
+    // would be moved!
+    SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
+    ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
+
+    bool const bSuccess( DeleteRangeImplImpl( aDelPam ) );
+    if (bSuccess)
+    {   // now copy position from temp copy to given PaM
+        *rPam.GetPoint() = *aDelPam.GetPoint();
+    }
+
+    return bSuccess;
+}
+
+bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
 {
     SwPosition *pStt = (SwPosition*)rPam.Start(), *pEnd = (SwPosition*)rPam.End();
 

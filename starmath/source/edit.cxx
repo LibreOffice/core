@@ -113,14 +113,13 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     // Even RTL languages don't use RTL for math
     rCmdBox.GetEditWindow()->EnableRTL( FALSE );
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
     aModifyTimer.SetTimeoutHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
-    aModifyTimer.SetTimeout(2000);
-    aModifyTimer.Start();
+    aModifyTimer.SetTimeout(500);
 
     aCursorMoveTimer.SetTimeoutHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
     aCursorMoveTimer.SetTimeout(500);
@@ -216,7 +215,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 {
     const StyleSettings aSettings( GetSettings().GetStyleSettings() );
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
     SetBackground( aSettings.GetWindowColor() );
 
     // edit fields in other Applications use this font instead of
@@ -250,10 +249,9 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
 IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     if (pp->GetConfig()->IsAutoRedraw())
         Flush();
-    aModifyTimer.Start();
     return 0;
 }
 
@@ -882,7 +880,10 @@ void SmEditWindow::Cut()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->Cut();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::Copy()
@@ -896,14 +897,20 @@ void SmEditWindow::Paste()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->Paste();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::Delete()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->DeleteSelected();
+        GetDoc()->SetModified( TRUE );
+    }
 }
 
 void SmEditWindow::InsertText(const String& Text)

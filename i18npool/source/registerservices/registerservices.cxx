@@ -170,6 +170,9 @@ IMPL_CREATEINSTANCE_MSF( TextConversion_zh )
 
 IMPL_CREATEINSTANCE( Transliteration_u2l )
 IMPL_CREATEINSTANCE( Transliteration_l2u )
+IMPL_CREATEINSTANCE( Transliteration_sentencecase )
+IMPL_CREATEINSTANCE( Transliteration_titlecase )
+IMPL_CREATEINSTANCE( Transliteration_togglecase )
 IMPL_CREATEINSTANCE( Transliteration_caseignore )
 IMPL_CREATEINSTANCE( hiraganaToKatakana )
 IMPL_CREATEINSTANCE( katakanaToHiragana )
@@ -420,6 +423,15 @@ static const struct InstancesArray {
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "LOWERCASE_UPPERCASE",
         &Transliteration_l2u_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "SENTENCE_CASE",
+        &Transliteration_sentencecase_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "TITLE_CASE",
+        &Transliteration_titlecase_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "TOGGLE_CASE",
+        &Transliteration_togglecase_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "IGNORE_CASE",
         &Transliteration_caseignore_CreateInstance },

@@ -498,13 +498,37 @@ ifneq (,$(findstring freebsd,$(PLATFORM)))
 
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 
-# Default is freebsd on a intel machine    
+ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))
+PLATFORM=kfreebsd
+ifeq "$(PROCTYPE)" "x86_64"
+PACKAGE_LIB_DIR=kfreebsd_x86_64.plt
+UNOPKG_PLATFORM=kFreeBSD_x86_64
+else
+PACKAGE_LIB_DIR=kfreebsd_x86.plt
+UNOPKG_PLATFORM=kFreeBSD_x86
+endif
+else
 PLATFORM=freebsd
+ifeq "$(PROCTYPE)" "x86_64"
+PACKAGE_LIB_DIR=freebsd_x86_64.plt
+UNOPKG_PLATFORM=FreeBSD_x86_64
+else
 PACKAGE_LIB_DIR=freebsd_x86.plt
 UNOPKG_PLATFORM=FreeBSD_x86
-JAVA_PROC_TYPE=i386
+endif
+endif
 
+ifeq "$(PROCTYPE)" "x86_64"
+JAVA_PROC_TYPE=amd64
+else
+JAVA_PROC_TYPE=i386
+endif
+
+ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))
+OS=LINUX
+else
 OS=FREEBSD
+endif
 PS=/
 ICL=\$$
 CC=gcc
@@ -520,13 +544,8 @@ SHAREDLIB_OUT=$(OUT_LIB)
 
 GCC_VERSION=$(shell $(CC) -dumpversion)
 
-ifeq "$(shell echo $(GCC_VERSION) | cut -c 1)" "3"
 COMID=gcc3
 CPPU_ENV=gcc3
-else
-COMID=GCC
-CPPU_ENV=gcc2
-endif
 
 OSEP=\<
 CSEP=\>

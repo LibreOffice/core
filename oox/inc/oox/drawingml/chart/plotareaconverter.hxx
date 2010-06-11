@@ -83,6 +83,8 @@ public:
 
     /** Converts the OOXML plot area model to a chart2 diagram. */
     void                convertFromModel( View3DModel& rView3DModel );
+    /** Converts the manual plot area position and size, if set. */
+    void                convertPositionFromModel();
 
     /** Returns the automatic chart title if the chart contains only one series. */
     inline const ::rtl::OUString& getAutomaticTitle() const { return maAutoTitle; }
@@ -95,6 +97,7 @@ private:
     ::rtl::OUString     maAutoTitle;
     bool                mb3dChart;
     bool                mbWall3dChart;
+    bool                mbPieChart;
 };
 
 // ============================================================================

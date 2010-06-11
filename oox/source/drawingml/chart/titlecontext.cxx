@@ -41,65 +41,6 @@ namespace chart {
 
 // ============================================================================
 
-LayoutContext::LayoutContext( ContextHandler2Helper& rParent, LayoutModel& rModel ) :
-    ContextBase< LayoutModel >( rParent, rModel )
-{
-}
-
-LayoutContext::~LayoutContext()
-{
-}
-
-ContextHandlerRef LayoutContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
-{
-    switch( getCurrentElement() )
-    {
-        case C_TOKEN( layout ):
-            switch( nElement )
-            {
-                case C_TOKEN( manualLayout ):
-                    return this;
-            }
-        break;
-
-        case C_TOKEN( manualLayout ):
-            switch( nElement )
-            {
-                case C_TOKEN( x ):
-                    mrModel.mfX = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
-                case C_TOKEN( y ):
-                    mrModel.mfY = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
-                case C_TOKEN( w ):
-                    mrModel.mfW = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
-                case C_TOKEN( h ):
-                    mrModel.mfH = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
-                case C_TOKEN( xMode ):
-                    mrModel.mnXMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
-                case C_TOKEN( yMode ):
-                    mrModel.mnYMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
-                case C_TOKEN( wMode ):
-                    mrModel.mnWMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
-                case C_TOKEN( hMode ):
-                    mrModel.mnHMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
-                case C_TOKEN( layoutTarget ):
-                    mrModel.mnTarget = rAttribs.getToken( XML_val, XML_outer );
-                    return 0;
-            }
-        break;
-    }
-    return 0;
-}
-
-// ============================================================================
-
 TextContext::TextContext( ContextHandler2Helper& rParent, TextModel& rModel ) :
     ContextBase< TextModel >( rParent, rModel )
 {
