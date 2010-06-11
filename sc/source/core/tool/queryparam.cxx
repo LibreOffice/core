@@ -171,7 +171,11 @@ ScQueryParamTable::~ScQueryParamTable()
 
 ScQueryParam::ScQueryParam() :
     ScQueryParamBase(),
-    ScQueryParamTable()
+    ScQueryParamTable(),
+    bDestPers(true),
+    nDestTab(0),
+    nDestCol(0),
+    nDestRow(0)
 {
     Clear();
 }

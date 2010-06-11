@@ -804,10 +804,6 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 if (pDrawLayer)
                     DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefMoveTable(nOldPos, nNewPos, false);
-
                 bValid = TRUE;
             }
         }
@@ -925,10 +921,6 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
         pTab[nNewPos]->SetPendingRowHeights( pTab[nOldPos]->IsPendingRowHeights() );
-
-        // Update cells containing external references.
-        if (pExternalRefMgr.get())
-            pExternalRefMgr->updateRefMoveTable(nOldPos, nNewPos, true);
     }
     else
         SetAutoCalc( bOldAutoCalc );
