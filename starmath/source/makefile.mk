@@ -88,6 +88,7 @@ EXCEPTIONSFILES =   \
         $(SLO)$/register.obj  \
         $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
+        $(SLO)$/dialog.obj \
         $(SLO)$/document.obj \
         $(SLO)$/node.obj \
         $(SLO)$/parse.obj \
