@@ -195,7 +195,7 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
     SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
     for ( ; aIt != m_aSymbols.end(); ++aIt)
         aRes.push_back( &aIt->second );
-    DBG_ASSERT( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
+//    DBG_ASSERT( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
     return aRes;
 }
 

@@ -1896,7 +1896,7 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
     const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
             sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
             aSymbolSets.GetText() );
-    DBG_ASSERT( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
+    //DBG_ASSERT( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
     aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
 
     // update display of new symbol
