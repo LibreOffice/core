@@ -45,6 +45,7 @@
 
     use lib ("$ENV{SOLARENV}/bin/modules");
     use SourceConfig;
+    use RepositoryHelper;
 
     my $in_so_env = 0;
     if (defined $ENV{COMMON_ENV_TOOLS}) {
@@ -1141,34 +1142,44 @@ sub get_stand_dir {
         $ENV{mk_tmp} = '';
         die "No environment set\n";
     };
-    my $StandDir;
-    if ( defined $ENV{PWD} ) {
-        $StandDir = $ENV{PWD};
-    } elsif (defined $ENV{_cwd}) {
-        $StandDir = $ENV{_cwd};
-    } else {
-        $StandDir = cwd();
+    my $repository_helper = RepositoryHelper->new();
+    my $StandDir = $repository_helper->get_repository_root();
+    my $initial_dir = $repository_helper->get_initial_directory();
+    if ($StandDir eq $initial_dir) {
+        print_error('Found no project to build');
     };
-    my $previous_dir = '';
-    do {
-        foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
-            if (-e $StandDir . '/prj/'.$_) {
-                $initial_module = File::Basename::basename($StandDir);
-                $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
-                $StandDir = File::Basename::dirname($StandDir);
-                $module_paths{$initial_module} = $StandDir . "/$initial_module";
+    $initial_module = substr($initial_dir, length($StandDir) + 1);
+    if ($initial_module =~ /\\|\//) {
+        $initial_module = File::Basename::dirname($initial_module);
+    };
+    $module_paths{$initial_module} = $StandDir . "/$initial_module";
+#    $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
+#    if ( defined $ENV{PWD} ) {
+#       $StandDir = $ENV{PWD};
+#   } elsif (defined $ENV{_cwd}) {
+#       $StandDir = $ENV{_cwd};
+#   } else {
+#       $StandDir = cwd();
+#    };
+#    my $previous_dir = '';
+#    do {
+#        foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
+#            if (-e $StandDir . '/prj/'.$_) {
+#                $initial_module = File::Basename::basename($StandDir);
+#                $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
+#                $StandDir = File::Basename::dirname($StandDir);
+#                $module_paths{$initial_module} = $StandDir . "/$initial_module";
                 return $StandDir;
-            } elsif ($StandDir eq $previous_dir) {
-                $ENV{mk_tmp} = '';
-                print_error('Found no project to build');
-            };
-        };
-        $previous_dir = $StandDir;
-        $StandDir = File::Basename::dirname(Cwd::realpath($StandDir));
-        print_error('Found no project to build') if (!$StandDir);
-    }
-#    while (chdir '..');
-    while (chdir "$StandDir");
+#            } elsif ($StandDir eq $previous_dir) {
+#                $ENV{mk_tmp} = '';
+#                print_error('Found no project to build');
+#            };
+#        };
+#        $previous_dir = $StandDir;
+#        $StandDir = File::Basename::dirname(Cwd::realpath($StandDir));
+#        print_error('Found no project to build') if (!$StandDir);
+#    }
+#    while (chdir "$StandDir");
 };
 
 #
@@ -1571,7 +1582,7 @@ sub get_options {
     };
     $grab_output = 0 if ($dont_grab_output);
     print_error('Switches --with_branches and --all collision') if ($build_from_with_branches && $build_all_cont);
-    print_error('Switch --skip is for building multiple modules only!!') if (!$build_all_parents);
+    print_error('Switch --skip is for building multiple modules only!!') if ((scalar keys %skip_modules) && (!$build_all_parents));
 #    print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
     print_error('Switches --with_branches and --since collision') if ($build_from_with_branches && $build_since);
     if ($show) {
