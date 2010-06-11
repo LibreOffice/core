@@ -4181,7 +4181,7 @@ void WorkbookStreamObject::dumpChFrExtProps()
     while( bValid && (rStrm.getRemaining() > 4) )
     {
         ChFrExtPropInfo aInfo = dumpChFrExtPropHeader();
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         switch( aInfo.first )
         {
             case 0: // start
@@ -4215,7 +4215,7 @@ void WorkbookStreamObject::dumpChFrExtProps()
 
 WorkbookStreamObject::ChFrExtPropInfo WorkbookStreamObject::dumpChFrExtPropHeader()
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     ChFrExtPropInfo aInfo;
     aInfo.first = dumpDec< sal_uInt8 >( "datatype", "CHFREXTPROPS-TYPE" );
     dumpUnused( 1 );
