@@ -291,7 +291,7 @@ String SvxHyphenWordDialog_Impl::EraseUnusableHyphens_Impl(
     DBG_ASSERT(rxPossHyph.is(), "missing possible hyphens");
     if (rxPossHyph.is())
     {
-        DBG_ASSERT( aActWord == rxPossHyph->getWord(), "word mismatch"  );
+        DBG_ASSERT( aActWord == String( rxPossHyph->getWord() ), "word mismatch"  );
 
         aTxt = String( rxPossHyph->getPossibleHyphens() );
 
