@@ -315,7 +315,6 @@ void SwSpellPopup::fillLangPopupMenu(
             {
                 //make a check mark for the current language
                 pPopupMenu->CheckItem( nItemId, TRUE );
-                bNothingSelected = false;
             }
             rLangTable[ nItemId ] = aEntryTxt;
             ++nItemId;
