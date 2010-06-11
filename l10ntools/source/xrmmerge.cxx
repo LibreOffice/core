@@ -605,7 +605,8 @@ void XRMResExport::EndOfText(
 
                 sOutput.SearchAndReplaceAll( sSearch, "_" );
                 //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
-                pOutputStream->WriteLine( sOutput );
+                if( sAct.Len() > 1 )
+                    pOutputStream->WriteLine( sOutput );
             }
     }
     delete pResData;
