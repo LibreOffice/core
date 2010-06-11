@@ -2323,15 +2323,35 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDialog2*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XDialog*, this ) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
     VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Dialog* pDialog = dynamic_cast< Dialog* >( GetWindow() );
+    if ( pDialog )
+        pDialog->EndDialog( i_result );
+}
+
+void SAL_CALL VCLXDialog::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+        pWindow->SetHelpId( i_id );
+}
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2379,11 +2399,7 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
-
-    Dialog* pDlg = (Dialog*) GetWindow();
-    if ( pDlg )
-        pDlg->EndDialog( 0 );
+    endDialog(0);
 }
 
 void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)

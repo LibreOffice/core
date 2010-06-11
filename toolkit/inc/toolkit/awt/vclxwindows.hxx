@@ -75,7 +75,7 @@
 #include <com/sun/star/awt/XFixedHyperlink.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XCurrencyField.hpp>
 #include <com/sun/star/awt/XPatternField.hpp>
@@ -390,7 +390,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXDialog
 //  ----------------------------------------------------
-class VCLXDialog :  public ::com::sun::star::awt::XDialog,
+class VCLXDialog :  public ::com::sun::star::awt::XDialog2,
                     public VCLXTopWindow
 {
 public:
@@ -405,6 +405,10 @@ public:
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XDialog2
+    virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( ::sal_Int32 Id ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);

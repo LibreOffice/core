@@ -1975,6 +1975,20 @@ void UnoDialogControl::ImplUpdateResourceResolver()
     }
 }
 
+void SAL_CALL UnoDialogControl::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->endDialog( i_result );
+}
+
+void SAL_CALL UnoDialogControl::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->setHelpId( i_id );
+}
+
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
