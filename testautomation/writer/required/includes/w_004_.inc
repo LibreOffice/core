@@ -345,45 +345,52 @@ testcase tInsertHyperlink
     printlog "-  Internet"
     printlog " Insert / Hyperlink"
     InsertHyperlink
-    printlog "  In 'Hyperlink' dialog step through all pages"
-    Call wEinfuegenHyperlink(1)
-    Call DialogTest ( TabHyperlinkInternet )
 
-    Kontext "Hyperlink"
-    printlog "-  Mail & News"
-    Call wEinfuegenHyperlink(2)
-    wait 500
-    Call DialogTest ( TabHyperlinkMailUndNews )
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
 
-    Kontext "Hyperlink"
-    printlog "-  Document"
-    Call wEinfuegenHyperlink(3)
-    wait 500
-    Call DialogTest ( TabHyperlinkDokument )
-    
-    DateiOeffnen.Click
+        printlog "  In 'Hyperlink' dialog step through all pages"
+        Call wEinfuegenHyperlink(1)
+        Call DialogTest ( TabHyperlinkInternet )
 
-    Kontext "OeffnenDlg"
-    if ( OeffnenDlg.exists( 1 ) ) then
+        Kontext "Hyperlink"
+        printlog "-  Mail & News"
+        Call wEinfuegenHyperlink(2)
+        wait 500
+        Call DialogTest ( TabHyperlinkMailUndNews )
+
+        Kontext "Hyperlink"
+        printlog "-  Document"
+        Call wEinfuegenHyperlink(3)
+        wait 500
+        Call DialogTest ( TabHyperlinkDokument )
+
+        DateiOeffnen.Click
+
+        Kontext "OeffnenDlg"
+        if ( OeffnenDlg.exists( 1 ) ) then
+            OeffnenDlg.Cancel
+        else
+            warnlog( "Dialog <OeffnenDlg> is not available" )
+        endif
+
+        Kontext "Hyperlink"
+        printlog "-  New Document"
+        Call wEinfuegenHyperlink(4)
+        wait 500
+        Call DialogTest ( TabHyperlinkNeuesDokument )
+
+        Pfad.Click
+        Sleep 1
+        Kontext "OeffnenDlg"
         OeffnenDlg.Cancel
+
+        printlog " Close 'Hyperlink' dialog"
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close
     else
-        warnlog( "Dialog <OeffnenDlg> is not available" )
+        warnlog( "Unable to open <HyperlinkDialog>" )
     endif
-
-    Kontext "Hyperlink"
-    printlog "-  New Document"
-    Call wEinfuegenHyperlink(4)
-    wait 500
-    Call DialogTest ( TabHyperlinkNeuesDokument )
-    
-    Pfad.Click
-    Sleep 1
-    Kontext "OeffnenDlg"
-    OeffnenDlg.Cancel
-
-    Kontext "TabHyperlinkNeuesDokument"
-    TabHyperlinkNeuesDokument.Cancel
-    printlog " Close 'Hyperlink' dialog"
 
     printlog " Close active document"
     Call hCloseDocument
