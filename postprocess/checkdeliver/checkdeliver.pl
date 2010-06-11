@@ -38,7 +38,6 @@ use File::stat;
 use IO::Handle;
 
 use lib ("$ENV{SOLARENV}/bin/modules");
-use SourceConfig;
 
 #### globals #####
 
@@ -49,7 +48,6 @@ my $platform         = '';
 my $logfile          = '';
 my $milestoneext     = '';
 my $local_env        = 0;
-my $source_config    = SourceConfig -> new($ENV{SOLARSRC});
 my @exceptionmodlist = (
                         "postprocess",
                         "instset.*native",
@@ -143,6 +141,7 @@ sub check
     my $error = 0;
     my %delivered;
     my $module;
+    my $repository;
     STDOUT->autoflush(1);
     # which module are we checking?
     if ( $listname =~ /\/([\w-]+?)\/deliver\.log$/o) {
@@ -151,9 +150,39 @@ sub check
         print_logged( "Error: cannot determine module name from \'$listname\'\n" );
         return 1;
     }
-    # where do we have to look for modules?
-    my $repository = $source_config->get_module_repository($module);
-    my $path = $source_config->get_module_path($module);
+
+    # read deliver log file
+    if ( ! open( DELIVERLOG, "< $listname" ) ) {
+        print_logged( "Error: cannot open file \'$listname\'\n$!" );
+        exit 2;
+    }
+    foreach ( <DELIVERLOG> ) {
+        next if ( /^LINK / );
+        # What's this modules' repository?
+        if ( / (\w+?)\/$module\/prj\/build.lst/ ) {
+            $repository = $1;
+        }
+        # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
+        next if ( (! /\/$module\/$platform\/[bl]i[nb]\//) && (! /\/$module\/$platform\/misc\/build\//));
+        next if (! /[bl]i[nb]/);
+        next if ( /\.html$/ );
+        chomp;
+        if ( /^\w+? (\S+) (\S+)\s*$/o ) {
+            my $origin = $1;
+            $delivered{$origin} = $2;
+        } else {
+            print_logged( "Warning: cannot parse \'$listname\' line\n\'$_\'\n" );
+        }
+    }
+    close( DELIVERLOG );
+
+    if ( ! $repository ) {
+        print_logged( "Error parsing \'$listname\': cannot determine repository\n");
+        $error ++;
+        return $error;
+    }
+
+    my $path = "$srcrootdir/$repository/$module";
     # is module physically accessible?
     # there are valid use cases where we build against a prebuild solver whithout having
     # all modules at disk
@@ -176,30 +205,10 @@ sub check
         return $error;
     }
 
-    # read deliver log file
-    if ( ! open( DELIVERLOG, "< $listname" ) ) {
-        print_logged( "Error: cannot open file \'$listname\'\n$!" );
-        exit 2;
-    }
-    foreach ( <DELIVERLOG> ) {
-        next if ( /^LINK / );
-        # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
-        next if ( (! / $module\/$platform\/[bl]i[nb]\//) && (! / $module\/$platform\/misc\/build\//));
-        next if (! /[bl]i[nb]/);
-        next if ( /\.html$/ );
-        chomp;
-        if ( /^\w+? (\S+) (\S+)\s*$/o ) {
-            $delivered{$1} = $2;
-        } else {
-            print_logged( "Warning: cannot parse \'$listname\' line\n\'$_\'\n" );
-        }
-    }
-    close( DELIVERLOG );
-
     # compare all delivered files with their origin
     # no strict 'diff' allowed here, as deliver may alter files (hedabu, strip, ...)
     foreach my $file ( sort keys %delivered ) {
-        my $ofile = "$srcrootdir/$repository/$file";
+        my $ofile = "$srcrootdir/$file";
         my $sfile = "$solverdir/$delivered{$file}";
         if ( $milestoneext ) {
             # deliver log files do not contain milestone extension on solver
