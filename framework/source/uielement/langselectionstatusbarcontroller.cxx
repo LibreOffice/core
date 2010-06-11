@@ -227,7 +227,6 @@ throw (::com::sun::star::uno::RuntimeException)
             {
                 //make a sign for the current language
                 xPopupMenu->checkItem( nItemId, TRUE );
-                bNothingSelected = false;
             }
             aLangMap[ nItemId ] = rStr;
             ++nItemId;
