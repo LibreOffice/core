@@ -9,6 +9,19 @@
    *-*-cygwin*)
    MODULE_EXTENSION=".dll"
    { $as_echo "$as_me:$LINENO: checking for dlopen in -lcygwin" >&5
+@@ -20632,11 +20636,10 @@
+ 
+     fi
+     case $host_os in
+-       *mingw32*) if test "$THREAD_LIBS" != "-lpthread"; then
++       *mingw32*)
+                WITH_THREADS="1"
+                THREADS_W32="Win32"
+ 	       THREAD_CFLAGS="$THREAD_CFLAGS -DHAVE_WIN32_THREADS"
+-           fi
+        ;;
+        *cygwin*) THREAD_LIBS=""
+        ;;
 --- misc/libxml2-2.7.6/libxml.h	2007-11-23 19:47:23.000000000 +0900
 +++ misc/build/libxml2-2.7.6/libxml.h	2009-07-10 14:37:34.988250000 +0900
 @@ -30,6 +30,10 @@
