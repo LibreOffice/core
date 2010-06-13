@@ -468,22 +468,6 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 |*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
-SwRootFrm* SwFrm::FindRootFrm()
-{
-    // MIB: A layout frame is always registerd at a SwFrmFmt and a content
-    // frame alyways at a SwCntntNode. For any other case we won't find
-    // a root frame.
-    // Casting the GetDep() result instead of the frame itself (that has
-    // been done before) makes it save to use that method in constructors
-    // and destructors.
-    ASSERT( GetDep(), "frame is not registered any longer" );
-    ASSERT( IsLayoutFrm() || IsCntntFrm(), "invalid frame type" );
-    SwDoc *pDoc = IsLayoutFrm()
-                        ? static_cast < SwFrmFmt * >( GetDep() )->GetDoc()
-                        : static_cast < SwCntntNode * >( GetDep() )->GetDoc();
-    return pDoc->GetRootFrm();
-}
-
 SwPageFrm* SwFrm::FindPageFrm()
 {
     SwFrm *pRet = this;

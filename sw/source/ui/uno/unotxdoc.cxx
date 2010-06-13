@@ -2686,12 +2686,18 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     {
         SwDocShell *pRenderDocShell = pDoc->GetDocShell();
         SwWrtShell *pWrtShell = pRenderDocShell->GetWrtShell();
+        if (!pWrtShell->GetLayout())
+            return 0;
+
         if (bFormat)
         {
             // #i38289
-            if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
+            if( pWrtShell && pWrtShell->GetViewOptions()->getBrowseMode() )
             {
-                pRenderDocShell->ToggleBrowserMode(false,NULL);
+                SwViewOption aOpt( *pWrtShell->GetViewOptions() );
+                aOpt.setBrowseMode( false );
+                pWrtShell->ApplyViewOptions( aOpt );
+                pWrtShell->GetView().RecheckBrowseMode();
             }
 
             if (!pWrtShell)
@@ -2739,7 +2745,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // there is no time to sort this out.
             //TODO: check what exatly needs to be done and make just one function for that
             pWrtShell->CalcLayout();
-            pWrtShell->CalcPagesForPrint( pDoc->GetPageCount() );
+            pWrtShell->CalcPagesForPrint( pWrtShell->GetPageCount() );
 
             pWrtShell->SetPDFExportOption( sal_False );
 
@@ -2748,7 +2754,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             pWrtShell->EndAction();
         }
 
-        const sal_Int32 nPageCount = pDoc->GetPageCount();
+        const sal_Int32 nPageCount = pWrtShell->GetPageCount();
 
         //
         // get number of pages to be rendered
@@ -2756,7 +2762,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
         if (bPrintProspect)
         {
-            pDoc->CalculatePagePairsForProspectPrinting( *m_pRenderData, *m_pPrintUIOptions, nPageCount );
+            pDoc->CalculatePagePairsForProspectPrinting( *pWrtShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, nPageCount );
             nRet = m_pRenderData->GetPagePairsForProspectPrinting().size();
         }
         else
@@ -2770,7 +2776,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
             // get set of valid document pages (according to the current settings)
             // and their start frames
-            pDoc->CalculatePagesForPrinting( *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+            pDoc->CalculatePagesForPrinting( *pWrtShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
 
             if (nPostItMode != POSTITS_NONE)
             {
@@ -2826,6 +2832,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
+
+    const TypeId aSwViewTypeId = TYPE(SwView);
+    ViewShell* pVwSh = pView->IsA(aSwViewTypeId) ?
+             ((SwView*)pView)->GetWrtShellPtr() :
+            ((SwPagePreView*)pView)->GetViewShell();
+
     sal_Int32 nMaxRenderer = 0;
     if (!bIsSwSrcView && m_pRenderData)
     {
@@ -2884,7 +2896,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     // we just state what output size we would need
                     // which may cause vcl to set that page size on the printer
                     // (if available and not overriden by the user)
-                    aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+                    aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
                     aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
                                                      TWIP_TO_MM100( aTmpSize.Height() ));
                 }
@@ -2892,7 +2904,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
         else
         {
-            aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+            aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }

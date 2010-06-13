@@ -277,8 +277,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                     FRMTYPE_DRAWOBJ :
                                         rSh.GetFrmType(0,TRUE);
     const BOOL  bFrmSelection = rSh.IsFrmSelected();
-    const BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
-
+    const BOOL bBrowse = rSh.GetViewOptions()->getBrowseMode();
 
     const USHORT nSlot      = rReq.GetSlot();
     const USHORT nDescId    = rSh.GetCurPageDesc();
@@ -915,7 +914,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     const BOOL  bFrmSelection = rSh.IsFrmSelected();
 
-    const BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bBrowse = rSh.GetViewOptions()->getBrowseMode();
     // PageOffset/Begrenzer
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );

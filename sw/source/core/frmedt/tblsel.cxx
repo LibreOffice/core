@@ -194,7 +194,7 @@ void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
     if( rTblCrsr.IsChgd() || !rTblCrsr.GetBoxesCount() )
     {
         SwTableCursor* pTCrsr = (SwTableCursor*)&rTblCrsr;
-        pTCrsr->GetDoc()->GetRootFrm()->MakeTblCrsrs( *pTCrsr );
+        pTCrsr->GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );  //swmod 080218
     }
 
     if( rTblCrsr.GetBoxesCount() )
@@ -289,10 +289,10 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         }
         const SwCntntNode *pCntNd = rCrsr.GetCntntNode();
         const SwLayoutFrm *pStart = pCntNd ?
-            pCntNd->GetFrm( &aPtPos )->GetUpper() : 0;
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aPtPos )->GetUpper() : 0;
         pCntNd = rCrsr.GetCntntNode(FALSE);
         const SwLayoutFrm *pEnd = pCntNd ?
-            pCntNd->GetFrm( &aMkPos )->GetUpper() : 0;
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aMkPos )->GetUpper() : 0;
         if( pStart && pEnd )
             GetTblSel( pStart, pEnd, rBoxes, 0, eSearchType );
     }
@@ -501,10 +501,10 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     // OD 07.11.2003 #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
-    if ( !pCNd || pCNd->GetFrm() == NULL )
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
             return FALSE;
 
-    const SwLayoutFrm *pStart = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
+    const SwLayoutFrm *pStart = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     ASSERT( pStart, "ohne Frame geht gar nichts" );
 
     aIdx = rEndNd;
@@ -513,12 +513,12 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
 
     // OD 07.11.2003 #i22135# - Robust: check, if content was found and if it's visible
-    if ( !pCNd || pCNd->GetFrm() == NULL )
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
     {
         return FALSE;
     }
 
-    const SwLayoutFrm *pEnd = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
+    const SwLayoutFrm *pEnd = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     ASSERT( pEnd, "ohne Frame geht gar nichts" );
 
 
@@ -774,9 +774,9 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     if ( rShell.IsTableMode() )
         pCrsr = rShell.pTblCrsr;
 
-    const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->GetFrm(
+    const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetPtPos() )->GetUpper(),
-                      *pEnd   = pCrsr->GetCntntNode(FALSE)->GetFrm(
+                      *pEnd   = pCrsr->GetCntntNode(FALSE)->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetMkPos() )->GetUpper();
 
     const SwLayoutFrm* pSttCell = pStart;
@@ -1014,9 +1014,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 //              das die 1. Headline mit drin ist.
 //  Point aPt( rShell.GetCharRect().Pos() );
     Point aPt( 0, 0 );
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                        &aPt )->GetUpper(),
-                      *pEnd = rPam.GetCntntNode(FALSE)->GetFrm(
+
+    const SwCntntNode* pCntNd = rPam.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPt )->GetUpper();
+    pCntNd = rPam.GetCntntNode(FALSE);
+    const SwLayoutFrm *pEnd = rPam.GetCntntNode(FALSE)->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
 
     SwSelUnions aUnions;
@@ -1525,9 +1528,11 @@ USHORT CheckMergeSel( const SwPaM& rPam )
 //              richtig. Warum nicht Point 0,0 benutzen? Dann ist garantiert,
 //              das die 1. Headline mit drin ist.
     Point aPt;
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                    &aPt )->GetUpper(),
-                        *pEnd = rPam.GetCntntNode(FALSE)->GetFrm(
+    const SwCntntNode* pCntNd = rPam.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPt )->GetUpper();
+    pCntNd = rPam.GetCntntNode(FALSE);
+    const SwLayoutFrm *pEnd = rPam.GetCntntNode(FALSE)->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                     &aPt )->GetUpper();
     GetTblSel( pStart, pEnd, aBoxes, 0 );
     return CheckMergeSel( aBoxes );
@@ -2082,9 +2087,12 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
         aPtPos = pShCrsr->GetPtPos();
         aMkPos = pShCrsr->GetMkPos();
     }
-    const SwLayoutFrm *pStart = rCrsr.GetCntntNode()->GetFrm(
-                                &aPtPos )->GetUpper(),
-                      *pEnd   = rCrsr.GetCntntNode(FALSE)->GetFrm(
+
+    const SwCntntNode* pCntNd = rCrsr.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPtPos )->GetUpper();
+    pCntNd = rCrsr.GetCntntNode(FALSE);
+    const SwLayoutFrm *pEnd = rCrsr.GetCntntNode(FALSE)->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                 &aMkPos )->GetUpper();
 
     SWRECTFN( pStart->GetUpper() )
@@ -2143,7 +2151,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
 
 void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 {
-    SwRowFrm *pRow = new SwRowFrm( rLine );
+    SwRowFrm *pRow = new SwRowFrm( rLine, pUpper );
     if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->IsFollow() )
     {
         SwTabFrm* pTabFrm = (SwTabFrm*)pUpper;
@@ -2430,8 +2438,7 @@ void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
     const USHORT nRepeat = rTable.GetRowsToRepeat();
     for ( USHORT nIdx = 0; nIdx < nRepeat; ++nIdx )
     {
-        SwRowFrm* pHeadline = new SwRowFrm(
-                                *rTable.GetTabLines()[ nIdx ] );
+        SwRowFrm* pHeadline = new SwRowFrm( *rTable.GetTabLines()[ nIdx ], &rTabFrm );
         pHeadline->SetRepeatedHeadline( true );
         pHeadline->Paste( &rTabFrm, pLower );
         pHeadline->RegistFlys();

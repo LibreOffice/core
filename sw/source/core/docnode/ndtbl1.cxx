@@ -125,8 +125,8 @@ void lcl_GetStartEndCell( const SwCursor& rCrsr,
     SwCntntNode* pPointNd = rCrsr.GetCntntNode();
     SwCntntNode* pMarkNd  = rCrsr.GetCntntNode(FALSE);
 
-    SwFrm* pPointFrm = pPointNd ? pPointNd->GetFrm( &aPtPos ) : 0;
-    SwFrm* pMarkFrm  = pMarkNd  ? pMarkNd->GetFrm( &aMkPos )  : 0;
+    SwFrm* pPointFrm = pPointNd ? pPointNd->getLayoutFrm( pPointNd->GetDoc()->GetCurrentLayout(), &aPtPos ) : 0;
+    SwFrm* pMarkFrm  = pMarkNd  ? pMarkNd->getLayoutFrm( pMarkNd->GetDoc()->GetCurrentLayout(), &aMkPos )  : 0;
 
     prStart = pPointFrm ? pPointFrm->GetUpper() : 0;
     prEnd   = pMarkFrm  ? pMarkFrm->GetUpper() : 0;
@@ -801,7 +801,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
         if( pTableLayout )
         {
-            SwCntntFrm* pFrm = rCursor.GetCntntNode()->GetFrm();
+            SwCntntFrm* pFrm = rCursor.GetCntntNode()->getLayoutFrm( rCursor.GetCntntNode()->GetDoc()->GetCurrentLayout() );
             SwTabFrm* pTabFrm = pFrm->ImplFindTabFrm();
 
             pTableLayout->BordersChanged(
@@ -898,7 +898,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
         SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
         if( pTableLayout )
         {
-            SwCntntFrm* pFrm = rCursor.GetCntntNode()->GetFrm();
+            SwCntntFrm* pFrm = rCursor.GetCntntNode()->getLayoutFrm( rCursor.GetCntntNode()->GetDoc()->GetCurrentLayout() );
             SwTabFrm* pTabFrm = pFrm->ImplFindTabFrm();
 
             pTableLayout->BordersChanged(
@@ -1158,7 +1158,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
         SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
         if( pTableLayout )
         {
-            SwCntntFrm* pFrm = rCursor.GetCntntNode()->GetFrm();
+            SwCntntFrm* pFrm = rCursor.GetCntntNode()->getLayoutFrm( rCursor.GetCntntNode()->GetDoc()->GetCurrentLayout() );
             SwTabFrm* pTabFrm = pFrm->ImplFindTabFrm();
 
             pTableLayout->Resize(

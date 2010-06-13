@@ -1207,9 +1207,8 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     // OD 2004-06-01 #i26791# - no event handling, if existing <ViewShell>
     // is in contruction
     SwDoc* pDoc = GetFmt()->GetDoc();
-    if ( pDoc->GetRootFrm() &&
-         pDoc->GetRootFrm()->GetCurrShell() &&
-         pDoc->GetRootFrm()->GetCurrShell()->IsInConstructor() )
+    if ( pDoc->GetCurrentViewShell() &&
+         pDoc->GetCurrentViewShell()->IsInConstructor() )
     {
         return;
     }
@@ -1225,7 +1224,8 @@ void SwDrawContact::Changed( const SdrObject& rObj,
 
     //Action aufsetzen, aber nicht wenn gerade irgendwo eine Action laeuft.
     ViewShell *pSh = 0, *pOrg;
-    if ( pDoc->GetRootFrm() && pDoc->GetRootFrm()->IsCallbackActionEnabled() )
+    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
+    if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
         pDoc->GetEditShell( &pOrg );
         pSh = pOrg;
@@ -1239,13 +1239,13 @@ void SwDrawContact::Changed( const SdrObject& rObj,
             } while ( pSh && pSh != pOrg );
 
         if ( pSh )
-            pDoc->GetRootFrm()->StartAllAction();
+            pTmpRoot->StartAllAction();
     }
     SdrObjUserCall::Changed( rObj, eType, rOldBoundRect );
     _Changed( rObj, eType, &rOldBoundRect );    //Achtung, ggf. Suizid!
 
     if ( pSh )
-        pDoc->GetRootFrm()->EndAllAction();
+        pTmpRoot->EndAllAction();
 }
 
 // --> OD 2006-01-18 #129959#
@@ -1920,11 +1920,8 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
     SwFrmFmt* pDrawFrmFmt = (SwFrmFmt*)pRegisteredIn;
 
-    SwRootFrm* pRoot = pDrawFrmFmt->getIDocumentLayoutAccess()->GetRootFrm();
-    if ( !pRoot )
-    {
+    if( !pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )
         return;
-    }
 
     // OD 16.05.2003 #108784# - remove 'virtual' drawing objects from writer
     // layout and from drawing page, and remove 'master' drawing object from
@@ -1941,6 +1938,10 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         case FLY_AT_PAGE:
                 {
                 USHORT nPgNum = pAnch->GetPageNum();
+                ViewShell *pShell = pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell();
+                if( !pShell )
+                    break;
+                SwRootFrm* pRoot = pShell->GetLayout();
                 SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
                 for ( USHORT i = 1; i < nPgNum && pPage; ++i )

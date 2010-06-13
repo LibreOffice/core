@@ -165,6 +165,44 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
     return pDlg;
 }
 
+// Disable "multiple layout"
+
+void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
+{
+    GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
+    UpdateFontList();
+    SwView* pTempView = _pView ? _pView : (SwView*)GetView();
+    if( pTempView )
+    {
+        pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
+        if( !GetDoc()->getPrinter( false ) )
+            pTempView->SetPrinter( GetDoc()->getPrinter( false ), SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
+        GetDoc()->CheckDefaultPageFmt();
+        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
+        do {
+            if( pTmpFrm != pTempView->GetViewFrame() )
+            {
+                pTmpFrm->DoClose();
+                pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
+            }
+            else
+                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, FALSE);
+
+        } while ( pTmpFrm );
+        const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
+        pTempView->GetWrtShell().CheckBrowseView( TRUE );
+        pTempView->CheckVisArea();
+        if( bSet )
+        {
+            const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
+            if ( SVX_ZOOM_PERCENT != eType)
+                ((SwView*)GetView())->SetZoom( eType );
+        }
+        pTempView->InvalidateBorder();
+        pTempView->SetNewWindowAllowed(!bSet);
+    }
+}
+// End of disabled "multiple layout"
 
 /// update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
@@ -655,7 +693,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                      pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
                 {
                     SwDoc* pTmp = pDocSh->GetDoc();
-                    if ( pTmp->GetRootFrm() )
+                    if ( pTmp->GetCurrentViewShell() )  //swmod 071108//swmod 071225
                         pTmp->InvalidateAutoCompleteFlag();
                 }
             }
@@ -692,11 +730,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 USHORT nSlotId = 0;
                 if( bSet && !bFound )   // Keine gefunden, daher neue Preview anlegen
-                {
-                    //Keine neue anlegen fuer BrowseView!
-                    if( !GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) )
                         nSlotId = SID_VIEWSHELL1;
-                }
                 else if( bFound && !bSet )
                     nSlotId = bOnly ? SID_VIEWSHELL0 : SID_VIEWSHELL1;
 
@@ -949,6 +983,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     //pSavePrinter darf nicht wieder geloescht werden
                 }
                 pViewFrm->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));
+                pViewFrm->GetBindings().Invalidate( SID_NEWWINDOW );
                 pViewFrm->GetBindings().Invalidate( SID_BROWSER_MODE );
                 pViewFrm->GetBindings().Invalidate( FN_PRINT_LAYOUT );
             }
@@ -1113,60 +1148,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
             case SID_SPELLCHECKER_CHANGED:
                 //! FALSE, TRUE, TRUE is on the save side but a probably overdone
                 SW_MOD()->CheckSpellChanges(FALSE, TRUE, TRUE, FALSE );
-            break;
-
-            case SID_BROWSER_MODE:
-            case FN_PRINT_LAYOUT:   //Fuer Web, genau umgekehrt zum BrowserMode
-            {
-                int eState = STATE_TOGGLE;
-                BOOL bSet = sal_True;
-                const SfxPoolItem* pAttr=NULL;
-                if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pAttr ))
-                {
-                    bSet = ((SfxBoolItem*)pAttr)->GetValue();
-                    if ( nWhich == FN_PRINT_LAYOUT )
-                        bSet = !bSet;
-                    eState = bSet ? STATE_ON : STATE_OFF;
-                }
-
-                if ( STATE_TOGGLE == eState )
-                    bSet = !GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
-
-                ToggleBrowserMode(bSet, 0);
-
-                // OS: numerische Reihenfolge beachten!
-                static USHORT __READONLY_DATA aInva[] =
-                                    {
-                                        SID_NEWWINDOW,/*5620*/
-                                        SID_BROWSER_MODE, /*6313*/
-                                        SID_RULER_BORDERS, SID_RULER_PAGE_POS,
-                                        SID_ATTR_LONG_LRSPACE,
-                                        SID_HTML_MODE,
-                                        SID_RULER_PROTECT,
-                                        SID_AUTOSPELL_CHECK,
-                                        FN_RULER,       /*20211*/
-                                        FN_VIEW_GRAPHIC,    /*20213*/
-                                        FN_VIEW_BOUNDS,     /**/
-                                        FN_VIEW_FIELDS,     /*20215*/
-                                        FN_VLINEAL,             /*20216*/
-                                        FN_VSCROLLBAR,      /*20217*/
-                                        FN_HSCROLLBAR,      /*20218*/
-                                        FN_VIEW_META_CHARS, /**/
-                                        FN_VIEW_MARKS,      /**/
-                                        FN_VIEW_FIELDNAME,  /**/
-                                        FN_VIEW_TABLEGRID,  /*20227*/
-                                        FN_PRINT_LAYOUT, /*20237*/
-                                        FN_QRY_MERGE,   /*20364*/
-                                        0
-                                    };
-                // the view must not exist!
-                SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst( this );
-                if( pTmpFrm )
-                    pTmpFrm->GetBindings().Invalidate( aInva );
-                if ( !pAttr )
-                    rReq.AppendItem( SfxBoolItem( nWhich, bSet ) );
-                rReq.Done();
-            }
             break;
 
         case SID_MAIL_EXPORT_FINISHED:
@@ -1724,77 +1705,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
         SetModified();
     else
         pDoc->ResetModified();
-}
-
-/* -----------------------------14.12.99 16:52--------------------------------
-
- ---------------------------------------------------------------------------*/
-void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
-{
-    GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
-    UpdateFontList();
-    SwView* pTempView = _pView ? _pView : (SwView*)GetView();
-    if( pTempView )
-    {
-        SfxBindings& rBind = pTempView->GetViewFrame()->GetBindings();
-        rBind.Invalidate(FN_SHADOWCURSOR);
-        rBind.Invalidate(SID_BROWSER_MODE);
-        rBind.Invalidate(FN_PRINT_LAYOUT);
-
-        if( !GetDoc()->getPrinter( false ) )
-        {
-            pTempView->SetPrinter( GetDoc()->getPrinter( false ),
-                                   SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
-        }
-
-        // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
-        // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
-        GetDoc()->CheckDefaultPageFmt();
-        // <--
-
-        // Currently there can be only one view (layout) if the document is viewed in Web layout
-        // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
-        do {
-            if( pTmpFrm != pTempView->GetViewFrame() )
-            {
-                pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
-            }
-            else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, FALSE);
-
-        } while ( pTmpFrm );
-
-        const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
-
-        // set view columns before toggling:
-        if ( bSet )
-        {
-            const USHORT nColumns  = rViewOptions.GetViewLayoutColumns();
-            const bool   bBookMode = rViewOptions.IsViewLayoutBookMode();
-            if ( 1 != nColumns || bBookMode )
-            {
-                ((SwView*)GetView())->SetViewLayout( 1, false );
-            }
-        }
-
-        // Triggeres a formatting:
-        pTempView->GetWrtShell().CheckBrowseView( TRUE );
-        pTempView->CheckVisArea();
-
-        if( GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) )
-        {
-            const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
-
-            if ( SVX_ZOOM_PERCENT != eType)
-            {
-                ((SwView*)GetView())->SetZoom( eType );
-            }
-        }
-        pTempView->InvalidateBorder();
-        pTempView->SetNewWindowAllowed(!bSet);
-    }
 }
 
 ULONG SwDocShell::LoadStylesFromFile( const String& rURL,

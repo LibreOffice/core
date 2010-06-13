@@ -108,7 +108,7 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh )
     if ( pLst && pLst->GetMarkCount() == 1 )
     {
         SdrObject *pO = pLst->GetMark( 0 )->GetMarkedSdrObj();
-        if ( pO->ISA(SwVirtFlyDrawObj) )
+        if ( pO && pO->ISA(SwVirtFlyDrawObj) )
             return ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
     }
     return 0;
@@ -601,7 +601,7 @@ bool SwFEShell::IsSelContainsControl() const
         // if we have one marked object, get the SdrObject and check
         // whether it contains a control
         const SdrObject* pSdrObject = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-        bRet = CheckControlLayer( pSdrObject );
+        bRet = pSdrObject && CheckControlLayer( pSdrObject );
     }
     return bRet;
 }
@@ -957,6 +957,8 @@ short SwFEShell::GetLayerId() const
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+            if( !pObj )
+                continue;
             if ( nRet == SHRT_MAX )
                 nRet = pObj->GetLayer();
             else if ( nRet != pObj->GetLayer() )
@@ -994,6 +996,8 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+            if( !pObj )
+                continue;
             // OD 21.08.2003 #i18447# - no change of layer for controls
             // or group objects containing controls.
             const bool bControlObj = ::CheckControlLayer( pObj );
@@ -1658,12 +1662,12 @@ BOOL SwFEShell::ImpEndCreate()
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt.X(), aPt.Y() + rBound.GetHeight()/2 );
-        getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
+        GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState ); //swmod 080317
 
         //JP 22.01.99: Zeichenbindung ist im ReadnOnly-Inhalt nicht erlaubt
         if( !aPos.nNode.GetNode().IsProtect() )
         {
-            pAnch = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aPoint, &aPos );
+            pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, &aPos );
             SwRect aTmp;
             pAnch->GetCharRect( aTmp, aPos );
 
@@ -1711,7 +1715,7 @@ BOOL SwFEShell::ImpEndCreate()
             // die naechste nicht READONLY Position suchen?
             bAtPage = true;
 
-        pAnch = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aPoint, 0, FALSE );
+        pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, 0, FALSE );
 
         if( !bAtPage )
         {

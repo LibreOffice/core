@@ -75,7 +75,7 @@ static USHORT nPgNum = 0;
 BOOL SwView::IsDocumentBorder()
 {
     return GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-           pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
+           pWrtShell->GetViewOptions()->getBrowseMode() ||
            SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType();
 }
 
@@ -199,13 +199,24 @@ aDocSz = rSz;
     BOOL bModified = false;
     SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     SwTwips lTmp = aDocSz.Width() + lGreenOffset;
+    Size aEditSz( GetEditWin().PixelToLogic( GetEditWin().GetOutputSizePixel() ) );
 
+    if( !pWrtShell->GetViewOptions()->getBrowseMode() &&
+        lTmp < aEditSz.Width())
+    {
+        aNewVisArea.Left() = - (aEditSz.Width() - lTmp) / 2;
+        aNewVisArea.Right() = aEditSz.Width() + aNewVisArea.Left();
+        bModified = true;
+    }
+    else
+    {
     if ( aNewVisArea.Right() >= lTmp  )
     {
         lTmp = aNewVisArea.Right() - lTmp;
         aNewVisArea.Right() -= lTmp;
         aNewVisArea.Left() -= lTmp;
-        bModified = TRUE;
+            bModified = true;
+        }
     }
 
     lTmp = aDocSz.Height() + lGreenOffset;
@@ -214,7 +225,7 @@ aDocSz = rSz;
         lTmp = aNewVisArea.Bottom() - lTmp;
         aNewVisArea.Bottom() -= lTmp;
         aNewVisArea.Top() -= lTmp;
-        bModified = TRUE;
+        bModified = true;
     }
 
     if ( bModified )
@@ -249,7 +260,8 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
         aLR.Bottom() += lMin - aLR.Top();
         aLR.Top() = lMin;
     }
-    if( aLR.Left() < lMin )
+    if( pWrtShell->GetViewOptions()->getBrowseMode() &&
+        aLR.Left() < lMin )
     {
         aLR.Right() += lMin - aLR.Left();
         aLR.Left() = lMin;
@@ -354,7 +366,7 @@ void SwView::SetVisArea( const Point &rPt, BOOL bUpdateScrollbar )
 
 void SwView::CheckVisArea()
 {
-    pHScrollbar->SetAuto( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+    pHScrollbar->SetAuto( pWrtShell->GetViewOptions()->getBrowseMode() &&
                               !GetViewFrame()->GetFrame().IsInPlace() );
     if ( IsDocumentBorder() )
     {
@@ -713,7 +725,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
     if ( pScrollbar->GetType() == SCROLL_DRAG )
         pWrtShell->EnableSmooth( FALSE );
 
-    if(!pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+    if(!pWrtShell->GetViewOptions()->getBrowseMode() &&
         pScrollbar->GetType() == SCROLL_DRAG)
     {
         //Hier wieder auskommentieren wenn das mitscrollen nicht gewuenscht ist.
@@ -824,14 +836,31 @@ void SwView::CalcVisArea( const Size &rOutPixel )
     //Die Verschiebungen nach rechts und/oder unten koennen jetzt falsch
     //sein (z.B. Zoom aendern, Viewgroesse aendern.
     const long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-    if ( aRect.Left() )
+
+    if( !pWrtShell->GetViewOptions()->getBrowseMode() &&
+        aDocSz.Width() < aRect.GetWidth())
+    {
+        //#i1761# if the document is smaller than the Window then put it to the center of the window
+        long lDelta = (aDocSz.Width() + lBorder - aRect.GetWidth())/2;
+        aRect.Right() = aRect.GetWidth() + lDelta;
+        aRect.Left() = lDelta;
+    }
+    else
     {
         const long lWidth = GetWrtShell().GetDocSize().Width() + lBorder;
+        if ( aRect.Left() >  0 )
+        {
         if ( aRect.Right() > lWidth )
         {
             long lDelta    = aRect.Right() - lWidth;
             aRect.Left()  -= lDelta;
             aRect.Right() -= lDelta;
+        }
+    }
+        else if( aRect.Left() < 0 )
+        {
+            aRect.Right() = aRect.GetWidth();
+            aRect.Left() = 0;
         }
     }
     if ( aRect.Top() )
@@ -881,7 +910,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
     }
     //#i32913# in browse mode the visibility of the horizontal scrollbar
     // depends on the content (fixed width tables may require a scrollbar)
-    if ( pHScrollbar->IsVisible(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)) )
+    if ( pHScrollbar->IsVisible(pWrtShell->GetViewOptions()->getBrowseMode()) )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
@@ -1121,7 +1150,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     bInOuterResizePixel = TRUE;
 
 // feststellen, ob Scrollbars angezeigt werden duerfen
-    BOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    BOOL bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
     BOOL bShowH = FALSE,
          bShowV = FALSE,
          bAuto  = FALSE,
@@ -1214,7 +1243,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             pDocSh->SetVisArea(
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
-             !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+             !pWrtShell->GetViewOptions()->getBrowseMode() )
             _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType(), 100, TRUE );
         pWrtShell->EndAction();
 
@@ -1274,7 +1303,7 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 Size SwView::GetOptimalSizePixel() const
 {
     Size aPgSize;
-    if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if ( pWrtShell->GetViewOptions()->getBrowseMode() )
         aPgSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
     else
     {

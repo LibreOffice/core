@@ -176,7 +176,7 @@ BOOL SwDDETable::NoDDETable()
     pNewTbl->GetTabLines().Insert( &GetTabLines(),0 );                      // move die Lines
     GetTabLines().Remove( 0, GetTabLines().Count() );
 
-    if( pDoc->GetRootFrm() )
+    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
 
     pTblNd->SetNewTable( pNewTbl );       // setze die Tabelle

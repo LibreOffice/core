@@ -340,13 +340,13 @@ void ViewShell::CalcPagesForPrint( USHORT nMax )
 {
     SET_CURR_SHELL( this );
 
-    SwRootFrm* pLayout = GetLayout();
-    // ULONG nStatMax = pLayout->GetPageNum();
+    SwRootFrm* pMyLayout = GetLayout();
+    // ULONG nStatMax = pMyLayout->GetPageNum();
 
-    const SwFrm *pPage = pLayout->Lower();
-    SwLayAction aAction( pLayout, Imp() );
+    const SwFrm *pPage = pMyLayout->Lower();
+    SwLayAction aAction( pMyLayout, Imp() );
 
-    pLayout->StartAllAction();
+    pMyLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
     {
         pPage->Calc();
@@ -364,7 +364,8 @@ void ViewShell::CalcPagesForPrint( USHORT nMax )
         Imp()->SetFirstVisPageInvalid();
 //       SwPaintQueue::Repaint();
     }
-    pLayout->EndAllAction();
+
+    pMyLayout->EndAllAction();
 }
 
 /******************************************************************************/
@@ -402,7 +403,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
         SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
 
         const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
-        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
+        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->getLayoutFrm( GetLayout(), 0, pShellTblCrsr->Start() ) : 0;
         if( pCntntFrm )
         {
             SwRect aCharRect;
@@ -511,7 +512,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
 
         const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
-        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
+        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->getLayoutFrm( GetLayout(), 0, pShellTblCrsr->Start() ) : 0;
         if( pCntntFrm )
         {
             SwRect aCharRect;
@@ -631,7 +632,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     else
     {
         pOutDevDoc = GetDoc();
-        pShell = new ViewShell( *this, 0, pOutDev );
+        pShell = new ViewShell( *this, 0, pOutDev, VSHELLFLAG_SHARELAYOUT );
     }
 
     SdrView *pDrawView = pShell->GetDrawView();
@@ -734,10 +735,10 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
     //eine, dann legen wir uns eine neue Sicht an, oder das Doc hat noch
     //keine, dann erzeugen wir die erste Sicht.
     ViewShell *pSh;
-    if( pDoc->GetRootFrm() && pDoc->GetRootFrm()->GetCurrShell() )
-        pSh = new ViewShell( *pDoc->GetRootFrm()->GetCurrShell(), 0, pOleOut );
-    else
-        pSh = new ViewShell( *pDoc, 0, pOpt, pOleOut );
+    if( pDoc->GetCurrentViewShell() )
+        pSh = new ViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );//swmod 080129
+    else    //swmod 071108//swmod 071225
+        pSh = new ViewShell( *pDoc, 0, pOpt, pOleOut);//swmod 080129
 
     {
         SET_CURR_SHELL( pSh );
@@ -747,11 +748,12 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         SwRect aSwRect( rRect );
         pSh->aVisArea = aSwRect;
 
-        if ( pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+        if ( pSh->GetViewOptions()->getBrowseMode() &&
              pSh->GetNext() == pSh )
         {
             pSh->CheckBrowseView( FALSE );
-            pDoc->GetRootFrm()->Lower()->InvalidateSize();
+            //pDoc->GetCurrentLayout()->Lower()->InvalidateSize();  //swmod 080218//?
+            pSh->GetLayout()->Lower()->InvalidateSize();
         }
 
         // --> FME 2005-02-10 #119474#

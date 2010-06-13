@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <unotxdoc.hxx>
 #include <doc.hxx>
+#include <viewsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -84,7 +85,8 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
 sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
 {
     SwDocShell* pDocShell = getDocShell( xModel );
-    return pDocShell ? pDocShell->GetDoc()->GetPageCount() : 0;
+    ViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->GetCurrentViewShell() : 0;
+    return pViewSh ? pViewSh->GetPageCount() : 0;
 }
 
 } // word

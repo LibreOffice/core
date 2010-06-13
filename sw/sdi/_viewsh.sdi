@@ -98,6 +98,16 @@ interface BaseTextEditView
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
     ]
+    SID_BROWSER_MODE
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
     FN_REDLINE_PROTECT
     [
         ExecMethod = Execute;

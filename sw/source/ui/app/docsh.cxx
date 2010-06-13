@@ -1061,13 +1061,14 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_PRINTPREVIEW:
         {
             BOOL bDisable = IsInPlaceActive();
+            // Disable "multiple layout"
             if ( !bDisable )
             {
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 while (pTmpFrm)     // Preview suchen
                 {
                     if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
-                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
                         bDisable = TRUE;
                         break;
@@ -1075,6 +1076,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                     pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this);
                 }
             }
+            // End of disabled "multiple layout"
             if ( bDisable )
                 rSet.DisableItem( SID_PRINTPREVIEW );
             else

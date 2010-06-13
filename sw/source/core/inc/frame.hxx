@@ -277,6 +277,7 @@ class SwFrm: public SwClient
     const  sal_uInt32 mnFrmId;
     // <--
 
+    SwRootFrm   *mpRoot;
     SwLayoutFrm *pUpper;
     SwFrm       *pNext;
     SwFrm       *pPrev;
@@ -403,6 +404,9 @@ protected:
     void ColLock()      { bColLocked = TRUE; }
     void ColUnlock()    { bColLocked = FALSE; }
 
+    // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
+    void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
+
     SwPageFrm *InsertPage( SwPageFrm *pSibling, BOOL bFtn );
     void PrepareMake();
     void OptPrepareMake();
@@ -425,7 +429,7 @@ protected:
     SwModify        *GetDep()       { return pRegisteredIn; }
     const SwModify  *GetDep() const { return pRegisteredIn; }
 
-    SwFrm( SwModify* );
+    SwFrm( SwModify*, SwFrm* );
 
     void CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse );
 
@@ -614,10 +618,6 @@ public:
     inline BOOL HasFixSize() const { return bFixSize; }
     inline void SetFixSize( BOOL bNew ) { bFixSize = bNew; }
 
-    //Kann 0 liefern, pruefen auch ob die Shell zum richtigen Dokument
-    //gehoert. Impl in frmsh.hxx
-    ViewShell *GetShell() const;
-
     //Prueft alle Seiten ab der Uebergebenen und korrigiert ggf.
     static void CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields = TRUE );
 
@@ -625,7 +625,7 @@ public:
     SwFrm               *GetNext()  { return pNext; }
     SwFrm               *GetPrev()  { return pPrev; }
     SwLayoutFrm         *GetUpper() { return pUpper; }
-    SwRootFrm           *FindRootFrm();
+    SwRootFrm           *getRootFrm(){ return mpRoot; }
     SwPageFrm           *FindPageFrm();
     SwFrm               *FindColFrm();
     SwFtnBossFrm        *FindFtnBossFrm( BOOL bFootnotes = FALSE );
@@ -638,6 +638,7 @@ public:
     const SwFrm         *GetNext()  const { return pNext; }
     const SwFrm         *GetPrev()  const { return pPrev; }
     const SwLayoutFrm   *GetUpper() const { return pUpper; }
+    const SwRootFrm     *getRootFrm()   const { return mpRoot; }
     inline SwTabFrm     *FindTabFrm();
     inline SwFtnFrm     *FindFtnFrm();
     inline SwFlyFrm     *FindFlyFrm();
@@ -648,7 +649,6 @@ public:
     // <--
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
-    inline const SwRootFrm *FindRootFrm() const;
     inline const SwFtnBossFrm *FindFtnBossFrm( BOOL bFtn = FALSE ) const;
     inline const SwFrm     *FindColFrm() const;
     inline const SwFrm     *FindFooterOrHeader() const;
@@ -1076,10 +1076,6 @@ inline Point SwFrm::GetRelPos() const
 inline const SwPageFrm *SwFrm::FindPageFrm() const
 {
     return ((SwFrm*)this)->FindPageFrm();
-}
-inline const SwRootFrm *SwFrm::FindRootFrm() const
-{
-    return ((SwFrm*)this)->FindRootFrm();
 }
 inline const SwFrm *SwFrm::FindColFrm() const
 {

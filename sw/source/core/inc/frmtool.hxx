@@ -37,6 +37,7 @@
 class SwPageFrm;
 class SwFlyFrm;
 class SwCntntFrm;
+class SwRootFrm;
 class SwDoc;
 class SwAttrSet;
 class SdrObject;
@@ -138,7 +139,7 @@ const SwFrm * MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage );
 
 // JP 07.05.98: wird von SwCntntNode::GetFrm und von SwFlyFrm::GetFrm
 //              gerufen
-SwFrm* GetFrmOfModify( SwModify const&, USHORT const nFrmType, const Point* = 0,
+SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const&, USHORT const nFrmType, const Point* = 0,
                         const SwPosition *pPos = 0,
                         const BOOL bCalcFrm = FALSE );
 

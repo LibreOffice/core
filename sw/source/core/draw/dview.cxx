@@ -1074,8 +1074,9 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
-    if ( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->StartAllAction();
+    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
+    if ( pTmpRoot )
+        pTmpRoot->StartAllAction();
     pDoc->StartUndo(UNDO_EMPTY, NULL);
     // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
     // reference objects.
@@ -1096,20 +1097,7 @@ void SwDrawView::DeleteMarked()
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
     }
     pDoc->EndUndo(UNDO_EMPTY, NULL);
-    if( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->EndAllAction();
+    if( pTmpRoot )
+        pTmpRoot->EndAllAction();   //swmod 080218
 }
-
-/********
-JP 02.10.98: sollte als Fix fuer 57153 gelten, hatte aber Nebenwirkungen,
-            wie Bug 57475
-const SdrMarkList& SwDrawView::GetMarkedObjectList() const
-{
-    FlushComeBackTimer();
-    return FmFormView::GetMarkedObjectList();
-}
-*************/
-
-
-
 

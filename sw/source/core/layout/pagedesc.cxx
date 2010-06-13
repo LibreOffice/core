@@ -318,7 +318,7 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
         pMod = 0;
 
     Point aNullPt;
-    return pMod ? ::GetFrmOfModify( *pMod, nFrmType, &aNullPt, 0, FALSE )
+    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt, 0, FALSE )
                 : 0;
 }
 

@@ -213,7 +213,7 @@ BOOL SwGrfNode::ReRead(
 
             if( refLink.Is() )
             {
-                if( GetFrm() )
+                if( getLayoutFrm( GetDoc()->GetCurrentLayout() ) )
                 {
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     Modify( &aMsgHint, &aMsgHint );
@@ -597,7 +597,7 @@ BOOL SwGrfNode::RestorePersistentData()
         IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
         refLink->SetVisible( pIDLA->IsVisibleLinks() );
         pIDLA->GetLinkManager().InsertDDELink( refLink );
-        if( getIDocumentLayoutAccess()->GetRootFrm() )
+        if( getIDocumentLayoutAccess()->GetCurrentLayout() )    //swmod 080218
             refLink->Update();
     }
     return TRUE;

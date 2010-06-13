@@ -33,9 +33,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
@@ -49,9 +47,7 @@
 // --> collapsing borders FME 2005-05-27 #i29550#
 #include <svx/framelink.hxx>
 // <--
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <tgrditem.hxx>
 
@@ -59,9 +55,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
 #include <tools/shl.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <swmodule.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -3108,14 +3102,14 @@ void SwRootFrm::HackPrepareLongTblPaint( int nMode )
         case HACK_TABLEMODE_INIT       : ASSERT( !pLines, "HackPrepare: already prepared" );
                                          pLines = new SwLineRects;
                                          ASSERT( !pGlobalShell, "old GlobalShell lost" );
-                                         pGlobalShell = GetShell();
+                                         pGlobalShell = GetCurrShell();
                                          bTableHack = TRUE;
                                          break;
         case HACK_TABLEMODE_LOCKLINES  : pLines->LockLines( TRUE ); break;
         case HACK_TABLEMODE_PAINTLINES : pLines->PaintLines( GetShell()->GetOut() );
                                          break;
         case HACK_TABLEMODE_UNLOCKLINES: pLines->LockLines( FALSE ); break;
-        case HACK_TABLEMODE_EXIT       : pLines->PaintLines( GetShell()->GetOut() );
+        case HACK_TABLEMODE_EXIT       : pLines->PaintLines( GetCurrShell()->GetOut() );
                                          DELETEZ( pLines );
                                          pGlobalShell = 0;
                                          bTableHack = FALSE;
@@ -3187,7 +3181,7 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
 
 void SwLayoutFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
     Frm_Info aFrmInfo( *this );
@@ -3630,8 +3624,8 @@ void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ 
                     // for painting the graphic/OLE. Thus, the clip region is
                     // also applied for the PDF export.
 //                    if ( !pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER )
-                    ViewShell *pSh = GetShell();
-                    if ( !pOut->GetConnectMetaFile() || !pSh->GetWin() )
+                    ViewShell *pSh = getRootFrm()->GetCurrShell();
+                    if ( !pOut->GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     // <--
                     {
                         pOut->SetClipRegion( aPoly );
@@ -4291,7 +4285,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
     // OD 29.04.2003 #107169# - paint SwAligned-rectangle
     {
         SwRect aPaintRect( aRect );
-        ::SwAlignRect( aPaintRect, _rFrm.GetShell() );
+        ::SwAlignRect( aPaintRect, _rFrm.getRootFrm()->GetCurrShell() );
         // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
         // to the prior left postion with width of one twip.
         if ( (aPaintRect.*_rRectFn->fnGetWidth)() == 0 )
@@ -4331,7 +4325,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
         // OD 29.04.2003 #107169# - paint SwAligned-rectangle
         {
             SwRect aPaintRect( aRect );
-            ::SwAlignRect( aPaintRect, _rFrm.GetShell() );
+            ::SwAlignRect( aPaintRect, _rFrm.getRootFrm()->GetCurrShell() );
             // if <SwAlignRect> reveals rectangle with no width, adjust
             // rectangle to the prior left postion with width of one twip.
             if ( (aPaintRect.*_rRectFn->fnGetWidth)() == 0 )
@@ -4395,7 +4389,7 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
     // OD 29.04.2003 #107169# - paint SwAligned-rectangle
     {
         SwRect aPaintRect( aRect );
-        ::SwAlignRect( aPaintRect, _rFrm.GetShell() );
+        ::SwAlignRect( aPaintRect, _rFrm.getRootFrm()->GetCurrShell() );
         // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
         // to the prior top postion with width of one twip.
         if ( (aPaintRect.*_rRectFn->fnGetHeight)() == 0 )
@@ -4434,7 +4428,7 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
         // OD 29.04.2003 #107169# - paint SwAligned-rectangle
         {
             SwRect aPaintRect( aRect );
-            ::SwAlignRect( aPaintRect, _rFrm.GetShell() );
+            ::SwAlignRect( aPaintRect, _rFrm.getRootFrm()->GetCurrShell() );
             // if <SwAlignRect> reveals rectangle with no width, adjust
             // rectangle to the prior top postion with width of one twip.
             if ( (aPaintRect.*_rRectFn->fnGetHeight)() == 0 )
@@ -5252,7 +5246,7 @@ void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
                                  ViewShell* _pViewShell ) const
 {
     if (  _pViewShell->GetWin() &&
-         !_pViewShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+         !_pViewShell->GetViewOptions()->getBrowseMode() )
     {
         SwRect aPgPrtRect( Prt() );
         aPgPrtRect.Pos() += Frm().Pos();
@@ -5740,7 +5734,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     {
         if ( bBack || bPageFrm || !bLowerMode )
         {
-            const BOOL bBrowse = pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+            const BOOL bBrowse = pSh->GetViewOptions()->getBrowseMode();
 
             SwRect aRect;
             if ( (bPageFrm && bBrowse) ||
@@ -6393,7 +6387,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         return;
 
     ASSERT( GetUpper(), "Retoucheversuch ohne Upper." );
-    ASSERT( GetShell() && pGlobalShell->GetWin(), "Retouche auf dem Drucker?" );
+    ASSERT( getRootFrm()->GetCurrShell() && pGlobalShell->GetWin(), "Retouche auf dem Drucker?" );
 
     SwRect aRetouche( GetUpper()->PaintArea() );
     aRetouche.Top( Frm().Top() + Frm().Height() );
@@ -6405,7 +6399,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         //zum ausstanzen.
         SwRegionRects aRegion( aRetouche );
         aRegion -= rRect;
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
 
         // --> FME 2004-06-24 #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
@@ -6502,7 +6496,7 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                                 BOOL bLowerMode ) const
 {
     const SwFrm *pFrm = this;
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     const SwViewOption *pOpt = pSh->GetViewOptions();
     rpBrush = 0;
     rpCol = NULL;
@@ -6558,7 +6552,7 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         {
             rpBrush = &rBack;
             if ( pFrm->IsPageFrm() &&
-                 pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                 pSh->GetViewOptions()->getBrowseMode() )
                 rOrigRect = pFrm->Frm();
             else
             {
@@ -6623,7 +6617,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
     SwClientIter aIter( *this );
     SwClient *pFirst = aIter.First( TYPE(SwFrm) );
     ViewShell *pSh;
-    if ( pFirst && 0 != ( pSh = ((SwFrm*)pFirst)->GetShell()) )
+    if ( pFirst && 0 != ( pSh = ((SwFrm*)pFirst)->getRootFrm()->GetCurrShell()) )
     {
         ViewShell *pOldGlobal = pGlobalShell;
         pGlobalShell = pSh;

@@ -1294,7 +1294,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
 
     case RES_POOLFRM_FRAME:
         {
-            if ( get(IDocumentSettingAccess::BROWSE_MODE) )
+            if ( get(IDocumentSettingAccess::HTML_MODE) )
             {
                 aSet.Put( SwFmtAnchor( FLY_AS_CHAR ));
                 aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );

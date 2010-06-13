@@ -38,13 +38,10 @@
 #include <tgrditem.hxx>
 #include <paratr.hxx>
 
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <charfmt.hxx>
+#include "rootfrm.hxx"
 #include <pagefrm.hxx>
 #include <viewsh.hxx>   // ViewShell
 #include <viewimp.hxx>  // SwViewImp
@@ -324,7 +321,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     {
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
             return;
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
 
         SWAP_IF_NOT_SWAPPED( this )
         SwRect rOldRect( rRect );
@@ -478,7 +475,7 @@ SwRect SwTxtFrm::Paint()
 
 sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 {
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
         bInitFont = sal_False;
@@ -601,7 +598,7 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
     ResetRepaint();
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, *pSh->GetOut() );

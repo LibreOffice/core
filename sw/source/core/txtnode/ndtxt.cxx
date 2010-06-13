@@ -148,7 +148,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     //Wenn es noch kein Layout gibt oder in einer versteckten Section
     // stehen, brauchen wir uns um das MakeFrms nicht bemuehen.
     const SwSectionNode* pSectNd;
-    if( !GetDoc()->GetRootFrm() ||
+    if( !GetDoc()->GetCurrentViewShell() || //swmod 071108//swmod 071225
         ( 0 != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
@@ -300,9 +300,9 @@ SwTxtNode::~SwTxtNode()
     InitSwParaStatistics( false );
 }
 
-SwCntntFrm *SwTxtNode::MakeFrm()
+SwCntntFrm *SwTxtNode::MakeFrm( SwFrm* pSib )
 {
-    SwCntntFrm *pFrm = new SwTxtFrm(this);
+    SwCntntFrm *pFrm = new SwTxtFrm( this, pSib );
     return pFrm;
 }
 
@@ -320,7 +320,7 @@ xub_StrLen SwTxtNode::Len() const
 void lcl_ChangeFtnRef( SwTxtNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
-    if( pSwpHints && rNode.GetDoc()->GetRootFrm() )
+    if( pSwpHints && rNode.GetDoc()->GetCurrentViewShell() )    //swmod 071108//swmod 071225
     {
         SwTxtAttr* pHt;
         SwCntntFrm* pFrm = NULL;
@@ -353,7 +353,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                 SwCntntFrm* pCntnt = (SwCntntFrm*)aIter.First(TYPE(SwCntntFrm));
                 if( pCntnt )
                 {
-                    ASSERT( pCntnt->FindRootFrm() == pFrm->FindRootFrm(),
+                    ASSERT( pCntnt->getRootFrm() == pFrm->getRootFrm(),
                             "lcl_ChangeFtnRef: Layout double?" );
                     SwFtnFrm *pFtn = pCntnt->FindFtnFrm();
                     if( pFtn && pFtn->GetAttr() == pAttr )
@@ -538,13 +538,13 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         UnlockModify(); // Benachrichtigungen wieder freischalten
 
-        const SwRootFrm * const pRootFrm = pNode->GetDoc()->GetRootFrm();
         // If there is an accessible layout we must call modify even
         // with length zero, because we have to notify about the changed
         // text node.
+        const SwRootFrm *pRootFrm;
         if ( (nTxtLen != nSplitPos) ||
-             ( pRootFrm && pRootFrm->IsAnyShellAccessible() ) )
-
+            ( (pRootFrm = pNode->GetDoc()->GetCurrentLayout()) != 0 &&
+              pRootFrm->IsAnyShellAccessible() ) )  //swmod 080218
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
             if( 1 == nTxtLen - nSplitPos )

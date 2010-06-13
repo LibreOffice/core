@@ -56,7 +56,7 @@ protected:
     virtual void MakeAll();
 
 public:
-    SwRowFrm( const SwTableLine &, bool bInsertContent = true );
+    SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
     ~SwRowFrm();
 
     virtual void Cut();

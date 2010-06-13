@@ -68,7 +68,7 @@ protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint);
 
-    SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
 public:
     // --> OD 2004-06-29 #i28701#
@@ -130,7 +130,7 @@ public:
     // --> OD 2004-06-29 #i28701#
     TYPEINFO();
 
-    SwFlyLayFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
@@ -159,7 +159,7 @@ public:
     // --> OD 2004-06-29 #i28701#
     TYPEINFO();
 
-    SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
@@ -198,7 +198,7 @@ public:
     // --> OD 2004-06-29 #i28701#
     TYPEINFO();
 
-    SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     virtual ~SwFlyInCntFrm();
     virtual void  Format(  const SwBorderAttrs *pAttrs = 0 );

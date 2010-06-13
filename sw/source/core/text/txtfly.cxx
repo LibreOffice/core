@@ -83,6 +83,7 @@
 
 #ifdef DBG_UTIL
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
+#include "doc.hxx"
 #endif
 
 #ifdef VERT_DISTANCE
@@ -962,7 +963,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     if ( bOn && nCount > 0 )
     // <--
     {
-        MSHORT nHellId = pPage->GetShell()->getIDocumentDrawModelAccess()->GetHellId();
+        MSHORT nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
         for( MSHORT i = 0; i < nCount; ++i )
         {
             // --> OD 2006-08-15 #i68520#
@@ -1067,7 +1068,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     if ( bOn && nCount > 0 )
     // <--
     {
-        MSHORT nHellId = pPage->GetShell()->getIDocumentDrawModelAccess()->GetHellId();
+        MSHORT nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
         for( MSHORT i = 0; i < nCount; ++i )
         {
             // --> OD 2006-08-15 #i68520#
@@ -1106,7 +1107,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
                     SwRect aFly( pAnchoredObjTmp->GetObjRect() );
                     // <--
                     // OD 24.01.2003 #106593#
-                    ::SwAlignRect( aFly, pPage->GetShell() );
+                    ::SwAlignRect( aFly, pPage->getRootFrm()->GetCurrShell() );
                     if( aFly.Width() > 0 && aFly.Height() > 0 )
                         aRegion -= aFly;
                 }
@@ -1804,11 +1805,11 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         delete pPolyPolygon;
         // UPPER_LOWER_TEST
 #ifdef DBG_UTIL
-        const SwRootFrm* pTmpRootFrm = pFmt->getIDocumentLayoutAccess()->GetRootFrm();
-        if( pTmpRootFrm->GetCurrShell() )
+        const ViewShell* pTmpViewShell = pFmt->GetDoc()->GetCurrentViewShell();
+        if( pTmpViewShell )
         {
-            sal_Bool bT2 = pTmpRootFrm->GetCurrShell()->GetViewOptions()->IsTest2();
-            sal_Bool bT6 = pTmpRootFrm->GetCurrShell()->GetViewOptions()->IsTest6();
+            sal_Bool bT2 = pTmpViewShell->GetViewOptions()->IsTest2();
+            sal_Bool bT6 = pTmpViewShell->GetViewOptions()->IsTest6();
             if( bT2 || bT6 )
             {
                 if( bT2 )

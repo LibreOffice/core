@@ -51,6 +51,7 @@
 #include <doc.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
+#include <viewsh.hxx>
 #include <docstat.hxx>
 #include <swerror.h>
 #include <unotext.hxx>
@@ -583,7 +584,8 @@ void SwXMLExport::SetBodyAttributes()
             if( pText )
             {
                 SwDoc *pDoc = pText->GetDoc();
-                if( pDoc && pDoc->GetPageCount() > 1 )
+                if( pDoc && pDoc->GetCurrentViewShell() &&
+                    pDoc->GetCurrentViewShell()->GetPageCount() > 1 )
                 {
                     sal_Bool bValue = sal_True;
                     rtl::OUStringBuffer sBuffer;

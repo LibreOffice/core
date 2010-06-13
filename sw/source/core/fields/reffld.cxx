@@ -111,8 +111,8 @@ void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
 BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
                     const SwTxtNode& rBehindNd, USHORT nSttPos )
 {
-    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.GetFrm(0,0,FALSE),
-                   *pFrm = (SwTxtFrm*)rBehindNd.GetFrm(0,0,FALSE);
+    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->GetCurrentLayout(), 0,0,FALSE),
+                   *pFrm = (SwTxtFrm*)rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->GetCurrentLayout(), 0,0,FALSE);
 
     while( pFrm && !pFrm->IsInside( nSttPos ) )
         pFrm = (SwTxtFrm*)pFrm->GetFollow();
@@ -401,7 +401,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
-            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->GetFrm(0,0,FALSE),
+            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0,0,FALSE),
                         *pSave = pFrm;
             while( pFrm && !pFrm->IsInside( nStt ) )
                 pFrm = (SwTxtFrm*)pFrm->GetFollow();
@@ -423,7 +423,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_CHAPTER:
         {
             // ein bischen trickreich: suche irgend einen Frame
-            const SwFrm* pFrm = pTxtNd->GetFrm();
+            const SwFrm* pFrm = pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() );
             if( pFrm )
             {
                 SwChapterFieldType aFldTyp;

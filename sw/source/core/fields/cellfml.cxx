@@ -741,7 +741,7 @@ const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
     SwCntntNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
     ASSERT( pCNd, "Box hat keinen TextNode" );
     Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
-    return pCNd->GetFrm( &aPt, NULL, FALSE );
+    return pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, NULL, FALSE );
 }
 
 long lcl_GetLongBoxNum( String& rStr )

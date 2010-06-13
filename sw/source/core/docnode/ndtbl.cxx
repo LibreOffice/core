@@ -952,7 +952,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
             // JP 28.10.96: vom 1. Node die Positionen des Trenners besorgen,
             //              damit die Boxen entsprechend eingestellt werden
-            SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->GetFrm() );
+            SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->getLayoutFrm( pTxtNd->GetDoc()->GetCurrentLayout() ) );
             if( aFInfo.IsOneLine() )        // nur dann sinnvoll!
             {
                 const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
@@ -2450,9 +2450,9 @@ SwTableNode::~SwTableNode()
     delete pTable;
 }
 
-SwTabFrm *SwTableNode::MakeFrm()
+SwTabFrm *SwTableNode::MakeFrm( SwFrm* pSib )
 {
-    return new SwTabFrm( *pTable );
+    return new SwTabFrm( *pTable, pSib );
 }
 
 //Methode erzeugt fuer den vorhergehenden Node alle Ansichten vom
@@ -2474,7 +2474,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
 
     while( 0 != (pFrm = aNode2Layout.NextFrm()) )
     {
-        pNew = pNode->MakeFrm();
+        pNew = pNode->MakeFrm( pFrm );
         // wird ein Node vorher oder nachher mit Frames versehen
         if ( bBefore )
             // der neue liegt vor mir
@@ -2501,7 +2501,7 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
     while( 0 != (pUpper = aNode2Layout.UpperFrm( pFrm, *this )) )
     {
-        SwTabFrm* pNew = MakeFrm();
+        SwTabFrm* pNew = MakeFrm( pUpper );
         pNew->Paste( pUpper, pFrm );
         // --> OD 2005-12-01 #i27138#
         // notify accessibility paragraphs objects about changed
@@ -2509,7 +2509,7 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         {
-            ViewShell* pViewShell( pNew->GetShell() );
+            ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -2549,7 +2549,7 @@ void SwTableNode::DelFrms()
                 // Relation CONTENT_FLOWS_FROM for current next paragraph will change
                 // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
                 {
-                    ViewShell* pViewShell( pFrm->GetShell() );
+                    ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {
@@ -2604,7 +2604,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->GetFrm( &aPt, 0, FALSE );
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );
@@ -2829,7 +2829,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->GetFrm( &aPt, 0, FALSE );
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );

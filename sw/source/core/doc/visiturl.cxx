@@ -54,7 +54,7 @@ SwURLStateChanged::~SwURLStateChanged()
 
 void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if( rHint.ISA( INetURLHistoryHint ) && pDoc->GetRootFrm() )
+    if( rHint.ISA( INetURLHistoryHint ) && pDoc->GetCurrentViewShell() )    //swmod 071108//swmod 071225
     {
         // diese URL wurde veraendert:
         const INetURLObject* pIURL = ((INetURLHistoryHint&)rHint).GetObject();

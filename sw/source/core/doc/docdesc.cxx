@@ -202,6 +202,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     ASSERT( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
 
     SwPageDesc *pDesc = aPageDescs[i];
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
 
     BOOL bDoesUndo = DoesUndo();
     if (DoesUndo())
@@ -397,9 +398,12 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         }
     }
 
-    if ( (bUseOn || bFollow) && GetRootFrm() )
+    if ( (bUseOn || bFollow) && pTmpRoot)
         //Layot benachrichtigen!
-        GetRootFrm()->CheckPageDescs( (SwPageFrm*)GetRootFrm()->Lower() );
+    {
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));//swmod 080304
+    }
 
     //Jetzt noch die Seiten-Attribute uebernehmen.
     ::lcl_DescSetAttr( rChged.GetMaster(), pDesc->GetMaster() );
@@ -447,28 +451,10 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 |*
 |*************************************************************************/
 
-void lcl_RemoveFrms( SwFrmFmt& rFmt, BOOL& rbFtnsRemoved )
-{
-    SwClientIter aIter( rFmt );
-    SwFrm *pFrm;
-    for( pFrm = (SwFrm*)aIter.First(TYPE(SwFrm)); pFrm;
-            pFrm = (SwFrm*)aIter.Next() )
-        if ( !rbFtnsRemoved && pFrm->IsPageFrm() &&
-                ((SwPageFrm*)pFrm)->IsFtnPage() )
-        {
-            rFmt.getIDocumentLayoutAccess()->GetRootFrm()->RemoveFtns( 0, FALSE, TRUE );
-            rbFtnsRemoved = TRUE;
-        }
-        else
-        {
-            pFrm->Cut();
-            delete pFrm;
-        }
-}
-
 // #i7983#
 void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 {
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if (0 == pDel)
         return;
 
@@ -501,8 +487,11 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
              pLast == pEndNoteInfo->GetPageDescDep() )
         {
             aPageDescs[0]->Add( pLast );
-            if ( GetRootFrm() )
-                GetRootFrm()->CheckFtnPageDescs( !bFtnInf );
+            if ( pTmpRoot )
+            {
+                std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), !bFtnInf));//swmod 080228
+            }
         }
     }
 
@@ -515,24 +504,12 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
             //die Attribute wiederum reichen die Meldung an die Absaetze weiter.
 
             //Layot benachrichtigen!
-            if( GetRootFrm() )  // ist nicht immer vorhanden!! (Orginizer)
-                GetRootFrm()->CheckPageDescs( (SwPageFrm*)GetRootFrm()->Lower() );
+            if( pTmpRoot )  // ist nicht immer vorhanden!! (Orginizer)
+            {
+                std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));//swmod 080228
         }
     }
-
-    if( GetRootFrm() )        // ist nicht immer vorhanden!! (Orginizer)
-    {
-        //Wenn jetzt noch irgendwelche Seiten auf die FrmFmt'e (Master und Left)
-        //Zeigen (z.B. irgendwelche Fussnotenseiten), so muessen die Seiten
-        //vernichtet werden.
-
-        // Wenn wir auf Endnotenseiten stossen, schmeissen wir alle Fussnoten weg,
-        // anders kann die Reihenfolge der Seiten (FollowsPageDescs usw.)
-        // nicht garantiert werden.
-        BOOL bFtnsRemoved = FALSE;
-
-        ::lcl_RemoveFrms( pDel->GetMaster(), bFtnsRemoved );
-        ::lcl_RemoveFrms( pDel->GetLeft(), bFtnsRemoved );
     }
 }
 
@@ -667,7 +644,7 @@ void SwDoc::PrtDataChanged()
     ASSERT( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
             0 != getPrinter( sal_False ), "PrtDataChanged will be called recursive!" )
     // <--
-
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     SwWait *pWait = 0;
     BOOL bEndAction = FALSE;
 
@@ -675,16 +652,16 @@ void SwDoc::PrtDataChanged()
         GetDocShell()->UpdateFontList();
 
     BOOL bDraw = TRUE;
-    if ( GetRootFrm() )
+    if ( pTmpRoot )
     {
-        ViewShell *pSh = GetRootFrm()->GetCurrShell();
-        if( !get(IDocumentSettingAccess::BROWSE_MODE) ||
-            ( pSh && pSh->GetViewOptions()->IsPrtFormat() ) )
+        ViewShell *pSh = GetCurrentViewShell();
+        if( !pSh->GetViewOptions()->getBrowseMode() ||
+            pSh->GetViewOptions()->IsPrtFormat() )
         {
             if ( GetDocShell() )
                 pWait = new SwWait( *GetDocShell(), TRUE );
 
-            GetRootFrm()->StartAllAction();
+            pTmpRoot->StartAllAction();
             bEndAction = TRUE;
 
             bDraw = FALSE;
@@ -695,7 +672,9 @@ void SwDoc::PrtDataChanged()
             }
 
             pFntCache->Flush();
-            GetRootFrm()->InvalidateAllCntnt();
+
+            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));//swmod 080304
 
             if ( pSh )
             {
@@ -704,11 +683,11 @@ void SwDoc::PrtDataChanged()
                     pSh->InitPrt( pPrt );
                     pSh = (ViewShell*)pSh->GetNext();
                 }
-                while ( pSh != GetRootFrm()->GetCurrShell() );
+                while ( pSh != GetCurrentViewShell() );
             }
 
         }
-    }
+    }   //swmod 080218
     if ( bDraw && pDrawModel )
     {
         const sal_Bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
@@ -723,7 +702,7 @@ void SwDoc::PrtDataChanged()
     PrtOLENotify( TRUE );
 
     if ( bEndAction )
-        GetRootFrm()->EndAllAction();
+        pTmpRoot->EndAllAction();   //swmod 080218
     delete pWait;
 }
 
@@ -737,18 +716,18 @@ extern SvPtrarr *pGlobalOLEExcludeList;
 void SwDoc::PrtOLENotify( BOOL bAll )
 {
     SwFEShell *pShell = 0;
-    if ( GetRootFrm() && GetRootFrm()->GetCurrShell() )
+    if ( GetCurrentViewShell() )
     {
-        ViewShell *pSh = GetRootFrm()->GetCurrShell();
+        ViewShell *pSh = GetCurrentViewShell();
         if ( !pSh->ISA(SwFEShell) )
             do
             {   pSh = (ViewShell*)pSh->GetNext();
             } while ( !pSh->ISA(SwFEShell) &&
-                      pSh != GetRootFrm()->GetCurrShell() );
+                      pSh != GetCurrentViewShell() );
 
         if ( pSh->ISA(SwFEShell) )
             pShell = (SwFEShell*)pSh;
-    }
+    }   //swmod 071107//swmod 071225
     if ( !pShell )
     {
         //Das hat ohne Shell und damit ohne Client keinen Sinn, weil nur darueber
@@ -788,7 +767,7 @@ void SwDoc::PrtOLENotify( BOOL bAll )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
                              0, pNodes->Count(), GetDocShell());
-            GetRootFrm()->StartAllAction();
+            GetCurrentLayout()->StartAllAction();   //swmod 080218
 
             for( USHORT i = 0; i < pNodes->Count(); ++i )
             {
@@ -844,7 +823,7 @@ void SwDoc::PrtOLENotify( BOOL bAll )
                 }
             }
             delete pNodes;
-            GetRootFrm()->EndAllAction();
+            GetCurrentLayout()->EndAllAction(); //swmod 080218
             ::EndProgress( GetDocShell() );
         }
     }
@@ -874,7 +853,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
                              0, aOLENodes.Count(), GetDocShell());
-            GetRootFrm()->StartAllAction();
+            GetCurrentLayout()->StartAllAction();   //swmod 080218
             SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
 
             for( USHORT i = 0; i < aOLENodes.Count(); ++i )
@@ -905,7 +884,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                     pOLENd->Modify( &aMsgHint, &aMsgHint );
                 }
             }
-            GetRootFrm()->EndAllAction();
+            GetCurrentLayout()->EndAllAction(); //swmod 080218
             ::EndProgress( GetDocShell() );
         }
     }

@@ -55,6 +55,8 @@
 #include <frmtool.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
+#include "viewopt.hxx"
+#include "viewsh.hxx"
 #include <flyfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
@@ -186,7 +188,7 @@ BOOL SwLayCacheImpl::Read( SvStream& rStream )
 
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
-    if( rDoc.GetRootFrm() ) // the layout itself ..
+    if( rDoc.GetCurrentLayout() ) // the layout itself ..   //swmod 080218
     {
         SwLayCacheIoImpl aIo( rStream, TRUE );
         // We want to save the relative index, so we need the index
@@ -194,7 +196,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
         ULONG nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
         // The first page..
-        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
+        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();    //swmod 080218
 
         aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
         aIo.OpenFlagRec( 0, 0 );
@@ -347,13 +349,16 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 #ifdef DBG_UTIL
 sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
+    if( !pImpl )
+        return sal_True;
+    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();
     sal_Bool bRet = sal_True;
-    if( pImpl && rDoc.GetRootFrm() )
+    if( pRootFrm )
     {
         USHORT nIndex = 0;
         ULONG nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
-        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
+        SwPageFrm* pPage = (SwPageFrm*)pRootFrm->Lower();
         if( pPage )
             pPage = (SwPageFrm*)pPage->GetNext();
         while( pPage )
@@ -598,7 +603,10 @@ ULONG SwLayHelper::CalcPageCount()
             }
             if ( nNdCount < 1000 )
                 nPgCount = 0;// no progress bar for small documents
-            if ( pDoc->get(IDocumentSettingAccess::BROWSE_MODE) )
+            ViewShell *pSh = 0;
+            if( rpLay && rpLay->getRootFrm() )
+                pSh = rpLay->getRootFrm()->GetCurrShell();
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 nMaxParaPerPage *= 6;
         }
     }
@@ -893,7 +901,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                                 {
                                     ASSERT( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table ohne Zeilen?" );
                                     pHeadline =
-                                        new SwRowFrm( *pTab->GetTable()->GetTabLines()[ nRowIdx ] );
+                                        new SwRowFrm( *pTab->GetTable()->GetTabLines()[ nRowIdx ], pTab );
                                     pHeadline->SetRepeatedHeadline( true );
                                     pHeadline->InsertBefore( pFoll, 0 );
                                     pHeadline->RegistFlys();
@@ -925,7 +933,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                         else
                         {
                             SwTxtFrm *pNew = new SwTxtFrm( ((SwTxtFrm*)rpFrm)->
-                                                           GetTxtNode() );
+                                                            GetTxtNode(), rpFrm );
                             pNew->_SetIsFollow( sal_True );
                             pNew->ManipOfst( nOfst );
                             pNew->SetFollow( ((SwTxtFrm*)rpFrm)->GetFollow() );

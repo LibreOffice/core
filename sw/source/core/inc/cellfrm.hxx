@@ -43,7 +43,7 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
 
 public:
-    SwCellFrm( const SwTableBox &, bool bInsertContent = true );
+    SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
     ~SwCellFrm();
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;

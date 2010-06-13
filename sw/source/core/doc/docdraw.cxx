@@ -548,7 +548,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 
     if( RES_FLYFRMFMT == pFmt->Which() )
     {
-        if( pFmt->getIDocumentLayoutAccess()->GetRootFrm() )
+        if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )   //swmod 071107//swmod 071225
         {
             // Schauen, ob es ein SdrObject dafuer gibt
             if( aIter.First( TYPE( SwFlyFrm) ) )
@@ -650,7 +650,8 @@ void SwDoc::InitDrawModel()
         nInvisibleControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-    pDrawModel->InsertPage( pDrawModel->AllocPage( FALSE ) );
+    SdrPage* pMasterPage = pDrawModel->AllocPage( FALSE );
+    pDrawModel->InsertPage( pMasterPage );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create Spellchecker/Hyphenator" );
@@ -675,10 +676,24 @@ void SwDoc::InitDrawModel()
         pDrawModel->SetRefDevice( pRefDev );
 
     pDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
-    if ( pLayout )
+    if ( pCurrentView )
     {
-        pLayout->SetDrawPage( pDrawModel->GetPage( 0 ) );
-        pLayout->GetDrawPage()->SetSize( pLayout->Frm().SSize() );
+        ViewShell* pViewSh = pCurrentView;
+        do
+        {
+            SwRootFrm* pRoot =  pViewSh->GetLayout();
+            if( pRoot && !pRoot->GetDrawPage() )
+            {
+                // Disable "multiple layout" for the moment:
+                // use pMasterPage instead of a new created SdrPage
+                // pDrawModel->AllocPage( FALSE );
+                // pDrawModel->InsertPage( pDrawPage );
+                SdrPage* pDrawPage = pMasterPage;
+                pRoot->SetDrawPage( pDrawPage );
+                pDrawPage->SetSize( pRoot->Frm().SSize() );
+            }
+            pViewSh = (ViewShell*)pViewSh->GetNext();
+        }while( pViewSh != pCurrentView );
     }
 }
 
@@ -844,14 +859,14 @@ SdrModel* SwDoc::_MakeDrawModel()
 {
     ASSERT( !pDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
-    if ( pLayout && pLayout->GetCurrShell() )
+    if ( pCurrentView )
     {
-        ViewShell* pTmp = pLayout->GetCurrShell();
+        ViewShell* pTmp = pCurrentView;
         do
         {
             pTmp->MakeDrawView();
             pTmp = (ViewShell*) pTmp->GetNext();
-        } while ( pTmp != pLayout->GetCurrShell() );
+        } while ( pTmp != pCurrentView );
 
         //Broadcast, damit die FormShell mit der DrawView verbunden werden kann
         if( GetDocShell() )
@@ -859,7 +874,7 @@ SdrModel* SwDoc::_MakeDrawModel()
             SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
             GetDocShell()->Broadcast( aHnt );
         }
-    }
+    }   //swmod 071029//swmod 071225
     return pDrawModel;
 }
 

@@ -424,7 +424,7 @@ void InitCurrShells( SwRootFrm *pRoot )
 
 SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     SwLayoutFrm( pFmt->GetDoc()->MakeFrmFmt(
-        XubString( "Root", RTL_TEXTENCODING_MS_1252 ), pFmt ) ),
+        XubString( "Root", RTL_TEXTENCODING_MS_1252 ), pFmt ), 0 ),
     // --> PAGES01
     maPagesArea(),
     mnViewWidth( -1 ),
@@ -446,6 +446,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nType = FRMC_ROOT;
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = TRUE;
     bCheckSuperfluous = bBrowseWidthValid = FALSE;
+    setRootFrm( this );
 
     InitCurrShells( this );
 
@@ -454,14 +455,17 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-    pLayoutAccess->SetRootFrm( this );      //Fuer das Erzeugen der Flys durch MakeFrms()
+    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     //Fuer das Erzeugen der Flys durch MakeFrms()   //swmod 071108//swmod 071225
     bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
-
     if ( pMd )
     {
-        pDrawPage = pMd->GetPage( 0 );
+        // Disable "multiple layout"
+        pDrawPage = pMd->GetPage(0); //pMd->AllocPage( FALSE );
+        //pMd->InsertPage( pDrawPage );
+        // end of disabling
+
         pDrawPage->SetSize( Frm().SSize() );
     }
 
@@ -553,6 +557,7 @@ SwRootFrm::~SwRootFrm()
         pBlink->FrmDelete( this );
     ((SwFrmFmt*)pRegisteredIn)->GetDoc()->DelFrmFmt( (SwFrmFmt*)pRegisteredIn );
     delete pDestroy;
+    pDestroy = 0;
 
     //Referenzen entfernen.
     for ( USHORT i = 0; i < pCurrShells->Count(); ++i )
@@ -585,5 +590,38 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 }
 
 
+void SwRootFrm::AllCheckPageDescs() const
+{
+    CheckPageDescs( (SwPageFrm*)this->Lower() );
+}
+//swmod 080226
+void SwRootFrm::AllInvalidateAutoCompleteWords() const
+{
+    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    while ( pPage )
+    {
+        pPage->InvalidateAutoCompleteWords();
+        pPage = (SwPageFrm*)pPage->GetNext();
+    }
+}//swmod 080305
+void SwRootFrm::AllAddPaintRect() const
+{
+    GetCurrShell()->AddPaintRect( this->Frm() );
+}//swmod 080305
+void SwRootFrm::AllRemoveFtns()
+{
+    RemoveFtns();
+}
+void SwRootFrm::AllInvalidateSmartTagsOrSpelling(BOOL bSmartTags) const
+{
+    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    while ( pPage )
+    {
+        if ( bSmartTags )
+            pPage->InvalidateSmartTags();
 
+        pPage->InvalidateSpelling();
+        pPage = (SwPageFrm*)pPage->GetNext();
+    }   //swmod 080218
+}
 

@@ -58,11 +58,11 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
 |*  Letzte Aenderung    AMA 30. Oct 98
 |*
 |*************************************************************************/
-SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt ):
-    SwFtnBossFrm( pFmt )
+SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
+    SwFtnBossFrm( pFmt, pSib )
 {
     nType = FRMC_COLUMN;
-    SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt() );
+    SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt(), pSib );
     pColBody->InsertBehind( this, 0 ); // ColumnFrms jetzt mit BodyFrm
     SetMaxFtnHeight( LONG_MAX );
 }
@@ -174,7 +174,7 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
         }
         for ( USHORT i = 0; i < nCount; ++i )
         {
-            SwColumnFrm *pTmpCol = new SwColumnFrm( pNeighbourCol->GetFmt() );
+            SwColumnFrm *pTmpCol = new SwColumnFrm( pNeighbourCol->GetFmt(), pCont );
             pTmpCol->SetMaxFtnHeight( nMax );
             pTmpCol->InsertBefore( pCont, NULL );
             pNeighbourCol = (SwLayoutFrm*)pNeighbourCol->GetNext();
@@ -186,7 +186,7 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
         for ( USHORT i = 0; i < nCount; ++i )
         {
             SwFrmFmt *pFmt = pDoc->MakeFrmFmt( aEmptyStr, pDoc->GetDfltFrmFmt());
-            SwColumnFrm *pTmp = new SwColumnFrm( pFmt );
+            SwColumnFrm *pTmp = new SwColumnFrm( pFmt, pCont );
             pTmp->SetMaxFtnHeight( nMax );
             pTmp->Paste( pCont );
         }
@@ -248,7 +248,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         // SaveCntnt wuerde auch den Inhalt der Fussnotencontainer aufsaugen
         // und im normalen Textfluss unterbringen.
         if( IsPageBodyFrm() )
-            pDoc->GetRootFrm()->RemoveFtns( (SwPageFrm*)GetUpper(), TRUE, FALSE );
+            pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), TRUE, FALSE );    //swmod 080218
         pSave = ::SaveCntnt( this );
 
         //Wenn Spalten existieren, jetzt aber eine Spaltenanzahl von

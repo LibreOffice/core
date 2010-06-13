@@ -373,7 +373,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             const SwTxtNode& rFldTxtNode = pTxtFld->GetTxtNode();
             SwPosition aFldPos(rFldTxtNode);
             SwDoc& rDoc = *(SwDoc*)rFldTxtNode.GetDoc();
-            SwCntntFrm *pFrm = rFldTxtNode.GetFrm();
+            SwCntntFrm *pFrm = rFldTxtNode.getLayoutFrm( rDoc.GetCurrentLayout() );
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
                 pTxtNode = GetBodyTxtNode( rDoc, aFldPos, *pFrm );
@@ -381,7 +381,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             //body the directly available text node will be used
             if(!pTxtNode)
                 pTxtNode = &rFldTxtNode;
-            if( pTxtNode->GetTxt().Len() && pTxtNode->GetFrm() &&
+            if( pTxtNode->GetTxt().Len() && pTxtNode->getLayoutFrm( rDoc.GetCurrentLayout() ) &&
                 pTxtNode->GetNodes().IsDocNodes() )
             {
                 SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode,

@@ -46,6 +46,7 @@
 #include <docsh.hxx>
 
 #include "viewimp.hxx"
+#include "viewopt.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
@@ -89,8 +90,8 @@ using namespace ::com::sun::star;
 |*  Letzte Aenderung    MA 01. Aug. 93
 |*
 |*************************************************************************/
-SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt ):
-    SwLayoutFrm( pFmt )
+SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
+    SwLayoutFrm( pFmt, pSib )
 {
     nType = FRMC_BODY;
 }
@@ -196,8 +197,8 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
 |*  Letzte Aenderung    MA 08. Dec. 97
 |*
 |*************************************************************************/
-SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
-    SwFtnBossFrm( pFmt ),
+SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
+    SwFtnBossFrm( pFmt, pSib ),
     pSortedObjs( 0 ),
     pDesc( pPgDsc ),
     nPhyPageNum( 0 ),
@@ -221,12 +222,12 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidSmartTags = bInvalidAutoCmplWrds = bInvalidWordCount = TRUE;
     bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = FALSE;
 
-    const bool bBrowseMode = pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     if ( bBrowseMode )
     {
         Frm().Height( 0 );
-        ViewShell *pSh = GetShell();
-        long nWidth = pSh ? pSh->VisArea().Width():0;
+        long nWidth = pSh->VisArea().Width();
         if ( !nWidth )
             nWidth = 5000L;     //aendert sich sowieso
         Frm().Width ( nWidth );
@@ -241,7 +242,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     {
         bEmptyPage = FALSE;
         Calc();                             //Damit die PrtArea stimmt.
-        SwBodyFrm *pBodyFrm = new SwBodyFrm( pDoc->GetDfltFrmFmt() );
+        SwBodyFrm *pBodyFrm = new SwBodyFrm( pDoc->GetDfltFrmFmt(), this );
         pBodyFrm->ChgSize( Prt().SSize() );
         pBodyFrm->Paste( this );
         pBodyFrm->Calc();                   //Damit die Spalten korrekt
@@ -291,7 +292,7 @@ SwPageFrm::~SwPageFrm()
         SwDoc *pDoc = GetFmt()->GetDoc();
         if( pDoc && !pDoc->IsInDtor() )
         {
-            ViewShell *pSh = GetShell();
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
             if ( pSh )
             {
                 SwViewImp *pImp = pSh->Imp();
@@ -340,16 +341,16 @@ void SwPageFrm::CheckDirection( BOOL bVert )
             ((SvxFrameDirectionItem&)GetFmt()->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( bVert )
     {
-        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir ||
-            GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
+            bVertical = 0;
+        else
+        {
+            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             bVertical = 0;
         else
             bVertical = 1;
-/*
-        if( pDesc && pDesc->GetName().GetChar(0)=='x')
-            bReverse = 1;
-        else
- */
+        }
             bReverse = 0;
         bInvalidVert = 0;
     }
@@ -465,7 +466,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
                         pFly->AnchorFrm()->RemoveFly( pFly );
                 }
                 else
-                    pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, pPg );
+                    pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, pPg, pPg );
                 pPg->AppendFly( pFly );
                 ::RegistFlys( pPg, pFly );
             }
@@ -532,7 +533,7 @@ void SwPageFrm::PreparePage( BOOL bFtn )
 |*************************************************************************/
 void SwPageFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 {
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( pSh )
         pSh->SetFirstVisPageInvalid();
     BYTE nInvFlags = 0;
@@ -622,7 +623,8 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_FRM_SIZE:
         {
             const SwRect aOldPageFrmRect( Frm() );
-            if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
                 bValidSize = FALSE;
                 // OD 28.10.2002 #97265# - Don't call <SwPageFrm::MakeAll()>
@@ -650,8 +652,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                     static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
             }
             //Window aufraeumen.
-            ViewShell *pSh;
-            if ( 0 != (pSh = GetShell()) && pSh->GetWin() && aOldPageFrmRect.HasArea() )
+            if( pSh && pSh->GetWin() && aOldPageFrmRect.HasArea() )
             {
                 // OD 12.02.2003 #i9719#, #105645# - consider border and shadow of
                 // page frame for determine 'old' rectangle - it's used for invalidating.
@@ -790,7 +791,8 @@ SwPageDesc *SwPageFrm::FindPageDesc()
     SwPageDesc *pRet = 0;
 
     //5.
-    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
     {
         SwCntntFrm *pFrm = GetUpper()->ContainsCntnt();
         while ( !pFrm->IsInDocBody() )
@@ -847,10 +849,13 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
     ViewShell *pSh = pRoot->GetCurrShell();
     if ( pSh )
     {
-        pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );//Einmal fuer das Drawing.
         do
         {
-            pSh->SizeChgNotify();     //Einmal fuer jede Sicht.
+            if( pRoot == pSh->GetLayout() )
+            {
+                pSh->SizeChgNotify();
+                pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
+            }
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pRoot->GetCurrShell() );
     }
@@ -876,7 +881,7 @@ void SwPageFrm::Cut()
     // PAGES01
     //AdjustRootSize( CHG_CUTPAGE, 0 );
 
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( !IsEmptyPage() )
     {
         if ( GetNext() )
@@ -982,9 +987,11 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
     InvalidatePos();
 
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    if ( pSh )
+        pSh->SetFirstVisPageInvalid();
     // PAGES01
-    if ( GetUpper() )
-        static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
+    getRootFrm()->CheckViewLayout( 0, 0 );
 }
 
 /*************************************************************************
@@ -1066,7 +1073,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 {
     ASSERT( pStart, "Keine Startpage." );
 
-    ViewShell *pSh   = pStart->GetShell();
+    ViewShell *pSh   = pStart->getRootFrm()->GetCurrShell();
     SwViewImp *pImp  = pSh ? pSh->Imp() : 0;
 
     if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
@@ -1157,7 +1164,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             {
                 if ( pPage->GetPrev() )
                     pDesc = ((SwPageFrm*)pPage->GetPrev())->GetPageDesc();
-                SwPageFrm *pTmp = new SwPageFrm( pDoc->GetEmptyPageFmt(),pDesc);
+                SwPageFrm *pTmp = new SwPageFrm( pDoc->GetEmptyPageFmt(),pRoot,pDesc);
                 pTmp->Paste( pRoot, pPage );
                 pTmp->PreparePage( FALSE );
                 pPage = pTmp;
@@ -1316,7 +1323,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     if( bWishedOdd != bNextOdd )
     {   pFmt = pDoc->GetEmptyPageFmt();
         SwPageDesc *pTmpDesc = pPrevPage->GetPageDesc();
-        SwPageFrm *pPage = new SwPageFrm( pFmt, pTmpDesc );
+        SwPageFrm *pPage = new SwPageFrm( pFmt, pRoot, pTmpDesc );
         pPage->Paste( pRoot, pSibling );
         pPage->PreparePage( bFtn );
         //Wenn der Sibling keinen Bodytext enthaelt kann ich ihn vernichten
@@ -1336,7 +1343,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     }
     pFmt = bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
     ASSERT( pFmt, "Descriptor without format." );
-    SwPageFrm *pPage = new SwPageFrm( pFmt, pDesc );
+    SwPageFrm *pPage = new SwPageFrm( pFmt, pRoot, pDesc );
     pPage->Paste( pRoot, pSibling );
     pPage->PreparePage( bFtn );
     //Wenn der Sibling keinen Bodytext enthaelt kann ich ihn vernichten
@@ -1359,7 +1366,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
         if ( bCheckPages )
         {
             CheckPageDescs( pSibling, FALSE );
-            ViewShell *pSh = GetShell();
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
             SwViewImp *pImp = pSh ? pSh->Imp() : 0;
             if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
             {
@@ -1376,7 +1383,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 
     //Fuer das Aktualisieren der Seitennummern-Felder gibt nDocPos
     //die Seitenposition an, _ab_ der invalidiert werden soll.
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( !pSh || !pSh->Imp()->IsUpdateExpFlds() )
     {
         SwDocPosUpdate aMsgHnt( pPrevPage->Frm().Top() );
@@ -1388,12 +1395,13 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 // false = right, true = left
 sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 {
-    if (!GetShell() || GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    if( !pSh || pSh->GetViewOptions()->getBrowseMode() )
         return sw::sidebarwindows::SIDEBAR_NONE;
     else
     {
-        const bool bLTR = GetUpper() ? static_cast<const SwRootFrm*>(GetUpper())->IsLeftToRightViewLayout() : true;
-        const bool bBookMode = GetShell()->GetViewOptions()->IsViewLayoutBookMode();
+        const bool bLTR = getRootFrm()->IsLeftToRightViewLayout();
+        const bool bBookMode = pSh->GetViewOptions()->IsViewLayoutBookMode();
         const bool bRightSidebar = bLTR ? (!bBookMode || OnRightPage()) : (bBookMode && !OnRightPage());
 
         return bRightSidebar
@@ -1534,7 +1542,7 @@ void SwRootFrm::RemoveSuperfluous()
         }
     } while ( pPage );
 
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( nDocPos != LONG_MAX &&
          (!pSh || !pSh->Imp()->IsUpdateExpFlds()) )
     {
@@ -1595,7 +1603,7 @@ void SwRootFrm::AssertFlyPages()
             {
                 //Leerseite einfuegen, die Flys werden aber erst von
                 //der naechsten Seite aufgenommen!
-                pPage = new SwPageFrm( pDoc->GetEmptyPageFmt(), pDesc );
+                pPage = new SwPageFrm( pDoc->GetEmptyPageFmt(), this, pDesc );
                 pPage->Paste( this, pSibling );
                 pPage->PreparePage( FALSE );
                 bOdd = bOdd ? FALSE : TRUE;
@@ -1603,7 +1611,7 @@ void SwRootFrm::AssertFlyPages()
             }
             pPage = new
                     SwPageFrm( (bOdd ? pDesc->GetRightFmt() :
-                                       pDesc->GetLeftFmt()), pDesc );
+                                       pDesc->GetLeftFmt()), this, pDesc );
             pPage->Paste( this, pSibling );
             pPage->PreparePage( FALSE );
             bOdd = bOdd ? FALSE : TRUE;
@@ -1754,8 +1762,8 @@ void SwRootFrm::ImplInvalidateBrowseWidth()
 |*************************************************************************/
 void SwRootFrm::ImplCalcBrowseWidth()
 {
-    ASSERT( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE),
-            "CalcBrowseWidth and not in BrowseView" );
+    ASSERT( GetCurrShell() && GetCurrShell()->GetViewOptions()->getBrowseMode(),
+            "CalcBrowseWidth and not in BrowseView" )
 
     //Die (minimale) Breite wird von Rahmen, Tabellen und Zeichenobjekten
     //bestimmt. Die Breite wird nicht anhand ihrer aktuellen Groessen bestimmt,
@@ -1772,7 +1780,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
         return;
 
     bBrowseWidthValid = TRUE;
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     nBrowseWidth = pSh
                     ? MINLAY + 2 * pSh->GetOut()->
                                 PixelToLogic( pSh->GetBrowseBorder() ).Width()
@@ -2021,7 +2029,8 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
                 if ( pFlyFrm->Lower()->IsNoTxtFrm() )
                 {
                     SwCntntFrm* pCntntFrm = static_cast<SwCntntFrm*>(pFlyFrm->Lower());
-                    ViewShell *pSh = pFlyFrm->Lower()->GetShell();
+                    SwRootFrm* pRoot = pFlyFrm->Lower()->getRootFrm();
+                    ViewShell *pSh = pRoot ? pRoot->GetCurrShell() : 0;
                     if ( pSh )
                     {
                         SwOLENode* pNode = pCntntFrm->GetNode()->GetOLENode();
@@ -2076,7 +2085,7 @@ void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
     // Don't forget accessibility:
     if( pFrm->IsAccessibleFrm() )
     {
-        SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+        SwRootFrm *pRootFrm = pFrm->getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
             pRootFrm->GetCurrShell() )
         {
@@ -2175,7 +2184,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
     bool bPageChanged = false;
     const bool bRTL = !IsLeftToRightViewLayout();
-    const SwTwips nSidebarWidth = SwPageFrm::GetSidebarBorderWidth( GetShell() );
+    const SwTwips nSidebarWidth = SwPageFrm::GetSidebarBorderWidth( GetCurrShell() );
 
     while ( pPageFrm )
     {
@@ -2415,7 +2424,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
         ::AdjustSizeChgNotify( this );
         Calc();
 
-        ViewShell* pSh = GetShell();
+        ViewShell* pSh = GetCurrShell();
 
         if ( pSh && pSh->GetDoc()->GetDocShell() )
         {

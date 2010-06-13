@@ -68,7 +68,7 @@ protected:
     virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
-    SwCntntFrm( SwCntntNode * const );
+    SwCntntFrm( SwCntntNode * const, SwFrm* );
 
 public:
     virtual ~SwCntntFrm();

@@ -195,7 +195,7 @@ protected:
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 
-    SwPageFrm( SwFrmFmt*, SwPageDesc* );
+    SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
     ~SwPageFrm();
 
     //public, damit die ViewShell beim Umschalten vom BrowseMode darauf

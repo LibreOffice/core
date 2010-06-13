@@ -438,7 +438,8 @@ BOOL SwLayAction::RemoveEmptyBrowserPages()
     //Beim umschalten vom normalen in den Browsermodus bleiben u.U. einige
     //unangenehm lange stehen. Diese beseiten wir mal schnell.
     BOOL bRet = FALSE;
-    if ( pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    const ViewShell *pSh = pRoot->GetCurrShell();
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
     {
         SwPageFrm *pPage = (SwPageFrm*)pRoot->Lower();
         do
@@ -1181,7 +1182,8 @@ const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
 BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
     BOOL bRet = FALSE;
-    const BOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = pRoot->GetCurrShell();
+    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     //Wenn die Seite nicht Gueltig ist wird sie schnell formatiert, sonst
     //gibts nix als Aerger.
@@ -1430,19 +1432,14 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         BOOL bNoPaint = FALSE;
         if ( pLay->IsPageBodyFrm() &&
              pLay->Frm().Pos() == aOldRect.Pos() &&
-             pLay->Lower() &&
-             pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+             pLay->Lower() )
         {
-            //HotFix: Vobis Homepage, nicht so genau hinsehen, sonst
-            //rpaints
-
+            const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
             //Einschraenkungen wegen Kopf-/Fusszeilen
-            if ( !( pLay->IsCompletePaint() &&
-                   pLay->FindPageFrm()->FindFtnCont() ) )
-            {
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
+                !( pLay->IsCompletePaint() && pLay->FindPageFrm()->FindFtnCont() ) )
                 bNoPaint = TRUE;
             }
-        }
 
         if ( !bNoPaint && IsPaint() && bAddRect && (pLay->IsCompletePaint() || bChanged) )
         {
@@ -1482,8 +1479,14 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                 aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth);
             }
 
-            if ( pLay->IsPageFrm() &&
-                 pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+            BOOL bPageInBrowseMode = pLay->IsPageFrm();
+            if( bPageInBrowseMode )
+            {
+                const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
+                if( !pSh || !pSh->GetViewOptions()->getBrowseMode() )
+                    bPageInBrowseMode = FALSE;
+            }
+            if( bPageInBrowseMode )
             {
                 // NOTE: no vertical layout in online layout
                 //Ist die Aenderung ueberhaupt sichtbar?
@@ -1848,7 +1851,8 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
     const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
-    const BOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = pRoot->GetCurrShell();
+    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     while ( pCntnt && pPage->IsAnLower( pCntnt ) )
     {

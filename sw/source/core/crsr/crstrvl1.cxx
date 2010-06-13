@@ -91,7 +91,7 @@ BOOL SwCrsrShell::GoStartSentence()
 
 BOOL SwCrsrShell::SelectWord( const Point* pPt )
 {
-    return pCurCrsr->SelectWord( pPt );
+    return pCurCrsr->SelectWord( this, pPt );
 }
 
 

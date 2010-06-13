@@ -796,8 +796,8 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
         case DS_WORD: nVal = rDStat.nWord;  break;
         case DS_CHAR: nVal = rDStat.nChar;  break;
         case DS_PAGE:
-            if( pDoc->GetRootFrm() )
-                ((SwDocStat &)rDStat).nPage = pDoc->GetRootFrm()->GetPageNum();
+            if( pDoc->GetCurrentLayout() )//swmod 080218
+                ((SwDocStat &)rDStat).nPage = pDoc->GetCurrentLayout()->GetPageNum();   //swmod 080218
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFmt )
                 nFmt = (sal_uInt32)nNumberingType;
@@ -2337,7 +2337,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 
                 // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
                 Point aPt;
-                const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rTxtNd.GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
 
                 _SetGetExpFld* pNew;
 
@@ -2402,8 +2402,8 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
             {
                 // dann bestimme mal den entsp. Offset
                 Point aPt;
-                const SwCntntFrm* pFrm = pTxtNode->GetFrm( &aPt, 0, sal_False );
-                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
                 const SwPageFrm* pPgFrm = 0;
                 sal_uInt16 nDiff = ( pFrm && pRefFrm )
                         ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
@@ -2496,7 +2496,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
     Point aPt;
-    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False ) : 0;
+    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False ) : 0;
     if( pSetFld->IsOn() && pRefFrm )
     {
         // dann bestimme mal den entsp. Offset

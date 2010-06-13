@@ -58,7 +58,6 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     //darf Locken. Definiert in frmtool.cxx
     friend void AppendObjs   ( const SwSpzFrmFmts *, ULONG, SwFrm *, SwPageFrm * );
-    friend void AppendAllObjs( const SwSpzFrmFmts * );
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
@@ -131,7 +130,7 @@ protected:
     Size CalcRel( const SwFmtFrmSize &rSz ) const;
     SwTwips CalcAutoWidth() const;
 
-    SwFlyFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     /** method to assure that anchored object is registered at the correct
         page frame

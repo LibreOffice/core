@@ -802,7 +802,7 @@ void lcl_DeleteFtn( SwSectionNode *pNd, ULONG nStt, ULONG nEnd )
             // Werden die Nodes nicht geloescht mussen sie bei den Seiten
             // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
             // stehen (Undo loescht sie nicht!)
-            pSrch->DelFrms();
+            pSrch->DelFrms(0);
             ++nPos;
         }
 
@@ -812,7 +812,7 @@ void lcl_DeleteFtn( SwSectionNode *pNd, ULONG nStt, ULONG nEnd )
             // Werden die Nodes nicht geloescht mussen sie bei den Seiten
             // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
             // stehen (Undo loescht sie nicht!)
-            pSrch->DelFrms();
+            pSrch->DelFrms(0);
         }
     }
 }
@@ -937,7 +937,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     // Hier bietet sich als Optimierung an, vorhandene Frames nicht zu
     // zerstoeren und wieder neu anzulegen, sondern nur umzuhaengen.
     BOOL bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
-                   GetDoc()->GetRootFrm();
+                   GetDoc()->GetCurrentViewShell(); //swmod 071108//swmod 071225
     SwNode2Layout *pNode2Layout = NULL;
     if( bInsFrm )
     {
@@ -1117,10 +1117,10 @@ SwSectionNode::~SwSectionNode()
 }
 
 
-SwFrm *SwSectionNode::MakeFrm()
+SwFrm *SwSectionNode::MakeFrm( SwFrm *pSib )
 {
     m_pSection->m_Data.SetHiddenFlag(false);
-    return new SwSectionFrm( *m_pSection );
+    return new SwSectionFrm( *m_pSection, pSib );
 }
 
 //Methode erzeugt fuer den vorhergehenden Node alle Ansichten vom
@@ -1130,7 +1130,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
 {
     // also nehme meinen nachfolgenden oder vorhergehenden ContentFrame:
     SwNodes& rNds = GetNodes();
-    if( rNds.IsDocNodes() && rNds.GetDoc()->GetRootFrm() )
+    if( rNds.IsDocNodes() && rNds.GetDoc()->GetCurrentViewShell() ) //swmod 071108//swmod 071225
     {
         if( GetSection().IsHidden() || IsCntntHidden() )
         {
@@ -1152,7 +1152,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
             while( 0 != (pFrm = aNode2Layout.NextFrm()) )
             {
                 ASSERT( pFrm->IsSctFrm(), "Depend von Section keine Section." );
-                pNew = rIdx.GetNode().GetCntntNode()->MakeFrm();
+                pNew = rIdx.GetNode().GetCntntNode()->MakeFrm( pFrm );
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
                 // --> OD 2008-06-23 #156927#
@@ -1175,7 +1175,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 bool bInitNewSect = false;
                 if( pS )
                 {
-                    SwSectionFrm *pSct = new SwSectionFrm( pS->GetSection() );
+                    SwSectionFrm *pSct = new SwSectionFrm( pS->GetSection(), pFrm );
                     // OD 14.11.2002 #104684# - prepare <Init()> of new section frame.
                     bInitNewSect = true;
                     SwLayoutFrm* pUp = pSct;
@@ -1192,7 +1192,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                     // and relation CONTENT_FLOWS_TO for previous paragraph will change.
                     if ( pNew->IsTxtFrm() )
                     {
-                        ViewShell* pViewShell( pNew->GetShell() );
+                        ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
                         if ( pViewShell && pViewShell->GetLayout() &&
                              pViewShell->GetLayout()->IsAnyShellAccessible() )
                         {
@@ -1219,7 +1219,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 // and relation CONTENT_FLOWS_TO for previous paragraph will change.
                 if ( pNew->IsTxtFrm() )
                 {
-                    ViewShell* pViewShell( pNew->GetShell() );
+                    ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {
@@ -1361,7 +1361,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
     // dann kopiere auch noch die Links/Server
     if( pNewSect->IsLinkType() )        // den Link eintragen
-        pNewSect->CreateLink( pDoc->GetRootFrm() ? CREATE_CONNECT
+        pNewSect->CreateLink( pDoc->GetCurrentViewShell() ? CREATE_CONNECT  //swmod 071108//swmod 071225
                                                  : CREATE_NONE );
 
     // falls als Server aus dem Undo kopiert wird, wieder eintragen
@@ -1442,12 +1442,9 @@ void SwSectionNode::NodesArrChgd()
         {
             ASSERT( pDoc == GetDoc(),
                     "verschieben in unterschiedliche Documente?" );
-            if (m_pSection->IsLinkType())
-            {
-                m_pSection->CreateLink( pDoc->GetRootFrm() ? CREATE_CONNECT
-                                                         : CREATE_NONE );
-            }
-
+            if( m_pSection->IsLinkType() )      // den Link austragen
+                m_pSection->CreateLink( pDoc->GetCurrentViewShell() ? CREATE_CONNECT    //swmod 071108
+                                                         : CREATE_NONE );//swmod 071225
             if (m_pSection->IsServer())
             {
                 pDoc->GetLinkManager().InsertServer( m_pSection->GetObject() );

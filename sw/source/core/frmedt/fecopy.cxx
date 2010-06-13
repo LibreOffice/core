@@ -267,7 +267,7 @@ BOOL lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
 {
     BOOL bRet = TRUE;
     rAnchor.SetAnchor( &rPos );
-    SwCntntFrm* pTmpFrm = rNd.GetCntntNode()->GetFrm( &rInsPt, 0, FALSE );
+    SwCntntFrm* pTmpFrm = rNd.GetCntntNode()->getLayoutFrm( rDestShell.GetLayout(), &rInsPt, 0, FALSE );
     SwFlyFrm *pTmpFly = pTmpFrm->FindFlyFrm();
     if( pTmpFly && bCheckFlyRecur && pFly->IsUpperOf( *pTmpFly ) )
     {

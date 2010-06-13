@@ -2544,7 +2544,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
     else
     {
         sal_uInt16 nFrmType = RES_FLYFRMFMT == Which() ? FRM_FLY : USHRT_MAX;
-        pFrm = ::GetFrmOfModify( *(SwModify*)this, nFrmType, pPoint,
+        pFrm = ::GetFrmOfModify( 0, *(SwModify*)this, nFrmType, pPoint,
                                     0, bCalcFrm );
     }
 
@@ -2578,7 +2578,7 @@ SdrObject* SwFrmFmt::FindRealSdrObject()
     if( RES_FLYFRMFMT == Which() )
     {
         Point aNullPt;
-        SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( *this, FRM_FLY,
+        SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( 0, *this, FRM_FLY,
                                                     &aNullPt, 0, sal_False );
         return pFly ? pFly->GetVirtDrawObj() : 0;
     }
@@ -2701,8 +2701,8 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
 void SwFlyFrmFmt::MakeFrms()
 {
     // gibts ueberhaupt ein Layout ??
-    if( !GetDoc()->GetRootFrm() )
-        return;
+    if( !GetDoc()->GetCurrentViewShell() )
+        return; //swmod 071108//swmod 071225
 
     SwModify *pModify = 0;
     // OD 24.07.2003 #111032# - create local copy of anchor attribute for possible changes.
@@ -2764,7 +2764,7 @@ void SwFlyFrmFmt::MakeFrms()
     case FLY_AT_PAGE:
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
-            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetRootFrm()->Lower();
+            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetCurrentLayout()->Lower();   //swmod 080218
             if( !nPgNum && aAnchorAttr.GetCntntAnchor() )
             {
                 SwCntntNode *pCNd =
@@ -2858,16 +2858,16 @@ void SwFlyFrmFmt::MakeFrms()
                 switch( aAnchorAttr.GetAnchorId() )
                 {
                 case FLY_AT_FLY:
-                    pFly = new SwFlyLayFrm( this, pFrm );
+                    pFly = new SwFlyLayFrm( this, pFrm, pFrm );
                     break;
 
                 case FLY_AT_PARA:
                 case FLY_AT_CHAR:
-                    pFly = new SwFlyAtCntFrm( this, pFrm );
+                    pFly = new SwFlyAtCntFrm( this, pFrm, pFrm );
                     break;
 
                 case FLY_AS_CHAR:
-                    pFly = new SwFlyInCntFrm( this, pFrm );
+                    pFly = new SwFlyInCntFrm( this, pFrm, pFrm );
                     break;
                 default:
                     ASSERT( !this, "Neuer Ankertyp" )
@@ -2884,7 +2884,7 @@ void SwFlyFrmFmt::MakeFrms()
 
 SwFlyFrm* SwFlyFrmFmt::GetFrm( const Point* pPoint, const sal_Bool bCalcFrm ) const
 {
-    return (SwFlyFrm*)::GetFrmOfModify( *(SwModify*)this, FRM_FLY,
+    return (SwFlyFrm*)::GetFrmOfModify( 0, *(SwModify*)this, FRM_FLY,
                                             pPoint, 0, bCalcFrm );
 }
 

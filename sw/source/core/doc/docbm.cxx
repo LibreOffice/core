@@ -1286,7 +1286,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
         if( pNode )
         {
 
-            SwFrm* pFrm = pNode->GetFrm();
+            SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
 #if OSL_DEBUG_LEVEL > 1
             static BOOL bViaDoc = FALSE;
             if( bViaDoc )

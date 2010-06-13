@@ -360,7 +360,7 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
                     long nNext = rLS.GetTxtLeft() + nDefDist;
                     if( bModulus )
                         nNext = ( nNext / nDefDist ) * nDefDist;
-                    SwFrm* pFrm = pCNd->GetFrm();
+                    SwFrm* pFrm = pCNd->getLayoutFrm( GetLayout() );
                     if ( pFrm )
                     {
                         const USHORT nFrmWidth = static_cast<USHORT>( pFrm->IsVertical() ?

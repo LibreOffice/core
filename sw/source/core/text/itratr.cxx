@@ -33,7 +33,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <txtatr.hxx>
 #include <sfx2/printer.hxx>
-#include <editeng/lrspitem.hxx>
+#include <svx/svdobj.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtanchr.hxx>
@@ -62,6 +62,7 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <editeng/lrspitem.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -429,15 +430,14 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
     return bRet;
 }
 
-sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
+sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const//swmodtest 080307
 {
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     aIter.Seek( nBegin );
-    const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
-    return aIter.GetFnt()->IsSymbol( pTmpRootFrm ?
-                                     pTmpRootFrm->GetCurrShell() :
-                                     0 );
+    //const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetCurrentLayout();
+    return aIter.GetFnt()->IsSymbol(
+        const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );//swmod 080311
 }
 
 class SwMinMaxNodeArgs
@@ -590,7 +590,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
 // changing this method very likely requires changing of
 // "GetScalingOfSelectedText"
 void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
-                               ULONG& rAbsMin, OutputDevice* pOut ) const
+                               ULONG& rAbsMin, OutputDevice* pOut ) const//swmodtest 080307
 {
     ViewShell* pSh = 0;
     GetDoc()->GetEditShell( &pSh );
@@ -702,10 +702,9 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
             case CHAR_HARDHYPHEN:
             {
                 XubString sTmp( cChar );
-                const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
-                SwDrawTextInfo aDrawInf( pTmpRootFrm ?
-                                         pTmpRootFrm->GetCurrShell() :
-                                         0, *pOut, 0, sTmp, 0, 1, 0, sal_False );
+                //const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetCurrentLayout();
+                SwDrawTextInfo aDrawInf( const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
+                    *pOut, 0, sTmp, 0, 1, 0, sal_False );//swmod 080311
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;
@@ -839,7 +838,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
             pOut = GetpApp()->GetDefaultDevice();
         else
             pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );

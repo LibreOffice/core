@@ -33,6 +33,7 @@ class SwNodeIndex;
 class SwTxtNode;
 class SwNodes;
 class SwDoc;
+class SwFrm;
 
 // ATT_FTN **********************************************************
 
@@ -59,7 +60,7 @@ public:
     void MakeNewTextSection( SwNodes& rNodes );
 
         // loesche die FtnFrame aus der Seite
-    void DelFrms();
+    void DelFrms( const SwFrm* );
         // bedingten Absatzvorlagen checken
     void CheckCondColl();
 

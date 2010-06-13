@@ -220,6 +220,8 @@ void SwFtnIdxs::UpdateAllFtn()
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
+    SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();//swmod 080305
+    std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
     //Fuer normale Fussnoten werden Chapter- und Dokumentweise Nummerierung
     //getrennt behandelt. Fuer Endnoten gibt es nur die Dokumentweise
     //Nummerierung.
@@ -292,8 +294,10 @@ void SwFtnIdxs::UpdateAllFtn()
         }
     }
 
-    if( pDoc->GetRootFrm() && FTNNUM_PAGE == rFtnInfo.eNum )
-        pDoc->GetRootFrm()->UpdateFtnNums();
+    //if( pDoc->GetCurrentLayout() && FTNNUM_PAGE == rFtnInfo.eNum )
+    //  pDoc->GetCurrentLayout()->UpdateFtnNums();
+    if( pTmpRoot && FTNNUM_PAGE == rFtnInfo.eNum )
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 0
 }
 
 SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, USHORT* pFndPos ) const

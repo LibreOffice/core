@@ -205,7 +205,7 @@ void repaintTextFrames( SwModify& rModify )
          pFrm; pFrm = (const SwTxtFrm*)aIter.Next() )
     {
         SwRect aRec( pFrm->PaintArea() );
-        const SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+        const SwRootFrm *pRootFrm = pFrm->getRootFrm();
         ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
         if( pCurShell )
             pCurShell->InvalidateWindows( aRec );

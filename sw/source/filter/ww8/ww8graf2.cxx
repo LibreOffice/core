@@ -42,7 +42,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <dcontact.hxx>
 #include <grfatr.hxx>           // class SwCropGrf
 #include <fmtflcnt.hxx>
 #include <fmtanchr.hxx>
@@ -409,7 +408,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
         &aFlySet, &rGrfSet, NULL);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
-    if (rDoc.GetRootFrm() &&
+    if (rDoc.GetCurrentViewShell() &&   //swmod 071108//swmod 071225
         (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()))
     {
         pFlyFmt->MakeFrms();

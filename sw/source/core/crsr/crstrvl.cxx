@@ -94,7 +94,7 @@ BOOL SwCrsrShell::GotoNextNum()
             // dann versuche den Cursor auf die Position zu setzen,
             // auf halber Heohe vom Char-SRectangle
             Point aPt( pCurCrsr->GetPtPos() );
-            SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->GetFrm( &aPt,
+            SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), &aPt,
                                                         pCurCrsr->GetPoint() );
             pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint() );
             pFrm->Calc();
@@ -134,7 +134,7 @@ BOOL SwCrsrShell::GotoPrevNum()
             // dann versuche den Cursor auf die Position zu setzen,
             // auf halber Heohe vom Char-SRectangle
             Point aPt( pCurCrsr->GetPtPos() );
-            SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->GetFrm( &aPt,
+            SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), &aPt,
                                                         pCurCrsr->GetPoint() );
             pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint() );
             pFrm->Calc();
@@ -278,7 +278,7 @@ BOOL SwCrsrShell::SetCrsrInHdFt( USHORT nDescNo, BOOL bInHeader )
             const SwFrm* pFrm;
             Point aPt( pCurCrsr->GetPtPos() );
 
-            if( pCNd && 0 != ( pFrm = pCNd->GetFrm( &aPt, 0, FALSE ) ))
+            if( pCNd && 0 != ( pFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, FALSE ) ))
             {
                 // dann kann der Cursor ja auch hinein gesetzt werden
                 SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
@@ -329,7 +329,7 @@ BOOL SwCrsrShell::GotoNextTOXBase( const String* pName )
             const SwCntntFrm* pCFrm;
             if( pCNd &&
                 pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex() &&
-                0 != ( pCFrm = pCNd->GetFrm() ) &&
+                0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout() ) ) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
             {
                 pFnd = pCNd;
@@ -379,7 +379,7 @@ BOOL SwCrsrShell::GotoPrevTOXBase( const String* pName )
             const SwCntntFrm* pCFrm;
             if( pCNd &&
                 pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex() &&
-                0 != ( pCFrm = pCNd->GetFrm() ) &&
+                0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout() ) ) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
             {
                 pFnd = pCNd;
@@ -432,7 +432,7 @@ BOOL SwCrsrShell::GotoTOXMarkBase()
                 const SwCntntFrm* pCFrm;
                 if( pCNd &&
                     pCNd->EndOfSectionIndex() < pSectNd->EndOfSectionIndex() &&
-                    0 != ( pCFrm = pCNd->GetFrm() ) &&
+                    0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout() ) ) &&
                     ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
                 {
                     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
@@ -480,7 +480,7 @@ BOOL SwCrsrShell::GotoNxtPrvTblFormula( BOOL bNext, BOOL bOnlyErrors )
 
     if( rPos.nNode < GetDoc()->GetNodes().GetEndOfExtras() )
         // auch beim Einsammeln wird nur der erste Frame benutzt!
-        aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetCntntNode()->GetFrm(
+        aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),
                                 &aPt, &rPos, FALSE ) );
 
     {
@@ -500,7 +500,7 @@ BOOL SwCrsrShell::GotoNxtPrvTblFormula( BOOL bNext, BOOL bOnlyErrors )
                 const SwCntntFrm* pCFrm;
                 SwNodeIndex aIdx( *pTBox->GetSttNd() );
                 const SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-                if( pCNd && 0 != ( pCFrm = pCNd->GetFrm( &aPt, 0, FALSE ) ) &&
+                if( pCNd && 0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, FALSE ) ) &&
                     (IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
                 {
                     _SetGetExpFld aCmp( *pTBox );
@@ -551,7 +551,7 @@ BOOL SwCrsrShell::GotoNxtPrvTOXMark( BOOL bNext )
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
         // auch beim Einsammeln wird nur der erste Frame benutzt!
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
-                        GetCntntNode()->GetFrm( &aPt, &rPos, FALSE ) );
+                        GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, FALSE ) );
 
     {
         const SfxPoolItem* pItem;
@@ -565,7 +565,7 @@ BOOL SwCrsrShell::GotoNxtPrvTOXMark( BOOL bNext )
                                         RES_TXTATR_TOXMARK, n ) ) &&
                 0 != (pTxtTOX = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
                 ( pTxtNd = &pTxtTOX->GetTxtNode())->GetNodes().IsDocNodes() &&
-                0 != ( pCFrm = pTxtNd->GetFrm( &aPt, 0, FALSE )) &&
+                0 != ( pCFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, 0, FALSE )) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
             {
                 SwNodeIndex aNdIndex( *pTxtNd );    // UNIX benoetigt dieses Obj.
@@ -643,7 +643,7 @@ void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
         {
             SwCntntFrm* pCFrm;
             const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-            if( 0 != ( pCFrm = rTxtNode.GetFrm( &aPt, 0, FALSE )) &&
+            if( 0 != ( pCFrm = rTxtNode.getLayoutFrm( rTxtNode.GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE )) &&
                 ( bInReadOnly || !pCFrm->IsProtected() ))
             {
                 _SetGetExpFld* pNew = new _SetGetExpFld(
@@ -728,7 +728,7 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
         {
             // auch beim Einsammeln wird nur der erste Frame benutzt!
             Point aPt;
-            aSrch.SetBodyPos( *pTNd->GetFrm( &aPt, &rPos, FALSE ) );
+            aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, FALSE ) );
         }
 
         BOOL bFound = aSrtLst.Seek_Entry( &aSrch, &nPos );
@@ -1113,7 +1113,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_SMARTTAG;
 //                          rCntntAtPos.pFndTxtAttr = pTxtAttr;
 
-                            if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
+                            if( pFldRect && 0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt ) ) )
                                 pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
                         }
                     }
@@ -1133,7 +1133,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                     if( pFld )
                     {
-                        if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
+                        if( pFldRect && 0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt ) ) )
                             pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
 
                         if( bSetCrsr )
@@ -1231,7 +1231,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rCntntAtPos.pFndTxtAttr = pTxtAttr;
                             rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
 
-                            if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
+                            if( pFldRect && 0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt ) ) )
                                 pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
                         }
                     }
@@ -1299,7 +1299,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rCntntAtPos.pFndTxtAttr = pTxtAttr;
                             rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
 
-                            if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
+                            if( pFldRect && 0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt ) ) )
                                 pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
                         }
                     }
@@ -1336,7 +1336,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_INETATTR;
                             rCntntAtPos.pFndTxtAttr = pTxtAttr;
 
-                            if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
+                            if( pFldRect && 0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt ) ) )
                                 pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
                         }
                     }
@@ -1352,7 +1352,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         rCntntAtPos.pFndTxtAttr = 0;
                         bRet = TRUE;
 
-                        if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
+                        if( pFldRect && 0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt ) ) )
                             pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
                     }
                 }
@@ -1383,7 +1383,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
 #endif
                     )
                 {
-                    SwFrm* pF = pTxtNd->GetFrm( &aPt );
+                    SwFrm* pF = pTxtNd->getLayoutFrm( GetLayout(), &aPt );
                     if( pF )
                     {
                         // dann aber den CellFrame
@@ -1591,7 +1591,7 @@ BOOL SwContentAtPos::IsInProtectSect() const
 
     const SwCntntFrm* pFrm;
     return pNd && ( pNd->IsInProtectSect() ||
-                    ( 0 != ( pFrm = pNd->GetFrm(0,0,FALSE)) &&
+                    ( 0 != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), 0,0,FALSE)) &&
                         pFrm->IsProtected() ));
 }
 bool SwContentAtPos::IsInRTLText()const
@@ -2101,7 +2101,7 @@ BOOL SwCrsrShell::SelectNxtPrvHyperlink( BOOL bNext )
     {
         const SwCntntNode* pCNd = aCurPos.GetNodeFromCntnt()->GetCntntNode();
         SwCntntFrm* pFrm;
-        if( pCNd && 0 != ( pFrm = pCNd->GetFrm( &aPt )) )
+        if( pCNd && 0 != ( pFrm = pCNd->getLayoutFrm( GetLayout(), &aPt )) )
             aCurPos.SetBodyPos( *pFrm );
     }
 
@@ -2123,7 +2123,7 @@ BOOL SwCrsrShell::SelectNxtPrvHyperlink( BOOL bNext )
                     _SetGetExpFld aPos( aTmpPos.nNode, rAttr );
                     SwCntntFrm* pFrm;
                     if( pTxtNd->GetIndex() < nBodySttNdIdx &&
-                        0 != ( pFrm = pTxtNd->GetFrm( &aPt )) )
+                        0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt )) )
                         aPos.SetBodyPos( *pFrm );
 
                     if( bNext

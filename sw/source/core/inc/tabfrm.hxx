@@ -113,7 +113,7 @@ protected:
         //Aendert nur die Framesize, nicht die PrtArea-SSize
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 public:
-    SwTabFrm( SwTable & );  //Immer nach dem erzeugen _und_ pasten das
+    SwTabFrm( SwTable &, SwFrm* );  //Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
     SwTabFrm( SwTabFrm & ); //_Nur_ zum erzeugen von Follows
     ~SwTabFrm();

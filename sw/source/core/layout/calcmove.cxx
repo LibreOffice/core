@@ -33,6 +33,7 @@
 #include "viewsh.hxx"
 #include "doc.hxx"
 #include "viewimp.hxx"
+#include "viewopt.hxx"
 #include "swtypes.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
@@ -179,9 +180,9 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
 
             //determine space left in new upper frame
             nSpace = (aRect.*fnRectX->fnGetHeight)();
-
+            const ViewShell *pSh = pNewUpper->getRootFrm()->GetCurrShell();
             if ( IsInFtn() ||
-                 pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
+                 (pSh && pSh->GetViewOptions()->getBrowseMode()) ||
                  pNewUpper->IsCellFrm() ||
                  ( pNewUpper->IsInSct() && ( pNewUpper->IsSctFrm() ||
                    ( pNewUpper->IsColBodyFrm() &&
@@ -732,8 +733,8 @@ void SwPageFrm::MakeAll()
                     pAttrs = pAccess->Get();
                 }
                 //Bei der BrowseView gelten feste Einstellungen.
-                ViewShell *pSh = GetShell();
-                if ( pSh && GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                ViewShell *pSh = getRootFrm()->GetCurrShell();
+                if ( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 {
                     const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
                     const long nTop    = pAttrs->CalcTopLine()   + aBorder.Height();
@@ -986,11 +987,11 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             const long nRight = ((SwBorderAttrs&)rAttrs).CalcRight( this );
             (this->*fnRect->fnSetXMargins)( nLeft, nRight );
 
-            ViewShell *pSh = GetShell();
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
             SwTwips nWidthArea;
             if( pSh && 0!=(nWidthArea=(pSh->VisArea().*fnRect->fnGetWidth)()) &&
                 GetUpper()->IsPageBodyFrm() &&  // nicht dagegen bei BodyFrms in Columns
-                pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                pSh->GetViewOptions()->getBrowseMode() )
             {
                 //Nicht ueber die Kante des sichbaren Bereiches hinausragen.
                 //Die Seite kann breiter sein, weil es Objekte mit "ueberbreite"

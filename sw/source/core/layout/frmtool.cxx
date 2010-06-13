@@ -56,6 +56,7 @@
 #include "doc.hxx"
 #include "fesh.hxx"
 #include "viewimp.hxx"
+#include "viewopt.hxx"
 #include "pam.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
@@ -275,7 +276,7 @@ SwFrmNotify::~SwFrmNotify()
     {
         if( pFrm->IsAccessibleFrm() )
         {
-            SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+            SwRootFrm *pRootFrm = pFrm->getRootFrm();
             if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
                 pRootFrm->GetCurrShell() )
             {
@@ -410,7 +411,7 @@ SwFrmNotify::~SwFrmNotify()
     }
     else if( pFrm->IsTxtFrm() && bValidSize != pFrm->GetValidSizeFlag() )
     {
-        SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+        SwRootFrm *pRootFrm = pFrm->getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
             pRootFrm->GetCurrShell() )
         {
@@ -607,13 +608,16 @@ SwLayNotify::~SwLayNotify()
         if ( pLay->IsTabFrm() )
             //Damit _nur_ der Shatten bei Groessenaenderungen gemalt wird.
             ((SwTabFrm*)pLay)->SetComplete();
-        else if ( !pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
+        else
+        {
+            const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
+            if( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) ||
                   !(pLay->GetType() & (FRM_BODY | FRM_PAGE)) )
             //Damit die untergeordneten sauber retouchiert werden.
             //Problembsp: Flys an den Henkeln packen und verkleinern.
             //Nicht fuer Body und Page, sonst flackerts beim HTML-Laden.
             pLay->SetCompletePaint();
-
+        }
     }
     //Lower benachrichtigen wenn sich die Position veraendert hat.
     const BOOL bPrtPos = POS_DIFF( aPrt, pLay->Prt() );
@@ -728,7 +732,7 @@ SwFlyNotify::~SwFlyNotify()
     SwFlyFrm *pFly = GetFly();
     if ( pFly->IsNotifyBack() )
     {
-        ViewShell *pSh = pFly->GetShell();
+        ViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
         SwViewImp *pImp = pSh ? pSh->Imp() : 0;
         if ( !pImp || !pImp->IsAction() || !pImp->GetLayAction().IsAgain() )
         {
@@ -945,7 +949,7 @@ SwCntntNotify::~SwCntntNotify()
     {
         //Aktive PlugIn's oder OLE-Objekte sollten etwas von der Veraenderung
         //mitbekommen, damit sie Ihr Window entsprechend verschieben.
-        ViewShell *pSh  = pCnt->GetShell();
+        ViewShell *pSh  = pCnt->getRootFrm()->GetCurrShell();
         if ( pSh )
         {
             SwOLENode *pNd;
@@ -1182,9 +1186,9 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                 {
                     SwFlyFrm *pFly;
                     if( bFlyAtFly )
-                        pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, pFrm );
+                        pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, pFrm, pFrm );
                     else
-                        pFly = new SwFlyAtCntFrm( (SwFlyFrmFmt*)pFmt, pFrm );
+                        pFly = new SwFlyAtCntFrm( (SwFlyFrmFmt*)pFmt, pFrm, pFrm );
                     pFly->Lock();
                     pFrm->AppendFly( pFly );
                     pFly->Unlock();
@@ -1196,18 +1200,27 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
     }
 }
 
-BOOL MA_FASTCALL lcl_ObjConnected( SwFrmFmt *pFmt )
+bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
 {
     SwClientIter aIter( *pFmt );
     if ( RES_FLYFRMFMT == pFmt->Which() )
-        return 0 != aIter.First( TYPE(SwFlyFrm) );
+    {
+        const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
+        const SwFlyFrm* pTmpFrm;
+        for( pTmpFrm = (SwFlyFrm*)aIter.First( TYPE( SwFlyFrm )); pTmpFrm;
+                pTmpFrm = (SwFlyFrm*)aIter.Next() )
+        {
+            if(! pRoot || pRoot == pTmpFrm->getRootFrm() )
+                return true;
+        }
+    }
     else
     {
         SwDrawContact *pContact;
         if ( 0 != (pContact = (SwDrawContact*)aIter.First( TYPE(SwDrawContact))))
             return pContact->GetAnchorFrm() != 0;
     }
-    return FALSE;
+    return false;
 }
 
 /** helper method to determine, if a <SwFrmFmt>, which has an object connected,
@@ -1219,9 +1232,6 @@ BOOL MA_FASTCALL lcl_ObjConnected( SwFrmFmt *pFmt )
 */
 bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
 {
-    ASSERT( lcl_ObjConnected( &_rFmt ),
-            "::lcl_InHeaderOrFooter(..) - <SwFrmFmt> has no connected object" );
-
     bool bRetVal = false;
 
     const SwFmtAnchor& rAnch = _rFmt.GetAnchor();
@@ -1234,7 +1244,7 @@ bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
     return bRetVal;
 }
 
-void AppendAllObjs( const SwSpzFrmFmts *pTbl )
+void AppendAllObjs( const SwSpzFrmFmts *pTbl, const SwFrm* pSib )
 {
     //Verbinden aller Objekte, die in der SpzTbl beschrieben sind mit dem
     //Layout.
@@ -1262,7 +1272,7 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
                 //will ich hier nicht.
                 bRemove = TRUE;
             }
-            else if ( FALSE == (bRemove = ::lcl_ObjConnected( pFmt )) ||
+            else if ( FALSE == (bRemove = ::lcl_ObjConnected( pFmt, pSib )) ||
                       ::lcl_InHeaderOrFooter( *pFmt ) )
             {
             // OD 23.06.2003 #108784# - correction: for objects in header
@@ -1272,7 +1282,7 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
                 //keine abhaengigen Existieren, andernfalls, oder wenn das
                 //MakeFrms keine abhaengigen erzeugt, entfernen.
                 pFmt->MakeFrms();
-                bRemove = ::lcl_ObjConnected( pFmt );
+                bRemove = ::lcl_ObjConnected( pFmt, pSib );
             }
             if ( bRemove )
             {
@@ -1308,9 +1318,9 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                              SwFrm *pPrv )
 {
     pDoc->BlockIdling();
-    SwRootFrm* pLayout = pDoc->GetRootFrm();
-    const BOOL bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
-    if(pLayout)
+    SwRootFrm* pLayout = pLay->getRootFrm();
+    const BOOL bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : FALSE;
+    if( bOldCallbackActionEnabled )
         pLayout->SetCallbackActionEnabled( FALSE );
 
     //Bei der Erzeugung des Layouts wird bPages mit TRUE uebergeben. Dann
@@ -1390,8 +1400,8 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         if ( pNd->IsCntntNode() )
         {
             SwCntntNode* pNode = (SwCntntNode*)pNd;
-            pFrm = pNode->IsTxtNode() ? new SwTxtFrm( (SwTxtNode*)pNode ) :
-                                        pNode->MakeFrm();
+            pFrm = pNode->IsTxtNode() ? new SwTxtFrm( (SwTxtNode*)pNode, pLay ) :
+                                        pNode->MakeFrm( pLay );
             if( pPageMaker )
                 pPageMaker->CheckInsert( nIndex );
 
@@ -1403,7 +1413,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             // and relation CONTENT_FLOWS_TO for previous paragraph will change.
             if ( pFrm->IsTxtFrm() )
             {
-                ViewShell* pViewShell( pFrm->GetShell() );
+                ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
                 // no notification, if <ViewShell> is in construction
                 if ( pViewShell && !pViewShell->IsInConstructor() &&
                      pViewShell->GetLayout() &&
@@ -1443,7 +1453,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             pDoc->UpdateTblFlds( &aMsgHnt );
             pTblNode->GetTable().GCLines();
 
-            pFrm = pTblNode->MakeFrm();
+            pFrm = pTblNode->MakeFrm( pLay );
 
             if( pPageMaker )
                 pPageMaker->CheckInsert( nIndex );
@@ -1455,7 +1465,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             // Relation CONTENT_FLOWS_FROM for next paragraph will change
             // and relation CONTENT_FLOWS_TO for previous paragraph will change.
             {
-                ViewShell* pViewShell( pFrm->GetShell() );
+                ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
                 // no notification, if <ViewShell> is in construction
                 if ( pViewShell && !pViewShell->IsInConstructor() &&
                      pViewShell->GetLayout() &&
@@ -1493,7 +1503,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 nIndex = pNode->EndOfSectionIndex();
             else
             {
-                pFrm = pNode->MakeFrm();
+                pFrm = pNode->MakeFrm( pLay );
                 pActualSection = new SwActualSection( pActualSection,
                                                 (SwSectionFrm*)pFrm, pNode );
                 if ( pActualSection->GetUpper() )
@@ -1532,7 +1542,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 // Relation CONTENT_FLOWS_FROM for next paragraph will change
                 // and relation CONTENT_FLOWS_TO for previous paragraph will change.
                 {
-                    ViewShell* pViewShell( pFrm->GetShell() );
+                    ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
                     // no notification, if <ViewShell> is in construction
                     if ( pViewShell && !pViewShell->IsInConstructor() &&
                          pViewShell->GetLayout() &&
@@ -1604,7 +1614,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 }
 
                 // new section frame
-                pFrm = pActualSection->GetSectionNode()->MakeFrm();
+                pFrm = pActualSection->GetSectionNode()->MakeFrm( pLay );
                 pFrm->InsertBehind( pLay, pPrv );
                 static_cast<SwSectionFrm*>(pFrm)->Init();
 
@@ -1682,7 +1692,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     if ( bPages )       //Jetzt noch die Flys verbinden lassen.
     {
         if ( !bDontCreateObjects )
-            AppendAllObjs( pTbl );
+            AppendAllObjs( pTbl, pLayout );
         bObjsDirect = TRUE;
     }
 
@@ -1702,7 +1712,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     }
 
     pDoc->UnblockIdling();
-    if(pLayout)
+    if( bOldCallbackActionEnabled )
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
@@ -1885,7 +1895,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 {
                     const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
                     if( pTbl->Count() )
-                        AppendAllObjs( pTbl );
+                        AppendAllObjs( pTbl, pUpper );
                 }
 
                 // Wenn nichts eingefuegt wurde, z.B. ein ausgeblendeter Bereich,
@@ -1912,7 +1922,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 if( !pSct->ContainsCntnt() )
                 {
                     pSct->DelEmpty( TRUE );
-                    pDoc->GetRootFrm()->RemoveFromList( pSct );
+                    pUpper->getRootFrm()->RemoveFromList( pSct );
                     delete pSct;
                 }
             }
@@ -2903,11 +2913,11 @@ SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     {
         SwPageDesc *pTmpDesc = pSibling && pSibling->GetPrev() ?
                 ((SwPageFrm*)pSibling->GetPrev())->GetPageDesc() : &rDesc;
-        pRet = new SwPageFrm( pDoc->GetEmptyPageFmt(), pTmpDesc );
+        pRet = new SwPageFrm( pDoc->GetEmptyPageFmt(), pUpper, pTmpDesc );
         pRet->Paste( pUpper, pSibling );
         pRet->PreparePage( bFtn );
     }
-    pRet = new SwPageFrm( pFmt, &rDesc );
+    pRet = new SwPageFrm( pFmt, pUpper, &rDesc );
     pRet->Paste( pUpper, pSibling );
     pRet->PreparePage( bFtn );
     if ( pRet->GetNext() )
@@ -3019,7 +3029,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         //Der Einfachheit halber wird hier bewusst jeweils ein Twip
         //unnoetig invalidiert.
 
-        ViewShell *pSh = pFly->GetShell();
+        ViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
         if( pSh && rOld.HasArea() )
             pSh->InvalidateWindows( rOld );
 
@@ -3317,7 +3327,7 @@ void Notify_Background( const SdrObject* pObj,
     // --> OD 2008-01-30 #i82258# - make code robust
     ViewShell* pSh = 0;
     if ( bInva && pPage &&
-         0 != (pSh = pPage->GetShell()) )
+        0 != (pSh = pPage->getRootFrm()->GetCurrShell()) )
     {
         pSh->InvalidateWindows( rRect );
     }
@@ -3382,7 +3392,7 @@ BOOL Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
     }
     else
     {
-        pFrm = ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchorFrm();
+        pFrm = ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchorFrm(pObj);
         aPos = pObj->GetCurrentBoundRect().TopLeft();
     }
     ASSERT( pFrm, "8-( Fly is lost in Space." );
@@ -3516,7 +3526,7 @@ const SwFrm* MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage )
     return pPage;
 }
 
-SwFrm* GetFrmOfModify( SwModify const& rMod, USHORT const nFrmType,
+SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, USHORT const nFrmType,
         const Point* pPoint, const SwPosition *pPos, const BOOL bCalcFrm )
 {
     SwFrm *pMinFrm = 0, *pTmpFrm;
@@ -3533,6 +3543,7 @@ SwFrm* GetFrmOfModify( SwModify const& rMod, USHORT const nFrmType,
                 pTmpFrm = (SwFrm*)aIter.Next() )
         {
             if( pTmpFrm->GetType() & nFrmType &&
+                ( !pLayout || pLayout == pTmpFrm->getRootFrm() ) &&
                 (!pTmpFrm->IsFlowFrm() ||
                  !SwFlowFrm::CastFlowFrm( pTmpFrm )->IsFollow() ))
             {

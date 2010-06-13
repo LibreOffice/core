@@ -102,7 +102,7 @@ public:
                                    const SwCrsrMoveState *pCMS = 0,
                                    const BOOL bDefaultExpand = TRUE ) const;
 
-    SwLayoutFrm( SwFrmFmt* );
+    SwLayoutFrm( SwFrmFmt*, SwFrm* );
     ~SwLayoutFrm();
 
     virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;

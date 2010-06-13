@@ -35,7 +35,9 @@
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 #include <fmtfsize.hxx>
+#include "viewopt.hxx"
 #include "hffrm.hxx"
+#include "rootfrm.hxx"
 #include "txtfrm.hxx"
 #include "sectfrm.hxx"
 #include "flyfrm.hxx"
@@ -117,8 +119,8 @@ static void lcl_LayoutFrmEnsureMinHeight(SwLayoutFrm & rFrm,
     }
 }
 
-SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, USHORT nTypeIn)
-    : SwLayoutFrm(pFmt)
+SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, USHORT nTypeIn)
+    : SwLayoutFrm( pFmt, pSib )
 {
     nType = nTypeIn;
     SetDerivedVert( FALSE );
@@ -710,7 +712,8 @@ void SwPageFrm::PrepareHeader()
 
     const SwFmtHeader &rH = ((SwFrmFmt*)pRegisteredIn)->GetHeader();
 
-    const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const BOOL bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
     {   //Header einsetzen, vorher entfernen falls vorhanden.
@@ -727,7 +730,7 @@ void SwPageFrm::PrepareHeader()
             delete pDel;
         }
         ASSERT( pLay, "Wohin mit dem Header?" );
-        SwHeaderFrm *pH = new SwHeaderFrm( (SwFrmFmt*)rH.GetHeaderFmt() );
+        SwHeaderFrm *pH = new SwHeaderFrm( (SwFrmFmt*)rH.GetHeaderFmt(), this );
         pH->Paste( this, pLay );
         if ( GetUpper() )
             ::RegistFlys( this, pH );
@@ -760,7 +763,8 @@ void SwPageFrm::PrepareFooter()
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
-    const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const BOOL bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rF.IsActive() )
     {   //Footer einsetzen, vorher entfernen falls vorhanden.
@@ -774,7 +778,7 @@ void SwPageFrm::PrepareFooter()
             pLay->Cut();
             delete pLay;
         }
-        SwFooterFrm *pF = new SwFooterFrm( (SwFrmFmt*)rF.GetFooterFmt() );
+        SwFooterFrm *pF = new SwFooterFrm( (SwFrmFmt*)rF.GetFooterFmt(), this );
         pF->Paste( this );
         if ( GetUpper() )
             ::RegistFlys( this, pF );
@@ -782,10 +786,10 @@ void SwPageFrm::PrepareFooter()
     else if ( pLay && pLay->IsFooterFrm() )
     {   //Footer entfernen falls vorhanden.
         ::DelFlys( pLay, this );
-        ViewShell *pSh;
-        if ( pLay->GetPrev() && 0 != (pSh = GetShell()) &&
-             pSh->VisArea().HasArea() )
-            pSh->InvalidateWindows( pSh->VisArea() );
+        ViewShell *pShell;
+        if ( pLay->GetPrev() && 0 != (pShell = getRootFrm()->GetCurrShell()) &&
+             pShell->VisArea().HasArea() )
+            pShell->InvalidateWindows( pShell->VisArea() );
         pLay->Cut();
         delete pLay;
     }

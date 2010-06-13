@@ -162,8 +162,8 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
 *************************************************************************/
 
 
-SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode)
-    : SwCntntFrm(pNode)
+SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
+    : SwCntntFrm( pNode, pSib )
 {
     InitCtor();
 }
@@ -192,9 +192,9 @@ void SwNoTxtFrm::InitCtor()
 *************************************************************************/
 
 
-SwCntntFrm *SwNoTxtNode::MakeFrm()
+SwCntntFrm *SwNoTxtNode::MakeFrm( SwFrm* pSib )
 {
-    return new SwNoTxtFrm(this);
+    return new SwNoTxtFrm(this, pSib);
 }
 
 /*************************************************************************
@@ -247,7 +247,7 @@ void lcl_ClearArea( const SwFrm &rFrm,
         {
             // OD 2004-04-23 #116347#
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
-            rOut.SetFillColor( rFrm.GetShell()->Imp()->GetRetoucheColor());
+            rOut.SetFillColor( rFrm.getRootFrm()->GetCurrShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
             for( USHORT i = 0; i < aRegion.Count(); ++i )
                 rOut.DrawRect( aRegion[i].SVRect() );
@@ -271,7 +271,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
     if ( Frm().IsEmpty() )
         return;
 
-    const ViewShell* pSh = GetShell();
+    const ViewShell* pSh = getRootFrm()->GetCurrShell();
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
@@ -826,7 +826,7 @@ void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, Out
 /// OD 25.09.2002 #99739# - pixel-align coordinations for drawing graphic.
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
-    ViewShell* pShell = GetShell();
+    ViewShell* pShell = getRootFrm()->GetCurrShell();
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
@@ -1068,7 +1068,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
 BOOL SwNoTxtFrm::IsTransparent() const
 {
-    const ViewShell* pSh = GetShell();
+    const ViewShell* pSh = getRootFrm()->GetCurrShell();
     if ( !pSh || !pSh->GetViewOptions()->IsGraphic() )
         return TRUE;
 

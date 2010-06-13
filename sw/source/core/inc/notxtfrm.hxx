@@ -52,7 +52,7 @@ class SwNoTxtFrm: public SwCntntFrm
 protected:
     virtual void MakeAll();
 public:
-    SwNoTxtFrm( SwNoTxtNode * const );
+    SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
     ~SwNoTxtFrm();
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );

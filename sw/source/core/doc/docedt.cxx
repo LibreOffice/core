@@ -210,7 +210,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
                 pFmt, pFmt->GetDoc()->GetSpzFrmFmts()->Count() );
         pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
-        if( pCNd && pCNd->GetFrm( 0, 0, sal_False ) )
+        if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, sal_False ) )
             pFmt->MakeFrms();
     }
 }
@@ -407,7 +407,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 }
                 else
                 {
-                    pSrch->DelFrms();
+                    pSrch->DelFrms(0);
                     rFtnArr.Remove( nPos );
                     if( bSaveFtn )
                         rSaveArr.Insert( pSrch );
@@ -435,7 +435,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 }
                 else
                 {
-                    pSrch->DelFrms();
+                    pSrch->DelFrms(0);
                     rFtnArr.Remove( nPos );
                     if( bSaveFtn )
                         rSaveArr.Insert( pSrch );
@@ -1881,7 +1881,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             switch( pNd->GetNodeType() )
             {
             case ND_TEXTNODE:
-                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->GetFrm()) )
+                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetCurrentLayout() )) )
                 {
                     // geschutze Cellen/Flys ueberspringen, ausgeblendete
                     //ebenfalls
@@ -2111,7 +2111,7 @@ sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
     SwHyphArgs *pHyphArgs = (SwHyphArgs*)pArgs;
     if( pNode )
     {
-        SwCntntFrm* pCntFrm = pNode->GetFrm();
+        SwCntntFrm* pCntFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout() );
         if( pCntFrm && !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
         {
             sal_uInt16 *pPageSt = pHyphArgs->GetPageSt();

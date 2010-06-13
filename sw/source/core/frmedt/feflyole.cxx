@@ -80,7 +80,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
                  ((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == xObj )
             {
                 bExist = TRUE;
-                SwFrm *pFrm = ((SwOLENode*)pNd)->GetFrm();
+                SwFrm *pFrm = ((SwOLENode*)pNd)->getLayoutFrm( GetLayout() );
                 if ( pFrm )
                     pFly = pFrm->FindFlyFrm();
                 break;

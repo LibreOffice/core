@@ -30,11 +30,13 @@
 #include "pam.hxx"
 #include "swtable.hxx"
 #include "frame.hxx"
+#include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "flyfrm.hxx"
 #include "viewsh.hxx"
 #include "doc.hxx"
 #include "viewimp.hxx"
+#include "viewopt.hxx"
 #include "dflyobj.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
@@ -604,7 +606,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     ASSERT( rThis.GetUpper(), "Wo kommen wir denn her?" );
 
     //Sparsamer benachrichtigen wenn eine Action laeuft.
-    ViewShell *pSh = rThis.GetShell();
+    ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
     const SwViewImp *pImp = pSh ? pSh->Imp() : 0;
     const BOOL bComplete = pImp && pImp->IsAction() && pImp->GetLayAction().IsComplete();
 
@@ -1042,12 +1044,13 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                 return pLayLeaf;
 
             SwPageFrm *pNew = pLayLeaf->FindPageFrm();
+            const ViewShell *pSh = getRootFrm()->GetCurrShell();
             // #111704# The pagedesc check does not make sense for frames in fly frames
             if ( pNew != FindPageFrm() && !bNewPg && !IsInFly() &&
                  // --> FME 2005-05-10 #i46683#
                  // Do not consider page descriptions in browse mode (since
                  // MoveBwd ignored them)
-                 !pNew->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                 !(pSh && pSh->GetViewOptions()->getBrowseMode() ) )
                  // <--
             {
                 if( WrongPageDesc( pNew ) )
@@ -1173,7 +1176,8 @@ BOOL SwFlowFrm::IsPrevObjMove() const
     //     und fuer diesen ggf. Umbrechen.
 
     //!!!!!!!!!!!Hack!!!!!!!!!!!
-    if ( rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         return FALSE;
 
     SwFrm *pPre = rThis.FindPrev();
@@ -1252,9 +1256,11 @@ BOOL SwFlowFrm::IsPrevObjMove() const
 BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
 {
     if ( !IsFollow() && rThis.IsInDocBody() &&
-         ( !rThis.IsInTab() || ( rThis.IsTabFrm() && !rThis.GetUpper()->IsInTab() ) ) && // i66968
-         !rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+         ( !rThis.IsInTab() || ( rThis.IsTabFrm() && !rThis.GetUpper()->IsInTab() ) ) ) // i66968
     {
+        const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
+        if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+            return FALSE;
         const SwAttrSet *pSet = rThis.GetAttrSet();
 
         //Vorgaenger ermitteln
@@ -2113,7 +2119,7 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                 rThis.Prepare( PREP_BOSS_CHGD, 0, FALSE );
                 if( !bSamePage )
                 {
-                    ViewShell *pSh = rThis.GetShell();
+                    ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
                     if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                         pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher erledigt!
 
@@ -2125,7 +2131,9 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
             }
         }
         // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
-        if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
+
+        if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
         {
             // --> OD 2009-12-31 #i106452#
             // check page description not only in situation with sections.
@@ -2593,7 +2601,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         {
             //Kann sein, dass ich einen Container bekam.
             SwFtnFrm *pOld = rThis.FindFtnFrm();
-            SwFtnFrm *pNew = new SwFtnFrm( pOld->GetFmt(),
+            SwFtnFrm *pNew = new SwFtnFrm( pOld->GetFmt(), pOld,
                                            pOld->GetRef(), pOld->GetAttr() );
             if ( pOld->GetMaster() )
             {
@@ -2674,7 +2682,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         if( pNewPage != pOldPage )
         {
             rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, FALSE );
-            ViewShell *pSh = rThis.GetShell();
+            ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                 pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher eledigt!
 
@@ -2684,7 +2692,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             pNewPage->InvalidateWordCount();
 
             // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
-            if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+            if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
             {
                 if ( bCheckPageDescs && pNewPage->GetNext() )
                 {

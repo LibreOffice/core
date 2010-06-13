@@ -31,10 +31,8 @@
 
 #include <hintids.hxx>
 #include <editeng/protitem.hxx>
-
 #include <com/sun/star/i18n/WordType.hdl>
 #include <com/sun/star/i18n/CharType.hdl>
-
 #include <unotools/charclass.hxx>
 #include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
@@ -53,14 +51,13 @@
 #include <scriptinfo.hxx>
 #include <crstate.hxx>
 #include <docsh.hxx>
+#include <viewsh.hxx>
 #include <frmatr.hxx>
 #include <breakit.hxx>
 #include <crsskip.hxx>
 #include <vcl/msgbox.hxx>
 #include <mdiexp.hxx>           // ...Percent()
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <redline.hxx>      // SwRedline
 
 
@@ -351,7 +348,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
     if( pNd->IsCntntNode() && !dynamic_cast<SwUnoCrsr*>(this) )
     {
-        const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->GetFrm();
+        const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() );
         if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
             0 != ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
         {
@@ -368,7 +365,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
             if( !pFrm )
             {
                 bGoNxt = !bGoNxt;
-                pFrm = ((SwCntntNode*)pNd)->GetFrm();
+                pFrm = ((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() );
                 while ( pFrm && 0 == pFrm->Frm().Height() )
                 {
                     pFrm = bGoNxt ? pFrm->GetNextCntntFrm()
@@ -425,7 +422,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
     const SwTableNode* pPtNd = pNd->FindTableNode();
 
     if( (pNd = &GetMark()->nNode.GetNode())->IsCntntNode() &&
-        !((SwCntntNode*)pNd)->GetFrm() && !dynamic_cast<SwUnoCrsr*>(this) )
+        !((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() ) && !dynamic_cast<SwUnoCrsr*>(this) )
     {
         DeleteMark();
         RestoreSavePos();
@@ -696,7 +693,7 @@ BOOL SwCursor::IsAtValidPos( BOOL bPoint ) const
     const SwPosition* pPos = bPoint ? GetPoint() : GetMark();
     const SwNode* pNd = &pPos->nNode.GetNode();
 
-    if( pNd->IsCntntNode() && !((SwCntntNode*)pNd)->GetFrm() &&
+    if( pNd->IsCntntNode() && !((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
         !dynamic_cast<const SwUnoCrsr*>(this) )
     {
         return FALSE;
@@ -1176,9 +1173,9 @@ BOOL SwCursor::GoPrevWord()
     return GoPrevWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
 }
 
-BOOL SwCursor::SelectWord( const Point* pPt )
+BOOL SwCursor::SelectWord( ViewShell* pViewShell, const Point* pPt )
 {
-    return SelectWordWT( WordType::ANYWORD_IGNOREWHITESPACES, pPt );
+    return SelectWordWT( pViewShell, WordType::ANYWORD_IGNOREWHITESPACES, pPt );
 }
 
 BOOL SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
@@ -1354,20 +1351,20 @@ BOOL SwCursor::GoPrevWordWT( sal_Int16 nWordType )
     return bRet;
 }
 
-BOOL SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
+BOOL SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt )
 {
     SwCrsrSaveState aSave( *this );
 
     BOOL bRet = FALSE;
     BOOL bForward = TRUE;
     DeleteMark();
-    SwRootFrm* pLayout;
-    if( pPt && 0 != (pLayout = GetDoc()->GetRootFrm()) )
+    const SwRootFrm* pLayout = pViewShell->GetLayout();
+    if( pPt && 0 != pLayout )
     {
         // set the cursor to the layout position
         Point aPt( *pPt );
         pLayout->GetCrsrOfst( GetPoint(), aPt );
-    }
+    }   //swmod 071107//swmod 071225
 
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->GetBreakIter().is() )
@@ -1515,7 +1512,7 @@ SwCursor::DoSetBidiLevelLeftRight(
             // for visual cursor travelling (used in bidi layout)
             // we first have to convert the logic to a visual position
             Point aPt;
-            pSttFrm = rTNd.GetFrm( &aPt, GetPoint() );
+            pSttFrm = rTNd.getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
             if( pSttFrm )
             {
                 BYTE nCrsrLevel = GetCrsrBidiLevel();
@@ -1654,7 +1651,7 @@ BOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
         if ( &rTmpNode != &rNode && rTmpNode.IsTxtNode() )
         {
             Point aPt;
-            const SwCntntFrm* pEndFrm = ((SwTxtNode&)rTmpNode).GetFrm( &aPt, GetPoint() );
+            const SwCntntFrm* pEndFrm = ((SwTxtNode&)rTmpNode).getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
             if ( pEndFrm )
             {
                 if ( ! pEndFrm->IsRightToLeft() != ! pSttFrm->IsRightToLeft() )
@@ -1723,7 +1720,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
     Point aPt;
     if( pPt )
         aPt = *pPt;
-    SwCntntFrm* pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+    SwCntntFrm* pFrm = GetCntntNode()->getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
 
     if( pFrm )
     {
@@ -1761,7 +1758,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                 const SwNode* pEndNd = pTblNd->EndOfSectionNode();
                 GetPoint()->nNode = *pEndNd;
                 pTblCrsr->Move( fnMoveBackward, fnGoNode );
-                   pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+                   pFrm = GetCntntNode()->getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
             }
         }
 
@@ -1770,7 +1767,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                     : pFrm->UnitDown( this, nUpDownX, bInReadOnly ) ) &&
                 CheckNodesRange( aOldPos.nNode, GetPoint()->nNode, bChkRange ))
         {
-               pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+               pFrm = GetCntntNode()->getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
             --nCnt;
         }
 
@@ -1781,7 +1778,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
             {
                 // dann versuche den Cursor auf die Position zu setzen,
                 // auf halber Heohe vom Char-Rectangle
-                pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+                pFrm = GetCntntNode()->getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
                 SwCrsrMoveState eTmpState( MV_UPDOWN );
                 eTmpState.bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
@@ -1814,7 +1811,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
 BOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
 {
     Point aPt;
-    SwCntntFrm * pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+    SwCntntFrm * pFrm = GetCntntNode()->getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
 
     // calculate cursor bidi level
     if ( pFrm )
@@ -1828,7 +1825,7 @@ BOOL SwCursor::IsAtLeftRightMargin( BOOL bLeft, BOOL bAPI ) const
 {
     BOOL bRet = FALSE;
     Point aPt;
-    SwCntntFrm * pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+    SwCntntFrm * pFrm = GetCntntNode()->getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
     if( pFrm )
     {
         SwPaM aPam( *GetPoint() );

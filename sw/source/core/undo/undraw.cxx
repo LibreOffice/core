@@ -32,6 +32,7 @@
 #include <rtl/memory.h>
 #include <hintids.hxx>
 
+#include <rtl/string.h>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
@@ -80,7 +81,7 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
     {
         ClearRedo();
         const SdrMarkList* pMarkList = 0;
-        ViewShell* pSh = GetRootFrm() ? GetRootFrm()->GetCurrShell() : 0;
+        ViewShell* pSh = GetCurrentViewShell() ? GetCurrentViewShell() : 0; //swmod 071108//swmod 071225
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 

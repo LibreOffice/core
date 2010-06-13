@@ -277,7 +277,7 @@ public:
     void EnterWait( BOOL bLockDispatcher );
     void LeaveWait( BOOL bLockDispatcher );
 
-    void ToggleBrowserMode(BOOL bOn, SwView* pView = 0);
+    void ToggleBrowserMode(BOOL bOn, SwView* pView);
 
     ULONG LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,
                                 BOOL bUnoCall );

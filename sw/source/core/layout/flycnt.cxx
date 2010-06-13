@@ -29,7 +29,6 @@
 #include "precompiled_sw.hxx"
 #include <tools/bigint.hxx>
 #include "pagefrm.hxx"
-#include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
 #include "txtfrm.hxx"
@@ -83,8 +82,8 @@ using namespace ::com::sun::star;
 |*
 |*************************************************************************/
 
-SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFreeFrm( pFmt, pAnch )
+SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFreeFrm( pFmt, pSib, pAnch )
 {
     bAtCnt = TRUE;
     bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
@@ -194,7 +193,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         if ( !pCntnt )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
-            pCntnt = pNode->GetFrm( &pOldAnchor->Frm().Pos(), 0, FALSE );
+            pCntnt = pNode->getLayoutFrm( getRootFrm(), &pOldAnchor->Frm().Pos(), 0, FALSE );
             ASSERT( pCntnt, "Neuen Anker nicht gefunden" );
         }
         //Flys haengen niemals an einem Follow sondern immer am

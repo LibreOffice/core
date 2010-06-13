@@ -137,7 +137,7 @@ public:
     BOOL GoEndWord();
     BOOL GoNextWord();
     BOOL GoPrevWord();
-    BOOL SelectWord( const Point* pPt = 0 );
+    BOOL SelectWord( ViewShell* pViewShell, const Point* pPt = 0 );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
@@ -148,7 +148,7 @@ public:
     BOOL GoEndWordWT( sal_Int16 nWordType );
     BOOL GoNextWordWT( sal_Int16 nWordType );
     BOOL GoPrevWordWT( sal_Int16 nWordType );
-    BOOL SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
+    BOOL SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt = 0 );
 
     enum SentenceMoveType
     {

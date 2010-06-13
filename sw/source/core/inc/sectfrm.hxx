@@ -60,7 +60,7 @@ protected:
     virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat );
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
 public:
-    SwSectionFrm( SwSection & );                 //Inhalt wird nicht erzeugt!
+    SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!
     SwSectionFrm( SwSectionFrm &, BOOL bMaster );//_Nur_ zum Erzeugen von Master/Follows
     ~SwSectionFrm();
 

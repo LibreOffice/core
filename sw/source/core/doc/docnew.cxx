@@ -238,7 +238,8 @@ SwDoc::SwDoc() :
     pGrfFmtCollTbl( new SwGrfFmtColls() ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
-    pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
+    //pLayout( 0 ),                 // Rootframe des spezifischen Layouts.  //swmod 071029
+    pCurrentView( 0 ),  //swmod 071225
     pDrawModel( 0 ),
     pUndos( new SwUndos( 0, 20 ) ),
     pUpdtFlds( new SwDocUpdtFld() ),
@@ -301,6 +302,7 @@ SwDoc::SwDoc() :
     mbColumnSelection( false ),
     // i#78591#
     mbProtectForm(false),
+    mbLastBrowseMode( false ),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
     mbStartIdleTimer(sal_False)
@@ -317,7 +319,7 @@ SwDoc::SwDoc() :
     mbNewDoc =
     mbCopyIsMove =
     mbNoDrawUndoObj =
-    mbBrowseMode =
+    //mbBrowseMode =//swmod 080130
     mbInReading =
     mbInXMLImport =
     mbUpdateTOX =
@@ -526,7 +528,7 @@ SwDoc::~SwDoc()
     // damit die Fussnotenattribute die Fussnotennodes in Frieden lassen.
     mbDtor = TRUE;
 
-    DELETEZ( pLayout );
+    //DELETEZ( pCurrentView );  //swmod 080110//test if i can commit
 
     delete pRedlineTbl;
     delete pUnoCrsrTbl;
@@ -829,7 +831,7 @@ void SwDoc::ClearDoc()
     // den ersten immer wieder neu anlegen (ohne Attribute/Vorlagen/...)
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, pDfltTxtFmtColl );
 
-    if( pLayout )
+    if( pCurrentView )  //swmod 071029//swmod 071225
     {
         // set the layout to the dummy pagedesc
         pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
@@ -881,14 +883,14 @@ void SwDoc::ClearDoc()
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
     pCharFmtTbl->DeleteAndDestroy( 1, pCharFmtTbl->Count()-1 );
 
-    if( pLayout )
+    if( pCurrentView )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pLayout->GetFmt() ) );
+        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pCurrentView->GetLayout()->GetFmt() ) );
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
-        pFrmFmtTbl->Insert( pLayout->GetFmt(), pFrmFmtTbl->Count() );
+        pFrmFmtTbl->Insert( pCurrentView->GetLayout()->GetFmt(), pFrmFmtTbl->Count() );
     }
-    else
+    else    //swmod 071029//swmod 071225
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
 
     xForbiddenCharsTable.unbind();
@@ -991,7 +993,7 @@ void SwDoc::UpdateLinks( BOOL bUI )
             SfxMedium* pMedium = GetDocShell()->GetMedium();
             SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
             Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-            if( GetRootFrm() && !GetEditShell( &pVSh ) && !pVSh )
+            if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )  //swmod 071108//swmod 071225
             {
                 ViewShell aVSh( *this, 0, 0 );
 

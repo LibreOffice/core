@@ -124,10 +124,17 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
             Point aPt( *pPt );
             GetLayout()->GetCrsrOfst( &aPos, aPt );
             SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-            pFrm = pNd->GetFrm( pPt );
+            pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
         }
         else
+        {
+            const bool bOldCallbackActionEnabled = GetLayout()->IsCallbackActionEnabled();
+            if( bOldCallbackActionEnabled )
+                GetLayout()->SetCallbackActionEnabled( FALSE );
             pFrm = GetCurrFrm();
+            if( bOldCallbackActionEnabled )
+                GetLayout()->SetCallbackActionEnabled( TRUE );
+        }
     }
 
     if( !pFrm )
@@ -264,7 +271,7 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
         Point aPt( *pPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        pFrm = pNd->GetFrm( pPt );
+        pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
         pFrm = GetCurrFrm( FALSE );
@@ -423,7 +430,7 @@ void SwFEShell::SetNewPageOffset( USHORT nOffset )
 void SwFEShell::SetPageOffset( USHORT nOffset )
 {
     const SwPageFrm *pPage = GetCurrFrm( FALSE )->FindPageFrm();
-    const SwRootFrm* pLayout = GetLayout();
+    const SwRootFrm* pDocLayout = GetLayout();
     while ( pPage )
     {
         const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
@@ -434,7 +441,7 @@ void SwFEShell::SetPageOffset( USHORT nOffset )
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if ( rPgDesc.GetNumOffset() )
             {
-                pLayout->SetVirtPageNum( TRUE );
+                pDocLayout->SetVirtPageNum( TRUE );
                 lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
                 break;
             }
@@ -521,6 +528,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                     for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
                     {
                         SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
+                        if( pDrawObj )
                         aDrawObjs.push_back( pDrawObj );
                     }
                 }

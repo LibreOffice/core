@@ -726,8 +726,8 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     }
 
     // Frames anlegen
-    if( GetRootFrm() )
-        pFmt->MakeFrms();           // ???
+    if( GetCurrentViewShell() )
+        pFmt->MakeFrms();           // ???  //swmod 071108//swmod 071225
 
     if( DoesUndo() )
     {
@@ -1003,7 +1003,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
 
     // ggfs. Frames anlegen
-    if( GetRootFrm() )
+    if( GetCurrentViewShell() )
     {
         pFmt->MakeFrms();
         // --> OD 2005-02-09 #i42319# - follow-up of #i35635#
@@ -1119,11 +1119,11 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
     // kein Layout oder nur ein Teil, dann wars das
     // Seitenbezogen Flys nur, wenn vollstaendig "gewuenscht" wird !
-    if( !GetRootFrm() || pCmpRange )
+    if( !GetCurrentViewShell() || pCmpRange )   //swmod 071108//swmod 071225
         return;
 
     pFPos = 0;
-    SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->GetLower();
+    SwPageFrm *pPage = (SwPageFrm*)GetCurrentLayout()->GetLower();  //swmod 080218
     while( pPage )
     {
         if( pPage->GetSortedObjs() )
@@ -1860,11 +1860,12 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
 
-    if( GetRootFrm() && GetRootFrm()->GetCurrShell() &&
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    if( pTmpRoot &&
         !SfxProgress::GetActiveProgress( pDocShell ) )
     {
         ViewShell *pSh, *pStartSh;
-        pSh = pStartSh = GetRootFrm()->GetCurrShell();
+        pSh = pStartSh = GetCurrentViewShell();
         do {
             if( pSh->ActionPend() )
             {
@@ -1875,10 +1876,9 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             pSh = (ViewShell*)pSh->GetNext();
         } while( pSh != pStartSh );
 
-        if (GetRootFrm()->IsNeedGrammarCheck())
+        if( pTmpRoot->IsNeedGrammarCheck() )
         {
             BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
-
             sal_Bool bIsAutoGrammar = sal_False;
             SvtLinguConfig().GetProperty( ::rtl::OUString::createFromAscii(
                         UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
@@ -1886,12 +1886,20 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( *this );
         }
-
-        sal_uInt16 nFldUpdFlag;
-        if( GetRootFrm()->IsIdleFormat() )
-            GetRootFrm()->GetCurrShell()->LayoutIdle();
-        else if( ( AUTOUPD_FIELD_ONLY ==
-                 ( nFldUpdFlag = static_cast<sal_uInt16>(getFieldUpdateFlags(true)) )
+        SwFldUpdateFlags nFldUpdFlag;
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080320
+        std::set<SwRootFrm*>::iterator pLayIter = aAllLayouts.begin();
+        for ( ;pLayIter != aAllLayouts.end();pLayIter++ )
+        {
+            if ((*pLayIter)->IsIdleFormat())
+            {
+                (*pLayIter)->GetCurrShell()->LayoutIdle();
+                break;
+            }
+        }
+        BOOL bAllValid = pLayIter == aAllLayouts.end() ? 1 : 0;
+        if( bAllValid && ( AUTOUPD_FIELD_ONLY ==
+                 ( nFldUpdFlag = getFieldUpdateFlags(true) )
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
                 GetUpdtFlds().IsFieldsDirty() &&
                 !GetUpdtFlds().IsInUpdateFlds() &&
@@ -1903,7 +1911,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             // chaos::Action-Klammerung!
             GetUpdtFlds().SetInUpdateFlds( sal_True );
 
-            GetRootFrm()->StartAllAction();
+            pTmpRoot->StartAllAction();
 
             // no jump on update of fields #i85168#
             const sal_Bool bOldLockView = pStartSh->IsViewLocked();
@@ -1914,14 +1922,14 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             UpdateTblFlds(NULL);                // Tabellen
             UpdateRefFlds(NULL);                // Referenzen
 
-            GetRootFrm()->EndAllAction();
+            pTmpRoot->EndAllAction();
 
             pStartSh->LockView( bOldLockView );
 
             GetUpdtFlds().SetInUpdateFlds( sal_False );
             GetUpdtFlds().SetFieldsDirty( sal_False );
         }
-    }
+    }   //swmod 080219
 #ifdef TIMELOG
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, ((long&)pModLogFile) = 1;
@@ -1934,7 +1942,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 {
     ViewShell *pSh, *pStartSh;
-    pSh = pStartSh = pThis->GetRootFrm()->GetCurrShell();
+    pSh = pStartSh = pThis->GetCurrentViewShell();  //swmod 071108//swmod 071225
     if( pStartSh )
         do {
             if( pSh->GetWin() )
@@ -2171,9 +2179,9 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     // Redlines auch an Start- und Endnodes haengen, muss der Index nicht
     // unbedingt der eines Content-Nodes sein.
     SwNode* pNd = &rIdx.GetNode();
-    if( pNd->IsCntntNode() && pLayout )
+    if( pNd->IsCntntNode() && pCurrentView )//swmod 071029//swmod 071225
     {
-        const SwFrm *pFrm = pNd->GetCntntNode()->GetFrm();
+        const SwFrm *pFrm = pNd->GetCntntNode()->getLayoutFrm( GetCurrentLayout() );
         if( pFrm )
         {
             const SwFrm *pUp = pFrm->GetUpper();
@@ -2286,9 +2294,36 @@ sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) con
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 
-const SwRootFrm* SwDoc::GetRootFrm() const { return pLayout; }
-SwRootFrm* SwDoc::GetRootFrm() { return pLayout; }
-void SwDoc::SetRootFrm( SwRootFrm* pNew ) { pLayout = pNew; }
+//const SwRootFrm* SwDoc::GetRootFrm() const { return pLayout; }
+//SwRootFrm* SwDoc::GetRootFrm() { return pLayout; }
+//void SwDoc::SetRootFrm( SwRootFrm* pNew ) { pLayout = pNew; } //swmod 071029//swmod 071225
+void SwDoc::SetCurrentViewShell( ViewShell* pNew ) { pCurrentView = pNew; }//swmod 071227
 SwLayouter* SwDoc::GetLayouter() { return pLayouter; }
 const SwLayouter* SwDoc::GetLayouter() const { return pLayouter; }
 void SwDoc::SetLayouter( SwLayouter* pNew ) { pLayouter = pNew; }
+const ViewShell *SwDoc::GetCurrentViewShell() const { return pCurrentView;} //swmod 080219
+ViewShell *SwDoc::GetCurrentViewShell()     { return pCurrentView;} //swmod 080219 It must be able to communicate to a ViewShell.This is going to be removerd later.
+const SwRootFrm *SwDoc::GetCurrentLayout() const {
+    if(GetCurrentViewShell())
+        return GetCurrentViewShell()->GetLayout();
+    return 0;
+}
+SwRootFrm *SwDoc::GetCurrentLayout(){
+
+    if(GetCurrentViewShell())
+        return GetCurrentViewShell()->GetLayout();
+    return 0;
+}
+std::set<SwRootFrm*> SwDoc::GetAllLayouts(){
+    std::set<SwRootFrm*> aAllLayouts;
+    ViewShell *pStart = GetCurrentViewShell();
+    ViewShell *pTemp = pStart;
+    do {
+        if (pTemp->GetLayout()) {
+            aAllLayouts.insert(pTemp->GetLayout());
+            pTemp = (ViewShell*)pTemp->GetNext();
+        }
+    } while(pTemp!=pStart);
+    return aAllLayouts;
+}//swmod 070825
+

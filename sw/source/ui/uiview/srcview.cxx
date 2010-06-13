@@ -312,6 +312,7 @@ void SwSrcView::Init()
     }
 
 //  StartListening(*GetViewFrame());
+    SetNewWindowAllowed( sal_False );
     StartListening(*pDocShell,TRUE);
 }
 

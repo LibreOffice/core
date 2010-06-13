@@ -388,7 +388,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
             if ( !pCurrentPage && !pStopPage )
             {
                 pStopPage = pStartPage;
-                pCurrentPage = static_cast<SwPageFrm*>(mpDoc->GetRootFrm()->Lower());
+                pCurrentPage = static_cast<SwPageFrm*>(pViewShell->GetLayout()->Lower());
             }
         }
     }

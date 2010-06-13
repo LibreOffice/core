@@ -1941,7 +1941,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         const SwTableLine* pLine = pBoxArr[ 0 ]->GetBox()->GetUpper();
         // Zeilenhoehe ausgeben
         long nHeight = 0;
-        if( bFixRowHeight && rWrt.pDoc->GetRootFrm() )
+        if( bFixRowHeight && rWrt.pDoc->GetCurrentViewShell() ) //swmod 071108//swmod 071225
         {
             nHeight = -pRow->GetPos();      //neg. => abs. height!
             if( nLine )

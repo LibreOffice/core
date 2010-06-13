@@ -54,6 +54,7 @@
 #include "poolfmt.hxx"
 #include "viewsh.hxx"
 #include "tabfrm.hxx"
+#include "viewopt.hxx"
 
 #include "htmltbl.hxx"
 #include "ndindex.hxx"
@@ -369,7 +370,7 @@ USHORT SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
 USHORT SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
 {
     // Wenn ein Layout da ist, koennen wir die Breite dort herholen.
-    const SwRootFrm *pRootFrm = rDoc.GetRootFrm();
+    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();    //swmod 080218
     if( pRootFrm )
     {
         const SwFrm *pPageFrm = pRootFrm->GetLower();
@@ -1811,16 +1812,16 @@ void SwHTMLTableLayout::_Resize( USHORT nAbsAvail, BOOL bRecalc )
     if( bRecalc )
         AutoLayoutPass1();
 
-    SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->GetRootFrm();
+    SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->GetCurrentViewShell()->GetLayout();
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->StartAllAction();
+        pRoot->StartAllAction();    //swmod 071108//swmod 071225
 
     // Sonst koennen die Breiten gesetzt werden, wobei zuvor aber jewils
     // noch der Pass 2 laufen muss.
     SetWidths( TRUE, nAbsAvail );
 
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->EndAllAction( TRUE );    //True per VirDev (Browsen ruhiger)
+        pRoot->EndAllAction( TRUE );    //True per VirDev (Browsen ruhiger) //swmod 071108//swmod 071225
 }
 
 IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )
@@ -1857,7 +1858,7 @@ BOOL SwHTMLTableLayout::Resize( USHORT nAbsAvail, BOOL bRecalc,
     // und nicht die der VisArea uebergeben. Wenn wir nicht in einem Rahmen
     // stehen, muss die Tabelle allerdings fuer die VisArea berechnet werden,
     // weil sond die Umschaltung von relativ nach absolut nicht funktioniert.
-    if( pDoc->GetRootFrm() && pDoc->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if( pDoc->GetCurrentViewShell() && pDoc->GetCurrentViewShell()->GetViewOptions()->getBrowseMode() )
     {
         USHORT nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
         if( nVisAreaWidth < nAbsAvail && !FindFlyFrmFmt() )

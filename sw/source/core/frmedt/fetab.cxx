@@ -1167,7 +1167,7 @@ USHORT lcl_GetRowNumber( const SwPosition& rPos )
     const SwCntntFrm *pFrm;
 
     if( 0 != ( pNd = rPos.nNode.GetNode().GetCntntNode() ))
-        pFrm = pNd->GetFrm( &aTmpPt, &rPos, FALSE );
+        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, &rPos, FALSE );
     else
         pFrm = 0;
 

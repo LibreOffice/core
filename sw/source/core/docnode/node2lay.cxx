@@ -255,7 +255,7 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                     return static_cast<SwLayoutFrm*>(pFrm);
                 }
 
-                pUpper = new SwSectionFrm(((SwSectionNode*)pNode)->GetSection());
+                pUpper = new SwSectionFrm(((SwSectionNode*)pNode)->GetSection(), rpFrm);
                 pUpper->Paste( rpFrm->GetUpper(),
                                bMaster ? rpFrm : rpFrm->GetNext() );
                 static_cast<SwSectionFrm*>(pUpper)->Init();
@@ -299,7 +299,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
                     pNxt = pNxt->GetNext();
                 else
                     pNxt = pUp->Lower();
-                pNew = ((SwCntntNode*)pNd)->MakeFrm();
+                pNew = ((SwCntntNode*)pNd)->MakeFrm( pUp );
                 pNew->Paste( pUp, pNxt );
                 (*pUpperFrms)[n-2] = pNew;
             }
@@ -314,7 +314,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
                     pNxt = pNxt->GetNext();
                 else
                     pNxt = pUp->Lower();
-                pNew = ((SwTableNode*)pNd)->MakeFrm();
+                pNew = ((SwTableNode*)pNd)->MakeFrm( pUp );
                 ASSERT( pNew->IsTabFrm(), "Table exspected" );
                 pNew->Paste( pUp, pNxt );
                 ((SwTabFrm*)pNew)->RegistFlys();
@@ -358,7 +358,7 @@ SwFrm* SwNode2LayImpl::GetFrm( const Point* pDocPos,
                                 const SwPosition *pPos,
                                 const BOOL bCalcFrm ) const
 {
-    return pIter ? ::GetFrmOfModify( pIter->GetModify(), USHRT_MAX,
+    return pIter ? ::GetFrmOfModify( 0, pIter->GetModify(), USHRT_MAX,
                                         pDocPos, pPos, bCalcFrm )
                  : 0;
 }

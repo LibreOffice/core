@@ -77,6 +77,7 @@
 #include "pam.hxx"
 #include "frmatr.hxx"
 #include "viewimp.hxx"
+#include "viewopt.hxx"
 #include "errhdl.hxx"
 #include "dcontact.hxx"
 #include "dflyobj.hxx"
@@ -111,8 +112,8 @@ TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 |*
 |*************************************************************************/
 
-SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwLayoutFrm( pFmt ),
+SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
+    SwLayoutFrm( pFmt, pSib ),
     // OD 2004-03-22 #i26791#
     SwAnchoredObject(),
     // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
@@ -149,11 +150,16 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
         bInvalidVert = 0;
         bDerivedVert = 0;
         bDerivedR2L = 0;
-        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
-                                         || pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
+            bVertical = 0;
+        else
+        {
+            const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             bVertical = 0;
         else
             bVertical = 1;
+        }
         bVert = bVertical;
         bInvalidR2L = 0;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
@@ -288,7 +294,7 @@ SwFlyFrm::~SwFlyFrm()
     // anchor will do that.
     if( IsAccessibleFrm() && GetFmt() && (IsFlyInCntFrm() || !GetAnchorFrm()) )
     {
-        SwRootFrm *pRootFrm = FindRootFrm();
+        SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
             ViewShell *pVSh = pRootFrm->GetCurrShell();
@@ -428,7 +434,7 @@ void SwFlyFrm::FinitDrawObj()
     //Bei den SdrPageViews abmelden falls das Objekt dort noch selektiert ist.
     if ( !GetFmt()->GetDoc()->IsInDtor() )
     {
-        ViewShell *p1St = GetShell();
+        ViewShell *p1St = getRootFrm()->GetCurrShell();
         if ( p1St )
         {
             ViewShell *pSh = p1St;
@@ -524,10 +530,13 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
     }
 
     // invalidate accessible relation set (accessibility wrapper)
-    ViewShell* pSh = pMaster->GetShell();
-    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+    ViewShell* pSh = pMaster->getRootFrm()->GetCurrShell();
+    if( pSh )
+    {
+        SwRootFrm* pLayout = pMaster->getRootFrm();
+        if( pLayout && pLayout->IsAnyShellAccessible() )
         pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
-
+    }
 }
 
 void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
@@ -567,9 +576,13 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
                   pFollow->GetFmt()->GetDoc(), ++nIndex );
 
     // invalidate accessible relation set (accessibility wrapper)
-    ViewShell* pSh = pMaster->GetShell();
-    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+    ViewShell* pSh = pMaster->getRootFrm()->GetCurrShell();
+    if( pSh )
+    {
+        SwRootFrm* pLayout = pMaster->getRootFrm();
+        if( pLayout && pLayout->IsAnyShellAccessible() )
         pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
+}
 }
 
 /*************************************************************************
@@ -772,7 +785,7 @@ void SwFlyFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
         if ( ( nInvFlags & 0x40 ) && Lower() && Lower()->IsNoTxtFrm() )
             ClrContourCache( GetVirtDrawObj() );
         SwRootFrm *pRoot;
-        if ( nInvFlags & 0x20 && 0 != (pRoot = FindRootFrm()) )
+        if ( nInvFlags & 0x20 && 0 != (pRoot = getRootFrm()) )
             pRoot->InvalidateBrowseWidth();
         // --> OD 2004-06-28 #i28701#
         if ( nInvFlags & 0x80 )
@@ -794,7 +807,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 {
     BOOL bClear = TRUE;
     const USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     switch( nWhich )
     {
         case RES_VERT_ORIENT:
@@ -846,8 +859,12 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             const SvxProtectItem *pP = (SvxProtectItem*)pNew;
             GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()   );
             GetVirtDrawObj()->SetResizeProtect( pP->IsSizeProtected() );
-            if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+            if( pSh )
+            {
+                SwRootFrm* pLayout = getRootFrm();
+                if( pLayout && pLayout->IsAnyShellAccessible() )
                 pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+            }
             break;
             }
 
@@ -958,8 +975,8 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_LR_SPACE:
         {
             rInvFlags |= 0x41;
-            if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
-                GetFmt()->GetDoc()->GetRootFrm()->InvalidateBrowseWidth();
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                getRootFrm()->InvalidateBrowseWidth();
             SwRect aNew( GetObjRectWithSpaces() );
             SwRect aOld( aFrm );
             if ( RES_UL_SPACE == nWhich )
@@ -1000,10 +1017,14 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                                     pIDDMA->GetHeavenId() :
                                     pIDDMA->GetHellId();
                 GetVirtDrawObj()->SetLayer( nId );
-                if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+                if( pSh )
+                {
+                    SwRootFrm* pLayout = getRootFrm();
+                    if( pLayout && pLayout->IsAnyShellAccessible() )
                 {
                     pSh->Imp()->DisposeAccessibleFrm( this );
                     pSh->Imp()->AddAccessibleFrm( this );
+                }
                 }
                 // --> OD 2004-06-28 #i28701# - perform reorder of object lists
                 // at anchor frame and at page frame.
@@ -2194,7 +2215,7 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
              pToRemove->GetFmt() &&
              !pToRemove->IsFlyInCntFrm() )
         {
-            SwRootFrm *pRootFrm = FindRootFrm();
+            SwRootFrm *pRootFrm = getRootFrm();
             if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
             {
                 ViewShell *pVSh = pRootFrm->GetCurrShell();
@@ -2261,9 +2282,11 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
     }
 
     // Notify accessible layout.
-    ViewShell* pSh = GetShell();
-    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+    ViewShell* pSh = getRootFrm()->GetCurrShell();
+    if( pSh )
     {
+        SwRootFrm* pLayout = getRootFrm();
+        if( pLayout && pLayout->IsAnyShellAccessible() )
         pSh->Imp()->AddAccessibleObj( _rNewObj.GetDrawObj() );
     }
 }
@@ -2271,9 +2294,11 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 {
     // Notify accessible layout.
-    ViewShell* pSh = GetShell();
-    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+    ViewShell* pSh = getRootFrm()->GetCurrShell();
+    if( pSh )
     {
+        SwRootFrm* pLayout = getRootFrm();
+        if( pLayout && pLayout->IsAnyShellAccessible() )
         pSh->Imp()->DisposeAccessibleObj( _rToRemoveObj.GetDrawObj() );
     }
 
@@ -2493,10 +2518,10 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
     if( pRel ) // LAYER_IMPL
     {
         long nRelWidth = LONG_MAX, nRelHeight = LONG_MAX;
-        const ViewShell *pSh = GetShell();
+        const ViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( ( pRel->IsBodyFrm() || pRel->IsPageFrm() ) &&
-             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-             pSh && pSh->VisArea().HasArea() )
+             pSh && pSh->GetViewOptions()->getBrowseMode() &&
+             pSh->VisArea().HasArea() )
         {
             nRelWidth  = pSh->GetBrowseWidth();
             nRelHeight = pSh->VisArea().Height();

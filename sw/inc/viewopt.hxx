@@ -159,9 +159,10 @@ protected:
     BOOL            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
     BOOL            bSelectionInReadonly : 1; //determines whether selection is switched on in readonly documents
     // --> FME 2004-06-29 #114856# Formular view
-    BOOL            bFormView : 1;
+    BOOL            mbFormView : 1;
     // <--
-    BOOL            bBookview : 1;      // view mode for page preview
+    BOOL            mbBookview : 1;      // view mode for page preview
+     BOOL            mbBrowseMode : 1;    //swmod 080130
     BOOL            mbViewLayoutBookMode : 1; // book view mode for edit view
     sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
 
@@ -404,12 +405,15 @@ public:
     void         SetSelectionInReadonly(BOOL bSet) {bSelectionInReadonly = bSet;}
 
     // --> FME 2004-06-29 #114856# Formular view
-    BOOL         IsFormView() const { return bFormView; }
-    void         SetFormView( BOOL bSet ) { bFormView = bSet; }
+    BOOL         IsFormView() const { return mbFormView; }
+    void         SetFormView( BOOL bSet ) { mbFormView = bSet; }
     // <--
 
-    inline BOOL  IsPagePrevBookview() const { return bBookview; }
-    inline void  SetPagePrevBookview(BOOL bSet) { bBookview = bSet; }
+    inline BOOL  IsPagePrevBookview() const { return mbBookview; }
+    inline void  SetPagePrevBookview(BOOL bSet) { mbBookview = bSet; }
+
+    inline BOOL  getBrowseMode() const { return mbBrowseMode; }
+    inline void  setBrowseMode(BOOL bSet) { mbBrowseMode = bSet; }
 
     BOOL IsAutoCompleteWords() const;
 

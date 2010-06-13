@@ -2171,6 +2171,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             BOOL bCopyPoolIds )
 {
     BOOL bNotifyLayout = FALSE;
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
 
     rDstDesc.SetLandscape( rSrcDesc.GetLandscape() );
     rDstDesc.SetNumType( rSrcDesc.GetNumType() );
@@ -2234,9 +2235,11 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     else
         rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
 
-    if( bNotifyLayout && GetRootFrm() )
-        //Layot benachrichtigen!
-        GetRootFrm()->CheckPageDescs( (SwPageFrm*)GetRootFrm()->Lower() );
+    if( bNotifyLayout && pTmpRoot )
+    {
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080225
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));//swmod 080226
+    }
 
     //Wenn sich FussnotenInfo veraendert, so werden die Seiten
     //angetriggert.

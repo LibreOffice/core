@@ -1469,7 +1469,7 @@ BOOL SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pLinguNode != this )
     {
         pLinguNode = this;
-        pLinguFrm = (SwTxtFrm*)GetFrm( (Point*)(rHyphInf.GetCrsrPos()) );
+        pLinguFrm = (SwTxtFrm*)getLayoutFrm( GetDoc()->GetCurrentLayout(), (Point*)(rHyphInf.GetCrsrPos()) );
     }
     SwTxtFrm *pFrm = pLinguFrm;
     if( pFrm )

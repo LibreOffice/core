@@ -1061,7 +1061,7 @@ SwTableNode * InsertedTableClient::GetTableNode()
 }
 
 InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
-    : mbHasRoot(rDoc.GetRootFrm())
+    : mbHasRoot(rDoc.GetCurrentLayout())    //swmod 080218
 {
 }
 

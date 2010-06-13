@@ -51,6 +51,8 @@
 // --> OD 2005-05-17 #i49383#
 #include <objectformatter.hxx>
 // <--
+#include "viewopt.hxx"
+#include "viewsh.hxx"
 
 /*************************************************************************
 |*
@@ -214,8 +216,8 @@ USHORT lcl_ColumnNum( const SwFrm* pBoss )
 |*************************************************************************/
 
 
-SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt ):
-    SwLayoutFrm( pFmt )
+SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
+    SwLayoutFrm( pFmt, pSib )
 {
     nType = FRMC_FTNCONT;
 }
@@ -283,7 +285,14 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
 
     if ( !bValidSize )
     {
-        if ( pPage->IsFtnPage() && !GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        bool bGrow = pPage->IsFtnPage();
+        if( bGrow )
+        {
+            const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                bGrow = false;
+        }
+        if( bGrow )
                 Grow( LONG_MAX, FALSE );
         else
         {
@@ -379,7 +388,8 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
             return 0;
         }
     }
-    const bool bBrowseMode = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     SwPageFrm *pPage = pBoss->FindPageFrm();
     if ( bBrowseMode || !pPage->IsFtnPage() )
     {
@@ -483,9 +493,19 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, BOOL bTst, BOOL bInfo )
 {
     SwPageFrm *pPage = FindPageFrm();
-    if ( pPage &&
-           ( !pPage->IsFtnPage() ||
-             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ) )
+    bool bShrink = false;
+    if ( pPage )
+    {
+        if( !pPage->IsFtnPage() )
+            bShrink = true;
+        else
+        {
+            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                bShrink = true;
+        }
+    }
+    if( bShrink )
     {
         SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDiff, bTst, bInfo );
         if( IsInSct() && !bTst )
@@ -511,8 +531,8 @@ SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, BOOL bTst, BOOL bInfo )
 |*************************************************************************/
 
 
-SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
-    SwLayoutFrm( pFmt ),
+SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
+    SwLayoutFrm( pFmt, pSib ),
     pFollow( 0 ),
     pMaster( 0 ),
     pRef( pCnt ),
@@ -636,8 +656,8 @@ void SwFtnFrm::Cut()
             if ( pPage )
             {
                 SwLayoutFrm *pBody = pPage->FindBodyCont();
-                if ( !pBody->ContainsCntnt() )
-                    pPage->FindRootFrm()->SetSuperfluous();
+                if( pBody && !pBody->ContainsCntnt() )
+                    pPage->getRootFrm()->SetSuperfluous();
             }
             SwSectionFrm* pSect = pUp->FindSctFrm();
             pUp->Cut();
@@ -1146,7 +1166,7 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
     }
 #endif
 
-    SwFtnContFrm *pNew = new SwFtnContFrm( GetFmt()->GetDoc()->GetDfltFrmFmt());
+    SwFtnContFrm *pNew = new SwFtnContFrm( GetFmt()->GetDoc()->GetDfltFrmFmt(), this );
     SwLayoutFrm *pLay = FindBodyCont();
     pNew->Paste( this, pLay->GetNext() );
     return pNew;
@@ -1379,6 +1399,8 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
         if ( pLast->ISA(SwFrm) )
         {
             SwFrm *pFrm = (SwFrm*)pLast;
+            if( pFrm->getRootFrm() == pCheck->getRootFrm() )
+            {
             SwFrm *pTmp = pFrm->GetUpper();
             while ( pTmp && !pTmp->IsFtnFrm() )
                 pTmp = pTmp->GetUpper();
@@ -1396,6 +1418,7 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
                     pFtn = pNxt;
                 }
             }
+        }
         }
         pLast = ++aIter;
     }
@@ -1830,7 +1853,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         }
     }
 
-    SwFtnFrm *pNew = new SwFtnFrm( pDoc->GetDfltFrmFmt(), pRef, pAttr );
+    SwFtnFrm *pNew = new SwFtnFrm( pDoc->GetDfltFrmFmt(), this, pRef, pAttr );
     {
         SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
         ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
@@ -2850,7 +2873,8 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     else
         nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 
-    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nMaxFtnHeight += pBody->Grow( LONG_MAX, TRUE );
     if ( IsInSct() )
         nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX, TRUE );
@@ -2932,9 +2956,12 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
     }
     else
         nRet = 0;
-    if ( IsPageFrm() &&
-         GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if ( IsPageFrm() )
+    {
+        const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+        if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nRet += BROWSE_HEIGHT - Frm().Height();
+    }
     return nRet;
 }
 
@@ -3181,7 +3208,7 @@ BOOL SwCntntFrm::MoveFtnCntFwd( BOOL bMakePage, SwFtnBossFrm *pOldBoss )
             //Fussnote erzeugen.
             SwFtnFrm *pOld = FindFtnFrm();
             pTmpFtn = new SwFtnFrm( pOld->GetFmt()->GetDoc()->GetDfltFrmFmt(),
-                                    pOld->GetRef(), pOld->GetAttr() );
+                                    pOld, pOld->GetRef(), pOld->GetAttr() );
             //Verkettung der Fussnoten.
             if ( pOld->GetFollow() )
             {
@@ -3315,7 +3342,7 @@ SwCntntFrm* SwFtnFrm::GetRefFromAttr()
     ASSERT( pAttr, "invalid Attribute" );
     SwTxtNode& rTNd = (SwTxtNode&)pAttr->GetTxtNode();
     SwPosition aPos( rTNd, SwIndex( &rTNd, *pAttr->GetStart() ));
-    SwCntntFrm* pCFrm = rTNd.GetFrm( 0, &aPos, FALSE );
+    SwCntntFrm* pCFrm = rTNd.getLayoutFrm( getRootFrm(), 0, &aPos, FALSE );
     return pCFrm;
 }
 

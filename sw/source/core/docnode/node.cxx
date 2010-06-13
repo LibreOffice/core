@@ -449,14 +449,14 @@ BOOL SwNode::IsInVisibleArea( ViewShell* pSh ) const
     else
         pNd = GetCntntNode();
 
-    const SwFrm* pFrm;
-    if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, FALSE ) ) )
-    {
         if( !pSh )
             // dann die Shell vom Doc besorgen:
             GetDoc()->GetEditShell( &pSh );
 
         if( pSh )
+        {
+        const SwFrm* pFrm;
+        if( pNd && 0 != ( pFrm = pNd->getLayoutFrm( pSh->GetLayout(), 0, 0, FALSE ) ) )
         {
             if ( pFrm->IsInTab() )
                 pFrm = pFrm->FindTabFrm();
@@ -494,7 +494,7 @@ BOOL SwNode::IsProtect() const
     if( 0 != ( pSttNd = FindTableBoxStartNode() ) )
     {
         SwCntntFrm* pCFrm;
-        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->GetFrm() ))
+        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->getLayoutFrm( GetDoc()->GetCurrentLayout() ) ))
             return pCFrm->IsProtected();
 
         const SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
@@ -563,7 +563,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
     {
         const SwFrm* pFrm;
         const SwPageFrm* pPage;
-        if( pNode && 0 != ( pFrm = pNode->GetFrm( 0, 0, bCalcLay ) ) &&
+        if( pNode && 0 != ( pFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout(), 0, 0, bCalcLay ) ) &&
             0 != ( pPage = pFrm->FindPageFrm() ) )
         {
             pPgDesc = pPage->GetPageDesc();
@@ -862,8 +862,8 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( BYTE nLvl ) const
             const SwCntntNode* pCNd = GetCntntNode();
 
             Point aPt( 0, 0 );
-            const SwFrm* pFrm = pRet->GetFrm( &aPt, 0, FALSE ),
-                       * pMyFrm = pCNd ? pCNd->GetFrm( &aPt, 0, FALSE ) : 0;
+            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE ),
+                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE ) : 0;
             const SwPageFrm* pPgFrm = pFrm ? pFrm->FindPageFrm() : 0;
             if( pPgFrm && pMyFrm &&
                 pPgFrm->Frm().Top() > pMyFrm->Frm().Top() )
@@ -1157,20 +1157,19 @@ BOOL SwCntntNode::InvalidateNumRule()
     return 0 != pRule;
 }
 
-
-SwCntntFrm *SwCntntNode::GetFrm( const Point* pPoint,
-                                const SwPosition *pPos,
-                                const BOOL bCalcFrm ) const
+SwCntntFrm *SwCntntNode::getLayoutFrm( const SwRootFrm* _pRoot,
+    const Point* pPoint, const SwPosition *pPos, const BOOL bCalcFrm ) const
 {
-    return (SwCntntFrm*) ::GetFrmOfModify( *(SwModify*)this, FRM_CNTNT,
+    return (SwCntntFrm*) ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
                                             pPoint, pPos, bCalcFrm );
 }
+
 
 SwRect SwCntntNode::FindLayoutRect( const BOOL bPrtArea, const Point* pPoint,
                                     const BOOL bCalcFrm ) const
 {
     SwRect aRet;
-    SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( *(SwModify*)this,
+    SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( 0, *(SwModify*)this,
                                             FRM_CNTNT, pPoint, 0, bCalcFrm );
     if( pFrm )
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
@@ -1181,7 +1180,7 @@ SwRect SwCntntNode::FindPageFrmRect( const BOOL bPrtArea, const Point* pPoint,
                                     const BOOL bCalcFrm ) const
 {
     SwRect aRet;
-    SwFrm* pFrm = ::GetFrmOfModify( *(SwModify*)this,
+    SwFrm* pFrm = ::GetFrmOfModify( 0, *(SwModify*)this,
                                             FRM_CNTNT, pPoint, 0, bCalcFrm );
     if( pFrm && 0 != ( pFrm = pFrm->FindPageFrm() ))
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
@@ -1353,7 +1352,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 
     while( 0 != (pUpper = aNode2Layout.UpperFrm( pFrm, rNode )) )
     {
-        pNew = rNode.MakeFrm();
+        pNew = rNode.MakeFrm( pUpper );
         pNew->Paste( pUpper, pFrm );
         // --> OD 2005-12-01 #i27138#
         // notify accessibility paragraphs objects about changed
@@ -1362,7 +1361,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         if ( pNew->IsTxtFrm() )
         {
-            ViewShell* pViewShell( pNew->GetShell() );
+            ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -1400,7 +1399,7 @@ void SwCntntNode::DelFrms()
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
         if ( pFrm->IsTxtFrm() )
         {
-            ViewShell* pViewShell( pFrm->GetShell() );
+            ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -2049,7 +2048,7 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
 
     // --> OD 2007-01-10 #i72024#
     // No format of the frame, because this can cause recursive layout actions
-    SwFrm* pFrm = GetFrm( &aPt, &rPos, FALSE );
+    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, FALSE );
     // <--
 
     if ( pFrm )

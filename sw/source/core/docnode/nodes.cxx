@@ -395,7 +395,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
 
     if( bNewFrms )
         bNewFrms = &GetDoc()->GetNodes() == (const SwNodes*)&rNds &&
-                    GetDoc()->GetRootFrm();
+                    GetDoc()->GetCurrentViewShell();    //swmod 071108//swmod 071225
     if( bNewFrms )
     {
         // Frames besorgen:
@@ -2398,7 +2398,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
     SwNode* pFrmNd = 0;
 
     // habe wir gar kein Layout, vergiss es
-    if( GetDoc()->GetRootFrm() )
+    if( GetDoc()->GetCurrentViewShell() )   //swmod 071108//swmod 071225
     {
         SwNode* pSttNd = &rFrmIdx.GetNode();
 

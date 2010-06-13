@@ -789,11 +789,11 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         else
             throw uno::RuntimeException();
     }
-    else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->GetRootFrm())
+    else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->GetCurrentLayout())
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmp(MM100_TO_TWIP(aMM100Pos.X), MM100_TO_TWIP(aMM100Pos.Y));
-        pDoc->GetRootFrm()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
+        pDoc->GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );   //swmod 080218
         aAnchor.SetAnchor( pPam->GetPoint() );
 
         // --> OD 2004-08-18 #i32349# - adjustment of vertical positioning
@@ -1346,7 +1346,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     pFmt->SetPositionLayoutDir( nPositionLayoutDir );
                 }
                 // <--
-                else if( pDoc->GetRootFrm() )
+                else if( pDoc->GetCurrentLayout())  //swmod 080218
                 {
                     UnoActionContext aCtx(pDoc);
                     if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
@@ -1411,11 +1411,11 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             //if the fly has been anchored at page then it needs to be connected
                             //to the content position
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
-                            if( pDoc->GetRootFrm() )
+                            if( pDoc->GetCurrentLayout() )
                             {
                                 SwCrsrMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {
@@ -1530,7 +1530,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     aKeepedPosition = getPosition();
             }
             // <--
-            if( pFmt && pFmt->GetDoc()->GetRootFrm() )
+            if( pFmt && pFmt->GetDoc()->GetCurrentViewShell() ) //swmod 071108//swmod 071225
             {
                 UnoActionContext aCtx(pFmt->GetDoc());
                 xPrSet->setPropertyValue(rPropertyName, aValue);

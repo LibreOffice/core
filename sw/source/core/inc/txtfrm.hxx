@@ -337,7 +337,7 @@ public:
     inline const SwTxtNode *GetTxtNode() const
         { return (SwTxtNode*)SwCntntFrm::GetNode(); }
 
-    SwTxtFrm(SwTxtNode * const);
+    SwTxtFrm(SwTxtNode * const, SwFrm* );
     virtual ~SwTxtFrm();
 
     // SwCntntFrm: der "kurze Dienstweg" fuer die Frames.

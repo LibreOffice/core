@@ -31,20 +31,11 @@
 
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <editeng/brshitem.hxx>
-#ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
-#endif
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <viewopt.hxx>  // SwViewOptions
 #include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
@@ -54,10 +45,9 @@
 #include <blink.hxx>    // pBlink
 #include <frmtool.hxx>  // DrawGraphic
 #include <viewsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
+#include "rootfrm.hxx"
 #include <breakit.hxx>
 #include <porrst.hxx>
 #include <porftn.hxx>   // SwFtnPortion
@@ -1014,7 +1004,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 pViewShell && pViewShell->GetWin()  )
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StopAnimation(0,nId);
-                rInf.GetTxtFrm()->GetShell()->InvalidateWindows( aTmp );
+                rInf.GetTxtFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
             }
 
 
@@ -1248,7 +1238,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     USHORT nTop = ( nCount + 1 ) / 2; // the first character of the second line
-    ViewShell *pSh = rInf.GetTxtFrm()->GetShell();
+    ViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
     nProportion = 55;

@@ -354,7 +354,7 @@ public:
                     const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
     // virtuelle Methoden aus dem CntntNode
-    virtual SwCntntFrm *MakeFrm();
+    virtual SwCntntFrm *MakeFrm( SwFrm* );
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
     virtual SwCntntNode *JoinNext();
     virtual SwCntntNode *JoinPrev();

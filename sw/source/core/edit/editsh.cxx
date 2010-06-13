@@ -151,7 +151,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
                 // seems to be an empty paragraph.
                 Point aPt;
                 SwCntntFrm* pFrm =
-                        ((SwTxtNode&)rNode).GetFrm( &aPt, pTmpCrsr->GetPoint(),
+                        ((SwTxtNode&)rNode).getLayoutFrm( GetLayout(), &aPt, pTmpCrsr->GetPoint(),
                                                     sal_False );
 
                 SwScriptInfo aScriptInfo;
@@ -421,7 +421,7 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
     SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
     StartAllAction();
     pNd->SetContour( pPoly );
-    SwFlyFrm *pFly = (SwFlyFrm*)pNd->GetFrm()->GetUpper();
+    SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
     const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
     pFly->GetFmt()->SwModify::Modify( (SwFmtSurround*)&rSur,
                                       (SwFmtSurround*)&rSur );
@@ -437,7 +437,7 @@ void SwEditShell::ClearAutomaticContour()
     {
         StartAllAction();
         pNd->SetContour( NULL, FALSE );
-        SwFlyFrm *pFly = (SwFlyFrm*)pNd->GetFrm()->GetUpper();
+        SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
         pFly->GetFmt()->SwModify::Modify( (SwFmtSurround*)&rSur,
                                           (SwFmtSurround*)&rSur );
@@ -479,7 +479,7 @@ BOOL SwEditShell::HasOLEObj( const String &rName ) const
         SwNode& rNd = aIdx.GetNode();
         if( rNd.IsOLENode() &&
             rName == ((SwOLENode&)rNd).GetChartTblName() &&
-            ((SwOLENode&)rNd).GetFrm() )
+            ((SwOLENode&)rNd).getLayoutFrm( GetLayout() ) )
             return TRUE;
 
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
@@ -737,7 +737,7 @@ Graphic SwEditShell::GetIMapGraphic() const
         }
         else
         {
-            SwFlyFrm* pFlyFrm = pNd->GetCntntNode()->GetFrm()->FindFlyFrm();
+            SwFlyFrm* pFlyFrm = pNd->GetCntntNode()->getLayoutFrm( GetLayout() )->FindFlyFrm();
             if(pFlyFrm)
                 aRet = pFlyFrm->GetFmt()->MakeGraphic();
         }
@@ -904,7 +904,7 @@ void SwEditShell::SetNumberingRestart()
                 switch( pNd->GetNodeType() )
                 {
                 case ND_TEXTNODE:
-                    if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->GetFrm()) )
+                    if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetLayout() )) )
                     {
                         //jump over hidden frames - ignore protection!
                         if( !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
@@ -972,7 +972,7 @@ USHORT SwEditShell::GetLineCount( BOOL bActPos )
     else
     {
         if( 0 != ( pCNd = pPam->GetCntntNode() ) &&
-            0 != ( pCntFrm = pCNd->GetFrm() ) )
+            0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) )
         {
             const SwStartNode *pTmp;
             if( pCntFrm->IsInFly() )                        // Fly
@@ -1000,7 +1000,7 @@ USHORT SwEditShell::GetLineCount( BOOL bActPos )
     while( 0 != ( pCNd = GetDoc()->GetNodes().GoNextSection(
                 &aStart, TRUE, FALSE )) && ( !bActPos || aStart <= rPtIdx ) )
     {
-        if( 0 != ( pCntFrm = pCNd->GetFrm() ) && pCntFrm->IsTxtFrm() )
+        if( 0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) && pCntFrm->IsTxtFrm() )
         {
             xub_StrLen nActPos = bActPos && aStart == rPtIdx ?
                 pPam->GetPoint()->nContent.GetIndex() : USHRT_MAX;

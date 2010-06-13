@@ -567,7 +567,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         // steht im Sonderbereich, wird teuer !!
                         Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
-                        pFrm = rTxtNd.GetFrm( &aPt );
+                        pFrm = rTxtNd.getLayoutFrm( GetCurrentLayout(), &aPt );
                         if( pFrm )
                         {
                             SwPosition aPos( *pTblNd );
@@ -638,7 +638,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         if( !pCNd )
                             pCNd = GetNodes().GoNext( &aCNdIdx );
 
-                        if( pCNd && 0 != (pFrm = pCNd->GetFrm( &aPt )) )
+                        if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( GetCurrentLayout(), &aPt )) )
                         {
                             SwPosition aPos( *pCNd );
                             if( GetBodyTxtNode( *this, aPos, *pFrm ) )
@@ -2521,7 +2521,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
 
     // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
     Point aPt;
-    const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, FALSE );
+    const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, FALSE );
 
     _SetGetExpFld* pNew = NULL;
     BOOL bIsInBody = FALSE;
@@ -2587,7 +2587,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 
             // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
             Point aPt;
-            const SwCntntFrm* pFrm = pCNd->GetFrm( &aPt, 0, FALSE );
+            const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, FALSE );
             if( !pFrm )
                 break;
 

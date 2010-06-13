@@ -372,7 +372,7 @@ SwFrm::~SwFrm()
     // by the destructors of the derived classes.
     if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
     {
-        SwRootFrm *pRootFrm = FindRootFrm();
+        SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
             ViewShell *pVSh = pRootFrm->GetCurrShell();
@@ -437,8 +437,8 @@ void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
 /*************************************************************************
 |*                  SwCntntFrm::SwCntntFrm()
 |*************************************************************************/
-SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt ) :
-    SwFrm( pCntnt ),
+SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
+    SwFrm( pCntnt, pSib ),
     SwFlowFrm( (SwFrm&)*this )
 {
 }
@@ -453,7 +453,7 @@ SwCntntFrm::~SwCntntFrm()
         !pCNd->GetDoc()->IsInDtor() )
     {
         //Bei der Root abmelden wenn ich dort noch im Turbo stehe.
-        SwRootFrm *pRoot = FindRootFrm();
+        SwRootFrm *pRoot = getRootFrm();
         if( pRoot && pRoot->GetTurbo() == this )
         {
             pRoot->DisallowTurbo();
@@ -479,7 +479,7 @@ SwCntntFrm::~SwCntntFrm()
                 pTxtFtn = rFtnIdxs[ nPos ];
                 if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )
                     break;
-                pTxtFtn->DelFrms();
+                pTxtFtn->DelFrms( this );
                 ++nPos;
             }
         }

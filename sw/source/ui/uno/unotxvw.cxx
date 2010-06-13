@@ -1053,7 +1053,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
 
                 sal_Int32 nCount = -1;
                 if (nWID == WID_PAGE_COUNT)
-                    nCount = m_pView->GetDocShell()->GetDoc()->GetPageCount();
+                    nCount = m_pView->GetWrtShell().GetPageCount();
                 else // WID_LINE_COUNT
                     nCount = m_pView->GetWrtShell().GetLineCount( FALSE /*of whole document*/ );
                 aRet <<= nCount;

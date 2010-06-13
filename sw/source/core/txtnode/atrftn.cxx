@@ -92,7 +92,7 @@ void SwFmtFtn::SetEndNote( bool b )
     {
         if ( GetTxtFtn() )
         {
-            GetTxtFtn()->DelFrms();
+            GetTxtFtn()->DelFrms(0);
         }
         m_bEndNote = b;
     }
@@ -238,7 +238,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
                 // Werden die Nodes nicht geloescht mussen sie bei den Seiten
                 // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
                 // stehen (Undo loescht sie nicht!)
-                DelFrms();
+                DelFrms( 0 );
         }
         DELETEZ( m_pStartNode );
 
@@ -356,19 +356,22 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 }
 
 
-void SwTxtFtn::DelFrms()
+void SwTxtFtn::DelFrms( const SwFrm* pSib )
 {
     // delete the FtnFrames from the pages
     ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     if ( !m_pTxtNode )
         return;
 
+    const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
     BOOL bFrmFnd = FALSE;
     {
         SwClientIter aIter( *m_pTxtNode );
         for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
                 pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
         {
+            if( pRoot != pFnd->getRootFrm() && pRoot )
+                continue;
             SwPageFrm* pPage = pFnd->FindPageFrm();
             if( pPage )
             {
@@ -389,6 +392,8 @@ void SwTxtFtn::DelFrms()
             for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
                     pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
             {
+                if( pRoot != pFnd->getRootFrm() && pRoot )
+                    continue;
                 SwPageFrm* pPage = pFnd->FindPageFrm();
 
                 SwFrm *pFrm = pFnd->GetUpper();

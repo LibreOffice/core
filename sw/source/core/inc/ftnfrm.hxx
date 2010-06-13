@@ -43,7 +43,7 @@ class SwFtnFrm;
 class SwFtnContFrm: public SwLayoutFrm
 {
 public:
-    SwFtnContFrm( SwFrmFmt* );
+    SwFtnContFrm( SwFrmFmt*, SwFrm* );
 
     const SwFtnFrm* FindFootNote() const;
 
@@ -79,7 +79,7 @@ protected:
 
 
 public:
-    SwFtnFrm( SwFrmFmt*, SwCntntFrm*, SwTxtFtn* );
+    SwFtnFrm( SwFrmFmt*, SwFrm*, SwCntntFrm*, SwTxtFtn* );
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );

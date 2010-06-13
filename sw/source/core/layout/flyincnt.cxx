@@ -52,8 +52,8 @@ void DeepCalc( const SwFrm *pFrm );
 |*  Letzte Aenderung    MA 09. Apr. 99
 |*
 |*************************************************************************/
-SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFrm( pFmt, pAnch )
+SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFrm( pFmt, pSib, pAnch )
 {
     bInCnt = bInvalidLayout = bInvalidCntnt = TRUE;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
