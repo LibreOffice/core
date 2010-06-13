@@ -41,7 +41,7 @@ class ViewShell;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
-#define VIEWOPT_1_IDLE          0x00000001L
+//#define VIEWOPT_1_IDLE             0x00000001L  no longer used, see new member 'bIdle'
 #define VIEWOPT_1_TAB           0x00000002L
 #define VIEWOPT_1_BLANK         0x00000004L
 #define VIEWOPT_1_HARDBLANK     0x00000008L
@@ -165,6 +165,7 @@ protected:
      BOOL            mbBrowseMode : 1;    //swmod 080130
     BOOL            mbViewLayoutBookMode : 1; // book view mode for edit view
     sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
+    mutable bool    bIdle;
 
     // Maszstab
     USHORT          nZoom;              // Angaben in Prozent
@@ -203,9 +204,14 @@ public:
 ----------------------------------------------------------------------------*/
 
     inline BOOL IsIdle() const
-        { return nCoreOptions & VIEWOPT_1_IDLE ? TRUE : FALSE; }
-    inline void SetIdle( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_IDLE ) : ( nCoreOptions &= ~VIEWOPT_1_IDLE); }
+        { return bIdle; }
+
+    // logically this is a const function since it does not modify the viewoptions
+    // but only effects idle formatting. Of course that member is already implement
+    // in the wrong place here... Also currently there are many const modifying casts in the code
+    // just to call this function on otherwise const objects. Thus declaring it as const now.
+    inline void SetIdle( BOOL b ) const
+        { bIdle = b; }
 
     inline BOOL IsTab(BOOL bHard = FALSE) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_TAB) &&
