@@ -944,7 +944,7 @@ case "$build_os" in
       			AC_MSG_ERROR([only sparc and i386 processors are supported])
    		fi
 		;;
-	linux-gnu*)
+	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
 		test_kde=yes
@@ -2394,7 +2394,13 @@ dnl ===================================================================
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
        i?86)
-         DEFAULT_TO_STLPORT="yes"
+	 case "$build_os" in k*bsd*-gnu*)
+	 	DEFAULT_TO_STLPORT="no"
+		;;
+	 *) 
+         	DEFAULT_TO_STLPORT="yes"
+		;;
+	  esac
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
@@ -6059,7 +6065,7 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
           [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-codec.jar, 
-              [ COMMONS_CODEC_JAR=/usr/share/java/commons-codecs.jar ],
+              [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
               [AC_MSG_ERROR(commons-codec.jar replacement not found.)]
             )
           ]
@@ -6429,11 +6435,11 @@ fi
 dnl ===================================================================
 dnl Test whether to include fonts
 dnl ===================================================================
-AC_MSG_CHECKING([whether to include Bitstream Vera fonts])
+AC_MSG_CHECKING([whether to include third-party fonts])
 if test "$with_fonts" != "no" ; then
   AC_MSG_RESULT([yes])
   WITH_FONTS=YES
-  BUILD_TYPE="$BUILD_TYPE BITSTREAM_VERA_FONTS"
+  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
 else
   AC_MSG_RESULT([no])
   WITH_FONTS=NO
