@@ -54,7 +54,8 @@ OBJFILES= \
     $(OBJ)$/_unix.obj
 
 # nonstandard cpp options, needs the custom stgetopt defined here :/
-.IF "$(OS)" == "MACOSX"
+# And Windows, well, Windows... no comment.
+.IF "$(OS)" == "MACOSX" || "$(OS)" == "WNT"
 OBJFILES += $(OBJ)$/_getopt.obj
 .ENDIF
 
