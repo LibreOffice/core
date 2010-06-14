@@ -108,6 +108,8 @@ const char s_usingText [] =
 "                                         deployment context;\n"
 "                                         run only when no concurrent Office\n"
 "                                         process(es) are running!\n"
+" --bundled               expert feature: operate on bundled extensions. Only\n"
+"                                         works with list, validate, reinstall;\n"
 " --deployment-context    expert feature: explicit deployment context\n"
 "     <context>\n"
 "\n"

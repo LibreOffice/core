@@ -129,7 +129,7 @@ public:
             css::uno::RuntimeException);
 
 
-    virtual long SAL_CALL checkPrerequisitesAndEnable(
+    virtual sal_Int32 SAL_CALL checkPrerequisitesAndEnable(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )

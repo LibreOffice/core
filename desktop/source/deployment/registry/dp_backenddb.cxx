@@ -425,14 +425,24 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
-#if    OSL_DEBUG_LEVEL > 0
-        //There must not be yet an entry with the same url
+        //Check if there are an entry with the same url. This can be the case if the
+        //the status of an XPackage is ambiguous. In this case a call to activateExtension
+        //(dp_extensionmanager.cxx), will register the package again. See also
+        //Package::processPackage_impl in dp_backend.cxx.
+        //A package can become
+        //invalid after its successful registration, for example if a second extension with
+        //the same service is installed.
         const OUString sExpression(
             sPrefix + OUSTR(":") + sElementName + OUSTR("[@url = \"") + url + OUSTR("\"]"));
-        const Reference<css::xml::dom::XNode> _extensionNode =
+        const Reference<css::xml::dom::XNode> existingNode =
             getXPathAPI()->selectSingleNode(root, sExpression);
-        OSL_ASSERT(! _extensionNode.is());
-#endif
+        if (existingNode.is())
+        {
+            OSL_ASSERT(0);
+            //replace the existing entry.
+            removeEntry(url);
+        }
+
         const Reference<css::xml::dom::XElement> keyElement(
             doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":") + sElementName));
 
