@@ -1466,6 +1466,13 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
     mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
     {
+        // #i111122# delete SdrPageProperties when model is different
+        if(mpSdrPageProperties && GetModel() != rSrcPage.GetModel())
+        {
+            delete mpSdrPageProperties;
+            mpSdrPageProperties = 0;
+        }
+
         if(!mpSdrPageProperties)
         {
             mpSdrPageProperties = new SdrPageProperties(*this);

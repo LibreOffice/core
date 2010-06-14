@@ -237,6 +237,12 @@ namespace
             return maPropertyHolders.size();
         }
 
+        void PushDefault()
+        {
+            PropertyHolder* pNew = new PropertyHolder();
+            maPropertyHolders.push_back(pNew);
+        }
+
         void Push(sal_uInt16 nPushFlags)
         {
             if(nPushFlags)
@@ -338,11 +344,11 @@ namespace
                             }
                         }
                     }
-
-                    // execute the pop
-                    delete maPropertyHolders.back();
-                    maPropertyHolders.pop_back();
                 }
+
+                // execute the pop
+                delete maPropertyHolders.back();
+                maPropertyHolders.pop_back();
             }
         }
 
@@ -938,14 +944,17 @@ namespace
             default : // case HATCH_SINGLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
+                break;
             }
             case HATCH_DOUBLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
+                break;
             }
             case HATCH_TRIPLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE;
+                break;
             }
         }
 
@@ -2132,8 +2141,11 @@ namespace
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
+                                // #i# for sub-Mteafile contents, do start with new, default render state
+                                rPropertyHolders.PushDefault();
                                 interpretMetafile(aGDIMetaFile, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                                rPropertyHolders.Pop();
                                 rTargetHolders.Pop();
                             }
 
@@ -2957,8 +2969,11 @@ namespace
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
+                                // #i# for sub-Mteafile contents, do start with new, default render state
+                                rPropertyHolders.PushDefault();
                                 interpretMetafile(rContent, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                                rPropertyHolders.Pop();
                                 rTargetHolders.Pop();
                             }
 

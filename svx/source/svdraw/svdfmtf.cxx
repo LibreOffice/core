@@ -85,6 +85,11 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
 {
     aVD.EnableOutput(FALSE);
+
+    // #i111954# init to no fill and no line initially
+    aVD.SetLineColor();
+    aVD.SetFillColor();
+
     aOldLineColor.SetRed( aVD.GetLineColor().GetRed() + 1 ); // invalidate old line color
     pLineAttr=new SfxItemSet(rModel.GetItemPool(),XATTR_LINE_FIRST,XATTR_LINE_LAST);
     pFillAttr=new SfxItemSet(rModel.GetItemPool(),XATTR_FILL_FIRST,XATTR_FILL_LAST);
@@ -380,17 +385,61 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
             pObj->NbcMove( Size( aOfs.X(), aOfs.Y() ) );
     }
 
-    aTmpList.InsertObject( pObj );
-    if ( HAS_BASE( SdrPathObj, pObj ) )
+    // #i111954# check object for visibility
+    // used are SdrPathObj, SdrRectObj, SdrCircObj, SdrGrafObj
+    bool bVisible(false);
+
+    if(pObj->HasLineStyle())
     {
-        FASTBOOL bClosed=pObj->IsClosedObj();
-        bLastObjWasPolyWithoutLine=bNoLine && bClosed;
-        bLastObjWasLine=!bClosed;
+        bVisible = true;
+    }
+
+    if(!bVisible && pObj->HasFillStyle())
+    {
+        bVisible = true;
+    }
+
+    if(!bVisible)
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(pObj);
+
+        if(pTextObj && pTextObj->HasText())
+        {
+            bVisible = true;
+        }
+    }
+
+    if(!bVisible)
+    {
+        SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >(pObj);
+
+        if(pGrafObj)
+        {
+            // this may be refined to check if the graphic really is visible. It
+            // is here to ensure that graphic objects without fill, line and text
+            // get created
+            bVisible = true;
+        }
+    }
+
+    if(!bVisible)
+    {
+        SdrObject::Free(pObj);
     }
     else
     {
-        bLastObjWasPolyWithoutLine = FALSE;
-        bLastObjWasLine = FALSE;
+        aTmpList.InsertObject( pObj );
+        if ( HAS_BASE( SdrPathObj, pObj ) )
+        {
+            FASTBOOL bClosed=pObj->IsClosedObj();
+            bLastObjWasPolyWithoutLine=bNoLine && bClosed;
+            bLastObjWasLine=!bClosed;
+        }
+        else
+        {
+            bLastObjWasPolyWithoutLine = FALSE;
+            bLastObjWasLine = FALSE;
+        }
     }
 }
 
