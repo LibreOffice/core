@@ -23,7 +23,7 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = ../..
+PRJ = ../../../../..
 PRJNAME = test
 TARGET = java
 
