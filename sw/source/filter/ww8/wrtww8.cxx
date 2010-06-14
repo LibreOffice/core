@@ -1023,7 +1023,8 @@ bool WW8_WrFkp::Combine()
         return false;
     if( nIMax )
         memcpy( pFkp + ( nIMax + 1 ) * 4, pOfs, nIMax * nItemSize );
-    DELETEZ( pOfs );
+    delete[] pOfs;
+    pOfs = 0;
     ((BYTE*)pFkp)[511] = nIMax;
     bCombined = true;
 
@@ -3775,7 +3776,8 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
 #ifdef DEBUG
-    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;
+// someone who knows what he wants should make this linkable when building with 'debug=t' ...
+//    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;
 #endif
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo = mpTableInfo->getTableNodeInfo( &rNode );
