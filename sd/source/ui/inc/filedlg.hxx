@@ -40,39 +40,8 @@
 
 class SdFileDialog_Imp;
 
-/******************************************************************************/
-
-/**
-   The class SdExportFileDialog wraps the FileDialogHelper, displaying the
-   FILESAVE_AUTOEXTENSION_SELECTION dialog template. The interface is a downstripped
-   version of the aforementioned class, with similar semantics.
- */
-class SdExportFileDialog
-{
-    const std::auto_ptr< SdFileDialog_Imp > mpImpl;
-
-    // forbidden and not implemented
-    SdExportFileDialog ();
-    SdExportFileDialog (const SdExportFileDialog &);
-    SdExportFileDialog & operator= (const SdExportFileDialog &);
-
-public:
-    explicit                SdExportFileDialog( BOOL haveCheckbox );
-                            ~SdExportFileDialog();
-
-    ErrCode                 Execute();
-    String                  GetPath() const;
-    void                    SetPath( const String& rPath );
-
-    String                  ReqDisplayDirectory() const;
-
-    String                  ReqCurrentFilter() const;
-    BOOL                    IsExportSelection() const;  // whether the "selection" checkbox is checked.
-};
-
 
 /******************************************************************************/
-
 
 /**
    The class SdOpenSoundFileDialog wraps the FileDialogHelper, displaying the

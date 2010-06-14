@@ -144,7 +144,6 @@ class AnnotationWindow : public FloatingWindow
 
         void            Rescale();
 
-        void            SetReadonly(bool bSet);
         bool            IsReadOnly() { return mbReadonly;}
 
         bool            IsProtected() { return mbProtected; }

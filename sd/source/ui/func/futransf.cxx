@@ -136,29 +136,4 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     }
 }
 
-/*************************************************************************
-|*
-|* Function ResizeObject
-|*
-\************************************************************************/
-
-Point FuTransform::GetPoint( Rectangle aRect, RECT_POINT eRP )
-{
-
-    switch( eRP )
-    {
-        case RP_LT: return( Point( aRect.Left(), aRect.Top() ) );
-        case RP_MT: return( Point( aRect.Center().X(), aRect.Top() ) );
-        case RP_RT: return( Point( aRect.Right(), aRect.Top() ) );
-        case RP_LM: return( Point( aRect.Left(), aRect.Center().Y() ) );
-        case RP_MM: return( Point( aRect.Center().X(), aRect.Center().Y() ) );
-        case RP_RM: return( Point( aRect.Right(), aRect.Center().Y() ) );
-        case RP_LB: return( Point( aRect.Left(), aRect.Bottom() ) );
-        case RP_MB: return( Point( aRect.Center().X(), aRect.Bottom() ) );
-        case RP_RB: return( Point( aRect.Right(), aRect.Bottom() ) );
-    }
-    return( Point ( 0, 0 ) ); // Sollte nicht vorkommen !
-}
-
-
 } // end of namespace sd

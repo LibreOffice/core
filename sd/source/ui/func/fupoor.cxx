@@ -247,16 +247,6 @@ IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
 /*************************************************************************
 |*
-|* String in Applikations-Statuszeile ausgeben
-|*
-\************************************************************************/
-
-void FuPoor::WriteStatus(const String& )
-{
-}
-
-/*************************************************************************
-|*
 |* Tastaturereignisse bearbeiten
 |*
 |* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
@@ -1117,18 +1107,6 @@ void FuPoor::StartDelayToScrollTimer ()
 {
     bDelayActive = TRUE;
     aDelayToScrollTimer.Start ();
-}
-
-/*************************************************************************
-|*
-|* Handler fuer Maustaste
-|*
-\************************************************************************/
-
-long FuPoor::diffPoint (long pos1, long pos2)
-{
-    return (pos1 > pos2) ? pos1 - pos2
-                         : pos2 - pos1;
 }
 
 /*************************************************************************

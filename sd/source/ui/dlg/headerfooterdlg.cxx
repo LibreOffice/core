@@ -291,12 +291,6 @@ HeaderFooterDialog::~HeaderFooterDialog()
 
 // -----------------------------------------------------------------------
 
-void HeaderFooterDialog::initTabPages()
-{
-}
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
     const USHORT nId = pTabCtrl->GetCurPageId();

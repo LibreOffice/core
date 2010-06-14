@@ -336,20 +336,3 @@ OutputDevice* SdModule::GetRefDevice (::sd::DrawDocShell& )
 {
     return GetVirtualRefDevice();
 }
-
-
-/*************************************************************************
-|*
-\************************************************************************/
-
-::com::sun::star::text::WritingMode SdModule::GetDefaultWritingMode() const
-{
-/*
-    const SvtLanguageOptions aLanguageOptions;
-
-    return( aLanguageOptions.IsCTLFontEnabled() ?
-            ::com::sun::star::text::WritingMode_RL_TB :
-            ::com::sun::star::text::WritingMode_LR_TB );
-*/
-    return ::com::sun::star::text::WritingMode_LR_TB;
-}

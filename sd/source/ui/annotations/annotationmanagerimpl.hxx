@@ -99,9 +99,9 @@ public:
     void onTagDeselected( AnnotationTag& rTag );
 
     void onSelectionChanged();
-
+#if 0
     rtl::OUString GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
-
+#endif
     void addListener();
     void removeListener();
 

@@ -160,10 +160,7 @@ public:
 
     void                    SetMarkedOriginalSize();
 
-    VirtualDevice*          CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nWidthPixel);
-
     void                    LockRedraw(BOOL bLock);
-    bool IsRedrawLocked (void) const;
 
     BOOL                    IsMorphingAllowed() const;
     BOOL                    IsVectorizeAllowed() const;

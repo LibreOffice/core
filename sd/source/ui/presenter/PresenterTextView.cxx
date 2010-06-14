@@ -113,7 +113,6 @@ public:
     void SetFontDescriptor (const awt::FontDescriptor& rFontDescriptor);
     sal_Int32 GetTop (void) const;
     void SetTop (const sal_Int32 nTop);
-    void ClearText (void);
     void SetText (const OUString& Text);
     sal_Int32 ParseDistance (const OUString& rsDistance) const;
     Reference<rendering::XBitmap> GetBitmap (void);
@@ -528,17 +527,6 @@ void PresenterTextView::Implementation::SetTop (const sal_Int32 nTop)
     mnTop = nTop;
     mxBitmap = NULL;
     CheckTop();
-}
-
-
-
-
-void PresenterTextView::Implementation::ClearText (void)
-{
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
-    msText = OUString();
-    mnTotalHeight = 0;
-    mxBitmap = NULL;
 }
 
 

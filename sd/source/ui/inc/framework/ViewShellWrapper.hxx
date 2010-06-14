@@ -89,6 +89,10 @@ public:
     */
     ::boost::shared_ptr<ViewShell> GetViewShell (void);
 
+<<<<<<< local
+=======
+
+>>>>>>> other
     // XUnoTunnel
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)

@@ -947,13 +947,6 @@ sal_Int32 SlideShow::getCurrentPageNumber()
 
 // ---------------------------------------------------------
 
-sal_Int32 SlideShow::getCurrentPageIndex()
-{
-    return mxController.is() ? mxController->getCurrentSlideIndex() : 0;
-}
-
-// ---------------------------------------------------------
-
 void SlideShow::jumpToBookmark( const OUString& sBookmark )
 {
     if( mxController.is() )

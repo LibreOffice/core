@@ -68,18 +68,11 @@ class RequestData;
     bitmaps and throw.</li>
     </p>
 
-    <p>There are three somewhat similar methods for requesting new previews:
-    a) GetPreviewBitmap() schedules a re-rendering (when necessary) and
+    <p>There is another somewhat similar methods for requesting new previews:
+    GetPreviewBitmap() schedules a re-rendering (when necessary) and
     returns the preview what is currently available, either as a preview of
     the preview or, when nothing has changed since the last call, as the
     final thing.
-    b) RequestPreviewBitmap() schedules, like GetPreviewBitmap(), a
-    re-rendering when the currently available preview is not up-to-date.  It
-    does not, however, return anything.  Use this if you can wait for the
-    preview.
-    c) InvalidatePreviewBitmap() does not schedule a re-rendering, but
-    remembers that one is necessary when one of the other two methods is
-    called.
     </p>
 */
 class PageCache
@@ -119,24 +112,6 @@ public:
     BitmapEx GetPreviewBitmap (
         CacheKey aKey,
         const Size& rSize);
-
-    /** When the requested preview bitmap does not yet exist or is not
-        up-to-date then the rendering of one is scheduled.  Otherwise this
-        method does nothing.
-    */
-    void RequestPreviewBitmap (
-        CacheKey aKey,
-        const Size& rSize);
-
-    /** Tell the cache that the bitmap associated with the given request
-        data is not up-to-date anymore.  Unlike the RequestPreviewBitmap()
-        method this does not trigger the rendering itself.  It just
-        remembers to render it when the preview is requested the next time.
-        @param rRequestData
-            It is safe to pass a (barly) living object.  It will called only
-            once to obtain its page object.
-    */
-    void InvalidatePreviewBitmap (CacheKey aKey);
 
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a

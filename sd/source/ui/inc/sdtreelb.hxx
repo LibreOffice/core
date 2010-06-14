@@ -210,7 +210,6 @@ public:
     BOOL                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
     List*                   GetSelectEntryList( USHORT nDepth );
-    List*                   GetBookmarkList( USHORT nType );
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
 
