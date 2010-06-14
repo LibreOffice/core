@@ -104,7 +104,9 @@ bool checkDocChecksum( const rtl::OUString& rInPDFFileURL,
 
 bool getPassword( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler,
                   rtl::OUString&                                                                     o_rPwd,
-                  bool                                                                               bFirstTry );
+                  bool                                                                               bFirstTry,
+                  const rtl::OUString&                                                               i_rDocName
+                  );
 
 }
 
