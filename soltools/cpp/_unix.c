@@ -12,6 +12,12 @@
 
 #include "cpp.h"
 
+#if defined MACOSX
+extern int stgetopt(int, char *const *, const char *);
+extern char *optarg;
+extern int optind;
+#endif
+
 extern char rcsid[];
 
 int Pflag = 0;                          /* print no line information */
