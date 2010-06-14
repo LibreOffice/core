@@ -208,6 +208,9 @@ void EditSpellWrapper::CheckSpellTo()
             pSpellInfo->aSpellTo.nIndex = aPaM.GetNode()->Len();
     }
 }
+
+//////////////////////////////////////////////////////////////////////
+
 SV_IMPL_VARARR( WrongRanges, WrongRange );
 
 WrongList::WrongList()
@@ -218,6 +221,14 @@ WrongList::WrongList()
 
 WrongList::~WrongList()
 {
+}
+
+void WrongList::MarkInvalid( USHORT nS, USHORT nE )
+{
+    if ( ( nInvalidStart == NOT_INVALID ) || ( nInvalidStart > nS ) )
+        nInvalidStart = nS;
+    if ( nInvalidEnd < nE )
+        nInvalidEnd = nE;
 }
 
 void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsSep )
@@ -527,6 +538,7 @@ sal_Bool WrongList::DbgIsBuggy() const
 }
 #endif
 
+//////////////////////////////////////////////////////////////////////
 
 EdtAutoCorrDoc::EdtAutoCorrDoc( ImpEditEngine* pE, ContentNode* pN,
             sal_uInt16 nCrsr, xub_Unicode cIns )
