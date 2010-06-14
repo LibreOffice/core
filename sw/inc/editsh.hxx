@@ -745,9 +745,14 @@ public:
     bool SpellSentence(::svx::SpellPortions& rToFill, bool bIsGrammarCheck );
     // make SpellIter start with the current sentence when called next time
     void PutSpellingToSentenceStart();
+    // moves the continuation position to the end of the currently checked sentence
+    void MoveContinuationPosToEndOfCheckedSentence();
     //applies a changed sentence
-    void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bIsGrammarCheck);
+    void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bRecheck);
 
+
+    // check SwSpellIter data to see if the last sentence got grammar checked
+    bool HasLastSentenceGotGrammarChecked() const;
     // Is text conversion active somewhere else?
     BOOL HasConvIter() const;
     // Is hyphenation active somewhere else?

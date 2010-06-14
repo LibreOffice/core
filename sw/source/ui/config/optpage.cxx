@@ -542,10 +542,15 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         aFaxLB.SelectEntry( pAddPrinterAttr->sFaxName );
     }
     if (aProspectCB.IsChecked())
+    {
         aProspectCB_RTL.Enable(TRUE);
+        aNoRB.Enable( FALSE );
+        aOnlyRB.Enable( FALSE );
+        aEndRB.Enable( FALSE );
+        aEndPageRB.Enable( FALSE );
+    }
     else
-        aProspectCB_RTL.Disable();
-
+        aProspectCB_RTL.Enable( FALSE );
 }
 //-----------------------------------------------------------------------
 
@@ -560,13 +565,14 @@ void    SwAddPrinterTabPage::Init()
 IMPL_LINK_INLINE_START( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 {
     bAttrModified = TRUE;
-    if (aProspectCB.IsChecked())
-        aProspectCB_RTL.Enable(TRUE);
-    else
-    {
+    bool bIsProspect = aProspectCB.IsChecked();
+    if (!bIsProspect)
         aProspectCB_RTL.Check( FALSE );
-        aProspectCB_RTL.Disable();
-    }
+    aProspectCB_RTL.Enable( bIsProspect );
+    aNoRB.Enable( !bIsProspect );
+    aOnlyRB.Enable( !bIsProspect );
+    aEndRB.Enable( !bIsProspect );
+    aEndPageRB.Enable( !bIsProspect );
     return 0;
 }
 IMPL_LINK_INLINE_END( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )

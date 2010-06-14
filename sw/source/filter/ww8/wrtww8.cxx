@@ -2455,13 +2455,15 @@ typedef ::std::deque<SwNode *> SwNodeDeque;
 
 void MSWordExportBase::WriteText()
 {
-#ifdef DEBUG
-    ::std::clog << "<WriteText>" << ::std::endl;
-    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
-
-    SwNodeHashSet aNodeSet;
-    SwNodeDeque aNodeDeque;
-#endif
+// whoever has need of the missing function should go and implement it!
+// This damned piece of code always breaks builds...
+//#ifdef DEBUG
+//    ::std::clog << "<WriteText>" << ::std::endl;
+//    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+//
+//    SwNodeHashSet aNodeSet;
+//    SwNodeDeque aNodeDeque;
+//#endif
 
     while( pCurPam->GetPoint()->nNode < pCurPam->GetMark()->nNode ||
            ( pCurPam->GetPoint()->nNode == pCurPam->GetMark()->nNode &&
@@ -2469,6 +2471,9 @@ void MSWordExportBase::WriteText()
     {
         SwNode * pNd = pCurPam->GetNode();
 
+// whoever has need of the missing function should go and implement it!
+// This damned piece of code always breaks builds...
+#if 0
 #ifdef DEBUG
         if (aNodeSet.find(pNd) == aNodeSet.end())
         {
@@ -2479,6 +2484,7 @@ void MSWordExportBase::WriteText()
         {
             ::std::clog << "<already-done>" << dbg_out(*pNd) << "</already-done>" << ::std::endl;
         }
+#endif
 #endif
 
         if ( pNd->IsTxtNode() )
@@ -3814,7 +3820,8 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
 #ifdef DEBUG
-// someone who knows what he wants should make this linkable when building with 'debug=t' ...
+// whoever has need of the missing function should go and implement it!
+// This piece of code always breaks builds...
 //    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;
 #endif
 
