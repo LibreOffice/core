@@ -285,8 +285,7 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
     const OutputDevice* pReferenceDevice) const
 {
     const SdrPage* pPage = rpDescriptor->GetPage();
-    const bool bIsExcluded (rpDescriptor->GetVisualState().GetCurrentVisualState()
-        == model::VisualState::VS_Excluded);
+    const bool bIsExcluded (rpDescriptor->HasState(model::PageDescriptor::ST_Excluded));
 
     if (bIsExcluded)
     {
