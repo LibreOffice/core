@@ -2041,6 +2041,7 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst .PHONY :
 .ENDIF          # "$(SOLAR_JAVA)"!=""
 
 .INCLUDE : tg_merge.mk
+.INCLUDE : tg_propmerge.mk
 
 wordcount:
     wc *.* >> $(TMP)/wc.lst
