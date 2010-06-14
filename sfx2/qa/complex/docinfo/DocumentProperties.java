@@ -73,7 +73,7 @@ public class DocumentProperties
 
         assertNotNull("## Couldn't get MultiServiceFactory make sure your Office is started", m_xMSF);
 
-
+        // TODO: need other temp directory!
         String tempdir = System.getProperty("java.io.tmpdir");
         String fs = System.getProperty("file.separator");
 
