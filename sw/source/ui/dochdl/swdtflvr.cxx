@@ -322,6 +322,19 @@ SwTransferable::~SwTransferable()
 
 // -----------------------------------------------------------------------
 
+static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
+{
+    SwDoc *const pDoc = rDocFac.GetDoc();
+    ASSERT( pDoc, "Document not found" );
+    if (pDoc)
+    {
+        pDoc->SetClipBoard( true );
+    }
+    return pDoc;
+}
+
+// -----------------------------------------------------------------------
+
 void SwTransferable::ObjectReleased()
 {
     SwModule *pMod = SW_MOD();
@@ -443,7 +456,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         }
 
         pClpDocFac = new SwDocFac;
-        SwDoc* pTmpDoc = pClpDocFac->GetDoc();
+        SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
         pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
@@ -530,8 +543,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         case SOT_FORMATSTR_ID_DRAWING:
             {
-                SwDoc *pDoc = pClpDocFac->GetDoc();
-                ASSERT( pDoc, "Document not found" );
+                SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
                 bOK = SetObject( pDoc->GetDrawModel(),
                                 SWTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
             }
@@ -539,21 +551,22 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         case SOT_FORMAT_STRING:
         {
-            SwDoc* pDoc = pClpDocFac->GetDoc();
-            ASSERT( pDoc, "Document not found" );
-            pDoc->SetClipBoard( true );
-            bOK = SetObject( pDoc,
-                                SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
         }
         break;
         case SOT_FORMAT_RTF:
-            bOK = SetObject( pClpDocFac->GetDoc(),
-                                SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
+        {
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
+        }
             break;
 
         case SOT_FORMATSTR_ID_HTML:
-            bOK = SetObject( pClpDocFac->GetDoc(),
-                                SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
+        {
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
+        }
             break;
 
         case SOT_FORMATSTR_ID_SVXB:
@@ -597,7 +610,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 //      default:
             if( !aDocShellRef.Is() )
             {
-                SwDoc *pDoc = pClpDocFac->GetDoc();
+                SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
                 SwDocShell* pNewDocSh = new SwDocShell( pDoc,
                                          SFX_CREATE_MODE_EMBEDDED );
                 aDocShellRef = pNewDocSh;
@@ -805,7 +818,8 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             pOrigGrf = pClpBitmap;
 
         pClpDocFac = new SwDocFac;
-        pWrtShell->Copy( pClpDocFac->GetDoc() );
+        SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+        pWrtShell->Copy( pDoc );
 
         if (pOrigGrf && !pOrigGrf->GetBitmap().IsEmpty())
           AddFormat( SOT_FORMATSTR_ID_SVXB );
@@ -827,7 +841,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
     else if ( nSelection == nsSelectionType::SEL_OLE )
     {
         pClpDocFac = new SwDocFac;
-        SwDoc *pDoc = pClpDocFac->GetDoc();
+        SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
         aDocShellRef = new SwDocShell( pDoc, SFX_CREATE_MODE_EMBEDDED);
         aDocShellRef->DoInitNew( NULL );
         pWrtShell->Copy( pDoc );
@@ -857,8 +871,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         if( pWrtShell->IsAddMode() && pWrtShell->SwCrsrShell::HasSelection() )
             pWrtShell->CreateCrsr();
 
-        SwDoc* pTmpDoc = pClpDocFac->GetDoc();
-        pTmpDoc->SetClipBoard( true );
+        SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
         pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
@@ -1017,7 +1030,8 @@ int SwTransferable::CalculateAndCopy()
     String aStr( pWrtShell->Calculate() );
 
     pClpDocFac = new SwDocFac;
-    pWrtShell->Copy( pClpDocFac->GetDoc(), &aStr);
+    SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+    pWrtShell->Copy(pDoc, & aStr);
     eBufferType = TRNSFR_DOCUMENT;
     AddFormat( FORMAT_STRING );
 
@@ -1037,7 +1051,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwWait aWait( *pWrtShell->GetView().GetDocShell(), TRUE );
 
     pClpDocFac = new SwDocFac;
-    SwDoc* pCDoc = pClpDocFac->GetDoc();
+    SwDoc *const pCDoc = lcl_GetDoc(*pClpDocFac);
 
     SwNodes& rNds = pCDoc->GetNodes();
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
@@ -2211,9 +2225,9 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 if( rWrtShell.HasSelection() )
                     rWrtShell.DelRight();
 
-                SwSection aSect( DDE_LINK_SECTION, aName );
+                SwSectionData aSect( DDE_LINK_SECTION, aName );
                 aSect.SetLinkFileName( aCmd );
-                aSect.SetProtect();
+                aSect.SetProtectFlag(true);
                 rWrtShell.InsertSection( aSect );
 
                 pDDETyp = 0;                // FeldTypen wieder entfernen
@@ -2554,10 +2568,11 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     )
                 {
     // und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
-                    SwSection* pSect = new SwSection( FILE_LINK_SECTION,
+                    SwSectionData * pSect = new SwSectionData(
+                                    FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
                     pSect->SetLinkFileName( sFileURL );
-                    pSect->SetProtect( TRUE );
+                    pSect->SetProtectFlag( true );
 
                     Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
                                                 InsertRegionDialog ), pSect );

@@ -85,7 +85,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     if( aLocalizedStrings.Count() < 18 ) // bad resource ?
         return;
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     SmConfig *pConfig = pp->GetConfig();
     DBG_ASSERT( pConfig, "SmConfig not found" );
     if (!pConfig)
@@ -684,7 +684,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         0
                     };
                     SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );
-                    SmModule *pp = SM_MOD1();
+                    SmModule *pp = SM_MOD();
                     pp->GetConfig()->ConfigToItemSet(*pItemSet);
                     SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
@@ -701,8 +701,8 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if ( *pValues >>= aSequence )
                 {
                     sal_uInt32 nSize = aSequence.getLength();
-                    SmModule *pp = SM_MOD1();
-                    SmSymSetManager &rManager = pp->GetSymSetManager();
+                    SmModule *pp = SM_MOD();
+                    SmSymbolManager &rManager = pp->GetSymbolManager();
                     SymbolDescriptor *pDescriptor = aSequence.getArray();
                     for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
                     {
@@ -717,7 +717,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                                         pDescriptor->sSymbolSet );
                         aSymbol.SetExportName ( pDescriptor->sExportName );
                         aSymbol.SetDocSymbol( TRUE );
-                        rManager.AddReplaceSymbol ( aSymbol );
+                        rManager.AddOrReplaceSymbol ( aSymbol );
                     }
                 }
                 else
@@ -886,14 +886,15 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_SYMBOLS:
             {
                 // this is get
-                SmModule *pp = SM_MOD1();
-                const SmSymSetManager &rManager = pp->GetSymSetManager();
+                SmModule *pp = SM_MOD();
+                const SmSymbolManager &rManager = pp->GetSymbolManager();
                 vector < const SmSym * > aVector;
 
-                USHORT nCount = 0;
-                for (USHORT i = 0, nEnd = rManager.GetSymbolCount(); i < nEnd; i++)
+                const SymbolPtrVec_t aSymbols( rManager.GetSymbols() );
+                size_t nCount = 0;
+                for (size_t i = 0; i < aSymbols.size(); ++i)
                 {
-                    const SmSym * pSymbol = rManager.GetSymbolByPos( i );
+                    const SmSym * pSymbol = aSymbols[ i ];
                     if (pSymbol && !pSymbol->IsPredefined () )
                     {
                         aVector.push_back ( pSymbol );
@@ -903,12 +904,12 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 Sequence < SymbolDescriptor > aSequence ( nCount );
                 SymbolDescriptor * pDescriptor = aSequence.getArray();
 
-                vector <const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
+                vector < const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
                 for(; aIter != aEnd; pDescriptor++, aIter++)
                 {
                     pDescriptor->sName = (*aIter)->GetName();
                     pDescriptor->sExportName = (*aIter)->GetExportName();
-                    pDescriptor->sSymbolSet = (*aIter)->GetSetName();
+                    pDescriptor->sSymbolSet = (*aIter)->GetSymbolSetName();
                     pDescriptor->nCharacter = static_cast < sal_Int32 > ((*aIter)->GetCharacter());
 
                     Font rFont = (*aIter)->GetFace();

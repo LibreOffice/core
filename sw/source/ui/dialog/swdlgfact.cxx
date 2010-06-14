@@ -566,9 +566,10 @@ void AbstractEditRegionDlg_Impl::SelectSection(const String& rSectionName)
 }
 // AbstractEditRegionDlg_Impl end
 //AbstractInsertSectionTabDialog_Impl begin
-void AbstractInsertSectionTabDialog_Impl::SetSection(const SwSection& rSect)
+void
+AbstractInsertSectionTabDialog_Impl::SetSectionData(SwSectionData const& rSect)
 {
-    pDlg->SetSection( rSect);
+    pDlg->SetSectionData(rSect);
 }
 // AbstractInsertSectionTabDialog_Impl end
 

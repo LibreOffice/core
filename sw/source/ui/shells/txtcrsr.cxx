@@ -47,6 +47,8 @@
 #include <num.hxx>
 #include <edtwin.hxx>
 #include <crsskip.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -55,6 +57,10 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+
+#include <svx/svdouno.hxx>
+#include <svx/fmshell.hxx>
+#include <svx/sdrobjectfilter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -246,6 +252,36 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
     BOOL bSetRetVal = TRUE, bRet = TRUE;
     switch ( nSlot )
     {
+        case SID_FM_TOGGLECONTROLFOCUS:
+            {
+                const SwDoc* pDoc = rSh.GetDoc();
+                const SwDocShell* pDocShell = pDoc ? pDoc->GetDocShell() : NULL;
+                const SwView* pView = pDocShell ? pDocShell->GetView() : NULL;
+                const FmFormShell* pFormShell = pView ? pView->GetFormShell() : NULL;
+                SdrView* pDrawView = pView ? pView->GetDrawView() : NULL;
+                Window* pWindow = pView ? pView->GetWrtShell().GetWin() : NULL;
+
+                OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::ExecMoveMisc: no chance!" );
+                if ( !pFormShell || !pDrawView || !pWindow )
+                    break;
+
+                ::std::auto_ptr< ::svx::ISdrObjectFilter > pFilter( pFormShell->CreateFocusableControlFilter(
+                    *pDrawView, *pWindow ) );
+                if ( !pFilter.get() )
+                    break;
+
+                const SdrObject* pNearestControl = rSh.GetBestObject( TRUE, GOTOOBJ_DRAW_CONTROL, FALSE, pFilter.get() );
+                if ( !pNearestControl )
+                    break;
+
+                const SdrUnoObj* pUnoObject = dynamic_cast< const SdrUnoObj* >( pNearestControl );
+                OSL_ENSURE( pUnoObject, "SwTextShell::ExecMoveMisc: GetBestObject returned nonsense!" );
+                if ( !pUnoObject )
+                    break;
+
+                pFormShell->ToggleControlFocus( *pUnoObject, *pDrawView, *pWindow );
+            }
+            break;
         case FN_CNTNT_TO_NEXT_FRAME:
             bRet = rSh.GotoObj(TRUE, GOTOOBJ_GOTO_ANY);
             if(bRet)

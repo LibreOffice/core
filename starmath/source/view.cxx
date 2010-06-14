@@ -107,7 +107,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     const Fraction aFraction (1,1);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     SetTotalSize();
 
@@ -145,7 +145,7 @@ void SmGraphicWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColor
 
 void SmGraphicWindow::DataChanged( const DataChangedEvent& rEvt )
 {
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     ScrollableWindow::DataChanged( rEvt );
 }
@@ -270,7 +270,7 @@ void SmGraphicWindow::SetCursor(const Rectangle &rRect)
     // The old cursor will be removed, and the new one will be shown if
     // that is activated in the ConfigItem
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     if (IsCursorVisible())
         ShowCursor(FALSE);      // clean up remainings of old cursor
@@ -324,7 +324,7 @@ void SmGraphicWindow::Paint(const Rectangle&)
         nCol++;
         const SmNode *pFound = SetCursorPos(nRow, nCol);
 
-        SmModule  *pp = SM_MOD1();
+        SmModule  *pp = SM_MOD();
         if (pFound && pp->GetConfig()->IsShowFormulaCursor())
             ShowCursor(TRUE);
     }
@@ -743,6 +743,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
 //  SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_SERVER,
 //                              SmResId(RID_DRAW_OBJECTBAR) );
 
+    SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SmCmdBoxWrapper::GetChildWindowId());
 }
@@ -1162,7 +1163,7 @@ void SmViewShell::Impl_Print(
 USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
-    DBG_ASSERT( 0, "SmViewShell::Print: no longer usewd with new UI print dialog. Should be removed!!" );
+    DBG_ASSERT( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
 }
 
@@ -1190,7 +1191,7 @@ USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool 
 
     if ((nDiffFlags & SFX_PRINTER_OPTIONS) == SFX_PRINTER_OPTIONS)
     {
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         pp->GetConfig()->ItemSetToConfig(pNewPrinter->GetOptions());
     }
     return 0;
@@ -1378,7 +1379,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
     {
         case SID_FORMULACURSOR:
         {
-            SmModule *pp = SM_MOD1();
+            SmModule *pp = SM_MOD();
 
             const SfxItemSet  *pArgs = rReq.GetArgs();
             const SfxPoolItem *pItem;
@@ -1680,11 +1681,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
             SmDocShell *pDoc = GetDoc();
             OutputDevice *pDev = pDoc->GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
-                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+                pDev = &SM_MOD()->GetDefaultVirtualDev();
             DBG_ASSERT (pDev, "device for font list missing" );
 
-            SmModule *pp = SM_MOD1();
-            SmSymbolDialog( NULL, pDev, pp->GetSymSetManager(), *this ).Execute();
+            SmModule *pp = SM_MOD();
+            SmSymbolDialog( NULL, pDev, pp->GetSymbolManager(), *this ).Execute();
         }
         break;
     }
@@ -1759,7 +1760,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_FORMULACURSOR:
             {
-                SmModule *pp = SM_MOD1();
+                SmModule *pp = SM_MOD();
                 rSet.Put(SfxBoolItem(nWh, pp->GetConfig()->IsShowFormulaCursor()));
             }
             break;

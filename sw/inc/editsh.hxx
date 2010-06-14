@@ -89,6 +89,7 @@ class SwTable;
 class SwTextBlocks;     // fuer GlossaryRW
 class SwFmtFtn;
 class SwSection;
+class SwSectionData;
 class SwSectionFmt;
 class SwTOXMarks;
 class SwTOXBase;
@@ -200,6 +201,7 @@ public:
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( sal_uInt32 nType );
+    void TransliterateText( const String& rModuleName );
 
     // count words in current selection
     void CountWords( SwDocStat& rStat ) const;
@@ -814,9 +816,8 @@ public:
         // gebe Liste aller Fussnoten und deren Anfangstexte
     USHORT GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes = false );
 
-    // SS fuer Bereiche
-    const SwSection* InsertSection( const SwSection& rNew,
-                                    const SfxItemSet* = 0 );
+    SwSection const* InsertSection(
+            SwSectionData & rNewData, SfxItemSet const*const = 0 );
     BOOL IsInsRegionAvailable() const;
     const SwSection* GetCurrSection() const;
     // liefert wie GetCurrSection() den aktuellen Bereich, allerdings geht diese Funktion
@@ -830,7 +831,8 @@ public:
     USHORT GetSectionFmtPos( const SwSectionFmt& ) const;
     const SwSectionFmt& GetSectionFmt(USHORT nFmt) const;
     void DelSectionFmt( USHORT nFmt );
-    void ChgSection( USHORT nSect, const SwSection&, const SfxItemSet* = 0 );
+    void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
+            SfxItemSet const*const  = 0);
     BOOL IsAnySectionInDoc( BOOL bChkReadOnly = FALSE,
                             BOOL bChkHidden = FALSE,
                             BOOL BChkTOX = FALSE ) const;
@@ -876,7 +878,7 @@ public:
     BOOL IsGlblDocSaveLinks() const;
     USHORT GetGlobalDocContent( SwGlblDocContents& rArr ) const;
     BOOL InsertGlobalDocContent( const SwGlblDocContent& rPos,
-                                 const SwSection& rNew );
+                                 SwSectionData & rNew );
     BOOL InsertGlobalDocContent( const SwGlblDocContent& rPos,
                                  const SwTOXBase& rTOX );
     BOOL InsertGlobalDocContent( const SwGlblDocContent& rPos );

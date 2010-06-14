@@ -1460,15 +1460,23 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                 //mod #i6193# added sidebar width
                 const SwPostItMgr* pPostItMgr = pImp->GetShell()->GetPostItMgr();
                 const int nSidebarWidth = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ? pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() : 0;
-                if (pPageFrm->MarginSide())
+                switch ( pPageFrm->SidebarPosition() )
                 {
-                    aPaint.Left( aPaint.Left() - nBorderWidth - nSidebarWidth);
-                    aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth);
-                }
-                else
-                {
-                    aPaint.Left( aPaint.Left() - nBorderWidth );
-                    aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth + nSidebarWidth);
+                    case sw::sidebarwindows::SIDEBAR_LEFT:
+                    {
+                        aPaint.Left( aPaint.Left() - nBorderWidth - nSidebarWidth);
+                        aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth);
+                    }
+                    break;
+                    case sw::sidebarwindows::SIDEBAR_RIGHT:
+                    {
+                        aPaint.Left( aPaint.Left() - nBorderWidth );
+                        aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth + nSidebarWidth);
+                    }
+                    break;
+                    case sw::sidebarwindows::SIDEBAR_NONE:
+                        // nothing to do
+                    break;
                 }
                 aPaint.Top( aPaint.Top() - nBorderWidth );
                 aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth);
@@ -1659,24 +1667,6 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
         pLow = pLow->GetNext();
     }
     return bChanged || bTabChanged;
-}
-
-// OD 31.10.2002 #104100#
-// NOTE: no adjustments for vertical layout support necessary
-BOOL CheckPos( SwFrm *pFrm )
-{
-    if ( !pFrm->GetValidPosFlag() )
-    {
-        Point aOld( pFrm->Frm().Pos() );
-        pFrm->MakePos();
-        if ( aOld != pFrm->Frm().Pos() )
-        {
-            pFrm->Frm().Pos( aOld );
-            pFrm->_InvalidatePos();
-            return FALSE;
-        }
-    }
-    return TRUE;
 }
 
 // OD 31.10.2002 #104100#
