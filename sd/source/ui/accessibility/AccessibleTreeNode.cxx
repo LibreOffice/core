@@ -714,6 +714,7 @@ IMPL_LINK(AccessibleTreeNode, WindowEventListener, VclWindowEvent*, pEvent)
         case VCLEVENT_WINDOW_GETFOCUS:
         case VCLEVENT_WINDOW_LOSEFOCUS:
             UpdateStateSet();
+            break;
     }
     return 1;
 }

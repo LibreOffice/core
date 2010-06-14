@@ -130,7 +130,7 @@ String STR_PRESOBJ_TITLE
 };
 String STR_PRESOBJ_OUTLINE
 {
-    Text [ en-US ] = "Click to add an outline" ;
+    Text [ en-US ] = "Click to add text" ;
 };
 String STR_PRESOBJ_TEXT
 {

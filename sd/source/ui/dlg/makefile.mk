@@ -72,7 +72,6 @@ SRC1FILES =\
     PaneDockingWindow.src \
     layeroptionsdlg.src
 
-
 SLOFILES =  \
         $(SLO)$/inspagob.obj \
         $(SLO)$/ins_paste.obj \

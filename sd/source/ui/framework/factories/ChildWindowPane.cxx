@@ -191,7 +191,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
             break;
 
         // At last, we have access to the window and its UNO wrapper.
-        mpWindow = pDockingWindow->GetContentWindow();
+        mpWindow = &pDockingWindow->GetContentWindow();
         mxWindow = VCLUnoHelper::GetInterface(mpWindow);
 
         // Register as window listener to be informed when the child window
