@@ -33,10 +33,12 @@ import java.io.PrintStream;
 import java.io.LineNumberReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import lib.TestParameters;
+import share.LogWriter;
 import util.PropertyName;
 import util.utils;
 
@@ -58,6 +60,7 @@ class Pump extends Thread
     private String pref;
     private StringBuffer buf = new StringBuffer(256);
     private PrintWriter log;
+    private boolean bOutput;
 
     /**
      * Creates Pump for specified <code>InputStream</code>.
@@ -70,11 +73,12 @@ class Pump extends Thread
      * @param outPrefix A prefix which is printed at the
      *   beginning of each output line.
      */
-    public Pump(InputStream is, PrintWriter log, String outPrefix)
+    public Pump(InputStream is, PrintWriter log, String outPrefix, boolean _bOutput)
     {
         this.pref = (outPrefix == null) ? "" : outPrefix;
         reader = new LineNumberReader(new InputStreamReader(is));
         this.log = log;
+        this.bOutput = _bOutput;
         start();
     }
 
@@ -85,8 +89,11 @@ class Pump extends Thread
             String line = reader.readLine();
             while (line != null)
             {
-                log.println(pref + line);
-                log.flush();
+                if (bOutput)
+                {
+                    log.println(pref + line);
+                    log.flush();
+                }
                 buf.append(line).append('\n');
                 line = reader.readLine();
             }
@@ -133,6 +140,8 @@ public class ProcessHandler
     private Process m_aProcess = null;
     private TestParameters param = null;
     private boolean debug = false;
+
+    private boolean bUseOutput = true;
 
     /**
      * Creates instance with specified external command.
@@ -566,8 +575,8 @@ public class ProcessHandler
             return;
         }
         dbg("execute: pump io-streams");
-        stdout = new Pump(m_aProcess.getInputStream(), log, "out > ");
-        stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ");
+        stdout = new Pump(m_aProcess.getInputStream(), log, "out > ", bUseOutput);
+        stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ", bUseOutput);
         stdIn = new PrintStream(m_aProcess.getOutputStream());
 
         // int nExitValue = m_aProcess.exitValue();
@@ -821,4 +830,10 @@ public class ProcessHandler
             log.println(utils.getDateTime() + "PH." + message);
         }
     }
+
+    public void noOutput()
+    {
+        bUseOutput = false;
+    }
+
 }
