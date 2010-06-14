@@ -378,7 +378,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 //Every .oxt, uno.pkg file must contain a META-INF folder
                 ::ucbhelper::Content metaInfContent;
                 if (create_ucb_content(
-                    &metaInfContent, makeURL( url, OUSTR("META-INF/manifest.xml") ),
+                    &metaInfContent, makeURL( url, OUSTR("META-INF") ),
                     xCmdEnv, false /* no throw */ ))
                 {
                      mediaType = OUSTR("application/vnd.sun.star.package-bundle");
