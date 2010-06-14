@@ -58,8 +58,8 @@ testcase tPlotOptions
 
 	printlog "Edit / Object / Edit"
 	EditObjectEdit        
-
-    printlog "Select DataSeries A by toolbar selectorbox"
+        waitslot()
+        printlog "Select DataSeries A by toolbar selectorbox"
 	Kontext "DocumentChart"
 	call fChartSelectElement (8)        
 
@@ -117,8 +117,8 @@ testcase tPlotOptions
 	endif	
 
 	EditObjectEdit        
-
-    printlog "Select DataSeries A by toolbar selectorbox"
+        waitslot()
+        printlog "Select DataSeries A by toolbar selectorbox"
 	call fChartSelectElement (8)        
 
 	printlog "Invoke Format::ObjectProperties"
