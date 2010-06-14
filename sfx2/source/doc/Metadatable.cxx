@@ -33,6 +33,8 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx> // solarmutex
 
+#include <rtl/random.h>
+
 #include <boost/bind.hpp>
 
 #include <memory>
@@ -401,14 +403,16 @@ template< typename T >
 /*static*/ ::rtl::OUString create_id(const
     ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash > & i_rXmlIdMap)
 {
+    static rtlRandomPool s_Pool( rtl_random_createPool() );
     const ::rtl::OUString prefix( ::rtl::OUString::createFromAscii(s_prefix) );
     typename ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash >
         ::const_iterator iter;
     ::rtl::OUString id;
     do
     {
-        const int n( rand() );
-        id = prefix + ::rtl::OUString::valueOf(static_cast<sal_Int64>(n));
+        sal_Int32 n;
+        rtl_random_getBytes(s_Pool, & n, sizeof(n));
+        id = prefix + ::rtl::OUString::valueOf(static_cast<sal_Int32>(abs(n)));
         iter = i_rXmlIdMap.find(id);
     }
     while (iter != i_rXmlIdMap.end());
@@ -1488,8 +1492,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
     }
 }
 
-::boost::shared_ptr<MetadatableUndo> Metadatable::CreateUndo(
-    const bool i_isDelete)
+::boost::shared_ptr<MetadatableUndo> Metadatable::CreateUndo() const
 {
     OSL_ENSURE(!IsInUndo(), "CreateUndo called for object in undo?");
     OSL_ENSURE(!IsInClipboard(), "CreateUndo called for object in clipboard?");
@@ -1503,11 +1506,6 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                 pRegDoc->CreateUndo(*this) );
             pRegDoc->RegisterCopy(*this, *pUndo, false);
             pUndo->m_pReg = pRegDoc;
-
-            if (i_isDelete)
-            {
-                RemoveMetadataReference();
-            }
             return pUndo;
         }
     }
@@ -1516,6 +1514,13 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
         OSL_ENSURE(false, "Metadatable::CreateUndo: exception");
     }
     return ::boost::shared_ptr<MetadatableUndo>();
+}
+
+::boost::shared_ptr<MetadatableUndo> Metadatable::CreateUndoForDelete()
+{
+    ::boost::shared_ptr<MetadatableUndo> const pUndo( CreateUndo() );
+    RemoveMetadataReference();
+    return pUndo;
 }
 
 void Metadatable::RestoreMetadata(
@@ -1624,15 +1629,16 @@ MetadatableMixin::getMetadataReference()
 throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Metadatable* pObject( GetCoreObject() );
-    if (pObject)
+
+    Metadatable *const pObject( GetCoreObject() );
+    if (!pObject)
     {
-        return pObject->GetMetadataReference();
+        throw uno::RuntimeException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "MetadatableMixin: cannot get core object; not inserted?")),
+            *this);
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
+    return pObject->GetMetadataReference();
 }
 
 void SAL_CALL
@@ -1641,30 +1647,32 @@ MetadatableMixin::setMetadataReference(
 throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Metadatable* pObject( GetCoreObject() );
-    if (pObject)
+
+    Metadatable *const pObject( GetCoreObject() );
+    if (!pObject)
     {
-        return pObject->SetMetadataReference(i_rReference);
+        throw uno::RuntimeException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "MetadatableMixin: cannot get core object; not inserted?")),
+            *this);
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
+    return pObject->SetMetadataReference(i_rReference);
 }
 
 void SAL_CALL MetadatableMixin::ensureMetadataReference()
 throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Metadatable* pObject( GetCoreObject() );
-    if (pObject)
+
+    Metadatable *const pObject( GetCoreObject() );
+    if (!pObject)
     {
-        return pObject->EnsureMetadataReference();
+        throw uno::RuntimeException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "MetadatableMixin: cannot get core object; not inserted?")),
+            *this);
     }
-    else
-    {
-        throw uno::RuntimeException();
-    }
+    return pObject->EnsureMetadataReference();
 }
 
 } // namespace sfx2
@@ -1673,168 +1681,6 @@ throw (uno::RuntimeException)
 //=============================================================================
 
 #if OSL_DEBUG_LEVEL > 1
-
-static ::sfx2::XmlIdRegistryDocument s_Reg;
-static ::sfx2::XmlIdRegistryClipboard s_RegClip;
-
-class MockMetadatable : public ::sfx2::Metadatable
-{
-public:
-    MockMetadatable(bool i_isInClip = false) :
-        m_bInClipboard(i_isInClip), m_bInUndo(false), m_bInContent(true) {}
-    bool m_bInClipboard;
-    bool m_bInUndo;
-    bool m_bInContent;
-    virtual bool IsInClipboard() const { return m_bInClipboard; }
-    virtual bool IsInUndo() const { return m_bInUndo; }
-    virtual bool IsInContent() const { return m_bInContent; }
-    virtual ::sfx2::XmlIdRegistry& GetRegistry() { return m_bInClipboard ? static_cast< ::sfx2::XmlIdRegistry&>(s_RegClip) : static_cast< ::sfx2::XmlIdRegistry&>(s_Reg); }
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() { return 0; }
-};
-
-bool operator==(beans::StringPair p1, beans::StringPair p2)
-{
-    return p1.First == p2.First && p1.Second == p2.Second;
-}
-
-void test()
-{
-    OSL_TRACE("SwMetadatable test(): start\n");
-    MockMetadatable m1;
-    MockMetadatable m2;
-    MockMetadatable m3;
-    MockMetadatable m4;
-    MockMetadatable m5;
-    ::rtl::OUString empty;
-    ::rtl::OUString content( ::rtl::OUString::createFromAscii("content.xml") );
-    ::rtl::OUString styles ( ::rtl::OUString::createFromAscii("styles.xml") );
-    ::rtl::OUString sid1( ::rtl::OUString::createFromAscii("id1") );
-    ::rtl::OUString sid2( ::rtl::OUString::createFromAscii("id2") );
-    ::rtl::OUString sid3( ::rtl::OUString::createFromAscii("id3") );
-    ::rtl::OUString sid4( ::rtl::OUString::createFromAscii("id4") );
-    beans::StringPair id1(content, sid1);
-    beans::StringPair id2(content, sid2);
-    beans::StringPair id3(content, sid3);
-    beans::StringPair id4(styles,  sid4);
-    beans::StringPair id3e(empty,  sid3);
-    beans::StringPair id4e(empty,  sid4);
-    m1.SetMetadataReference(id1);
-    OSL_ENSURE(m1.GetMetadataReference() == id1, "set failed");
-    try {
-        m2.SetMetadataReference(id1);
-        OSL_ENSURE(false, "set duplicate succeeded");
-    } catch (lang::IllegalArgumentException) { }
-    m1.SetMetadataReference(id1);
-    OSL_ENSURE(m1.GetMetadataReference() == id1, "set failed (existing)");
-    m1.EnsureMetadataReference();
-    OSL_ENSURE(m1.GetMetadataReference() == id1, "ensure failed (existing)");
-
-    m2.EnsureMetadataReference();
-    beans::StringPair m2id(m2.GetMetadataReference());
-    OSL_ENSURE(m2id.Second.getLength(), "ensure failed");
-    m2.EnsureMetadataReference();
-    OSL_ENSURE(m2.GetMetadataReference() == m2id, "ensure failed (idempotent)");
-
-    m1.m_bInUndo = true;
-    OSL_ENSURE(!m1.GetMetadataReference().Second.getLength(), "move to undo failed");
-
-    m1.m_bInUndo = false;
-    OSL_ENSURE(m1.GetMetadataReference() == id1, "move from undo failed");
-
-    m1.m_bInUndo = true;
-    try {
-        m2.SetMetadataReference(id1); // steal!
-    } catch (lang::IllegalArgumentException &) {
-        OSL_ENSURE(false, "set duplicate to undo failed");
-    }
-    m1.m_bInUndo = false;
-    OSL_ENSURE(!m1.GetMetadataReference().Second.getLength(), "move from undo: duplicate");
-
-    m3.RegisterAsCopyOf(m2);
-    OSL_ENSURE(m2.GetMetadataReference() == id1, "copy: source");
-    OSL_ENSURE(!m3.GetMetadataReference().Second.getLength(), "copy: duplicate");
-    m4.RegisterAsCopyOf(m3);
-    OSL_ENSURE(m2.GetMetadataReference() == id1, "copy: source");
-    OSL_ENSURE(!m3.GetMetadataReference().Second.getLength(), "copy: duplicate");
-    OSL_ENSURE(!m4.GetMetadataReference().Second.getLength(), "copy: duplicate");
-    m2.m_bInUndo = true;
-    OSL_ENSURE(m3.GetMetadataReference() == id1, "duplicate to undo");
-    OSL_ENSURE(!m2.GetMetadataReference().Second.getLength(), "duplicate to undo");
-    m2.m_bInUndo = false;
-    OSL_ENSURE(m2.GetMetadataReference() == id1, "duplicate from undo");
-    OSL_ENSURE(!m3.GetMetadataReference().Second.getLength(), "duplicate from undo");
-
-    m4.EnsureMetadataReference(); // new!
-    beans::StringPair m4id(m4.GetMetadataReference());
-    OSL_ENSURE(m4id.Second.getLength() && !(m4id == id1), "ensure on duplicate");
-
-    MockMetadatable mc1(true); // in clipboard
-    MockMetadatable mc2(true);
-    MockMetadatable mc3(true);
-    MockMetadatable mc4(true);
-    MockMetadatable m2p;
-    MockMetadatable m3p;
-
-    mc1.SetMetadataReference(id2);
-    OSL_ENSURE(mc1.GetMetadataReference() == id2, "set failed");
-    try {
-        mc2.SetMetadataReference(id2);
-        OSL_ENSURE(false, "set duplicate succeeded");
-    } catch (lang::IllegalArgumentException) { }
-    mc1.SetMetadataReference(id2);
-    OSL_ENSURE(mc1.GetMetadataReference() == id2, "set failed (existing)");
-    mc1.EnsureMetadataReference();
-    OSL_ENSURE(mc1.GetMetadataReference() == id2, "ensure failed (existing)");
-    mc2.EnsureMetadataReference();
-    beans::StringPair mc2id(mc2.GetMetadataReference());
-    OSL_ENSURE(mc2id.Second.getLength(), "ensure failed");
-    mc2.EnsureMetadataReference();
-    OSL_ENSURE(mc2.GetMetadataReference() == mc2id, "ensure failed (idempotent)");
-    mc2.RemoveMetadataReference();
-    OSL_ENSURE(!mc2.GetMetadataReference().Second.getLength(), "remove failed");
-
-    // set up mc2 as copy of m2 and mc3 as copy of m3
-    mc3.RegisterAsCopyOf(m3);
-    OSL_ENSURE(!mc3.GetMetadataReference().Second.getLength() , "copy to clipboard (latent)");
-    mc2.RegisterAsCopyOf(m2);
-    OSL_ENSURE(mc2.GetMetadataReference() == id1, "copy to clipboard (non-latent)");
-    // paste mc2 to m2p and mc3 to m3p
-    m2p.RegisterAsCopyOf(mc2);
-    OSL_ENSURE(!m2p.GetMetadataReference().Second.getLength() , "paste from clipboard (non-latent)");
-    m3p.RegisterAsCopyOf(mc3);
-    OSL_ENSURE(!m3p.GetMetadataReference().Second.getLength() , "paste from clipboard (latent)");
-    // delete m2, m2p, m3
-    m2.RemoveMetadataReference();
-    OSL_ENSURE(!m2.GetMetadataReference().Second.getLength(), "remove failed");
-    OSL_ENSURE(m2p.GetMetadataReference() == id1, "paste-remove (non-latent)");
-    m2p.RemoveMetadataReference();
-    OSL_ENSURE(!m2p.GetMetadataReference().Second.getLength(), "remove failed");
-    OSL_ENSURE(m3.GetMetadataReference() == id1, "paste-remove2 (non-latent)");
-    m3.RemoveMetadataReference();
-    OSL_ENSURE(!m3.GetMetadataReference().Second.getLength(), "remove failed");
-    OSL_ENSURE(m3p.GetMetadataReference() == id1, "paste-remove (latent)");
-    // delete mc2
-    mc2.SetMetadataReference(beans::StringPair());
-    OSL_ENSURE(!mc3.GetMetadataReference().Second.getLength() , "in clipboard becomes non-latent");
-    // paste mc2
-    m2p.RegisterAsCopyOf(mc2);
-    OSL_ENSURE(!m2p.GetMetadataReference().Second.getLength(), "remove-paste");
-    OSL_ENSURE(m3p.GetMetadataReference() == id1, "remove-paste (stolen)");
-
-    // auto-detect stream
-    m5.SetMetadataReference(id3e);
-    OSL_ENSURE(m5.GetMetadataReference() == id3, "auto-detect (content)");
-    m5.m_bInContent = false;
-    m5.SetMetadataReference(id4e);
-    OSL_ENSURE(m5.GetMetadataReference() == id4, "auto-detect (styles)");
-
-    OSL_TRACE("sfx2::Metadatable test(): finished\n");
-}
-
-struct Test { Test() { test(); }  };
-static Test s_test;
-
 
 #include <stdio.h>
 

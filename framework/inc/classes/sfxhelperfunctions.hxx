@@ -40,6 +40,7 @@ typedef svt::StatusbarController* ( *pfunc_setStatusBarControllerCreator)( const
 typedef void ( *pfunc_getRefreshToolbars)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 typedef void ( *pfunc_createDockingWindow)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
 typedef bool ( *pfunc_isDockingWindowVisible)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
+typedef void ( *pfunc_activateToolPanel)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
 
 namespace framework
 {
@@ -63,6 +64,10 @@ void SAL_CALL CreateDockingWindow( const ::com::sun::star::uno::Reference< ::com
 pfunc_isDockingWindowVisible SAL_CALL SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
 
 bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
+
+pfunc_activateToolPanel SAL_CALL SetActivateToolPanel( pfunc_activateToolPanel i_pActivator );
+
+void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
 }
 
 #endif // __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_

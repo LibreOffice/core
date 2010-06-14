@@ -281,6 +281,8 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
+    { XML_NAMESPACE_CHART_EXT,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION_EXT },
+    { XML_NAMESPACE_CHART,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION },
     { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
     { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
     { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL             },
@@ -657,6 +659,7 @@ SchXMLImport::SchXMLImport(
         SvXMLImport( xServiceFactory, nImportFlags )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 
     mbIsGraphicLoadOnDemandSupported = false;
 }
@@ -670,6 +673,7 @@ SchXMLImport::SchXMLImport(
 :   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 
     // get status indicator (if requested)
     if( bShowProgress )

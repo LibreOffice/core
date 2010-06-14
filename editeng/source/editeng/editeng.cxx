@@ -49,6 +49,7 @@
 #include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng.hrc>
+#include <editeng/acorrcfg.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/txtrange.hxx>
 #include <vcl/graph.hxx>
@@ -1152,8 +1153,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelection();
                     // Autokorrektur ?
+                    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
-                        SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) )
+                        ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
+                          pAutoCorrect->HasRunNext() ) )
                     {
                         aCurSel = pImpEditEngine->AutoCorrect( aCurSel, nCharCode, !pEditView->IsInsertMode() );
                     }
