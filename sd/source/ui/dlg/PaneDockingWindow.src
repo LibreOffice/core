@@ -59,7 +59,7 @@ DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
     Text [ en-US ] = "Page Pane" ;
 };
 
-DockingWindow FLT_RIGHT_PANE_DOCKING_WINDOW
+DockingWindow FLT_TOOL_PANEL_DOCKING_WINDOW
 {
     //  HelpID = SID_EFFECT_WIN ;
     Border = TRUE ;

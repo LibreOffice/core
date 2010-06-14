@@ -126,6 +126,8 @@ public:
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
+    virtual void SAL_CALL acquire (void) throw ();
+    virtual void SAL_CALL release (void) throw ();
 protected:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
 

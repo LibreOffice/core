@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,46 +22,28 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
+#ifndef SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
+#define SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
 
-#include "ToolPanelChildWindow.hxx"
-#include "ToolPanelDockingWindow.hxx"
+#include "ResourceManager.hxx"
 
-#include "sdresid.hxx"
-#include "app.hrc"
-#include "sfx2/app.hxx"
+#include <rtl/ref.hxx>
 
+namespace sd { namespace framework {
 
-namespace sd { namespace toolpanel {
+class ReadOnlyModeObserver;
 
-
-
-ToolPanelChildWindow::ToolPanelChildWindow (
-    ::Window* pParentWindow,
-    USHORT nId,
-    SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo)
-    : SfxChildWindow (pParentWindow, nId)
+/** This module is responsible for showing the task pane.
+*/
+class ToolPanelModule
 {
-    pWindow = new ToolPanelDockingWindow (pBindings, this, pParentWindow);
-    eChildAlignment = SFX_ALIGN_RIGHT;
-    static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
-    //  SetHideNotDelete (TRUE);
+public:
+    static void Initialize (
+        const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
 };
 
+} } // end of namespace sd::framework
 
-
-
-ToolPanelChildWindow::~ToolPanelChildWindow()
-{}
-
-
-SFX_IMPL_DOCKINGWINDOW(ToolPanelChildWindow, SID_TOOLPANEL)
-
-
-
-
-} } // end of namespace ::sd::toolpanel
+#endif

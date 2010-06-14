@@ -42,27 +42,9 @@ class TitleToolBox
     : public ToolBox
 {
 public:
-    enum ToolBoxId {
-        TBID_DOCUMENT_CLOSE = 1,
-        TBID_PANEL_MENU = 2,
-        TBID_TRIANGLE_RIGHT = 3,
-        TBID_TRIANGLE_DOWN = 4,
-        TBID_TEST
-    };
-
     TitleToolBox (::Window* pParent, WinBits nStyle = 0);
 
-    void AddItem (ToolBoxId aId);
-
     void DataChanged (const DataChangedEvent& rDCEvt);
-
-private:
-    Image maImage;
-    Image maImageHC;
-    Image maTriangleRight;
-    Image maTriangleDown;
-
-    long lastSize;
 };
 
 } } // end of namespace ::sd::toolbox

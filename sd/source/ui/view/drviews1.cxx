@@ -68,6 +68,8 @@
 
 #include <svx/dialogs.hrc>
 
+#include "view/viewoverlaymanager.hxx"
+
 #include "glob.hrc"
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -154,12 +156,32 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
     ViewShell::Deactivate(bIsMDIActivate);
 }
 
+namespace
+{
+    class LockUI
+    {
+    private:
+        void Lock(bool bLock);
+        SfxViewFrame *mpFrame;
+    public:
+        LockUI(SfxViewFrame *pFrame) : mpFrame(pFrame) { Lock(true); }
+        ~LockUI() { Lock(false); }
+
+    };
+
+    void LockUI::Lock(bool bLock)
+    {
+        if (!mpFrame)
+            return;
+        mpFrame->Enable( !bLock );
+    }
+}
+
 /*************************************************************************
 |*
 |* Wird gerufen, wenn sich der Selektionszustand der View aendert
 |*
 \************************************************************************/
-
 void DrawViewShell::SelectionHasChanged (void)
 {
     Invalidate();
@@ -213,6 +235,8 @@ void DrawViewShell::SelectionHasChanged (void)
             // we need to deselect it now
             if (!pOleObj)
             {
+                //#i47279# disable frame until after object has completed unload
+                LockUI aUILock(GetViewFrame());
                 pIPClient->DeactivateObject();
                 //HMHmpDrView->ShowMarkHdl();
             }
@@ -292,6 +316,7 @@ void DrawViewShell::SetZoom( long nZoom )
     ViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    mpViewOverlayManager->onZoomChanged();
 }
 
 /*************************************************************************
@@ -305,6 +330,7 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
     ViewShell::SetZoomRect( rZoomRect );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    mpViewOverlayManager->onZoomChanged();
 }
 
 /*************************************************************************
@@ -1218,6 +1244,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         rBindings.Invalidate(SID_STATUS_PAGE, TRUE, FALSE);
         rBindings.Invalidate(SID_DELETE_MASTER_PAGE, TRUE, FALSE);
         rBindings.Invalidate(SID_DELETE_PAGE, TRUE, FALSE);
+        rBindings.Invalidate(SID_ASSIGN_LAYOUT,TRUE,FALSE);
         UpdatePreview( mpActualPage );
 
         mpDrawView->AdjustMarkHdl();

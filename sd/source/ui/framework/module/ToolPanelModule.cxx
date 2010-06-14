@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: ToolPanelModule.cxx,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +30,7 @@
 
 #include "precompiled_sd.hxx"
 
-#include "TaskPaneModule.hxx"
+#include "ToolPanelModule.hxx"
 #include "ReadOnlyModeObserver.hxx"
 #include "framework/FrameworkHelper.hxx"
 
@@ -54,7 +57,7 @@ typedef ::cppu::WeakComponentImplHelper1 <
     > LocalReadOnlyModeObserverInterfaceBase;
 
 /** This local class enables or disables the ResourceManager of a
-    TaskPaneModule.  It connects to a ReadOnlyModeObserver and is called
+    ToolPanelModule.  It connects to a ReadOnlyModeObserver and is called
     when the state of the .uno:EditDoc command changes.  When either the
     ResourceManager or the ReadOnlyModeObserver are disposed then the
     LocalReadOnlyModeObserver disposes itself.  The link
@@ -138,9 +141,9 @@ private:
 
 
 
-//===== TaskPaneModule ====================================================
+//===== ToolPanelModule ====================================================
 
-void TaskPaneModule::Initialize (const Reference<frame::XController>& rxController)
+void ToolPanelModule::Initialize (const Reference<frame::XController>& rxController)
 {
     ::rtl::Reference<ResourceManager> pResourceManager (
         new ResourceManager(
