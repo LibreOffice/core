@@ -932,14 +932,17 @@ testcase tEditHyperlink
         PrintLog "Insert / Hyperlink"
 
         Call wEinfuegenHyperlink(1)
+        
         Kontext "TabHyperlinkInternet"
         Internet.Check
-        ZielUrl.Settext "http://www.sonor.de"
+        
         PrintLog "Enter URL "
+        ZielUrl.Settext "http://www.sonor.de"
 
-        kontext "HyperlinkDialog"
         PrintLog "Click 'Apply'"
         Uebernehmen.Click
+
+        kontext "HyperlinkDialog"
         PrintLog "Close Hyperlink dialog"
         HyperlinkDialog.Close()
     else
