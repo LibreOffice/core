@@ -1141,7 +1141,7 @@ void TabBar::Paint( const Rectangle& )
                 }
                 else
                 {
-                    if ( !pItem->IsDefaultTabBgColor() )
+                    if ( !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode() )
                     {
                         SetFillColor( pItem->maTabBgColor );
                         SetTextColor( pItem->maTabTextColor );
@@ -1198,7 +1198,7 @@ void TabBar::Paint( const Rectangle& )
                 if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) ) {
                     SetLineColor( rStyleSettings.GetLightColor() );
                 } else {
-                    if ( !pItem->IsDefaultTabBgColor() )
+                    if ( !pItem->IsDefaultTabBgColor() && ! rStyleSettings.GetHighContrastMode() )
                     {
                         SetLineColor( pItem->maTabBgColor );
                     } else {
@@ -1232,7 +1232,7 @@ void TabBar::Paint( const Rectangle& )
 
                 if ( !pItem->IsDefaultTabBgColor() )
                 {
-                    if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) ) {
+                    if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) || rStyleSettings.GetHighContrastMode() ) {
                         SetLineColor( pItem->maTabBgColor );
                         DrawLine( Point(aPos1.X()-1, aPos1.Y()-1), Point(aPos2.X(), aPos2.Y()-1) );
                         if ( !pItem->mbEnable )
