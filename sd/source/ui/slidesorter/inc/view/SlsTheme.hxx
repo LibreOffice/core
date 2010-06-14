@@ -85,6 +85,7 @@ public:
         Color_PageNumber,
         Color_Selection,
         Color_PreviewBorder,
+        Color_PageCountFontColor,
         _ColorType_Size_
     };
     ColorData GetColor (const ColorType eType);

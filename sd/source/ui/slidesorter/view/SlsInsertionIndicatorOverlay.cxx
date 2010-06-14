@@ -319,10 +319,10 @@ void InsertionIndicatorOverlay::PaintPageCount (
         rDevice.DrawRect(GrowRectangle(aTextBox, nBorder));
 
         rDevice.SetFillColor();
-        rDevice.SetLineColor(COL_WHITE);
+        rDevice.SetLineColor(pTheme->GetColor(Theme::Color_PageCountFontColor));
         rDevice.DrawRect(GrowRectangle(aTextBox, nBorder-1));
 
-        rDevice.SetTextColor(COL_WHITE);
+        rDevice.SetTextColor(pTheme->GetColor(Theme::Color_PageCountFontColor));
         rDevice.DrawText(aTextBox.TopLeft()-aTextOffset, sNumber);
     }
 }

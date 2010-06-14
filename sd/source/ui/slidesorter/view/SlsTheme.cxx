@@ -138,6 +138,10 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
 void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 {
+    const bool bSavedHighContrastMode (mbIsHighContrastMode);
+    mbIsHighContrastMode = rpProperties->IsHighContrastModeActive();
+
+    // Set up colors.
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
     maPageBackgroundColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
@@ -148,7 +152,12 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     maColor[Color_Background] = maBackgroundColor;
     const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
     maColor[Color_Selection] = aSelectionColor;
+    if (Color(aSelectionColor).IsBright())
+        maColor[Color_PageCountFontColor] = Black;
+    else
+        maColor[Color_PageCountFontColor] = White;
 
+    // Set up gradients.
     SetGradient(Gradient_SelectedPage, aSelectionColor, 50, 50, +100,+100, +50,+25);
     SetGradient(Gradient_MouseOverPage, aSelectionColor, 75, 75, +100,+100, +50,+25);
     SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +100,+100, -50,-75);
@@ -163,8 +172,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     GetGradient(Gradient_FocusedPage).maFillColor1 = GetGradient(Gradient_NormalPage).maFillColor1;
     GetGradient(Gradient_FocusedPage).maFillColor2 = GetGradient(Gradient_NormalPage).maFillColor2;
 
-    const bool bSavedHighContrastMode (mbIsHighContrastMode);
-    mbIsHighContrastMode = rpProperties->IsHighContrastModeActive();
+    // Set up icons.
     if (bSavedHighContrastMode != mbIsHighContrastMode || maIcons.empty())
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);

@@ -383,7 +383,7 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
                 maMouseOverBackground,
                 Theme::Gradient_MouseOverPage,
                 rReferenceDevice,
-                (eState & Focused));
+                (eState & Focused)!=0);
 
         case Selected | Focused:
             return GetBackground(
@@ -448,7 +448,12 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     VirtualDevice aBitmapDevice (rReferenceDevice);
     aBitmapDevice.SetOutputSizePixel(aSize);
 
-    // Paint the background with a linear gradient that starts some pixels
+    // Fill the background with the background color of the slide sorter.
+    aBitmapDevice.SetFillColor(mpTheme->GetColor(Theme::Color_Background));
+    aBitmapDevice.SetLineColor(mpTheme->GetColor(Theme::Color_Background));
+    aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
+
+    // Paint the slide area with a linear gradient that starts some pixels
     // below the top and ends some pixels above the bottom.
     const sal_Int32 nHeight (aPageObjectBox.GetHeight());
     const sal_Int32 nDefaultConstantSize(nHeight/4);
