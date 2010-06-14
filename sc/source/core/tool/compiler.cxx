@@ -128,7 +128,7 @@ enum ScanState
 struct FunctionName
 {
     const sal_Char* pName;
-    const OpCode    eOp;
+    OpCode          eOp;
 };
 static const FunctionName aOdffAliases[] = {
     // Renamed old names:
