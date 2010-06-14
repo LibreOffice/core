@@ -594,7 +594,7 @@
                     <value>GenericCategories</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryUIName">
-                    <value xml:lang="en-US">Base: Table Data View</value>
+                    <value>Base: Table Data View</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
@@ -616,7 +616,7 @@
                     <value >GenericCategories</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryUIName">
-                    <value xml:lang="en-US">Bibliography</value>
+                    <value>Bibliography</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
@@ -801,13 +801,13 @@
           <node oor:name="Common" oor:op="replace">
             <prop oor:name="IncludedFiles">
               <value>
-                .*/autotext/.*
-                .*/autocorr/.*
-                .*/config/.*\.so[bcdegh]
-                .*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml
-                .*/config/soffice.cfg/modules/.*/images/.*
-                .*/gallery/.*
-                .*/template/.*
+                <it>.*/autotext/.*</it>
+                <it>.*/autocorr/.*</it>
+                <it>.*/config/.*\.so[bcdegh]</it>
+                <it>.*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml</it>
+                <it>.*/config/soffice.cfg/modules/.*/images/.*</it>
+                <it>.*/gallery/.*</it>
+                <it>.*/template/.*</it>
               </value>
             </prop>
             <prop oor:name="IncludedNodes">

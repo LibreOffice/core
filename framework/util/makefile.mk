@@ -56,7 +56,6 @@ LIB1OBJFILES=   \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
                 $(SLO)$/jobconst.obj                            \
-                $(SLO)$/popupmenucontrollerbase.obj             \
                 $(SLO)$/mischelper.obj                          \
                 $(SLO)$/propertysethelper.obj
 
@@ -114,6 +113,9 @@ SHL1STDLIBS=    \
                 $(UNOTOOLSLIB)      \
                 $(CPPUHELPERLIB)    \
                 $(TOOLSLIB)         \
+                $(SVTOOLLIB)        \
+                $(SVLLIB)        	\
+                $(I18NISOLANGLIB)   \
                 $(VOSLIB)           \
                 $(VCLLIB)           \
                 $(TKLIB)            \
@@ -195,7 +197,8 @@ SHL3OBJS=       $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/dispatchrecorder.obj        \
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchhelper.obj          \
-                $(SLO)$/popupmenudispatcher.obj           \
+                $(SLO)$/popupmenudispatcher.obj     \
+                $(SLO)$/popupmenucontroller.obj
 
 SHL3STDLIBS=    \
                 $(FWILIB)                           \
@@ -205,7 +208,6 @@ SHL3STDLIBS=    \
                 $(SVTOOLLIB)                        \
                 $(UNOTOOLSLIB)                      \
                 $(TOOLSLIB)                         \
-                $(I18NISOLANGLIB)                   \
                 $(COMPHELPERLIB)                    \
                 $(CPPUHELPERLIB)                    \
                 $(COMPHELPERLIB)                    \

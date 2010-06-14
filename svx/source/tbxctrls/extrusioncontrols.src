@@ -30,9 +30,9 @@
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
+DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
 {
-    Border = TRUE ;
+    Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
@@ -200,9 +200,9 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
     };
 };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
+DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
 {
-    Border = TRUE ;
+    Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
@@ -289,9 +289,10 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
     };
 };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
+
+DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
 {
-    Border = TRUE ;
+    Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
@@ -605,9 +606,9 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
     };
 };
 
-FloatingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
+DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
 {
-    Border = TRUE ;
+    Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
@@ -703,7 +704,7 @@ ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
     MetricField MTR_DEPTH
     {
          //HelpId = HID_SD_CTL_FAVORITES ;
-        Border = TRUE ;
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 3 , 14 ) ;
         Size = MAP_APPFONT ( WIDTH - 50 - 12, 12 ) ;
         TabStop = TRUE ;
