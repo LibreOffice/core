@@ -37,6 +37,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/rectitem.hxx>
 #include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>

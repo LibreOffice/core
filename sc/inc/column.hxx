@@ -275,7 +275,6 @@ public:
     void        CalcAfterLoad();
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
-    bool        MarkUsedExternalReferences();
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
@@ -373,7 +372,7 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, BOOL bUp ) const;
 
-    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings);
+    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates);
     BOOL        GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
 
 //UNUSED2008-05  SCROW      NoteCount( SCROW nMaxRow = MAXROW ) const;
@@ -397,8 +396,8 @@ public:
     void        CompileColRowNameFormula();
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
-    xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                       SCROW nRowStart, SCROW nRowEnd ) const;
 
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);

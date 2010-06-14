@@ -465,11 +465,8 @@ void ScDocument::MarkUsedExternalReferences()
     // Charts.
     bool bAllMarked = pExternalRefMgr->markUsedByLinkListeners();
     // Formula cells.
-    for (SCTAB nTab = 0; !bAllMarked && nTab < nMaxTableNumber; ++nTab)
-    {
-        if (pTab[nTab])
-            bAllMarked = pTab[nTab]->MarkUsedExternalReferences();
-    }
+    bAllMarked = pExternalRefMgr->markUsedExternalRefCells();
+
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
 }
@@ -1263,7 +1260,8 @@ BOOL ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
 //
 
-BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScStrCollection& rStrings, bool bFilter )
+BOOL ScDocument::GetFilterEntries(
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && pTab[nTab] && pDBCollection )
     {
@@ -1300,11 +1298,11 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScSt
 
             if ( bFilter )
             {
-                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings );
+                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings, rHasDates );
             }
             else
             {
-                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
             }
 
             return TRUE;
@@ -1319,11 +1317,11 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScSt
 //
 
 BOOL ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                        SCTAB nTab, TypedScStrCollection& rStrings )
+                                        SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
     {
-        pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+        pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
         return TRUE;
     }
 

@@ -714,11 +714,16 @@ void VLegend::createShapes(
             LegendExpansion eExpansion = LegendExpansion_HIGH;
             if( xLegendProp.is())
             {
-                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, nMaxLabelWidth,
-                                   rPageSize );
-
                 // get Expansion property
                 xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion;
+                if( eExpansion == LegendExpansion_WIDE )
+                {
+                    //#i80377#
+                    nMaxLabelWidth = (rAvailableSpace.Width * 5) / 6;//completely correct would be available width minus symbol size minus distances to page ...
+                }
+
+                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, nMaxLabelWidth,
+                                   rPageSize );
             }
 
             if( xBorder.is())

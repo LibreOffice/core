@@ -51,6 +51,7 @@
 #include <tools/tenccvt.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -374,10 +375,6 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefInsertTable(nPos);
-
                 SetDirty();
                 bValid = TRUE;
             }
@@ -465,11 +462,6 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 }
                 // #81844# sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
-
-
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefDeleteTable(nTab);
 
                 SetAutoCalc( bOldAutoCalc );
                 bValid = TRUE;
@@ -693,6 +685,10 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
     if (nRow2 < rEndRow)
         rEndRow = nRow2;
 
+    if (rStartCol > rEndCol || rStartRow > rEndRow)
+        // invalid range.
+        return false;
+
     return true;  // success!
 }
 
@@ -707,11 +703,10 @@ bool ScDocument::ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol,
 //  zusammenhaengender Bereich
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown )
+                              SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown ) const
 {
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
+    if (ValidTab(nTab) && pTab[nTab])
+        pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
 
@@ -4972,4 +4967,13 @@ void ScDocument::EnableUndo( bool bVal )
     mbUndoEnabled = bVal;
 }
 
-
+bool ScDocument::IsInVBAMode() const
+{
+    bool bResult = false;
+    if ( pShell )
+    {
+        com::sun::star::uno::Reference< com::sun::star::script::XVBACompat > xVBA( pShell->GetBasicContainer(), com::sun::star::uno::UNO_QUERY );
+        bResult = xVBA->getVBACompatModeOn();
+    }
+    return bResult;
+}

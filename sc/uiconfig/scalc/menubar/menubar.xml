@@ -109,8 +109,8 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:NormalViewMode"/>
-            <menu:menuitem menu:id=".uno:PagebreakMode"/>
+            <menu:menuitem menu:id=".uno:NormalViewMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:PagebreakMode"  menu:style="radio"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:InputLineVisible"/>
@@ -122,7 +122,8 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
-            <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TaskPane"/>
+      <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
             <menu:menuitem menu:id=".uno:Zoom"/>
         </menu:menupopup>
@@ -233,8 +234,11 @@
             <menu:menuitem menu:id=".uno:ParagraphDialog"/>
             <menu:menu menu:id=".uno:TransliterateMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
@@ -247,21 +251,21 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:AnchorMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SetAnchorToPage"/>
-                    <menu:menuitem menu:id=".uno:SetAnchorToCell"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:SetAnchorToCell" menu:style="radio"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:ObjectAlign">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalDefault"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignLeft"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignRight"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignJustified"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalDefault" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignLeft" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignRight" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignJustified" menu:style="radio"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:CommonAlignTop"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter"/>
-                    <menu:menuitem menu:id=".uno:CommonAlignBottom"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignTop" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:CommonAlignBottom" menu:style="radio"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:ArrangeMenu">
@@ -310,7 +314,7 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
                     <menu:menuitem menu:id=".uno:ChineseConversion"/>
-                    <menu:menuitem menu:id=".uno:Thesaurus"/>
+                    <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
                     <menu:menuitem menu:id=".uno:Hyphenate"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:MoreDictionaries"/>

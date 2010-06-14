@@ -1249,7 +1249,7 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 //  TRUE = Zahlformat gesetzt
 BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
-                          SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
+                          SvNumberFormatter* pLangFormatter, bool bDetectNumberFormat )
 {
     BOOL bNumFmtSet = FALSE;
     if (VALIDROW(nRow))
@@ -1261,8 +1261,11 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
             double nVal;
             sal_uInt32 nIndex, nOldIndex = 0;
             sal_Unicode cFirstChar;
-            if (!pFormatter)
-                pFormatter = pDocument->GetFormatTable();
+            // #i110979# If a different NumberFormatter is passed in (pLangFormatter),
+            // its formats aren't valid in the document.
+            // Only use the language / LocaleDataWrapper from pLangFormatter,
+            // always the document's number formatter for IsNumberFormat.
+            SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
             SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
             if ( pDocSh )
                 bIsLoading = pDocSh->IsLoading();
@@ -1337,8 +1340,22 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 
                     if (bDetectNumberFormat)
                     {
+                        if ( pLangFormatter )
+                        {
+                            // for number detection: valid format index for selected language
+                            nIndex = pFormatter->GetStandardIndex( pLangFormatter->GetLanguage() );
+                        }
+
                         if (!pFormatter->IsNumberFormat(rString, nIndex, nVal))
                             break;
+
+                        if ( pLangFormatter )
+                        {
+                            // convert back to the original language if a built-in format was detected
+                            const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
+                            if ( pOldFormat )
+                                nIndex = pFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
+                        }
 
                         pNewCell = new ScValueCell( nVal );
                         if ( nIndex != nOldIndex)
@@ -1378,7 +1395,8 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     else
                     {
                         // Only check if the string is a regular number.
-                        const LocaleDataWrapper* pLocale = pFormatter->GetLocaleData();
+                        SvNumberFormatter* pLocaleSource = pLangFormatter ? pLangFormatter : pFormatter;
+                        const LocaleDataWrapper* pLocale = pLocaleSource->GetLocaleData();
                         if (!pLocale)
                             break;
 
@@ -1467,8 +1485,9 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 }
 
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings)
+void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates)
 {
+    bool bHasDates = false;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     String aString;
     SCROW nRow = 0;
@@ -1504,6 +1523,18 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
                     nValue = 0.0;
             }
 
+            if (pFormatter)
+            {
+                short nType = pFormatter->GetType(nFormat);
+                if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+                {
+                    // special case for date values.  Disregard the time
+                    // element if the number format is of date type.
+                    nValue = ::rtl::math::approxFloor(nValue);
+                    bHasDates = true;
+                }
+            }
+
             pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
         }
 #if 0 // DR
@@ -1522,6 +1553,8 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 
         ++nIndex;
     }
+
+    rHasDates = bHasDates;
 }
 
 //
@@ -1905,11 +1938,15 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
 }
 
 
-xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
-        SCROW nRowStart, SCROW nRowEnd ) const
+xub_StrLen ScColumn::GetMaxNumberStringLen(
+    sal_uInt16& nPrecision, SCROW nRowStart, SCROW nRowEnd ) const
 {
     xub_StrLen nStringLen = 0;
     nPrecision = pDocument->GetDocOptions().GetStdPrecision();
+    if ( nPrecision == SvNumberFormatter::UNLIMITED_PRECISION )
+        // In case of unlimited precision, use 2 instead.
+        nPrecision = 2;
+
     if ( pItems )
     {
         String aString;
@@ -1932,8 +1969,8 @@ xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
                 {
                     if ( nFormat )
                     {   // more decimals than standard?
-                        USHORT nPrec = pNumFmt->GetFormatPrecision( nFormat );
-                        if ( nPrec > nPrecision )
+                        sal_uInt16 nPrec = pNumFmt->GetFormatPrecision( nFormat );
+                        if ( nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > nPrecision )
                             nPrecision = nPrec;
                     }
                     if ( nPrecision )
