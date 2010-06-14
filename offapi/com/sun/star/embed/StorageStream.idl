@@ -64,7 +64,7 @@
     of the stream can exist.
     </p>
  */
-service StorageStream
+published service StorageStream
 {
     // -----------------------------------------------------------------------
     /** allows to get access to <type scope="com::sun::star::io">XInputStream</type>

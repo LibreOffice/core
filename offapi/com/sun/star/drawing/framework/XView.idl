@@ -45,8 +45,6 @@ module com { module sun { module star { module drawing { module framework {
     view is.  It just needs to identify view objects and a typesafe way to
     reference them.</p>
     <p>The URL prefix of views is <code>private:resource/view</code></p>
-    @see XViewController
-    @see XViewFactory
 */
 interface XView
 {

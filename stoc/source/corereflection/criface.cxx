@@ -877,7 +877,8 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
 Uik InterfaceIdlClassImpl::getUik()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return *(Uik *)&getTypeDescr()->aUik;
+    return Uik(0, 0, 0, 0, 0);
+        // Uiks are deprecated and this function must not be called
 }
 //__________________________________________________________________________________________________
 Sequence< Reference< XIdlMethod > > InterfaceIdlClassImpl::getMethods()
