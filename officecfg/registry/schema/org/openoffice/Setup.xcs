@@ -261,7 +261,15 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="ooSetupExtension" oor:type="xs:string">
+			<prop oor:name="ooVendor" oor:type="xs:string">
+				<info>
+					<author>IHI</author>
+					<desc>Specifies the vendor who build the product.</desc>
+				</info>
+				<value/>
+			</prop>
+
+            <prop oor:name="ooSetupExtension" oor:type="xs:string">
 				<info>
 					<desc>Specifies the version number that appears on the user interface.</desc>
 				</info>
