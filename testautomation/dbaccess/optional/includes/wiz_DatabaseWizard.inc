@@ -233,38 +233,7 @@ qaerrorlog "not yet implemented"
 endcase
 '-------------------------------------------------------------------------
 testcase tAdabas
-
     qaerrorlog "not yet implemented"
-    goto endsub
-
-    qaerrorlog "not yet implemented"
-    goto endsub
-
-    if gPlatform = "x86" then
-        printlog "Adabas doesn't exists under x86."
-        goto endsub    
-    elseif gOOO then
-        printlog "Adabas doesn't exists under Openoffice.org."
-        goto endsub    
-    end if
-    
-    dim aDatabaseProperties(6) as string
-    aDatabaseProperties() = tools_dbtools_fgetAdabasDatabaseProperties()
-
-    ' if and only if no properties are defined in the environment file the test is stopped
-    if(aDatabaseProperties(1) = "no") then
-        qaerrorlog "No database properties from Adabas defiened. The Test is stopped here."
-        goto endsub
-    endif        
-    
-	call fCreateAdabasDatasource( sFileName, aDatabaseProperties(2), aDatabaseProperties(3), aDatabaseProperties(4))
-    call fOpendatabase(gOfficePath + "user/work/tt_adabas.odb","testuser")
-    
-    Kontext "ContainerView"
-        ViewTables
-    
-    call fCloseDatabase(true)    
-    
 endcase
 '-------------------------------------------------------------------------
 testcase tdBase

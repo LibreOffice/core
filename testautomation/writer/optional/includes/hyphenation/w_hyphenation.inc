@@ -173,9 +173,9 @@ testcase tHyphenation_3
 	
 	printlog "Tools/Hyphenation"
 	ToolsLanguageHyphenate
-	Kontext "Silbentrennung"
+	Kontext "Hyphenation"
 	
-	if Not Silbentrennung.Exists then	
+	if Not Hyphenation.Exists then	
 		Warnlog "Unable to bring up Dialog 'Hyphenation'!"
 		Call hCloseDocument
 		goto endsub
@@ -184,21 +184,21 @@ testcase tHyphenation_3
 	printlog "check if get 'fol=low-ing'"
 	if Wort.Gettext <> testWordInHyphenationDlg then
 		Warnlog "Expected " & testWordInHyphenationDlg & " but found " & Wort.Gettext 
-		Silbentrennung.Cancel
+		Hyphenation.Cancel
 		Call hCloseDocument
 		goto endsub
 	end if
 	
 	if NOT Vor.IsEnabled then
 		Warnlog "the 'Vor' button is Not enabled, or something wrong!"
-		Silbentrennung.Cancel
+		Hyphenation.Cancel
 		Call hCloseDocument
 		goto endsub
 	end if
 	
 	printlog "add '-' between 'fol' and 'lowing' using left arrow key"
 	Vor.Click
-	Silbentrennung.OK
+	Hyphenation.OK
 	
 	' Messagebox 'Start hypheantion from the beginning ?
 	Kontext "Active"
@@ -285,9 +285,9 @@ testcase tHyphenation_4
 	
 	printlog "Tools/Hyphenation"
 	ToolsLanguageHyphenate
-	Kontext "Silbentrennung"
+	Kontext "Hyphenation"
 	
-	if Not Silbentrennung.Exists then
+	if Not Hyphenation.Exists then
 		Call hCloseDocument
 		goto endsub
 	end if
@@ -295,7 +295,7 @@ testcase tHyphenation_4
 	printlog "check if get 'fol=low-ing'"
 	if Wort.Gettext <> testWordInHyphenationDlg1 then
 		Warnlog "Expected " & testWordInHyphenationDlg1 & " but found " & Wort.Gettext
-		Silbentrennung.Cancel
+		Hyphenation.Cancel
 		Call hCloseDocument
 		goto endsub
 	end if
@@ -303,7 +303,7 @@ testcase tHyphenation_4
 	printlog "click left arrow key"
 	if NOT Vor.IsEnabled then
 		Warnlog "the Vor button is Not enabled, or something wrong!"
-		Silbentrennung.Cancel
+		Hyphenation.Cancel
 		Call hCloseDocument
 		goto endsub
 	end if
@@ -334,7 +334,7 @@ testcase tHyphenation_4
 	Sleep 1
 	
 	printlog "close all dialogs"
-	Silbentrennung.OK
+	Hyphenation.OK
 	
 	' Messagebox 'Start hypheantion from the beginning ?
 	Kontext "Active"
