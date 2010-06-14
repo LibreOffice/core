@@ -53,6 +53,11 @@ OBJFILES= \
     $(OBJ)$/_tokens.obj 	\
     $(OBJ)$/_unix.obj
 
+# nonstandard cpp options, needs the custom stgetopt defined here :/
+.IF "$(OS)" == "MACOSX"
+OBJFILES += $(OBJ)$/_getopt.obj
+.ENDIF
+
 APP1TARGET	=	$(TARGET)
 .IF "$(GUI)" != "OS2"
 APP1STACK	=	1000000
