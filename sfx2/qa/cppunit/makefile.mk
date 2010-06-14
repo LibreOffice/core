@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,31 +25,50 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-
-
+PRJ=../..
 PRJNAME=sfx2
-TARGET=menu
+TARGET=qa_cppunit
+
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-# --- Files --------------------------------------------------------
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+DLLPRE = # no leading "lib" on .so files
 
-SRS1NAME=$(TARGET)
-SRC1FILES = menu.src
+# --- Libs ---------------------------------------------------------
 
-SLOFILES =	\
-        $(SLO)$/mnuitem.obj \
-        $(SLO)$/mnumgr.obj \
-        $(SLO)$/objmnctl.obj \
-        $(SLO)$/thessubmenu.obj \
-        $(SLO)$/virtmenu.obj
+SHL1OBJS=  \
+    $(SLO)/test_metadatable.obj \
 
-# --- Tagets -------------------------------------------------------
+
+SHL1STDLIBS= \
+     $(CPPUNITLIB) \
+     $(SALLIB) \
+     $(CPPULIB) \
+     $(CPPUHELPERLIB) \
+     $(VCLLIB) \
+     $(SFXLIB) \
+
+
+SHL1TARGET= test_metadatable
+SHL1RPATH = NONE
+SHL1IMPLIB= i$(SHL1TARGET)
+# SHL1DEF= $(MISC)/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP= version.map
+
+# --- All object files ---------------------------------------------
+
+SLOFILES= \
+    $(SHL1OBJS) \
+
+
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
 
