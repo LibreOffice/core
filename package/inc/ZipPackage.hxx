@@ -93,7 +93,7 @@ protected:
     sal_Bool         m_bForceRecovery;
 
     sal_Bool        m_bMediaTypeFallbackUsed;
-    sal_Int16       m_nFormat;
+    sal_Int32       m_nFormat;
     sal_Bool        m_bAllowRemoveOnInsert;
 
     InitialisationMode m_eMode;
@@ -125,7 +125,7 @@ public:
     virtual ~ZipPackage( void );
     ZipFile& getZipFile() { return *m_pZipFile;}
     const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return m_aEncryptionKey;}
-    sal_Int16 getFormat() const { return m_nFormat; }
+    sal_Int32 getFormat() const { return m_nFormat; }
 
     SotMutexHolderRef GetSharedMutexRef() { return m_aMutexHolder; }
 

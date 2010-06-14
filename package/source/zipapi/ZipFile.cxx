@@ -787,14 +787,14 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nOffset += nLocPos;
             aEntry.nOffset *= -1;
 
-            if ( aEntry.nPathLen < 0 || aEntry.nPathLen > ZIP_MAXNAMELEN )
-                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
+            if ( aEntry.nPathLen < 0 )
+                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "unexpected name length" ) ), Reference < XInterface > () );
 
-            if ( nCommentLen < 0 || nCommentLen > ZIP_MAXNAMELEN )
-                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "comment length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
+            if ( nCommentLen < 0 )
+                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "unexpected comment length" ) ), Reference < XInterface > () );
 
-            if ( aEntry.nExtraLen < 0 || aEntry.nExtraLen > ZIP_MAXEXTRA )
-                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds ZIP_MAXEXTRA bytes") ), Reference < XInterface > () );
+            if ( aEntry.nExtraLen < 0 )
+                throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "unexpected extra header info length") ), Reference < XInterface > () );
 
             // read always in UTF8, some tools seem not to set UTF8 bit
             aEntry.sPath = rtl::OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
@@ -879,7 +879,7 @@ sal_Int32 ZipFile::recover()
 
                             sal_Int32 nDataSize = ( aEntry.nMethod == DEFLATED ) ? aEntry.nCompressedSize : aEntry.nSize;
                             sal_Int32 nBlockLength = nDataSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
-                            if ( aEntry.nPathLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
+                            if ( aEntry.nPathLen >= 0 && aEntry.nExtraLen >= 0
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {
                                 // read always in UTF8, some tools seem not to set UTF8 bit

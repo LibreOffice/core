@@ -125,17 +125,6 @@ namespace abp
         // ----------------------------------------------------------------
         // - ctor/dtor/assignment
         // ----------------------------------------------------------------
-        /** ctor
-            @param _rxORB
-                the service factory to use to access the UNO objects
-            @param _rName
-                the name of the data source the object should represent
-        */
-        ODataSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::rtl::OUString& _rName
-        );
-
         /// constructs an object which is initially invalid
         ODataSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
