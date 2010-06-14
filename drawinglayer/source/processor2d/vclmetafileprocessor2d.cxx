@@ -1429,7 +1429,11 @@ namespace drawinglayer
                             {
                                 // there is already a clip polygon set; build clipped union of
                                 // current mask polygon and new one
-                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aMask, maClipPolyPolygon, false, false);
+                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                    aMask,
+                                    maClipPolyPolygon,
+                                    true, // #i106516# we want the inside of aMask, not the outside
+                                    false);
                             }
                             else
                             {
