@@ -55,8 +55,11 @@ OBJFILES= \
 
 # nonstandard cpp options, needs the custom stgetopt defined here :/
 # And Windows, well, Windows... no comment.
-.IF "$(OS)" == "MACOSX" || "$(OS)" == "WNT"
+.IF "$(OS)" == "MACOSX" || "$(HAVE_GETOPT)" == "NO"
 OBJFILES += $(OBJ)$/_getopt.obj
+.ENDIF
+.IF "$(HAVE_GETOPT)" == "YES"
+CDEFS += -DHAVE_GETOPT
 .ENDIF
 
 APP1TARGET	=	$(TARGET)
