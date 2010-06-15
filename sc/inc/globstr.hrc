@@ -353,7 +353,7 @@
 #define STR_SCATTR_PAGE_SCALETOPAGES 277
 
 #define STR_NOREF_STR               278     /* moved to compiler.src, keep define! */
-#define STR_ODER_SO                 279
+// unused: 279
 
 #define STR_UNDO_CHARTDATA          280
 #define STR_UNDO_ORIGINALSIZE       281

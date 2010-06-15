@@ -61,7 +61,6 @@ SLOFILES =  \
     $(SLO)$/crdlg.obj			\
     $(SLO)$/namecrea.obj		\
     $(SLO)$/namepast.obj		\
-    $(SLO)$/teamdlg.obj			\
     $(SLO)$/textdlgs.obj		\
     $(SLO)$/anyrefdg.obj		\
     $(SLO)$/crnrdlg.obj			\
@@ -110,7 +109,6 @@ LIB1OBJFILES =  \
     $(SLO)$/solveroptions.obj   \
     $(SLO)$/solverutil.obj      \
     $(SLO)$/tabopdlg.obj		\
-    $(SLO)$/teamdlg.obj			\
     $(SLO)$/anyrefdg.obj		\
     $(SLO)$/crnrdlg.obj			\
     $(SLO)$/acredlin.obj		\

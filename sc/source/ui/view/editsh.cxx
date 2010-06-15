@@ -32,13 +32,16 @@
 
 //------------------------------------------------------------------
 
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <editeng/cntritem.hxx>
-//CHINA001 #include <svx/chardlg.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unolingu.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -91,6 +94,11 @@
 
 #include "scui_def.hxx" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+
+
+using namespace ::com::sun::star;
+
+
 TYPEINIT1( ScEditShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
@@ -210,6 +218,17 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if (pTopView)
                     pTopView->SetInsertMode( bIsInsertMode );
                 rBindings.Invalidate( SID_ATTR_INSERT );
+            }
+            break;
+
+        case SID_THES:
+            {
+                String aReplaceText;
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+                if (pItem2)
+                    aReplaceText = pItem2->GetValue();
+                if (aReplaceText.Len() > 0)
+                    ReplaceTextWithSynonym( *pEditView, aReplaceText );
             }
             break;
 
@@ -680,6 +699,22 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
             case SID_INSERT_ZWSP:
                 ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
             break;
+
+            case SID_THES:
+                {
+                    String          aStatusVal;
+                    LanguageType    nLang = LANGUAGE_NONE;
+                    bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, *pActiveView );
+                    rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+                    // disable thesaurus context menu entry if there is nothing to look up
+                    BOOL bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+                    if (!bIsLookUpWord || !bCanDoThesaurus)
+                        rSet.DisableItem( SID_THES );
+                }
+                break;
+
+
         }
         nWhich = aIter.NextWhich();
     }

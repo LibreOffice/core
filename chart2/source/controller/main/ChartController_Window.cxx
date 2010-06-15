@@ -774,6 +774,7 @@ void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
     ControllerLockGuard aCLGuard( m_aModel->getModel());
+    bool bMouseUpWithoutMouseDown = !m_bWaitingForMouseUp;
     m_bWaitingForMouseUp = false;
     bool bNotifySelectionChange = false;
     {
@@ -796,6 +797,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
         {
             pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
+            impl_switchDiagramPositioningToExcludingPositioning();
             if ( pDrawViewWrapper->AreObjectsMarked() )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
@@ -869,8 +871,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , m_aModel->getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
-                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
-                                        , m_xChartView );
+                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
                         if( bChanged )
                         {
                             bDraggingDone = true;
@@ -907,9 +908,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             else
                 m_aSelection.resetPossibleSelectionAfterSingleClickWasEnsured();
         }
-        else if( isDoubleClick(rMEvt) )
+        else if( isDoubleClick(rMEvt) && !bMouseUpWithoutMouseDown /*#i106966#*/ )
         {
-            // #i12587# support for shapes in chart
             Point aMousePixel = rMEvt.GetPosPixel();
             execute_DoubleClick( &aMousePixel );
         }
@@ -1714,7 +1714,11 @@ bool ChartController::requestQuickHelp(
         lang::EventObject aEvent( xSelectionSupplier );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< view::XSelectionChangeListener*>(aIt.next()))->selectionChanged( aEvent );
+        {
+            uno::Reference< view::XSelectionChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->selectionChanged( aEvent );
+        }
     }
 }
 

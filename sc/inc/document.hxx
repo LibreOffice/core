@@ -909,7 +909,7 @@ public:
     bool            ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                    SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown );
+                                 SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown ) const;
     SC_DLLPUBLIC BOOL           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
@@ -1428,9 +1428,9 @@ public:
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);
 
     BOOL            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                TypedScStrCollection& rStrings, bool bFilter = false );
+                                bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates);
     SC_DLLPUBLIC BOOL           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                SCTAB nTab, TypedScStrCollection& rStrings );
+                                SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates );
     BOOL            GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 TypedScStrCollection& rStrings, BOOL bLimit = FALSE );
     BOOL            GetFormulaEntries( TypedScStrCollection& rStrings );
@@ -1695,9 +1695,9 @@ public:
     /** Maximum string length of numerical cells of a column, e.g. for dBase export.
         @return String length in characters (!) including the decimal
                 separator, and the decimal precision needed. */
-    xub_StrLen      GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCTAB nTab, SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen      GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                           SCTAB nTab, SCCOL nCol,
+                                           SCROW nRowStart, SCROW nRowEnd ) const;
 
     void    KeyInput( const KeyEvent& rKEvt );      // TimerDelays etc.
 
@@ -1752,6 +1752,8 @@ public:
                             { return eStorageGrammar; }
 
     SfxUndoManager*     GetUndoManager();
+    bool IsInVBAMode() const;
+
 private: // CLOOK-Impl-Methoden
 
     /**

@@ -98,7 +98,6 @@
 #include "msgpool.hxx"
 #include "scresid.hxx"
 #include "anyrefdg.hxx"
-#include "teamdlg.hxx"
 #include "dwfunctr.hxx"
 #include "formdata.hxx"
 //CHINA001 #include "tpview.hxx"
@@ -142,7 +141,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pSelTransfer( NULL ),
     pMessagePool( NULL ),
     pRefInputHandler( NULL ),
-    pTeamDlg( NULL ),
     pViewCfg( NULL ),
     pDocCfg( NULL ),
     pAppCfg( NULL ),
@@ -1507,11 +1505,6 @@ void ScModule::ViewShellGone( ScTabViewShell* pViewSh )
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
         pHdl->ViewShellGone( pViewSh );
-
-    //  Team dialog is opened with the window from a view as parent
-    //  -> close it if any view is closed
-    if (pTeamDlg)
-        pTeamDlg->Close();          // resets variable pTeamDlg
 }
 
 void ScModule::SetRefInputHdl( ScInputHandler* pNew )
@@ -1633,21 +1626,6 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
         SfxApplication* pSfxApp = SFX_APP();
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
     }
-}
-
-void ScModule::OpenTeamDlg()
-{
-    if ( !pTeamDlg )
-    {
-        //  team dialog needs an existing parent window
-        //  -> use window from active view (dialog is closed in ViewShellGone)
-
-        ScTabViewShell* pShell = ScTabViewShell::GetActiveViewShell();
-        if (pShell)
-            pTeamDlg = new ScTeamDlg( pShell->GetActiveWin() );
-    }
-    else
-        pTeamDlg->Center();
 }
 
 SfxChildWindow* lcl_GetChildWinFromAnyView( USHORT nId )

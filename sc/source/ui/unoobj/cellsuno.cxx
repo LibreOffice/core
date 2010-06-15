@@ -770,6 +770,7 @@ const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, &getCppuType((sal_Int32*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, &getCppuType(static_cast< const rtl::OUString * >(0)),    0, 0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
@@ -5265,6 +5266,8 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
     {
+        ScExternalRefManager::ApiGuard aExtRefGuard(pDocSh->GetDocument());
+
         // GRAM_PODF_A1 for API compatibility.
         bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
     }
@@ -7913,7 +7916,8 @@ void SAL_CALL ScTableSheetObj::protect( const rtl::OUString& aPassword )
 {
     ScUnoGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
+    // #i108245# if already protected, don't change anything
+    if ( pDocSh && !pDocSh->GetDocument()->IsTabProtected( GetTab_Impl() ) )
     {
         String aString(aPassword);
         ScDocFunc aFunc(*pDocSh);
@@ -7930,9 +7934,9 @@ void SAL_CALL ScTableSheetObj::unprotect( const rtl::OUString& aPassword )
     {
         String aString(aPassword);
         ScDocFunc aFunc(*pDocSh);
-        aFunc.Unprotect( GetTab_Impl(), aString, TRUE );
-
-        //! Rueckgabewert auswerten, Exception oder so
+        BOOL bDone = aFunc.Unprotect( GetTab_Impl(), aString, TRUE );
+        if (!bDone)
+            throw lang::IllegalArgumentException();
     }
 }
 
@@ -8469,7 +8473,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
-        {
+    {
             sal_Int32 nColor = COL_AUTO;
             if (aValue >>= nColor)
             {
@@ -8477,6 +8481,16 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                     pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
             }
         }
+        else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
+        {
+        rtl::OUString aCodeName;
+        if ( pDocSh && ( aValue >>= aCodeName ) )
+        {
+            String sNewName( aCodeName );
+            pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), sNewName );
+        }
+    }
+    }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
     }
@@ -8616,9 +8630,17 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             ScUnoHelpFunctions::SetBoolInAny( rAny, bAutoPrint );
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
-        {
+    {
             rAny <<= sal_Int32(pDoc->GetTabBgColor(nTab).GetColor());
-        }
+    }
+        else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
+        {
+        String aCodeName;
+        if ( pDocSh )
+            pDocSh->GetDocument()->GetCodeName( GetTab_Impl(), aCodeName );
+        rAny <<= rtl::OUString( aCodeName );
+    }
+    }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
     }

@@ -2605,6 +2605,180 @@ void ScXMLExport::_ExportAutoStyles()
                                     GetProgressBarHelper()->SetReference(GetProgressBarHelper()->GetReference() + nCount2 - nCount);
                             }
                         }
+
+                        // collect other auto-styles only for non-copied sheets
+                        if (xTable.is() && !bUseStream)
+                        {
+                            uno::Reference<sheet::XUniqueCellFormatRangesSupplier> xCellFormatRanges ( xTable, uno::UNO_QUERY );
+                            if ( xCellFormatRanges.is() )
+                            {
+                                uno::Reference<container::XIndexAccess> xFormatRangesIndex(xCellFormatRanges->getUniqueCellFormatRanges());
+                                if (xFormatRangesIndex.is())
+                                {
+                                    sal_Int32 nFormatRangesCount(xFormatRangesIndex->getCount());
+                                    GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nFormatRangesCount);
+                                    for (sal_Int32 nFormatRange = 0; nFormatRange < nFormatRangesCount; ++nFormatRange)
+                                    {
+                                        uno::Reference< sheet::XSheetCellRanges> xCellRanges(xFormatRangesIndex->getByIndex(nFormatRange), uno::UNO_QUERY);
+                                        if (xCellRanges.is())
+                                        {
+                                            uno::Reference <beans::XPropertySet> xProperties (xCellRanges, uno::UNO_QUERY);
+                                            if (xProperties.is())
+                                            {
+                                                AddStyleFromCells(xProperties, xTable, nTable, NULL);
+                                                IncrementProgressBar(sal_False);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            uno::Reference<table::XColumnRowRange> xColumnRowRange (xTable, uno::UNO_QUERY);
+                            if (xColumnRowRange.is())
+                            {
+                                if (pDoc)
+                                {
+                                    uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
+                                    if (xTableColumns.is())
+                                    {
+                                        sal_Int32 nColumns(pDoc->GetLastChangedCol(sal::static_int_cast<SCTAB>(nTable)));
+                                        pSharedData->SetLastColumn(nTable, nColumns);
+                                        table::CellRangeAddress aCellAddress(GetEndAddress(xTable, nTable));
+                                        if (aCellAddress.EndColumn > nColumns)
+                                        {
+                                            ++nColumns;
+                                            pColumnStyles->AddNewTable(nTable, aCellAddress.EndColumn);
+                                        }
+        //                              else if (nColumns < MAXCOL)
+        //                                  pColumnStyles->AddNewTable(nTable, ++nColumns);
+                                        else
+                                            pColumnStyles->AddNewTable(nTable, nColumns);
+                                        sal_Int32 nColumn = 0;
+                                        while (/*nColumn <= nColumns && */nColumn <= MAXCOL)
+                                        {
+                                            sal_Int32 nIndex(-1);
+                                            sal_Bool bIsVisible(sal_True);
+                                            uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex(nColumn), uno::UNO_QUERY);
+                                            if (xColumnProperties.is())
+                                            {
+                                                AddStyleFromColumn( xColumnProperties, NULL, nIndex, bIsVisible );
+                                                //if(xPropStates.size())
+                                                pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex, bIsVisible);
+                                            }
+                                            sal_Int32 nOld(nColumn);
+                                            nColumn = pDoc->GetNextDifferentChangedCol(sal::static_int_cast<SCTAB>(nTable), static_cast<USHORT>(nColumn));
+                                            for (sal_Int32 i = nOld + 1; i < nColumn; ++i)
+                                                pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
+                                        }
+                                        if (aCellAddress.EndColumn > nColumns)
+                                        {
+                                            sal_Bool bIsVisible(sal_True);
+                                            sal_Int32 nIndex(pColumnStyles->GetStyleNameIndex(nTable, nColumns, bIsVisible));
+                                            for (sal_Int32 i = nColumns + 1; i <= aCellAddress.EndColumn; ++i)
+                                                pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
+                                        }
+                                    }
+                                    uno::Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
+                                    if (xTableRows.is())
+                                    {
+                                        sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
+                                        pSharedData->SetLastRow(nTable, nRows);
+                                        table::CellRangeAddress aCellAddress(GetEndAddress(xTable, nTable));
+                                        if (aCellAddress.EndRow > nRows)
+                                        {
+                                            ++nRows;
+                                            pRowStyles->AddNewTable(nTable, aCellAddress.EndRow);
+                                        }
+        //                              else if (nRows < MAXROW)
+        //                                  pRowStyles->AddNewTable(nTable, ++nRows);
+                                        else
+                                            pRowStyles->AddNewTable(nTable, nRows);
+                                        sal_Int32 nRow = 0;
+                                        while ( /*nRow <= nRows && */nRow <= MAXROW)
+                                        {
+                                            sal_Int32 nIndex = 0;
+                                            uno::Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
+                                            if(xRowProperties.is())
+                                            {
+                                                AddStyleFromRow( xRowProperties, NULL, nIndex );
+                                                //if(xPropStates.size())
+                                                pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
+                                            }
+                                            sal_Int32 nOld(nRow);
+                                            nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<USHORT>(nRow), false);
+                                            for (sal_Int32 i = nOld + 1; i < nRow; ++i)
+                                                pRowStyles->AddFieldStyleName(nTable, i, nIndex);
+                                        }
+                                        if (aCellAddress.EndRow > nRows)
+                                        {
+                                            sal_Int32 nIndex(pRowStyles->GetStyleNameIndex(nTable, nRows));
+                                            for (sal_Int32 i = nRows + 1; i <= aCellAddress.EndRow; ++i)
+                                                pRowStyles->AddFieldStyleName(nTable, i, nIndex);
+                                        }
+                                    }
+                                }
+                            }
+                            uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
+                            if (xCellRangesQuery.is())
+                            {
+                                uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
+                                uno::Reference<sheet::XSheetOperation> xSheetOperation(xSheetCellRanges, uno::UNO_QUERY);
+                                if (xSheetCellRanges.is() && xSheetOperation.is())
+                                {
+                                    sal_uInt32 nCount(sal_uInt32(xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT)));
+                                    uno::Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
+                                    if (xCellsAccess.is())
+                                    {
+                                        GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
+                                        uno::Reference<container::XEnumeration> xCells(xCellsAccess->createEnumeration());
+                                        if (xCells.is())
+                                        {
+                                            sal_uInt32 nCount2(0);
+                                            while (xCells->hasMoreElements())
+                                            {
+                                                uno::Reference<text::XText> xText(xCells->nextElement(), uno::UNO_QUERY);
+                                                if (xText.is())
+                                                    GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
+                                                ++nCount2;
+                                                IncrementProgressBar(sal_False);
+                                            }
+                                            if(nCount2 > nCount)
+                                                GetProgressBarHelper()->SetReference(GetProgressBarHelper()->GetReference() + nCount2 - nCount);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        IncrementProgressBar(sal_False);
+                    }
+                    pChangeTrackingExportHelper->CollectAutoStyles();
+
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
+                        GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW,
+                        GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE,
+                        GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+                    exportAutoDataStyles();
+                    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
+                        GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+
+                    GetShapeExport()->exportAutoStyles();
+                    GetFormExport()->exportAutoStyles( );
+
+                    if (pDoc)
+                    {
+                        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+                        // #i100879# write the table style for cached tables only if there are cached tables
+                        // (same logic as in ExportExternalRefCacheStyles)
+                        if (pRefMgr->hasExternalData())
+                        {
+                            // Special table style for the external ref cache tables.
+                            AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sExternalRefTabStyleName);
+                            AddAttribute(XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE);
+                            SvXMLElementExport aElemStyle(*this, XML_NAMESPACE_STYLE, XML_STYLE, sal_True, sal_True);
+                            AddAttribute(XML_NAMESPACE_TABLE,  XML_DISPLAY, XML_FALSE);
+                            SvXMLElementExport aElemStyleTabProps(*this, XML_NAMESPACE_STYLE, XML_TABLE_PROPERTIES, sal_True, sal_True);
+                        }
                     }
                 }
             }
@@ -3242,6 +3416,7 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
     {
         const ScMyAreaLink& rAreaLink = rMyCell.aAreaLink;
         AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, rAreaLink.sSourceStr );
+        AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(rAreaLink.sURL) );
         AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_NAME, rAreaLink.sFilter );
         if( rAreaLink.sFilterOptions.getLength() )
@@ -3725,6 +3900,7 @@ void ScXMLExport::WriteTableSource()
                             xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_REFDELAY))) >>= nRefresh;
                             if (sLink.getLength())
                             {
+                                AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
                                 AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(sLink));
                                 if (sTableName.getLength())
                                     AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sTableName);
@@ -3963,6 +4139,7 @@ void ScXMLExport::WriteExternalRefCaches()
                         aRelUrl = pExtFileData->maRelativeName;
                     else
                         aRelUrl = GetRelativeReference(pExtFileData->maRelativeName);
+                    AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
                     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aRelUrl);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, *itr);
                     if (pExtFileData->maFilterName.Len())
@@ -3990,6 +4167,14 @@ void ScXMLExport::WriteExternalRefCaches()
                     if (nMaxColsUsed <= nCol)
                         nMaxColsUsed = nCol + 1;
                 }
+            }
+
+            // Column definitions have to be present to make a valid file
+            {
+                if (nMaxColsUsed > 1)
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
+                                    OUString::valueOf(static_cast<sal_Int32>(nMaxColsUsed)));
+                SvXMLElementExport aElemColumn(*this, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
             }
 
             // Write cache content for this table.
