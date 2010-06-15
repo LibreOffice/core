@@ -28,6 +28,7 @@
 #ifndef SC_XLESCHER_HXX
 #define SC_XLESCHER_HXX
 
+#include <tools/gen.hxx>
 #include <vcl/mapunit.hxx>
 #include "fapihelper.hxx"
 #include "xladdress.hxx"
@@ -431,16 +432,12 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                         GetControlModel( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
-    /** Returns the Calc macro name from an Excel macro name. */
-    static ::rtl::OUString GetScMacroName( const String& rXclMacroName, SfxObjectShell* pShell = NULL );
-    /** Returns the Excel macro name from a Calc macro name. */
-    static String       GetXclMacroName( const ::rtl::OUString& rScMacroName );
-
     /** Fills the macro descriptor according to the passed macro name. */
     static bool         FillMacroDescriptor(
                             ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType,
-                            const String& rXclMacroName, SfxObjectShell* pShell = NULL );
+                            const String& rXclMacroName,
+                            SfxObjectShell* pDocShell = 0 );
     /** Tries to extract an Excel macro name from the passed macro descriptor. */
     static String       ExtractFromMacroDescriptor(
                             const ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,

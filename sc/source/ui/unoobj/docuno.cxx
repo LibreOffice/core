@@ -96,6 +96,7 @@
 #include "scmod.hxx"
 #include "rangeutl.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
+#include "sheetevents.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
 
@@ -591,6 +592,10 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
 
             DELETEZ( pPrintFuncCache );
+
+            // handle "OnCalculate" sheet events
+            if ( pDocShell && pDocShell->GetDocument()->HasSheetEventScript( SC_SHEETEVENT_CALCULATE ) )
+                HandleCalculateEvents();
         }
     }
     else if ( rHint.ISA( ScPointerChangedHint ) )
@@ -2089,11 +2094,11 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     }
 
     if ( rId.getLength() == 16 &&
-          0 == rtl_compareMemory( SfxObjectShell::getUnoTunnelId().getConstArray(),
+        0 == rtl_compareMemory( SfxObjectShell::getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
-        {
-            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
-        }
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
+    }
 
     //  aggregated number formats supplier has XUnoTunnel, too
     //  interface from aggregated object must be obtained via queryAggregation
@@ -2162,7 +2167,23 @@ void ScModelObj::removeChangesListener( const uno::Reference< util::XChangesList
 
 bool ScModelObj::HasChangesListeners() const
 {
-    return ( maChangesListeners.getLength() > 0 );
+    if ( maChangesListeners.getLength() > 0 )
+        return true;
+
+    if ( pDocShell )
+    {
+        // "change" event set in any sheet?
+        ScDocument* pDoc = pDocShell->GetDocument();
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+        {
+            const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
+            if (pEvents && pEvents->GetScript(SC_SHEETEVENT_CHANGE))
+                return true;
+        }
+    }
+
+    return false;
 }
 
 void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRangeList& rRanges,
@@ -2207,6 +2228,91 @@ void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRange
             {
             }
         }
+    }
+
+    // handle sheet events
+    //! separate method with ScMarkData? Then change HasChangesListeners back.
+    if ( rOperation.compareToAscii("cell-change") == 0 && pDocShell )
+    {
+        ScMarkData aMarkData;
+        aMarkData.MarkFromRangeList( rRanges, FALSE );
+        ScDocument* pDoc = pDocShell->GetDocument();
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+            if (aMarkData.GetTableSelect(nTab))
+            {
+                const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
+                if (pEvents)
+                {
+                    const rtl::OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CHANGE);
+                    if (pScript)
+                    {
+                        ScRangeList aTabRanges;     // collect ranges on this sheet
+                        ULONG nRangeCount = rRanges.Count();
+                        for ( ULONG nIndex = 0; nIndex < nRangeCount; ++nIndex )
+                        {
+                            ScRange aRange( *rRanges.GetObject( nIndex ) );
+                            if ( aRange.aStart.Tab() == nTab )
+                                aTabRanges.Append( aRange );
+                        }
+                        ULONG nTabRangeCount = aTabRanges.Count();
+                        if ( nTabRangeCount > 0 )
+                        {
+                            uno::Reference<uno::XInterface> xTarget;
+                            if ( nTabRangeCount == 1 )
+                            {
+                                ScRange aRange( *aTabRanges.GetObject( 0 ) );
+                                if ( aRange.aStart == aRange.aEnd )
+                                    xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, aRange.aStart ) ) );
+                                else
+                                    xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, aRange ) ) );
+                            }
+                            else
+                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
+
+                            uno::Sequence<uno::Any> aParams(1);
+                            aParams[0] <<= xTarget;
+
+                            uno::Any aRet;
+                            uno::Sequence<sal_Int16> aOutArgsIndex;
+                            uno::Sequence<uno::Any> aOutArgs;
+
+                            /*ErrCode eRet =*/ pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+                        }
+                    }
+                }
+            }
+    }
+}
+
+void ScModelObj::HandleCalculateEvents()
+{
+    if (pDocShell)
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        // don't call events before the document is visible
+        // (might also set a flag on SFX_EVENT_LOADFINISHED and only disable while loading)
+        if ( pDoc->IsDocVisible() )
+        {
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+            {
+                const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
+                if (pEvents)
+                {
+                    const rtl::OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CALCULATE);
+                    if (pScript && pDoc->HasCalcNotification(nTab))
+                    {
+                        uno::Any aRet;
+                        uno::Sequence<uno::Any> aParams;
+                        uno::Sequence<sal_Int16> aOutArgsIndex;
+                        uno::Sequence<uno::Any> aOutArgs;
+                        pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+                    }
+                }
+            }
+        }
+        pDoc->ResetCalcNotifications();
     }
 }
 

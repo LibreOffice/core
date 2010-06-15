@@ -36,6 +36,7 @@
 #include <ooo/vba/excel/XlColorIndex.hpp>
 #include <ooo/vba/excel/XlUnderlineStyle.hpp>
 #include <svl/itemset.hxx>
+#include "excelvbahelper.hxx"
 #include "vbafont.hxx"
 #include "scitems.hxx"
 #include "cellsuno.hxx"
@@ -43,15 +44,22 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaFont::ScVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, uno::Reference< beans::XPropertySet > xPropertySet, ScCellRangeObj* pRangeObj  ) throw ( uno::RuntimeException ) : ScVbaFont_BASE( xParent, xContext, dPalette.getPalette(), xPropertySet ), mPalette( dPalette ),  mpRangeObj( pRangeObj )
+ScVbaFont::ScVbaFont(
+        const uno::Reference< XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const ScVbaPalette& dPalette,
+        const uno::Reference< beans::XPropertySet >& xPropertySet,
+        ScCellRangeObj* pRangeObj, bool bFormControl ) throw ( uno::RuntimeException ) :
+    ScVbaFont_BASE( xParent, xContext, dPalette.getPalette(), xPropertySet, bFormControl ),
+    mPalette( dPalette ),
+    mpRangeObj( pRangeObj )
 {
 }
 
 SfxItemSet*
 ScVbaFont::GetDataSet()
 {
-    SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( mpRangeObj );
-    return pDataSet;
+    return mpRangeObj ? excel::ScVbaCellRangeAccess::GetDataSet( mpRangeObj ) : 0;
 }
 
 ScVbaFont::~ScVbaFont()

@@ -112,6 +112,7 @@ private:
                                                 const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptions,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus, String& rPagesStr ) const;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
+    void                    HandleCalculateEvents();
 
     rtl::OUString           maBuildId;
     sal_Int32               mnXlsWriteProtPass;

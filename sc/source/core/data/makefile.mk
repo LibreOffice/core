@@ -98,6 +98,7 @@ SLOFILES =  \
     $(SLO)$/patattr.obj \
     $(SLO)$/pivot2.obj \
     $(SLO)$/poolhelp.obj \
+    $(SLO)$/sheetevents.obj \
     $(SLO)$/sortparam.obj \
     $(SLO)$/stlpool.obj \
     $(SLO)$/stlsheet.obj \

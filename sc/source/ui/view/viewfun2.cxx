@@ -2201,6 +2201,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
                 pUndoDoc->SetActiveScenario( nTab, bActive );
             }
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
+            pUndoDoc->SetSheetEvents( nTab, pDoc->GetSheetEvents( nTab ) );
 
             if ( pDoc->IsTabProtected( nTab ) )
                 pUndoDoc->SetTabProtection(nTab, pDoc->GetTabProtection(nTab));

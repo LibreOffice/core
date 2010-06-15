@@ -34,12 +34,14 @@
 
 #include "scitems.hxx"
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
 #include <layout/layout.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <svx/svxdlg.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -52,8 +54,11 @@
 //CHINA001 #include "strindlg.hxx"
 //CHINA001 #include "mvtabdlg.hxx"
 #include "docfunc.hxx"
+#include "eventuno.hxx"
 
 #include "scabstdlg.hxx" //CHINA001
+
+using namespace com::sun::star;
 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
@@ -680,6 +685,26 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                     aFunc.SetLayoutRTL( nCurrentTab, bSet, FALSE );
+            }
+            break;
+
+        case FID_TAB_EVENTS:
+            {
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( pDocSh, nCurrentTab ) );
+
+                uno::Reference<frame::XFrame> xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
+
+                SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
+                if (pDlgFactory)
+                {
+                    std::auto_ptr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
+                        GetDialogParent(), xFrame, false, xEvents, 0 ) );
+                    if ( pDialog.get() && pDialog->Execute() == RET_OK )
+                    {
+                        // the dialog modifies the settings directly
+                    }
+                }
             }
             break;
 

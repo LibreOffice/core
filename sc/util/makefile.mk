@@ -314,7 +314,7 @@ SHL9STDLIBS= \
         $(ISCLIB) \
         $(VCLLIB) \
         $(TKLIB) \
-        $(SVXMSFILTERLIB)		\
+        $(MSFILTERLIB)		\
         $(FORLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)

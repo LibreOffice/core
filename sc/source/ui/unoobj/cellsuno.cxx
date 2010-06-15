@@ -84,6 +84,7 @@
 #include "srchuno.hxx"
 #include "targuno.hxx"
 #include "tokenuno.hxx"
+#include "eventuno.hxx"
 #include "docsh.hxx"
 #include "markdata.hxx"
 #include "patattr.hxx"
@@ -6835,6 +6836,7 @@ uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType ) thro
     SC_QUERYINTERFACE( sheet::XScenarioEnhanced )
     SC_QUERYINTERFACE( sheet::XSheetLinkable )
     SC_QUERYINTERFACE( sheet::XExternalSheetName )
+    SC_QUERYINTERFACE( document::XEventsSupplier )
 
     return ScCellRangeObj::queryInterface( rType );
 }
@@ -6858,7 +6860,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 17 );
+        aTypes.realloc( nParentLen + 18 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheet>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XNamed>*)0);
@@ -6877,6 +6879,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
         pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XScenarioEnhanced>*)0);
         pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XSheetLinkable>*)0);
         pPtr[nParentLen +16] = getCppuType((const uno::Reference<sheet::XExternalSheetName>*)0);
+        pPtr[nParentLen +17] = getCppuType((const uno::Reference<document::XEventsSupplier>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -8156,6 +8159,18 @@ void ScTableSheetObj::setExternalName( const ::rtl::OUString& aUrl, const ::rtl:
             }
         }
     }
+}
+
+// XEventsSupplier
+
+uno::Reference<container::XNameReplace> SAL_CALL ScTableSheetObj::getEvents() throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+        return new ScSheetEventsObj( pDocSh, GetTab_Impl() );
+
+    return NULL;
 }
 
 // XPropertySet erweitert fuer Sheet-Properties

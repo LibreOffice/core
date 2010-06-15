@@ -631,5 +631,10 @@
 
 #define SC_UNO_SHAREDOC             "IsDocumentShared"
 
+// EventDescriptor
+
+#define SC_UNO_EVENTTYPE            "EventType"
+#define SC_UNO_SCRIPT               "Script"
+
 #endif
 

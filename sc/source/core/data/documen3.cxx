@@ -83,6 +83,7 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
+#include "sheetevents.hxx"
 
 #include <memory>
 
@@ -479,6 +480,52 @@ ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
     if( !mxFormulaParserPool.get() )
         mxFormulaParserPool.reset( new ScFormulaParserPool( *this ) );
     return *mxFormulaParserPool;
+}
+
+const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        return pTab[nTab]->GetSheetEvents();
+    return NULL;
+}
+
+void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        pTab[nTab]->SetSheetEvents( pNew );
+}
+
+bool ScDocument::HasSheetEventScript( sal_Int32 nEvent ) const
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (pTab[nTab])
+        {
+            const ScSheetEvents* pEvents = pTab[nTab]->GetSheetEvents();
+            if ( pEvents && pEvents->GetScript( nEvent ) )
+                return true;
+        }
+    return false;
+}
+
+BOOL ScDocument::HasCalcNotification( SCTAB nTab ) const
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        return pTab[nTab]->GetCalcNotification();
+    return FALSE;
+}
+
+void ScDocument::SetCalcNotification( SCTAB nTab )
+{
+    // set only if not set before
+    if (VALIDTAB(nTab) && pTab[nTab] && !pTab[nTab]->GetCalcNotification())
+        pTab[nTab]->SetCalcNotification(TRUE);
+}
+
+void ScDocument::ResetCalcNotifications()
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (pTab[nTab] && pTab[nTab]->GetCalcNotification())
+            pTab[nTab]->SetCalcNotification(FALSE);
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )

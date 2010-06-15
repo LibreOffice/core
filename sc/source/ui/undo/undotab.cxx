@@ -411,6 +411,7 @@ void ScUndoDeleteTab::Undo()
                 pDoc->SetActiveScenario( nTab, bActive );
             }
             pDoc->SetVisible( nTab, pRefUndoDoc->IsVisible( nTab ) );
+            pDoc->SetSheetEvents( nTab, pRefUndoDoc->GetSheetEvents( nTab ) );
 
             if ( pRefUndoDoc->IsTabProtected( nTab ) )
                 pDoc->SetTabProtection(nTab, pRefUndoDoc->GetTabProtection(nTab));

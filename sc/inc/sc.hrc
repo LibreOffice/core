@@ -833,6 +833,7 @@
 #define FID_TAB_INDEX           (TAB_POPUP_START+6)
 #define FID_TAB_RTL             (TAB_POPUP_START+7)
 #define FID_TAB_DESELECTALL     (TAB_POPUP_START+8)
+#define FID_TAB_EVENTS          (TAB_POPUP_START+9)
 
 #define TAB_POPUP_END           (DATA_MENU_END + 20)
 

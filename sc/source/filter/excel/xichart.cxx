@@ -3831,6 +3831,8 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
 
             case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( rStrm, true );break;
             case EXC_ID_SCL:            rTabViewSett.ReadScl( rStrm );          break;
+
+            case EXC_ID_CODENAME:       ReadCodeName( rStrm, false );           break;
         }
 
         // common records

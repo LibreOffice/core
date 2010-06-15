@@ -232,7 +232,10 @@ ScVbaName::setRefersToR1C1Local( const ::rtl::OUString & rRefersTo ) throw (css:
 css::uno::Reference< ov::excel::XRange >
 ScVbaName::getRefersToRange() throw (css::uno::RuntimeException)
 {
-    uno::Reference< ov::excel::XRange > xRange = ScVbaRange::getRangeObjectForName( mxContext, mxNamedRange->getName(), excel::getDocShell( mxModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
+    // FIXME: pass proper Worksheet parent
+    uno::Reference< ov::excel::XRange > xRange = ScVbaRange::getRangeObjectForName(
+        uno::Reference< XHelperInterface >(), mxContext,
+        mxNamedRange->getName(), excel::getDocShell( mxModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
     return xRange;
 }
 

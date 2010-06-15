@@ -80,6 +80,7 @@
 #include "XMLExportSharedData.hxx"
 #include "docuno.hxx"
 #include "sheetdata.hxx"
+#include "XMLCodeNameProvider.hxx"
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -425,6 +426,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "StreamName" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -635,6 +637,12 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     xModelSet->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
                 }
             }
+
+            // Set Code Names
+            uno::Any aAny = xInfoSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration") ));
+            uno::Reference <container::XNameAccess> xCodeNameAccess;
+            if( aAny >>= xCodeNameAccess )
+                XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
         }
 
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams

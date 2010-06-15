@@ -28,14 +28,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include "xlescher.hxx"
+
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <svx/unoapi.hxx>
-#include "xestream.hxx"
 #include "document.hxx"
+#include "xestream.hxx"
 #include "xistream.hxx"
-#include "xlescher.hxx"
-#include <filter/msfilter/msvbahelper.hxx>
+#include "xltools.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -326,33 +327,7 @@ Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape 
     return xCtrlModel;
 }
 
-#define EXC_MACRONAME_PRE "vnd.sun.star.script:Standard."
-#define EXC_MACRONAME_SUF "?language=Basic&location=document"
-
-OUString XclControlHelper::GetScMacroName( const String& rXclMacroName, SfxObjectShell* pDocShell )
-{
-    String sTmp( rXclMacroName );
-    if( rXclMacroName.Len() > 0 )
-    {
-        ooo::vba::VBAMacroResolvedInfo aMacro = ooo::vba::resolveVBAMacro( pDocShell, rXclMacroName, false );
-        if ( aMacro.IsResolved() )
-            return ooo::vba::makeMacroURL( aMacro.ResolvedMacro() );
-
-    }
-    return OUString();
-}
-
-String XclControlHelper::GetXclMacroName( const OUString& rScMacroName )
-{
-    const OUString saMacroNamePre = CREATE_OUSTRING( EXC_MACRONAME_PRE );
-    const OUString saMacroNameSuf = CREATE_OUSTRING( EXC_MACRONAME_SUF );
-    sal_Int32 snScMacroNameLen = rScMacroName.getLength();
-    sal_Int32 snXclMacroNameLen = snScMacroNameLen - saMacroNamePre.getLength() - saMacroNameSuf.getLength();
-    if( (snXclMacroNameLen > 0) && rScMacroName.matchIgnoreAsciiCase( saMacroNamePre, 0 ) &&
-            rScMacroName.matchIgnoreAsciiCase( saMacroNameSuf, snScMacroNameLen - saMacroNameSuf.getLength() ) )
-        return rScMacroName.copy( saMacroNamePre.getLength(), snXclMacroNameLen );
-    return String::EmptyString();
-}
+namespace {
 
 static const struct
 {
@@ -369,17 +344,17 @@ spTbxListenerData[] =
     /*EXC_TBX_EVENT_CHANGE*/    { "XChangeListener",     "changed"                }
 };
 
-#define EXC_MACROSCRIPT "Script"
+} // namespace
 
 bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
-        XclTbxEventType eEventType, const String& rXclMacroName, SfxObjectShell* pShell )
+        XclTbxEventType eEventType, const String& rXclMacroName, SfxObjectShell* pDocShell )
 {
     if( rXclMacroName.Len() > 0 )
     {
         rDescriptor.ListenerType = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcListenerType );
         rDescriptor.EventMethod = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcEventMethod );
-        rDescriptor.ScriptType = CREATE_OUSTRING( EXC_MACROSCRIPT );
-        rDescriptor.ScriptCode = GetScMacroName( rXclMacroName, pShell );
+        rDescriptor.ScriptType = CREATE_OUSTRING( "Script" );
+        rDescriptor.ScriptCode = XclTools::GetSbMacroUrl( rXclMacroName, pDocShell );
         return true;
     }
     return false;
@@ -389,12 +364,11 @@ String XclControlHelper::ExtractFromMacroDescriptor(
         const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType )
 {
     if( (rDescriptor.ScriptCode.getLength() > 0) &&
-            rDescriptor.ScriptType.equalsIgnoreAsciiCaseAscii( EXC_MACROSCRIPT ) &&
+            rDescriptor.ScriptType.equalsIgnoreAsciiCaseAscii( "Script" ) &&
             rDescriptor.ListenerType.equalsAscii( spTbxListenerData[ eEventType ].mpcListenerType ) &&
             rDescriptor.EventMethod.equalsAscii( spTbxListenerData[ eEventType ].mpcEventMethod ) )
-        return GetXclMacroName( rDescriptor.ScriptCode );
+        return XclTools::GetXclMacroName( rDescriptor.ScriptCode );
     return String::EmptyString();
 }
 
 // ============================================================================
-

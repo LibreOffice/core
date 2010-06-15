@@ -250,7 +250,11 @@ const sal_uInt16 EXC_ID_DSF                 = 0x0161;
 const sal_uInt16 EXC_ID_USERSVIEWBEGIN      = 0x01AA;
 const sal_uInt16 EXC_ID_USERSVIEWEND        = 0x01AB;
 
-// (0x01C0) XL9FILE --------------------------------------------------------
+// (0x01BA) CODENAME ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CODENAME            = 0x01BA;
+
+// (0x01C0) XL9FILE -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_XL9FILE             = 0x01C0;
 

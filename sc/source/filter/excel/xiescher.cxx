@@ -62,10 +62,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <basic/sbstar.hxx>
-#include <basic/sbmod.hxx>
-#include <basic/sbmeth.hxx>
-
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdoedge.hxx>
@@ -478,14 +474,14 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
     {
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, TRUE ) )
         {
-            pInfo->SetMacro( XclControlHelper::GetScMacroName( maMacroName, GetDocShell() ) );
+            pInfo->SetMacro( XclTools::GetSbMacroUrl( maMacroName, GetDocShell() ) );
             pInfo->SetHlink( maHyperlink );
         }
     }
 #else
     if( mbSimpleMacro && (maMacroName.Len() > 0) )
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, TRUE ) )
-            pInfo->SetMacro( XclControlHelper::GetScMacroName( maMacroName, GetDocShell() ) );
+            pInfo->SetMacro( XclTools::GetSbMacroUrl( maMacroName, GetDocShell() ) );
 #endif
 
     // call virtual function for object type specific processing
@@ -550,16 +546,7 @@ void XclImpDrawObjBase::ReadMacro8( XclImpStream& rStrm )
             DBG_ASSERT( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
                 "XclImpDrawObjBase::ReadMacro - tNameXR token expected" );
             if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
-            {
                 maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
-                // #i38718# missing module name - try to find the macro in the imported modules
-                if( maMacroName.Len() && (maMacroName.Search( '.' ) == STRING_NOTFOUND) )
-                    if( SfxObjectShell* pDocShell = GetDocShell() )
-                        if( StarBASIC* pBasic = pDocShell->GetBasic() )
-                            if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( maMacroName, SbxCLASS_METHOD ) ) )
-                                if( SbModule* pModule = pMethod->GetModule() )
-                                    maMacroName.Insert( '.', 0 ).Insert( pModule->GetName(), 0 );
-            }
         }
     }
 }
