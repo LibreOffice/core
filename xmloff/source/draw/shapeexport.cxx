@@ -27,7 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <memory>
+
 #include "unointerfacetouniqueidentifiermapper.hxx"
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -43,9 +47,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "PropertySetMerger.hxx"
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include "sdxmlexp_impl.hxx"
 #include <xmloff/families.hxx>
@@ -75,6 +77,8 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
 :   mrExport( rExp ),
     mnNextUniqueShapeId(1),
+    maShapesInfos(),
+    maCurrentShapesIter(maShapesInfos.end()),
     mbExportLayer( sal_False ),
     // #88546# init to FALSE
     mbHandleProgressBar( sal_False ),
@@ -467,6 +471,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
             break;
         }
+        case XmlShapeTypePresTableShape:
         case XmlShapeTypeDrawTableShape:
         {
             try
@@ -538,6 +543,38 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+
+
+    ::std::auto_ptr< SvXMLElementExport >  mpHyperlinkElement;
+
+    // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
+    // does not support document events
+    if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::E_DRAW) ) try
+    {
+        presentation::ClickAction eAction = presentation::ClickAction_NONE;
+        xSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("OnClick"))) >>= eAction;
+
+        if( (eAction == presentation::ClickAction_DOCUMENT) ||
+            (eAction == presentation::ClickAction_BOOKMARK) )
+        {
+            OUString sURL;
+            xSet->getPropertyValue(msBookmark) >>= sURL;
+
+            if( sURL.getLength() )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                mpHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, sal_True, sal_True) );
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR("XMLShapeExport::exportShape(): exception during hyperlink export");
+    }
+
+
     if( xSet.is() )
         xSet->getPropertyValue(msZIndex) >>= nZIndex;
 
@@ -639,7 +676,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
         if( rShapeId.getLength() )
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, rShapeId );
+        {
+            mrExport.AddAttributeIdLegacy(XML_NAMESPACE_DRAW, rShapeId);
+        }
     }
 
     // --------------------------
@@ -759,6 +798,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypePresTableShape:
         case XmlShapeTypeDrawTableShape:
         {
             ImpExportTableShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
@@ -828,6 +868,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypePresMediaShape:
         case XmlShapeTypeDrawMediaShape:
         {
             ImpExportMediaShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
@@ -844,6 +885,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
     }
+
+    mpHyperlinkElement.reset();
 
     // #97489# #97111#
     // if there was an error and no element for the shape was exported
@@ -1085,7 +1128,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     // get info about presentation shape
                     uno::Reference <beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
-                    if(xPropSet.is())
+                    if(xPropSet.is()) try
                     {
                         rtl::OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sCLSID)
@@ -1097,16 +1140,22 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             }
                         }
                     }
+                    catch( uno::Exception& )
+                    {
+                        DBG_ERROR( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
+                    }
                 }
                 else if(aType.EqualsAscii("Chart", 26, 5)) { eShapeType = XmlShapeTypePresChartShape;  }
                 else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
-                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresSheetShape; }
+                else if(aType.EqualsAscii("CalcShape", 26, 9)) { eShapeType = XmlShapeTypePresSheetShape; }
+                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresTableShape; }
                 else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
                 else if(aType.EqualsAscii("HandoutShape", 26, 12)) { eShapeType = XmlShapeTypeHandoutShape; }
                 else if(aType.EqualsAscii("HeaderShape", 26, 11)) { eShapeType = XmlShapeTypePresHeaderShape; }
                 else if(aType.EqualsAscii("FooterShape", 26, 11)) { eShapeType = XmlShapeTypePresFooterShape; }
                 else if(aType.EqualsAscii("SlideNumberShape", 26, 16)) { eShapeType = XmlShapeTypePresSlideNumberShape; }
                 else if(aType.EqualsAscii("DateTimeShape", 26, 13)) { eShapeType = XmlShapeTypePresDateTimeShape; }
+                else if(aType.EqualsAscii("MediaShape", 26, 10)) { eShapeType = XmlShapeTypePresMediaShape; }
             }
         }
     }

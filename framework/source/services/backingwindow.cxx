@@ -42,7 +42,7 @@
 
 #include "unotools/dynamicmenuoptions.hxx"
 #include "svtools/imagemgr.hxx"
-#include "svl/svtools.hrc"
+#include "svtools/svtools.hrc"
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"
@@ -133,7 +133,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mbInitControls( false ),
     mnLayoutStyle( 0 ),
     mpAccExec( NULL ),
-    mnBtnPos( 120 )
+    mnBtnPos( 120 ),
+    mnBtnTop( 150 )
 {
     mnColumnWidth[0] = mnColumnWidth[1] = 0;
     mnTextColumnWidth[0] = mnTextColumnWidth[1] = 0;
@@ -163,16 +164,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     {
     }
 
-    // get icon images from vcl resource and set them on the appropriate buttons
-    loadImage( FwkResId( BMP_BACKING_WRITER ), maWriterButton );
-    loadImage( FwkResId( BMP_BACKING_CALC ), maCalcButton );
-    loadImage( FwkResId( BMP_BACKING_IMPRESS ), maImpressButton );
-    loadImage( FwkResId( BMP_BACKING_DRAW ), maDrawButton );
-    loadImage( FwkResId( BMP_BACKING_DATABASE ), maDBButton );
-    loadImage( FwkResId( BMP_BACKING_FORMULA ), maMathButton );
-    loadImage( FwkResId( BMP_BACKING_FOLDER ), maOpenButton );
-    loadImage( FwkResId( BMP_BACKING_FOLDER ), maTemplateButton );
-
     String aExtHelpText( FwkResId( STR_BACKING_EXTHELP ) );
     String aRegHelpText( FwkResId( STR_BACKING_REGHELP ) );
     String aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
@@ -186,10 +177,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     EnableChildTransparentMode();
 
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
-
-    // add some breathing space for the images
-    maButtonImageSize.Width() += 12;
-    maButtonImageSize.Height() += 12;
 
     // force tab cycling in toolbox
     maToolbox.SetStyle( maToolbox.GetStyle() | WB_FORCETABCYCLE );
@@ -236,6 +223,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
     // init background
     initBackground();
+
+    // add some breathing space for the images
+    maButtonImageSize.Width() += 12;
+    maButtonImageSize.Height() += 12;
+
 }
 
 
@@ -324,6 +316,17 @@ void BackingWindow::initBackground()
         else
             mnBtnPos = maBackgroundLeft.GetSizePixel().Width() + 40;
     }
+
+    // get icon images from fwk resource and set them on the appropriate buttons
+    loadImage( FwkResId( BMP_BACKING_WRITER ), maWriterButton );
+    loadImage( FwkResId( BMP_BACKING_CALC ), maCalcButton );
+    loadImage( FwkResId( BMP_BACKING_IMPRESS ), maImpressButton );
+    loadImage( FwkResId( BMP_BACKING_DRAW ), maDrawButton );
+    loadImage( FwkResId( BMP_BACKING_DATABASE ), maDBButton );
+    loadImage( FwkResId( BMP_BACKING_FORMULA ), maMathButton );
+    loadImage( FwkResId( BMP_BACKING_OPENFILE ), maOpenButton );
+    loadImage( FwkResId( BMP_BACKING_OPENTEMPLATE ), maTemplateButton );
+
 }
 
 void BackingWindow::initControls()
@@ -550,7 +553,7 @@ void BackingWindow::layoutButton(
 
     long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
 
-    nTextWidth += maButtonImageSize.Width();
+    nTextWidth += maButtonImageSize.Width() + 8; // add some fuzz to be on the safe side
     if( nColumn >= 0 && nColumn < static_cast<int>(sizeof(mnColumnWidth)/sizeof(mnColumnWidth[0])) )
     {
         if( nTextWidth > mnColumnWidth[nColumn] )
@@ -732,6 +735,9 @@ void BackingWindow::Resize()
     nYPos += nPDelta - nDiff;
 
     nYPos += nWDelta/2 - nDiff;
+
+    if( mnLayoutStyle != 1 )
+        nYPos = maControlRect.Top() + mnBtnTop;
 
     maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
     maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );

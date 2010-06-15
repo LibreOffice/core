@@ -90,7 +90,6 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include "xmlkywd.hxx"
 #include "xmlnmspe.hxx"
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
@@ -1999,7 +1998,18 @@ void XMLTextParagraphExport::exportParagraph(
             {
                 const OUString& rIdentifier = GetExport().getInterfaceToIdentifierMapper().getIdentifier( xRef );
                 if( rIdentifier.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ID, rIdentifier );
+                {
+                    // FIXME: this is just temporary until EditEngine
+                    // paragraphs implement XMetadatable.
+                    // then that must be used and not the mapper, because
+                    // when both can be used we get two xml:id!
+                    uno::Reference<rdf::XMetadatable> const xMeta(xRef,
+                        uno::UNO_QUERY);
+                    OSL_ENSURE(!xMeta.is(), "paragraph that implements "
+                        "XMetadatable used in interfaceToIdentifierMapper?");
+                    GetExport().AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
+                        rIdentifier);
+                }
             }
 
             OUString sAutoStyle( sStyle );

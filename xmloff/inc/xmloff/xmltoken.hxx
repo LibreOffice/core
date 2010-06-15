@@ -3096,6 +3096,11 @@ namespace xmloff { namespace token {
         XML_ENDS_WITH,
         XML_DOES_NOT_END_WITH,
 
+        //chart
+        XML_NP_CHART_EXT,
+        XML_N_CHART_EXT,
+        XML_COORDINATE_REGION,
+
         XML_TOKEN_END
     };
 

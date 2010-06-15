@@ -3097,6 +3097,10 @@ namespace xmloff { namespace token {
         TOKEN( "ends-with",             XML_ENDS_WITH ),
         TOKEN( "does-not-end-with",     XML_DOES_NOT_END_WITH ),
 
+        TOKEN( "chartooo", XML_NP_CHART_EXT ),
+        TOKEN( "http://openoffice.org/2010/chart", XML_N_CHART_EXT ),
+        TOKEN( "coordinate-region",    XML_COORDINATE_REGION ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

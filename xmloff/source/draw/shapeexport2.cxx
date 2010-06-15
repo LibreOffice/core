@@ -31,7 +31,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -1247,27 +1246,6 @@ void XMLShapeExport::ImpExportChartShape(
     SvXMLAttributeList* pAttrList )
 {
     ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint, pAttrList );
-/*
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        uno::Reference< chart::XChartDocument > xChartDoc;
-        if( !bIsEmptyPresObj )
-            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) >>= xChartDoc;
-
-        if( xChartDoc.is() )
-        {
-            // export chart data if the flag is not set (default)
-            sal_Bool bExportOwnData = ( nFeatures & SEF_EXPORT_NO_CHART_DATA ) == 0;
-            mrExport.GetChartExport()->exportChart( xChartDoc, bExportOwnData );
-        }
-        else
-        {
-            // write chart object (fake for now, replace later)
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_CHART, XML_CHART, sal_True, sal_True);
-        }
-    }
-*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1996,13 +1974,16 @@ void XMLShapeExport::ImpExportPluginShape(
 
 void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        if(eShapeType == XmlShapeTypePresMediaShape)
+            ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
