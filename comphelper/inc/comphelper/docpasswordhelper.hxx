@@ -33,7 +33,7 @@
 #include "comphelper/docpasswordrequest.hxx"
 
 namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
 namespace comphelper {
 
