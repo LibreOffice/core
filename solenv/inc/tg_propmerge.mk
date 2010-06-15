@@ -43,6 +43,7 @@ $(CLASSDIR)/$(PACKAGE)/%.properties $(MERGEPHONY) : %.properties
 .IF "$(WITH_LANG)"==""
     $(COMMAND_ECHO)$(COPY) $< $@
 .ELSE          # "$(WITH_LANG)"==""
+    @@-$(RM) $@
     $(COMMAND_ECHO)@noop $(assign PMERGELIST+:=$(<:f))
     $(COMMAND_ECHO)@noop $(assign PDESTDIR:=$(@:d))
 .ENDIF          # "$(WITH_LANG)"==""
@@ -53,7 +54,9 @@ $(MISC)/$(TARGET).pmerge.mk : $(PMERGELIST)
 # - one file per line
 # - no spaces
 # - no empty lines
-    $(COMMAND_ECHO)$(SOLARBINDIR)/jpropex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR) -i @$(mktmp $(PMERGELIST:t"\n":s/ //)) -l all -lf $(alllangiso:s/ /,/) -m $(LOCALIZESDF)A
+# $(uniq ...) to workaround $assign adding the value twice...
+    @noop $(assign PMERGEFILELIST:=$(uniq $(PMERGELIST)))
+    $(COMMAND_ECHO)$(SOLARBINDIR)/jpropex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR) -i @$(mktmp $(PMERGEFILELIST:t"\n":s/ //)) -l all -lf $(alllangiso:s/ /,/) -m $(LOCALIZESDF)
 .ENDIF          # "$(WITH_LANG)"!=""
     @-$(RM) $@
     $(COMMAND_ECHO)echo last_merge=$(alllangiso) > $@
