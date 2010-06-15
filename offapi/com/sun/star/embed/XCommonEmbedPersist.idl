@@ -59,7 +59,7 @@
 /** specifies common implementation for embedded objects and links
     persistence.
  */
-interface XCommonEmbedPersist: com::sun::star::uno::XInterface
+published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
 {
      //------------------------------------------------------------------------
     /** lets the object or the link store itself.

@@ -40,7 +40,7 @@
     <type scope="com::sun::star::datatransfer">XTransferable</type>
     implementation from the object.
  */
-interface XTransferableSupplier: com::sun::star::uno::XInterface
+published interface XTransferableSupplier: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** allows to get access to

@@ -281,10 +281,6 @@ static OUString & getIniFileName_Impl()
             fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
         }
 
-        OUString workDir;
-        osl_getProcessWorkingDir(&workDir.pData);
-        osl::FileBase::getAbsoluteFileURL(workDir, fileName, fileName);
-
         static OUString theFileName;
         if(fileName.getLength())
             theFileName = fileName;
@@ -653,11 +649,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     rtl_uString * pIniName
 ) SAL_THROW_EXTERN_C()
 {
-    OUString workDir;
     OUString iniName( pIniName );
-
-    osl_getProcessWorkingDir( &workDir.pData );
-    osl::FileBase::getAbsoluteFileURL( workDir, iniName, iniName );
 
     // normalize path
     FileStatus status( FileStatusMask_FileURL );
