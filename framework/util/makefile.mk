@@ -158,7 +158,7 @@ SHL2STDLIBS=    \
                 $(SALLIB)
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL2DEPN=       $(SHL1TARGETN)
 .ELSE
 SHL2DEPN=       $(SHL1IMPLIBN)
@@ -218,7 +218,7 @@ SHL3STDLIBS=    \
                 $(SALLIB)
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL3DEPN=       $(SHL1TARGETN) $(SHL2TARGETN)
 .ELSE
 SHL3DEPN=       $(SHL1IMPLIBN) $(SHL2IMPLIBN)
@@ -363,7 +363,7 @@ SHL4STDLIBS=    \
                 $(I18NISOLANGLIB)
 
 SHL4DEF=        $(MISC)$/$(SHL4TARGET).def
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL4DEPN=       $(SHL1TARGETN) $(SHL2TARGETN)
 .ELSE
 SHL4DEPN=       $(SHL1IMPLIBN) $(SHL2IMPLIBN)
@@ -398,7 +398,7 @@ SHL5STDLIBS=    \
                 $(SALLIB)
 
 SHL5DEF=        $(MISC)$/$(SHL5TARGET).def
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL5DEPN=       $(SHL1TARGETN)
 .ELSE
 SHL5DEPN=       $(SHL1IMPLIBN)
