@@ -208,7 +208,7 @@ private:
     */
     void EnableBroadcasting (void);
 
-    /** Disable the broadcasting o selectio change events.  Subsequent
+    /** Disable the broadcasting of selection change events.  Subsequent
         changes of the selection will set a flag that triggers the sending
         of events when EnableBroadcasting() is called.
     */

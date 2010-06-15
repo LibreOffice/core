@@ -1203,7 +1203,6 @@ void SelectionFunction::ModeHandler::SetCurrentPage (
     const model::SharedPageDescriptor& rpDescriptor)
 {
     SelectOnePage(rpDescriptor);
-
     mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(rpDescriptor);
 }
 

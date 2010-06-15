@@ -376,7 +376,6 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
             if (i == 0)
             {
                 mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
-                mrController.GetFocusManager().SetFocusedPage(pDescriptor);
             }
         }
     }

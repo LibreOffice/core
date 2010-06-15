@@ -141,15 +141,19 @@ void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
 
 
 
-void CurrentSlideManager::SwitchCurrentSlide (const sal_Int32 nSlideIndex)
+void CurrentSlideManager::SwitchCurrentSlide (
+    const sal_Int32 nSlideIndex,
+    const bool bUpdateSelection)
 {
-    SwitchCurrentSlide(mrSlideSorter.GetModel().GetPageDescriptor(nSlideIndex));
+    SwitchCurrentSlide(mrSlideSorter.GetModel().GetPageDescriptor(nSlideIndex), bUpdateSelection);
 }
 
 
 
 
-void CurrentSlideManager::SwitchCurrentSlide (const SharedPageDescriptor& rpDescriptor)
+void CurrentSlideManager::SwitchCurrentSlide (
+    const SharedPageDescriptor& rpDescriptor,
+    const bool bUpdateSelection)
 {
     if (rpDescriptor.get() != NULL && mpCurrentSlide!=rpDescriptor)
     {
@@ -174,6 +178,11 @@ void CurrentSlideManager::SwitchCurrentSlide (const SharedPageDescriptor& rpDesc
             SetCurrentSlideAtViewShellBase(rpDescriptor);
         }
         SetCurrentSlideAtXController(rpDescriptor);
+        if (bUpdateSelection)
+        {
+            mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
+            mrSlideSorter.GetController().GetPageSelector().SelectPage(rpDescriptor);
+        }
         mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(rpDescriptor);
     }
 }

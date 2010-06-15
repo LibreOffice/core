@@ -63,9 +63,18 @@ public:
     /** Call this method to switch the current page of the main view shell
         to the given slide.  Use CurrentSlideHasChanged() when the current
         slide change has been initiated by someone else.
+        @param nSlideIndex
+            Zero based index in the range [0,number-of-slides).
+        @param bUpdateSelection
+            When <TRUE/> then the page selection is cleared and only the new
+            current slide is selected.
     */
-    void SwitchCurrentSlide (const sal_Int32 nSlideIndex);
-    void SwitchCurrentSlide (const model::SharedPageDescriptor& rpSlide);
+    void SwitchCurrentSlide (
+        const sal_Int32 nSlideIndex,
+        const bool bUpdateSelection = false);
+    void SwitchCurrentSlide (
+        const model::SharedPageDescriptor& rpSlide,
+        const bool bUpdateSelection = false);
 
     /** Return the page descriptor for the current slide.  Note, that when
         there is no current slide then the returned pointer is empty.
