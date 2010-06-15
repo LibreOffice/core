@@ -40,7 +40,8 @@ PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912630&group_id=11795&atid=311795>
 
-.IF "$(OS)" == "WNT" && "$(COM)" == "MSC"
+.IF "$(OS)" == "WNT"
+.IF "$(COM)" == "MSC"
 
 # On Windows, CppUnit appears to support either the Unix-style configure/make
 # approach with cygwin and gcc (and libtool fails miserably if gcc is replaced
@@ -70,11 +71,12 @@ OUTDIR2INC = include/cppunit
 $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
 
 .ELSE
-
-.IF "$(OS)" == "WNT"
+.IF "$(COM)" == "GCC"
 EXTRA_CFLAGS += -mthreads
 LDFLAGS += -Wl,--enable-runtime-pseudo-reloc-v2
-.ENDIF
+.ENDIF # "$(COM)" == "GCC"
+.ENDIF # "$(COM)" == "MSC"
+.ELSE
 
 .IF "$(USE_SYSTEM_STL)" != "YES"
 
