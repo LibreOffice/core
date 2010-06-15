@@ -161,6 +161,11 @@ public:
         const ::boost::shared_ptr<PageSelection>& rSelection,
         const bool bUpdateCurrentPage = true);
 
+    /** Call this method after the the model has changed to set the number
+        of selected pages.
+    */
+    void CountSelectedPages (void);
+
     /** Use the UpdateLock whenever you do a complex selection, i.e. call
         more than one method in a row.  An active lock prevents intermediate
         changes of the current slide.
@@ -214,7 +219,6 @@ private:
     */
     void DisableBroadcasting (void);
 
-    void CountSelectedPages (void);
     void UpdateCurrentPage (const bool bUpdateOnlyWhenPending = false);
 
     void CheckConsistency (void) const;

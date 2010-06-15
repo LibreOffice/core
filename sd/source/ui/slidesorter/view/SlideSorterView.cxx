@@ -81,6 +81,7 @@
 #include <vector>
 #endif
 
+
 using namespace std;
 using namespace ::sd::slidesorter::model;
 using namespace ::drawinglayer::primitive2d;
@@ -167,7 +168,8 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
           new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background))),
       mpButtonBar(new ButtonBar(mrSlideSorter)),
       mpToolTip(new ToolTip(mrSlideSorter)),
-      mbIsRearrangePending(true)
+      mbIsRearrangePending(true),
+      maVisibilityChangeListeners()
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
@@ -561,7 +563,25 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
                     PageDescriptor::ST_Visible,
                     aRange.IsInside(nIndex));
         }
-        maVisiblePageRange = aRange;
+
+        // Broadcast a change of the set of visible page objects.
+        if (maVisiblePageRange != aRange)
+        {
+            maVisiblePageRange = aRange;
+
+            // Tell the listeners that the visibility of some objects has
+            // changed.
+            ::std::vector<Link>& aChangeListeners (maVisibilityChangeListeners);
+            for (::std::vector<Link>::const_iterator
+                     iLink(aChangeListeners.begin()),
+                     iEnd(aChangeListeners.end());
+                 iLink!=iEnd;
+                 ++iLink)
+            {
+                iLink->Call(NULL);
+            }
+        }
+
 
         // Restore the mouse over state.
         UpdatePageUnderMouse(true);
@@ -826,6 +846,32 @@ Pair SlideSorterView::GetVisiblePageRange (void)
     if ( ! mbPageObjectVisibilitiesValid)
         DeterminePageObjectVisibilities();
     return maVisiblePageRange;
+}
+
+
+
+
+void SlideSorterView::AddVisibilityChangeListener (const Link& rListener)
+{
+    if (::std::find (
+        maVisibilityChangeListeners.begin(),
+        maVisibilityChangeListeners.end(),
+        rListener) == maVisibilityChangeListeners.end())
+    {
+        maVisibilityChangeListeners.push_back(rListener);
+    }
+}
+
+
+
+
+void SlideSorterView::RemoveVisibilityChangeListener(const Link&rListener)
+{
+    maVisibilityChangeListeners.erase (
+        ::std::find (
+            maVisibilityChangeListeners.begin(),
+            maVisibilityChangeListeners.end(),
+            rListener));
 }
 
 

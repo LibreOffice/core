@@ -160,6 +160,7 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
         nNewCurrentSlide = 0;
     else if (nNewCurrentSlide >= mrSlideSorter.GetModel().GetPageCount())
         nNewCurrentSlide = mrSlideSorter.GetModel().GetPageCount()-1;
+    mrController.GetPageSelector().CountSelectedPages();
     mrController.GetPageSelector().SelectPage(nNewCurrentSlide);
     mrController.GetFocusManager().SetFocusedPage(nNewCurrentSlide);
 }

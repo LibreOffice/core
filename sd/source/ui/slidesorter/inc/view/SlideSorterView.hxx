@@ -195,7 +195,22 @@ public:
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().
     */
-    void AddSdrObject (SdrObject& rObject);
+    //    void AddSdrObject (SdrObject& rObject);
+
+    /** Add a listener that is called when the set of visible slides.
+        @param rListener
+            When this method is called multiple times for the same listener
+            the second and all following calls are ignored.  Each listener
+            is added only once.
+    */
+    void AddVisibilityChangeListener (const Link& rListener);
+
+    /** Remove a listener that is called when the set of visible slides changes.
+        @param rListener
+            It is save to pass a listener that was not added or has been
+            removed previously.  Such calls are ignored.
+    */
+    void RemoveVisibilityChangeListener (const Link& rListener);
 
     /** The page under the mouse is not highlighted in some contexts.  Call
         this method on context changes.
@@ -269,6 +284,7 @@ private:
     ::boost::scoped_ptr<ButtonBar> mpButtonBar;
     ::boost::scoped_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;
+    ::std::vector<Link> maVisibilityChangeListeners;
 
     /** Determine the visibility of all page objects.
     */

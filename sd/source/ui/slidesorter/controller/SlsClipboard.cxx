@@ -528,9 +528,9 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
              aDraggedPage!=maPagesToRemove.end();
              aDraggedPage++)
         {
-            rSelector.SelectPage (*aDraggedPage);
+            rSelector.SelectPage(*aDraggedPage);
         }
-        mrController.GetSelectionManager()->DeleteSelectedPages ();
+        mrController.GetSelectionManager()->DeleteSelectedPages();
     }
     mpUndoContext.reset();
     mpSelectionObserverContext.reset();
