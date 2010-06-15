@@ -47,6 +47,11 @@ PATCH_FILES=mythes-1.2.0-vanilla-th-gen-idx.patch \
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
 
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+HUNSPELL_CFLAGS +:= -I$(SOLARINCDIR)$/hunspell
+HUNSPELL_LIBS +:= -L$(SOLARLIBDIR) -lhunspell-1.2
+.ENDIF
+
 #relative to CONFIGURE_DIR
 # still needed also in system-mythes case as it creates the makefile
 CONFIGURE_ACTION=configure
@@ -103,4 +108,8 @@ OUT2INC += mythes.hxx
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
+
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+.EXPORT: HUNSPELL_LIBS HUNSPELL_CFLAGS
+.ENDIF
 
