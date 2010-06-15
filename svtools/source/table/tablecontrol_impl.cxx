@@ -888,7 +888,7 @@ namespace svt { namespace table
             int nRange = m_nColumnCount;
             if( m_nLeftColumn + nVisibleUnits == nRange-1)
             {
-                if(m_aColumnWidthsPixel[nRange-2] + m_aColumnWidthsPixel[nRange-1]>aDataCellPlayground.GetWidth())
+                if(m_aAccColumnWidthsPixel[nRange-2] - m_aAccColumnWidthsPixel[m_nLeftColumn] + m_aColumnWidthsPixel[nRange-1]>aDataCellPlayground.GetWidth())
                 {
                     m_pHScroll->SetVisibleSize( nVisibleUnits -1 );
                     m_pHScroll->SetPageSize(nVisibleUnits -1);
