@@ -323,12 +323,38 @@ void PageObjectPainter::PaintPageNumber (
         PageObjectLayouter::PageNumber,
         PageObjectLayouter::ModelCoordinateSystem));
 
+    // Determine the color of the page number.
+    Color aPageNumberColor (mpTheme->GetColor(Theme::Color_PageNumberDefault));
+    if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver))
+        aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHover));
+    else if ( ! rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
+    {
+        const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
+        const sal_Int32 nBackgroundLuminance (aBackgroundColor.GetLuminance());
+        // When the background color is black then this is interpreted as
+        // high contrast mode and the font color is set to white.
+        if (nBackgroundLuminance == 0)
+            aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHighContrast));
+        else
+        {
+        // Compare luminance of default page number color and background
+        // color.  When the two are similar then use a darker (preferred) or
+        // brighter font color.
+            const sal_Int32 nFontLuminance (aPageNumberColor.GetLuminance());
+            if (abs(nBackgroundLuminance - nFontLuminance) < 60)
+                if (nBackgroundLuminance > nFontLuminance-30)
+                    aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberBrightBackground));
+                else
+                    aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberDarkBackground));
+        }
+    }
+
     // Paint the page number.
     OSL_ASSERT(rpDescriptor->GetPage()!=NULL);
     const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNum() - 1) / 2 + 1);
     const String sPageNumber (String::CreateFromInt32(nPageNumber));
     rDevice.SetFont(*mpPageNumberFont);
-    rDevice.SetTextColor(Color(mpTheme->GetColor(Theme::Color_PageNumber)));
+    rDevice.SetTextColor(aPageNumberColor);
     rDevice.DrawText(aBox, sPageNumber, TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
 }
 

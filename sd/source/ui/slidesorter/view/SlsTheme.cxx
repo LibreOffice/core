@@ -111,7 +111,11 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maColor[Color_ButtonText] = Gray;
         maColor[Color_ButtonTextHover] = White;
         maColor[Color_MouseOverColor] = gnMouseOverColor;
-        maColor[Color_PageNumber] = 0x0848a8f;
+        maColor[Color_PageNumberDefault] = 0x0808080;
+        maColor[Color_PageNumberHover] = 0x4c4c4c;
+        maColor[Color_PageNumberHighContrast] = 0xffffff;
+        maColor[Color_PageNumberBrightBackground] = 0x333333;
+        maColor[Color_PageNumberDarkBackground] = 0xcccccc;
         maColor[Color_Selection] = StellaBlue;
         maColor[Color_PreviewBorder] = 0x949599;
 
