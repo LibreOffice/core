@@ -2638,7 +2638,7 @@ void ScXMLExport::_ExportAutoStyles()
                 if (getExportFlags() & EXPORT_MASTERSTYLES)
                 {
                     GetPageExport()->collectAutoStyles(sal_True);
-                      GetPageExport()->exportAutoStyles();
+                    GetPageExport()->exportAutoStyles();
                 }
 
                 // #i30251#; only write Text Styles once
