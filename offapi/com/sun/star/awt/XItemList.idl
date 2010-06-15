@@ -1,0 +1,286 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __offapi_com_sun_star_awt_XItemList_idl__
+#define __offapi_com_sun_star_awt_XItemList_idl__
+
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/beans/Pair.idl>
+
+//==================================================================================================================
+
+module com { module sun { module star { module awt {
+
+interface XItemListListener;
+
+//==================================================================================================================
+
+/** provides convenient access to the list of items in a list box
+ */
+interface XItemList
+{
+    /** is the number of items in the list
+    */
+    [attribute, readonly]   long    ItemCount;
+
+    /** inserts a new item into the list
+
+        @param Position
+            the position at which the item should be inserted. Must be greater or equal to 0, and
+            lesser than or equal to <member>ItemCount</member>.
+
+        @param ItemText
+            the text of the item to be inserted.
+
+        @param ItemImageURL
+            the URL of the image to display for the item
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    void    insertItem(
+                [in] long Position,
+                [in] string ItemText,
+                [in] string ItemImageURL
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** inserts an item which has only a text, but no image
+
+        @param Position
+            the position at which the item should be inserted. Must be greater or equal to 0, and
+            lesser than or equal to <member>ItemCount</member>.
+
+        @param ItemText
+            the text of the item to be inserted.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    void    insertItemText(
+                [in] long Position,
+                [in] string ItemText
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** inserts an item which has only an image, but no text
+
+        @param Position
+            the position at which the item should be inserted. Must be greater or equal to 0, and
+            lesser than or equal to <member>ItemCount</member>.
+
+        @param ItemImageURL
+            the URL of the image to display for the item
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    void    insertItemImage(
+                [in] long Position,
+                [in] string ItemImageURL
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** removes an item from the list
+
+        @param Position
+            the position of the item which should be removed. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    void    removeItem(
+                [in] long Position
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** removes all items from the list
+    */
+    void    removeAllItems();
+
+    /** sets a new text for an existing item
+
+        @param Position
+            the position of the item whose text is to be changed. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @param ItemText
+            the new text of the item
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    void    setItemText(
+                [in] long Position,
+                [in] string ItemText
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** sets a new image for an existing item
+
+        @param Position
+            the position of the item whose image is to be changed. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @param ItemImageURL
+            the new URL of the image to display for the item
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    void    setItemImage(
+                [in] long Position,
+                [in] string ItemImageURL
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** sets both a new position and text for an existing item
+
+        @param Position
+            the position of the item whose text and image is to be changed. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @param ItemText
+            the new text of the item
+
+        @param ItemImageURL
+            the new URL of the image to display for the item
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    void    setItemTextAndImage(
+                [in] long Position,
+                [in] string ItemText,
+                [in] string ItemImageURL
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** associates an implementation dependend value with the given list item.
+
+        <p>You can use this to store data for an item which does not interfere with the displayed
+        text and image, but can be used by the client of the list box for an arbitrary purpose.</p>
+
+        @param Position
+            the position of the item whose data value should be set. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @param ItemData
+            the data to associate with the list item
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+
+        @see getItemData
+    */
+    void    setItemData(
+                [in] long Position,
+                [in] any ItemData
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the text of an existing item
+
+        @param Position
+            the position of the item whose text should be retrieved. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    string  getItemText(
+                [in] long Position
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the URL of the image of an existing item
+
+        @param Position
+            the position of the item whose image should be retrieved. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    string  getItemImage(
+                [in] long Position
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves both the text and the image URL of an existing item
+
+        @param Position
+            the position of the item whose text and image should be retrieved. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+    */
+    ::com::sun::star::beans::Pair< string, string >
+            getItemTextAndImage(
+                [in] long Position
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the implementation dependend value associated with the given list item.
+        @see setItemData
+
+        @param Position
+            the position of the item whose data value should be retrieved. Must be greater or equal to 0, and
+            lesser than <member>ItemCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Position</code> is invalid.
+
+        @see setItemData
+    */
+    any     getItemData(
+                [in] long Position
+            )
+            raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the texts and images of all items in the list
+    */
+    sequence< ::com::sun::star::beans::Pair< string, string > >
+            getAllItems();
+
+    /** registers a listener which is notified about changes in the item list.
+    */
+    void addItemListListener( [in] XItemListListener Listener );
+
+    /** revokes a listener which is notified about changes in the item list.
+    */
+    void removeItemListListener( [in] XItemListListener Listener );
+};
+
+//==================================================================================================================
+
+}; }; }; };
+
+//==================================================================================================================
+
+#endif
