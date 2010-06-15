@@ -59,9 +59,7 @@
 
 #ifdef USE_XINERAMA
 #ifdef USE_XINERAMA_XORG
-#if defined(X86) || defined(X86_64)
 #include <X11/extensions/Xinerama.h>
-#endif
 #elif defined USE_XINERAMA_XSUN
 #if defined(SOLARIS) && defined(INTEL) // missing extension header in standard installation
 #define MAXFRAMEBUFFERS       16
@@ -2647,7 +2645,6 @@ void SalDisplay::InitXinerama()
         }
     }
 #elif defined(USE_XINERAMA_XORG)
-#if defined( X86 ) || defined( X86_64 )
 if( XineramaIsActive( pDisp_ ) )
 {
     int nFramebuffers = 1;
@@ -2669,7 +2666,6 @@ if( XineramaIsActive( pDisp_ ) )
         XFree( pScreens );
     }
 }
-#endif
 #endif
 #if OSL_DEBUG_LEVEL > 1
     if( m_bXinerama )
