@@ -30,7 +30,9 @@ dependencies\version30.oxt;0,0,1,0,0
 dependencies\version300.oxt;0,0,1,0,0
 dependencies\version301.oxt;0,0,1,0,0
 dependencies\versionempty.oxt;0,0,1,0,0
-dependencies\version31.oxt;1,0,0,0,0
+dependencies\version31.oxt;0,0,1,0,0
+dependencies\version33.oxt;0,0,1,0,0
+dependencies\version34.oxt;1,0,0,0,0
 dependencies\version937.oxt;1,0,0,0,0
 dependencies\versionnone.oxt;0,0,1,0,0
 versions/plain.oxt;0,0,1,0,0
