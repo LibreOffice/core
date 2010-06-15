@@ -63,7 +63,6 @@ public:
     void FuTemporary (SfxRequest& rRequest);
     void FuPermanent (SfxRequest& rRequest);
     void FuSupport (SfxRequest& rRequest);
-    void GetCtrlState (SfxItemSet &rSet);
     void GetMenuState (SfxItemSet &rSet);
     void GetClipboardState (SfxItemSet &rSet);
     void GetStatusBarState (SfxItemSet& rSet);
@@ -93,8 +92,6 @@ private:
     /** Handle SID_INSERTPAGE slot calls.
     */
     void InsertSlide (SfxRequest& rRequest);
-
-    void AssignTransitionEffect (void);
 
     DECL_LINK(UserEventCallback, void*);
 };

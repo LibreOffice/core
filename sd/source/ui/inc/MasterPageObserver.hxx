@@ -80,12 +80,6 @@ public:
     */
     void RemoveEventListener (const Link& rEventListener);
 
-    /** Return a set of the names of master pages for the given document.
-        This convenience method exists because this set is part of the
-        internal data structure and thus takes no time to create.
-    */
-    MasterPageNameSet GetMasterPageNames (SdDrawDocument& rDocument);
-
 private:
     static ::osl::Mutex maMutex;
 

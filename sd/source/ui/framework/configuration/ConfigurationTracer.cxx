@@ -60,12 +60,12 @@ void ConfigurationTracer::TraceConfiguration (
 
 
 
+#ifdef DEBUG
 void ConfigurationTracer::TraceBoundResources (
     const Reference<XConfiguration>& rxConfiguration,
     const Reference<XResourceId>& rxResourceId,
     const int nIndentation)
 {
-#ifdef DEBUG
     Sequence<Reference<XResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, ::rtl::OUString(), AnchorBindingMode_DIRECT));
     const ::rtl::OUString sIndentation (::rtl::OUString::createFromAscii("    "));
@@ -77,11 +77,7 @@ void ConfigurationTracer::TraceBoundResources (
         OSL_TRACE("%s", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
         TraceBoundResources(rxConfiguration, aResourceList[nIndex], nIndentation+1);
     }
-#else
-    (void)rxConfiguration;
-    (void)rxResourceId;
-    (void)nIndentation;
-#endif
 }
+#endif
 
 } } // end of namespace sd::framework

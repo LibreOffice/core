@@ -94,11 +94,6 @@ public:
         PageKind ePageKind = PK_STANDARD,
         FrameView* pFrameView = NULL);
 
-    DrawViewShell(
-        SfxViewFrame* pFrame,
-        ::Window* pParentWindow,
-        const DrawViewShell& rShell);
-
     virtual ~DrawViewShell (void);
 
     virtual void Init (bool bIsMainViewShell);
@@ -198,9 +193,6 @@ public:
 
     void            ExecFormText(SfxRequest& rReq);
     void            GetFormTextState(SfxItemSet& rSet);
-
-    void            ExecObjPalette(SfxRequest& rReq);
-    void            GetObjPaletteState(SfxItemSet& rSet);
 
     void            ExecAnimationWin(SfxRequest& rReq);
     void            GetAnimationWinState(SfxItemSet& rSet);

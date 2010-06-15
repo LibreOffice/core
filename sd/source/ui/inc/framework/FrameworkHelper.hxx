@@ -383,23 +383,6 @@ private:
 };
 
 
-
-/** This functor wraps a slot call.  It is used to call a slot after an
-    asynchronous configuration update, eg after switching views.
-*/
-class DispatchCaller
-{
-    SfxDispatcher& mrDispatcher;
-    USHORT mnSId;
-public:
-    /** Create a new DispatchCaller object that, when executed, will call
-        the given slot at the given dispatcher.
-    */
-    DispatchCaller(SfxDispatcher& rDispatcher, USHORT nSId);
-    void operator() (bool bEventSeen);
-};
-
-
 } } // end of namespace sd::framework
 
 

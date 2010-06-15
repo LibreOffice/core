@@ -54,8 +54,6 @@ class FuOutline
 public:
     TYPEINFO();
 
-    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-
     virtual BOOL Command(const CommandEvent& rCEvt);
 
     virtual void ScrollStart();

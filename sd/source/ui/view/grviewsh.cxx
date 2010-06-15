@@ -61,24 +61,6 @@ GraphicViewShell::GraphicViewShell (
     ConstructGraphicViewShell();
 }
 
-/*************************************************************************
-|*
-|* Copy-Konstruktor
-|*
-\************************************************************************/
-
-GraphicViewShell::GraphicViewShell (
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    const DrawViewShell& rShell)
-    : DrawViewShell (pFrame, pParentWindow, rShell)
-{
-    ConstructGraphicViewShell();
-}
-
-
-
-
 GraphicViewShell::~GraphicViewShell (void)
 {
 }

@@ -65,7 +65,6 @@ private:
     SdPage*                 mpCurrentPage;
     ViewShell*              mpViewShell;
 
-    void initTabPages();
     void apply( bool bToAll, bool bForceSlides );
     void change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings );
 

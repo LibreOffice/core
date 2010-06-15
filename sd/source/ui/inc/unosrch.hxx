@@ -58,9 +58,10 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  GetCurrentShape() const throw();
 
 public:
-    SdUnoSearchReplaceShape( ::com::sun::star::drawing::XDrawPage* xPage ) throw(); // danger, these c'tors are only usable if
-    SdUnoSearchReplaceShape( ::com::sun::star::drawing::XShape* xShape ) throw();   // the given shape or page is derived from
-    virtual ~SdUnoSearchReplaceShape() throw();                                     // this class!!!
+    // danger, this c'tor is only usable if the given shape or page is derived
+    // from this class!!!
+    SdUnoSearchReplaceShape( ::com::sun::star::drawing::XDrawPage* xPage ) throw();
+    virtual ~SdUnoSearchReplaceShape() throw();
 
     // XReplaceable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XReplaceDescriptor > SAL_CALL createReplaceDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);

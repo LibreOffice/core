@@ -68,7 +68,6 @@ public:
     SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
 
     SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
-    String              GetLayoutName() const;
 
                         // Caller muss Liste loeschen
     List*               CreateOutlineSheetList(const String& rLayoutName);
@@ -82,7 +81,6 @@ public:
                             when styles are missing.
     */
     SD_DLLPUBLIC void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
-    void                EraseLayoutStyleSheets(const String& rLayoutName);
     List*               CreateLayoutSheetNames(const String& rLayoutName) const;
     void                CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
     void                CopyLayoutSheets(const String& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );

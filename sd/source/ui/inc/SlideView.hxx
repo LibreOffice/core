@@ -36,7 +36,6 @@ class SdPage;
 
 namespace sd {
 
-class ShowView;
 class SlideViewShell;
 class Window;
 
@@ -129,7 +128,6 @@ private:
     List                aDelayedPaints;
     SlideViewShell*     pSlideViewShell;
     BitmapCache*        pCache;
-    ShowView*           pShowView;
     VirtualDevice*      mpVDev;
     USHORT              nAllowInvalidateSmph;
     USHORT              nPagesPerRow;

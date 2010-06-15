@@ -124,7 +124,6 @@ private:
 
     // intern
     inline List* GetCustomShowList() const throw();
-    sal_Int32 getSdCustomShowIdx( const ::rtl::OUString& Name ) const throw();
     SdCustomShow * getSdCustomShow( const ::rtl::OUString& Name ) const throw();
 
 public:
