@@ -40,8 +40,8 @@
 //  class VCLXSystemDependendtWindow
 //  ----------------------------------------------------
 
-class VCLXSystemDependentWindow :   public ::com::sun::star::awt::XSystemDependentWindowPeer,
-                                    public VCLXWindow
+class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow : public ::com::sun::star::awt::XSystemDependentWindowPeer,
+                                                    public VCLXWindow
 {
 public:
     VCLXSystemDependentWindow();
