@@ -2638,7 +2638,7 @@ void SalDisplay::InitXinerama()
         if( result > 0 && nFramebuffers > 1 )
         {
             m_bXinerama = true;
-            m_aXineramaScreens = std::vector<Rectangle>( nFramebuffers );
+            m_aXineramaScreens = std::vector<Rectangle>();
             for( int i = 0; i < nFramebuffers; i++ )
                 addXineramaScreenUnique( pFramebuffers[i].x,
                                          pFramebuffers[i].y,
