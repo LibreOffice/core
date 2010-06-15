@@ -851,7 +851,7 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     bool bDirOk = (rWrapper.FcConfigAppFontAddDir( rWrapper.FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bRet );
+    fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bDirOk );
 #endif
 
     if( bDirOk )
