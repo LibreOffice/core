@@ -31,6 +31,7 @@
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
+#include "oox/core/filterbase.hxx"
 #include "properties.hxx"
 
 #include <com/sun/star/util/XProtectable.hpp>
@@ -325,7 +326,7 @@ void WorksheetSettings::finalizeImport()
 
     if (!maSheetSettings.maTabColor.isAuto())
     {
-        sal_Int32 nColor = maSheetSettings.maTabColor.getColor(getBaseFilter());
+        sal_Int32 nColor = maSheetSettings.maTabColor.getColor(getBaseFilter().getGraphicHelper());
         aPropSet.setProperty(PROP_TabColor, nColor);
     }
 }
