@@ -169,10 +169,9 @@ public class Finalizer
 
     public String finish()
     {
-        CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurDBMetaData);
         String queryName = getTitle();
-        if  (   CurDBMetaData.oSQLQueryComposer.setQueryCommand( m_queryWizard.xWindow, true, true )
-            &&  CurDBMetaData.createQuery( CurDBMetaData.oSQLQueryComposer, queryName )
+        if  (   CurDBMetaData.getSQLQueryComposer().setQueryCommand( m_queryWizard.xWindow, true, true )
+            &&  CurDBMetaData.createQuery( CurDBMetaData.getSQLQueryComposer(), queryName )
             )
             return queryName;
 
