@@ -405,16 +405,16 @@ sal_Bool ODbTypeWizDialog::saveDatasource()
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-IWizardPage* ODbTypeWizDialog::getWizardPage(TabPage* _pCurrentPage) const
+IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const
 {
     OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
     return pPage;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ODbTypeWizDialog::onFinish(sal_Int32 _nResult)
+sal_Bool ODbTypeWizDialog::onFinish()
 {
     saveDatasource();
-    return m_pImpl->saveChanges(*m_pOutSet) ? OWizardMachine::onFinish(_nResult) : sal_False;
+    return m_pImpl->saveChanges(*m_pOutSet) ? OWizardMachine::onFinish() : sal_False;
 }
 //.........................................................................
 }   // namespace dbaui
