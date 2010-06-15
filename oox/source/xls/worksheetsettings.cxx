@@ -297,6 +297,11 @@ void WorksheetSettings::importSheetProtection( BiffInputStream& rStrm )
     maSheetProt.mbSelectUnlocked   = !getFlag( nFlags, BIFF_SHEETPROT_SELECT_UNLOCKED );
 }
 
+void WorksheetSettings::importCodeName( BiffInputStream& rStrm )
+{
+    maSheetSettings.maCodeName = rStrm.readUniString();
+}
+
 void WorksheetSettings::importPhoneticPr( BiffInputStream& rStrm )
 {
     maPhoneticSett.importPhoneticPr( rStrm );
@@ -304,6 +309,7 @@ void WorksheetSettings::importPhoneticPr( BiffInputStream& rStrm )
 
 void WorksheetSettings::finalizeImport()
 {
+    // sheet protection
     if( maSheetProt.mbSheet ) try
     {
         Reference< XProtectable > xProtectable( getSheet(), UNO_QUERY_THROW );
@@ -313,11 +319,14 @@ void WorksheetSettings::finalizeImport()
     {
     }
 
+    // VBA code name
+    PropertySet aPropSet( getSheet() );
+    aPropSet.setProperty( PROP_CodeName, maSheetSettings.maCodeName );
+
     if (!maSheetSettings.maTabColor.isAuto())
     {
         sal_Int32 nColor = maSheetSettings.maTabColor.getColor(getBaseFilter());
-        PropertySet aSheetProp(getSheet());
-        aSheetProp.setProperty(PROP_TabColor, nColor);
+        aPropSet.setProperty(PROP_TabColor, nColor);
     }
 }
 

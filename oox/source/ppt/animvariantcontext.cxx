@@ -65,7 +65,7 @@ namespace oox { namespace ppt {
     {
         if( ( aElement == mnElement ) && maColor.isUsed() )
         {
-            maValue = makeAny( maColor.getColor( getFilter() ) );
+            maValue = makeAny( maColor.getColor( getFilter().getGraphicHelper() ) );
         }
     }
 

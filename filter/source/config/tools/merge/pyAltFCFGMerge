@@ -9,9 +9,9 @@
 # there is a java which is available for use by all
 #_____________________________________________
 
-import sys, string, os.path
+import sys, string, os.path 
 
-CFGFILE = "../../../../transex3/source/filter/merge/FCFGMerge.cfg"
+CFGFILE             = os.environ["SOLARVER"] + "/" + os.environ["INPATH"] + "/inc/l10ntools/FCFGMerge.cfg"
 
 PROP_XMLVERSION      = "xmlversion"               # // <= global cfg file
 PROP_XMLENCODING     = "xmlencoding"              # // <= global cfg file

@@ -34,22 +34,23 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+class WorkbookData;
 
-class WorkbookHelper;
+// ============================================================================
 
 class ExcelFilterBase
 {
+public:
+    void                registerWorkbookData( WorkbookData& rData );
+    WorkbookData&       getWorkbookData() const;
+    void                unregisterWorkbookData();
+
 protected:
     explicit            ExcelFilterBase();
     virtual             ~ExcelFilterBase();
 
-    void                setWorkbookHelper( WorkbookHelper& rHelper );
-    WorkbookHelper&     getWorkbookHelper() const;
-    void                clearWorkbookHelper();
-
 private:
-    WorkbookHelper*     mpHelper;       /// Nonowning pointer to helper base.
+    WorkbookData*       mpData;
 };
 
 // ============================================================================
@@ -64,15 +65,13 @@ public:
     virtual bool        importDocument() throw();
     virtual bool        exportDocument() throw();
 
-    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
-    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
-
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
     virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
 private:
+    virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 };
 
@@ -88,9 +87,8 @@ public:
     virtual bool        importDocument() throw();
     virtual bool        exportDocument() throw();
 
-    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
-
 private:
+    virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 };
 

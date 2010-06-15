@@ -64,6 +64,9 @@ public:
     // bit 1 = 1 -> the VBA - storage is copy to the ObjectShell storage
     int Import( const String& rStorageName, const String &rSubStorageName,
                 BOOL bAsComment=TRUE, BOOL bStripped=TRUE );
+    int Import( const String& rStorageName, const String &rSubStorageName,
+                const std::vector< String >& codeNames,
+                BOOL bAsComment=TRUE, BOOL bStripped=TRUE );
 
     // only for the export - copy or delete the saved VBA-macro-storage
     // form the ObjectShell
@@ -84,6 +87,7 @@ private:
 
     MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
+                          const std::vector< String >& codeNames,
                           BOOL bAsComment, BOOL bStripped);
     MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
         const String &rSubStorageName);

@@ -27,7 +27,6 @@
 
 #include "oox/helper/binaryoutputstream.hxx"
 #include <osl/diagnose.h>
-#include "oox/helper/binaryinputstream.hxx"
 #include <string.h>
 
 using ::com::sun::star::uno::UNO_QUERY;
@@ -41,25 +40,6 @@ namespace oox {
 const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
 
 // ============================================================================
-
-void BinaryOutputStream::copyStream( BinaryInputStream& rInStrm, sal_Int64 nBytes )
-{
-    if( nBytes > 0 )
-    {
-        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, OUTPUTSTREAM_BUFFERSIZE );
-        StreamDataSequence aBuffer( nBufferSize );
-        while( nBytes > 0 )
-        {
-            sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, nBufferSize );
-            sal_Int32 nBytesRead = rInStrm.readData( aBuffer, nReadSize );
-            writeData( aBuffer );
-            if( nReadSize == nBytesRead )
-                nBytes -= nReadSize;
-            else
-                nBytes = 0;
-        }
-    }
-}
 
 void BinaryOutputStream::writeAtom( const void* pMem, sal_uInt8 nSize )
 {
