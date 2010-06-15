@@ -1227,11 +1227,9 @@ endcase
 ' *******************************************************************
 
 testcase tToolsThesaurus
+
     Dim sWordInitial as string
-    Dim sLanguageToBeSelected as string
     Dim sWordToBeFound as string
-    Dim sWordReplacedWith as string
-    Dim i as integer
     Dim TheFile as String
 
     PrintLog "- Tools / Thesaurus"
@@ -1283,19 +1281,20 @@ testcase tToolsThesaurus
     '/// Call Thesaurus without a written word ///
 	ToolsLanguageThesaurus
     Kontext "Thesaurus"
-    if Ersetzen.GetText <> "" then Warnlog "- Though no word has been selected there is a replacetext in the textfield!"
-    printlog "-  enter one word and search"
-    Ersetzen.SetText sWordInitial
-    Nachschlagen.Click
-    Kontext "Active"
-    if Active.Exists then
-        Warnlog Active.Gettext
-        Active.ok
-    end if
-    Kontext "Thesaurus"
-    if Bedeutung.GetSelText(1) = "" then Warnlog "No meaning text"
-    if Ersetzen.Gettext = "" then Ersetzen.SetText = sWordInitial
-    sWordToBeFound = Ersetzen.GetText
+    if CurrentWord.GetSelText <> "" then Warnlog "- Though no word has been selected Current Word textfield is filled !"            
+    if ReplaceWith.GetText <> "" then Warnlog "- Though no word has been selected there is a replacetext in the textfield!"
+    printlog "Set language dependent word in textfield Current Word"
+    CurrentWord.Settext sWordInitial
+
+    wait 500
+    if Alternatives.GetItemCount = 0 then
+        Warnlog "No alternatives text"
+    else
+        if ReplaceWith.Gettext <> Alternatives.GetText(Alternatives.GetSelIndex) then
+            Warnlog "Replace with textfield was not filled with word from alternative"
+        endif
+    endif
+    sWordToBeFound = ReplaceWith.GetText
     Thesaurus.OK
     Call wTypeKeys "<Home><Shift End>"
     wait 200
@@ -1310,166 +1309,156 @@ testcase tToolsThesaurus
     
     printlog " Open new preformatted-document where the formatting is set to the language we wish to test."
     call hFileOpen (TheFile,false)
-    Call sMakeReadOnlyDocumentEditable
-
-    printlog "-  check the language"
-    Call wTypeKeys sWordInitial + "<Home>"
-    '/// Check language in Thesaurus ///
-    ToolsLanguageThesaurus
-    Kontext "Thesaurus"
-
-    Sprache.Click
-    Kontext "SpracheAuswaehlen"
-    select case iSprache ' iSystemSprache
-        case 01 : sLanguageToBeSelected = "English (USA)"
-        case 07 : sLanguageToBeSelected = "Русский"
-        case 03 : sLanguageToBeSelected = "Português"
-        case 31 : sLanguageToBeSelected = "Nederlands (NL)"
-        case 33 : sLanguageToBeSelected = "Français (France)"
-        case 34 : sLanguageToBeSelected = "Español (España)"
-        case 36 : sLanguageToBeSelected = "Madyar"
-        case 39 : sLanguageToBeSelected = "Italiano (Italia)"
-        case 45 : sLanguageToBeSelected = "Dansk"
-        case 46 : sLanguageToBeSelected = "svenska (Sverige)"
-        case 48 : sLanguageToBeSelected = "Polski"
-        case 49 : sLanguageToBeSelected = "Deutsch (Deutschland)"
-    end select
-    SpracheAuswaehlen.OK
-    Sleep 5
-
-    Kontext "Thesaurus"
-    printlog "-  Search for a Synonym"
-    '/// Search for a synonym ///
-    Synonym.Select 1
-    wait 500
-    sWordToBeFound = Synonym.GetSelText
-    if Ersetzen.GetText <> sWordToBeFound then Warnlog "Synonym has not been taken over"
-    Nachschlagen.Click
-	wait 500
-	if Wort.GetSelText <> sWordToBeFound then Warnlog "Synonym has not been added to the word listand activated"
-	
-    printlog "-  Search for a meaning"
-    '/// Search for a meaning ///
-    wait 500
-	Bedeutung.Select 1
-    wait 500
-	Nachschlagen.Click
-    Sleep 1
-    Kontext "Active"
-    if Active.Exists then
-        printlog "-   " + Active.Gettext
-        Active.Ok
-        Kontext "Thesaurus"
-    else                                               ' Nur wenn Wort auch enthalten ist
-        Kontext "Thesaurus"
-        for i = 1 to 100
-            if Bedeutung.GetSeltext <> "" then i = 101
-            Sleep 1
-        next i
-        sWordToBeFound = Bedeutung.GetSelText
-        if Instr ( Ersetzen.GetText, sWordToBeFound ) <> 0 then
-            Warnlog "Meaning has not been overtaken"
-        end if
-    end if
-
-    printlog "-  Replace unchecked ( Cursor in front of words 1. character )"
-    '/// replace unchecked ///
-    sWordReplacedWith = Ersetzen.GetText
-    Thesaurus.OK
-    Call wTypeKeys "<Shift Home>"
-    wait 200
-    EditCopy
-    if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
-
-    Call wTypeKeys "<End><Shift Home><Delete>" + sWordInitial
+    Call sMakeReadOnlyDocumentEditable  
+    
+    Call wTypeKeys sWordInitial
     Call wTypeKeys "<Home><Right><Right>"
 
-    printlog "-  Replace unchecked ( Cursor in word )"
+    printlog "-  Replace ( select alternative with cursor within word )"
     ToolsLanguageThesaurus
     Kontext "Thesaurus"
     wait 500
-    if Synonym.GetItemCount >0 then
-        Synonym.Select 1
-        sWordReplacedWith = Ersetzen.GetText
-        Thesaurus.OK
-        Call wTypeKeys "<Home><Shift End>"
-        wait 200
-        EditCopy
-        if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
-    else
-        Warnlog "- No Synonym when cursor is in word!"
-        Thesaurus.Ok
-    end if
+    if CurrentWord.GetSeltext = sWordInitial then
+    	sWordToBeFound = ReplaceWith.Gettext   	
+		if Alternatives.GetItemCount > 0 then
+			printlog "Select last entry in alternatives list"
+			Alternatives.Select Alternatives.GetItemCount
+			Alternatives.TypeKeys "<Space>"
+			if ReplaceWith.Gettext = sWordToBeFound then			
+				Warnlog "Though alternative was selected replace with was not changed"
+			else
+				sWordToBeFound = ReplaceWith.Gettext
+			end if
+			Thesaurus.OK
+			Call wTypeKeys "<Home><Shift End>"
+			wait 200
+			EditCopy
+			if GetClipboardText <> sWordToBeFound then Warnlog "Text has not been correctly replaced, not => " + sWordToBeFound + " but => " + GetClipboardText
+		else
+			Warnlog "- No Alternative for current word"
+			Thesaurus.Ok
+		end if
+	else
+		Warnlog "Current word is not selected word !"
+	end if
 
-    Call wTypeKeys "<End><Shift Home><Delete>"
-    Call wTypeKeys sWordInitial + "<End><Left>"
-
+    Call wTypeKeys "<Home><Shift End><Delete>"
+    Call wTypeKeys sWordInitial        
+    
     printlog "-  Replace unchecked ( Cursor at words end )"
     ToolsLanguageThesaurus
     Kontext "Thesaurus"
-    if Synonym.GetItemCount >0 then
-        Synonym.Select 1
-        sWordReplacedWith = Ersetzen.GetText
-        Thesaurus.OK
-        Call wTypeKeys "<Home><Shift End>"
-        wait 200
-        EditCopy
-        if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + Trim$(GetClipboardText)
-    else
-        Warnlog "- No sysnonym when cursor pointed to words end!"
-        Thesaurus.Ok
-    end if
-
-    Call wTypeKeys "<End><Shift Home><Delete>"
-    Call wTypeKeys sWordInitial + "<End><Left><Shift Mod1 Left>"
-
-    printlog "-  Replace checked ( back to front )"
-    '/// replace checked ///
-    ToolsLanguageThesaurus
-    Kontext "Thesaurus"
-    if Synonym.GetItemCount >0 then
-        Synonym.Select 1
-        sWordReplacedWith = Ersetzen.GetText
-        Thesaurus.Ok
-        Call wTypeKeys "<Home><Shift End><Shift Left>"
-        wait 200
-        EditCopy
-        if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
-    else
-        Nachschlagen.Click
-        Kontext "Active"
-        if Active.Exists then
-            Active.Ok
-            Kontext "Thesaurus"
-            Thesaurus.OK
-        end if
-    end if
-
-    Call wTypeKeys "<End><Shift Home><Delete>"
-    Call wTypeKeys sWordInitial + "<Home><Shift End>"
-    printlog "-  Replace checked ( front to back )"
-    ToolsLanguageThesaurus
-    Kontext "Thesaurus"
-    if Synonym.GetItemCount >0 then
-        Synonym.Select 1
-        sWordReplacedWith = Ersetzen.GetText
-        Thesaurus.Ok
-        Call wTypeKeys "<Home><Shift End>"
-        wait 200
-        EditCopy
-        if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
-    else
-        Warnlog "- No sysnonym when word is marked!"
-        Thesaurus.Ok
-    end if
-
-    Call wTypeKeys "<End><Shift Home><Delete>"
-    Call wTypeKeys sWordInitial + "<Home><Right><Shift Right><Shift Right>"
-
-    printlog "-  Part of Replace checked ( back to front )  - no checking anymore"
-    ToolsLanguageThesaurus
-    Kontext "Thesaurus"
-    Thesaurus.OK
+    wait 500
+    if CurrentWord.GetSeltext = sWordInitial then
+    	sWordToBeFound = ReplaceWith.Gettext   	
+		if Alternatives.GetItemCount > 0 then			
+			printlog "Select last entry in alternatives list"
+			Alternatives.Select Alternatives.GetItemCount
+			Alternatives.TypeKeys "<Space>"
+			if ReplaceWith.Gettext = sWordToBeFound then			
+				Warnlog "Though alternative was selected replace with was not changed"
+			else
+				sWordToBeFound = ReplaceWith.Gettext
+			end if
+			Thesaurus.OK
+			Call wTypeKeys "<Home><Shift End>"
+			wait 200
+			EditCopy
+			if GetClipboardText <> sWordToBeFound then Warnlog "Text has not been correctly replaced, not => " + sWordToBeFound + " but => " + GetClipboardText
+		else
+			Warnlog "- No Alternative for current word"
+			Thesaurus.Ok
+		end if
+	else
+		Warnlog "Current word is not selected word !"
+	end if
+    
     '/// Close thesaurus and writerdocument ///
     Call hCloseDocument
 endcase
+
+' *******************************************************************
+
+testcase tToolsThesaurusSynonyms
+
+    Dim sWordInitial as string
+    Dim sNumberOfSuggestions as string
+    Dim sReplaceWithWord as string
+    Dim TheFile as String
+
+    PrintLog "- Tools / Thesaurus"
+
+    printlog " Open document where the formatting is set to the language we wish to test."
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+
+    select case iSprache
+        case 01 : sWordInitial = "Morning"
+        case 03 : sWordInitial = "Confirmam"
+        case 07 : Printlog "- No Thesaurus in Russian!"
+                  goto endsub
+        case 31 : sWordInitial = "Hulp"
+        case 33 : sWordInitial = "Payer"
+        case 34 : sWordInitial = "Suficiente"
+        case 36 : Printlog "- No Thesaurus in Hungarian!"
+                  goto endsub
+        case 39 : sWordInitial = "Lingua"
+        case 45 : sWordInitial = "Først"
+        case 46 : sWordInitial = "Däng"
+        case 48 : sWordInitial = "wypowiedź"
+        case 49 : sWordInitial = "Mann"
+        case 55 : Printlog "- No Thesaurus in Portuguese (Brazil) !"
+        		  goto endsub
+        case 81 : Printlog "- No Thesaurus in Japanese!"
+                  goto endsub
+        case 82 : Printlog "- No Thesaurus in Korean!"
+                  goto endsub
+        case 86 : Printlog "- No Thesaurus in Chinese (simplified)!"
+                  goto endsub
+        case 88 : Printlog "- No Thesaurus in Chinese (traditional)!"
+                  goto endsub
+        case 30, 35, 36, 37, 42, 47, 48, 51, 90
+                  Printlog "- No Thesaurus available !"
+                  goto endsub
+        case else : QAErrorlog "The language " + iSprache + " has no defined errortext. No Test!"
+                    goto endsub
+    end select
+
+    printlog "Open new preformatted-writerdocument"
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+    Call wTypeKeys sWordInitial
+    Call wTypeKeys "<Shift Home>"
+
+    printlog "Open contextmenu in wrong word"
+    Call wTypeKeys "<Shift F10>"
+    printlog "Select 'Synonyms' in context menu"
+    Call hMenuSelectNr (13)
+    sNumberOfSuggestions=MenuGetItemCount - 2
+    '/// Check if there is a suggestion and replace word ///
+    if sNumberOfSuggestions <=0 then
+        Warnlog "- No synonyms in Context menu for the first wrong word!"
+    else
+        printlog "- Context menu has " + sNumberOfSuggestions + " synonyms for the 1. wrong word!"
+        sReplaceWithWord=hMenuItemGetText (1)
+        Call hMenuSelectNr (1)
+        Call wTypeKeys "<Shift Mod1 Left>"
+        try
+            EditCopy
+            if GetClipboardtext<> sReplaceWithWord then
+                Warnlog "- 1. wrong Word has not been replaced with " + sReplaceWithWord + " but "+ GetClipBoardtext
+            else
+                printlog "- 1. wrong word has been replaced with the 1. entry in context menu!"
+            end if
+        catch
+        endcatch
+    end if
+    Call hCloseDocument
+
+endcase
+
+
+
