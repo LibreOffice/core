@@ -32,9 +32,12 @@
 #include "oox/drawingml/chart/objectformatter.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
     namespace lang { class XMultiServiceFactory; }
     namespace chart2 { class XChartDocument; }
+    namespace chart2 { class XTitle; }
+    namespace drawing { class XShape; }
 } } }
 
 namespace oox { namespace core {
@@ -45,12 +48,20 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
-
 class ChartConverter;
-class ObjectFormatter;
 struct ChartSpaceModel;
 struct ConverterData;
+
+// ============================================================================
+
+const sal_Int32 API_PRIM_AXESSET = 0;
+const sal_Int32 API_SECN_AXESSET = 1;
+
+const sal_Int32 API_X_AXIS = 0;
+const sal_Int32 API_Y_AXIS = 1;
+const sal_Int32 API_Z_AXIS = 2;
+
+// ============================================================================
 
 class ConverterRoot
 {
@@ -62,12 +73,6 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
                             const ::com::sun::star::awt::Size& rChartSize );
     virtual             ~ConverterRoot();
-
-    /** Creates an instance for the passed service name, using the passed service factory. */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        createInstance(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
-                            const ::rtl::OUString& rServiceName );
 
     /** Creates an instance for the passed service name, using the process service factory. */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -86,12 +91,24 @@ protected:
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
 
+    /** Registers a title object and its layout data, needed for conversion of
+        the title position using the old Chart1 API. */
+    void                registerTitleLayout(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >& rxTitle,
+                            const ModelRef< LayoutModel >& rxLayout, ObjectType eObjType,
+                            sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
+    /** Converts the positions of the main title and all axis titles. */
+    void                convertTitlePositions();
+
 private:
     ::boost::shared_ptr< ConverterData > mxData;
 };
 
 // ============================================================================
 
+/** Base class of all converter classes. Holds a reference to a model structure
+    of the specified type.
+ */
 template< typename ModelType >
 class ConverterBase : public ConverterRoot
 {
@@ -105,6 +122,30 @@ protected:
 
 protected:
     ModelType&          mrModel;
+};
+
+// ============================================================================
+
+/** A layout converter calculates positions and sizes for various chart objects.
+ */
+class LayoutConverter : public ConverterBase< LayoutModel >
+{
+public:
+    explicit            LayoutConverter( const ConverterRoot& rParent, LayoutModel& rModel );
+    virtual             ~LayoutConverter();
+
+    /** Tries to calculate the absolute position and size from the contained
+        OOXML layout model. Returns true, if returned rectangle is valid. */
+    bool                calcAbsRectangle( ::com::sun::star::awt::Rectangle& orRect ) const;
+
+    /** Tries to set the position from the contained OOXML layout model.
+        Returns true, if a manual position could be calculated. */
+    bool                convertFromModel( PropertySet& rPropSet );
+    /** Tries to set the position from the contained OOXML layout model.
+        Returns true, if a manual position could be calculated. */
+    bool                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            double fRotationAngle );
 };
 
 // ============================================================================

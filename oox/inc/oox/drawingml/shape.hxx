@@ -30,7 +30,7 @@
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/customshapeproperties.hxx"
+//#include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -41,6 +41,9 @@
 #include <map>
 
 namespace oox { namespace drawingml {
+
+class CustomShapeProperties;
+typedef boost::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
 typedef ::std::map< ::rtl::OUString, ShapePtr > ShapeIdMap;
 
@@ -123,7 +126,7 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
-    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
+    void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
     sal_Int32                       getSubTypeIndex() const { return mnSubTypeIndex; }
@@ -190,8 +193,8 @@ protected:
     rtl::OUString       msServiceName;
     rtl::OUString       msName;
     rtl::OUString       msId;
-    sal_uInt32          mnSubType;      // if this type is not zero, then the shape is a placeholder
-    sal_uInt32          mnSubTypeIndex;
+    sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
+    sal_Int32           mnSubTypeIndex;
 
     ShapeStyleRefMap   maShapeStyleRefs;
 

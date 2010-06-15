@@ -29,6 +29,7 @@
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
+#include "tokens.hxx"
 
 namespace oox { namespace shape {
 
