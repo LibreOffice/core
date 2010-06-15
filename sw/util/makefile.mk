@@ -169,7 +169,7 @@ SHL3TARGET= swui$(DLLPOSTFIX)
 SHL3IMPLIB= swuiimp
 SHL3VERSIONMAP= swui.map
 SHL3DEF=$(MISC)$/$(SHL3TARGET).def
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL3DEPN=$(SHL1TARGETN)
 .ELSE
 SHL3DEPN=$(SHL1IMPLIBN)
@@ -313,7 +313,7 @@ SHL3OBJS += $(SLO)$/pchname.obj \
 SHL4TARGET=msword$(DLLPOSTFIX)
 SHL4VERSIONMAP=msword.map
 SHL4LIBS=$(SLB)$/rtf.lib $(SLB)$/ww8.lib
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL4DEPN=$(SHL1TARGETN)
 .ELSE
 SHL4DEPN=$(SHL1IMPLIBN)
@@ -377,7 +377,7 @@ SHL5STDLIBS= \
                 $(SVXCORELIB) \
                 $(SVXMSFILTERLIB)
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL5DEPN=$(SHL1TARGETN)
 .ELSE
 SHL5DEPN=$(SHL1IMPLIBN)
