@@ -1387,7 +1387,20 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
-                const SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;
+                // --> OD 2010-05-05 #i111172#
+                // If text node is already inside a list, assure that the indents
+                // are the same. Thus, adjust the indent change value by subtracting
+                // indents of to be applied list style.
+                SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;
+                if ( pTxtNode->GetNumRule() )
+                {
+                    const SwNumFmt aFmt( aNumRule.Get( 0 ) );
+                    if ( aFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                    {
+                        nIndentChange -= aFmt.GetIndentAt() + aFmt.GetFirstLineIndent();
+                    }
+                }
+                // <--
                 aNumRule.ChangeIndent( nIndentChange );
             }
         }
@@ -1476,7 +1489,7 @@ SelectionType SwWrtShell::GetSelectionType() const
 //      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
-    if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->GetActivePostIt() )
+    if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
         return nsSelectionType::SEL_POSTIT;
      int nCnt;
 
@@ -1808,7 +1821,7 @@ BOOL SwWrtShell::Pop( BOOL bOldCrsr )
  --------------------------------------------------------------------*/
 BOOL SwWrtShell::CanInsert()
 {
-    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActivePostIt()!= NULL)));
+    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
 
 // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden

@@ -63,6 +63,11 @@ class SwFrmFmt;
 struct SwSortOptions;
 class SdrMarkList;
 
+namespace svx
+{
+    class ISdrObjectFilter;
+}
+
 
 // return values for GetFrmType() und GetSelFrmType().
 //! values can be combined via logival or
@@ -464,6 +469,7 @@ public:
     BOOL GetObjAttr( SfxItemSet &rSet ) const;
     BOOL SetObjAttr( const SfxItemSet &rSet );
 
+    const SdrObject* GetBestObject( BOOL bNext, USHORT eType = GOTOOBJ_DRAW_ANY, BOOL bFlat = TRUE, const ::svx::ISdrObjectFilter* pFilter = NULL );
     BOOL GotoObj( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
 
     //Setzen vom DragMode (z.B. Rotate), tut nix bei Rahmenselektion.
@@ -476,7 +482,7 @@ public:
     void EndTextEdit();             //Loescht ggf. das Objekt.
 
     //Ankertyp des selektierten Objektes, -1 bei Uneindeutigkeit oder
-    //Rahmenselektion; FLY_PAGE bzw. FLY_AT_CNTNT aus frmatr.hxx sonst.
+    //Rahmenselektion; FLY_AT_PAGE bzw. FLY_AT_PARA aus frmatr.hxx sonst.
     short GetAnchorId() const;
 
     //Erzeugen von DrawObjekten, beim Begin wird der Objekttyp mitgegeben.

@@ -48,7 +48,6 @@
 #include <swundo.hxx>
 #include <breakit.hxx>
 
-/*testarea*/
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
@@ -145,7 +144,9 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
                         //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
                            BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
-                            !((SwTxtFld*)pHt)->GetFld().GetFld()->Expand().Len();
+                            !(static_cast<SwTxtFld const*>(pHt)
+                                ->GetFld().GetFld()->ExpandField(
+                                    rNd.GetDoc()->IsClipBoard()).Len());
                         if ( bEmpty && nStart == nAkt )
                            {
                             rArr.Insert( nAkt, rArr.Count() );
@@ -334,7 +335,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
 
             xub_StrLen aStart = 0;
             // do we need to finish a note?
-            if (POSTITMGR->GetActivePostIt())
+            if (POSTITMGR->HasActiveSidebarWin())
             {
                 if (bSearchInNotes)
                 {
@@ -354,7 +355,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
                 }
                 else
                 {
-                    POSTITMGR->SetActivePostIt(0);
+                    POSTITMGR->SetActiveSidebarWin(0);
                 }
             }
 

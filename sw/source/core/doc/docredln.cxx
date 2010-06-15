@@ -914,17 +914,24 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 
                         case POS_INSIDE:
                             {
-                                pNewRedl->PushData( *pRedl, FALSE );
                                 if( *pRStt == *pStt )
                                 {
-                                    pRedl->SetStart( *pEnd, pRStt );
-                                    // neu einsortieren
-                                    pRedlineTbl->Remove( n );
-                                    pRedlineTbl->Insert( pRedl, n );
-                                    bDec = true;
+                                    // --> mst 2010-05-17 #i97421#
+                                    // redline w/out extent loops
+                                    if (*pStt != *pEnd)
+                                    // <--
+                                    {
+                                        pNewRedl->PushData( *pRedl, FALSE );
+                                        pRedl->SetStart( *pEnd, pRStt );
+                                        // re-insert
+                                        pRedlineTbl->Remove( n );
+                                        pRedlineTbl->Insert( pRedl, n );
+                                        bDec = true;
+                                    }
                                 }
                                 else
                                 {
+                                    pNewRedl->PushData( *pRedl, FALSE );
                                     if( *pREnd != *pEnd )
                                     {
                                         pNew = new SwRedline( *pRedl );
@@ -1109,8 +1116,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 
                     case POS_EQUAL:
                     case POS_INSIDE:
-                        // TODO Check if there is any side effect
-                        //delete pNewRedl, pNewRedl = 0;
+                        delete pNewRedl, pNewRedl = 0;
                         break;
 
                     case POS_OUTSIDE:

@@ -34,7 +34,7 @@
 #include <algorithm>
 #include <comphelper/stlunosequence.hxx>
 
-#include "errhdl.hxx"
+#include <errhdl.hxx>
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -81,22 +81,39 @@ namespace {
     }
 }
 
-// implementation of calss <SwTextMarkupoHelper>
-SwTextMarkupHelper::SwTextMarkupHelper( const SwTxtNode& rTxtNode,
-                                        const SwAccessiblePortionData& rPortionData )
-    : mrTxtNode( rTxtNode ),
-      mrPortionData( rPortionData )
+// implementation of class <SwTextMarkupoHelper>
+SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
+                                        const SwTxtNode& rTxtNode )
+    : mrPortionData( rPortionData )
+    // --> OD 2010-02-19 #i108125#
+    , mpTxtNode( &rTxtNode )
+    , mpTextMarkupList( 0 )
+    // <--
 {
 }
 
-sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
+// --> OD 2010-02-19 #i108125#
+SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
+                                        const SwWrongList& rTextMarkupList )
+    : mrPortionData( rPortionData )
+    , mpTxtNode( 0 )
+    , mpTextMarkupList( &rTextMarkupList )
+{
+}
+// <--
+
+sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupType )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nTextMarkupCount( 0 );
 
+    // --> OD 2010-02-19 #i108125#
     const SwWrongList* pTextMarkupList =
-                            getTextMarkupList( mrTxtNode, nTextMarkupType );
+                            mpTextMarkupList
+                            ? mpTextMarkupList
+                            : getTextMarkupList( *mpTxtNode, nTextMarkupType );
+    // <--
     if ( pTextMarkupList )
     {
         nTextMarkupCount = pTextMarkupList->Count();
@@ -105,8 +122,8 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
     return nTextMarkupCount;
 }
 ::com::sun::star::accessibility::TextSegment
-        SwTextMarkupHelper::getTextMarkup( sal_Int32 nTextMarkupIndex,
-                                           sal_Int32 nTextMarkupType )
+        SwTextMarkupHelper::getTextMarkup( const sal_Int32 nTextMarkupIndex,
+                                           const sal_Int32 nTextMarkupType )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException)
@@ -121,8 +138,12 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
+    // --> OD 2010-02-19 #i108125#
     const SwWrongList* pTextMarkupList =
-                            getTextMarkupList( mrTxtNode, nTextMarkupType );
+                            mpTextMarkupList
+                            ? mpTextMarkupList
+                            : getTextMarkupList( *mpTxtNode, nTextMarkupType );
+    // <--
     if ( pTextMarkupList )
     {
         const SwWrongArea* pTextMarkup =
@@ -149,8 +170,8 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::accessibility::TextSegment >
-        SwTextMarkupHelper::getTextMarkupAtIndex( sal_Int32 nCharIndex,
-                                                  sal_Int32 nTextMarkupType )
+        SwTextMarkupHelper::getTextMarkupAtIndex( const sal_Int32 nCharIndex,
+                                                  const sal_Int32 nTextMarkupType )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException)
@@ -166,9 +187,13 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
         return uno::Sequence< ::com::sun::star::accessibility::TextSegment >();
     }
 
-    ::std::vector< ::com::sun::star::accessibility::TextSegment > aTmpTextMarkups;
+    // --> OD 2010-02-19 #i108125#
     const SwWrongList* pTextMarkupList =
-                            getTextMarkupList( mrTxtNode, nTextMarkupType );
+                            mpTextMarkupList
+                            ? mpTextMarkupList
+                            : getTextMarkupList( *mpTxtNode, nTextMarkupType );
+    // <--
+    ::std::vector< ::com::sun::star::accessibility::TextSegment > aTmpTextMarkups;
     if ( pTextMarkupList )
     {
         const ::rtl::OUString rText = mrPortionData.GetAccessibleString();

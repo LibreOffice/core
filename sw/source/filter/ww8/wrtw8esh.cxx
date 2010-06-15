@@ -170,10 +170,20 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     rtl::OUString sHelp;
     {
-        uno::Any aTmp = xPropSet->getPropertyValue(C2U("Help"));
-        const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
-        if (pStr)
-            sHelp = *pStr;
+        // --> OD 2010-05-14 #160026#
+        // property "Help" does not exist and due to the no-existence an exception is thrown.
+//        uno::Any aTmp = xPropSet->getPropertyValue(C2U("Help"));
+        try
+        {
+            uno::Any aTmp = xPropSet->getPropertyValue(C2U("HelpText"));
+            // <--
+            const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+            if (pStr)
+                sHelp = *pStr;
+        }
+        catch( uno::Exception& )
+        {}
+        // <--
     }
 
     rtl::OUString sToolTip;
@@ -270,25 +280,10 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     sal_Int16 nTemp = 0;
     xPropSet->getPropertyValue(C2U("DefaultState")) >>= nTemp;
-    sal_uInt32 nIsDefaultChecked(nTemp);
+    aFFData.setDefaultResult(nTemp);
 
     xPropSet->getPropertyValue(C2U("State")) >>= nTemp;
-    sal_uInt32 nIsChecked(nTemp);
-
-    if (nIsDefaultChecked != nIsChecked)
-    {
-        switch (nIsChecked)
-        {
-            case false:
-                aFFData.setResult(0);
-                break;
-            case true:
-                aFFData.setResult(1);
-                break;
-            default:
-                ASSERT(!this, "how did that happen");
-        }
-    }
+    aFFData.setResult(nTemp);
 
     ::rtl::OUString aStr;
     static ::rtl::OUString sName(C2U("Name"));
