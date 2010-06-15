@@ -8473,7 +8473,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
-    {
+        {
             sal_Int32 nColor = COL_AUTO;
             if (aValue >>= nColor)
             {
@@ -8483,14 +8483,13 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
         {
-        rtl::OUString aCodeName;
-        if ( pDocSh && ( aValue >>= aCodeName ) )
-        {
-            String sNewName( aCodeName );
-            pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), sNewName );
+            rtl::OUString aCodeName;
+            if ( pDocSh && ( aValue >>= aCodeName ) )
+            {
+                String sNewName( aCodeName );
+                pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), sNewName );
+            }
         }
-    }
-    }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
     }
@@ -8630,17 +8629,16 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             ScUnoHelpFunctions::SetBoolInAny( rAny, bAutoPrint );
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
-    {
+        {
             rAny <<= sal_Int32(pDoc->GetTabBgColor(nTab).GetColor());
-    }
+        }
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
         {
-        String aCodeName;
-        if ( pDocSh )
-            pDocSh->GetDocument()->GetCodeName( GetTab_Impl(), aCodeName );
-        rAny <<= rtl::OUString( aCodeName );
-    }
-    }
+            String aCodeName;
+            if ( pDocSh )
+                pDocSh->GetDocument()->GetCodeName( GetTab_Impl(), aCodeName );
+            rAny <<= rtl::OUString( aCodeName );
+        }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
     }
