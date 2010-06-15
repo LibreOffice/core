@@ -31,6 +31,7 @@
 
 #include "SlideSorter.hxx"
 #include "model/SlsPageDescriptor.hxx"
+#include "model/SlideSorterModel.hxx"
 #include "view/SlsTheme.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsToolTip.hxx"
@@ -41,13 +42,21 @@
 #include "controller/SlsAnimator.hxx"
 #include "controller/SlsAnimationFunction.hxx"
 #include "app.hrc"
+#include "drawdoc.hxx"
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <boost/bind.hpp>
+
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::presentation::XPresentation2;
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -383,8 +392,13 @@ SharedButton ButtonBar::GetButtonAt (const Point aModelLocation)
         ::std::vector<SharedButton>& rButtons (
             mbIsExcluded ? maExcludedButtons : maRegularButtons);
         for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
+        {
             if (rButtons[sal_uInt32(nIndex)]->GetBoundingBox().IsInside(aLocalLocation))
-                return rButtons[sal_uInt32(nIndex)];
+                if (rButtons[sal_uInt32(nIndex)]->IsEnabled())
+                    return rButtons[sal_uInt32(nIndex)];
+                else
+                    return SharedButton();
+        }
     }
 
     return SharedButton();
@@ -1140,6 +1154,14 @@ Button::IconSize Button::GetIconSize (void) const
 
 
 
+bool Button::IsEnabled (void) const
+{
+    return true;
+}
+
+
+
+
 //===== TextButton ============================================================
 
 TextButton::TextButton (
@@ -1378,20 +1400,44 @@ StartShowButton::StartShowButton (SlideSorter& rSlideSorter)
 
 
 
+bool StartShowButton::IsEnabled (void) const
+{
+    const SfxPoolItem* pState = NULL;
+    const SfxItemState eState (mrSlideSorter.GetViewShell()->GetDispatcher()->QueryState(
+        SID_PRESENTATION,
+        pState));
+    return (eState & SFX_ITEM_DISABLED) == 0;
+}
+
+
+
 void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescriptor)
 {
-    mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
-        rpDescriptor);
+    //    mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
+    //        rpDescriptor);
     if (mrSlideSorter.GetViewShell() != NULL
         && mrSlideSorter.GetViewShell()->GetDispatcher() != NULL)
     {
         // Hide the tool tip early, while the slide show still intializes.
         mrSlideSorter.GetView().GetToolTip().SetPage(model::SharedPageDescriptor());
 
+        Reference< XPresentation2 > xPresentation(
+            mrSlideSorter.GetModel().GetDocument()->getPresentation());
+        if (xPresentation.is())
+        {
+            Sequence<PropertyValue> aProperties (1);
+            aProperties[0].Name = ::rtl::OUString::createFromAscii("FirstPage");
+            const ::rtl::OUString sName (rpDescriptor->GetPage()->GetName());
+            aProperties[0].Value = Any(sName);
+            xPresentation->startWithArguments(aProperties);
+        }
+
+        /*
         // Request the start of the slide show.
         mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
             SID_PRESENTATION,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        */
     }
 }
 
@@ -1443,6 +1489,18 @@ DuplicateButton::DuplicateButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command3SmallHover),
         rSlideSorter.GetTheme()->GetString(Theme::String_Command3))
 {
+}
+
+
+
+
+bool DuplicateButton::IsEnabled (void) const
+{
+    const SfxPoolItem* pState = NULL;
+    const SfxItemState eState (mrSlideSorter.GetViewShell()->GetDispatcher()->QueryState(
+        SID_DUPLICATE_PAGE,
+        pState));
+    return (eState & SFX_ITEM_DISABLED) == 0;
 }
 
 

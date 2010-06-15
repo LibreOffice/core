@@ -36,6 +36,7 @@
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlsSlotManager.hxx"
 #include "view/SlideSorterView.hxx"
 #include "taskpane/SlideSorterCacheDisplay.hxx"
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -516,6 +517,8 @@ void SlideSorterModel::SetDocumentSlides (
             }
         }
     }
+
+    mrSlideSorter.GetController().GetSlotManager()->NotifyEditModeChange();
 }
 
 

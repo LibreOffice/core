@@ -83,6 +83,11 @@ public:
         const model::SharedPageDescriptor& rpDescriptor,
         const bool bExcludeSlide);
 
+    /** Call this after a change from normal mode to master mode or back.
+        The affected slots are invalidated.
+    */
+    void NotifyEditModeChange (void);
+
 private:
     /// The controller for which we manage the slot calls.
     SlideSorter& mrSlideSorter;

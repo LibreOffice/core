@@ -242,6 +242,9 @@ public:
     bool IsActive (void) const;
     void SetIconSize (const IconSize eIconSize);
     IconSize GetIconSize (void) const;
+    /** By default a button is always enabled.  Override to change this.
+    */
+    virtual bool IsEnabled (void) const;
 
 protected:
     SlideSorter& mrSlideSorter;
@@ -324,6 +327,7 @@ class StartShowButton : public ImageButton
 {
 public:
     StartShowButton (SlideSorter& rSlideSorter);
+    virtual bool IsEnabled (void) const;
 
 protected:
     virtual void ProcessClick (const model::SharedPageDescriptor& rpDescriptor);
@@ -344,6 +348,7 @@ class DuplicateButton : public ImageButton
 {
 public:
     DuplicateButton (SlideSorter& rSlideSorter);
+    virtual bool IsEnabled (void) const;
 
 protected:
     virtual void ProcessClick (const model::SharedPageDescriptor& rpDescriptor);

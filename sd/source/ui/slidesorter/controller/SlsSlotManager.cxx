@@ -584,7 +584,7 @@ void SlotManager::GetCtrlState (SfxItemSet& rSet)
 
 
 
-void SlotManager::GetMenuState ( SfxItemSet& rSet)
+void SlotManager::GetMenuState (SfxItemSet& rSet)
 {
     EditMode eEditMode = mrSlideSorter.GetModel().GetEditMode();
     ViewShell* pShell = mrSlideSorter.GetViewShell();
@@ -719,6 +719,15 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
                 rSet.DisableItem(SID_SHOW_SLIDE);
                 break;
         }
+    }
+
+    // Disable some slots when in master page mode.
+    if (mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE)
+    {
+        if (rSet.GetItemState(SID_INSERTPAGE) == SFX_ITEM_AVAILABLE)
+            rSet.DisableItem(SID_INSERTPAGE);
+        if (rSet.GetItemState(SID_DUPLICATE_PAGE) == SFX_ITEM_AVAILABLE)
+            rSet.DisableItem(SID_DUPLICATE_PAGE);
     }
 }
 
@@ -1333,6 +1342,17 @@ sal_Int32 SlotManager::GetInsertionPosition (void)
         OSL_ASSERT(false);
         return -1;
     }
+}
+
+
+
+
+void SlotManager::NotifyEditModeChange (void)
+{
+    SfxBindings& rBindings (mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings());
+    rBindings.Invalidate(SID_PRESENTATION);
+    rBindings.Invalidate(SID_INSERTPAGE);
+    rBindings.Invalidate(SID_DUPLICATE_PAGE);
 }
 
 
