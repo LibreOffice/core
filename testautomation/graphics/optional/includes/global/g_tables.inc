@@ -224,7 +224,7 @@ testcase tiTableObjectBar
     printlog "Switching between Draw/Impress"
     if ( gApplication = "IMPRESS" )then
         Kontext "DocumentImpress"
-        DocumentImpress.TypeKeys "<MOD1 A>"
+        DocumentImpress.TypeKeys "<TAB>",3
     else
         Kontext "DocumentDraw"
         DocumentDraw.TypeKeys "<MOD1 A>"

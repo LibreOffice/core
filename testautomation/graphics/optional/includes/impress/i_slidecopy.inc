@@ -39,15 +39,17 @@ testcase tiSlideCopyNewPresentation
     Dim value2 as string
     Dim value12 as string
     Dim value13 as string
+
     printlog "This test copies one slide from one presentation to another."
     printlog "Make new presentation"
     Call  hNewDocument
-    printlog "Insert three objects: Connector, Door-plate, and Smiley."
-
-    printlog "First we Insert a Connector."
-    kontext "Toolbar"
-    sleep 1
-    try
+    Call sSelectEmptyLayout
+     printlog "Insert three objects: Connector, Door-plate, and Smiley."
+     
+     printlog "First we Insert a Connector."
+     kontext "Toolbar"
+     sleep 1
+     try
         Verbinder.TearOff
     catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
@@ -281,14 +283,13 @@ testcase tiSlideCopyDuplicate
     Dim value12 as string
     Dim value13 as string
     dim i as integer
-    '/// Make a duplicate of a slide. In the same presentation ///'
-    '/// Make new presentation ///'
-    Call  hNewDocument
-    '/// Insert three objects: Connector, Door-plate, and Smiley ///'
-    '1 Insert Connector.
-    kontext "Toolbar"
-    sleep 1
-    try
+    printlog "Make new presentation"
+     Call  hNewDocument
+     Call sSelectEmptyLayout
+     printlog "Insert Connector."
+     kontext "Toolbar"
+     sleep 1
+     try
         Verbinder.TearOff  ' insert connector
     catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
@@ -302,16 +303,16 @@ testcase tiSlideCopyDuplicate
     gMouseMove (10,10,30,30)
     gMouseUp (30,30)
 
-    hTypeKeys "<ESCAPE>"
-    hTypeKeys "<TAB>", 1
-    sleep (1)
-
-    'rename object
-    DocumentImpress.TypeKeys "<SHIFT F10>"
-    sleep 1
-
-    'Choose rename.
-    if hMenuFindSelect(27027, true, 14) = false then
+     hTypeKeys "<ESCAPE>"
+     hTypeKeys "<TAB>", 1
+     sleep (1)
+     
+     printlog "rename object"
+     DocumentImpress.TypeKeys "<SHIFT F10>"
+     sleep 1
+     
+     printlog "Choose rename"
+     if hMenuFindSelect(27027, true, 14) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
@@ -324,12 +325,12 @@ testcase tiSlideCopyDuplicate
     kontext "DocumentImpress"
     hMouseClick DocumentImpress, 90, 90
 
-    '2 Insert Door-plate.
-    kontext "Toolbar"
-    sleep 1
-    try
-        StarShapes.TearOff  ' insert connector
-    catch
+     printlog "2 Insert Door-plate"
+     kontext "Toolbar"
+     sleep 1
+     try
+        StarShapes.TearOff
+     catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
     endcatch
     kontext "StarShapes"
@@ -345,12 +346,12 @@ testcase tiSlideCopyDuplicate
     hTypeKeys "<TAB>", 2
     sleep (1)
 
-    'Rename object
-    kontext "DocumentImpress"
-    DocumentImpress.TypeKeys "<SHIFT F10>"
-    sleep (1)
-    'Choose rename.
-    if hMenuFindSelect(27027, true, 15) = false then
+     printlog "Rename object"
+     kontext "DocumentImpress"
+     DocumentImpress.TypeKeys "<SHIFT F10>"
+     sleep (1)
+     printlog "Choose rename."
+     if hMenuFindSelect(27027, true, 15) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
@@ -363,12 +364,12 @@ testcase tiSlideCopyDuplicate
     kontext "DocumentImpress"
     hMouseClick DocumentImpress, 90, 90
 
-    '3 Insert Smiley.
-    kontext "Toolbar"
-    sleep 1
-    try
-        SymbolShapes.TearOff  ' insert connector
-    catch
+     printlog "Insert Smiley."
+     kontext "Toolbar"
+     sleep 1
+     try
+        SymbolShapes.TearOff  
+     catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
     endcatch
     kontext "SymbolShapes"
@@ -383,11 +384,11 @@ testcase tiSlideCopyDuplicate
     hTypeKeys "<TAB>", 3
     sleep (1)
 
-    'rename object
-    DocumentImpress.TypeKeys "<SHIFT F10>"
-    sleep (1)
-    'Choose rename.
-    if hMenuFindSelect(27027, true, 15) = false then
+     printlog "rename object"
+     DocumentImpress.TypeKeys "<SHIFT F10>"
+     sleep (1)
+     printlog "Choose rename"
+     if hMenuFindSelect(27027, true, 15) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
@@ -400,30 +401,30 @@ testcase tiSlideCopyDuplicate
     kontext "DocumentImpress"
     hMouseClick DocumentImpress, 90, 90
 
-    '/// Close the bars we opened before. ///'
-    kontext "Connectorsbar"
-    if Connectorsbar.Exists then Connectorsbar.Close
-    kontext "SymbolShapes"
-    if SymbolShapes.Exists then SymbolShapes.Close
-    kontext "StarShapes"
-    if StarShapes.Exists then StarShapes.Close
+     printlog "Close the bars we opened before."
+     kontext "Connectorsbar"
+     if Connectorsbar.Exists then Connectorsbar.Close
+     kontext "SymbolShapes"
+     if SymbolShapes.Exists then SymbolShapes.Close
+     kontext "StarShapes"
+     if StarShapes.Exists then StarShapes.Close
 
-    '/// Copy the slide to the clipboard ///'
-    kontext "Slides"
-    SlidesControl.TypeKeys "<PAGEUP>"
-    sleep (1)
-    SlidesControl.TypeKeys "<SHIFT F10>"
-    sleep (1)
-    'Choose `Copy`
-    if hMenuFindSelect(5711, true, 10) = false then
+     printlog "Copy the slide to the clipboard"
+     kontext "Slides"
+     SlidesControl.TypeKeys "<PAGEUP>"
+     sleep (1)
+     SlidesControl.TypeKeys "<SHIFT F10>"
+     sleep (1)
+     printlog "Choose `Copy`"
+     if hMenuFindSelect(5711, true, 10) = false then
         Warnlog "Context-Menu-entry `Copy` was not found.Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
     endif
 
-    '/// Paste the content from the Clipboard ///'
-    kontext "Slides"
-    'open context-menu choose 'paste'
+     printlog "Paste the content from the Clipboard"
+     kontext "Slides"
+     printlog "open context-menu choose 'paste'"
 
     EditPaste
 
@@ -431,33 +432,33 @@ testcase tiSlideCopyDuplicate
     if InsertPaste.Exists(1) then
         After.Check
         InsertPaste.OK
-    endif
-    sleep (2)
-    '/// Check if we have two slides, and that the objects exists, and has the right values ///'
+     endif
+     sleep (2)
+     printlog "Check if we have two slides, and that the objects exists, and has the right values "
 
     kontext "Slides"
     SlidesControl.TypeKeys "<PAGEUP>"
 
-    for i = 1 to 2   ' we have two slides, so we do this two times to check everything.
+     for i = 1 to 2   
         Printlog "Checking objects the " + i + " + time."
         kontext "DocumentImpress"
         hMouseClick DocumentImpress, 90, 90
-        DocumentImpress.TypeKeys "<TAB>" 'Select the first object.
+        DocumentImpress.TypeKeys "<TAB>" 
         sleep (1)
-        'Bring up the kontext-menu for the object
+        
         DocumentImpress.TypeKeys "<SHIFT F10>"
         sleep 1
-        'Choose rename.
-        if hMenuFindSelect(27027, true, 14) = false then
-            Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
-            Call hCloseDocument
-            Goto Endsub
+        printlog "Choose rename"
+	if hMenuFindSelect(27027, true, 14) = false then
+           Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+           Call hCloseDocument
+           Goto Endsub
         endif
 
-        'Read out what the name is, and check if its correct.
-        kontext "NameDlgObject"  '"LinieName"  "NameDlgPage"
+        printlog "Read out what the name is, and check if its correct."
+        kontext "NameDlgObject"  
         value1 = NameField.GetText
-        NameDlgObject.OK 'TypeKeys "<Enter>"
+        NameDlgObject.OK 
 
         if value1 = "First" then
             printlog "First object was found correctly"
@@ -470,14 +471,14 @@ testcase tiSlideCopyDuplicate
         sleep (1)
         DocumentImpress.TypeKeys "<SHIFT F10>"
 
-        'Choose rename.
+        printlog "Choose rename"
         if hMenuFindSelect(27027, true, 15) = false then
             Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
             Call hCloseDocument
             Goto Endsub
         endif
 
-        'Read out what the name is, and check if its correct.
+        printlog "Read out what the name is, and check if its correct."
         kontext "NameDlgObject"
         value12 = NameField.GetText
         NameDlgObject.OK
@@ -489,20 +490,21 @@ testcase tiSlideCopyDuplicate
         endif
 
         hTypeKeys "<ESCAPE>"
-        hTypeKeys "<TAB>", 3 'Select the third object.
+        printlog "Select the third object."
+        hTypeKeys "<TAB>", 3 
         sleep (1)
 
-        'Bring up the kontext-menu for the object
+        printlog "Bring up the kontext-menu for the object"
         DocumentImpress.TypeKeys "<SHIFT F10>"
         sleep 1
-        'Choose rename.
+        printlog "Choose rename"
         if hMenuFindSelect(27027, true, 15) = false then
             Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
             Call hCloseDocument
             Goto Endsub
         endif
 
-        'Read out what the name is, and check if its correct.
+        printlog "Read out what the name is, and check if its correct."
         kontext "NameDlgObject"
         value13 = NameField.GetText
         NameDlgObject.OK
@@ -516,8 +518,8 @@ testcase tiSlideCopyDuplicate
         SlidesControl.TypeKeys "<DOWN>"
     next i
 
-    '/// Close Presentation. End testcase ///'
-    Call hCloseDocument
+     printlog " Close Presentation. End testcase "
+     Call hCloseDocument
 endcase 'tiSlidecopyDuplicate
 
 '-----------------------------------------------------------------------

@@ -1,4 +1,5 @@
 [Current program versions]
-OpenOffice.org=3.2
-Oracle Open Office=3.2
+Oracle Open Office=3.3
+OpenOffice.org=3.3
+BrOffice.org=3.3
 

@@ -40,22 +40,32 @@ testcase i_us_presentation1
 
     printlog "New impress document"
     Call hNewDocument
+    Call sSelectEmptyLayout
     WaitSlot (2000)
     kontext "DocumentImpress"
 
-    printlog "Add second Master-Page"
+    printlog "Add second Master-Page "
     ViewMasterPage
-
     kontext "Slides"
-    printlog "   Insert second Master-Slide"
+    SlidesControl.OpenContextMenu(true)
+    sleep (2)
+    printlog "New master"
+    MenuSelect(MenuGetItemID(1))
+    sleep (1)
+    ViewMasterPage
+    kontext "Slides"
     SlidesControl.OpenContextMenu(true)
     sleep (2)
     MenuSelect(MenuGetItemID(1)) 'New Master
+    sleep (1)
+    printlog "   Inserted second Master-Slide"
 
-    printlog "Background: picture (Gallery)"
+
+    printlog "set background to picture(Gallery)"
     Kontext "Gallery"
     if Gallery.Exists(2) then
         warnlog "   The Gallery was already visible. Check earlier ran tests for inconsistency."
+        sleep (2)
     else
         ToolsGallery
         WaitSlot (2000)
@@ -92,7 +102,33 @@ testcase i_us_presentation1
 
     kontext "Gallery"
     Gallerys.Select (iPictures)
-
+    View.TypeKeys "<HOME><RIGHT><RIGHT>"
+    printlog "OpenContextMenu"
+    View.TypeKeys "<SHIFT F10>"
+    sleep (2)
+    MenuSelect(MenuGetItemID(1))
+    sleep (2)
+    MenuSelect(MenuGetItemID(1))
+    sleep (2)
+    printlog "Check that we really got a copy of the object"
+    kontext "DocumentImpress"
+    DocumentImpress.OpenContextMenu(true)
+    sleep (2)
+    MenuSelect 27353
+    sleep (2)
+    Kontext "ExportierenDlg"
+    if ExportierenDlg.IsVisible(5) then
+        printlog "   Gallery-object correctly copied into Slide."
+        ExportierenDlg.Close
+        ToolsGallery
+        WaitSlot (2000)
+    end if
+    kontext "GraphicObjectbar"
+    if GraphicObjectbar.Exists(5) = FALSE then
+        kontext "DocumentImpress"
+        ViewToolbarsPicture
+    end if
+    Kontext "Gallery"
     View.TypeKeys "<HOME><RIGHT><RIGHT>"
     printlog "'OpenContextMenu"
     View.TypeKeys "<SHIFT F10>"
@@ -106,28 +142,42 @@ testcase i_us_presentation1
     DocumentImpress.OpenContextMenu(true)
     sleep (2)
     MenuSelect 27353
-
+    sleep (2)
     Kontext "ExportierenDlg"
-    if ( ExportierenDlg.exists( 5 ) ) then
+    if ExportierenDlg.IsVisible(5) then
         printlog "   Gallery-object correctly copied into Slide."
         ExportierenDlg.Close
     else
         warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
     end if
-
     kontext "GraphicObjectbar"
-    if ( not GraphicObjectbar.Exists( 5 ) ) then
+    if GraphicObjectbar.Exists(5) = FALSE then
         kontext "DocumentImpress"
         ViewToolbarsPicture
-        WaitSlot( 2000 )
     end if
-
-    printlog "50% Transparency"
-    kontext "GraphicObjectbar" ' the one with Transparency
+    kontext "Gallery"
+    Gallerys.Select (iPictures)
+    printlog " 50% Transparency"
+    WaitSlot (2000)
+    kontext "GraphicObjectbar"
     Transparenz.SetText "50"
-
+    sleep (1)
     printlog "Mosaic 16px x 16px"
     Filter.TearOff
+    sleep (1)
+    kontext "GraphicFilterBar"
+    Mosaic.Click
+    WaitSlot (2000)
+    kontext "Mosaic"
+    Width.SetText "16"
+    Height.SetText "16"
+    Mosaic.OK
+    kontext "GraphicFilterBar"
+    GraphicFilterBar.Close
+    ToolsGallery
+    WaitSlot (1000)
+    kontext "DocumentImpress"
+    hTypeKeys "<TAB>"
     sleep (1)
 
     kontext "GraphicFilterBar"
@@ -176,7 +226,7 @@ testcase i_us_presentation1
 
     printlog "Close Document"
     hFileCloseAll()
-    
+
 endcase 'i_us_presentation1
 
 '-------------------------------------------------------------------------------
@@ -339,7 +389,7 @@ testcase i_us_presentation3
 
     printlog "Close Document"
     hFileCloseAll()
-    
+
 endcase 'i_us_presentation3
 
 '-------------------------------------------------------------------------------
@@ -468,7 +518,7 @@ testcase i_us_presentation4
 
     printlog "Close Document"
     hFileCloseAll()
-    
+
 endcase 'i_us_presentation4
 
 '-------------------------------------------------------------------------------
@@ -637,9 +687,9 @@ testcase i_us_presentation7
     else
         warnlog "   Presentation not finished, fullscreen view still open."
         DocumentPresentation.typeKeys "<ESC>"
-        
+
         kontext "DocumentPresentation"
-        if ( DocumentPresentation.notExists( 3 ) ) then 
+        if ( DocumentPresentation.notExists( 3 ) ) then
             printlog( "Recovery attempt successful" )
         else
             goto endsub
@@ -682,5 +732,5 @@ testcase i_us_presentation7
 
     printlog "Close Documents"
     hFileCloseAll()
-    
+
 endcase 'i_us_presentation7
