@@ -498,7 +498,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         {
             //scaling dependent
             //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
-            rExplicitSubIncrement.IntervalCount = 5;
+            rExplicitSubIncrement.IntervalCount = 9;
         }
         lcl_ensureMaximumSubIncrementCount( rExplicitSubIncrement.IntervalCount );
         if(!(rSubIncrement.PostEquidistant>>=rExplicitSubIncrement.PostEquidistant))

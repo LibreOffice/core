@@ -211,7 +211,11 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
 ChartView::~ChartView()
 {
     if( m_pDrawModelWrapper.get() )
+    {
         EndListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bAllDups*/ );
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        m_pDrawModelWrapper.reset();
+    }
     m_xDrawPage = NULL;
     impl_deleteCoordinateSystems();
 }
