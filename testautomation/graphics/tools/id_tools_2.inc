@@ -1048,6 +1048,10 @@ end sub
 '---------------------------------------------------------------------------------------
 sub sSelectEmptyLayout
     if gApplication = "IMPRESS" then
+        Kontext "DocumentImpress"
+        DocumentImpress.UseMenu
+        hMenuSelectNr (5)
+        hMenuSelectNr (13)
         printlog "Changing focus to TaskPane."
         kontext "Tasks"
         sleep (1)
