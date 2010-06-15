@@ -42,7 +42,13 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
-
+//shizhoubo for ToolbarController Visiable
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/propertycontainer.hxx>
+#include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
+//end
 #ifndef INCLUDED_HASH_MAP
 #include <hash_map>
 #define INCLUDED_HASH_MAP
@@ -59,9 +65,13 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
                           public ::com::sun::star::lang::XInitialization,
                           public ::com::sun::star::util::XUpdatable,
                           public ::com::sun::star::lang::XComponent,
-                          public ::comphelper::OBaseMutex,
+                          public ::comphelper::OMutexAndBroadcastHelper,//shizhoubo
+                          public ::comphelper::OPropertyContainer,//shizhoubo
+                          public ::comphelper::OPropertyArrayUsageHelper< ToolboxController >,//shizhoubo
                           public ::cppu::OWeakObject
 {
+    private:
+        sal_Bool  m_bSupportVisiable; //shizhoubo
     public:
         ToolboxController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
@@ -93,6 +103,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
+        using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
         // XStatusListener
@@ -104,6 +115,15 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException);
+        // OPropertySetHelper //shizhoubo
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception);
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException);
+        // XPropertySet //shizhoubo
+        virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        // OPropertyArrayUsageHelper //shizhoubo
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
 
         const rtl::OUString& getCommandURL() const { return  m_aCommandURL; }
         const rtl::OUString& getModuleName() const;
@@ -113,8 +133,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         void enable( bool bEnable );
 
     protected:
-        bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
-
+        void setSupportVisiableProperty(sal_Bool bValue); //shizhoubo
         struct Listener
         {
             Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
