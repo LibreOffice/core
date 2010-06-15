@@ -28,20 +28,12 @@
 #ifndef __com_sun_star_ui_UIElement_idl__
 #define __com_sun_star_ui_UIElement_idl__
 
-#ifndef __com_sun_star_frame_XFrame_idl__
-#include <com/sun/star/frame/XFrame.idl>
-#endif
-
 #ifndef __com_sun_star_ui_XUIElement_idl__
 #include <com/sun/star/ui/XUIElement.idl>
 #endif
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_ui_UIElementType_idl__
-#include <com/sun/star/ui/UIElementType.idl>
 #endif
 
 #ifndef __com_sun_star_lang_XInitialization_idl__
@@ -97,7 +89,7 @@ service UIElement
         @see com::sun::star::ui::UIElementFactoryManager;
         @see com::sun::star::ui::UIElementFactory
     */
-    interface ::com::sun::star::lang::XInitialization;
+    [optional] interface ::com::sun::star::lang::XInitialization;
 
     /** used to notify an implementation that it needs to update its visual representation.
 
@@ -106,31 +98,11 @@ service UIElement
         representation. It is up to the implementation if it ignores notifications.
         </p>
     */
-    interface com::sun::star::util::XUpdatable;
+    [optional] interface com::sun::star::util::XUpdatable;
 
     /** controls the life-time of the object.
     */
     interface ::com::sun::star::lang::XComponent;
-
-    /** determines the frame to which this element is bound to.
-
-        <p>
-        The life time of a user interface element does not explicitly depend on the
-        frame itself but on the visible component attached to the frame. It is possible
-        to exchange the visible component of a frame and that will lead to the end of
-        life of all user interface elements.
-    */
-    [readonly, property] com::sun::star::frame::XFrame Frame;
-
-    /** a resource URL which is a unique identifier of a user interface element.
-    */
-    [readonly, property] string ResourceURL;
-
-    /** determines the real type of the user interface element.
-
-        @see UIElementType
-    */
-    [readonly, property] short  Type;
 };
 
 }; }; }; };
