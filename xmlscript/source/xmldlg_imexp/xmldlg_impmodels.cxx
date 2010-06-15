@@ -930,6 +930,9 @@ void TreeControlElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
     ctx.importSelectionTypeProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectionType") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("selectiontype") ),
                               _xAttributes );
