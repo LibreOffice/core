@@ -145,7 +145,6 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
 
     FixedText FT_PASSWD_TO_MODIFY
     {
-        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY;
         Pos = MAP_APPFONT( 6, 186 );
         Size = MAP_APPFONT( 159, 8 );
         Text [ en-US ] = "Enter password to allow editing";
