@@ -703,8 +703,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.EndSelect();
                 }
                 BOOL bRet = rSh.MoveFldType(pFldType, nSlot == FN_GOTO_NEXT_MARK);
-                if (bRet)
-                    rSh.ClickToField(*rSh.GetCurFld());
+                SwField* pCurField = bRet ? rSh.GetCurFld() : 0;
+                if (pCurField)
+                    rSh.ClickToField(*pCurField);
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRet));
             }
         }

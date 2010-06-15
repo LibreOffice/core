@@ -332,7 +332,6 @@ string WW8TableNodeInfoInner::toString() const
 
     return string(buffer);
 }
-
 // WW8TableTextNodeInfo
 
 WW8TableNodeInfo::WW8TableNodeInfo(WW8TableInfo * pParent,
@@ -368,16 +367,13 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 
         aIt++;
     }
-
 #ifdef DEBUG
     sResult += dbg_out(*mpNode);
 #endif
-
     sResult += "</tableNodeInfo>";
 
     return sResult;
 }
-
 void WW8TableNodeInfo::setDepth(sal_uInt32 nDepth)
 {
     mnDepth = nDepth;
