@@ -611,6 +611,12 @@ testcase tmFileProperties
    Call DialogTest ( TabDokumentInfo )
 
    Kontext
+   '/// select tabpage 'Security' ///'
+   active.SetPage TabSecurityProperties
+   Kontext "TabSecurityProperties"
+   Call DialogTest (TabSecurityProperties)
+
+   Kontext
    '/// select tabpage 'Internet' ///'
    active.SetPage TabInternet
    Kontext "TabInternet"
