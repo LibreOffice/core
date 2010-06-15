@@ -128,6 +128,7 @@ const sal_uInt32 AX_IMAGE_DEFFLAGS          = 0x0000001B;
 const sal_uInt32 AX_MORPHDATA_DEFFLAGS      = 0x2C80081B;
 const sal_uInt32 AX_SPINBUTTON_DEFFLAGS     = 0x0000001B;
 const sal_uInt32 AX_SCROLLBAR_DEFFLAGS      = 0x0000001B;
+const sal_uInt32 AX_TABSTRIP_DEFFLAGS       = 0x0000001B;
 
 const sal_uInt16 AX_POS_TOPLEFT             = 0;
 const sal_uInt16 AX_POS_TOP                 = 1;
@@ -186,6 +187,10 @@ const sal_Int32 AX_ORIENTATION_HORIZONTAL   = 1;
 const sal_Int32 AX_PROPTHUMB_ON             = -1;
 const sal_Int32 AX_PROPTHUMB_OFF            = 0;
 
+const sal_uInt32 AX_TABSTRIP_TABS           = 0;
+const sal_uInt32 AX_TABSTRIP_BUTTONS        = 1;
+const sal_uInt32 AX_TABSTRIP_NONE           = 2;
+
 const sal_uInt32 AX_CONTAINER_ENABLED       = 0x00000004;
 const sal_uInt32 AX_CONTAINER_HASDESIGNEXT  = 0x00004000;
 const sal_uInt32 AX_CONTAINER_NOCLASSTABLE  = 0x00008000;
@@ -231,20 +236,20 @@ ControlConverter::~ControlConverter()
 
 // Generic conversion ---------------------------------------------------------
 
-void ControlConverter::convertSize( PropertyMap& rPropMap, const AxPairData& rSize ) const
-{
-    // size is given in 1/100 mm, UNO needs AppFont units
-    Size aAppFontSize = mrGraphicHelper.convertHmmToAppFont( Size( rSize.first, rSize.second ) );
-    rPropMap.setProperty( PROP_Width, aAppFontSize.Width );
-    rPropMap.setProperty( PROP_Height, aAppFontSize.Height );
-}
-
 void ControlConverter::convertPosition( PropertyMap& rPropMap, const AxPairData& rPos ) const
 {
     // position is given in 1/100 mm, UNO needs AppFont units
     Point aAppFontPos = mrGraphicHelper.convertHmmToAppFont( Point( rPos.first, rPos.second ) );
     rPropMap.setProperty( PROP_PositionX, aAppFontPos.X );
     rPropMap.setProperty( PROP_PositionY, aAppFontPos.Y );
+}
+
+void ControlConverter::convertSize( PropertyMap& rPropMap, const AxPairData& rSize ) const
+{
+    // size is given in 1/100 mm, UNO needs AppFont units
+    Size aAppFontSize = mrGraphicHelper.convertHmmToAppFont( Size( rSize.first, rSize.second ) );
+    rPropMap.setProperty( PROP_Width, aAppFontSize.Width );
+    rPropMap.setProperty( PROP_Height, aAppFontSize.Height );
 }
 
 void ControlConverter::convertColor( PropertyMap& rPropMap, sal_Int32 nPropId, sal_uInt32 nOleColor ) const
@@ -1362,7 +1367,69 @@ void AxScrollBarModel::convertProperties( PropertyMap& rPropMap, const ControlCo
 
 // ============================================================================
 
-AxContainerModelBase::AxContainerModelBase() :
+AxTabStripModel::AxTabStripModel() :
+    AxFontDataModel( false ),   // no support for Align property
+    mnBackColor( AX_SYSCOLOR_BUTTONFACE ),
+    mnTextColor( AX_SYSCOLOR_BUTTONTEXT ),
+    mnFlags( AX_TABSTRIP_DEFFLAGS ),
+    mnSelectedTab( -1 ),
+    mnTabStyle( AX_TABSTRIP_TABS ),
+    mnTabFlagCount( 0 )
+{
+}
+
+bool AxTabStripModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readIntProperty< sal_Int32 >( mnSelectedTab );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt32 >( mnTextColor );
+    aReader.skipUndefinedProperty();
+    aReader.readPairProperty( maSize );
+    aReader.readStringArrayProperty( maCaptions );
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.skipUndefinedProperty();
+    aReader.skipIntProperty< sal_uInt32 >(); // tab orientation
+    aReader.readIntProperty< sal_uInt32 >( mnTabStyle );
+    aReader.skipBoolProperty(); // multiple rows
+    aReader.skipIntProperty< sal_uInt32 >(); // fixed width
+    aReader.skipIntProperty< sal_uInt32 >(); // fixed height
+    aReader.skipBoolProperty(); // tooltips
+    aReader.skipUndefinedProperty();
+    aReader.skipStringArrayProperty(); // tooltip strings
+    aReader.skipUndefinedProperty();
+    aReader.skipStringArrayProperty(); // tab names
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.skipBoolProperty(); // new version
+    aReader.skipIntProperty< sal_uInt32 >(); // tabs allocated
+    aReader.skipStringArrayProperty(); // tags
+    aReader.readIntProperty< sal_uInt32 >( mnTabFlagCount );
+    aReader.skipStringArrayProperty(); // accelerators
+    aReader.skipPictureProperty(); // mouse icon
+    return aReader.finalizeImport() && AxFontDataModel::importBinaryModel( rInStrm );
+}
+
+ApiControlType AxTabStripModel::getControlType() const
+{
+    return API_CONTROL_TABSTRIP;
+}
+
+void AxTabStripModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Decoration, mnTabStyle != AX_TABSTRIP_NONE );
+    rPropMap.setProperty( PROP_MultiPageValue, mnSelectedTab );
+    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
+    AxFontDataModel::convertProperties( rPropMap, rConv );
+}
+
+OUString AxTabStripModel::getCaption( sal_Int32 nIndex ) const
+{
+    return ContainerHelper::getVectorElement( maCaptions, nIndex, OUString() );
+}
+
+// ============================================================================
+
+AxContainerModelBase::AxContainerModelBase( bool bFontSupport ) :
     AxFontDataModel( false ),   // no support for Align property
     maLogicalSize( AX_CONTAINER_DEFWIDTH, AX_CONTAINER_DEFHEIGHT ),
     maScrollPos( 0, 0 ),
@@ -1376,7 +1443,8 @@ AxContainerModelBase::AxContainerModelBase() :
     mnSpecialEffect( AX_SPECIALEFFECT_FLAT ),
     mnPicAlign( AX_PICALIGN_CENTER ),
     mnPicSizeMode( AX_PICSIZE_CLIP ),
-    mbPicTiling( false )
+    mbPicTiling( false ),
+    mbFontSupport( bFontSupport )
 {
     setAwtModelMode();
     // different default size for frame
@@ -1423,6 +1491,15 @@ bool AxContainerModelBase::importBinaryModel( BinaryInputStream& rInStrm )
     return aReader.finalizeImport();
 }
 
+void AxContainerModelBase::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    if( mbFontSupport )
+    {
+        rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
+        AxFontDataModel::convertProperties( rPropMap, rConv );
+    }
+}
+
 bool AxContainerModelBase::importClassTable( BinaryInputStream& rInStrm, AxClassTable& orClassTable )
 {
     bool bValid = true;
@@ -1457,7 +1534,8 @@ bool AxContainerModelBase::importClassTable( BinaryInputStream& rInStrm, AxClass
 
 // ============================================================================
 
-AxFrameModel::AxFrameModel()
+AxFrameModel::AxFrameModel() :
+    AxContainerModelBase( true )
 {
 }
 
@@ -1471,6 +1549,49 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
+// ============================================================================
+
+AxFormPageModel::AxFormPageModel()
+{
+}
+
+ApiControlType AxFormPageModel::getControlType() const
+{
+    return API_CONTROL_PAGE;
+}
+
+void AxFormPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Title, maCaption );
+    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
+    AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
+// ============================================================================
+
+AxMultiPageModel::AxMultiPageModel()
+{
+}
+
+ApiControlType AxMultiPageModel::getControlType() const
+{
+    return API_CONTROL_MULTIPAGE;
+}
+
+void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    if( mxTabStrip.get() )
+        mxTabStrip->convertProperties( rPropMap, rConv );
+    AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
+void AxMultiPageModel::setTabStripModel( const AxTabStripModelRef& rxTabStrip )
+{
+    mxTabStrip = rxTabStrip;
 }
 
 // ============================================================================

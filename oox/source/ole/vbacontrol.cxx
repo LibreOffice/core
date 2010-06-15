@@ -231,6 +231,11 @@ void VbaSiteModel::moveRelative( const AxPairData& rDistance )
     maPos.second += rDistance.second;
 }
 
+bool VbaSiteModel::isVisible() const
+{
+    return getFlag( mnFlags, VBA_SITE_VISIBLE );
+}
+
 bool VbaSiteModel::isContainer() const
 {
     return !getFlag( mnFlags, VBA_SITE_OSTREAM );
@@ -326,7 +331,7 @@ void VbaSiteModel::convertProperties( PropertyMap& rPropMap,
         if( (0 <= nCtrlIndex) && (nCtrlIndex <= SAL_MAX_INT16) )
             rPropMap.setProperty( PROP_TabIndex, static_cast< sal_Int16 >( nCtrlIndex ) );
         // progress bar and group box support TabIndex, but not Tabstop...
-        if( (eCtrlType != API_CONTROL_PROGRESSBAR) && (eCtrlType != API_CONTROL_GROUPBOX) )
+        if( (eCtrlType != API_CONTROL_PROGRESSBAR) && (eCtrlType != API_CONTROL_GROUPBOX) && (eCtrlType != API_CONTROL_FRAME) && (eCtrlType != API_CONTROL_PAGE) )
             rPropMap.setProperty( PROP_Tabstop, getFlag( mnFlags, VBA_SITE_TABSTOP ) );
         rConv.convertPosition( rPropMap, maPos );
     }
@@ -365,6 +370,11 @@ void VbaFormControl::importModelOrStorage( BinaryInputStream& rInStrm, StorageBa
 OUString VbaFormControl::getControlName() const
 {
     return mxSiteModel.get() ? mxSiteModel->getName() : OUString();
+}
+
+sal_Int32 VbaFormControl::getControlId() const
+{
+    return mxSiteModel.get() ? mxSiteModel->getId() : -1;
 }
 
 void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,

@@ -99,6 +99,7 @@ D3DScenePerspective
 D3DSceneShadeMode
 DDELinks
 DatabaseRanges
+Decoration
 DefaultContext
 DefaultScrollValue
 DefaultSpinValue
@@ -247,6 +248,7 @@ MinorTickmarks
 MissingValueTreatment
 Model
 MultiLine
+MultiPageValue
 MultiSelection
 Name
 NamedRanges

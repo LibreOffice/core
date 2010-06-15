@@ -263,6 +263,7 @@ bool BiffChartsheetFragment::importFragment()
 
                     case BIFF8: switch( nRecId )
                     {
+                        case BIFF_ID_CODENAME:      rWorksheetSett.importCodeName( mrStrm );        break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_PICTURE:       rPageSett.importPicture( mrStrm );              break;

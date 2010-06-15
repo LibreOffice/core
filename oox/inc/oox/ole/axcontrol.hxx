@@ -111,8 +111,12 @@ enum ApiControlType
     API_CONTROL_COMBOBOX,
     API_CONTROL_SPINBUTTON,
     API_CONTROL_SCROLLBAR,
+    API_CONTROL_TABSTRIP,
     API_CONTROL_PROGRESSBAR,
     API_CONTROL_GROUPBOX,
+    API_CONTROL_FRAME,
+    API_CONTROL_PAGE,
+    API_CONTROL_MULTIPAGE,
     API_CONTROL_DIALOG
 };
 
@@ -639,19 +643,50 @@ private:
 
 // ============================================================================
 
+/** Model for a Forms 2.0 tabstrip control. */
+class AxTabStripModel : public AxFontDataModel
+{
+public:
+    explicit            AxTabStripModel();
+
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+
+    virtual ApiControlType getControlType() const;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+
+    /** Returns the caption with the specified zero-based index. */
+    ::rtl::OUString     getCaption( sal_Int32 nIndex ) const;
+
+private:
+    AxStringArray       maCaptions;         /// Captions of all tabs.
+    sal_uInt32          mnBackColor;        /// Fill color.
+    sal_uInt32          mnTextColor;        /// Text color.
+    sal_uInt32          mnFlags;            /// Various flags.
+    sal_Int32           mnSelectedTab;      /// The index of the selected tab.
+    sal_uInt32          mnTabStyle;         /// Visual style of the tabs.
+    sal_Int32           mnTabFlagCount;     /// Number of entries in tab flag array.
+};
+
+typedef ::boost::shared_ptr< AxTabStripModel > AxTabStripModelRef;
+
+// ============================================================================
+
 typedef ::std::vector< ::rtl::OUString > AxClassTable;
 
 /** Base class for ActiveX container controls. */
 class AxContainerModelBase : public AxFontDataModel
 {
 public:
-    explicit            AxContainerModelBase();
+    explicit            AxContainerModelBase( bool bFontSupport = false );
 
     /** Allows to set single properties specified by XML token identifier. */
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     /** Reads the leading structure in the 'f' stream containing the model for
         this control. */
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    /** Converts font settings if supported. */
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+
     /** Reads the class table structure for embedded controls following the own
         model from the 'f' stream. */
     bool                importClassTable( BinaryInputStream& rInStrm, AxClassTable& orClassTable );
@@ -672,13 +707,14 @@ protected:
     sal_Int32           mnPicAlign;         /// Anchor position of the picture.
     sal_Int32           mnPicSizeMode;      /// Clip, stretch, zoom.
     bool                mbPicTiling;        /// True = picture is repeated.
+    bool                mbFontSupport;      /// True = control supports the font property.
 };
 
 typedef ::boost::shared_ptr< AxContainerModelBase > AxContainerModelRef;
 
 // ============================================================================
 
-/** Model for a Forms 2.0 frame (group box). */
+/** Model for a Forms 2.0 frame control. */
 class AxFrameModel : public AxContainerModelBase
 {
 public:
@@ -686,6 +722,38 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+};
+
+// ============================================================================
+
+/** Model for a Forms 2.0 formpage control (a single page in a multipage control). */
+class AxFormPageModel : public AxContainerModelBase
+{
+public:
+    explicit            AxFormPageModel();
+
+    virtual ApiControlType getControlType() const;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+};
+
+// ============================================================================
+
+/** Model for a Forms 2.0 multipage control. Contains the tabstrip control
+    (class AxTabStripModel) and the single pages (class AxFormPageModel). */
+class AxMultiPageModel : public AxContainerModelBase
+{
+public:
+    explicit            AxMultiPageModel();
+
+    virtual ApiControlType getControlType() const;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+
+    /** Sets the tabstrip control model related to this multipage control.
+        Contains all formatting attributes of the page tabs. */
+    void                setTabStripModel( const AxTabStripModelRef& rxTabStrip );
+
+private:
+    AxTabStripModelRef  mxTabStrip;
 };
 
 // ============================================================================
