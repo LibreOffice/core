@@ -100,6 +100,15 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, USHORT nId )
     nTypeStrId = nId;
 }
 
+// new <type>
+SbiExprNode::SbiExprNode( SbiParser* p, USHORT nId )
+{
+    BaseInit( p );
+
+    eType     = SbxOBJECT;
+    eNodeType = SbxNEW;
+    nTypeStrId = nId;
+}
 
 // AB: 17.12.95, Hilfsfunktion fuer Ctor fuer einheitliche Initialisierung
 void SbiExprNode::BaseInit( SbiParser* p )
@@ -253,7 +262,8 @@ void SbiExprNode::CollectBits()
 void SbiExprNode::FoldConstants()
 {
     if( IsOperand() || eTok == LIKE ) return;
-    pLeft->FoldConstants();
+    if( pLeft )
+        pLeft->FoldConstants();
     if( pRight )
     {
         pRight->FoldConstants();
@@ -431,7 +441,7 @@ void SbiExprNode::FoldConstants()
             }
         }
     }
-    else if( pLeft->IsNumber() )
+    else if( pLeft && pLeft->IsNumber() )
     {
         nVal = pLeft->nVal;
         delete pLeft;

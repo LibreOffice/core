@@ -67,6 +67,8 @@ public:
     virtual void SAL_CALL setVisible( ::sal_Bool _visible ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnabled( ::sal_Bool _enabled ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getBeginGroup() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setBeginGroup( ::sal_Bool _begin ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException)
     {
         return ov::office::MsoControlType::msoControlButton;

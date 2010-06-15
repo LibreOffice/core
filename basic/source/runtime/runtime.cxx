@@ -155,6 +155,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     &SbiRuntime::StepVBASET,// vba-like set statement
     &SbiRuntime::StepERASE_CLEAR,// vba-like set statement
     &SbiRuntime::StepARRAYACCESS,// access TOS as array
+    &SbiRuntime::StepBYVAL,     // access TOS as array
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
@@ -1231,9 +1232,7 @@ void SbiRuntime::DllCall
 
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();
-    ByteString aByteFuncName( aFuncName, gsl_getSystemTextEncoding() );
-    ByteString aByteDLLName( aDLLName, gsl_getSystemTextEncoding() );
-    SbError nErr = pDllMgr->Call( aByteFuncName.GetBuffer(), aByteDLLName.GetBuffer(), pArgs, *pRes, bCDecl );
+    SbError nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
     if( nErr )
         Error( nErr );
     PushVar( pRes );

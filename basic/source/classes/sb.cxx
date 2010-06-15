@@ -321,23 +321,52 @@ SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
 }
 
 
-// Factory class to create user defined objects (type command)
-class SbTypeFactory : public SbxFactory
-{
-    SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
+//========================================================================
+// SbFormFactory, show user forms by: dim as new <user form name>
 
+class SbFormFactory : public SbxFactory
+{
 public:
     virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const String& );
 };
 
-SbxBase* SbTypeFactory::Create( UINT16, UINT32 )
+SbxBase* SbFormFactory::Create( UINT16, UINT32 )
 {
     // Not supported
     return NULL;
 }
 
-SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
+SbxObject* SbFormFactory::CreateObject( const String& rClassName )
+{
+    static String aLoadMethodName( RTL_CONSTASCII_USTRINGPARAM("load") );
+
+    SbxObject* pRet = NULL;
+    SbModule* pMod = pMOD;
+    if( pMod )
+    {
+        SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT );
+        if( pVar )
+        {
+            SbxBase* pObj = pVar->GetObject();
+            SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pObj );
+
+            if( pFormModule != NULL )
+            {
+                pFormModule->load();
+                SbUserFormModuleInstance* pFormInstance = pFormModule->CreateInstance();
+                pRet = pFormInstance;
+            }
+        }
+    }
+    return pRet;
+}
+
+
+//========================================================================
+// SbTypeFactory
+
+SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
 {
     SbxObject* pRet = new SbxObject( rTypeObj );
     pRet->PutObject( pRet );
@@ -352,7 +381,8 @@ SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
         if( pProp )
         {
             SbxProperty* pNewProp = new SbxProperty( *pProp );
-            if( pVar->GetType() & SbxARRAY )
+            SbxDataType eVarType = pVar->GetType();
+            if( eVarType & SbxARRAY )
             {
                 SbxBase* pParObj = pVar->GetObject();
                 SbxDimArray* pSource = PTR_CAST(SbxDimArray,pParObj);
@@ -379,10 +409,33 @@ SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 pNewProp->PutObject( pDest );
                 pNewProp->SetFlags( nSavFlags );
             }
+            if( eVarType == SbxOBJECT )
+            {
+                SbxBase* pObjBase = pVar->GetObject();
+                SbxObject* pSrcObj = PTR_CAST(SbxObject,pObjBase);
+                SbxObject* pDestObj = NULL;
+                if( pSrcObj != NULL )
+                    pDestObj = cloneTypeObjectImpl( *pSrcObj );
+                pNewProp->PutObject( pDestObj );
+            }
             pProps->PutDirect( pNewProp, i );
         }
     }
     return pRet;
+}
+
+// Factory class to create user defined objects (type command)
+class SbTypeFactory : public SbxFactory
+{
+public:
+    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxObject* CreateObject( const String& );
+};
+
+SbxBase* SbTypeFactory::Create( UINT16, UINT32 )
+{
+    // Not supported
+    return NULL;
 }
 
 SbxObject* SbTypeFactory::CreateObject( const String& rClassName )
@@ -728,6 +781,8 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
         AddFactory( pCLASSFAC );
         pOLEFAC = new SbOLEFactory;
         AddFactory( pOLEFAC );
+        pFORMFAC = new SbFormFactory;
+        AddFactory( pFORMFAC );
     }
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
     // Search via StarBasic is always global
@@ -748,15 +803,17 @@ StarBASIC::~StarBASIC()
     if( !--GetSbData()->nInst )
     {
         RemoveFactory( pSBFAC );
-        pSBFAC = NULL;
+        delete pSBFAC; pSBFAC = NULL;
         RemoveFactory( pUNOFAC );
-        pUNOFAC = NULL;
+        delete pUNOFAC; pUNOFAC = NULL;
         RemoveFactory( pTYPEFAC );
-        pTYPEFAC = NULL;
+        delete pTYPEFAC; pTYPEFAC = NULL;
         RemoveFactory( pCLASSFAC );
-        pCLASSFAC = NULL;
+        delete pCLASSFAC; pCLASSFAC = NULL;
         RemoveFactory( pOLEFAC );
-        pOLEFAC = NULL;
+        delete pOLEFAC; pOLEFAC = NULL;
+        RemoveFactory( pFORMFAC );
+        delete pFORMFAC; pFORMFAC = NULL;
 
 #ifdef DBG_UTIL
     // There is no need to clean SbiData at program end,

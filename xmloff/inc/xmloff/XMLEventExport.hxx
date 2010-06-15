@@ -73,6 +73,8 @@ class XMLOFF_DLLPUBLIC XMLEventExport
     HandlerMap aHandlerMap;
     NameMap aNameTranslationMap;
 
+    bool bExtNamespace;
+
 public:
     XMLEventExport(SvXMLExport& rExport,
                    const XMLEventNameTranslation* pTranslationTable = NULL);
@@ -101,6 +103,12 @@ public:
 
     /// export the events (writes <office:events> element)
     void Export( ::com::sun::star::uno::Reference<
+                     ::com::sun::star::container::XNameAccess> & xAccess,
+                sal_Bool bUseWhitespace = sal_True);
+
+    /// export the events, but write <officeooo:events> element
+    /// (for new file format additions)
+    void ExportExt( ::com::sun::star::uno::Reference<
                      ::com::sun::star::container::XNameAccess> & xAccess,
                 sal_Bool bUseWhitespace = sal_True);
 

@@ -148,6 +148,10 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
         pLeft->Gen();
         pGen->Gen( _TESTCLASS, nTypeStrId );
     }
+    else if( IsNew() )
+    {
+        pGen->Gen( _CREATE, 0, nTypeStrId );
+    }
     else
     {
         pLeft->Gen();
@@ -285,6 +289,8 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
     // AB: 17.12.1995, Spezialbehandlung fuer WITH
     // Wenn pExpr == .-Ausdruck in With, zunaechst Gen fuer Basis-Objekt
     pExpr->Gen( eRecMode );
+    if( bByVal )
+        pParser->aGen.Gen( _BYVAL );
     if( bBased )
     {
         USHORT uBase = pParser->nBase;

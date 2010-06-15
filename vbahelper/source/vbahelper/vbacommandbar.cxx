@@ -202,3 +202,85 @@ ScVbaCommandBar::getServiceNames()
     }
     return aServiceNames;
 }
+
+
+VbaDummyCommandBar::VbaDummyCommandBar(
+        const uno::Reference< ov::XHelperInterface > xParent,
+        const uno::Reference< uno::XComponentContext > xContext,
+        const ::rtl::OUString& rName, sal_Int32 nType ) throw( uno::RuntimeException ) :
+    CommandBar_BASE( xParent, xContext ),
+    maName( rName ),
+    mnType( nType )
+{
+}
+
+::rtl::OUString SAL_CALL VbaDummyCommandBar::getName() throw ( uno::RuntimeException )
+{
+    return maName;
+}
+
+void SAL_CALL VbaDummyCommandBar::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
+{
+    maName = _name;
+}
+
+::sal_Bool SAL_CALL VbaDummyCommandBar::getVisible() throw (uno::RuntimeException)
+{
+    return sal_True;
+}
+
+void SAL_CALL VbaDummyCommandBar::setVisible( ::sal_Bool /*_visible*/ ) throw (uno::RuntimeException)
+{
+}
+
+::sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled() throw (uno::RuntimeException)
+{
+    // emulated with Visible
+    return getVisible();
+}
+
+void SAL_CALL VbaDummyCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
+{
+    // emulated with Visible
+    setVisible( _enabled );
+}
+
+void SAL_CALL VbaDummyCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    // no-op
+}
+
+uno::Any SAL_CALL VbaDummyCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    uno::Reference< XCommandBarControls > xCommandBarControls( new VbaDummyCommandBarControls( this, mxContext ) );
+    if( aIndex.hasValue() )
+        return xCommandBarControls->Item( aIndex, uno::Any() );
+    return uno::Any( xCommandBarControls );
+}
+
+sal_Int32 SAL_CALL VbaDummyCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeException)
+{
+    return mnType;
+}
+
+uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    return uno::Any( uno::Reference< XCommandBarControl >() );
+}
+
+rtl::OUString& VbaDummyCommandBar::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBar") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString > VbaDummyCommandBar::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBar" ) );
+    }
+    return aServiceNames;
+}

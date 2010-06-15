@@ -63,8 +63,15 @@ class VBAHELPER_DLLPUBLIC VbaFontBase : public VbaFontBase_BASE
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxFont;
     css::uno::Reference< css::container::XIndexAccess > mxPalette;
+    bool mbFormControl;
+
 public:
-    VbaFontBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPalette, css::uno::Reference< css::beans::XPropertySet > xPropertySet ) throw ( css::uno::RuntimeException );
+    VbaFontBase(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::container::XIndexAccess >& xPalette,
+        const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
+        bool bFormControl = false ) throw ( css::uno::RuntimeException );
     virtual ~VbaFontBase();// {}
 
     // Attributes

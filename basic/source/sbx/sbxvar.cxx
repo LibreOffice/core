@@ -39,6 +39,9 @@
 #include <math.h>
 #include <ctype.h>
 
+#include "com/sun/star/uno/XInterface.hpp"
+using namespace com::sun::star::uno;
+
 ///////////////////////////// SbxVariable //////////////////////////////
 
 TYPEINIT1(SbxVariable,SbxValue)
@@ -49,10 +52,28 @@ extern UINT32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
 static ULONG nVar = 0;
 #endif
 
+///////////////////////////// SbxVariableImpl ////////////////////////////
+
+class SbxVariableImpl
+{
+    friend class SbxVariable;
+    String                      m_aDeclareClassName;
+    Reference< XInterface >     m_xComListener;
+
+    SbxVariableImpl( void )
+    {}
+    SbxVariableImpl( const SbxVariableImpl& r )
+        : m_aDeclareClassName( r.m_aDeclareClassName )
+        , m_xComListener( r.m_xComListener )
+    {}
+};
+
+
 ///////////////////////////// Konstruktoren //////////////////////////////
 
 SbxVariable::SbxVariable() : SbxValue()
 {
+    mpSbxVariableImpl = NULL;
     pCst = NULL;
     pParent = NULL;
     nUserData = 0;
@@ -66,6 +87,9 @@ SbxVariable::SbxVariable() : SbxValue()
 SbxVariable::SbxVariable( const SbxVariable& r )
            : SvRefBase( r ), SbxValue( r ), mpPar( r.mpPar ), pInfo( r.pInfo )
 {
+    mpSbxVariableImpl = NULL;
+    if( r.mpSbxVariableImpl != NULL )
+        mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
     pCst = NULL;
     if( r.CanRead() )
     {
@@ -91,6 +115,7 @@ SbxVariable::SbxVariable( const SbxVariable& r )
 
 SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 {
+    mpSbxVariableImpl = NULL;
     pCst = NULL;
     pParent = NULL;
     nUserData = 0;
@@ -111,6 +136,7 @@ SbxVariable::~SbxVariable()
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     GetSbxData_Impl()->aVars.Remove( this );
 #endif
+    delete mpSbxVariableImpl;
     delete pCst;
 }
 
@@ -287,6 +313,11 @@ USHORT SbxVariable::MakeHashCode( const XubString& rName )
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
     SbxValue::operator=( r );
+    delete mpSbxVariableImpl;
+    if( r.mpSbxVariableImpl != NULL )
+        mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+    else
+        mpSbxVariableImpl = NULL;
     return *this;
 }
 
@@ -345,6 +376,32 @@ void SbxVariable::SetParent( SbxObject* p )
 
     pParent = p;
 }
+
+SbxVariableImpl* SbxVariable::getImpl( void )
+{
+    if( mpSbxVariableImpl == NULL )
+        mpSbxVariableImpl = new SbxVariableImpl();
+    return mpSbxVariableImpl;
+}
+
+const String& SbxVariable::GetDeclareClassName( void )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    return pImpl->m_aDeclareClassName;
+}
+
+void SbxVariable::SetDeclareClassName( const String& rDeclareClassName )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    pImpl->m_aDeclareClassName = rDeclareClassName;
+}
+
+void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    pImpl->m_xComListener = xComListener;
+}
+
 
 ////////////////////////////// Laden/Speichern /////////////////////////////
 

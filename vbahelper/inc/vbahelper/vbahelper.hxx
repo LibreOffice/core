@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -74,8 +75,8 @@ namespace ooo
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const css::uno::Any& aObject ) throw (css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > getTypeConverter( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 
-        VBAHELPER_DLLPUBLIC void dispatchRequests (css::uno::Reference< css::frame::XModel>& xModel,rtl::OUString & aUrl) ;
-        VBAHELPER_DLLPUBLIC void dispatchRequests (css::uno::Reference< css::frame::XModel>& xModel,rtl::OUString & aUrl, css::uno::Sequence< css::beans::PropertyValue >& sProps ) ;
+        VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString& aUrl );
+        VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString& aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps );
         VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, USHORT nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
@@ -92,7 +93,9 @@ namespace ooo
         VBAHELPER_DLLPUBLIC rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike = false); // needs to be in an uno service ( already this code is duplicated in basic )
         VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical);
         VBAHELPER_DLLPUBLIC double PointsToPixels( css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical);
-        VBAHELPER_DLLPUBLIC double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical);
+        VBAHELPER_DLLPUBLIC double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical);
+        VBAHELPER_DLLPUBLIC sal_Int32 PointsToHmm( double fPoints );
+        VBAHELPER_DLLPUBLIC double HmmToPoints( sal_Int32 nHmm );
         VBAHELPER_DLLPUBLIC sal_Int32 getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
         VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, const Pointer& rPointer, sal_Bool bOverWrite );
         VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const css::uno::Any& aObj, const css::uno::Any& aValue  ) throw ( css::uno::RuntimeException );
@@ -103,8 +106,6 @@ class VBAHELPER_DLLPUBLIC Millimeter
 {
 //Factor to translate between points and hundredths of millimeters:
 private:
-    static const double factor;
-
     double m_nMillimeter;
 
 public:
@@ -178,12 +179,19 @@ public:
     virtual double getWidth();
     virtual void setWidth( double nWidth);
 };
+
 #define VBA_LEFT "PositionX"
 #define VBA_TOP "PositionY"
+#define VBA_HEIGHT "Height"
+#define VBA_WIDTH "Width"
 class VBAHELPER_DLLPUBLIC UserFormGeometryHelper : public AbstractGeometryAttributes
 {
-
+    css::uno::Reference< css::awt::XUnitConversion > mxControlUnits;
     css::uno::Reference< css::beans::XPropertySet > mxModel;
+
+    sal_Int32 ConvertLogicToPixel( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nSourceUnit );
+    sal_Int32 ConvertPixelToLogic( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nTargetUnit );
+
 public:
     UserFormGeometryHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::awt::XControl >& xControl );
     virtual double getLeft();

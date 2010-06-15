@@ -58,6 +58,7 @@ SLOFILES=\
     $(SLO)$/vbamultipage.obj \
     $(SLO)$/vbalistcontrolhelper.obj \
     $(SLO)$/vbaspinbutton.obj \
+    $(SLO)$/vbasystemaxcontrol.obj \
     $(SLO)$/vbaimage.obj \
     $(SLO)$/vbapages.obj \
     $(SLO)$/vbauserform.obj \
