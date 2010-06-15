@@ -53,8 +53,8 @@ OBJFILES= \
     $(OBJ)$/_tokens.obj 	\
     $(OBJ)$/_unix.obj
 
-# nonstandard cpp options, needs the custom stgetopt defined here :/
-# And Windows, well, Windows... no comment.
+# nonstandard cpp options needed for Mac (-isysroot),
+# needs the custom stgetopt defined here :/
 .IF "$(OS)" == "MACOSX" || "$(HAVE_GETOPT)" == "NO"
 OBJFILES += $(OBJ)$/_getopt.obj
 .ENDIF
