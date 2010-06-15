@@ -380,7 +380,7 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
  *  nType/nPart combination.
  */
 BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                        const Point& rPos, SalControlHandle& rControlHandle, BOOL& rIsInside )
+                        const Point& rPos, BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
@@ -468,7 +468,6 @@ UInt32 AquaSalGraphics::getTrackState( ControlState nState )
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:     An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the AquaSalGraphics implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
@@ -476,7 +475,6 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     const Region& rControlRegion,
                     ControlState nState,
                     const ImplControlValue& aValue,
-                    SalControlHandle& rControlHandle,
                     const rtl::OUString& aCaption )
 {
     BOOL bOK = FALSE;
@@ -1226,12 +1224,11 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:     An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the AquaSalGraphics implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption )
+                                               const rtl::OUString& aCaption )
 {
     return( FALSE );
 }
@@ -1248,11 +1245,10 @@ BOOL AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPar
  *
  *  rControlRegion: The bounding region of the control in VCL frame coordinates.
  *  aValue:     An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the AquaSalGraphics implementation.
  *  aCaption:       A caption or title string (like button text etc)
  */
 BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                               const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                               const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion )
 
 {

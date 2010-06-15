@@ -35,7 +35,7 @@
 #include "logindlg.hrc"
 #endif
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 #include <svtools/svtdata.hxx>
 
