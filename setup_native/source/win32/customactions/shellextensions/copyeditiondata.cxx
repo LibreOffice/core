@@ -100,7 +100,7 @@ extern "C" UINT __stdcall copyEditionData(MSIHANDLE install) {
     wchar_t * end;
     boost::scoped_array<wchar_t> to(
         getProperty(
-            install, L"OFFICEINSTALLLOCATION",
+            install, L"INSTALLLOCATION",
             LCL_STRING0(L"program\\edition\0"), &end));
     if (!to) {
         return ERROR_INSTALL_FAILURE;
