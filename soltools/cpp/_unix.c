@@ -12,7 +12,7 @@
 
 #include "cpp.h"
 
-#if defined MACOSX || defined WINNT
+#if defined MACOSX || defined WNT
 extern int stgetopt(int, char *const *, const char *);
 extern char *optarg;
 extern int optind;
@@ -40,7 +40,7 @@ void
     Tokenrow tr;
 
     setup_kwtab();
-#if defined MACOSX || defined WINNT
+#if defined MACOSX || defined WNT
     while ((c = stgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
 #else
     while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
