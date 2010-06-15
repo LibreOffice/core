@@ -118,10 +118,6 @@ AC_ARG_ENABLE(odk,
 [  --disable-odk           OO.o includes an ODK, office development kit
                           which some packagers may with to build without
 ],,enable_odk="yes")
-AC_ARG_ENABLE(qadevooo,
-[  --disable-qadevooo      OO.o includes some qa testsuites which some
-                          packagers may wish to build without
-],,enable_qadevooo="yes")
 AC_ARG_ENABLE(mathmldtd,
 [  --disable-mathmldtd     disable mathmldtd
                           (useful for distributions that want to avoid packaging
@@ -550,6 +546,9 @@ AC_ARG_WITH(system-lpsolve,
 AC_ARG_WITH(system-cppunit,
 [  --with-system-cppunit         Use cppunit already on system
 ],,)
+AC_ARG_WITH(system-redland,
+[  --with-system-redland   Use redland library already on system
+],,)
 AC_ARG_WITH(system-mozilla,
 [  --with-system-mozilla   Use mozilla already on system. Note that some
                           components cannot be built against a contemporary
@@ -945,7 +944,7 @@ case "$build_os" in
       			AC_MSG_ERROR([only sparc and i386 processors are supported])
    		fi
 		;;
-	linux-gnu*)
+	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
 		test_kde=yes
@@ -1404,6 +1403,9 @@ fi
 AC_MSG_RESULT($GCC_HOME)
 AC_SUBST(GCC_HOME)
 
+save_CC=$CC
+save_CXX=$CXX
+
 if test -n "$with_gcc_home"; then
    if test -z "$CC"; then
       CC="$with_gcc_home/bin/gcc"
@@ -1431,7 +1433,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
     AC_MSG_CHECKING([the GNU gcc compiler version])
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
-   _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
    if test "$_gcc_major" -lt "3"; then
@@ -1443,7 +1444,22 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
 	    fi
       fi
    fi
-   AC_MSG_RESULT([checked (gcc $_gcc_version)])
+   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
+      if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
+         CC=$GCC_HOME/bin/gcc-4.0
+         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+         if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
+            GCCVER=$GCCVER2
+         fi
+      fi
+      if test "$GCCVER" -ge "040100" ; then
+         AC_MSG_ERROR([You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly])
+      else
+         AC_MSG_RESULT([implicitly using CC=$CC])
+      fi
+   else
+      AC_MSG_RESULT([checked (gcc $_gcc_version)])
+   fi
    if test "$_os" = "SunOS"; then
       AC_MSG_CHECKING([gcc linker])
       if $CC -Wl,--version 2>&1 |head -n 1| grep -v GNU > /dev/null;then
@@ -2048,14 +2064,27 @@ if test "$GXX" = "yes"; then
    AC_MSG_CHECKING([the GNU C++ compiler version])
 
    _gpp_version=`$CXX -dumpversion`
-   _gpp_major=`echo $_gpp_version | $AWK -F. '{ print \$1 }'`
-   _gpp_minor=`echo $_gpp_version | $AWK -F. '{ print \$2 }'`
-   
-   AC_MSG_RESULT([checked (g++ $_gpp_version)])
+   _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   if test "$_gpp_major" = "3"; then
-      if test "$_gpp_minor" = "4"; then
-         AC_MSG_CHECKING([whether $CXX has the enum bug])
+   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
+      if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
+         CXX=$GCC_HOME/bin/g++-4.0
+         _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+         if test "$_gpp_majmin_2" -ge "400" -a "$_gpp_majmin_2" -lt "401" ; then
+            _gpp_majmin=$_gpp_majmin_2
+         fi
+      fi
+      if test "$_gpp_majmin" -ge "401" ; then
+         AC_MSG_ERROR([You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly])
+      else
+         AC_MSG_RESULT([implicitly using CXX=$CXX])
+      fi
+   else
+      AC_MSG_RESULT([checked (g++ $_gpp_version)])
+   fi
+
+   if test "$_gpp_majmin" = "304"; then
+      AC_MSG_CHECKING([whether $CXX has the enum bug])
 AC_TRY_RUN([
 extern "C" void abort (void);
 extern "C" void exit (int status);
@@ -2078,7 +2107,6 @@ main (void)
   return 0;
 }
 ],[AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents OpenOffice.org from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])], [AC_MSG_RESULT([no])])
-      fi
    fi
 fi
 
@@ -2217,21 +2245,6 @@ if test "$_os" = "SunOS"; then
       fi
    fi 
 fi
-dnl ===================================================================
-dnl Extra checking for the DARWIN compiler
-dnl ===================================================================
-if test "$_os" = "Darwin"; then
-   dnl c++ packaged with cc (gcc) for Macosx
-   if test "$CC" = "cc"; then
-      AC_MSG_CHECKING([Macosx c++ Compiler])
-      if test "$CXX" != "c++"; then
-         AC_MSG_WARN([Macosx C++ was not found])
-         echo "Macosx C++ was not found" >> warn
-      else
-         AC_MSG_RESULT([checked]) 
-      fi
-   fi 
-fi 
 dnl ===================================================================
 dnl Extra checking for the OSF compiler
 dnl ===================================================================
@@ -2381,7 +2394,13 @@ dnl ===================================================================
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
        i?86)
-         DEFAULT_TO_STLPORT="yes"
+	 case "$build_os" in k*bsd*-gnu*)
+	 	DEFAULT_TO_STLPORT="no"
+		;;
+	 *) 
+         	DEFAULT_TO_STLPORT="yes"
+		;;
+	  esac
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
@@ -3479,20 +3498,6 @@ AC_SUBST(MINGWCXX)
 AC_SUBST(MINGWSTRIP)
 
 dnl ===================================================================
-dnl Check for building qadevOOo
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build qadevOOo])
-if test "z$enable_qadevooo" = "z" -o "$enable_qadevooo" != "no"; then
-   AC_MSG_RESULT([yes])
-   BUILD_QADEVOOO="YES"
-   BUILD_TYPE="$BUILD_TYPE QADEVOOO"
-else
-   BUILD_QADEVOOO="NO"
-   AC_MSG_RESULT([no])
-fi
-AC_SUBST(BUILD_QADEVOOO)
-
-dnl ===================================================================
 dnl Check for prelinked libgcc_s.so.1
 dnl ===================================================================
 if test "$_os" = "Linux" -a -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
@@ -3726,26 +3731,25 @@ AC_SUBST(LIBXML_LIBS)
 dnl ===================================================================
 dnl Check for system python
 dnl ===================================================================
+AC_MSG_CHECKING([which python to use])
 if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
    with_system_python=yes
-fi
-AC_MSG_CHECKING([which python to use])
-if test -n "$with_system_python" -o -n "$with_system_libs" && \
+   AC_MSG_RESULT([compiling against MacOSX10.4u.sdk (python version 2.3)])
+   PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
+   PYTHON_LIBS="-framework Python"
+elif test -n "$with_system_python" -o -n "$with_system_libs" && \
 	test "$with_system_python" != "no"; then
-   SYSTEM_PYTHON=YES
+   with_system_python=yes
    AC_MSG_RESULT([external])
    AM_PATH_PYTHON([2.2])
 
    python_include=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('INCLUDEPY');"`
    python_version=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('VERSION');"`
    PYTHON_CFLAGS="-I$python_include"
-
-   if test "$_os" = "Darwin"; then
-      PYTHON_LIBS="-framework Python"
-   else
-      PYTHON_LIBS="-lpython$python_version"
-   fi
-   
+   PYTHON_LIBS="-lpython$python_version"
+fi
+if test "$with_system_python" = "yes" ; then
+   SYSTEM_PYTHON=YES
    dnl check if the headers really work:
    save_CPPFLAGS="$CPPFLAGS"
    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
@@ -5004,16 +5008,12 @@ dnl ===================================================================
 dnl Check for system redland
 dnl ===================================================================
 AC_MSG_CHECKING([which redland library to use])
-dnl if test -n "$with_system_redland" -o -n "$with_system_libs" && \
-dnl	test "$with_system_redland" != "no"; then
-dnl mst: NOTE: right now we need patches against redland
-dnl            so we only enable system redland if explicitly requested
-dnl            if next version includes patches, insert version check here
-if test -n "$with_system_redland" && \
+if test -n "$with_system_redland" -o -n "$with_system_libs" && \
 	test "$with_system_redland" != "no"; then
 	AC_MSG_RESULT([external])
 	SYSTEM_REDLAND=YES
-	PKG_CHECK_MODULES(REDLAND, redland)
+   dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
+   PKG_CHECK_MODULES(REDLAND, redland >= 1.0.8)
 else
 	AC_MSG_RESULT([internal])
 	BUILD_TYPE="$BUILD_TYPE REDLAND"
@@ -6065,7 +6065,7 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
           [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-codec.jar, 
-              [ COMMONS_CODEC_JAR=/usr/share/java/commons-codecs.jar ],
+              [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
               [AC_MSG_ERROR(commons-codec.jar replacement not found.)]
             )
           ]
@@ -6435,11 +6435,11 @@ fi
 dnl ===================================================================
 dnl Test whether to include fonts
 dnl ===================================================================
-AC_MSG_CHECKING([whether to include Bitstream Vera fonts])
+AC_MSG_CHECKING([whether to include third-party fonts])
 if test "$with_fonts" != "no" ; then
   AC_MSG_RESULT([yes])
   WITH_FONTS=YES
-  BUILD_TYPE="$BUILD_TYPE BITSTREAM_VERA_FONTS"
+  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
 else
   AC_MSG_RESULT([no])
   WITH_FONTS=NO
@@ -6736,9 +6736,9 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
         AC_MSG_RESULT([$OOO_JUNIT_JAR])
     else
         AC_MSG_RESULT([no])
-        AC_MSG_ERROR([cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
-please install one and/or specify its pathname via --with-junit=...,
-or disable it via --without-junit])
+        AC_MSG_ERROR([cannot find JUnit 4 jar; please install one in the default
+location (/usr/share/java), specify its pathname via
+--with-junit=..., or disable it via --without-junit])
     fi
 fi
 AC_SUBST(OOO_JUNIT_JAR)

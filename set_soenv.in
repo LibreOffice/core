@@ -302,6 +302,47 @@ elsif ( $platform =~ m/netbsd/ )
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
 }
+elsif ( $platform =~ m/kfreebsd/ ) 
+{
+# General GNU/kFreeBSD settings:
+      $CVER           = "C341";
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $GLIBC          = "2REDHAT60";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GVER           = "VCL";
+      $OS             = "LINUX";
+      $PATH_SEPERATOR = $ps;
+
+#Set platform specific values: 
+   if ($platform =~ m/^i[3456]86/)
+   {  print "Setting GNU/kFreeBSD x86 specific values... ";
+      $outfile        = "GNUkFreeBSDX86Env.Set"; 
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $OUTPATH        = "unxkfgi6";
+      
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+
+   }
+   elsif ($platform =~ m/^x86_64/)
+   {  print "Setting GNU/kFreeBSD x86-64 specific values... ";
+      $outfile        = "GNUkFreeBSDX86-64Env.Set";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $OUTPATH        = "unxkfgx6";
+
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+   }
+
+   $INPATH         = $OUTPATH.$PROEXT;
+}
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
@@ -510,9 +551,9 @@ elsif ( $platform =~ m/linux/ )
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
-      $CPU            = "A";
-      $CPUNAME        = "ALPHA_";
-      $OUTPATH        = "unxlnga";
+      $CPU            = "L";
+      $CPUNAME        = "AXP";
+      $OUTPATH        = "unxlngaxp";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";

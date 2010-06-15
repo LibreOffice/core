@@ -7,16 +7,15 @@ http://hg.services.openoffice.org/binaries
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz
-195d042623bcc2e1668ab8370de6dc2a-xmlsec1-1.2.12.tar.gz
+1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
 24be19595acad0a2cae931af77a0148a-LICENSE_source-9.0.0.7-bj.html
 26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz
 284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz
 2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz
 2ae988b339daec234019a7066f96733e-commons-lang-2.3-src.tar.gz
 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
-2dfbbf27a5822eeabaeacdf16d7c41e7-fondu_src-051010.tar.gz
 2f6ecca935948f7db92d925d88d0d078-icu4c-4_0_1-src.tgz
-30102daecfb3a6aa022d2691dc075180-liberation-fonts-1.05.zip
+ef9ab6c1740682fbd730606d5f6922e6-liberation-fonts-ttf-1.05.3.20100427.zip
 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
 35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip
 377a60170e5185eb63d3ed2fae98e621-README_silgraphite-2.3.1.txt
@@ -31,7 +30,7 @@ http://hg.services.openoffice.org/binaries
 5aba06ede2daa9f2c11892fbd7bc3057-libserializer.zip
 6244eb0b6e2647ee50470951fa6efb47-nss_3_12_5.tar.gz
 67b42915c8432abf0a922438f00860a2-libxml.zip
-71ef7bcd3493a94395abccecbcf62dd7-libxml2-2.6.31.tar.gz
+7740a8ec23878a2f50120e1faa2730f2-libxml2-2.7.6.tar.gz
 7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz
 79600e696a98ff95c2eba976f7a8dfbb-liblayout.zip
 798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip
@@ -60,7 +59,7 @@ dbb3757275dc5cc80820c0b4dd24ed95-librepository.zip
 dbd5f3b47ed13132f04c685d608a7547-jpeg-6b.tar.gz
 e0707ff896045731ff99e99799606441-README_db-4.7.25.NC-custom.txt
 e81c2f0953aa60f8062c05a4673f2be0-Python-2.6.1.tar.bz2
-e83ec5d27fc4c10c6f612879bea9a153-libxslt-1.1.24.tar.gz
+e61d0364a30146aaa3001296f853b2b9-libxslt-1.1.26.tar.gz
 ea570af93c284aa9e5621cd563f54f4d-bsh-2.0b1-src.tar.gz
 ea91f2fb4212a21d708aced277e6e85a-vigra1.4.0.tar.gz
 ee8b492592568805593f81f8cdf2a04c-expat-2.0.1.tar.gz

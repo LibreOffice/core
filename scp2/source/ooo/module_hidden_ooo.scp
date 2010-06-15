@@ -606,6 +606,7 @@ Module gid_Module_Root_Files_6
     gid_File_Lm_Vietnamese,
     gid_File_Lm_Welsh,
     gid_File_Lm_Yiddish_Utf,
+    gid_File_Lm_Zulu,
 	gid_File_Mod_Chart,
 	gid_File_Mod_Datastyl,
 	gid_File_Mod_Defs,
@@ -750,6 +751,10 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_DejaVuSerifCondensed_BoldItalic,
 	gid_File_Fnt_DejaVuSerifCondensed_Italic,
 	gid_File_Fnt_DejaVuSerifCondensed,
+	gid_File_Fnt_LibSansNarrow_Regular, 
+	gid_File_Fnt_LibSansNarrow_Bold,
+	gid_File_Fnt_LibSansNarrow_BoldItalic,
+	gid_File_Fnt_LibSansNarrow_Italic,
 	gid_File_Fnt_LiberationMono_Bold, 
 	gid_File_Fnt_LiberationMono_BoldItalic, 
 	gid_File_Fnt_LiberationMono_Italic,
@@ -963,6 +968,17 @@ Module gid_Module_Root_Extension_Dictionary_It
 	Files = (gid_File_Extension_Dictionary_It);
 	InstallOrder = "2000";
 	Spellcheckerlanguage = "it";
+	PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+	Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Root_Extension_Dictionary_Ku_Tr
+	Name = "gid_Module_Root_Extension_Dictionary_Ku_Tr";
+	Description = "gid_Module_Root_Extension_Dictionary_Ku_Tr";
+	Files = (gid_File_Extension_Dictionary_Ku_Tr);
+	InstallOrder = "2000";
+	Spellcheckerlanguage = "ku-TR";
 	PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Styles = (HIDDEN_ROOT);

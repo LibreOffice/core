@@ -84,7 +84,7 @@ File gid_File_Lib_Cached1
   #endif
 End
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Configmgr, configmgr)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
 #ifdef WITH_LDAP
 File gid_File_Lib_Ldapbe2
@@ -100,10 +100,10 @@ File gid_File_Lib_Ldapbe2
 End
 #endif
 
-STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
-STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
-STD_UNO_LIB_FILE(gid_File_Lib_Charttools, charttools)
-STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Chartcontroller, chartcontroller)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Chartmodel, chartmodel)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Charttools, charttools)
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Chartview, chartview)
 
 
 #if defined WNT && defined _MSC
@@ -228,7 +228,7 @@ End
 File gid_File_Lib_QStart_Gtk
     Name = LIBNAME(qstart_gtk);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -363,7 +363,7 @@ File gid_File_Lib_Vbaswobj
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(libvbaswobj,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -375,7 +375,7 @@ File gid_File_Lib_Vbamsforms
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(libmsforms,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -505,7 +505,7 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
 
 File gid_File_Lib_Filterconfig1
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = SPECIAL_NAME(filterconfig1);
@@ -653,7 +653,7 @@ STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1126,13 +1126,13 @@ SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistr
 File gid_File_Lib_Desktop_Detector
     Name = LIBNAME(desktop_detector);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -1142,7 +1142,7 @@ End
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -1151,7 +1151,7 @@ End
 File gid_File_Lib_Vclplug_Kde
     Name = LIBNAME(vclplug_kde);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -1161,7 +1161,7 @@ End
 File gid_File_Lib_Vclplug_Kde4
     Name = LIBNAME(vclplug_kde4);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
 #endif
@@ -1172,7 +1172,7 @@ End
 File gid_File_Lib_AppleRemote
     Name = LIBNAME(AppleRemote);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -1181,13 +1181,13 @@ End
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 
 #if defined UNX && ! defined QUARTZ
-STD_LIB_FILE( gid_File_Lib_Vclplug_Svp, vclplug_svp )
+STD_LIB_FILE_PATCH( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 #endif
 
@@ -1195,7 +1195,7 @@ STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 
 File gid_File_Lib_Recentfile
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(librecentfile,UNXSUFFIX));
 End
@@ -1238,7 +1238,7 @@ End
 File gid_File_Lib_Res
     Name = LIBNAME(res);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1383,7 +1383,7 @@ STD_LIB_FILE( gid_File_Lib_Sts , sts)
 STD_UNO_LIB_FILE( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
 
-STD_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
+STD_UNO_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
 STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 STD_LIB_FILE( gid_File_Lib_Editeng, editeng)
@@ -1485,6 +1485,8 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
 
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
+
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
 File gid_File_Lib_Lnth
@@ -1512,7 +1514,7 @@ STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
