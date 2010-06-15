@@ -1983,6 +1983,20 @@ void UnoDialogControl::ImplUpdateResourceResolver()
     }
 }
 
+void SAL_CALL UnoDialogControl::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->endDialog( i_result );
+}
+
+void SAL_CALL UnoDialogControl::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->setHelpId( i_id );
+}
+
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -2089,24 +2103,24 @@ throw (RuntimeException)
 
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {
-
-
-    ::rtl::OUString ret;
-
     ::rtl::OUString baseLocation;
     ::rtl::OUString url;
 
     rbase  >>= baseLocation;
     rUrl  >>= url;
 
+    ::rtl::OUString absoluteURL( url );
     if ( url.getLength() > 0 )
     {
         INetURLObject urlObj(baseLocation);
         urlObj.removeSegment();
         baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
-        ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+
+        ::rtl::OUString testAbsoluteURL;
+        if ( ::osl::FileBase::E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
+            absoluteURL = testAbsoluteURL;
     }
 
-    return ret;
+    return absoluteURL;
 }
 
