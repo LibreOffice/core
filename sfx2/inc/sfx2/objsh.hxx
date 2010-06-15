@@ -439,8 +439,12 @@ public:
     void                                            SetSaveVersionOnClose( sal_Bool bSet );
     void                                              ResetFromTemplate( const String& rTemplateName, const String& rFileName );
 
+    // TODO/LATER: the following two methods should be replaced by Get/SetModifPasswordInfo in future
     sal_uInt32                  GetModifyPasswordHash() const;
     sal_Bool                    SetModifyPasswordHash( sal_uInt32 nHash );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetModifyPasswordInfo() const;
+    sal_Bool                    SetModifyPasswordInfo( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 

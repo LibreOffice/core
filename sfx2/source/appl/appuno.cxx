@@ -191,6 +191,7 @@ static char const sFolderName[] = "FolderName";
 static char const sUseSystemDialog[] = "UseSystemDialog";
 static char const sStandardDir[] = "StandardDir";
 static char const sBlackList[] = "BlackList";
+static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -846,6 +847,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_NOAUTOSAVE, bVal ) );
                 }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sModifyPasswordInfo)) )
+                {
+                    rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
+                }
 #ifdef DBG_UTIL
                 else
                     --nFoundArgs;
@@ -1058,6 +1063,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_NOAUTOSAVE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1197,7 +1204,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     // used only internally
                     if ( nId == SID_SAVETO )
                         continue;
-                }
+                     if ( nId == SID_MODIFYPASSWORDINFO )
+                        continue;
+               }
 
                 ByteString aDbg( "Unknown item detected: ");
                 aDbg += ByteString::CreateFromInt32( nId );
@@ -1555,7 +1564,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sNoAutoSave));
                 pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
-
+            if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sModifyPasswordInfo));
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
         }
     }
 
