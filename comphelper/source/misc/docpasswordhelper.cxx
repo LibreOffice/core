@@ -32,6 +32,10 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include "comphelper/mediadescriptor.hxx"
 
+#include <osl/time.h>
+#include <rtl/digest.h>
+#include <rtl/random.h>
+
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
@@ -43,12 +47,109 @@ using ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionRequest;
 
+using namespace ::com::sun::star;
+
 namespace comphelper {
+
+// ============================================================================
+
+static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const ::rtl::OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
+{
+    uno::Sequence< sal_Int8 > aResult;
+
+    if ( aPassword.getLength() && aSalt.getLength() && nCount && nHashLength )
+    {
+        ::rtl::OString aBytePass = ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
+        aResult.realloc( 16 );
+        rtl_digest_PBKDF2( reinterpret_cast < sal_uInt8 * > ( aResult.getArray() ),
+                           aResult.getLength(),
+                           reinterpret_cast < const sal_uInt8 * > ( aBytePass.getStr() ),
+                           aBytePass.getLength(),
+                           reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ),
+                           aSalt.getLength(),
+                           nCount );
+    }
+
+    return aResult;
+}
 
 // ============================================================================
 
 IDocPasswordVerifier::~IDocPasswordVerifier()
 {
+}
+
+// ============================================================================
+uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( const ::rtl::OUString& aPassword )
+{
+    uno::Sequence< beans::PropertyValue > aResult;
+
+    uno::Sequence< sal_Int8 > aSalt( 16 );
+    sal_Int32 nCount = 1024;
+
+    TimeValue aTime;
+    osl_getSystemTime( &aTime );
+    rtlRandomPool aRandomPool = rtl_random_createPool ();
+    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+
+    rtl_random_getBytes ( aRandomPool, aSalt.getArray(), 16 );
+
+    uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash( aPassword, aSalt, nCount, 16 );
+    if ( aNewHash.getLength() )
+    {
+        aResult.realloc( 4 );
+        aResult[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "algorithm-name" ) );
+        aResult[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PBKDF2" ) );
+        aResult[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "salt" ) );
+        aResult[1].Value <<= aSalt;
+        aResult[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iteration-count" ) );
+        aResult[2].Value <<= nCount;
+        aResult[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hash" ) );
+        aResult[3].Value <<= aNewHash;
+    }
+
+    // Clean up random pool memory
+    rtl_random_destroyPool ( aRandomPool );
+
+    return aResult;
+}
+
+// ============================================================================
+sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const ::rtl::OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
+{
+    sal_Bool bResult = sal_False;
+    if ( aPassword.getLength() && aInfo.getLength() )
+    {
+        ::rtl::OUString sAlgorithm;
+        uno::Sequence< sal_Int8 > aSalt;
+        uno::Sequence< sal_Int8 > aHash;
+        sal_Int32 nCount = 0;
+
+        for ( sal_Int32 nInd = 0; nInd < aInfo.getLength(); nInd++ )
+        {
+            if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "algorithm-name" ) ) ) )
+                aInfo[nInd].Value >>= sAlgorithm;
+            else if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "salt" ) ) ) )
+                aInfo[nInd].Value >>= aSalt;
+            else if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iteration-count" ) ) ) )
+                aInfo[nInd].Value >>= nCount;
+            else if ( aInfo[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hash" ) ) ) )
+                aInfo[nInd].Value >>= aHash;
+        }
+
+        if ( sAlgorithm.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PBKDF2" ) ) )
+          && aSalt.getLength() && nCount > 0 && aHash.getLength() )
+        {
+            uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash( aPassword, aSalt, nCount, aHash.getLength() );
+            for ( sal_Int32 nInd = 0; nInd < aNewHash.getLength() && nInd < aHash.getLength() && aNewHash[nInd] == aHash[nInd]; nInd ++ )
+            {
+                if ( nInd == aNewHash.getLength() - 1 && nInd == aHash.getLength() - 1 )
+                    bResult = sal_True;
+            }
+        }
+    }
+
+    return bResult;
 }
 
 // ============================================================================
