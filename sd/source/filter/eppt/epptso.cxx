@@ -4138,6 +4138,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
         ImplWriteTextStyleAtom( aClientTextBox, nStyleInstance, 0, NULL, aExtBu, &aPropOpt );
 
         aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+        aPropOpt.CreateShapeProperties( mXShape );
         aPropOpt.Commit( *mpStrm );
         mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
         *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
@@ -5389,6 +5390,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             maRect.Justify();
             if ( mnAngle )
                 ImplFlipBoundingBox( aPropOpt );
+            aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddClientAnchor( maRect );
 
@@ -5458,6 +5460,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             SvMemoryStream  aExtBu( 0x200, 0x200 );
             ImplWriteTextStyleAtom( *pClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOpt );
 
+            aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddClientAnchor( maRect );
 
@@ -5635,6 +5638,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
                 aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );
                 aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, sal_True, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
+                aPropOpt.CreateShapeProperties( rXShape );
                 aPropOpt.Commit( *mpStrm );
                 aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
