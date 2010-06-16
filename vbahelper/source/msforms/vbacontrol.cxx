@@ -258,8 +258,8 @@ void SAL_CALL ScVbaControl::SetFocus() throw (uno::RuntimeException)
 void SAL_CALL ScVbaControl::Move( double Left, double Top, const uno::Any& Width, const uno::Any& Height )
     throw ( uno::RuntimeException )
 {
-    double nWidth;
-    double nHeight;
+    double nWidth = 0.0;
+    double nHeight = 0.0;
 
     setLeft( Left );
     setTop( Top );

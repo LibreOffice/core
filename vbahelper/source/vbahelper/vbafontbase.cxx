@@ -127,7 +127,7 @@ VbaFontBase::setSize( const uno::Any& aValue ) throw( uno::RuntimeException )
     uno::Any aVal( aValue );
     if( mbFormControl )
     {
-        float fVal;
+        float fVal = 0.0;
         aVal >>= fVal;
         aVal <<= static_cast< sal_Int16 >( fVal );
     }
