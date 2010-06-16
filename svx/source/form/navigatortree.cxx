@@ -2232,7 +2232,7 @@ namespace svxform
             {
                 SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
                 OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-                if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
+                if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
                 {
                     pFormView->MakeVisible( aMarkRect, (Window&)rOutDev );
                 }
