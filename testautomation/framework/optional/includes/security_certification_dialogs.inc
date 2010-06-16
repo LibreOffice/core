@@ -32,8 +32,6 @@
 '\******************************************************************************
 
 testcase tCertificationDialogs
-
-
     dim brc as boolean
     const CFN = "tCertificationDialogs::"
     const SVERSION = "680"
@@ -53,7 +51,14 @@ testcase tCertificationDialogs
     kontext "active"
     if ( active.exists( 1 ) ) then
         printlog( "MSGBOX: " & active.getText() )
-        active.yes()
+        try
+           active.yes()
+        catch
+           warnlog "#i111181# cws DEV300/fs33a wrong messge box when try to sign a new document"
+           active.ok
+           hCloseDocument
+           goto endsub
+        endcatch
         printlog( CFN & "Allow to save the document" )
     else
         if ( gApplication <> "MASTERDOCUMENT" ) then
@@ -91,8 +96,5 @@ testcase tCertificationDialogs
     endif
 
     call hCloseDocument()
-
-
-
 endcase
 
