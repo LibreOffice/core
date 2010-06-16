@@ -38,7 +38,7 @@ ScVbaPane::ScVbaPane(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< frame::XModel >& xModel,
-        const uno::Reference< sheet::XViewPane > xViewPane ) :
+        const uno::Reference< sheet::XViewPane > xViewPane ) throw (uno::RuntimeException) :
     ScVbaPane_BASE( xParent, xContext ),
     m_xModel( xModel, uno::UNO_SET_THROW ),
     m_xViewPane( xViewPane, uno::UNO_SET_THROW )
