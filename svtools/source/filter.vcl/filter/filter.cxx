@@ -52,7 +52,7 @@
 #include "xbmread.hxx"
 #include "xpmread.hxx"
 #include <svl/solar.hrc>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
 #include <com/sun/star/uno/Reference.h>
