@@ -43,17 +43,11 @@ DEPTARGET=vepict
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRS1NAME=$(TARGET)
-SRC1FILES =	dlgepct.src	\
-            epictstr.src
 .IF "$(L10N_framework)"==""
-SLOFILES =  $(SLO)$/epict.obj \
-            $(SLO)$/dlgepct.obj
+SLOFILES =  $(SLO)$/epict.obj
 .ENDIF
 # ==========================================================================
 
-RESLIB1NAME=$(TARGET2)
-RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 .IF "$(L10N_framework)"==""
 SHL1TARGET=     ept$(DLLPOSTFIX)
 SHL1IMPLIB=     epict
