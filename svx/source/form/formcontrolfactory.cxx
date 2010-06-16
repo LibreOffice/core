@@ -40,6 +40,7 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
@@ -97,6 +98,7 @@ namespace svxform
     /** === end UNO using === **/
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
     namespace ScrollBarOrientation = ::com::sun::star::awt::ScrollBarOrientation;
+    namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
     namespace LineEndFormat = ::com::sun::star::awt::LineEndFormat;
     namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
     namespace DataType = ::com::sun::star::sdbc::DataType;
@@ -504,6 +506,12 @@ namespace svxform
             if ( xPSI->hasPropertyByName( FM_PROP_STRICTFORMAT ) )
             {
                 _rxControlModel->setPropertyValue( FM_PROP_STRICTFORMAT, makeAny( sal_Bool( sal_True ) ) );
+            }
+
+            // mouse wheel: don't use it for scrolling by default (i110036)
+            if ( xPSI->hasPropertyByName( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) )
+            {
+                _rxControlModel->setPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
             }
 
             if ( xPSI->hasPropertyByName( FM_PROP_WRITING_MODE ) )
