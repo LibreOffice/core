@@ -44,9 +44,7 @@ public class NoLocalizeFilter extends FilterInputStream
         String search = new String( b );
         Matcher m = p.matcher( search );
         if( m.find() )
-        //if( search.contains("x-no-translate" ) )  // TODO: fixme!
         {
-            System.out.println("found x-no-translate");
             in.close();
             close();
             System.exit( 0 );
