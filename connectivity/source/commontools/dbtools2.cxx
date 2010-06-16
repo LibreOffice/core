@@ -30,11 +30,10 @@
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbconversion.hxx"
 #include "connectivity/dbcharset.hxx"
+#include "connectivity/SQLStatementHelper.hxx"
 #include <unotools/confignode.hxx>
 #include "resource/sharedresources.hxx"
-#ifndef CONNECTIVITY_RESOURCE_COMMON_HRC
 #include "resource/common_res.hrc"
-#endif
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -71,7 +70,7 @@ namespace dbtools
     using namespace connectivity;
     using namespace comphelper;
 
-::rtl::OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sCreatePattern)
+::rtl::OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const ::rtl::OUString& _sCreatePattern)
 {
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -186,11 +185,14 @@ namespace dbtools
         aSql.append(sAutoIncrementValue);
     }
 
+    if ( _pHelper )
+        _pHelper->addComment(xColProp,aSql);
+
     return aSql.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sCreatePattern)
+::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const ::rtl::OUString& _sCreatePattern)
 {
     ::rtl::OUStringBuffer aSql  = ::rtl::OUString::createFromAscii("CREATE TABLE ");
     ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
@@ -223,7 +225,7 @@ namespace dbtools
     {
         if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
         {
-            aSql.append(createStandardColumnPart(xColProp,_xConnection,_sCreatePattern));
+            aSql.append(createStandardColumnPart(xColProp,_xConnection,_pHelper,_sCreatePattern));
             aSql.appendAscii(",");
         }
     }
@@ -364,9 +366,10 @@ namespace
 // -----------------------------------------------------------------------------
 ::rtl::OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descriptor,
                                                 const Reference< XConnection>& _xConnection,
+                                                ISQLStatementHelper* _pHelper,
                                                 const ::rtl::OUString& _sCreatePattern)
 {
-    ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection,_sCreatePattern);
+    ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection,_pHelper,_sCreatePattern);
     const ::rtl::OUString sKeyStmt = ::dbtools::createStandardKeyStatement(descriptor,_xConnection);
     if ( sKeyStmt.getLength() )
         aSql += sKeyStmt;
@@ -411,7 +414,8 @@ namespace
                     sal_Int32       nField7 = xRow->getInt(7)
                                 ,   nField9 = xRow->getInt(9)
                                 ,   nField11= xRow->getInt(11);
-                    ::rtl::OUString sField13 = xRow->getString(13);
+                    ::rtl::OUString sField12 = xRow->getString(12),
+                                    sField13 = xRow->getString(13);
                     ::comphelper::disposeComponent(xRow);
 
                     sal_Bool bAutoIncrement = _bIsAutoIncrement
@@ -471,6 +475,7 @@ namespace
                     connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
                                                 aField6,
                                                 sField13,
+                                                sField12,
                                                 nField11,
                                                 nField7,
                                                 nField9,
@@ -526,28 +531,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
 
-    Reference<XKeysSupplier> xKeysSup(_xTable,UNO_QUERY);
-    Reference<XNameAccess> xPrimaryKeyColumns;
-    if ( xKeysSup.is() )
-    {
-        const Reference<XIndexAccess> xKeys = xKeysSup->getKeys();
-        if ( xKeys.is() )
-        {
-            const sal_Int32 nKeyCount = xKeys->getCount();
-            for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++nKeyIter)
-            {
-                const Reference<XPropertySet> xKey(xKeys->getByIndex(nKeyIter),UNO_QUERY_THROW);
-                sal_Int32 nType = 0;
-                xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))   >>= nType;
-                if ( nType == KeyType::PRIMARY )
-                {
-                    const Reference<XColumnsSupplier> xColS(xKey,UNO_QUERY_THROW);
-                    xPrimaryKeyColumns = xColS->getColumns();
-                    break;
-                }
-            } // for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++)
-        }
-    }
+    Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(_xTable);
 
     xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
     if ( !xProp.is() )
@@ -555,7 +539,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
         xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
         if ( !xProp.is() )
             xProp = new connectivity::sdbcx::OColumn(_rName,
-                                                ::rtl::OUString(),::rtl::OUString(),
+                                                ::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),
                                                 ColumnValue::NULLABLE_UNKNOWN,
                                                 0,
                                                 0,
@@ -665,19 +649,9 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
         Reference< XDataDefinitionSupplier > xSupp( xManager->getDriverByURL( _rsUrl ), UNO_QUERY );
 
         if ( xSupp.is() )
+        {
             xTablesSup = xSupp->getDataDefinitionByConnection( _xConnection );
-
-        // if we don't get the catalog from the original driver we have to try them all.
-        if ( !xTablesSup.is() )
-        { // !TODO: Why?
-            Reference< XEnumerationAccess> xEnumAccess( xManager, UNO_QUERY_THROW );
-            Reference< XEnumeration > xEnum( xEnumAccess->createEnumeration(), UNO_QUERY_THROW );
-            while ( xEnum.is() && xEnum->hasMoreElements() && !xTablesSup.is() )
-            {
-                xEnum->nextElement() >>= xSupp;
-                if ( xSupp.is() )
-                    xTablesSup = xSupp->getDataDefinitionByConnection( _xConnection );
-            }
+            OSL_ENSURE(xTablesSup.is(),"No table supplier!");
         }
     }
     catch( const Exception& )

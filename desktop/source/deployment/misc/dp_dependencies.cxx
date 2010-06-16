@@ -56,17 +56,13 @@ namespace css = ::com::sun::star;
 static char const xmlNamespace[] =
     "http://openoffice.org/extensions/description/2006";
 
-::dp_misc::Order compareWithVersion(::rtl::OUString const & version) {
+bool satisfiesMinimalVersion(::rtl::OUString const & version) {
     ::rtl::OUString v(
         RTL_CONSTASCII_USTRINGPARAM(
             "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version")
             ":Version:OOOPackageVersion}"));
     ::rtl::Bootstrap::expandMacros(v);
-    return ::dp_misc::compareVersions(v, version);
-}
-
-bool satisfiesMinimalVersion(::rtl::OUString const & version) {
-    return compareWithVersion(version) != ::dp_misc::LESS;
+    return ::dp_misc::compareVersions(v, version) != ::dp_misc::LESS;
 }
 
 }
@@ -102,8 +98,14 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
                        RTL_CONSTASCII_STRINGPARAM(
                            "OpenOffice.org-maximal-version")))
         {
+            ::rtl::OUString v(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version")
+                    ":Version:OOOBaseVersion}"));
+            ::rtl::Bootstrap::expandMacros(v);
             sat =
-                compareWithVersion(
+                ::dp_misc::compareVersions(
+                    v,
                     e->getAttribute(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))))
                 != ::dp_misc::GREATER;

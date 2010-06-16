@@ -3931,6 +3931,33 @@ SfxBoolItem Navigator SID_NAVIGATOR
     ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATOR;
 ]
+
+//--------------------------------------------------------------------------
+SfxBoolItem TaskPane SID_TASKPANE
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
 
@@ -8192,5 +8219,31 @@ SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+// call thesaurus dialog from context menu
+SfxInt16Item ThesaurusFromContext SID_THES
+(SfxStringItem WordReplace SID_THES)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_TEXT;
 ]
 
