@@ -1,5 +1,5 @@
---- misc/xmlsec1-1.2.12/include/xmlsec/mscrypto/Makefile.am	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/mscrypto/Makefile.am	2009-09-21 14:02:48.563253008 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.am	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.am	2009-09-21 14:02:48.563253008 +0200
 @@ -3,6 +3,7 @@
  xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
  
@@ -8,9 +8,9 @@
  app.h \
  certkeys.h \
  crypto.h \
---- misc/xmlsec1-1.2.12/include/xmlsec/mscrypto/Makefile.in	2009-06-25 22:53:30.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/mscrypto/Makefile.in	2009-09-21 14:02:48.571021349 +0200
-@@ -308,6 +308,7 @@
+--- misc/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.in	2009-06-25 22:53:30.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/mscrypto/Makefile.in	2009-09-21 14:02:48.571021349 +0200
+@@ -281,6 +281,7 @@
  NULL = 
  xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
  xmlsecmscryptoinc_HEADERS = \
@@ -18,8 +18,8 @@
  app.h \
  certkeys.h \
  crypto.h \
---- misc/xmlsec1-1.2.12/include/xmlsec/mscrypto/akmngr.h	2009-09-21 14:07:19.052318336 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/mscrypto/akmngr.h	2009-09-21 14:02:48.504966762 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/mscrypto/akmngr.h	2009-09-21 14:07:19.052318336 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/mscrypto/akmngr.h	2009-09-21 14:02:48.504966762 +0200
 @@ -1 +1,71 @@
 -dummy
 +/** 
@@ -93,8 +93,8 @@
 +#endif /* __XMLSEC_MSCRYPTO_AKMNGR_H__ */
 +
 +
---- misc/xmlsec1-1.2.12/include/xmlsec/nss/Makefile.am	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/nss/Makefile.am	2009-09-21 14:02:48.577933031 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.am	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.am	2009-09-21 14:02:48.577933031 +0200
 @@ -10,6 +10,9 @@
  keysstore.h \
  pkikeys.h \
@@ -105,9 +105,9 @@
  $(NULL)
  
  install-exec-hook:
---- misc/xmlsec1-1.2.12/include/xmlsec/nss/Makefile.in	2009-06-25 22:53:31.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/nss/Makefile.in	2009-09-21 14:02:48.585376325 +0200
-@@ -315,6 +315,9 @@
+--- misc/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.in	2009-06-25 22:53:31.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/Makefile.in	2009-09-21 14:02:48.585376325 +0200
+@@ -288,6 +288,9 @@
  keysstore.h \
  pkikeys.h \
  x509.h \
@@ -117,8 +117,8 @@
  $(NULL)
  
  all: all-am
---- misc/xmlsec1-1.2.12/include/xmlsec/nss/akmngr.h	2009-09-21 14:07:19.105517659 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/nss/akmngr.h	2009-09-21 14:02:48.510978278 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/nss/akmngr.h	2009-09-21 14:07:19.105517659 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/akmngr.h	2009-09-21 14:02:48.510978278 +0200
 @@ -1 +1,56 @@
 -dummy
 +/** 
@@ -177,8 +177,8 @@
 +#endif /* __XMLSEC_NSS_AKMNGR_H__ */
 +
 +
---- misc/xmlsec1-1.2.12/include/xmlsec/nss/app.h	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/nss/app.h	2009-09-21 14:02:48.612847068 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/nss/app.h	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/app.h	2009-09-21 14:02:48.612847068 +0200
 @@ -22,6 +22,9 @@
  #include <xmlsec/keysmngr.h>
  #include <xmlsec/transforms.h>
@@ -198,8 +198,8 @@
  XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrSave	(xmlSecKeysMngrPtr mngr,
  									 const char* filename,
  									 xmlSecKeyDataType type);
---- misc/xmlsec1-1.2.12/include/xmlsec/nss/ciphers.h	2009-09-21 14:07:19.146496548 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/nss/ciphers.h	2009-09-21 14:02:48.516689712 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/nss/ciphers.h	2009-09-21 14:07:19.146496548 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/ciphers.h	2009-09-21 14:02:48.516689712 +0200
 @@ -1 +1,35 @@
 -dummy
 +/** 
@@ -237,8 +237,8 @@
 +#endif /* __XMLSEC_NSS_CIPHERS_H__ */
 +
 +
---- misc/xmlsec1-1.2.12/include/xmlsec/nss/keysstore.h	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/nss/keysstore.h	2009-09-21 14:02:48.626261748 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/nss/keysstore.h	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/keysstore.h	2009-09-21 14:02:48.626261748 +0200
 @@ -16,6 +16,8 @@
  #endif /* __cplusplus */ 
  
@@ -257,8 +257,8 @@
  XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreLoad 	(xmlSecKeyStorePtr store,
  								 const char *uri,
  								 xmlSecKeysMngrPtr keysMngr);
---- misc/xmlsec1-1.2.12/include/xmlsec/nss/tokens.h	2009-09-21 14:07:19.172421448 +0200
-+++ misc/build/xmlsec1-1.2.12/include/xmlsec/nss/tokens.h	2009-09-21 14:02:48.522913605 +0200
+--- misc/xmlsec1-1.2.14/include/xmlsec/nss/tokens.h	2009-09-21 14:07:19.172421448 +0200
++++ misc/build/xmlsec1-1.2.14/include/xmlsec/nss/tokens.h	2009-09-21 14:02:48.522913605 +0200
 @@ -1 +1,182 @@
 -dummy
 +/**
@@ -443,8 +443,8 @@
 +
 +#endif	/* __XMLSEC_NSS_TOKENS_H__ */
 +
---- misc/xmlsec1-1.2.12/src/mscrypto/akmngr.c	2009-09-21 14:07:19.078910929 +0200
-+++ misc/build/xmlsec1-1.2.12/src/mscrypto/akmngr.c	2009-09-21 14:02:48.531281225 +0200
+--- misc/xmlsec1-1.2.14/src/mscrypto/akmngr.c	2009-09-21 14:07:19.078910929 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/akmngr.c	2009-09-21 14:02:48.531281225 +0200
 @@ -1 +1,235 @@
 -dummy
 +/** 
@@ -682,8 +682,8 @@
 +	return( 0 ) ;
 +}
 +
---- misc/xmlsec1-1.2.12/src/nss/Makefile.am	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/Makefile.am	2009-09-21 14:02:48.591560472 +0200
+--- misc/xmlsec1-1.2.14/src/nss/Makefile.am	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/Makefile.am	2009-09-21 14:02:48.591560472 +0200
 @@ -35,6 +35,9 @@
  	kw_des.c \
  	kw_aes.c \
@@ -694,9 +694,9 @@
  	$(NULL)
  
  if SHAREDLIB_HACK
---- misc/xmlsec1-1.2.12/src/nss/Makefile.in	2009-06-25 22:53:33.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/Makefile.in	2009-09-21 14:02:48.599339718 +0200
-@@ -61,7 +61,8 @@
+--- misc/xmlsec1-1.2.14/src/nss/Makefile.in	2009-06-25 22:53:33.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/Makefile.in	2009-09-21 14:02:48.599339718 +0200
+@@ -72,7 +72,8 @@
  am__libxmlsec1_nss_la_SOURCES_DIST = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -706,7 +706,7 @@
  am__objects_1 =
  @SHAREDLIB_HACK_TRUE@am__objects_2 = libxmlsec1_nss_la-strings.lo
  am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
-@@ -72,6 +73,8 @@
+@@ -83,6 +84,8 @@
  	libxmlsec1_nss_la-x509.lo libxmlsec1_nss_la-x509vfy.lo \
  	libxmlsec1_nss_la-keysstore.lo libxmlsec1_nss_la-keytrans.lo \
  	libxmlsec1_nss_la-kw_des.lo libxmlsec1_nss_la-kw_aes.lo \
@@ -714,8 +714,8 @@
 +	libxmlsec1_nss_la-tokens.lo \
  	$(am__objects_1) $(am__objects_2)
  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
- DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
-@@ -357,6 +360,7 @@
+ libxmlsec1_nss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+@@ -333,6 +336,7 @@
  libxmlsec1_nss_la_SOURCES = app.c bignum.c ciphers.c crypto.c \
  	digests.c hmac.c pkikeys.c signatures.c symkeys.c x509.c \
  	x509vfy.c keysstore.c keytrans.c kw_des.c kw_aes.c globals.h \
@@ -723,7 +723,7 @@
  	$(NULL) $(am__append_1)
  libxmlsec1_nss_la_LIBADD = \
  	../libxmlsec1.la \
-@@ -458,6 +462,9 @@
+@@ -439,6 +443,9 @@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-symkeys.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-x509vfy.Plo@am__quote@
@@ -732,10 +732,10 @@
 +@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_nss_la-tokens.Plo@am__quote@
  
  .c.o:
- @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@@ -487,6 +494,27 @@
+ @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@@ -468,6 +475,27 @@
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
- @am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
+ @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
  
 +libxmlsec1_nss_la-akmngr.lo: akmngr.c
 +@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_nss_la-akmngr.lo -MD -MP -MF "$(DEPDIR)/libxmlsec1_nss_la-akmngr.Tpo" -c -o libxmlsec1_nss_la-akmngr.lo `test -f 'akmngr.c' || echo '$(srcdir)/'`akmngr.c; \
@@ -759,10 +759,10 @@
 +@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_nss_la-tokens.lo `test -f 'tokens.c' || echo '$(srcdir)/'`tokens.c
 +
  libxmlsec1_nss_la-bignum.lo: bignum.c
- @am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_nss_la-bignum.lo -MD -MP -MF "$(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo" -c -o libxmlsec1_nss_la-bignum.lo `test -f 'bignum.c' || echo '$(srcdir)/'`bignum.c; \
- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo" "$(DEPDIR)/libxmlsec1_nss_la-bignum.Plo"; else rm -f "$(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo"; exit 1; fi
---- misc/xmlsec1-1.2.12/src/nss/akmngr.c	2009-09-21 14:07:19.197249962 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/akmngr.c	2009-09-21 14:02:48.539616129 +0200
+ @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_nss_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_nss_la-bignum.lo -MD -MP -MF $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo -c -o libxmlsec1_nss_la-bignum.lo `test -f 'bignum.c' || echo '$(srcdir)/'`bignum.c
+ @am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libxmlsec1_nss_la-bignum.Tpo $(DEPDIR)/libxmlsec1_nss_la-bignum.Plo
+--- misc/xmlsec1-1.2.14/src/nss/akmngr.c	2009-09-21 14:07:19.197249962 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/akmngr.c	2009-09-21 14:02:48.539616129 +0200
 @@ -1 +1,384 @@
 -dummy
 +/** 
@@ -1149,8 +1149,8 @@
 +	return(0) ;
 +}
 +
---- misc/xmlsec1-1.2.12/src/nss/hmac.c	2009-06-26 06:18:13.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/hmac.c	2009-09-21 14:02:48.649065288 +0200
+--- misc/xmlsec1-1.2.14/src/nss/hmac.c	2009-06-26 06:18:13.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/hmac.c	2009-09-21 14:02:48.649065288 +0200
 @@ -23,8 +23,8 @@
  #include <xmlsec/transforms.h>
  #include <xmlsec/errors.h>
@@ -1159,9 +1159,9 @@
  #include <xmlsec/nss/crypto.h>
 +#include <xmlsec/nss/tokens.h>
  
- #define XMLSEC_NSS_MIN_HMAC_SIZE		40
- #define XMLSEC_NSS_MAX_HMAC_SIZE		128
-@@ -284,13 +284,13 @@
+ /* sizes in bits */
+ #define XMLSEC_NSS_MIN_HMAC_SIZE		80
+@@ -286,13 +286,13 @@
      keyItem.data = xmlSecBufferGetData(buffer);
      keyItem.len  = xmlSecBufferGetSize(buffer); 
  
@@ -1178,8 +1178,8 @@
  	return(-1);
      }
  	
---- misc/xmlsec1-1.2.12/src/nss/keysstore.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/keysstore.c	2009-09-21 14:02:48.633533885 +0200
+--- misc/xmlsec1-1.2.14/src/nss/keysstore.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/keysstore.c	2009-09-21 14:02:48.633533885 +0200
 @@ -1,36 +1,56 @@
  /** 
   * XMLSec library
@@ -1252,7 +1252,7 @@
  #include <xmlsec/errors.h>
  #include <xmlsec/xmltree.h>
  
-@@ -38,82 +58,464 @@
+@@ -38,82 +58,461 @@
  
  #include <xmlsec/nss/crypto.h>
  #include <xmlsec/nss/keysstore.h>
@@ -1344,6 +1344,8 @@
 +                       XMLSEC_ERRORS_NO_MESSAGE ) ;
 +               return -1 ;
 +       }
++       return 0 ;
++}
  
 -    /* data */
 -    BAD_CAST "NSS-keys-store",		/* const xmlChar* name; */ 
@@ -1357,13 +1359,6 @@
 -    NULL,				/* void* reserved0; */
 -    NULL,				/* void* reserved1; */
 -};
-+       return 0 ;
-+}
- 
--/**
-- * xmlSecNssKeysStoreGetKlass:
-- * 
-- * The Nss list based keys store klass.
 +int xmlSecNssKeysStoreAdoptKey(
 +       xmlSecKeyStorePtr       store ,
 +       xmlSecKeyPtr            key
@@ -1411,7 +1406,11 @@
 +                       XMLSEC_ERRORS_NO_MESSAGE ) ;
 +               return -1 ;
 +       }
-+
+ 
+-/**
+- * xmlSecNssKeysStoreGetKlass:
+- * 
+- * The Nss list based keys store klass.
 +       return 0 ;
 +}
 +
@@ -1421,7 +1420,7 @@
 + *
 + * Keys store specific initialization method.
   *
-- * Returns Nss list based keys store klass.
+- * Returns: Nss list based keys store klass.
 + * Returns 0 on success or a negative value if an error occurs.
   */
 -xmlSecKeyStoreId 
@@ -1459,7 +1458,7 @@
 - * 
 - * Adds @key to the @store. 
   *
-- * Returns 0 on success or a negative value if an error occurs.
+- * Returns: 0 on success or a negative value if an error occurs.
 + * xmlSecKeyStoreFinalizeMethod:
 + * @store:             the store.
 + *
@@ -1500,10 +1499,7 @@
 +               context->slotList = NULL ;
 +       }
 +}
- 
--    ss = xmlSecNssKeysStoreGetSS(store);
--    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
--		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
++
 +xmlSecKeyPtr
 +xmlSecNssKeysStoreFindKeyFromSlot(
 +       PK11SlotInfo* slot,
@@ -1639,10 +1635,11 @@
 +               }
 +       }
  
--    return (xmlSecSimpleKeysStoreAdoptKey(*ss, key));
-+       return(key);
- }
- 
+-    ss = xmlSecNssKeysStoreGetSS(store);
+-    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
+-		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
++    return(key);
++}
 +
 +/** 
 + * xmlSecKeyStoreFindKeyMethod:
@@ -1750,19 +1747,19 @@
 +       NULL ,
 +       NULL
 +} ;
-+
+ 
+-    return (xmlSecSimpleKeysStoreAdoptKey(*ss, key));
 +/**
 + * xmlSecNssKeysStoreGetKlass:
 + * 
 + * The simple list based keys store klass.
 + *
-+ * Returns simple list based keys store klass.
 + */
 +xmlSecKeyStoreId 
 +xmlSecNssKeysStoreGetKlass( void ) {
 +    return &xmlSecNssKeysStoreKlass ;
-+}
-+
+ }
+ 
 +/**************************
 + * Application routines
 + */
@@ -1770,7 +1767,7 @@
  /** 
   * xmlSecNssKeysStoreLoad:
   * @store:		the pointer to Nss keys store.
-@@ -252,234 +654,147 @@
+@@ -252,234 +651,147 @@
   */
  int
  xmlSecNssKeysStoreSave(xmlSecKeyStorePtr store, const char *filename, xmlSecKeyDataType type) {
@@ -1794,26 +1791,26 @@
 -    ss = xmlSecNssKeysStoreGetSS(store);
 -    xmlSecAssert2(((ss != NULL) && (*ss != NULL) && 
 -		   (xmlSecKeyStoreCheckId(*ss, xmlSecSimpleKeysStoreId))), -1);
-+    xmlSecAssert2( xmlSecKeyStoreCheckSize( store , xmlSecNssKeysStoreSize ), -1 ) ;
-+    xmlSecAssert2(filename != NULL, -1);   
- 
+-
 -    return (xmlSecSimpleKeysStoreSave(*ss, filename, type));
 -}
-+    context = xmlSecNssKeysStoreGetCtx( store ) ;
-+    xmlSecAssert2( context != NULL, -1 );
- 
+-
 -static int
 -xmlSecNssKeysStoreInitialize(xmlSecKeyStorePtr store) {
 -    xmlSecKeyStorePtr *ss;
++    xmlSecAssert2( xmlSecKeyStoreCheckSize( store , xmlSecNssKeysStoreSize ), -1 ) ;
++    xmlSecAssert2(filename != NULL, -1);   
+ 
+-    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
++    context = xmlSecNssKeysStoreGetCtx( store ) ;
++    xmlSecAssert2( context != NULL, -1 );
+ 
+-    ss = xmlSecNssKeysStoreGetSS(store);
+-    xmlSecAssert2((*ss == NULL), -1);
 +    list = context->keyList ;
 +       xmlSecAssert2( list != NULL, -1 );
 +    xmlSecAssert2(xmlSecPtrListCheckId(list, xmlSecKeyPtrListId), -1);
  
--    xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
--
--    ss = xmlSecNssKeysStoreGetSS(store);
--    xmlSecAssert2((*ss == NULL), -1);
--
 -    *ss = xmlSecKeyStoreCreate(xmlSecSimpleKeysStoreId);
 -    if(*ss == NULL) {
 -	xmlSecError(XMLSEC_ERRORS_HERE,
@@ -1832,9 +1829,7 @@
  
 -    return(0);    
 -}
-+    idsList = xmlSecKeyDataIdsGet();   
-+    xmlSecAssert2(idsList != NULL, -1);
- 
+-
 -static void
 -xmlSecNssKeysStoreFinalize(xmlSecKeyStorePtr store) {
 -    xmlSecKeyStorePtr *ss;
@@ -1846,12 +1841,7 @@
 -    
 -    xmlSecKeyStoreDestroy(*ss);
 -}
-+    keysSize = xmlSecPtrListGetSize(list);
-+    idsSize = xmlSecPtrListGetSize(idsList);
-+    for(i = 0; i < keysSize; ++i) {
-+        key = (xmlSecKeyPtr)xmlSecPtrListGetItem(list, i);
-+        xmlSecAssert2(key != NULL, -1);
- 
+-
 -static xmlSecKeyPtr 
 -xmlSecNssKeysStoreFindKey(xmlSecKeyStorePtr store, const xmlChar* name, 
 -		          xmlSecKeyInfoCtxPtr keyInfoCtx) {
@@ -1883,7 +1873,9 @@
 -    if (name == NULL) {
 -	goto done;
 -    }
--
++    idsList = xmlSecKeyDataIdsGet();   
++    xmlSecAssert2(idsList != NULL, -1);
+ 
 -    /* what type of key are we looking for? 
 -     * TBD: For now, we'll look only for public/private keys using the
 -     * name as a cert nickname. Later on, we can attempt to find
@@ -1896,7 +1888,12 @@
 -	if (cert == NULL) {
 -	    goto done;
 -	}
--
++    keysSize = xmlSecPtrListGetSize(list);
++    idsSize = xmlSecPtrListGetSize(idsList);
++    for(i = 0; i < keysSize; ++i) {
++        key = (xmlSecKeyPtr)xmlSecPtrListGetItem(list, i);
++        xmlSecAssert2(key != NULL, -1);
+ 
 -	if (keyReq->keyType & xmlSecKeyDataTypePublic) {
 - 	    pubkey = CERT_ExtractPublicKey(cert);
 -	    if (pubkey == NULL) {
@@ -2112,8 +2109,8 @@
 +    xmlFreeDoc(doc);
 +    return(0);
  }
---- misc/xmlsec1-1.2.12/src/nss/keywrapers.c	2009-09-21 14:07:19.223802688 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/keywrapers.c	2009-09-21 14:02:48.548869372 +0200
+--- misc/xmlsec1-1.2.14/src/nss/keywrapers.c	2009-09-21 14:07:19.223802688 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/keywrapers.c	2009-09-21 14:02:48.548869372 +0200
 @@ -1 +1,1213 @@
 -dummy
 +/** 
@@ -3329,8 +3326,8 @@
 +
 +#endif /* XMLSEC_NO_DES */
 +
---- misc/xmlsec1-1.2.12/src/nss/pkikeys.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/pkikeys.c	2009-09-21 14:02:48.657352624 +0200
+--- misc/xmlsec1-1.2.14/src/nss/pkikeys.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/pkikeys.c	2009-09-21 14:02:48.657352624 +0200
 @@ -24,6 +24,7 @@
  #include <xmlsec/nss/crypto.h>
  #include <xmlsec/nss/bignum.h>
@@ -3520,8 +3517,8 @@
  
      return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
  }
---- misc/xmlsec1-1.2.12/src/nss/symkeys.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/symkeys.c	2009-09-21 14:02:48.620574832 +0200
+--- misc/xmlsec1-1.2.14/src/nss/symkeys.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/symkeys.c	2009-09-21 14:02:48.620574832 +0200
 @@ -15,20 +15,41 @@
  #include <stdio.h>
  #include <string.h>
@@ -4362,8 +4359,8 @@
  
      /* data */
      xmlSecNameHMACKeyValue,
---- misc/xmlsec1-1.2.12/src/nss/tokens.c	2009-09-21 14:07:19.249145861 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/tokens.c	2009-09-21 14:02:48.556772442 +0200
+--- misc/xmlsec1-1.2.14/src/nss/tokens.c	2009-09-21 14:07:19.249145861 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/tokens.c	2009-09-21 14:02:48.556772442 +0200
 @@ -1 +1,548 @@
 -dummy
 +/**
@@ -4914,8 +4911,8 @@
 +	return(0);
 +}
 +
---- misc/xmlsec1-1.2.12/src/nss/x509.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/x509.c	2009-09-21 14:02:48.642312431 +0200
+--- misc/xmlsec1-1.2.14/src/nss/x509.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/x509.c	2009-09-21 14:02:48.642312431 +0200
 @@ -34,7 +34,6 @@
  #include <xmlsec/keys.h>
  #include <xmlsec/keyinfo.h>
@@ -5651,8 +5648,8 @@
  static void 
  xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
      SECItem *sn;
---- misc/xmlsec1-1.2.12/src/nss/x509vfy.c	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/src/nss/x509vfy.c	2009-09-21 14:02:48.669245207 +0200
+--- misc/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-09-21 14:02:48.669245207 +0200
 @@ -30,6 +30,7 @@
  #include <xmlsec/keyinfo.h>
  #include <xmlsec/keysmngr.h>
@@ -5680,7 +5677,7 @@
  
  static xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
      sizeof(xmlSecKeyDataStoreKlass),
-@@ -343,40 +334,28 @@
+@@ -339,40 +330,28 @@
  xmlSecNssX509FindCert(xmlChar *subjectName, xmlChar *issuerName, 
  		      xmlChar *issuerSerial, xmlChar *ski) {
      CERTCertificate *cert = NULL;
@@ -5724,7 +5721,7 @@
  	    goto done;
  	}
  
-@@ -398,34 +377,23 @@
+@@ -394,34 +373,23 @@
      if((issuerName != NULL) && (issuerSerial != NULL)) {
  	CERTIssuerAndSN issuerAndSN;
  
@@ -5762,7 +5759,7 @@
  	    goto done;
  	}
  
-@@ -445,8 +413,15 @@
+@@ -441,8 +409,15 @@
  	issuerAndSN.derIssuer.data = nameitem->data;
  	issuerAndSN.derIssuer.len = nameitem->len;
  
@@ -5780,7 +5777,7 @@
  
  	cert = CERT_FindCertByIssuerAndSN(CERT_GetDefaultCertDB(), 
  					  &issuerAndSN);
-@@ -477,9 +452,6 @@
+@@ -473,9 +448,6 @@
      }
  
  done:
@@ -5790,13 +5787,10 @@
      if (arena != NULL) {
  	PORT_FreeArena(arena, PR_FALSE);
      }
-@@ -490,226 +462,76 @@
+@@ -486,176 +458,6 @@
      return(cert);
  }
  
--/**
-- * xmlSecNssX509NameRead:
-- */       
 -static xmlSecByte *
 -xmlSecNssX509NameRead(xmlSecByte *str, int len) {
 -    xmlSecByte name[256];
@@ -5804,15 +5798,7 @@
 -    xmlSecByte *retval = NULL;
 -    xmlSecByte *p = NULL;
 -    int nameLen, valueLen;
-+static int
-+xmlSecNssIntegerToItem(
-+       const xmlChar* integer ,
-+       SECItem *item
-+) {
-+    xmlSecBn bn ;
-+    xmlSecSize i, length ;
-+    const xmlSecByte* bnInteger ;
- 
+-
 -    xmlSecAssert2(str != NULL, NULL);
 -    
 -    /* return string should be no longer than input string */
@@ -5832,20 +5818,14 @@
 -	while((len > 0) && isspace(*str)) {
 -	    ++str; --len;
 -	}
-+    xmlSecAssert2( integer != NULL, -1 ) ;
-+    xmlSecAssert2( item != NULL, -1 ) ;
- 
+-
 -	nameLen = xmlSecNssX509NameStringRead(&str, &len, name, sizeof(name), '=', 0);	
 -	if(nameLen < 0) {
 -	    xmlSecError(XMLSEC_ERRORS_HERE,
-+    if( xmlSecBnInitialize( &bn, 0 ) < 0 ) {
-+        xmlSecError(XMLSEC_ERRORS_HERE,
- 			NULL,
+-			NULL,
 -			"xmlSecNssX509NameStringRead",
 -			XMLSEC_ERRORS_R_XMLSEC_FAILED,
-+			"xmlSecBnInitialize",
-+			XMLSEC_ERRORS_R_INVALID_DATA,
- 			XMLSEC_ERRORS_NO_MESSAGE);
+-			XMLSEC_ERRORS_NO_MESSAGE);
 -	    goto done;
 -	}
 -	memcpy(p, name, nameLen);
@@ -5857,17 +5837,11 @@
 -		valueLen = xmlSecNssX509NameStringRead(&str, &len, 
 -					value, sizeof(value), '"', 1);	
 -		if(valueLen < 0) {
-+	    return -1 ;
-+    }
-+
-+    if( xmlSecBnFromDecString( &bn, integer ) < 0 ) {
- 		    xmlSecError(XMLSEC_ERRORS_HERE,
- 				NULL,
+-		    xmlSecError(XMLSEC_ERRORS_HERE,
+-				NULL,
 -				"xmlSecNssX509NameStringRead",
 -				XMLSEC_ERRORS_R_XMLSEC_FAILED,
-+				"xmlSecBnFromDecString",
-+				XMLSEC_ERRORS_R_INVALID_DATA,
- 				XMLSEC_ERRORS_NO_MESSAGE);
+-				XMLSEC_ERRORS_NO_MESSAGE);
 -		    goto done;
 -    		}
 -		/* skip spaces before comma or semicolon */
@@ -5875,17 +5849,10 @@
 -		    ++str; --len;
 -		}
 -		if((len > 0) && ((*str) != ',')) {
-+        xmlSecBnFinalize( &bn ) ;
-+        return -1 ;
-+    }
-+
-+    length = xmlSecBnGetSize( &bn ) ;
-+    if( length <= 0 ) {
- 		    xmlSecError(XMLSEC_ERRORS_HERE,
- 				NULL,
+-		    xmlSecError(XMLSEC_ERRORS_HERE,
 -				NULL,
-+				"xmlSecBnGetSize",
- 				XMLSEC_ERRORS_R_INVALID_DATA,
+-				NULL,
+-				XMLSEC_ERRORS_R_INVALID_DATA,
 -				"comma is expected");
 -		    goto done;
 -		}
@@ -5912,7 +5879,7 @@
 -				NULL,
 -				"xmlSecNssX509NameStringRead",
 -				XMLSEC_ERRORS_R_XMLSEC_FAILED,
- 				XMLSEC_ERRORS_NO_MESSAGE);
+-				XMLSEC_ERRORS_NO_MESSAGE);
 -		    goto done;
 -    		}
 -		memcpy(p, value, valueLen);
@@ -5926,8 +5893,8 @@
 -	if(len > 0) {
 -	    ++str; --len;
 -	}	
-     }
- 
+-    }
+-
 -    *p = 0;
 -    return(retval);
 -    
@@ -5936,11 +5903,6 @@
 -    return (NULL);
 -}
 -
--
--
--/**
-- * xmlSecNssX509NameStringRead:
-- */
 -static int 
 -xmlSecNssX509NameStringRead(xmlSecByte **str, int *strLen, 
 -			    xmlSecByte *res, int resLen,
@@ -5964,13 +5926,10 @@
 -	    nonSpace = q;    
 -	    if(xmlSecIsHex((*p))) {
 -		if((p - (*str) + 1) >= (*strLen)) {
-+    bnInteger = xmlSecBnGetData( &bn ) ;
-+    if( bnInteger == NULL ) {
- 		    xmlSecError(XMLSEC_ERRORS_HERE,
- 				NULL,
+-		    xmlSecError(XMLSEC_ERRORS_HERE,
 -				NULL,
-+				"xmlSecBnGetData",
- 				XMLSEC_ERRORS_R_INVALID_DATA,
+-				NULL,
+-				XMLSEC_ERRORS_R_INVALID_DATA,
 -				"two hex digits expected");
 -	    	    return(-1);
 -		}
@@ -5978,28 +5937,17 @@
 -		p += 2;
 -	    } else {
 -		if(((++p) - (*str)) >= (*strLen)) {
-+				XMLSEC_ERRORS_NO_MESSAGE ) ;
-+        xmlSecBnFinalize( &bn ) ;
-+        return -1 ;
-+    }
-+
-+    item->data = ( unsigned char * )PORT_Alloc( length );
-+    if( item->data == NULL ) {
- 		    xmlSecError(XMLSEC_ERRORS_HERE,
- 				NULL,
+-		    xmlSecError(XMLSEC_ERRORS_HERE,
 -				NULL,
-+				"PORT_Alloc",
- 				XMLSEC_ERRORS_R_INVALID_DATA,
+-				NULL,
+-				XMLSEC_ERRORS_R_INVALID_DATA,
 -				"escaped symbol missed");
 -		    return(-1);
 -		}
 -		*(q++) = *(p++); 
 -	    }
 -	}	    
-+				XMLSEC_ERRORS_NO_MESSAGE ) ;
-+        xmlSecBnFinalize( &bn ) ;
-+        return -1 ;
-     }
+-    }
 -    if(((p - (*str)) < (*strLen)) && ((*p) != delim)) {
 -	xmlSecError(XMLSEC_ERRORS_HERE,
 -		    NULL,
@@ -6012,61 +5960,91 @@
 -    (*str) = p;
 -    return((ingoreTrailingSpaces) ? nonSpace - res + 1 : q - res);
 -}
- 
--/* code lifted from NSS */
--static void
--xmlSecNssNumToItem(SECItem *it, unsigned long ui)
--{
--    unsigned char bb[5];
--    int len;
 -
--    bb[0] = 0;
--    bb[1] = (unsigned char) (ui >> 24);
--    bb[2] = (unsigned char) (ui >> 16);
--    bb[3] = (unsigned char) (ui >> 8);
--    bb[4] = (unsigned char) (ui);
--
--    /*
--    ** Small integers are encoded in a single byte. Larger integers
--    ** require progressively more space.
--    */
--    if (ui > 0x7f) {
--        if (ui > 0x7fff) {
--            if (ui > 0x7fffffL) {
--                if (ui >= 0x80000000L) {
--                    len = 5;
--                } else {
--                    len = 4;
--                }
--            } else {
--                len = 3;
--            }
--        } else {
--            len = 2;
--        }
--    } else {
--        len = 1;
--    }
+ /* code lifted from NSS */
+ static void
+ xmlSecNssNumToItem(SECItem *it, unsigned long ui)
+@@ -699,6 +501,77 @@
+     it->len = len;
+     PORT_Memcpy(it->data, bb + (sizeof(bb) - len), len);
+ }
++
++static int
++xmlSecNssIntegerToItem(
++       const xmlChar* integer ,
++       SECItem *item
++) {
++    xmlSecBn bn ;
++    xmlSecSize i, length ;
++    const xmlSecByte* bnInteger ;
++
++    xmlSecAssert2( integer != NULL, -1 ) ;
++    xmlSecAssert2( item != NULL, -1 ) ;
++
++    if( xmlSecBnInitialize( &bn, 0 ) < 0 ) {
++        xmlSecError(XMLSEC_ERRORS_HERE,
++                       NULL,
++                       "xmlSecBnInitialize",
++                       XMLSEC_ERRORS_R_INVALID_DATA,
++                       XMLSEC_ERRORS_NO_MESSAGE);
++           return -1 ;
++    }
++
++    if( xmlSecBnFromDecString( &bn, integer ) < 0 ) {
++                   xmlSecError(XMLSEC_ERRORS_HERE,
++                               NULL,
++                               "xmlSecBnFromDecString",
++                               XMLSEC_ERRORS_R_INVALID_DATA,
++                               XMLSEC_ERRORS_NO_MESSAGE);
++        xmlSecBnFinalize( &bn ) ;
++        return -1 ;
++    }
++
++    length = xmlSecBnGetSize( &bn ) ;
++    if( length <= 0 ) {
++                   xmlSecError(XMLSEC_ERRORS_HERE,
++                               NULL,
++                               "xmlSecBnGetSize",
++                               XMLSEC_ERRORS_R_INVALID_DATA,
++                               XMLSEC_ERRORS_NO_MESSAGE);
++    }
++
++    bnInteger = xmlSecBnGetData( &bn ) ;
++    if( bnInteger == NULL ) {
++                   xmlSecError(XMLSEC_ERRORS_HERE,
++                               NULL,
++                               "xmlSecBnGetData",
++                               XMLSEC_ERRORS_R_INVALID_DATA,
++                               XMLSEC_ERRORS_NO_MESSAGE ) ;
++        xmlSecBnFinalize( &bn ) ;
++        return -1 ;
++    }
++
++    item->data = ( unsigned char * )PORT_Alloc( length );
++    if( item->data == NULL ) {
++                   xmlSecError(XMLSEC_ERRORS_HERE,
++                               NULL,
++                               "PORT_Alloc",
++                               XMLSEC_ERRORS_R_INVALID_DATA,
++                               XMLSEC_ERRORS_NO_MESSAGE ) ;
++        xmlSecBnFinalize( &bn ) ;
++        return -1 ;
++    }
++
 +    item->len = length;
- 
--    it->data = (unsigned char *)PORT_Alloc(len);
--    if (it->data == NULL) {
--        return;
--    }
 +    for( i = 0 ; i < length ; i ++ )
 +        item->data[i] = *( bnInteger + i ) ;
 +
 +    xmlSecBnFinalize( &bn ) ;
- 
--    it->len = len;
--    PORT_Memcpy(it->data, bb + (sizeof(bb) - len), len);
++
 +    return 0 ;
- }
++}
  #endif /* XMLSEC_NO_X509 */
  
---- misc/xmlsec1-1.2.12/win32/Makefile.msvc	2009-06-25 22:53:18.000000000 +0200
-+++ misc/build/xmlsec1-1.2.12/win32/Makefile.msvc	2009-09-21 14:02:48.607277908 +0200
-@@ -223,6 +223,9 @@
+ 
+--- misc/xmlsec1-1.2.14/win32/Makefile.msvc	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/win32/Makefile.msvc	2009-09-21 14:02:48.607277908 +0200
+@@ -218,6 +218,9 @@
  	$(XMLSEC_OPENSSL_INTDIR_A)\x509vfy.obj 
  
  XMLSEC_NSS_OBJS = \
@@ -6076,7 +6054,7 @@
  	$(XMLSEC_NSS_INTDIR)\app.obj\
  	$(XMLSEC_NSS_INTDIR)\bignum.obj\
  	$(XMLSEC_NSS_INTDIR)\ciphers.obj \
-@@ -258,6 +261,7 @@
+@@ -253,6 +256,7 @@
  	$(XMLSEC_NSS_INTDIR_A)\strings.obj
  
  XMLSEC_MSCRYPTO_OBJS = \
