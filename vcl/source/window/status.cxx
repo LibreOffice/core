@@ -320,6 +320,8 @@ void StatusBar::ImplFormat()
             nExtraWidth2 = 0;
         }
         nX = STATUSBAR_OFFSET_X;
+        if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+            nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
     pItem = mpItemList->First();
@@ -833,7 +835,7 @@ void StatusBar::Resize()
 {
     // Breite und Hoehe abfragen und merken
     Size aSize = GetOutputSizePixel();
-    mnDX = aSize.Width();
+    mnDX = aSize.Width() - ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     mnDY = aSize.Height();
     mnCalcHeight = mnDY;
     // subtract border

@@ -318,6 +318,9 @@ struct ImplSVNWFData
                                                           // window background before drawing the native
                                                           // checkbox
     bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
+    int                     mnStatusBarLowerRightOffset;  // amount in pixel to avoid in the lower righthand corner
+                                                          // used on the Mac where the system resizer paints over
+                                                          // our window content
 };
 
 
