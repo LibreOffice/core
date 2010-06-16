@@ -3368,7 +3368,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
    { (exit 1); exit 1; }; }
    		fi
 		;;
-	linux-gnu*)
+	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
 		test_kde=yes
@@ -9696,7 +9696,13 @@ echo $ECHO_N "checking what the default STL should be... $ECHO_C" >&6
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
        i?86)
-         DEFAULT_TO_STLPORT="yes"
+	 case "$build_os" in k*bsd*-gnu*)
+	 	DEFAULT_TO_STLPORT="no"
+		;;
+	 *)
+         	DEFAULT_TO_STLPORT="yes"
+		;;
+	  esac
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
@@ -19444,7 +19450,7 @@ ac_x_header_dirs='
 /usr/openwin/share/include'
 
 if test "$ac_x_includes" = no; then
-  # Guess where to find include files, by looking for Intrinsic.h.
+  # Guess where to find include files, by looking for Xlib.h.
   # First, try using that file with no special directory specified.
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -19452,7 +19458,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -19479,7 +19485,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -19493,18 +19499,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lXt $LIBS"
+  LIBS="-lX11 $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 int
 main ()
 {
-XtMalloc (0)
+XrmInitialize ()
   ;
   return 0;
 }
@@ -27215,7 +27221,7 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_commons_codec_jar" >&5
 echo "${ECHO_T}$ac_cv_file__usr_share_java_commons_codec_jar" >&6
 if test $ac_cv_file__usr_share_java_commons_codec_jar = yes; then
-   COMMONS_CODEC_JAR=/usr/share/java/commons-codecs.jar
+   COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar
 else
   { { echo "$as_me:$LINENO: error: commons-codec.jar replacement not found." >&5
 echo "$as_me: error: commons-codec.jar replacement not found." >&2;}
@@ -28065,13 +28071,13 @@ echo "${ECHO_T}no" >&6
   SCPDEFS="$SCPDEFS -DWITHOUT_MATHMLDTD"
 fi
 
-echo "$as_me:$LINENO: checking whether to include Bitstream Vera fonts" >&5
-echo $ECHO_N "checking whether to include Bitstream Vera fonts... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether to include third-party fonts" >&5
+echo $ECHO_N "checking whether to include third-party fonts... $ECHO_C" >&6
 if test "$with_fonts" != "no" ; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   WITH_FONTS=YES
-  BUILD_TYPE="$BUILD_TYPE BITSTREAM_VERA_FONTS"
+  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6

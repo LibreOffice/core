@@ -279,23 +279,11 @@ openoffice:
 .ENDIF			# "$(alllangiso)"!=""
 
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
     @$(COPY) $< $@
-
-.IF "$(SYSTEM_PYTHON)" != "YES"
-$(BIN)$/cp1251.py : $(SOLARLIBDIR)$/python$/encodings$/cp1251.py
-    @$(COPY) $< $@
-$(BIN)$/iso8859_1.py : $(SOLARLIBDIR)$/python$/encodings$/iso8859_1.py
-    @$(COPY) $< $@
-.ELSE
-$(BIN)$/cp1251.py :
-    @echo "Using system python - nothing more to do here"
-$(BIN)$/iso8859_1.py :
-    @echo "Using system python - nothing more to do here"
-.ENDIF
 
 $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_nologo$/intro.zip
     $(COPY) $< $@
