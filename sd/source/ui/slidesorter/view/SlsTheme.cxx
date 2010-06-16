@@ -380,7 +380,9 @@ void Theme::SetGradient (
 
     rGradient.mnSaturationOverride = nSaturationOverride;
     rGradient.mnBrightnessOverride = nBrightnessOverride;
-    const ColorData aColor (HGBAdapt(aBaseColor, nSaturationOverride, nBrightnessOverride));
+    const ColorData aColor (nSaturationOverride>=0 || nBrightnessOverride>=0
+        ? HGBAdapt(aBaseColor, nSaturationOverride, nBrightnessOverride)
+        : aBaseColor);
 
     rGradient.maFillColor1 = ChangeLuminance(aColor, nFillStartOffset);
     rGradient.maFillColor2 = ChangeLuminance(aColor, nFillEndOffset);

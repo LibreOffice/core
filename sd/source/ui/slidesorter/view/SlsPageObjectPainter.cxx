@@ -325,9 +325,15 @@ void PageObjectPainter::PaintPageNumber (
 
     // Determine the color of the page number.
     Color aPageNumberColor (mpTheme->GetColor(Theme::Color_PageNumberDefault));
-    if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver))
+    if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver) ||
+        rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
+    {
+        // Page number is painted on background for hover or selection or
+        // both.  Each of these background colors has a predefined luminance
+        // which is compatible with the PageNumberHover color.
         aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHover));
-    else if ( ! rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
+    }
+    else
     {
         const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
         const sal_Int32 nBackgroundLuminance (aBackgroundColor.GetLuminance());
@@ -337,9 +343,9 @@ void PageObjectPainter::PaintPageNumber (
             aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHighContrast));
         else
         {
-        // Compare luminance of default page number color and background
-        // color.  When the two are similar then use a darker (preferred) or
-        // brighter font color.
+            // Compare luminance of default page number color and background
+            // color.  When the two are similar then use a darker
+            // (preferred) or brighter font color.
             const sal_Int32 nFontLuminance (aPageNumberColor.GetLuminance());
             if (abs(nBackgroundLuminance - nFontLuminance) < 60)
                 if (nBackgroundLuminance > nFontLuminance-30)
@@ -474,40 +480,50 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     aBitmapDevice.SetOutputSizePixel(aSize);
 
     // Fill the background with the background color of the slide sorter.
-    aBitmapDevice.SetFillColor(mpTheme->GetColor(Theme::Color_Background));
-    aBitmapDevice.SetLineColor(mpTheme->GetColor(Theme::Color_Background));
+    const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
+    OSL_TRACE("filling background of page object bitmap with color %x", aBackgroundColor.GetColor());
+    aBitmapDevice.SetFillColor(aBackgroundColor);
+    aBitmapDevice.SetLineColor(aBackgroundColor);
     aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
 
     // Paint the slide area with a linear gradient that starts some pixels
     // below the top and ends some pixels above the bottom.
-    const sal_Int32 nHeight (aPageObjectBox.GetHeight());
-    const sal_Int32 nDefaultConstantSize(nHeight/4);
-    const sal_Int32 nMinimalGradientSize(40);
-    const sal_Int32 nY1 (
-        ::std::max<sal_Int32>(
-            0,
-            ::std::min<sal_Int32>(
-                nDefaultConstantSize,
-                (nHeight - nMinimalGradientSize)/2)));
-    const sal_Int32 nY2 (nHeight-nY1);
     const Color aTopColor(mpTheme->GetGradientColor(eColorType, Theme::Fill1));
     const Color aBottomColor(mpTheme->GetGradientColor(eColorType, Theme::Fill2));
-    const sal_Int32 nTop (aPageObjectBox.Top());
-    for (sal_Int32 nY=0; nY<nHeight; ++nY)
+    if (aTopColor != aBottomColor)
     {
-        if (nY<=nY1)
-            aBitmapDevice.SetLineColor(aTopColor);
-        else if (nY>=nY2)
-            aBitmapDevice.SetLineColor(aBottomColor);
-        else
+        const sal_Int32 nHeight (aPageObjectBox.GetHeight());
+        const sal_Int32 nDefaultConstantSize(nHeight/4);
+        const sal_Int32 nMinimalGradientSize(40);
+        const sal_Int32 nY1 (
+            ::std::max<sal_Int32>(
+                0,
+                ::std::min<sal_Int32>(
+                    nDefaultConstantSize,
+                    (nHeight - nMinimalGradientSize)/2)));
+        const sal_Int32 nY2 (nHeight-nY1);
+        const sal_Int32 nTop (aPageObjectBox.Top());
+        for (sal_Int32 nY=0; nY<nHeight; ++nY)
         {
-            Color aColor (aTopColor);
-            aColor.Merge(aBottomColor, 255 * (nY2-nY) / (nY2-nY1));
-            aBitmapDevice.SetLineColor(aColor);
+            if (nY<=nY1)
+                aBitmapDevice.SetLineColor(aTopColor);
+            else if (nY>=nY2)
+                aBitmapDevice.SetLineColor(aBottomColor);
+            else
+            {
+                Color aColor (aTopColor);
+                aColor.Merge(aBottomColor, 255 * (nY2-nY) / (nY2-nY1));
+                aBitmapDevice.SetLineColor(aColor);
+            }
+            aBitmapDevice.DrawLine(
+                Point(aPageObjectBox.Left(), nY+nTop),
+                Point(aPageObjectBox.Right(), nY+nTop));
         }
-        aBitmapDevice.DrawLine(
-            Point(aPageObjectBox.Left(), nY+nTop),
-            Point(aPageObjectBox.Right(), nY+nTop));
+    }
+    else
+    {
+        aBitmapDevice.SetFillColor(aTopColor);
+        aBitmapDevice.DrawRect(aPageObjectBox);
     }
 
     // Paint the simple border and, for some backgrounds, the focus border.
