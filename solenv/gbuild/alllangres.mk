@@ -77,7 +77,7 @@ $(call gb_SrsPartTarget_get_dep_target,%) :
 
 define gb_SrsPartTarget_SrsPartTarget
 ifeq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(SRCDIR)/$*
+$(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(SRCDIR)/$(1)
 $(call gb_SrsPartTarget_get_target,$(1)) : $(SRCDIR)/$(1)
 else
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : $(SRCDIR)/$(1)

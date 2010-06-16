@@ -90,6 +90,13 @@ gb_DEBUGLEVEL := 1
 endif
 endif
 
+ifneq ($(strip $(ENABLE_PCH)),)
+gb_ENABLE_PCH := $(true)
+else
+gb_ENABLE_PCH := $(false)
+endif
+
+
 gb_FULLDEPS := $(true)
 #gb_FULLDEPS := $(false)
 ifeq ($(MAKECMDGOALS),clean)

@@ -152,13 +152,9 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
     -DEXCEPTIONS_ON \
     -EHa \
 
-gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
-
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -DEXCEPTIONS_OFF \
     
-gb_PrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
-
 gb_LinkTarget_LDFLAGS := \
     -MACHINE:IX86 \
     -NODEFAULTLIB \
@@ -263,14 +259,6 @@ endef
 
 # PrecompiledHeader class
 
-gb_PrecompiledHeader_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
-
-gb_PrecompiledHeader_INCLUDE :=\
-    $(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
-    $(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
-
-gb_PrecompiledHeader_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
-
 define gb_PrecompiledHeader__command
 $(call gb_Helper_announce,Compiling pch $(1) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -282,7 +270,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
     E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
-$(call gb_Helper_abbreviate_dirs_native,\
+endef
+#$(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
         -I$(dir $(3)) \
@@ -295,7 +284,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
     > $(call gb_PrecompiledHeader_get_dep_target,$(1)))
-endef
 
 # LinkTarget class
 
