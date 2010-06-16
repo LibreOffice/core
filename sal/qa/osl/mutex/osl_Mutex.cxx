@@ -838,7 +838,7 @@ protected:
     void SAL_CALL run( )
     {
         // acquire the mutex
-        printf("# ResettableGuard" );
+        printf("# ResettableGuard\n" );
         ResettableMutexGuard aGuard( pMyMutex );
         // release the mutex
         aGuard.clear( );
@@ -894,13 +894,13 @@ namespace osl_ResettableGuard
         {
             Mutex aMutex;
             ResetGuardThread myThread( &aMutex );
-            myThread.create( );
             ResettableMutexGuard myMutexGuard( aMutex );
+            myThread.create( );
 
             /// is it running? and clear done?
+            sal_Bool bRes = myThread.isRunning( );
             myMutexGuard.clear( );
             ThreadHelper::thread_sleep_tenth_sec( 1 );
-            sal_Bool bRes = myThread.isRunning( );
 
             /// if reset is not success, the release will return sal_False
             myMutexGuard.reset( );
