@@ -155,9 +155,9 @@ testcase tToolsSpellcheck
         if OptionenBearbeiten.IsEnabled then
             OptionenBearbeiten.Click
             wait 500
-            Kontext "SilbentrennungOptionen"
-            DialogTest ( SilbentrennungOptionen )
-            SilbentrennungOptionen.Cancel
+            Kontext "HyphenationOptions"
+            DialogTest ( HyphenationOptions )
+            HyphenationOptions.Cancel
         end if
     next i
 
@@ -289,13 +289,6 @@ testcase tToolsThesaurus
 
     Kontext "Thesaurus"
     DialogTest ( Thesaurus )
-    printlog " In 'Thesaurus' dialog click 'Language'"
-    Sprache.Click
-    Kontext "SpracheAuswaehlen"
-    DialogTest ( SpracheAuswaehlen )
-    printlog " Close 'Language' dialog"
-    SpracheAuswaehlen.Cancel
-    Kontext "Thesaurus"
     printlog " Close 'Thesaurus' dialog"
     Thesaurus.Cancel
     PrintLog "Close active documents"
@@ -390,11 +383,11 @@ testcase tToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if Silbentrennung.Exists then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if Hyphenation.Exists then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"
@@ -1294,11 +1287,11 @@ testcase tMasterDocToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if ( Silbentrennung.Exists( 2 ) ) then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if ( Hyphenation.Exists( 2 ) ) then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"
