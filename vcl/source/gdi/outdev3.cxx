@@ -6118,7 +6118,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         if( nSubstituteHeight > nOriginalHeight )
         {
             const float fScale = nOriginalHeight / (float)nSubstituteHeight;
-fprintf(stderr,"fScale=%5.3f\n",fScale);//#########
             const float fOrigHeight = aFontSelData.mfExactHeight;
             const int nOrigHeight = aFontSelData.mnHeight;
             aFontSelData.mfExactHeight *= fScale;
