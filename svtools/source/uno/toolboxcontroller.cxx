@@ -751,6 +751,25 @@ const rtl::OUString& ToolboxController::getModuleName() const
     return m_pImpl->m_sModuleName;
 }
 
+void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs )
+{
+    try
+    {
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY_THROW );
+        URL aURL;
+        aURL.Complete = sCommandURL;
+        getURLTransformer()->parseStrict( aURL );
+
+        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
+
+        Application::PostUserEvent( STATIC_LINK(0, ToolboxController_Impl, ExecuteHdl_Impl), new DispatchInfo( xDispatch, aURL, rArgs ) );
+
+    }
+    catch( Exception& )
+    {
+    }
+}
+
 //
 //-------------------------------------------------------------------------
 // XPropertySet by shizhoubo
@@ -813,6 +832,15 @@ throw( com::sun::star::uno::Exception)
         if (( aValue >>= rValue ) && m_bInitialized)
             this->setSupportVisiableProperty( rValue );
     }
+}
+
+//--------------------------------------------------------------------
+
+IMPL_STATIC_LINK_NOINSTANCE( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
+{
+    pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );
+    delete pDispatchInfo;
+    return 0;
 }
 
 void ToolboxController::enable( bool bEnable )
