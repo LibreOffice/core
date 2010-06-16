@@ -31,7 +31,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtdata.hxx>
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -1232,7 +1232,7 @@ BOOL SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const String&
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
 // -----------------------------------------------------------------------
-Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }

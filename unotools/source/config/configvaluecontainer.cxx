@@ -331,7 +331,7 @@ namespace utl
             m_pImpl->xORB,
             _rConfigLocation,
             _nLevels,
-            ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_PREFER_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
+            ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
             ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) ? sal_False : sal_True
         );
         #ifdef DBG_UTIL
