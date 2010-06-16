@@ -745,6 +745,12 @@ Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
 {
     return m_pImpl->m_xParentWindow;
 }
+
+const rtl::OUString& ToolboxController::getModuleName() const
+{
+    return m_pImpl->m_sModuleName;
+}
+
 //
 //-------------------------------------------------------------------------
 // XPropertySet by shizhoubo
