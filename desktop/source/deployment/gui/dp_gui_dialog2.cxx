@@ -281,6 +281,8 @@ void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 // -----------------------------------------------------------------------
 void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
 {
+    bool bShowOptionBtn = true;
+
     pEntry->m_bHasButtons = false;
     if ( ( pEntry->m_eState == REGISTERED ) || ( pEntry->m_eState == NOT_AVAILABLE ) )
     {
@@ -291,6 +293,7 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
     {
         m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
+        bShowOptionBtn = false;
     }
 
     if ( ( !pEntry->m_bUser || ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
@@ -303,7 +306,7 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
         pEntry->m_bHasButtons = true;
     }
 
-    if ( pEntry->m_bHasOptions )
+    if ( pEntry->m_bHasOptions && bShowOptionBtn )
     {
         m_pOptionsBtn->Enable( pEntry->m_bHasOptions );
         m_pOptionsBtn->Show();
