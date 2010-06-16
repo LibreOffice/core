@@ -105,6 +105,7 @@ IDLFILES=\
     XChartDocument.idl\
     XComplexDescriptionAccess.idl\
     XDiagram.idl\
+    XDiagramPositioning.idl\
     XStatisticDisplay.idl\
     XTwoAxisXSupplier.idl\
     XTwoAxisYSupplier.idl\

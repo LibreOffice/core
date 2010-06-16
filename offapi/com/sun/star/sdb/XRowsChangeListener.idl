@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XRowsChangeListener.idl,v $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,33 +27,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_sdb_XRowsChangeListener_idl__
+#define __com_sun_star_sdb_XRowsChangeListener_idl__
 
-#ifndef __com_sun_star_drawing_framework_XView_idl__
-#define __com_sun_star_drawing_framework_XView_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
 #endif
-#ifndef __com_sun_star_drawing_framework_XResource_idl__
-#include <com/sun/star/drawing/framework/XResource.idl>
-#endif
+#include <com/sun/star/sdb/RowsChangeEvent.idl>
 
-module com { module sun { module star { module drawing { module framework {
+ module com {  module sun {  module star {  module sdb {
 
-/** A view in the drawing framework is any object that paints into a pane.
-    <p>Typical examples are the Impress views that show a graphical
-    representation of a document.  But the task pane, which is primarily a
-    container of dialogs, is a view as well.</p>
-    <p>Luckily the drawing framework does not need to know much about what a
-    view is.  It just needs to identify view objects and a typesafe way to
-    reference them.</p>
-    <p>The URL prefix of views is <code>private:resource/view</code></p>
-*/
-interface XView
+
+/** is used for receiving "rowsChanged" events
+    posted by, for example, a rowset.
+ */
+interface XRowsChangeListener: com::sun::star::lang::XEventListener
 {
-    interface XResource;
+
+    /** is called when rows are inserted, updated, or deleted.
+        @param event
+            contains information about the event
+     */
+    [oneway] void rowsChanged([in]com::sun::star::sdb::RowsChangeEvent event);
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+//=============================================================================
 
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
 #endif
