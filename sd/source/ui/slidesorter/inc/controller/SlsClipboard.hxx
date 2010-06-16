@@ -137,6 +137,7 @@ private:
     ::boost::scoped_ptr<UndoContext> mpUndoContext;
 
     ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
+    ULONG mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (
         ::Window* pWindow,
@@ -219,6 +220,11 @@ private:
         ::sd::Window* pTargetWindow,
         USHORT nPage,
         USHORT nLayer);
+
+    /** Asynchronous part of DragFinished.  The argument is the sal_Int8
+        nDropAction, disguised as void*.
+    */
+    DECL_LINK(ProcessDragFinished, void*);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

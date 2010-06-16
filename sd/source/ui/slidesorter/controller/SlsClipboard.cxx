@@ -130,7 +130,9 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
       maPagesToRemove(),
       maPagesToSelect(),
       mbUpdateSelectionPending(false),
-      mpUndoContext()
+      mpUndoContext(),
+      mpSelectionObserverContext(),
+      mnDragFinishedUserEventId(0)
 {
 }
 
@@ -139,6 +141,8 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
 
 Clipboard::~Clipboard (void)
 {
+    if (mnDragFinishedUserEventId != 0)
+        Application::RemoveUserEvent(mnDragFinishedUserEventId);
 }
 
 
@@ -506,15 +510,35 @@ void Clipboard::StartDrag (
 
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
+    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+    if (pDragTransferable != NULL)
+        pDragTransferable->SetView (NULL);
+
+    if (mnDragFinishedUserEventId == 0)
+    {
+        if ( ! Application::PostUserEvent(
+            mnDragFinishedUserEventId,
+            LINK(this, Clipboard, ProcessDragFinished),
+            reinterpret_cast<void*>(nDropAction)))
+        {
+            mnDragFinishedUserEventId = 0;
+        }
+    }
+}
+
+
+
+
+IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
+{
+    const sal_Int8 nDropAction (static_cast<sal_Int8>(reinterpret_cast<sal_IntPtr>(pUserData)));
+
+    mnDragFinishedUserEventId = 0;
+
     // Hide the substitution display and insertion indicator.
     ::rtl::Reference<SelectionFunction> pFunction (mrController.GetCurrentSelectionFunction());
     if (pFunction.is())
         pFunction->NotifyDragFinished();
-
-    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-
-    if (pDragTransferable != NULL)
-        pDragTransferable->SetView (NULL);
 
     PageSelector& rSelector (mrController.GetPageSelector());
     if ((nDropAction & DND_ACTION_MOVE) != 0
@@ -534,6 +558,8 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
     }
     mpUndoContext.reset();
     mpSelectionObserverContext.reset();
+
+    return 1;
 }
 
 
