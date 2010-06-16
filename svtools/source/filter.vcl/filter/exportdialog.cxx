@@ -628,6 +628,7 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
     mpFilterOptionsItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     mnMaxFilesizeForRealtimePreview = mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "MaxFilesizeForRealtimePreview" ) ), 0 );
+    maFtEstimatedSize.SetText( String( RTL_CONSTASCII_USTRINGPARAM( " \n " ) ) );
 
     String  aTitle( maExt );
     aTitle += String( ResId( DLG_EXPORT_TITLE, *mpMgr ) );
