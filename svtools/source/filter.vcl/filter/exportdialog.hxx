@@ -138,11 +138,6 @@ private:
     sal_Int16           mnFormat;
     sal_Int32           mnMaxFilesizeForRealtimePreview;
 
-    sal_Bool            mbPreview;
-    sal_Bool            mbIsPixelFormat;
-    sal_Bool            mbExportSelection;
-    sal_Bool            mbPreserveAspectRatio;
-
     Rectangle           maRectFlButtons;
     Rectangle           maRectBtnHelp;
     Rectangle           maRectBtnOK;
@@ -155,7 +150,13 @@ private:
                         maOriginalSize;     // the original graphic size in 1/100mm
     com::sun::star::awt::Size
                         maSize;             // for vector graphics it always contains the logical size in 1/100mm
-                                            // for pixel graphics it always contains the pixel count
+
+    sal_Bool            mbPreview;
+    sal_Bool            mbIsPixelFormat;
+    sal_Bool            mbExportSelection;
+    sal_Bool            mbPreserveAspectRatio;
+
+    // for pixel graphics it always contains the pixel count
     com::sun::star::awt::Size
                         maResolution;       // it always contains the number of pixels per meter
 

@@ -535,7 +535,7 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
 // to determine the exact graphic output size and preview for jpg
 sal_Bool ExportDialog::IsTempExportAvailable() const
 {
-    return GetRawFileSize() < mnMaxFilesizeForRealtimePreview;
+    return GetRawFileSize() < static_cast< sal_uInt32 >( mnMaxFilesizeForRealtimePreview );
 }
 
 ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
@@ -573,6 +573,8 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
                 maCbRLEEncoding         ( this, ResId( CB_RLE_ENCODING, *rPara.pResMgr ) ),
                 maFlGIFDrawingObjects   ( this, ResId( FL_GIF_DRAWING_OBJECTS, *rPara.pResMgr ) ),
                 maCbSaveTransparency    ( this, ResId( CB_SAVE_TRANSPARENCY, *rPara.pResMgr ) ),
+                maRbBinary              ( this, ResId( RB_BINARY, *rPara.pResMgr ) ),
+                maRbText                ( this, ResId( RB_TEXT, *rPara.pResMgr ) ),
                 maFlEPSPreview          ( this, ResId( FL_EPS_PREVIEW, *rPara.pResMgr ) ),
                 maCbEPSPreviewTIFF      ( this, ResId( CB_EPS_PREVIEW_TIFF, *rPara.pResMgr ) ),
                 maCbEPSPreviewEPSI      ( this, ResId( CB_EPS_PREVIEW_EPSI, *rPara.pResMgr ) ),
@@ -585,8 +587,6 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
                 maFlCompression         ( this, ResId( FL_COMPRESSION, *rPara.pResMgr ) ),
                 maRbEPSCompressionLZW   ( this, ResId( RB_EPS_COMPRESSION_LZW, *rPara.pResMgr ) ),
                 maRbEPSCompressionNone  ( this, ResId( RB_EPS_COMPRESSION_NONE, *rPara.pResMgr ) ),
-                maRbBinary              ( this, ResId( RB_BINARY, *rPara.pResMgr ) ),
-                maRbText                ( this, ResId( RB_TEXT, *rPara.pResMgr ) ),
                 maFlEstimatedSize       ( this, ResId( FL_ESTIMATED_SIZE, *rPara.pResMgr ) ),
                 maFtEstimatedSize       ( this, ResId( FT_ESTIMATED_SIZE, *rPara.pResMgr ) ),
                 msEstimatedSizePix1     ( ResId( STR_ESTIMATED_SIZE_PIX_1, *rPara.pResMgr ) ),
@@ -1386,6 +1386,7 @@ IMPL_LINK( ExportDialog, UpdateHdlMtfSizeX, void *, EMPTYARG )
             case MAP_CM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.01 * maMfSizeX.GetValue() / 100.0 + 0.5 ); break;
             case MAP_MM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.001 * maMfSizeX.GetValue() / 100.0 + 0.5 ); break;
             case MAP_POINT :    maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * maMfSizeX.GetValue() / 100.0 * 72 + 0.5 ); break;
+            default:
             case MAP_PIXEL :    maSize.Width = maMfSizeX.GetValue(); break;
         }
         maSize.Height = static_cast< sal_Int32 >( fRatio * maSize.Width + 0.5 );
@@ -1419,6 +1420,7 @@ IMPL_LINK( ExportDialog, UpdateHdlMtfSizeY, void *, EMPTYARG )
             case MAP_CM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.01 * maMfSizeY.GetValue() / 100.0 + 0.5 ); break;
             case MAP_MM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.001 * maMfSizeY.GetValue() / 100.0 + 0.5 ); break;
             case MAP_POINT :    maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * maMfSizeY.GetValue() / 100.0 * 72 + 0.5 ); break;
+            default:
             case MAP_PIXEL :    maSize.Height = maMfSizeY.GetValue(); break;
         }
         maSize.Width = static_cast< sal_Int32 >( fRatio * maSize.Height + 0.5 );
