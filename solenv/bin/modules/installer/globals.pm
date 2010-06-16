@@ -236,7 +236,7 @@ BEGIN
     $mergefiles_added_into_collector = 0;
     $creating_windows_installer_patch = 0;
 
-    $strip = $ENV{DISABLE_STRIP} eq '';
+    $strip = 1;
     $solarjava = 0;
     $jdklib = "";
     $jrepath = "";
@@ -531,6 +531,7 @@ BEGIN
     $wrapcmd = "";
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
+    if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
     if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
 

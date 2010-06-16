@@ -84,7 +84,7 @@ File gid_File_Lib_Cached1
   #endif
 End
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Configmgr, configmgr)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
 #ifdef WITH_LDAP
 File gid_File_Lib_Ldapbe2
@@ -1383,7 +1383,7 @@ STD_LIB_FILE( gid_File_Lib_Sts , sts)
 STD_UNO_LIB_FILE( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
 
-STD_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
+STD_UNO_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
 STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 STD_LIB_FILE( gid_File_Lib_Editeng, editeng)
@@ -1484,6 +1484,8 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucphier1,ucphier1)
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
+
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
