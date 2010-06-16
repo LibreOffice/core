@@ -33,6 +33,7 @@
 #if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #include <sys/stat.h>
+#include <external/glibc/getopt.h>
 #else
 #include <unistd.h>
 #endif

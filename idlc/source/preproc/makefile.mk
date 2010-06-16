@@ -63,6 +63,10 @@ APP1OBJS=$(OBJ)$/cpp.obj
 
 APP1LIBS= $(LB)$/idlcpp.lib
 
+.IF "$(GUI)" == "WNT"
+APP1STDLIBS=gnu_getopt.lib
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
