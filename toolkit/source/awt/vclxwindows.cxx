@@ -2965,16 +2965,15 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     return getMinimumSize();
 }
 
-::com::sun::star::awt::Size VCLXFixedText::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Size VCLXFixedText::calcAdjustedSize( const ::com::sun::star::awt::Size& rMaxSize ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    ::com::sun::star::awt::Size aSz = rNewSize;
-    ::com::sun::star::awt::Size aMinSz = getMinimumSize();
-    if ( aSz.Height != aMinSz.Height )
-        aSz.Height = aMinSz.Height;
-
-    return aSz;
+    Size aAdjustedSize( VCLUnoHelper::ConvertToVCLSize( rMaxSize ) );
+    FixedText* pFixedText = (FixedText*)GetWindow();
+    if ( pFixedText )
+        aAdjustedSize = pFixedText->CalcMinimumSize( rMaxSize.Width );
+    return VCLUnoHelper::ConvertToAWTSize( aAdjustedSize );
 }
 
 //  ----------------------------------------------------
