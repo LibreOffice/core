@@ -2739,7 +2739,9 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         {
             // it contains either a simple hash or a set of PropertyValues
             // TODO/LATER: the sequence of PropertyValue should replace the hash completely in future
-            pModifyPasswordInfoItem->GetValue() >>= nModifyPasswordHash;
+            sal_Int32 nMPHTmp = 0;
+            pModifyPasswordInfoItem->GetValue() >>= nMPHTmp;
+            nModifyPasswordHash = (sal_uInt32)nMPHTmp;
             pModifyPasswordInfoItem->GetValue() >>= aModifyPasswordInfo;
         }
         aParams->ClearItem( SID_MODIFYPASSWORDINFO );

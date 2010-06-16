@@ -83,6 +83,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -170,9 +171,10 @@ TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
 //=========================================================================
 
 //-------------------------------------------------------------------------
-static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const ::rtl::OUString& aPath, const SfxFilter* pFilter, sal_uInt32 nPasswordHash )
+static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const ::rtl::OUString& aPath, const SfxFilter* pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue > aInfo )
 {
-    sal_Bool bResult = !nPasswordHash;
+    // TODO/LATER: In future the info should replace the direct hash completely
+    sal_Bool bResult = ( !nPasswordHash && !aInfo.getLength() );
 
     OSL_ENSURE( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ), "PasswordToModify feature is active for a filter that does not support it!" );
 
@@ -196,7 +198,17 @@ static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteracti
             xHandler->handle( rRequest );
 
             if ( pPasswordRequest->isPassword() )
-                bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
+            {
+                if ( aInfo.getLength() )
+                {
+                    bResult = ::comphelper::DocPasswordHelper::IsModifyPasswordCorrect( pPasswordRequest->getPasswordToModify(), aInfo );
+                }
+                else
+                {
+                    // the binary format
+                    bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
+                }
+            }
             else
                 bCancel = sal_True;
 
@@ -399,11 +411,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             else
             {
                 if ( pSh->IsReadOnlyMedium()
-                  && pSh->GetModifyPasswordHash()
+                  && ( pSh->GetModifyPasswordHash() || pSh->GetModifyPasswordInfo().getLength() )
                   && !pSh->IsModifyPasswordEntered() )
                 {
                     ::rtl::OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-                    if( !AskPasswordToModify_Impl( pMed->GetInteractionHandler(), aDocumentName, pMed->GetOrigFilter(), pSh->GetModifyPasswordHash() ) )
+                    if( !AskPasswordToModify_Impl( pMed->GetInteractionHandler(), aDocumentName, pMed->GetOrigFilter(), pSh->GetModifyPasswordHash(), pSh->GetModifyPasswordInfo() ) )
                     {
                         // this is a read-only document, if it has "Password to modify"
                         // the user should enter password before he can edit the document
