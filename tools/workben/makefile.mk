@@ -62,6 +62,11 @@ APP3TARGET = inetmimetest
 APP3OBJS = $(OBJ)$/inetmimetest.obj
 APP3STDLIBS = $(SALLIB) $(TOOLSLIB)
 
+APP4TARGET = mempooltest
+APP4OBJS = $(OBJ)$/mempooltest.obj
+APP4STDLIBS = $(TOOLSLIB)
+APP4RPATH = UREBIN
+
 # APP3TARGET = tldem
 # APP3OBJS = $(OBJ)$/tldem.obj
 # .IF "$(GUI)" == "UNX"
