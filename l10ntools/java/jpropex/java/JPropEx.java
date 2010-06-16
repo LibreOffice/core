@@ -284,7 +284,7 @@ public class JPropEx
         }
         path += name;
         // Write the properties file
-        System.out.println("DBG: Writing to "+path);
+        //System.out.println("DBG: Writing to "+path);
         try{
             BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( path ) );
             if( prop == null )
