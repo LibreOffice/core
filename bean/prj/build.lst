@@ -4,3 +4,7 @@ ob	bean\com\sun\star\beans			nmake	-	all	ob_legacybeanjava ob_beanjava NULL
 ob	bean\native\win32				nmake	-	n	ob_beanwin32 NULL
 ob	bean\native\unix				nmake	-	u	ob_beanunix NULL
 ob  bean\util              			nmake   -   all	ob_util ob_beanjava ob_legacybeanjava ob_beanwin32.n ob_beanunix.u NULL
+
+# complex tests compileable but fail at runtime
+# ob      bean\qa\complex\bean                    nmake   -   all ob_qa_complex ob_util NULL
+

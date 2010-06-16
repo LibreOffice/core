@@ -24,19 +24,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex;
+package complex.bean;
 
 
-import complexlib.ComplexTestCase;
+// import complexlib.ComplexTestCase;
 import java.io.File;
 import java.awt.Rectangle;
-import java.awt.BorderLayout;
+// import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
-import java.awt.event.*;
-import java.awt.Frame;
+// import java.awt.event.*;
+// import java.awt.Frame;
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
+// import javax.imageio.stream.FileImageOutputStream;
 
 
 
@@ -104,7 +104,9 @@ class ScreenComparer
     public boolean compare() throws Exception
     {
         if (m_img1 == null || m_img2 == null)
+        {
             throw new Exception("Only one image captured!");
+        }
         boolean ret = true;
         int w1 = m_img1.getWidth();
         int h1 = m_img1.getHeight();
@@ -127,19 +129,31 @@ class ScreenComparer
                     int pixel2 = 0;
                     //get the pixel for m_img1
                     if (x < w1 && y < h1)
+                    {
                         pixel1 = m_img1.getRGB(x, y);
+                    }
                     else
+                    {
                         bOutOfRange = true;
+                    }
 
                     if (x < w2 && y < h2)
+                    {
                         pixel2 = m_img2.getRGB(x, y);
+                    }
                     else
+                    {
                         bOutOfRange = true;
+                    }
 
                     if (bOutOfRange || pixel1 != pixel2)
+                    {
                         m_imgDiff.setRGB(x, y, m_diffColor);
+                    }
                     else
+                    {
                         m_imgDiff.setRGB(x, y, pixel1);
+                    }
 
                 }
             }
@@ -165,7 +179,9 @@ class ScreenComparer
         for (index = 0; index < lenAr; index++)
         {
             if (pixels1[index] != pixels2[index])
+            {
                 break;
+            }
         }
 
         //If the images are different, then create the diff image
