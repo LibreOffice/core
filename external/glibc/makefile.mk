@@ -52,6 +52,11 @@ CONFIGURE_ACTION=
 
 BUILD_DIR=posix
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+
+OUT2INC= \
+    posix/getopt.h \
+    posix/config.h
+
 .ELSE
 @all:
     @echo "Nothing to do here."

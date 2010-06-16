@@ -76,7 +76,7 @@
  extern int getopt ();
 --- misc/glibc-2.1.3/posix/makefile.mk	Mon Mar 31 09:43:50 2008
 +++ misc/build/glibc-2.1.3/posix/makefile.mk	Mon Mar 31 09:43:38 2008
-@@ -1 +1,69 @@
+@@ -1 +1,70 @@
 -dummy
 +#*************************************************************************
 +#
@@ -132,7 +132,7 @@
 +LIB1OBJFILES=$(OBJFILES)
 +.ENDIF
 +
-+.IF "$(HAVE_READDIR_R)" != "YES"
++.IF "$(HAVE_READDIR_R)" != "YES" && "$(OS)" != "WNT"
 +TARGET2=gnu_readdir_r
 +OBJFILES+= $(OBJ)$/readdir_r.obj
 +LIB2TARGET=$(SLB)$/$(TARGET2).lib

@@ -12,6 +12,8 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib%_EXT%\libgnu_getopt.a
 ..\%__SRC%\lib\libgnu_getopt_static.a %_DEST%\lib%_EXT%\libgnu_getopt_static.a
 
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\glibc\*.h
+
 ..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc%_EXT%\external\mingw\include\*
 ..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc%_EXT%\external\mingw\include\atl\*
 ..\%__SRC%\misc\mingw\include\sys\*.h %_DEST%\inc%_EXT%\external\mingw\include\sys\*
