@@ -52,7 +52,7 @@
 #include "xbmread.hxx"
 #include "xpmread.hxx"
 #include <svl/solar.hrc>
-#include "strings.hrc"
+#include <svl/svtools.hrc>
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -752,7 +752,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        sal_Int32 nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, *pResMgr ) ), -1 );
+        sal_Int32 nMode = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ExportMode" ) ), -1 );
 
         if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
         {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
@@ -782,7 +782,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
                 MapMode     aMap( MAP_100TH_INCH );
 
-                sal_Int32   nDPI = rConfigItem.ReadInt32( String( ResId( KEY_RES, *pResMgr ) ), 75 );
+                sal_Int32   nDPI = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), 75 );
                 Fraction    aFrac( 1, Min( Max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
 
                 aMap.SetScaleX( aFrac );
@@ -806,7 +806,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
 
-            sal_Int32 nColors = rConfigItem.ReadInt32( String( ResId( KEY_COLORS, *pResMgr ) ), 0 ); // #92767#
+            sal_Int32 nColors = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Color" ) ), 0 ); // #92767#
             if ( nColors )  // graphic conversion necessary ?
             {
                 BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
@@ -1769,7 +1769,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                         aBmp = aGraphic.GetBitmap();
                 }
                 ResMgr*     pResMgr = CREATERESMGR( svt );
-                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, *pResMgr ) ), sal_True );
+                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "RLE_Coding" ) ), sal_True );
                 // Wollen wir RLE-Kodiert speichern?
                 aBmp.Write( rOStm, bRleCoding );
                 delete pResMgr;

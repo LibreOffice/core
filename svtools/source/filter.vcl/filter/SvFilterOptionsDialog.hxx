@@ -46,18 +46,22 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper5
     com::sun::star::lang::XServiceInfo
 >
 {
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &
-        rxMgr;
+    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        mxMgr;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-        aMediaDescriptor;
+        maMediaDescriptor;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-        aFilterDataSequence;
-    rtl::OUString   aDialogTitle;
-    FieldUnit       eFieldUnit;
+        maFilterDataSequence;
+    com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        mxSourceDocument;
+
+    rtl::OUString   maDialogTitle;
+    FieldUnit       meFieldUnit;
+    sal_Bool        mbExportSelection;
 
 public:
 
-    SvFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+    SvFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB );
     ~SvFilterOptionsDialog();
 
     // XInterface
