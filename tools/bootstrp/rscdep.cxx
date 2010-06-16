@@ -45,6 +45,12 @@
 
 #include "cppdep.hxx"
 
+#ifdef WNT
+#define __STDC__ 1
+#define __GNU_LIBRARY__
+#include <external/glibc/getopt.h>
+#endif
+
 class RscHrcDep : public CppDep
 {
 public:
