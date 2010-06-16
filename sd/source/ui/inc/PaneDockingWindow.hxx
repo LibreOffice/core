@@ -65,8 +65,7 @@ public:
     virtual ~PaneDockingWindow (void);
 
     virtual void StateChanged( StateChangedType nType );
-<<<<<<< local
-=======
+
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
     /** Initializing the title tool box either creates a new title tool box
@@ -126,7 +125,6 @@ private:
         last invocation the size of the docking window has changed.
     */
     void Layout (void);
->>>>>>> other
 };
 
 } // end of namespace ::sd
