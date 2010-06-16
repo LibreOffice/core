@@ -6247,6 +6247,9 @@ void Window::SetParent( Window* pNewParent )
     if( pNewParent == this )
         return;
 
+    if ( mpWindowImpl->mpParent == pNewParent )
+        return;
+
     // check if the taskpanelist would change and move the window pointer accordingly
     SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
     SystemWindow *pNewSysWin = NULL;
@@ -6295,9 +6298,6 @@ void Window::SetParent( Window* pNewParent )
         mpWindowImpl->mpBorderWindow->SetParent( pNewParent );
         return;
     }
-
-    if ( mpWindowImpl->mpParent == pNewParent )
-        return;
 
     if ( mpWindowImpl->mbFrame )
         mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
