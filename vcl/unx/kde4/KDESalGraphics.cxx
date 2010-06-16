@@ -48,6 +48,8 @@
 #include "vcl/decoview.hxx"
 #include "rtl/ustrbuf.hxx"
 
+#include <stdio.h>
+
 using namespace ::rtl;
 
 /**
@@ -193,6 +195,22 @@ namespace
 
         QPainter painter(image);
         kapp->style()->drawComplexControl(element, option, &painter);
+    }
+
+    int getFrameWidth()
+    {
+        static int s_nFrameWidth = -1;
+        if( s_nFrameWidth < 0 )
+        {
+            // fill in a default
+            s_nFrameWidth = 2;
+            QFrame aFrame( NULL );
+            aFrame.setFrameRect( QRect(0, 0, 100, 30) );
+            aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+            aFrame.ensurePolished();
+            s_nFrameWidth = aFrame.frameWidth();
+        }
+        return s_nFrameWidth;
     }
 
     void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State state)
@@ -480,18 +498,25 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         lcl_drawFrame( QStyle::PE_Frame, m_image,
                        vclStateValue2StateFlag(nControlState, value) );
 
-        int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+        // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
+        int nFrameWidth = getFrameWidth();
         pTempClipRegion = XCreateRegion();
         XRectangle xRect = { widgetRect.left(), widgetRect.top(), widgetRect.width(), widgetRect.height() };
         XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
-        XLIB_Region pSubtract = XCreateRegion();
-        xRect.x += size;
-        xRect.y += size;
-        xRect.width -= 2* size;
-        xRect.height -= 2*size;
-        XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
-        XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
-        XDestroyRegion( pSubtract );
+        xRect.x += nFrameWidth;
+        xRect.y += nFrameWidth;
+
+        // do not crash for too small widgets, see http://qa.openoffice.org/issues/show_bug.cgi?id=112102
+        if( xRect.width > 2*nFrameWidth && xRect.height > 2*nFrameWidth )
+        {
+            xRect.width -= 2*nFrameWidth;
+            xRect.height -= 2*nFrameWidth;
+
+            XLIB_Region pSubtract = XCreateRegion();
+            XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
+            XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
+            XDestroyRegion( pSubtract );
+        }
     }
     else if (type == CTRL_FIXEDBORDER)
     {
@@ -744,14 +769,14 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         {
             if( part == PART_BORDER )
             {
-                int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+                int nFrameWidth = getFrameWidth();
                 USHORT nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {
                     // in this case the question is: how thick would a frame be
                     // see brdwin.cxx, decoview.cxx
                     // most probably the behavior in decoview.cxx is wrong.
-                    contentRect.adjust(size, size, -size, -size);
+                    contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
                 }
                 retVal = true;
             }

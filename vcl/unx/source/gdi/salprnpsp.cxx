@@ -617,6 +617,7 @@ BOOL PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 
         // copy everything to job setup
         copyJobDataToJobSetup( pJobSetup, aInfo );
+        JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
         return TRUE;
     }
     return FALSE;
