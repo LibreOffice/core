@@ -4957,7 +4957,7 @@ USHORT SwHTMLParser::ToTwips( USHORT nPixel ) const
 
 SwTwips SwHTMLParser::GetCurrentBrowseWidth()
 {
-    SwTwips nWidth = SwHTMLTableLayout::GetBrowseWidth( *pDoc );
+    const SwTwips nWidth = SwHTMLTableLayout::GetBrowseWidth( *pDoc );
     if( nWidth )
         return nWidth;
 

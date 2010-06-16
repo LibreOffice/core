@@ -101,9 +101,7 @@ using namespace nsFieldFlags;
 
 void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "WW8Export::OutputGrfNode( const SwGrfNode& )\n" );
-#endif
+    OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )\n" );
     ASSERT( mpParentFrame, "frame not set!" );
     if ( mpParentFrame )
     {
@@ -223,9 +221,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
 void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 {
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "WW8Export::OutputOLENode( const SwOLENode& rOLENode )\n" );
-#endif
+    OSL_TRACE("WW8Export::OutputOLENode( const SwOLENode& rOLENode )\n" );
     BYTE *pSpecOLE;
     BYTE *pDataAdr;
     short nSize;
@@ -609,7 +605,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.
     */
-    if ( (aGrTwipSz.Width() > USHRT_MAX) || (aGrTwipSz.Height() > USHRT_MAX)
+    if ( (aGrTwipSz.Width() > SHRT_MAX) || (aGrTwipSz.Height() > SHRT_MAX)
         || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
     {
         aGrTwipSz.Width() = nWidth;
