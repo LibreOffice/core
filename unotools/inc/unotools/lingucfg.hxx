@@ -230,8 +230,10 @@ public:
     ::rtl::OUString     GetSpellAndGrammarDialogImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
     ::rtl::OUString     GetSpellAndGrammarContextSuggestionImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
     ::rtl::OUString     GetSpellAndGrammarContextDictionaryImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
+    ::rtl::OUString     GetThesaurusDialogImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
+    ::rtl::OUString     GetSynonymsContextImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
 
-    bool                HasAnyVendorImages() const;
+    bool                HasVendorImages( const char *pImageName ) const;
     bool                HasGrammarChecker() const;
 };
 
