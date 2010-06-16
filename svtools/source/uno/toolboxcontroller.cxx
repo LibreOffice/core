@@ -808,6 +808,45 @@ throw( com::sun::star::uno::Exception)
             this->setSupportVisiableProperty( rValue );
     }
 }
+
+void ToolboxController::enable( bool bEnable )
+{
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nItemId = 0;
+    if( getToolboxId( nItemId, &pToolBox ) )
+    {
+        pToolBox->EnableItem( nItemId, bEnable ? TRUE : FALSE );
+    }
+}
+
+bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
+{
+    if( (m_pImpl->m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == 0) )
+        return m_pImpl->m_nToolBoxId;
+
+    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+
+    if( (m_pImpl->m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
+    {
+        const sal_uInt16 nCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
+        {
+            const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
+            if ( pToolBox->GetItemCommand( nItemId ) == String( m_aCommandURL ) )
+            {
+                m_pImpl->m_nToolBoxId = nItemId;
+                break;
+            }
+        }
+    }
+
+    if( ppToolBox )
+        *ppToolBox = pToolBox;
+
+    rItemId = m_pImpl->m_nToolBoxId;
+
+    return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == 0) || (*ppToolBox != 0) );
+}
 //end
 
 } // svt

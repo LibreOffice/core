@@ -133,6 +133,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         void enable( bool bEnable );
 
     protected:
+        bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
         void setSupportVisiableProperty(sal_Bool bValue); //shizhoubo
         struct Listener
         {
