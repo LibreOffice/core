@@ -138,17 +138,18 @@ testcase tiInsertSpecialCharacter
 endcase
 
 testcase tiInsertHyperlink
+
     Call hNewDocument
     InsertHyperlink
-    WaitSlot (5000)
-    Kontext "Hyperlink"
-    if Hyperlink.exists (5) then
+
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
+
+        Kontext "TabHyperlinkInternet"
         Auswahl.MouseDown 50, 5
         Auswahl.MouseUp 50, 5
         Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
         Auswahl.typekeys "<TAB>"
-        sleep 3
-        Kontext "TabHyperlinkInternet"
 
         'Workaround to get rid of a Focusing-problem...
         NameText.Typekeys "alal <RETURN>"
@@ -158,12 +159,14 @@ testcase tiInsertHyperlink
         'End of workaround...
 
         Internet.Check
-        ZielUrl.Settext "http://mahler"
-        Kontext "Hyperlink"
-        Uebernehmen.Click
-        Hyperlink.Close
+        ZielUrl.SetText( "http://www.nowhere.com" )
+        Uebernehmen.Click()
+
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close()
+
     else
-        warnlog "Failed to open hyperlink ??!!"
+        warnlog "Failed to open <HyperlinkDialog>"
     end if
     Call hCloseDocument
 endcase

@@ -924,21 +924,30 @@ testcase tEditHyperlink
     Printlog "- Edit / Hyperlink"
     Call hNewDocument
     PrintLog "Open new document"
+    
     InsertHyperlink
-    PrintLog "Insert / Hyperlink"
-    WaitSlot(5000)
-    Kontext "Hyperlink"
 
-    Call wEinfuegenHyperlink(1)
-    Kontext "TabHyperlinkInternet"
-    Internet.Check
-    ZielUrl.Settext "http://www.sonor.de"
-    PrintLog "Enter URL "
-    Kontext "Hyperlink"
-    PrintLog "Click 'Apply'"
-    Uebernehmen.Click
-    PrintLog "Close Hyperlink dialog"
-    Hyperlink.Close
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
+        PrintLog "Insert / Hyperlink"
+
+        Call wEinfuegenHyperlink(1)
+        
+        Kontext "TabHyperlinkInternet"
+        Internet.Check
+        
+        PrintLog "Enter URL "
+        ZielUrl.Settext "http://www.sonor.de"
+
+        PrintLog "Click 'Apply'"
+        Uebernehmen.Click
+
+        kontext "HyperlinkDialog"
+        PrintLog "Close Hyperlink dialog"
+        HyperlinkDialog.Close()
+    else
+        warnlog( "Failed to open <HyperlinkDialog>" )
+    endif
 
     Call wDocSetContext
     try
@@ -957,9 +966,9 @@ testcase tEditHyperlink
     try
         PrintLog "Edit / Hyperlink has to be enabled"
         EditHyperlink
-        Kontext "Hyperlink"
-        if Hyperlink.Exists then
-            Hyperlink.Close
+        Kontext "HyperlinkDialog"
+        if ( HyperlinkDialog.Exists( 1 ) ) then
+            HyperlinkDialog.Close()
         else
             Warnlog "- Hyperlinkdialog not up"
         end if
