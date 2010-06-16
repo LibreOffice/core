@@ -59,7 +59,8 @@
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hdl>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/outlobj.hxx>
@@ -528,6 +529,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
     if( pOlView && (
+        (nSlot == SID_TRANSLITERATE_SENTENCE_CASE) ||
+        (nSlot == SID_TRANSLITERATE_TITLE_CASE) ||
+        (nSlot == SID_TRANSLITERATE_TOGGLE_CASE) ||
         (nSlot == SID_TRANSLITERATE_UPPER) ||
         (nSlot == SID_TRANSLITERATE_LOWER) ||
         (nSlot == SID_TRANSLITERATE_HALFWIDTH) ||
@@ -661,6 +665,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         }
         break;
 
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+        case SID_TRANSLITERATE_TITLE_CASE:
+        case SID_TRANSLITERATE_TOGGLE_CASE:
         case SID_TRANSLITERATE_UPPER:
         case SID_TRANSLITERATE_LOWER:
         case SID_TRANSLITERATE_HALFWIDTH:
@@ -676,6 +683,15 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
                 switch( nSlot )
                 {
+                    case SID_TRANSLITERATE_SENTENCE_CASE:
+                        nType = TransliterationModulesExtra::SENTENCE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TITLE_CASE:
+                        nType = TransliterationModulesExtra::TITLE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TOGGLE_CASE:
+                        nType = TransliterationModulesExtra::TOGGLE_CASE;
+                        break;
                     case SID_TRANSLITERATE_UPPER:
                         nType = TransliterationModules_LOWERCASE_UPPERCASE;
                         break;
@@ -988,7 +1004,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         GetDoc()->SetChanged(TRUE);
     }
 
-    // Da šberladen, muss hier der Status gesetzt werden
+    // Da ï¿½berladen, muss hier der Status gesetzt werden
     if( !GetDocSh()->IsModified() )
     {
         rSet.DisableItem( SID_SAVEDOC );

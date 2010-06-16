@@ -42,7 +42,7 @@
 #include "DrawViewShell.hxx"
 #include "GraphicViewShell.hxx"
 #include "OutlineViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "PresentationViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "FrameView.hxx"
@@ -55,6 +55,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
@@ -189,7 +190,7 @@ void SAL_CALL BasicViewFactory::disposing (void)
 
 Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw(RuntimeException)
+    throw(RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     Reference<XResource> xView;
     const bool bIsCenterPane (
@@ -372,7 +373,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             pDescriptor->mpViewShell,
             rxViewId,
             rxPane->getWindow());
-        pDescriptor->mxView = Reference<XResource>(pDescriptor->mpWrapper);
+        pDescriptor->mxView.set( pDescriptor->mpWrapper->queryInterface( XResource::static_type() ), UNO_QUERY_THROW );
     }
 
     return pDescriptor;
@@ -449,7 +450,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     else if (rsViewURL.equals(FrameworkHelper::msTaskPaneURL))
     {
         pViewShell.reset(
-            new ::sd::toolpanel::TaskPaneViewShell (
+            new ::sd::toolpanel::ToolPanelViewShell(
                 &rFrame,
                 *mpBase,
                 &rWindow,

@@ -425,18 +425,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_ASSIGN_LAYOUT:
         {
-            if (mePageKind==PK_STANDARD
-                || mePageKind==PK_NOTES
-                || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
+            if (mePageKind==PK_STANDARD || mePageKind==PK_NOTES || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
             {
                 if ( mpDrawView->IsTextEdit() )
                     mpDrawView->SdrEndTextEdit();
 
-                SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-                SFX_REQUEST_ARG (rReq, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                ::sd::ViewShell::mpImpl->AssignLayout (
-                    GetDoc()->GetSdPage((USHORT)pWhatPage->GetValue(), mePageKind),
-                    (AutoLayout)pWhatLayout->GetValue());
+                ::sd::ViewShell::mpImpl->AssignLayout(rReq, mePageKind);
             }
             Cancel();
             rReq.Done ();
