@@ -1019,6 +1019,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDocSh->GetModifyPasswordInfo();
         }
+        break;
 
         default:
             throw UnknownPropertyException();
