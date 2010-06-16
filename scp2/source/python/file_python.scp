@@ -83,17 +83,24 @@ End
 File gid_File_Py_Python_Core
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
+  #ifdef MACOSX
+    Name = "OOoPython.framework.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+  #else
     Name = STRING(CONCAT3(python-core-,PYVERSION,.zip));
     Styles = (ARCHIVE);
+  #endif
 End
 
 #ifdef UNX
+#ifndef MACOSX
 File gid_File_Py_Python_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "python.bin";
     Styles = (PACKED);
 End
+#endif
 #endif
 #endif
 
@@ -126,12 +133,163 @@ File gid_File_Share_Registry_Pyuno_Xcd
 End
 
 #ifndef SYSTEM_PYTHON
+#ifndef MACOSX
 File gid_File_Lib_Python_So
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
+#else //MACOSX
+//directory entries solely to be able to create the symlinks
+Directory gid_Dir_PythonFramework
+    ParentID = gid_Dir_Program;
+    HostName = "OOoPython.framework";
+End
+
+Unixlink gid_Unixlink_Python_Headers
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework;
+    Name = "Headers";
+    Target = "Versions/Current/Headers";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_Resources
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework;
+    Name = "Resources";
+    Target = "Versions/Current/Resources";
+    Styles = ();
+End
+
+Directory gid_Dir_PythonFramework_Versions
+    ParentID = gid_Dir_PythonFramework;
+    HostName = "Versions";
+End
+
+Unixlink gid_Unixlink_Python_Versions_Current
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions;
+    Name = "Current";
+    Target = STRING(PYMAJMIN);
+    Styles = ();
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver
+    ParentID = gid_Dir_PythonFramework_Versions;
+    HostName = STRING(PYMAJMIN);
+End
+
+Unixlink gid_Unixlink_Python_Versions_ver_Headers
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver;
+    Name = "Headers";
+    Target = STRING(CONCAT2(include/python,PYMAJMIN));
+    Styles = ();
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_bin
+    ParentID = gid_Dir_PythonFramework_Versions_ver;
+    HostName = "bin";
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_lib
+    ParentID = gid_Dir_PythonFramework_Versions_ver;
+    HostName = "lib";
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_lib_pythonver
+    ParentID = gid_Dir_PythonFramework_Versions_ver_lib;
+    HostName = STRING(CONCAT2(python,PYMAJMIN));
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config
+    ParentID = gid_Dir_PythonFramework_Versions_ver_lib_pythonver;
+    HostName = "config";
+End
+
+Unixlink gid_Unixlink_Python_OOoPython
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework;
+    Name = "OOoPython";
+    Target = "Versions/Current/OOoPython";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_idle
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "idle";
+    Target = STRING(CONCAT2(idle,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pydoc
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "pydoc";
+    Target = STRING(CONCAT2(pydoc,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_python_real
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "python";
+    Target = "../Resources/Python.app/Contents/MacOS/OOoPython";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_python
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "python";
+    Target = STRING(CONCAT2(python,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pythonconfig
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "python-config";
+    Target = STRING(CONCAT3(python,PYMAJMIN,-config));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pythonw_real
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "pythonw";
+    Target = "../Resources/Python.app/Contents/MacOS/OOoPython";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pythonw
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "pythonw";
+    Target = STRING(CONCAT2(pythonw,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_smtpdpy
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "smtpd.py";
+    Target = STRING(CONCAT3(smtpd,PYMAJMIN,.py));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_libpython
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config;
+    Name = STRING(PY_FULL_DLL_NAME);
+    Target = "../../../OOoPython";
+    Styles = ();
+End
+#endif //MACOSX
+
 #ifdef WNT
 File gid_File_Lib_Python_So_Brand // Fix for system-python-problem on windows
     TXT_FILE_BODY;
