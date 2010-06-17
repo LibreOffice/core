@@ -97,6 +97,11 @@ interface XUIElementFactory : ::com::sun::star::uno::XInterface
                     configuration manager. This argument is <b>mandatory</b> to
                     have a working configurable user interface element instance.
                 </li>
+                <li><b>ParentWindow</b><br/>
+                    specifies a parent window to use for the window(s) representing
+                    the UI element. Depending on the concrete UI element type, this parameter
+                    might be required or ignored by an implementation.
+                </li>
                 <li><b>Persistent</b><br>specifies if changes to a configurable
                     user interface element should be persistent. This is an
                     optional argument. The default value is <TRUE/>.</li>
