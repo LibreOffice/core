@@ -119,6 +119,7 @@ PageObjectPainter::PageObjectPainter (
       maSelectionBackground(),
       maFocusedSelectionBackground(),
       maMouseOverBackground(),
+      maMouseOverFocusedBackground(),
       msUnhideString(mpTheme->GetString(Theme::String_Unhide)),
       mrButtonBar(rSlideSorter.GetView().GetButtonBar())
 {
@@ -179,6 +180,7 @@ void PageObjectPainter::NotifyResize (const bool bForce)
     maFocusedSelectionBackground.SetEmpty();
     maFocusedBackground.SetEmpty();
     maMouseOverBackground.SetEmpty();
+    maMouseOverFocusedBackground.SetEmpty();
     maMouseOverSelectedAndFocusedBackground.SetEmpty();
 }
 
@@ -408,13 +410,19 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
                 true);
 
         case MouseOver | Selected:
-        case MouseOver | Focused:
         case MouseOver:
             return GetBackground(
                 maMouseOverBackground,
                 Theme::Gradient_MouseOverPage,
                 rReferenceDevice,
-                (eState & Focused)!=0);
+                false);
+
+        case MouseOver | Focused:
+            return GetBackground(
+                maMouseOverFocusedBackground,
+                Theme::Gradient_MouseOverPage,
+                rReferenceDevice,
+                true);
 
         case Selected | Focused:
             return GetBackground(

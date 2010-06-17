@@ -101,6 +101,7 @@ private:
     Bitmap maFocusedSelectionBackground;
     Bitmap maFocusedBackground;
     Bitmap maMouseOverBackground;
+    Bitmap maMouseOverFocusedBackground;
     Bitmap maMouseOverSelectedAndFocusedBackground;
     ::rtl::OUString msUnhideString;
     ButtonBar& mrButtonBar;
