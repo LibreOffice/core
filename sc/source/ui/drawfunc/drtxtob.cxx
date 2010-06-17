@@ -32,6 +32,9 @@
 
 //-------------------------------------------------------------------------
 
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+
 #include "scitems.hxx"
 
 #include <editeng/adjitem.hxx>
@@ -46,6 +49,7 @@
 #include <svx/hlnkitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <svx/svdoutl.hxx>
+#include <editeng/unolingu.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/scripttypeitem.hxx>
@@ -71,6 +75,7 @@
 
 #include "sc.hrc"
 #include "globstr.hrc"
+#include "scmod.hxx"
 #include "drtxtob.hxx"
 #include "fudraw.hxx"
 #include "viewdata.hxx"
@@ -82,6 +87,10 @@
 
 #define ScDrawTextObjectBar
 #include "scslots.hxx"
+
+
+using namespace ::com::sun::star;
+
 
 SFX_IMPL_INTERFACE( ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL) )
 {
@@ -363,6 +372,24 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             ExecuteGlobal( rReq );
             break;
 #endif
+
+        case SID_THES:
+            {
+                String aReplaceText;
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+                if (pItem2)
+                    aReplaceText = pItem2->GetValue();
+                if (aReplaceText.Len() > 0)
+                    ReplaceTextWithSynonym( pOutView->GetEditView(), aReplaceText );
+            }
+            break;
+
+        case SID_THESAURUS:
+            {
+                pOutView->StartThesaurus();
+            }
+            break;
+
     }
 }
 
@@ -453,6 +480,25 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             BOOL bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
+    }
+
+    if ( rSet.GetItemState( SID_THES ) != SFX_ITEM_UNKNOWN  ||
+         rSet.GetItemState( SID_THESAURUS ) != SFX_ITEM_UNKNOWN )
+    {
+        SdrView * pView = pViewData->GetScDrawView();
+        EditView & rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+
+        String          aStatusVal;
+        LanguageType    nLang = LANGUAGE_NONE;
+        bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+        rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+        // disable thesaurus main menu and context menu entry if there is nothing to look up
+        BOOL bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+        if (!bIsLookUpWord || !bCanDoThesaurus)
+            rSet.DisableItem( SID_THES );
+        if (!bCanDoThesaurus)
+            rSet.DisableItem( SID_THESAURUS );
     }
 }
 

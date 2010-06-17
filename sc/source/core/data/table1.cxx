@@ -116,8 +116,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-extern BOOL bIsOlk, bOderSo;
-
 // -----------------------------------------------------------------------
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
@@ -235,9 +233,6 @@ void ScTable::GetName( String& rName ) const
 
 void ScTable::SetName( const String& rNewName )
 {
-    String aMd( "D\344umling", RTL_TEXTENCODING_MS_1252 );  // ANSI
-    if( rNewName == aMd )
-        bIsOlk = bOderSo = TRUE;
     aName = rNewName;
     aUpperName.Erase();         // invalidated if the name is changed
 
@@ -687,7 +682,7 @@ BOOL ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 }
 
 void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-                            BOOL bIncludeOld, bool bOnlyDown ) const
+                           BOOL bIncludeOld, bool bOnlyDown ) const
 {
     BOOL bLeft       = FALSE;
     BOOL bRight  = FALSE;

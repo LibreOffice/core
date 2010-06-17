@@ -2631,13 +2631,20 @@ void ScXMLExport::_ExportAutoStyles()
                     GetShapeExport()->exportAutoStyles();
                     GetFormExport()->exportAutoStyles( );
 
+                    if (pDoc)
                     {
-                        // Special table style for the external ref cache tables.
-                        AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sExternalRefTabStyleName);
-                        AddAttribute(XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE);
-                        SvXMLElementExport aElemStyle(*this, XML_NAMESPACE_STYLE, XML_STYLE, sal_True, sal_True);
-                        AddAttribute(XML_NAMESPACE_TABLE,  XML_DISPLAY, XML_FALSE);
-                        SvXMLElementExport aElemStyleTabProps(*this, XML_NAMESPACE_STYLE, XML_TABLE_PROPERTIES, sal_True, sal_True);
+                        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+                        // #i100879# write the table style for cached tables only if there are cached tables
+                        // (same logic as in ExportExternalRefCacheStyles)
+                        if (pRefMgr->hasExternalData())
+                        {
+                            // Special table style for the external ref cache tables.
+                            AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sExternalRefTabStyleName);
+                            AddAttribute(XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE);
+                            SvXMLElementExport aElemStyle(*this, XML_NAMESPACE_STYLE, XML_STYLE, sal_True, sal_True);
+                            AddAttribute(XML_NAMESPACE_TABLE,  XML_DISPLAY, XML_FALSE);
+                            SvXMLElementExport aElemStyleTabProps(*this, XML_NAMESPACE_STYLE, XML_TABLE_PROPERTIES, sal_True, sal_True);
+                        }
                     }
                 }
                 if (getExportFlags() & EXPORT_MASTERSTYLES)
@@ -3250,6 +3257,7 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
     {
         const ScMyAreaLink& rAreaLink = rMyCell.aAreaLink;
         AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, rAreaLink.sSourceStr );
+        AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(rAreaLink.sURL) );
         AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_NAME, rAreaLink.sFilter );
         if( rAreaLink.sFilterOptions.getLength() )
@@ -3733,6 +3741,7 @@ void ScXMLExport::WriteTableSource()
                             xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_REFDELAY))) >>= nRefresh;
                             if (sLink.getLength())
                             {
+                                AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
                                 AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(sLink));
                                 if (sTableName.getLength())
                                     AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sTableName);
@@ -3971,6 +3980,7 @@ void ScXMLExport::WriteExternalRefCaches()
                         aRelUrl = pExtFileData->maRelativeName;
                     else
                         aRelUrl = GetRelativeReference(pExtFileData->maRelativeName);
+                    AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
                     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aRelUrl);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, *itr);
                     if (pExtFileData->maFilterName.Len())
@@ -3998,6 +4008,14 @@ void ScXMLExport::WriteExternalRefCaches()
                     if (nMaxColsUsed <= nCol)
                         nMaxColsUsed = nCol + 1;
                 }
+            }
+
+            // Column definitions have to be present to make a valid file
+            {
+                if (nMaxColsUsed > 1)
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
+                                    OUString::valueOf(static_cast<sal_Int32>(nMaxColsUsed)));
+                SvXMLElementExport aElemColumn(*this, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
             }
 
             // Write cache content for this table.

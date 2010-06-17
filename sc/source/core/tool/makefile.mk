@@ -104,7 +104,6 @@ SLOFILES =  \
         $(SLO)$/reftokenhelper.obj \
         $(SLO)$/refupdat.obj \
         $(SLO)$/scmatrix.obj \
-        $(SLO)$/sctictac.obj \
         $(SLO)$/stringutil.obj \
         $(SLO)$/subtotal.obj \
         $(SLO)$/token.obj \
