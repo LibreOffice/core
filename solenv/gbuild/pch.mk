@@ -30,8 +30,10 @@
 
 ifeq ($(gb_ENABLE_PCH),$(true))
 
+# gb_PrecompiledHeader_get_enableflags defined by platform
+
 $(call gb_PrecompiledHeader_get_target,%) :
-    $(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
+    $(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(PCH_EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 .PHONY : $(call gb_PrecompiledHeader_get_clean_target,%)
 $(call gb_PrecompiledHeader_get_clean_target,%) :

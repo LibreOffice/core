@@ -52,16 +52,39 @@ gb_CxxObject_get_source = $(SRCDIR)/$(1).cxx
 #  gb_CxxObject__command
 #  gb_CxxObject__command_dep
 
+define gb_CxxObject__set_pchflags
+ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(strip $$(PCH_NAME)),)
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(CXXFLAGS) $$(DEFS)))
+$$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(call gb_PrecompiledHeader_get_target,$$(PCH_NAME)))
+else
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(CXXFLAGS) $$(DEFS)))
+$$@ : PCHFLAGS := $$i(call gb_PrecompiledHeader_get_enableflags,$$(call gb_PrecompiledHeader_get_noex_target,$$(PCH_NAME)))
+else
+$$(info No precompiled header available for $$*.)
+$$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
+$$(info precompiled header flags (noex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)))
+$$(info .           object flags        : $$(sort $$(CXXFLAGS) $$(DEFS)))
+$$@ : PCHFLAGS := 
+endif
+endif
+endif
+endif
+endef
+
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,%)
-    $(call gb_CxxObject__command,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+    $(eval $(gb_CxxObject__set_pchflags))
+    $(call gb_CxxObject__command,$@,$*,$<,$(DEFS),$(CXXFLAGS) $(PCHFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_source,%)
-    $(call gb_CxxObject__command_dep,$@,$*,$<,$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+    $(eval $(gb_CxxObject__set_pchflags))
+    $(call gb_CxxObject__command_dep,$@,$*,$<,$(DEFS),$(CXXFLAGS) $(PCHFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_CxxObject_get_dep_target,%) :
     $(error unable to find C++ file $(call gb_CxxObject_get_source,$*))
 
 gb_CxxObject_CxxObject =
+
 
 # ObjCxxObject class
 
@@ -154,6 +177,7 @@ $(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) \
@@ -166,6 +190,7 @@ $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
 $(call gb_LinkTarget_get_dep_target,$(1)) \
@@ -178,6 +203,9 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE_FLAGS := 
+$(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 ifeq ($(gb_FULLDEPS),$(true))
 include $(call gb_LinkTarget_get_dep_target,$(1))
 endif
@@ -188,7 +216,8 @@ define gb_LinkTarget_set_defs
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $(2)
 $(call gb_LinkTarget_get_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $(2)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
 endef
 
 define gb_LinkTarget_set_cflags
@@ -200,7 +229,8 @@ define gb_LinkTarget_set_cxxflags
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $(2)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(CXXFLAGS)
 endef
 
 define gb_LinkTarget_set_objcxxflags
@@ -350,9 +380,11 @@ define gb_LinkTarget__add_precompiled_header_impl
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_target,$(3)))
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_noex_target,$(3)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
-$(call gb_PrecompiledHeader_get_noex_target,$(3)) : EXCEPTIONFLAGS :=
+$(call gb_PrecompiledHeader_get_target,$(3)) : PCH_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
+$(call gb_PrecompiledHeader_get_noex_target,$(3)) : PCH_EXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 $(call gb_PrecompiledHeader_get_target,$(3)) \
 $(call gb_PrecompiledHeader_get_noex_target,$(3)) : $(2).cxx $(2).hxx
+$(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
 endef
 
 define gb_LinkTarget_add_precompiled_header
