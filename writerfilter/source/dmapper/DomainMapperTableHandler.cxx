@@ -274,7 +274,7 @@ void lcl_debug_TableBorder(table::TableBorder & rBorder)
 }
 #endif
 
-struct TableInfo
+struct WRITERFILTER_DLLPRIVATE TableInfo
 {
     sal_Int32 nLeftBorderDistance;
     sal_Int32 nRightBorderDistance;

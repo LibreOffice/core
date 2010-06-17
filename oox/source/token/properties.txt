@@ -6,6 +6,7 @@ Adjust
 AdjustContrast
 AdjustLuminance
 Align
+AnchorPosition
 ArrangeOrder
 Aspect
 AttachedAxisIndex
@@ -58,6 +59,7 @@ CharFontPitchComplex
 CharHeight
 CharHeightAsian
 CharHeightComplex
+CharKerning
 CharLocale
 CharLocaleAsian
 CharLocaleComplex
@@ -121,6 +123,7 @@ ErrorBarX
 ErrorBarY
 ErrorMessage
 ErrorTitle
+Expansion
 ExternalDocLinks
 ExternalLinks
 FileFormat
@@ -169,10 +172,16 @@ HasAutoShowInfo
 HasColumnRowHeaders
 HasHorizontalScrollBar
 HasLayoutInfo
+HasMainTitle
 HasReference
+HasSecondaryXAxisTitle
+HasSecondaryYAxisTitle
 HasSheetTabs
 HasSortInfo
 HasVerticalScrollBar
+HasXAxisTitle
+HasYAxisTitle
+HasZAxisTitle
 HeaderBodyDistance
 HeaderHeight
 HeaderIsDynamicHeight
@@ -305,6 +314,7 @@ ReferenceDevice
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
+RelativePosition
 Repeat
 RepeatDelay
 Representation
@@ -382,6 +392,8 @@ Text
 TextAutoGrowHeight
 TextBreak
 TextColor
+TextFitToSize
+TextHorizontalAdjust
 TextLeftDistance
 TextLowerDistance
 TextOverlap
@@ -415,6 +427,7 @@ VertJustify
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+Visible
 VisibleSize
 VisualArea
 VisualEffect

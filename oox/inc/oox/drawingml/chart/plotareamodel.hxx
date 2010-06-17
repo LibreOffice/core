@@ -31,7 +31,6 @@
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/seriesmodel.hxx"
-#include "oox/drawingml/chart/titlemodel.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
 
 namespace oox {
