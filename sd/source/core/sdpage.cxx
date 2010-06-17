@@ -2104,7 +2104,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     }
 }
 
-SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect )
+SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, Rectangle aRect )
 {
     SdDrawDocument* pModel = static_cast< SdDrawDocument* >( rPage.GetModel() );
     DBG_ASSERT( pModel, "sd::convertPresentationObjectImpl(), no model on page!" );
@@ -2217,6 +2217,16 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             if( !bUndo )
                 SdrObject::Free( pSourceObj );
+        }
+    }
+    else if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
+    {
+        switch( pSourceObj->GetObjIdentifier() )
+        {
+        case OBJ_TABLE: eObjKind = PRESOBJ_TABLE; break;
+        case OBJ_MEDIA: eObjKind = PRESOBJ_MEDIA; break;
+        case OBJ_GRAF: eObjKind = PRESOBJ_GRAPHIC; break;
+        case OBJ_OLE2: eObjKind = PRESOBJ_OBJECT; break;
         }
     }
 
