@@ -94,8 +94,10 @@ namespace
         basegfx::BColor         maTextLineColor;
         basegfx::BColor         maOverlineColor;
 
-        /// clipping, font, etc.
-        Region                  maRegion;
+        /// clipping
+        basegfx::B2DPolyPolygon maClipPolyPoygon;
+
+        /// font, etc.
         Font                    maFont;
         RasterOp                maRasterOp;
         sal_uInt32              mnLayoutMode;
@@ -110,7 +112,7 @@ namespace
         bool                    mbTextFillColor : 1;
         bool                    mbTextLineColor : 1;
         bool                    mbOverlineColor : 1;
-        bool                    mbRegion : 1;
+        bool                    mbClipPolyPolygonActive : 1;
 
     public:
         PropertyHolder()
@@ -122,7 +124,7 @@ namespace
             maTextFillColor(),
             maTextLineColor(),
             maOverlineColor(),
-            maRegion(),
+            maClipPolyPoygon(),
             maFont(),
             maRasterOp(ROP_OVERPAINT),
             mnLayoutMode(0),
@@ -134,7 +136,7 @@ namespace
             mbTextFillColor(false),
             mbTextLineColor(false),
             mbOverlineColor(false),
-            mbRegion(false)
+            mbClipPolyPolygonActive(false)
         {
         }
 
@@ -179,10 +181,10 @@ namespace
         bool getOverlineColorActive() const { return mbOverlineColor; }
         void setOverlineColorActive(bool bNew) { if(bNew != mbOverlineColor) mbOverlineColor = bNew; }
 
-        const Region& getRegion() const { return maRegion; }
-        void setRegion(const Region& rRegion) { if(rRegion != maRegion) maRegion = rRegion; }
-        bool getRegionActive() const { return mbRegion; }
-        void setRegionActive(bool bNew) { if(bNew != mbRegion) mbRegion = bNew; }
+        const basegfx::B2DPolyPolygon& getClipPolyPolygon() const { return maClipPolyPoygon; }
+        void setClipPolyPolygon(const basegfx::B2DPolyPolygon& rNew) { if(rNew != maClipPolyPoygon) maClipPolyPoygon = rNew; }
+        bool getClipPolyPolygonActive() const { return mbClipPolyPolygonActive; }
+        void setClipPolyPolygonActive(bool bNew) { if(bNew != mbClipPolyPolygonActive) mbClipPolyPolygonActive = bNew; }
 
         const Font& getFont() const { return maFont; }
         void setFont(const Font& rFont) { if(rFont != maFont) maFont = rFont; }
@@ -233,6 +235,12 @@ namespace
         sal_uInt32 size()
         {
             return maPropertyHolders.size();
+        }
+
+        void PushDefault()
+        {
+            PropertyHolder* pNew = new PropertyHolder();
+            maPropertyHolders.push_back(pNew);
         }
 
         void Push(sal_uInt16 nPushFlags)
@@ -291,8 +299,8 @@ namespace
                             }
                             if(!(nPushFlags & PUSH_CLIPREGION     ))
                             {
-                                pLast->setRegion(pTip->getRegion());
-                                pLast->setRegionActive(pTip->getRegionActive());
+                                pLast->setClipPolyPolygon(pTip->getClipPolyPolygon());
+                                pLast->setClipPolyPolygonActive(pTip->getClipPolyPolygonActive());
                             }
                             if(!(nPushFlags & PUSH_RASTEROP       ))
                             {
@@ -336,11 +344,11 @@ namespace
                             }
                         }
                     }
-
-                    // execute the pop
-                    delete maPropertyHolders.back();
-                    maPropertyHolders.pop_back();
                 }
+
+                // execute the pop
+                delete maPropertyHolders.back();
+                maPropertyHolders.pop_back();
             }
         }
 
@@ -465,25 +473,18 @@ namespace
             // the buffer to not delete them in the destructor.
             aTargets.clear();
 
-            if(xRetval.hasElements() && rPropertyHolder.getRegionActive())
+            if(xRetval.hasElements() && rPropertyHolder.getClipPolyPolygonActive())
             {
-                const Region& rRegion = rPropertyHolder.getRegion();
+                const basegfx::B2DPolyPolygon& rClipPolyPolygon = rPropertyHolder.getClipPolyPolygon();
 
-                if(!rRegion.IsEmpty())
+                if(rClipPolyPolygon.count())
                 {
-                    basegfx::B2DPolyPolygon aClipPolyPolygon(getB2DPolyPolygonFromRegion(rRegion));
+                    const drawinglayer::primitive2d::Primitive2DReference xMask(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            rClipPolyPolygon,
+                            xRetval));
 
-                    if(aClipPolyPolygon.count())
-                    {
-                        aClipPolyPolygon.transform(rPropertyHolder.getTransformation());
-
-                        const drawinglayer::primitive2d::Primitive2DReference xMask(
-                            new drawinglayer::primitive2d::MaskPrimitive2D(
-                                aClipPolyPolygon,
-                                xRetval));
-
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
-                    }
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
                 }
             }
 
@@ -943,14 +944,17 @@ namespace
             default : // case HATCH_SINGLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
+                break;
             }
             case HATCH_DOUBLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
+                break;
             }
             case HATCH_TRIPLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE;
+                break;
             }
         }
 
@@ -969,53 +973,56 @@ namespace
         a new target for embracing new geometry to the current region
      */
     void HandleNewClipRegion(
-        const Region* pRegion,
+        const basegfx::B2DPolyPolygon& rClipPolyPolygon,
         TargetHolders& rTargetHolders,
         PropertyHolders& rPropertyHolders)
     {
-        const bool bNewActive(pRegion && !pRegion->IsEmpty());
+        const bool bNewActive(rClipPolyPolygon.count());
 
-        // #i108636# The handlig of new ClipRegions was not done as good as possible
-        // in the first version of this interpreter; e.g. when a ClipRegion was set
+        // #i108636# The handlig of new ClipPolyPolygons was not done as good as possible
+        // in the first version of this interpreter; e.g. when a ClipPolyPolygon was set
         // initially and then using a lot of push/pop actions, the pop always leads
-        // to setting a 'new' ClipRegion which indeed is the return to the ClipRegion
+        // to setting a 'new' ClipPolyPolygon which indeed is the return to the ClipPolyPolygon
         // of the properties next on the stack.
-        // This ClipRegion is identical to the current one, so there is no need to
+        //
+        // This ClipPolyPolygon is identical to the current one, so there is no need to
         // create a MaskPrimitive2D containing the up-to-now created primitives, but
         // this was done before. While this does not lead to wrong primitive
         // representations of the metafile data, it creates unneccesarily expensive
-        // representations. Just detecting when no really 'new' ClipRegion gets set
+        // representations. Just detecting when no really 'new' ClipPolyPolygon gets set
         // solves the problem.
 
-        if(!rPropertyHolders.Current().getRegionActive() && !bNewActive)
+        if(!rPropertyHolders.Current().getClipPolyPolygonActive() && !bNewActive)
         {
-            // no active region exchanged by no new one, done
+            // no active ClipPolyPolygon exchanged by no new one, done
             return;
         }
 
-        if(rPropertyHolders.Current().getRegionActive() && bNewActive)
+        if(rPropertyHolders.Current().getClipPolyPolygonActive() && bNewActive)
         {
-            // active region and new active region
-            if(rPropertyHolders.Current().getRegion() == *pRegion)
+            // active ClipPolyPolygon and new active ClipPolyPolygon
+            if(rPropertyHolders.Current().getClipPolyPolygon() == rClipPolyPolygon)
             {
-                // new region is the same as the old region, done
+                // new is the same as old, done
                 return;
             }
         }
 
-        // Here the old region and the new one are definitively different, maybe
+        // Here the old and the new are definitively different, maybe
         // old one and/or new one is not active.
 
-        // Handle deletion of old region.The process evtl. created primitives which
-        // belong to this active region. These need to be embedded to a
+        // Handle deletion of old ClipPolyPolygon. The process evtl. created primitives which
+        // belong to this active ClipPolyPolygon. These need to be embedded to a
         // MaskPrimitive2D accordingly.
-        if(rPropertyHolders.Current().getRegionActive() && rTargetHolders.size() > 1)
+        if(rPropertyHolders.Current().getClipPolyPolygonActive() && rTargetHolders.size() > 1)
         {
             drawinglayer::primitive2d::Primitive2DSequence aSubContent;
 
-            if(!rPropertyHolders.Current().getRegion().IsEmpty() && rTargetHolders.Current().size())
+            if(rPropertyHolders.Current().getClipPolyPolygon().count()
+                && rTargetHolders.Current().size())
             {
-                aSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                aSubContent = rTargetHolders.Current().getPrimitive2DSequence(
+                    rPropertyHolders.Current());
             }
 
             rTargetHolders.Pop();
@@ -1030,11 +1037,11 @@ namespace
 
         // apply new settings to current properties by setting
         // the new region now
-        rPropertyHolders.Current().setRegionActive(bNewActive);
+        rPropertyHolders.Current().setClipPolyPolygonActive(bNewActive);
 
         if(bNewActive)
         {
-            rPropertyHolders.Current().setRegion(*pRegion);
+            rPropertyHolders.Current().setClipPolyPolygon(rClipPolyPolygon);
 
             // prepare new content holder for new active region
             rTargetHolders.Push();
@@ -2134,8 +2141,11 @@ namespace
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
+                                // #i# for sub-Mteafile contents, do start with new, default render state
+                                rPropertyHolders.PushDefault();
                                 interpretMetafile(aGDIMetaFile, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                                rPropertyHolders.Pop();
                                 rTargetHolders.Pop();
                             }
 
@@ -2424,13 +2434,18 @@ namespace
 
                     if(pA->IsClipping())
                     {
-                        // new clipping
-                        HandleNewClipRegion(&pA->GetRegion(), rTargetHolders, rPropertyHolders);
+                        // new clipping. Get PolyPolygon and transform with current transformation
+                        basegfx::B2DPolyPolygon aNewClipPolyPolygon(getB2DPolyPolygonFromRegion(pA->GetRegion()));
+
+                        aNewClipPolyPolygon.transform(rPropertyHolders.Current().getTransformation());
+                        HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
                     {
                         // end clipping
-                        HandleNewClipRegion(0, rTargetHolders, rPropertyHolders);
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
 
                     break;
@@ -2444,49 +2459,60 @@ namespace
                     if(rRectangle.IsEmpty())
                     {
                         // intersect with empty rectangle will always give empty
-                        // region; start new clipping with empty region
-                        const Region aNewRegion;
-                        HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                        // ClipPolyPolygon; start new clipping with empty PolyPolygon
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
                     {
-                        if(rPropertyHolders.Current().getRegionActive())
+                        // create transformed ClipRange
+                        basegfx::B2DRange aClipRange(
+                            rRectangle.Left(), rRectangle.Top(),
+                            rRectangle.Right(), rRectangle.Bottom());
+
+                        aClipRange.transform(rPropertyHolders.Current().getTransformation());
+
+                        if(rPropertyHolders.Current().getClipPolyPolygonActive())
                         {
-                            if(rPropertyHolders.Current().getRegion().IsEmpty())
+                            if(0 == rPropertyHolders.Current().getClipPolyPolygon().count())
                             {
-                                // nothing to do, empty active clip region will stay
+                                // nothing to do, empty active clipPolyPolygon will stay
                                 // empty when intersecting
                             }
                             else
                             {
-                                // AND existing region and new rectangle
+                                // AND existing region and new ClipRange
                                 const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
-                                    getB2DPolyPolygonFromRegion(rPropertyHolders.Current().getRegion()));
+                                    rPropertyHolders.Current().getClipPolyPolygon());
                                 basegfx::B2DPolyPolygon aClippedPolyPolygon;
 
                                 if(aOriginalPolyPolygon.count())
                                 {
-                                    const basegfx::B2DRange aIntersectRange(
-                                        rRectangle.Left(), rRectangle.Top(),
-                                        rRectangle.Right(), rRectangle.Bottom());
-
                                     aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(
-                                        aOriginalPolyPolygon, aIntersectRange, true, false);
+                                        aOriginalPolyPolygon,
+                                        aClipRange,
+                                        true,
+                                        false);
                                 }
 
                                 if(aClippedPolyPolygon != aOriginalPolyPolygon)
                                 {
                                     // start new clipping with intersected region
-                                    const Region aNewRegion(aClippedPolyPolygon);
-                                    HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                                    HandleNewClipRegion(
+                                        aClippedPolyPolygon,
+                                        rTargetHolders,
+                                        rPropertyHolders);
                                 }
                             }
                         }
                         else
                         {
-                            // start new clipping with rectangle
-                            const Region aNewRegion(rRectangle);
-                            HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                            // start new clipping with ClipRange
+                            const basegfx::B2DPolyPolygon aNewClipPolyPolygon(
+                                basegfx::tools::createPolygonFromRect(aClipRange));
+
+                            HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                         }
                     }
 
@@ -2501,50 +2527,48 @@ namespace
                     if(rNewRegion.IsEmpty())
                     {
                         // intersect with empty region will always give empty
-                        // region; start new clipping with empty region
-                        const Region aNewRegion;
-                        HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                        // region; start new clipping with empty PolyPolygon
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
                     {
-                        if(rPropertyHolders.Current().getRegionActive())
+                        // get new ClipPolyPolygon, transform it with current transformation
+                        basegfx::B2DPolyPolygon aNewClipPolyPolygon(getB2DPolyPolygonFromRegion(rNewRegion));
+                        aNewClipPolyPolygon.transform(rPropertyHolders.Current().getTransformation());
+
+                        if(rPropertyHolders.Current().getClipPolyPolygonActive())
                         {
-                            if(rPropertyHolders.Current().getRegion().IsEmpty())
+                            if(0 == rPropertyHolders.Current().getClipPolyPolygon().count())
                             {
-                                // nothing to do, empty active clip region will stay empty
+                                // nothing to do, empty active clipPolyPolygon will stay empty
                                 // when intersecting with any region
                             }
                             else
                             {
                                 // AND existing and new region
                                 const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
-                                    getB2DPolyPolygonFromRegion(rPropertyHolders.Current().getRegion()));
+                                    rPropertyHolders.Current().getClipPolyPolygon());
                                 basegfx::B2DPolyPolygon aClippedPolyPolygon;
 
                                 if(aOriginalPolyPolygon.count())
                                 {
-                                    const basegfx::B2DPolyPolygon aClipPolyPolygon(
-                                        getB2DPolyPolygonFromRegion(rNewRegion));
-
-                                    if(aClipPolyPolygon.count())
-                                    {
-                                        aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
-                                            aOriginalPolyPolygon, aClipPolyPolygon, true, false);
-                                    }
+                                    aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                        aOriginalPolyPolygon, aNewClipPolyPolygon, true, false);
                                 }
 
                                 if(aClippedPolyPolygon != aOriginalPolyPolygon)
                                 {
-                                    // start new clipping with intersected region
-                                    const Region aNewRegion(aClippedPolyPolygon);
-                                    HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                                    // start new clipping with intersected ClipPolyPolygon
+                                    HandleNewClipRegion(aClippedPolyPolygon, rTargetHolders, rPropertyHolders);
                                 }
                             }
                         }
                         else
                         {
-                            // start new clipping with new region
-                            HandleNewClipRegion(&rNewRegion, rTargetHolders, rPropertyHolders);
+                            // start new clipping with new ClipPolyPolygon
+                            HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                         }
                     }
 
@@ -2555,24 +2579,31 @@ namespace
                     /** CHECKED, WORKS WELL */
                     const MetaMoveClipRegionAction* pA = (const MetaMoveClipRegionAction*)pAction;
 
-                    if(rPropertyHolders.Current().getRegionActive())
+                    if(rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
-                        if(rPropertyHolders.Current().getRegion().IsEmpty())
+                        if(0 == rPropertyHolders.Current().getClipPolyPolygon().count())
                         {
                             // nothing to do
                         }
                         else
                         {
-                            // move using old interface
-                            Region aRegion(rPropertyHolders.Current().getRegion());
-
                             const sal_Int32 nHor(pA->GetHorzMove());
                             const sal_Int32 nVer(pA->GetVertMove());
 
                             if(0 != nHor || 0 != nVer)
                             {
-                                aRegion.Move(nHor, nVer);
-                                HandleNewClipRegion(&aRegion, rTargetHolders, rPropertyHolders);
+                                // prepare translation, add current transformation
+                                basegfx::B2DVector aVector(pA->GetHorzMove(), pA->GetVertMove());
+                                aVector *= rPropertyHolders.Current().getTransformation();
+                                basegfx::B2DHomMatrix aTransform(
+                                    basegfx::tools::createTranslateB2DHomMatrix(aVector));
+
+                                // transform existing region
+                                basegfx::B2DPolyPolygon aClipPolyPolygon(
+                                    rPropertyHolders.Current().getClipPolyPolygon());
+
+                                aClipPolyPolygon.transform(aTransform);
+                                HandleNewClipRegion(aClipPolyPolygon, rTargetHolders, rPropertyHolders);
                             }
                         }
                     }
@@ -2777,10 +2808,12 @@ namespace
                     const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_CLIPREGION);
                     const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_RASTEROP);
 
-                    if(bRegionMayChange && rPropertyHolders.Current().getRegionActive())
+                    if(bRegionMayChange && rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
                         // end evtl. clipping
-                        HandleNewClipRegion(0, rTargetHolders, rPropertyHolders);
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
 
                     if(bRasterOpMayChange && rPropertyHolders.Current().isRasterOpActive())
@@ -2797,10 +2830,11 @@ namespace
                         HandleNewRasterOp(rPropertyHolders.Current().getRasterOp(), rTargetHolders, rPropertyHolders);
                     }
 
-                    if(bRegionMayChange && rPropertyHolders.Current().getRegionActive())
+                    if(bRegionMayChange && rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
                         // start evtl. clipping
-                        HandleNewClipRegion(&rPropertyHolders.Current().getRegion(), rTargetHolders, rPropertyHolders);
+                        HandleNewClipRegion(
+                            rPropertyHolders.Current().getClipPolyPolygon(), rTargetHolders, rPropertyHolders);
                     }
 
                     break;
@@ -2948,8 +2982,11 @@ namespace
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
+                                // #i# for sub-Mteafile contents, do start with new, default render state
+                                rPropertyHolders.PushDefault();
                                 interpretMetafile(rContent, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                                rPropertyHolders.Pop();
                                 rTargetHolders.Pop();
                             }
 

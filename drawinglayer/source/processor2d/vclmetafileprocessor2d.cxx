@@ -94,6 +94,147 @@
 using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
+// #112245# definition for maximum allowed point count due to Metafile target.
+// To be on the safe side with the old tools polygon, use slightly less then
+// the theoretical maximum (bad experiences with tools polygon)
+
+#define MAX_POLYGON_POINT_COUNT_METAFILE    (0x0000fff0)
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+    // #112245# helper to split line polygon in half
+    void splitLinePolygon(
+        const basegfx::B2DPolygon& rBasePolygon,
+        basegfx::B2DPolygon& o_aLeft,
+        basegfx::B2DPolygon& o_aRight)
+    {
+        const sal_uInt32 nCount(rBasePolygon.count());
+
+        if(nCount)
+        {
+            const sal_uInt32 nHalfCount((nCount - 1) >> 1);
+
+            o_aLeft = basegfx::B2DPolygon(rBasePolygon, 0, nHalfCount + 1);
+            o_aLeft.setClosed(false);
+
+            o_aRight = basegfx::B2DPolygon(rBasePolygon, nHalfCount, nCount - nHalfCount);
+            o_aRight.setClosed(false);
+
+            if(rBasePolygon.isClosed())
+            {
+                o_aRight.append(rBasePolygon.getB2DPoint(0));
+
+                if(rBasePolygon.areControlPointsUsed())
+                {
+                    o_aRight.setControlPoints(
+                        o_aRight.count() - 1,
+                        rBasePolygon.getPrevControlPoint(0),
+                        rBasePolygon.getNextControlPoint(0));
+                }
+            }
+        }
+        else
+        {
+            o_aLeft.clear();
+            o_aRight.clear();
+        }
+    }
+
+    // #112245# helper to evtl. split filled polygons to maximum metafile point count
+    bool fillPolyPolygonNeededToBeSplit(basegfx::B2DPolyPolygon& rPolyPolygon)
+    {
+        bool bRetval(false);
+        const sal_uInt32 nPolyCount(rPolyPolygon.count());
+
+        if(nPolyCount)
+        {
+            basegfx::B2DPolyPolygon aSplitted;
+
+            for(sal_uInt32 a(0); a < nPolyCount; a++)
+            {
+                const basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(a));
+                const sal_uInt32 nPointCount(aCandidate.count());
+                bool bNeedToSplit(false);
+
+                if(aCandidate.areControlPointsUsed())
+                {
+                    // compare with the maximum for bezier curved polygons
+                    bNeedToSplit = nPointCount > ((MAX_POLYGON_POINT_COUNT_METAFILE / 3L) - 1L);
+                }
+                else
+                {
+                    // compare with the maximum for simple point polygons
+                    bNeedToSplit = nPointCount > (MAX_POLYGON_POINT_COUNT_METAFILE - 1);
+                }
+
+                if(bNeedToSplit)
+                {
+                    // need to split the partial polygon
+                    const basegfx::B2DRange aRange(aCandidate.getB2DRange());
+                    const basegfx::B2DPoint aCenter(aRange.getCenter());
+
+                    if(aRange.getWidth() > aRange.getHeight())
+                    {
+                        // clip in left and right
+                        const basegfx::B2DPolyPolygon aLeft(
+                            basegfx::tools::clipPolygonOnParallelAxis(
+                                aCandidate,
+                                false,
+                                true,
+                                aCenter.getX(),
+                                false));
+                        const basegfx::B2DPolyPolygon aRight(
+                            basegfx::tools::clipPolygonOnParallelAxis(
+                                aCandidate,
+                                false,
+                                false,
+                                aCenter.getX(),
+                                false));
+
+                        aSplitted.append(aLeft);
+                        aSplitted.append(aRight);
+                    }
+                    else
+                    {
+                        // clip in top and bottom
+                        const basegfx::B2DPolyPolygon aTop(
+                            basegfx::tools::clipPolygonOnParallelAxis(
+                                aCandidate,
+                                true,
+                                true,
+                                aCenter.getY(),
+                                false));
+                        const basegfx::B2DPolyPolygon aBottom(
+                            basegfx::tools::clipPolygonOnParallelAxis(
+                                aCandidate,
+                                true,
+                                false,
+                                aCenter.getY(),
+                                false));
+
+                        aSplitted.append(aTop);
+                        aSplitted.append(aBottom);
+                    }
+                }
+                else
+                {
+                    aSplitted.append(aCandidate);
+                }
+            }
+
+            if(aSplitted.count() != nPolyCount)
+            {
+                rPolyPolygon = aSplitted;
+            }
+        }
+
+        return bRetval;
+    }
+} // end of anonymous namespace
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
@@ -985,14 +1126,12 @@ namespace drawinglayer
                     const primitive2d::PolygonHairlinePrimitive2D& rHairlinePrimitive = static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate);
                     const basegfx::B2DPolygon& rBasePolygon = rHairlinePrimitive.getB2DPolygon();
 
-                    if(rBasePolygon.count() > (0x0000ffff - 1))
+                    if(rBasePolygon.count() > (MAX_POLYGON_POINT_COUNT_METAFILE - 1))
                     {
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more, split the polygon in half and call recursively
-                        const sal_uInt32 nCount(rBasePolygon.count());
-                        const sal_uInt32 nHalfCount((nCount - 1) >> 1);
-                        const basegfx::B2DPolygon aLeft(rBasePolygon, 0, nHalfCount + 1);
-                        const basegfx::B2DPolygon aRight(rBasePolygon, nHalfCount, nCount - nHalfCount);
+                        basegfx::B2DPolygon aLeft, aRight;
+                        splitLinePolygon(rBasePolygon, aLeft, aRight);
                         const primitive2d::PolygonHairlinePrimitive2D aPLeft(aLeft, rHairlinePrimitive.getBColor());
                         const primitive2d::PolygonHairlinePrimitive2D aPRight(aRight, rHairlinePrimitive.getBColor());
 
@@ -1020,14 +1159,12 @@ namespace drawinglayer
                     const primitive2d::PolygonStrokePrimitive2D& rStrokePrimitive = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
                     const basegfx::B2DPolygon& rBasePolygon = rStrokePrimitive.getB2DPolygon();
 
-                    if(rBasePolygon.count() > (0x0000ffff - 1))
+                    if(rBasePolygon.count() > (MAX_POLYGON_POINT_COUNT_METAFILE - 1))
                     {
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more, split the polygon in half and call recursively
-                        const sal_uInt32 nCount(rBasePolygon.count());
-                        const sal_uInt32 nHalfCount((nCount - 1) >> 1);
-                        const basegfx::B2DPolygon aLeft(rBasePolygon, 0, nHalfCount + 1);
-                        const basegfx::B2DPolygon aRight(rBasePolygon, nHalfCount, nCount - nHalfCount);
+                        basegfx::B2DPolygon aLeft, aRight;
+                        splitLinePolygon(rBasePolygon, aLeft, aRight);
                         const primitive2d::PolygonStrokePrimitive2D aPLeft(
                             aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
                         const primitive2d::PolygonStrokePrimitive2D aPRight(
@@ -1099,14 +1236,12 @@ namespace drawinglayer
                     const primitive2d::PolygonStrokeArrowPrimitive2D& rStrokeArrowPrimitive = static_cast< const primitive2d::PolygonStrokeArrowPrimitive2D& >(rCandidate);
                     const basegfx::B2DPolygon& rBasePolygon = rStrokeArrowPrimitive.getB2DPolygon();
 
-                    if(rBasePolygon.count() > (0x0000ffff - 1))
+                    if(rBasePolygon.count() > (MAX_POLYGON_POINT_COUNT_METAFILE - 1))
                     {
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more, split the polygon in half and call recursively
-                        const sal_uInt32 nCount(rBasePolygon.count());
-                        const sal_uInt32 nHalfCount((nCount - 1) >> 1);
-                        const basegfx::B2DPolygon aLeft(rBasePolygon, 0, nHalfCount + 1);
-                        const basegfx::B2DPolygon aRight(rBasePolygon, nHalfCount, nCount - nHalfCount);
+                        basegfx::B2DPolygon aLeft, aRight;
+                        splitLinePolygon(rBasePolygon, aLeft, aRight);
                         const attribute::LineStartEndAttribute aEmpty;
                         const primitive2d::PolygonStrokeArrowPrimitive2D aPLeft(
                             aLeft,
@@ -1150,16 +1285,26 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :
                 {
                     // need to handle PolyPolygonBitmapPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
-                    SvtGraphicFill* pSvtGraphicFill = 0;
+                    const primitive2d::PolyPolygonBitmapPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::PolyPolygonBitmapPrimitive2D& >(rCandidate);
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rBitmapCandidate.getB2DPolyPolygon());
 
-                    if(!mnSvtGraphicFillCount)
+                    if(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
                     {
-                        const primitive2d::PolyPolygonBitmapPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::PolyPolygonBitmapPrimitive2D& >(rCandidate);
-                        basegfx::B2DPolyPolygon aLocalPolyPolygon(rBitmapCandidate.getB2DPolyPolygon());
-                        aLocalPolyPolygon.transform(maCurrentTransformation);
+                        // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                        // per polygon. If there are more use the splitted polygon and call recursively
+                        const primitive2d::PolyPolygonBitmapPrimitive2D aSplitted(
+                            aLocalPolyPolygon,
+                            rBitmapCandidate.getFillBitmap());
 
-                        if(aLocalPolyPolygon.count())
+                        processBasePrimitive2D(aSplitted);
+                    }
+                    else
+                    {
+                        SvtGraphicFill* pSvtGraphicFill = 0;
+
+                        if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                         {
+                            aLocalPolyPolygon.transform(maCurrentTransformation);
                             // calculate transformation. Get real object size, all values in FillBitmapAttribute
                             // are relative to the unified object
                             const attribute::FillBitmapAttribute& rFillBitmapAttribute = rBitmapCandidate .getFillBitmap();
@@ -1216,84 +1361,100 @@ namespace drawinglayer
                                 0,
                                 aFillGraphic);
                         }
-                    }
 
-                    // Do use decomposition; encapsulate with SvtGraphicFill
-                    impStartSvtGraphicFill(pSvtGraphicFill);
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    impEndSvtGraphicFill(pSvtGraphicFill);
+                        // Do use decomposition; encapsulate with SvtGraphicFill
+                        impStartSvtGraphicFill(pSvtGraphicFill);
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        impEndSvtGraphicFill(pSvtGraphicFill);
+                    }
 
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D :
                 {
                     // need to handle PolyPolygonHatchPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
+                    const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate = static_cast< const primitive2d::PolyPolygonHatchPrimitive2D& >(rCandidate);
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
+
+                    // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                    // per polygon. Split polygon until there are less than that
+                    while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
+                        ;
+
                     SvtGraphicFill* pSvtGraphicFill = 0;
+                    const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
+                    aLocalPolyPolygon.transform(maCurrentTransformation);
 
-                    if(!mnSvtGraphicFillCount)
+                    if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                     {
-                        const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate = static_cast< const primitive2d::PolyPolygonHatchPrimitive2D& >(rCandidate);
-                        basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
-                        aLocalPolyPolygon.transform(maCurrentTransformation);
+                        // re-create a VCL hatch as base data
+                        SvtGraphicFill::HatchType eHatch(SvtGraphicFill::hatchSingle);
 
-                        if(aLocalPolyPolygon.count())
+                        switch(rFillHatchAttribute.getStyle())
                         {
-                            // re-create a VCL hatch as base data
-                            const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
-                            SvtGraphicFill::HatchType eHatch(SvtGraphicFill::hatchSingle);
-
-                            switch(rFillHatchAttribute.getStyle())
+                            default: // attribute::HATCHSTYLE_SINGLE :
                             {
-                                default: // attribute::HATCHSTYLE_SINGLE :
-                                {
-                                    eHatch = SvtGraphicFill::hatchSingle;
-                                    break;
-                                }
-                                case attribute::HATCHSTYLE_DOUBLE :
-                                {
-                                    eHatch = SvtGraphicFill::hatchDouble;
-                                    break;
-                                }
-                                case attribute::HATCHSTYLE_TRIPLE :
-                                {
-                                    eHatch = SvtGraphicFill::hatchTriple;
-                                    break;
-                                }
+                                eHatch = SvtGraphicFill::hatchSingle;
+                                break;
                             }
-
-                            SvtGraphicFill::Transform aTransform;
-
-                            // scale
-                            aTransform.matrix[0] *= rFillHatchAttribute.getDistance();
-                            aTransform.matrix[4] *= rFillHatchAttribute.getDistance();
-
-                            // rotate (was never correct in impgrfll anyways, use correct angle now)
-                            aTransform.matrix[0] *= cos(rFillHatchAttribute.getAngle());
-                            aTransform.matrix[1] *= -sin(rFillHatchAttribute.getAngle());
-                            aTransform.matrix[3] *= sin(rFillHatchAttribute.getAngle());
-                            aTransform.matrix[4] *= cos(rFillHatchAttribute.getAngle());
-
-                            pSvtGraphicFill = new SvtGraphicFill(
-                                PolyPolygon(aLocalPolyPolygon),
-                                Color(),
-                                0.0,
-                                SvtGraphicFill::fillEvenOdd,
-                                SvtGraphicFill::fillHatch,
-                                aTransform,
-                                false,
-                                eHatch,
-                                Color(rFillHatchAttribute.getColor()),
-                                SvtGraphicFill::gradientLinear,
-                                Color(),
-                                Color(),
-                                0,
-                                Graphic());
+                            case attribute::HATCHSTYLE_DOUBLE :
+                            {
+                                eHatch = SvtGraphicFill::hatchDouble;
+                                break;
+                            }
+                            case attribute::HATCHSTYLE_TRIPLE :
+                            {
+                                eHatch = SvtGraphicFill::hatchTriple;
+                                break;
+                            }
                         }
+
+                        SvtGraphicFill::Transform aTransform;
+
+                        // scale
+                        aTransform.matrix[0] *= rFillHatchAttribute.getDistance();
+                        aTransform.matrix[4] *= rFillHatchAttribute.getDistance();
+
+                        // rotate (was never correct in impgrfll anyways, use correct angle now)
+                        aTransform.matrix[0] *= cos(rFillHatchAttribute.getAngle());
+                        aTransform.matrix[1] *= -sin(rFillHatchAttribute.getAngle());
+                        aTransform.matrix[3] *= sin(rFillHatchAttribute.getAngle());
+                        aTransform.matrix[4] *= cos(rFillHatchAttribute.getAngle());
+
+                        pSvtGraphicFill = new SvtGraphicFill(
+                            PolyPolygon(aLocalPolyPolygon),
+                            Color(),
+                            0.0,
+                            SvtGraphicFill::fillEvenOdd,
+                            SvtGraphicFill::fillHatch,
+                            aTransform,
+                            false,
+                            eHatch,
+                            Color(rFillHatchAttribute.getColor()),
+                            SvtGraphicFill::gradientLinear,
+                            Color(),
+                            Color(),
+                            0,
+                            Graphic());
                     }
 
                     // Do use decomposition; encapsulate with SvtGraphicFill
                     impStartSvtGraphicFill(pSvtGraphicFill);
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    // #i111954# do NOT use decomposition, but use direct VCL-command
+                    // process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    const PolyPolygon aToolsPolyPolygon(aLocalPolyPolygon);
+                    const HatchStyle aHatchStyle(
+                        attribute::HATCHSTYLE_SINGLE == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
+                        attribute::HATCHSTYLE_DOUBLE == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
+                        HATCH_TRIPLE);
+
+                    mpOutputDevice->DrawHatch(aToolsPolyPolygon,
+                        Hatch(aHatchStyle,
+                            Color(rFillHatchAttribute.getColor()),
+                            basegfx::fround(rFillHatchAttribute.getDistance()),
+                            basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800)));
+
                     impEndSvtGraphicFill(pSvtGraphicFill);
 
                     break;
@@ -1301,13 +1462,18 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
                     const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
+
+                    // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                    // per polygon. Split polygon until there are less than that
+                    while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
+                        ;
 
                     // for support of MetaCommentActions of the form XGRAD_SEQ_BEGIN, XGRAD_SEQ_END
                     // it is safest to use the VCL OutputDevice::DrawGradient method which creates those.
                     // re-create a VCL-gradient from FillGradientPrimitive2D and the needed tools PolyPolygon
                     Gradient aVCLGradient;
                     impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rGradientCandidate.getFillGradient(), false);
-                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
                     aLocalPolyPolygon.transform(maCurrentTransformation);
 
                     // #i82145# ATM VCL printing of gradients using curved shapes does not work,
@@ -1365,13 +1531,20 @@ namespace drawinglayer
 
                     // NO usage of common own gradient randerer, not used ATM for VCL MetaFile, see text above
                     // RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
+
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
                     const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
-                    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
+
+                    // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                    // per polygon. Split polygon until there are less than that
+                    while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
+                        ;
+
+                    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
                     aLocalPolyPolygon.transform(maCurrentTransformation);
 
                     // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
@@ -1433,7 +1606,11 @@ namespace drawinglayer
                             {
                                 // there is already a clip polygon set; build clipped union of
                                 // current mask polygon and new one
-                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aMask, maClipPolyPolygon, false, false);
+                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                    aMask,
+                                    maClipPolyPolygon,
+                                    true, // #i106516# we want the inside of aMask, not the outside
+                                    false);
                             }
                             else
                             {
@@ -1535,6 +1712,13 @@ namespace drawinglayer
                                 // single transparent PolyPolygon identified, use directly
                                 const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
                                 basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
+
+                                // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                                // per polygon. Split polygon until there are less than that
+                                while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
+                                    ;
+
+                                // now transform
                                 aLocalPolyPolygon.transform(maCurrentTransformation);
 
                                 // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
