@@ -149,11 +149,12 @@ bool Components::allLocales(rtl::OUString const & locale) {
 }
 
 rtl::Reference< Node > Components::resolvePathRepresentation(
-    rtl::OUString const & pathRepresentation, Path * path,
-    int * finalizedLayer) const
+    rtl::OUString const & pathRepresentation,
+    rtl::OUString * canonicRepresentation, Path * path, int * finalizedLayer)
+    const
 {
     return data_.resolvePathRepresentation(
-        pathRepresentation, path, finalizedLayer);
+        pathRepresentation, canonicRepresentation, path, finalizedLayer);
 }
 
 rtl::Reference< Node > Components::getTemplate(
@@ -494,12 +495,10 @@ void Components::parseFileList(
             try {
                 (*parseFile)(url, layer, data_, 0, 0);
             } catch (css::container::NoSuchElementException & e) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "stat'ed file does not exist: ")) +
-                     e.Message),
-                    css::uno::Reference< css::uno::XInterface >());
+                OSL_TRACE(
+                    "configmgr file does not exist: %s",
+                    rtl::OUStringToOString(
+                        e.Message, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
         if (i == -1) {

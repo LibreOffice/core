@@ -75,6 +75,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException);
 
         void dispatchCommand( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+        using svt::ToolboxController::dispatchCommand;
 
     private:
         SvxFontSizeBox_Impl*                  m_pBox;

@@ -42,7 +42,7 @@
 
 #include "unotools/dynamicmenuoptions.hxx"
 #include "svtools/imagemgr.hxx"
-#include "svl/svtools.hrc"
+#include "svtools/svtools.hrc"
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"
