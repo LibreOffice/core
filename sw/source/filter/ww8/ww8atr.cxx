@@ -1743,9 +1743,9 @@ static void InsertSpecialChar( WW8Export& rWrt, BYTE c,
         aItems.GetData());
 }
 
-String lcl_GetExpandedField(const SwField &rFld)
+String lcl_GetExpandedField(const SwField &rFld, SwDoc const& rDoc)
 {
-    String sRet(rFld.Expand());
+    String sRet(rFld.ExpandField(rDoc.IsClipBoard()));
 
     //replace LF 0x0A with VT 0x0B
     sRet.SearchAndReplaceAll(0x0A, 0x0B);
@@ -1871,7 +1871,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     {
         String sOut;
         if( pFld )
-            sOut = lcl_GetExpandedField(*pFld);
+            sOut = lcl_GetExpandedField(*pFld, *pDoc);
         else
             sOut = rFldCmd;
         if( sOut.Len() )
@@ -2598,7 +2598,7 @@ void WW8AttributeOutput::RefField( const SwField &rFld, const String &rRef)
     sStr.APPEND_CONST_ASC( "\" " );
     m_rWW8Export.OutputField( &rFld, ww::eREF, sStr, WRITEFIELD_START |
         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
-    String sVar = lcl_GetExpandedField( rFld );
+    String sVar = lcl_GetExpandedField( rFld, *GetExport().pDoc );
     if ( sVar.Len() )
     {
         if ( m_rWW8Export.IsUnicode() )
@@ -2614,7 +2614,7 @@ void WW8AttributeOutput::RefField( const SwField &rFld, const String &rRef)
 
 void WW8AttributeOutput::WriteExpand( const SwField* pFld )
 {
-    String sExpand( lcl_GetExpandedField( *pFld ) );
+    String sExpand( lcl_GetExpandedField( *pFld, *GetExport().pDoc ) );
     if ( m_rWW8Export.IsUnicode() )
         SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sExpand, false );
     else
@@ -4297,17 +4297,24 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
 // ( Tabellenumrandungen fransen sonst aus )
 // Ein WW8Bytes-Ptr wird als Ausgabe-Parameter uebergeben
 
-void WW8Export::Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox )
+void WW8Export::Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem * pBox )
 {
     // moeglich und vielleicht besser waere 0xffff
     static const USHORT aBorders[] =
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
+    static const SvxBorderLine aBorderLine;
+
     const USHORT* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
-        const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
+        const SvxBorderLine* pLn;
+        if (pBox != NULL)
+            pLn = pBox->GetLine( *pBrd );
+        else
+            pLn = & aBorderLine;
+
         Out_BorderLine(rO, pLn, 0, 0, false);
     }
 }
@@ -5254,9 +5261,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         default:
-#if OSL_DEBUG_LEVEL > 0
-            fprintf( stderr, "Unhandled SfxPoolItem with id %d.\n", rHt.Which() );
-#endif
+            OSL_TRACE("Unhandled SfxPoolItem with id %d.\n", rHt.Which() );
             break;
     }
 }
