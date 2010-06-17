@@ -102,30 +102,6 @@ class Window;
 #define FILE_OPEN_SERVICE_NAME_SYSTEM "com.sun.star.ui.dialogs.SystemFilePicker"
 #define FILE_OPEN_SERVICE_NAME_OOO   "com.sun.star.ui.dialogs.OfficeFilePicker"
 
-//*****************************************************************************
-// SfxUrlDialog
-//*****************************************************************************
-
-//#if 0 // _SOLAR__PRIVATE
-#ifndef DONT_USE_FILE_DIALOG_SERVICE
-
-class SfxUrlDialog : public ModalDialog
-{
-private:
-    Edit            aEdit;
-    OKButton        aOk;
-    CancelButton    aCancel;
-
-public:
-                    SfxUrlDialog( Window* pParent );
-
-    String          GetUrl() const { return aEdit.GetText(); }
-    void            SetUrl( const String& rUrl ) { aEdit.SetText( rUrl ); }
-};
-
-#endif
-//#endif
-
 //-----------------------------------------------------------------------------
 
 namespace sfx2 {

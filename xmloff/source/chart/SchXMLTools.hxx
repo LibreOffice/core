@@ -54,6 +54,7 @@ namespace SchXMLTools
     bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
     bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
     bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
 
     void setBuildIDAtImportInfo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel
         , ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xImportInfo );
@@ -86,6 +87,11 @@ namespace SchXMLTools
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > CreateDataSequence(
+        const ::rtl::OUString& rRange,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument >& xChartDoc );
 
     void CreateCategories(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,

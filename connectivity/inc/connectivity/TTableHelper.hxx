@@ -45,6 +45,7 @@ namespace connectivity
     {
         ::rtl::OUString sName;
         ::rtl::OUString aField6;
+        ::rtl::OUString sField12; // REMARKS
         ::rtl::OUString sField13;
         sal_Int32       nField5
                     ,   nField7
@@ -60,10 +61,12 @@ namespace connectivity
             , sal_Int32     _nField7
             , sal_Int32     _nField9
             , sal_Int32     _nField11
+            , const ::rtl::OUString& _sField12
             , const ::rtl::OUString& _sField13
             ,OrdinalPosition _nPosition )
             :sName( _rName )
             ,aField6(_aField6)
+            ,sField12(_sField12)
             ,sField13(_sField13)
             ,nField5(_nField5)
             ,nField7(_nField7)
