@@ -16,6 +16,8 @@
 extern int stgetopt(int, char *const *, const char *);
 extern char *optarg;
 extern int optind;
+#else
+#include <getopt.h>
 #endif
 
 extern char rcsid[];
