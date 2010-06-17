@@ -468,6 +468,10 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             const rtl::OUString sSwitched           ( RTL_CONSTASCII_USTRINGPARAM( "Switched" ) );
             const rtl::OUString sPolar              ( RTL_CONSTASCII_USTRINGPARAM( "Polar" ) );
 //          const rtl::OUString sMap                ( RTL_CONSTASCII_USTRINGPARAM( "Map" ) );
+            const rtl::OUString sRefX               ( RTL_CONSTASCII_USTRINGPARAM( "RefX" ) );
+            const rtl::OUString sRefY               ( RTL_CONSTASCII_USTRINGPARAM( "RefY" ) );
+            const rtl::OUString sRefAngle           ( RTL_CONSTASCII_USTRINGPARAM( "RefAngle" ) );
+            const rtl::OUString sRefR               ( RTL_CONSTASCII_USTRINGPARAM( "RefR" ) );
             const rtl::OUString sRadiusRangeMinimum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMinimum" ) );
             const rtl::OUString sRadiusRangeMaximum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMaximum" ) );
             const rtl::OUString sRangeXMinimum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeXMinimum" ) );
@@ -526,6 +530,26 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                 }
             }
 */
+            else if ( rPropVal.Name.equals( sRefX ) )
+            {
+                if ( rPropVal.Value >>= rDestinationHandle.nRefX )
+                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFX;
+            }
+            else if ( rPropVal.Name.equals( sRefY ) )
+            {
+                if ( rPropVal.Value >>= rDestinationHandle.nRefY )
+                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFY;
+            }
+            else if ( rPropVal.Name.equals( sRefAngle ) )
+            {
+                if ( rPropVal.Value >>= rDestinationHandle.nRefAngle )
+                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFANGLE;
+            }
+            else if ( rPropVal.Name.equals( sRefR ) )
+            {
+                if ( rPropVal.Value >>= rDestinationHandle.nRefR )
+                    rDestinationHandle.nFlags |= HANDLE_FLAGS_REFR;
+            }
             else if ( rPropVal.Name.equals( sRadiusRangeMinimum ) )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aRadiusRangeMinimum )
@@ -1182,131 +1206,141 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
         Handle aHandle;
         if ( ConvertSequenceToEnhancedCustomShape2dHandle( seqHandles[ nIndex ], aHandle ) )
         {
-            sal_Bool bAdjFirst = aHandle.aPosition.First.Type == EnhancedCustomShapeParameterType::ADJUSTMENT;
-            sal_Bool bAdjSecond= aHandle.aPosition.Second.Type == EnhancedCustomShapeParameterType::ADJUSTMENT;
-            if ( bAdjFirst || bAdjSecond )
+            Point aP( rPosition.X, rPosition.Y );
+            // apply the negative object rotation to the controller position
+
+            aP.Move( -aLogicRect.Left(), -aLogicRect.Top() );
+            if ( bFlipH )
+                aP.X() = aLogicRect.GetWidth() - aP.X();
+            if ( bFlipV )
+                aP.Y() = aLogicRect.GetHeight() - aP.Y();
+            if ( nRotateAngle )
             {
-                Point aP( rPosition.X, rPosition.Y );
-                // apply the negative object rotation to the controller position
+                double a = -nRotateAngle * F_PI18000;
+                RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
+            }
+            const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
+            if ( aGeoStat.nShearWink )
+            {
+                double nTan = -aGeoStat.nTan;
+                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                    nTan = -nTan;
+                ShearPoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
+            }
 
-                aP.Move( -aLogicRect.Left(), -aLogicRect.Top() );
-                if ( bFlipH )
-                    aP.X() = aLogicRect.GetWidth() - aP.X();
-                if ( bFlipV )
-                    aP.Y() = aLogicRect.GetHeight() - aP.Y();
-                if ( nRotateAngle )
+            double fPos1 = aP.X();  //( bFlipH ) ? aLogicRect.GetWidth() - aP.X() : aP.X();
+            double fPos2 = aP.Y();  //( bFlipV ) ? aLogicRect.GetHeight() -aP.Y() : aP.Y();
+            fPos1 /= fXScale;
+            fPos2 /= fYScale;
+
+            if ( aHandle.nFlags & HANDLE_FLAGS_SWITCHED )
+            {
+                if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
                 {
-                    double a = -nRotateAngle * F_PI18000;
-                    RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
+                    double fX = fPos1;
+                    double fY = fPos2;
+                    fPos1 = fY;
+                    fPos2 = fX;
                 }
-                const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
-                if ( aGeoStat.nShearWink )
-                {
-                    double nTan = -aGeoStat.nTan;
-                    if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
-                        nTan = -nTan;
-                    ShearPoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
-                }
+            }
 
-                double fPos1 = aP.X();  //( bFlipH ) ? aLogicRect.GetWidth() - aP.X() : aP.X();
-                double fPos2 = aP.Y();  //( bFlipV ) ? aLogicRect.GetHeight() -aP.Y() : aP.Y();
-                fPos1 /= fXScale;
-                fPos2 /= fYScale;
+            sal_Int32 nFirstAdjustmentValue = -1, nSecondAdjustmentValue = -1;
 
-                if ( aHandle.nFlags & HANDLE_FLAGS_SWITCHED )
-                {
-                    if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
-                    {
-                        double fX = fPos1;
-                        double fY = fPos2;
-                        fPos1 = fY;
-                        fPos2 = fX;
-                    }
-                }
-
-                sal_Int32 nFirstAdjustmentValue = 0, nSecondAdjustmentValue = 0;
+            if ( aHandle.aPosition.First.Type == EnhancedCustomShapeParameterType::ADJUSTMENT )
                 aHandle.aPosition.First.Value >>= nFirstAdjustmentValue;
+            if ( aHandle.aPosition.Second.Type == EnhancedCustomShapeParameterType::ADJUSTMENT )
                 aHandle.aPosition.Second.Value>>= nSecondAdjustmentValue;
 
-                if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
+            if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
+            {
+                double fXRef, fYRef, fAngle;
+                GetParameter( fXRef, aHandle.aPolar.First, sal_False, sal_False );
+                GetParameter( fYRef, aHandle.aPolar.Second, sal_False, sal_False );
+                const double fDX = fPos1 - fXRef;
+                fAngle = -( atan2( -fPos2 + fYRef, ( ( fDX == 0.0L ) ? 0.000000001 : fDX ) ) / F_PI180 );
+                double fX = ( fPos1 - fXRef );
+                double fY = ( fPos2 - fYRef );
+                double fRadius = sqrt( fX * fX + fY * fY );
+                if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MINIMUM )
                 {
-                    double fXRef, fYRef, fAngle;
-                    GetParameter( fXRef, aHandle.aPolar.First, sal_False, sal_False );
-                    GetParameter( fYRef, aHandle.aPolar.Second, sal_False, sal_False );
-                    const double fDX = fPos1 - fXRef;
-                    fAngle = -( atan2( -fPos2 + fYRef, ( ( fDX == 0.0L ) ? 0.000000001 : fDX ) ) / F_PI180 );
-                    double fX = ( fPos1 - fXRef );
-                    double fY = ( fPos2 - fYRef );
-                    double fRadius = sqrt( fX * fX + fY * fY );
-                    if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MINIMUM )
-                    {
-                        double fMin;
-                        GetParameter( fMin,  aHandle.aRadiusRangeMinimum, sal_False, sal_False );
-                        if ( fRadius < fMin )
-                            fRadius = fMin;
-                    }
-                    if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM )
-                    {
-                        double fMax;
-                        GetParameter( fMax, aHandle.aRadiusRangeMaximum, sal_False, sal_False );
-                        if ( fRadius > fMax )
-                            fRadius = fMax;
-                    }
-                    if ( bAdjFirst )
-                        SetAdjustValueAsDouble( fRadius, nFirstAdjustmentValue );
-                    if ( bAdjSecond )
-                        SetAdjustValueAsDouble( fAngle,  nSecondAdjustmentValue );
+                    double fMin;
+                    GetParameter( fMin,  aHandle.aRadiusRangeMinimum, sal_False, sal_False );
+                    if ( fRadius < fMin )
+                        fRadius = fMin;
                 }
-                else
+                if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM )
                 {
-                    if ( bAdjFirst )
-                    {
-                        if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MINIMUM )        // check if horizontal handle needs to be within a range
-                        {
-                            double fXMin;
-                            GetParameter( fXMin, aHandle.aXRangeMinimum, sal_False, sal_False );
-                            if ( fPos1 < fXMin )
-                                fPos1 = fXMin;
-                        }
-                        if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MAXIMUM )        // check if horizontal handle needs to be within a range
-                        {
-                            double fXMax;
-                            GetParameter( fXMax, aHandle.aXRangeMaximum, sal_False, sal_False );
-                            if ( fPos1 > fXMax )
-                                fPos1 = fXMax;
-                        }
-                        SetAdjustValueAsDouble( fPos1, nFirstAdjustmentValue );
-                    }
-                    if ( bAdjSecond )
-                    {
-                        if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MINIMUM )        // check if vertical handle needs to be within a range
-                        {
-                            double fYMin;
-                            GetParameter( fYMin, aHandle.aYRangeMinimum, sal_False, sal_False );
-                            if ( fPos2 < fYMin )
-                                fPos2 = fYMin;
-                        }
-                        if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MAXIMUM )        // check if vertical handle needs to be within a range
-                        {
-                            double fYMax;
-                            GetParameter( fYMax, aHandle.aYRangeMaximum, sal_False, sal_False );
-                            if ( fPos2 > fYMax )
-                                fPos2 = fYMax;
-                        }
-                        SetAdjustValueAsDouble( fPos2, nSecondAdjustmentValue );
-                    }
+                    double fMax;
+                    GetParameter( fMax, aHandle.aRadiusRangeMaximum, sal_False, sal_False );
+                    if ( fRadius > fMax )
+                        fRadius = fMax;
                 }
-                // and writing them back into the GeometryItem
-                SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)
-                    (const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-                const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
-                com::sun::star::beans::PropertyValue aPropVal;
-                aPropVal.Name = sAdjustmentValues;
-                aPropVal.Value <<= seqAdjustmentValues;
-                aGeometryItem.SetPropertyValue( aPropVal );
-                pCustomShapeObj->SetMergedItem( aGeometryItem );
-                bRetValue = sal_True;
+                if ( nFirstAdjustmentValue >= 0 )
+                    SetAdjustValueAsDouble( fRadius, nFirstAdjustmentValue );
+                if ( nSecondAdjustmentValue >= 0 )
+                    SetAdjustValueAsDouble( fAngle,  nSecondAdjustmentValue );
             }
+            else
+            {
+                if ( aHandle.nFlags & HANDLE_FLAGS_REFX )
+                {
+                    nFirstAdjustmentValue = aHandle.nRefX;
+                    fPos1 *= 100000.0;
+                    fPos1 /= nCoordWidth;
+                }
+                if ( aHandle.nFlags & HANDLE_FLAGS_REFY )
+                {
+                    nSecondAdjustmentValue = aHandle.nRefY;
+                    fPos2 *= 100000.0;
+                    fPos2 /= nCoordHeight;
+                }
+                if ( nFirstAdjustmentValue >= 0 )
+                {
+                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MINIMUM )        // check if horizontal handle needs to be within a range
+                    {
+                        double fXMin;
+                        GetParameter( fXMin, aHandle.aXRangeMinimum, sal_False, sal_False );
+                        if ( fPos1 < fXMin )
+                            fPos1 = fXMin;
+                    }
+                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MAXIMUM )        // check if horizontal handle needs to be within a range
+                    {
+                        double fXMax;
+                        GetParameter( fXMax, aHandle.aXRangeMaximum, sal_False, sal_False );
+                        if ( fPos1 > fXMax )
+                            fPos1 = fXMax;
+                    }
+                    SetAdjustValueAsDouble( fPos1, nFirstAdjustmentValue );
+                }
+                if ( nSecondAdjustmentValue >= 0 )
+                {
+                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MINIMUM )        // check if vertical handle needs to be within a range
+                    {
+                        double fYMin;
+                        GetParameter( fYMin, aHandle.aYRangeMinimum, sal_False, sal_False );
+                        if ( fPos2 < fYMin )
+                            fPos2 = fYMin;
+                    }
+                    if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MAXIMUM )        // check if vertical handle needs to be within a range
+                    {
+                        double fYMax;
+                        GetParameter( fYMax, aHandle.aYRangeMaximum, sal_False, sal_False );
+                        if ( fPos2 > fYMax )
+                            fPos2 = fYMax;
+                    }
+                    SetAdjustValueAsDouble( fPos2, nSecondAdjustmentValue );
+                }
+            }
+            // and writing them back into the GeometryItem
+            SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)
+                (const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+            const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
+            com::sun::star::beans::PropertyValue aPropVal;
+            aPropVal.Name = sAdjustmentValues;
+            aPropVal.Value <<= seqAdjustmentValues;
+            aGeometryItem.SetPropertyValue( aPropVal );
+            pCustomShapeObj->SetMergedItem( aGeometryItem );
+            bRetValue = sal_True;
         }
     }
     return bRetValue;

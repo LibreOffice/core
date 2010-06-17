@@ -807,7 +807,7 @@ void Outliner::PutSpellingToSentenceStart( EditView& rEditView )
 /*-- 13.10.2003 16:56:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking )
+void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
 {
-    pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bIsGrammarChecking );
+    pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );
 }

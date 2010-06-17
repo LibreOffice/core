@@ -351,7 +351,7 @@
 			<prop oor:name="ToolboxVisible" oor:type="xs:boolean">
 				<!-- OldPath: Math/View -->
 				<!-- OldLocation: Soffice.cfg -->
-                <!-- UIHints: View - Formula Elements -->
+                <!-- UIHints: View - Elements -->
 				<info>
 					<author>TL</author>
 					<desc>Toggles the visibility of the ToolBox (Selection Box).</desc>

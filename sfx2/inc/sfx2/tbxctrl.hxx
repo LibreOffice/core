@@ -243,6 +243,7 @@ protected:
     virtual void               SAL_CALL release() throw();
 
     // XEventListener
+    using ::cppu::OPropertySetHelper::disposing;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
 
     // XComponent

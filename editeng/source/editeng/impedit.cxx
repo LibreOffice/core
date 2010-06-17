@@ -1489,7 +1489,7 @@ void ImpEditView::HideDDCursor()
 
 void ImpEditView::ShowDDCursor( const Rectangle& rRect )
 {
-    if ( !pDragAndDropInfo->bVisCursor )
+    if ( pDragAndDropInfo && !pDragAndDropInfo->bVisCursor )
     {
         if ( pOutWin->GetCursor() )
             pOutWin->GetCursor()->Hide();
@@ -1543,6 +1543,8 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
     DBG_ASSERT( !pDragAndDropInfo, "dragGestureRecognized - DragAndDropInfo exist!" );
 
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    pDragAndDropInfo = NULL;
 
     Point aMousePosPixel( rDGE.DragOriginX, rDGE.DragOriginY );
 
@@ -1717,7 +1719,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
 
     DBG_ASSERT( pDragAndDropInfo, "Drop - No Drag&Drop info?!" );
 
-    if ( pDragAndDropInfo->bDragAccepted )
+    if ( pDragAndDropInfo && pDragAndDropInfo->bDragAccepted )
     {
         pEditEngine->GetBeginDropHdl().Call(GetEditViewPtr());
         BOOL bChanges = FALSE;
@@ -1817,7 +1819,7 @@ void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTarge
 
     HideDDCursor();
 
-    if ( !pDragAndDropInfo->bStarterOfDD )
+    if ( pDragAndDropInfo && !pDragAndDropInfo->bStarterOfDD )
     {
         delete pDragAndDropInfo;
         pDragAndDropInfo = NULL;
@@ -1837,7 +1839,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
     {
 //        sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
-        if ( pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
+        if ( pDragAndDropInfo && pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
         {
             bAccept = sal_True;
 
@@ -1957,7 +1959,8 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
     if ( !bAccept )
     {
         HideDDCursor();
-        pDragAndDropInfo->bDragAccepted = FALSE;
+        if (pDragAndDropInfo)
+            pDragAndDropInfo->bDragAccepted = FALSE;
         rDTDE.Context->rejectDrag();
     }
 }
