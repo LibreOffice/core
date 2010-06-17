@@ -37,6 +37,10 @@
         <prop oor:name="ooSetupVersionAboutBox" install:module="brand">
             <value>${ABOUTBOXPRODUCTVERSION}</value>
         </prop>
+        <prop oor:name="ooVendor" install:module="brand">
+            <value>${OOOVENDOR}</value>
+        </prop>
+
         <prop oor:name="ooSetupExtension" install:module="brand">
             <value >${PRODUCTEXTENSION}</value>
         </prop>
@@ -86,6 +90,9 @@
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
                 </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >scalc</value>
                 </prop>
@@ -126,6 +133,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
+                </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sdraw</value>
@@ -168,6 +178,9 @@
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
                 </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >simpress</value>
                 </prop>
@@ -207,6 +220,9 @@
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
                 </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >smath</value>
                 </prop>
@@ -245,6 +261,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
+                </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sglobal</value>
@@ -286,6 +305,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
+                </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >swriter</value>
@@ -433,6 +455,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
+                </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sweb</value>
@@ -686,6 +711,9 @@
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
                 </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >schart</value>
                 </prop>
@@ -724,6 +752,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryTemplateFile">
                     <value ></value>
+                </prop>
+                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+                    <value >false</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >dbapp</value>
@@ -801,13 +832,13 @@
           <node oor:name="Common" oor:op="replace">
             <prop oor:name="IncludedFiles">
               <value>
-                .*/autotext/.*
-                .*/autocorr/.*
-                .*/config/.*\.so[bcdegh]
-                .*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml
-                .*/config/soffice.cfg/modules/.*/images/.*
-                .*/gallery/.*
-                .*/template/.*
+                <it>.*/autotext/.*</it>
+                <it>.*/autocorr/.*</it>
+                <it>.*/config/.*\.so[bcdegh]</it>
+                <it>.*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml</it>
+                <it>.*/config/soffice.cfg/modules/.*/images/.*</it>
+                <it>.*/gallery/.*</it>
+                <it>.*/template/.*</it>
               </value>
             </prop>
             <prop oor:name="IncludedNodes">

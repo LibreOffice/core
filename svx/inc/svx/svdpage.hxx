@@ -376,7 +376,6 @@ private:
 public:
     // construct/destruct
     SdrPageProperties(SdrPage& rSdrPage);
-    SdrPageProperties(const SdrPageProperties& rCandidate);
     virtual ~SdrPageProperties();
 
     // Notify(...) from baseclass SfxListener

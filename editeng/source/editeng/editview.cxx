@@ -40,6 +40,7 @@
 #include <svl/languageoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
+#include <svtools/filter.hxx>
 
 #include <svl/srchitem.hxx>
 
@@ -62,6 +63,8 @@
 #include <editeng/acorrcfg.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/fontitem.hxx>
+#include <unotools/lingucfg.hxx>
+#include <osl/file.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/beans/PropertyValues.hdl>
@@ -70,6 +73,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/lingucfg.hxx>
+
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using ::rtl::OUString;
 using namespace com::sun::star;
@@ -1004,6 +1009,26 @@ sal_Bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMa
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
+
+static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
+{
+    Image aRes;
+    OUString aTmp;
+    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+//    ::rtl::OString aPath = OString( aTmp.getStr(), aTmp.getLength(), osl_getThreadTextEncoding() );
+#if defined(WNT)
+//    aTmp = lcl_Win_GetShortPathName( aTmp );
+#endif
+    Graphic aGraphic;
+    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    {
+        aRes = Image( aGraphic.GetBitmapEx() );
+    }
+    return aRes;
+}
+
+
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 {
 #ifndef SVX_LIGHT
@@ -1114,25 +1139,54 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         else
             aPopupMenu.RemoveItem( MN_AUTOCORR );   // Loeschen?
 
-        Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+        SvtLinguConfig aCfg;
+        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
+        Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
         Sequence< Reference< XDictionary >  > aDics;
+        const Reference< XDictionary >  *pDic = NULL;
         if (xDicList.is())
-            aDics = xDicList->getDictionaries();
-        const Reference< XDictionary >  *pDic = aDics.getConstArray();
-        sal_uInt16 nLanguage = PIMPEE->GetLanguage( aPaM2 );
-        sal_uInt16 nDicCount = (USHORT)aDics.getLength();
-        for ( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
-            Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
+            // add the default positive dictionary to dic-list (if not already done).
+            // This is to ensure that there is at least one dictionary to which
+            // words could be added.
+            uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
             if (xDic.is())
+                xDic->setActive( sal_True );
+
+            aDics = xDicList->getDictionaries();
+            pDic  = aDics.getConstArray();
+            sal_uInt16 nCheckedLanguage = PIMPEE->GetLanguage( aPaM2 );
+            sal_uInt16 nDicCount = (USHORT)aDics.getLength();
+            for (sal_uInt16 i = 0; i < nDicCount; i++)
             {
-                sal_uInt16 nActLanguage = SvxLocaleToLanguage( xDic->getLocale() );
-                if( xDic->isActive() &&
-                    xDic->getDictionaryType() == DictionaryType_POSITIVE &&
-                    (nLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage ) )
+                uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
+                if (!xDicTmp.is() || SvxGetIgnoreAllList() == xDicTmp)
+                    continue;
+
+                uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
+                LanguageType nActLanguage = SvxLocaleToLanguage( xDicTmp->getLocale() );
+                if( xDicTmp->isActive()
+                    &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
+                    && (nCheckedLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
+                    && (!xStor.is() || !xStor->isReadonly()) )
                 {
-                    pInsertMenu->InsertItem( MN_DICTSTART + i, xDic->getName() );
+                    // the extra 1 is because of the (possible) external
+                    // linguistic entry above
+                    USHORT nPos = MN_DICTSTART + i;
+                    pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
+
+                    uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
+                    if (xSvcInfo.is())
+                    {
+                        OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
+                                xSvcInfo->getImplementationName(), bHC) );
+                        if (aDictionaryImageUrl.getLength() > 0)
+                        {
+                            Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
+                            pInsertMenu->SetItemImage( nPos, aImage );
+                        }
+                    }
                 }
             }
         }
@@ -1256,13 +1310,13 @@ void EditView::SpellIgnoreWord()
     pImpEditView->SpellIgnoreOrAddWord( sal_False );
 }
 
-sal_Bool EditView::SelectCurrentWord()
+sal_Bool EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     EditSelection aCurSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
-    aCurSel = PIMPEE->SelectWord( aCurSel.Max() );
+    aCurSel = PIMPEE->SelectWord( aCurSel.Max(), nWordType );
     pImpEditView->SetEditSelection( aCurSel );
     pImpEditView->DrawSelection();
     ShowCursor( sal_True, sal_False );
