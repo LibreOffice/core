@@ -284,10 +284,10 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager,
         registerServices( xRegistryKey, "TreeControl", szServiceName_TreeControl );
         registerServices( xRegistryKey, "TreeControlModel", szServiceName_TreeControlModel );
         registerServices( xRegistryKey, "MutableTreeDataModel", szServiceName_MutableTreeDataModel );
-        registerServices( xRegistryKey, "UnoSimpleAnimationControlModel", szServiceName_UnoSimpleAnimationControlModel );
-        registerServices( xRegistryKey, "UnoSimpleAnimationControl", szServiceName_UnoSimpleAnimationControl );
-        registerServices( xRegistryKey, "UnoThrobberControlModel", szServiceName_UnoThrobberControlModel );
-        registerServices( xRegistryKey, "UnoThrobberControl", szServiceName_UnoThrobberControl );
+        registerServices( xRegistryKey, "UnoSimpleAnimationControlModel", szServiceName_UnoSimpleAnimationControlModel, szServiceName2_UnoSimpleAnimationControlModel );
+        registerServices( xRegistryKey, "UnoSimpleAnimationControl", szServiceName_UnoSimpleAnimationControl, szServiceName2_UnoSimpleAnimationControl );
+        registerServices( xRegistryKey, "UnoThrobberControlModel", szServiceName_UnoThrobberControlModel, szServiceName2_UnoThrobberControlModel );
+        registerServices( xRegistryKey, "UnoThrobberControl", szServiceName_UnoThrobberControl, szServiceName2_UnoThrobberControl );
         registerServices( xRegistryKey, "UnoFixedHyperlinkControl", szServiceName_UnoControlFixedHyperlink );
         registerServices( xRegistryKey, "UnoControlFixedHyperlinkModel", szServiceName_UnoControlFixedHyperlinkModel );
         registerServices( xRegistryKey, "GridControl", szServiceName_GridControl );
@@ -371,10 +371,10 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( TreeControl, szServiceName_TreeControl, NULL )
         CHECKANDCREATEFACTORY( TreeControlModel, szServiceName_TreeControlModel, NULL )
         CHECKANDCREATEFACTORY( MutableTreeDataModel, szServiceName_MutableTreeDataModel, NULL )
-        CHECKANDCREATEFACTORY( UnoSimpleAnimationControlModel, szServiceName_UnoSimpleAnimationControlModel, NULL )
-        CHECKANDCREATEFACTORY( UnoSimpleAnimationControl, szServiceName_UnoSimpleAnimationControl, NULL )
-        CHECKANDCREATEFACTORY( UnoThrobberControlModel, szServiceName_UnoThrobberControlModel, NULL )
-        CHECKANDCREATEFACTORY( UnoThrobberControl, szServiceName_UnoThrobberControl, NULL )
+        CHECKANDCREATEFACTORY( UnoSimpleAnimationControlModel, szServiceName_UnoSimpleAnimationControlModel, szServiceName2_UnoSimpleAnimationControlModel )
+        CHECKANDCREATEFACTORY( UnoSimpleAnimationControl, szServiceName_UnoSimpleAnimationControl, szServiceName2_UnoSimpleAnimationControl )
+        CHECKANDCREATEFACTORY( UnoThrobberControlModel, szServiceName_UnoThrobberControlModel, szServiceName2_UnoThrobberControlModel )
+        CHECKANDCREATEFACTORY( UnoThrobberControl, szServiceName_UnoThrobberControl, szServiceName2_UnoThrobberControl )
         CHECKANDCREATEFACTORY( UnoFixedHyperlinkControl, szServiceName_UnoControlFixedHyperlink, NULL )
         CHECKANDCREATEFACTORY( UnoControlFixedHyperlinkModel, szServiceName_UnoControlFixedHyperlinkModel, NULL )
         CHECKANDCREATEFACTORY( GridControl, szServiceName_GridControl, NULL );
