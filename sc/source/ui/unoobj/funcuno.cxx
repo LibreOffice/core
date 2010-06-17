@@ -691,7 +691,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         // GRAM_PODF_A1 doesn't really matter for the token array but fits with
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
-                &aTokenArr,formula::FormulaGrammar::GRAM_PODF_A1, mbArray ? MM_FORMULA : MM_NONE );
+                &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (BYTE)(mbArray ? MM_FORMULA : MM_NONE) );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
