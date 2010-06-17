@@ -32,11 +32,14 @@
 #include <classes/sfxhelperfunctions.hxx>
 #endif
 
+#include <tools/diagnose_ex.h>
+
 static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = NULL;
 static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = NULL;
 static pfunc_getRefreshToolbars            pRefreshToolbars            = NULL;
 static pfunc_createDockingWindow           pCreateDockingWindow        = NULL;
 static pfunc_isDockingWindowVisible        pIsDockingWindowVisible     = NULL;
+static pfunc_activateToolPanel             pActivateToolPanel          = NULL;
 
 
 
@@ -153,6 +156,26 @@ bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::
         return (*pIsDockingWindowVisible)( rFrame, rResourceURL );
     else
         return false;
+}
+
+pfunc_activateToolPanel SAL_CALL SetActivateToolPanel( pfunc_activateToolPanel i_pActivator )
+{
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    pfunc_activateToolPanel pOldFunc = pActivateToolPanel;
+    pActivateToolPanel = i_pActivator;
+    return pOldFunc;
+}
+
+void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL )
+{
+    pfunc_activateToolPanel pActivator = NULL;
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        pActivator = pActivateToolPanel;
+    }
+
+    ENSURE_OR_RETURN_VOID( pActivator, "framework::ActivateToolPanel: no activator function!" );
+    (*pActivator)( i_rFrame, i_rPanelURL );
 }
 
 }

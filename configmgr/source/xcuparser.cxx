@@ -395,7 +395,8 @@ void XcuParser::handleItem(XmlReader & reader) {
     rtl::OUString path(xmldata::convertFromUtf8(attrPath));
     int finalizedLayer;
     rtl::Reference< Node > node(
-        data_.resolvePathRepresentation(path, &path_, &finalizedLayer));
+        data_.resolvePathRepresentation(
+            path, 0, &path_, &finalizedLayer));
     if (!node.is()) {
         OSL_TRACE(
             "configmgr unknown item %s in %s",

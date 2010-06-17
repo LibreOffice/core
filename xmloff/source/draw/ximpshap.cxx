@@ -167,6 +167,8 @@ SdXMLShapeContext::SdXMLShapeContext(
 ,   mnZOrder(-1)
 ,   maSize(1, 1)
 ,   maPosition(0, 0)
+,   mbVisible(true)
+,   mbPrintable(true)
 {
 }
 
@@ -442,6 +444,20 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             uno::Reference<beans::XMultiPropertyStates> xMultiPropertyStates(xShape, uno::UNO_QUERY );
             if (xMultiPropertyStates.is())
                 xMultiPropertyStates->setAllPropertiesToDefault();
+        }
+
+        if( !mbVisible || !mbPrintable ) try
+        {
+            uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY_THROW );
+            if( !mbVisible )
+                xSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ), uno::Any( sal_False ) );
+
+            if( !mbPrintable )
+                xSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) ), uno::Any( sal_False ) );
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR( "SdXMLShapeContext::AddShape(), exception caught!" );
         }
 
         // #107848#
@@ -777,7 +793,7 @@ void SdXMLShapeContext::SetThumbnail()
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
     bool bHaveXmlId( false );
-    if( XML_NAMESPACE_DRAW == nPrefix )
+    if( (XML_NAMESPACE_DRAW == nPrefix) || (XML_NAMESPACE_DRAW_EXT == nPrefix) )
     {
         if( IsXMLToken( rLocalName, XML_ZINDEX ) )
         {
@@ -806,6 +822,11 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+        }
+        else if( IsXMLToken( rLocalName, XML_DISPLAY ) )
+        {
+            mbVisible = IsXMLToken( rValue, XML_ALWAYS ) || IsXMLToken( rValue, XML_SCREEN );
+            mbPrintable = IsXMLToken( rValue, XML_ALWAYS ) || IsXMLToken( rValue, XML_PRINTER );
         }
     }
     else if( XML_NAMESPACE_PRESENTATION == nPrefix )
@@ -2565,7 +2586,7 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
         }
         else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
         {
-            pService = "com.sun.star.presentation.TableShape";
+            pService = "com.sun.star.presentation.CalcShape";
         }
         else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
         {
@@ -2922,8 +2943,21 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
     const char* pService;
 
+    sal_Bool bIsPresShape = sal_False;
+
     if( mbMedia )
+    {
         pService = "com.sun.star.drawing.MediaShape";
+
+        bIsPresShape = maPresentationClass.getLength() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
+        if( bIsPresShape )
+        {
+            if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
+            {
+                pService = "com.sun.star.presentation.MediaShape";
+            }
+        }
+    }
     else
         pService = "com.sun.star.drawing.PluginShape";
 
@@ -2932,6 +2966,23 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
     if( mxShape.is() )
     {
         SetLayer();
+
+        if(bIsPresShape)
+        {
+            uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() )
+                {
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
+                }
+            }
+        }
 
         // set pos, size, shear and rotate
         SetTransformation();
@@ -3556,8 +3607,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
 {
     const char* pService = "com.sun.star.drawing.TableShape";
 
-    sal_Bool bIsPresShape = sal_False; //maPresentationClass.getLength() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
-/*
+    sal_Bool bIsPresShape = maPresentationClass.getLength() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
     if( bIsPresShape )
     {
         if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
@@ -3565,7 +3615,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
             pService = "com.sun.star.presentation.TableShape";
         }
     }
-*/
+
     AddShape( pService );
 
     if( mxShape.is() )

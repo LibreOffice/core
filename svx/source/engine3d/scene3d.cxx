@@ -336,8 +336,18 @@ UINT16 E3dScene::GetObjIdentifier() const
 
 void E3dScene::SetBoundRectDirty()
 {
-    // avoid resetting aOutRect which in case of this object is model data,
-    // not re-creatable view data
+    E3dScene* pScene = GetScene();
+
+    if(pScene == this)
+    {
+        // avoid resetting aOutRect which in case of a 3D scene used as 2d object
+        // is model data,not re-creatable view data
+    }
+    else
+    {
+        // if not the outmost scene it is used as group in 3d, call parent
+        E3dObject::SetBoundRectDirty();
+    }
 }
 
 /*************************************************************************

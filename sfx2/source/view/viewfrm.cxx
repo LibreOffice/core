@@ -44,6 +44,7 @@
 #endif
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>
+#include <svl/visitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/slstitm.hxx>
@@ -94,6 +95,8 @@
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
 
+#include <boost/optional.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -108,6 +111,7 @@ namespace css = ::com::sun::star;
 
 // wg. ViewFrame::Current
 #include "appdata.hxx"
+#include <sfx2/taskpane.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include "openflag.hxx"
@@ -168,6 +172,19 @@ TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
 
 //=========================================================================
 
+//-------------------------------------------------------------------------
+namespace
+{
+    bool moduleHasToolPanels( SfxViewFrame_Impl& i_rViewFrameImpl )
+    {
+        if ( !i_rViewFrameImpl.aHasToolPanels )
+        {
+            i_rViewFrameImpl.aHasToolPanels.reset( ::sfx2::ModuleTaskPane::ModuleHasToolPanels(
+                i_rViewFrameImpl.rFrame.GetFrameInterface() ) );
+        }
+        return *i_rViewFrameImpl.aHasToolPanels;
+    }
+}
 //-------------------------------------------------------------------------
 void SfxViewFrame::SetDowning_Impl()
 {
@@ -3294,6 +3311,22 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
             else if ( KnowsChildWindow(nSID) )
                 rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
         }
+        else if ( nSID == SID_TASKPANE )
+        {
+            if  ( !KnowsChildWindow( nSID ) )
+            {
+                OSL_ENSURE( false, "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
+                rState.DisableItem( nSID );
+            }
+            else if ( !moduleHasToolPanels( *pImp ) )
+            {
+                rState.Put( SfxVisibilityItem( nSID, sal_False ) );
+            }
+            else
+            {
+                rState.Put( SfxBoolItem( nSID, HasChildWindow( nSID ) ) );
+            }
+        }
         else if ( KnowsChildWindow(nSID) )
             rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
         else
@@ -3380,4 +3413,38 @@ void SfxViewFrame::UpdateDocument_Impl()
 void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 {
     SFX_APP()->SetViewFrame_Impl( pFrame );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // look up the SfxFrame for the given XFrame
+    SfxFrame* pFrame = NULL;
+    for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+    {
+        if ( pFrame->GetFrameInterface() == i_rFrame )
+            break;
+    }
+    SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : NULL;
+    ENSURE_OR_RETURN_VOID( pViewFrame != NULL, "SfxViewFrame::ActivateToolPanel: did not find an SfxFrame for the given XFrame!" );
+
+    pViewFrame->ActivateToolPanel_Impl( i_rPanelURL );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
+{
+    // ensure the task pane is visible
+    ENSURE_OR_RETURN_VOID( KnowsChildWindow( SID_TASKPANE ), "SfxViewFrame::ActivateToolPanel: this frame/module does not allow for a task pane!" );
+    if ( !HasChildWindow( SID_TASKPANE ) )
+        ToggleChildWindow( SID_TASKPANE );
+
+    SfxChildWindow* pTaskPaneChildWindow = GetChildWindow( SID_TASKPANE );
+    ENSURE_OR_RETURN_VOID( pTaskPaneChildWindow, "SfxViewFrame::ActivateToolPanel_Impl: just switched it on, but it is not there!" );
+
+    ::sfx2::ITaskPaneToolPanelAccess* pPanelAccess = dynamic_cast< ::sfx2::ITaskPaneToolPanelAccess* >( pTaskPaneChildWindow );
+    ENSURE_OR_RETURN_VOID( pPanelAccess, "SfxViewFrame::ActivateToolPanel_Impl: task pane child window does not implement a required interface!" );
+    pPanelAccess->ActivateToolPanel( i_rPanelURL );
 }

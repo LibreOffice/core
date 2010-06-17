@@ -1,8 +1,7 @@
-sf      sfx2    :    l10n idl basic xmlscript framework shell setup_native sax SYSTRAY_GTK:libegg LIBXML2:libxml2 NULL
+sf      sfx2    :    l10n idl basic xmlscript framework readlicense_oo shell setup_native sax SYSTRAY_GTK:libegg LIBXML2:libxml2 NULL
 sf	sfx2									usr1	-	all	sf_mkout NULL
 sf	sfx2\inc								nmake	-	all	sf_inc NULL
 sf	sfx2\prj								get		-	all	sf_prj NULL
-sf	sfx2\win\res							get		-	all	sf_wres NULL
 sf	sfx2\mac\res							get		-	all	sf_mres NULL
 sf	sfx2\source\inc							get		-	all	sf_sinc NULL
 sf	sfx2\sdi								nmake	-	all	sf_sdi NULL
@@ -20,5 +19,7 @@ sf	sfx2\source\statbar						nmake	-	all	sf_sbar sf_sdi sf_inc NULL
 sf	sfx2\source\toolbox						nmake	-	all	sf_tbox sf_sdi sf_inc NULL
 sf	sfx2\source\inet						nmake	-	all	sf_inet sf_sdi sf_inc NULL
 sf	sfx2\source\explorer					nmake	-	all	sf_expl sf_sdi sf_inc NULL
+sf	sfx2\workben\custompanel                nmake   -   all sf_wb_custompanel NULL
 sf      sfx2\util                                                               nmake   -       all     sf_util sf_appl sf_bast sf_cnfg sf_ctrl sf_dlg sf_doc sf_expl sf_inet sf_menu sf_layout sf_noti sf_sbar sf_tbox sf_view NULL
 sf sfx2\qa\unoapi nmake - all sf_qa_unoapi NULL
+sf  sfx2\qa\cppunit							nmake	-	all sf_qa_cppunit sf_util NULL

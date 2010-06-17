@@ -299,10 +299,14 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ControlHolder::invalidate() const
     {
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
-        OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
-        if ( pWindow )
-            pWindow->Invalidate();
+        Reference< XWindowPeer > xPeer( m_xControl->getPeer() );
+        if ( xPeer.is() )
+        {
+            Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
+            OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
+            if ( pWindow )
+                pWindow->Invalidate();
+        }
     }
 
     //--------------------------------------------------------------------
@@ -1310,12 +1314,12 @@ namespace sdr { namespace contact {
         {
             // the layer of our object
             SdrLayerID nObjectLayer = _rUnoObject.GetLayer();
-            // is the layer we're residing in visible in this view?
-            bool bIsObjectLayerVisible = _rPageView.isLayerVisible( nObjectLayer );
+            // is the object we're residing in visible in this view?
+            bool bIsObjectVisible = _rUnoObject.IsVisible() && _rPageView.isLayerVisible( nObjectLayer );
 
-            if ( _bForce || ( bIsObjectLayerVisible != _bIsCurrentlyVisible ) )
+            if ( _bForce || ( bIsObjectVisible != _bIsCurrentlyVisible ) )
             {
-                _rControl.setVisible( bIsObjectLayerVisible );
+                _rControl.setVisible( bIsObjectVisible );
             }
         }
     }
@@ -1866,7 +1870,8 @@ namespace sdr { namespace contact {
 
             if(pSdrPageView)
             {
-                const bool bIsLayerVisible(pSdrPageView->GetVisibleLayers().IsSet(getSdrObject().GetLayer()));
+                const SdrObject& rObject = getSdrObject();
+                const bool bIsLayerVisible( rObject.IsVisible() && pSdrPageView->GetVisibleLayers().IsSet(rObject.GetLayer()));
 
                 if(rControl.isVisible() != bIsLayerVisible)
                 {
