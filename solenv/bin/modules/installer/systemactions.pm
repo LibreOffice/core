@@ -321,6 +321,13 @@ sub create_directories
     else
     {
         $path = $installer::globals::unpackpath . $installer::globals::separator;
+
+        # special handling, if LOCALINSTALLDIR is set
+        if (( $installer::globals::localinstalldirset ) && ( $newdirectory eq "install" ))
+        {
+            $installer::globals::localinstalldir =~ s/\Q$installer::globals::separator\E\s*$//;
+            $path = $installer::globals::localinstalldir . $installer::globals::separator;
+        }
     }
 
     $infoline = "create_directories: Using $path for $newdirectory !\n";
