@@ -597,7 +597,7 @@ private:
     //private methods
 
     sal_Bool            impl_isDisposedOrSuspended() const;
-    ::std::auto_ptr< ReferenceSizeProvider > impl_createReferenceSizeProvider() const;
+    ::std::auto_ptr< ReferenceSizeProvider > impl_createReferenceSizeProvider();
     void                impl_adaptDataSeriesAutoResize();
 
     void                impl_createDrawViewController();
@@ -725,6 +725,8 @@ private:
     void impl_SetMousePointer( const MouseEvent & rEvent );
 
     void impl_ClearSelection();
+
+    void impl_switchDiagramPositioningToExcludingPositioning();
 };
 
 //.............................................................................

@@ -38,11 +38,13 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
-#include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/XAxisXSupplier.hpp>
+#include <com/sun/star/chart/XAxisYSupplier.hpp>
+#include <com/sun/star/chart/XAxisZSupplier.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
+#include <com/sun/star/chart2/Symbol.hpp>
 
 #include <rtl/math.hxx>
 #include <svl/itemset.hxx>
@@ -55,9 +57,8 @@
 #include <filter/msfilter/escherex.hxx>
 #include <editeng/memberids.hrc>
 #include "global.hxx"
-#include "xlconst.hxx"
+#include "xlroot.hxx"
 #include "xlstyle.hxx"
-#include "xltools.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -66,6 +67,9 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::chart2::XChartDocument;
+using ::com::sun::star::drawing::XShape;
+
+namespace cssc = ::com::sun::star::chart;
 
 // Common =====================================================================
 
@@ -104,8 +108,8 @@ XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
 // Frame formatting ===========================================================
 
 XclChFramePos::XclChFramePos() :
-    mnObjType( EXC_CHFRAMEPOS_ANY ),
-    mnSizeMode( EXC_CHFRAMEPOS_AUTOSIZE )
+    mnTLMode( EXC_CHFRAMEPOS_PARENT ),
+    mnBRMode( EXC_CHFRAMEPOS_PARENT )
 {
 }
 
@@ -189,7 +193,7 @@ XclChText::XclChText() :
     mnVAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnBackMode( EXC_CHTEXT_TRANSPARENT ),
     mnFlags( EXC_CHTEXT_AUTOCOLOR | EXC_CHTEXT_AUTOFILL ),
-    mnPlacement( EXC_CHTEXT_POS_DEFAULT ),
+    mnFlags2( EXC_CHTEXT_POS_DEFAULT ),
     mnRotation( EXC_ROT_NONE )
 {
 }
@@ -512,7 +516,7 @@ const sal_Char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartTyp
 const sal_Char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
 const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 
-namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+namespace csscd = cssc::DataLabelPlacement;
 
 static const XclChTypeInfo spTypeInfos[] =
 {
@@ -680,10 +684,6 @@ const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Colo
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-/** Property names for legend properties. */
-const sal_Char* const sppcLegendNames[] =
-    { "Show", "AnchorPosition", "Expansion", "RelativePosition", 0 };
-
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -698,8 +698,7 @@ XclChPropSetHelper::XclChPropSetHelper() :
     maGradHlpFilled( sppcGradNamesFilled ),
     maHatchHlpCommon( sppcHatchNamesCommon ),
     maHatchHlpFilled( sppcHatchNamesFilled ),
-    maBitmapHlp( sppcBitmapNames ),
-    maLegendHlp( sppcLegendNames )
+    maBitmapHlp( sppcBitmapNames )
 {
 }
 
@@ -957,46 +956,6 @@ sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPr
         XclTools::GetXclRotation( static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 ) );
 }
 
-void XclChPropSetHelper::ReadLegendProperties( XclChLegend& rLegend, const ScfPropertySet& rPropSet )
-{
-    namespace cssc = ::com::sun::star::chart2;
-    namespace cssd = ::com::sun::star::drawing;
-
-    // read the properties
-    bool bShow;
-    cssc::LegendPosition eApiPos;
-    cssc::LegendExpansion eApiExpand;
-    Any aRelPosAny;
-    maLegendHlp.ReadFromPropertySet( rPropSet );
-    maLegendHlp >> bShow >> eApiPos >> eApiExpand >> aRelPosAny;
-    DBG_ASSERT( bShow, "XclChPropSetHelper::ReadLegendProperties - legend must be visible" );
-
-    // legend position
-    switch( eApiPos )
-    {
-        case cssc::LegendPosition_LINE_START:   rLegend.mnDockMode = EXC_CHLEGEND_LEFT;     break;
-        case cssc::LegendPosition_LINE_END:     rLegend.mnDockMode = EXC_CHLEGEND_RIGHT;    break;
-        case cssc::LegendPosition_PAGE_START:   rLegend.mnDockMode = EXC_CHLEGEND_TOP;      break;
-        case cssc::LegendPosition_PAGE_END:     rLegend.mnDockMode = EXC_CHLEGEND_BOTTOM;   break;
-        default:                                rLegend.mnDockMode = EXC_CHLEGEND_NOTDOCKED;
-    }
-    // legend expansion
-    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand != cssc::LegendExpansion_WIDE );
-    // legend position
-    if( rLegend.mnDockMode == EXC_CHLEGEND_NOTDOCKED )
-    {
-        cssc::RelativePosition aRelPos;
-        if( aRelPosAny >>= aRelPos )
-        {
-            rLegend.maRect.mnX = limit_cast< sal_Int32 >( aRelPos.Primary * EXC_CHART_UNIT, 0, EXC_CHART_UNIT );
-            rLegend.maRect.mnY = limit_cast< sal_Int32 >( aRelPos.Secondary * EXC_CHART_UNIT, 0, EXC_CHART_UNIT );
-        }
-        else
-            rLegend.mnDockMode = EXC_CHLEGEND_LEFT;
-    }
-    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_DOCKED, rLegend.mnDockMode != EXC_CHLEGEND_NOTDOCKED );
-}
-
 // write properties -----------------------------------------------------------
 
 void XclChPropSetHelper::WriteLineProperties(
@@ -1207,51 +1166,6 @@ void XclChPropSetHelper::WriteRotationProperties(
     }
 }
 
-void XclChPropSetHelper::WriteLegendProperties(
-        ScfPropertySet& rPropSet, const XclChLegend& rLegend )
-{
-    namespace cssc = ::com::sun::star::chart2;
-    namespace cssd = ::com::sun::star::drawing;
-
-    // legend position
-    cssc::LegendPosition eApiPos = cssc::LegendPosition_CUSTOM;
-    switch( rLegend.mnDockMode )
-    {
-        case EXC_CHLEGEND_LEFT:     eApiPos = cssc::LegendPosition_LINE_START;  break;
-        case EXC_CHLEGEND_RIGHT:    eApiPos = cssc::LegendPosition_LINE_END;    break;
-        case EXC_CHLEGEND_TOP:      eApiPos = cssc::LegendPosition_PAGE_START;  break;
-        case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc::LegendPosition_PAGE_END;    break;
-    }
-    // legend expansion
-    cssc::LegendExpansion eApiExpand = ::get_flagvalue(
-        rLegend.mnFlags, EXC_CHLEGEND_STACKED, cssc::LegendExpansion_HIGH, cssc::LegendExpansion_WIDE );
-    // legend position
-    Any aRelPosAny;
-    if( eApiPos == cssc::LegendPosition_CUSTOM )
-    {
-        // #i71697# it is not possible to set the size directly, do some magic here
-        double fRatio = ((rLegend.maRect.mnWidth > 0) && (rLegend.maRect.mnHeight > 0)) ?
-            (static_cast< double >( rLegend.maRect.mnWidth ) / rLegend.maRect.mnHeight) : 1.0;
-        if( fRatio > 1.5 )
-            eApiExpand = cssc::LegendExpansion_WIDE;
-        else if( fRatio < 0.75 )
-            eApiExpand = cssc::LegendExpansion_HIGH;
-        else
-            eApiExpand = cssc::LegendExpansion_BALANCED;
-        // set position
-        cssc::RelativePosition aRelPos;
-        aRelPos.Primary = static_cast< double >( rLegend.maRect.mnX ) / EXC_CHART_UNIT;
-        aRelPos.Secondary = static_cast< double >( rLegend.maRect.mnY ) / EXC_CHART_UNIT;
-        aRelPos.Anchor = cssd::Alignment_TOP_LEFT;
-        aRelPosAny <<= aRelPos;
-    }
-
-    // write the properties
-    maLegendHlp.InitializeWrite();
-    maLegendHlp << true << eApiPos << eApiExpand << aRelPosAny;
-    maLegendHlp.WriteToPropertySet( rPropSet );
-}
-
 // private --------------------------------------------------------------------
 
 ScfPropSetHelper& XclChPropSetHelper::GetLineHelper( XclChPropertyMode ePropMode )
@@ -1301,27 +1215,81 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
 
 // ============================================================================
 
+namespace {
+
+/*  The following local functions implement getting the XShape interface of all
+    supported title objects (chart and axes). This needs some effort due to the
+    design of the old Chart1 API used to access these objects. */
+
+/** A code fragment that returns a shape object from the passed shape supplier
+    using the specified interface function. Checks a boolean property first. */
+#define EXC_FRAGMENT_GETTITLESHAPE( shape_supplier, supplier_func, property_name ) \
+    ScfPropertySet aPropSet( shape_supplier ); \
+    if( shape_supplier.is() && aPropSet.GetBoolProperty( CREATE_OUSTRING( #property_name ) ) ) \
+        return shape_supplier->supplier_func(); \
+    return Reference< XShape >(); \
+
+/** Implements a function returning the drawing shape of an axis title, if
+    existing, using the specified API interface and its function. */
+#define EXC_DEFINEFUNC_GETAXISTITLESHAPE( func_name, interface_type, supplier_func, property_name ) \
+Reference< XShape > func_name( const Reference< cssc::XChartDocument >& rxChart1Doc ) \
+{ \
+    Reference< cssc::interface_type > xAxisSupp( rxChart1Doc->getDiagram(), UNO_QUERY ); \
+    EXC_FRAGMENT_GETTITLESHAPE( xAxisSupp, supplier_func, property_name ) \
+}
+
+/** Returns the drawing shape of the main title, if existing. */
+Reference< XShape > lclGetMainTitleShape( const Reference< cssc::XChartDocument >& rxChart1Doc )
+{
+    EXC_FRAGMENT_GETTITLESHAPE( rxChart1Doc, getTitle, HasMainTitle )
+}
+
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetXAxisTitleShape, XAxisXSupplier, getXAxisTitle, HasXAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetYAxisTitleShape, XAxisYSupplier, getYAxisTitle, HasYAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetZAxisTitleShape, XAxisZSupplier, getZAxisTitle, HasZAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecXAxisTitleShape, XSecondAxisTitleSupplier, getSecondXAxisTitle, HasSecondaryXAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupplier, getSecondYAxisTitle, HasSecondaryYAxisTitle )
+
+#undef EXC_DEFINEFUNC_GETAXISTITLESHAPE
+#undef EXC_IMPLEMENT_GETTITLESHAPE
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
 XclChRootData::XclChRootData() :
     mxTypeInfoProv( new XclChTypeInfoProvider ),
-    mxFmtInfoProv( new XclChFormatInfoProvider )
+    mxFmtInfoProv( new XclChFormatInfoProvider ),
+    mnBorderGapX( 0 ),
+    mnBorderGapY( 0 )
 {
+    // remember some title shape getter functions
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_TITLE ) ] = lclGetMainTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_X ) ] = lclGetXAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_Y ) ] = lclGetYAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_Z ) ] = lclGetZAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_SECONDARY, EXC_CHAXIS_X ) ] = lclGetSecXAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_SECONDARY, EXC_CHAXIS_Y ) ] = lclGetSecYAxisTitleShape;
 }
 
 XclChRootData::~XclChRootData()
 {
 }
 
-Reference< XChartDocument > XclChRootData::GetChartDoc() const
+void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
 {
-    DBG_ASSERT( mxChartDoc.is(), "XclChRootData::GetChartDoc - missing chart document" );
-    return mxChartDoc;
-}
+    // remember chart document reference and chart shape position/size
+    DBG_ASSERT( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
+    mxChartDoc = rxChartDoc;
+    maChartRect = rChartRect;
 
-void XclChRootData::InitConversion( XChartDocRef xChartDoc )
-{
-    // remember chart document reference
-    DBG_ASSERT( xChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
-    mxChartDoc = xChartDoc;
+    // Excel excludes a border of 5 pixels in each direction from chart area
+    mnBorderGapX = rRoot.GetHmmFromPixelX( 5.0 );
+    mnBorderGapY = rRoot.GetHmmFromPixelY( 5.0 );
+
+    // size of a chart unit in 1/100 mm
+    mfUnitSizeX = ::std::max< double >( maChartRect.GetWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeY = ::std::max< double >( maChartRect.GetHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
 
     // create object tables
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );
@@ -1346,5 +1314,15 @@ void XclChRootData::FinishConversion()
     mxChartDoc.clear();
 }
 
-// ============================================================================
+Reference< XShape > XclChRootData::GetTitleShape( const XclChTextKey& rTitleKey ) const
+{
+    XclChGetShapeFuncMap::const_iterator aIt = maGetShapeFuncs.find( rTitleKey );
+    OSL_ENSURE( aIt != maGetShapeFuncs.end(), "XclChRootData::GetTitleShape - invalid title key" );
+    Reference< cssc::XChartDocument > xChart1Doc( mxChartDoc, UNO_QUERY );
+    Reference< XShape > xTitleShape;
+    if( xChart1Doc.is() && (aIt != maGetShapeFuncs.end()) )
+        xTitleShape = (aIt->second)( xChart1Doc );
+    return xTitleShape;
+}
 
+// ============================================================================

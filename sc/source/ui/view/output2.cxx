@@ -632,7 +632,7 @@ long ScDrawStringsVars::GetMaxDigitWidth()
         return nMaxDigitWidth;
 
     sal_Char cZero = '0';
-    for (int i = 0; i < 10; ++i)
+    for (sal_Char i = 0; i < 10; ++i)
     {
         sal_Char cDigit = cZero + i;
         long n = pOutput->pFmtDevice->GetTextWidth(String(cDigit));
