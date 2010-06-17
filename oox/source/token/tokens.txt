@@ -13,6 +13,10 @@
 3Symbols2
 3TrafficLights1
 3TrafficLights2
+3cd4
+3cd8
+5cd8
+7cd8
 3dDkShadow
 3dLight
 4Arrows
@@ -1045,6 +1049,9 @@ categoryIdx
 ccw
 ccwIn
 ccwOut
+cd2
+cd4
+cd8
 cell
 cell3D
 cellColor
@@ -2495,6 +2502,12 @@ harsh
 hasCustomPrompt
 hash
 hashData
+hc
+hd2
+hd4
+hd5
+hd6
+hd8
 hdr
 hdrShapeDefaults
 hdrs
@@ -3077,6 +3090,7 @@ lpstr
 lpwstr
 lrTb
 lrTbV
+ls
 lsdException
 lstStyle
 lt
@@ -4730,6 +4744,11 @@ srcNode
 srcOrd
 srcRect
 srgbClr
+ss
+ssd2
+ssd4
+ssd6
+ssd8
 sst
 st
 stA
@@ -5434,6 +5453,7 @@ variant
 varp
 varyColors
 vbProcedure
+vc
 vector
 vendorID
 venn
@@ -5498,6 +5518,12 @@ wavyDbl
 wavyDouble
 wavyHeavy
 wd
+wd10
+wd2
+wd4
+wd5
+wd6
+wd8
 wdDnDiag
 wdUpDiag
 weave
