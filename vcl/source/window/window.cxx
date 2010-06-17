@@ -6247,9 +6247,6 @@ void Window::SetParent( Window* pNewParent )
     if( pNewParent == this )
         return;
 
-    if ( mpWindowImpl->mpParent == pNewParent )
-        return;
-
     // check if the taskpanelist would change and move the window pointer accordingly
     SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
     SystemWindow *pNewSysWin = NULL;
@@ -6263,23 +6260,6 @@ void Window::SetParent( Window* pNewParent )
             pSysWin->GetTaskPaneList()->RemoveWindow( this );
         }
     }
-
-    // de-register as "top window child" at our parent, if necessary
-    if ( mpWindowImpl->mbFrame )
-    {
-        BOOL bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
-        if ( mpWindowImpl->mpRealParent && bIsTopWindow )
-        {
-            ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
-
-            ::std::list< Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
-                pParentWinData->maTopWindowChildren.end(), this );
-            DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
-            if ( myPos != pParentWinData->maTopWindowChildren.end() )
-                pParentWinData->maTopWindowChildren.erase( myPos );
-        }
-    }
-
     // remove ownerdraw decorated windows from list in the top-most frame window
     if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
     {
@@ -6298,6 +6278,9 @@ void Window::SetParent( Window* pNewParent )
         mpWindowImpl->mpBorderWindow->SetParent( pNewParent );
         return;
     }
+
+    if ( mpWindowImpl->mpParent == pNewParent )
+        return;
 
     if ( mpWindowImpl->mbFrame )
         mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
@@ -6414,12 +6397,6 @@ void Window::SetParent( Window* pNewParent )
 
     if( bChangeTaskPaneList )
         pNewSysWin->GetTaskPaneList()->AddWindow( this );
-
-    if ( mpWindowImpl->mbFrame && pNewParent && IsTopWindow() )
-    {
-        ImplWinData* pParentWinData = pNewParent->ImplGetWinData();
-        pParentWinData->maTopWindowChildren.push_back( this );
-    }
 
     if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
         ImplGetOwnerDrawList().push_back( this );
