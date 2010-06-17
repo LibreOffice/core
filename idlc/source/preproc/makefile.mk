@@ -63,8 +63,10 @@ APP1OBJS=$(OBJ)$/cpp.obj
 
 APP1LIBS= $(LB)$/idlcpp.lib
 
+.IF "$(HAVE_GETOPT)" != "YES"
 .IF "$(GUI)" == "WNT"
 APP1STDLIBS=gnu_getopt.lib
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
