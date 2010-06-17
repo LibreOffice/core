@@ -1463,7 +1463,7 @@ sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) thro
 
     Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
     const ::rtl::OUString* pArray = aSNL.getConstArray();
-    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray();
+    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray() + aSNL.getLength();
     for (; pArray != pArrayEnd; ++pArray )
         if( *pArray == rServiceName )
             break;
