@@ -33,7 +33,7 @@
 #define _DATETIMEITEM_CXX
 #include <svl/dateitem.hxx>
 #include <svl/svldata.hxx>
-#include <svl/svtools.hrc>
+#include <svl/svl.hrc>
 
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -44,7 +44,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-
 
 // STATIC DATA -----------------------------------------------------------
 

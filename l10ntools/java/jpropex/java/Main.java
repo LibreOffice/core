@@ -26,82 +26,13 @@
  ************************************************************************/
 
 
-
-#ifndef _SVT_UNO_UNOIFAC_HRC_
-#include <unoifac2.hrc>
-#endif
-
-
-Menu RID_CONTEXTMENU
+class Main
 {
-    ItemList =
+
+    public static void main( String args[] )
     {
-        MenuItem
-        {
-            Identifier = RID_OPEN_LINK ;
-            HelpId = HID_TEXTCPNT_OPEN_LINK ;
-            Text [ en-US ] = "~Open";
-        };
-        MenuItem
-        {
-            Identifier = RID_OPEN_LINK_NEW ;
-            HelpId = HID_TEXTCPNT_OPEN_LINK_NEW ;
-            Text [ en-US ] = "Open in New ~Window";
-        };
-        MenuItem
-        {
-            Identifier = RID_DOWNLOAD ;
-            HelpId = HID_TEXTCPNT_DOWNLOAD ;
-            Text [ en-US ] = "~Download...";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = RID_ADD_BOOKMARK ;
-            HelpId = HID_TEXTCPNT_ADD_BOOKMARK ;
-            Text [ en-US ] = "Add ~Link";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = RID_COPY_LINK ;
-            HelpId = HID_TEXTCPNT_COPY_LINK ;
-            Text [ en-US ] = "Cop~y Link" ;
-        };
-    };
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        JPropEx jpropex = new JPropEx( args );
+        //jpropex.init();
+    }
+}
 

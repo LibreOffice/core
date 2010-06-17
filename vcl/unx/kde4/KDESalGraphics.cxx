@@ -158,7 +158,7 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 
 BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
                                            const Region&, const Point&,
-                                           SalControlHandle&, BOOL& )
+                                           BOOL& )
 {
     return FALSE;
 }
@@ -220,7 +220,7 @@ namespace
 
 BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const Region& rControlRegion, ControlState nControlState,
-                                        const ImplControlValue& value, SalControlHandle&,
+                                        const ImplControlValue& value,
                                         const OUString& )
 {
     // put not implemented types here
@@ -567,7 +567,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
 BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              const Region& controlRegion, ControlState controlState,
-                                             const ImplControlValue& val, SalControlHandle&,
+                                             const ImplControlValue& val,
                                              const OUString&,
                                              Region &nativeBoundingRegion, Region &nativeContentRegion )
 {
