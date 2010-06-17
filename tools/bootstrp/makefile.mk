@@ -38,6 +38,10 @@ LIBTARGET=NO
 
 CDEFS+=-D_TOOLS_STRINGLIST
 
+.IF "$(HAVE_GETOPT)" == "YES"
+CDEFS += -DHAVE_GETOPT
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 OBJFILES= \

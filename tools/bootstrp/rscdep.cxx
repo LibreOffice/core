@@ -45,10 +45,14 @@
 
 #include "cppdep.hxx"
 
-#ifdef WNT
+#if defined WNT
+#if !defined HAVE_GETOPT
 #define __STDC__ 1
 #define __GNU_LIBRARY__
 #include <external/glibc/getopt.h>
+#else
+#include <getopt.h>
+#endif
 #endif
 
 class RscHrcDep : public CppDep
