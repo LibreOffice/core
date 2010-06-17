@@ -907,7 +907,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
     {
         // TEST, has to be vb here always
 #ifdef DBG_UTIL
-        SbError nTmp = StarBASIC::GetSfxFromVBError( nError );
+        SbError nTmp = StarBASIC::GetSfxFromVBError( (USHORT)nError );
         DBG_ASSERT( nTmp, "No VB error!" );
 #endif
 
