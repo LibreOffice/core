@@ -65,66 +65,6 @@ public:
     virtual ~PaneDockingWindow (void);
 
     virtual void StateChanged( StateChangedType nType );
-
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-
-    /** Initializing the title tool box either creates a new title tool box
-        or clears all items from an existing one.  A closer is added as only
-        item.
-    */
-    void InitializeTitleToolBox (void);
-
-    /** Add a top down menu to the title bar or rather the top-level menu
-        entry.  The given callback is called when the menu is clicked and it
-        is the task of the callback to show the menu.
-        @return
-            The id of the new menu is returned.  It can be compared by the
-            callback to the value of GetCurItemId() when called at the given
-            tool box.
-    */
-    USHORT AddMenu (const String& rsMenuName, ULONG nHelpId, const Link& rCallback);
-
-    ::Window* GetContentWindow (void);
-
-    ::boost::shared_ptr<ToolBox> GetTitleToolBox (void) const;
-
-private:
-    /** The pane which is represented by the docking window.
-    */
-    ::rtl::OUString msPaneURL;
-
-    /** Title that is shown at the top of the docking window.
-    */
-    ::rtl::OUString msTitle;
-
-    /** The tool box that is displayed in the window title area contains
-        menus and the closer button.
-    */
-    ::boost::shared_ptr<ToolBox> mpTitleToolBox;
-
-    /** The border that is painted arround the inner window.  The bevel
-        shadow lines are part of the border, so where the border is 0 no
-        such line is painted.
-    */
-    SvBorder maBorder;
-
-    sal_uInt16 mnChildWindowId;
-
-    ::boost::scoped_ptr< ::Window> mpContentWindow;
-
-    /** Remember that a layout is pending, i.e. Resize() has been called
-        since the last Paint().
-    */
-    bool mbIsLayoutPending;
-
-    DECL_LINK(ToolboxSelectHandler, ToolBox*);
-
-    /** This does the actual placing and sizing of the title bar and the
-        content window after the size of the docking window has changed.
-        This method is called from withing the Paint() method when since its
-        last invocation the size of the docking window has changed.
-    */
-    void Layout (void);
 };
 
 } // end of namespace ::sd
