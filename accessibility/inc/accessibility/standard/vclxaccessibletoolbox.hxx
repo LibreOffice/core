@@ -57,6 +57,7 @@ private:
     void                        UpdateAllItems_Impl();
     void                        UpdateItemName_Impl( sal_Int32 _nPos );
     void                        UpdateItemEnabled_Impl( sal_Int32 _nPos );
+    void                        UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen );
     void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow );
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
 

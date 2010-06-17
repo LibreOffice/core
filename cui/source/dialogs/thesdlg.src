@@ -24,185 +24,123 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include "cuires.hrc"
 #include "thesdlg.hrc"
 #include "helpid.hrc"
 #include <svx/svxids.hrc> // SID_THESAURUS
 
-// pragma ----------------------------------------------------------------
 
  // RID_SVXDLG_THES -------------------------------------------------------
 ModalDialog RID_SVXDLG_THESAURUS
 {
     HelpId = SID_THESAURUS ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 285 , 116 ) ;
+    Size = MAP_APPFONT ( 235, 230 ) ;
     Text [ en-US ] = "Thesaurus" ;
-    Moveable = TRUE ;
     SvLook = TRUE ;
-    OkButton BTN_THES_OK
+    Moveable = TRUE ;
+
+    FixedImage IMG_VENDOR
     {
-        Pos = MAP_APPFONT ( 219 , 6 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 0, 0 ) ;
+        Size = MAP_APPFONT ( 235, 0  ) ;    // correct size will be applied at runtime
+        Hide = TRUE;
     };
-    CancelButton BTN_THES_CANCEL
+
+    ImageButton BTN_LEFT
     {
-        Pos = MAP_APPFONT ( 219 , 23 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-    };
-    PushButton BTN_LOOKUP
-    {
-        Pos = MAP_APPFONT ( 219 , 40 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Search" ;
-    };
-    PushButton BTN_LANGUAGE
-    {
-        Pos = MAP_APPFONT ( 219 , 57 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Language..." ;
-    };
-    HelpButton BTN_THES_HELP
-    {
-        Pos = MAP_APPFONT ( 219 , 77 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Pos = MAP_APPFONT ( 5 , 15 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TABSTOP = TRUE ;
+        SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
     };
     FixedText FT_WORD
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ en-US ] = "~Word" ;
+        Pos = MAP_APPFONT ( 24 , 5 ) ;
+        Size = MAP_APPFONT ( 143 , 8 ) ;
+        Text [ en-US ] = "Current ~word" ;
         LEFT = TRUE ;
     };
-    ListBox LB_WORD
+    ComboBox CB_WORD
     {
         DropDown = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 96 , 65 ) ;
+        Pos = MAP_APPFONT ( 24 , 16 ) ;
+        Size = MAP_APPFONT ( 141 , 60 ) ;   // have drop down space for several lines
     };
-    FixedText FT_MEAN
+    MenuButton MB_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ en-US ] = "~Meaning " ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Language" ;
+    };
+
+    FixedText FT_THES_ALTERNATIVES
+    {
+        Pos = MAP_APPFONT ( 5 , 33 ) ;
+        Size = MAP_APPFONT ( 255 , 8 ) ;
+        Text [ en-US ] = "~Alternatives" ;
         LEFT = TRUE ;
     };
-    ListBox LB_MEAN
+    Control CT_THES_ALTERNATIVES
     {
-        BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 55 ) ;
-        Size = MAP_APPFONT ( 96 , 50 ) ;
-        AutoHScroll = TRUE ;
+        HelpID = HID_CT_THES_ALTERNATIVES ;     // also needed for automatic testing to find the control
+        Pos = MAP_APPFONT ( 5 , 45 ) ;
+        Size = MAP_APPFONT ( 225 , 121 ) ;
+        Border = TRUE;
+        TabStop = TRUE ;
     };
-    FixedText FT_SYNON
-    {
-        Pos = MAP_APPFONT ( 111 , 43 ) ;
-        Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ en-US ] = "Sy~nonym" ;
-        LEFT = TRUE ;
-    };
-    ListBox LB_SYNON
-    {
-        BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 55 ) ;
-        Size = MAP_APPFONT ( 96 , 50 ) ;
-        AutoHScroll = TRUE ;
-    };
+
     FixedText FT_REPL
     {
-        Pos = MAP_APPFONT ( 111 , 14 ) ;
-        Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ en-US ] = "~Replace" ;
+        Pos = MAP_APPFONT ( 5 , 173 ) ;
+        Size = MAP_APPFONT ( 255 , 8 ) ;
+        Text [ en-US ] = "Replace ~with" ;
         LEFT = TRUE ;
     };
     Edit ED_REPL
     {
         BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 25 ) ;
-        Size = MAP_APPFONT ( 96 , 12 ) ;
+        Pos = MAP_APPFONT ( 5 , 184 ) ;
+        Size = MAP_APPFONT ( 225 , 12 ) ;
         LEFT = TRUE ;
     };
     FixedLine FL_VAR
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 207 , 8 ) ;
-        Text [ en-US ] = "Variations" ;
+        Pos = MAP_APPFONT ( 0 , 200 ) ;
+        Size = MAP_APPFONT ( 235 , 8 ) ;
     };
-    String STR_ERR_WORDNOTFOUND
+
+    HelpButton BTN_THES_HELP
     {
-        Text [ en-US ] = "Word not found in thesaurus" ;
+        Pos = MAP_APPFONT ( 5 , 210 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
     };
-};
- // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
-ModalDialog RID_SVXDLG_THES_LANGUAGE
-{
-    HelpId = HID_THES_LANGUAGE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 170 , 86 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Sprache auswählen : Sprache auswõhlen */
-    /* ### ACHTUNG: Neuer Text in Resource? Sprache auswählen : Sprache auswõhlen */
-    Text [ en-US ] = "Select Language" ;
-    Moveable = TRUE ;
-    ListBox LB_THES_LANGUAGE
+    OkButton BTN_THES_OK
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 90 , 60 ) ;
-        Sort = TRUE ;
-    };
-    FixedLine FL_THES_LANGUAGE
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ en-US ] = "Selection" ;
-    };
-    OKButton BTN_LANG_OK
-    {
-        Pos = MAP_APPFONT ( 114 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 105 , 210 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Replace" ;
         DefButton = TRUE ;
     };
-    CancelButton BTN_LANG_CANCEL
+    CancelButton BTN_THES_CANCEL
     {
-        Pos = MAP_APPFONT ( 114 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 170 , 210 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
     };
-    HelpButton BTN_LANG_HELP
+
+    String STR_ERR_TEXTNOTFOUND
     {
-        Pos = MAP_APPFONT ( 114 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "No alternatives found." ;
+    };
+
+    Image IMG_DEFAULT_VENDOR
+    {
+        ImageBitmap = Bitmap { File = "vendor01.png"; };
+    };
+    Image IMG_DEFAULT_VENDOR_HC
+    {
+        ImageBitmap = Bitmap { File = "vendor01h.png"; };
     };
 };
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
