@@ -327,6 +327,7 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
     {
         case STATE_CHANGE_INITSHOW:
             Resize();
+            mpContentWindow->SetStyle(mpContentWindow->GetStyle() | WB_DIALOGCONTROL);
             break;
 
         case STATE_CHANGE_VISIBLE:
