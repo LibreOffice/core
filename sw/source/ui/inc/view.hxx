@@ -437,6 +437,12 @@ public:
     virtual USHORT          PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
     virtual void            MarginChanged();
 
+    // replace word/selection with text from the thesaurus
+    // (this code has special handling for "in word" character)
+    void                    InsertThesaurusSynonym( const String &rSynonmText, const String &rLookUpText, bool bValidSelection );
+    bool                    IsValidSelectionForThesaurus() const;
+    String                  GetThesaurusLookUpText( bool bSelection ) const;
+
     // Shell sofort wechseln ->  fuer GetSelectionObject
     void        StopShellTimer();
 
@@ -574,7 +580,7 @@ public:
     BOOL            HasDrwObj(SdrObject *pSdrObj) const;
     BOOL            HasOnlyObj(SdrObject *pSdrObj, UINT32 eObjInventor) const;
     BOOL            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
-                                    Window* pWin=NULL, BOOL bIsNewObj=FALSE);
+                                    Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
 
@@ -599,6 +605,7 @@ public:
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
     inline       FmFormShell    *GetFormShell() { return pFormShell; }
+    inline const FmFormShell    *GetFormShell() const { return pFormShell; }
 
     //damit in DToren der SubShells ggf. pShell zurueckgesetzt werden kann
     void ResetSubShell()    { pShell = 0; }

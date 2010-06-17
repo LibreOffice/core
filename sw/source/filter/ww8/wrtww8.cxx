@@ -58,10 +58,12 @@
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
+#include <swtblfmt.hxx>
 #include <txatbase.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtpdsc.hxx>
@@ -1023,7 +1025,8 @@ bool WW8_WrFkp::Combine()
         return false;
     if( nIMax )
         memcpy( pFkp + ( nIMax + 1 ) * 4, pOfs, nIMax * nItemSize );
-    DELETEZ( pOfs );
+    delete[] pOfs;
+    pOfs = 0;
     ((BYTE*)pFkp)[511] = nIMax;
     bCombined = true;
 
@@ -1910,6 +1913,7 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
             TableBidi( pTableTextNodeInfoInner );
             TableVerticalCell( pTableTextNodeInfoInner );
             TableOrientation( pTableTextNodeInfoInner );
+            TableSpacing( pTableTextNodeInfoInner );
         }
     }
 }
@@ -2088,6 +2092,41 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
                 break;
             default:
                 break;
+        }
+    }
+}
+
+void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
+{
+    const SwTable * pTable = pTableTextNodeInfoInner->getTable();
+    const SwTableFmt * pTableFmt = dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+
+    if (pTableFmt != NULL)
+    {
+        const SvxULSpaceItem & rUL = pTableFmt->GetULSpace();
+
+        if (rUL.GetUpper() > 0)
+        {
+            sal_uInt8 nPadding = 2;
+            sal_uInt8 nPcVert = 0;
+            sal_uInt8 nPcHorz = 0;
+
+            sal_uInt8 nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
+
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TPc);
+            m_rWW8Export.pO->Insert( nTPc, m_rWW8Export.pO->Count() );
+
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaAbs);
+            m_rWW8Export.InsUInt16(rUL.GetUpper());
+
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaFromText);
+            m_rWW8Export.InsUInt16(rUL.GetUpper());
+        }
+
+        if (rUL.GetLower() > 0)
+        {
+            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaFromTextBottom);
+            m_rWW8Export.InsUInt16(rUL.GetLower());
         }
     }
 }
@@ -2416,13 +2455,15 @@ typedef ::std::deque<SwNode *> SwNodeDeque;
 
 void MSWordExportBase::WriteText()
 {
-#ifdef DEBUG
-    ::std::clog << "<WriteText>" << ::std::endl;
-    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
-
-    SwNodeHashSet aNodeSet;
-    SwNodeDeque aNodeDeque;
-#endif
+// whoever has need of the missing function should go and implement it!
+// This damned piece of code always breaks builds...
+//#ifdef DEBUG
+//    ::std::clog << "<WriteText>" << ::std::endl;
+//    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
+//
+//    SwNodeHashSet aNodeSet;
+//    SwNodeDeque aNodeDeque;
+//#endif
 
     while( pCurPam->GetPoint()->nNode < pCurPam->GetMark()->nNode ||
            ( pCurPam->GetPoint()->nNode == pCurPam->GetMark()->nNode &&
@@ -2430,6 +2471,9 @@ void MSWordExportBase::WriteText()
     {
         SwNode * pNd = pCurPam->GetNode();
 
+// whoever has need of the missing function should go and implement it!
+// This damned piece of code always breaks builds...
+#if 0
 #ifdef DEBUG
         if (aNodeSet.find(pNd) == aNodeSet.end())
         {
@@ -2440,6 +2484,7 @@ void MSWordExportBase::WriteText()
         {
             ::std::clog << "<already-done>" << dbg_out(*pNd) << "</already-done>" << ::std::endl;
         }
+#endif
 #endif
 
         if ( pNd->IsTxtNode() )
@@ -3775,7 +3820,9 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
 #ifdef DEBUG
-    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;
+// whoever has need of the missing function should go and implement it!
+// This piece of code always breaks builds...
+//    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;
 #endif
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo = mpTableInfo->getTableNodeInfo( &rNode );

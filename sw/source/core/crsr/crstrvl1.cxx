@@ -33,25 +33,29 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-BOOL SwCrsrShell::IsStartWord() const
+BOOL SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
 {
-    return pCurCrsr->IsStartWord();
+    return pCurCrsr->IsStartWord( nWordType );
 }
-BOOL SwCrsrShell::IsEndWord() const
+
+BOOL SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
 {
-    return pCurCrsr->IsEndWord();
+    return pCurCrsr->IsEndWord( nWordType );
 }
+
+BOOL SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
+{
+    return pCurCrsr->IsInWord( nWordType );
+}
+
 BOOL SwCrsrShell::IsStartSentence() const
 {
     return pCurCrsr->IsStartEndSentence( false );
 }
+
 BOOL SwCrsrShell::IsEndSentence() const
 {
     return pCurCrsr->IsStartEndSentence( true );
-}
-BOOL SwCrsrShell::IsInWord() const
-{
-    return pCurCrsr->IsInWord();
 }
 
 
@@ -94,4 +98,8 @@ BOOL SwCrsrShell::SelectWord( const Point* pPt )
     return pCurCrsr->SelectWord( pPt );
 }
 
+BOOL SwCrsrShell::ExpandToSentenceBorders()
+{
+    return pCurCrsr->ExpandToSentenceBorders();
+}
 

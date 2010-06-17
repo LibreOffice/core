@@ -354,13 +354,3 @@ void SwUndoMove::DelFtn( const SwPaM& rRange )
     }
 }
 
-void SwUndoMove::AddTblMrgFlyHstry( SwHistory& rHstr )
-{
-    if( !pHistory )
-        pHistory = new SwHistory;
-
-    USHORT nInsPos = nFtnStt;
-    nFtnStt = nFtnStt + rHstr.Count();
-    pHistory->Move( nInsPos, &rHstr );
-}
-

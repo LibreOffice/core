@@ -26,7 +26,9 @@
  ************************************************************************/
 #ifndef _SWCRSR_HXX
 #define _SWCRSR_HXX
+
 #include <com/sun/star/i18n/WordType.hpp>
+
 #include <pam.hxx>
 #include <tblsel.hxx>
 #include <cshtyp.hxx>
@@ -129,10 +131,10 @@ public:
                 const SfxItemSet* rReplSet = 0 );
 
     // UI versions
-    BOOL IsStartWord() const;
-    BOOL IsEndWord() const;
+    BOOL IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    BOOL IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    BOOL IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
     BOOL IsStartEndSentence( bool bEnd ) const;
-    BOOL IsInWord() const;
     BOOL GoStartWord();
     BOOL GoEndWord();
     BOOL GoNextWord();
@@ -162,6 +164,7 @@ public:
     BOOL GoEndSentence(){return GoSentence(END_SENT);}
     BOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
     BOOL GoStartSentence(){return GoSentence(START_SENT);}
+    BOOL ExpandToSentenceBorders();
 
     virtual BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
         BOOL bAllowVisual, BOOL bSkipHidden, BOOL bInsertCrsr );

@@ -136,21 +136,6 @@ void SwGrammarMarkUp::setSentence( xub_StrLen nStart )
         maSentence.insert( pIter, nStart );
 }
 
-void SwGrammarMarkUp::removeSentence(xub_StrLen nStart, xub_StrLen nLength )
-{
-    std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
-    while( pIter != maSentence.end() && *pIter < nStart )
-        ++pIter;
-    if( nLength == STRING_LEN )
-        nStart = STRING_LEN;
-    else
-        nStart += nLength;
-    std::vector< xub_StrLen >::iterator pLast = pIter;
-    while( pLast != maSentence.end() && *pLast < nStart )
-        ++pLast;
-    maSentence.erase( pIter, pLast );
-}
-
 xub_StrLen SwGrammarMarkUp::getSentenceStart( xub_StrLen nPos )
 {
     if( !maSentence.size() )
