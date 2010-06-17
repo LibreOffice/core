@@ -50,7 +50,7 @@ published struct AccessibleRelation
         the whole relation is regarded as invalid.  The content of the
         targetSet is then undefined.</p>
 
-        @see AccessibleRelationType.
+        @see AccessibleRelationType
     */
     short RelationType;
 

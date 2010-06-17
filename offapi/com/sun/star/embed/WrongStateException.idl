@@ -41,7 +41,7 @@
 /** This exception can be thrown in case the object's state does not allow
     to call requested functionality.
  */
-exception WrongStateException: com::sun::star::uno::Exception
+published exception WrongStateException: com::sun::star::uno::Exception
 {
 };
 
