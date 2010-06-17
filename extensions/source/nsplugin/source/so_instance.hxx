@@ -103,7 +103,6 @@ public:
     virtual sal_Bool Print(void) ;
 
     static sal_Bool ShutDown(void);
-    static sal_Bool SetSODir(char * sDir);
     static char* GetSODir(void) {return sSO_Dir;};
     long GetParent(void) {return m_pParent;};
 };
