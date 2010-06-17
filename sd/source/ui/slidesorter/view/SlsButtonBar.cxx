@@ -1402,10 +1402,15 @@ StartShowButton::StartShowButton (SlideSorter& rSlideSorter)
 
 bool StartShowButton::IsEnabled (void) const
 {
+    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    if (pViewShell == NULL)
+        return false;
+    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
+    if (pDispatcher == NULL)
+        return NULL;
+
     const SfxPoolItem* pState = NULL;
-    const SfxItemState eState (mrSlideSorter.GetViewShell()->GetDispatcher()->QueryState(
-        SID_PRESENTATION,
-        pState));
+    const SfxItemState eState (pDispatcher->QueryState(SID_PRESENTATION, pState));
     return (eState & SFX_ITEM_DISABLED) == 0;
 }
 
