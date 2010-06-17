@@ -122,11 +122,13 @@ uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
 void SAL_CALL FormattedString::setString( const ::rtl::OUString& String )
     throw (uno::RuntimeException)
 {
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_aString = String;
+    {
+        MutexGuard aGuard( GetMutex());
+        m_aString = String;
+    }
+    //don't keep the mutex locked while calling out
     fireModifyEvent();
-    // \--
+
 }
 
 // ____ XModifyBroadcaster ____

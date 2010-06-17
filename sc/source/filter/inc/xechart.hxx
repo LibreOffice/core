@@ -39,6 +39,10 @@
 class Size;
 
 namespace com { namespace sun { namespace star {
+    namespace awt
+    {
+        struct Rectangle;
+    }
     namespace frame
     {
         class XModel;
@@ -65,7 +69,7 @@ namespace com { namespace sun { namespace star {
 
 // Common =====================================================================
 
-class XclExpChRootData;
+struct XclExpChRootData;
 class XclExpChChart;
 
 /** Base class for complex chart classes, provides access to other components
@@ -80,11 +84,13 @@ public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
 
 public:
-    explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart* pChartData );
+    explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData );
     virtual             ~XclExpChRoot();
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclExpChRoot& GetChRoot() const { return *this; }
+    /** Returns the API Chart document model. */
+    XChartDocRef        GetChartDocument() const;
     /** Returns a reference to the parent chart data object. */
     XclExpChChart&      GetChartData() const;
     /** Returns chart type info for a unique chart type identifier. */
@@ -96,7 +102,7 @@ public:
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc ) const;
+    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion() const;
 
@@ -104,6 +110,18 @@ public:
     bool                IsSystemColor( const Color& rColor, sal_uInt16 nSysColorIdx ) const;
     /** Sets a system color and the respective color identifier. */
     void                SetSystemColor( Color& rColor, sal_uInt32& rnColorId, sal_uInt16 nSysColorIdx ) const;
+
+    /** Converts the passed horizontal coordinate from 1/100 mm to Excel chart units. */
+    sal_Int32           CalcChartXFromHmm( sal_Int32 nPosX ) const;
+    /** Converts the passed vertical coordinate from 1/100 mm to Excel chart units. */
+    sal_Int32           CalcChartYFromHmm( sal_Int32 nPosY ) const;
+    /** Converts the passed rectangle from 1/100 mm to Excel chart units. */
+    XclChRectangle      CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const;
+
+    /** Converts the passed horizontal coordinate from a relative position to Excel chart units. */
+    sal_Int32           CalcChartXFromRelative( double fPosX ) const;
+    /** Converts the passed vertical coordinate from a relative position to Excel chart units. */
+    sal_Int32           CalcChartYFromRelative( double fPosY ) const;
 
     /** Reads all line properties from the passed property set. */
     void                ConvertLineFormat(
@@ -190,6 +208,25 @@ public:
 };
 
 // Frame formatting ===========================================================
+
+class XclExpChFramePos : public XclExpRecord
+{
+public:
+    explicit            XclExpChFramePos( sal_uInt16 nTLMode, sal_uInt16 nBRMode );
+
+    /** Returns read/write access to the frame position data. */
+    inline XclChFramePos& GetFramePosData() { return maData; }
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    XclChFramePos       maData;             /// Position of the frame.
+};
+
+typedef ScfRef< XclExpChFramePos > XclExpChFramePosRef;
+
+// ----------------------------------------------------------------------------
 
 class XclExpChLineFormat : public XclExpRecord
 {
@@ -514,6 +551,7 @@ private:
 
 private:
     XclChText           maData;             /// Contents of the CHTEXT record.
+    XclExpChFramePosRef mxFramePos;         /// Relative text frame position (CHFRAMEPOS record).
     XclExpChSourceLinkRef mxSrcLink;        /// Linked data (CHSOURCELINK with CHSTRING record).
     XclExpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
     XclExpChFontRef     mxFont;             /// Index into font buffer (CHFONT record).
@@ -830,8 +868,8 @@ typedef ScfRef< XclExpChChart3d > XclExpChChart3dRef;
 
 /** Represents the CHLEGEND record group describing the chart legend.
 
-    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAME group,
-    CHTEXT group, CHEND.
+    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAMEPOS, CHFRAME
+    group, CHTEXT group, CHEND.
  */
 class XclExpChLegend : public XclExpChGroupBase
 {
@@ -849,6 +887,7 @@ private:
 
 private:
     XclChLegend         maData;             /// Contents of the CHLEGEND record.
+    XclExpChFramePosRef mxFramePos;         /// Legend frame position (CHFRAMEPOS record).
     XclExpChTextRef     mxText;             /// Legend text format (CHTEXT group).
     XclExpChFrameRef    mxFrame;            /// Legend frame format (CHFRAME group).
 };
@@ -1137,6 +1176,7 @@ private:
     typedef XclExpRecordList< XclExpChTypeGroup > XclExpChTypeGroupList;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
+    XclExpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
     XclExpChAxisRef     mxXAxis;            /// The X axis (CHAXIS group).
     XclExpChAxisRef     mxYAxis;            /// The Y axis (CHAXIS group).
     XclExpChAxisRef     mxZAxis;            /// The Z axis (CHAXIS group).
@@ -1164,7 +1204,7 @@ public:
 
 public:
     explicit            XclExpChChart( const XclExpRoot& rRoot,
-                            XChartDocRef xChartDoc, const Size& rSize );
+                            XChartDocRef xChartDoc, const Rectangle& rChartRect );
 
     /** Creates, registers and returns a new data series object. */
     XclExpChSeriesRef   CreateSeries();
@@ -1172,6 +1212,8 @@ public:
     void                RemoveLastSeries();
     /** Stores a CHTEXT group that describes a data point label. */
     void                SetDataLabel( XclExpChTextRef xText );
+    /** Sets the plot area position and size to manual mode. */
+    void                SetManualPlotArea();
 
     /** Writes all embedded records. */
     virtual void        WriteSubRecords( XclExpStream& rStrm );
@@ -1224,7 +1266,7 @@ public:
 
 public:
     explicit            XclExpChart( const XclExpRoot& rRoot,
-                            XModelRef xModel, const Size& rSize );
+                            XModelRef xModel, const Rectangle& rChartRect );
 };
 
 // ============================================================================
