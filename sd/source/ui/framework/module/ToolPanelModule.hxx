@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,49 +22,28 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+************************************************************************/
 
-#include "CustomAnimation.hrc"
+#ifndef SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
+#define SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
 
-ModalDialog DLG_CUSTOMANIMATION_SCHEMES_PANE
+#include "ResourceManager.hxx"
+
+#include <rtl/ref.hxx>
+
+namespace sd { namespace framework {
+
+class ReadOnlyModeObserver;
+
+/** This module is responsible for showing the task pane.
+*/
+class ToolPanelModule
 {
-    DialogControl = TRUE;
-
-    Text [ en-US ] = "Animation Schemes";
-
-    Fixedline 1
-    {
-        Text [ en-US ] = "Apply to selected slides";
-    };
-
-    PushButton 1
-    {
-        Text [ en-US ] = "Apply to All Slides";
-    };
-
-    PushButton 2
-    {
-        Text [ en-US ] = "Play";
-    };
-
-    PushButton 3
-    {
-        Text [ en-US ] = "Slide Show";
-    };
-
-    Checkbox 4
-    {
-        Text [ en-US ] = "Automatic preview";
-    };
-
-    String 2
-    {
-        Text [ en-US ] = "No Animation";
-    };
-
-    String 3
-    {
-        Text [ en-US ] = "Recently used Schemes";
-    };
+public:
+    static void Initialize (
+        const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
 };
 
+} } // end of namespace sd::framework
+
+#endif

@@ -27,18 +27,19 @@
 
 #include "precompiled_sd.hxx"
 #include "TaskPanelFactory.hxx"
-#include "TaskPaneViewShell.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "DrawController.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <cppuhelper/compbase1.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
-using ::sd::toolpanel::TaskPaneViewShell;
 
 namespace sd { namespace framework {
 
@@ -85,13 +86,10 @@ class TaskPanelResource
 {
 public:
     TaskPanelResource (
-        const Reference<XResourceId>& rxResourceId,
-        const TaskPaneViewShell::PanelId ePaneId);
+        const Reference<XResourceId>& rxResourceId );
     virtual ~TaskPanelResource ();
 
     virtual void SAL_CALL disposing ();
-
-    TaskPaneViewShell::PanelId GetPaneId () const;
 
     // XResource
 
@@ -103,7 +101,6 @@ public:
 
 private:
     const Reference<XResourceId> mxResourceId;
-    const TaskPaneViewShell::PanelId mePaneId;
 };
 
 } // end of anonymous namespace.
@@ -185,9 +182,27 @@ void SAL_CALL TaskPanelFactory::initialize(
 
 //===== XResourceController ===================================================
 
+namespace
+{
+    void lcl_collectResourceURLs( const Reference< XResourceId >& i_rResourceId, ::std::vector< ::rtl::OUString >& o_rResourceURLs )
+    {
+        ENSURE_OR_RETURN_VOID( i_rResourceId.is(), "illegal resource ID" );
+        o_rResourceURLs.resize(0);
+
+        Reference< XResourceId > xResourceId( i_rResourceId );
+        ::rtl::OUString sResourceURL = xResourceId->getResourceURL();
+        while ( sResourceURL.getLength() > 0 )
+        {
+            o_rResourceURLs.push_back( sResourceURL );
+            xResourceId = xResourceId->getAnchor();
+            sResourceURL = xResourceId->getResourceURL();
+        }
+    }
+}
+
 Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
     const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     Reference<XResource> xResource;
 
@@ -196,45 +211,26 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
 
     OUString sResourceURL (rxResourceId->getResourceURL());
 
-    if (sResourceURL.match(FrameworkHelper::msTaskPanelURLPrefix))
+    if ( sResourceURL.match( FrameworkHelper::msTaskPanelURLPrefix ) )
     {
-        TaskPaneViewShell::PanelId ePaneId (TaskPaneViewShell::PID_UNKNOWN);
+        toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( sResourceURL ) );
 
-        if (sResourceURL.equals(FrameworkHelper::msMasterPagesTaskPanelURL))
+        if ( ( ePanelId != toolpanel::PID_UNKNOWN ) && ( mpViewShellBase != NULL ) )
         {
-            ePaneId = TaskPaneViewShell::PID_MASTER_PAGES;
-        }
-        else if (sResourceURL.equals(FrameworkHelper::msLayoutTaskPanelURL))
-        {
-            ePaneId = TaskPaneViewShell::PID_LAYOUT;
-        }
-        else if (sResourceURL.equals(FrameworkHelper::msTableDesignPanelURL))
-        {
-            ePaneId = TaskPaneViewShell::PID_TABLE_DESIGN;
-        }
-        else if (sResourceURL.equals(FrameworkHelper::msCustomAnimationTaskPanelURL))
-        {
-            ePaneId = TaskPaneViewShell::PID_CUSTOM_ANIMATION;
-        }
-        else if (sResourceURL.equals(FrameworkHelper::msSlideTransitionTaskPanelURL))
-        {
-            ePaneId = TaskPaneViewShell::PID_SLIDE_TRANSITION;
-        }
+            ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( *mpViewShellBase ) );
 
-        if (ePaneId!=TaskPaneViewShell::PID_UNKNOWN && mpViewShellBase!=NULL)
-        {
-            toolpanel::TaskPaneViewShell* pTaskPane
-                = dynamic_cast<toolpanel::TaskPaneViewShell*>(
-                    FrameworkHelper::Instance(*mpViewShellBase)
-                        ->GetViewShell(FrameworkHelper::msRightPaneURL).get());
-            if (pTaskPane != NULL)
-            {
-                xResource = new TaskPanelResource(
-                    rxResourceId,
-                    ePaneId);
-                pTaskPane->ShowPanel(ePaneId);
-                pTaskPane->ExpandPanel(ePaneId);
-            }
+            // assume that the top-level anchor is the URL of the pane
+            ::std::vector< ::rtl::OUString > aResourceURLs;
+            lcl_collectResourceURLs( rxResourceId, aResourceURLs );
+
+            const ::rtl::OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
+            const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
+
+            toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
+            if ( pToolPanel != NULL )
+                xResource = new TaskPanelResource( rxResourceId );
+
+            OSL_POSTCOND( xResource.is(), "TaskPanelFactory::createResource: did not find the given resource!" );
         }
     }
 
@@ -248,37 +244,41 @@ void SAL_CALL TaskPanelFactory::releaseResource (
     const Reference<XResource>& rxResource)
     throw (RuntimeException)
 {
-    toolpanel::TaskPaneViewShell* pTaskPane
-        = dynamic_cast<toolpanel::TaskPaneViewShell*>(
-            FrameworkHelper::Instance(*mpViewShellBase)
-                ->GetViewShell(FrameworkHelper::msRightPaneURL).get());
+    ENSURE_OR_RETURN_VOID( rxResource.is(), "illegal resource" );
+    const Reference< XResourceId > xResourceId( rxResource->getResourceId(), UNO_SET_THROW );
 
-    rtl::Reference<TaskPanelResource> pResource = dynamic_cast<TaskPanelResource*>(
-        rxResource.get());
+    // assume that the top-level anchor is the URL of the pane
+    ::std::vector< ::rtl::OUString > aResourceURLs;
+    lcl_collectResourceURLs( xResourceId, aResourceURLs );
 
-    if (pTaskPane != NULL && pResource.is())
-        pTaskPane->CollapsePanel(pResource->GetPaneId());
+    OSL_ENSURE( !aResourceURLs.empty(), "TaskPanelFactory::releaseResource: illegal resource/URL!" );
+    if ( !aResourceURLs.empty() )
+    {
+        const ::rtl::OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
+        ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( *mpViewShellBase ) );
+        const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
+        if ( pPaneViewShell != NULL )
+        {
+            const ::rtl::OUString sPanelResourceURL( xResourceId->getResourceURL() );
+            const toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( sPanelResourceURL ) );
+            toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
+
+            if  (   ( ePanelId != toolpanel::PID_UNKNOWN )
+                &&  ( pToolPanel != NULL )
+                )
+            {
+                pToolPanel->DeactivatePanel( sPanelResourceURL );
+            }
+            else
+            {
+                OSL_ENSURE( false, "TaskPanelFactory::releaseResource: don't know what to do with this resource!" );
+            }
+        }
+    }
 
     Reference<XComponent> xComponent (rxResource, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
-}
-
-
-
-
-//=============================================================================
-
-void TaskPanelFactory::ThrowIfDisposed (void) const
-    throw (lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "TaskPanelFactory object has already been disposed")),
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
 }
 
 
@@ -289,11 +289,9 @@ void TaskPanelFactory::ThrowIfDisposed (void) const
 namespace {
 
 TaskPanelResource::TaskPanelResource (
-    const Reference<XResourceId>& rxResourceId,
-    const TaskPaneViewShell::PanelId ePaneId)
+    const Reference<XResourceId>& rxResourceId)
     : TaskPanelResourceInterfaceBase(m_aMutex),
-      mxResourceId(rxResourceId),
-      mePaneId(ePaneId)
+      mxResourceId(rxResourceId)
 {
 }
 
@@ -309,14 +307,6 @@ TaskPanelResource::~TaskPanelResource (void)
 
 void SAL_CALL TaskPanelResource::disposing ()
 {
-}
-
-
-
-
-TaskPaneViewShell::PanelId TaskPanelResource::GetPaneId () const
-{
-    return mePaneId;
 }
 
 

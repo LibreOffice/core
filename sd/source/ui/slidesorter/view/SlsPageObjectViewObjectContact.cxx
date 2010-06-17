@@ -61,6 +61,7 @@
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::sdr::contact;
 using namespace ::sd::slidesorter::model;
@@ -626,7 +627,6 @@ private:
 
     // private helpers
     const BitmapEx& getFadeEffectIconBitmap() const;
-    const BitmapEx& getCommentsIconBitmap() const;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
@@ -683,21 +683,6 @@ const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getFadeEffectIconBitmap() c
 
 const sal_Int32 SdPageObjectFadeNameNumberPrimitive::mnCommentsIndicatorOffset(9);
 BitmapEx* SdPageObjectFadeNameNumberPrimitive::mpCommentsIconBitmap = 0;
-
-const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getCommentsIconBitmap() const
-{
-    if(mpCommentsIconBitmap == NULL)
-    {
-        // prepare CommentsIconBitmap on demand
-        const sal_uInt16 nIconId(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? BMP_COMMENTS_INDICATOR_H
-            : BMP_COMMENTS_INDICATOR);
-        const BitmapEx aCommentsIconBitmap(IconCache::Instance().GetIcon(nIconId).GetBitmapEx());
-        const_cast< SdPageObjectFadeNameNumberPrimitive* >(this)->mpCommentsIconBitmap = new BitmapEx(aCommentsIconBitmap);
-    }
-
-    return *mpCommentsIconBitmap;
-}
 
 Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const
 {
@@ -1166,7 +1151,7 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PageObjectViewObjectContact::GetPreview: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aBitmap;

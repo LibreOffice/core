@@ -47,6 +47,7 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "taskpane/ScrollPanel.hxx"
 #include "tools/SlotStateListener.hxx"
 #include "EventMultiplexer.hxx"
@@ -84,38 +85,30 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace toolpanel {
 
-/** This factory class stores references to ViewShellBase and DrawDocShell
-    and passes them to new LayoutMenu objects.
-*/
-class LayoutMenuFactory
+class LayoutMenuRootFactory
     : public ControlFactory
 {
 public:
-    LayoutMenuFactory (ViewShellBase& rBase, DrawDocShell& rDocShell)
-        : mrBase(rBase),
-          mrDocShell(rDocShell)
-    {}
+    LayoutMenuRootFactory (ToolPanelViewShell& i_rPanelViewShell)
+        :mrPanelViewShell(i_rPanelViewShell)
+    {
+    }
 
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        ScrollPanel* pScrollPanel = new ScrollPanel (pTreeNode);
+        ScrollPanel* pScrollPanel = new ScrollPanel (i_rParent);
         ::std::auto_ptr<TreeNode> pMenu (
             new LayoutMenu (
                 pScrollPanel,
-                mrDocShell,
-                mrBase,
-                false));
+                mrPanelViewShell));
         pScrollPanel->AddControl(pMenu);
         return pScrollPanel;
     }
 
 private:
-    ViewShellBase& mrBase;
-    DrawDocShell& mrDocShell;
+    ToolPanelViewShell& mrPanelViewShell;
 };
-
-
 
 
 SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
@@ -161,83 +154,50 @@ static snewfoil_value_info handout[] =
 
 static snewfoil_value_info standard[] =
 {
-    {BMP_FOIL_20, BMP_FOIL_20_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,
-     AUTOLAYOUT_NONE},
-    {BMP_FOIL_00, BMP_FOIL_00_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,
-     AUTOLAYOUT_TITLE},
-    {BMP_FOIL_01, BMP_FOIL_01_H, STR_AUTOLAYOUT_ENUM, WritingMode_LR_TB,
-     AUTOLAYOUT_ENUM},
-    {BMP_FOIL_03, BMP_FOIL_03_H, STR_AUTOLAYOUT_2TEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_2TEXT},
-    {BMP_FOIL_19, BMP_FOIL_19_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,
-     AUTOLAYOUT_ONLY_TITLE},
-    {BMP_FOIL_25, BMP_FOIL_25_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_ONLY_TEXT},
-    {BMP_FOIL_11, BMP_FOIL_11_H, STR_AUTOLAYOUT_OBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_OBJ},
-    {BMP_FOIL_02, BMP_FOIL_02_H, STR_AUTOLAYOUT_CHART, WritingMode_LR_TB,
-     AUTOLAYOUT_CHART},
-    {BMP_FOIL_08, BMP_FOIL_08_H, STR_AUTOLAYOUT_TAB, WritingMode_LR_TB,
-     AUTOLAYOUT_TAB},
-    {BMP_FOIL_09, BMP_FOIL_09_H, STR_AUTOLAYOUT_CLIPTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_CLIPTEXT},
-    {BMP_FOIL_04, BMP_FOIL_04_H, STR_AUTOLAYOUT_TEXTCHART, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXTCHART},
-    {BMP_FOIL_06, BMP_FOIL_06_H, STR_AUTOLAYOUT_TEXTCLIP, WritingMode_LR_TB,
-    AUTOLAYOUT_TEXTCLIP},
-    {BMP_FOIL_07, BMP_FOIL_07_H, STR_AUTOLAYOUT_CHARTTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_CHARTTEXT},
-    {BMP_FOIL_10, BMP_FOIL_10_H, STR_AUTOLAYOUT_TEXTOBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXTOBJ},
-    {BMP_FOIL_12, BMP_FOIL_12_H, STR_AUTOLAYOUT_TEXT2OBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXT2OBJ},
-    {BMP_FOIL_13, BMP_FOIL_13_H, STR_AUTOLAYOUT_OBJTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_OBJTEXT},
-    {BMP_FOIL_14, BMP_FOIL_14_H, STR_AUTOLAYOUT_OBJOVERTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_OBJOVERTEXT},
-    {BMP_FOIL_15, BMP_FOIL_15_H, STR_AUTOLAYOUT_2OBJTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_2OBJTEXT},
-    {BMP_FOIL_16, BMP_FOIL_16_H, STR_AUTOLAYOUT_2OBJOVERTEXT,
-     WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
-    {BMP_FOIL_17, BMP_FOIL_17_H, STR_AUTOLAYOUT_TEXTOVEROBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXTOVEROBJ},
-    {BMP_FOIL_18, BMP_FOIL_18_H, STR_AUTOLAYOUT_4OBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_4OBJ},
-    {BMP_FOIL_26, BMP_FOIL_26_H, STR_AUTOLAYOUT_4CLIPART, WritingMode_LR_TB, AUTOLAYOUT_4CLIPART},
-    {BMP_FOIL_27, BMP_FOIL_27_H, STR_AUTOLAYOUT_6CLIPART, WritingMode_LR_TB, AUTOLAYOUT_6CLIPART},
+    {BMP_LAYOUT_EMPTY, BMP_LAYOUT_EMPTY_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
+    {BMP_LAYOUT_HEAD03, BMP_LAYOUT_HEAD03_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
+    {BMP_LAYOUT_HEAD01, BMP_LAYOUT_HEAD01_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},
+    {BMP_LAYOUT_TEXTONLY, BMP_LAYOUT_TEXTONLY_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
+    {BMP_LAYOUT_HEAD03B, BMP_LAYOUT_HEAD03B_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
+    {BMP_LAYOUT_HEAD03C, BMP_LAYOUT_HEAD03C_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
+    {BMP_LAYOUT_HEAD03A, BMP_LAYOUT_HEAD03A_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD02B, BMP_LAYOUT_HEAD02B_H, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD04, BMP_LAYOUT_HEAD04_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
+    {BMP_LAYOUT_HEAD06, BMP_LAYOUT_HEAD06_H, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
 
     // vertical
-    {BMP_FOIL_21, BMP_FOIL_21_H, STR_AL_VERT_TITLE_TEXT_CHART,
-     WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
-    {BMP_FOIL_22, BMP_FOIL_22_H, STR_AL_VERT_TITLE_VERT_OUTLINE,
-     WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
-    {BMP_FOIL_23, BMP_FOIL_23_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL,
-     AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
-    {BMP_FOIL_24, BMP_FOIL_24_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,
-     WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
-
+    {BMP_LAYOUT_VERTICAL02, BMP_LAYOUT_VERTICAL02_H, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
+    {BMP_LAYOUT_VERTICAL01, BMP_LAYOUT_VERTICAL01_H, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
     {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-
-
-
-LayoutMenu::LayoutMenu (
-    TreeNode* pParent,
-    DrawDocShell& rDocumentShell,
-    ViewShellBase& rViewShellBase,
-    bool bUseOwnScrollBar)
+LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
     : ValueSet (pParent->GetWindow()),
       TreeNode(pParent),
       DragSourceHelper(this),
       DropTargetHelper(this),
-      mrBase (rViewShellBase),
-      mbUseOwnScrollBar (bUseOwnScrollBar),
+      mrBase( i_rPanelViewShell.GetViewShellBase() ),
+      mpShellManager (&i_rPanelViewShell.GetSubShellManager()),
+      mbUseOwnScrollBar( false ),
       mnPreferredColumnCount(3),
       mxListener(NULL),
       mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false)
 {
+    implConstruct( *mrBase.GetDocument()->GetDocSh() );
+}
+
+
+void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
+{
+    OSL_ENSURE( mrBase.GetDocument()->GetDocSh() == &rDocumentShell,
+        "LayoutMenu::implConstruct: hmm?" );
+    // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
+
     SetStyle (
         ( GetStyle()  & ~(WB_ITEMBORDER) )
         | WB_TABSTOP
@@ -276,7 +236,6 @@ LayoutMenu::LayoutMenu (
 
 
 
-
 LayoutMenu::~LayoutMenu (void)
 {
     // Tell the shell factory that this object is no longer available.
@@ -296,18 +255,9 @@ LayoutMenu::~LayoutMenu (void)
 
 
 ::std::auto_ptr<ControlFactory> LayoutMenu::CreateControlFactory (
-    ViewShellBase& rBase,
-    DrawDocShell& rDocShell)
+    ToolPanelViewShell& i_rPanelViewShell )
 {
-    return ::std::auto_ptr<ControlFactory>(new LayoutMenuFactory(rBase, rDocShell));
-}
-
-
-
-
-String LayoutMenu::GetSelectedLayoutName (void)
-{
-    return GetItemText (GetSelectItemId());
+    return ::std::auto_ptr<ControlFactory>(new LayoutMenuRootFactory(i_rPanelViewShell));
 }
 
 
@@ -631,6 +581,13 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 
 
 
+TaskPaneShellManager* LayoutMenu::GetShellManager()
+{
+    if ( mpShellManager )
+        return mpShellManager;
+    return TreeNode::GetShellManager();
+}
+
 void LayoutMenu::InvalidateContent (void)
 {
     // The number of items may have changed.  Request a resize so that the
@@ -732,7 +689,8 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             // There is a slide sorter visible so get the list of selected pages from it.
             pPageSelection = pSlideSorter->GetPageSelection();
         }
-        else
+
+        if( (pSlideSorter == NULL) || (pPageSelection.get() == 0) || pPageSelection->empty() )
         {
             // No valid slide sorter available.  Ask the main view shell for
             // its current page.

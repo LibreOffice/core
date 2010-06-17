@@ -141,8 +141,6 @@ public:
 
     SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
-    ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
-
     //virtuelle Methoden fuer den Optionendialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );
     virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );

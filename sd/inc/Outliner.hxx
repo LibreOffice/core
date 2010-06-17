@@ -179,13 +179,6 @@ public:
 
     enum ChangeHint { CH_VIEW_SHELL_INVALID, CH_VIEW_SHELL_VALID };
 
-    /** Handle a change outside the outliner which may affect the outliner.
-        At the moment this is restricted to changes of the main view shell
-        but later may include any changes that are detected now by
-        DetectChange().
-    */
-    void HandleOutsideChange (ChangeHint eHint);
-
     int         GetIgnoreCurrentPageChangesLevel() const     { return mnIgnoreCurrentPageChangesLevel; };
     void        IncreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel++; };
     void        DecreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel--; };
@@ -421,15 +414,6 @@ private:
     */
     void EndOfSearch (void);
 
-    /** Prepare to commence searching/spell checking on the specified page.
-        This also creates a proper page iterator.
-        @param nPageIndex
-            Index of the page to prepare for searching.  The default value
-            of -1 is a flag for using the first/last page of the current
-            edit mode/view mode depending on the search direction.
-    */
-    void InitPage (USHORT nPageIndex = (USHORT)-1);
-
     /** Show a dialog that tells the user that the search has ended either
         because there are no more matches after finding at least one or that
         no match has been found at all.
@@ -520,11 +504,6 @@ private:
             responsibility to set the cursor position accordingly.
     */
     bool HandleFailedSearch (void);
-
-    /** Return a parent window for a dialog.  The returned window depends on
-        the search mode.
-    */
-    ::Window* GetParentForDialog (void);
 
     /** Take a position as returned by an object iterator and switch to the
         view and page on which the object specified by this position is

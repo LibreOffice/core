@@ -36,17 +36,21 @@ namespace sd { namespace toolpanel {
 class ControlFactory;
 class TreeNode;
 
+#ifdef SHOW_TEST_PANEL
+
 /** This panel demonstrates how to create a panel for the task pane.
 */
 class TestPanel
     : public SubToolPanel
 {
 public:
-    TestPanel (TreeNode* pParent);
+    TestPanel (::Window& i_rParent);
     virtual ~TestPanel (void);
 
     static std::auto_ptr<ControlFactory> CreateControlFactory (void);
 };
+
+#endif
 
 } } // end of namespace ::sd::toolpanel
 

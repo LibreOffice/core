@@ -47,11 +47,11 @@
 #include "DrawController.hxx"
 #include "FactoryIds.hxx"
 #include "slideshow.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShellHint.hxx"
+#include "taskpane/PanelId.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 #include <sfx2/bindings.hxx>
@@ -68,48 +68,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
-
-namespace {
-
-class ImpUndoDeleteWarning : public ModalDialog
-{
-private:
-    FixedImage      maImage;
-    FixedText       maWarningFT;
-    CheckBox        maDisableCB;
-    OKButton        maYesBtn;
-    CancelButton    maNoBtn;
-
-public:
-    ImpUndoDeleteWarning(Window* pParent);
-    BOOL IsWarningDisabled() const { return maDisableCB.IsChecked(); }
-};
-
-ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
-:   ModalDialog(pParent, SdResId(RID_UNDO_DELETE_WARNING)),
-    maImage(this, SdResId(IMG_UNDO_DELETE_WARNING)),
-    maWarningFT(this, SdResId(FT_UNDO_DELETE_WARNING)),
-    maDisableCB(this, SdResId(CB_UNDO_DELETE_DISABLE)),
-    maYesBtn(this, SdResId(BTN_UNDO_DELETE_YES)),
-    maNoBtn(this, SdResId(BTN_UNDO_DELETE_NO))
-{
-    FreeResource();
-
-    SetHelpId( HID_SD_UNDODELETEWARNING_DLG );
-    maDisableCB.SetHelpId( HID_SD_UNDODELETEWARNING_CBX );
-
-    maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
-    maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));
-    maImage.SetImage(WarningBox::GetStandardImage());
-
-    // #93721# Set focus to YES-Button
-    maYesBtn.GrabFocus();
-}
-
-} // end of anonymous namespace
-
-
-
 
 namespace sd {
 
@@ -195,12 +153,12 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             // Make the layout menu visible in the tool pane.
             SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
             SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
+                ::sd::toolpanel::PID_LAYOUT);
             SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
             if (pFrame!=NULL && pFrame->GetDispatcher()!=NULL)
             {
                 pFrame->GetDispatcher()->Execute (
-                    SID_TASK_PANE,
+                    SID_SHOW_TOOL_PANEL,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                     &aMakeToolPaneVisible,
                     &aPanelId,
@@ -319,30 +277,53 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     rRequest.Done ();
 }
 
-
-
-
-void ViewShell::Implementation::AssignLayout (
-    SdPage* pPage,
-    AutoLayout aLayout)
+void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind ePageKind )
 {
-    // Transform the given request into the four argument form that is
-    // understood by ProcessModifyPageSlot().
-    SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
-    BYTE aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
-    BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
-    SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
-    SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
-    aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
-    aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
-    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
+    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
+    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
 
-    // Forward the call with the new arguments.
-    ProcessModifyPageSlot (
-        aRequest,
-        pPage,
-        pPage->GetPageKind());
+    SdDrawDocument* pDocument = mrViewShell.GetDoc();
+    if( !pDocument )
+        return;
+
+    SdPage* pPage = 0;
+    if( pWhatPage )
+    {
+        pPage = pDocument->GetSdPage(static_cast<USHORT>(pWhatPage->GetValue()), ePageKind);
+    }
+
+    if( pPage == 0 )
+        pPage = mrViewShell.getCurrentPage();
+
+    if( pPage )
+    {
+        AutoLayout eLayout = pPage->GetAutoLayout();
+
+        if( pWhatLayout )
+            eLayout = static_cast< AutoLayout >( pWhatLayout->GetValue() );
+
+        // Transform the given request into the four argument form that is
+        // understood by ProcessModifyPageSlot().
+        SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
+        BYTE aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+        BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+
+        SetOfByte aVisibleLayers;
+
+        if( pPage->GetPageKind() == PK_HANDOUT )
+            aVisibleLayers.SetAll();
+        else
+            aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+
+        SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
+        aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
+        aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, eLayout));
+        aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
+        aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
+
+        // Forward the call with the new arguments.
+        ProcessModifyPageSlot( aRequest, pPage, pPage->GetPageKind());
+    }
 }
 
 

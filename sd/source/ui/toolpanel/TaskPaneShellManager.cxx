@@ -31,7 +31,7 @@
 #include "TaskPaneShellManager.hxx"
 
 #include "ViewShellManager.hxx"
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 
 #include <algorithm>
@@ -76,19 +76,6 @@ void TaskPaneShellManager::ReleaseShell (SfxShell* )
     // Nothing to do.
 }
 
-// hack for annotation panel, better fix?
-void TaskPaneShellManager_AddSubShell ( TaskPaneShellManager* pManager, sal_Int32 nId, SfxShell* pShell, ::Window* pWindow )
-{
-    if( pManager != NULL )
-        pManager->AddSubShell( (ShellId)nId, pShell, pWindow );
-}
-
-void TaskPaneShellManager_RemoveSubShell ( TaskPaneShellManager* pManager, const SfxShell* pShell)
-{
-    if( pManager != NULL )
-        pManager->RemoveSubShell( pShell );
-}
-
 void TaskPaneShellManager::AddSubShell (
     ShellId nId,
     SfxShell* pShell,
@@ -106,6 +93,21 @@ void TaskPaneShellManager::AddSubShell (
         else
             mpViewShellManager->ActivateSubShell(mrViewShell, nId);
     }
+}
+
+
+
+
+void TaskPaneShellManager::RemoveSubShell (const ShellId i_nShellId)
+{
+    SubShells::iterator pos = maSubShells.find( i_nShellId );
+    ENSURE_OR_RETURN_VOID( pos != maSubShells.end(), "no shell for this ID" );
+    if ( pos->second.mpWindow != NULL )
+    {
+        pos->second.mpWindow->RemoveEventListener( LINK( this, TaskPaneShellManager, WindowCallback ) );
+    }
+    mpViewShellManager->DeactivateSubShell( mrViewShell, pos->first );
+    maSubShells.erase( pos );
 }
 
 

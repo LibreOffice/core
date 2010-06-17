@@ -105,48 +105,6 @@ namespace sd {
 
 /*************************************************************************
 |*
-|* modal dialog for #90356#
-|*
-\************************************************************************/
-
-class ImpUndoDeleteWarning : public ModalDialog
-{
-private:
-    FixedImage      maImage;
-    FixedText       maWarningFT;
-    CheckBox        maDisableCB;
-    OKButton        maYesBtn;
-    CancelButton    maNoBtn;
-
-public:
-    ImpUndoDeleteWarning(Window* pParent);
-    BOOL IsWarningDisabled() const { return maDisableCB.IsChecked(); }
-};
-
-ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
-:   ModalDialog(pParent, SdResId(RID_UNDO_DELETE_WARNING)),
-    maImage(this, SdResId(IMG_UNDO_DELETE_WARNING)),
-    maWarningFT(this, SdResId(FT_UNDO_DELETE_WARNING)),
-    maDisableCB(this, SdResId(CB_UNDO_DELETE_DISABLE)),
-    maYesBtn(this, SdResId(BTN_UNDO_DELETE_YES)),
-    maNoBtn(this, SdResId(BTN_UNDO_DELETE_NO))
-{
-    FreeResource();
-
-    SetHelpId( HID_SD_UNDODELETEWARNING_DLG );
-    maDisableCB.SetHelpId( HID_SD_UNDODELETEWARNING_CBX );
-
-    maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
-    maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));
-    maImage.SetImage(WarningBox::GetStandardImage());
-
-    // #93721# Set focus to YES-Button
-    maYesBtn.GrabFocus();
-}
-
-
-/*************************************************************************
-|*
 |* SfxRequests fuer temporaere Funktionen
 |*
 \************************************************************************/
@@ -425,18 +383,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_ASSIGN_LAYOUT:
         {
-            if (mePageKind==PK_STANDARD
-                || mePageKind==PK_NOTES
-                || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
+            if (mePageKind==PK_STANDARD || mePageKind==PK_NOTES || (mePageKind==PK_HANDOUT && meEditMode==EM_MASTERPAGE))
             {
                 if ( mpDrawView->IsTextEdit() )
                     mpDrawView->SdrEndTextEdit();
 
-                SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-                SFX_REQUEST_ARG (rReq, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                ::sd::ViewShell::mpImpl->AssignLayout (
-                    GetDoc()->GetSdPage((USHORT)pWhatPage->GetValue(), mePageKind),
-                    (AutoLayout)pWhatLayout->GetValue());
+                ::sd::ViewShell::mpImpl->AssignLayout(rReq, mePageKind);
             }
             Cancel();
             rReq.Done ();

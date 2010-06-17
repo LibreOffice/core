@@ -64,9 +64,6 @@ public:
     DECL_LINK( FinishHdl, OKButton * );
 
     SfxObjectShellLock GetDocument();
-    String GetTopic() const;
-    String GetUserName() const;
-    String GetInformation() const;
     OutputType GetOutputMedium() const;
     BOOL IsSummary() const;
     StartType GetStartType() const;

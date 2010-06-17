@@ -40,6 +40,7 @@
 #include <vcl/image.hxx>
 #include <vcl/pngread.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -291,7 +292,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     }
     catch (uno::RuntimeException)
     {
-        OSL_TRACE ("caught exception while loading page from template file");
+        DBG_UNHANDLED_EXCEPTION();
         pPage = NULL;
     }
 
@@ -381,46 +382,6 @@ int DefaultPageObjectProvider::GetCostIndex (void)
 bool DefaultPageObjectProvider::operator== (const PageObjectProvider& rProvider)
 {
     return (dynamic_cast<const DefaultPageObjectProvider*>(&rProvider) != NULL);
-}
-
-
-
-
-//===== DefaultPagePreviewProvider ============================================
-
-DefaultPagePreviewProvider::DefaultPagePreviewProvider (void)
-{
-}
-
-
-
-Image DefaultPagePreviewProvider::operator() (
-    int nWidth,
-    SdPage* pPage,
-    ::sd::PreviewRenderer& rRenderer)
-{
-    // Unused parameters.
-    (void)nWidth;
-    (void)pPage;
-    (void)rRenderer;
-
-    return Image();
-}
-
-
-
-
-int DefaultPagePreviewProvider::GetCostIndex (void)
-{
-    return 0;
-}
-
-
-
-
-bool DefaultPagePreviewProvider::NeedsPageObject (void)
-{
-    return false;
 }
 
 

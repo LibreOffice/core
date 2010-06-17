@@ -1809,15 +1809,6 @@ void EffectSequenceHelper::append( const CustomAnimationEffectPtr& pEffect )
 
 // --------------------------------------------------------------------
 
-void EffectSequenceHelper::insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect )
-{
-    pEffect->setEffectSequence( this );
-    maEffects.insert( rPos, pEffect );
-    rebuild();
-}
-
-// --------------------------------------------------------------------
-
 CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPresetPtr& pPreset, const Any& rTarget, double fDuration /* = -1.0 */ )
 {
     CustomAnimationEffectPtr pEffect;

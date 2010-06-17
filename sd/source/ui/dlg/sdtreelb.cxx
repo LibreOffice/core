@@ -56,6 +56,7 @@
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <svtools/embedtransfer.hxx>
+#include <tools/diagnose_ex.h>
 #include <ViewShell.hxx>
 
 using namespace com::sun::star;
@@ -730,61 +731,6 @@ List* SdPageObjsTLB::GetSelectEntryList( USHORT nDepth )
 
 /*************************************************************************
 |*
-|* Alle Pages (und Objekte) des Docs zurueckgeben
-|* nType == 0 -> Seiten
-|* nType == 1 -> Objekte
-|*
-\************************************************************************/
-
-List* SdPageObjsTLB::GetBookmarkList( USHORT nType )
-{
-    List* pList = NULL;
-
-    if( GetBookmarkDoc() )
-    {
-        SdPage*      pPage = NULL;
-        String*      pName = NULL;
-        USHORT       nPage = 0;
-        const USHORT nMaxPages = mpBookmarkDoc->GetSdPageCount( PK_STANDARD );
-
-        while( nPage < nMaxPages )
-        {
-            pPage = mpBookmarkDoc->GetSdPage( nPage, PK_STANDARD );
-
-            if( nType == 0 ) // Seitennamen einfuegen
-            {
-                if( !pList )
-                    pList = new List();
-
-                pName = new String( pPage->GetRealName() );
-                pList->Insert( pName, LIST_APPEND );
-            }
-            else // Objektnamen einfuegen
-            {
-                // Ueber Objekte der Seite iterieren
-                SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
-                while( aIter.IsMore() )
-                {
-                    SdrObject* pObj = aIter.Next();
-                    String aStr( GetObjectName( pObj ) );
-                    if( aStr.Len() )
-                    {
-                        if( !pList )
-                            pList = new List();
-
-                        pName = new String( aStr );
-                        pList->Insert( pName, LIST_APPEND );
-                    }
-                }
-            }
-            nPage++;
-        }
-    }
-    return( pList );
-}
-
-/*************************************************************************
-|*
 |* Eintraege werden erst auf Anforderung (Doppelklick) eingefuegt
 |*
 \************************************************************************/
@@ -1268,7 +1214,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
     catch (com::sun::star::uno::Exception&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     if (nRet == DND_ACTION_NONE)

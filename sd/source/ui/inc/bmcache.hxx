@@ -45,8 +45,6 @@ public:
                               : nMaxSize(nMaxSizeKB), nCurSize(0) {}
     virtual                 ~BitmapCache();
 
-    void                    Add(const SdPage* pPage, const Bitmap& rBmp, long nZoomPercent);
-    const GraphicObject*    Get(const SdPage* pPage, long& rZoomPercent, long nZoomTolerancePercent);
     void                    Remove(const SdPage* pPage);
 };
 

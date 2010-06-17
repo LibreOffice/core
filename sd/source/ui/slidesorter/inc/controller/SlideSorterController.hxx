@@ -105,8 +105,6 @@ public:
     */
     Rectangle Rearrange (bool bForce = false);
 
-    SlideSorter& GetSlideSorter (void) const;
-
     /** Return the descriptor of the page that is rendered under the
         given position.
         @return
@@ -115,14 +113,6 @@ public:
             then NULL is returned to indicate this.
     */
     model::SharedPageDescriptor GetPageAt (const Point& rPixelPosition);
-
-    /** Return the descriptor of the page that is associated to the page
-        visible fade symbol at the given position.
-        @return
-            When the given position is not over a visible page fade symbol
-            then NULL is returned.
-    */
-    model::SharedPageDescriptor GetFadePageAt (const Point& rPixelPosition);
 
     PageSelector& GetPageSelector (void);
     FocusManager& GetFocusManager (void);
@@ -188,14 +178,6 @@ public:
         releasing previews and caches.
     */
     void UpdateAllPages (void);
-
-    /** Set the zoom factor.  The given value is clipped against an upper
-        bound.
-        @param nZoom
-            An integer percent value, i.e. nZoom/100 is the actual zoom
-            factor.
-        */
-    void SetZoom (long int nZoom);
 
     /** This factory method creates a selection function.
     */

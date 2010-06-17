@@ -36,7 +36,6 @@
 #include <svx/svxids.hrc>
 
 #include <editeng/outliner.hxx>
-
 #include <editeng/editview.hxx>
 
 #include "app.hrc"
@@ -146,35 +145,6 @@ void Window::SetViewShell (ViewShell* pViewSh)
             pWindowUpdater->RegisterWindow (this);
     }
 }
-
-
-
-
-/*************************************************************************
-|*
-|* Die Haelfte des Sichtbaren Bereich eines anderen Fensters darstellen
-|*
-\************************************************************************/
-
-void Window::ShareViewArea(Window* pOtherWin)
-{
-    mpShareWin      = pOtherWin;
-    maViewOrigin    = pOtherWin->maViewOrigin;
-    maViewSize      = pOtherWin->maViewSize;
-    mnMinZoom       = pOtherWin->mnMinZoom;
-    mnMaxZoom       = pOtherWin->mnMaxZoom;
-    mbCenterAllowed = pOtherWin->mbCenterAllowed;
-
-    long nZoom = pOtherWin->GetZoom();
-    MapMode aMap(GetMapMode());
-    aMap.SetScaleX(Fraction(nZoom, 100));
-    aMap.SetScaleY(Fraction(nZoom, 100));
-    aMap.SetOrigin(pOtherWin->GetMapMode().GetOrigin());
-    SetMapMode(aMap);
-}
-
-
-
 
 void Window::CalcMinZoom()
 {

@@ -62,12 +62,12 @@ protected:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    virtual ::svx::SpellPortions GetNextWrongSentence (void);
+    virtual ::svx::SpellPortions GetNextWrongSentence( bool bRecheck );
 
     /** This method is responsible for merging corrections made in the
         spelling dialog back into the document.
     */
-    virtual void ApplyChangedSentence (const ::svx::SpellPortions& rChanged);
+    virtual void ApplyChangedSentence(const ::svx::SpellPortions& rChanged, bool bRecheck);
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
 

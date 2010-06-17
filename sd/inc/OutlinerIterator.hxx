@@ -109,13 +109,6 @@ public:
     */
     explicit Iterator (IteratorImplBase* pObject);
 
-    /** Create a new iterator with the implementation object being the copy
-        of the provided one.
-        @param rObject
-            A copy of this object will become the implementation object.
-    */
-    explicit Iterator (const IteratorImplBase& rObject);
-
     ~Iterator (void);
 
     /** Assign the iterator from the given one.  The implementation object
@@ -240,9 +233,8 @@ private:
             This specifies whether the returned iterator points to the
             first, (one past the) last, or current object.
         @return
-            Returns an iterator as constructed by one of the
+            Returns an iterator as constructed by
             <member>CreateSelectionIterator()</member>,
-            <member>CreateViewIterator()</member>, or <member>CreateDocumentIterator()</member>.
      */
     Iterator CreateIterator (IteratorLocation aLocation);
 
@@ -266,24 +258,6 @@ private:
         const ::std::vector<SdrObjectWeakRef>& rObjectList,
         SdDrawDocument* pDocument,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
-        bool bDirectionIsForward=true,
-        IteratorLocation aLocation=BEGIN);
-
-    /** Create an iterator that iterates over all <type>SdrObjects</type>
-        objects of the <member>mpOutliner</member> outliner that belong to
-        the current view.
-        @param pDocument
-            The document to which the objects belong.
-        @param pViewShell
-            The view shell which displays the objects.
-        @param bDirectionIsForward
-            The direction of iteration.  It defaults to forward.
-        @param aLocation
-            This specifies at which object the iterator points initially.
-    */
-    Iterator CreateViewIterator (
-        SdDrawDocument* pDocument,
-        const boost::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
@@ -356,9 +330,6 @@ public:
             assigned to the data members of this object.
     */
     IteratorPosition (const IteratorPosition& aPosition);
-    /** Create a new object and set its data members to the given values.
-    */
-    IteratorPosition (SdrObject* pObject, sal_Int32 nText, sal_Int32 nPageIndex, PageKind ePageKind, EditMode eEditMode);
 
     /// The destructor is a no-op at the moment.
     ~IteratorPosition (void);

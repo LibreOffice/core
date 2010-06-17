@@ -345,7 +345,34 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
     return pRet;
 }
 
-UNO3_GETIMPLEMENTATION2_IMPL( SdGenericDrawPage, SvxFmDrawPage );
+const ::com::sun::star::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() throw()
+{
+        static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
+        if( !pSeq )
+        {
+                ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+                if( !pSeq )
+                {
+                        static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
+                        rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+                        pSeq = &aSeq;
+                }
+        }
+        return *pSeq;
+}
+
+sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException)
+{
+        if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+            rId.getConstArray(), 16 ) )
+        {
+                return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+        }
+        else
+        {
+                return SvxFmDrawPage::getSomething( rId );
+        }
+}
 
 /***********************************************************************
 *                                                                      *
@@ -403,7 +430,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
 
     String aType( xShape->getShapeType() );
     const String aPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.") );
-    if(aType.CompareTo( aPrefix, aPrefix.Len() ) != 0)
+    if( aType.CompareTo( aPrefix, aPrefix.Len() ) != 0 )
     {
         SdrObject* pObj = SvxFmDrawPage::_CreateSdrObject( xShape );
         if( pObj && ( (pObj->GetObjInventor() != SdrInventor) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
@@ -438,6 +465,10 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     else if( aType.EqualsAscii( "ChartShape" ) )
     {
         eObjKind = PRESOBJ_CHART;
+    }
+    else if( aType.EqualsAscii( "CalcShape" ) )
+    {
+        eObjKind = PRESOBJ_CALC;
     }
     else if( aType.EqualsAscii( "TableShape" ) )
     {
@@ -486,6 +517,10 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     {
         eObjKind = PRESOBJ_DATETIME;
     }
+    else if( aType.EqualsAscii( "MediaShape" ) )
+    {
+        eObjKind = PRESOBJ_MEDIA;
+    }
 
     Rectangle aRect( eObjKind == PRESOBJ_TITLE ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
 
@@ -495,7 +530,22 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     const awt::Size aSize( aRect.GetWidth(), aRect.GetHeight() );
     xShape->setSize( aSize );
 
-    SdrObject *pPresObj = GetPage()->CreatePresObj( eObjKind, FALSE, aRect, sal_True );
+    SdrObject *pPresObj = 0;
+    if( (eObjKind == PRESOBJ_TABLE) || (eObjKind == PRESOBJ_MEDIA) )
+    {
+        pPresObj = SvxFmDrawPage::_CreateSdrObject( xShape );
+        if( pPresObj )
+        {
+            SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+            if( pDoc )
+                pPresObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), sal_True );
+            GetPage()->InsertPresObj( pPresObj, eObjKind );
+        }
+    }
+    else
+    {
+        pPresObj = GetPage()->CreatePresObj( eObjKind, FALSE, aRect, sal_True );
+    }
 
     if( pPresObj )
         pPresObj->SetUserCall( GetPage() );
@@ -1380,8 +1430,14 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
             case PRESOBJ_ORGCHART:
                 aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OrgChartShape") );
                 break;
+            case PRESOBJ_CALC:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("CalcShape") );
+                break;
             case PRESOBJ_TABLE:
                 aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TableShape") );
+                break;
+            case PRESOBJ_MEDIA:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("MediaShape") );
                 break;
             case PRESOBJ_PAGE:
                 aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("PageShape") );

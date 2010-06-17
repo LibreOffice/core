@@ -69,14 +69,6 @@ public:
     Layouter (void);
     ~Layouter (void);
 
-    /** Set the minimal, the maximal, and the desired width of the page
-        objects.  The three parameters have to fullfill the constraint
-        nMinimalWidth <= nPreferredWidth <= nMaximalWidth or the call is
-        ignored.
-    */
-    void SetObjectWidth (sal_Int32 nMinimalWidth, sal_Int32 nMaximalWidth,
-        sal_Int32 nPreferredWidth);
-
     /** Set the horizontal and vertical borders in pixel coordinates between
         the enclosing window and page objects.  The borders may be painted
         larger then the given values when the space for the insertion marker
@@ -113,13 +105,6 @@ public:
     */
     void SetPageBorders (sal_Int32 nLeftBorder, sal_Int32 nRightBorder,
         sal_Int32 nTopBorder, sal_Int32 nBottomBorder);
-
-    /** Set the horizontal and vertical gaps between adjacent page objects.
-        These gaps are only relevant when there is more than one column or
-        more than one row.  Negative values indicate that the respective gap
-        is not set.
-    */
-    void SetGaps (sal_Int32 nHorizontalGap, sal_Int32 nVerticalGap);
 
     /** Set the interval of valid column counts.  When nMinimalColumnCount
         <= nMaximalColumnCount is not fullfilled then the call is ignored.
@@ -160,18 +145,11 @@ public:
     /** Change the zoom factor.  This does not change the general layout
         (number of columns).
     */
-    void SetZoom (double nZoomFactor, OutputDevice* pDevice);
     void SetZoom (Fraction nZoomFactor, OutputDevice* pDevice);
 
     /** Return the number of columns.
     */
     sal_Int32 GetColumnCount (void) const;
-
-    /** Returns whether the column count is fixed (<TRUE/>) or variable
-        (<FALSE/>).  It is fixed if SetColumnCount() was called with the
-        same value for minimal and maximal column count.
-    */
-    bool IsColumnCountFixed (void) const;
 
     /** Return the scale factor that can be set at the map mode of the
         output window.
@@ -289,7 +267,6 @@ public:
         const DoublePoint&rLayouterPoint) const;
 
     typedef ::std::vector<Rectangle> BackgroundRectangleList;
-    const BackgroundRectangleList& GetBackgroundRectangleList (void) const;
 
 private:
     class ScreenAndModelValue {public:
