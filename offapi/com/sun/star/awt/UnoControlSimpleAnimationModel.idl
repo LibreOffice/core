@@ -45,9 +45,10 @@
     <p> </p>
 
     @see UnoControlScrollBarModel
+    @since OOo 2.2
  */
 
-service UnoControlSimpleAnimationModel
+published service UnoControlSimpleAnimationModel
 {
     service com::sun::star::awt::UnoControlModel;
 
