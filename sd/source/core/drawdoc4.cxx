@@ -242,26 +242,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    // only change paragraph text direction,
-    // if this is a new document and
-    // text direction is set explicitly to RTL
-/*
-    if( mpDocSh &&
-        mpDocSh->IsNewDocument() &&
-        SD_MOD()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB )
-    {
-        SvxAdjustItem           aAdjust( SVX_ADJUST_RIGHT );
-        SvxFrameDirectionItem   aFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR );
-
-        rISet.Put( aAdjust );
-        rISet.Put( aFrameDirectionItem );
-
-        pItemPool->SetPoolDefaultItem( aAdjust );
-        pItemPool->SetPoolDefaultItem( aFrameDirectionItem );
-    }
-    else
-        rISet.Put( SvxAdjustItem() );
-*/
     rISet.Put( SdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
     rISet.Put( SdrTextRightDistItem( 250 ) );
     rISet.Put( SdrTextUpperDistItem( 125 ) );
@@ -1121,57 +1101,6 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
 
 /*************************************************************************
 |*
-|* Sprachabhaengige Namen der StandardLayer durch eindeutigen Namen ersetzen
-|*
-\************************************************************************/
-
-void SdDrawDocument::MakeUniqueLayerNames()
-{
-    String aLayerLayout(SdResId(STR_LAYER_LAYOUT));
-    String aLayerBckgrnd(SdResId(STR_LAYER_BCKGRND));
-    String aLayerBckgrndObj(SdResId(STR_LAYER_BCKGRNDOBJ));
-    String aLayerControls(SdResId(STR_LAYER_CONTROLS));
-    String aLayerMeasurelines(SdResId(STR_LAYER_MEASURELINES));
-    SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    USHORT nStandardLayer = 5;
-    USHORT nLayerCount = Min(rLayerAdmin.GetLayerCount(), nStandardLayer);
-
-    for (USHORT nLayer = 0; nLayer < nLayerCount; nLayer++)
-    {
-        // Die sprachabhaengigen Namen der Default-Layer werden nicht mehr
-        // gespeichert. Es werden stattdessen eindeutige Namen verwendet.
-        SdrLayer* pLayer = rLayerAdmin.GetLayer(nLayer);
-
-        if (pLayer)
-        {
-            String aLayerName(pLayer->GetName());
-
-            if (aLayerName == aLayerLayout)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )));
-            }
-            else if (aLayerName == aLayerBckgrnd)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )));
-            }
-            else if (aLayerName == aLayerBckgrndObj)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )));
-            }
-            else if (aLayerName == aLayerControls)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )));
-            }
-            else if (aLayerName == aLayerMeasurelines)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )));
-            }
-        }
-    }
-}
-
-/*************************************************************************
-|*
 |* Eindeutige Namen der StandardLayer durch sprachabhaengige Namen ersetzen
 |*
 \************************************************************************/
@@ -1543,12 +1472,6 @@ sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight
 SdStyleSheetPool* SdDrawDocument::GetSdStyleSheetPool() const
 {
     return dynamic_cast< SdStyleSheetPool* >( GetStyleSheetPool() );
-}
-
-ModifyGuard::ModifyGuard( DrawDocShell* pDocShell )
-: mpDocShell( pDocShell ), mpDoc( 0 )
-{
-    init();
 }
 
 ModifyGuard::ModifyGuard( SdDrawDocument* pDoc )

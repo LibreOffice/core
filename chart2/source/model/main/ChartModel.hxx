@@ -162,11 +162,8 @@ private:
         m_xChartTypeManager;
 
     // Diagram Access
-    typedef ::std::vector< ::com::sun::star::uno::Reference<
-                                ::com::sun::star::chart2::XDiagram > >
-        tDiagramContainer;
-
-    tDiagramContainer                     m_aDiagrams;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >
+        m_xDiagram;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
                                           m_xTitle;
@@ -230,10 +227,6 @@ private:
 
     void impl_adjustAdditionalShapesPositionAndSize(
         const ::com::sun::star::awt::Size& aVisualAreaSize );
-
-    void impl_removeAllDiagrams();
-    void impl_appendDiagram( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::chart2::XDiagram > & xDiagram );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
         impl_getNumberFormatsSupplier();

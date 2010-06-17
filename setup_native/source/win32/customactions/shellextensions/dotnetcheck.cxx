@@ -161,18 +161,6 @@ extern "C" UINT __stdcall ShowProperties(MSIHANDLE handle)
     string myText = TEXT("INSTALLLOCATION: ") + property;
     MessageBox(NULL, myText.c_str(), "INSTALLLOCATION", MB_OK);
 
-    property = GetMsiProperty(handle, TEXT("UREINSTALLLOCATION"));
-    myText = TEXT("UREINSTALLLOCATION: ") + property;
-    MessageBox(NULL, myText.c_str(), "UREINSTALLLOCATION", MB_OK);
-
-    property = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
-    myText = TEXT("BASISINSTALLLOCATION: ") + property;
-    MessageBox(NULL, myText.c_str(), "BASISINSTALLLOCATION", MB_OK);
-
-    property = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
-    myText = TEXT("OFFICEINSTALLLOCATION: ") + property;
-    MessageBox(NULL, myText.c_str(), "OFFICEINSTALLLOCATION", MB_OK);
-
     property = GetMsiProperty(handle, TEXT("Installed"));
     myText = TEXT("Installed: ") + property;
     MessageBox(NULL, myText.c_str(), "Installed", MB_OK);

@@ -289,7 +289,7 @@ namespace dbaui
         callModifiedHdl();
     }
     // -----------------------------------------------------------------------
-       sal_Bool OConnectionTabPageSetup::commitPage( CommitPageReason /*_eReason*/ )
+       sal_Bool OConnectionTabPageSetup::commitPage( ::svt::WizardTypes::CommitPageReason /*_eReason*/ )
     {
         return commitURL();
     }

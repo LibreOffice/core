@@ -130,6 +130,7 @@ class GtkSalFrame : public SalFrame
         int                             m_nPrevKeyPresses; // avoid using size()
         GtkIMContext*                   m_pIMContext;
         bool                            m_bFocused;
+        bool                            m_bPreeditJustChanged;
         SalExtTextInputEvent            m_aInputEvent;
         std::vector< USHORT >           m_aInputFlags;
 

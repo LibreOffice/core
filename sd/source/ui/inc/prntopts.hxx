@@ -94,7 +94,6 @@ public:
             ~SdPrintOptions();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  USHORT*     GetRanges();
 
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );

@@ -99,14 +99,6 @@ FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
 {
 }
 
-FunctionReference FuDraw::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
-{
-    FuDraw* pFunc;
-    FunctionReference xFunc( pFunc = new FuDraw( pViewSh, pWin, pView, pDoc, rReq ) );
-    pFunc->SetPermanent(bPermanent);
-    return xFunc;
-}
-
 /*************************************************************************
 |*
 |* Destruktor

@@ -242,7 +242,7 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
 {
     // container for metaformat
     boost::shared_ptr<PDFIProcessor> pSink(
-        new PDFIProcessor(xStatus));
+        new PDFIProcessor(xStatus, m_xContext));
 
     // TEMP! TEMP!
     if( m_bEnableToplevelText )

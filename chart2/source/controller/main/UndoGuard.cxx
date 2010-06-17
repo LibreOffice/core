@@ -55,7 +55,7 @@ UndoGuard_Base::~UndoGuard_Base()
 
 void UndoGuard_Base::commitAction()
 {
-    if( !m_bActionPosted )
+    if( !m_bActionPosted && m_xUndoManager.is() )
         m_xUndoManager->postAction( m_aUndoString );
     m_bActionPosted = true;
 }
@@ -67,12 +67,13 @@ UndoGuard::UndoGuard( const OUString& rUndoString
         , const uno::Reference< frame::XModel > & xModel )
         : UndoGuard_Base( rUndoString, xUndoManager, xModel )
 {
-    m_xUndoManager->preAction( m_xModel );
+    if( m_xUndoManager.is() )
+        m_xUndoManager->preAction( m_xModel );
 }
 
 UndoGuard::~UndoGuard()
 {
-    if( !m_bActionPosted )
+    if( !m_bActionPosted && m_xUndoManager.is() )
         m_xUndoManager->cancelAction();
 }
 
@@ -83,12 +84,13 @@ UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& rUndoString
         , const uno::Reference< frame::XModel > & xModel )
         : UndoGuard_Base( rUndoString, xUndoManager, xModel )
 {
-    m_xUndoManager->preAction( m_xModel );
+    if( m_xUndoManager.is() )
+        m_xUndoManager->preAction( m_xModel );
 }
 
 UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
 {
-    if( !m_bActionPosted )
+    if( !m_bActionPosted && m_xUndoManager.is() )
         m_xUndoManager->cancelActionWithUndo( m_xModel );
 }
 
@@ -99,16 +101,19 @@ UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData( const OUString& rUndoS
         , const uno::Reference< frame::XModel > & xModel )
         : UndoGuard_Base( rUndoString, xUndoManager, xModel )
 {
-    Sequence< beans::PropertyValue > aArgs(1);
-    aArgs[0] = beans::PropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("WithData")), -1, uno::Any(),
-        beans::PropertyState_DIRECT_VALUE );
-    m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
+    if( m_xUndoManager.is() )
+    {
+        Sequence< beans::PropertyValue > aArgs(1);
+        aArgs[0] = beans::PropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("WithData")), -1, uno::Any(),
+            beans::PropertyState_DIRECT_VALUE );
+        m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
+    }
 }
 
 UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
 {
-    if( !m_bActionPosted )
+    if( !m_bActionPosted && m_xUndoManager.is() )
         m_xUndoManager->cancelActionWithUndo( m_xModel );
 }
 
@@ -119,16 +124,19 @@ UndoGuardWithSelection::UndoGuardWithSelection( const rtl::OUString& rUndoString
         , const uno::Reference< frame::XModel > & xModel )
         : UndoGuard_Base( rUndoString, xUndoManager, xModel )
 {
-    Sequence< beans::PropertyValue > aArgs(1);
-    aArgs[0] = beans::PropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("WithSelection")), -1, uno::Any(),
-        beans::PropertyState_DIRECT_VALUE );
-    m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
+    if( m_xUndoManager.is() )
+    {
+        Sequence< beans::PropertyValue > aArgs(1);
+        aArgs[0] = beans::PropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("WithSelection")), -1, uno::Any(),
+            beans::PropertyState_DIRECT_VALUE );
+        m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
+    }
 }
 
 UndoGuardWithSelection::~UndoGuardWithSelection()
 {
-    if( !m_bActionPosted )
+    if( !m_bActionPosted && m_xUndoManager.is() )
         m_xUndoManager->cancelAction();
 }
 

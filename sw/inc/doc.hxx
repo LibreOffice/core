@@ -2131,7 +2131,7 @@ public:
 
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
-    SwDoc* CreateCopy() const;
+    SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 
 

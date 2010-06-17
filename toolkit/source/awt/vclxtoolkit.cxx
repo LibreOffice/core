@@ -632,7 +632,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
         // spaeter mal ::com::sun::star::uno::Exception...
         sal_Bool bException = sal_True;
-        if ( ( nType == WINDOW_DIALOG ) || ( nType == WINDOW_MODALDIALOG ) || ( nType == WINDOW_MODELESSDIALOG ) )
+        if  (   ( nType == WINDOW_DIALOG )
+            ||  ( nType == WINDOW_MODALDIALOG )
+            ||  ( nType == WINDOW_MODELESSDIALOG )
+            ||  ( nType == WINDOW_MESSBOX )
+            ||  ( nType == WINDOW_INFOBOX )
+            ||  ( nType == WINDOW_WARNINGBOX )
+            ||  ( nType == WINDOW_ERRORBOX )
+            ||  ( nType == WINDOW_QUERYBOX )
+            )
             bException = sal_False;
         else if ( ( nType == WINDOW_WINDOW ) ||
                   ( nType == WINDOW_WORKWINDOW ) ||

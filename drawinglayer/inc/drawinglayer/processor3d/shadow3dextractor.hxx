@@ -54,9 +54,12 @@ namespace drawinglayer
         class Shadow3DExtractingProcessor : public BaseProcessor3D
         {
         private:
+            /// typedef for data handling
+            typedef std::vector< primitive2d::BasePrimitive2D* > BasePrimitive2DVector;
+
             /// result holding vector (2D) and target vector for stacking (inited to &maPrimitive2DSequence)
-            primitive2d::Primitive2DSequence                maPrimitive2DSequence;
-            primitive2d::Primitive2DSequence*               mpPrimitive2DSequence;
+            BasePrimitive2DVector                           maPrimitive2DSequence;
+            BasePrimitive2DVector*                          mpPrimitive2DSequence;
 
             /// object transformation for scene for 2d definition
             basegfx::B2DHomMatrix                           maObjectTransformation;
@@ -93,6 +96,10 @@ namespace drawinglayer
              */
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
+            /// helper to convert from BasePrimitive2DVector to primitive2d::Primitive2DSequence
+            const primitive2d::Primitive2DSequence getPrimitive2DSequenceFromBasePrimitive2DVector(
+                const BasePrimitive2DVector& rVector) const;
+
         public:
             Shadow3DExtractingProcessor(
                 const geometry::ViewInformation3D& rViewInformation,
@@ -100,9 +107,10 @@ namespace drawinglayer
                 const basegfx::B3DVector& rLightNormal,
                 double fShadowSlant,
                 const basegfx::B3DRange& rContained3DRange);
+            virtual ~Shadow3DExtractingProcessor();
 
             /// data read access
-            const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+            const primitive2d::Primitive2DSequence getPrimitive2DSequence() const;
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const basegfx::B3DHomMatrix& getWorldToEye() const { return maWorldToEye; }
             const basegfx::B3DHomMatrix& getEyeToView() const { return maEyeToView; }

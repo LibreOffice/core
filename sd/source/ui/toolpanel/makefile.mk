@@ -45,10 +45,8 @@ PRJINC=..$/slidesorter
 SLOFILES =      								\
     $(SLO)$/ControlContainer.obj				\
     $(SLO)$/ScrollPanel.obj						\
-    $(SLO)$/SimpleLayoutWrapper.obj				\
     $(SLO)$/SubToolPanel.obj					\
     $(SLO)$/TitleBar.obj 						\
-    $(SLO)$/TitleToolBox.obj					\
     $(SLO)$/TitledControl.obj 					\
     $(SLO)$/TaskPaneControlFactory.obj 			\
     $(SLO)$/TaskPaneFocusManager.obj 			\
@@ -59,7 +57,6 @@ SLOFILES =      								\
     $(SLO)$/ToolPanelFactory.obj                \
     $(SLO)$/ToolPanelUIElement.obj              \
                                                 \
-    $(SLO)$/EmptyWindow.obj						\
     $(SLO)$/LayoutMenu.obj                      \
     $(SLO)$/TestMenu.obj                        \
     $(SLO)$/TestPanel.obj						\

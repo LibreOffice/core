@@ -46,8 +46,6 @@ public:
 
     void    SetColors( Color& aBack, Color& aText, Color& aLink,
                        Color& aVLink, Color& aALink );
-    void    GetColors( Color& aBack, Color& aText, Color& aLink,
-                       Color& aVLink, Color& aALink ) const;
 };
 
 #endif // _SD_HTMLATTR_HXX

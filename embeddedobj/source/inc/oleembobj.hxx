@@ -186,6 +186,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
 
     ::rtl::OUString m_aTempURL;
 
+    ::rtl::OUString m_aTempDumpURL;
+
     // STAMPIT solution
     // the following member is used during verb execution to detect whether the verb execution modifies the object
     VerbExecutionController m_aVerbExecutionController;

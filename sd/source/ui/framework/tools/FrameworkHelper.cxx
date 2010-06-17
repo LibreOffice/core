@@ -1002,28 +1002,6 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObje
 
 
 
-//----- DispatchCaller --------------------------------------------------------
-
-DispatchCaller::DispatchCaller (
-    SfxDispatcher& rDispatcher,
-    USHORT nSId)
-    : mrDispatcher(rDispatcher),
-      mnSId(nSId)
-{
-}
-
-
-
-
-void DispatchCaller::operator() (bool bEventSeen)
-{
-    (void)bEventSeen;
-    mrDispatcher.Execute(mnSId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-}
-
-
-
-
 //===== FrameworkHelperResourceIdFilter =======================================
 
 FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (

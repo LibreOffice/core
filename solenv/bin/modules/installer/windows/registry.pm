@@ -203,8 +203,9 @@ sub get_registry_value
     if ( $registry->{'Value'} ) { $value = $registry->{'Value'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-    $value =~ s/\<progpath\>/\[OFFICEINSTALLLOCATION\]/;
-    $value =~ s/\[OFFICEINSTALLLOCATION\]\\/\[OFFICEINSTALLLOCATION\]/; # removing "\" after "[OFFICEINSTALLLOCATION]"
+    $value =~ s/\\\\\s*$/\\/g;  # making "\\" at end of value to "\"
+    $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
+    $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
 
     if ( $value =~ /\%/ ) { $value = installer::worker::replace_variables_in_string($value, $allvariableshashref); }
 
@@ -224,8 +225,9 @@ sub get_registry_val64
     if ( $registry->{'Val64'} ) { $value = $registry->{'Val64'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-    $value =~ s/\<progpath\>/\[OFFICEINSTALLLOCATION\]/;
-    $value =~ s/\[OFFICEINSTALLLOCATION\]\\/\[OFFICEINSTALLLOCATION\]/; # removing "\" after "[OFFICEINSTALLLOCATION]"
+    $value =~ s/\\\\\s*$/\\/g;  # making "\\" at end of value to "\"
+    $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
+    $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
 
     if ( $value =~ /\%/ ) { $value = installer::worker::replace_variables_in_string($value, $allvariableshashref); }
 

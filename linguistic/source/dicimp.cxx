@@ -74,6 +74,12 @@ static const sal_Char*      pVerStr5    = "WBSWG5";
 static const sal_Char*      pVerStr6    = "WBSWG6";
 static const sal_Char*      pVerOOo7    = "OOoUserDict1";
 
+static const INT16 DIC_VERSION_DONTKNOW = -1;
+static const INT16 DIC_VERSION_2 = 2;
+static const INT16 DIC_VERSION_5 = 5;
+static const INT16 DIC_VERSION_6 = 6;
+static const INT16 DIC_VERSION_7 = 7;
+
 static sal_Bool getTag(const ByteString &rLine,
         const sal_Char *pTagName, ByteString &rTagValue)
 {
@@ -89,7 +95,7 @@ static sal_Bool getTag(const ByteString &rLine,
 INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
 {
     // Sniff the header
-    INT16 nDicVersion;
+    INT16 nDicVersion = DIC_VERSION_DONTKNOW;
     sal_Char pMagicHeader[MAX_HEADER_LENGTH];
 
     nLng = LANGUAGE_NONE;
@@ -107,7 +113,7 @@ INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
         sal_Bool bSuccess;
         ByteString aLine;
 
-        nDicVersion = 7;
+        nDicVersion = DIC_VERSION_7;
 
         // 1st skip magic / header line
         rpStream->ReadLine(aLine);
@@ -160,17 +166,17 @@ INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
 
         // Check version magic
         if (0 == strcmp( pMagicHeader, pVerStr6 ))
-            nDicVersion = 6;
+            nDicVersion = DIC_VERSION_6;
         else if (0 == strcmp( pMagicHeader, pVerStr5 ))
-            nDicVersion = 5;
+            nDicVersion = DIC_VERSION_5;
         else if (0 == strcmp( pMagicHeader, pVerStr2 ))
-            nDicVersion = 2;
+            nDicVersion = DIC_VERSION_2;
         else
-            nDicVersion = -1;
+            nDicVersion = DIC_VERSION_DONTKNOW;
 
-        if (2 == nDicVersion ||
-            5 == nDicVersion ||
-            6 == nDicVersion)
+        if (DIC_VERSION_2 == nDicVersion ||
+            DIC_VERSION_5 == nDicVersion ||
+            DIC_VERSION_6 == nDicVersion)
         {
             // The language of the dictionary
             *rpStream >> nLng;
@@ -203,7 +209,7 @@ DictionaryNeo::DictionaryNeo() :
     nLanguage       (LANGUAGE_NONE)
 {
     nCount       = 0;
-    nDicVersion  = -1;
+    nDicVersion  = DIC_VERSION_DONTKNOW;
     bNeedEntries = FALSE;
     bIsModified  = bIsActive = FALSE;
     bIsReadonly  = FALSE;
@@ -220,7 +226,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     nLanguage       (nLang)
 {
     nCount       = 0;
-    nDicVersion  = -1;
+    nDicVersion  = DIC_VERSION_DONTKNOW;
     bNeedEntries = TRUE;
     bIsModified  = bIsActive = FALSE;
     bIsReadonly = !bWriteable;
@@ -230,8 +236,8 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
         BOOL bExists = FileExists( rMainURL );
         if( !bExists )
         {
-            // save new dictionaries with in 6.0 Format (uses UTF8)
-            nDicVersion  = 6;
+            // save new dictionaries with in Format 7 (UTF8 plain text)
+            nDicVersion  = DIC_VERSION_7;
 
             //! create physical representation of an **empty** dictionary
             //! that could be found by the dictionary-list implementation
@@ -303,13 +309,13 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
     eDicType = bNegativ ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
 
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    if (nDicVersion >= 6)
+    if (nDicVersion >= DIC_VERSION_6)
         eEnc = RTL_TEXTENCODING_UTF8;
     nCount = 0;
 
-    if (6 == nDicVersion ||
-        5 == nDicVersion ||
-        2 == nDicVersion)
+    if (DIC_VERSION_6 == nDicVersion ||
+        DIC_VERSION_5 == nDicVersion ||
+        DIC_VERSION_2 == nDicVersion)
     {
         USHORT  nLen = 0;
         sal_Char aWordBuf[ BUFSIZE ];
@@ -363,7 +369,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
             *(aWordBuf + nLen) = 0;
         }
     }
-    else if (7 == nDicVersion)
+    else if (DIC_VERSION_7 == nDicVersion)
     {
         sal_Bool bSuccess;
         ByteString aLine;
@@ -436,10 +442,10 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
     ULONG nErr = sal::static_int_cast< ULONG >(-1);
 
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    if (nDicVersion >= 6)
+    if (nDicVersion >= DIC_VERSION_6)
         eEnc = RTL_TEXTENCODING_UTF8;
 
-    if (nDicVersion == 7)
+    if (nDicVersion == DIC_VERSION_7)
     {
         pStream->WriteLine(ByteString (pVerOOo7));
         if (0 != (nErr = pStream->GetError()))
@@ -482,7 +488,7 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
 
         // write version
         const sal_Char *pVerStr = NULL;
-        if (6 == nDicVersion)
+        if (DIC_VERSION_6 == nDicVersion)
             pVerStr = pVerStr6;
         else
             pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;

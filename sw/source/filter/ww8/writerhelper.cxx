@@ -567,6 +567,7 @@ namespace sw
             return aRet;
         }
 
+#if 0
         Frames GetFramesBetweenNodes(const Frames &rFrames,
             const SwNode &rStart, const SwNode &rEnd)
         {
@@ -580,7 +581,7 @@ namespace sw
             return aRet;
 
         }
-
+#endif
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode)
         {
             Frames aRet;

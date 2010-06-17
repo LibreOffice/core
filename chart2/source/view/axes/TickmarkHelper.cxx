@@ -472,15 +472,17 @@ sal_Int32 TickmarkHelper::getMaxTickCount( sal_Int32 nDepth ) const
     if( m_rIncrement.Distance<=0.0)
         return 0;
 
-    sal_Int32 nIntervalCount;
+    double fSub;
     if(m_rIncrement.PostEquidistant  )
-        nIntervalCount = static_cast<sal_Int32>
-                        ( approxSub( m_fScaledVisibleMax, m_fScaledVisibleMin )
-                            / m_rIncrement.Distance );
+        fSub = approxSub( m_fScaledVisibleMax, m_fScaledVisibleMin );
     else
-        nIntervalCount = static_cast<sal_Int32>
-                        ( approxSub( m_rScale.Maximum, m_rScale.Minimum )
-                            / m_rIncrement.Distance );
+        fSub = approxSub( m_rScale.Maximum, m_rScale.Minimum );
+
+    if (!isFinite(fSub))
+        return 0;
+
+    sal_Int32 nIntervalCount = static_cast<sal_Int32>( fSub / m_rIncrement.Distance );
+
     nIntervalCount+=3;
     for(sal_Int32 nN=0; nN<nDepth-1; nN++)
     {

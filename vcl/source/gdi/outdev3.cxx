@@ -579,6 +579,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     {
         aFont.SetHeight( nDefaultHeight );
         aFont.SetWeight( WEIGHT_NORMAL );
+        aFont.SetLanguage( eLang );
 
         if ( aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
             aFont.SetCharSet( gsl_getSystemTextEncoding() );

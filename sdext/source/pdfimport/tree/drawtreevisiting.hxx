@@ -29,7 +29,9 @@
 #define INCLUDED_PDFI_DRAWTREEVISITING_HXX
 
 #include "treevisiting.hxx"
-
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace pdfi
 {
@@ -42,6 +44,8 @@ namespace pdfi
         void optimizeTextElements(Element& rParent);
 
     public:
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIter;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
         explicit DrawXmlOptimizer(PDFIProcessor& rProcessor) :
             m_rProcessor(rProcessor)
         {}
@@ -82,6 +86,10 @@ namespace pdfi
     class DrawXmlEmitter : public ElementTreeVisitor
     {
     private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIter;
+
         EmitContext& m_rEmitContext ;
         /// writes Impress doc when false
         const bool   m_bWriteDrawDocument;
@@ -91,6 +99,7 @@ namespace pdfi
                              const EmitContext& rEmitContext );
 
     public:
+    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
         enum DocType{ DRAW_DOC, IMPRESS_DOC };
         explicit DrawXmlEmitter(EmitContext& rEmitContext, DocType eDocType) :
             m_rEmitContext(rEmitContext),

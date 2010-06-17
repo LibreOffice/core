@@ -318,18 +318,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    if ( $installer::globals::basisdirhostname )
-    {
-        my $onepropertyline = "BASISDIRHOSTNAME" . "\t" . $installer::globals::basisdirhostname . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
-    if ( $installer::globals::uredirhostname )
-    {
-        my $onepropertyline = "UREDIRHOSTNAME" . "\t" . $installer::globals::uredirhostname . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
     if ( $installer::globals::sundirhostname )
     {
         my $onepropertyline = "SUNDIRHOSTNAME" . "\t" . $installer::globals::sundirhostname . "\n";

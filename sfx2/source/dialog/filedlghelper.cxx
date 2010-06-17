@@ -57,6 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/stillreadwriteinteraction.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -542,33 +543,13 @@ void FileDialogHelper_Impl::updateExportButton()
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::updateSelectionBox()
 {
-    if ( !mbExport )
+    if ( !mbHasSelectionBox )
         return;
 
-    // Does the selection box exist?
-    bool bSelectionBoxFound = false;
-    uno::Reference< XControlInformation > xCtrlInfo( mxFileDlg, UNO_QUERY );
-    if ( xCtrlInfo.is() )
-    {
-        Sequence< ::rtl::OUString > aCtrlList = xCtrlInfo->getSupportedControls();
-        sal_uInt32 nCount = aCtrlList.getLength();
-        for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
-            if ( aCtrlList[ nCtrl ].equalsAscii("SelectionBox") )
-            {
-                bSelectionBoxFound = true;
-                break;
-            }
-    }
-
-    if ( bSelectionBoxFound )
-    {
-        const SfxFilter* pFilter = getCurentSfxFilter();
-        updateExtendedControl(
-            ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
-            ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
-        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( (sal_Bool)mbSelection ) );
-    }
+    const SfxFilter* pFilter = getCurentSfxFilter();
+    mbSelectionFltrEnabled = updateExtendedControl(
+        ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
+        ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
 }
 
 // ------------------------------------------------------------------------
@@ -956,6 +937,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbPwdCheckBoxState      = sal_False;
     mbSelection             = sal_False;
     mbSelectionEnabled      = sal_True;
+    mbHasSelectionBox       = sal_False;
+    mbSelectionFltrEnabled  = sal_False;
 
     // default settings
     m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINSTALLED;
@@ -1025,6 +1008,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
                 mbHasAutoExt = sal_True;
                 mbIsSaveDlg = sal_True;
+                mbHasSelectionBox = sal_True;
                 if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
                 {
                     mxFilterCFG = uno::Reference< XNameAccess >(
@@ -2073,6 +2057,21 @@ void FileDialogHelper_Impl::saveConfig()
             }
         }
 
+        if( mbHasSelectionBox && mbSelectionFltrEnabled )
+        {
+            try
+            {
+                aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
+                sal_Bool bSelection = sal_True;
+                aValue >>= bSelection;
+                if ( aUserData.GetTokenCount(' ') < 3 )
+                    aUserData.Append(' ');
+                aUserData.SetToken( 2, ' ', String::CreateFromInt32( (sal_Int32) bSelection ) );
+                bWriteConfig = sal_True;
+            }
+            catch( IllegalArgumentException ){}
+        }
+
         if ( bWriteConfig )
             aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
     }
@@ -2202,6 +2201,17 @@ void FileDialogHelper_Impl::loadConfig()
             try
             {
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+            }
+            catch( IllegalArgumentException ){}
+        }
+
+        if( mbHasSelectionBox )
+        {
+            sal_Int32 nFlag = aUserData.GetToken( 2, ' ' ).ToInt32();
+            aValue <<= (sal_Bool) nFlag;
+            try
+            {
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, aValue );
             }
             catch( IllegalArgumentException ){}
         }
@@ -2664,10 +2674,12 @@ static int impl_isFolder( const OUString& rPath )
     {
     }
 
+    ::rtl::Reference< ::comphelper::StillReadWriteInteraction > aHandler = new ::comphelper::StillReadWriteInteraction( xHandler );
+
     try
     {
         ::ucbhelper::Content aContent(
-            rPath, new ::ucbhelper::CommandEnvironment( xHandler, uno::Reference< ucb::XProgressHandler >() ) );
+            rPath, new ::ucbhelper::CommandEnvironment( static_cast< task::XInteractionHandler* > ( aHandler.get() ), uno::Reference< ucb::XProgressHandler >() ) );
         if ( aContent.isFolder() )
             return 1;
 

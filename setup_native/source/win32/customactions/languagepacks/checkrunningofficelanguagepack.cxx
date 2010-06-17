@@ -177,8 +177,8 @@ static BOOL MoveFileExImpl( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, D
 
 extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 {
-    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
-    std::_tstring   sResourceDir = sInstDir + TEXT("program\\resource\\");
+    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring   sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
     std::_tstring   sPattern = sResourceDir + TEXT("vcl*.res");
 
     WIN32_FIND_DATA aFindFileData;

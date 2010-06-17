@@ -88,8 +88,9 @@ const sal_uInt16 XML_NAMESPACE_##prefix##_EXT_IDX   = key;
 XML_NAMESPACE_EXT( OFFICE,      37U )
 XML_NAMESPACE_EXT( TABLE,       38U )
 XML_NAMESPACE_EXT( CHART,       39U )
+XML_NAMESPACE_EXT( DRAW,        40U )
 
-#define _XML_OLD_NAMESPACE_BASE 40U
+#define _XML_OLD_NAMESPACE_BASE 41U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )

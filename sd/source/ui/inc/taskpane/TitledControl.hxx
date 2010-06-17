@@ -125,13 +125,6 @@ public:
 
     virtual void SetEnabledState(bool bFlag);
 
-    /** Ownership of the given data remains with the caller.  The data
-        is thus not destroyed when the destructor of this class is
-        called.
-    */
-    void SetUserData (void* pUserData);
-    void* GetUserData (void) const;
-
     virtual bool IsShowing (void) const;
     virtual void Show (bool bVisible);
 

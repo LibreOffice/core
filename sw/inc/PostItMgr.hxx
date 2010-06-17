@@ -234,7 +234,9 @@ class SwPostItMgr: public SfxListener
             void Delete(String aAuthor);
             void Delete();
 
+#if 0
             void Hide( SwPostItField* pPostItField );
+#endif
             void Hide( const String& rAuthor );
             void Hide();
             void Show();
@@ -274,7 +276,6 @@ class SwPostItMgr: public SfxListener
             Color           GetColorLight(sal_uInt16 aAuthorIndex);
             Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
 
-            bool                ShowPreview(const SwField* pFld,SwFmtFld*& pFmtFld) const;
 
             void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
             OutlinerParaObject* IsAnswer() {return mpAnswer;}

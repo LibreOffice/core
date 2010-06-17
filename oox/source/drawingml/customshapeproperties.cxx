@@ -32,6 +32,7 @@
 #include "oox/core/namespaces.hxx"
 #include "properties.hxx"
 #include "tokens.hxx"
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
@@ -39,6 +40,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 
 using rtl::OUString;
+using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -54,13 +56,41 @@ CustomShapeProperties::~CustomShapeProperties()
 {
 }
 
+sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide )
+{
+    sal_uInt32 nIndex = 0;
+    for( ; nIndex < rGuideList.size(); nIndex++ )
+    {
+        if ( rGuideList[ nIndex ].maName == rGuide.maName )
+            break;
+    }
+    if ( nIndex == rGuideList.size() )
+        rGuideList.push_back( rGuide );
+    return static_cast< sal_Int32 >( nIndex );
+}
+
+// returns the index into the guidelist for a given formula name,
+// if the return value is < 0 then the guide value could not be found
+sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName )
+{
+    sal_Int32 nIndex = 0;
+    for( ; nIndex < static_cast< sal_Int32 >( rGuideList.size() ); nIndex++ )
+    {
+        if ( rGuideList[ nIndex ].maName == rFormulaName )
+            break;
+    }
+    if ( nIndex == static_cast< sal_Int32 >( rGuideList.size() ) )
+        nIndex = -1;
+    return nIndex;
+}
+
 void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCustomShapeProperties */ )
 {
     // not sure if this needs to be implemented
 }
 
-void CustomShapeProperties::pushToPropSet(
-        const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
+void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
+    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
 {
     if ( maShapePresetType.getLength() )
     {
@@ -69,63 +99,154 @@ void CustomShapeProperties::pushToPropSet(
         if( xDefaulter.is() )
             xDefaulter->createCustomShapeDefaults( maShapePresetType );
 
-        const OUString sType = CREATE_OUSTRING( "Type" );
-        const OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
-        uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
-        uno::Sequence< beans::PropertyValue > aGeoPropSeq;
-        if ( aGeoPropSet >>= aGeoPropSeq )
+        if ( maAdjustmentGuideList.size() )
         {
-            sal_Int32 i, nCount = aGeoPropSeq.getLength();
-            for ( i = 0; i < nCount; i++ )
+            const OUString sType = CREATE_OUSTRING( "Type" );
+            const OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+            uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
+            uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+            if ( aGeoPropSet >>= aGeoPropSeq )
             {
-                const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
-                if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
+                sal_Int32 i, nCount = aGeoPropSeq.getLength();
+                for ( i = 0; i < nCount; i++ )
                 {
-                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-                    if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
+                    const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
+                    if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
                     {
-                        sal_uInt32 j, nHighest = 0;
-                        for( j = 0; j < maAdjustmentValues.size(); j++ )
+                        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+                        if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
                         {
-                            const rtl::OUString& rS( maAdjustmentValues[ j ].maName );
-                            if ( rS.getLength() > 3 )
+                            std::vector< CustomShapeGuide >::const_iterator aIter( maAdjustmentGuideList.begin() );
+                            while( aIter != maAdjustmentGuideList.end() )
                             {
-                                sal_uInt32 nVal = rS.copy( 3 ).toInt32();
-                                if ( ( nVal < 10 ) && ( nVal > nHighest ) )
-                                    nHighest = nVal;
-                            }
-                        }
-                        if ( nHighest > static_cast< sal_uInt32 >( aAdjustmentSeq.getLength() ) )
-                            aAdjustmentSeq.realloc( nHighest );
-
-                        for ( j = 0; j < maAdjustmentValues.size(); j++ )
-                        {
-                            if( maAdjustmentValues[ j ].maName.getLength() > 3 )
-                            {
-                                sal_uInt32 nVal = maAdjustmentValues[ j ].maName.copy( 3 ).toInt32();
-                                if ( nVal-- )
+                                if ( (*aIter).maName.getLength() > 3 )
                                 {
-                                    double fNewAdj = getValue( maAdjustmentValues, nVal );
-                                    aAdjustmentSeq[ nVal ].State = beans::PropertyState_DIRECT_VALUE;
-                                    aAdjustmentSeq[ nVal ].Value <<= fNewAdj;
+                                    sal_Int32 nAdjustmentIndex = (*aIter).maName.copy( 3 ).toInt32() - 1;
+                                    if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
+                                    {
+                                        EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+                                        aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
+                                        aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                                        aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
+                                    }
                                 }
+                                aIter++;
                             }
+                            aGeoPropSeq[ i ].Value <<= aAdjustmentSeq;
+                            xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
                         }
-                        aGeoPropSeq[ i ].Value <<= aAdjustmentSeq;
-                        xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
                     }
-                }
-                else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
-                {
-                    aGeoPropSeq[ i ].Value <<= maShapePresetType;
+                    else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
+                    {
+                        aGeoPropSeq[ i ].Value <<= maShapePresetType;
+                    }
                 }
             }
         }
     }
     else
     {
+        sal_uInt32 i;
         PropertyMap aPropertyMap;
         aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
+
+        awt::Size aSize( xShape->getSize() );
+        awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
+        if ( maPath2DList.size() )
+        {   // TODO: each polygon may have its own size, but I think it is rather been used
+            // so we are only taking care of the first
+            if ( maPath2DList[ 0 ].w )
+                aViewBox.Width = static_cast< sal_Int32 >( maPath2DList[ 0 ].w );
+            if ( maPath2DList[ 0 ].h )
+                aViewBox.Height = static_cast< sal_Int32 >( maPath2DList[ 0 ].h );
+        }
+        aPropertyMap[ PROP_ViewBox ] <<= aViewBox;
+
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
+        for ( i = 0; i < maAdjustmentGuideList.size(); i++ )
+        {
+            EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+            aAdjustmentVal.Value <<= maAdjustmentGuideList[ i ].maFormula.toInt32();
+            aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+            aAdjustmentValues[ i ] = aAdjustmentVal;
+        }
+        aPropertyMap[ PROP_AdjustmentValues ] <<= aAdjustmentValues;
+
+        Sequence< rtl::OUString > aEquations( maGuideList.size() );
+        for ( i = 0; i < maGuideList.size(); i++ )
+            aEquations[ i ] = maGuideList[ i ].maFormula;
+        aPropertyMap[ PROP_Equations ] <<= aEquations;
+
+        PropertyMap aPath;
+        Sequence< EnhancedCustomShapeSegment > aSegments( maSegments.size() );
+        for ( i = 0; i < maSegments.size(); i++ )
+            aSegments[ i ] = maSegments[ i ];
+        aPath[ PROP_Segments ] <<= aSegments;
+        sal_uInt32 j, k, nParameterPairs = 0;
+        for ( i = 0; i < maPath2DList.size(); i++ )
+            nParameterPairs += maPath2DList[ i ].parameter.size();
+        Sequence< EnhancedCustomShapeParameterPair > aParameterPairs( nParameterPairs );
+        for ( i = 0, k = 0; i < maPath2DList.size(); i++ )
+            for ( j = 0; j < maPath2DList[ i ].parameter.size(); j++ )
+                aParameterPairs[ k++ ] = maPath2DList[ i ].parameter[ j ];
+        aPath[ PROP_Coordinates ] <<= aParameterPairs;
+        Sequence< PropertyValue > aPathSequence = aPath.makePropertyValueSequence();
+        aPropertyMap[ PROP_Path ] <<= aPathSequence;
+
+        Sequence< PropertyValues > aHandles( maAdjustHandleList.size() );
+        for ( i = 0; i < maAdjustHandleList.size(); i++ )
+        {
+            PropertyMap aHandle;
+            // maAdjustmentHandle[ i ].gdRef1 ... maAdjustmentHandle[ i ].gdRef2 ... :(
+            // gdRef1 && gdRef2 -> we do not offer such reference, so it is difficult
+            // to determine the correct adjustment handle that should be updated with the adjustment
+            // position. here is the solution: the adjustment value that is used within the position
+            // has to be updated, in case the position is a formula the first usage of a
+            // adjument value is decisive
+            if ( maAdjustHandleList[ i ].polar )
+            {
+                aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
+                if ( maAdjustHandleList[ i ].min1.has() )
+                    aHandle[ PROP_RadiusRangeMinimum ] <<= maAdjustHandleList[ i ].min1.get();
+                if ( maAdjustHandleList[ i ].max1.has() )
+                    aHandle[ PROP_RadiusRangeMaximum ] <<= maAdjustHandleList[ i ].max1.get();
+
+                /* TODO: AngleMin & AngleMax
+                if ( maAdjustHandleList[ i ].min2.has() )
+                    aHandle[ PROP_ ] = maAdjustHandleList[ i ].min2.get();
+                if ( maAdjustHandleList[ i ].max2.has() )
+                    aHandle[ PROP_ ] = maAdjustHandleList[ i ].max2.get();
+                */
+            }
+            else
+            {
+                aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
+                if ( maAdjustHandleList[ i ].gdRef1.has() )
+                {
+                    // TODO: PROP_RefX and PROP_RefY are not yet part of our file format,
+                    // so the handles will not work after save/reload
+                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.get() );
+                    if ( nIndex >= 0 )
+                        aHandle[ PROP_RefX ] <<= nIndex;
+                }
+                if ( maAdjustHandleList[ i ].gdRef2.has() )
+                {
+                    sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.get() );
+                    if ( nIndex >= 0 )
+                        aHandle[ PROP_RefY ] <<= nIndex;
+                }
+                if ( maAdjustHandleList[ i ].min1.has() )
+                    aHandle[ PROP_RangeXMinimum ] <<= maAdjustHandleList[ i ].min1.get();
+                if ( maAdjustHandleList[ i ].max1.has() )
+                    aHandle[ PROP_RangeXMaximum ] <<= maAdjustHandleList[ i ].max1.get();
+                if ( maAdjustHandleList[ i ].min2.has() )
+                    aHandle[ PROP_RangeYMinimum ] <<= maAdjustHandleList[ i ].min2.get();
+                if ( maAdjustHandleList[ i ].max2.has() )
+                    aHandle[ PROP_RangeYMaximum ] <<= maAdjustHandleList[ i ].max2.get();
+            }
+            aHandles[ i ] = aHandle.makePropertyValueSequence();
+        }
+        aPropertyMap[ PROP_Handles ] <<= aHandles;
 
         // converting the vector to a sequence
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();

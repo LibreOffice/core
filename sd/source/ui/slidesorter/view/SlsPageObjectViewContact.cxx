@@ -93,21 +93,6 @@ void PageObjectViewContact::ActionChanged (void)
     ViewContactOfPageObj::ActionChanged();
 }
 
-Rectangle PageObjectViewContact::GetPageObjectBoundingBox (void) const
-{
-    // use model data directly here
-    OSL_ASSERT(mpDescriptor.get()!=NULL);
-    Rectangle aRetval(GetPageObject().GetLastBoundRect());
-    const SvBorder aPageDescriptorBorder(mpDescriptor->GetModelBorder());
-
-    aRetval.Left() -= aPageDescriptorBorder.Left();
-    aRetval.Top() -= aPageDescriptorBorder.Top();
-    aRetval.Right() += aPageDescriptorBorder.Right();
-    aRetval.Bottom() += aPageDescriptorBorder.Bottom();
-
-    return aRetval;
-}
-
 SdrPageObj& PageObjectViewContact::GetPageObject (void) const
 {
     return ViewContactOfPageObj::GetPageObj();

@@ -36,7 +36,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <cppuhelper/implbase6.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -186,7 +186,7 @@ protected:
 //  ----------------------------------------------------
 typedef ::cppu::ImplHelper6 <   ::com::sun::star::container::XContainerListener
                             ,   ::com::sun::star::awt::XTopWindow
-                            ,   ::com::sun::star::awt::XDialog
+                            ,   ::com::sun::star::awt::XDialog2
                             ,   ::com::sun::star::util::XChangesListener
                             ,   ::com::sun::star::util::XModifyListener
                             ,   ::com::sun::star::awt::XWindowListener
@@ -271,6 +271,10 @@ public:
     void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XDialog2
+    virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( ::sal_Int32 Id ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);

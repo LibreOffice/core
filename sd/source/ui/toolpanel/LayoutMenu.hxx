@@ -90,10 +90,6 @@ public:
     static std::auto_ptr<ControlFactory> CreateControlFactory (
         ToolPanelViewShell& i_rPanelViewShell );
 
-    /** Return the name of the currently selected layout.
-    */
-    String GetSelectedLayoutName (void);
-
     /** Return a numerical value representing the currently selected
         layout.
     */

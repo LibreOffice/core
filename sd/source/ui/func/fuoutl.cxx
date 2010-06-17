@@ -60,12 +60,6 @@ FuOutline::FuOutline (
 {
 }
 
-FunctionReference FuOutline::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-{
-    FunctionReference xFunc( new FuOutline( pViewSh, pWin, pView, pDoc, rReq ) );
-    return xFunc;
-}
-
 /*************************************************************************
 |*
 |* Command, weiterleiten an OutlinerView

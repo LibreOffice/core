@@ -78,7 +78,7 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 
     //    MessageBox(NULL, sDesktopFile.c_str(), TEXT("OfficeMenuFolder"), MB_OK | MB_ICONINFORMATION);
 
-    std::_tstring   sIconFile = GetMsiProperty( handle, TEXT("OFFICEINSTALLLOCATION") ) + TEXT("program\\soffice.exe");
+    std::_tstring   sIconFile = GetMsiProperty( handle, TEXT("INSTALLLOCATION") ) + TEXT("program\\soffice.exe");
 
     OSVERSIONINFO   osverinfo;
     osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);

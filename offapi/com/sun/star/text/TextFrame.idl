@@ -112,6 +112,13 @@ published service TextFrame
      */
     [property] short SizeType;
     //-------------------------------------------------------------------------
+    /** determines if the text frame should be editable in a read-only document.
+        (This is usually used in forms.)
+
+     */
+    [optional, property] boolean EditInReadonly;
+
+    //-------------------------------------------------------------------------
     /** determines the interpretation of the width and relative
         width properties.
 
@@ -119,12 +126,14 @@ published service TextFrame
         @since  OOo 2.4
      */
     [optional, property] short WidthType;
+
     //-----------------------------------------------------------------------------
     /** contains the writing direction, as represented by the
         <type scope="com::sun::star::text">WritingMode2</type> constants
      */
     [optional, property] short WritingMode;
 
+    //-----------------------------------------------------------------------------
     /** controls, if the frame follows the text flow or can leave its layout environment
 
         <p>If set, the frame follows the text flow and doesn't leaves the layout

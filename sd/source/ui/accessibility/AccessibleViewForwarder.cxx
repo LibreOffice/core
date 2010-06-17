@@ -44,18 +44,6 @@ namespace accessibility {
     May change in the future.
 */
 
-AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, USHORT nWindowId)
-    : mpView (pView),
-      mnWindowId (nWindowId),
-      mrDevice (pView->GetPaintWindow((sal_uInt32)nWindowId)->GetOutputDevice())
-{
-    OSL_ASSERT (mpView != NULL);
-    // empty
-}
-
-
-
-
 AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice)
     : mpView (pView),
       mnWindowId (0),
@@ -81,15 +69,6 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
 AccessibleViewForwarder::~AccessibleViewForwarder (void)
 {
     // empty
-}
-
-
-
-
-void AccessibleViewForwarder::SetView (SdrPaintView* pView)
-{
-    mpView = pView;
-    OSL_ASSERT (mpView != NULL);
 }
 
 

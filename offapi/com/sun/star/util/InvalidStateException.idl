@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,74 +24,27 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
+#ifndef __com_sun_star_util_InvalidStateException_idl__
+#define __com_sun_star_util_InvalidStateException_idl__
 
-#include "SimpleLayoutWrapper.hxx"
+#include <com/sun/star/uno/Exception.idl>
 
-#include <vcl/window.hxx>
+//==================================================================================================================
 
-namespace sd { namespace toolpanel {
+module com { module sun { module star { module util {
 
-SimpleLayoutWrapper::SimpleLayoutWrapper (
-    ::std::auto_ptr< ::Window> pWindow,
-    int nPreferredWidth,
-    int nPreferredHeight,
-    bool bIsResizable)
-    : mpWindow (pWindow),
-      mnPreferredWidth(nPreferredWidth),
-      mnPreferredHeight(nPreferredHeight),
-      mbIsResizable (bIsResizable)
+//==================================================================================================================
+
+/** is thrown when an object's state does not allow to call requested functionality.
+ */
+exception InvalidStateException : com::sun::star::uno::Exception
 {
-}
+};
 
+//==================================================================================================================
 
+}; }; }; };
 
+//==================================================================================================================
 
-SimpleLayoutWrapper::~SimpleLayoutWrapper (void)
-{
-}
-
-
-
-
-Size SimpleLayoutWrapper::GetPreferredSize (void)
-{
-    return Size (mnPreferredWidth, mnPreferredHeight);
-}
-
-
-
-
-sal_Int32 SimpleLayoutWrapper::GetPreferredWidth (sal_Int32)
-{
-    return mnPreferredWidth;
-}
-
-
-
-
-sal_Int32 SimpleLayoutWrapper::GetPreferredHeight (sal_Int32)
-{
-    return mnPreferredHeight;
-}
-
-
-
-
-bool SimpleLayoutWrapper::IsResizable (void)
-{
-    return mbIsResizable;
-}
-
-
-
-
-::Window* SimpleLayoutWrapper::GetWindow (void)
-{
-    return mpWindow.get();
-}
-
-
-} } // end of namespace ::sd::toolpanel
-
+#endif

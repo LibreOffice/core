@@ -159,12 +159,6 @@ private:
                 css::drawing::framework::XResourceId>& rxPaneId,
             const PaneDescriptor& rDescriptor);
 
-    /** Return <TRUE/> when the specified resource is bound to one of the
-        child windows.
-    */
-    bool IsBoundToChildWindow (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId) const;
-
     void ThrowIfDisposed (void) const
         throw (css::lang::DisposedException);
 };

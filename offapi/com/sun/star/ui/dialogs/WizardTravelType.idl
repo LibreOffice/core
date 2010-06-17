@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,23 +24,31 @@
  *
  ************************************************************************/
 
-#ifndef SW_WARNPASSWORD_HXX
-#define SW_WARNPASSWORD_HXX
+#ifndef __com_sun_star_ui_dialogs_WizardTravelType_idl__
+#define __com_sun_star_ui_dialogs_WizardTravelType_idl__
 
+//==================================================================================================================
 
+module com { module sun { module star { module ui { module dialogs {
 
-class SfxMedium;
-/** Static API helper functions. */
-class SwWarnPassword
+//==================================================================================================================
+
+/** denotes ways to leave a <type>Wizard</type>'s page
+ */
+constants WizardTravelType
 {
-public:
-    /** Opens a query warning dialog.
-     @descr Pop up Query on export  with a choice of yes/no if a
-     an encrypted password is imported.
-     @return true if yes and false if no. default to true.
-   */
-    static bool        WarningOnPassword( SfxMedium& rMedium );
+    /// indicates the wizard page is left due to forward traveling through the wizard
+    const short FORWARD = 1;
+    /// indicates the wizard page is left due to backward traveling through the wizard
+    const short BACKWARD = 2;
+    /// indicates the wizard page is left since the wizard is about to be finished
+    const short FINISH = 3;
 };
 
+//==================================================================================================================
+
+}; }; }; }; };
+
+//==================================================================================================================
 
 #endif

@@ -437,7 +437,8 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     DBG_ASSERT( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     // create a new OBJ list for this sheet (may be used by notes, autofilter, data validation)
-    GetObjectManager().StartSheet();
+    if( eBiff == EXC_BIFF8 )
+        GetObjectManager().StartSheet();
 
     // cell table: DEFROWHEIGHT, DEFCOLWIDTH, COLINFO, DIMENSIONS, ROW, cell records
     mxCellTable.reset( new XclExpCellTable( GetRoot() ) );

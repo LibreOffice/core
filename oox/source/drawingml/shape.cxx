@@ -95,6 +95,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mnRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
+, mbHidden( false )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -183,6 +184,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
     mnRotation = rReferencedShape.mnRotation;
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
+    mbHidden = rReferencedShape.mbHidden;
 }
 
 // for group shapes, the following method is also adding each child
@@ -299,35 +301,6 @@ Reference< XShape > Shape::createAndInsert(
         aTransformation.translate( aPosition.X / 360.0, aPosition.Y / 360.0 );
     }
 
-    if ( mpCustomShapePropertiesPtr && mpCustomShapePropertiesPtr->getPolygon().count() )
-    {
-    ::basegfx::B2DPolyPolygon& rPolyPoly = mpCustomShapePropertiesPtr->getPolygon();
-
-    if( rPolyPoly.count() > 0 ) {
-        if( rPolyPoly.areControlPointsUsed() ) {
-        // TODO Beziers
-        } else {
-        uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( rPolyPoly.count() );
-
-        for (sal_uInt32 j = 0; j < rPolyPoly.count(); j++ ) {
-            ::basegfx::B2DPolygon aPoly = rPolyPoly.getB2DPolygon( j );
-
-            // now creating the corresponding PolyPolygon
-            sal_Int32 i, nNumPoints = aPoly.count();
-            uno::Sequence< awt::Point > aPointSequence( nNumPoints );
-            awt::Point* pPoints = aPointSequence.getArray();
-            for( i = 0; i < nNumPoints; ++i )
-            {
-            const ::basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
-            pPoints[ i ] = awt::Point( static_cast< sal_Int32 >( aPoint.getX() ), static_cast< sal_Int32 >( aPoint.getY() ) );
-            }
-            aPolyPolySequence.getArray()[ j ] = aPointSequence;
-        }
-        maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
-        }
-    }
-    }
-
     // special for lineshape
     if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.LineShape" ) )
     {
@@ -398,6 +371,12 @@ Reference< XShape > Shape::createAndInsert(
                 xNamed->setName( msName );
         }
         rxShapes->add( mxShape );
+
+        if ( mbHidden )
+        {
+            const OUString sHidden( CREATE_OUSTRING( "NumberingLevel" ) );
+            xSet->setPropertyValue( sHidden, Any( mbHidden ) );
+        }
 
         Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
         if( xLockable.is() )
@@ -491,7 +470,7 @@ Reference< XShape > Shape::createAndInsert(
             aPropSet.setProperties( aShapeProperties );
 
         if( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
-            mpCustomShapePropertiesPtr->pushToPropSet( xSet, mxShape );
+            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
 
         // in some cases, we don't have any text body.
         if( getTextBody() )

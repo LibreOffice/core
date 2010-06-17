@@ -1087,6 +1087,72 @@ bool ScDPOutput::GetHeaderLayout() const
     return mbHeaderLayout;
 }
 
+void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, sal_Int32& rDataLayoutIndex,
+                             std::vector<String>& rDataNames, std::vector<String>& rGivenNames,
+                             sheet::DataPilotFieldOrientation& rDataOrient,
+                             const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+{
+    rDataLayoutIndex = -1;  // invalid
+    rGrandTotalCols = 0;
+    rGrandTotalRows = 0;
+    rDataOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+
+    uno::Reference<beans::XPropertySet> xSrcProp( xSource, uno::UNO_QUERY );
+    BOOL bColGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
+                                         rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND) );
+    if ( bColGrand )
+        rGrandTotalCols = 1;    // default if data layout not in columns
+
+    BOOL bRowGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
+                                         rtl::OUString::createFromAscii(DP_PROP_ROWGRAND) );
+    if ( bRowGrand )
+        rGrandTotalRows = 1;    // default if data layout not in rows
+
+    if ( xSource.is() )
+    {
+        // find index and orientation of "data layout" dimension, count data dimensions
+
+        sal_Int32 nDataCount = 0;
+
+        uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xSource->getDimensions() );
+        long nDimCount = xDims->getCount();
+        for (long nDim=0; nDim<nDimCount; nDim++)
+        {
+            uno::Reference<uno::XInterface> xDim =
+                    ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+            uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
+            if ( xDimProp.is() )
+            {
+                sheet::DataPilotFieldOrientation eDimOrient =
+                    (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
+                        xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
+                        sheet::DataPilotFieldOrientation_HIDDEN );
+                if ( ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+                                         rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) ) )
+                {
+                    rDataLayoutIndex = nDim;
+                    rDataOrient = eDimOrient;
+                }
+                if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
+                {
+                    String aSourceName;
+                    String aGivenName;
+                    ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xDim );
+                    rDataNames.push_back( aSourceName );
+                    rGivenNames.push_back( aGivenName );
+
+                    ++nDataCount;
+                }
+            }
+        }
+
+        if ( ( rDataOrient == sheet::DataPilotFieldOrientation_COLUMN ) && bColGrand )
+            rGrandTotalCols = nDataCount;
+        else if ( ( rDataOrient == sheet::DataPilotFieldOrientation_ROW ) && bRowGrand )
+            rGrandTotalRows = nDataCount;
+    }
+}
+
 void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
 {
     using namespace ::com::sun::star::sheet;
@@ -1207,15 +1273,14 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         // No data field is present in this datapilot table.
         return false;
 
-    bool bColGrand = bool();
-    any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii(SC_UNO_COLGRAND));
-    if (!(any >>= bColGrand))
-        return false;
-
-    bool bRowGrand = bool();
-    any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii(SC_UNO_ROWGRAND));
-    if (!(any >>= bRowGrand))
-        return false;
+    // #i111421# use lcl_GetTableVars for correct size of totals and data layout position
+    sal_Int32 nGrandTotalCols;
+    sal_Int32 nGrandTotalRows;
+    sal_Int32 nDataLayoutIndex;
+    std::vector<String> aDataNames;
+    std::vector<String> aGivenNames;
+    sheet::DataPilotFieldOrientation eDataOrient;
+    lcl_GetTableVars( nGrandTotalCols, nGrandTotalRows, nDataLayoutIndex, aDataNames, aGivenNames, eDataOrient, xSource );
 
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -1232,12 +1297,16 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         return false;
     }
 
-    bool bFilterByCol = !(bColGrand && (nCol == nTabEndCol));
-    bool bFilterByRow = !(bRowGrand && (nRow == nTabEndRow));
+    bool bFilterByCol = (nCol <= static_cast<SCCOL>(nTabEndCol - nGrandTotalCols));
+    bool bFilterByRow = (nRow <= static_cast<SCROW>(nTabEndRow - nGrandTotalRows));
 
     // column fields
     for (SCCOL nColField = 0; nColField < nColFieldCount && bFilterByCol; ++nColField)
     {
+        if (pColFields[nColField].nDim == nDataLayoutIndex)
+            // There is no sense including the data layout field for filtering.
+            continue;
+
         sheet::DataPilotFieldFilter filter;
         filter.FieldName = pColFields[nColField].maName;
 
@@ -1256,10 +1325,9 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
     }
 
     // row fields
-    bool bDataLayoutExists = (nDataFieldCount > 1);
     for (SCROW nRowField = 0; nRowField < nRowFieldCount && bFilterByRow; ++nRowField)
     {
-        if (bDataLayoutExists && nRowField == nRowFieldCount - 1)
+        if (pRowFields[nRowField].nDim == nDataLayoutIndex)
             // There is no sense including the data layout field for filtering.
             continue;
 
@@ -1640,72 +1708,6 @@ void ScDPOutput::GetDataDimensionNames( String& rSourceName, String& rGivenName,
                                 xDimProp, rtl::OUString::createFromAscii(DP_PROP_FUNCTION),
                                 sheet::GeneralFunction_NONE );
         rGivenName = lcl_GetDataFieldName( rSourceName, eFunc );
-    }
-}
-
-void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, sal_Int32& rDataLayoutIndex,
-                             std::vector<String>& rDataNames, std::vector<String>& rGivenNames,
-                             sheet::DataPilotFieldOrientation& rDataOrient,
-                             const uno::Reference<sheet::XDimensionsSupplier>& xSource )
-{
-    rDataLayoutIndex = -1;  // invalid
-    rGrandTotalCols = 0;
-    rGrandTotalRows = 0;
-    rDataOrient = sheet::DataPilotFieldOrientation_HIDDEN;
-
-    uno::Reference<beans::XPropertySet> xSrcProp( xSource, uno::UNO_QUERY );
-    BOOL bColGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
-                                         rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND) );
-    if ( bColGrand )
-        rGrandTotalCols = 1;    // default if data layout not in columns
-
-    BOOL bRowGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
-                                         rtl::OUString::createFromAscii(DP_PROP_ROWGRAND) );
-    if ( bRowGrand )
-        rGrandTotalRows = 1;    // default if data layout not in rows
-
-    if ( xSource.is() )
-    {
-        // find index and orientation of "data layout" dimension, count data dimensions
-
-        sal_Int32 nDataCount = 0;
-
-        uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xSource->getDimensions() );
-        long nDimCount = xDims->getCount();
-        for (long nDim=0; nDim<nDimCount; nDim++)
-        {
-            uno::Reference<uno::XInterface> xDim =
-                    ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
-            uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
-            if ( xDimProp.is() )
-            {
-                sheet::DataPilotFieldOrientation eDimOrient =
-                    (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                        xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
-                        sheet::DataPilotFieldOrientation_HIDDEN );
-                if ( ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                                         rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) ) )
-                {
-                    rDataLayoutIndex = nDim;
-                    rDataOrient = eDimOrient;
-                }
-                if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
-                {
-                    String aSourceName;
-                    String aGivenName;
-                    ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xDim );
-                    rDataNames.push_back( aSourceName );
-                    rGivenNames.push_back( aGivenName );
-
-                    ++nDataCount;
-                }
-            }
-        }
-
-        if ( ( rDataOrient == sheet::DataPilotFieldOrientation_COLUMN ) && bColGrand )
-            rGrandTotalCols = nDataCount;
-        else if ( ( rDataOrient == sheet::DataPilotFieldOrientation_ROW ) && bRowGrand )
-            rGrandTotalRows = nDataCount;
     }
 }
 

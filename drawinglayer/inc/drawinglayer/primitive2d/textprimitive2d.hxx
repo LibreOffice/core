@@ -62,11 +62,48 @@ namespace drawinglayer
 
             To get better text quality, it is suggested to handle tis primitive directly
             in a renderer. In that case, e.g. hintings on the system can be supported.
+
+            @param maTextTransform
+            The text transformation contains the text start position (always baselined)
+            as translation, the FontSize as scale (where width relative to height defines
+            font scaling and width == height means no font scaling) and the font rotation
+            and shear.
+            When shear is used and a renderer does not support it, it may be better to use
+            the decomposition which will do everything correctly. Same is true for mirroring
+            which would be expressed as negative scalings.
+
+            @param rText
+            The text to be used. Only a part may be used, but a bigger part of the string
+            may be necessary for correct layouting (e.g. international)
+
+            @param aTextPosition
+            The index to the first character to use from rText
+
+            @param aTextLength
+            The number of characters to use from rText
+
+            @param rDXArray
+            The distances between the characters. This parameter may be empty, in that case
+            the renderer is responsible to do something useful. If it is given, it has to be of
+            the size aTextLength. Its values are in logical coordinates and describe the
+            distance for each character to use. This is independent from the font width which
+            is given with maTextTransform. The first value is the offset to use from the start
+            point in FontCoordinateSystem X-Direction (given by maTextTransform) to the start
+            point of the second character
+
+            @param rFontAttribute
+            The font definition
+
+            @param rLocale
+            The locale to use
+
+            @param rFontColor
+            The font color to use
          */
         class TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            /// text range transformation from unit range ([0.0 .. 1.0]) to text range
+            /// text transformation (FontCoordinateSystem)
             basegfx::B2DHomMatrix                   maTextTransform;
 
             /// The text, used from maTextPosition up to maTextPosition + maTextLength
@@ -78,10 +115,10 @@ namespace drawinglayer
             /// The length for maText usage, starting from maTextPosition
             xub_StrLen                              maTextLength;
 
-            /// The DX array scale-independent in unit coordinates
+            /// The DX array in logic units
             ::std::vector< double >                 maDXArray;
 
-            /// The font to use
+            /// The font definition
             attribute::FontAttribute                maFontAttribute;
 
             /// The Locale for the text
@@ -90,7 +127,7 @@ namespace drawinglayer
             /// font color
             basegfx::BColor                         maFontColor;
 
-            /// #i96669# add simple range buffering for this primitive
+            /// #i96669# internal: add simple range buffering for this primitive
             basegfx::B2DRange                       maB2DRange;
 
         protected:

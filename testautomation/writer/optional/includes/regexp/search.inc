@@ -79,13 +79,13 @@ testcase tCheckDialog
    if SearchAll.IsEnabled then Warnlog "Without Search-for-entry Find-All is active!"
    if SearchNow.IsEnabled then Warnlog "Without Search-for-entry Find is active!"
    if ReplaceAll.IsEnabled then Warnlog "Without Search-for-entry Replace-All is active!"
-   if Replace.IsEnabled then Warnlog "Without Search-for-entry Replace is active!"
+   if ReplaceBtn.IsEnabled then Warnlog "Without Search-for-entry Replace is active!"
    if NoFormat.IsEnabled then Warnlog "Without selecting Formats , No-Format is active!"
    SearchFor.SetText "Hallo"
    if NOT SearchAll.IsEnabled then Warnlog "Containing Search-for-entry Find-All is inactive!"
    if NOT SearchNow.IsEnabled then Warnlog "Containing Search-for-entry Find inactive!"
    if NOT ReplaceAll.IsEnabled then Warnlog "Containing Search-for-entry Replace-All is inactive!"
-   if NOT Replace.IsEnabled then Warnlog "Containing Search-for-entry Replace is inactive!"
+   if NOT ReplaceBtn.IsEnabled then Warnlog "Containing Search-for-entry Replace is inactive!"
 
    Sleep 5
   printlog "- Dependencies of Format-Properties"

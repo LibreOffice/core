@@ -73,13 +73,4 @@ String STR_DDEFORMAT
 {
     Text [ en-US ] = "DDE link" ;
 };
-Bitmap BMP_SW_TEAM_MUGSHOT
-{
-    File ="writerteam.bmp";
-};
-
-String STR_SW_TEAM_NAMES
-{
-    Text = "Back row: Aidan Butler, Hans-Peter Burow, Caolan McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Duesterhoeft, Henning Brinkmann, Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
-};
 

@@ -1090,7 +1090,16 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 
                         if(!bFirstObjectComplete)
                         {
-                            aMergePolyPolygonA = aTmpPoly;
+                            // #i111987# Also need to collect ORed source shape when more than
+                            // a single polygon is involved
+                            if(aMergePolyPolygonA.count())
+                            {
+                                aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aTmpPoly);
+                            }
+                            else
+                            {
+                                aMergePolyPolygonA = aTmpPoly;
+                            }
                         }
                         else
                         {

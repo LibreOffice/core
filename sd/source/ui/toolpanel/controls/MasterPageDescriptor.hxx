@@ -214,11 +214,6 @@ public:
         URLComparator (const ::rtl::OUString& sURL);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
-    class PageNameComparator { public:
-        ::rtl::OUString msPageName;
-        PageNameComparator (const ::rtl::OUString& sPageName);
-        bool operator() (const SharedMasterPageDescriptor& rDescriptor);
-    };
     class StyleNameComparator { public:
         ::rtl::OUString msStyleName;
         StyleNameComparator (const ::rtl::OUString& sStyleName);

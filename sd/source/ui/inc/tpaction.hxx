@@ -114,7 +114,6 @@ private:
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
     void                    SetEditText( String const & rStr );
     String                  GetEditText( BOOL bURL = FALSE );
-    String                  GetMacroName( const String& rPath );
     USHORT                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
     USHORT                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
@@ -123,7 +122,6 @@ public:
             ~SdTPAction();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  USHORT*    GetRanges();
 
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );

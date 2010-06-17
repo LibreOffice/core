@@ -127,8 +127,6 @@ public:
     void SetSubController (
         const css::uno::Reference<css::drawing::XDrawSubController>& rxSubController);
 
-    ::com::sun::star::awt::Rectangle GetVisArea (void) const;
-
     /** Call this method when the VisArea has changed.
     */
     void FireVisAreaChanged (const Rectangle& rVisArea) throw();

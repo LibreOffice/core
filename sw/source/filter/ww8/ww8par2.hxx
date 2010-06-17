@@ -285,7 +285,6 @@ public:
         const WW8SwFlyPara* pFS, bool bGraf);
     WW8FlySet(SwWW8ImplReader& rReader, const SwPaM* pPaM, const WW8_PIC& rPic,
         long nWidth, long nHeight);
-    WW8FlySet(const SwWW8ImplReader& rReader, const SwPaM* pPaM);
 };
 
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};

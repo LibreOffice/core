@@ -190,7 +190,9 @@ namespace pdfi
     bool getPassword( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::task::XInteractionHandler >& xHandler,
                       rtl::OUString&                                       rOutPwd,
-                      bool                                                 bFirstTry );
+                      bool                                                 bFirstTry,
+                      const rtl::OUString&                                 rDocName
+                      );
 }
 
 #define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )

@@ -61,11 +61,30 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence() const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::attribute::SdrFillAttribute aFill;
+            const SdrPage* pCorrectPage = &GetMasterPageDescriptor().GetOwnerPage();
+            const SdrPageProperties* pCorrectProperties = &pCorrectPage->getSdrPageProperties();
 
-            // build primitive from page fill attributes
-            const SfxItemSet& rPageFillAttributes = GetMasterPageDescriptor().getCorrectFillAttributes();
-            const drawinglayer::attribute::SdrFillAttribute aFill(
-                drawinglayer::primitive2d::createNewSdrFillAttribute(rPageFillAttributes));
+            if(XFILL_NONE == ((const XFillStyleItem&)pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+            {
+                pCorrectPage = &GetMasterPageDescriptor().GetUsedPage();
+                pCorrectProperties = &pCorrectPage->getSdrPageProperties();
+            }
+
+            if(pCorrectPage->IsMasterPage() && !pCorrectProperties->GetStyleSheet())
+            {
+                // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
+                // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
+                // MasterPages should have a StyleSheet excactly for this reason, but historically
+                // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
+                pCorrectProperties = 0;
+            }
+
+            if(pCorrectProperties)
+            {
+                // create page fill attributes when correct properties were identified
+                aFill = drawinglayer::primitive2d::createNewSdrFillAttribute(pCorrectProperties->GetItemSet());
+            }
 
             if(!aFill.isDefault())
             {

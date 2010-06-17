@@ -53,6 +53,7 @@ IDLFILES=\
     ElementChange.idl \
     Endianness.idl \
     FileIOException.idl\
+    InvalidStateException.idl\
     Language.idl\
     NumberFormat.idl\
     NumberFormatProperties.idl\

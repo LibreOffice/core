@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
 #include "oox/core/namespaces.hxx"
@@ -85,9 +86,13 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 //  case XML_drElemPr:
 //      break;
     case XML_cNvPr:
+    {
+        AttributeList aAttribs( xAttribs );
+        mpShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
         mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
         mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
         break;
+    }
     case XML_ph:
         mpShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );

@@ -188,12 +188,12 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SaveDBDocPage::commitPage( CommitPageReason _eReason )
+    sal_Bool SaveDBDocPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if ( !MacroMigrationPage::commitPage( _eReason ) )
             return sal_False;
 
-        if ( eTravelBackward == _eReason )
+        if ( ::svt::WizardTypes::eTravelBackward == _eReason )
             return sal_True;
 
         if ( !m_aLocationController.prepareCommit() )

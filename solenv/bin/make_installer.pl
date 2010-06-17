@@ -257,6 +257,10 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
 
+installer::ziplist::overwrite_ooovendor( $allvariableshashref );
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3c.log", $allvariableshashref); }
+
+
 ########################################################
 # Check if this is simple packaging mechanism
 ########################################################
@@ -1982,7 +1986,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17c.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::updatedatabase ) { installer::windows::file::check_file_sequences($allupdatefileorder, $allupdatecomponentorder); }
 
-        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname);
+        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname, $loggingdir);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles18.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt1.log", $directoriesforepmarrayref); }
 
@@ -2142,10 +2146,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
                 push(@installer::globals::logfileinfo, $infoline);
             }
-
-            # include office directory in CustomAction table
-
-            installer::windows::idtglobal::add_officedir_to_database($languageidtdir, $allvariableshashref);
 
             # include a component into environment table if required
 

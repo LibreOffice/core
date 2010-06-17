@@ -50,8 +50,6 @@ class SlideFunction
 public:
     TYPEINFO();
 
-    static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
-
     virtual BOOL MouseMove (const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp (const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown (const MouseEvent& rMEvt);

@@ -125,7 +125,7 @@ void TitlesAndObjectsTabPage::initializePage()
     m_bCommitToModel = true;
 }
 
-sal_Bool TitlesAndObjectsTabPage::commitPage( CommitPageReason /*eReason*/ )
+sal_Bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     if( m_apTitleResources->IsModified() ) //titles may have changed in the meanwhile
         commitToModel();

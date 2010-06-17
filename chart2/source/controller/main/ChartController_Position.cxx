@@ -139,7 +139,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
             ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
-        m_xUndoManager, m_aModel->getModel() );
+        m_xUndoManager, getModel() );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try
@@ -166,11 +166,11 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
                 Rectangle aObjectRect;
                 aItemSet.Put(*pOutItemSet);//overwrite old values with new values (-> all items are set)
                 lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect, aSelectedSize );
-                awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel() ) );
+                awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                 Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
                 bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
-                            , m_aModel->getModel()
+                            , getModel()
                             , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                             , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
                 if( bChanged )

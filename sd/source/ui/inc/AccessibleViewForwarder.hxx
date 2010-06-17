@@ -53,12 +53,9 @@ class AccessibleViewForwarder
 public:
     //=====  internal  ========================================================
 
-    AccessibleViewForwarder (SdrPaintView* pView, USHORT nWindowId);
     AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice);
 
     virtual ~AccessibleViewForwarder (void);
-
-    void SetView (SdrPaintView* pView);
 
     //=====  IAccessibleViewforwarder  ========================================
 

@@ -386,7 +386,6 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
     {
         bool bMatchesPrefix =
             aNewGraphicURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ));
-        OSL_ENSURE( bMatchesPrefix, "Invalid URL for Symbol Bitmap" );
         if( bMatchesPrefix )
         {
             GraphicObject aGrObj = GraphicObject(
@@ -407,6 +406,7 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
                     C2U("URL"), -1, uno::makeAny( aNewGraphicURL ),
                     beans::PropertyState_DIRECT_VALUE );
                 aSymbol.Graphic.set( xGraphProv->queryGraphic( aArgs ));
+                OSL_ENSURE( aSymbol.Graphic.is(), "Invalid URL for Symbol Bitmap" );
                 xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
             }
             catch( const uno::Exception & ex )

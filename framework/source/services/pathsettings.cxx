@@ -855,6 +855,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 ::rtl::OUString sVal;
                 aVal >>= sVal;
                 OUStringList lList = impl_convertOldStyle2Path(sVal);
+                impl_subst(lList, fa_getSubstitution(), sal_False);
                 impl_purgeKnownPaths(aChangePath, lList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();

@@ -110,7 +110,7 @@ sub create_unique_directorynames
         }
         else
         {
-            $uniqueparentname = "INSTALLLOCATION";
+            $uniqueparentname = $installer::globals::programfilesfolder;
         }
 
         if ( $styles =~ /\bPROGRAMFILESFOLDER\b/ ) { $uniqueparentname = $installer::globals::programfilesfolder; }
@@ -130,29 +130,73 @@ sub create_unique_directorynames
         $onedir->{'uniquename'} = $uniquename;
         $onedir->{'uniqueparentname'} = $uniqueparentname;
 
-        # setting the office installation directory
-        if ( $styles =~ /\bOFFICEDIRECTORY\b/ )
+        # setting the installlocation directory
+        if ( $styles =~ /\bISINSTALLLOCATION\b/ )
         {
-            if ( $installer::globals::officeinstalldirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag OFFICEDIRECTORY alread set: \"$installer::globals::officeinstalldirectory\".", "create_unique_directorynames"); }
-            $installer::globals::officeinstalldirectory = $uniquename;
-            $installer::globals::officeinstalldirectoryset = 1;
-            if ( $installer::globals::officeinstalldirectory =~ /sun_/i ) { $installer::globals::sundirexists = 1; }
+            if ( $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION alread set: \"$installer::globals::installlocationdirectory\".", "create_unique_directorynames"); }
+            $installer::globals::installlocationdirectory = $uniquename;
+            $installer::globals::installlocationdirectoryset = 1;
+            if ( $installer::globals::installlocationdirectory =~ /oracle_/i ) { $installer::globals::sundirexists = 1; }
         }
 
-        # setting the bais installation directory
-        if ( $styles =~ /\bBASISDIRECTORY\b/ )
+        # setting the sundirectory
+        if ( $styles =~ /\bSUNDIRECTORY\b/ )
         {
-            if ( $installer::globals::basisinstalldirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag BASISDIRECTORY alread set: \"$installer::globals::basisinstalldirectory\".", "create_unique_directorynames"); }
-            $installer::globals::basisinstalldirectory = $uniquename;
-            $installer::globals::basisinstalldirectoryset = 1;
+            if ( $installer::globals::vendordirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag SUNDIRECTORY alread set: \"$installer::globals::vendordirectory\".", "create_unique_directorynames"); }
+            $installer::globals::vendordirectory = $uniquename;
+            $installer::globals::vendordirectoryset = 1;
+        }
+    }
+}
+
+#####################################################
+# Adding ":." to selected default directory names
+#####################################################
+
+sub check_sourcedir_addon
+{
+    my ( $onedir, $allvariableshashref ) = @_;
+
+    if (($installer::globals::addchildprojects) ||
+        ($installer::globals::patch) ||
+        ($installer::globals::languagepack) ||
+        ($allvariableshashref->{'CHANGETARGETDIR'}))
+    {
+        my $sourcediraddon = "\:\.";
+        $onedir->{'defaultdir'} = $onedir->{'defaultdir'} . $sourcediraddon;
+    }
+
+}
+
+#####################################################
+# The directory with the style ISINSTALLLOCATION
+# will be replaced by INSTALLLOCATION
+#####################################################
+
+sub set_installlocation_directory
+{
+    my ( $directoryref, $allvariableshashref ) = @_;
+
+    if ( ! $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION not set!", "set_installlocation_directory"); }
+
+    for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
+    {
+        my $onedir = ${$directoryref}[$i];
+
+        if ( $onedir->{'uniquename'} eq $installer::globals::installlocationdirectory )
+        {
+            $onedir->{'uniquename'} = "INSTALLLOCATION";
+            check_sourcedir_addon($onedir, $allvariableshashref);
         }
 
-        # setting the ure installation directory
-        if ( $styles =~ /\bUREDIRECTORY\b/ )
+        if ( $onedir->{'uniquename'} eq $installer::globals::vendordirectory )
         {
-            if ( $installer::globals::ureinstalldirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag UREDIRECTORY alread set: \"$installer::globals::ureinstalldirectory\".", "create_unique_directorynames"); }
-            $installer::globals::ureinstalldirectory = $uniquename;
-            $installer::globals::ureinstalldirectoryset = 1;
+            check_sourcedir_addon($onedir, $allvariableshashref);
+        }
+
+        if ( $onedir->{'uniqueparentname'} eq $installer::globals::installlocationdirectory )
+        {
+            $onedir->{'uniqueparentname'} = "INSTALLLOCATION";
         }
     }
 }
@@ -266,27 +310,19 @@ sub add_root_directories
 {
     my ($directorytableref, $allvariableshashref) = @_;
 
-    my $oneline = "TARGETDIR\t\tSourceDir\n";
-    push(@{$directorytableref}, $oneline);
+#   my $sourcediraddon = "";
+#   if (($installer::globals::addchildprojects) ||
+#       ($installer::globals::patch) ||
+#       ($installer::globals::languagepack) ||
+#       ($allvariableshashref->{'CHANGETARGETDIR'}))
+#   {
+#       $sourcediraddon = "\:\.";
+#   }
 
-    my $sourcediraddon = "";
-    if (($installer::globals::addchildprojects) ||
-        ($installer::globals::patch) ||
-        ($installer::globals::languagepack) ||
-        ($allvariableshashref->{'CHANGETARGETDIR'}))
+    my $oneline = "";
+
+    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
     {
-        $sourcediraddon = "\:\.";
-    }
-
-    if (!($installer::globals::product =~ /ada/i )) # the following directories not for ada products
-    {
-        $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        # my $manufacturer = $installer::globals::manufacturer;
-        # my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");    # third parameter not used
-        # $shortmanufacturer =~ s/\s/\_/g;                                  # changing empty space to underline
-
         my $productname = $allvariableshashref->{'PRODUCTNAME'};
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
         my $baseproductversion = $productversion;
@@ -318,83 +354,63 @@ sub add_root_directories
         my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
         $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
 
-        if ( $allvariableshashref->{'SUNDIR'} )
-        {
-            if ( $allvariableshashref->{'SUNDIRNAME'} ) { $installer::globals::sundirname = $allvariableshashref->{'SUNDIRNAME'}; }
-            $oneline = "sundirectory\t$installer::globals::programfilesfolder\t$installer::globals::sundirname$sourcediraddon\n";
-            push(@{$directorytableref}, $oneline);
-
-            $oneline = "INSTALLLOCATION\tsundirectory\t$shortproductkey|$productkey$sourcediraddon\n";
-            push(@{$directorytableref}, $oneline);
-        }
-        else
-        {
-            if ( $allvariableshashref->{'PROGRAMFILESROOT'} )
-            {
-                $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t.\n";
-            }
-            else
-            {
-                $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey$sourcediraddon\n";
-            }
-
-            push(@{$directorytableref}, $oneline);
-        }
-
-        $oneline = "$installer::globals::programmenufolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
-        {
-            $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$realproductkey\n";
-            push(@{$directorytableref}, $oneline);
-        }
-
-        $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        $oneline = "$installer::globals::desktopfolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        $oneline = "$installer::globals::startmenufolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        $oneline = "$installer::globals::commonfilesfolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        $oneline = "$installer::globals::commonappdatafolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        $oneline = "$installer::globals::localappdatafolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        if ( $installer::globals::usesharepointpath )
-        {
-            $oneline = "SHAREPOINTPATH\tTARGETDIR\t.\n";
-            push(@{$directorytableref}, $oneline);
-        }
-
-        $oneline = "$installer::globals::systemfolder\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
-
-        my $localtemplatefoldername = $installer::globals::templatefoldername;
-        my $directorytableentry = $localtemplatefoldername;
-        my $shorttemplatefoldername = installer::windows::idtglobal::make_eight_three_conform($localtemplatefoldername, "dir");
-        if ( $shorttemplatefoldername ne $localtemplatefoldername ) { $directorytableentry = "$shorttemplatefoldername|$localtemplatefoldername"; }
-        $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$directorytableentry\n";
-        push(@{$directorytableref}, $oneline);
-
-        if ( $installer::globals::fontsdirname )
-        {
-            $oneline = "$installer::globals::fontsfolder\t$installer::globals::fontsdirparent\t$installer::globals::fontsfoldername\:$installer::globals::fontsdirname\n";
-        }
-        else
-        {
-            $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
-        }
-
+        $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$realproductkey\n";
         push(@{$directorytableref}, $oneline);
     }
+
+    $oneline = "TARGETDIR\t\tSourceDir\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::programmenufolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::desktopfolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::startmenufolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::commonfilesfolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::commonappdatafolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "$installer::globals::localappdatafolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    if ( $installer::globals::usesharepointpath )
+    {
+        $oneline = "SHAREPOINTPATH\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+    }
+
+    $oneline = "$installer::globals::systemfolder\tTARGETDIR\t.\n";
+    push(@{$directorytableref}, $oneline);
+
+    my $localtemplatefoldername = $installer::globals::templatefoldername;
+    my $directorytableentry = $localtemplatefoldername;
+    my $shorttemplatefoldername = installer::windows::idtglobal::make_eight_three_conform($localtemplatefoldername, "dir");
+    if ( $shorttemplatefoldername ne $localtemplatefoldername ) { $directorytableentry = "$shorttemplatefoldername|$localtemplatefoldername"; }
+    $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$directorytableentry\n";
+    push(@{$directorytableref}, $oneline);
+
+    if ( $installer::globals::fontsdirname )
+    {
+        $oneline = "$installer::globals::fontsfolder\t$installer::globals::fontsdirparent\t$installer::globals::fontsfoldername\:$installer::globals::fontsdirname\n";
+    }
+    else
+    {
+        $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
+    }
+
+    push(@{$directorytableref}, $oneline);
 
 }
 
@@ -404,7 +420,7 @@ sub add_root_directories
 
 sub create_directory_table
 {
-    my ($directoryref, $basedir, $allvariableshashref, $shortdirnamehashref) = @_;
+    my ($directoryref, $basedir, $allvariableshashref, $shortdirnamehashref, $loggingdir) = @_;
 
     # Structure of the directory table:
     # Directory Directory_Parent DefaultDir
@@ -419,7 +435,11 @@ sub create_directory_table
 
     overwrite_programfilesfolder($allvariableshashref);
     create_unique_directorynames($directoryref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
     create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
+    set_installlocation_directory($directoryref, $allvariableshashref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_3.log", $directoryref); }
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
     add_root_directories(\@directorytable, $allvariableshashref);
     create_directorytable_from_collection(\@directorytable, $directoryref);

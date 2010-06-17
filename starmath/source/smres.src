@@ -1556,7 +1556,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 0 , 0 ) ;
-    Text [ en-US ] = "Formula Elements" ;
+    Text [ en-US ] = "Elements" ;
 
     ToolBox 1
     {

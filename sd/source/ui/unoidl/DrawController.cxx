@@ -380,18 +380,6 @@ void  SAL_CALL
 
 
 
-::awt::Rectangle DrawController::GetVisArea (void) const
-{
-    return awt::Rectangle(
-        maLastVisArea.Left(),
-        maLastVisArea.Top(),
-        maLastVisArea.GetWidth(),
-        maLastVisArea.GetHeight());
-}
-
-
-
-
 // XDrawView
 
 void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPage >& xPage )

@@ -203,8 +203,8 @@ if ( $ret ) {
 }
 push @cleanuplist, ".c1";
 
-print         "$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2\n" if $verbose;
-$ret = system "$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2";
+print         "$compiler $defs $solarincludes $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2\n" if $verbose;
+$ret = system "$compiler $defs $solarincludes $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2";
 if ( $ret ) {
     push @cleanuplist, ".c2";
     cleandie("ERROR - calling compiler for preprocessing failed");
@@ -246,8 +246,8 @@ if ( $outobj_flag ne "" )
 {
     $outobj_param = "$outobj_flag${shell_workfile}$objext";
 }
-print         "$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext \n" if $verbose;
-$ret = system "$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext";
+print         "$compiler $defs $solarincludes ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext \n" if $verbose;
+$ret = system "$compiler $defs $solarincludes ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext";
 if ( $ret ) {
     push @cleanuplist, "$appext";
     cleandie("ERROR - compiling $workfile.c failed");

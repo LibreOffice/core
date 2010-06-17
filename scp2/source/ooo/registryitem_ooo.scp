@@ -289,7 +289,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
-	Value = "[OFFICEINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,UPGRADEKEY);
 End
 
@@ -307,7 +307,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
-	Value = "[OFFICEINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
@@ -325,7 +325,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Officeinstall
 	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
-	Value = "[OFFICEINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]";
 	Styles = (ALWAYS_REQUIRED);
 End
 
@@ -334,7 +334,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[BASISINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]Basis\\";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
@@ -343,7 +343,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[BASISINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]Basis\\";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
@@ -352,7 +352,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
 	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\Basis\%OOOBASEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[BASISINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]Basis\\";
 	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_OOOBASEVERSION);
 End
 
@@ -361,7 +361,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstal
 	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
-	Value = "[BASISINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]Basis\\";
 	Styles = (ALWAYS_REQUIRED);
 End
 
@@ -370,7 +370,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
-	Value = "[UREINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]URE\\";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
@@ -379,7 +379,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
-	Value = "[UREINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]URE\\";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
 End
 
@@ -388,7 +388,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
 	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
-	Value = "[UREINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]URE\\";
 	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_URELAYERVERSION);
 End
 
@@ -397,7 +397,7 @@ RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Ureinstall
 	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
-	Value = "[UREINSTALLLOCATION]";
+	Value = "[INSTALLLOCATION]URE\\";
 	Styles = (ALWAYS_REQUIRED);
 End
 

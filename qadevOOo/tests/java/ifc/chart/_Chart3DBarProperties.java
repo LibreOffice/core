@@ -93,6 +93,40 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
             throw new StatusException("Couldn't change Diagram to 3D", e);
         }
     }
+
+    /**
+    * Sets the diagram back to 2D as 2D rendering is much faster for the following tests.
+    */
+    protected void after() {
+        log.println("Setting Diagram back to 2D");
+        XChartDocument doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
+        if (doc == null) throw new StatusException(Status.failed
+            ("Relation 'CHARTDOC' not found"));
+
+        log.println("Change Diagram to 3D");
+        oObj = (XPropertySet)
+            UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
+        try {
+            oObj.setPropertyValue("Dim3D", new Boolean(false));
+        } catch(com.sun.star.lang.WrappedTargetException e) {
+            log.println("Couldn't change Diagram back to 2D");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't change Diagram back to 2D", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("Couldn't change Diagram back to 2D");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't change Diagram back to 2D", e);
+        } catch(com.sun.star.beans.PropertyVetoException e) {
+            log.println("Couldn't change Diagram back to 2D");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't change Diagram back to 2D", e);
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("Couldn't change Diagram back to 2D");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't change Diagram back to 2D", e);
+        }
+    }
+
 }  // finish class _Chart3DBarProperties
 
 

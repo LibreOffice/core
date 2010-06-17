@@ -329,6 +329,8 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         /// @todo document me
         ::sal_Bool m_bInExecute;
 
+        ::sal_Bool m_bWasExecuted;
+
         // handle to parent window
         HWND m_hParentWindow;
 

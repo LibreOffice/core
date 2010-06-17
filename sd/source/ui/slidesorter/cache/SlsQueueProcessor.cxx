@@ -30,7 +30,6 @@
 #include "SlsQueueProcessor.hxx"
 #include "SlsCacheConfiguration.hxx"
 #include "SlsRequestQueue.hxx"
-#include "SlsIdleDetector.hxx"
 
 namespace sd { namespace slidesorter { namespace cache {
 

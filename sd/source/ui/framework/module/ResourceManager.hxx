@@ -126,8 +126,6 @@ private:
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XConfiguration>& rxConfiguration);
     void UpdateForMainViewShell (void);
-
-    void Trace (void) const;
 };
 
 } } // end of namespace sd::framework

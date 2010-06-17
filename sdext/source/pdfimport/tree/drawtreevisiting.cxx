@@ -39,9 +39,45 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "comphelper/processfactory.hxx"
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <string.h>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::uno;
 
 namespace pdfi
 {
+
+const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& DrawXmlOptimizer::GetBreakIterator()
+{
+    if ( !mxBreakIter.is() )
+    {
+        Reference< XComponentContext > xContext( this->m_rProcessor.m_xContext, uno::UNO_SET_THROW );
+        Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+
+        mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
+    }
+    return mxBreakIter;
+}
+
+const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& DrawXmlEmitter::GetBreakIterator()
+{
+    if ( !mxBreakIter.is() )
+    {
+        Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
+        Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+        mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
+    }
+    return mxBreakIter;
+}
 
 void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >::const_iterator&   )
 {
@@ -72,6 +108,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
         return;
 
     rtl::OUString strSpace(32);
+    rtl::OUString strNbSpace(160);
     rtl::OUString tabSpace(0x09);
     PropertyMap aProps;
     if( elem.StyleId != -1 )
@@ -80,27 +117,50 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 
+    rtl::OUString str(elem.Text.getStr());
+
+    // Check for CTL
+    bool isComplex = false;
+    for(int i=0; i< elem.Text.getLength(); i++)
+    {
+    sal_Int16 nType = GetBreakIterator()->getScriptType( str, i + 1);
+    if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
+        isComplex = true;
+    }
+
+    #if 0
+    // FIXME: need to have a service to do this mirroring
+    if (isComplex)  // If so, reverse string
+    {
+        rtl::OUString flippedStr(RTL_CONSTASCII_USTRINGPARAM( "" ));
+        for(int i = str.getLength() - 1; i >= 0; i--)
+        {
+             sal_Unicode cChar = str[ i ];
+             cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
+             rtl::OUString uC(cChar);
+             flippedStr += uC;
+        }
+        str = flippedStr;
+    }
+    #endif
+
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
-    rtl::OUString str(elem.Text.getStr());
     for(int i=0; i< elem.Text.getLength(); i++)
     {
         rtl::OUString strToken=  str.copy(i,1) ;
-        if( strSpace.equals(strToken) )
+        if( strSpace.equals(strToken) || strNbSpace.equals(strToken))
         {
             aProps[ USTR( "text:c" ) ] = USTR( "1" );
             m_rEmitContext.rEmitter.beginTag( "text:s", aProps );
             m_rEmitContext.rEmitter.endTag( "text:s");
-
         }
         else
         {
             if( tabSpace.equals(strToken) )
             {
-
                 m_rEmitContext.rEmitter.beginTag( "text:tab", aProps );
                 m_rEmitContext.rEmitter.endTag( "text:tab");
-
             }
             else
             {
@@ -608,6 +668,29 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
     elem.applyToChildren(*this);
 }
 
+bool isSpaces(TextElement* pTextElem)
+{
+    rtl::OUString strSpace(32);
+    ::rtl::OUString ouTxt2(pTextElem->Text);
+     for(int i=0; i< pTextElem->Text.getLength(); i++)
+    {
+        rtl::OUString strToken =  ouTxt2.copy(i,1) ;
+        if( !strSpace.equals(strToken) )
+            return false;
+    }
+    return true;
+}
+
+bool notTransformed(GraphicsContext GC)
+{
+    return (
+        GC.Transformation.get(0,0) ==  100.00 &&
+        GC.Transformation.get(1,0) ==    0.00 &&
+        GC.Transformation.get(0,1) ==    0.00 &&
+        GC.Transformation.get(1,1) == -100.00
+       );
+}
+
 void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
 {
     if( rParent.Children.empty() ) // this should not happen
@@ -615,9 +698,6 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
         OSL_ENSURE( 0, "empty paragraph optimized" );
         return;
     }
-
-    bool bFirstTime= true;
-    double fPrevY = 0;
 
     // concatenate child elements with same font id
     std::list< Element* >::iterator next = rParent.Children.begin();
@@ -634,15 +714,22 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
     {
         bool bConcat = false;
         TextElement* pCur = dynamic_cast<TextElement*>(*it);
-        if( bFirstTime )
-        {
-            bFirstTime=false;
-            fPrevY = pCur->y;
-        }
 
         if( pCur )
         {
             TextElement* pNext = dynamic_cast<TextElement*>(*next);
+            bool isComplex = false;
+            rtl::OUString str(pCur->Text.getStr());
+            for(int i=0; i< str.getLength(); i++)
+            {
+                sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
+                if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
+                    isComplex = true;
+            }
+            bool bPara = strspn("ParagraphElement", typeid(rParent).name());
+            ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(&rParent);
+            if (bPara && isComplex)
+                pPara->bRtl = true;
             if( pNext )
             {
                 const GraphicsContext& rCurGC = m_rProcessor.getGraphicsContext( pCur->GCId );
@@ -650,20 +737,29 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
 
                 // line and space optimization; works only in strictly horizontal mode
 
-
                 // concatenate consecutive text elements unless there is a
                 // font or text color or matrix change, leave a new span in that case
-                if( pCur->FontId == pNext->FontId &&
+                if( (pCur->FontId == pNext->FontId || isSpaces(pNext)) &&
                     rCurGC.FillColor.Red == rNextGC.FillColor.Red &&
                     rCurGC.FillColor.Green == rNextGC.FillColor.Green &&
                     rCurGC.FillColor.Blue == rNextGC.FillColor.Blue &&
                     rCurGC.FillColor.Alpha == rNextGC.FillColor.Alpha &&
-                    rCurGC.Transformation == rNextGC.Transformation
+                    (rCurGC.Transformation == rNextGC.Transformation || notTransformed(rNextGC))
                     )
                 {
                     pCur->updateGeometryWith( pNext );
                     // append text to current element
-                    pCur->Text.append( pNext->Text.getStr(), pNext->Text.getLength() );
+                        pCur->Text.append( pNext->Text.getStr(), pNext->Text.getLength() );
+
+                        str = pCur->Text.getStr();
+                    for(int i=0; i< str.getLength(); i++)
+                    {
+                        sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
+                        if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
+                            isComplex = true;
+                    }
+                    if (bPara && isComplex)
+                        pPara->bRtl = true;
                     // append eventual children to current element
                     // and clear children (else the children just
                     // appended to pCur would be destroyed)
@@ -677,16 +773,11 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
         }
         else if( dynamic_cast<HyperlinkElement*>(*it) )
             optimizeTextElements( **it );
-        if( bConcat )
-        {
+        if ( bConcat )
             next = it;
-            ++next;
-        }
         else
-        {
             ++it;
-            ++next;
-        }
+        ++next;
     }
 }
 
@@ -763,19 +854,21 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
 
     // family name
     aFontProps[ USTR( "fo:font-family" ) ] = rFont.familyName;
+    aFontProps[ USTR( "style:font-family-complex" ) ] = rFont.familyName;
+
     // bold
     if( rFont.isBold )
     {
         aFontProps[ USTR( "fo:font-weight" ) ]         = USTR( "bold" );
         aFontProps[ USTR( "fo:font-weight-asian" ) ]   = USTR( "bold" );
-        aFontProps[ USTR( "fo:font-weight-complex" ) ] = USTR( "bold" );
+        aFontProps[ USTR( "style:font-weight-complex" ) ] = USTR( "bold" );
     }
     // italic
     if( rFont.isItalic )
     {
         aFontProps[ USTR( "fo:font-style" ) ]         = USTR( "italic" );
         aFontProps[ USTR( "fo:font-style-asian" ) ]   = USTR( "italic" );
-        aFontProps[ USTR( "fo:font-style-complex" ) ] = USTR( "italic" );
+        aFontProps[ USTR( "style:font-style-complex" ) ] = USTR( "italic" );
     }
     // underline
     if( rFont.isUnderline )
@@ -809,6 +902,26 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
 
 void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element* >::const_iterator& )
 {
+
+    PropertyMap aProps;
+    aProps[ USTR( "style:family" ) ] = USTR( "paragraph" );
+    // generate standard paragraph style if necessary
+    m_rStyleContainer.getStandardStyleId( "paragraph" );
+
+    PropertyMap aParProps;
+
+    aParProps[ USTR("fo:text-align")]                   = USTR("start");
+    if (elem.bRtl)
+        aParProps[ USTR("style:writing-mode")]                    = USTR("rl-tb");
+    else
+        aParProps[ USTR("style:writing-mode")]                    = USTR("lr-tb");
+
+    StyleContainer::Style aStyle( "style:style", aProps );
+    StyleContainer::Style aSubStyle( "style:paragraph-properties", aParProps );
+    aStyle.SubStyles.push_back( &aSubStyle );
+
+    elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
+
     // update page boundaries
     if( elem.Parent )
     {

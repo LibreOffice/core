@@ -169,7 +169,9 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
 
     if( ! out->StopCondition.check() )
     {
-        double fPercent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
+        double fPercent = 0;
+        if ( dltotal + out->Offset )
+            fPercent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
         if( fPercent < 0 )
             fPercent = 0;
 
@@ -262,6 +264,9 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
         rtl::OString aURL(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
         curl_easy_setopt(pCURL, CURLOPT_URL, aURL.getStr());
 
+        // abort on http errors
+        curl_easy_setopt(pCURL, CURLOPT_FAILONERROR, 1);
+
         // enable redirection
         curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
 
@@ -300,6 +305,19 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
             ret = true;
         }
 
+        if ( CURLE_PARTIAL_FILE  == cc )
+        {
+            // this sometimes happens, when a user throws away his user data, but has already
+            // completed the download of an update.
+            double fDownloadSize;
+            curl_easy_getinfo( pCURL, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize );
+            if ( -1 == fDownloadSize )
+            {
+                out.Handler->downloadFinished(out.File);
+                ret = true;
+            }
+        }
+
         // Avoid target file being removed
         else if( (CURLE_ABORTED_BY_CALLBACK == cc) || out.StopCondition.check() )
             ret = true;
@@ -313,7 +331,30 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
             if( NULL != error_message )
                 aMessage = error_message;
 
-            out.Handler->downloadStalled( rtl::OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
+            if ( CURLE_HTTP_RETURNED_ERROR == cc )
+            {
+                long nError;
+                curl_easy_getinfo( pCURL, CURLINFO_RESPONSE_CODE, &nError );
+
+                if ( 403 == nError )
+                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( " 403: Access denied!" ) );
+                else if ( 404 == nError )
+                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( " 404: File not found!" ) );
+                else if ( 416 == nError )
+                {
+                    // we got this error probably, because we already downloaded the file
+                    out.Handler->downloadFinished(out.File);
+                    ret = true;
+                }
+                else
+                {
+                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( ":error code = " ) );
+                    aMessage += aMessage.valueOf( nError );
+                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( " !" ) );
+                }
+            }
+            if ( !ret )
+                out.Handler->downloadStalled( rtl::OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
         }
 
         curl_easy_cleanup(pCURL);
@@ -330,14 +371,52 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
     OSL_ASSERT( m_aHandler.is() );
 
     OutData out(m_aCondition);
+    rtl::OUString aFile( rFile );
 
-    out.File = rFile;
+    // when rFile is empty, there is no remembered file name. If there is already a file with the
+    // same name ask the user if she wants to resume a download or restart the download
+    if ( !aFile.getLength() )
+    {
+        // GetFileName()
+        rtl::OUString aURL( rURL );
+        // ensure no trailing '/'
+        sal_Int32 nLen = aURL.getLength();
+        while( (nLen > 0) && ('/' == aURL[ nLen-1 ]) )
+            aURL = aURL.copy( 0, --nLen );
+
+        // extract file name last '/'
+        sal_Int32 nIndex = aURL.lastIndexOf('/');
+        aFile = rDestinationDir + aURL.copy( nIndex );
+
+        // check for existing file
+        oslFileError rc = osl_openFile( aFile.pData, &out.FileHandle, osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
+        osl_closeFile(out.FileHandle);
+        out.FileHandle = NULL;
+
+        if( osl_File_E_EXIST == rc )
+        {
+            if ( m_aHandler->checkDownloadDestination( aURL.copy( nIndex+1 ) ) )
+            {
+                osl_removeFile( aFile.pData );
+                aFile = rtl::OUString();
+            }
+            else
+                m_aHandler->downloadStarted( aFile, 0 );
+        }
+        else
+        {
+            osl_removeFile( aFile.pData );
+            aFile = rtl::OUString();
+        }
+    }
+
+    out.File = aFile;
     out.DestinationDir = rDestinationDir;
     out.Handler = m_aHandler;
 
-    if( rFile.getLength() > 0 )
+    if( aFile.getLength() > 0 )
     {
-        oslFileError rc = osl_openFile(rFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
+        oslFileError rc = osl_openFile(aFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
 
         if( osl_File_E_None == rc )
         {

@@ -134,7 +134,6 @@ public:
             given position.
     */
     sal_Int32 GetPageIndexAtPoint (const Point& rPosition) const;
-    sal_Int32 GetFadePageIndexAtPoint (const Point& rPosition) const;
 
     view::Layouter& GetLayouter (void);
 
@@ -206,8 +205,6 @@ public:
     */
     void SetSelectionRectangleVisibility (bool bVisible);
 
-    ::sdr::contact::ObjectContact& GetObjectContact (void) const;
-
     typedef ::std::pair<sal_Int32,sal_Int32> PageRange;
     /** Return the range of currently visible page objects including the
         first and last one in that range.
@@ -216,16 +213,6 @@ public:
             second index is lower than the first.
     */
     PageRange GetVisiblePageRange (void);
-
-    /** Return the size of the area where the page numbers are displayed.
-        @return
-            The returned size is given in model coordinates.
-    */
-    Size GetPageNumberAreaModelSize (void) const;
-
-    /** Return the size of the border around the original SdrPageObj.
-    */
-    SvBorder GetModelBorder (void) const;
 
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().

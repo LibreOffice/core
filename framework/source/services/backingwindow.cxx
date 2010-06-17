@@ -41,6 +41,7 @@
 #include "tools/urlobj.hxx"
 
 #include "unotools/dynamicmenuoptions.hxx"
+#include "unotools/historyoptions.hxx"
 #include "svtools/imagemgr.hxx"
 #include "svtools/svtools.hrc"
 
@@ -48,14 +49,18 @@
 #include "comphelper/sequenceashashmap.hxx"
 #include "comphelper/configurationhelper.hxx"
 
+#include "cppuhelper/implbase1.hxx"
+
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+#include "osl/file.h"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/system/XSystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
+#include "com/sun/star/util/XStringWidth.hpp"
 
 
 using namespace ::com::sun::star::beans;
@@ -110,6 +115,20 @@ Size DecoToolBox::getMinSize()
     return maMinSize;
 }
 
+class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
+{
+    public:
+        RecentFilesStringLength() {}
+        virtual ~RecentFilesStringLength() {}
+
+        // XStringWidth
+        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+            throw (::com::sun::star::uno::RuntimeException)
+        {
+            return aString.getLength();
+        }
+};
+
 #define STC_BUTTON_STYLE  (WB_LEFT | WB_VCENTER | WB_FLATBUTTON | WB_BEVELBUTTON)
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
@@ -134,7 +153,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mnLayoutStyle( 0 ),
     mpAccExec( NULL ),
     mnBtnPos( 120 ),
-    mnBtnTop( 150 )
+    mnBtnTop( 150 ),
+    mpRecentMenu( NULL )
 {
     mnColumnWidth[0] = mnColumnWidth[1] = 0;
     mnTextColumnWidth[0] = mnTextColumnWidth[1] = 0;
@@ -233,6 +253,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
 BackingWindow::~BackingWindow()
 {
+    delete mpRecentMenu;
     delete mpAccExec;
 }
 
@@ -258,6 +279,116 @@ void BackingWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         initBackground();
         Invalidate();
+    }
+}
+
+void BackingWindow::prepareRecentFileMenu()
+{
+    if( ! mpRecentMenu )
+        mpRecentMenu = new PopupMenu();
+    mpRecentMenu->Clear();
+    maRecentFiles.clear();
+
+    // get recent file list and dispatch arguments
+    Sequence< Sequence< PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( ePICKLIST ) );
+
+    sal_Int32 nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
+
+    if( ( nPickListMenuItems > 0 ) )
+    {
+        maRecentFiles.reserve( nPickListMenuItems );
+        for ( sal_Int32 i = 0; i < nPickListMenuItems; i++ )
+        {
+            Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
+            rtl::OUString aURL, aFilter, aFilterOpt, aTitle;
+
+            for ( sal_Int32 j = 0; j < rPickListEntry.getLength(); j++ )
+            {
+                const Any& a = rPickListEntry[j].Value;
+
+                if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
+                    a >>= aURL;
+                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
+                {
+                    a >>= aFilter;
+                    sal_Int32 nPos = aFilter.indexOf( '|' );
+                    if ( nPos >= 0 )
+                    {
+                        if ( nPos < ( aFilter.getLength() - 1 ) )
+                            aFilterOpt = aFilter.copy( nPos+1 );
+                        aFilter = aFilter.copy( 0, nPos-1 );
+                    }
+                }
+                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
+                    a >>= aTitle;
+            }
+            maRecentFiles.push_back( LoadRecentFile() );
+            maRecentFiles.back().aTargetURL = aURL;
+
+            sal_Int32 nArgs = aFilterOpt.getLength() ? 4 : 3;
+            Sequence< PropertyValue >& rArgsList( maRecentFiles.back().aArgSeq );
+            rArgsList.realloc( nArgs );
+
+            nArgs--;
+            rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+            rArgsList[nArgs].Value = makeAny( aFilter );
+
+            if( aFilterOpt.getLength() )
+            {
+                nArgs--;
+                rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+                rArgsList[nArgs].Value = makeAny( aFilterOpt );
+            }
+
+            // documents in the picklist will never be opened as templates
+            nArgs--;
+            rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
+            rArgsList[nArgs].Value = makeAny( (sal_Bool) sal_False );
+
+            nArgs--;
+            rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
+            rArgsList[nArgs].Value = makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ) ) );
+
+            // and finally create an entry in the popupmenu
+            rtl::OUString   aMenuTitle;
+            INetURLObject   aURLObj( aURL );
+
+            if ( aURLObj.GetProtocol() == INET_PROT_FILE )
+            {
+                // Do handle file URL differently => convert it to a system
+                // path and abbreviate it with a special function:
+                String aFileSystemPath( aURLObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
+
+                rtl::OUString   aSystemPath( aFileSystemPath );
+                rtl::OUString   aCompactedSystemPath;
+
+                oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
+                if ( !nError )
+                    aMenuTitle = String( aCompactedSystemPath );
+                else
+                    aMenuTitle = aSystemPath;
+            }
+            else
+            {
+                // Use INetURLObject to abbreviate all other URLs
+                Reference< util::XStringWidth > xStringLength( new RecentFilesStringLength() );
+                aMenuTitle = aURLObj.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
+            }
+            rtl::OUStringBuffer aBuf( aMenuTitle.getLength() + 5 );
+            if( i < 9 )
+            {
+                aBuf.append( sal_Unicode( '~' ) );
+                aBuf.append( i+1 );
+            }
+            else if( i == 9 )
+                aBuf.appendAscii( "1~0" );
+            else
+                aBuf.append( i+1 );
+            aBuf.appendAscii( ": " );
+            aBuf.append( aMenuTitle );
+            mpRecentMenu->InsertItem( static_cast<USHORT>(i+1), aBuf.makeStringAndClear() );
+        }
+        maOpenButton.SetPopupMenu( mpRecentMenu );
     }
 }
 
@@ -327,6 +458,9 @@ void BackingWindow::initBackground()
     loadImage( FwkResId( BMP_BACKING_OPENFILE ), maOpenButton );
     loadImage( FwkResId( BMP_BACKING_OPENTEMPLATE ), maTemplateButton );
 
+    maOpenButton.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    maOpenButton.SetSelectHdl( LINK( this, BackingWindow, SelectHdl ) );
+    prepareRecentFileMenu();
 }
 
 void BackingWindow::initControls()
@@ -515,7 +649,7 @@ void BackingWindow::initControls()
     maWriterButton.GrabFocus();
 }
 
-void BackingWindow::loadImage( const ResId& i_rId, ImageButton& i_rButton )
+void BackingWindow::loadImage( const ResId& i_rId, PushButton& i_rButton )
 {
     BitmapEx aBmp( i_rId );
     Size aImgSize( aBmp.GetSizePixel() );
@@ -530,7 +664,7 @@ void BackingWindow::layoutButton(
                           const char* i_pURL, int nColumn,
                           const std::set<rtl::OUString>& i_rURLS,
                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
-                          ImageButton& i_rBtn,
+                          PushButton& i_rBtn,
                           MnemonicGenerator& i_rMnemns,
                           const String& i_rStr
                           )
@@ -904,6 +1038,20 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
 
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(TEMPLATE_URL) ), rtl::OUString(), xFrame, aArgs );
+    }
+    return 0;
+}
+
+IMPL_LINK( BackingWindow, SelectHdl, Button*, pButton )
+{
+    if( pButton == &maOpenButton )
+    {
+        sal_Int32 nItem = sal_Int32(maOpenButton.GetCurItemId())-1;
+        if( nItem >= 0 && nItem < sal_Int32(maRecentFiles.size()) )
+        {
+            Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+            dispatchURL( maRecentFiles[nItem].aTargetURL, rtl::OUString(), xFrame, maRecentFiles[nItem].aArgSeq );
+        }
     }
     return 0;
 }

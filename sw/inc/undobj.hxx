@@ -392,7 +392,6 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-    BOOL CanGrouping( const SwPosition&, sal_Unicode cIns );
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };
@@ -549,7 +548,6 @@ public:
     ULONG GetEndNode() const        { return nEndNode; }
     ULONG GetDestSttNode() const    { return nDestSttNode; }
     xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
-    void AddTblMrgFlyHstry( SwHistory& rHstr );
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
 
@@ -1106,14 +1104,6 @@ public:
     virtual SwRewriter GetRewriter() const;
 };
 
-
-class SwUndoDelBookmark : public SwUndoBookmark
-{
-public:
-    SwUndoDelBookmark( const ::sw::mark::IMark& );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-};
 
 class SwUndoInsBookmark : public SwUndoBookmark
 {

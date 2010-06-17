@@ -119,10 +119,9 @@ private:
 /** Manage tool bars that are implemented as sub shells of a view shell.
     The typical procedure of updating the sub shells of a view shell is to
     rebuild a list of sub shells that the caller would like to have active.
-    The methods ClearGroup(), AddShellId(), and RemoveShellId() allow the
-    caller to do that.  A final call to UpdateShells() activates the
-    requested shells that are not active and deactivates the active shells
-    that are not requested.
+    The methods ClearGroup() and AddShellId() allow the caller to do that.  A
+    final call to UpdateShells() activates the requested shells that are not
+    active and deactivates the active shells that are not requested .
 
     This is done by maintaining two lists.  One (the current list)
     reflects the current state.  The other (the requested list) contains the
@@ -156,18 +155,6 @@ public:
             The id of the shell to add.
     */
     void AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId);
-
-    /** Remove a shell.  This is done only when the specified shell is a
-        member of the specified group.  If it has been requested for another
-        group or if it has not been requested then this call is ignored.
-        @param eGroup
-            The group from which to remove the shell.
-        @param nId
-            The id of the shell to remove.
-        @return
-            Returns whether the shell is removed.
-    */
-    bool RemoveShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId);
 
     /** Releasing all shells means that the given ToolBarRules object is
         informed that every shell mananged by the called ToolBarShellList is
@@ -296,7 +283,6 @@ public:
     void AddToolBar (ToolBarGroup eGroup, const ::rtl::OUString& rsToolBarName);
     void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
     void RemoveToolBar (ToolBarGroup eGroup, const ::rtl::OUString& rsToolBarName);
-    void RemoveToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
 
     /** Release all tool bar shells and the associated framework tool bars.
         Typically called when the main view shell is being replaced by
@@ -332,7 +318,6 @@ public:
     };
 
     void LockViewShellManager (void);
-    bool IsUpdateLocked (void) const;
     void LockUpdate (void);
     void UnlockUpdate (void);
 
@@ -430,15 +415,6 @@ void ToolBarManager::Shutdown (void)
 
 
 
-void ToolBarManager::SetValid (bool bValid)
-{
-    if (mpImpl.get() != NULL)
-        mpImpl->SetValid(bValid);
-}
-
-
-
-
 void ToolBarManager::ResetToolBars (ToolBarGroup eGroup)
 {
     if (mpImpl.get() != NULL)
@@ -505,20 +481,6 @@ void ToolBarManager::RemoveToolBar (
 
 
 
-void ToolBarManager::RemoveToolBarShell (
-    ToolBarGroup eGroup,
-    ShellId nToolBarId)
-{
-    if (mpImpl.get() != NULL)
-    {
-        UpdateLock aLock (shared_from_this());
-        mpImpl->RemoveToolBarShell(eGroup,nToolBarId);
-    }
-}
-
-
-
-
 void ToolBarManager::SetToolBar (
     ToolBarGroup eGroup,
     const ::rtl::OUString& rsToolBarName)
@@ -571,17 +533,6 @@ void ToolBarManager::LockViewShellManager (void)
 {
     if (mpImpl.get() != NULL)
         mpImpl->LockViewShellManager();
-}
-
-
-
-
-bool ToolBarManager::IsUpdateLocked (void) const
-{
-    if (mpImpl.get() != NULL)
-        return mpImpl->IsUpdateLocked();
-    else
-        return false;
 }
 
 
@@ -819,21 +770,6 @@ void ToolBarManager::Implementation::AddToolBarShell (
 
 
 
-void ToolBarManager::Implementation::RemoveToolBarShell (
-    ToolBarGroup eGroup,
-    ShellId nToolBarId)
-{
-    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-    if (pMainViewShell != NULL)
-    {
-        GetToolBarRules().SubShellRemoved(eGroup, nToolBarId);
-        maToolBarShellList.RemoveShellId(eGroup,nToolBarId);
-    }
-}
-
-
-
-
 void ToolBarManager::Implementation::ReleaseAllToolBarShells (void)
 {
     maToolBarShellList.ReleaseAllShells(GetToolBarRules());
@@ -941,14 +877,6 @@ void ToolBarManager::Implementation::LockViewShellManager (void)
     if (mpViewShellManagerLock.get() == NULL)
         mpViewShellManagerLock.reset(
             new ViewShellManager::UpdateLock(mrBase.GetViewShellManager()));
-}
-
-
-
-
-bool ToolBarManager::Implementation::IsUpdateLocked (void) const
-{
-    return mnLockCount;
 }
 
 
@@ -1700,26 +1628,6 @@ void ToolBarShellList::AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::
     }
     else
         maNewList.insert(aDescriptor);
-}
-
-
-
-
-bool ToolBarShellList::RemoveShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId)
-{
-    bool bRemoved (false);
-
-    GroupedShellList::iterator iDescriptor (maNewList.find(ShellDescriptor(nId,eGroup)));
-    if (iDescriptor != maNewList.end())
-    {
-        if (iDescriptor->meGroup == eGroup)
-        {
-            maNewList.erase(iDescriptor);
-            bRemoved = true;
-        }
-    }
-
-    return bRemoved;
 }
 
 

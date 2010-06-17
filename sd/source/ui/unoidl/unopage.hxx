@@ -113,7 +113,8 @@ public:
     SdPage* GetPage() const { return (SdPage*)SvxDrawPage::mpPage; }
     SdXImpressDocument* GetModel() const;
 
-    UNO3_GETIMPLEMENTATION_DECL( SdGenericDrawPage )
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // this is called whenever a SdrObject must be created for a empty api shape wrapper
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();

@@ -152,31 +152,6 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
 
 
 
-
-::std::auto_ptr<SdGlobalResource> SdGlobalResourceContainer::ReleaseResource (
-    SdGlobalResource* pResource)
-{
-    ::std::auto_ptr<SdGlobalResource> pResult (NULL);
-
-    ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
-    Implementation::ResourceList::iterator iResource;
-    iResource = ::std::find (
-        mpImpl->maResources.begin(),
-        mpImpl->maResources.end(),
-        pResource);
-    if (iResource != mpImpl->maResources.end())
-    {
-        pResult.reset (*iResource);
-        mpImpl->maResources.erase(iResource);
-    }
-
-    return pResult;
-}
-
-
-
-
 SdGlobalResourceContainer::SdGlobalResourceContainer (void)
     : mpImpl (new SdGlobalResourceContainer::Implementation())
 {

@@ -138,6 +138,8 @@
 #define RID_IMG_LOCKED_HC                      (RID_DEPLOYMENT_GUI_START+59)
 #define RID_IMG_EXTENSION                      (RID_DEPLOYMENT_GUI_START+60)
 #define RID_IMG_EXTENSION_HC                   (RID_DEPLOYMENT_GUI_START+61)
+#define RID_IMG_SHARED                         (RID_DEPLOYMENT_GUI_START+62)
+#define RID_IMG_SHARED_HC                      (RID_DEPLOYMENT_GUI_START+63)
 
 #define RID_STR_ADD_PACKAGES                   (RID_DEPLOYMENT_GUI_START+70)
 

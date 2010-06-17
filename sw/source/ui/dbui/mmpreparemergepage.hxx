@@ -64,7 +64,7 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
     DECL_LINK(MoveHdl_Impl, void*);
 
     virtual void        ActivatePage();
-    virtual sal_Bool    commitPage( CommitPageReason _eReason );
+    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
 public:
         SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent);

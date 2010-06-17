@@ -254,8 +254,8 @@ void CharacterProperties::AddPropertiesToVector(
         Property( C2U( "CharLocale" ),
                   PROP_CHAR_LOCALE,
                   ::getCppuType( reinterpret_cast< const lang::Locale * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharShadowed
     rOutProperties.push_back(
         Property( C2U( "CharShadowed" ),
@@ -385,8 +385,8 @@ void CharacterProperties::AddPropertiesToVector(
         Property( C2U( "CharLocaleAsian" ),
                   PROP_CHAR_ASIAN_LOCALE,
                   ::getCppuType( reinterpret_cast< const lang::Locale * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     // CharacterPropertiesComplex
     // ===
@@ -452,8 +452,8 @@ void CharacterProperties::AddPropertiesToVector(
         Property( C2U( "CharLocaleComplex" ),
                   PROP_CHAR_COMPLEX_LOCALE,
                   ::getCppuType( reinterpret_cast< const lang::Locale * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     // Writing Mode left to right vs right to left
     rOutProperties.push_back(

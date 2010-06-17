@@ -171,52 +171,6 @@ sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rPosition) const
 
 
 
-sal_Int32 SlideSorterView::GetFadePageIndexAtPoint (
-    const Point& rPosition) const
-{
-    sal_Int32 nIndex (-1);
-
-    ::sd::Window* pWindow = GetWindow();
-    if (pWindow != NULL)
-    {
-        Point aModelPosition (pWindow->PixelToLogic (rPosition));
-        nIndex = mpLayouter->GetIndexAtPoint(
-            aModelPosition,
-            true // Include page borders into hit test
-            );
-
-        // Clip the page index against the page count.
-        if (nIndex >= mrModel.GetPageCount())
-            nIndex = -1;
-
-        if (nIndex >= 0)
-        {
-            // Now test whether the given position is inside the area of the
-            // fade effect indicator.
-            view::PageObjectViewObjectContact* pContact
-                = mrModel.GetPageDescriptor(nIndex)->GetViewObjectContact();
-            if (pContact != NULL)
-            {
-                if ( ! pContact->GetBoundingBox(
-                    *pWindow,
-                    PageObjectViewObjectContact::FadeEffectIndicatorBoundingBox,
-                    PageObjectViewObjectContact::ModelCoordinateSystem).IsInside (
-                    aModelPosition))
-                {
-                    nIndex = -1;
-                }
-            }
-            else
-                nIndex = -1;
-        }
-    }
-
-    return nIndex;
-}
-
-
-
-
 Layouter& SlideSorterView::GetLayouter (void)
 {
     return *mpLayouter.get();
@@ -725,14 +679,6 @@ ViewOverlay& SlideSorterView::GetOverlay (void)
 
 
 
-::sdr::contact::ObjectContact& SlideSorterView::GetObjectContact (void) const
-{
-    return GetSdrPageView()->GetPageWindow(0)->GetObjectContact();
-}
-
-
-
-
 SlideSorterView::PageRange SlideSorterView::GetVisiblePageRange (void)
 {
     const int nMaxPageIndex (mrModel.GetPageCount() - 1);
@@ -816,22 +762,6 @@ void SlideSorterView::UpdatePageBorders (void)
         maPagePixelBorder.Right(),
         maPagePixelBorder.Top(),
         maPagePixelBorder.Bottom());
-}
-
-
-
-
-Size SlideSorterView::GetPageNumberAreaModelSize (void) const
-{
-    return maPageNumberAreaModelSize;
-}
-
-
-
-
-SvBorder SlideSorterView::GetModelBorder (void) const
-{
-    return maModelBorder;
 }
 
 

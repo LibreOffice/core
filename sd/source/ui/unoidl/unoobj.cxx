@@ -311,14 +311,6 @@ typedef SORT*       PSORT;
 
 extern "C" int __LOADONCALLAPI SortFunc( const void* p1, const void* p2 );
 
-SdXShape::SdXShape() throw()
-:   mpPropSet(lcl_GetEmpty_SdXShapePropertySet_Impl()),
-    mpMap(lcl_GetEmpty_SdXShapePropertyMap_Impl()),
-    mpModel(NULL),
-    mpImplementationId(NULL)
-{
-}
-
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   mpShape( pShape ),
     mpPropSet( pModel?

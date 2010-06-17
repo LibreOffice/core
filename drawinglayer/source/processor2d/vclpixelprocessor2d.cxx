@@ -284,20 +284,37 @@ namespace drawinglayer
                             if(bAllowUsingDrawTransparent && 1 == rContent.getLength())
                             {
                                 const primitive2d::Primitive2DReference xReference(rContent[0]);
-                                const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
+                                const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
 
-                                if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                                if(pBasePrimitive)
                                 {
-                                    // single transparent PolyPolygon identified, use directly
-                                    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
-                                    mpOutputDevice->SetFillColor(Color(aPolygonColor));
-                                    mpOutputDevice->SetLineColor();
+                                    switch(pBasePrimitive->getPrimitive2DID())
+                                    {
+                                        case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
+                                        {
+                                            // single transparent PolyPolygon identified, use directly
+                                            const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = static_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(pBasePrimitive);
+                                            OSL_ENSURE(pPoPoColor, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
+                                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                                            mpOutputDevice->SetLineColor();
 
-                                    basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
-                                    aLocalPolyPolygon.transform(maCurrentTransformation);
+                                            basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
+                                            aLocalPolyPolygon.transform(maCurrentTransformation);
 
-                                    mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniTransparenceCandidate.getTransparence());
-                                    bDrawTransparentUsed = true;
+                                            mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniTransparenceCandidate.getTransparence());
+                                            bDrawTransparentUsed = true;
+                                            break;
+                                        }
+                                        // #i# need to wait for #i101378# which is in CWS vcl112 to directly paint transparent hairlines
+                                        //case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
+                                        //{
+                                        //  // single transparent PolygonHairlinePrimitive2D identified, use directly
+                                        //  const primitive2d::PolygonHairlinePrimitive2D* pPoHair = static_cast< const primitive2d::PolygonHairlinePrimitive2D* >(pBasePrimitive);
+                                        //  OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                                        //  break;
+                                        //}
+                                    }
                                 }
                             }
 
@@ -469,11 +486,22 @@ namespace drawinglayer
                         // This is wrong in principle, but looks nicer. This could also be done here directly
                         // without VCL usage if needed
                         const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive = static_cast< const primitive2d::FillHatchPrimitive2D& >(rCandidate);
+                        const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
 
                         // create hatch polygon in range size and discrete coordinates
                         basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getObjectRange());
                         aHatchRange.transform(maCurrentTransformation);
                         const basegfx::B2DPolygon aHatchPolygon(basegfx::tools::createPolygonFromRect(aHatchRange));
+
+                        if(rFillHatchAttributes.isFillBackground())
+                        {
+                            // #i111846# background fill is active; draw fill polygon
+                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
+
+                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                            mpOutputDevice->SetLineColor();
+                            mpOutputDevice->DrawPolygon(aHatchPolygon);
+                        }
 
                         // set hatch line color
                         const basegfx::BColor aHatchColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
@@ -481,7 +509,6 @@ namespace drawinglayer
                         mpOutputDevice->SetLineColor(Color(aHatchColor));
 
                         // get hatch style
-                        const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
                         HatchStyle eHatchStyle(HATCH_SINGLE);
 
                         switch(rFillHatchAttributes.getStyle())

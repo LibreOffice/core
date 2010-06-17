@@ -204,7 +204,6 @@ private:
     ::boost::scoped_ptr<cppu::IPropertyArrayHelper> mpPropertyArrayHelper;
 
     void Resize (void);
-    void Rearrange (void);
 
     /** This method throws a DisposedException when the object has already been
         disposed.

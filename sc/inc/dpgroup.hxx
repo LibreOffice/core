@@ -207,7 +207,6 @@ class ScDPGroupTableData : public ScDPTableData
     void                         FillGroupValues( SCROW* pItemDataIndex, long nCount, const long* pDims );
     virtual long                GetSourceDim( long nDim );
 // End Comments
-    void        CopyFields(const ::std::vector<long>& rFieldDims, ::std::vector<long>& rNewFieldDims);
 
     bool        IsNumGroupDimension( long nDimension ) const;
     void        GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,

@@ -73,8 +73,11 @@ SLOFILES =	\
         $(SLO)$/tmplctrl.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/sddll1.obj      \
+        $(SLO)$/sddll2.obj      \
         $(SLO)$/sdxfer.obj		\
         $(SLO)$/sdmod1.obj		\
+        $(SLO)$/tbxww.obj		\
         $(SLO)$/tmplctrl.obj
 
 .IF "$(GUI)" == "WNT"

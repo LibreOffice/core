@@ -42,6 +42,7 @@ namespace svt
 //.........................................................................
 
 // wizard buttons
+#define WZB_NONE                0x0000
 #define WZB_NEXT                0x0001
 #define WZB_PREVIOUS            0x0002
 #define WZB_FINISH              0x0004
@@ -62,12 +63,11 @@ namespace svt
             eTravelForward,         // traveling forward (maybe with skipping pages)
             eTravelBackward,        // traveling backward (maybe with skipping pages)
             eFinish,                // the wizard is about to be finished
-            eValidate,              // the data should be validated only, no traveling wll happen
-            eValidateNoUI           // the data should be validated only, without displaying error messages and other UI
+            eValidate               // the data should be validated only, no traveling wll happen
         };
     };
 
-    class SAL_NO_VTABLE IWizardPage : public WizardTypes
+    class SAL_NO_VTABLE IWizardPageController
     {
     public:
         //-----------------------------------------------------------------
@@ -78,7 +78,16 @@ namespace svt
         // to be committed for this.
         // So initializePage and commitPage are designated to initialitzing/committing data on the page.
         virtual void        initializePage() = 0;
-        virtual sal_Bool    commitPage( CommitPageReason _eReason ) = 0;
+        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason ) = 0;
+
+        /** determines whether or not it is allowed to advance to a next page
+
+            You should make this dependent on the current state of the page only, not on
+            states on other pages of the whole dialog.
+
+            The default implementation always returns <TRUE/>.
+        */
+        virtual bool    canAdvance() const = 0;
     };
 
     //=====================================================================
@@ -87,7 +96,7 @@ namespace svt
     class OWizardMachine;
     struct WizardPageImplData;
 
-    class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPage
+    class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {
     private:
         WizardPageImplData*     m_pImpl;
@@ -101,23 +110,10 @@ namespace svt
         OWizardPage( Window* _pParent, const ResId& _rResId );
         ~OWizardPage();
 
-        // This methods  behave somewhat different than ActivatePage/DeactivatePage
-        // The latter are handled by the base class itself whenever changing the pages is in the offing,
-        // i.e., when it's already decided which page is the next.
-        // We may have situations where the next page depends on the state of the current, which needs
-        // to be committed for this.
-        // So initializePage and commitPage are designated to initialitzing/committing data on the page.
+        // IWizardPageController overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
-
-        /** determines whether or not it is allowed to advance to a next page
-
-            You should make this dependent on the current state of the page only, not on
-            states on other pages of the whole dialog.
-
-            The default implementation always returns <TRUE/>.
-        */
-        virtual bool    canAdvance() const;
+        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason );
+        virtual bool        canAdvance() const;
 
     protected:
         // TabPage overridables
@@ -189,6 +185,7 @@ namespace svt
             For the button flags, use any combination of the WZB_* flags.
         */
         OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags );
+        OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
         ~OWizardMachine();
 
         /// enable (or disable) buttons
@@ -263,7 +260,7 @@ namespace svt
         /** called when the finish button is pressed
             <p>By default, only the base class' Finnish method (which is not virtual) is called</p>
         */
-        virtual sal_Bool    onFinish(sal_Int32 _nResult);
+        virtual sal_Bool    onFinish();
 
         /// travel to the next state
         sal_Bool            travelNext();
@@ -342,7 +339,8 @@ namespace svt
         */
         WizardState             getCurrentState() const { return WizardDialog::GetCurLevel(); }
 
-        virtual IWizardPage*    getWizardPage(TabPage* _pCurrentPage) const;
+        virtual IWizardPageController*
+                                getPageController( TabPage* _pCurrentPage ) const;
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
@@ -355,6 +353,9 @@ namespace svt
         void resumeTraveling( AccessGuard );
         bool isTravelingSuspended() const;
 
+    protected:
+        TabPage* GetOrCreatePage( const WizardState i_nState );
+
     private:
        // long OnNextPage( PushButton* );
         DECL_DLLPRIVATE_LINK(OnNextPage, PushButton*);
@@ -363,6 +364,7 @@ namespace svt
 
         SVT_DLLPRIVATE void     implResetDefault(Window* _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();
+        SVT_DLLPRIVATE void     implConstruct( const sal_uInt32 _nButtonFlags );
     };
 
     /// helper class to temporarily suspend any traveling in the wizard

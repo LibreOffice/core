@@ -254,11 +254,11 @@ void SwMailMergeLayoutPage::ActivatePage()
 /*-- 11.05.2004 10:41:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeLayoutPage::commitPage( CommitPageReason _eReason )
+sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     //now insert the frame and the greeting
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    if(eTravelForward == _eReason)
+    if(::svt::WizardTypes::eTravelForward == _eReason)
     {
         long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
         long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));

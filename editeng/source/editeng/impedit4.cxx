@@ -1455,6 +1455,23 @@ Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
     return xSpeller;
 }
 
+
+SpellInfo * ImpEditEngine::CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs )
+{
+    pSpellInfo = new SpellInfo;
+    pSpellInfo->bMultipleDoc = bMultipleDocs;
+    EditSelection aSentenceSel( SelectSentence( rSel ) );
+//    pSpellInfo->aSpellStart = CreateEPaM( aSentenceSel.Min() );
+//    pSpellInfo->aSpellTo    = CreateEPaM( rSel.HasRange()? aSentenceSel.Max() : aSentenceSel.Min() );
+    // always spell draw objects completely, startting at the top.
+    // (spelling in only a selection or not starting with the top requires
+    // further changes elsewehe to work properly)
+    pSpellInfo->aSpellStart = EPaM();
+    pSpellInfo->aSpellTo    = EPaM( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND );
+    return pSpellInfo;
+}
+
+
 EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
 {
 #ifdef SVX_LIGHT
@@ -1475,9 +1492,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
     }
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
-    pSpellInfo = new SpellInfo;
-    pSpellInfo->bMultipleDoc = bMultipleDoc;
-    pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
+    pSpellInfo = CreateSpellInfo( aCurSel, bMultipleDoc );
 
     sal_Bool bIsStart = sal_False;
     if ( bMultipleDoc )
@@ -1945,11 +1960,9 @@ void ImpEditEngine::EndSpelling()
 void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?");
-    pSpellInfo = new SpellInfo;
-    pSpellInfo->bMultipleDoc = bMultipleDoc;
     rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
-    pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
+    pSpellInfo = CreateSpellInfo( aCurSel, bMultipleDoc );
 }
 /*-- 13.10.2003 16:43:27---------------------------------------------------
     Search for the next wrong word within the given selection
@@ -2002,33 +2015,31 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool ImpEditEngine::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool /*bIsGrammarChecking*/ )
+bool ImpEditEngine::SpellSentence(EditView& rEditView,
+    ::svx::SpellPortions& rToFill,
+    bool /*bIsGrammarChecking*/ )
 {
 #ifdef SVX_LIGHT
 #else
     bool bRet = false;
+    EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
     //the pSpellInfo has to be created on demand
     if(!pSpellInfo)
-    {
-        pSpellInfo = new SpellInfo;
-        pSpellInfo->bMultipleDoc = sal_True;
-        rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
-        EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
-        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
-    }
+        pSpellInfo = CreateSpellInfo( aCurSel, true );
+    pSpellInfo->aCurSentenceStart = aCurSel.Min();
     DBG_ASSERT( xSpeller.is(), "Kein Speller gesetzt!" );
     pSpellInfo->aLastSpellPortions.clear();
     pSpellInfo->aLastSpellContentSelections.clear();
     rToFill.clear();
-    EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
     //if no selection previously exists the range is extended to the end of the object
     if(aCurSel.Min() == aCurSel.Max())
     {
         ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count()-1);
         aCurSel.Max() = EditPaM(pLastNode, pLastNode->Len());
     }
+    // check for next error in aCurSel and set aCurSel to that one if any was found
     Reference< XSpellAlternatives > xAlt = ImpFindNextError(aCurSel);
-    if(xAlt.is())
+    if (xAlt.is())
     {
         bRet = true;
         //find the sentence boundaries
@@ -2060,6 +2071,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rTo
             aCurSel = aNextSel;
         }
         while( xAlt.is() );
+
         //set the selection to the end of the current sentence
         rEditView.pImpEditView->SetEditSelection(aSentencePaM.Max());
     }
@@ -2173,13 +2185,20 @@ void ImpEditEngine::AddPortionIterated(
 /*-- 13.10.2003 16:43:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool /*bIsGrammarChecking*/ )
+void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
+    const ::svx::SpellPortions& rNewPortions,
+    bool bRecheck )
 {
 #ifdef SVX_LIGHT
 #else
     DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
     if(pSpellInfo)
     {
+        // get current paragraph length to calculate later on how the sentence length changed,
+        // in order to place the cursor at the end of the sentence again
+        EditSelection aOldSel( rEditView.pImpEditView->GetEditSelection() );
+        xub_StrLen nOldLen = aOldSel.Max().GetNode()->Len();
+
         UndoActionStart( EDITUNDO_INSERT );
         if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
         {
@@ -2266,9 +2285,24 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::Spell
             }
         }
         UndoActionEnd( EDITUNDO_INSERT );
+
+        EditPaM aNext;
+        if (bRecheck)
+            aNext = pSpellInfo->aCurSentenceStart;
+        else
+        {
+            // restore cursor position to the end of the modified sentence.
+            // (This will define the continuation position for spell/grammar checking)
+            // First: check if the sentence/para length changed
+            sal_Int32 nDelta = rEditView.pImpEditView->GetEditSelection().Max().GetNode()->Len() - nOldLen;
+            xub_StrLen nEndOfSentence = aOldSel.Max().GetIndex() + nDelta;
+            aNext = EditPaM( aOldSel.Max().GetNode(), nEndOfSentence );
+        }
+        rEditView.pImpEditView->SetEditSelection( aNext );
+
+        FormatAndUpdate();
+        aEditDoc.SetModified(TRUE);
     }
-    FormatAndUpdate();
-    aEditDoc.SetModified(TRUE);
 #endif
 }
 /*-- 08.09.2008 11:33:02---------------------------------------------------

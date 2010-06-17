@@ -98,12 +98,14 @@ namespace
 
 extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 {
-    string sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
-    string sBasisInstallPath = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
-    string sUreInstallPath = GetMsiProperty(handle, TEXT("UREINSTALLLOCATION"));
+    string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
-    string sBasisLinkPath = sOfficeInstallPath + TEXT("basis-link");
-    string sUreLinkPath = sBasisInstallPath + TEXT("ure-link");
+    string sOfficeInstallPath = sInstallPath;
+    string sBasisInstallPath = sInstallPath + TEXT("Basis\\");
+    string sUreInstallPath = sInstallPath + TEXT("URE\\");
+
+    string sBasisLinkPath = sInstallPath + TEXT("basis-link");
+    string sUreLinkPath = sInstallPath + TEXT("Basis\\ure-link");
 
     if ( IsSetMsiProperty(handle, TEXT("ADMININSTALL")) )
     {
@@ -208,9 +210,11 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 
 extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
 {
-    string sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEUNINSTALLLOCATION"));
-    string sBasisInstallPath = GetMsiProperty(handle, TEXT("BASISUNINSTALLLOCATION"));
-    string sUreInstallPath = GetMsiProperty(handle, TEXT("UREUNINSTALLLOCATION"));
+    string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+
+    string sOfficeInstallPath = sInstallPath;
+    string sBasisInstallPath = sInstallPath + TEXT("Basis\\");
+    string sUreInstallPath = sInstallPath + TEXT("URE\\");
 
     string sBasisLinkPath = sOfficeInstallPath + TEXT("basis-link");
     string sUreLinkPath = sBasisInstallPath + TEXT("ure-link");

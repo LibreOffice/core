@@ -108,6 +108,40 @@ public:
     iteratorT                   m_aGlobalBegin;
 
 public:
+    struct pdf_string_parser
+    {
+        typedef nil_t result_t;
+        template <typename ScannerT>
+        std::ptrdiff_t
+        operator()(ScannerT const& scan, result_t& result) const
+        {
+            std::ptrdiff_t len = 0;
+
+            int nBraceLevel = 0;
+            while( ! scan.at_end() )
+            {
+                char c = *scan;
+                if( c == ')' )
+                {
+                    nBraceLevel--;
+                    if( nBraceLevel < 0 )
+                        break;
+                }
+                else if( c == '(' )
+                    nBraceLevel++;
+                else if( c == '\\' ) // ignore escaped braces
+                {
+                    ++len;
+                    ++scan;
+                    if( scan.at_end() )
+                        break;
+                }
+                ++len;
+                ++scan;
+            }
+            return scan.at_end() ? -1 : len;
+        }
+    };
 
     template< typename ScannerT >
     struct definition
@@ -135,7 +169,8 @@ public:
             //stringtype  = ( confix_p("(",*anychar_p, ")") |
             //                confix_p("<",*xdigit_p,  ">") )
             //              [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
-            stringtype  = ( ( ch_p('(') >> *(str_p("\\)")|(anychar_p - ch_p(')'))) >> ch_p(')') ) |
+
+            stringtype  = ( ( ch_p('(') >> functor_parser<pdf_string_parser>() >> ch_p(')') ) |
                             ( ch_p('<') >> *xdigit_p >> ch_p('>') ) )
                           [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
 

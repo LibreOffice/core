@@ -1515,9 +1515,10 @@ void SvLBox::MakeVisible( SvLBoxEntry* )
     DBG_CHKTHIS(SvLBox,0);
 }
 
-void SvLBox::Command( const CommandEvent& )
+void SvLBox::Command( const CommandEvent& i_rCommandEvent )
 {
     DBG_CHKTHIS(SvLBox,0);
+    Control::Command( i_rCommandEvent );
 }
 
 void SvLBox::KeyInput( const KeyEvent& rKEvt )
@@ -1774,10 +1775,14 @@ void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     DBG_CHKTHIS(SvLBox,0);
 
-    ReleaseMouse();
-    SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
     nOldDragMode = GetDragDropMode();
-    if( !pEntry || !nOldDragMode )
+    if ( !nOldDragMode )
+        return;
+
+    ReleaseMouse();
+
+    SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
+    if( !pEntry )
     {
         DragFinished( DND_ACTION_NONE );
         return;

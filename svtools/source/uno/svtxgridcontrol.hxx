@@ -51,7 +51,7 @@ class SVTXGridControl : public ::cppu::ImplInheritanceHelper3< VCLXWindow, ::com
                                  ::com::sun::star::awt::grid::XGridDataListener, ::com::sun::star::awt::grid::XGridColumnListener>
 {
 private:
-    UnoControlTableModel* m_pTableModel;
+    ::boost::shared_ptr< UnoControlTableModel > m_pTableModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >m_xDataModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >m_xColumnModel;
     bool m_bHasColumnHeaders;

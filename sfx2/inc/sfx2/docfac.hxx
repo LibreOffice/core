@@ -101,6 +101,7 @@ public:
     const SfxFilter* GetTemplateFilter() const;
     static String   GetStandardTemplate( const String& rServiceName );
     static void     SetStandardTemplate( const String& rServiceName, const String& rTemplateName );
+    static void     SetSystemTemplate( const String& rServiceName, const String& rTemplateName );
 
     void            SetDocumentServiceName( const rtl::OUString& rServiceName );
     const rtl::OUString&    GetDocumentServiceName() const;

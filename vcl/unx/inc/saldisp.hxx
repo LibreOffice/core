@@ -231,6 +231,7 @@ protected:
         XErrorHandler   m_aHandler;
     };
     std::vector< XErrorStackEntry > m_aXErrorHandlerStack;
+    XIOErrorHandler m_aOrigXIOErrorHandler;
 public:
     SalXLib();
     virtual         ~SalXLib();

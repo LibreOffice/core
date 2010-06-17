@@ -29,7 +29,6 @@
 
 #include "SlsGenericPageCache.hxx"
 #include "SlsRequestFactory.hxx"
-#include "SlsIdleDetector.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "model/SlideSorterModel.hxx"
 #include <boost/bind.hpp>
@@ -76,25 +75,6 @@ BitmapEx PageCache::GetPreviewBitmap (
     const Size& rSize)
 {
     return mpImplementation->GetPreviewBitmap(aKey, rSize);
-}
-
-
-
-
-void PageCache::RequestPreviewBitmap (
-    CacheKey aKey,
-    const Size& rSize)
-{
-    return mpImplementation->RequestPreviewBitmap(aKey, rSize);
-}
-
-
-
-
-void PageCache::InvalidatePreviewBitmap (
-    CacheKey aKey)
-{
-    mpImplementation->InvalidatePreviewBitmap(aKey);
 }
 
 

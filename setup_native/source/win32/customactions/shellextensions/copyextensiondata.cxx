@@ -93,7 +93,7 @@ extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
         bool fSuccess = true;
         bool bFailIfExist = true;
 
-        std::_tstring sDestDir = GetMsiProperty( handle, TEXT("OFFICEINSTALLLOCATION") );
+        std::_tstring sDestDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
         std::_tstring sShareInstallDir = sDestDir + TEXT("share\\extension\\install\\");
 
         // creating directories

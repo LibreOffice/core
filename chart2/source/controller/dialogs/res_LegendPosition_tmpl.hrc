@@ -35,7 +35,7 @@ CheckBox CBX_SHOWLEGEND \
 { \
     HelpID = HID_SCH_LEGEND_SHOW ; \
     Pos = MAP_APPFONT ( xpos , ypos  ) ; \
-    Size = MAP_APPFONT ( 67 , 12 ) ; \
+    Size = MAP_APPFONT ( 95 , 12 ) ; \
     Text [ en-US ] = "~Display legend" ; \
     TabStop = TRUE ; \
 };

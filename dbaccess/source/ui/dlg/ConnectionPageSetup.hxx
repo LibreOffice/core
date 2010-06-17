@@ -89,7 +89,7 @@ namespace dbaui
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(sal_False); }

@@ -4,7 +4,7 @@
     <node oor:name="States">
       <node oor:name="private:resource/toolpanel/org.openoffice.example.colorpanel/00FF00" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Soylent Green</value>
+          <value>Soylent Green</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
@@ -18,7 +18,7 @@
       </node>
       <node oor:name="private:resource/toolpanel/org.openoffice.example.colorpanel/FF0000" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Soylent Red</value>
+          <value>Soylent Red</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>

@@ -56,13 +56,14 @@ WINADVAPI LONG WINAPI RegDeleteKeyExW(HKEY,LPCWSTR,REGSAM,DWORD);
 // in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
 // Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
 // extensions\source\activex\main\so_activex.cpp
+
 #ifndef KEY_WOW64_64KEY
     #define KEY_WOW64_64KEY (0x0100)
 #endif
 
 
 #define TABLE_NAME L"Reg64"
-#define BASISINSTALLLOCATION L"[BASISINSTALLLOCATION]"
+#define INSTALLLOCATION L"[INSTALLLOCATION]"
 
 bool isInstall4AllUsers;
 wchar_t * sBasisInstallLocation;
@@ -214,9 +215,10 @@ wchar_t* GetBasisInstallLocation( MSIHANDLE hMSI )
     OutputDebugStringFormat(L"GetBasisInstallLocation - START\n" );
     bool bResult = FALSE;
     wchar_t* pVal = NULL;
-    GetMsiProp( hMSI, L"BASISINSTALLLOCATION", &pVal);
+    GetMsiProp( hMSI, L"INSTALLLOCATION", &pVal);
 
     OutputDebugStringFormat(L"GetBasisInstallLocation - ENDE\n" );
+
     return pVal;
 }
 
@@ -325,14 +327,14 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
 
 
 
-            wchar_t* nPos = wcsstr(szValue , BASISINSTALLLOCATION);
+            wchar_t* nPos = wcsstr(szValue , INSTALLLOCATION);
             if ( NULL != nPos)
             {
 
                 DWORD nPrefixSize = nPos - szValue;
 
                 DWORD nPropSize = wcslen(sBasisInstallLocation);
-                DWORD nPostfixSize = dwValue - wcslen( BASISINSTALLLOCATION );
+                DWORD nPostfixSize = dwValue - wcslen( INSTALLLOCATION );
 
                 DWORD nNewValueBytes = (nPropSize + nPostfixSize + 1) * sizeof( wchar_t );
                    wchar_t* newValue = reinterpret_cast<wchar_t*>( malloc( nNewValueBytes ) );
@@ -345,7 +347,7 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
                 wcsncat(newValue, sBasisInstallLocation, nPropSize * sizeof( wchar_t ));
 
                 // postfix
-                wcsncat(newValue, nPos + ( wcslen( BASISINSTALLLOCATION ) ), nPropSize * sizeof( wchar_t ));
+                wcsncat(newValue, nPos + ( wcslen( INSTALLLOCATION ) ), nPropSize * sizeof( wchar_t ));
 
                 wcsncpy(szValue, newValue, nNewValueBytes <=1024? nNewValueBytes: 1024);
 

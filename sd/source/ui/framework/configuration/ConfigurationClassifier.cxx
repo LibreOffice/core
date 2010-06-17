@@ -87,13 +87,10 @@ const ConfigurationClassifier::ResourceIdVector& ConfigurationClassifier::GetC2m
 
 
 
-
 const ConfigurationClassifier::ResourceIdVector& ConfigurationClassifier::GetC1andC2 (void) const
 {
     return maC1andC2;
 }
-
-
 
 
 void ConfigurationClassifier::PartitionResources (
@@ -222,8 +219,6 @@ void ConfigurationClassifier::CopyResources (
 }
 
 
-
-
 void ConfigurationClassifier::TraceResourceIdVector (
     const sal_Char* pMessage,
     const ResourceIdVector& rResources) const
@@ -238,8 +233,6 @@ void ConfigurationClassifier::TraceResourceIdVector (
             OUStringToOString(sResource, RTL_TEXTENCODING_UTF8).getStr());
     }
 }
-
-
 
 
 } } // end of namespace sd::framework

@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/mutex.hxx>
@@ -46,7 +47,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
@@ -73,13 +74,14 @@ struct UnoControl_Data;
 //  ----------------------------------------------------
 //  class UnoControl
 //  ----------------------------------------------------
-typedef ::cppu::WeakAggImplHelper7  <   ::com::sun::star::awt::XControl
+typedef ::cppu::WeakAggImplHelper8  <   ::com::sun::star::awt::XControl
                                     ,   ::com::sun::star::awt::XWindow2
                                     ,   ::com::sun::star::awt::XView
                                     ,   ::com::sun::star::beans::XPropertiesChangeListener
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::accessibility::XAccessible
                                     ,   ::com::sun::star::util::XModeChangeBroadcaster
+                                    ,   ::com::sun::star::awt::XUnitConversion
                                     >   UnoControl_Base;
 
 class TOOLKIT_DLLPUBLIC UnoControl :    public UnoControl_Base
@@ -119,7 +121,7 @@ protected:
     ::osl::Mutex&                                                               GetMutex() { return maMutex; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
-    void                                                                        updateFromModel();
+    virtual void                                                                updateFromModel();
     void                                                                        peerCreated();
     bool                                                                        ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
@@ -219,6 +221,12 @@ public:
     virtual void SAL_CALL removeModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    // XUnitConversion
+    virtual ::com::sun::star::awt::Point SAL_CALL convertPointToLogic( const ::com::sun::star::awt::Point& Point, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL convertPointToPixel( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL convertSizeToLogic( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL convertSizeToPixel( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
 private:
     // ::com::sun::star::beans::XPropertiesChangeListener

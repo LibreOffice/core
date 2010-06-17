@@ -113,7 +113,8 @@ namespace dbaui
     //=========================================================================
     class IDatabaseSettingsDialog;
     class IItemSetHelper;
-    class OGenericAdministrationPage : public SfxTabPage, public svt::IWizardPage
+    class OGenericAdministrationPage    :public SfxTabPage
+                                        ,public ::svt::IWizardPageController
     {
     private:
         Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
@@ -165,9 +166,10 @@ namespace dbaui
         */
         sal_Bool getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
 
-        // svt::IWizardPage
+        // svt::IWizardPageController
         virtual void initializePage();
-        virtual sal_Bool commitPage( CommitPageReason _eReason );
+        virtual sal_Bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool canAdvance() const;
 
         void                SetRoadmapStateValue( sal_Bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
         bool                GetRoadmapStateValue() const { return m_abEnableRoadmap; }

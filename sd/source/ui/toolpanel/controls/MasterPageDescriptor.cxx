@@ -337,28 +337,6 @@ bool MasterPageDescriptor::URLComparator::operator() (
 
 
 
-//===== PageNameComparator ====================================================
-
-MasterPageDescriptor::PageNameComparator::PageNameComparator (const ::rtl::OUString& sPageName)
-    : msPageName(sPageName)
-{
-}
-
-
-
-
-bool MasterPageDescriptor::PageNameComparator::operator() (
-    const SharedMasterPageDescriptor& rDescriptor)
-{
-    if (rDescriptor.get() == NULL)
-        return false;
-    else
-        return rDescriptor->msPageName.equals(msPageName);
-}
-
-
-
-
 // ===== StyleNameComparator ==================================================
 
 MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const ::rtl::OUString& sStyleName)

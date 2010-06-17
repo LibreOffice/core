@@ -92,7 +92,6 @@ extern void fillDurationComboBox( ComboBox* pBox );
 class CategoryListBox : public ListBox
 {
 public:
-    CategoryListBox( Window* pParent, WinBits nStyle = WB_BORDER );
     CategoryListBox( Window* pParent, const ResId& rResId );
     ~CategoryListBox();
 
@@ -109,12 +108,6 @@ private:
 
     Link            maDoubleClickHdl;
 };
-
-CategoryListBox::CategoryListBox( Window* pParent, WinBits nStyle /* = WB_BORDER */ )
-: ListBox( pParent, nStyle )
-{
-    EnableUserDraw( TRUE );
-}
 
 CategoryListBox::CategoryListBox( Window* pParent, const ResId& rResId )
 : ListBox( pParent, rResId )

@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <toolkit/helper/property.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
 #include <treecontrolpeer.hxx>
@@ -196,9 +197,7 @@ void TreeControlPeer::addEntry( UnoTreeListEntry* pEntry )
             mpTreeNodeMap = new TreeNodeMap();
         }
 
-        const Reference< XTreeNode > xNormalizedNode( pEntry->mxNode, UNO_QUERY );
-        (*mpTreeNodeMap)[ xNormalizedNode ] = pEntry;
-        OSL_TRACE( "tree: adding %p => %p", xNormalizedNode.get(), pEntry );
+        (*mpTreeNodeMap)[ pEntry->mxNode ] = pEntry;
     }
 }
 
@@ -208,11 +207,9 @@ void TreeControlPeer::removeEntry( UnoTreeListEntry* pEntry )
 {
     if( mpTreeNodeMap && pEntry && pEntry->mxNode.is() )
     {
-        const Reference< XTreeNode > xNormalizedNode( pEntry->mxNode, UNO_QUERY );
-        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( xNormalizedNode ) );
+        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( pEntry->mxNode ) );
         if( aIter != mpTreeNodeMap->end() )
         {
-            OSL_TRACE( "tree: removing %p => %p", xNormalizedNode.get(), pEntry );
             mpTreeNodeMap->erase( aIter );
         }
     }
@@ -224,8 +221,7 @@ UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode
 {
     if( mpTreeNodeMap )
     {
-        const Reference< XTreeNode > xNormalizedNode( xNode, UNO_QUERY );
-        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( xNormalizedNode ) );
+        TreeNodeMap::iterator aIter( mpTreeNodeMap->find( xNode ) );
         if( aIter != mpTreeNodeMap->end() )
             return (*aIter).second;
     }
@@ -287,13 +283,13 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
         pEntry->AddItem( pUnoItem );
 
+        mpTreeImpl->insert( pEntry, pParent, nPos );
+
         if( msDefaultExpandedGraphicURL.getLength() )
             mpTreeImpl->SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
 
         if( msDefaultCollapsedGraphicURL.getLength() )
             mpTreeImpl->SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
-
-        mpTreeImpl->insert( pEntry, pParent, nPos );
 
         updateEntry( pEntry );
     }
@@ -918,6 +914,19 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_
         xNode = pEntry->mxNode;
 
     return xNode;
+}
+
+// -------------------------------------------------------------------
+
+awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode >& i_Node ) throw (IllegalArgumentException, RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
+    UnoTreeListEntry* pEntry = getEntry( i_Node, true );
+
+    ::Rectangle aEntryRect( rTree.GetFocusRect( pEntry, rTree.GetEntryPosition( pEntry ).Y() ) );
+    return VCLUnoHelper::ConvertToAWTRect( aEntryRect );
 }
 
 // -------------------------------------------------------------------

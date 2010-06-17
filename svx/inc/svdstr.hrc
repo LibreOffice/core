@@ -674,7 +674,7 @@
 #define SIP_SA_CIRCRESERVE1                 (SIP_Begin + 177)
 #define SIP_SA_CIRCRESERVE2                 (SIP_Begin + 178)
 #define SIP_SA_CIRCRESERVE3                 (SIP_Begin + 179)
-//BFS01#define  SIP_SDRATTRSET_CIRC                 (SIP_Begin + 180)
+#define SIP_SA_OBJVISIBLE                   (SIP_Begin + 180)
 #define SIP_SA_OBJMOVEPROTECT               (SIP_Begin + 181)
 #define SIP_SA_OBJSIZEPROTECT               (SIP_Begin + 182)
 #define SIP_SA_OBJPRINTABLE                 (SIP_Begin + 183)

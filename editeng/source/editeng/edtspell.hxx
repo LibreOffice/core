@@ -97,13 +97,7 @@ public:
 
     BOOL    IsInvalid() const       { return nInvalidStart != NOT_INVALID; }
     void    SetValid()              { nInvalidStart = NOT_INVALID; nInvalidEnd = 0; }
-    void    MarkInvalid( USHORT nS, USHORT nE )
-            {
-                if ( ( nInvalidStart == NOT_INVALID ) || ( nInvalidStart > nS ) )
-                    nInvalidStart = nS;
-                if ( nInvalidEnd < nE )
-                    nInvalidEnd = nE;
-            }
+    void    MarkInvalid( USHORT nS, USHORT nE );
 
     USHORT          Count() const               { return WrongRanges::Count(); }
 

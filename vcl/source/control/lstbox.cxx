@@ -885,6 +885,8 @@ void ListBox::StateChanged( StateChangedType nType )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? TRUE : FALSE );
+        BOOL bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? TRUE : FALSE;
+        mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
     }
     else if( nType == STATE_CHANGE_MIRRORING )
     {
@@ -1077,6 +1079,15 @@ void ListBox::RemoveEntry( USHORT nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
     CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, (void*) sal_IntPtr(nPos) );
+}
+
+// -----------------------------------------------------------------------
+
+Image ListBox::GetEntryImage( USHORT nPos ) const
+{
+    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+        return mpImplLB->GetEntryList()->GetEntryImage( nPos );
+    return Image();
 }
 
 // -----------------------------------------------------------------------

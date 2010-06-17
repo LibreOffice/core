@@ -28,26 +28,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scripting.hxx"
 
-#ifndef SCRIPTING_DLGPROV_HXX
 #include "dlgprov.hxx"
-#endif
 #include "dlgevtatt.hxx"
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
+#include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include "com/sun/star/resource/XStringResourceWithLocation.hpp"
+#include <com/sun/star/resource/XStringResourceWithLocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -691,13 +687,22 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
         //Reference< XDialog > xDialog;
         Reference< XControl > xCtrl;
         Reference< XControlModel > xCtrlMod;
-        // add support for basic RTL_FUNCTION
-        if ( m_BasicInfo.get() )
-            xCtrlMod = createDialogModelForBasic();
-        else
+        try
         {
-            OSL_ENSURE( URL.getLength(), "DialogProviderImpl::getDialog: no URL!" );
-            xCtrlMod = createDialogModel( URL );
+            // add support for basic RTL_FUNCTION
+            if ( m_BasicInfo.get() )
+                xCtrlMod = createDialogModelForBasic();
+            else
+            {
+                OSL_ENSURE( URL.getLength(), "DialogProviderImpl::getDialog: no URL!" );
+                xCtrlMod = createDialogModel( URL );
+            }
+        }
+        catch ( const RuntimeException& ) { throw; }
+        catch ( const Exception& )
+        {
+            const Any aError( ::cppu::getCaughtException() );
+            throw WrappedTargetRuntimeException( ::rtl::OUString(), *this, aError );
         }
         if ( xCtrlMod.is() )
         {

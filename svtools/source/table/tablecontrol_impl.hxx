@@ -204,6 +204,7 @@ namespace svt { namespace table
     /** updates the vector, which contains the selected rows after removing the row nRowPos*/
     void    removeSelectedRow(RowPos _nRowPos);
     void    invalidateRows();
+    void    clearSelection();
         // IAbstractTableControl
         virtual void    hideCursor();
         virtual void    showCursor();

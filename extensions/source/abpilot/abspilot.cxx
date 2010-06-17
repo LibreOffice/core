@@ -213,13 +213,10 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAddessBookSourcePilot::onFinish(sal_Int32 _nResult)
+    sal_Bool OAddessBookSourcePilot::onFinish()
     {
-        if (!OAddessBookSourcePilot_Base::onFinish(_nResult))
+        if ( !OAddessBookSourcePilot_Base::onFinish() )
             return sal_False;
-
-        if (RET_OK != _nResult)
-            return sal_True;
 
         implCommitAll();
 
@@ -283,9 +280,7 @@ namespace abp
 
             if ( aTables.empty() )
             {
-                if  (   ( _eReason == eValidateNoUI )
-                    ||  ( RET_YES != QueryBox( this, ModuleRes( RID_QRY_NOTABLES ) ).Execute() )
-                    )
+                if ( RET_YES != QueryBox( this, ModuleRes( RID_QRY_NOTABLES ) ).Execute() )
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
                     bAllow = sal_False;

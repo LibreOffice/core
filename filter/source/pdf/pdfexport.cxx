@@ -1926,6 +1926,7 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
             SvMemoryStream  aStrm;
             Bitmap          aMask;
 
+            bool bTrueColorJPG = true;
             if ( bUseJPGCompression )
             {
                 sal_uInt32 nZippedFileSize;     // sj: we will calculate the filesize of a zipped bitmap
@@ -1956,12 +1957,13 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aFilterData[ 1 ].Value <<= nColorMode;
 
                 /*sal_uInt16 nError =*/ aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, &aFilterData );
+                bTrueColorJPG = ((aGraphicFilter.GetExportGraphicHint() & GRFILTER_OUTHINT_GREY) == 0);
                 aStrm.Seek( STREAM_SEEK_TO_END );
                 if ( aStrm.Tell() > nZippedFileSize )
                     bUseJPGCompression = sal_False;
             }
             if ( bUseJPGCompression )
-                rWriter.DrawJPGBitmap( aStrm, true, aSizePixel, Rectangle( aPoint, aSize ), aMask );
+                rWriter.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, Rectangle( aPoint, aSize ), aMask );
             else if ( aBitmapEx.IsTransparent() )
                 rWriter.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else

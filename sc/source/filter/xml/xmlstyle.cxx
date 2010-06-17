@@ -1039,8 +1039,10 @@ sal_Bool XmlScPropHdl_CellProtection::exportXML(
             rStrExpValue = GetXMLToken(XML_NONE);
             bRetval = sal_True;
         }
-        else if (aCellProtection.IsHidden && aCellProtection.IsLocked)
+        else if (aCellProtection.IsHidden)
         {
+            // #i105964# "Hide all" implies "Protected" in the UI, so it must be saved as "hidden-and-protected"
+            // even if "IsLocked" is not set in the CellProtection struct.
             rStrExpValue = GetXMLToken(XML_HIDDEN_AND_PROTECTED);
             bRetval = sal_True;
         }

@@ -382,10 +382,10 @@ void DataSourceTabPage::DeactivatePage()
 
 void DataSourceTabPage::commitPage()
 {
-    commitPage(eFinish);
+    commitPage(::svt::WizardTypes::eFinish);
 }
 
-sal_Bool DataSourceTabPage::commitPage( CommitPageReason /*eReason*/ )
+sal_Bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //ranges may have been edited in the meanwhile (dirty is true in that case here)
     if( isValid() )

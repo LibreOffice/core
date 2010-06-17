@@ -2061,11 +2061,19 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
 
     // falls aEnd-1 auf keinem ContentNode steht, dann suche den vorherigen
     aRg.aEnd--;
-    while( (( pAktNode = (*this)[ aRg.aEnd ])->GetStartNode() &&
-            !pAktNode->IsSectionNode() ) ||
-            ( pAktNode->IsEndNode() &&
-            ND_STARTNODE == pAktNode->pStartOfSection->GetNodeType()) )
-        aRg.aEnd--;
+    // #i107142#: if aEnd is start node of a special section, do nothing.
+    // Otherwise this could lead to crash: going through all previous
+    // special section nodes and then one before the first.
+    if (aRg.aEnd.GetNode().StartOfSectionIndex() != 0)
+    {
+        while( (( pAktNode = (*this)[ aRg.aEnd ])->GetStartNode() &&
+                !pAktNode->IsSectionNode() ) ||
+                ( pAktNode->IsEndNode() &&
+                ND_STARTNODE == pAktNode->pStartOfSection->GetNodeType()) )
+        {
+            aRg.aEnd--;
+        }
+    }
     aRg.aEnd++;
 
     // wird im selben Array's verschoben, dann ueberpruefe die Einfuegepos.

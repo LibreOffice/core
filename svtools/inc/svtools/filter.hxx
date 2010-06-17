@@ -62,6 +62,8 @@ class Graphic;
 #define GRFILTER_ABORT              6
 #define GRFILTER_TOOBIG             7
 
+#define GRFILTER_OUTHINT_GREY       1
+
 #define GRFILTER_FORMAT_NOTFOUND    ((USHORT)0xFFFF)
 #define GRFILTER_FORMAT_DONTKNOW    ((USHORT)0xFFFF)
 
@@ -323,7 +325,7 @@ protected:
     sal_Bool            bDummy2;
     sal_Bool            bDummy3;
     sal_Bool            bDummy4;
-    long                nDummy1;
+    long                nExpGraphHint;
     long                nDummy2;
     void*               pDummy1;
     void*               pDummy2;
@@ -374,6 +376,7 @@ public:
     USHORT          ExportGraphic( const Graphic& rGraphic, const String& rPath,
                                     SvStream& rOStm, USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
                                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
+    long            GetExportGraphicHint() const { return nExpGraphHint; }
 
     USHORT          CanImportGraphic( const INetURLObject& rPath,
                                       USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,

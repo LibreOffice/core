@@ -42,16 +42,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
-    AnimationSchemesPane.src\
     CustomAnimationPane.src\
     CustomAnimationDialog.src\
     CustomAnimationCreateDialog.src\
     SlideTransitionPane.src\
-    CustomAnimationSchemesPane.src\
     CustomAnimation.src
 
 SLOFILES =  \
-        $(SLO)$/AnimationSchemesPane.obj \
         $(SLO)$/CustomAnimationCreateDialog.obj\
         $(SLO)$/CustomAnimationDialog.obj\
         $(SLO)$/CustomAnimationPane.obj \

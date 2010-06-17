@@ -53,12 +53,6 @@ SlideFunction::SlideFunction (
 {
 }
 
-FunctionReference SlideFunction::Create( SlideSorter& rSlideSorter, SfxRequest& rRequest )
-{
-    FunctionReference xFunc( new SlideFunction( rSlideSorter, rRequest ) );
-    return xFunc;
-}
-
 void SlideFunction::ScrollStart (void)
 {
 }

@@ -170,21 +170,6 @@ public:
 
 
 
-
-/** Used temporarily to avoid the (expensive) creation of the default page
-    too early.
-*/
-class DefaultPagePreviewProvider : public PreviewProvider
-{
-public:
-    DefaultPagePreviewProvider (void);
-    virtual Image operator() (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer);
-    virtual int GetCostIndex (void);
-    virtual bool NeedsPageObject (void);
-};
-
-
-
 /** This implementation of the PageObjectProvider simply returns an already
     existing master page object.
 */

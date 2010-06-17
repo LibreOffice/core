@@ -386,8 +386,9 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
         const bool bSymbolic = (mpRangeCodes[0]>=0xF000) & (mpRangeCodes[1]<=0xF0FF);
         if( !bSymbolic )
             return 0;
-        // check for symbol aliasing (U+F0xx -> U+00xx)
-        nRange = ImplFindRangeIndex( cChar | 0xF000 );
+        // check for symbol aliasing (U+00xx <-> U+F0xx)
+        cChar |= 0xF000;
+        nRange = ImplFindRangeIndex( cChar );
     }
     // check that we are inside a range
     if( (nRange & 1) != 0 )
@@ -401,7 +402,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
         nGlyphIndex += nStartIndex;
     } else {
         // the glyphid array has the glyph index
-        nGlyphIndex = mpGlyphIds[ nGlyphIndex - nStartIndex];
+        nGlyphIndex = mpGlyphIds[ nGlyphIndex - nStartIndex ];
     }
 
     return nGlyphIndex;

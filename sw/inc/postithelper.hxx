@@ -78,7 +78,6 @@ namespace SwPostItHelper
     };
 
     SwLayoutStatus getLayoutInfos( std::vector< SwLayoutInfo >&, SwPosition& );
-    SwLayoutStatus getLayoutInfos( std::vector< SwLayoutInfo >&, SwTxtFld* );
     long getLayoutHeight( const SwRootFrm* pRoot );
     void setSidebarChanged( SwRootFrm* pRoot, bool bBrowseMode );
     unsigned long getPageInfo( SwRect& rPageFrm, const SwRootFrm* , const Point& );

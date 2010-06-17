@@ -179,6 +179,8 @@ private:
     SystemWindow (const SystemWindow &);
     SystemWindow & operator= (const SystemWindow &);
 
+    SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin );
+
 protected:
     // Single argument ctors shall be explicit.
     explicit        SystemWindow( WindowType nType );

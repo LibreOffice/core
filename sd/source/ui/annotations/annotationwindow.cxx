@@ -136,14 +136,25 @@ AnnotationTextWindow::~AnnotationTextWindow()
 
 void AnnotationTextWindow::Paint( const Rectangle& rRect)
 {
-    if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+    if ( !bHighContrast )
     {
         DrawGradient(Rectangle(Point(0,0),PixelToLogic(GetSizePixel())),
             Gradient(GRADIENT_LINEAR,mpAnnotationWindow->maColorLight,mpAnnotationWindow->maColor));
      }
 
     if( mpOutlinerView )
+    {
+        Color aBackgroundColor( mpAnnotationWindow->maColor );
+        if( bHighContrast )
+        {
+            aBackgroundColor = GetSettings().GetStyleSettings().GetWindowColor();
+        }
+
+        mpOutlinerView->SetBackgroundColor( aBackgroundColor );
+
         mpOutlinerView->Paint( rRect );
+    }
 }
 
 void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
@@ -493,12 +504,6 @@ void AnnotationWindow::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
     }
 }
 
-void AnnotationWindow::SetReadonly(bool bSet)
-{
-    mbReadonly = bSet;
-    getView()->SetReadOnly(bSet);
-}
-
 void AnnotationWindow::SetLanguage(const SvxLanguageItem aNewItem)
 {
     Engine()->SetModifyHdl( Link() );
@@ -615,16 +620,34 @@ void AnnotationWindow::SetColor()
 {
     sal_uInt16 nAuthorIdx = mpDoc->GetAnnotationAuthorIndex( mxAnnotation->getAuthor() );
 
-    maColor = mrManager.GetColor( nAuthorIdx );
-    maColorDark = mrManager.GetColorDark( nAuthorIdx );
-    maColorLight = mrManager.GetColorLight( nAuthorIdx );
+    const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+    if( bHighContrast )
+    {
+        StyleSettings aStyleSettings = GetSettings().GetStyleSettings();
+
+        maColor = aStyleSettings.GetWindowColor();
+        maColorDark = maColor;
+        maColorLight = aStyleSettings.GetWindowTextColor();
+    }
+    else
+    {
+        maColor = mrManager.GetColor( nAuthorIdx );
+        maColorDark = mrManager.GetColorDark( nAuthorIdx );
+        maColorLight = mrManager.GetColorLight( nAuthorIdx );
+    }
 
     mpOutlinerView->SetBackgroundColor(maColor);
+    Engine()->SetBackgroundColor(maColor);
+
+    {
+        SvtAccessibilityOptions aOptions;
+        Engine()->ForceAutoColor( bHighContrast || aOptions.GetIsAutomaticFontColor() );
+    }
 
     mpMeta->SetControlBackground(maColor);
     AllSettings aSettings = mpMeta->GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    aStyleSettings.SetFieldTextColor(maColorDark);
+    aStyleSettings.SetFieldTextColor( bHighContrast ? maColorLight : maColorDark);
     aSettings.SetStyleSettings(aStyleSettings);
     mpMeta->SetSettings(aSettings);
 
@@ -641,59 +664,35 @@ void AnnotationWindow::SetColor()
 void AnnotationWindow::Deactivate()
 {
     Reference< XAnnotation > xAnnotation( mxAnnotation );
-/*
-    // check if text is empty
-    Paragraph* p1stPara=Engine()->GetParagraph( 0 );
-    ULONG nParaAnz=Engine()->GetParagraphCount();
-    if(p1stPara==NULL)
-        nParaAnz=0;
 
-    if(nParaAnz==1)
+    // write changed text back to annotation
+    if ( Engine()->IsModified() )
     {
-        // if it is only one paragraph, check if that paragraph is empty
-        XubString aStr(Engine()->GetText(p1stPara));
+        TextApiObject* pTextApi = getTextApiObject( xAnnotation );
 
-        if(!aStr.Len())
-            nParaAnz = 0;
-    }
-
-    if( nParaAnz == 0 )
-    {
-        // text is empty, delete postit
-        DeleteAnnotation( xAnnotation );
-    }
-    else
-*/
-    {
-        // write changed text back to annotation
-        if ( Engine()->IsModified() )
+        if( pTextApi )
         {
-            TextApiObject* pTextApi = getTextApiObject( xAnnotation );
-
-            if( pTextApi )
+            OutlinerParaObject* pOPO = Engine()->CreateParaObject();
+            if( pOPO )
             {
-                OutlinerParaObject* pOPO = Engine()->CreateParaObject();
-                if( pOPO )
-                {
-                    if( mpDoc->IsUndoEnabled() )
-                        mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_EDIT ) ) );
+                if( mpDoc->IsUndoEnabled() )
+                    mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_EDIT ) ) );
 
-                    pTextApi->SetText( *pOPO );
-                    delete pOPO;
+                pTextApi->SetText( *pOPO );
+                delete pOPO;
 
-                    // set current time to changed annotation
-                    xAnnotation->setDateTime( getCurrentDateTime() );
+                // set current time to changed annotation
+                xAnnotation->setDateTime( getCurrentDateTime() );
 
-                    if( mpDoc->IsUndoEnabled() )
-                        mpDoc->EndUndo();
+                if( mpDoc->IsUndoEnabled() )
+                    mpDoc->EndUndo();
 
-                    DocView()->GetDocSh()->SetModified(sal_True);
-                }
-
+                DocView()->GetDocSh()->SetModified(sal_True);
             }
+
         }
-        Engine()->ClearModifyFlag();
     }
+    Engine()->ClearModifyFlag();
 
     Engine()->GetUndoManager().Clear();
 }
@@ -704,15 +703,16 @@ void AnnotationWindow::Paint( const Rectangle& rRect)
 
     if(mpMeta->IsVisible() && !mbReadonly)
     {
+        const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
         //draw left over space
-        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        if ( bHighContrast )
             SetFillColor(COL_BLACK);
         else
             SetFillColor(maColor);
         SetLineColor();
         DrawRect(PixelToLogic(Rectangle(Point(mpMeta->GetPosPixel().X()+mpMeta->GetSizePixel().Width(),mpMeta->GetPosPixel().Y()),Size(METABUTTON_AREA_WIDTH,mpMeta->GetSizePixel().Height()))));
 
-        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+        if ( bHighContrast )
         {
             //draw rect around button
             SetFillColor(COL_BLACK);
@@ -734,7 +734,7 @@ void AnnotationWindow::Paint( const Rectangle& rRect)
         DrawRect(maRectMetaButton);
 
         //draw arrow
-        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        if( bHighContrast )
             SetFillColor(COL_WHITE);
         else
             SetFillColor(COL_BLACK);

@@ -141,12 +141,12 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool FinalPage::commitPage( CommitPageReason _eReason )
+    sal_Bool FinalPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;
 
-        if  (   ( eTravelBackward != _eReason )
+        if  (   ( ::svt::WizardTypes::eTravelBackward != _eReason )
             &&  ( !m_aLocationController.prepareCommit() )
             )
             return sal_False;

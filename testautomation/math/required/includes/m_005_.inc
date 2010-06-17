@@ -168,6 +168,7 @@ testcase tToolsExtensionManager
     dim sTemp2 as string
     dim x as integer
 
+    if ( lcase( gPlatform ) <> "osx" ) then
     sPath = convertPath(gTestToolPath+"math/required/input/")
     '/// open application ///'
     Call hNewDocument
@@ -306,4 +307,7 @@ testcase tToolsExtensionManager
             warnlog "Couldn't call Tools -> Package manager - aborting test"
         endif
    Call hCloseDocument
+   else
+       qaErrorLog "Do not run on macosx - not reproduceable error"
+   endif
 endcase

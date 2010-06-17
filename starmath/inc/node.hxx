@@ -484,15 +484,24 @@ public:
 
 class SmLineNode : public SmStructureNode
 {
+    BOOL  bUseExtraSpaces;
+
 protected:
     SmLineNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmStructureNode(eNodeType, rNodeToken)
-    {}
+    {
+        bUseExtraSpaces = TRUE;
+    }
 
 public:
     SmLineNode(const SmToken &rNodeToken)
     :   SmStructureNode(NLINE, rNodeToken)
-    {}
+    {
+        bUseExtraSpaces = TRUE;
+    }
+
+    void  SetUseExtraSpaces(BOOL bVal) { bUseExtraSpaces = bVal; }
+    BOOL  IsUseExtraSpaces() const { return bUseExtraSpaces; };
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);

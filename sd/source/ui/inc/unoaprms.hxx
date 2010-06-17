@@ -97,8 +97,6 @@ public:
         bInfoCreated    (bCreated)
         {}
 
-        SdAnimationPrmsUndoAction( SdDrawDocument* pTheDoc, SdrObject* pObj );
-
         void SetActive(BOOL bTheOldActive, BOOL bTheNewActive)
             { bOldActive = bTheOldActive; bNewActive = bTheNewActive; }
         void SetEffect(::com::sun::star::presentation::AnimationEffect eTheOldEffect, ::com::sun::star::presentation::AnimationEffect eTheNewEffect)

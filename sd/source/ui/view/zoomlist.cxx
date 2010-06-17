@@ -112,19 +112,6 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
     rBindings.Invalidate( SID_ZOOM_PREV );
 }
 
-
-/*************************************************************************
-|*
-|* Aktuelles ZoomRect herausgeben
-|*
-\************************************************************************/
-
-Rectangle ZoomList::GetCurrentZoomRect() const
-{
-    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
-    return (aRect);
-}
-
 /*************************************************************************
 |*
 |* Naechstes ZoomRect herausgeben

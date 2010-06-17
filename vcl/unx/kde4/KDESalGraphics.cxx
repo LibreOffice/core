@@ -744,7 +744,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         {
             if( part == PART_BORDER )
             {
-                int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+                int size = kapp->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
                 USHORT nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {

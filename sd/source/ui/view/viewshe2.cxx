@@ -526,34 +526,6 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
     }
 }
 
-
-/*************************************************************************
-|*
-|* Auf allen Split-Windows ein Rechteck zeichnen. Fuer den Rahmen wird der
-|* uebergebene Pen, zum Fuellen die uebergebene Brush benutzt.
-|*
-\************************************************************************/
-
-void ViewShell::DrawFilledRect( const Rectangle& rRect, const Color& rLColor,
-                                  const Color& rFColor ) const
-{
-    if (mpContentWindow.get() != NULL)
-    {
-        const Color& rOldLineColor = mpContentWindow->GetLineColor();
-        const Color& rOldFillColor = mpContentWindow->GetFillColor();
-
-        mpContentWindow->SetLineColor( rLColor );
-        mpContentWindow->SetFillColor( rFColor );
-
-        mpContentWindow->DrawRect(rRect);
-
-        mpContentWindow->SetLineColor( rOldLineColor );
-        mpContentWindow->SetFillColor( rOldFillColor );
-    }
-}
-
-
-
 /*************************************************************************
 |*
 |* Groesse und Raender aller Seiten setzen
@@ -847,18 +819,6 @@ void ViewShell::ReadFrameViewData(FrameView*)
 
 void ViewShell::WriteFrameViewData()
 {
-}
-
-/*************************************************************************
-|*
-|* Auf allen Split-Windows ein Update erzwingen.
-|*
-\************************************************************************/
-
-void ViewShell::UpdateWindows()
-{
-    if (mpContentWindow.get() != NULL)
-        mpContentWindow->Update();
 }
 
 /*************************************************************************

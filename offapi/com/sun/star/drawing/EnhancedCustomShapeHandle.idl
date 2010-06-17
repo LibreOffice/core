@@ -68,6 +68,26 @@ service EnhancedCustomShapeHandle
     */
     [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair Polar;
 
+    /** RefX, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the horizontal position of the handle
+    */
+    [optional, property] long RefX;
+
+    /** RefY, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the vertical position of the handle
+    */
+    [optional, property] long RefY;
+
+    /** RefAngle, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the angle of the handle
+    */
+    [optional, property] long RefAngle;
+
+    /** RefR, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the radius of the handle
+    */
+    [optional, property] long RefR;
+
     /** If the attribute RangeXMinimum is set, it specifies the horizontal minimum range of the handle.
     */
     [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeXMinimum;

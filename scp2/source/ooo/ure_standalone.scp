@@ -46,6 +46,7 @@ Directory gid_Dir_Ooo_Openofficeorg
   #else
     HostName = "openoffice.org";
   #endif
+    Styles = (ISINSTALLLOCATION);
 End
 
 Directory gid_Dir_Common_Ure
@@ -105,21 +106,4 @@ RegistryItem gid_Regitem_Ure_Software_Manufacturer_Productname_Productversion_Up
 	Styles = (ALWAYS_REQUIRED);
 End
 
-RegistryItem gid_Regitem_Ure_Software_Manufacturer_Productname_Productversion_Productcode_Ureinstall
-	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
-	ModuleID = gid_Module_Root;
-	Name = "UREINSTALLLOCATION";
-	Value = "[UREINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED);
-End
-
-RegistryItem gid_Regitem_Ure_Software_Manufacturer_Productname_Productversion_Upgradecode_Ureinstall
-	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
-	ModuleID = gid_Module_Root;
-	Name = "UREINSTALLLOCATION";
-	Value = "[UREINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED);
-End
 

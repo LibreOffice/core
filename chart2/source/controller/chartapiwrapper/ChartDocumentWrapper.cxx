@@ -170,20 +170,20 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "HasMainTitle" ),
                   PROP_DOCUMENT_HAS_MAIN_TITLE,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "HasSubTitle" ),
                   PROP_DOCUMENT_HAS_SUB_TITLE,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( C2U( "HasLegend" ),
                   PROP_DOCUMENT_HAS_LEGEND,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     // really needed?
     rOutProperties.push_back(
@@ -196,8 +196,8 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "DataSourceLabelsInFirstColumn" ),
                   PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //add-in
     rOutProperties.push_back(
@@ -223,7 +223,8 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "RefreshAddInAllowed" ),
                   PROP_DOCUMENT_UPDATE_ADDIN,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::TRANSIENT ));
 
     // table:null-date // i99104
     rOutProperties.push_back(
@@ -742,6 +743,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
 {
     if( !m_xTitle.is()  )
     {
+        ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
         m_xTitle = new TitleWrapper( TitleHelper::MAIN_TITLE, m_spChart2ModelContact );
     }
     return m_xTitle;
@@ -752,6 +754,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
 {
     if( !m_xSubTitle.is() )
     {
+        ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
         m_xSubTitle = new TitleWrapper( TitleHelper::SUB_TITLE, m_spChart2ModelContact );
     }
     return m_xSubTitle;
@@ -1499,6 +1502,16 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     const uno::Reference< uno::XInterface >& rDelegator )
     throw (uno::RuntimeException)
 {
+    if( m_bIsDisposed )
+    {
+        if( rDelegator.is() )
+            throw lang::DisposedException(
+                C2U("ChartDocumentWrapper is disposed" ),
+                static_cast< ::cppu::OWeakObject* >( this ));
+        else
+            return;
+    }
+
     if( rDelegator.is())
     {
         m_xDelegator = rDelegator;

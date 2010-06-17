@@ -1052,7 +1052,10 @@ sub wOptionsUndo ( sOption$ )
         Call hToolsOptions("WRITER","Autocaption")
         for i = 1 to ObjectList.GetItemCount
             ObjectList.Select i
-            ObjectList.UnCheck
+            ' uncheck only if checked, else it might crash on macosx, see issue 111883 for further information
+            if ObjectList.getState (i) > 1 then
+                ObjectList.UnCheck
+            endif
         next i
     end if
 

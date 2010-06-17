@@ -84,11 +84,6 @@ Ppt97Animation::Ppt97Animation( SvStream& rInputStream )
      m_aAtom.ReadStream( rInputStream );
 }
 
-Ppt97Animation::Ppt97Animation()
-    : MEMBER_CONSTRUCTOR_LIST()
-{
-}
-
 Ppt97Animation::Ppt97Animation( const Ppt97Animation& rAnimation )
     : MEMBER_CONSTRUCTOR_LIST()
 {
@@ -163,11 +158,12 @@ bool Ppt97Animation::HasAfterEffect_DimAtNextEffect() const
 {
     return m_aAtom.nAfterEffect == 2;
 }
+#ifdef FUTURE
 bool Ppt97Animation::HasAfterEffect_DimAfterEffect() const
 {
     return m_aAtom.nAfterEffect == 3;
 }
-
+#endif
 UINT32 Ppt97Animation::GetSoundRef() const
 {
     return m_aAtom.nSoundRef;

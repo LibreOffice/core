@@ -114,14 +114,25 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         }           // sonst alles
     }
 
-    // bSkipBreaks holen:
+    // get bSkipColBreaks/bSkipRowBreaks flags:
 
-    BOOL bSkipBreaks = FALSE;
+    bool bSkipColBreaks = false;
+    bool bSkipRowBreaks = false;
 
     if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE, &pItem ) == SFX_ITEM_SET )
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "falsches Item" );
-        bSkipBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
+        bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
+    }
+
+    if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, FALSE, &pItem) == SFX_ITEM_SET )
+    {
+        // #i54993# when fitting to width or height, ignore only manual breaks in that direction
+        const ScPageScaleToItem* pScaleToItem = static_cast<const ScPageScaleToItem*>(pItem);
+        if ( pScaleToItem->GetWidth() > 0 )
+            bSkipColBreaks = true;
+        if ( pScaleToItem->GetHeight() > 0 )
+            bSkipRowBreaks = true;
     }
 
     //--------------------------------------------------------------------------
@@ -149,7 +160,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     {
         BOOL bStartOfPage = FALSE;
         long nThisX = ( pColFlags[nX] & CR_HIDDEN ) ? 0 : pColWidth[nX];
-        if ( (nSizeX+nThisX > nPageSizeX) || ((pColFlags[nX] & CR_MANUALBREAK) && !bSkipBreaks) )
+        if ( (nSizeX+nThisX > nPageSizeX) || ((pColFlags[nX] & CR_MANUALBREAK) && !bSkipColBreaks) )
         {
             pColFlags[nX] |= CR_PAGEBREAK;
             nSizeX = 0;
@@ -187,7 +198,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         BOOL bStartOfPage = FALSE;
         BYTE nFlags = *aFlagsIter;
         long nThisY = (nFlags & CR_HIDDEN) ? 0 : *aHeightIter;
-        if ( (nSizeY+nThisY > nPageSizeY) || ((nFlags & CR_MANUALBREAK) && !bSkipBreaks) )
+        if ( (nSizeY+nThisY > nPageSizeY) || ((nFlags & CR_MANUALBREAK) && !bSkipRowBreaks) )
         {
             pRowFlags->SetValue( nY, nFlags | CR_PAGEBREAK);
             aFlagsIter.Resync( nY);

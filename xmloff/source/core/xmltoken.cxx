@@ -156,6 +156,9 @@ namespace xmloff { namespace token {
         TOKEN( "tableooo", XML_NP_TABLE_EXT ),
         TOKEN( "http://openoffice.org/2009/table", XML_N_TABLE_EXT ),
 
+        TOKEN( "drawooo", XML_NP_DRAW_EXT ),
+        TOKEN( "http://openoffice.org/2010/draw", XML_N_DRAW_EXT ),
+
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
         TOKEN( "m",                               XML_UNIT_M ),
@@ -2551,6 +2554,9 @@ namespace xmloff { namespace token {
         TOKEN( "z",                            XML_Z ),
         TOKEN( "dimension",                    XML_DIMENSION ),
         TOKEN( "validation-name",               XML_VALIDATION_NAME ),
+
+        TOKEN( "screen",                       XML_SCREEN ),
+        TOKEN( "printer",                      XML_PRINTER ),
 
         // XForms token
         TOKEN( "model",                            XML_MODEL ),

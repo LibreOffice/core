@@ -2096,7 +2096,7 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
     }
 
     ByteString sContent;
-    pEntrys->GetText( sContent, nTyp, nLangIndex );
+    pEntrys->GetTransex3Text( sContent, nTyp, nLangIndex );
     //if ( !sContent.Len() && ( ! nLangIndex.EqualsIgnoreCaseAscii("en-US") )) {
     if ( !sContent.Len() && ( ! Export::isSourceLanguage( nLangIndex ) )) {
         rText = sOrigText;
@@ -2158,7 +2158,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sCur = aLanguages[ n ];
 
                     ByteString sText;
-                    BOOL bText = pEntry->GetText( sText, STRING_TYP_TEXT, sCur , TRUE );
+                    BOOL bText = pEntry->GetTransex3Text( sText, STRING_TYP_TEXT, sCur , TRUE );
                     if ( bText && sText.Len() && sText != "-" ) {
                         ByteString sOutput;
                         if ( bNextMustBeDefineEOL)  {
@@ -2211,7 +2211,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sCur = aLanguages[ n ];
 
                     ByteString sText;
-                    BOOL bText = pEntry->GetText( sText, STRING_TYP_QUICKHELPTEXT, sCur, TRUE );
+                    BOOL bText = pEntry->GetTransex3Text( sText, STRING_TYP_QUICKHELPTEXT, sCur, TRUE );
                     if ( bText && sText.Len() && sText != "-" ) {
                         ByteString sOutput;
                         if ( bNextMustBeDefineEOL)  {
@@ -2258,7 +2258,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sCur = aLanguages[ n ];
 
                 ByteString sText;
-                    BOOL bText = pEntry->GetText( sText, STRING_TYP_TITLE, sCur, TRUE );
+                    BOOL bText = pEntry->GetTransex3Text( sText, STRING_TYP_TITLE, sCur, TRUE );
                     if ( bText && sText.Len() && sText != "-" ) {
                         ByteString sOutput;
                         if ( bNextMustBeDefineEOL)  {
@@ -2343,9 +2343,9 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             //printf("Lang %s, List Index %d\n",sCur.GetBuffer(),(int)nLIndex);
                             ByteString sText;
                             BOOL bText;
-                            bText = pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, TRUE );
+                            bText = pEntrys->GetTransex3Text( sText, STRING_TYP_TEXT, sCur, TRUE );
                             if( !bText )
-                                bText = pEntrys->GetText( sText , STRING_TYP_TEXT, SOURCE_LANGUAGE , FALSE );
+                                bText = pEntrys->GetTransex3Text( sText , STRING_TYP_TEXT, SOURCE_LANGUAGE , FALSE );
 
                             // Use fallback, if data is missing in sdf file
                             //if( !bText && pResData->sResTyp.Equals( "pairedlist" ) ){

@@ -44,7 +44,6 @@ public:
     virtual ~ZoomList();
 
     void        InsertZoomRect(const Rectangle& rRect);
-    Rectangle   GetCurrentZoomRect() const;
     Rectangle   GetNextZoomRect();
     Rectangle   GetPreviousZoomRect();
     BOOL        IsNextPossible() const;

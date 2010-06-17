@@ -32,21 +32,39 @@
 '\******************************************************************************
 
 testcase tUpdtScriptCount
+    dim sDialog as string
 
     printlog( "Resource test for macros and scripts / related dialogs" )
 
     const SCRIPTING_DIALOGS = 5
     dim aScriptCount( SCRIPTING_DIALOGS )
+        ' JavaScript
         aScriptCount( 1 ) = 10
+        ' BeanShell
         aScriptCount( 2 ) = 14
-        aScriptCount( 3 ) = 10 
-    if ( gOOo ) then
-        aScriptCount( 4 ) = 585
-        aScriptCount( 5 ) = 601 
-    else            
-        aScriptCount( 4 ) = 586
-        aScriptCount( 5 ) = 602 
-    endif
+        if ( lcase( gPlatform ) = "osx" ) then
+           ' Python
+           aScriptCount( 3 ) = 8 
+        else
+           ' Python
+           aScriptCount( 3 ) = 10 
+        endif
+        if ( lcase( gPlatform ) = "osx" ) then
+            ' Run Macro
+            aScriptCount( 5 ) = 600 
+        else
+            ' Run Macro
+            aScriptCount( 5 ) = 602 
+        endif
+        if ( gOOo ) then
+            ' Makro Organizer
+            aScriptCount( 4 ) = 585
+            ' Run Macro
+            aScriptCount( 5 ) = aScriptCount( 5 ) - 1 
+        else            
+            ' Makro Organizer
+            aScriptCount( 4 ) = 586
+        endif
 
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer
@@ -57,37 +75,39 @@ testcase tUpdtScriptCount
 
         printlog( "" )
         select case iCurrentDialog
-        case 1: printlog( "JavaScript" )
+        case 1: sDialog = "JavaScript" 
                 ToolsMacrosOrganizeMacrosJavaScript
                 kontext "ScriptOrganizer"
                 iCurrentScriptCount = hExpandAllNodes( ScriptTreeList )
                 ScriptOrganizer.cancel()                 
-        case 2: printlog( "BeanShell" )
+        case 2: sDialog = "BeanShell"
                 ToolsMacrosOrganizeMacrosBeanShell
                 kontext "ScriptOrganizer"
                 iCurrentScriptCount = hExpandAllNodes( ScriptTreeList )
                 ScriptOrganizer.cancel()                
-        case 3: printlog( "Python" )
+        case 3: sDialog = "Python"
                 ToolsMacrosOrganizeMacrosPython
                 kontext "ScriptOrganizer"
                 iCurrentScriptCount = hExpandAllNodes( ScriptTreeList )
                 ScriptOrganizer.cancel()                
-        case 4: printlog( "Makro Organizer" )
+        case 4: sDialog = "Makro Organizer"
                 ToolsMacro_uno
                 Kontext "Makro"
                 hExpandAllNodes( MakroAus )
                 iCurrentScriptCount = hGetScriptCount( MakroAus, MakroListe )
                 Makro.close()                
-        case 5: printlog( "Run Macro" )
+        case 5: sDialog = "Run Macro"
                 ToolsMacrosRunMacro
                 kontext "ScriptSelector"
                 hExpandAllNodes( LibraryTreeList )
                 iCurrentScriptCount = hGetScriptCount( LibraryTreeList, ScriptList )
                 ScriptSelector.cancel()                
         end select
+
+        printlog sDialog
         
         if ( aScriptCount( iCurrentDialog ) <> iCurrentScriptCount ) then
-            warnlog( "Incorrect number of scripts for this dialog: " & iCurrentScriptCount )
+            warnlog( "Incorrect number of scripts for this dialog: '" + sDialog + "' expected:" + aScriptCount( iCurrentDialog ) + ", but is:" & iCurrentScriptCount )
         else
             printlog( "Number of scripts is ok" )
         endif
@@ -95,7 +115,6 @@ testcase tUpdtScriptCount
     next iCurrentDialog
     
     hCloseDocument()
-    
 
 endcase
 

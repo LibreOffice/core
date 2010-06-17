@@ -474,7 +474,7 @@ public:
     inline void DrawBackBrush( const SwLinePortion &rPor ) const
     { /* if( pFnt->GetBackColor() ) */ _DrawBackBrush( rPor ); }
 
-        void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;
+    void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;
 
     inline void NotifyURL( const SwLinePortion &rPor ) const
         { if( URLNotify() ) _NotifyURL( rPor ); }

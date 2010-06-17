@@ -705,7 +705,7 @@ SfxItemPresentation lcl_HFPresentation
                 nTmp = rLRItem.GetRight();
                 nRightMargin = nTmp < 0 ? 0 : USHORT(nTmp);
 
-                aText = SVX_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
+                aText = EE_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
                 if ( 100 != nPropLeftMargin )
                 {
                     aText += String::CreateFromInt32( nPropLeftMargin );
@@ -715,13 +715,13 @@ SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nLeftMargin,
                                            eCoreMetric, ePresentationMetric, pIntl );
-                    aText += SVX_RESSTR(GetMetricId(ePresentationMetric));
+                    aText += EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim;
 
                 // nPropFirstLineOfst haben wir nicht
 
-                aText += SVX_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
+                aText += EE_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
                     aText += String::CreateFromInt32( nPropRightMargin );
@@ -731,7 +731,7 @@ SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nRightMargin,
                                             eCoreMetric, ePresentationMetric, pIntl );
-                    aText += SVX_RESSTR(GetMetricId(ePresentationMetric));
+                    aText += EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
             }
             break;

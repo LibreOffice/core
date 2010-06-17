@@ -112,8 +112,7 @@ struct PresentationSettingsEx : public PresentationSettings
     css::uno::Reference< css::drawing::XDrawPage > mxStartPage;
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
 
-    PresentationSettingsEx();
-    PresentationSettingsEx( PresentationSettingsEx& );
+    PresentationSettingsEx( const PresentationSettingsEx& );
     PresentationSettingsEx( PresentationSettings& );
 
     void SetArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments ) throw (css::lang::IllegalArgumentException);

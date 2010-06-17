@@ -30,6 +30,8 @@
 #include "TitleWrapper.hxx"
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
+#include "ControllerLockGuard.hxx"
+
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -225,6 +227,9 @@ TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
         m_aEventListenerContainer( m_aMutex ),
         m_eTitleType(eTitleType)
 {
+    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
+    if( !getTitleObject().is() ) //#i83831# create an empty title at the model, thus references to properties can be mapped mapped correctly
+        TitleHelper::createTitle( m_eTitleType, OUString(), m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
 }
 
 TitleWrapper::~TitleWrapper()
@@ -449,6 +454,33 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
         aRet = WrappedPropertySet::getPropertyDefault( rPropertyName );
 
     return aRet;
+}
+
+void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
+    {
+        Reference< beans::XPropertySet > xPropSet( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        if( xPropSet.is() )
+            xPropSet->addPropertyChangeListener( rPropertyName, xListener );
+    }
+    else
+        WrappedPropertySet::addPropertyChangeListener( rPropertyName, xListener );
+}
+void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
+    {
+        Reference< beans::XPropertySet > xPropSet( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        if( xPropSet.is() )
+            xPropSet->removePropertyChangeListener( rPropertyName, xListener );
+    }
+    else
+        WrappedPropertySet::removePropertyChangeListener( rPropertyName, xListener );
 }
 
 // ================================================================================

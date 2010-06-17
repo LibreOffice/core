@@ -90,11 +90,14 @@ public class XMLStylesExporter extends TestCase {
     }
 
     /**
-     * Document disposed here.
+     * Close document
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xChartDoc " );
-        xChartDoc.dispose();
+        if( xChartDoc!=null ) {
+            log.println( "    closing xChartDoc" );
+            util.DesktopTools.closeDoc(xChartDoc);
+            xChartDoc = null;
+        }
     }
 
     /**

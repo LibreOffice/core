@@ -43,6 +43,9 @@
 #include "toolkit/controls/tkscrollbar.hxx"
 #endif
 #include <toolkit/controls/stdtabcontroller.hxx>
+#include <toolkit/controls/tksimpleanimation.hxx>
+#include <toolkit/controls/tkthrobber.hxx>
+
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
@@ -453,6 +456,10 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
         pNewModel = new OGeometryControlModel< UnoTreeModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName_GridControlModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoGridModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoSimpleAnimationControlModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoSimpleAnimationControlModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoThrobberControlModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoThrobberControlModel >;
 
     if ( !pNewModel )
     {
@@ -492,7 +499,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
     static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 21 );
+        pNamesSeq = new Sequence< ::rtl::OUString >( 24 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -515,8 +522,9 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
         pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
         pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
         pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
-        pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
-
+        pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
+        pNames[22] = ::rtl::OUString::createFromAscii( szServiceName2_UnoSimpleAnimationControlModel );
+        pNames[23] = ::rtl::OUString::createFromAscii( szServiceName2_UnoThrobberControlModel );
     }
     return *pNamesSeq;
 }
@@ -1975,6 +1983,20 @@ void UnoDialogControl::ImplUpdateResourceResolver()
     }
 }
 
+void SAL_CALL UnoDialogControl::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->endDialog( i_result );
+}
+
+void SAL_CALL UnoDialogControl::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->setHelpId( i_id );
+}
+
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -2081,24 +2103,24 @@ throw (RuntimeException)
 
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {
-
-
-    ::rtl::OUString ret;
-
     ::rtl::OUString baseLocation;
     ::rtl::OUString url;
 
     rbase  >>= baseLocation;
     rUrl  >>= url;
 
+    ::rtl::OUString absoluteURL( url );
     if ( url.getLength() > 0 )
     {
         INetURLObject urlObj(baseLocation);
         urlObj.removeSegment();
         baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
-        ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+
+        ::rtl::OUString testAbsoluteURL;
+        if ( ::osl::FileBase::E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
+            absoluteURL = testAbsoluteURL;
     }
 
-    return ret;
+    return absoluteURL;
 }
 

@@ -64,7 +64,13 @@ IDLFILES=\
         XControlInformation.idl \
         XAsynchronousExecutableDialog.idl \
         XDialogClosedListener.idl \
-        DialogClosedEvent.idl
+        DialogClosedEvent.idl \
+    XWizard.idl \
+    XWizardController.idl \
+    Wizard.idl \
+    XWizardPage.idl \
+    WizardButton.idl \
+    WizardTravelType.idl
 
 # ------------------------------------------------------------------
 

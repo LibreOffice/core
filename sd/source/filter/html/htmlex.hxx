@@ -88,7 +88,6 @@ public:
 
     virtual BOOL    GetString( ULONG nErrId, String& rCtxStr );
 
-    void            SetContext( USHORT nResId );
     void            SetContext( USHORT nResId, const String& rURL );
     void            SetContext( USHORT nResId, const String& rURL1, const String& rURL2 );
 };

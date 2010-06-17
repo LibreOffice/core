@@ -98,7 +98,7 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     void                EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective);
 
     virtual void        ActivatePage();
-    virtual sal_Bool    commitPage( CommitPageReason _eReason );
+    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
     virtual bool        canAdvance() const;
 
 public:

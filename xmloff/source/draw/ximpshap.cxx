@@ -167,6 +167,8 @@ SdXMLShapeContext::SdXMLShapeContext(
 ,   mnZOrder(-1)
 ,   maSize(1, 1)
 ,   maPosition(0, 0)
+,   mbVisible(true)
+,   mbPrintable(true)
 {
 }
 
@@ -442,6 +444,20 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             uno::Reference<beans::XMultiPropertyStates> xMultiPropertyStates(xShape, uno::UNO_QUERY );
             if (xMultiPropertyStates.is())
                 xMultiPropertyStates->setAllPropertiesToDefault();
+        }
+
+        if( !mbVisible || !mbPrintable ) try
+        {
+            uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY_THROW );
+            if( !mbVisible )
+                xSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ), uno::Any( sal_False ) );
+
+            if( !mbPrintable )
+                xSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) ), uno::Any( sal_False ) );
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR( "SdXMLShapeContext::AddShape(), exception caught!" );
         }
 
         // #107848#
@@ -777,7 +793,7 @@ void SdXMLShapeContext::SetThumbnail()
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
     bool bHaveXmlId( false );
-    if( XML_NAMESPACE_DRAW == nPrefix )
+    if( (XML_NAMESPACE_DRAW == nPrefix) || (XML_NAMESPACE_DRAW_EXT == nPrefix) )
     {
         if( IsXMLToken( rLocalName, XML_ZINDEX ) )
         {
@@ -806,6 +822,11 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+        }
+        else if( IsXMLToken( rLocalName, XML_DISPLAY ) )
+        {
+            mbVisible = IsXMLToken( rValue, XML_ALWAYS ) || IsXMLToken( rValue, XML_SCREEN );
+            mbPrintable = IsXMLToken( rValue, XML_ALWAYS ) || IsXMLToken( rValue, XML_PRINTER );
         }
     }
     else if( XML_NAMESPACE_PRESENTATION == nPrefix )

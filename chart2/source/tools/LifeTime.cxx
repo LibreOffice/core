@@ -62,12 +62,15 @@ LifeTimeManager::~LifeTimeManager()
 {
 }
 
-        sal_Bool LifeTimeManager
-::impl_isDisposed()
+bool LifeTimeManager::impl_isDisposed( bool bAssert )
 {
     if( m_bDisposed || m_bInDispose )
     {
-        OSL_ENSURE( sal_False, "This component is already disposed " );
+        if( bAssert )
+        {
+            OSL_ENSURE( sal_False, "This component is already disposed " );
+            (void)(bAssert);
+        }
         return sal_True;
     }
     return sal_False;
@@ -185,15 +188,18 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
 {
 }
 
-        sal_Bool CloseableLifeTimeManager
-::impl_isDisposedOrClosed()
+bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
 {
-    if( impl_isDisposed() )
+    if( impl_isDisposed( bAssert ) )
         return sal_True;
 
     if( m_bClosed )
     {
-        OSL_ENSURE( sal_False, "This object is already closed" );
+        if( bAssert )
+        {
+            OSL_ENSURE( sal_False, "This object is already closed" );
+            (void)(bAssert);//avoid warnings
+        }
         return sal_True;
     }
     return sal_False;
@@ -206,6 +212,8 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
     //no mutex is allowed to be acquired
     {
         osl::ResettableGuard< osl::Mutex > aGuard( m_aAccessMutex );
+        if( impl_isDisposedOrClosed(false) )
+            return sal_False;
 
         //Mutex needs to be acquired exactly ones; will be released inbetween
         if( !impl_canStartApiCall() )

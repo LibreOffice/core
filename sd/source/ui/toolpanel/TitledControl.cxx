@@ -311,22 +311,6 @@ void TitledControl::SetEnabledState(bool bFlag)
 
 
 
-void TitledControl::SetUserData (void* pUserData)
-{
-    mpUserData = pUserData;
-}
-
-
-
-
-void* TitledControl::GetUserData (void) const
-{
-    return mpUserData;
-}
-
-
-
-
 bool TitledControl::IsShowing (void) const
 {
     return mbVisible;

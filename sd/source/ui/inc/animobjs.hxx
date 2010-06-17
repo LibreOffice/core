@@ -172,7 +172,6 @@ private:
 
     void            UpdateControl( ULONG nPos, BOOL bDisableCtrls = FALSE );
     void            ResetAttrs();
-    void            WaitInEffect( ULONG nMilliSeconds ) const;
     void            WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
                                         SfxProgress* pStbMgr ) const;
     Fraction        GetScale();

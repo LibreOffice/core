@@ -327,22 +327,6 @@ SfxUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
 
 
 
-SfxShell* SlideSorterViewShell::CreateInstance (
-    sal_Int32,
-    SfxShell*,
-    void* pUserData,
-    ViewShellBase& rBase)
-{
-    return new SlideSorterViewShell (
-        rBase.GetViewFrame(),
-        rBase,
-        static_cast< ::Window*>(pUserData),
-        NULL);
-}
-
-
-
-
 void SlideSorterViewShell::GetFocus (void)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);

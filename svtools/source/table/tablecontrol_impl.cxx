@@ -1647,6 +1647,12 @@ namespace svt { namespace table
     {
         return m_nRowSelected;
     }
+    //--------------------------------------------------------------------
+    void TableControl_Impl::clearSelection()
+    {
+        m_nRowSelected.clear();
+    }
+    //--------------------------------------------------------------------
     //-------------------------------------------------------------------------------
     void TableControl_Impl::removeSelectedRow(RowPos _nRowPos)
     {

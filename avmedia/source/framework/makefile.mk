@@ -50,6 +50,7 @@ SLOFILES= \
         $(SLO)$/soundhandler.obj  
 
 EXCEPTIONSFILES = \
+        $(SLO)$/mediatoolbox.obj \
         $(SLO)$/soundhandler.obj
 
 # --- Targets ----------------------------------
