@@ -228,6 +228,7 @@ private:
     gint mnLooping;
     gint mnQuit;
     gint mnVideoWindowSet;
+    gint mnInitFail;
 };
 }     // namespace gst
 } // namespace avmedia

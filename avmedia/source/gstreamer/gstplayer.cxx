@@ -35,6 +35,10 @@
 #include <gst/gstelement.h>
 #include <gst/interfaces/xoverlay.h>
 
+
+// maximum timeout time in nanoseconds
+#define GST_MAX_TIMEOUT 500000000
+
 using namespace ::com::sun::star;
 
 namespace avmedia
@@ -81,7 +85,8 @@ Player::Player( GString* pURI ) :
     mnVolumeDB( 0 ),
     mnLooping( 0 ),
     mnQuit( 0 ),
-    mnVideoWindowSet( 0 )
+    mnVideoWindowSet( 0 ),
+    mnInitFail( 0 )
 {
     // initialize GStreamer framework only once
     static bool bGstInitialized = false;
@@ -207,7 +212,7 @@ sal_Bool SAL_CALL Player::isPlaying()
 
     if( mpPlayer )
     {
-        gst_element_get_state( mpPlayer, &aState, NULL, GST_CLOCK_TIME_NONE );
+        gst_element_get_state( mpPlayer, &aState, NULL, GST_MAX_TIMEOUT );
     }
 
     return( GST_STATE_PLAYING == aState );
@@ -450,7 +455,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow(
                 GstState aOldState = GST_STATE_NULL;
 
                 mpPlayerWindow = pPlayerWindow;
-                gst_element_get_state( mpPlayer, &aOldState, NULL, GST_CLOCK_TIME_NONE );
+                gst_element_get_state( mpPlayer, &aOldState, NULL, GST_MAX_TIMEOUT );
                 gst_element_set_state( mpPlayer, GST_STATE_READY );
                 g_object_set( mpPlayer, "video-sink", pVideoSink, NULL );
                 gst_element_set_state( mpPlayer, aOldState );
@@ -543,11 +548,11 @@ bool Player::implInitPlayer()
 {
     bool bRet = false;
 
-    if( mpPlayer )
+    if( mpPlayer && (mnInitFail < 3) )
     {
         GstState aState = GST_STATE_NULL;
 
-        if( gst_element_get_state( mpPlayer, &aState, NULL, GST_CLOCK_TIME_NONE ) == GST_STATE_CHANGE_SUCCESS )
+        if( gst_element_get_state( mpPlayer, &aState, NULL, GST_MAX_TIMEOUT ) == GST_STATE_CHANGE_SUCCESS )
         {
             bRet = ( GST_STATE_PAUSED == aState ) || ( GST_STATE_PLAYING == aState );
 
@@ -555,10 +560,13 @@ bool Player::implInitPlayer()
             {
                 gst_element_set_state( mpPlayer, GST_STATE_PAUSED );
                 bRet = ( gst_element_get_state( mpPlayer, &aState, NULL,
-                                                GST_CLOCK_TIME_NONE ) == GST_STATE_CHANGE_SUCCESS ) &&
+                                                GST_MAX_TIMEOUT ) == GST_STATE_CHANGE_SUCCESS ) &&
                     ( GST_STATE_PAUSED == aState );
             }
         }
+
+        if( ! bRet )
+            mnInitFail++;
     }
 
     return( bRet );
