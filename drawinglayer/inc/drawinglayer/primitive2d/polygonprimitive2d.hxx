@@ -189,7 +189,7 @@ namespace drawinglayer
                 const attribute::LineAttribute& rLineAttribute);
 
             /// data read access
-            basegfx::B2DPolygon getB2DPolygon() const { return maPolygon; }
+            const basegfx::B2DPolygon& getB2DPolygon() const { return maPolygon; }
             const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 

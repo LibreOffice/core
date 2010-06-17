@@ -982,26 +982,69 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                 {
-                    // direct draw of hairline; use default processing
-                    // also support SvtGraphicStroke MetaCommentAction
                     const primitive2d::PolygonHairlinePrimitive2D& rHairlinePrimitive = static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate);
-                    const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rHairlinePrimitive.getBColor()));
-                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rHairlinePrimitive.getB2DPolygon(), &aLineColor, 0, 0, 0, 0);
+                    const basegfx::B2DPolygon& rBasePolygon = rHairlinePrimitive.getB2DPolygon();
 
-                    impStartSvtGraphicStroke(pSvtGraphicStroke);
-                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate), false);
-                    impEndSvtGraphicStroke(pSvtGraphicStroke);
+                    if(rBasePolygon.count() > (0x0000ffff - 1))
+                    {
+                        // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                        // per polygon. If there are more, split the polygon in half and call recursively
+                        const sal_uInt32 nCount(rBasePolygon.count());
+                        const sal_uInt32 nHalfCount((nCount - 1) >> 1);
+                        const basegfx::B2DPolygon aLeft(rBasePolygon, 0, nHalfCount + 1);
+                        const basegfx::B2DPolygon aRight(rBasePolygon, nHalfCount, nCount - nHalfCount);
+                        const primitive2d::PolygonHairlinePrimitive2D aPLeft(aLeft, rHairlinePrimitive.getBColor());
+                        const primitive2d::PolygonHairlinePrimitive2D aPRight(aRight, rHairlinePrimitive.getBColor());
+
+                        processBasePrimitive2D(aPLeft);
+                        processBasePrimitive2D(aPRight);
+                    }
+                    else
+                    {
+                        // direct draw of hairline; use default processing
+                        // support SvtGraphicStroke MetaCommentAction
+                        const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rHairlinePrimitive.getBColor()));
+                        SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
+                            rHairlinePrimitive.getB2DPolygon(),
+                            &aLineColor,
+                            0, 0, 0, 0);
+
+                        impStartSvtGraphicStroke(pSvtGraphicStroke);
+                        RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate), false);
+                        impEndSvtGraphicStroke(pSvtGraphicStroke);
+                    }
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D :
                 {
-                    // support SvtGraphicStroke MetaCommentAction
                     const primitive2d::PolygonStrokePrimitive2D& rStrokePrimitive = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
-                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rStrokePrimitive.getB2DPolygon(), 0, &rStrokePrimitive.getLineAttribute(),
-                        &rStrokePrimitive.getStrokeAttribute(), 0, 0);
+                    const basegfx::B2DPolygon& rBasePolygon = rStrokePrimitive.getB2DPolygon();
 
-                    if(true)
+                    if(rBasePolygon.count() > (0x0000ffff - 1))
                     {
+                        // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                        // per polygon. If there are more, split the polygon in half and call recursively
+                        const sal_uInt32 nCount(rBasePolygon.count());
+                        const sal_uInt32 nHalfCount((nCount - 1) >> 1);
+                        const basegfx::B2DPolygon aLeft(rBasePolygon, 0, nHalfCount + 1);
+                        const basegfx::B2DPolygon aRight(rBasePolygon, nHalfCount, nCount - nHalfCount);
+                        const primitive2d::PolygonStrokePrimitive2D aPLeft(
+                            aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
+                        const primitive2d::PolygonStrokePrimitive2D aPRight(
+                            aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
+
+                        processBasePrimitive2D(aPLeft);
+                        processBasePrimitive2D(aPRight);
+                    }
+                    else
+                    {
+                        // support SvtGraphicStroke MetaCommentAction
+                        SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
+                            rBasePolygon, 0,
+                            &rStrokePrimitive.getLineAttribute(),
+                            &rStrokePrimitive.getStrokeAttribute(),
+                            0, 0);
+
                         impStartSvtGraphicStroke(pSvtGraphicStroke);
                         const attribute::LineAttribute& rLine = rStrokePrimitive.getLineAttribute();
 
@@ -1013,12 +1056,12 @@ namespace drawinglayer
 
                             if(0.0 == rStroke.getFullDotDashLen())
                             {
-                                aHairLinePolyPolygon.append(rStrokePrimitive.getB2DPolygon());
+                                aHairLinePolyPolygon.append(rBasePolygon);
                             }
                             else
                             {
                                 basegfx::tools::applyLineDashing(
-                                    rStrokePrimitive.getB2DPolygon(), rStroke.getDotDashArray(),
+                                    rBasePolygon, rStroke.getDotDashArray(),
                                     &aHairLinePolyPolygon, 0, rStroke.getFullDotDashLen());
                             }
 
@@ -1048,93 +1091,54 @@ namespace drawinglayer
 
                         impEndSvtGraphicStroke(pSvtGraphicStroke);
                     }
-                    else
-                    {
-                        // Adapt OutDev's DrawMode if special ones were used
-                        const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
-                        adaptLineToFillDrawMode();
-
-                        impStartSvtGraphicStroke(pSvtGraphicStroke);
-
-                        // #i101491#
-                        // Change default of fat line generation for MetaFiles: Create MetaPolyLineAction
-                        // instead of decomposing all geometries when the polygon has more than given amount of
-                        // points; else the decomposition will get too expensive quiclky. OTOH
-                        // the decomposition provides the better quality e.g. taking edge roundings
-                        // into account which will NOT be taken into account with LineInfo-based actions
-                        const sal_uInt32 nSubPolygonCount(rStrokePrimitive.getB2DPolygon().count());
-                        bool bDone(0 == nSubPolygonCount);
-
-                        if(!bDone && nSubPolygonCount > 1000)
-                        {
-                            // create MetaPolyLineActions, but without LINE_DASH
-                            const attribute::LineAttribute& rLine = rStrokePrimitive.getLineAttribute();
-
-                            if(basegfx::fTools::more(rLine.getWidth(), 0.0))
-                            {
-                                const attribute::StrokeAttribute& rStroke = rStrokePrimitive.getStrokeAttribute();
-                                basegfx::B2DPolyPolygon aHairLinePolyPolygon;
-
-                                if(0.0 == rStroke.getFullDotDashLen())
-                                {
-                                    aHairLinePolyPolygon.append(rStrokePrimitive.getB2DPolygon());
-                                }
-                                else
-                                {
-                                    basegfx::tools::applyLineDashing(
-                                        rStrokePrimitive.getB2DPolygon(), rStroke.getDotDashArray(),
-                                        &aHairLinePolyPolygon, 0, rStroke.getFullDotDashLen());
-                                }
-
-                                const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rLine.getColor()));
-                                mpOutputDevice->SetLineColor(Color(aHairlineColor));
-                                mpOutputDevice->SetFillColor();
-
-                                aHairLinePolyPolygon.transform(maCurrentTransformation);
-
-                                const LineInfo aLineInfo(LINE_SOLID, basegfx::fround(rLine.getWidth()));
-
-                                for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
-                                {
-                                    const basegfx::B2DPolygon aCandidate(aHairLinePolyPolygon.getB2DPolygon(a));
-
-                                    if(aCandidate.count() > 1)
-                                    {
-                                        const Polygon aToolsPolygon(aCandidate);
-
-                                        mpMetaFile->AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
-                                    }
-                                }
-
-                                bDone = true;
-                            }
-                        }
-
-                        if(!bDone)
-                        {
-                            // use decomposition (creates line geometry as filled polygon
-                            // geometry)
-                            process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                        }
-
-                        impEndSvtGraphicStroke(pSvtGraphicStroke);
-
-                        // restore DrawMode
-                        mpOutputDevice->SetDrawMode(nOriginalDrawMode);
-                    }
 
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D :
                 {
-                    // support SvtGraphicStroke MetaCommentAction
                     const primitive2d::PolygonStrokeArrowPrimitive2D& rStrokeArrowPrimitive = static_cast< const primitive2d::PolygonStrokeArrowPrimitive2D& >(rCandidate);
-                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rStrokeArrowPrimitive.getB2DPolygon(), 0, &rStrokeArrowPrimitive.getLineAttribute(),
-                        &rStrokeArrowPrimitive.getStrokeAttribute(), &rStrokeArrowPrimitive.getStart(), &rStrokeArrowPrimitive.getEnd());
+                    const basegfx::B2DPolygon& rBasePolygon = rStrokeArrowPrimitive.getB2DPolygon();
 
-                    impStartSvtGraphicStroke(pSvtGraphicStroke);
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    impEndSvtGraphicStroke(pSvtGraphicStroke);
+                    if(rBasePolygon.count() > (0x0000ffff - 1))
+                    {
+                        // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                        // per polygon. If there are more, split the polygon in half and call recursively
+                        const sal_uInt32 nCount(rBasePolygon.count());
+                        const sal_uInt32 nHalfCount((nCount - 1) >> 1);
+                        const basegfx::B2DPolygon aLeft(rBasePolygon, 0, nHalfCount + 1);
+                        const basegfx::B2DPolygon aRight(rBasePolygon, nHalfCount, nCount - nHalfCount);
+                        const attribute::LineStartEndAttribute aEmpty;
+                        const primitive2d::PolygonStrokeArrowPrimitive2D aPLeft(
+                            aLeft,
+                            rStrokeArrowPrimitive.getLineAttribute(),
+                            rStrokeArrowPrimitive.getStrokeAttribute(),
+                            rStrokeArrowPrimitive.getStart(),
+                            aEmpty);
+                        const primitive2d::PolygonStrokeArrowPrimitive2D aPRight(
+                            aRight,
+                            rStrokeArrowPrimitive.getLineAttribute(),
+                            rStrokeArrowPrimitive.getStrokeAttribute(),
+                            aEmpty,
+                            rStrokeArrowPrimitive.getEnd());
+
+                        processBasePrimitive2D(aPLeft);
+                        processBasePrimitive2D(aPRight);
+                    }
+                    else
+                    {
+                        // support SvtGraphicStroke MetaCommentAction
+                        SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
+                            rBasePolygon, 0,
+                            &rStrokeArrowPrimitive.getLineAttribute(),
+                            &rStrokeArrowPrimitive.getStrokeAttribute(),
+                            &rStrokeArrowPrimitive.getStart(),
+                            &rStrokeArrowPrimitive.getEnd());
+
+                        impStartSvtGraphicStroke(pSvtGraphicStroke);
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        impEndSvtGraphicStroke(pSvtGraphicStroke);
+                    }
+
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
@@ -1780,7 +1784,7 @@ namespace drawinglayer
                     }
                     break;
                 }
-                case PRIMITIVE2D_ID_STRUCTURETAGRIMITIVE2D :
+                case PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D :
                 {
                     // structured tag primitive
                     const primitive2d::StructureTagPrimitive2D& rStructureTagCandidate = static_cast< const primitive2d::StructureTagPrimitive2D& >(rCandidate);

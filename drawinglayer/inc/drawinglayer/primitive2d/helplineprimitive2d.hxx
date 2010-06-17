@@ -94,8 +94,8 @@ namespace drawinglayer
                 double fDiscreteDashLength);
 
             /// data read access
-            const basegfx::B2DPoint getPosition() const { return maPosition; }
-            const basegfx::B2DVector getDirection() const { return maDirection; }
+            const basegfx::B2DPoint& getPosition() const { return maPosition; }
+            const basegfx::B2DVector& getDirection() const { return maDirection; }
             HelplineStyle2D getStyle() const { return meStyle; }
             const basegfx::BColor& getRGBColA() const { return maRGBColA; }
             const basegfx::BColor& getRGBColB() const { return maRGBColB; }
