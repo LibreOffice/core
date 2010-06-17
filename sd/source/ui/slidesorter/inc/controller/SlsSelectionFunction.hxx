@@ -117,7 +117,7 @@ public:
     void SwitchToNormalMode (void);
     void SwitchToDragAndDropMode(const Point aMousePosition);
     void SwitchToMultiSelectionMode (const Point aMousePosition, const sal_uInt32 nEventCode);
-    void SwitchToButtonMode (void);
+    bool SwitchToButtonMode (void);
 
     void ResetShiftKeySelectionAnchor (void);
 

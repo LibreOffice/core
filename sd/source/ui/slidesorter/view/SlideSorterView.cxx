@@ -955,15 +955,20 @@ void SlideSorterView::UpdatePageUnderMouse (
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
 
-    const bool bIsMouseOverButtonBar (GetButtonBar().IsMouseOverBar());
-    GetButtonBar().ProcessMouseMotionEvent(rpDescriptor, aMouseModelPosition, bIsMouseButtonDown);
-    // Set the help text of the slide when the mouse was moved from
-    // the button bar back over the preview.
-    if (rpDescriptor
-        && GetButtonBar().IsMouseOverBar() != bIsMouseOverButtonBar
-        && bIsMouseOverButtonBar)
+    ::boost::shared_ptr<ViewShell> pMainViewShell (mrSlideSorter.GetViewShellBase()->GetMainViewShell());
+    if (pMainViewShell
+        && pMainViewShell->GetShellType()!=ViewShell::ST_DRAW)
     {
-        mpToolTip->ShowDefaultHelpText();
+        const bool bIsMouseOverButtonBar (GetButtonBar().IsMouseOverBar());
+        GetButtonBar().ProcessMouseMotionEvent(rpDescriptor, aMouseModelPosition, bIsMouseButtonDown);
+        // Set the help text of the slide when the mouse was moved from the
+        // button bar back over the preview.
+        if (rpDescriptor
+            && GetButtonBar().IsMouseOverBar() != bIsMouseOverButtonBar
+            && bIsMouseOverButtonBar)
+        {
+            mpToolTip->ShowDefaultHelpText();
+        }
     }
 }
 
@@ -1017,12 +1022,17 @@ bool SlideSorterView::SetState (
             RequestRepaint(pDescriptor);
     }
 
-    // Fade in or out the buttons.
-    if (eState == PageDescriptor::ST_MouseOver)
-        if (bStateValue)
-            GetButtonBar().RequestFadeIn(rpDescriptor, bAnimate);
-        else
-            GetButtonBar().RequestFadeOut(rpDescriptor, bAnimate);
+    ::boost::shared_ptr<ViewShell> pMainViewShell(mrSlideSorter.GetViewShellBase()->GetMainViewShell());
+    if (pMainViewShell
+        && pMainViewShell->GetShellType()!=ViewShell::ST_DRAW)
+    {
+        // Fade in or out the buttons.
+        if (eState == PageDescriptor::ST_MouseOver)
+            if (bStateValue)
+                GetButtonBar().RequestFadeIn(rpDescriptor, bAnimate);
+            else
+                GetButtonBar().RequestFadeOut(rpDescriptor, bAnimate);
+    }
 
     return bModified;
 }

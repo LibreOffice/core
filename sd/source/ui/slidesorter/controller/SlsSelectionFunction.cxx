@@ -857,11 +857,19 @@ void SelectionFunction::SwitchToMultiSelectionMode (
 
 
 
-void SelectionFunction::SwitchToButtonMode (void)
+bool SelectionFunction::SwitchToButtonMode (void)
 {
-    if (mpModeHandler->GetMode() != ButtonMode)
-        SwitchMode(::boost::shared_ptr<ModeHandler>(
-            new ButtonModeHandler(mrSlideSorter, *this)));
+    // Do not show the buttons for draw pages.
+    ::boost::shared_ptr<ViewShell> pMainViewShell (mrSlideSorter.GetViewShellBase()->GetMainViewShell());
+    if (pMainViewShell
+        && pMainViewShell->GetShellType()!=ViewShell::ST_DRAW
+        && mpModeHandler->GetMode() != ButtonMode)
+    {
+        SwitchMode(::boost::shared_ptr<ModeHandler>(new ButtonModeHandler(mrSlideSorter, *this)));
+        return true;
+    }
+    else
+        return false;
 }
 
 
@@ -1357,8 +1365,8 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             // (or being faded in.)
             if (mrSlideSorter.GetView().GetButtonBar().IsVisible(rDescriptor.mpHitDescriptor))
             {
-                mrSelectionFunction.SwitchToButtonMode();
-                ReprocessEvent(rDescriptor);
+                if (mrSelectionFunction.SwitchToButtonMode())
+                    ReprocessEvent(rDescriptor);
             }
             else
             {
