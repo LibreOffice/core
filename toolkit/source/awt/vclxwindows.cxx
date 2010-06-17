@@ -63,6 +63,9 @@
 #include <vcl/tabpage.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
@@ -634,7 +637,13 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 aEvent.ActionCommand = maActionCommand;
-                maActionListeners.actionPerformed( aEvent );
+
+                Callback aCallback = ::boost::bind(
+                    &ActionListenerMultiplexer::actionPerformed,
+                    &maActionListeners,
+                    aEvent
+                );
+                ImplExecuteAsyncWithoutSolarLock( aCallback );
             }
         }
         break;
@@ -1537,6 +1546,8 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HELPURL,
                      BASEPROPERTY_LINECOUNT,
                      BASEPROPERTY_MULTISELECTION,
+                     BASEPROPERTY_MULTISELECTION_SIMPLEMODE,
+                     BASEPROPERTY_ITEM_SEPARATOR_POS,
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_SELECTEDITEMS,
                      BASEPROPERTY_STRINGITEMLIST,
@@ -1906,6 +1917,13 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+            {
+                sal_Int16 nSeparatorPos(0);
+                if ( Value >>= nSeparatorPos )
+                    pListBox->SetSeparatorPos( nSeparatorPos );
+            }
+            break;
             case BASEPROPERTY_READONLY:
             {
                 sal_Bool b = sal_Bool();
@@ -1920,6 +1938,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                      pListBox->EnableMultiSelection( b );
             }
             break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+                ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, sal_False );
+                break;
             case BASEPROPERTY_LINECOUNT:
             {
                 sal_Int16 n = sal_Int16();
@@ -1974,6 +1995,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+                aProp <<= sal_Int16( pListBox->GetSeparatorPos() );
+                break;
             case BASEPROPERTY_READONLY:
             {
                  aProp <<= (sal_Bool) pListBox->IsReadOnly();
@@ -1982,6 +2006,11 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             case BASEPROPERTY_MULTISELECTION:
             {
                  aProp <<= (sal_Bool) pListBox->IsMultiSelectionEnabled();
+            }
+            break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+            {
+                aProp <<= (sal_Bool)( ( pListBox->GetStyle() & WB_SIMPLEMODE ) == 0 );
             }
             break;
             case BASEPROPERTY_LINECOUNT:
@@ -2305,15 +2334,35 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDialog2*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XDialog*, this ) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
     VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Dialog* pDialog = dynamic_cast< Dialog* >( GetWindow() );
+    if ( pDialog )
+        pDialog->EndDialog( i_result );
+}
+
+void SAL_CALL VCLXDialog::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+        pWindow->SetHelpId( i_id );
+}
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2361,11 +2410,7 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
-
-    Dialog* pDlg = (Dialog*) GetWindow();
-    if ( pDlg )
-        pDlg->EndDialog( 0 );
+    endDialog(0);
 }
 
 void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)

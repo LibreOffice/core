@@ -263,6 +263,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                 aDefault <<= Reference< awt::XDevice >();
                 break;
 
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
             case BASEPROPERTY_VERTICALALIGN:
             case BASEPROPERTY_BORDERCOLOR:
             case BASEPROPERTY_SYMBOL_COLOR:
@@ -338,6 +339,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_HARDLINEBREAKS:
             case BASEPROPERTY_NOLABEL:              aDefault <<= (sal_Bool) sal_False; break;
 
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
             case BASEPROPERTY_HIDEINACTIVESELECTION:
             case BASEPROPERTY_ENFORCE_FORMAT:
             case BASEPROPERTY_AUTOCOMPLETE:

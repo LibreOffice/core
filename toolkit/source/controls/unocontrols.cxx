@@ -2427,6 +2427,12 @@ void UnoListBoxControl::updateFromModel()
 
     EventObject aEvent( getModel() );
     xItemListListener->itemListChanged( aEvent );
+
+    // notify the change of the SelectedItems property, again. While our base class, in updateFromModel,
+    // already did this, our peer(s) can only legitimately set the selection after they have the string
+    // item list, which we just notified with the itemListChanged call.
+    const ::rtl::OUString sSelectedItemsPropName( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ) );
+    ImplSetPeerProperty( sSelectedItemsPropName, ImplGetPropertyValue( sSelectedItemsPropName ) );
 }
 
 void UnoListBoxControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
