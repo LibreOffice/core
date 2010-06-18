@@ -124,6 +124,7 @@ enum SwDocumentSettingsPropertyHandles
     // --> OD 2008-06-05 #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     // <--
+    HANDLE_MODIFYPASSWORDINFO
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -177,6 +178,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("ProtectForm"), HANDLE_PROTECT_FORM, CPPUTYPE_BOOLEAN, 0, 0},
         // --> OD 2008-06-05 #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, CPPUTYPE_PROPERTYVALUE, 0,   0},
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -671,6 +673,21 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        case HANDLE_MODIFYPASSWORDINFO:
+        {
+            uno::Sequence< beans::PropertyValue > aInfo;
+            if ( !( rValue >>= aInfo ) )
+                throw lang::IllegalArgumentException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
+                    uno::Reference< uno::XInterface >(),
+                    2 );
+
+            if ( !mpDocSh->SetModifyPasswordInfo( aInfo ) )
+                throw beans::PropertyVetoException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                    uno::Reference< uno::XInterface >() );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -998,6 +1015,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        case HANDLE_MODIFYPASSWORDINFO:
+        {
+            rValue <<= mpDocSh->GetModifyPasswordInfo();
+        }
+        break;
 
         default:
             throw UnknownPropertyException();
