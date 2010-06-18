@@ -389,6 +389,12 @@ public:
      Selection  GetSurroundingTextSelection() const;
 };
 
+
+// some thesaurus functionality to avoid code duplication in different projects...
+bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( String &rStatusVal, LanguageType &rLang, const EditView &rEditView );
+void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText );
+
+
 //#if 0 // _SOLAR__PRIVATE
 DECLARE_LIST(ViewList,OutlinerView*)
 //#else
@@ -1017,7 +1023,7 @@ public:
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
-    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
+    void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
     void            EndSpelling();
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */

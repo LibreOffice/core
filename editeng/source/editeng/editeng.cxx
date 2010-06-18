@@ -813,6 +813,14 @@ ESelection EditEngine::CursorRight( const ESelection& rSelection, USHORT nCharac
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
+ESelection EditEngine::SelectSentence( const ESelection& rCurSel ) const
+{
+    EditEngine* pE = (EditEngine*)this;
+    EditSelection aCurSel( pE->pImpEditEngine->CreateSel( rCurSel ) );
+    EditSelection aSentenceSel( pE->pImpEditEngine->SelectSentence( aCurSel ) );
+    return pE->pImpEditEngine->CreateESel( aSentenceSel );
+}
+
 sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2198,7 +2206,7 @@ void EditEngine::EndSpelling()
 bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking  );
+    return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking );
 }
 /*-- 08.09.2008 11:38:32---------------------------------------------------
 
@@ -2211,10 +2219,10 @@ void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking )
+void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bIsGrammarChecking  );
+    pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck  );
 }
 
 sal_Bool EditEngine::HasConvertibleTextPortion( LanguageType nLang )
