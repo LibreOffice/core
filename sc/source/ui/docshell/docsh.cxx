@@ -49,6 +49,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -2652,3 +2653,97 @@ sal_Bool ScDocShell::AcceptStateUpdate() const
     return sal_False;
 }
 //-->Added by PengYunQuan for Validity Cell Range Picker
+
+
+bool ScDocShell::IsChangeRecording() const
+{
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    return pChangeTrack != NULL;
+}
+
+
+bool ScDocShell::HasChangeRecordProtection() const
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack)
+        bRes = pChangeTrack->IsProtected();
+    return bRes;
+}
+
+
+void ScDocShell::SetChangeRecording( bool bActivate )
+{
+    bool bOldChangeRecording = IsChangeRecording();
+
+    if (bActivate)
+    {
+        aDocument.StartChangeTracking();
+        ScChangeViewSettings aChangeViewSet;
+        aChangeViewSet.SetShowChanges(TRUE);
+        aDocument.SetChangeViewSettings(aChangeViewSet);
+    }
+    else
+    {
+        aDocument.EndChangeTracking();
+        PostPaintGridAll();
+    }
+
+    if (bOldChangeRecording != IsChangeRecording())
+    {
+        UpdateAcceptChangesDialog();
+        // Slots invalidieren
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
+            pBindings->InvalidateAll(FALSE);
+    }
+}
+
+
+bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack)
+    {
+        sal_Bool bProtected = pChangeTrack->IsProtected();
+
+        if (rNewPassword.Len())
+        {
+            // when password protection is applied change tracking must always be active
+            SetChangeRecording( true );
+
+            ::com::sun::star::uno::Sequence< sal_Int8 > aProtectionHash;
+            SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
+            pChangeTrack->SetProtection( aProtectionHash );
+        }
+        else
+        {
+            pChangeTrack->SetProtection( ::com::sun::star::uno::Sequence< sal_Int8 >() );
+        }
+        bRes = true;
+
+        if ( bProtected != pChangeTrack->IsProtected() )
+        {
+            UpdateAcceptChangesDialog();
+            SetDocumentModified();
+        }
+    }
+
+    return bRes;
+}
+
+
+bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack && pChangeTrack->IsProtected())
+    {
+        rPasswordHash = pChangeTrack->GetProtection();
+        bRes = true;
+    }
+    return bRes;
+}
+
+

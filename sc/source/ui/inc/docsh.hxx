@@ -418,7 +418,19 @@ public:
     sal_Bool        AcceptStateUpdate() const;
     //-->Added by PengYunQuan for Validity Cell Range Picker
     ScSheetSaveData* GetSheetSaveData();
+
+    // passwword protection for Calc (derived from SfxObjectShell)
+    // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
+    virtual void    SetChangeRecording( bool bActivate );
+    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 };
+
+
+void UpdateAcceptChangesDialog();
+
 
 SO2_DECL_REF(ScDocShell)
 SO2_IMPL_REF(ScDocShell)
