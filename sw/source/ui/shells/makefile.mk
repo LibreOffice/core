@@ -83,6 +83,7 @@ EXCEPTIONSFILES =  \
         $(SLO)$/drwtxtsh.obj \
         $(SLO)$/frmsh.obj \
         $(SLO)$/drwtxtex.obj \
+        $(SLO)$/slotadd.obj \
         $(SLO)$/textsh1.obj
 
 # --- Tagets -------------------------------------------------------

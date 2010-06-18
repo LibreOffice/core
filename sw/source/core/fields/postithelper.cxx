@@ -173,22 +173,6 @@ unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrm, const SwRootFrm* pR
     return nRet;
 }
 
-SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLayoutInfo >& rInfo, SwTxtFld* pFld )
-{
-    SwLayoutStatus aRet = SwPostItHelper::INVISIBLE;
-    if( pFld )
-    {
-        SwTxtNode* pTNd = pFld->GetpTxtNode();
-        if( pTNd )
-        {
-            SwPosition aPos( *pTNd );
-            aPos.nContent.Assign( pTNd, *pFld->GetStart() );
-            aRet = getLayoutInfos( rInfo, aPos );
-        }
-    }
-    return aRet;
-}
-
 SwPosition SwAnnotationItem::GetAnchorPosition() const
 {
     SwTxtFld* pFld = pFmtFld->GetTxtFld();

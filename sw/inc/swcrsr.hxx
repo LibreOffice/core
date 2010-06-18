@@ -164,6 +164,7 @@ public:
     BOOL GoEndSentence(){return GoSentence(END_SENT);}
     BOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
     BOOL GoStartSentence(){return GoSentence(START_SENT);}
+    BOOL ExpandToSentenceBorders();
 
     virtual BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
         BOOL bAllowVisual, BOOL bSkipHidden, BOOL bInsertCrsr );

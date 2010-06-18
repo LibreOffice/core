@@ -88,23 +88,6 @@ SwRewriter SwUndoBookmark::GetRewriter() const
 
 //----------------------------------------------------------------------
 
-SwUndoDelBookmark::SwUndoDelBookmark( const ::sw::mark::IMark& rBkmk )
-    : SwUndoBookmark( UNDO_DELBOOKMARK, rBkmk )
-{
-}
-
-
-void SwUndoDelBookmark::Undo( SwUndoIter& rUndoIter )
-{
-    SetInDoc( &rUndoIter.GetDoc() );
-}
-
-
-void SwUndoDelBookmark::Redo( SwUndoIter& rUndoIter )
-{
-    ResetInDoc( &rUndoIter.GetDoc() );
-}
-
 
 SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
     : SwUndoBookmark( UNDO_INSBOOKMARK, rBkmk )
