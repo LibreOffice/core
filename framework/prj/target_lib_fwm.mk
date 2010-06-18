@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,fwm))
 
-$(call gb_Library_get_headers_target,fwm) : $(call gb_Package_get_target,framework_inc)
+$(eval $(call gb_Library_add_package_headers,fwm,framework_inc))
 
 $(eval $(call gb_Library_set_include,fwm,\
     $$(INCLUDE) \

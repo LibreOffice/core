@@ -27,7 +27,9 @@
 
 $(eval $(call gb_Library_Library,xo))
 
-$(call gb_Library_get_headers_target,xo) : $(call gb_Package_get_target,xo_inc)
+$(eval $(call gb_Library_add_package_headers,xo,xmloff_inc))
+
+$(eval $(call gb_Library_add_precompiled_header,xo,$(SRCDIR)/xmloff/inc/pch/precompiled_xmloff))
 
 $(eval $(call gb_Library_set_include,xo,\
     $$(SOLARINC) \

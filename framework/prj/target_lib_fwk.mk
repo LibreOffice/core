@@ -27,14 +27,16 @@
 
 $(eval $(call gb_Library_Library,fwk))
 
-$(call gb_Library_get_headers_target,fwk) : $(call gb_Package_get_target,framework_inc)
+$(eval $(call gb_Library_add_package_headers,fwk,framework_inc))
+
+$(eval $(call gb_Library_add_precompiled_header,fwk,$(SRCDIR)/framework/inc/pch/precompiled_framework))
 
 $(eval $(call gb_Library_set_include,fwk,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/inc/framework/ \
     -I$(SRCDIR)/framework/inc \
     -I$(SRCDIR)/framework/inc/pch \
     -I$(SRCDIR)/framework/source/inc \
+    -I$(WORKDIR)/inc/framework/ \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
     -I$(OUTDIR)/inc/offuh \
 ))

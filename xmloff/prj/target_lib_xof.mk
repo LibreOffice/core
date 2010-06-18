@@ -28,13 +28,13 @@
 $(eval $(call gb_Library_Library,xof))
 
 $(eval $(call gb_Library_set_include,xof,\
-    $$(SOLARINC) \
-    -I$(WORKDIR)/inc/ \
+    -I$(SRCDIR)/xmloff/inc/pch \
     -I$(SRCDIR)/xmloff/inc \
     -I$(SRCDIR)/xmloff/source/inc \
-    -I$(SRCDIR)/xmloff/inc/pch \
-    -I$(OUTDIR)/inc/offuh \
+    -I$(WORKDIR)/inc/ \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc \
+    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xof,\

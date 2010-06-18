@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,fwi))
 
-$(call gb_Library_get_headers_target,fwi) : $(call gb_Package_get_target,framework_inc)
+$(eval $(call gb_Library_add_package_headers,fwi,framework_inc))
 
 $(eval $(call gb_Library_set_defs,fwi,\
     $$(DEFS) \
