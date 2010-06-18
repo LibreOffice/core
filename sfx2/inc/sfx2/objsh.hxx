@@ -286,6 +286,7 @@ public:
     sal_Bool                    HasName() const { return bHasName; }
     virtual String              GetAPIName() const;
     void                        SetHasName( sal_Bool bSet = sal_True ) { bHasName = bSet; }
+    void                        SetReadOnly();
     sal_Bool                    IsReadOnly() const;
     sal_Bool                    IsReadOnlyMedium() const;
     void                        SetReadOnlyUI( sal_Bool bReadOnly = sal_True );
@@ -437,6 +438,9 @@ public:
     void                                            SetLoadReadonly( sal_Bool _bReadonly );
     void                                            SetSaveVersionOnClose( sal_Bool bSet );
     void                                              ResetFromTemplate( const String& rTemplateName, const String& rFileName );
+
+    sal_uInt32                  GetModifyPasswordHash() const;
+    sal_Bool                    SetModifyPasswordHash( sal_uInt32 nHash );
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
@@ -713,6 +717,8 @@ public:
     SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+    SAL_DLLPRIVATE void SetModifyPasswordEntered( sal_Bool bEntered = sal_True );
+    SAL_DLLPRIVATE sal_Bool IsModifyPasswordEntered();
 
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }

@@ -247,6 +247,8 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bCreateTempStor( sal_False )
     ,m_bIsInit( sal_False )
     ,m_bIncomplEncrWarnShown( sal_False )
+    ,m_nModifyPasswordHash( 0 )
+    ,m_bModifyPasswordEntered( sal_False )
 {
     SfxObjectShell* pDoc = &_rDocShell;
     SfxObjectShellArr_Impl &rArr = SFX_APP()->GetObjectShells_Impl();

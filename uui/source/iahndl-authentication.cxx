@@ -26,18 +26,23 @@
  ************************************************************************/
 
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
+#include "com/sun/star/task/DocumentPasswordRequest2.hpp"
 #include "com/sun/star/task/DocumentMSPasswordRequest.hpp"
+#include "com/sun/star/task/DocumentMSPasswordRequest2.hpp"
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionPassword.hpp"
+#include "com/sun/star/task/XInteractionPassword2.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
 #include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
 
+#include "osl/diagnose.h"
 #include "rtl/digest.h"
 #include "vos/mutex.hxx"
 #include "tools/errcode.hxx"
 #include "vcl/msgbox.hxx"
+#include "vcl/abstdlg.hxx"
 #include "vcl/svapp.hxx"
 
 #include "ids.hrc"
@@ -67,8 +72,7 @@ executeLoginDialog(
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        bool bAccount
-            = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
+        bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
         bool bSavePassword   = rInfo.GetCanRememberPassword();
         bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
 
@@ -88,15 +92,10 @@ executeLoginDialog(
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        std::auto_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< ResMgr > xManager( ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         UniString aRealm(rRealm);
         std::auto_ptr< LoginDialog > xDialog(
-            new LoginDialog(pParent,
-                            nFlags,
-                            rInfo.GetServer(),
-                            &aRealm,
-                            xManager.get()));
+                new LoginDialog( pParent, nFlags, rInfo.GetServer(), &aRealm, xManager.get()));
         if (rInfo.GetErrorText().Len() != 0)
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());
@@ -118,8 +117,7 @@ executeLoginDialog(
         }
 
         if ( bCanUseSysCreds )
-            xDialog->SetUseSystemCredentials(
-                rInfo.GetIsUseSystemCredentials() );
+            xDialog->SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
 
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                                                        ERRCODE_BUTTON_CANCEL);
@@ -521,7 +519,8 @@ executePasswordDialog(
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode,
     ::rtl::OUString aDocName,
-    bool bMSCryptoMode)
+    bool bMSCryptoMode,
+    bool bIsPasswordToModify )
        SAL_THROW((uno::RuntimeException))
 {
     try
@@ -532,23 +531,25 @@ executePasswordDialog(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            std::auto_ptr< PasswordCreateDialog > xDialog(
-                new PasswordCreateDialog(pParent,
-                                         xManager.get(),
-                                         bMSCryptoMode));
+            const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
 
-            rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
-            rInfo.SetPassword( xDialog->GetPassword() );
+            VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
+            AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
+            std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
+
+            rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+            rInfo.SetPassword( pDialog->GetPasswordToOpen() );
+            rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
+            rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
         }
         else
         {
-            std::auto_ptr< PasswordDialog > xDialog(
-                new PasswordDialog(pParent, nMode, xManager.get(), aDocName));
+            std::auto_ptr< PasswordDialog > pDialog(
+                new PasswordDialog( pParent, nMode, xManager.get(), aDocName, bIsPasswordToModify ) );
 
-            rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
-            rInfo.SetPassword( xDialog->GetPassword() );
+            rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+            rInfo.SetPassword( bIsPasswordToModify ? String() : pDialog->GetPassword() );
+            rInfo.SetPasswordToModify( bIsPasswordToModify ? pDialog->GetPassword() : String() );
         }
     }
     catch (std::bad_alloc const &)
@@ -566,26 +567,36 @@ handlePasswordRequest_(
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     ::rtl::OUString aDocumentName,
-    bool bMSCryptoMode )
+    bool bMSCryptoMode,
+    bool bIsPasswordToModify )
     SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< task::XInteractionPassword > xPassword;
-    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword);
+    uno::Reference< task::XInteractionPassword2 > xPassword2;
+    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword2, &xPassword);
+
+    if ( xPassword2.is() && !xPassword.is() )
+        xPassword.set( xPassword2, uno::UNO_QUERY_THROW );
+
     LoginErrorInfo aInfo;
 
-    executePasswordDialog(pParent,
-                          aInfo,
-                          nMode,
-                          aDocumentName,
-                          bMSCryptoMode);
+    executePasswordDialog( pParent, aInfo, nMode,
+            aDocumentName, bMSCryptoMode, bIsPasswordToModify );
 
     switch (aInfo.GetResult())
     {
     case ERRCODE_BUTTON_OK:
+        OSL_ENSURE( !bIsPasswordToModify || xPassword2.is(), "PasswordToModify is requested, but there is no Interaction!" );
         if (xPassword.is())
         {
+            if (xPassword2.is())
+            {
+                xPassword2->setPasswordToModify( aInfo.GetPasswordToModify() );
+                xPassword2->setRecommendReadOnly( aInfo.IsRecommendToOpenReadonly() );
+            }
+
             xPassword->setPassword(aInfo.GetPassword());
             xPassword->select();
         }
@@ -661,27 +672,66 @@ UUIInteractionHelper::handlePasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
     SAL_THROW((uno::RuntimeException))
 {
+    // parameters to be filled for the call to handlePasswordRequest_
+    Window * pParent = getParentProperty();
+    task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
+    ::rtl::OUString aDocumentName;
+    bool bMSCryptoMode          = false;
+    bool bIsPasswordToModify    = false;
+    
+    bool bDoHandleRequest = false;
+
     uno::Any aAnyRequest(rRequest->getRequest());
 
-    task::DocumentPasswordRequest aDocumentPasswordRequest;
-    if (aAnyRequest >>= aDocumentPasswordRequest)
+    task::DocumentPasswordRequest2 aDocumentPasswordRequest2;
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentPasswordRequest2))
     {
-        handlePasswordRequest_(getParentProperty(),
-                               aDocumentPasswordRequest.Mode,
-                               rRequest->getContinuations(),
-                               aDocumentPasswordRequest.Name,
-                               false /* bool bMSCryptoMode */);
-        return true;
+        nMode               = aDocumentPasswordRequest2.Mode;
+        aDocumentName       = aDocumentPasswordRequest2.Name;
+        OSL_ENSURE( bMSCryptoMode == false, "bMSCryptoMode should be false" );
+        bIsPasswordToModify = aDocumentPasswordRequest2.IsRequestPasswordToModify;
+
+        bDoHandleRequest = true;
     }
 
-    task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
-    if (aAnyRequest >>= aDocumentMSPasswordRequest)
+    task::DocumentPasswordRequest aDocumentPasswordRequest;
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentPasswordRequest))
     {
-        handlePasswordRequest_(getParentProperty(),
-                               aDocumentMSPasswordRequest.Mode,
-                               rRequest->getContinuations(),
-                               aDocumentMSPasswordRequest.Name,
-                               true /* bool bMSCryptoMode */);
+        nMode               = aDocumentPasswordRequest.Mode;
+        aDocumentName       = aDocumentPasswordRequest.Name;
+        OSL_ENSURE( bMSCryptoMode == false, "bMSCryptoMode should be false" );
+        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+
+        bDoHandleRequest = true;
+    }
+
+    task::DocumentMSPasswordRequest2 aDocumentMSPasswordRequest2;
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest2))
+    {
+        nMode               = aDocumentMSPasswordRequest2.Mode;
+        aDocumentName       = aDocumentMSPasswordRequest2.Name;
+        bMSCryptoMode       = true;
+        bIsPasswordToModify = aDocumentMSPasswordRequest2.IsRequestPasswordToModify;
+
+        bDoHandleRequest = true;
+    }
+    
+    task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest))
+    {
+        nMode               = aDocumentMSPasswordRequest.Mode;
+        aDocumentName       = aDocumentMSPasswordRequest.Name;
+        bMSCryptoMode       = true;
+        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+
+        bDoHandleRequest = true;
+    }
+
+    if (bDoHandleRequest)
+    {
+        handlePasswordRequest_( pParent, nMode, rContinuations, 
+                aDocumentName, bMSCryptoMode, bIsPasswordToModify );
         return true;
     }
 
@@ -698,3 +748,4 @@ UUIInteractionHelper::handlePasswordRequest(
 
     return false;
 }
+

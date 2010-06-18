@@ -62,6 +62,9 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
@@ -80,6 +83,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dinfdlg.hxx>
+#include <sfx2/request.hxx>
 #include <sfxtypes.hxx>
 #include "alienwarn.hxx"
 
@@ -108,6 +112,7 @@ const ::rtl::OUString aFilterFlagsString   = ::rtl::OUString::createFromAscii( "
 
 using namespace ::com::sun::star;
 
+namespace {
 //-------------------------------------------------------------------------
 static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 {
@@ -168,6 +173,69 @@ static sal_Int32 getDontFlags( sal_Int8 nStoreMode )
 }
 
 //=========================================================================
+// class DocumentSettingsGuard
+//=========================================================================
+
+class DocumentSettingsGuard
+{
+    uno::Reference< beans::XPropertySet > m_xDocumentSettings;
+    sal_Bool m_bPreserveReadOnly;
+    sal_Bool m_bReadOnlySupported;
+
+    sal_Bool m_bRestoreSettings;
+public:
+    DocumentSettingsGuard( const uno::Reference< frame::XModel >& xModel, sal_Bool bReadOnly, sal_Bool bRestore )
+    : m_bPreserveReadOnly( sal_False )
+    , m_bReadOnlySupported( sal_False )
+    , m_bRestoreSettings( bRestore )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY_THROW );
+            m_xDocumentSettings.set(
+                xDocSettingsSupplier->createInstance(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ),
+                uno::UNO_QUERY_THROW );
+
+            ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
+
+            try
+            {
+                m_xDocumentSettings->getPropertyValue( aLoadReadonlyString ) >>= m_bPreserveReadOnly;
+                m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( bReadOnly ) );
+                m_bReadOnlySupported = sal_True;
+            }
+            catch( uno::Exception& )
+            {}
+        }
+        catch( uno::Exception& )
+        {}
+
+        if ( ( bReadOnly && !m_bReadOnlySupported ) )
+            throw uno::RuntimeException(); // the user could provide the data, so it must be stored
+    }
+
+    ~DocumentSettingsGuard()
+    {
+        if ( m_bRestoreSettings )
+        {
+            ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
+
+            try
+            {
+                if ( m_bReadOnlySupported )
+                    m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( m_bPreserveReadOnly ) );
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ASSERT( "Unexpected exception!" );
+            }
+        }
+    }
+};
+} // anonymous namespace
+
+//=========================================================================
 // class ModelData_Impl
 //=========================================================================
 class ModelData_Impl
@@ -184,6 +252,8 @@ class ModelData_Impl
 
     ::comphelper::SequenceAsHashMap m_aMediaDescrHM;
 
+    sal_Bool m_bRecommendReadOnly;
+
 public:
     ModelData_Impl( SfxStoringHelper& aOwner,
                     const uno::Reference< frame::XModel >& xModel,
@@ -199,6 +269,8 @@ public:
     uno::Reference< util::XModifiable > GetModifiable();
 
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
+
+    sal_Bool IsRecommendReadOnly() { return m_bRecommendReadOnly; }
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
@@ -252,6 +324,7 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 , m_pDocumentPropsHM( NULL )
 , m_pModulePropsHM( NULL )
 , m_aMediaDescrHM( aMediaDescr )
+, m_bRecommendReadOnly( sal_False )
 {
     CheckInteractionHandler();
 }
@@ -923,6 +996,12 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     ::rtl::OUString aFilterName = aStringTypeFN;
 
+    // the following two arguments can not be converted in MediaDescriptor,
+    // so they should be removed from the ItemSet after retrieving
+    SFX_ITEMSET_ARG( pDialogParams, pRecommendReadOnly, SfxBoolItem, SID_RECOMMENDREADONLY, sal_False );
+    m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
+    pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
+
     uno::Sequence< beans::PropertyValue > aPropsFromDialog;
     TransformItems( nSlotID, *pDialogParams, aPropsFromDialog, NULL );
     GetMediaDescr() << aPropsFromDialog;
@@ -1508,6 +1587,8 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     // store the document and handle it's docinfo
     SvtSaveOptions aOptions;
+
+    DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
 
     if ( aOptions.IsDocInfoSave()
       && ( !aModelData.GetStorable()->hasLocation()

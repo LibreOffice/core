@@ -36,9 +36,6 @@
 #endif
 #include <classes/framelistanalyzer.hxx>
 
-#ifndef __FRAMEWORK_CONSTANT_FILTER_HXX_
-#include <constant/filter.hxx>
-#endif
 #include <dispatch/interaction.hxx>
 
 #ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
