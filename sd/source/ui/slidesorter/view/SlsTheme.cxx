@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsViewCacheContext.hxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,19 +37,9 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-// Grays
-#define Black 0x000000
-#define Gray 0xc0c0c0
-#define White 0xffffff
+const static ColorData Black = 0x000000;
+const static ColorData White = 0xffffff;
 
-// Blues
-#define StellaBlue 0x009ee1
-#define AirForceBlue 0x5d8aa8
-
-
-const static ColorData BackgroundColorData = 0xffffff;
-
-const static ColorData gnMouseOverColor = 0x59000000 | StellaBlue;
 
 
 ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
@@ -106,17 +92,14 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
         maColor.resize(_ColorType_Size_);
         maColor[Color_Background] = maBackgroundColor;
-        maColor[Color_PageBackground] = AirForceBlue;
         maColor[Color_ButtonBackground] = Black;
-        maColor[Color_ButtonText] = Gray;
+        maColor[Color_ButtonText] = 0xc0c0c0;
         maColor[Color_ButtonTextHover] = White;
-        maColor[Color_MouseOverColor] = gnMouseOverColor;
         maColor[Color_PageNumberDefault] = 0x0808080;
         maColor[Color_PageNumberHover] = 0x4c4c4c;
-        maColor[Color_PageNumberHighContrast] = 0xffffff;
+        maColor[Color_PageNumberHighContrast] = White;
         maColor[Color_PageNumberBrightBackground] = 0x333333;
         maColor[Color_PageNumberDarkBackground] = 0xcccccc;
-        maColor[Color_Selection] = StellaBlue;
         maColor[Color_PreviewBorder] = 0x949599;
 
         maIntegerValues.resize(_IntegerValueType_Size_);
@@ -168,7 +151,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 75, 75, +100,+100, -50,-75);
     SetGradient(Gradient_FocusedPage, aSelectionColor, -1,-1, 0,0, -50,-75);
 
-    SetGradient(Gradient_ButtonBackground, 0x000000, -1,-1, 0,0, 0,0);
+    SetGradient(Gradient_ButtonBackground, Black, -1,-1, 0,0, 0,0);
     SetGradient(Gradient_NormalPage, maBackgroundColor, -1,-1, 0,0, 0,0);
 
     // The focused gradient needs special handling because its fill color is
