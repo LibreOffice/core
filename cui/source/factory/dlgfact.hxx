@@ -589,6 +589,19 @@ private:
 };
 //add for SvxPostItDialog end
 
+//for PasswordToOpenModifyDialog begin
+class PasswordToOpenModifyDialog;
+class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenModifyDialog
+{
+    DECL_ABSTDLG_BASE( AbstractPasswordToOpenModifyDialog_Impl, PasswordToOpenModifyDialog )
+
+    virtual String  GetPasswordToOpen() const;
+    virtual String  GetPasswordToModify() const;
+    virtual bool    IsRecommendToOpenReadonly() const;
+};
+//for PasswordToOpenModifyDialog end
+
+
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
@@ -796,6 +809,8 @@ public:
         Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext );
 
     virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId );
+
+    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
 };
 
 #endif
