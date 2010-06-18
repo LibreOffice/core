@@ -92,7 +92,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <vcl/pointr.hxx>
-#include <vcl/imgcons.hxx>
 #include <vcl/image.hxx>
 
 class Button;

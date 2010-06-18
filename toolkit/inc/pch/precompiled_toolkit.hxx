@@ -326,7 +326,6 @@
 #include "vcl/font.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/image.hxx"
-#include "vcl/imgcons.hxx"
 #include "vcl/jobset.hxx"
 #include "vcl/mapunit.hxx"
 #include "vcl/menu.hxx"
