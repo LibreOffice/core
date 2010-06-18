@@ -203,7 +203,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     ,maRemoveBtn        ( this, XMLSEC_RES( BTN_REMOVECERT ) )
     ,maBottomSepFL      ( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
     ,maOKBtn            ( this, XMLSEC_RES( BTN_OK ) )
-    ,maCancelBtn        ( this, XMLSEC_RES( BTN_CANCEL ) )
     ,maHelpBtn          ( this, XMLSEC_RES( BTN_HELP ) )
     ,m_sODFVersion (sODFVersion)
     ,m_bHasDocumentSignature(bHasDocumentSignature)
@@ -212,7 +211,10 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     // --> PB #i48253 the tablistbox needs its own unique id
     maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     // <--
-    static long nTabs[] = { 4, 0, 6*DS_LB_WIDTH/100, 36*DS_LB_WIDTH/100, 74*DS_LB_WIDTH/100 };
+    Size aControlSize( maSignaturesLB.GetSizePixel() );
+    aControlSize = maSignaturesLB.PixelToLogic( aControlSize, MapMode( MAP_APPFONT ) );
+    const long nControlWidth = aControlSize.Width();
+    static long nTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );
     maSignaturesLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
 
