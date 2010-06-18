@@ -107,7 +107,7 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
                 bInEscape = false;
             }
         }
-        else if (c == ',')
+        else if (c == ',' || c == '+')
         {
             //The comma separate the attribute value pairs.
             //If the comma is not part of a value (the value would then be enclosed in '"'),
