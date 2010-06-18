@@ -67,7 +67,7 @@
 +PRJ = ../../../..
 +
 +PRJNAME	= mythes
-+TARGET	= mythes-1.2
++TARGET	= mythes
 +LIBTARGET=YES
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
