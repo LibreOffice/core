@@ -42,11 +42,11 @@ testcase tCertificationDialogs
 
     hDeleteFile( sFile )
 
-    call hNewDocument() 
+    hNewDocument() 
 
-    call hChangeDoc()
+    hChangeDoc()
 
-    brc = hOpenDigitalSignaturesDialog()
+    hOpenDigitalSignaturesDialog()
 
     kontext "active"
     if ( active.exists( 1 ) ) then
@@ -54,10 +54,10 @@ testcase tCertificationDialogs
         try
            active.yes()
         catch
-           warnlog "#i111181# cws DEV300/fs33a wrong messge box when try to sign a new document"
-           active.ok
-           hCloseDocument
-           goto endsub
+            warnlog( CFN & "This is not the expected messagebox, aborting test" )
+            active.ok()
+            hCloseDocument()
+            goto endsub
         endcatch
         printlog( CFN & "Allow to save the document" )
     else

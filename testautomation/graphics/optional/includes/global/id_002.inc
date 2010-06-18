@@ -29,22 +29,6 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiEditUndoRedo
-' #1 tiEditRepeat
-' #1 tiEditCutPasteCopySelectall
-' #1 tiEditPasteSpecial
-' #1 tiEditSearchAndReplace
-' #1 tiEditDuplicate
-' #1 tiEditFields
-' #1 tdEditDeleteSlide
-' #1 tiEditLinks
-' #1 tiEditImageMap
-' #1 tiEditObjectProperties
-' #1 tiEditObjectEdit
-' #1 tiEditPlugIn
-' #1 tiEditHyperlink
-' #1 tEditPoints
 '\**********************************************************************************
 
 testcase tiEditUndoRedo
@@ -247,9 +231,9 @@ testcase tiEditLinks
         Link.Check
         Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
         Oeffnen.Click
-        sleep 2
+
         kontext "Messagebox"
-        if Messagebox.Exists then
+        if Messagebox.Exists( 2 ) then
             Warnlog Messagebox.GetText
             Messagebox.OK
             sleep 1
@@ -277,9 +261,9 @@ testcase tiEditImageMap
     Call  hNewDocument
 
     EditImageMap
+
     Kontext "ImageMapEditor"
-    sleep (1)
-    if ImageMapEditor.Exists (2) then
+    if ImageMapEditor.Exists( 5 ) then
         printlog "- ImageMap exists"
         DialogTest ( ImageMapEditor )
         try
@@ -319,7 +303,6 @@ testcase tiEditObjectProperties
     WaitSlot (1000)
     Kontext "TabEigenschaften"
     DialogTest ( TabEigenschaften )
-    sleep(1)
     Oeffnen.Click
     Kontext "OeffnenDlg"
     Call DialogTest ( OeffnenDlg )

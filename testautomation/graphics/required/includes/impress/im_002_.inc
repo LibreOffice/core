@@ -31,22 +31,27 @@
 '*
 '\*****************************************************************
 
+sub im_002_
+
+    call tiEditDeleteSlide()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiEditDeleteSlide
-printlog "open application"
-   Call hNewDocument
-printlog "Insert->Slide; press 'OK' "
-   InsertSlide
-   sleep 2
-   hTypekeys "<Pagedown>"
-   sleep 2
-printlog "Edit->Delete Slide "
-   try
-      EditDeleteSlide
-   catch
-      warnlog "Error when deleting slide"
-   endcatch
-   Call hCloseDocument
-printlog "close application "
+
+    printlog "open application"
+    Call hNewDocument
+    printlog "Insert->Slide; press 'OK' "
+    InsertSlide
+    WaitSlot( 2000 )
+    hTypekeys "<Pagedown>"
+    printlog "Edit->Delete Slide "
+    hUseAsyncSlot( "EditDeleteSlide" )
+    Call hCloseDocument
+    printlog "close application "
+    
 endcase
 
 

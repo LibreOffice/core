@@ -25,18 +25,30 @@
 '
 '/******************************************************************************
 '*
-'*  owner : Joerg.Skottke@Sun.Com
+'*  owner : joerg.skottke@sun.com
 '*
-'*  short description : Verify names of macros and scripts
+'*  short description : Update-Test for some dialogs in Basic-IDE
 '*
 '\******************************************************************************
 
 sub main
 
+    use "framework\required\includes\basic_macroassignment.inc"
+    use "framework\required\includes\basic_dialog_i18n.inc"
+    use "framework\required\includes\basic_organizer.inc"
+    use "framework\required\includes\basic_dialog_export.inc"
+    use "framework\required\includes\basic_dialog_i18n_import.inc"
+    use "framework\required\includes\scripting_basics.inc"
     use "framework\required\includes\script_organizers.inc"
 
-    call hStatusIn( "framework" , "f_script_organizers.bas" )
-    call tUpdtScriptCount()
+    call hStatusIn( "framework" , "f_programmability_dialogs.bas" )
+    call tUpdtMacroAssignment()
+    call tUpdtBasicDialogI18n()
+    call tUpdtBasicOrganizer()
+    call tUpdtDialogExport()
+    call tBasicDialogI18nImport()
+    call tScripting()       ' script organizer nodes if no documents are open
+    call tUpdtScriptCount() ' script organizer nodes with one open document
     call hStatusOut()
 
 end sub
@@ -48,11 +60,18 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
 
-    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_basic_ide_tools.inc"
+    use "global\tools\includes\optional\t_basic_organizer_tools.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_filetools.inc"    
+
+    use "framework\tools\includes\formcontrols.inc"
+    use "framework\tools\includes\pbrowser_tools.inc"
 
     gApplication = "WRITER"
     call GetUseFiles()
 
 end sub
 
+'-------------------------------------------------------------------------

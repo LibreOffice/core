@@ -31,26 +31,34 @@
 '*
 '\*****************************************************************
 
+sub im_004_
+
+    call tiInsertSlideExpandSummary()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiInsertSlideExpandSummary
 
-printlog "open application "
-   Call hNewDocument
-printlog "View->Master View->Outline View "
-      ViewWorkspaceOutlineView
-      Sleep 1
-      Kontext "DocumentImpressOutlineView"
-printlog "Type 2 rows "
-      DocumentImpressOutlineView.TypeKeys "Herbert<Return>Rudi"
-printlog "View->Master View->Drawing View "
-      ViewWorkspaceDrawingView
-      Sleep 1
-printlog "Insert->Summery Slide "
-   InsertSummerySlide
-   Sleep 1
-printlog "Insert->Expand Slide "
-   InsertExpandSlide
-   Sleep 2
-printlog "close application "
-   Call  hCloseDocument
+    printlog "open application "
+    Call hNewDocument
+    printlog "View->Master View->Outline View "
+    ViewWorkspaceOutlineView
+    WaitSlot()
+    Kontext "DocumentImpressOutlineView"
+    printlog "Type 2 rows "
+    DocumentImpressOutlineView.TypeKeys "Herbert<Return>Rudi"
+    printlog "View->Master View->Drawing View "
+    ViewWorkspaceDrawingView
+    WaitSlot()
+    printlog "Insert->Summery Slide "
+    InsertSummerySlide
+    WaitSlot()
+    printlog "Insert->Expand Slide "
+    InsertExpandSlide
+    WaitSlot( 3000 )
+    printlog "close application "
+    Call  hCloseDocument
 endcase
 

@@ -91,9 +91,10 @@ testcase tBasicVBACompatImportEnabled()
     hFileOpen( cTestFile )
     
     printlog( "Open the Basic organizer" )
-    hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Expand all nodes" )
+    kontext "Makro"
     cNodeCount = hExpandAllNodes( MakroAus )
     
     printlog( "Verify that we have the correct node count for the current mode." )

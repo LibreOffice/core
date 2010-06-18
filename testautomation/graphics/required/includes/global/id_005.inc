@@ -29,27 +29,7 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiFormatDefault
-' #1 tiFormatLine
-' #1 tdFormatArea
-' #1 tiFormatText
-' #1 tiFormatPositionAndSize
-' #1 tiFormatCharacter
-' #1 tiFormatControlForm
-' #1 tiFormatDimensions
-' #1 tiFormatConnector
-' #1 tiFormat3D_Effects
-' #1 tiFormatNumberingBullets
-' #1 tiFormatCaseCharacter
-' #1 tiFormatParagraph
-' #1 tiFormatPage
-' #1 tiFormatStylesAndFormatting
-' #1 tiFormatStylesSlideDesign
-' #1 tiFormatFontwork
-' #1 tiFormatGroup
-' #1 hWalkTheStyles
-'\**********************************************************************************
+'\******************************************************************************
 testcase tiFormatDefault
 
     printlog "open application"

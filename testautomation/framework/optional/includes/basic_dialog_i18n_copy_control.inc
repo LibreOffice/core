@@ -38,6 +38,7 @@ testcase tBasicDialogI18nCopyControl
     const DIALOG_NAME = "DialogExport"  ' Name of the first module
     const LANGUAGES_TO_COPY = 5         ' Only copy n languages
     const TARGET_DIALOG = "Target"      ' The name of the dialog the control is pasted to
+    const DEFAULT_TIMEOUT = 2
     
     dim cLanguageList( LANGUAGES_TO_COPY ) as string ' Note: Index 0 is used
     dim iCurrentLanguage as integer
@@ -56,146 +57,145 @@ testcase tBasicDialogI18nCopyControl
     ' These are the IDE internal coordinates of the control, used to restore
     ' identical coordinates in the source and target dialogs
     dim iOriginalCoordinates( 4 ) as integer
-
-    ' Some multi purpose returncode                
-    dim brc as boolean
     
     hCreateDocument()
 
     printlog( "Test init: Setting up environment" )
-    brc = hInitFormControls( DIALOG_NAME )
-    if ( not brc ) then
-        warnlog( "Failed to initialize BASIC IDE/Dialog editor, aborting" )
-        goto endsub
-    endif
-    
-    hDrawControlOnDialog( COMMAND_BUTTON )
-    
-    hOpenPropertyBrowser()
-    kontext "TabGeneralControl"
-    printlog( "Get internal coordinates for the control" )
-    iOriginalCoordinates( 1 ) = height.getText()
-    iOriginalCoordinates( 2 ) = width.getText()
-    iOriginalCoordinates( 3 ) = PosX.getText()
-    iOriginalCoordinates( 4 ) = PosY.getText()
-    printlog( "Height: " & iOriginalCoordinates( 1 ) )
-    printlog( "Width.: " & iOriginalCoordinates( 2 ) )
-    printlog( "Pos X.: " & iOriginalCoordinates( 3 ) )
-    printlog( "Pos Y.: " & iOriginalCoordinates( 4 ) )
-    hClosePropertyBrowser()
-    
-    qaerrorlog( "#i80456# properties button not enabled when a formcontrol is inserted via keyboard" )
-    
-    kontext "ToolsCollectionBar"
-    ManageLanguage.click()
-    
-    kontext "ManageUILanguages"
-    if ( ManageUILanguages.exists( 2 ) ) then
-    
-        add.click()
-        
-        kontext "SetDefaultLanguage" 
-        if ( SetDefaultLanguage.exists( 1 ) ) then
-            SetDefaultLanguage.ok()
-        else
-            warnlog( "Set Default Language dialog is missing" )
-        endif
-    else
-        warnlog( "Unable to open Manage UI Languages dialog" )
-    endif
-    
-    kontext "ManageUILanguages"
-    if ( ManageUILanguages.exists( 1 ) ) then
-    
-        add.click()
-        
-        kontext "AddUserInterface" 
-        if ( AddUserInterface.exists( 1 ) ) then
-            for iCurrentLanguage = 1 to LANGUAGES_TO_COPY
-                AddNewControl.select( iCurrentLanguage )
-                AddNewControl.check()
-            next iCurrentLanguage
-            AddUserInterface.ok()
-        else
-            warnlog( "Add User Interface Language dialog is missing" )
-        endif
-    else
-        warnlog( "Unable to open Manage UI Languages dialog" )
-    endif
-    
-    kontext "ManageUILanguages"
-    for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
-        PresentLanguages.select( iCurrentLanguage + 1 ) 
-        cLanguageList( iCurrentLanguage ) = PresentLanguages.getSelText()
-        printlog( iCurrentLanguage & ": " & cLanguageList( iCurrentLanguage ) )
-    next iCurrentLanguage
-    
-    kontext "ManageUILanguages"
-    ManageUILanguages.close()
-    
-    printlog( "Localizing control" )
-    for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
-        kontext "TranslationBar"
-        CurrentLanguage.select( iCurrentLanguage + 1 )
-        kontext "BasicIde"
-        hSelectControl( COMMAND_BUTTON )
+    if ( hInitFormControls( DIALOG_NAME ) ) then
+
+        printlog( "Draw a commandbutton on the dialog" )
+        hDrawControlOnDialog( COMMAND_BUTTON )
+
+        printlog( "Open the property browser" )
         hOpenPropertyBrowser()
-        printlog( "Setting string: " & cIDStrings( iCurrentLanguage ) )
         kontext "TabGeneralControl"
-        NameText.typeKeys( cIDStrings( iCurrentLanguage ) & "<RETURN>" )
+        printlog( "Get internal coordinates for the control" )
+        iOriginalCoordinates( 1 ) = height.getText()
+        iOriginalCoordinates( 2 ) = width.getText()
+        iOriginalCoordinates( 3 ) = PosX.getText()
+        iOriginalCoordinates( 4 ) = PosY.getText()
+        printlog( "Height: " & iOriginalCoordinates( 1 ) )
+        printlog( "Width.: " & iOriginalCoordinates( 2 ) )
+        printlog( "Pos X.: " & iOriginalCoordinates( 3 ) )
+        printlog( "Pos Y.: " & iOriginalCoordinates( 4 ) )
         hClosePropertyBrowser()
-    next iCurrentLanguage
-    
-    printlog( "Copy control" )
-    EditCopy
-        
-    printlog( "New dialog" )
-    Call hNewDialog()
-    
-    printlog( "Paste control" )
-    EditPaste
-    
-    hOpenPropertyBrowser()
-    kontext "TabGeneralControl"
-    printlog( "Set coordinates to be identical with those from the source control" )
-    PosX.typeKeys  (  )
-    PosX.typeKeys  ( "<HOME><SHIFT END>" & iOriginalCoordinates( 3 ) & "<RETURN>" )
-    PosY.typeKeys  ( "<HOME><SHIFT END>" & iOriginalCoordinates( 4 ) & "<RETURN>" )
-    Height.typeKeys( "<HOME><SHIFT END>" & iOriginalCoordinates( 1 ) & "<RETURN>" )
-    Width.typeKeys ( "<HOME><SHIFT END>" & iOriginalCoordinates( 2 ) & "<RETURN>" )
-    hClosePropertyBrowser
 
+        qaerrorlog( "#i80456# properties button not enabled when a formcontrol is inserted via keyboard" )
 
-    hOpenPropertyBrowser()
-    kontext "TabGeneralControl"
-    printlog( "Get internal coordinates for the control" )
-    iOriginalCoordinates( 1 ) = height.getText()
-    iOriginalCoordinates( 2 ) = width.getText()
-    iOriginalCoordinates( 3 ) = PosX.getText()
-    iOriginalCoordinates( 4 ) = PosY.getText()
-    printlog( "Height: " & iOriginalCoordinates( 1 ) )
-    printlog( "Width.: " & iOriginalCoordinates( 2 ) )
-    printlog( "Pos X.: " & iOriginalCoordinates( 3 ) )
-    printlog( "Pos Y.: " & iOriginalCoordinates( 4 ) )
-    hClosePropertyBrowser()
+        kontext "ToolsCollectionBar"
+        printlog( "Click <Manage Languages>" )
+        ManageLanguage.click()
 
-    
-    kontext "TranslationBar"
-    for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
-        CurrentLanguage.select( iCurrentLanguage + 1 )
-        cTempString = CurrentLanguage.getSelText()
-        if ( cTempString = cLanguageList( iCurrentLanguage ) ) then
-            printlog( "Language <" & cTempString & "> was successfully copied" )
+        kontext "ManageUILanguages"
+        if ( ManageUILanguages.exists( DEFAULT_TIMEOUT ) ) then
+
+            printlog( "Click <Add>" )
+            hClickButton( Add )
+
+            kontext "SetDefaultLanguage"
+            if ( SetDefaultLanguage.exists( DEFAULT_TIMEOUT ) ) then
+                hCloseDialog( SetDefaultLanguage, "ok" )
+            else
+                warnlog( "Set Default Language dialog is missing" )
+            endif
         else
-            warnlog( "Either a language was lost or the sort order changed" )
-            printlog( "Expected: " & cLanguageList( iCurrentLanguage ) )
-            printlog( "Found...: " & cTempString )
+            warnlog( "Unable to open Manage UI Languages dialog" )
         endif
-    next iCurrentLanguage
-    
-    
-    kontext "BasicIde"
-    hDestroyDocument()
+
+        kontext "ManageUILanguages"
+        if ( ManageUILanguages.exists( DEFAULT_TIMEOUT ) ) then
+
+            printlog( "Click <Add>" )
+            hClickButton( Add )
+
+            kontext "AddUserInterface"
+            if ( AddUserInterface.exists( DEFAULT_TIMEOUT ) ) then
+                for iCurrentLanguage = 1 to LANGUAGES_TO_COPY
+                    AddNewControl.select( iCurrentLanguage )
+                    AddNewControl.check()
+                next iCurrentLanguage
+                hCloseDialog( AddUserInterface, "ok" )
+            else
+                warnlog( "Add User Interface Language dialog is missing" )
+            endif
+        else
+            warnlog( "Unable to open Manage UI Languages dialog" )
+        endif
+
+        kontext "ManageUILanguages"
+        for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
+            PresentLanguages.select( iCurrentLanguage + 1 )
+            cLanguageList( iCurrentLanguage ) = PresentLanguages.getSelText()
+            printlog( iCurrentLanguage & ": " & cLanguageList( iCurrentLanguage ) )
+        next iCurrentLanguage
+
+        kontext "ManageUILanguages"
+        hCloseDialog( ManageUILanguages, "close" )
+
+        printlog( "Localizing control" )
+        for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
+            kontext "TranslationBar"
+            CurrentLanguage.select( iCurrentLanguage + 1 )
+            kontext "BasicIde"
+            hSelectControl( COMMAND_BUTTON )
+            hOpenPropertyBrowser()
+            printlog( "Setting string: " & cIDStrings( iCurrentLanguage ) )
+            kontext "TabGeneralControl"
+            NameText.typeKeys( cIDStrings( iCurrentLanguage ) & "<RETURN>" )
+            hClosePropertyBrowser()
+        next iCurrentLanguage
+
+        printlog( "Copy control" )
+        hUseAsyncSlot( "EditCopy" )
+
+        printlog( "New dialog" )
+        hNewDialog()
+
+        printlog( "Paste control" )
+        hUseAsyncSlot( "EditPaste" )
+
+        hOpenPropertyBrowser()
+        kontext "TabGeneralControl"
+        printlog( "Set coordinates to be identical with those from the source control" )
+        PosX.typeKeys  (  )
+        PosX.typeKeys  ( "<HOME><SHIFT END>" & iOriginalCoordinates( 3 ) & "<RETURN>" )
+        PosY.typeKeys  ( "<HOME><SHIFT END>" & iOriginalCoordinates( 4 ) & "<RETURN>" )
+        Height.typeKeys( "<HOME><SHIFT END>" & iOriginalCoordinates( 1 ) & "<RETURN>" )
+        Width.typeKeys ( "<HOME><SHIFT END>" & iOriginalCoordinates( 2 ) & "<RETURN>" )
+        hClosePropertyBrowser
+
+
+        hOpenPropertyBrowser()
+        kontext "TabGeneralControl"
+        printlog( "Get internal coordinates for the control" )
+        iOriginalCoordinates( 1 ) = height.getText()
+        iOriginalCoordinates( 2 ) = width.getText()
+        iOriginalCoordinates( 3 ) = PosX.getText()
+        iOriginalCoordinates( 4 ) = PosY.getText()
+        printlog( "Height: " & iOriginalCoordinates( 1 ) )
+        printlog( "Width.: " & iOriginalCoordinates( 2 ) )
+        printlog( "Pos X.: " & iOriginalCoordinates( 3 ) )
+        printlog( "Pos Y.: " & iOriginalCoordinates( 4 ) )
+        hClosePropertyBrowser()
+
+
+        kontext "TranslationBar"
+        for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
+            CurrentLanguage.select( iCurrentLanguage + 1 )
+            cTempString = CurrentLanguage.getSelText()
+            if ( cTempString = cLanguageList( iCurrentLanguage ) ) then
+                printlog( "Language <" & cTempString & "> was successfully copied" )
+            else
+                warnlog( "Either a language was lost or the sort order changed" )
+                printlog( "Expected: " & cLanguageList( iCurrentLanguage ) )
+                printlog( "Found...: " & cTempString )
+            endif
+        next iCurrentLanguage
+
+        hCloseBasicIDE()
+    else
+        warnlog( "Failed to initialize dialog" )
+    endif
     hDestroyDocument()
     
 endcase

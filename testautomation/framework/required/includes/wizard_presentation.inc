@@ -47,14 +47,12 @@ testcase tUpdtWizardPresentation
         
         printlog( "Page 1" )
         call Dialogtest( AutopilotPraesentation1 )
-        
-        hClickNextButton()
+        hClickButton( NextButton )
         
         printlog( "Page 2" )
         kontext "AutopilotPraesentation2"
         call DialogTest( AutopilotPraesentation2 )
-        
-        hClickNextButton()
+        hClickButton( NextButton )
         
         printlog( "Page 3" )
         kontext "AutopilotPraesentation3" 
@@ -65,9 +63,7 @@ testcase tUpdtWizardPresentation
         warnlog( "Presentation wizard not open/exceeded timeout" )
     endif
     
-    do while( getDocumentCount() > 0 )
-        call hCloseDocument()
-    loop
+    hFileCloseAll()
 
     gApplication = "WRITER"
 

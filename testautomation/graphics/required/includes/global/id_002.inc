@@ -29,23 +29,7 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiEditUndoRedo
-' #1 tiEditRepeat
-' #1 tiEditCutPasteCopySelectall
-' #1 tiEditPasteSpecial
-' #1 tiEditSearchAndReplace
-' #1 tiEditDuplicate
-' #1 tiEditFields
-' #1 tdEditDeleteSlide
-' #1 tiEditLinks
-' #1 tiEditImageMap
-' #1 tiEditObjectProperties
-' #1 tiEditObjectEdit
-' #1 tiEditPlugIn
-' #1 tiEditHyperlink
-' #1 tEditPoints
-'\**********************************************************************************
+'\******************************************************************************
 testcase tiEditUndoRedo
 
     printlog " open application"
@@ -101,22 +85,15 @@ testcase tiEditCutPasteCopySelectall
 
     call hTBOtypeInDoc
 
-    EditCut
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditCopy
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditSelectAll
-    sleep (1)
-    EditCut
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditDeleteContents
-    sleep (1)
+    hUseAsyncSlot( "EditCut" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditCopy" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditSelectAll" )
+    hUseAsyncSlot( "EditCut" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditDeleteContents" )
+
     printlog " close application"
     Call hCloseDocument
     
@@ -131,14 +108,18 @@ testcase tiEditPasteSpecial
     SetClipboard "This is a Text in the Clipboard"
 
     printlog " Edit->PasteSpecial"
-    EditPasteSpecial
-    WaitSlot (1000)
+    hUseAsyncSlot( "EditPasteSpecial" )
+
     Kontext "InhaltEinfuegen"
+    if ( InhaltEinfuegen.exists( 2 ) ) then
         DialogTest ( InhaltEinfuegen )
 
         printlog " close the dialog without inserting something"
-        InhaltEinfuegen.Cancel
-    WaitSlot (1000)
+        hCloseDialog( InhaltEinfuegen, "Cancel" )
+    else
+        warnlog( "Dialog <InhalteEinfuegen> did not open" )
+    endif
+
     printlog " close application"
     Call hCloseDocument
     

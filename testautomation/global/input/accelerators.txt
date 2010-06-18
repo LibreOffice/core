@@ -1,7 +1,7 @@
 # This file contains a list of most commonly used accelerators.
 # These accelerators are language dependent
-# Include framework/tools/inc/accels.inc and use hGetAccel( string )
-# to retrieve one specific accelerator, where string is one of the sections
+# Include global/tools/includes/optional/t_accels.inc and use hGetAccel( <string> )
+# to retrieve one specific accelerator, where <string> is one of the sections
 # from this file. 
 
 # mod1 = CTRL
@@ -159,48 +159,3 @@ zh-CN=mod2 u
 zh-TW=mod2 u
 sl=mod2 i
 cs=mod2 a
-
-
-# This is the accelerator that switches tabs in the BASIC IDE. I found it by accident
-# and i'm not at all certain that it is documented somewhere.
-[IDE_SWITCH_TAB+]
-en-US=MOD1 PAGEUP
-pt-PT=MOD1 PAGEUP
-ru-RU=MOD1 PAGEUP
-nl-NL=MOD1 PAGEUP
-fr-FR=MOD1 PAGEUP
-es=MOD1 PAGEUP
-hu-HU=MOD1 PAGEUP
-it=MOD1 PAGEUP
-da-DK=MOD1 PAGEUP
-sv=MOD1 PAGEUP
-pl-PL=MOD1 PAGEUP
-de=MOD1 PAGEUP
-pt-BR=MOD1 PAGEUP
-ja-JP=MOD1 PAGEUP
-ko-KR=MOD1 PAGEUP
-zh-CN=MOD1 PAGEUP
-zh-TW=MOD1 PAGEUP
-sl=MOD1 PAGEUP
-
-# This is the accelerator that switches tabs in the BASIC IDE. I found it by accident
-# and i'm not at all certain that it is documented somewhere.
-[IDE_SWITCH_TAB-]
-en-US=MOD1 PAGEDOWN
-pt-PT=MOD1 PAGEDOWN
-ru-RU=MOD1 PAGEDOWN
-nl-NL=MOD1 PAGEDOWN
-fr-FR=MOD1 PAGEDOWN
-es=MOD1 PAGEDOWN
-hu-HU=MOD1 PAGEDOWN
-it=MOD1 PAGEDOWN
-da-DK=MOD1 PAGEDOWN
-sv=MOD1 PAGEDOWN
-pl-PL=MOD1 PAGEDOWN
-de=MOD1 PAGEDOWN
-pt-BR=MOD1 PAGEDOWN
-ja-JP=MOD1 PAGEDOWN
-ko-KR=MOD1 PAGEDOWN
-zh-CN=MOD1 PAGEDOWN
-zh-TW=MOD1 PAGEDOWN
-sl=MOD1 PAGEDOWN

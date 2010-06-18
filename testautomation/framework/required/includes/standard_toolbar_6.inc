@@ -116,10 +116,12 @@ testcase tStandardBar_6
     kontext "documentwriter"
     DocumentWriter.TypeKeys( "Hallo" )
     
-    hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
     hDestroyDocument()
     
-    hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
     hDestroyDocument()
     
     printlog "   - Math"

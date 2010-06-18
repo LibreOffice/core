@@ -1,5 +1,5 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 ' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '
 ' Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,13 +23,13 @@
 ' <http://www.openoffice.org/license.html>
 ' for a copy of the LGPLv3 License.
 '
-'/************************************************************************
+'/******************************************************************************
 '*
-'* owner :  joerg.skottke@sun.com
+'* owner : joerg.skottke@sun.com
 '*
-'* short description : 1. test for general group userdata ... view)
+'* short description : 1. test for general group userdata
 '*
-'\***********************************************************************
+'\******************************************************************************
 
 testcase tOOoGeneral
 
@@ -61,12 +61,8 @@ testcase tOOoGeneral
    StyleSheet.Select 3
 
    Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
-        printlog( "Options closed" )
-    endif
 
-
+   hCloseDialog( ExtrasOptionenDlg, "ok" )
    hCloseDocument
 
    printlog " - exit/restart StarOffice"
@@ -89,59 +85,8 @@ testcase tOOoGeneral
    DruckenStatus.UnCheck
 
    Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
-        printlog( "Options closed" )
-    endif
+   hCloseDialog( ExtrasOptionenDlg, "ok" )
 
-
-   'It's a little tricky to reproduce.
-   if gPlatgroup = "unx" then
-       hNewDocument()
-       FilePrint
-       Kontext "DruckenDLG"
-       if DruckenDLG.exists(5) then
-           if gPlatform <> "osx" then
-              Eigenschaften.click
-              kontext
-              active.setPage TabSPAPaper
-              Kontext "TabSPAPaper"
-              if TabSPAPaper.exists (5) then
-                  TabSPAPaper.OK
-                  sleep 5
-              else
-                  qaErrorlog "Properties of Printer didn't come up."
-              endif
-            end if
-            Kontext "DruckenDLG"
-            DruckenDLG.OK
-            ' check state
-            kontext
-            if active.exists(5) then
-                printlog "active: printing failed? '" + active.gettext + "'"
-                active.ok
-            endif
-            try
-                FileSave
-                qaErrorlog "#i52248# Modify flag is set after printing though option is not set."
-                kontext "SpeichernDlg"
-                if SpeichernDlg.exists(5) then
-                    SpeichernDlg.cancel
-                endif
-            catch
-                printlog "#i52248# doesn't come up."
-            endcatch
-       else
-            qaErrorLog "No printer available - resuming."
-            kontext
-            if active.exists(5) then
-                printlog active.getText
-                active.ok
-            endif
-       endif
-       hCloseDocument
-   endif
-   
    printlog " - check data"
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
@@ -162,10 +107,7 @@ testcase tOOoGeneral
    StyleSheet.Select lsSave(3)
 
    Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
-        printlog( "Options closed" )
-    endif
+   hCloseDialog( ExtrasOptionenDlg, "ok" )
 
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
@@ -183,11 +125,7 @@ testcase tOOoGeneral
    if StyleSheet.GetSelText <> lsSave (3) then Warnlog "Style sheet for StarOffice Help => changes not saved!"
 
    Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
-        printlog( "Options closed" )
-    endif
-
+   hCloseDialog( ExtrasOptionenDlg, "ok" )
 
 endcase
 

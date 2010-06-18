@@ -80,11 +80,8 @@ testcase tRecommendPassword( filetypeID as string )
 
     if ( rc = 0 ) then
 
-        if AutomatischeDateinamenserweiterung.Exists then
-            AutomatischeDateinamenserweiterung.Uncheck
-        endif
-
-                                                                                                                               
+        AutomatischeDateinamenserweiterung.Uncheck
+                                                                                                                              
         printlog( "Name the file" )
         Dateiname.settext( workpath & workfile )
   
@@ -117,6 +114,5 @@ testcase tRecommendPassword( filetypeID as string )
 
     printlog( "Close the current document" )
     call hCloseDocument()
-    
 
 endcase
