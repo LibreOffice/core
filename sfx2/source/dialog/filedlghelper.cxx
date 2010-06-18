@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,11 +81,13 @@
 #include <svtools/helpid.hrc>
 #include <svl/pickerhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>
 #include "openflag.hxx"
@@ -1532,8 +1534,8 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             mbPwdCheckBoxState = ( pPassItem != NULL );
 
             // in case the document has password to modify, the dialog should be shown
-            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxInt32Item, SID_MODIFYPASSWORDHASH, FALSE );
-            mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue() );
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, FALSE );
+            mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
         SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE );
@@ -1545,7 +1547,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORD );
         rpSet->ClearItem( SID_RECOMMENDREADONLY );
-        rpSet->ClearItem( SID_MODIFYPASSWORDHASH );
+        rpSet->ClearItem( SID_MODIFYPASSWORDINFO );
 
     }
 
@@ -1663,10 +1665,19 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                             if ( pPasswordRequest->getRecommendReadOnly() )
                                 rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
 
-                            // the empty password has 0 as Hash
-                            sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pCurrentFilter->GetServiceName() ) );
-                            if ( nHash )
-                                rpSet->Put( SfxInt32Item( SID_MODIFYPASSWORDHASH, nHash ) );
+                            if ( bMSType )
+                            {
+                                // the empty password has 0 as Hash
+                                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pCurrentFilter->GetServiceName() ) );
+                                if ( nHash )
+                                    rpSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
+                            }
+                            else
+                            {
+                                uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
+                                if ( aModifyPasswordInfo.getLength() )
+                                    rpSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( aModifyPasswordInfo ) ) );
+                            }
                         }
                         else
                             return ERRCODE_ABORT;
@@ -2072,7 +2083,7 @@ void FileDialogHelper_Impl::saveConfig()
                 bWriteConfig = sal_True;
             }
         }
-        
+
         if( mbHasSelectionBox && mbSelectionFltrEnabled )
         {
             try
@@ -2220,7 +2231,7 @@ void FileDialogHelper_Impl::loadConfig()
             }
             catch( IllegalArgumentException ){}
         }
-        
+
         if( mbHasSelectionBox )
         {
             sal_Int32 nFlag = aUserData.GetToken( 2, ' ' ).ToInt32();
@@ -2637,7 +2648,7 @@ Sequence< ::rtl::OUString > FileDialogHelper::GetSelectedFiles() const
         if ( nFiles > 1 )
         {
             aResultSeq = Sequence< ::rtl::OUString >( nFiles-1 );
-            
+
             INetURLObject aPath( lFiles[0] );
             aPath.setFinalSlash();
 
@@ -2654,7 +2665,7 @@ Sequence< ::rtl::OUString > FileDialogHelper::GetSelectedFiles() const
         else
             aResultSeq = lFiles;
     }
-    
+
     return aResultSeq;
 }
 

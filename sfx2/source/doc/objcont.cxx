@@ -1249,17 +1249,35 @@ sal_uInt32 SfxObjectShell::GetModifyPasswordHash() const
 
 sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
 {
-// Commented out before the solution for Saving process is found
-//    if ( ( !IsReadOnly() && !IsReadOnlyUI() )
-//      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
-//    {
-//        // the hash can be changed only in editable documents,
-//        // or during loading of document
+    if ( ( !IsReadOnly() && !IsReadOnlyUI() )
+      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
+    {
+        // the hash can be changed only in editable documents,
+        // or during loading of document
         pImp->m_nModifyPasswordHash = nHash;
         return sal_True;
-//    }
-//
-//    return sal_False;
+    }
+
+    return sal_False;
+}
+
+uno::Sequence< beans::PropertyValue > SfxObjectShell::GetModifyPasswordInfo() const
+{
+    return pImp->m_aModifyPasswordInfo;
+}
+
+sal_Bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::PropertyValue >& aInfo )
+{
+    if ( ( !IsReadOnly() && !IsReadOnlyUI() )
+      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
+    {
+        // the hash can be changed only in editable documents,
+        // or during loading of document
+        pImp->m_aModifyPasswordInfo = aInfo;
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 void SfxObjectShell::SetModifyPasswordEntered( sal_Bool bEntered )
