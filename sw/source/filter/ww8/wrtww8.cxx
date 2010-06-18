@@ -257,11 +257,28 @@ static void WriteDop( WW8Export& rWrt )
     SwDocShell *pDocShell(rWrt.pDoc->GetDocShell());
     DBG_ASSERT(pDocShell, "no SwDocShell");
     uno::Reference<document::XDocumentProperties> xDocProps;
+    uno::Reference<beans::XPropertySet> xProps;
     if (pDocShell) {
+        uno::Reference<lang::XComponent> xModelComp(pDocShell->GetModel(),
+           uno::UNO_QUERY);
+        xProps = uno::Reference<beans::XPropertySet>(xModelComp,
+           uno::UNO_QUERY);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+            xModelComp, uno::UNO_QUERY_THROW);
         xDocProps = xDPS->getDocumentProperties();
         DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+
+        rDop.lKeyProtDoc = pDocShell->GetModifyPasswordHash();
+    }
+
+    if ((rWrt.pSepx && rWrt.pSepx->DocumentIsProtected()) ||
+        rDop.lKeyProtDoc != 0)
+    {
+        rDop.fProtEnabled =  1;
+    }
+    else
+    {
+        rDop.fProtEnabled = 0;
     }
 
     if (!xDocProps.is()) {
@@ -279,9 +296,8 @@ static void WriteDop( WW8Export& rWrt )
         Date aD3(uDT.Day, uDT.Month, uDT.Year);
         Time aT3(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
         rDop.dttmLastPrint = sw::ms::DateTime2DTTM(DateTime(aD3,aT3));
-    }
 
-    rDop.fProtEnabled = rWrt.pSepx ? rWrt.pSepx->DocumentIsProtected() : 0;
+    }
 
 //  auch damit werden die DocStat-Felder in Kopf-/Fusszeilen nicht korrekt
 //  berechnet.
