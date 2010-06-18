@@ -27,7 +27,6 @@
 
 package complex.accessibility;
 
-import com.sun.star.accessibility.AccessibleRelation;
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleText;
@@ -42,68 +41,61 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import complexlib.ComplexTestCase;
-import java.io.PrintWriter;
-import lib.StatusException;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
 import util.AccessibilityTools;
 import util.WriterTools;
-import util.utils;
+import static org.junit.Assert.*;
 
-public class AccessibleRelationSet extends ComplexTestCase {
-
-    private static XAccessible para1 = null;
-    private static XAccessible para2 = null;
-    private static XAccessible para3 = null;
-    private static XTextDocument xTextDoc = null;
+public class AccessibleRelationSet {
+    private XAccessible para1 = null;
+    private XAccessible para2 = null;
+    private XAccessible para3 = null;
+    private XTextDocument xTextDoc = null;
     private final static String[] types = {"INVALID","CONTENT_FLOWS_FROM","CONTENT_FLOWS_TO","CONTROLLED_BY","CONTROLLER_FOR","LABEL_FOR","LABELED_BY","MEMBER_OF","SUB_WINDOW_OF"};
 
-    public String[] getTestMethodNames() {
-        return new String[]{"contents_flows_to","contents_flows_from"};
-    }
-
-    public void contents_flows_to() {
+    @Test public void contents_flows_to() {
         XAccessibleRelationSet set = getAccessibleRelation(para1);
 
-        boolean res = true;
         short firstrelation=-1;
         XAccessibleText atarget=null;
         if (set != null) {
-            log.println("Count of relations "+set.getRelationCount());
-            assure("didn't gain correct count of relations",
-                   set.getRelationCount() == 1);
+            assertEquals(
+                "didn't gain correct count of relations", 1,
+                set.getRelationCount());
             try {
                 firstrelation = set.getRelation(0).RelationType;
                 Object oTmp = set.getRelation(0).TargetSet[0];
                 atarget = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
             } catch (IndexOutOfBoundsException e) {
-                log.println("Exception when getting relations "+e);
-                res = false;
+                fail("Exception when getting relations "+e);
             }
         }
 
-        log.println("Expected for paragraph 0 "+types[2]);
-        log.println("gained for paragraph 0 "+types[firstrelation]);
-        res = types[2].equals(types[firstrelation]);
-        assure("didn't gain correct relation type",res);
+        assertEquals(
+            "didn't gain correct relation type for paragraph 0", types[2],
+            types[firstrelation]);
 
-        log.println("Text of target paragraph "+atarget.getText());
         XAccessibleText paraTxt2 =
           (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, para2);
-        assure("didn't gain correct target paragraph",
-               atarget.getText().equals(paraTxt2.getText()) );
+        assertEquals(
+            "didn't gain correct target paragraph", atarget.getText(),
+            paraTxt2.getText());
     }
 
-    public void contents_flows_from() {
+    @Test public void contents_flows_from() {
         XAccessibleRelationSet set = getAccessibleRelation(para2);
 
-        boolean res = true;
         short[] relationtypes = new short[2];
         XAccessibleText[] atargets = new XAccessibleText[2];
         if (set != null) {
-            log.println("Count of relations "+set.getRelationCount());
-            assure("didn't gain correct count of relations",
-                   set.getRelationCount() == 2);
+            assertEquals(
+                "didn't gain correct count of relations", 2,
+                set.getRelationCount());
             try {
                 short tmprelation = set.getRelation(0).RelationType;
                 if ( tmprelation == 1 )
@@ -120,7 +112,7 @@ public class AccessibleRelationSet extends ComplexTestCase {
                 }
                 else
                 {
-                  assure("didn't gain correct relation type", false);
+                    fail("didn't gain correct relation type");
                 }
                 tmprelation = set.getRelation(1).RelationType;
                 if ( tmprelation == 1 )
@@ -137,79 +129,51 @@ public class AccessibleRelationSet extends ComplexTestCase {
                 }
                 else
                 {
-                  assure("didn't gain correct relation type", false);
+                    fail("didn't gain correct relation type");
                 }
             } catch (IndexOutOfBoundsException e) {
-                log.println("Exception when getting relations "+e);
-                res = false;
+                fail("Exception when getting relations "+e);
             }
         }
 
-        log.println("### Checking "+types[1]+" for paragraph 1");
-        log.println("Expected for paragraph 1 "+types[1]);
-        log.println("gained for paragraph 1 "+types[relationtypes[0]]);
-        res = types[1].equals(types[relationtypes[0]]);
-        assure("didn't gain correct relation type",res);
+        assertEquals(
+            "didn't gain correct relation type for paragraph 1", types[1],
+            types[relationtypes[0]]);
 
-        log.println("Text of target paragraph "+atargets[0].getText());
         XAccessibleText paraTxt1 =
           (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, para1);
-        assure("didn't gain correct target paragraph",
-               atargets[0].getText().equals(paraTxt1.getText()) );
+        assertEquals(
+            "didn't gain correct target paragraph", atargets[0].getText(),
+            paraTxt1.getText());
 
-        log.println("### Checking "+types[2]+" for paragraph 1");
-        log.println("Expected for paragraph 1 "+types[2]);
-        log.println("gained for paragraph 1 "+types[relationtypes[1]]);
-        res = types[2].equals(types[relationtypes[1]]);
-        assure("didn't gain correct relation type",res);
+        assertEquals(
+            "didn't gain correct relation type for paragraph 3", types[2],
+            types[relationtypes[1]]);
 
-        log.println("Text of target paragraph "+atargets[1].getText());
         XAccessibleText paraTxt3 =
           (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, para3);
-        assure("didn't gain correct target paragraph",
-               atargets[1].getText().equals(paraTxt3.getText()) );
+        assertEquals(
+            "didn't gain correct target paragraph", atargets[1].getText(),
+            paraTxt3.getText());
     }
 
-    private boolean getResult(XAccessible aPara, short index, int nr) {
-        XAccessibleRelationSet set = getAccessibleRelation(aPara);
+    @Before public void before()
+        throws com.sun.star.lang.IllegalArgumentException,
+        IndexOutOfBoundsException
+    {
+        XMultiServiceFactory factory = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class,
+            connection.getComponentContext().getServiceManager());
 
-        boolean res = true;
-        short firstrelation=-1;
-        if (set != null) {
-            log.println("Count of relations "+set.getRelationCount());
-            try {
-                firstrelation = set.getRelation(0).RelationType;
-            } catch (IndexOutOfBoundsException e) {
-                log.println("Exception when getting relations "+e);
-                res = false;
-            }
-        }
-
-
-        log.println("Expected for paragraph "+nr+" "+types[index]);
-        log.println("gained for paragraph "+nr+" "+types[firstrelation]);
-        res = types[index].equals(types[firstrelation]);
-        return res;
-    }
-
-
-    public void before() {
-        log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) param.getMSF());
+        xTextDoc = WriterTools.createTextDoc(factory);
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
-        log.println( "inserting some lines" );
-        try {
-            for (int i=0; i<5; i++){
-                oText.insertString( oCursor,"Paragraph Number: " + i, false);
-                oText.insertControlCharacter(
-                        oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-            }
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            e.printStackTrace((PrintWriter)log);
-            throw new StatusException( "Couldn't insert lines", e );
+        for (int i=0; i<5; i++){
+            oText.insertString( oCursor,"Paragraph Number: " + i, false);
+            oText.insertControlCharacter(
+                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
         }
 
         XModel aModel = (XModel)
@@ -217,26 +181,17 @@ public class AccessibleRelationSet extends ComplexTestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow(factory, aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
-        try {
-            para1 = at.SearchedContext.getAccessibleChild(0);
-            para2 = at.SearchedContext.getAccessibleChild(1);
-            para3 = at.SearchedContext.getAccessibleChild(2);
-        } catch(IndexOutOfBoundsException e) {
-            e.printStackTrace((PrintWriter)log);
-            throw new StatusException( "Couldn't insert lines", e );
-        }
-
-        log.println("ImplementationName (para1)" + utils.getImplName(para1));
-        log.println("ImplementationName (para2)" + utils.getImplName(para2));
+        para1 = at.SearchedContext.getAccessibleChild(0);
+        para2 = at.SearchedContext.getAccessibleChild(1);
+        para3 = at.SearchedContext.getAccessibleChild(2);
     }
 
-    public void after() {
-        log.println("close text document");
+    @After public void after() {
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
@@ -248,5 +203,15 @@ public class AccessibleRelationSet extends ComplexTestCase {
         return set;
     }
 
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
 
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 }
