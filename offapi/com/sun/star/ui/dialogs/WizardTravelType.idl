@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,42 +23,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XThrobber_idl__
-#define __com_sun_star_awt_XThrobber_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_ui_dialogs_WizardTravelType_idl__
+#define __com_sun_star_ui_dialogs_WizardTravelType_idl__
 
-#ifndef com_sun_star_graphic_XGraphic_idl
-#include <com/sun/star/graphic/XGraphic.idl>
-#endif
+//==================================================================================================================
 
-//=============================================================================
+module com { module sun { module star { module ui { module dialogs {
 
- module com {  module sun {  module star {  module awt {
+//==================================================================================================================
 
-//=============================================================================
-
-/** Controls the animation control.
+/** denotes ways to leave a <type>Wizard</type>'s page
  */
-published interface XThrobber: com::sun::star::uno::XInterface
+constants WizardTravelType
 {
-    //-------------------------------------------------------------------------
-
-    /** starts the animation of the control.
-     */
-    void start();
-
-    //-------------------------------------------------------------------------
-
-    /** stops the animation of the control.
-     */
-    void stop();
+    /// indicates the wizard page is left due to forward traveling through the wizard
+    const short FORWARD = 1;
+    /// indicates the wizard page is left due to backward traveling through the wizard
+    const short BACKWARD = 2;
+    /// indicates the wizard page is left since the wizard is about to be finished
+    const short FINISH = 3;
 };
 
-//=============================================================================
+//==================================================================================================================
 
-}; }; }; };
+}; }; }; }; };
+
+//==================================================================================================================
 
 #endif

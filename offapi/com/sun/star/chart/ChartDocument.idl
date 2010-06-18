@@ -39,9 +39,8 @@
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #endif
 
-// #ifndef com_sun_star_chart2_data_XDataReceiver_idl
-// #include <com/sun/star/chart2/data/XDataReceiver.idl>
-// #endif
+#include <com/sun/star/drawing/XDrawPageSupplier.idl>
+
 
 //=============================================================================
 
@@ -73,12 +72,7 @@ published service ChartDocument
     interface ::com::sun::star::chart::XChartDocument;
     interface ::com::sun::star::beans::XPropertySet;
 
-    /** If this interface is implemented, it is possible to connect
-        data to a chart via the improved data connection method using
-        an <type scope="com::sun::star::chart2::data">XDataProvider</type>.
-     */
-    // BM: #i32138# XDataReceiver is not yet published
-//    [optional] interface ::com::sun::star::chart2::data::XDataReceiver;
+    [optional] interface ::com::sun::star::drawing::XDrawPageSupplier;
 
     //-------------------------------------------------------------------------
 
