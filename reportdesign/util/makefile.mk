@@ -160,7 +160,7 @@ SHL2STDLIBS+= \
 .ENDIF
 
 
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL2DEPN=$(SHL1TARGETN)
 .ELSE
 SHL2DEPN=$(SHL1IMPLIBN)
@@ -220,7 +220,7 @@ SHL3STDLIBS+= \
 .ENDIF
 
 
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL3DEPN=$(SHL1TARGETN)
 .ELSE
 SHL3DEPN=$(SHL1IMPLIBN)
