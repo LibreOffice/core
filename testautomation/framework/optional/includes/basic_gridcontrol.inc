@@ -51,6 +51,7 @@ testcase tGridcontrolLoad
 
     printlog "Start the macro, that performs the test"
     Kontext "GridControlDialogStarter"
+ ' FAILS IF DOCUMENT IS READONLY....
     ShowGridcontrol.typeKeys "<space>"
     Kontext "GridControlDialog"
     if GridControlDialog.exists(5) then
@@ -59,6 +60,37 @@ testcase tGridcontrolLoad
             printlog " " + i + ":"+a+": '" + gridcontrolcontrol.getitemtype (i,a) + "' '" + gridcontrolcontrol.getitemtext (i,a) + "'"
         next a
         next i
+        gridcontrolcontrol.select 5
+
+        kontext
+        if active.exists(5) then
+            printlog active.gettext
+            active.ok
+        else
+            warnlog "No selection Event by .select"
+        endif
+
+    Kontext "GridControlDialog"
+        gridcontrolcontrol.typeKeys("<down>")
+
+        kontext
+        if active.exists(5) then
+        printlog active.gettext
+        active.ok
+        else
+        warnlog "No selection event by .typeKeys <down>"
+        endif
+    Kontext "GridControlDialog"
+        gridcontrolcontrol.typeKeys("<up>")
+        kontext
+        if active.exists(5) then
+        printlog active.gettext
+        active.ok
+        else
+        warnlog "No selection event by .typeKeys <up>"
+        endif
+
+    Kontext "GridControlDialog"
         GridControlDialog.close
     else
         warnlog "Gridcontrol Dialog did not come up after pressing button"
@@ -68,4 +100,5 @@ testcase tGridcontrolLoad
     hFileCloseAll()
     
 endcase
+
 
