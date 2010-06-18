@@ -1539,8 +1539,10 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
+    (void)nFallbackLevel; // glyph-fallback on ATSU is done differently -> no fallback level
+
     // get the ATSU font metrics (in point units)
     // of the font that has eventually been size-limited
 
