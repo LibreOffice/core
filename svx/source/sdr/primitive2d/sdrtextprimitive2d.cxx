@@ -77,8 +77,16 @@ namespace
 
         if(pPage && pPage->GetModel())
         {
-            const sal_uInt16 nPageCount(pPage->GetModel()->GetPageCount());
-            nRetval = ((sal_Int16)nPageCount - 1) / 2;
+            if( (pPage->GetPageNum() == 0) && !pPage->IsMasterPage() )
+            {
+                // handout page!
+                return pPage->GetModel()->getHandoutPageCount();
+            }
+            else
+            {
+                const sal_uInt16 nPageCount(pPage->GetModel()->GetPageCount());
+                nRetval = ((sal_Int16)nPageCount - 1) / 2;
+            }
         }
 
         return nRetval;
