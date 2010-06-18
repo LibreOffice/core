@@ -40,6 +40,7 @@ class TabBar;
 #include <svtools/svlbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
+#include <tools/diagnose_ex.h>
 #include <svimpbox.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -427,17 +428,6 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,SvLBoxEntry* pPa
     else
         SvLBox::Insert( pEntry, pParent, nPos );
 
-    short nExpWidth = (short)rDefExpBmp.GetSizePixel().Width();
-    short nColWidth = (short)rDefColBmp.GetSizePixel().Width();
-    short nMax = Max(nExpWidth, nColWidth);
-    // #97680# ----------------
-    nMax = pImp->UpdateContextBmpWidthVector( pEntry, nMax );
-    if( nMax > nContextBmpWidthMax )
-    {
-        nContextBmpWidthMax = nMax;
-        SetTabs();
-    }
-
     aPrevInsertedExpBmp = rDefExpBmp;
     aPrevInsertedColBmp = rDefColBmp;
 
@@ -467,17 +457,6 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,
         SvLBox::Insert( pEntry, nPos );
     else
         SvLBox::Insert( pEntry, pParent, nPos );
-
-    short nExpWidth = (short)aExpEntryBmp.GetSizePixel().Width();
-    short nColWidth = (short)aCollEntryBmp.GetSizePixel().Width();
-    short nMax = Max(nExpWidth, nColWidth);
-    // #97680# ----------------
-    nMax = pImp->UpdateContextBmpWidthVector( pEntry, nMax );
-    if( nMax > nContextBmpWidthMax )
-    {
-        nContextBmpWidthMax = nMax;
-        SetTabs();
-    }
 
     aPrevInsertedExpBmp = aExpEntryBmp;
     aPrevInsertedColBmp = aCollEntryBmp;
@@ -1041,7 +1020,7 @@ BOOL SvTreeListBox::Expand( SvLBoxEntry* pParent )
     // --> OD 2009-04-01 #i92103#
     if ( bExpanded )
     {
-        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_EXPANDED, pParent );
+        pImp->CallEventListeners( VCLEVENT_ITEM_EXPANDED, pParent );
     }
     // <--
 
@@ -1068,7 +1047,7 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
     // --> OD 2009-04-01 #i92103#
     if ( bCollapsed )
     {
-        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_COLLAPSED, pParent );
+        pImp->CallEventListeners( VCLEVENT_ITEM_COLLAPSED, pParent );
     }
     // <--
 
@@ -2250,7 +2229,8 @@ Region SvTreeListBox::GetDragRegion() const
 void SvTreeListBox::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    pImp->Command( rCEvt );
+    if ( !pImp->Command( rCEvt ) )
+        SvLBox::Command( rCEvt );
 }
 
 
@@ -2346,6 +2326,25 @@ void SvTreeListBox::ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
     SvLBox::ModelNotification( nActionId, pEntry1, pEntry2, nPos );
     switch( nActionId )
     {
+        case LISTACTION_INSERTED:
+        {
+            SvLBoxEntry* pEntry( dynamic_cast< SvLBoxEntry* >( pEntry1 ) );
+            ENSURE_OR_BREAK( pEntry, "SvTreeListBox::ModelNotification: invalid entry!" );
+            SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+            if ( !pBmpItem )
+                break;
+            const Image& rBitmap1( pBmpItem->GetBitmap1() );
+            const Image& rBitmap2( pBmpItem->GetBitmap2() );
+            short nMaxWidth = short( Max( rBitmap1.GetSizePixel().Width(), rBitmap2.GetSizePixel().Width() ) );
+            nMaxWidth = pImp->UpdateContextBmpWidthVector( pEntry, nMaxWidth );
+            if( nMaxWidth > nContextBmpWidthMax )
+            {
+                nContextBmpWidthMax = nMaxWidth;
+                SetTabs();
+            }
+        }
+        break;
+
         case LISTACTION_RESORTING:
             SetUpdateMode( FALSE );
             break;

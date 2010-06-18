@@ -48,30 +48,32 @@ LIB2TARGET= $(LB)$/svtool.lib
 LIB2FILES=	$(LB)$/_svt.lib
 .ENDIF
 
-LIB1TARGET= $(SLB)$/svt.lib
+LIB1TARGET= $(SLB)/svt.lib
 LIB1FILES=	\
-        $(SLB)$/browse.lib		\
-        $(SLB)$/config.lib	\
-        $(SLB)$/svcontnr.lib	\
-        $(SLB)$/ctrl.lib		\
-        $(SLB)$/dialogs.lib 	\
-        $(SLB)$/edit.lib		\
-        $(SLB)$/filter.lib		\
-        $(SLB)$/filter.uno.lib	\
+        $(SLB)/browse.lib		\
+        $(SLB)/config.lib	\
+        $(SLB)/svcontnr.lib	\
+        $(SLB)/ctrl.lib		\
+        $(SLB)/dialogs.lib 	\
+        $(SLB)/edit.lib		\
+        $(SLB)/filter.lib		\
+        $(SLB)/filter.uno.lib	\
         $(SLB)$/graphic.lib	\
-        $(SLB)$/igif.lib		\
-        $(SLB)$/jpeg.lib		\
-        $(SLB)$/ixpm.lib		\
-        $(SLB)$/ixbm.lib		\
-        $(SLB)$/wmf.lib 		\
-        $(SLB)$/java.lib		\
-        $(SLB)$/misc.lib		\
-        $(SLB)$/plugapp.lib 	\
-        $(SLB)$/svhtml.lib     \
-        $(SLB)$/svrtf.lib	\
-        $(SLB)$/table.lib 	\
-        $(SLB)$/unoiface.lib	\
-        $(SLB)$/urlobj.lib	
+        $(SLB)/igif.lib		\
+        $(SLB)/jpeg.lib		\
+        $(SLB)/ixpm.lib		\
+        $(SLB)/ixbm.lib		\
+        $(SLB)/wmf.lib 		\
+        $(SLB)/java.lib		\
+        $(SLB)/misc.lib		\
+        $(SLB)/plugapp.lib 	\
+        $(SLB)/svhtml.lib   \
+        $(SLB)/svrtf.lib	\
+        $(SLB)/table.lib 	\
+        $(SLB)/unoiface.lib	\
+        $(SLB)/unowiz.lib	\
+        $(SLB)/urlobj.lib	\
+        $(SLB)/toolpanel.lib
 
 # generation of resourcen-lib ----------------------------------------
 
@@ -84,8 +86,8 @@ RESLIB1SRSFILES= \
         $(SRS)$/dialogs.srs     \
         $(SRS)$/plugapp.srs     \
         $(SRS)$/svcontnr.srs    \
-        $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs		\
+        $(SRS)$/toolpanel.srs		\
         $(SRS)$/javaerror.srs
 
 RESLIB3NAME= $(RESTARGETPATCH)

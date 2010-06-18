@@ -3,8 +3,7 @@ tr	l10ntools						usr1	-	all	tr_mkout NULL
 tr	l10ntools\inc					nmake	-	all	tr_inc NULL
 tr	l10ntools\source					nmake	-	all	tr_src tr_inc NULL
 tr	l10ntools\layout					nmake	-	all	rt_layout tr_src tr_inc NULL
-#tr	l10ntools\java\l10nconv			nmake	-	all	tr_conv NULL
-#tr	l10ntools\java\receditor			nmake	-	all	tr_rece NULL
+tr	l10ntools\java\jpropex			nmake	-	all	tr_blah NULL
 tr  l10ntools\source\help    nmake   -   all tr_bla_help  NULL
 tr  l10ntools\source\filter\utils    nmake   -   all tr_bla_utils NULL
 tr  l10ntools\source\filter\merge    nmake   -   all tr_bla_merge tr_bla_utils NULL

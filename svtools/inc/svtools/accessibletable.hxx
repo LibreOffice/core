@@ -99,7 +99,7 @@ public:
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
-    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) = 0;
+    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
     virtual XACC GetAccessible( BOOL bCreate = TRUE )= 0;
     virtual Window* GetAccessibleParentWindow() const= 0;
