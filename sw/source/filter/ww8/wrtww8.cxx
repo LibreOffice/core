@@ -2472,7 +2472,7 @@ typedef ::std::deque<SwNode *> SwNodeDeque;
 void MSWordExportBase::WriteText()
 {
 // whoever has need of the missing function should go and implement it!
-// This damned piece of code always breaks builds...
+// This piece of code always breaks builds...
 //#ifdef DEBUG
 //    ::std::clog << "<WriteText>" << ::std::endl;
 //    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
@@ -2488,9 +2488,10 @@ void MSWordExportBase::WriteText()
         SwNode * pNd = pCurPam->GetNode();
 
 // whoever has need of the missing function should go and implement it!
-// This damned piece of code always breaks builds...
+// This piece of code always breaks builds...
 #if 0
 #ifdef DEBUG
+#if 0
         if (aNodeSet.find(pNd) == aNodeSet.end())
         {
             aNodeSet.insert(pNd);
