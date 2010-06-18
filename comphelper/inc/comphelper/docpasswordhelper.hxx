@@ -84,6 +84,78 @@ class COMPHELPER_DLLPUBLIC DocPasswordHelper
 public:
     // ------------------------------------------------------------------------
 
+    /** This helper function generates the hash code based on the algorithm
+        specified by MS for "Password to modify" feature of Word.
+
+        @param aString
+            The string for which the hash should be calculated
+
+        @return
+            The hash represented by sal_uInt32
+      */
+
+    static sal_uInt32 GetWordHashAsUINT32(
+                const ::rtl::OUString& aString );
+
+    // ------------------------------------------------------------------------
+
+    /** This helper function generates the hash code based on the algorithm
+        specified by MS for "Password to modify" feature of Word.
+
+        @param aString
+            The string for which the hash should be calculated
+
+        @return
+            The hash represented by sequence of bytes in BigEndian form
+      */
+
+    static ::com::sun::star::uno::Sequence< sal_Int8 > GetWordHashAsSequence(
+                const ::rtl::OUString& aString );
+
+    // ------------------------------------------------------------------------
+
+    /** This helper function generates the hash code based on the algorithm
+        specified by MS for "Password to modify" and passwords related to
+        table protection of Excel.
+
+        @param aString
+            The string for which the hash should be calculated
+
+        @param nEnc
+            The encoding that should be used to generate the 8-bit string
+            before the hash is generated
+
+        @return
+            The hash represented by sal_uInt16
+      */
+
+    static sal_uInt16 GetXLHashAsUINT16(
+                const ::rtl::OUString& aString,
+                rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
+
+    // ------------------------------------------------------------------------
+
+    /** This helper function generates the hash code based on the algorithm
+        specified by MS for "Password to modify" and passwords related to
+        table protection.
+
+        @param aString
+            The string for which the hash should be calculated
+
+        @param nEnc
+            The encoding that should be used to generate the 8-bit string
+            before the hash is generated
+
+        @return
+            The hash represented by sequence of bytes in BigEndian form
+      */
+
+    static ::com::sun::star::uno::Sequence< sal_Int8 > GetXLHashAsSequence(
+                const ::rtl::OUString& aString,
+                rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
+
+    // ------------------------------------------------------------------------
+
     /** This helper function tries to request and verify a password to load a
         protected document.
 
