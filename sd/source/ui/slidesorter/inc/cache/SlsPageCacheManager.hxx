@@ -107,6 +107,12 @@ public:
         DocumentKey pDocument,
         const SdrPage* pPage);
 
+    /** Invalidate the preview bitmaps for all slides that belong to the
+        specified document.  This is necessary after model changes that
+        affect e.g. page number fiels.
+    */
+    void InvalidateAllPreviewBitmaps (DocumentKey pDocument);
+
     /** Invalidate all the caches that are currently in use and destroy
         those that are not.  This is used for example when the high contrast
         mode is turned on or off.

@@ -318,42 +318,7 @@ void Listener::Notify (
         {
             case HINT_PAGEORDERCHG:
                 if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
-                {
-                    // Notify model and selection observer about the page.
-                    // The return value of the model call acts as filter as
-                    // to which events to pass to the selection observer.
-                    if (mrSlideSorter.GetModel().NotifyPageEvent(rSdrHint.GetPage()))
-                    {
-                        // The page of the hint belongs (or belonged)
-                        // to the model.
-
-                        // Tell the cache manager that the preview
-                        // bitmaps for a deleted page can be removed
-                        // from all caches.
-                        const SdrPage* pPage = rSdrHint.GetPage();
-                        if (pPage!=NULL && ! pPage->IsInserted())
-                            cache::PageCacheManager::Instance()->ReleasePreviewBitmap(pPage);
-
-                        mrController.GetSelectionManager()
-                            ->GetSelectionObserver()->NotifyPageEvent(rSdrHint.GetPage());
-                    }
-
-                    if (rBroadcaster.ISA(SdDrawDocument))
-                    {
-                        SdDrawDocument& rDocument (static_cast<SdDrawDocument&>(rBroadcaster));
-                        if (rDocument.GetMasterSdPageCount(PK_STANDARD)
-                            == rDocument.GetMasterSdPageCount(PK_NOTES))
-                        {
-                            mrController.HandleModelChange();
-                        }
-                    }
-                }
-                break;
-
-            case HINT_OBJINSERTED:
-            case HINT_OBJREMOVED:
-            case HINT_OBJCHG:
-                HandleShapeModification(rSdrHint.GetPage());
+                    HandleModelChange(rSdrHint.GetPage());
                 break;
 
             default:
@@ -639,6 +604,40 @@ void Listener::UpdateEditMode (void)
         bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
 }
 
+
+
+void Listener::HandleModelChange (const SdrPage* pPage)
+{
+    // Notify model and selection observer about the page.  The return value
+    // of the model call acts as filter as to which events to pass to the
+    // selection observer.
+    if (mrSlideSorter.GetModel().NotifyPageEvent(pPage))
+    {
+        // The page of the hint belongs (or belonged) to the model.
+
+        // Tell the cache manager that the preview bitmaps for a deleted
+        // page can be removed from all caches.
+        if (pPage!=NULL && ! pPage->IsInserted())
+            cache::PageCacheManager::Instance()->ReleasePreviewBitmap(pPage);
+
+        mrController.GetSelectionManager()->GetSelectionObserver()->NotifyPageEvent(pPage);
+    }
+
+    // Tell the controller about the model change only when the document is
+    // in a sane state, not just in the middle of a larger change.
+    SdDrawDocument* pDocument (mrSlideSorter.GetModel().GetDocument());
+    if (pDocument != NULL
+        && pDocument->GetMasterSdPageCount(PK_STANDARD) == pDocument->GetMasterSdPageCount(PK_NOTES))
+    {
+        // A model change can make updates of some text fields necessary
+        // (like page numbers and page count.)  Invalidate all previews in
+        // the cache to cope with this.  Doing this on demand would be a
+        // nice optimization.
+        cache::PageCacheManager::Instance()->InvalidateAllPreviewBitmaps(pDocument->getUnoModel());
+
+        mrController.HandleModelChange();
+    }
+}
 
 
 

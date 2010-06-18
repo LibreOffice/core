@@ -1466,7 +1466,7 @@ void GridImplementation::CalculateLogicalInsertPosition (
         {
             nIndex = mnPageCount;
             nRow = mnRowCount-1;
-            nColumn = mnPageCount%mnColumnCount;
+            nColumn = ::std::min(::std::min(mnPageCount, mnColumnCount), nColumn);
             bIsAtRunEnd = true;
         }
 

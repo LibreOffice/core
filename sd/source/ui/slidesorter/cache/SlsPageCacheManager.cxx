@@ -385,6 +385,32 @@ bool PageCacheManager::InvalidatePreviewBitmap (
 
 
 
+void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
+{
+    if (pDocument == NULL)
+        return;
+
+    // Iterate over all caches that are currently in use and invalidate the
+    // previews in those that belong to the document.
+    PageCacheContainer::iterator iCache;
+    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
+        if (iCache->first.mpDocument == pDocument)
+            iCache->second->InvalidateCache();
+
+    // Invalidate the previews in the recently used caches belonging to the
+    // given document.
+    RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
+    if (iQueue != mpRecentlyUsedPageCaches->end())
+    {
+        RecentlyUsedQueue::const_iterator iCache2;
+        for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
+            iCache2->mpCache->InvalidateCache();
+    }
+}
+
+
+
+
 void PageCacheManager::InvalidateAllCaches (void)
 {
     // Iterate over all caches that are currently in use and invalidate

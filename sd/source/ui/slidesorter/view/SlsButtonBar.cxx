@@ -1407,7 +1407,7 @@ bool StartShowButton::IsEnabled (void) const
         return false;
     SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
     if (pDispatcher == NULL)
-        return NULL;
+        return false;
 
     const SfxPoolItem* pState = NULL;
     const SfxItemState eState (pDispatcher->QueryState(SID_PRESENTATION, pState));
@@ -1416,33 +1416,21 @@ bool StartShowButton::IsEnabled (void) const
 
 
 
+
 void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescriptor)
 {
-    //    mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
-    //        rpDescriptor);
-    if (mrSlideSorter.GetViewShell() != NULL
-        && mrSlideSorter.GetViewShell()->GetDispatcher() != NULL)
+    // Hide the tool tip early, while the slide show still intializes.
+    mrSlideSorter.GetView().GetToolTip().SetPage(model::SharedPageDescriptor());
+
+    Reference< XPresentation2 > xPresentation(
+        mrSlideSorter.GetModel().GetDocument()->getPresentation());
+    if (xPresentation.is())
     {
-        // Hide the tool tip early, while the slide show still intializes.
-        mrSlideSorter.GetView().GetToolTip().SetPage(model::SharedPageDescriptor());
-
-        Reference< XPresentation2 > xPresentation(
-            mrSlideSorter.GetModel().GetDocument()->getPresentation());
-        if (xPresentation.is())
-        {
-            Sequence<PropertyValue> aProperties (1);
-            aProperties[0].Name = ::rtl::OUString::createFromAscii("FirstPage");
-            const ::rtl::OUString sName (rpDescriptor->GetPage()->GetName());
-            aProperties[0].Value = Any(sName);
-            xPresentation->startWithArguments(aProperties);
-        }
-
-        /*
-        // Request the start of the slide show.
-        mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
-            SID_PRESENTATION,
-            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-        */
+        Sequence<PropertyValue> aProperties (1);
+        aProperties[0].Name = ::rtl::OUString::createFromAscii("FirstPage");
+        const ::rtl::OUString sName (rpDescriptor->GetPage()->GetName());
+        aProperties[0].Value = Any(sName);
+        xPresentation->startWithArguments(aProperties);
     }
 }
 
@@ -1501,8 +1489,15 @@ DuplicateButton::DuplicateButton (SlideSorter& rSlideSorter)
 
 bool DuplicateButton::IsEnabled (void) const
 {
+    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    if (pViewShell == NULL)
+        return false;
+    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
+    if (pDispatcher == NULL)
+        return false;
+
     const SfxPoolItem* pState = NULL;
-    const SfxItemState eState (mrSlideSorter.GetViewShell()->GetDispatcher()->QueryState(
+    const SfxItemState eState (pDispatcher->QueryState(
         SID_DUPLICATE_PAGE,
         pState));
     return (eState & SFX_ITEM_DISABLED) == 0;
@@ -1527,10 +1522,13 @@ void DuplicateButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
     }
     // Duplicate the selected pages.  Insert the new pages right
     // after the current selection and select them
-    if (mrSlideSorter.GetViewShell() != NULL)
+    if (mrSlideSorter.GetViewShell() != NULL
+        && mrSlideSorter.GetViewShell()->GetDispatcher() != NULL)
+    {
         mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
             SID_DUPLICATE_PAGE,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+    }
 }
 
 
