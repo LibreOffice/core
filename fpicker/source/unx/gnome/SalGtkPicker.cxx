@@ -175,7 +175,7 @@ void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject
     throw (::com::sun::star::uno::RuntimeException)
 {
     GdkThreadLock aLock;
-    gdk_threads_add_timeout_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
 }
 
 void RunDialog::cancel()
