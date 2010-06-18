@@ -26,8 +26,8 @@
 #*************************************************************************
 
 PRJ = ..
-PRJNAME = tl
-TARGET = tldem
+PRJNAME = tools
+TARGET = workben
 LIBTARGET = NO
 TARGETTYPE = CUI
 ENABLE_EXCEPTIONS=TRUE
@@ -37,10 +37,8 @@ ENABLE_EXCEPTIONS=TRUE
 OBJFILES = \
     $(OBJ)$/solar.obj \
     $(OBJ)$/urltest.obj \
-    $(OBJ)$/inetmimetest.obj
-#	$(OBJ)$/demostor.obj \
-#	$(OBJ)$/fstest.obj \
-#	$(OBJ)$/tldem.obj \
+    $(OBJ)$/inetmimetest.obj \
+    $(OBJ)$/mempooltest.obj
 
 APP1TARGET = solar
 APP1OBJS = $(OBJ)$/solar.obj
@@ -62,28 +60,9 @@ APP3TARGET = inetmimetest
 APP3OBJS = $(OBJ)$/inetmimetest.obj
 APP3STDLIBS = $(SALLIB) $(TOOLSLIB)
 
-# APP3TARGET = tldem
-# APP3OBJS = $(OBJ)$/tldem.obj
-# .IF "$(GUI)" == "UNX"
-# APP3STDLIBS = $(TOOLSLIB)
-# .ELSE
-# APP3STDLIBS = $(LB)$/itools.lib
-# .ENDIF
-
-# APP4TARGET = demostor
-# APP4OBJS = $(OBJ)$/demostor.obj
-# .IF "$(GUI)" == "UNX"
-# APP4STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
-# .ELSE
-# APP4STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB)
-# .ENDIF
-
-# APP5TARGET = fstest
-# APP5OBJS = $(OBJ)$/fstest.obj
-# .IF "$(GUI)" == "UNX"
-# APP5STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
-# .ELSE
-# APP5STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB)
-# .ENDIF
+APP4TARGET = mempooltest
+APP4OBJS = $(OBJ)$/mempooltest.obj
+APP4STDLIBS = $(TOOLSLIB)
+APP4RPATH = UREBIN
 
 .INCLUDE: target.mk
