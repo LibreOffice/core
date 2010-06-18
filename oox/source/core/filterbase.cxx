@@ -200,11 +200,7 @@ void FilterBaseImpl::finalizeFilter()
 {
     try
     {
-        // clear the 'ComponentData' property in the descriptor
-        MediaDescriptor::iterator aIt = maMediaDesc.find( MediaDescriptor::PROP_COMPONENTDATA() );
-        if( aIt != maMediaDesc.end() )
-            aIt->second.clear();
-        // write the descriptor back to the document model (adds the password)
+        // write the descriptor back to the document model (adds the passwords)
         mxModel->attachResource( maFileUrl, maMediaDesc.getAsConstPropertyValueList() );
         // unlock the model controllers
         mxModel->unlockControllers();
@@ -248,11 +244,6 @@ const Reference< XMultiServiceFactory >& FilterBase::getGlobalFactory() const
     return mxImpl->mxGlobalFactory;
 }
 
-MediaDescriptor& FilterBase::getMediaDescriptor() const
-{
-    return mxImpl->maMediaDesc;
-}
-
 const Reference< XModel >& FilterBase::getModel() const
 {
     return mxImpl->mxModel;
@@ -276,6 +267,11 @@ const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
 const Reference< XInteractionHandler >& FilterBase::getInteractionHandler() const
 {
     return mxImpl->mxInteractionHandler;
+}
+
+MediaDescriptor& FilterBase::getMediaDescriptor() const
+{
+    return mxImpl->maMediaDesc;
 }
 
 const OUString& FilterBase::getFileUrl() const
@@ -560,7 +556,7 @@ Reference< XStream > FilterBase::implGetOutputStream( MediaDescriptor& rMediaDes
 
 void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDescSeq )
 {
-    mxImpl->maMediaDesc = rMediaDescSeq;
+    mxImpl->maMediaDesc << rMediaDescSeq;
 
     switch( mxImpl->meDirection )
     {

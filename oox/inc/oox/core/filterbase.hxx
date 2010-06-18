@@ -113,9 +113,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getGlobalFactory() const;
 
-    /** Returns the media descriptor. */
-    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
-
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
                         getModel() const;
@@ -135,6 +132,9 @@ public:
     /** Returns the status interaction handler (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
                         getInteractionHandler() const;
+
+    /** Returns the media descriptor. */
+    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
     const ::rtl::OUString& getFileUrl() const;
