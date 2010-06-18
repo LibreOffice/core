@@ -65,7 +65,7 @@ namespace slideshow
         class DrawShape : public AttributableShape,
                           public DocTreeNodeSupplier,
                           public HyperlinkArea,
-                          protected ::osl::DebugBase<DrawShape>
+                          public ::osl::DebugBase<DrawShape>
         {
         public:
             /** Create a shape for the given XShape
