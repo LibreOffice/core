@@ -200,13 +200,13 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
 
 //=========================================================================
 void SimpleAuthenticationRequest::initialize(
-                                      const ucb::URLAuthenticationRequest & rRequest,
-                                      sal_Bool bCanSetRealm,
-                                      sal_Bool bCanSetUserName,
-                                      sal_Bool bCanSetPassword,
-                                      sal_Bool bCanSetAccount,
-                                      sal_Bool bAllowPersistentStoring,
-                                      sal_Bool bAllowUseSystemCredentials )
+      const ucb::URLAuthenticationRequest & rRequest,
+      sal_Bool bCanSetRealm,
+      sal_Bool bCanSetUserName,
+      sal_Bool bCanSetPassword,
+      sal_Bool bCanSetAccount,
+      sal_Bool bAllowPersistentStoring,
+      sal_Bool bAllowUseSystemCredentials )
 {
     setRequest( uno::makeAny( rRequest ) );
 

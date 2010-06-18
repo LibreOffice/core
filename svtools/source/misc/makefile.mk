@@ -75,7 +75,8 @@ SLOFILES=\
     $(SLO)$/transfer.obj            \
     $(SLO)$/transfer2.obj           \
     $(SLO)$/unitconv.obj           \
-    $(SLO)$/wallitem.obj
+    $(SLO)$/wallitem.obj           \
+    $(SLO)$/xwindowitem.obj
 
 # --- Targets -------------------------------------------------------
 
