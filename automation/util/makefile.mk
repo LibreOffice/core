@@ -123,7 +123,7 @@ SHL3STDLIBS+= \
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
 SHL3LIBS=       $(SLB)$/communi.lib 
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL3DEPN=$(SHL2TARGETN)
 .ELSE
 SHL3DEPN=$(SHL2IMPLIBN)
@@ -140,7 +140,7 @@ DEF3DES         =Communication
 
 APP1TARGET=testtool
 
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 APP1DEPN+=$(SHL2TARGETN) $(SHL3TARGETN)
 .ELSE
 APP1DEPN+=$(SHL2IMPLIBN) $(SHL3IMPLIBN)
@@ -232,7 +232,7 @@ APP3STDLIBS+= \
 .ENDIF
 .ENDIF
 # $(AUTOMATIONLIB) is build in SHL1TARGET
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 APP3DEPN=$(SHL1TARGETN)
 .ELSE
 APP3DEPN=$(SHL1IMPLIBN)
