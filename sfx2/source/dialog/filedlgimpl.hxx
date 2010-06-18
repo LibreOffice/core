@@ -107,6 +107,8 @@ namespace sfx2
         sal_Bool                    mbPwdCheckBoxState      : 1;
         sal_Bool                    mbSelection             : 1;
         sal_Bool                    mbSelectionEnabled      : 1;
+        sal_Bool                    mbHasSelectionBox       : 1;
+        sal_Bool                    mbSelectionFltrEnabled  : 1;
 
     private:
         void                    addFilters( sal_Int64 nFlags,
