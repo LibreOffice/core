@@ -1,0 +1,18 @@
+#!/bin/sh
+if [ x${SOLARENV}x = xx ]; then
+    echo No environment found, please use 'setsolar'
+exit 1
+fi
+
+if [ "${OS?}" = MACOSX ]; then
+    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+else
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+fi
+
+if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
+    exec $SOLARVERSION/$INPATH/bin/gsicheck "$@"
+else
+    exec $SOLARVERSION/$INPATH/bin$UPDMINOREXT/gsicheck "$@"
+fi
+

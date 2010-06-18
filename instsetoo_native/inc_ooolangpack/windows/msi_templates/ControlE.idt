@@ -56,7 +56,6 @@ InstallChangeFolder	Cancel	NewDialog	DestinationFolder	1	2
 InstallChangeFolder	Cancel	Reset	0	1	1
 InstallChangeFolder	OK	NewDialog	DestinationFolder	1	3
 InstallChangeFolder	OK	SetTargetPath	[_BrowseProperty]	1	2
-InstallChangeFolder	OK	DoAction	SetOfficeInstallLocation	1	4
 InstallChangeFolder	Up	DirectoryListUp	0	1	0
 InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
 InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
