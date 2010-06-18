@@ -921,7 +921,6 @@
 #include "vcl/help.hxx"
 #include "vcl/image.hxx"
 #include "vcl/imagebtn.hxx"
-#include "vcl/imgcons.hxx"
 #include "vcl/inputctx.hxx"
 #include "vcl/jobset.hxx"
 #include "vcl/keycod.hxx"

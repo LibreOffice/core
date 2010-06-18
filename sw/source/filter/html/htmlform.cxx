@@ -32,7 +32,6 @@
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/imgcons.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/htmlkywd.hxx>
