@@ -30,7 +30,7 @@
 
 #include "dp_gui.hrc"
 #include "svtools/controldims.hrc"
-#include "svl/svtools.hrc"
+#include "svtools/svtools.hrc"
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
@@ -239,7 +239,10 @@ void ExtBoxWithBtns_Impl::RecalcAll()
     const sal_Int32 nActive = getSelIndex();
 
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    {
         SetButtonPos( GetEntryRect( nActive ) );
+        SetButtonStatus( GetEntryData( nActive) );
+    }
     else
     {
         m_pOptionsBtn->Hide();
@@ -257,21 +260,6 @@ void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
         return;
 
     ExtensionBox_Impl::selectEntry( nPos );
-
-    if ( ( nPos >= 0 ) && ( nPos < GetEntryCount() ) )
-    {
-        if ( IsReallyVisible() )
-        {
-            SetButtonPos( GetEntryRect( nPos ) );
-        }
-        SetButtonStatus( GetEntryData( nPos) );
-    }
-    else
-    {
-        m_pOptionsBtn->Hide();
-        m_pEnableBtn->Hide();
-        m_pRemoveBtn->Hide();
-    }
 }
 
 // -----------------------------------------------------------------------

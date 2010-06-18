@@ -365,6 +365,7 @@ public:
     void                    SetActiveChild_Impl( Window *pChild );
     Window*                 GetActiveChild_Impl();
     virtual BOOL            ActivateNextChild_Impl( BOOL bForward = TRUE );
+    bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
     // Methoden f"ur StatusBar
     void                    SetTempStatusBar_Impl( BOOL bSet );

@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
@@ -120,6 +121,8 @@ const USHORT HI_NAME = 1;
 const USHORT HI_TYPE = 2;
 const USHORT HI_VALUE = 3;
 const USHORT HI_ACTION = 4;
+
+static const char DOCUMENT_SIGNATURE_MENU_CMD[]      = "Signature";
 
 //------------------------------------------------------------------------
 String CreateSizeText( ULONG nSize, BOOL bExtraBytes = TRUE, BOOL bSmartExtraBytes = FALSE );
@@ -860,6 +863,13 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
         aNewSize.Width() -= nDelta;
         aUseUserDataCB.SetSizePixel( aNewSize );
     }
+    // See i96288
+    // Check if the document signature command is enabled
+    // on the main list enable/disable the pushbutton accordingly
+    SvtCommandOptions aCmdOptions;
+    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
+                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( DOCUMENT_SIGNATURE_MENU_CMD ) ) ) )
+        aSignatureBtn.Disable();
 }
 
 //------------------------------------------------------------------------

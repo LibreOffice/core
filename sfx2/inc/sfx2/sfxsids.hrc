@@ -478,6 +478,9 @@
 #define SID_CAPTION                         (SID_SFX_START + 641)
 #define SID_STATUSBARTEXT                   (SID_SFX_START + 642)
 
+// id for thesaurs entry in context menu
+#define SID_THES                            (SID_SFX_START + 698)
+
 // default-ids for editing, cursor travellung and selection
 #define SID_REDO                            (SID_SFX_START + 700)
 #define SID_UNDO                            (SID_SFX_START + 701)
@@ -868,6 +871,7 @@
 #define SID_HYPERLINK_GETLINK               (SID_SVX_START + 361)
 #define SID_HYPERLINK_SETLINK               (SID_SVX_START + 362)
 #define SID_NAVIGATOR                       (SID_SVX_START + 366)
+#define SID_TASKPANE                        (SID_SVX_START + 370)
 #define SID_ZOOM_NEXT                       (SID_SVX_START + 402)
 #define SID_ZOOM_PREV                       (SID_SVX_START + 403)
 #define SID_INET_DLG                        (SID_SVX_START + 416)

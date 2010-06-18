@@ -113,18 +113,6 @@ namespace sdr
             || &maUsedPage != &rCandidate.maUsedPage
             || maVisibleLayers != rCandidate.maVisibleLayers);
     }
-
-    const SfxItemSet& MasterPageDescriptor::getCorrectFillAttributes() const
-    {
-        const SfxItemSet& rOwnerPageAtributes = GetOwnerPage().getSdrPageProperties().GetItemSet();
-
-        if(XFILL_NONE != ((const XFillStyleItem&)rOwnerPageAtributes.Get(XATTR_FILLSTYLE)).GetValue())
-        {
-            return rOwnerPageAtributes;
-        }
-
-        return GetUsedPage().getSdrPageProperties().GetItemSet();
-    }
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////

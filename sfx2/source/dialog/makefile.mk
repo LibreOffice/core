@@ -45,7 +45,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/recfloat.obj        \
         $(SLO)$/templdlg.obj        \
         $(SLO)$/dinfdlg.obj         \
-        $(SLO)$/dockwin.obj
+        $(SLO)$/dockwin.obj         \
+        $(SLO)$/taskpane.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -60,7 +61,6 @@ SLOFILES =\
         $(SLO)$/passwd.obj			\
         $(SLO)$/printopt.obj		\
         $(SLO)$/sfxdlg.obj          \
-        $(SLO)$/sfxurl.obj			\
         $(SLO)$/splitwin.obj		\
         $(SLO)$/srchdlg.obj         \
         $(SLO)$/styfitem.obj		\
@@ -69,7 +69,8 @@ SLOFILES =\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/versdlg.obj         \
-        $(SLO)$/securitypage.obj
+        $(SLO)$/securitypage.obj    \
+        $(SLO)$/titledockwin.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
@@ -87,7 +88,9 @@ SRC1FILES =\
         versdlg.src			\
         printopt.src        \
         srchdlg.src         \
-        securitypage.src
+        securitypage.src    \
+        titledockwin.src    \
+        taskpane.src
 
 .IF "$(BUILD_VER_STRING)"!=""
 .IF "$(GUI)"=="UNX"
@@ -104,9 +107,9 @@ CFLAGS+=-DBUILD_VER_STRING="$(subst,",\" "$(BUILD_VER_STRING)")"
 $(INCCOM)$/cuilib.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     $(RM) $@
-    echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    @echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
+    @echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
 .ENDIF
 
 $(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx

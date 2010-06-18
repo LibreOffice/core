@@ -120,7 +120,8 @@ static const char* UIELEMENTTYPENAMES[] =
     UIELEMENTTYPE_TOOLBAR_NAME,
     UIELEMENTTYPE_STATUSBAR_NAME,
     UIELEMENTTYPE_FLOATINGWINDOW_NAME,
-    UIELEMENTTYPE_PROGRESSBAR_NAME
+    UIELEMENTTYPE_PROGRESSBAR_NAME,
+    UIELEMENTTYPE_TOOLPANEL_NAME
 };
 
 static const char       RESOURCEURL_PREFIX[] = "private:resource/";
@@ -292,11 +293,12 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
                 }
+                rElementTypeData.bLoaded = true;
             }
         }
     }
 
-    rElementTypeData.bLoaded = true;
+    //rElementTypeData.bLoaded = true;
 }
 
 void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData )

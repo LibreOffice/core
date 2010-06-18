@@ -125,5 +125,8 @@ XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, 
 
 const SdrTextObj* SdrOutliner::GetTextObj() const
 {
-    return static_cast< SdrTextObj* >( mpTextObj.get() );
+    if( mpTextObj.is() )
+        return static_cast< SdrTextObj* >( mpTextObj.get() );
+    else
+        return 0;
 }
