@@ -60,6 +60,10 @@ public class Skeleton
         assertTrue("Couldn't open document", open());
         System.out.println("check");
         assertTrue("Couldn't close document", close());
+        String tempDirURL = util.utils.getOfficeTemp/*Dir*/(getMSF());
+        System.out.println("temp dir URL is: " + tempDirURL);
+        String tempDir = graphical.FileHelper.getSystemPathFromFileURL(tempDirURL);
+        assertTrue("Temp directory doesn't exist.", new File(tempDir).exists());
     }
 
     private boolean open()
