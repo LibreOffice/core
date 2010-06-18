@@ -25,22 +25,41 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = DocHelper
-PRJNAME = $(TARGET)
-PACKAGE = complex$/framework$/dochelper
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-# --- Settings -----------------------------------------------------
+PRJ = ../../..
+PRJNAME = sfx2
+TARGET = qa_complex_framework
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/framework
+JAVATESTFILES = \
+    DocumentMetadataAccessTest.java \
+    DocumentMetaData.java \
+    CheckGlobalEventBroadcaster_writer1.java
+
+JAVAFILES = $(JAVATESTFILES) \
+    TestDocument.java
+
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+
+SUBDIRS         = DocHelper
+
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
+.END
+
 .INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
+ALLTAR : javatest
 
-#----- compile .java files -----------------------------------------
+.END
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = DialogThread.java WriterHelper.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
 
