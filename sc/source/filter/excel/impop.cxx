@@ -178,15 +178,16 @@ void ImportExcel::ReadFileSharing()
     maStrm >> nRecommendReadOnly >> nPasswordHash;
 
     if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
+    {
         if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
             pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
 
-    if( nPasswordHash != 0 )
-    {
-        if( SfxObjectShell* pDocShell = GetDocShell() )
+        if( SfxObjectShell* pShell = GetDocShell() )
         {
-            ScfPropertySet aPropSet( pDocShell->GetModel() );
-            aPropSet.SetProperty( CREATE_OUSTRING( "WriteProtectionPassword" ), static_cast< sal_Int32 >( nPasswordHash ) );
+            if( nRecommendReadOnly != 0 )
+                pShell->SetLoadReadonly( sal_True );
+            if( nPasswordHash != 0 )
+                pShell->SetModifyPasswordHash( nPasswordHash );
         }
     }
 }
