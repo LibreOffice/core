@@ -27,7 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+
 #include <comphelper/processfactory.hxx>
 #include <svx/dialogs.hrc>
 #include <hintids.hxx>
@@ -338,6 +341,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     const String aParagraphLangPrefix( String::CreateFromAscii("Paragraph_") );
                     const String aDocumentLangPrefix( String::CreateFromAscii("Default_") );
                     const String aStrNone( String::CreateFromAscii("LANGUAGE_NONE") );
+                    const String aStrResetLangs( String::CreateFromAscii("RESET_LANGUAGES") );
 
                     SfxItemSet aCoreSet( GetPool(),
                             RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -376,10 +380,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.SelAll();
                         rWrtSh.ExtendedSelectAll();
                     }
-                    if (aNewLangTxt != aStrNone)
-                        SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
-                    else
+                    if (aNewLangTxt == aStrNone)
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
+                    else if (aNewLangTxt == aStrResetLangs)
+                        SwLangHelper::ResetLanguages( rWrtSh, bForSelection );
+                    else
+                        SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
                 }
 
                 // restore selection...
@@ -395,6 +401,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rReq.Done();
             break;
         }
+
+        case SID_THES:
+        {
+            // replace word/selection with text from selected sub menu entry
+            String aReplaceText;
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+            if (pItem2)
+                aReplaceText = pItem2->GetValue();
+            if (aReplaceText.Len() > 0)
+            {
+                SwView &rView2 = rWrtSh.GetView();
+                const bool bSelection = rWrtSh.HasSelection();
+                const String aLookUpText = rView2.GetThesaurusLookUpText( bSelection );
+                rView2.InsertThesaurusSynonym( aReplaceText, aLookUpText, bSelection );
+            }
+        }
+        break;
 
         case SID_CHARMAP:
         {
@@ -1373,6 +1396,38 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 aItem.SetStringList( aSeq );
                 rSet.Put( aItem, SID_LANGUAGE_STATUS );
             }
+        break;
+
+        case SID_THES:
+        {
+            // is there a valid selection to get text from?
+            String aText;
+            sal_Bool bValid = !rSh.HasSelection() ||
+                    (rSh.IsSelOnePara() && !rSh.IsMultiSelection());
+            // prevent context menu from showing when cursor is not in or at the end of a word
+            // (GetCurWord will return the next word if there is none at the current position...)
+            const sal_Int16 nWordType = ::i18n::WordType::DICTIONARY_WORD;
+            bool bWord = rSh.IsInWord( nWordType ) || rSh.IsStartWord( nWordType ) || rSh.IsEndWord( nWordType );
+            if (bValid && bWord)
+               aText = rSh.HasSelection()? rSh.GetSelTxt() : rSh.GetCurWord();
+
+            LanguageType nLang = rSh.GetCurLang();
+            lang::Locale aLocale = SvxCreateLocale( nLang );
+            String aLangText( MsLangId::convertLanguageToIsoString( nLang ) );
+
+            // set word and locale to look up as status value
+            String aStatusVal( aText );
+            aStatusVal.AppendAscii( "#" );
+            aStatusVal += aLangText;
+
+            rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+            // disable "Thesaurus" context menu entry if there is nothing to look up
+            uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
+            if (aText.Len() == 0 ||
+                !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                rSet.DisableItem( SID_THES );
+        }
         break;
 
         case FN_NUMBER_NEWSTART :

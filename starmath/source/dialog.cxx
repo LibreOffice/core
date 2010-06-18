@@ -426,7 +426,7 @@ IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton
 
     if (pQueryBox->Execute() == RET_YES)
     {
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
@@ -533,7 +533,7 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTY
     QueryBox *pQueryBox = new QueryBox(this, SmResId(RID_DEFAULTSAVEQUERY));
     if (pQueryBox->Execute() == RET_YES)
     {
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt, TRUE );
@@ -579,7 +579,7 @@ SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevic
 
 void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     aVariableFont = pp->GetConfig()->GetFontPickList(FNT_VARIABLE);
     aFunctionFont = pp->GetConfig()->GetFontPickList(FNT_FUNCTION);
@@ -601,7 +601,7 @@ void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
 
 void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     pp->GetConfig()->GetFontPickList(FNT_VARIABLE) = aVariableFont;
     pp->GetConfig()->GetFontPickList(FNT_FUNCTION) = aFunctionFont;
@@ -740,7 +740,7 @@ IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton
 
     if (pQueryBox->Execute() == RET_YES)
     {
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
@@ -1063,7 +1063,7 @@ IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
 
     if (pQueryBox->Execute() == RET_YES)
     {
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
@@ -1140,12 +1140,12 @@ void SmShowSymbolSet::Paint(const Rectangle&)
     SetMapMode(MapMode(MAP_PIXEL));
 
     USHORT v        = sal::static_int_cast< USHORT >((aVScrollBar.GetThumbPos() * nColumns));
-    USHORT nSymbols = aSymbolSet.GetCount();
+    size_t nSymbols = aSymbolSet.size();
 
     Color aTxtColor( GetTextColor() );
     for (USHORT i = v; i < nSymbols ; i++)
     {
-        SmSym    aSymbol (aSymbolSet.GetSymbol(i));
+        SmSym    aSymbol (*aSymbolSet[i]);
         Font     aFont   (aSymbol.GetFace());
         aFont.SetAlign(ALIGN_TOP);
 
@@ -1206,7 +1206,7 @@ void SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
             case KEY_LEFT:      n -= 1; break;
             case KEY_RIGHT:     n += 1; break;
             case KEY_HOME:      n  = 0; break;
-            case KEY_END:       n  = aSymbolSet.GetCount() - 1; break;
+            case KEY_END:       n  = static_cast< USHORT >(aSymbolSet.size() - 1);   break;
             case KEY_PAGEUP:    n -= nColumns * nRows;  break;
             case KEY_PAGEDOWN:  n += nColumns * nRows;  break;
 
@@ -1218,7 +1218,7 @@ void SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
     else
         n = 0;
 
-    if (n >= aSymbolSet.GetCount())
+    if (n >= aSymbolSet.size())
         n = nSelectSymbol;
 
     // adjust scrollbar
@@ -1274,13 +1274,13 @@ SmShowSymbolSet::SmShowSymbolSet(Window *pParent, const ResId& rResId) :
 }
 
 
-void SmShowSymbolSet::SetSymbolSet(const SmSymSet& rSymbolSet)
+void SmShowSymbolSet::SetSymbolSet(const SymbolPtrVec_t& rSymbolSet)
 {
     aSymbolSet = rSymbolSet;
 
-    if (aSymbolSet.GetCount() > (nColumns * nRows))
+    if (static_cast< USHORT >(aSymbolSet.size()) > (nColumns * nRows))
     {
-        aVScrollBar.SetRange(Range(0, ((aSymbolSet.GetCount() + (nColumns - 1)) / nColumns) - nRows));
+        aVScrollBar.SetRange(Range(0, ((aSymbolSet.size() + (nColumns - 1)) / nColumns) - nRows));
         aVScrollBar.Enable(TRUE);
     }
     else
@@ -1302,10 +1302,10 @@ void SmShowSymbolSet::SelectSymbol(USHORT nSymbol)
                                    ((nSelectSymbol - v) / nColumns) * nLen),
                              Size(nLen, nLen)));
 
-    if (nSymbol < aSymbolSet.GetCount())
+    if (nSymbol < aSymbolSet.size())
         nSelectSymbol = nSymbol;
 
-    if (aSymbolSet.GetCount() == 0)
+    if (aSymbolSet.size() == 0)
         nSelectSymbol = SYMBOL_NONE;
 
     if (nSelectSymbol != SYMBOL_NONE)
@@ -1380,9 +1380,10 @@ void SmSymbolDialog::FillSymbolSets(BOOL bDeleteText)
     if (bDeleteText)
         aSymbolSets.SetNoSelection();
 
-    USHORT nNumSymSets = rSymSetMgr.GetSymbolSetCount();
-    for (USHORT i = 0;  i < nNumSymSets;  i++)
-        aSymbolSets.InsertEntry(rSymSetMgr.GetSymbolSet(i)->GetName());
+    std::set< String >  aSybolSetNames( rSymbolMgr.GetSymbolSetNames() );
+    std::set< String >::const_iterator aIt( aSybolSetNames.begin() );
+    for ( ; aIt != aSybolSetNames.end(); ++aIt)
+        aSymbolSets.InsertEntry( *aIt );
 }
 
 
@@ -1416,7 +1417,7 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
     DBG_ASSERT(pButton == &aEditBtn, "Sm : falsches Argument");
 #endif
 
-    SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, pFontListDev, rSymSetMgr);
+    SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, pFontListDev, rSymbolMgr);
 
     // aktuelles Symbol und SymbolSet am neuen Dialog setzen
     const XubString  aSymSetName (aSymbolSets.GetSelectEntry()),
@@ -1432,9 +1433,9 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
     USHORT nSymPos = GetSelectedSymbol();
 
     // Dialog an evtl geaenderte Daten des SymbolSet Manager anpassen
-    if (pDialog->Execute() == RET_OK  &&  rSymSetMgr.IsModified())
+    if (pDialog->Execute() == RET_OK  &&  rSymbolMgr.IsModified())
     {
-        rSymSetMgr.Save();
+        rSymbolMgr.Save();
         FillSymbolSets();
     }
 
@@ -1442,7 +1443,16 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
     // (soweit eines vorhanden ist)
     if (!SelectSymbolSet(aOldSymbolSet)  &&  aSymbolSets.GetEntryCount() > 0)
         SelectSymbolSet(aSymbolSets.GetEntry(0));
+    else
+    {
+        // just update display of current symbol set
+        DBG_ASSERT( aSymSetName == aSymSetName, "unexpected change in symbol set name" );
+           aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
+        aSymbolSetDisplay.SetSymbolSet( aSymbolSet );
+    }
 
+    if (nSymPos >= aSymbolSet.size())
+        nSymPos = static_cast< USHORT >(aSymbolSet.size()) - 1;
     SelectSymbol( nSymPos );
 
     delete pDialog;
@@ -1499,7 +1509,7 @@ IMPL_LINK_INLINE_END( SmSymbolDialog, CloseClickHdl, Button *, pButton )
 
 
 SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
-        SmSymSetManager &rMgr, SmViewShell &rViewShell, BOOL bFreeRes) :
+        SmSymbolManager &rMgr, SmViewShell &rViewShell, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMBOLDIALOG)),
     aSymbolSetText      (this, SmResId(1)),
     aSymbolSets         (this, SmResId(1)),
@@ -1510,13 +1520,14 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
     aCloseBtn           (this, SmResId(3)),
     aEditBtn            (this, SmResId(1)),
     rViewSh             (rViewShell),
-    rSymSetMgr          (rMgr),
+    rSymbolMgr          (rMgr),
     pFontListDev        (pFntListDevice)
 {
     if (bFreeRes)
         FreeResource();
 
-    pSymSet = NULL;
+    aSymbolSetName = String();
+    aSymbolSet.clear();
     FillSymbolSets();
     if (aSymbolSets.GetEntryCount() > 0)
         SelectSymbolSet(aSymbolSets.GetEntry(0));
@@ -1580,18 +1591,17 @@ BOOL SmSymbolDialog::SelectSymbolSet(const XubString &rSymbolSetName)
     BOOL    bRet = FALSE;
     USHORT  nPos = aSymbolSets.GetEntryPos(rSymbolSetName);
 
-    pSymSet = NULL;
+    aSymbolSetName = String();
+    aSymbolSet.clear();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         aSymbolSets.SelectEntryPos(nPos);
-        USHORT nSymbolSetNo = rSymSetMgr.GetSymbolSetPos(aSymbolSets.GetSelectEntry());
-        pSymSet = rSymSetMgr.GetSymbolSet(nSymbolSetNo);
-#if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT(pSymSet, "Sm : NULL pointer");
-#endif
 
-        aSymbolSetDisplay.SetSymbolSet(*pSymSet);
-        if (pSymSet->GetCount() > 0)
+        aSymbolSetName  = rSymbolSetName;
+        aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
+
+        aSymbolSetDisplay.SetSymbolSet( aSymbolSet );
+        if (aSymbolSet.size() > 0)
             SelectSymbol(0);
 
         bRet = TRUE;
@@ -1606,8 +1616,8 @@ BOOL SmSymbolDialog::SelectSymbolSet(const XubString &rSymbolSetName)
 void SmSymbolDialog::SelectSymbol(USHORT nSymbolNo)
 {
     const SmSym *pSym = NULL;
-    if (pSymSet  &&  nSymbolNo < pSymSet->GetCount())
-        pSym = &pSymSet->GetSymbol(nSymbolNo);
+    if (aSymbolSetName.Len() > 0  &&  nSymbolNo < static_cast< USHORT >(aSymbolSet.size()))
+        pSym = aSymbolSet[ nSymbolNo ];
 
     aSymbolSetDisplay.SelectSymbol(nSymbolNo);
     aSymbolDisplay.SetSymbol(pSym);
@@ -1618,7 +1628,8 @@ void SmSymbolDialog::SelectSymbol(USHORT nSymbolNo)
 const SmSym * SmSymbolDialog::GetSymbol() const
 {
     USHORT nSymbolNo = aSymbolSetDisplay.GetSelectSymbol();
-    return pSymSet == NULL ? NULL : &pSymSet->GetSymbol(nSymbolNo);
+    bool bValid = aSymbolSetName.Len() > 0  &&  nSymbolNo < static_cast< USHORT >(aSymbolSet.size());
+    return bValid ? aSymbolSet[ nSymbolNo ] : NULL;
 }
 
 
@@ -1678,15 +1689,10 @@ void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, BOOL bDeleteText)
     if (bDeleteText)
         rComboBox.SetText(XubString());
 
-    ComboBox &rSymbolSets = &rComboBox == &aOldSymbols ?
-                                    aOldSymbolSets : aSymbolSets;
-    const SmSymSet *pSymSet = GetSymbolSet(rSymbolSets);
-    if (pSymSet)
-    {   USHORT nNumSymbols = pSymSet->GetCount();
-        for (USHORT i = 0;  i < nNumSymbols;  i++)
-            rComboBox.InsertEntry(pSymSet->GetSymbol(i).GetName());
-    }
-
+    ComboBox &rBox = &rComboBox == &aOldSymbols ? aOldSymbolSets : aSymbolSets;
+    SymbolPtrVec_t aSymSet( aSymbolMgrCopy.GetSymbolSet( rBox.GetText() ) );
+    for (size_t i = 0;  i < aSymSet.size();  ++i)
+        rComboBox.InsertEntry( aSymSet[i]->GetName() );
 }
 
 
@@ -1701,9 +1707,10 @@ void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, BOOL bDeleteText)
     if (bDeleteText)
         rComboBox.SetText(XubString());
 
-    USHORT nNumSymSets = aSymSetMgrCopy.GetSymbolSetCount();
-    for (USHORT i = 0;  i < nNumSymSets;  i++)
-        rComboBox.InsertEntry(aSymSetMgrCopy.GetSymbolSet(i)->GetName());
+    const std::set< String >  aSymbolSetNames( aSymbolMgrCopy.GetSymbolSetNames() );
+    std::set< String >::const_iterator aIt( aSymbolSetNames.begin() );
+    for ( ;  aIt != aSymbolSetNames.end();  ++aIt)
+        rComboBox.InsertEntry( *aIt );
 }
 
 
@@ -1748,26 +1755,13 @@ void SmSymDefineDialog::FillStyles(BOOL bDeleteText)
 }
 
 
-SmSymSet * SmSymDefineDialog::GetSymbolSet(const ComboBox &rComboBox)
-{
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(&rComboBox == &aOldSymbolSets  ||  &rComboBox == &aSymbolSets,
-        "Sm : falsche ComboBox");
-#endif
-    USHORT nSymbolSetNo = aSymSetMgrCopy.GetSymbolSetPos(rComboBox.GetText());
-
-    return nSymbolSetNo == SYMBOLSET_NONE ?
-        NULL : aSymSetMgrCopy.GetSymbolSet(nSymbolSetNo);
-}
-
-
 SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 {
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
         "Sm : falsche ComboBox");
 #endif
-    return aSymSetMgrCopy.GetSymbolByName(rComboBox.GetText());
+    return aSymbolMgrCopy.GetSymbolByName(rComboBox.GetText());
 }
 
 
@@ -1897,32 +1891,23 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
     DBG_ASSERT(aAddBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
 #endif
 
-    SmSymSet *pSymSet = GetSymbolSet(aSymbolSets);
-
-    // SymbolSet einfuegen falls es noch nicht existiert
-    if (!pSymSet)
-    {
-        pSymSet = new SmSymSet(aSymbolSets.GetText());
-        aSymSetMgrCopy.AddSymbolSet(pSymSet);
-        FillSymbolSets(aOldSymbolSets, FALSE);
-        FillSymbolSets(aSymbolSets,    FALSE);
-    }
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pSymSet, "Sm : NULL pointer");
-#endif
-
-    // Symbol ins SymbolSet einfuegen
+    // add symbol
     // TO_DO_UCS4 (#i74049): get rid of cast without loosing UCS4 functionality
-    SmSym *pSym = new SmSym(aSymbols.GetText(), aCharsetDisplay.GetFont(),
-                            sal::static_int_cast< sal_Unicode >(aCharsetDisplay.GetSelectCharacter()),
-                            aSymbolSets.GetText());
-    pSymSet->AddSymbol(pSym);
+    const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
+            sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
+            aSymbolSets.GetText() );
+    //DBG_ASSERT( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
+    aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
 
-    // update der Hash Tabelle erzwingen (damit aAddBtn disabled wird).
-    // (wird spaeter nach Ueberarbeitung von symbol.cxx ueberfluessig werden).
-    aSymSetMgrCopy.ChangeSymbolSet((SmSymSet *)1);
+    // update display of new symbol
+    aSymbolDisplay.SetChar( aNewSymbol.GetCharacter() );
+    aSymbolDisplay.SetFont( aNewSymbol.GetFace() );
+    aSymbolName.SetText( aNewSymbol.GetName() );
+    aSymbolSetName.SetText( aNewSymbol.GetSymbolSetName() );
 
-    // Symbolliste aktualiseren
+    // update list box entries
+    FillSymbolSets(aOldSymbolSets, FALSE);
+    FillSymbolSets(aSymbolSets,    FALSE);
     FillSymbols(aOldSymbols ,FALSE);
     FillSymbols(aSymbols    ,FALSE);
 
@@ -1940,61 +1925,36 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
     DBG_ASSERT(aChangeBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
 #endif
 
-    // finden des SymbolSets zum alten Symbol
-    SmSymSet *pOldSymSet = GetSymbolSet(aOldSymbolSets);
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pOldSymSet, "Sm : NULL pointer");
-#endif
-
-    // suchen des neuen SymbolSets
-    SmSymSet *pNewSymSet = GetSymbolSet(aSymbolSets);
-    // SymbolSet einfuegen falls es noch nicht existiert
-    if (!pNewSymSet)
-    {
-        pNewSymSet = new SmSymSet(aSymbolSets.GetText());
-        aSymSetMgrCopy.AddSymbolSet(pNewSymSet);
-        FillSymbolSets(aOldSymbolSets, FALSE);
-        FillSymbolSets(aSymbolSets,    FALSE);
-    }
-
-    // das (alte) Symbol besorgen
-    USHORT nSymbol = pOldSymSet->GetSymbolPos(aOldSymbols.GetText());
-    SmSym *pSym    = (SmSym *) &pOldSymSet->GetSymbol(nSymbol);
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( SYMBOL_NONE != nSymbol, "symbol not found" );
-    DBG_ASSERT(pSym, "Sm : NULL pointer");
-#endif
-
-    // apply changes
-    pSym->SetName( aSymbols.GetText() );
-    //! get font from symbol-display since charset-display does not keep
+    // get new Sybol to use
+    //! get font from symbol-disp lay since charset-display does not keep
     //! the bold attribut.
-    pSym->SetFace( aSymbolDisplay.GetFont() );
     // TO_DO_UCS4 (#i74049): get rid of cast without loosing UCS4 functionality
-    pSym->SetCharacter( sal::static_int_cast< sal_Unicode >(aCharsetDisplay.GetSelectCharacter()) );
+    const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
+            sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
+            aSymbolSets.GetText() );
 
-    // das SymbolSet wechseln wenn noetig
-    if (pOldSymSet != pNewSymSet)
-    {
-        pNewSymSet->AddSymbol( new SmSym( *pSym ) );
-        pOldSymSet->DeleteSymbol(nSymbol);
+    // remove old symbol if the name was changed then add new one
+//    const bool bSetNameChanged    = aOldSymbolSets.GetText() != aSymbolSets.GetText();
+    const bool bNameChanged       = aOldSymbols.GetText() != aSymbols.GetText();
+    if (bNameChanged)
+        aSymbolMgrCopy.RemoveSymbol( aOldSymbols.GetText() );
+    aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol, true );
 
-        //
-        // update controls
-        //
-        // actualize symbol-lists in the dialog
-        String  aTmpOldSymbolName( pOrigSymbol->GetName() );
-        aOldSymbols.SetText( String() );
-        aOldSymbols.RemoveEntry( aTmpOldSymbolName );
-        if (aSymbolSets.GetText() == aOldSymbolSets.GetText())
-            aSymbols.RemoveEntry( aTmpOldSymbolName );
-        // clear display for original symbol
+    // clear display for original symbol if necessary
+    if (bNameChanged)
         SetOrigSymbol(NULL, XubString());
-    }
 
-    //!! den SymbolSet Manger dazu zwingen seinen HashTable zu aktualisieren,
-    //!! um mit moeglich neuen bzw fehlenden alten Symbol Namen konform zu sein.
-    aSymSetMgrCopy.ChangeSymbolSet((SmSymSet *)1);
+    // update display of new symbol
+    aSymbolDisplay.SetChar( aNewSymbol.GetCharacter() );
+    aSymbolDisplay.SetFont( aNewSymbol.GetFace() );
+    aSymbolName.SetText( aNewSymbol.GetName() );
+    aSymbolSetName.SetText( aNewSymbol.GetSymbolSetName() );
+
+    // update list box entries
+    FillSymbolSets(aOldSymbolSets, FALSE);
+    FillSymbolSets(aSymbolSets,    FALSE);
+    FillSymbols(aOldSymbols ,FALSE);
+    FillSymbols(aSymbols    ,FALSE);
 
     UpdateButtons();
 
@@ -2012,33 +1972,16 @@ IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, EMPTYARG pButton )
 
     if (pOrigSymbol)
     {
-        // loeschen des Symbols:
-        //
-        // zugehoeriges SymbolSet finden
-        SmSymSet *pSymSet = GetSymbolSet(aOldSymbolSets);
-        // finden des Index
-        XubString  aTmpOldSymbolName (pOrigSymbol->GetName());
-        USHORT    nSymbolNo   = pSymSet->GetSymbolPos(aTmpOldSymbolName);
-        // Bezuege auf das Symbols loeschen
+        aSymbolMgrCopy.RemoveSymbol( pOrigSymbol->GetName() );
+
+        // clear display for original symbol
         SetOrigSymbol(NULL, XubString());
-        // und weg mit dem Symbol
-        pSymSet->DeleteSymbol(nSymbolNo);
-#if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT(pSymSet, "Sm : NULL pointer");
-        DBG_ASSERT(nSymbolNo != SYMBOL_NONE, "Sm : kein Symbol");
-#endif
 
-        //!! den SymbolSet Manger dazu zwingen seinen HashTable zu aktualisieren,
-        //!! was er naemlich nicht tut, wenn in einem seiner SymbolSets geaendert/
-        //!! geloescht wird, was wiederum zu einem Absturz fuehren kann (wenn er
-        //!! ueber ein nicht mehr existentes aber nicht entferntes Symbol iteriert).
-        aSymSetMgrCopy.ChangeSymbolSet((SmSymSet *)1);
-
-        // aktualisieren der Symboleintraege des Dialogs
-        aOldSymbols.SetText(XubString());
-        aOldSymbols.RemoveEntry(aTmpOldSymbolName);
-        if (aSymbolSets.GetText() == aOldSymbolSets.GetText())
-            aSymbols.RemoveEntry(aTmpOldSymbolName);
+        // update list box entries
+        FillSymbolSets(aOldSymbolSets, FALSE);
+        FillSymbolSets(aSymbolSets,    FALSE);
+        FillSymbols(aOldSymbols ,FALSE);
+        FillSymbols(aSymbols    ,FALSE);
     }
 
     UpdateButtons();
@@ -2070,7 +2013,7 @@ void SmSymDefineDialog::UpdateButtons()
                     && aCharsetDisplay.GetSelectCharacter() == pOrigSymbol->GetCharacter();
 
         // hinzufuegen nur wenn es noch kein Symbol desgleichen Namens gibt
-        bAdd    = aSymSetMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL;
+        bAdd    = aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL;
 
         // loeschen nur wenn alle Einstellungen gleich sind
         bDelete = pOrigSymbol != NULL;
@@ -2078,9 +2021,12 @@ void SmSymDefineDialog::UpdateButtons()
         // aendern wenn bei gleichem Namen mindestens eine Einstellung anders ist
         // oder wenn es noch kein Symbol des neuen Namens gibt (wuerde implizites
         // loeschen des bereits vorhandenen Symbols erfordern)
-        BOOL  bEqualName = pOrigSymbol && aTmpSymbolName == pOrigSymbol->GetName();
-        bChange = pOrigSymbol && ( (bEqualName && !bEqual) || (!bEqualName && bAdd) );
-    }
+//        BOOL  bEqualName = pOrigSymbol && aTmpSymbolName == pOrigSymbol->GetName();
+//      bChange = pOrigSymbol && ( (bEqualName && !bEqual) || (!bEqualName && bAdd) );
+
+        // aendern nur falls altes Symbol vorhanden und am neuen etwas anders ist
+        bChange = pOrigSymbol && !bEqual;
+}
 
     aAddBtn   .Enable(bAdd);
     aChangeBtn.Enable(bChange);
@@ -2089,7 +2035,7 @@ void SmSymDefineDialog::UpdateButtons()
 
 
 SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
-        OutputDevice *pFntListDevice, SmSymSetManager &rMgr, BOOL bFreeRes) :
+        OutputDevice *pFntListDevice, SmSymbolManager &rMgr, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMDEFINEDIALOG)),
     aOldSymbolText      (this, SmResId(1)),
     aOldSymbols         (this, SmResId(1)),
@@ -2120,7 +2066,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
     aRightArrow         (this, SmResId(1)),
     aRigthArrow_Im      (SmResId(1)),
     aRigthArrow_Im_HC   (SmResId(2)),   // hi-contrast version
-    rSymSetMgr          (rMgr),
+    rSymbolMgr          (rMgr),
     pSubsetMap          (NULL),
     pFontList           (NULL)
 {
@@ -2131,9 +2077,10 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
 
     pOrigSymbol = 0;
 
-    // make autocompletion for symbols case-sensitive
-    aOldSymbols.EnableAutocomplete(TRUE, TRUE);
-    aSymbols   .EnableAutocomplete(TRUE, TRUE);
+    // auto completion is troublesome since that symbols character also gets automatically selected in the
+    // display and if the user previously selected a character to define/redefine that one this is bad
+   aOldSymbols.EnableAutocomplete( FALSE, TRUE );
+   aSymbols   .EnableAutocomplete( FALSE, TRUE );
 
     FillFonts();
     if (aFonts.GetEntryCount() > 0)
@@ -2141,7 +2088,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
 
     InitColor_Impl();
 
-    SetSymbolSetManager(rSymSetMgr);
+    SetSymbolSetManager(rSymbolMgr);
 
     aOldSymbols    .SetSelectHdl(LINK(this, SmSymDefineDialog, OldSymbolChangeHdl));
     aOldSymbolSets .SetSelectHdl(LINK(this, SmSymDefineDialog, OldSymbolSetChangeHdl));
@@ -2215,41 +2162,23 @@ short SmSymDefineDialog::Execute()
     short nResult = ModalDialog::Execute();
 
     // Aenderungen uebernehmen falls Dialog mit OK beendet wurde
-    if (aSymSetMgrCopy.IsModified()  &&  nResult == RET_OK)
-    {
-        // leere SymbolSets aus dem Ergebnis entfernen.
-        // Dabei von hinten durch das array iterieren, da beim loeschen die
-        // Elemente aufruecken.
-        USHORT  nSymbolSets = aSymSetMgrCopy.GetSymbolSetCount();
-        for (USHORT i = 0;  i < nSymbolSets;  i++)
-        {
-            USHORT nIdx = nSymbolSets - 1 - i;
-            if (aSymSetMgrCopy.GetSymbolSet(nIdx)->GetCount() == 0)
-                aSymSetMgrCopy.DeleteSymbolSet(nIdx);
-        }
-
-
-
-        rSymSetMgr = aSymSetMgrCopy;
-#ifdef DEBUG
-//        USHORT nS = rSymSetMgr.GetSymbolSetCount();
-#endif
-    }
+    if (aSymbolMgrCopy.IsModified()  &&  nResult == RET_OK)
+        rSymbolMgr = aSymbolMgrCopy;
 
     return nResult;
 }
 
 
-void SmSymDefineDialog::SetSymbolSetManager(const SmSymSetManager &rMgr)
+void SmSymDefineDialog::SetSymbolSetManager(const SmSymbolManager &rMgr)
 {
-    aSymSetMgrCopy = rMgr;
+    aSymbolMgrCopy = rMgr;
 #ifdef DEBUG
-//        USHORT nS = aSymSetMgrCopy.GetSymbolSetCount();
+//        USHORT nS = aSymbolMgrCopy.GetSymbolSetCount();
 #endif
 
     // Das modified Flag der Kopie auf FALSE setzen, damit man spaeter damit
     // testen kann ob sich was geaendert hat.
-    aSymSetMgrCopy.SetModified(FALSE);
+    aSymbolMgrCopy.SetModified(FALSE);
 
     FillSymbolSets(aOldSymbolSets);
     if (aOldSymbolSets.GetEntryCount() > 0)
@@ -2404,13 +2333,13 @@ BOOL SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
     {
         // bei Wechsel des alten Symbols nur vorhandene anzeigen sonst keins
         const SmSym *pOldSymbol = NULL;
-        XubString     aTMpOldSymbolSetName;
+        XubString     aTmpOldSymbolSetName;
         if (nPos != COMBOBOX_ENTRY_NOTFOUND)
         {
-            pOldSymbol        = aSymSetMgrCopy.GetSymbolByName(aNormName);
-            aTMpOldSymbolSetName = aOldSymbolSets.GetText();
+            pOldSymbol        = aSymbolMgrCopy.GetSymbolByName(aNormName);
+            aTmpOldSymbolSetName = aOldSymbolSets.GetText();
         }
-        SetOrigSymbol(pOldSymbol, aTMpOldSymbolSetName);
+        SetOrigSymbol(pOldSymbol, aTmpOldSymbolSetName);
     }
     else
         aSymbolName.SetText(rComboBox.GetText());

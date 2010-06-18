@@ -8319,31 +8319,6 @@ SfxVoidItem TextWrap FN_DRAW_WRAP_DLG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ThesaurusDialog FN_THESAURUS_DLG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem ToggleAnchorType FN_TOOL_ANKER
 ()
 [

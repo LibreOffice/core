@@ -125,11 +125,6 @@ sal_Bool isHahChar ( xub_Unicode cCh )
            || cCh == 0x6BF );
 }
 
-sal_Bool isTahChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x637 || cCh == 0x638 || cCh == 0x69F );
-}
-
 sal_Bool isAinChar ( xub_Unicode cCh )
 {
    return ( cCh == 0x639 || cCh == 0x63A || cCh == 0x6A0 || cCh == 0x6FC );

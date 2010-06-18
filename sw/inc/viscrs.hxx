@@ -92,8 +92,6 @@ class SwSelPaintRects : public SwRects
     // die Shell
     const SwCrsrShell* pCShell;
 
-    void Paint( const SwRect& rRect );
-
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects() = 0;
 
