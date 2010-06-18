@@ -71,6 +71,7 @@ LIB1FILES=	\
         $(SLB)/svrtf.lib	\
         $(SLB)/table.lib 	\
         $(SLB)/unoiface.lib	\
+        $(SLB)/unowiz.lib	\
         $(SLB)/urlobj.lib	\
         $(SLB)/toolpanel.lib
 

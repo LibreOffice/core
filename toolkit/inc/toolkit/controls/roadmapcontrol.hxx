@@ -132,14 +132,8 @@ namespace toolkit{
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::beans::XMultiPropertySet
-//  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlRoadmapModel, UnoControlModel, szServiceName2_UnoControlRoadmapModel )
-
-//    void              ImplPropertyChanged( sal_uInt16 nPropId );
 
     sal_Int32 SAL_CALL getCount() throw (RuntimeException);
     virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException );

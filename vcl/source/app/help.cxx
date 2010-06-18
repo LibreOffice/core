@@ -759,18 +759,26 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     else if ( ( aPos.Y() + aSz.Height() ) > aScreenRect.Bottom() )
         aPos.Y() = aScreenRect.Bottom() - aSz.Height();
 
-    // the popup must not appear under the mouse
-    // otherwise it would directly be closed due to a focus change...
-    Rectangle aHelpRect( aPos, aSz );
-    if( aHelpRect.IsInside( mPos ) )
+    if( ! (nStyle & QUICKHELP_NOEVADEPOINTER) )
     {
-        Point delta(2,2);
-        Point pSize( aSz.Width(), aSz.Height() );
-        Point pTest( mPos - pSize - delta );
-        if( pTest.X() > aScreenRect.Left() &&  pTest.Y() > aScreenRect.Top() )
-            aPos = pTest;
-        else
-            aPos = mPos + delta;
+        /* the remark below should be obsolete by now as the helpwindow should
+        not be focusable, leaving it as a hint. However it is sensible in most
+        conditions to evade the mouse pointer so the content window is fully visible.
+
+        // the popup must not appear under the mouse
+        // otherwise it would directly be closed due to a focus change...
+        */
+        Rectangle aHelpRect( aPos, aSz );
+        if( aHelpRect.IsInside( mPos ) )
+        {
+            Point delta(2,2);
+            Point pSize( aSz.Width(), aSz.Height() );
+            Point pTest( mPos - pSize - delta );
+            if( pTest.X() > aScreenRect.Left() &&  pTest.Y() > aScreenRect.Top() )
+                aPos = pTest;
+            else
+                aPos = mPos + delta;
+        }
     }
 
     Window* pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
