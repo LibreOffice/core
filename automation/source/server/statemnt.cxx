@@ -5311,13 +5311,13 @@ BOOL StatementControl::Execute()
                             {           // Wir fälschen einen Parameter
                                 if ( aUId.HasNumeric() )
                                 {
-                                    nParams = PARAM_ULONG_1;
+                                    nParams |= PARAM_ULONG_1;
                                     nLNr1 = USHORT( aUId.GetNum() );
                                     DBG_ASSERT( nLNr1 <= 0xFFFF, "ID on ToolBox > 0xFFFF" );
                                 }
                                 else
                                 {
-                                    nParams = PARAM_STR_1;
+                                    nParams |= PARAM_STR_1;
                                     aString1 = aUId.GetStr();
                                 }
                             }
@@ -5330,9 +5330,9 @@ BOOL StatementControl::Execute()
     BOOL bItemFound = FALSE;\
     {\
         SmartId aButtonId;\
-        if( nParams == PARAM_STR_1 )\
+        if( nParams & PARAM_STR_1 )\
             aButtonId = SmartId( aString1 );\
-        if( nParams == PARAM_ULONG_1 )\
+        if( nParams & PARAM_ULONG_1 )\
             aButtonId = SmartId( nLNr1 );\
         for ( nItemPos = 0; nItemPos < pTB->GetItemCount() && !aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos))) &&\
                                                       !aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos))) ; nItemPos++ ) {}\
@@ -5341,12 +5341,12 @@ BOOL StatementControl::Execute()
             ReportError( aUId, GEN_RES_STR1( S_HELPID_ON_TOOLBOX_NOT_FOUND, MethodString( nMethodId ) ) );\
         else\
         {\
-            if ( !pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) && nMethodId != _M_IsEnabled )\
+            if ( !pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) && nMethodId != _M_IsEnabled && nMethodId != M_GetState )\
             {\
                 ReportError( aUId, GEN_RES_STR1( S_BUTTON_DISABLED_ON_TOOLBOX, MethodString( nMethodId ) ) );\
                 bItemFound = FALSE;\
             }\
-            else if ( !pTB->IsItemVisible( pTB->GetItemId(nItemPos) ) )\
+            else if ( !pTB->IsItemVisible( pTB->GetItemId(nItemPos) ) && nMethodId != M_GetState )\
             {\
                 ReportError( aUId, GEN_RES_STR1( S_BUTTON_HIDDEN_ON_TOOLBOX, MethodString( nMethodId ) ) );\
                 bItemFound = FALSE;\
@@ -5738,19 +5738,28 @@ BOOL StatementControl::Execute()
                                                     pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
                                                     break;
                                                 case M_Check :
-                                                    pItem->SetStateChecked();
-                                                    pTree->CheckButtonHdl();
-                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    if ( !pItem->IsStateChecked() )
+                                                    {
+                                                        pItem->SetStateChecked();
+                                                        pTree->CheckButtonHdl();
+                                                        pTree->InvalidateEntry( pThisEntry );
+                                                    }
                                                     break;
                                                 case M_UnCheck :
-                                                    pItem->SetStateUnchecked();
-                                                    pTree->CheckButtonHdl();
-                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    if ( pItem->IsStateChecked() || pItem->IsStateTristate() )
+                                                    {
+                                                        pItem->SetStateUnchecked();
+                                                        pTree->CheckButtonHdl();
+                                                        pTree->InvalidateEntry( pThisEntry );
+                                                    }
                                                     break;
                                                 case M_TriState :
-                                                    pItem->SetStateTristate();
-                                                    pTree->CheckButtonHdl();
-                                                    pTree->InvalidateEntry( pThisEntry );
+                                                    if ( !pItem->IsStateTristate() )
+                                                    {
+                                                        pItem->SetStateTristate();
+                                                        pTree->CheckButtonHdl();
+                                                        pTree->InvalidateEntry( pThisEntry );
+                                                    }
                                                     break;
                                                 default:
                                                     ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
@@ -6282,6 +6291,8 @@ protected:
                                                                 MouseEvent aMEvnt(aPos,1,MOUSE_SIMPLECLICK|MOUSE_SELECT,MOUSE_LEFT,KEY_MOD1);
                                                                 pTC->getSelEngine()->SelMouseButtonDown( aMEvnt );
                                                                 pTC->getSelEngine()->SelMouseButtonUp( aMEvnt );
+                                                                if ( pTC->IsRowSelected( nNr1-1 ) )
+                                                                    pTC->Select();
                                                             }
                                                             else
                                                                 ReportError( aUId, GEN_RES_STR2c2( S_METHOD_FAILED, MethodString( nMethodId ), "find pos" ) );
