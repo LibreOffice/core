@@ -798,17 +798,16 @@ public class DocumentMetadataAccessTest
                         x_FooBarLit11
                     }));
 
-// differ in file names, which is right in the new test environment
-//            XURI xFile = URI.createNS(xContext, file, "/" + contentPath);
-//            Statement x_FileBarLit12 =
-//                new Statement(xFile, bar, mkLit("12"), null);
+            XURI xFile = URI.createNS(xContext, file, "/" + contentPath);
+            Statement x_FileBarLit12 =
+                new Statement(xFile, bar, mkLit("12"), null);
               xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-//            result = xRep.getStatementRDFa(xPara);
-//            assertTrue("RDFa: 12",
-//                !result.Second &&
-//                eq(result.First, new Statement[] {
-//                        x_FileBarLit12
-//                    }));
+            result = xRep.getStatementRDFa(xPara);
+            assertTrue("RDFa: 12",
+                !result.Second &&
+                eq(result.First, new Statement[] {
+                        x_FileBarLit12
+                    }));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
             result = xRep.getStatementRDFa(xPara);
