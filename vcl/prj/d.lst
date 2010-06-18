@@ -1,4 +1,4 @@
-kdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\vcl
 
 ..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\bin%_EXT%\*.zip
