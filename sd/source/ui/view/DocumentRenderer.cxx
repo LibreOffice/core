@@ -27,6 +27,8 @@
 
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include "DocumentRenderer.hxx"
 #include "DocumentRenderer.hrc"
 
@@ -996,6 +998,9 @@ namespace {
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PK_HANDOUT));
 
+            Reference< com::sun::star::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
+            const rtl::OUString sPageNumber( RTL_CONSTASCII_USTRINGPARAM( "Number" ) );
+
             // Collect the page objects of the handout master.
             std::vector<SdrPageObj*> aHandoutPageObjects;
             SdrObjListIter aShapeIter (rHandoutPage);
@@ -1050,7 +1055,15 @@ namespace {
                 }
             }
 
-            rViewShell.SetPrintedHandoutPageNum(mnHandoutPageIndex + 1);
+            if( xHandoutPage.is() ) try
+            {
+                xHandoutPage->setPropertyValue( sPageNumber, Any( static_cast<sal_Int16>(mnHandoutPageIndex) ) );
+            }
+            catch( Exception& )
+            {
+            }
+            rViewShell.SetPrintedHandoutPageNum( mnHandoutPageIndex + 1 );
+
             MapMode aMap (rPrinter.GetMapMode());
             rPrinter.SetMapMode(maMap);
 
@@ -1067,6 +1080,13 @@ namespace {
                 msPageString,
                 maPageStringOffset);
 
+            if( xHandoutPage.is() ) try
+            {
+                xHandoutPage->setPropertyValue( sPageNumber, Any( static_cast<sal_Int16>(0) ) );
+            }
+            catch( Exception& )
+            {
+            }
             rViewShell.SetPrintedHandoutPageNum(1);
 
             // Restore outlines.
@@ -1080,7 +1100,8 @@ namespace {
                         pPathObj->SetMergedItem(XLineStyleItem(XLINE_SOLID));
                 }
             }
-        }
+
+       }
 
     private:
         const USHORT mnHandoutPageIndex;
@@ -1885,12 +1906,17 @@ private:
                 ++nShapeCount;
         }
 
+        const USHORT nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        const USHORT nHandoutPageCount = nShapeCount ? (nPageCount + nShapeCount - 1) / nShapeCount : 0;
+        pViewShell->SetPrintedHandoutPageCount( nHandoutPageCount );
+        mrBase.GetDocument()->setHandoutPageCount( nHandoutPageCount );
+
         // Distribute pages to handout pages.
         ::std::vector<USHORT> aPageIndices;
         std::vector<SdPage*> aPagesVector;
         for (USHORT
                  nIndex=0,
-                 nCount=mrBase.GetDocument()->GetSdPageCount(PK_STANDARD),
+                 nCount= nPageCount,
                  nHandoutPageIndex=0;
              nIndex <= nCount;
              ++nIndex)

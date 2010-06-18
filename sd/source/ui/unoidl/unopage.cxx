@@ -355,6 +355,7 @@ SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPa
         SdUnoSearchReplaceShape(this),
         mpModel     ( _pModel ),
         mpSdrModel(0),
+        mnTempPageNumber(0),
         mpPropSet   ( _pSet ),
         mbIsImpressDocument(false)
 {
@@ -897,9 +898,18 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             break;
         }
 
+        case WID_PAGE_NUMBER:
+            if( (GetPage()->GetPageKind() == PK_HANDOUT) && !GetPage()->IsMasterPage() )
+            {
+                if( !(aValue >>= mnTempPageNumber) )
+                    throw lang::IllegalArgumentException();
+
+                break;
+            }
+            throw beans::PropertyVetoException();
+
         case WID_PAGE_LDBITMAP:
         case WID_PAGE_LDNAME:
-        case WID_PAGE_NUMBER:
         case WID_PAGE_ISDARK:
             throw beans::PropertyVetoException();
 
@@ -1026,9 +1036,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             }
             else
             {
-                // for pages with number 0 (Handout Master, Handout page)
-                // return 0
-                aAny <<= (sal_Int16)0;
+                aAny <<= mnTempPageNumber;
             }
         }
         break;
