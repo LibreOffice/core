@@ -42,7 +42,9 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     DocumentMacroConfirmationRequest.idl\
     DocumentPasswordRequest.idl\
+    DocumentPasswordRequest2.idl\
     DocumentMSPasswordRequest.idl\
+    DocumentMSPasswordRequest2.idl\
     ErrorCodeRequest.idl\
     ErrorCodeIOException.idl\
     FutureDocumentVersionProductUpdateRequest.idl\
@@ -65,6 +67,7 @@ IDLFILES=\
     XInteractionAskLater.idl\
     XInteractionDisapprove.idl\
     XInteractionPassword.idl\
+    XInteractionPassword2.idl\
     XJob.idl\
     XJobExecutor.idl\
     XJobListener.idl\
