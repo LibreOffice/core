@@ -174,7 +174,7 @@ SHL6LIBS= \
 SHL6VERSIONMAP= scfilt.map
 SHL6DEF=$(MISC)$/$(SHL6TARGET).def
 DEF6NAME= $(SHL6TARGET)
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL6DEPN=$(SHL1TARGETN)
 .ELSE
 SHL6DEPN=$(SHL1IMPLIBN)
@@ -210,7 +210,7 @@ SHL8TARGET= scui$(DLLPOSTFIX)
 SHL8IMPLIB= scuiimp
 SHL8VERSIONMAP= scui.map
 SHL8DEF=$(MISC)$/$(SHL8TARGET).def
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL8DEPN=$(SHL1TARGETN)
 .ELSE
 SHL8DEPN=$(SHL1IMPLIBN)
@@ -325,7 +325,7 @@ SHL9STDLIBS= \
         $(SVXMSFILTERLIB)		\
         $(FORLIB)
 
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
 .ELSE
 SHL9DEPN=$(SHL1IMPLIBN) $(SHL8IMPLIBN)
