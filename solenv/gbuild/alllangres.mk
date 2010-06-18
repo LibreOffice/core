@@ -236,7 +236,7 @@ endef
 
 # AllLangResTarget
 
-gb_AllLangResTarget_LANGS := en-US
+gb_AllLangResTarget_LANGS := en-US $(WITH_LANG)
 
 define gb_AllLangResTarget_set_langs
 gb_AllLangResTarget_LANGS := $(1)
@@ -251,7 +251,8 @@ $(call gb_AllLangResTarget_get_target,%) :
         mkdir -p $(dir $@) && touch $@)
 
 define gb_AllLangResTarget_AllLangResTarget
-$(call gb_ResTarget_ResTarget,$(1)en-US,$(1),en-US)
+$(foreach lang,$(gb_AllLangResTarget_LANGS),\
+    $(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 endef
 
 define gb_AllLangResTarget_add_one_srs
