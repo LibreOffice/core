@@ -28,16 +28,15 @@
 $(eval $(call gb_Library_Library,vbaswobj))
 
 $(eval $(call gb_Library_set_include,vbaswobj,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/inc/sw/vbaswobj \
-    -I$(WORKDIR)/inc/sw/ \
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/inc/pch \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
-    -I$(OUTDIR)/inc/sw \
+    -I$(SRCDIR)/sw/inc/pch \
+    -I$(SRCDIR)/sw/inc \
+    -I$(WORKDIR)/Misc/sw/ \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
+    -I$(OUTDIR)/inc/ \
 ))
 
 $(eval $(call gb_Library_set_defs,vbaswobj,\

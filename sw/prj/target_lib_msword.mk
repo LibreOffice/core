@@ -28,16 +28,16 @@
 $(eval $(call gb_Library_Library,msword))
 
 $(eval $(call gb_Library_set_include,msword,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/inc/sw/sdi \
-    -I$(WORKDIR)/inc/sw/ \
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/inc/pch \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
-    -I$(OUTDIR)/inc/sw \
+    -I$(SRCDIR)/sw/inc/pch \
+    -I$(SRCDIR)/sw/inc \
+    -I$(WORKDIR)/inc/sw/sdi \
+    -I$(WORKDIR)/Misc/sw/ \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
+    -I$(OUTDIR)/inc/sw \
 ))
 
 $(eval $(call gb_Library_set_defs,msword,\
