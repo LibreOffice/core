@@ -53,7 +53,7 @@ $(COMMONMISC)$/readme.dtd : ..$/readme.dtd
 virtual : $(MERGEDXRM) $(COMMONMISC)$/readme.dtd $(PRJ)$/docs/readme.xsl
 
 $(MISC)$/readme_text.xsl : virtual
-     $(SED) 's#method="html".*>#method="text"/>#' < ..$/readme.xsl > $@
+     $(SED) '' < ..$/readme.xsl > $@
 
 $(MISC)$/$(GUI)$/$(eq,$(GUI),WNT readme README)_%.html : 'virtual'
     @@-$(MKDIRHIER) $(@:d)
@@ -79,6 +79,7 @@ $(SYSTEXTDOCS) : $(MISC)$/readme_text.xsl
     --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
     --stringparam cp1 $(CPUNAME)	--stringparam type text	--stringparam lang1 $(@:b:s/readme_//:s/README_//) \
     $<	$(MERGEDXRM)
+
 .IF "$(GUI)"=="UNX"
     chmod g+w $(MISC)$/$(GUI)
 .ENDIF			# "$(GUI)"=="UNX"
