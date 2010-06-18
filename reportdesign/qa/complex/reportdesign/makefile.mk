@@ -25,34 +25,42 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+    @echo "OOO_SUBSEQUENT_TESTS not set, do nothing."
+.ELSE
 
+PRJ = ../../..
 PRJNAME = reportdesign
-PACKAGE = complex
-TARGET = rptdesigntest
+TARGET = qa_complex_reportdesign
 
-# --- Settings -----------------------------------------------------
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/reportdesign
 
-.INCLUDE :  settings.mk
+# here store only Files which contain a @Test
+JAVATESTFILES = \
+    ReportDesignerTest.java
 
-# --- Files --------------------------------------------------------
+# put here all other files
+JAVAFILES = $(JAVATESTFILES) \
+    TestDocument.java \
+    FileURL.java
 
-JARFILES = ridl.jar jurt.jar unoil.jar juh.jar OOoRunner.jar
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
-JAVAFILES =	ReportDesignerTest.java
+# subdirectories
+# SUBDIRS         = helper
 
-# --- Targets ------------------------------------------------------
+# Sample how to debug
+JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 
-.INCLUDE :  target.mk
+.END
 
-# JAVADEBUG=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8502,suspend=y
-JAVADEBUG=
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-MYSQL_CONNECTOR=$(PWD)$/mysql-connector-java-5.0.6-bin.jar
-CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(MYSQL_CONNECTOR)
+ALLTAR : javatest
 
-run: ALLTAR
-    $(PERL) mysql-connector-exists.pl $(MYSQL_CONNECTOR)
-#	@echo $(CLASSPATH)
-#	@echo $(VCSID)
-    @java $(JAVADEBUG) -cp $(CLASSPATH) -DVCSID=$(VCSID) -DCWS_WORK_STAMP=$(CWS_WORK_STAMP) -DUPDMINOR=$(UPDMINOR) org.openoffice.Runner -ini runner.props 
+.END
