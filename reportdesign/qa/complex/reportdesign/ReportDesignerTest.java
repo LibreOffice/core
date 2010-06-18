@@ -384,6 +384,7 @@ public class ReportDesignerTest
 
                 XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
                 /* boolean isConnect = */
+// TODO: throws an exception in DEV300m78
                 aDBDocUI.connect();
 //                     if (isConnect)
 //                     {
