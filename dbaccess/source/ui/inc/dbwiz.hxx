@@ -111,8 +111,9 @@ protected:
     virtual TabPage*    createPage(WizardState _nState);
     virtual WizardState determineNextState(WizardState _nCurrentState) const;
     virtual sal_Bool    leaveState(WizardState _nState);
-    virtual ::svt::IWizardPage* getWizardPage(TabPage* _pCurrentPage) const;
-    virtual sal_Bool onFinish(sal_Int32 _nResult);
+    virtual ::svt::IWizardPageController*
+                        getPageController( TabPage* _pCurrentPage ) const;
+    virtual sal_Bool    onFinish();
 
 protected:
     inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }

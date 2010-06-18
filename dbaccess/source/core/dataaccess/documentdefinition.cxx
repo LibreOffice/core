@@ -1453,8 +1453,6 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
                     aRequest.Name = DBACORE_RESSTRING( RID_STR_REPORT );
                 aRequest.Name = ::dbtools::createUniqueName(xName,aRequest.Name);
             }
-            else if ( xName->hasByName(aRequest.Name) )
-                aRequest.Name = ::dbtools::createUniqueName(xName,aRequest.Name);
 
             aRequest.Content.set(m_xParentContainer,UNO_QUERY);
             OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));

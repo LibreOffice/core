@@ -32,6 +32,9 @@
 #include "dbadmin.hrc"
 #include "dbadmin.hxx"
 #include "dbu_dlg.hrc"
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include "dbustrings.hrc"
 #include "dsitems.hxx"
 #include "dsselect.hxx"
@@ -201,9 +204,14 @@ namespace dbaui
             Reset(*m_pItemSetHelper->getOutputSet());
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::commitPage( CommitPageReason )
+    sal_Bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
     {
         return sal_True;
+    }
+    // -----------------------------------------------------------------------
+    bool OGenericAdministrationPage::canAdvance() const
+    {
+        return true;
     }
     // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )

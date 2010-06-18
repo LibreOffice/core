@@ -68,7 +68,7 @@ namespace dbmm
         virtual sal_Bool        prepareLeaveCurrentState( CommitPageReason _eReason );
         virtual sal_Bool        leaveState( WizardState _nState );
         virtual WizardState     determineNextState( WizardState _nCurrentState ) const;
-        virtual sal_Bool        onFinish( sal_Int32 _nResult );
+        virtual sal_Bool        onFinish();
 
         // Dialog overridables
         virtual BOOL    Close();
