@@ -84,8 +84,7 @@ public class SdfData
         }
         catch( IOException e )
         {
-            System.out.println("Error: reading file " + filename);
-            System.exit( -1 );
+            System.out.println("Warning: can not read file " + filename);
         }
     }
     public void write( String filename )
