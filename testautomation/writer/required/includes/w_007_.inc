@@ -983,9 +983,6 @@ testcase tToolsHangulHanjaConversion
         goto endsub
     end if
 
-    warnlog( "#i112523# - Hangul Hanya Conversion dialog causes crash." )
-    goto endsub
-
     select case gApplication
     case "HTML"   : sTestFile = gTesttoolpath & "writer\required\input\hangul.html"
     case "WRITER" : sTestFile = gTesttoolpath & "writer\required\input\hangul.sxw"
@@ -1126,6 +1123,10 @@ endcase
 ' -------------------------------------------
 
 testcase tHtmlDocToolsHangulHanjaConversion
+
+    warnlog( "#i112523# - Hangul Hanya Conversion dialog causes crash." )
+    goto endsub
+
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
