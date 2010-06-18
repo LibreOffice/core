@@ -976,7 +976,6 @@ void WrappedStatisticPropertySetProperty::setValueToSeries(
     const Reference< beans::XPropertySet >& /* xSeriesPropertySet */
     , Reference< beans::XPropertySet > /* xNewValue */ ) const
 {
-    OSL_ENSURE( false, "Trying to set a read-only property" );
 }
 
 //-----------------------------------------------------------------------------

@@ -205,13 +205,13 @@ bool lcl_deleteDataCurve(
 namespace chart
 {
 
-::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider() const
+::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider()
 {
-    awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()) );
+    awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
 
     return ::std::auto_ptr< ReferenceSizeProvider >(
         new ReferenceSizeProvider( aPageSize,
-            Reference< chart2::XChartDocument >( m_aModel->getModel(), uno::UNO_QUERY )));
+            Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
 }
 
 void ChartController::impl_adaptDataSeriesAutoResize()
@@ -229,7 +229,7 @@ void ChartController::executeDispatch_NewArrangement()
 
     try
     {
-        Reference< frame::XModel > xModel( m_aModel->getModel());
+        Reference< frame::XModel > xModel( getModel() );
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ));
         if( xDiagram.is())
         {
@@ -286,8 +286,8 @@ void ChartController::executeDispatch_ScaleText()
     // using assignment for broken gcc 3.3
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_SCALE_TEXT ))),
-        m_xUndoManager, m_aModel->getModel());
-    ControllerLockGuard aCtlLockGuard( m_aModel->getModel());
+        m_xUndoManager, getModel() );
+    ControllerLockGuard aCtlLockGuard( getModel() );
     ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProv( impl_createReferenceSizeProvider());
     OSL_ASSERT( apRefSizeProv.get());
     if( apRefSizeProv.get())
@@ -379,7 +379,7 @@ void ChartController::impl_PasteGraphic(
 {
     // note: the XPropertySet of the model is the old API. Also the property
     // "AdditionalShapes" that is used there.
-    uno::Reference< beans::XPropertySet > xModelProp( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY );
     DrawModelWrapper * pDrawModelWrapper( this->GetDrawModelWrapper());
     if( ! (xGraphic.is() && xModelProp.is()))
         return;
@@ -395,7 +395,7 @@ void ChartController::impl_PasteGraphic(
             xPage->add( xGraphicShape );
             //need to change the model state manually
             {
-                uno::Reference< util::XModifiable > xModifiable( m_aModel->getModel(), uno::UNO_QUERY );
+                uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
                 if( xModifiable.is() )
                     xModifiable->setModified( true );
             }
@@ -459,7 +459,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                 }
             }
 
-            Reference< util::XModifiable > xModifiable( m_aModel->getModel(), uno::UNO_QUERY );
+            Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
             if ( xModifiable.is() )
             {
                 xModifiable->setModified( true );
@@ -643,7 +643,7 @@ bool ChartController::executeDispatch_Delete()
             return false;
 
         //remove chart object
-        uno::Reference< chart2::XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
+        uno::Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
         if( !xChartDoc.is() )
             return false;
 
@@ -656,9 +656,9 @@ bool ChartController::executeDispatch_Delete()
                 UndoGuard aUndoGuard = UndoGuard(
                     ActionDescriptionProvider::createDescription(
                         ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_TITLE )))),
-                    m_xUndoManager, m_aModel->getModel() );
+                    m_xUndoManager, getModel());
                 TitleHelper::removeTitle(
-                    ObjectIdentifier::getTitleTypeForCID( aCID ), m_aModel->getModel());
+                    ObjectIdentifier::getTitleTypeForCID( aCID ), getModel() );
                 bReturn = true;
                 aUndoGuard.commitAction();
                 break;
@@ -675,7 +675,7 @@ bool ChartController::executeDispatch_Delete()
                         UndoGuard aUndoGuard = UndoGuard(
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_LEGEND )))),
-                            m_xUndoManager, m_aModel->getModel() );
+                            m_xUndoManager, getModel() );
                         xLegendProp->setPropertyValue( C2U("Show"), uno::makeAny( false ));
                         bReturn = true;
                         aUndoGuard.commitAction();
@@ -685,7 +685,7 @@ bool ChartController::executeDispatch_Delete()
             }
 
             case OBJECTTYPE_DATA_SERIES:
-                bReturn = lcl_deleteDataSeries( aCID, m_aModel->getModel(), m_xUndoManager );
+                bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
                 break;
 
             case OBJECTTYPE_LEGEND_ENTRY:
@@ -693,9 +693,9 @@ bool ChartController::executeDispatch_Delete()
                 ObjectType eParentObjectType = ObjectIdentifier::getObjectType(
                     ObjectIdentifier::getFullParentParticle( aCID ));
                 if( eParentObjectType == OBJECTTYPE_DATA_SERIES )
-                    bReturn = lcl_deleteDataSeries( aCID, m_aModel->getModel(), m_xUndoManager );
+                    bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
                 else if( eParentObjectType == OBJECTTYPE_DATA_CURVE )
-                    bReturn = lcl_deleteDataCurve( aCID, m_aModel->getModel(), m_xUndoManager );
+                    bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
                 break;
             }
 
@@ -703,14 +703,14 @@ bool ChartController::executeDispatch_Delete()
             {
                 uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                     ObjectIdentifier::getObjectPropertySet(
-                        ObjectIdentifier::getFullParentParticle( aCID ), m_aModel->getModel()), uno::UNO_QUERY );
+                        ObjectIdentifier::getFullParentParticle( aCID ), getModel()), uno::UNO_QUERY );
                 if( xRegCurveCnt.is())
                 {
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_AVERAGE_LINE )))),
-                        m_xUndoManager, m_aModel->getModel() );
+                        m_xUndoManager, getModel() );
                     RegressionCurveHelper::removeMeanValueLine( xRegCurveCnt );
                     bReturn = true;
                     aUndoGuard.commitAction();
@@ -719,16 +719,16 @@ bool ChartController::executeDispatch_Delete()
             }
 
             case OBJECTTYPE_DATA_CURVE:
-                bReturn = lcl_deleteDataCurve( aCID, m_aModel->getModel(), m_xUndoManager );
+                bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
                 break;
 
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 uno::Reference< beans::XPropertySet > xEqProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel()));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getModel()));
                 if( xEqProp.is())
                 {
-                    uno::Reference< frame::XModel > xModel( m_aModel->getModel());
+                    uno::Reference< frame::XModel > xModel( getModel() );
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
@@ -748,10 +748,10 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_ERRORS:
             {
                 uno::Reference< beans::XPropertySet > xErrorBarProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel()));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getModel() ));
                 if( xErrorBarProp.is())
                 {
-                    uno::Reference< frame::XModel > xModel( m_aModel->getModel());
+                    uno::Reference< frame::XModel > xModel( getModel() );
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
@@ -773,14 +773,14 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_LABEL:
             {
                 uno::Reference< beans::XPropertySet > xObjectProperties =
-                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel() );
+                    ObjectIdentifier::getObjectPropertySet( aCID, getModel() );
                 if( xObjectProperties.is() )
                 {
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
                         ActionDescriptionProvider::DELETE, ::rtl::OUString( String(
                             SchResId( aObjectType == OBJECTTYPE_DATA_LABEL ? STR_OBJECT_LABEL : STR_OBJECT_DATALABELS )))),
-                                m_xUndoManager, m_aModel->getModel() );
+                                m_xUndoManager, getModel() );
                     chart2::DataPointLabel aLabel;
                     xObjectProperties->getPropertyValue( C2U( "Label" ) ) >>= aLabel;
                     aLabel.ShowNumber = false;
@@ -789,7 +789,7 @@ bool ChartController::executeDispatch_Delete()
                     aLabel.ShowLegendSymbol = false;
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
-                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, m_aModel->getModel() ));
+                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ));
                         ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), uno::makeAny(aLabel) );
                     }
                     else
@@ -844,7 +844,7 @@ bool ChartController::executeDispatch_Delete()
 
 void ChartController::executeDispatch_ToggleLegend()
 {
-    Reference< frame::XModel > xModel( m_aModel->getModel());
+    Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_TOGGLE_LEGEND ))), m_xUndoManager, xModel );
     Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend( xModel ), uno::UNO_QUERY );
@@ -878,10 +878,10 @@ void ChartController::executeDispatch_ToggleLegend()
 
 void ChartController::executeDispatch_ToggleGridHorizontal()
 {
-    Reference< frame::XModel > xModel( m_aModel->getModel());
+    Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_TOGGLE_GRID_HORZ ))), m_xUndoManager, xModel );
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_aModel->getModel()));
+    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
     if( xDiagram.is())
     {
         sal_Int32 nDimensionIndex = 1;
