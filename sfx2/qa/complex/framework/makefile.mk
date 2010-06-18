@@ -36,8 +36,8 @@ TARGET = qa_complex_framework
 .IF "$(OOO_JUNIT_JAR)" != ""
 PACKAGE = complex/framework
 JAVATESTFILES = \
+    DocumentPropertiesTest.java \
     DocumentMetadataAccessTest.java \
-    DocumentMetaData.java \
     CheckGlobalEventBroadcaster_writer1.java
 
 JAVAFILES = $(JAVATESTFILES) \

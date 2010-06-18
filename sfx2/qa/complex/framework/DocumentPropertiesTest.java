@@ -66,7 +66,7 @@ import static org.junit.Assert.*;
  *
  * @author mst
  */
-public class DocumentMetaData
+public class DocumentPropertiesTest
 {
 //    public String[] getTestMethodNames () {
 //        return new String[] { "check", "cleanup" };
@@ -555,7 +555,7 @@ public class DocumentMetaData
     @AfterClass public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
     {
-        System.out.println("tearDownConnection() DocumentMetaData");
+        System.out.println("tearDownConnection() DocumentPropertiesTest");
         connection.tearDown();
     }
 
