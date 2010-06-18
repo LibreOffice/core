@@ -1,6 +1,7 @@
 #*************************************************************************
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -21,29 +22,27 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#***********************************************************************/
+#
+#*************************************************************************
 
-PRJ = ../..
-PRJNAME = test
-TARGET = java
+PRJ = ../../../..
+TARGET  = helper
+PRJNAME = $(TARGET)
+PACKAGE = complex/junitskeleton/helper
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-
-PACKAGE = org/openoffice/test
-JAVAFILES = OfficeConnection.java
-JARFILES = juh.jar ridl.jar unoil.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-JARTARGET = test.jar
-JARCLASSDIRS = $(PACKAGE)
-JARCLASSPATH = $(JARFILES)
- # expect $(OOO_JUNIT_JAR) to be on CLASSPATH wherever test.jar is used (also,
- # on Windows, $(OOO_JUNIT_JAR) could be an absolute pathname with drive letter
- # like X:/path and some JVMs would refuse to load test.jar if its MANIFEST.MF
- # Class-Path contained such a pathname that looks like an unknown URL with
- # scheme X)
-
-.END
-
+# --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
-.INCLUDE: target.mk
+
+
+#----- compile .java files -----------------------------------------
+
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JAVAFILES       = \
+    justatest.java
+
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :  target.mk
+

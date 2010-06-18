@@ -1,4 +1,5 @@
 /*************************************************************************
+*
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -21,24 +22,18 @@
 * version 3 along with OpenOffice.org.  If not, see
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
+*
 ************************************************************************/
 
-#ifndef INCLUDED_TEST_GETARGUMENT_HXX
-#define INCLUDED_TEST_GETARGUMENT_HXX
+package org.openoffice.test;
 
-#include "sal/config.h"
+/** Obtain the value of a test argument (tunneled in via an
+    "org.openoffice.test.arg.testarg.<name>" system property).
+ */
+public final class TestArgument {
+    public static String get(String name) {
+        return Argument.get("testarg." + name);
+    }
 
-#include "test/detail/testdllapi.hxx"
-
-namespace rtl { class OUString; }
-
-namespace test {
-
-// Obtain the value of an argument tunneled in via an "arg-<name>" bootstrap
-// variable:
-OOO_DLLPUBLIC_TEST bool getArgument(
-    rtl::OUString const & name, rtl::OUString * value);
-
+    private TestArgument() {}
 }
-
-#endif

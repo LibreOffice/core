@@ -1,6 +1,7 @@
 #*************************************************************************
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -21,36 +22,44 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#***********************************************************************/
+#
+#*************************************************************************
 
-PRJ = ../..
-PRJNAME = test
-TARGET = cpp
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+    @echo "OOO_SUBSEQUENT_TESTS not set, do nothing."
+.ELSE
 
-ENABLE_EXCEPTIONS = TRUE
-VISIBILITY_HIDDEN = TRUE
+PRJ = ../../..
+PRJNAME = sc
+TARGET = qa_complex_junitskeleton
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/junitskeleton
+
+# here store only Files which contain a @Test
+JAVATESTFILES = \
+    Skeleton.java
+
+# put here all other files
+JAVAFILES = $(JAVATESTFILES) \
+    TestDocument.java
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+
+# subdirectories
+SUBDIRS         = helper
+
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
+.END
 
 .INCLUDE: settings.mk
-
-CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-SLOFILES = \
-    $(SLO)/getargument.obj \
-    $(SLO)/gettestargument.obj \
-    $(SLO)/officeconnection.obj \
-    $(SLO)/toabsolutefileurl.obj
-
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLOFILES)
-SHL1RPATH = NONE
-SHL1STDLIBS = \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(CPPUNITLIB) \
-    $(SALLIB)
-SHL1TARGET = test
-SHL1USE_EXPORTS = name
-DEF1NAME = $(SHL1TARGET)
-
 .INCLUDE: target.mk
+.INCLUDE: installationtest.mk
+
+ALLTAR : javatest
+
+.END
