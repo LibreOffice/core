@@ -69,6 +69,7 @@ SLOFILES =\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/versdlg.obj         \
+        $(SLO)$/securitypage.obj    \
         $(SLO)$/titledockwin.obj
 
 SRS1NAME=$(TARGET)
@@ -87,6 +88,7 @@ SRC1FILES =\
         versdlg.src			\
         printopt.src        \
         srchdlg.src         \
+        securitypage.src    \
         titledockwin.src    \
         taskpane.src
 

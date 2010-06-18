@@ -342,18 +342,19 @@
 // Calc-Id's
 // --------------------------------------------------------------------------
 
-#ifndef SC_FUNCTION_START
-#define SC_FUNCTION_START       (SID_SC_START + 200)
-#endif
-#ifndef FILE_MENU_END
-#define FILE_MENU_END           (SC_FUNCTION_START + 20)
-#endif
-#ifndef EDIT_MENU_START
-#define EDIT_MENU_START         (FILE_MENU_END)
-#endif
-#ifndef SC_VIEW_START
-#define SC_VIEW_START           (SID_SC_START)
-#endif
+//! moved to sfx2, still in use:
+//#ifndef SC_FUNCTION_START
+//#define SC_FUNCTION_START       (SID_SC_START + 200)
+//#endif
+//#ifndef FILE_MENU_END
+//#define FILE_MENU_END           (SC_FUNCTION_START + 20)
+//#endif
+//#ifndef EDIT_MENU_START
+//#define EDIT_MENU_START         (FILE_MENU_END)
+//#endif
+//#ifndef SC_VIEW_START
+//#define SC_VIEW_START           (SID_SC_START)
+//#endif
 
 #define SID_OUTLINE_HIDE        (SID_SC_START + 329)
 #define SID_OUTLINE_SHOW        (SID_SC_START + 330)
@@ -365,8 +366,9 @@
 #define SID_ATTR_SECIALCHAR     (SID_SC_START + 581)
 #define SID_ATTR_SPECIALCHAR    (SID_SC_START + 581)
 
-#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
-#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+//! moved to sfx2, still in use:
+//#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
+//#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
 
 // --------------------------------------------------------------------------
 // Writer-Id's
@@ -402,9 +404,10 @@
 #define FN_PGPREVIEW            (SID_SW_START + 1250)
 #define FN_SHOW_MULTIPLE_PAGES  (FN_PGPREVIEW + 2)
 
-#define FN_EDIT2                (SID_SW_START + 1800)
-#define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
-#define FN_REDLINE_ON           (FN_EDIT2 + 25)
+//! moved to sfx2, still in use:
+//#define FN_EDIT2                (SID_SW_START + 1800)
+//#define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
+//#define FN_REDLINE_ON           (FN_EDIT2 + 25)
 
 // --------------------------------------------------------------------------
 // Svx-Id's
@@ -749,7 +752,10 @@
 #define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
 #define SID_ATTR_3D_AMBIENTCOLOR                        ( SID_SVX_START + 411 )
 #define SID_IMPORT_GRAPH_LINK                           ( SID_SVX_START + 412 )
-#define SID_HTML_MODE                                   ( SID_SVX_START + 414 )
+
+//! moved to sfx2, still in use:
+//#define SID_HTML_MODE                                   ( SID_SVX_START + 414 )
+
 #define SID_RULER_PROTECT                               ( SID_SVX_START + 415 )
 //#define SID_INET_DLG                                    ( SID_SVX_START + 416 )   -> sfxsids.hrc
 #define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )

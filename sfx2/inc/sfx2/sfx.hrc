@@ -229,9 +229,14 @@
 #define TP_DOCINFOUSER                      (RID_SFX_START+5)
 #define TP_DOCINFORELOAD                    (RID_SFX_START+13)
 #define TP_CUSTOMPROPERTIES                 (RID_SFX_START+14)
+#define TP_DOCINFOSECURITY                  (RID_SFX_START+215)
 #define DLG_DOCINFO_EDT                     (RID_SFX_START+6)
 #define TP_MANAGE_STYLES                    (RID_SFX_START+7)
 #define DLG_STYLE_DESIGNER                  (RID_SFX_START+8)
+
+#define RID_SFX_PROTECT_RECORDS             (RID_SFX_START+216)
+#define RID_SFX_UNPROTECT_RECORDS           (RID_SFX_START+217)
+#define RID_SFX_INCORRECT_PASSWORD          (RID_SFX_START+218)
 
 #define STR_STYLE_FILTER_AUTO               (RID_SFX_START+9)
 #define STR_STYLE_FILTER_USED               (RID_SFX_START+10)

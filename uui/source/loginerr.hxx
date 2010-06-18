@@ -81,7 +81,7 @@ public:
                     { return ( m_nFlags & LOGINERROR_FLAG_IS_USE_SYSCREDS ) ==
                              LOGINERROR_FLAG_IS_USE_SYSCREDS; }
     BYTE            GetFlags() const        { return m_nFlags; }
-    USHORT          GetResult() const        { return m_nRet; }
+    USHORT          GetResult() const       { return m_nRet; }
 
     void            SetTitle( const String& aTitle )
                     { m_aTitle = aTitle; }

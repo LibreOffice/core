@@ -679,7 +679,7 @@ UUIInteractionHelper::handlePasswordRequest(
     ::rtl::OUString aDocumentName;
     bool bMSCryptoMode          = false;
     bool bIsPasswordToModify    = false;
-    
+
     bool bDoHandleRequest = false;
 
     uno::Any aAnyRequest(rRequest->getRequest());
@@ -716,7 +716,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
         bDoHandleRequest = true;
     }
-    
+
     task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
     if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest))
     {
@@ -730,7 +730,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
     if (bDoHandleRequest)
     {
-        handlePasswordRequest_( pParent, nMode, rContinuations, 
+        handlePasswordRequest_( pParent, nMode, rContinuations,
                 aDocumentName, bMSCryptoMode, bIsPasswordToModify );
         return true;
     }
