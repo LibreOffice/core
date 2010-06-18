@@ -107,8 +107,6 @@
 #include "com/sun/star/awt/XFont.hpp"
 #include "com/sun/star/awt/XGraphics.hpp"
 #include "com/sun/star/awt/XImageButton.hpp"
-#include "com/sun/star/awt/XImageConsumer.hpp"
-#include "com/sun/star/awt/XImageProducer.hpp"
 #include "com/sun/star/awt/XInfoPrinter.hpp"
 #include "com/sun/star/awt/XItemEventBroadcaster.hpp"
 #include "com/sun/star/awt/XItemListener.hpp"

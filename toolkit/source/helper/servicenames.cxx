@@ -77,7 +77,6 @@ const sal_Char __FAR_DATA szServiceName_UnoControlPatternFieldModel[] = "stardiv
 const sal_Char __FAR_DATA szServiceName_UnoControlFormattedField[] = "stardiv.vcl.control.FormattedField", szServiceName2_UnoControlFormattedField[] = "com.sun.star.awt.UnoControlFormattedField";
 const sal_Char __FAR_DATA szServiceName_UnoControlFormattedFieldModel[] = "stardiv.vcl.controlmodel.FormattedField", szServiceName2_UnoControlFormattedFieldModel[] = "com.sun.star.awt.UnoControlFormattedFieldModel";
 const sal_Char __FAR_DATA szServiceName_MVCIntrospection[] = "stardiv.vcl.MVCIntrospection", szServiceName2_MVCIntrospection[] = "com.sun.star.awt.MVCIntrospection";
-const sal_Char __FAR_DATA szServiceName_ImageProducer[] = "stardiv.vcl.ImageProducer", szServiceName2_ImageProducer[] = "com.sun.star.awt.ImageProducer";
 const sal_Char __FAR_DATA szServiceName_PrinterServer[] = "stardiv.vcl.PrinterServer", szServiceName2_PrinterServer[] = "com.sun.star.awt.PrinterServer";
 const sal_Char __FAR_DATA szServiceName_UnoControlProgressBar[] = "stardiv.vcl.control.ProgressBar", szServiceName2_UnoControlProgressBar[] = "com.sun.star.awt.UnoControlProgressBar";
 const sal_Char __FAR_DATA szServiceName_UnoControlProgressBarModel[] = "stardiv.vcl.controlmodel.ProgressBar", szServiceName2_UnoControlProgressBarModel[] = "com.sun.star.awt.UnoControlProgressBarModel";

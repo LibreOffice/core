@@ -82,7 +82,6 @@
 #include <com/sun/star/awt/XDateField.hpp>
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XItemListListener.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -111,17 +110,14 @@ class VclSimpleEvent;
 class VclMenuEvent;
 
 //  ----------------------------------------------------
-//  class VCLXImageConsumer
-//    deriving from VCLXWindow and XImageConsumer
+//  class VCLXGraphicControl
+//    deriving from VCLXWindow, drawing the graphic which exists as "Graphic" at the model
 //  ----------------------------------------------------
 
 
-typedef ::cppu::ImplInheritanceHelper1< VCLXWindow, ::com::sun::star::awt::XImageConsumer >  VCLXImageConsumer_Base;
-class TOOLKIT_DLLPUBLIC VCLXImageConsumer : public VCLXImageConsumer_Base
+class TOOLKIT_DLLPUBLIC VCLXGraphicControl : public VCLXWindow
 {
 private:
-    /// implements our XImageConsumer functionality
-    ImageConsumer               maImageConsumer;
     /// the image we currently display
     Image                       maImage;
 
@@ -132,19 +128,9 @@ protected:
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XImageConsumer
-    void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    void            ImplUpdateImage( sal_Bool bGetNewImage );
 
 protected:
     /** forward our bitmap to our window
@@ -155,6 +141,7 @@ protected:
         @see GetBitmap
     */
     virtual void    ImplSetNewImage();
+
 public:
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
@@ -164,7 +151,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXButton
 //  ----------------------------------------------------
-typedef ::cppu::ImplInheritanceHelper2  <   VCLXImageConsumer
+typedef ::cppu::ImplInheritanceHelper2  <   VCLXGraphicControl
                                         ,   ::com::sun::star::awt::XButton
                                         ,   ::com::sun::star::awt::XToggleButton
                                         >   VCLXButton_Base;
@@ -213,7 +200,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXImageControl
 //  ----------------------------------------------------
-class VCLXImageControl : public VCLXImageConsumer
+class VCLXImageControl : public VCLXGraphicControl
 {
 public:
                     VCLXImageControl();
@@ -230,6 +217,7 @@ public:
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+
 protected:
     virtual void    ImplSetNewImage();
 };
@@ -239,7 +227,7 @@ protected:
 //  ----------------------------------------------------
 class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
                         public ::com::sun::star::awt::XButton,
-                        public VCLXImageConsumer
+                        public VCLXGraphicControl
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -297,7 +285,7 @@ public:
 //  ----------------------------------------------------
 class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
                         public ::com::sun::star::awt::XButton,
-                        public VCLXImageConsumer
+                        public VCLXGraphicControl
 {
 private:
     ItemListenerMultiplexer     maItemListeners;

@@ -52,27 +52,6 @@ namespace toolkit
 //  helper
 //  ----------------------------------------------------
 
-    static void lcl_knitImageComponents( const Reference< XControlModel >& _rxModel,
-                                    const Reference< XWindowPeer >& _rxPeer,
-                                    bool _bAdd )
-    {
-        Reference< XImageProducer > xProducer( _rxModel, UNO_QUERY );
-        if ( xProducer.is() )
-        {
-            Reference< XImageConsumer > xConsumer( _rxPeer, UNO_QUERY );
-            if ( xConsumer.is() )
-            {
-                if ( _bAdd )
-                {
-                    xProducer->addConsumer( xConsumer );
-                    xProducer->startProduction();
-                }
-                else
-                    xProducer->removeConsumer( xConsumer );
-            }
-        }
-    }
-
 static void lcl_throwIllegalArgumentException( )
 {   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw IllegalArgumentException();
@@ -384,40 +363,6 @@ static void lcl_throwIndexOutOfBoundsException( )
         maContainerListeners.removeInterface( xListener );
     }
 
-
-    void UnoControlRoadmapModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-    {
-        maImageListeners.push_back( xConsumer );
-    }
-
-
-    void UnoControlRoadmapModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-    {
-        maImageListeners.remove( xConsumer );
-    }
-
-
-    void UnoControlRoadmapModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
-    {
-        Sequence<Any> aArgs(1);
-        aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference< XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), UNO_QUERY );
-        if ( xImageProducer.is() )
-        {
-            std::list< Reference< XImageConsumer > >::iterator aIter( maImageListeners.begin() );
-            while ( aIter != maImageListeners.end() )
-            {
-                xImageProducer->addConsumer( *aIter );
-                aIter++;
-            }
-            xImageProducer->startProduction();
-        }
-    }
-
-
-
-
     // ===================================================================
     // = UnoRoadmapControl
     // ===================================================================
@@ -434,9 +379,6 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     {
 
 
-        // remove the peer as image consumer from the model
-        lcl_knitImageComponents( getModel(), getPeer(), false );
-
            Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )
             xC->removeContainerListener( this );
@@ -446,9 +388,6 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
         xC = xC.query( getModel());
         if ( xC.is() )
             xC->addContainerListener( this );
-
-        // add the peer as image consumer to the model
-        lcl_knitImageComponents( getModel(), getPeer(), true );
 
         return bReturn;
     }
@@ -462,18 +401,6 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
 
 
 
-    void SAL_CALL UnoRoadmapControl::createPeer( const Reference<XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
-    {
-            // remove the peer as image consumer from the model
-        lcl_knitImageComponents( getModel(), getPeer(), false );
-
-        UnoControl::createPeer( rxToolkit, rParentPeer );
-
-        lcl_knitImageComponents( getModel(), getPeer(), true );
-
-    }
-
-
     void UnoRoadmapControl::dispose() throw(RuntimeException)
     {
         EventObject aEvt;
@@ -482,24 +409,6 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
         UnoControl::dispose();
     }
 
-
-
-void UnoRoadmapControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal )
-{
-    sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( getPeer().is() && ( nType == BASEPROPERTY_IMAGEURL ) )
-    {
-        Reference < XImageProducer > xImgProd( getModel(), UNO_QUERY );
-        Reference < XImageConsumer > xImgCons( getPeer(), UNO_QUERY );
-
-        if ( xImgProd.is() && xImgCons.is() )
-        {
-            xImgProd->startProduction();
-        }
-    }
-    else
-        UnoControlBase::ImplSetPeerProperty( rPropName, rVal );
-}
 
 
 void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(RuntimeException)

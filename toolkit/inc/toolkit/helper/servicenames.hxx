@@ -104,10 +104,5 @@ extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceNa
 extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[], szServiceName2_UnoThrobberControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[], szServiceName_UnoControlFixedHyperlinkModel[];
 
-// ExtUnoWrapper:
-extern const char __FAR_DATA szServiceName_ImageProducer[], szServiceName2_ImageProducer[];
-
-
-
 #endif // _TOOLKIT_HELPER_SERVICENAMES_HXX_
 

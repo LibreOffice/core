@@ -109,17 +109,6 @@ SAL_THROW (())
         DBG_ERROR( "Fatal error: top node isn't a dialog" );
     }
 
-#if 0
-    // Hack moved to proplist.cxx
-    OUString aGraphic;
-    if ( findAndRemove( "graphic", aProps, aGraphic ) )
-        //if ( layout::FixedImage *i = dynamic_cast<layout::FixedImage *> ( mpWidget->getPeer().get() ) )
-        // FIXME: huh? XImageProducer::complete( XImageConsumer )
-        //i->setImage( Image( loadGraphic( OUSTRING_CSTR( aGraphic ) ) ) );
-        mpWidget->setProperty( OUString::createFromAscii( "graphic" ),
-                               loadGraphic( OUSTRING_CSTR( aGraphic ) ) );
-#endif
-
     OUString aOrdering;
     if ( findAndRemove( "ordering", aProps, aOrdering ) )
         if ( DialogButtonHBox *b = dynamic_cast<DialogButtonHBox *> ( mpWidget->getPeer().get() ) )

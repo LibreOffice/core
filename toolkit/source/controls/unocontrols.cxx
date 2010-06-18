@@ -80,32 +80,6 @@ using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
 
-
-//  ----------------------------------------------------
-//  helper
-//  ----------------------------------------------------
-
-static void lcl_knitImageComponents( const uno::Reference< awt::XControlModel >& _rxModel,
-                                const uno::Reference< awt::XWindowPeer >& _rxPeer,
-                                bool _bAdd )
-{
-    uno::Reference< awt::XImageProducer > xProducer( _rxModel, uno::UNO_QUERY );
-    if ( xProducer.is() )
-    {
-        uno::Reference< awt::XImageConsumer > xConsumer( _rxPeer, uno::UNO_QUERY );
-        if ( xConsumer.is() )
-        {
-            if ( _bAdd )
-            {
-                xProducer->addConsumer( xConsumer );
-                xProducer->startProduction();
-            }
-            else
-                xProducer->removeConsumer( xConsumer );
-        }
-    }
-}
-
 //  ----------------------------------------------------
 //  class UnoControlEditModel
 //  ----------------------------------------------------
@@ -543,37 +517,16 @@ UnoFileControl::UnoFileControl()
 }
 
 //  ----------------------------------------------------
-//  class ImageProducerControlModel
+//  class GraphicControlModel
 //  ----------------------------------------------------
-uno::Any SAL_CALL ImageProducerControlModel::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    return UnoControlModel::queryInterface( rType );
-}
-
-uno::Any SAL_CALL ImageProducerControlModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XImageProducer*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
-}
-
-void SAL_CALL ImageProducerControlModel::acquire() throw()
-{
-    UnoControlModel::acquire();
-}
-
-void SAL_CALL ImageProducerControlModel::release() throw()
-{
-    UnoControlModel::release();
-}
-
-uno::Any ImageProducerControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_GRAPHIC )
         return uno::makeAny( uno::Reference< graphic::XGraphic >() );
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
-    uno::Reference< graphic::XGraphic > ImageProducerControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+    uno::Reference< graphic::XGraphic > GraphicControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
     {
         uno::Reference< graphic::XGraphic > xGraphic;
 
@@ -611,7 +564,7 @@ uno::Any ImageProducerControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) co
         return xGraphic;
     }
 
-void SAL_CALL ImageProducerControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
+void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
@@ -665,88 +618,9 @@ void SAL_CALL ImageProducerControlModel::setFastPropertyValue_NoBroadcast( sal_I
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "ImageProducerControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
+        OSL_ENSURE( sal_False, "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
         mbAdjustingImagePosition = sal_False;
     }
-}
-
-void ImageProducerControlModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.push_back( xConsumer );
-}
-
-void ImageProducerControlModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.remove( xConsumer );
-}
-
-void ImageProducerControlModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    uno::Sequence<uno::Any> aArgs(1);
-    aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
-    if ( xImageProducer.is() )
-    {
-        std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
-        while ( aIter != maListeners.end() )
-        {
-            xImageProducer->addConsumer( *aIter );
-            aIter++;
-        }
-        xImageProducer->startProduction();
-    }
-}
-
-//  ----------------------------------------------------
-//  class ImageConsumerControl
-//  ----------------------------------------------------
-
-sal_Bool SAL_CALL ImageConsumerControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
-
-    return bReturn;
-}
-
-void SAL_CALL ImageConsumerControl::createPeer( const uno::Reference< awt::XToolkit >& rxToolkit, const uno::Reference< awt::XWindowPeer >& rParentPeer ) throw(uno::RuntimeException)
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    UnoControlBase::createPeer( rxToolkit, rParentPeer );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
-}
-
-void SAL_CALL ImageConsumerControl::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    UnoControlBase::dispose();
-}
-
-void ImageConsumerControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
-{
-    sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( nType == BASEPROPERTY_IMAGEURL )
-    {
-        uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
-        uno::Reference < awt::XImageConsumer > xImgCons( getPeer(), uno::UNO_QUERY );
-
-        if ( xImgProd.is() && xImgCons.is() )
-            xImgProd->startProduction();
-    }
-    else
-        UnoControlBase::ImplSetPeerProperty( rPropName, rVal );
 }
 
 //  ----------------------------------------------------
@@ -784,7 +658,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         return uno::makeAny( (sal_Bool)sal_True );
     }
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlButtonModel::getInfoHelper()
@@ -847,12 +721,12 @@ void UnoButtonControl::dispose() throw(uno::RuntimeException)
     aEvt.Source = (::cppu::OWeakObject*)this;
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
-    ImageConsumerControl::dispose();
+    UnoControlBase::dispose();
 }
 
 void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
@@ -896,7 +770,7 @@ void UnoButtonControl::removeItemListener(const uno::Reference< awt::XItemListen
 
 void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
 {
-    ImageConsumerControl::disposing( Source );
+    UnoControlBase::disposing( Source );
 }
 
 void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw (uno::RuntimeException)
@@ -966,7 +840,7 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
         return makeAny( awt::ImageScaleMode::Anisotropic );
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlImageControlModel::getInfoHelper()
@@ -989,7 +863,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
 
 void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception)
 {
-    ImageProducerControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+    GraphicControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
     // ScaleImage is an older (and less powerful) version of ScaleMode, but keep both in sync as far as possible
     try
@@ -1093,7 +967,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
         return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
     }
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlRadioButtonModel::getInfoHelper()
@@ -1136,7 +1010,7 @@ void UnoRadioButtonControl::dispose() throw(uno::RuntimeException)
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aEvt );
-    ImageConsumerControl::dispose();
+    UnoControlBase::dispose();
 }
 
 
@@ -1147,7 +1021,7 @@ sal_Bool UnoRadioButtonControl::isTransparent() throw(uno::RuntimeException)
 
 void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XRadioButton >  xRadioButton( getPeer(), uno::UNO_QUERY );
     xRadioButton->addItemListener( this );
@@ -1300,7 +1174,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
         return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
     }
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlCheckBoxModel::getInfoHelper()
@@ -1343,7 +1217,7 @@ void UnoCheckBoxControl::dispose() throw(uno::RuntimeException)
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aEvt );
-    ImageConsumerControl::dispose();
+    UnoControlBase::dispose();
 }
 
 sal_Bool UnoCheckBoxControl::isTransparent() throw(uno::RuntimeException)
@@ -1353,7 +1227,7 @@ sal_Bool UnoCheckBoxControl::isTransparent() throw(uno::RuntimeException)
 
 void UnoCheckBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XCheckBox >  xCheckBox( getPeer(), uno::UNO_QUERY );
     xCheckBox->addItemListener( this );

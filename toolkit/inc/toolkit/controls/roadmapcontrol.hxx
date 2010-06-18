@@ -40,13 +40,9 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
-#include <com/sun/star/awt/XImageConsumer.hpp>
-#include <com/sun/star/awt/XImageProducer.hpp>
 #include <cppuhelper/implbase2.hxx>
-
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
-#endif
 
 
 
@@ -55,10 +51,9 @@
 typedef UnoControlModel UnoControlRoadmapModel_Base;
 
 
-typedef ::cppu::ImplHelper4 <   ::com::sun::star::lang::XSingleServiceFactory
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::lang::XSingleServiceFactory
                             ,   ::com::sun::star::container::XContainer
                             ,   ::com::sun::star::container::XIndexContainer
-                            ,   ::com::sun::star::awt::XImageProducer
                             >   UnoControlRoadmapModel_IBase;
 
 
@@ -99,8 +94,6 @@ namespace toolkit{
 //        PropertyChangeListenerMultiplexer                 maPropertyListeners;
 
         typedef ::std::vector< Reference< XInterface > >    RoadmapItemHolderList;
-
-        std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > maImageListeners;
 
         ContainerListenerMultiplexer        maContainerListeners;
         RoadmapItemHolderList               maRoadmapItems;
@@ -151,12 +144,6 @@ namespace toolkit{
     void                        SAL_CALL release() throw()  { UnoControlModel::release(); }
 
 
-    // ::com::sun::star::awt::XImageProducer
-    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
-
-
     // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -190,8 +177,6 @@ namespace toolkit{
 
     sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw ( ::com::sun::star::uno::RuntimeException );
 
-    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
-
     void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
@@ -203,8 +188,6 @@ namespace toolkit{
     virtual void SAL_CALL itemStateChanged( const ItemEvent& rEvent ) throw (RuntimeException);
 
     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
-
-    void ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )
