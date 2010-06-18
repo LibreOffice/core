@@ -26,22 +26,20 @@
  ************************************************************************/
 package complex.tempfile;
 
-import complexlib.ComplexTestCase;
-import com.sun.star.lang.XMultiServiceFactory;
+
 
 import com.sun.star.io.*;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
+
 
 public class TestHelper {
-    LogWriter m_aLogWriter;
+
     String m_sTestPrefix;
 
-    public TestHelper( LogWriter aLogWriter, String sTestPrefix ) {
-        m_aLogWriter = aLogWriter;
+    public TestHelper( String sTestPrefix ) {
+
         m_sTestPrefix = sTestPrefix;
     }
     public void SetTempFileRemove( XTempFile xTempFile, boolean b ) {
@@ -69,7 +67,7 @@ public class TestHelper {
         } catch (Exception e) {
             Error ( "Cannot get TempFileURL. exception: " + e );
         }
-        if ( sTempFileURL == null || sTempFileURL == "" ) {
+        if ( sTempFileURL == null || sTempFileURL.equals("") ) {
             Error ( "Temporary file not valid." );
         }
         return sTempFileURL;
@@ -82,7 +80,7 @@ public class TestHelper {
         } catch ( Exception e ) {
             Error( "Cannot get TempFileName. exception: " + e );
         }
-        if ( sTempFileName == null || sTempFileName == "") {
+        if ( sTempFileName == null || sTempFileName.equals("") ) {
             Error( "Temporary file not valid." );
         }
         return sTempFileName;
@@ -216,10 +214,10 @@ public class TestHelper {
     }
 
     public void Error( String sError ) {
-        m_aLogWriter.println( m_sTestPrefix + "Error: " + sError );
+        System.out.println( m_sTestPrefix + "Error: " + sError );
     }
 
     public void Message( String sMessage ) {
-        m_aLogWriter.println( m_sTestPrefix + sMessage );
+        System.out.println( m_sTestPrefix + sMessage );
     }
 }

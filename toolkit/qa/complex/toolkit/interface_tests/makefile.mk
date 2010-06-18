@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..$/..
+PRJ = ../../../..
 TARGET  = Toolkit
 PRJNAME = $(TARGET)
-PACKAGE = complex$/toolkit$/interface_tests
+PACKAGE = complex/toolkit/interface_tests
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -36,14 +36,14 @@ PACKAGE = complex$/toolkit$/interface_tests
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = _XAccessibleComponent.java         \
                   _XAccessibleContext.java           \
                   _XAccessibleExtendedComponent.java \
                   _XAccessibleEventBroadcaster.java  \
                   _XAccessibleText.java              \
                   _XRequestCallback.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
 
 # --- Targets ------------------------------------------------------
 

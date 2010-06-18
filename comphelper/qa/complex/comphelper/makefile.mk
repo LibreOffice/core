@@ -30,20 +30,16 @@ nothing .PHONY:
 .ELSE
 
 PRJ = ../../..
-PRJNAME = unotools
-TARGET = qa_complex_tempfile
+PRJNAME = comphelper
+TARGET = qa_complex_comphelper
 
 .IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/tempfile
+PACKAGE = complex/comphelper
 JAVATESTFILES = \
-    TempFileUnitTest.java
-
-JAVAFILES = $(JAVATESTFILES) \
-    TempFileTest.java \
-    Test01.java \
-    Test02.java \
-    TestHelper.java
-
+    Map.java \
+    SequenceOutputStreamUnitTest.java
+    
+JAVAFILES = $(JAVATESTFILES)
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 .END
@@ -55,3 +51,4 @@ EXTRAJARFILES = $(OOO_JUNIT_JAR)
 ALLTAR : javatest
 
 .END
+
