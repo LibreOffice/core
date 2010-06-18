@@ -27,7 +27,9 @@
 
 $(eval $(call gb_Library_Library,svt))
 
-$(call gb_Library_get_headers_target,svt) : $(call gb_Package_get_target,svtools_inc)
+$(eval $(call gb_Library_add_package_headers,svt,svtools_inc))
+
+$(eval $(call gb_Library_add_precompiled_header,svt,$(SRCDIR)/svtools/inc/pch/precompiled_svtools))
 
 $(eval $(call gb_Library_set_include,svt,\
     $$(INCLUDE) \

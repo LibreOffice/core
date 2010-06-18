@@ -27,7 +27,9 @@
 
 $(eval $(call gb_Library_Library,tk))
 
-$(call gb_Library_get_headers_target,tk) : $(call gb_Package_get_target,toolkit_inc)
+$(eval $(call gb_Library_add_package_headers,tk,toolkit_inc))
+
+#$(eval $(call gb_Library_add_precompiled_header,tk,$(SRCDIR)/toolkit/inc/pch/precompiled_toolkit))
 
 $(eval $(call gb_Library_set_include,tk,\
     $$(INCLUDE) \
