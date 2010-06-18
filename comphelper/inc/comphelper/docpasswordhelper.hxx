@@ -33,6 +33,7 @@
 #include "comphelper/docpasswordrequest.hxx"
 
 namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
 namespace comphelper {
 
@@ -82,6 +83,44 @@ public:
 class COMPHELPER_DLLPUBLIC DocPasswordHelper
 {
 public:
+    // ------------------------------------------------------------------------
+
+    /** This helper function generates the information related
+        to "Password to modify" provided by user. The result
+        sequence contains the hash and the algorithm-related
+        info.
+
+        @param aString
+            The string for which the info should be generated
+
+        @return
+            The sequence containing the hash and the algorithm-related info
+      */
+
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+        GenerateNewModifyPasswordInfo( const ::rtl::OUString& aPassword );
+
+    // ------------------------------------------------------------------------
+
+    /** This helper function allows to check whether
+        the "Password to modify" provided by user is the correct one.
+
+        @param aString
+            The string containing the provided password
+
+        @param aInfo
+            The sequence containing the hash and the algorithm-info
+
+        @return
+            <TRUE/> if the password is correct one
+            <FALSE/> otherwise
+      */
+
+    static sal_Bool IsModifyPasswordCorrect(
+                const ::rtl::OUString& aPassword,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
+
+
     // ------------------------------------------------------------------------
 
     /** This helper function generates the hash code based on the algorithm
