@@ -74,8 +74,44 @@ $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
 .IF "$(COM)" == "GCC"
 EXTRA_CFLAGS += -mthreads
 LDFLAGS += -Wl,--enable-runtime-pseudo-reloc-v2
+
+.IF "$(USE_SYSTEM_STL)" != "YES"
+
+OOO_STLPORT_CXXFLAGS = -I$(SOLARINCDIR)/stl
+.IF "$(USE_STLP_DEBUG)" == "TRUE"
+OOO_STLPORT_CXXFLAGS += -D_STLP_DEBUG
+.END
+OOO_STLPORT_CXXFLAGS += -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
+
+OOO_STLPORT_LDFLAGS = -L$(SOLARLIBDIR)
+OOO_STLPORT_LIBS = $(LIBSTLPORT)
+
+.END
+
+CONFIGURE_ACTION = ./configure
+CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
+    pwd $(PWDFLAGS))/$(TARFILE_ROOTDIR)/ooo-install \
+    --disable-dependency-tracking --disable-static --disable-doxygen \
+    --disable-html-docs --disable-latex-docs CC='$(CC)' CXX='$(CXX)' \
+    CXXFLAGS='$(EXTRA_CFLAGS) $(OOO_STLPORT_CXXFLAGS)' \
+    LDFLAGS='$(LDFLAGS) $(OOO_STLPORT_LDFLAGS)' \
+    LIBS='$(OOO_STLPORT_LIBS) $(MY_LIBS)'
+
+BUILD_ACTION = $(GNUMAKE)
+BUILD_FLAGS = install
+
+OUTDIR2INC = ooo-install/include/cppunit
+
+OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
+    ooo-install/bin/cygcppunit-1-12-1.dll
+
+.INCLUDE: set_ext.mk
+.INCLUDE: target.mk
+.INCLUDE: tg_ext.mk
+
 .ENDIF # "$(COM)" == "GCC"
 .ENDIF # "$(COM)" == "MSC"
+
 .ELSE
 
 .IF "$(USE_SYSTEM_STL)" != "YES"
@@ -139,17 +175,12 @@ BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
 
-.IF "$(OS)" == "WNT"
-OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
-    ooo-install/bin/cygcppunit-1-12-1.dll
-.ELSE
 OUT2BIN = ooo-install/bin/DllPlugInTester
 .IF "$(OS)" == "MACOSX"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.1.dylib
 EXTRPATH = NONE
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
-.END
 .END
 
 .INCLUDE: set_ext.mk
