@@ -31,8 +31,8 @@
 #ifndef __com_sun_star_awt_XDialogProvider_idl__
 #include <com/sun/star/awt/XDialogProvider.idl>
 #endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
-#include <com/sun/star/beans/PropertyValue.idl>
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
 #endif
 
 
@@ -125,7 +125,7 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
     XDialog createDialogWithArguments(
         [in] string URL,
-        [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments
+        [in] sequence< ::com::sun::star::beans::NamedValue > Arguments
     )
     raises  (   com::sun::star::lang::IllegalArgumentException
             );
