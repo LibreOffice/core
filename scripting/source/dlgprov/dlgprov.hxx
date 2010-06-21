@@ -140,7 +140,7 @@ namespace dlgprov
 
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialogWithArguments(
             const ::rtl::OUString& URL,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createContainerWindow(

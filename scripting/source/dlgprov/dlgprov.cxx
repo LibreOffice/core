@@ -767,7 +767,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
     }
 
     Reference < XDialog > DialogProviderImpl::createDialogWithArguments(
-        const ::rtl::OUString& URL, const Sequence< PropertyValue >& Arguments )
+        const ::rtl::OUString& URL, const Sequence< NamedValue >& Arguments )
             throw (IllegalArgumentException, RuntimeException)
     {
         ::comphelper::NamedValueCollection aArguments( Arguments );
