@@ -1133,7 +1133,7 @@ void ChartTypeTabPage::initializePage()
     }
 }
 
-sal_Bool ChartTypeTabPage::commitPage( CommitPageReason /*eReason*/ )
+sal_Bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //commit changes to model
     if( !m_bDoLiveUpdate && m_pCurrentMainType )

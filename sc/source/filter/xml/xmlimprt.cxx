@@ -1370,7 +1370,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceServiceAttrTokenMap()
             { XML_NAMESPACE_TABLE, XML_SOURCE_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_SOURCE_NAME         },
             { XML_NAMESPACE_TABLE, XML_OBJECT_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_OBJECT_NAME         },
             { XML_NAMESPACE_TABLE, XML_USER_NAME,               XML_TOK_SOURCE_SERVICE_ATTR_USER_NAME           },
-            { XML_NAMESPACE_TABLE, XML_PASSWORT,                XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD            },
+            { XML_NAMESPACE_TABLE, XML_PASSWORD,                XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD            },
             XML_TOKEN_MAP_END
         };
 
