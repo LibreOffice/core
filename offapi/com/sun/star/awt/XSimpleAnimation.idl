@@ -43,7 +43,7 @@
 
 /** Controls the animation control.
  */
-interface XSimpleAnimation: com::sun::star::uno::XInterface
+published interface XSimpleAnimation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
