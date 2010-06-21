@@ -76,6 +76,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
         ImplRegisterProperty( BASEPROPERTY_HELPURL );
         ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
+        ImplRegisterProperty( BASEPROPERTY_GRAPHIC );
         ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
         ImplRegisterProperty( BASEPROPERTY_COMPLETE );
         ImplRegisterProperty( BASEPROPERTY_ACTIVATED );
@@ -114,7 +115,7 @@ static void lcl_throwIndexOutOfBoundsException( )
                 case BASEPROPERTY_DEFAULTCONTROL:
                     aReturn <<= ::rtl::OUString( ::rtl::OUString::createFromAscii( szServiceName_UnoControlRoadmap ) );
                     break;
-            default : aReturn = UnoControlModel::ImplGetDefaultValue( nPropId ); break;
+            default : aReturn = UnoControlRoadmapModel_Base::ImplGetDefaultValue( nPropId ); break;
         }
 
         return aReturn;

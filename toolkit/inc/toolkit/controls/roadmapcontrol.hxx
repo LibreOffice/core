@@ -48,7 +48,7 @@
 
 #include <comphelper/uno3.hxx>
 
-typedef UnoControlModel UnoControlRoadmapModel_Base;
+typedef GraphicControlModel UnoControlRoadmapModel_Base;
 
 
 typedef ::cppu::ImplHelper3 <   ::com::sun::star::lang::XSingleServiceFactory
@@ -126,7 +126,7 @@ namespace toolkit{
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlRoadmapModel, UnoControlModel, szServiceName2_UnoControlRoadmapModel )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, szServiceName2_UnoControlRoadmapModel )
 
     sal_Int32 SAL_CALL getCount() throw (RuntimeException);
     virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
@@ -138,10 +138,10 @@ namespace toolkit{
     virtual void SAL_CALL addContainerListener( const Reference< XContainerListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeContainerListener( const Reference< XContainerListener >& xListener ) throw (RuntimeException);
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlRoadmapModel_Base::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { UnoControlModel::acquire(); }
-    void                        SAL_CALL release() throw()  { UnoControlModel::release(); }
+    void                        SAL_CALL acquire() throw()  { UnoControlRoadmapModel_Base::acquire(); }
+    void                        SAL_CALL release() throw()  { UnoControlRoadmapModel_Base::release(); }
 
 
     // ::com::sun::star::beans::XPropertySet
