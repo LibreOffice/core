@@ -77,10 +77,16 @@ public class ChXChartDocument extends TestCase {
     * Disposes Chart documents.
     */
     protected void cleanup(TestParameters Param, PrintWriter log) {
-        log.println( "    closing xChartDoc " );
-        util.DesktopTools.closeDoc(xChartDoc);
-        log.println( "    closing xChartDoc2 " );
-        util.DesktopTools.closeDoc(doc2);
+        if( xChartDoc!=null ) {
+            log.println( "    closing xChartDoc" );
+            util.DesktopTools.closeDoc(xChartDoc);
+            xChartDoc = null;
+        }
+        if( doc2!=null ) {
+            log.println( "    closing xChartDoc2" );
+            util.DesktopTools.closeDoc(doc2);
+            doc2 = null;
+        }
     }
 
     /**

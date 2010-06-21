@@ -79,13 +79,13 @@ testcase tCheckDialog
    if SearchAll.IsEnabled then Warnlog "Without Search-for-entry Find-All is active!"
    if SearchNow.IsEnabled then Warnlog "Without Search-for-entry Find is active!"
    if ReplaceAll.IsEnabled then Warnlog "Without Search-for-entry Replace-All is active!"
-   if Replace.IsEnabled then Warnlog "Without Search-for-entry Replace is active!"
+   if ReplaceBtn.IsEnabled then Warnlog "Without Search-for-entry Replace is active!"
    if NoFormat.IsEnabled then Warnlog "Without selecting Formats , No-Format is active!"
    SearchFor.SetText "Hallo"
    if NOT SearchAll.IsEnabled then Warnlog "Containing Search-for-entry Find-All is inactive!"
    if NOT SearchNow.IsEnabled then Warnlog "Containing Search-for-entry Find inactive!"
    if NOT ReplaceAll.IsEnabled then Warnlog "Containing Search-for-entry Replace-All is inactive!"
-   if NOT Replace.IsEnabled then Warnlog "Containing Search-for-entry Replace is inactive!"
+   if NOT ReplaceBtn.IsEnabled then Warnlog "Containing Search-for-entry Replace is inactive!"
 
    Sleep 5
   printlog "- Dependencies of Format-Properties"
@@ -1190,7 +1190,7 @@ function wSelectAttributeName(aNumber as integer, AsianSupport as boolean, SetSt
 
   Case 31
    Select Case iSprache
-    Case 49: aSelectIt = "Silbentrennung"
+    Case 49: aSelectIt = "Hyphenation"
     Case else: Warnlog "Language not supported. No test"
                exit function
    end select
@@ -1469,7 +1469,7 @@ sub wCheckAttribute(aNumber as integer)
   Case 28    '"Schriftstellung asiatische Schrift"
   Case 29    '"Schusterjungen"
   Case 30    '"Seitenvorlage"
-  Case 31    '"Silbentrennung"
+  Case 31    '"Hyphenation"
   Case 32    '"Skalierung"
   Case 33    '"Sprache"
   Case 34    '"Sprache asiatische Schrift"
