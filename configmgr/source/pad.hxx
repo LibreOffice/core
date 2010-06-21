@@ -45,8 +45,6 @@ public:
 
     void clear();
 
-    bool is() const;
-
     Span get() const;
 
 private:

@@ -65,11 +65,6 @@ void Pad::clear() {
     buffer_.setLength(0);
 }
 
-bool Pad::is() const {
-    OSL_ASSERT(!(span_.is() && buffer_.getLength() != 0));
-    return span_.is() || buffer_.getLength() != 0;
-}
-
 Span Pad::get() const {
     OSL_ASSERT(!(span_.is() && buffer_.getLength() != 0));
     if (span_.is()) {
