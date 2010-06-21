@@ -53,7 +53,7 @@ EXTRAJARFILES = $(OOO_JUNIT_JAR)
 # SUBDIRS         = helper
 
 # Sample how to debug
-JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 
 .END
 
