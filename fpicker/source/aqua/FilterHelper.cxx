@@ -35,6 +35,7 @@
 // #endif
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
+#include "NSURL_OOoAdditions.hxx"
 
 #include "FilterHelper.hxx"
 
@@ -426,6 +427,16 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
                 return sal_True;
             }
         }
+    }
+
+    // might be an alias
+    NSString* pResolved = resolveAlias( sFilename );
+    if( pResolved )
+    {
+        sal_Bool bResult = filenameMatchesFilter( pResolved );
+        [pResolved autorelease];
+        if( bResult )
+            return sal_True;
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);

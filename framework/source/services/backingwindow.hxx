@@ -159,6 +159,7 @@ namespace framework
 
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( SelectHdl, Button* );
+        DECL_LINK( ActivateHdl, Button* );
         DECL_LINK( ToolboxHdl, void* );
 
         void initControls();
