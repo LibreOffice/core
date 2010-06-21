@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
@@ -94,6 +95,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mnRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
+, mbHidden( false )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -182,6 +184,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
     mnRotation = rReferencedShape.mnRotation;
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
+    mbHidden = rReferencedShape.mbHidden;
 }
 
 // for group shapes, the following method is also adding each child
@@ -218,8 +221,8 @@ void Shape::addChildren(
     aIter = rMaster.maChildren.begin();
     while( aIter != rMaster.maChildren.end() )
     {
-        Rectangle aShapeRect;
-        Rectangle* pShapeRect = 0;
+        awt::Rectangle aShapeRect;
+        awt::Rectangle* pShapeRect = 0;
         if ( ( nGlobalLeft != SAL_MAX_INT32 ) && ( nGlobalRight != SAL_MIN_INT32 ) && ( nGlobalTop != SAL_MAX_INT32 ) && ( nGlobalBottom != SAL_MIN_INT32 ) )
         {
             sal_Int32 nGlobalWidth = nGlobalRight - nGlobalLeft;
@@ -369,6 +372,12 @@ Reference< XShape > Shape::createAndInsert(
         }
         rxShapes->add( mxShape );
 
+        if ( mbHidden )
+        {
+            const OUString sHidden( CREATE_OUSTRING( "NumberingLevel" ) );
+            xSet->setPropertyValue( sHidden, Any( mbHidden ) );
+        }
+
         Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
         if( xLockable.is() )
             xLockable->addActionLock();
@@ -422,7 +431,6 @@ Reference< XShape > Shape::createAndInsert(
         PropertyMap aShapeProperties;
         PropertyMap::const_iterator aShapePropIter;
 
-        aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
         if( mxCreateCallback.get() )
         {
             for ( aShapePropIter = mxCreateCallback->getShapeProperties().begin();
@@ -438,6 +446,7 @@ Reference< XShape > Shape::createAndInsert(
                 aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
         }
 
+        aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
         // applying properties
         PropertySet aPropSet( xSet );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
@@ -461,7 +470,7 @@ Reference< XShape > Shape::createAndInsert(
             aPropSet.setProperties( aShapeProperties );
 
         if( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
-            mpCustomShapePropertiesPtr->pushToPropSet( xSet, mxShape );
+            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
 
         // in some cases, we don't have any text body.
         if( getTextBody() )

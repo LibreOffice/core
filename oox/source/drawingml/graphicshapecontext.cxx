@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
 #include "oox/drawingml/table/tablecontext.hxx"
 #include "oox/core/namespaces.hxx"

@@ -66,10 +66,15 @@ ZipStorage::ZipStorage(
         /*  #i105325# ::comphelper::OStorageHelper::GetStorageFromInputStream()
             cannot be used here as it will open a storage with format type
             'PackageFormat' that will not work with OOXML packages.
+
+            #161971# The MS-document storages should always be opened in Repair-Mode to
+            ignore the format errors and get so much info as possible. I hate this
+            solution, but it seems to be the only consistent way to handle the MS-documents.
+
             TODO: #i105410# switch to 'OFOPXMLFormat' and use its
             implementation of relations handling. */
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxFactory );
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxFactory, sal_True );
     }
     catch( Exception& )
     {
@@ -87,7 +92,7 @@ ZipStorage::ZipStorage(
     {
         using namespace ::com::sun::star::embed::ElementModes;
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
-            OFOPXML_STORAGE_FORMAT_STRING, rxStream, READWRITE | TRUNCATE, rxFactory );
+            OFOPXML_STORAGE_FORMAT_STRING, rxStream, READWRITE | TRUNCATE, rxFactory, sal_True );
     }
     catch( Exception& )
     {
