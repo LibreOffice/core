@@ -396,6 +396,7 @@ Suffix
 SwapXAndYAxis
 Symbol
 SymbolColor
+TabColor
 TabIndex
 TableBorder
 TableLayout

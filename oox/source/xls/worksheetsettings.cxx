@@ -26,15 +26,19 @@
  ************************************************************************/
 
 #include "oox/xls/worksheetsettings.hxx"
-#include <com/sun/star/util/XProtectable.hpp>
-#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
+#include "oox/core/filterbase.hxx"
+#include "properties.hxx"
+
+#include <com/sun/star/util/XProtectable.hpp>
 
 using ::rtl::OUString;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -319,6 +323,12 @@ void WorksheetSettings::finalizeImport()
     // VBA code name
     PropertySet aPropSet( getSheet() );
     aPropSet.setProperty( PROP_CodeName, maSheetSettings.maCodeName );
+
+    if (!maSheetSettings.maTabColor.isAuto())
+    {
+        sal_Int32 nColor = maSheetSettings.maTabColor.getColor(getBaseFilter().getGraphicHelper());
+        aPropSet.setProperty(PROP_TabColor, nColor);
+    }
 }
 
 // ============================================================================
