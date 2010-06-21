@@ -36,10 +36,14 @@ TARGET=getopt
 
 # --- Files --------------------------------------------------------
 
+.IF "$(HAVE_GETOPT)" != "YES" || "$(HAVE_READDIR_R)" != "YES"
 TARFILE_NAME=glibc-2.1.3-stub
 TARFILE_MD5=4a660ce8466c9df01f19036435425c3a
 TARFILE_ROOTDIR=glibc-2.1.3
-ADDITIONAL_FILES=posix$/makefile.mk posix$/config.h posix$/readdir_r.c
+ADDITIONAL_FILES=posix$/makefile.mk posix$/config.h
+.IF "$(HAVE_READDIR_R)" != "YES"
+ADDITIONAL_FILES += posix$/readdir_r.c
+.ENDIF
 
 PATCH_FILES=$(PRJ)$/glibc-2.1.3.patch
 
@@ -48,6 +52,15 @@ CONFIGURE_ACTION=
 
 BUILD_DIR=posix
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+
+OUT2INC= \
+    posix/getopt.h \
+    posix/config.h
+
+.ELSE
+@all:
+    @echo "Nothing to do here."
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
