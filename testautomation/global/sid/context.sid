@@ -12,6 +12,7 @@ NotizAnzeigen FID_NOTE_VISIBLE
 
 ' Kontextmenue: Tabelle Calc
 AlleTabellenAuswaehlen FID_TAB_SELECTALL
+SetTabColor FID_TAB_MENU_SET_TAB_BG_COLOR
 
 ' ** Kontextmenue im Gestalter/Stylist
 Stylist_Neu HID_STYLIST_NEW
