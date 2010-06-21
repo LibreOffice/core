@@ -1187,7 +1187,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             aSize.Width()      -= ( 5 + nSymbolSize );
 
             ImplDrawAlignedImage( pDev, aPos, aSize, bLayout,
-                                  1, nDrawFlags, nTextStyle );
+                                  1, nDrawFlags, nTextStyle, NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
         }
         else
             ImplCalcSymbolRect( aInRect );

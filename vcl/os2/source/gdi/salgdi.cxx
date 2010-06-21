@@ -670,6 +670,7 @@ bool Os2SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /
 
 bool Os2SalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& /*rPolygon*/,
+    double /*fTransparency*/,
     const basegfx::B2DVector& /*rLineWidths*/,
     basegfx::B2DLineJoin /*eLineJoin*/)
 {

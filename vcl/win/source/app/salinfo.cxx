@@ -160,7 +160,8 @@ bool WinSalSystem::initMonitors()
             std::hash_map< rtl::OUString, int, rtl::OUStringHash > aDeviceStringCount;
             while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
             {
-                if( (aDev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) == 0 ) // sort out non monitors
+                if( (aDev.StateFlags & DISPLAY_DEVICE_ACTIVE)
+                    && !(aDev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) ) // sort out non/disabled monitors
                 {
                     aDev.DeviceName[31] = 0;
                     aDev.DeviceString[127] = 0;
