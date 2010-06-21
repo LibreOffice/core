@@ -184,12 +184,12 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
     // renaming the vcl resource doesn't work reliable with OS >= Windows Vista
     if (osverinfo.dwMajorVersion < 6 )
     {
-        std::_tstring sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
+        std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
         // Property empty -> no office installed
         if ( sInstDir.length() == 0 )
             return ERROR_SUCCESS;
 
-        std::_tstring sResourceDir = sInstDir + TEXT("program\\resource\\");
+        std::_tstring sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
         std::_tstring sPattern = sResourceDir + TEXT("vcl*.res");
 
 //        std::_tstring mystr;
@@ -233,7 +233,7 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
     }
     else
     {
-        std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
+        std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
         // Property empty -> no office installed
         if ( sOfficeInstallPath.length() == 0 )
             return ERROR_SUCCESS;

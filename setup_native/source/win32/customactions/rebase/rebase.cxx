@@ -126,13 +126,11 @@ static BOOL rebaseImagesInFolder( MSIHANDLE handle, const std::string& sPath, LP
 
 static BOOL rebaseImages( MSIHANDLE handle, LPVOID pAddress )
 {
-    std::string sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
-    std::string sBasisInstallPath = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
-    std::string sUreInstallPath = GetMsiProperty(handle, TEXT("UREINSTALLLOCATION"));
+    std::string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
-    std::string sBasisDir  = sBasisInstallPath + TEXT("program\\");
-    std::string sOfficeDir = sOfficeInstallPath + TEXT("program\\");
-    std::string sUreDir    = sUreInstallPath + TEXT("bin\\");
+    std::string sBasisDir  = sInstallPath + TEXT("Basis\\program\\");
+    std::string sOfficeDir = sInstallPath + TEXT("program\\");
+    std::string sUreDir    = sInstallPath + TEXT("URE\\bin\\");
 
     BOOL bResult = rebaseImagesInFolder( handle, sBasisDir, pAddress );
     bResult &= rebaseImagesInFolder( handle, sOfficeDir, pAddress );
