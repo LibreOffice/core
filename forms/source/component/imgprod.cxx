@@ -359,8 +359,6 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
 
 sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
-    USHORT  nFilter = GRFILTER_FORMAT_DONTKNOW;
-
     if( ERRCODE_IO_PENDING == mpStm->GetError() )
         mpStm->ResetError();
 
