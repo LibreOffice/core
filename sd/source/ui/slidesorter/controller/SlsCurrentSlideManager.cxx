@@ -54,8 +54,11 @@ namespace sd { namespace slidesorter { namespace controller {
 CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mnCurrentSlideIndex(-1),
-      mpCurrentSlide()
+      mpCurrentSlide(),
+      maSwitchPageDelayTimer()
 {
+    maSwitchPageDelayTimer.SetTimeout(100);
+    maSwitchPageDelayTimer.SetTimeoutHdl(LINK(this,CurrentSlideManager,SwitchPageCallback));
 }
 
 
@@ -163,21 +166,23 @@ void CurrentSlideManager::SwitchCurrentSlide (
         ViewShell* pViewShell = mrSlideSorter.GetViewShell();
         if (pViewShell != NULL && pViewShell->IsMainViewShell())
         {
+            // The slide sorter is the main view.
             FrameView* pFrameView = pViewShell->GetFrameView();
             if (pFrameView != NULL)
                 pFrameView->SetSelectedPage(sal::static_int_cast<USHORT>(mnCurrentSlideIndex));
             mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
         }
-        else
-        {
-            // Set current page.  At the moment we have to do this in two
-            // different ways.  The UNO way is the preferable one but, alas,
-            // it does not work always correctly (after some kinds of model
-            // changes).  Therefore, we call DrawViewShell::SwitchPage(),
-            // too.
-            SetCurrentSlideAtViewShellBase(rpDescriptor);
-        }
-        SetCurrentSlideAtXController(rpDescriptor);
+
+        // We do not tell the XController/ViewShellBase about the new
+        // slide right away.  This is done asynchronously after a short
+        // delay to allow for more slide switches in the slide sorter.
+        // This goes under the assumption that slide switching inside
+        // the slide sorter is fast (no expensive redraw of the new page
+        // (unless the preview of the new slide is not yet preset)) and
+        // that slide switching in the edit view is slow (all shapes of
+        // the new slide have to be repainted.)
+        maSwitchPageDelayTimer.Start();
+
         if (bUpdateSelection)
         {
             mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
@@ -275,6 +280,27 @@ void CurrentSlideManager::HandleModelChange (void)
         if (mpCurrentSlide.get() != NULL)
             mrSlideSorter.GetView().SetState(mpCurrentSlide, PageDescriptor::ST_Current, true);
     }
+}
+
+
+
+
+IMPL_LINK(CurrentSlideManager, SwitchPageCallback, void*, EMPTYARG)
+{
+    if (mpCurrentSlide)
+    {
+        // Set current page.  At the moment we have to do this in two
+        // different ways.  The UNO way is the preferable one but, alas,
+        // it does not work always correctly (after some kinds of model
+        // changes).  Therefore, we call DrawViewShell::SwitchPage(),
+        // too.
+        ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+        if (pViewShell==NULL || ! pViewShell->IsMainViewShell())
+            SetCurrentSlideAtViewShellBase(mpCurrentSlide);
+        SetCurrentSlideAtXController(mpCurrentSlide);
+    }
+
+    return 1;
 }
 
 

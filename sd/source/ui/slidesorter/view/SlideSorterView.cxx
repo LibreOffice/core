@@ -65,6 +65,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/scrbar.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
 #include <algorithm>
@@ -909,19 +910,33 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
 
 void SlideSorterView::UpdatePageUnderMouse (bool bAnimate)
 {
+    ::boost::shared_ptr<ScrollBar> pVScrollBar (mrSlideSorter.GetVerticalScrollBar());
+    ::boost::shared_ptr<ScrollBar> pHScrollBar (mrSlideSorter.GetHorizontalScrollBar());
+    if ((pVScrollBar && pVScrollBar->IsVisible() && pVScrollBar->IsTracking())
+        || (pHScrollBar && pHScrollBar->IsVisible() && pHScrollBar->IsTracking()))
+    {
+        // One of the scroll bars is tracking mouse movement.  Do not
+        // highlight the slide under the mouse in this case.
+        SetPageUnderMouse(SharedPageDescriptor(),false);
+        return;
+    }
+
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (pWindow && ! pWindow->IsMouseCaptured())
+    if (pWindow && pWindow->IsVisible() && ! pWindow->IsMouseCaptured())
     {
         const Window::PointerState aPointerState (pWindow->GetPointerState());
         const Rectangle aWindowBox (pWindow->GetPosPixel(), pWindow->GetSizePixel());
         if (aWindowBox.IsInside(aPointerState.maPos))
+        {
             UpdatePageUnderMouse (
                 aPointerState.maPos,
                 (aPointerState.mnState & MOUSE_LEFT)!=0,
                 bAnimate);
-        else
-            SetPageUnderMouse(SharedPageDescriptor(),false);
+            return;
+        }
     }
+
+    SetPageUnderMouse(SharedPageDescriptor(),false);
 }
 
 

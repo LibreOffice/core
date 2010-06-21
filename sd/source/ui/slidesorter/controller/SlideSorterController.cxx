@@ -633,6 +633,11 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                     mrView.RequestRepaint();
                 break;
 
+            case VCLEVENT_WINDOW_HIDE:
+                if (pActiveWindow && pWindow == pActiveWindow->GetParent())
+                    mrView.SetPageUnderMouse(SharedPageDescriptor());
+                break;
+
             case VCLEVENT_WINDOW_GETFOCUS:
                 if (pActiveWindow)
                     if (pWindow == pActiveWindow.get())
