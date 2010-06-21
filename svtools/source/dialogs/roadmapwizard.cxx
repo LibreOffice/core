@@ -29,7 +29,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <svtools/roadmapwizard.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include "roadmap.hxx"
 #include <tools/debug.hxx>
@@ -182,7 +182,21 @@ namespace svt
         ,m_pImpl( new RoadmapWizardImpl )
     {
         DBG_CTOR( RoadmapWizard, CheckInvariants );
+        impl_construct();
+    }
 
+    //--------------------------------------------------------------------
+    RoadmapWizard::RoadmapWizard( Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+        :OWizardMachine( _pParent, i_nStyle, _nButtonFlags )
+        ,m_pImpl( new RoadmapWizardImpl )
+    {
+        DBG_CTOR( RoadmapWizard, CheckInvariants );
+        impl_construct();
+    }
+
+    //--------------------------------------------------------------------
+    void RoadmapWizard::impl_construct()
+    {
         SetLeftAlignedButtonCount( 1 );
         SetEmptyViewMargin();
 
@@ -328,15 +342,16 @@ namespace svt
         if ( (sal_Int32)aNewPathPos->second.size() <= nCurrentStatePathIndex )
             return;
 
-#if OSL_DEBUG_LEVEL > 0
         // assert that the current and the new path are equal, up to nCurrentStatePathIndex
         Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
         if ( aActivePathPos != m_pImpl->aPaths.end() )
         {
-            DBG_ASSERT( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) > nCurrentStatePathIndex,
-                "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+            if ( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
+            {
+                OSL_ENSURE( false, "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+                return;
+            }
         }
-#endif
 
         m_pImpl->nActivePath = _nPathId;
         m_pImpl->bActivePathIsDefinite = _bDecideForIt;
@@ -383,8 +398,14 @@ namespace svt
         }
 
         // can we advance from the current page?
-        const OWizardPage* pCurrentPage = dynamic_cast< const OWizardPage* >( GetPage( getCurrentState() ) );
-        const bool bCurrentPageCanAdvance = !pCurrentPage || pCurrentPage->canAdvance();
+        bool bCurrentPageCanAdvance = true;
+        TabPage* pCurrentPage = GetPage( getCurrentState() );
+        if ( pCurrentPage )
+        {
+            const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+            OSL_ENSURE( pController != NULL, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
+            bCurrentPageCanAdvance = !pController || pController->canAdvance();
+        }
 
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary
@@ -641,11 +662,33 @@ namespace svt
         // if the state is currently in the roadmap, reflect it's new status
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
     }
+
+    //--------------------------------------------------------------------
+    bool RoadmapWizard::knowsState( WizardState i_nState ) const
+    {
+        for (   Paths::const_iterator path = m_pImpl->aPaths.begin();
+                path != m_pImpl->aPaths.end();
+                ++path
+            )
+        {
+            for (   WizardPath::const_iterator state = path->second.begin();
+                    state != path->second.end();
+                    ++state
+                )
+            {
+                if ( *state == i_nState )
+                    return true;
+            }
+        }
+        return false;
+    }
+
     //--------------------------------------------------------------------
     bool RoadmapWizard::isStateEnabled( WizardState _nState ) const
     {
         return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }
+
     //--------------------------------------------------------------------
     void RoadmapWizard::Resize()
     {

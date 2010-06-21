@@ -42,7 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <ctrltool.hxx>
 
