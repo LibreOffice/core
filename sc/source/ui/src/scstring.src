@@ -280,6 +280,14 @@ String SCSTR_RENAMETAB
 {
     Text [ en-US ] = "Rename Sheet" ;
 };
+String SCSTR_SET_TAB_BG_COLOR
+{
+    Text [ en-US ] = "Tab Color" ;
+};
+String SCSTR_NO_TAB_BG_COLOR
+{
+    Text [ en-US ] = "Default" ;
+};
 String SCSTR_RENAMEOBJECT
 {
     Text [ en-US ] = "Name Object";

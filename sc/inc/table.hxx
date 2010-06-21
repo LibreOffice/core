@@ -153,6 +153,7 @@ private:
 
     ScRangeList*    pScenarioRanges;
     Color           aScenarioColor;
+    Color           aTabBgColor;
     USHORT          nScenarioFlags;
     BOOL            bActiveScenario;
 
@@ -209,6 +210,8 @@ public:
     void        SetScenarioComment( const String& rComment ) { aComment = rComment; }
     const Color& GetScenarioColor() const                    { return aScenarioColor; }
     void        SetScenarioColor(const Color& rNew)          { aScenarioColor = rNew; }
+    const Color& GetTabBgColor() const;
+    void         SetTabBgColor(const Color& rColor);
     USHORT      GetScenarioFlags() const                     { return nScenarioFlags; }
     void        SetScenarioFlags(USHORT nNew)                { nScenarioFlags = nNew; }
     void        SetActiveScenario(BOOL bSet)                 { bActiveScenario = bSet; }

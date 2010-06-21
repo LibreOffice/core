@@ -80,7 +80,8 @@ public:
     void                ReadPane( XclImpStream& rStrm );
     /** Reads a SELECTION record. */
     void                ReadSelection( XclImpStream& rStrm );
-
+    /** Reads a SHEETEXT record (Tab Color). */
+    void                ReadTabBgColor( XclImpStream& rStrm, XclImpPalette& rPal );
     /** Sets the view settings at the current sheet or the extended sheet options object. */
     void                Finalize();
 

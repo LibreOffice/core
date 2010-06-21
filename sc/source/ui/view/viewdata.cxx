@@ -160,9 +160,6 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_PAGEVIEWZOOMVALUE));
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
-
-//        pSettings[SC_TABLE_SELECTED].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLESELECTED));
-//        pSettings[SC_TABLE_SELECTED].Value <<= bool(rViewData.GetMarkData().GetTableSelect( nTab ));
     }
 }
 
@@ -272,6 +269,17 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             bool bSelected = false;
             aSettings[i].Value >>= bSelected;
             rViewData.GetMarkData().SelectTable( nTab, bSelected );
+        }
+        else if (sName.compareToAscii(SC_UNONAME_TABCOLOR) == 0)
+        {
+            // There are documents out there that have their tab color defined as a view setting.
+            sal_Int32 nColor = COL_AUTO;
+            aSettings[i].Value >>= nColor;
+            if (static_cast<ColorData>(nColor) != COL_AUTO)
+            {
+                ScDocument* pDoc = rViewData.GetDocument();
+                pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
+            }
         }
     }
     if (eHSplitMode == SC_SPLIT_FIX)

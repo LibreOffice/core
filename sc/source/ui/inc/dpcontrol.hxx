@@ -76,7 +76,6 @@ public:
     void draw();
 
     void getPopupBoundingBox(Point& rPos, Size& rSize) const;
-    bool isPopupButton() const;
 
 private:
     void drawPopupButton();
@@ -127,9 +126,6 @@ public:
     void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer);
     void clearSelectedMenuItem();
     ScMenuFloatingWindow* getSubMenuWindow(size_t nPos) const;
-    size_t getMenuItemCount() const;
-    ::rtl::OUString getMenuItemName(size_t nPos) const;
-    bool isMenuItemEnabled(size_t nPos) const;
     bool isMenuItemSelected(size_t nPos) const;
     size_t getSelectedMenuItem() const;
 

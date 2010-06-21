@@ -58,9 +58,6 @@ public:
 
     // Non-UNO Methods
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getAccessibleChildMenu();
-
     enum ChildControlType {
         LISTBOX, TOGGLE_ALL, SINGLE_ON_BTN, SINGLE_OFF_BTN, OK_BTN, CANCEL_BTN
     };

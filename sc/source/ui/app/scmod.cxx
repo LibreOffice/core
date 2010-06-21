@@ -2192,9 +2192,6 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
-
-
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 BOOL ScModule::RegisterRefWindow( USHORT nSlotId, Window *pWnd )
 {
     std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
@@ -2244,10 +2241,13 @@ BOOL  ScModule::IsAliveRefDlg( USHORT nSlotId, Window *pWnd )
 
 Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return FALSE;
+        return NULL;
 
     std::list<Window*> & rlRefWindow = iSlot->second;
 
@@ -2262,6 +2262,9 @@ Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 
 Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
 
     for( std::map<USHORT, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
@@ -2272,4 +2275,4 @@ Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 
     return NULL;
 }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+

@@ -698,12 +698,12 @@ const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                        XML_TOK_TABLE_NAME              },
-            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_STYLE_NAME        },
-            { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTION        },
-            { XML_NAMESPACE_TABLE, XML_PRINT_RANGES,                XML_TOK_TABLE_PRINT_RANGES      },
-            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY,              XML_TOK_TABLE_PASSWORD          },
-            { XML_NAMESPACE_TABLE, XML_PRINT,                       XML_TOK_TABLE_PRINT             },
+            { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME          },
+            { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME    },
+            { XML_NAMESPACE_TABLE,     XML_PROTECTED,      XML_TOK_TABLE_PROTECTION    },
+            { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES  },
+            { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD      },
+            { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT         },
             XML_TOKEN_MAP_END
         };
 

@@ -106,6 +106,24 @@ void XclImpTabViewSettings::Initialize()
     maData.SetDefaults();
 }
 
+void XclImpTabViewSettings::ReadTabBgColor( XclImpStream& rStrm, XclImpPalette& rPal )
+{
+    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF8 );
+    if( GetBiff() < EXC_BIFF8 )
+        return;
+
+    sal_uInt8 ColorIndex;
+    Color TabBgColor;
+
+    rStrm.Ignore( 16 );
+    ColorIndex = rStrm.ReaduInt8() & EXC_SHEETEXT_TABCOLOR; //0x7F
+    if ( ColorIndex >= 8 && ColorIndex <= 63 ) //only accept valid index values
+    {
+        TabBgColor = rPal.GetColor( ColorIndex );
+        maData.maTabBgColor = TabBgColor;
+    }
+}
+
 void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
 {
     if( GetBiff() == EXC_BIFF2 )
@@ -276,6 +294,10 @@ void XclImpTabViewSettings::Finalize()
         aViewOpt.SetOption( VOPT_OUTLINER, maData.mbShowOutline );
         rDoc.SetViewOptions( aViewOpt );
     }
+
+    // *** set tab bg color
+    if ( !maData.IsDefaultTabBgColor() )
+        rDoc.SetTabBgColor(nScTab, maData.maTabBgColor);
 }
 
 // ============================================================================
