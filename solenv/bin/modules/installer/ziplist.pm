@@ -762,6 +762,16 @@ sub replace_variables_in_ziplist_variables
 }
 
 ###########################################################
+# Overwrite the vendor string in openoffice.lst that is defined in configure
+###########################################################
+
+sub overwrite_ooovendor
+{
+    my ($variableshashref) = @_;
+    $variableshashref->{'OOOVENDOR'} = $ENV{'OOO_VENDOR'} , if( defined $ENV{'OOO_VENDOR'}  && $ENV{'OOO_VENDOR'} ne "" );
+}
+
+###########################################################
 # Adding the lowercase variables into the variableshashref
 ###########################################################
 
