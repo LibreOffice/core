@@ -895,6 +895,9 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
        }
     }
 #endif
+
+    if( mnPrioEmbedded <= 0 )
+        mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
 // -----------------------------------------------------------------------
