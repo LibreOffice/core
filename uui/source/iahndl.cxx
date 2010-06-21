@@ -868,14 +868,15 @@ UUIInteractionHelper::handleRequest_impl(
                 return true;
 
 // @@@ Todo #i29340#: activate!
-//            ucb::NameClashResolveRequest aNameClashResolveRequest;
-//            if (aAnyRequest >>= aNameClashResolveRequest)
-//            {
-//                handleNameClashResolveRequest(aNameClashResolveRequest,
-//                                              rRequest->getContinuations());
-//                return true;
-//            }
-
+#if 0
+            ucb::NameClashResolveRequest aNameClashResolveRequest;
+            if (aAnyRequest >>= aNameClashResolveRequest)
+            {
+                handleNameClashResolveRequest(aNameClashResolveRequest,
+                                              rRequest->getContinuations());
+                return true;
+            }
+#endif
             if ( handleMasterPasswordRequest( rRequest ) )
                 return true;
 
@@ -1187,6 +1188,8 @@ executeMessageBox(
     return aResult;
 }
 
+// @@@ Todo #i29340#: activate!
+#if 0
 enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 
 NameClashResolveDialogResult
@@ -1214,9 +1217,11 @@ executeSimpleNameClashResolveDialog(
                 "executeSimpleNameClashResolveDialog not yet implemented!" );
     return ABORT;
 }
-
+#endif
 } // namespace
 
+// @@@ Todo #i29340#: activate!
+#if 0
 void
 UUIInteractionHelper::handleNameClashResolveRequest(
     ucb::NameClashResolveRequest const & rRequest,
@@ -1284,6 +1289,7 @@ UUIInteractionHelper::handleNameClashResolveRequest(
         break;
     }
 }
+#endif
 
 void
 UUIInteractionHelper::handleGenericErrorRequest(

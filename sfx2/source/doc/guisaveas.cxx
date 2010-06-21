@@ -835,7 +835,8 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     ::rtl::OUString aAdjustToType;
-    if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ))
+
+    if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         // it is export, set the preselected filter
         ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(

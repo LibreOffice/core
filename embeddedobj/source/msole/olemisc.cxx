@@ -158,6 +158,9 @@ OleEmbeddedObject::~OleEmbeddedObject()
 
     if ( m_aTempURL.getLength() )
            KillFile_Impl( m_aTempURL, m_xFactory );
+
+    if ( m_aTempDumpURL.getLength() )
+           KillFile_Impl( m_aTempDumpURL, m_xFactory );
 }
 
 //------------------------------------------------------
