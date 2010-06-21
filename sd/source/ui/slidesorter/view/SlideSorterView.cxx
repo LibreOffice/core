@@ -70,10 +70,9 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svl/itempool.hxx>
-
-#ifndef _SFXITEMPOOL_HXX
 #include <svl/itempool.hxx>
-#endif
+
+#include <boost/foreach.hpp>
 
 using namespace std;
 using namespace ::sd::slidesorter::model;
@@ -420,12 +419,23 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
                     pContact = pDescriptor->GetViewObjectContact();
 
                 if (pDescriptor.get() != NULL)
-                    pDescriptor->SetVisible (bIsVisible);
+                    pDescriptor->SetVisible(bIsVisible);
             }
 
         }
-        mnFirstVisiblePageIndex = nFirstIndex;
-        mnLastVisiblePageIndex = nLastIndex;
+
+        if (mnFirstVisiblePageIndex != nFirstIndex
+            || mnLastVisiblePageIndex != nLastIndex)
+        {
+            mnFirstVisiblePageIndex = nFirstIndex;
+            mnLastVisiblePageIndex = nLastIndex;
+
+            // Tell the listeners that the visibility of some objects has changed.
+            ::std::vector<Link> aChangeListeners (maVisibilityChangeListeners);
+            BOOST_FOREACH(Link& rLink, aChangeListeners)
+                rLink.Call(NULL);
+        }
+
     }
 }
 
@@ -772,5 +782,35 @@ void SlideSorterView::AddSdrObject (SdrObject& rObject)
     mpPage->InsertObject(&rObject);
     rObject.SetModel(&maPageModel);
 }
+
+
+
+
+void SlideSorterView::AddVisibilityChangeListener (const Link& rListener)
+{
+    if (::std::find (
+        maVisibilityChangeListeners.begin(),
+        maVisibilityChangeListeners.end(),
+        rListener) == maVisibilityChangeListeners.end())
+    {
+        maVisibilityChangeListeners.push_back(rListener);
+    }
+}
+
+
+
+
+void SlideSorterView::RemoveVisibilityChangeListener(const Link&rListener)
+{
+    maVisibilityChangeListeners.erase (
+        ::std::find (
+            maVisibilityChangeListeners.begin(),
+            maVisibilityChangeListeners.end(),
+            rListener));
+}
+
+
+
+
 
 } } } // end of namespace ::sd::slidesorter::view
