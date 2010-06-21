@@ -48,8 +48,6 @@
 #include "vcl/decoview.hxx"
 #include "rtl/ustrbuf.hxx"
 
-#include <stdio.h>
-
 using namespace ::rtl;
 
 /**
