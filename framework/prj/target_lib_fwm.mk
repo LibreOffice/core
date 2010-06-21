@@ -27,14 +27,12 @@
 
 $(eval $(call gb_Library_Library,fwm))
 
-$(eval $(call gb_Library_add_package_headers,fwm,framework_inc))
-
 $(eval $(call gb_Library_set_include,fwm,\
-    $$(INCLUDE) \
-    -I$(WORKDIR)/inc/framework/ \
-    -I$(SRCDIR)/framework/inc \
     -I$(SRCDIR)/framework/inc/pch \
+    -I$(SRCDIR)/framework/inc \
     -I$(SRCDIR)/framework/source/inc \
+    -I$(WORKDIR)/inc/framework/ \
+    $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
     -I$(OUTDIR)/inc/offuh \
 ))
