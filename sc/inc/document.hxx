@@ -906,7 +906,7 @@ public:
     bool            ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                    SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown );
+                                 SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown ) const;
     SC_DLLPUBLIC BOOL           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
@@ -1692,9 +1692,9 @@ public:
     /** Maximum string length of numerical cells of a column, e.g. for dBase export.
         @return String length in characters (!) including the decimal
                 separator, and the decimal precision needed. */
-    xub_StrLen      GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCTAB nTab, SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen      GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                           SCTAB nTab, SCCOL nCol,
+                                           SCROW nRowStart, SCROW nRowEnd ) const;
 
     void    KeyInput( const KeyEvent& rKEvt );      // TimerDelays etc.
 

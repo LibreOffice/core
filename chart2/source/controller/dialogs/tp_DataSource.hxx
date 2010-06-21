@@ -89,7 +89,7 @@ public:
 protected:
     // OWizardPage
     virtual void ActivatePage();
-    virtual sal_Bool commitPage( CommitPageReason eReason );
+    virtual sal_Bool commitPage( ::svt::WizardTypes::CommitPageReason eReason );
 
     //TabPage
     virtual void DeactivatePage();

@@ -39,8 +39,13 @@
 #include "CommonConverters.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 #include "servicenames_charttypes.hxx"
+#include "ChartModelHelper.hxx"
+#include "RelativePositionHelper.hxx"
+#include "ControllerLockGuard.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
@@ -49,9 +54,13 @@
 #include <com/sun/star/chart2/InterpretedData.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 
+#include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
+
+#include <com/sun/star/util/XModifiable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -466,18 +475,20 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
 
     try
     {
-        Reference< XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
+        if( xCooSysCnt.is() )
         {
-            Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            if(xCooSys.is())
+            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+                xCooSysCnt->getCoordinateSystems());
+
+            for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
             {
-                nResult = xCooSys->getDimension();
-                break;
+                Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
+                if(xCooSys.is())
+                {
+                    nResult = xCooSys->getDimension();
+                    break;
+                }
             }
         }
     }
@@ -1405,6 +1416,144 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     }
 
     return nResult;
+}
+
+//static
+DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Reference<
+                chart2::XDiagram > & xDiagram )
+{
+    DiagramPositioningMode eMode = DiagramPositioningMode_AUTO;
+    uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY );
+    if( xDiaProps.is() )
+    {
+        RelativePosition aRelPos;
+        RelativeSize aRelSize;
+        if( (xDiaProps->getPropertyValue(C2U("RelativePosition")) >>= aRelPos ) &&
+            (xDiaProps->getPropertyValue(C2U("RelativeSize")) >>= aRelSize ) )
+        {
+            bool bPosSizeExcludeAxes=false;
+            xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bPosSizeExcludeAxes;
+            if( bPosSizeExcludeAxes )
+                eMode = DiagramPositioningMode_EXCLUDING;
+            else
+                eMode = DiagramPositioningMode_INCLUDING;
+        }
+    }
+    return eMode;
+}
+
+void lcl_ensureRange0to1( double& rValue )
+{
+    if(rValue<0.0)
+        rValue=0.0;
+    if(rValue>1.0)
+        rValue=1.0;
+}
+
+//static
+bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
+        const awt::Rectangle& rPosRect /*100th mm*/ )
+{
+    ControllerLockGuard aCtrlLockGuard( xChartModel );
+
+    bool bChanged = false;
+    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
+    if( !xDiaProps.is() )
+        return bChanged;
+
+    RelativePosition aOldPos;
+    RelativeSize aOldSize;
+    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aOldPos;
+    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aOldSize;
+
+    RelativePosition aNewPos;
+    aNewPos.Anchor = drawing::Alignment_TOP_LEFT;
+    aNewPos.Primary = double(rPosRect.X)/double(aPageSize.Width);
+    aNewPos.Secondary = double(rPosRect.Y)/double(aPageSize.Height);
+
+    chart2::RelativeSize aNewSize;
+    aNewSize.Primary = double(rPosRect.Width)/double(aPageSize.Width);
+    aNewSize.Secondary = double(rPosRect.Height)/double(aPageSize.Height);
+
+    lcl_ensureRange0to1( aNewPos.Primary );
+    lcl_ensureRange0to1( aNewPos.Secondary );
+    lcl_ensureRange0to1( aNewSize.Primary );
+    lcl_ensureRange0to1( aNewSize.Secondary );
+    if( (aNewPos.Primary + aNewSize.Primary) > 1.0 )
+        aNewPos.Primary = 1.0 - aNewSize.Primary;
+    if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
+        aNewPos.Secondary = 1.0 - aNewSize.Secondary;
+
+    xDiaProps->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aNewPos) );
+    xDiaProps->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aNewSize) );
+
+    bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
+        (aOldPos.Primary!=aNewPos.Primary) ||
+        (aOldPos.Secondary!=aNewPos.Secondary) ||
+        (aOldSize.Primary!=aNewSize.Primary) ||
+        (aOldSize.Secondary!=aNewSize.Secondary);
+    return bChanged;
+}
+
+//static
+awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference< frame::XModel >& xChartModel )
+{
+    awt::Rectangle aRet(-1,-1,-1,-1);
+
+    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
+    if( !xDiaProps.is() )
+        return aRet;
+
+    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+
+    RelativePosition aRelPos;
+    RelativeSize aRelSize;
+    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aRelPos;
+    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aRelSize;
+
+    awt::Size aAbsSize(
+        aRelSize.Primary * aPageSize.Width,
+        aRelSize.Secondary * aPageSize.Height );
+
+    awt::Point aAbsPos(
+        static_cast< sal_Int32 >( aRelPos.Primary * aPageSize.Width ),
+        static_cast< sal_Int32 >( aRelPos.Secondary * aPageSize.Height ));
+
+    awt::Point aAbsPosLeftTop = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject( aAbsPos, aAbsSize, aRelPos.Anchor );
+
+    aRet = awt::Rectangle(aAbsPosLeftTop.X, aAbsPosLeftTop.Y, aAbsSize.Width, aAbsSize.Height );
+
+    return aRet;
+}
+
+//static
+bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
+    const uno::Reference< frame::XModel >& xChartModel
+    , bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )
+{
+    //return true if something was changed
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    if( nCurrentODFVersion == SvtSaveOptions::ODFVER_LATEST )//#i100778# todo: change this dependent on fileformat evolution
+    {
+        uno::Reference< ::com::sun::star::chart::XChartDocument > xOldDoc( xChartModel, uno::UNO_QUERY ) ;
+        if( xOldDoc.is() )
+        {
+            uno::Reference< ::com::sun::star::chart::XDiagramPositioning > xDiagramPositioning( xOldDoc->getDiagram(), uno::UNO_QUERY );
+            if( xDiagramPositioning.is() && ( bConvertAlsoFromAutoPositioning || !xDiagramPositioning->isAutomaticDiagramPositioning() )
+                && !xDiagramPositioning->isExcludingDiagramPositioning() )
+            {
+                ControllerLockGuard aCtrlLockGuard( xChartModel );
+                uno::Reference< util::XModifiable > xModifiable( xChartModel, uno::UNO_QUERY );
+                bool bModelWasModified = xModifiable.is() && xModifiable->isModified();
+                xDiagramPositioning->setDiagramPositionExcludingAxes( xDiagramPositioning->calculateDiagramPositionExcludingAxes() );
+                if(bResetModifiedState && !bModelWasModified && xModifiable.is() )
+                    xModifiable->setModified(sal_False);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 } //  namespace chart
