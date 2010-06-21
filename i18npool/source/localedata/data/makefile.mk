@@ -68,6 +68,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_af_ZA.cxx  \
     $(MISC)$/localedata_ak_GH.cxx  \
     $(MISC)$/localedata_am_ET.cxx  \
+    $(MISC)$/localedata_ar_DZ.cxx  \
     $(MISC)$/localedata_ar_EG.cxx  \
     $(MISC)$/localedata_ar_LB.cxx  \
     $(MISC)$/localedata_ar_SA.cxx  \
@@ -176,6 +177,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_lt_LT.cxx  \
     $(MISC)$/localedata_ltg_LV.cxx  \
     $(MISC)$/localedata_lv_LV.cxx  \
+    $(MISC)$/localedata_mai_IN.cxx \
     $(MISC)$/localedata_mk_MK.cxx  \
     $(MISC)$/localedata_ml_IN.cxx  \
     $(MISC)$/localedata_mn_MN.cxx  \
@@ -200,6 +202,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_pt_BR.cxx  \
     $(MISC)$/localedata_pt_PT.cxx  \
     $(MISC)$/localedata_ro_RO.cxx  \
+    $(MISC)$/localedata_rue_SK.cxx  \
     $(MISC)$/localedata_ru_RU.cxx  \
     $(MISC)$/localedata_rw_RW.cxx  \
     $(MISC)$/localedata_sg_CF.cxx  \
@@ -378,8 +381,9 @@ SHL3OBJS=	\
     $(SLO)$/localedata_pl_PL.obj	\
     $(SLO)$/localedata_pt_BR.obj	\
     $(SLO)$/localedata_pt_PT.obj	\
-    $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_ro_RO.obj	\
+    $(SLO)$/localedata_rue_SK.obj	\
+    $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_sc_IT.obj	\
     $(SLO)$/localedata_sh_ME.obj	\
     $(SLO)$/localedata_sh_RS.obj	\
@@ -416,6 +420,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_af_ZA.obj \
     $(SLO)$/localedata_ak_GH.obj \
     $(SLO)$/localedata_am_ET.obj \
+    $(SLO)$/localedata_ar_DZ.obj \
     $(SLO)$/localedata_ar_EG.obj \
     $(SLO)$/localedata_ar_LB.obj \
     $(SLO)$/localedata_ar_OM.obj \
@@ -449,6 +454,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_lg_UG.obj \
     $(SLO)$/localedata_ln_CD.obj \
     $(SLO)$/localedata_lo_LA.obj \
+    $(SLO)$/localedata_mai_IN.obj \
     $(SLO)$/localedata_ml_IN.obj \
     $(SLO)$/localedata_mn_MN.obj \
     $(SLO)$/localedata_mr_IN.obj \

@@ -169,6 +169,7 @@ static const struct {
     { "ast_ES", lcl_DATA_EURO },
     { "ltg_LV", lcl_DATA_EURO },
     { "hsb_DE", lcl_DATA_EURO },
+    { "rue_SK", lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
@@ -179,6 +180,7 @@ static const struct {
     { "zh_MO",  lcl_DATA_OTHERS },
 
     { "ar_EG",  lcl_DATA_OTHERS },
+    { "ar_DZ",  lcl_DATA_OTHERS },
     { "ar_LB",  lcl_DATA_OTHERS },
     { "ar_SA",  lcl_DATA_OTHERS },
     { "ar_TN",  lcl_DATA_OTHERS },
@@ -248,6 +250,7 @@ static const struct {
     { "ug_CN",  lcl_DATA_OTHERS },
     { "om_ET",  lcl_DATA_OTHERS },
     { "plt_MG", lcl_DATA_OTHERS },
+    { "mai_IN", lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
