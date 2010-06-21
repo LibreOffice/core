@@ -31,11 +31,6 @@
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "tokens.hxx"
 
-#if DEBUG
-#include <iostream>
-using namespace std;
-#endif
-
 namespace oox { namespace shape {
 
 using namespace ::com::sun::star;
@@ -93,9 +88,6 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getDrawingShapeContext()
 {
-#if DEBUG
-    clog << "ShapeContextHandler::getDrawingShapeContext" << endl;
-#endif
     if (!mxDrawingFragmentHandler.is())
     {
         mpDrawing.reset( new oox::vml::Drawing( *mxFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD ) );
@@ -186,9 +178,6 @@ ShapeContextHandler::createFastChildContext
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#if DEBUG
-    clog << "ShapeContextHandler::createFastChildContext" << endl;
-#endif
     uno::Reference< xml::sax::XFastContextHandler > xResult;
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler(getContextHandler());
 
@@ -243,6 +232,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         {
             mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes);
             xResult.set(mpShape->getXShape());
+            mxGraphicShapeContext.clear( );
         }
     }
 
