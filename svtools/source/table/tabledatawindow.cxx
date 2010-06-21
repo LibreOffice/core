@@ -47,6 +47,10 @@ namespace svt { namespace table
         ,m_rTableControl        ( _rTableControl )
         ,m_nRowAlreadySelected( -1 )
     {
+        // by default, use the background as determined by the style settings
+        const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
+        SetBackground( Wallpaper( aWindowColor ) );
+        SetFillColor( aWindowColor );
     }
 
     //--------------------------------------------------------------------
@@ -54,6 +58,7 @@ namespace svt { namespace table
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }
+
     //--------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {

@@ -703,7 +703,7 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
         nBitDepth = 8;
 
     sal_uInt16  nPaletteEntryCount = 1 << nBitDepth;
-    sal_uInt32  nAdd = 256 / (nPaletteEntryCount - 1);
+    sal_uInt32  nAdd = nBitDepth ? 256 / (nPaletteEntryCount - 1) : 0;
 
     // no bitdepth==2 available
     // but bitdepth==4 with two unused bits is close enough

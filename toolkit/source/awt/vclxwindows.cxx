@@ -29,7 +29,7 @@
 #include "precompiled_toolkit.hxx"
 #include <toolkit/awt/vclxwindows.hxx>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
@@ -43,6 +43,9 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
+#include <com/sun/star/awt/XItemList.hpp>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 
 #ifndef _SV_BUTTON_HXX
@@ -58,12 +61,20 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
-#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::awt::ItemListEvent;
+using ::com::sun::star::awt::XItemList;
 using ::com::sun::star::graphic::XGraphic;
+using ::com::sun::star::graphic::XGraphicProvider;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt::VisualEffect;
@@ -626,7 +637,13 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 aEvent.ActionCommand = maActionCommand;
-                maActionListeners.actionPerformed( aEvent );
+
+                Callback aCallback = ::boost::bind(
+                    &ActionListenerMultiplexer::actionPerformed,
+                    &maActionListeners,
+                    aEvent
+                );
+                ImplExecuteAsyncWithoutSolarLock( aCallback );
             }
         }
         break;
@@ -1529,6 +1546,8 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HELPURL,
                      BASEPROPERTY_LINECOUNT,
                      BASEPROPERTY_MULTISELECTION,
+                     BASEPROPERTY_MULTISELECTION_SIMPLEMODE,
+                     BASEPROPERTY_ITEM_SEPARATOR_POS,
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_SELECTEDITEMS,
                      BASEPROPERTY_STRINGITEMLIST,
@@ -1549,22 +1568,6 @@ VCLXListBox::VCLXListBox()
       maItemListeners( *this )
 {
 }
-
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXListBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XListBox*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XTextLayoutConstrains*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXListBox )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextLayoutConstrains>* ) NULL ),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 void VCLXListBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1914,6 +1917,13 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+            {
+                sal_Int16 nSeparatorPos(0);
+                if ( Value >>= nSeparatorPos )
+                    pListBox->SetSeparatorPos( nSeparatorPos );
+            }
+            break;
             case BASEPROPERTY_READONLY:
             {
                 sal_Bool b = sal_Bool();
@@ -1928,6 +1938,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                      pListBox->EnableMultiSelection( b );
             }
             break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+                ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, sal_False );
+                break;
             case BASEPROPERTY_LINECOUNT:
             {
                 sal_Int16 n = sal_Int16();
@@ -1982,6 +1995,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+                aProp <<= sal_Int16( pListBox->GetSeparatorPos() );
+                break;
             case BASEPROPERTY_READONLY:
             {
                  aProp <<= (sal_Bool) pListBox->IsReadOnly();
@@ -1990,6 +2006,11 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             case BASEPROPERTY_MULTISELECTION:
             {
                  aProp <<= (sal_Bool) pListBox->IsMultiSelectionEnabled();
+            }
+            break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+            {
+                aProp <<= (sal_Bool)( ( pListBox->GetStyle() & WB_SIMPLEMODE ) == 0 );
             }
             break;
             case BASEPROPERTY_LINECOUNT:
@@ -2096,6 +2117,114 @@ void VCLXListBox::ImplCallItemListeners()
     }
 }
 
+namespace
+{
+    Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
+    {
+        if ( !i_rImageURL.getLength() )
+            return Image();
+
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            Reference< XGraphicProvider > xProvider;
+            if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+            {
+                ::comphelper::NamedValueCollection aMediaProperties;
+                aMediaProperties.put( "URL", i_rImageURL );
+                Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+                return Image( xGraphic );
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return Image();
+    }
+}
+
+void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemInserted: no ListBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pListBox->GetEntryCount() ) ),
+        "VCLXListBox::listItemInserted: illegal (inconsistent) item position!" );
+    pListBox->InsertEntry(
+        i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString(),
+        i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
+        i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemRemoved: no ListBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pListBox->GetEntryCount() ) ),
+        "VCLXListBox::listItemRemoved: illegal (inconsistent) item position!" );
+
+    pListBox->RemoveEntry( i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pListBox->GetEntryCount() ) ),
+        "VCLXListBox::listItemModified: illegal (inconsistent) item position!" );
+
+    // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
+
+    const ::rtl::OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
+    const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
+
+    pListBox->RemoveEntry( i_rEvent.ItemPosition );
+    pListBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
+
+    pListBox->Clear();
+
+    (void)i_rEvent;
+}
+
+void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
+
+    pListBox->Clear();
+
+    Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
+    uno::Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > aItems = xItemList->getAllItems();
+    for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
+    {
+        pListBox->InsertEntry( aItems[i].First, lcl_getImageFromURL( aItems[i].Second ) );
+    }
+}
+
+void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    // just disambiguate
+    VCLXWindow::disposing( i_rEvent );
+}
 
 //  ----------------------------------------------------
 //  class VCLXMessageBox
@@ -2205,15 +2334,35 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDialog2*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XDialog*, this ) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
     VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Dialog* pDialog = dynamic_cast< Dialog* >( GetWindow() );
+    if ( pDialog )
+        pDialog->EndDialog( i_result );
+}
+
+void SAL_CALL VCLXDialog::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+        pWindow->SetHelpId( i_id );
+}
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2261,11 +2410,7 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
-
-    Dialog* pDlg = (Dialog*) GetWindow();
-    if ( pDlg )
-        pDlg->EndDialog( 0 );
+    endDialog(0);
 }
 
 void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
