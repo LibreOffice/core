@@ -210,6 +210,7 @@ namespace svt { namespace table
         virtual void    showCursor();
         virtual bool    dispatchAction( TableControlAction _eAction );
     virtual SelectionEngine* getSelEngine();
+    virtual bool isTooltipActive();
     virtual rtl::OUString& setTooltip(const Point& rPoint );
     virtual void resizeColumn(const Point& rPoint);
     virtual bool startResizeColumn(const Point& rPoint);
