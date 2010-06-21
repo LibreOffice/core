@@ -273,7 +273,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
                 sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
             else
                 sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
-            aSlotImage = ::GetImage( mxFrame, sSlotStr, FALSE, FALSE );
+            aSlotImage = ::GetImage( mxFrame, sSlotStr, FALSE, bHighContrast );
 
             String sSlotTitle;
             if( bInsertPage )
