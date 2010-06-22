@@ -14099,7 +14099,7 @@ fi
 if test "x$ac_cv_header_boost_spirit_include_classic_core_hpp" = x""yes; then :
 
 else
-  as_fn_error "boost/spirit/include/classic_core.hpp not found. install boost >= 1.38" "$LINENO" 5
+  as_fn_error "boost/spirit/include/classic_core.hpp not found. install boost >= 1.36" "$LINENO" 5
 fi
 
 
