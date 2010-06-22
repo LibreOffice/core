@@ -808,6 +808,8 @@ AC_ARG_WITH(build-version,
 AC_ARG_WITH(alloc,
 [  --with-alloc            Define which allocator to build with
                            (choices are oo, system, tcmalloc, jemalloc)
+
+			   Note that on FreeBSD/NetBSD system==jemalloc
 ],,)
 AC_ARG_ENABLE(verbose,
 [  --enable-verbose        Increase build verbosity.
@@ -2678,12 +2680,19 @@ if test "$with_alloc" = "tcmalloc"; then
     ALLOC="TCMALLOC";
 fi
 if test "$with_alloc" = "jemalloc"; then
+  if test "$_os" != "FreeBSD" -o "$_os" != "NetBSD"; then
+    AC_MSG_RESULT(jemalloc)
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -pthread"
     AC_CHECK_LIB(jemalloc, malloc, [],
         [AC_MSG_ERROR(jemalloc not found or functional. Install the jemalloc allocator.)], [])
     ALLOC="JEMALLOC";
     CFLAGS=$save_CFLAGS
+  else
+    AC_MSG_RESULT([system])
+    ALLOC="SYS_ALLOC";
+    AC_CHECK_FUNCS([malloc realloc calloc free])
+  fi
 fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
    AC_MSG_RESULT([internal])

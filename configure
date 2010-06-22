@@ -2386,6 +2386,8 @@ Optional Packages:
   --with-alloc            Define which allocator to build with
                            (choices are oo, system, tcmalloc, jemalloc)
 
+			   Note that on FreeBSD/NetBSD system==jemalloc
+
   --with-x                use the X Window System
 
 Some influential environment variables:
@@ -10248,6 +10250,9 @@ fi
     ALLOC="TCMALLOC";
 fi
 if test "$with_alloc" = "jemalloc"; then
+  if test "$_os" != "FreeBSD" -o "$_os" != "NetBSD"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: jemalloc" >&5
+$as_echo "jemalloc" >&6; }
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -pthread"
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for malloc in -ljemalloc" >&5
@@ -10299,6 +10304,24 @@ fi
 
     ALLOC="JEMALLOC";
     CFLAGS=$save_CFLAGS
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: system" >&5
+$as_echo "system" >&6; }
+    ALLOC="SYS_ALLOC";
+    for ac_func in malloc realloc calloc free
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+eval as_val=\$$as_ac_var
+   if test "x$as_val" = x""yes; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+  fi
 fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: internal" >&5
