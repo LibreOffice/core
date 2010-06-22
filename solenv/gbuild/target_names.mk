@@ -79,8 +79,8 @@ gb_AllLangResTarget_get_target = $(OUTDIR)/misc/AllLangRes/$(1)
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Package_get_target = $(OUTDIR)/misc/Package/$(1)
 gb_Module_get_target = $(OUTDIR)/misc/Module/$(1)
-gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/ex/$(1).hxx.pch
-gb_PrecompiledHeader_get_noex_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/noex/$(1).hxx.pch
+gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
+gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
 
 $(eval $(call gb_Helper_make_clean_targets,\
     LinkTarget \
@@ -88,6 +88,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
     SdiTarget \
     SrsTarget \
     PrecompiledHeader \
+    NoexPrecompiledHeader \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
@@ -107,6 +108,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
     SrsPartTarget \
     SrsTarget \
     PrecompiledHeader \
+    NoexPrecompiledHeader \
 ))
 
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)

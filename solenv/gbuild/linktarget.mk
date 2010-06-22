@@ -56,10 +56,10 @@ define gb_CxxObject__set_pchflags
 ifeq ($(gb_ENABLE_PCH),$(true))
 ifneq ($(strip $$(PCH_NAME)),)
 ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(CXXFLAGS) $$(DEFS)))
-$$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(call gb_PrecompiledHeader_get_target,$$(PCH_NAME)))
+$$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(PCH_NAME))
 else
 ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(CXXFLAGS) $$(DEFS)))
-$$@ : PCHFLAGS := $$i(call gb_PrecompiledHeader_get_enableflags,$$(call gb_PrecompiledHeader_get_noex_target,$$(PCH_NAME)))
+$$@ : PCHFLAGS := $$(call gb_NoexPrecompiledHeader_get_enableflags,$$(PCH_NAME))
 else
 $$(info No precompiled header available for $$*.)
 $$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
@@ -378,12 +378,13 @@ endef
 
 define gb_LinkTarget__add_precompiled_header_impl
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_target,$(3)))
-$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_noex_target,$(3)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
-$(call gb_PrecompiledHeader_get_target,$(3)) : PCH_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
-$(call gb_PrecompiledHeader_get_noex_target,$(3)) : PCH_EXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
-$(call gb_PrecompiledHeader_get_target,$(3)) \
-$(call gb_PrecompiledHeader_get_noex_target,$(3)) : $(2).cxx $(2).hxx
+$(call gb_PrecompiledHeader_get_target,$(3)) : $(2).cxx
+
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_NoexPrecompiledHeader_get_target,$(3)))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_NoexPrecompiledHeader_get_clean_target,$(3))
+$(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(2).cxx
+
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS

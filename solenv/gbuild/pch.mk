@@ -33,21 +33,31 @@ ifeq ($(gb_ENABLE_PCH),$(true))
 # gb_PrecompiledHeader_get_enableflags defined by platform
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_PrecompiledHeader_DEBUGDIR := debug
+gb_NoexPrecompiledHeader_DEBUGDIR := debug
 else
 gb_PrecompiledHeader_DEBUGDIR := nodebug
+gb_NoexPrecompiledHeader_DEBUGDIR := nodebug
 endif
 
-$(call gb_PrecompiledHeader_get_target,%) \
-$(call gb_PrecompiledHeader_get_noex_target,%) :
-    $(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(PCH_EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
+$(call gb_PrecompiledHeader_get_target,%) :
+    $(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
-.PHONY : $(call gb_PrecompiledHeader_get_clean_target,%)
+$(call gb_NoexPrecompiledHeader_get_target,%) :
+    $(call gb_NoexPrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
+
+.PHONY : $(call gb_PrecompiledHeader_get_clean_target,%) $(call gb_NoExPrecompiledHeader_get_clean_target,%)
 $(call gb_PrecompiledHeader_get_clean_target,%) :
     $(call gb_Helper_announce,Cleaning up pch $* ...)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_PrecompiledHeader_get_target,$*) \
-            $(call gb_PrecompiledHeader_get_noex_target,$*))
+            $(call gb_PrecompiledHeader_get_dep_target,$*))
 
+
+$(call gb_NoexPrecompiledHeader_get_clean_target,%) :
+    $(call gb_Helper_announce,Cleaning up noex pch $* ...)
+    -$(call gb_Helper_abbreviate_dirs,\
+        rm -f $(call gb_NoexPrecompiledHeader_get_target,$*) \
+            $(call gb_NoexPrecompiledHeader_get_dep_target,$*))
 endif
 
 # vim: set noet sw=4 ts=4:
