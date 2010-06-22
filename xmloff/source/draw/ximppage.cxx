@@ -339,6 +339,9 @@ void SdXMLGenericPageContext::EndElement()
                     else if( aDateTimeFormat.getLength() )
                     {
                         const SdXMLStylesContext* pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetStylesContext() );
+                        if( !pStyles )
+                            pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetAutoStylesContext() );
+
                         if( pStyles )
                         {
                             const SdXMLNumberFormatImportContext* pSdNumStyle =
