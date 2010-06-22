@@ -5158,6 +5158,9 @@ if test -n "$with_system_lpsolve" -o -n "$with_system_libs" && \
     SYSTEM_LPSOLVE=YES
     AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
        [ AC_MSG_ERROR(lpsolve headers not found.)], [])
+    # some systems need this. Like Ubuntu....
+    AC_CHECK_LIB(m, floor)
+    AC_CHECK_LIB(dl, dlopen)
     AC_CHECK_LIB(lpsolve55, make_lp, ,
         [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
 else
