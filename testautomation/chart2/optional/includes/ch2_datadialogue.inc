@@ -45,12 +45,6 @@ testcase tChartDataDialogueButtons
         Printlog "   Insert a new Chart-object, via the Menu: 'Insert - Chart'."
         InsertChart
         WaitSlot()
-        '/// Press 'TAB' once to select the object
-        printlog "   Press 'TAB' once to select the object."
-        DocumentImpress.TypeKeys "<TAB>"
-        '/// Click the button 'RETURN' / 'ENTER' to enter the Chart-Data-dialogue
-        printlog "   Click the button 'Return', to enter the Chart-Data-dialogue."
-        DocumentImpress.TypeKeys "<RETURN>"
         Kontext "DocumentChart"
         '/// Open context menu
         printlog "Open context menu" 
@@ -230,12 +224,6 @@ testcase tChartDataDialogueFieldsUndo
         printlog "   Insert a new Chart-object, via the Menu: 'Insert - Chart'."
         InsertChart
         WaitSlot()
-        '/// Press 'TAB' once to select the object
-        printlog "   Press 'TAB' once to select the object."
-        DocumentImpress.TypeKeys "<TAB>"
-        '/// Click the button 'RETURN' / 'ENTER' to enter the Chart-Data-dialogue
-        printlog "   Click the button 'Return', to enter the Chart-Data-dialogue."
-        DocumentImpress.TypeKeys "<RETURN>"
         Kontext "DocumentChart"
         '/// Open context menu
         printlog "Open context menu"
