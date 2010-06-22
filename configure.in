@@ -3331,9 +3331,11 @@ msi - Windows .msi
        done
        if test -z "$RPM" ; then
           AC_MSG_ERROR([not found])
-       else
+       elif "$RPM" --usage 2>&1 | $EGREP -- -bb >/dev/null; then
 	  RPM_PATH=`which $RPM`
-          AC_MSG_RESULT([$RPM_PATH])
+	  AC_MSG_RESULT([$RPM_PATH])
+       else
+	  AC_MSG_ERROR([cannot build packages. Try installing rpmbuild.])
        fi
    fi
    if echo "$PKGFORMAT" | $EGREP deb 2>&1 >/dev/null; then
