@@ -130,10 +130,9 @@ enum FilterDirection
 
 struct FilterBaseImpl
 {
-    typedef ::boost::shared_ptr< GraphicHelper >            GraphicHelperRef;
-    typedef ::boost::shared_ptr< ModelObjectHelper >        ModelObjHelperRef;
-    typedef ::boost::shared_ptr< OleObjectHelper >          OleObjHelperRef;
-    typedef ::std::map< OUString, Reference< XGraphic > >   EmbeddedGraphicMap;
+    typedef ::boost::shared_ptr< GraphicHelper >        GraphicHelperRef;
+    typedef ::boost::shared_ptr< ModelObjectHelper >    ModelObjHelperRef;
+    typedef ::boost::shared_ptr< OleObjectHelper >      OleObjHelperRef;
 
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
@@ -144,7 +143,6 @@ struct FilterBaseImpl
     GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
     OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
-    EmbeddedGraphicMap  maEmbeddedGraphics;     /// Maps all imported embedded graphics by their path.
 
     Reference< XMultiServiceFactory >   mxGlobalFactory;
     Reference< XModel >                 mxModel;
@@ -419,31 +417,6 @@ bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString
     return true;
 }
 
-Reference< XGraphic > FilterBase::importEmbeddedGraphic( const OUString& rStreamName ) const
-{
-    Reference< XGraphic > xGraphic;
-    OSL_ENSURE( rStreamName.getLength() > 0, "FilterBase::importEmbeddedGraphic - empty stream name" );
-    if( rStreamName.getLength() > 0 )
-    {
-        FilterBaseImpl::EmbeddedGraphicMap::const_iterator aIt = mxImpl->maEmbeddedGraphics.find( rStreamName );
-        if( aIt == mxImpl->maEmbeddedGraphics.end() )
-        {
-            xGraphic = getGraphicHelper().importGraphic( openInputStream( rStreamName ) );
-            if( xGraphic.is() )
-                mxImpl->maEmbeddedGraphics[ rStreamName ] = xGraphic;
-        }
-        else
-            xGraphic = aIt->second;
-    }
-    return xGraphic;
-}
-
-OUString FilterBase::importEmbeddedGraphicObject( const OUString& rStreamName ) const
-{
-    Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
-    return xGraphic.is() ? getGraphicHelper().createGraphicObject( xGraphic ) : OUString();
-}
-
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 
 OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException )
@@ -583,7 +556,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
 GraphicHelper* FilterBase::implCreateGraphicHelper() const
 {
     // default: return base implementation without any special behaviour
-    return new GraphicHelper( mxImpl->mxGlobalFactory, mxImpl->mxTargetFrame );
+    return new GraphicHelper( mxImpl->mxGlobalFactory, mxImpl->mxTargetFrame, mxImpl->mxStorage );
 }
 
 // ============================================================================

@@ -83,7 +83,7 @@ struct ShapeTypeModel
 class ShapeType
 {
 public:
-    explicit            ShapeType( const Drawing& rDrawing );
+    explicit            ShapeType( Drawing& rDrawing );
     virtual             ~ShapeType();
 
     /** Returns read/write access to the shape template model structure. */
@@ -109,7 +109,7 @@ private:
     ::com::sun::star::awt::Rectangle getRelRectangle() const;
 
 protected:
-    const Drawing&      mrDrawing;          /// The VML drawing page that contains this shape.
+    Drawing&            mrDrawing;          /// The VML drawing page that contains this shape.
     ShapeTypeModel      maTypeModel;        /// The model structure containing shape type data.
 };
 
@@ -180,7 +180,7 @@ public:
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
 
 protected:
-    explicit            ShapeBase( const Drawing& rDrawing );
+    explicit            ShapeBase( Drawing& rDrawing );
 
     /** Derived classes create the corresponding XShape and insert it into the passed container. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
@@ -207,7 +207,7 @@ protected:
 class SimpleShape : public ShapeBase
 {
 public:
-    explicit            SimpleShape( const Drawing& rDrawing, const ::rtl::OUString& rService );
+    explicit            SimpleShape( Drawing& rDrawing, const ::rtl::OUString& rService );
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
@@ -226,7 +226,7 @@ private:
 class RectangleShape : public SimpleShape
 {
 public:
-    explicit            RectangleShape( const Drawing& rDrawing );
+    explicit            RectangleShape( Drawing& rDrawing );
 };
 
 // ============================================================================
@@ -235,7 +235,7 @@ public:
 class EllipseShape : public SimpleShape
 {
 public:
-    explicit            EllipseShape( const Drawing& rDrawing );
+    explicit            EllipseShape( Drawing& rDrawing );
 };
 
 // ============================================================================
@@ -244,7 +244,7 @@ public:
 class PolyLineShape : public SimpleShape
 {
 public:
-    explicit            PolyLineShape( const Drawing& rDrawing );
+    explicit            PolyLineShape( Drawing& rDrawing );
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
@@ -260,7 +260,7 @@ protected:
 class CustomShape : public SimpleShape
 {
 public:
-    explicit            CustomShape( const Drawing& rDrawing );
+    explicit            CustomShape( Drawing& rDrawing );
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
@@ -277,7 +277,7 @@ protected:
 class ComplexShape : public CustomShape
 {
 public:
-    explicit            ComplexShape( const Drawing& rDrawing );
+    explicit            ComplexShape( Drawing& rDrawing );
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
@@ -293,7 +293,7 @@ protected:
 class GroupShape : public ShapeBase
 {
 public:
-    explicit            GroupShape( const Drawing& rDrawing );
+    explicit            GroupShape( Drawing& rDrawing );
     virtual             ~GroupShape();
 
     /** Returns read/write access to the container of child shapes and templates. */

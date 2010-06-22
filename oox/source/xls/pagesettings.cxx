@@ -440,7 +440,7 @@ void PageSettings::importPictureData( const Relations& rRelations, const OUStrin
 {
     OUString aPicturePath = rRelations.getFragmentPathFromRelId( rRelId );
     if( aPicturePath.getLength() > 0 )
-        maModel.maGraphicUrl = getBaseFilter().importEmbeddedGraphicObject( aPicturePath );
+        maModel.maGraphicUrl = getBaseFilter().getGraphicHelper().importEmbeddedGraphicObject( aPicturePath );
 }
 
 // ============================================================================

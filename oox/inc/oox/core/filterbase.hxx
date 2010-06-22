@@ -202,12 +202,6 @@ public:
         @return  True, if the data could be imported from the stream. */
     bool                importBinaryData( StreamDataSequence& orDataSeq, const ::rtl::OUString& rStreamName );
 
-    /** Imports a graphic from the storage stream with the passed path and name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                        importEmbeddedGraphic( const ::rtl::OUString& rStreamName ) const;
-    /** Imports a graphic object from the storage stream with the passed path and name. */
-    ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
-
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual ::rtl::OUString SAL_CALL

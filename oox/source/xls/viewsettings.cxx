@@ -26,11 +26,14 @@
  ************************************************************************/
 
 #include "oox/xls/viewsettings.hxx"
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
@@ -38,22 +41,26 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
+#include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::awt::Size;
 using ::com::sun::star::container::XNameContainer;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::oox::core::FilterBase;
 
 namespace oox {
@@ -622,7 +629,8 @@ WorkbookViewModel::WorkbookViewModel() :
 // ----------------------------------------------------------------------------
 
 ViewSettings::ViewSettings( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper )
+    WorkbookHelper( rHelper ),
+    mbValidOleSize( false )
 {
 }
 
@@ -643,6 +651,12 @@ void ViewSettings::importWorkbookView( const AttributeList& rAttribs )
     rModel.mbMinimized     = rAttribs.getBool( XML_minimized, false );
 }
 
+void ViewSettings::importOleSize( const AttributeList& rAttribs )
+{
+    OUString aRange = rAttribs.getString( XML_ref, OUString() );
+    mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aRange, 0, true, false );
+}
+
 void ViewSettings::importWorkbookView( RecordInputStream& rStrm )
 {
     WorkbookViewModel& rModel = createWorkbookView();
@@ -653,6 +667,13 @@ void ViewSettings::importWorkbookView( RecordInputStream& rStrm )
     rModel.mbShowHorScroll = getFlag( nFlags, OOBIN_WBVIEW_SHOWHORSCROLL );
     rModel.mbShowVerScroll = getFlag( nFlags, OOBIN_WBVIEW_SHOWVERSCROLL );
     rModel.mbMinimized     = getFlag( nFlags, OOBIN_WBVIEW_MINIMIZED );
+}
+
+void ViewSettings::importOleSize( RecordInputStream& rStrm )
+{
+    BinRange aBinRange;
+    rStrm >> aBinRange;
+    mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aBinRange, 0, true, false );
 }
 
 void ViewSettings::importWindow1( BiffInputStream& rStrm )
@@ -691,10 +712,23 @@ void ViewSettings::importWindow1( BiffInputStream& rStrm )
     }
 }
 
+void ViewSettings::importOleSize( BiffInputStream& rStrm )
+{
+    rStrm.skip( 2 );
+    BinRange aBinRange;
+    aBinRange.read( rStrm, false );
+    mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aBinRange, 0, true, false );
+}
+
 void ViewSettings::setSheetViewSettings( sal_Int16 nSheet, const SheetViewModelRef& rxSheetView, const Any& rProperties )
 {
     maSheetViews[ nSheet ] = rxSheetView;
     maSheetProps[ nSheet ] = rProperties;
+}
+
+void ViewSettings::setSheetUsedArea( const CellRangeAddress& rUsedArea )
+{
+    maSheetUsedAreas[ rUsedArea.Sheet ] = rUsedArea;
 }
 
 void ViewSettings::finalizeImport()
@@ -751,6 +785,31 @@ void ViewSettings::finalizeImport()
     {
         OSL_ENSURE( false, "ViewSettings::finalizeImport - cannot create document view settings" );
     }
+
+    /*  Set visible area to be used if this document is an embedded OLE object.
+        #i44077# If a new OLE object is inserted from file, there is no OLESIZE
+        record in the Excel file. In this case, use the used area calculated
+        from file contents (used cells and drawing objects). */
+    maOleSize.Sheet = nActiveSheet;
+    const CellRangeAddress* pVisibleArea = mbValidOleSize ?
+        &maOleSize : ContainerHelper::getMapElement( maSheetUsedAreas, nActiveSheet );
+    if( pVisibleArea )
+    {
+        // calculate the visible area in units of 1/100 mm
+        PropertySet aRangeProp( getCellRangeFromDoc( *pVisibleArea ) );
+        Point aPos;
+        Size aSize;
+        if( aRangeProp.getProperty( aPos, PROP_Position ) && aRangeProp.getProperty( aSize, PROP_Size ) )
+        {
+            // set the visible area as sequence of long at the media descriptor
+            Sequence< sal_Int32 > aWinExtent( 4 );
+            aWinExtent[ 0 ] = aPos.X;
+            aWinExtent[ 1 ] = aPos.Y;
+            aWinExtent[ 2 ] = aPos.X + aSize.Width;
+            aWinExtent[ 3 ] = aPos.Y + aSize.Height;
+            getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "WinExtent" ) ] <<= aWinExtent;
+        }
+    }
 }
 
 sal_Int16 ViewSettings::getActiveCalcSheet() const
@@ -771,4 +830,3 @@ WorkbookViewModel& ViewSettings::createWorkbookView()
 
 } // namespace xls
 } // namespace oox
-

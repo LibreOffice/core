@@ -2532,6 +2532,11 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpObjRec();
         break;
 
+        case BIFF_ID_OLESIZE:
+            dumpUnused( 2 );
+            dumpRange( "visible-range", false );
+        break;
+
         case BIFF_ID_PAGELAYOUTVIEW:
             dumpFrHeader( true, true );
             dumpDec< sal_uInt16 >( "scaling", "CONV-PERCENT" );
