@@ -42,9 +42,28 @@ namespace dp_manager {
 class ActivePackages {
 public:
     struct Data {
+        Data(): failedPrerequisites(::rtl::OUString::valueOf((sal_Int32)0))
+            {}
+        /* name of the temporary file (shared, user extension) or the name of
+           the folder of the bundled extension.
+           It does not contain the trailing '_' of the folder.
+           UTF-8 encoded
+        */
         ::rtl::OUString temporaryName;
+        /* The file name (shared, user) or the folder name (bundled)
+           If the key is the file name, then file name is not encoded.
+           If the key is the idendifier then the file name is UTF-8 encoded.
+         */
         ::rtl::OUString fileName;
         ::rtl::OUString mediaType;
+        ::rtl::OUString version;
+        /* If this string contains the value according to
+           com::sun::star::deployment::Prerequisites or "0". That is, if
+           the value is > 0 then
+           the call to XPackage::checkPrerequisites failed.
+           In this case the extension must not be registered.
+         */
+        ::rtl::OUString failedPrerequisites;
     };
 
     typedef ::std::vector< ::std::pair< ::rtl::OUString, Data > > Entries;

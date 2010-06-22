@@ -986,8 +986,10 @@ void ExtensionIteratorBase::init()
 
     m_bUserPackagesLoaded = false;
     m_bSharedPackagesLoaded = false;
+    m_bBundledPackagesLoaded = false;
     m_iUserPackage = 0;
     m_iSharedPackage = 0;
+    m_iBundledPackage = 0;
 }
 
 Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromPackage
@@ -1089,13 +1091,43 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
 
     if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
     {
-        m_eState = END_REACHED;
+        m_eState = BUNDLED_EXTENSIONS;
     }
     else
     {
         const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
         VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
+        xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
+    }
+
+    return xHelpPackage;
+}
+
+Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpPackage
+    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
+{
+    Reference< deployment::XPackage > xHelpPackage;
+
+    if( !m_bBundledPackagesLoaded )
+    {
+        Reference< XPackageManager > xBundledManager =
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("bundled") );
+        m_aBundledPackagesSeq = xBundledManager->getDeployedPackages
+            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+
+        m_bBundledPackagesLoaded = true;
+    }
+
+    if( m_iBundledPackage == m_aBundledPackagesSeq.getLength() )
+    {
+        m_eState = END_REACHED;
+    }
+    else
+    {
+        const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
+        Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage++ ];
+        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1173,7 +1205,18 @@ rtl::OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
                 aRetFile = implGetTreeFileFromPackage( rnFileSize, xHelpPackage );
                 break;
             }
-            case END_REACHED:
+            case BUNDLED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                aRetFile = implGetTreeFileFromPackage( rnFileSize, xHelpPackage );
+                break;
+            }
+
+        case END_REACHED:
                 VOS_ENSURE( false, "DataBaseIterator::nextTreeFile(): Invalid case END_REACHED" );
                 break;
         }

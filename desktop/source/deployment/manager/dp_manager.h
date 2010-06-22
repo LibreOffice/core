@@ -53,6 +53,8 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     ::rtl::OUString m_context;
+    ::rtl::OUString m_registrationData;
+    ::rtl::OUString m_registrationData_expanded;
     ::rtl::OUString m_registryCache;
     bool m_readOnly;
 
@@ -73,6 +75,7 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     ::rtl::OUString detectMediaType(
         ::ucbhelper::Content const & ucbContent, bool throw_exc = true );
     ::rtl::OUString insertToActivationLayer(
+        css::uno::Sequence<css::beans::NamedValue> const & properties,
         ::rtl::OUString const & mediaType,
         ::ucbhelper::Content const & sourceContent,
         ::rtl::OUString const & title, ActivePackages::Data * dbData );
@@ -83,16 +86,16 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         css::uno::Reference<css::deployment::XPackage> const & xPackage,
         ::rtl::OUString const & destFolder );
 
-    bool checkUpdate(
-        css::uno::Reference<css::deployment::XPackage> const & package,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & origCmdEnv,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const &
-            wrappedCmdEnv );
+    bool isInstalled(
+        css::uno::Reference<css::deployment::XPackage> const & package);
 
-    bool checkInstall(
-        css::uno::Reference<css::deployment::XPackage> const & package,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
+    bool synchronizeRemovedExtensions(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
+    bool synchronizeAddedExtensions(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     class CmdEnvWrapperImpl
         : public ::cppu::WeakImplHelper2< css::ucb::XCommandEnvironment,
@@ -135,7 +138,7 @@ protected:
         : t_pm_helper( getMutex() ),
           m_xComponentContext( xComponentContext ),
           m_context( context ),
-          m_readOnly( false )
+          m_readOnly( true )
         {}
 
 public:
@@ -171,7 +174,9 @@ public:
     createAbortChannel() throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addPackage(
-        ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
+        ::rtl::OUString const & url,
+        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        ::rtl::OUString const & mediaType,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -180,17 +185,15 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
-    /* Unregisters the package but does not remove it from disk.
-        When the operation is canceled by the user, a CommandAbortedException
-        is thrown. Then the package is still fully functional.
-        @param out_oldData
-            can be NULL
-    */
-    void removePackage_(
-        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
+    virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL importExtension(
+        css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-        ActivePackages::Data * out_oldData);
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
+            css::ucb::CommandAbortedException,
+            css::lang::IllegalArgumentException,
+            css::uno::RuntimeException);
 
     virtual void SAL_CALL removePackage(
         ::rtl::OUString const & id, ::rtl::OUString const & fileName,
@@ -242,7 +245,31 @@ public:
 
     virtual ::sal_Bool SAL_CALL isReadOnly(  )
         throw (::com::sun::star::uno::RuntimeException);
-};
+
+    virtual ::sal_Bool SAL_CALL synchronize(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException);
+
+    virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
+    getExtensionsWithUnacceptedLicenses(
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
+        throw (css::deployment::DeploymentException,
+               css::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL checkPrerequisites(
+        css::uno::Reference<css::deployment::XPackage> const & extension,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::lang::IllegalArgumentException,
+               css::uno::RuntimeException);
+        };
 
 //______________________________________________________________________________
 inline void PackageManagerImpl::check()

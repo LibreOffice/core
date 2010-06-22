@@ -36,6 +36,7 @@
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 #include "dp_misc_api.hxx"
 
@@ -69,12 +70,31 @@ inline void try_dispose( ::com::sun::star::uno::Reference< ::com::sun::star::uno
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcTerm( ::rtl::OUString const & term );
 
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+::rtl::OUString makeRcTerm( ::rtl::OUString const & url );
+
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcUrl( ::rtl::OUString const & url );
 
 //==============================================================================
+
+/** appends a relative path to a url.
+
+    The relative path must already be correctly encoded for use in an URL.
+    If the URL starts with vnd.sun.star.expand then the relative path will
+    be again encoded for use in an "expand" URL.
+ */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURL(
+    ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
+
+
+/** appends a relative path to a url.
+
+    This is the same as makeURL, but the relative Path must me a segment
+    of an system path.
+ */
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURLAppendSysPathSegment(
     ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
 
 //==============================================================================
@@ -97,11 +117,6 @@ oslProcess raiseProcess( ::rtl::OUString const & appURL,
                          ::com::sun::star::uno::Sequence< ::rtl::OUString > const & args );
 
 //==============================================================================
-/** returns the default update URL (for the update information) which
-    is used when an extension does not provide its own URL.
-*/
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString getExtensionDefaultUpdateURL();
 
 /** writes the argument string to the console.
     On Linux/Unix/etc. it converts the UTF16 string to an ANSI string using
@@ -151,6 +166,14 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void TRACE(::rtl::OUString const & sText);
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void TRACE(::rtl::OString const & sText);
+
+/** registers or revokes shared or bundled extensions which have been
+    recently added or removed.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void syncRepositories(::com::sun::star::uno::Reference<
+                      ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
+
 }
 
 #endif

@@ -84,6 +84,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/task/XRestartManager.hpp>
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJob.hpp>
 #endif
@@ -103,6 +104,7 @@
 #include <vos/security.hxx>
 #include <vos/ref.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #ifndef _UTL__HXX_
 #include <unotools/configmgr.hxx>
@@ -140,6 +142,7 @@
 #include <sfx2/sfx.hrc>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/bootstrap.hxx>
+#include <cppuhelper/bootstrap.hxx>
 
 #include "vos/process.hxx"
 
@@ -1409,10 +1412,13 @@ void Desktop::Main()
         tools::InitTestToolLib();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
+        // Check if bundled or shared extensions were added /removed
+        // and process those extensions (has to be done before checking
+        // the extension dependencies!
+        SynchronizeExtensionRepositories();
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
             return;
-
         // First Start Wizard allowed ?
         if ( ! pCmdLineArgs->IsNoFirstStartWizard())
         {
@@ -1456,7 +1462,6 @@ void Desktop::Main()
         }
 
         SetSplashScreenProgress(50);
-
         // Backing Component
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
@@ -1627,6 +1632,7 @@ void Desktop::Main()
     // call Application::Execute to process messages in vcl message loop
     RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
+    Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     try
     {
         // The JavaContext contains an interaction handler which is used when
@@ -1634,7 +1640,10 @@ void Desktop::Main()
         com::sun::star::uno::ContextLayer layer2(
             new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
-        Execute();
+        ::comphelper::ComponentContext aContext( xSMgr );
+        xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
+        if ( !xRestartManager.is() || !xRestartManager->isRestartRequested( sal_True ) )
+            Execute();
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
     {
@@ -1647,6 +1656,9 @@ void Desktop::Main()
         FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
     }
 
+    // check whether the shutdown is caused by restart
+    sal_Bool bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+
     if (xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent;
@@ -1655,22 +1667,18 @@ void Desktop::Main()
     }
 
     delete pResMgr;
-
     // Restore old value
     if ( pCmdLineArgs->IsHeadless() )
         SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
 
     // remove temp directory
     RemoveTemporaryDirectory();
-
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
     nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
     Application::AcquireSolarMutex(nAcquireCount);
-
     tools::DeInitTestToolLib();
-
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
@@ -1683,6 +1691,14 @@ void Desktop::Main()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
+    if ( bRestartRequested )
+    {
+#ifdef MACOSX
+        DoRestart();
+#endif
+        // wouldn't the solution be more clean if SalMain returns the exit code to the system?
+        _exit( ExitHelper::E_NORMAL_RESTART );
+    }
 }
 
 IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
@@ -2930,6 +2946,14 @@ void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
     if(m_rSplashScreen.is())
     {
         m_rSplashScreen->setValue(iProgress);
+    }
+}
+
+void Desktop::SetSplashScreenText( const ::rtl::OUString& rText )
+{
+    if( m_rSplashScreen.is() )
+    {
+        m_rSplashScreen->setText( rText );
     }
 }
 

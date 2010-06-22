@@ -96,9 +96,27 @@ static char const legacyPrefix[] = "org.openoffice.legacy.";
     OSL_ASSERT(i2 >= 0);
     d.fileName = ::rtl::OUString(
         value.getStr() + i1 + 1, i2 - i1 - 1, RTL_TEXTENCODING_UTF8);
-    d.mediaType = ::rtl::OUString(
-        value.getStr() + i2 + 1, value.getLength() - i2 - 1,
-        RTL_TEXTENCODING_UTF8);
+    sal_Int32 i3 = value.indexOf(separator, i2 + 1);
+
+    if (i3 < 0)
+    {
+        //Before ActivePackages::Data::version was added
+        d.mediaType = ::rtl::OUString(
+            value.getStr() + i2 + 1, value.getLength() - i2 - 1,
+            RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        sal_Int32 i4 = value.indexOf(separator, i3 + 1);
+        d.mediaType = ::rtl::OUString(
+            value.getStr() + i2 + 1, i3 - i2 -1, RTL_TEXTENCODING_UTF8);
+        d.version = ::rtl::OUString(
+            value.getStr() + i3 + 1, i4 - i3 - 1,
+            RTL_TEXTENCODING_UTF8);
+        d.failedPrerequisites = ::rtl::OUString(
+            value.getStr() + i4 + 1, value.getLength() - i4 - 1,
+            RTL_TEXTENCODING_UTF8);
+    }
     return d;
 }
 
@@ -172,6 +190,10 @@ void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
     b.append(::rtl::OUStringToOString(data.fileName, RTL_TEXTENCODING_UTF8));
     b.append(separator);
     b.append(::rtl::OUStringToOString(data.mediaType, RTL_TEXTENCODING_UTF8));
+    b.append(separator);
+    b.append(::rtl::OUStringToOString(data.version, RTL_TEXTENCODING_UTF8));
+    b.append(separator);
+    b.append(::rtl::OUStringToOString(data.failedPrerequisites, RTL_TEXTENCODING_UTF8));
     m_map.put(newKey(id), b.makeStringAndClear());
 }
 

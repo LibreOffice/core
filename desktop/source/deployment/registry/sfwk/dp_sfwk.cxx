@@ -77,12 +77,15 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
+            bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv );
 
     public:
-        PackageImpl( ::rtl::Reference<BackendImpl> const & myBackend,
-                     OUString const & url, OUString const & libType );
+        PackageImpl(
+            ::rtl::Reference<BackendImpl> const & myBackend,
+            OUString const & url, OUString const & libType, bool bRemoved,
+            OUString const & identifier);
         // XPackage
         virtual OUString SAL_CALL getDescription() throw (RuntimeException);
     };
@@ -91,6 +94,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
+        sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     const Reference<deployment::XPackageTypeInfo> m_xTypeInfo;
@@ -131,9 +135,10 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 //______________________________________________________________________________
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
-    OUString const & url, OUString const & libType )
+    OUString const & url, OUString const & libType, bool bRemoved,
+    OUString const & identifier)
     : Package( myBackend.get(), url, OUString(), OUString(),
-               myBackend->m_xTypeInfo ),
+               myBackend->m_xTypeInfo, bRemoved, identifier),
       m_descr(libType)
 {
     initPackageHandler();
@@ -217,8 +222,8 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 // PackageRegistryBackend
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
-    OUString const & url, OUString const & mediaType_,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
+    OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
     if (mediaType.getLength() == 0)
@@ -294,7 +299,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 dp_misc::TRACE(OUSTR(" BackEnd detected lang = ") + lang + OUSTR("\n"));
                 dp_misc::TRACE(OUSTR(" for url ") + sParcelDescURL + OUSTR("\n") );
                 dp_misc::TRACE("******************************\n");
-                return new PackageImpl( this, url, sfwkLibType );
+                return new PackageImpl( this, url, sfwkLibType, bRemoved, identifier);
             }
         }
     }
@@ -321,6 +326,10 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     else if ( that->m_eContext == CONTEXT_SHARED )
     {
         aContext  <<= OUSTR("share");
+    }
+    else if ( that->m_eContext == CONTEXT_BUNDLED )
+    {
+        aContext  <<= OUSTR("bundled");
     }
     else
     {
@@ -363,6 +372,7 @@ BackendImpl::PackageImpl::isRegistered_(
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
+    bool /* startup */,
     ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & )
 {

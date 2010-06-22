@@ -35,7 +35,6 @@
 
 
 namespace com { namespace sun { namespace star { namespace deployment {
-        class XPackageManager;
         class XPackage;
 }}}}
 namespace com { namespace sun { namespace star { namespace xml { namespace dom {
@@ -45,31 +44,42 @@ namespace com { namespace sun { namespace star { namespace xml { namespace dom {
 
 namespace dp_gui {
 
-struct UpdateListEntry
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> m_xPackageManager;
-
-    UpdateListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
-   ~UpdateListEntry();
-};
-
-typedef ::boost::shared_ptr< UpdateListEntry > TUpdateListEntry;
-
-
 struct UpdateData
 {
+    UpdateData( ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > const & aExt):
+        bIsShared(false), aInstalledPackage(aExt){};
+
+    //When entries added to the listbox then there can be one for the user update and one
+    //for the shared update. However, both list entries will contain the same UpdateData.
+    //isShared is used to indicate which one is used for the shared entry.
+    bool bIsShared;
+
+    //The currently installed extension which is going to be updated. If the extension exist in
+    //multiple repositories then it is the one with the highest version.
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > aInstalledPackage;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > aPackageManager;
-    // The content of the update information
+    //The version of the update
+    ::rtl::OUString updateVersion;
+
+    //For online update
+    // ======================
+    // The content of the update information.
+    //Only if aUpdateInfo is set then there is an online update available with a better version
+    //than any of the currently installed extensions with the same identifier.
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > aUpdateInfo;
     //The URL of the locally downloaded extension. It will only be set if there were no errors
     //during the download
     ::rtl::OUString sLocalURL;
     //The URL of the website wher the download can be obtained.
     ::rtl::OUString sWebsiteURL;
+
+    //For local update
+    //=====================
+    //The locale extension which is used as update for the user or shared repository.
+    //If set then the data for the online update (aUpdateInfo, sLocalURL, sWebsiteURL)
+    //are to be ignored.
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
+    aUpdateSource;
 };
 }
 

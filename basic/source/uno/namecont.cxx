@@ -65,7 +65,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/script/LibraryNotLoadedException.hpp>
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include "com/sun/star/deployment/ExtensionManager.hpp"
 #include <comphelper/storagehelper.hxx>
 #ifndef _RTL_USTRING_HXX_
 #include <comphelper/anytostring.hxx>
@@ -1080,6 +1080,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
 
                 OUString aUserSearchStr   = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" );
                 OUString aSharedSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" );
+                OUString aBundledSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$BUNDLED_EXTENSIONS" );
                 OUString aInstSearchStr   = OUString::createFromAscii( "$(INST)" );
 
                 Sequence< OUString > aNames = pPrevCont->getElementNames();
@@ -1111,6 +1112,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         bool bCreateLink = true;
                         if( aStorageURL.indexOf( aUserSearchStr   ) != -1 ||
                             aStorageURL.indexOf( aSharedSearchStr ) != -1 ||
+                            aStorageURL.indexOf( aBundledSearchStr ) != -1 ||
                             aStorageURL.indexOf( aInstSearchStr   ) != -1 )
                         {
                             bCreateLink = false;
@@ -2169,6 +2171,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     SfxLibrary* pNewLib = implCreateLibraryLink( Name, aLibInfoFileURL, aLibDirURL, ReadOnly );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
     pNewLib->maUnexpandedStorageURL = aUnexpandedStorageURL;
+    pNewLib->maOrignialStorageURL = StorageURL;
 
     OUString aInitFileName;
     uno::Reference< embed::XStorage > xDummyStor;
@@ -2184,11 +2187,12 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
 
     OUString aUserSearchStr   = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" );
     OUString aSharedSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" );
+    OUString aBundledSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$BUNDLED_EXTENSIONS" );
     if( StorageURL.indexOf( aUserSearchStr ) != -1 )
     {
         pNewLib->mbExtension = sal_True;
     }
-    else if( StorageURL.indexOf( aSharedSearchStr ) != -1 )
+    else if( StorageURL.indexOf( aSharedSearchStr ) != -1 || StorageURL.indexOf( aBundledSearchStr ) != -1 )
     {
         pNewLib->mbExtension = sal_True;
         pNewLib->mbReadOnly = sal_True;
@@ -2789,6 +2793,21 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     }
 }
 
+
+//XLibraryContainer3
+OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
+    throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+{
+    LibraryContainerMethodGuard aGuard( *this );
+    SfxLibrary* pImplLib = getImplLib( Name );
+    sal_Bool bLink = pImplLib->mbLink;
+    if( !bLink )
+        throw IllegalArgumentException();
+    OUString aRetStr = pImplLib->maOrignialStorageURL;
+    return aRetStr;
+}
+
+
 ::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatModeOn() throw (RuntimeException)
 {
     return mbVBACompat;
@@ -3101,8 +3120,10 @@ ScriptExtensionIterator::ScriptExtensionIterator( void )
     : m_eState( USER_EXTENSIONS )
     , m_bUserPackagesLoaded( false )
     , m_bSharedPackagesLoaded( false )
+    , m_bBundledPackagesLoaded( false )
     , m_iUserPackage( 0 )
     , m_iSharedPackage( 0 )
+       , m_iBundledPackage( 0 )
     , m_pScriptSubPackageIterator( NULL )
 {
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
@@ -3145,6 +3166,16 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
             {
                 Reference< deployment::XPackage > xScriptPackage =
                     implGetNextSharedScriptPackage( rbPureDialogLib );
+                if( !xScriptPackage.is() )
+                    break;
+
+                aRetLib = xScriptPackage->getURL();
+                break;
+            }
+            case BUNDLED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xScriptPackage =
+                    implGetNextBundledScriptPackage( rbPureDialogLib );
                 if( !xScriptPackage.is() )
                     break;
 
@@ -3321,10 +3352,11 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
     {
         try
         {
-            Reference< XPackageManager > xUserManager =
-                thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
-            m_aUserPackagesSeq = xUserManager->getDeployedPackages
-                ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            Reference< XExtensionManager > xManager =
+                ExtensionManager::get( m_xContext );
+            m_aUserPackagesSeq = xManager->getDeployedExtensions
+                (rtl::OUString::createFromAscii("user"),
+                 Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
         catch( com::sun::star::uno::DeploymentException& )
         {
@@ -3374,10 +3406,11 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
     {
         try
         {
-            Reference< XPackageManager > xSharedManager =
-                thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
-            m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
-                ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            Reference< XExtensionManager > xSharedManager =
+                ExtensionManager::get( m_xContext );
+            m_aSharedPackagesSeq = xSharedManager->getDeployedExtensions
+                (rtl::OUString::createFromAscii("shared"),
+                 Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
         catch( com::sun::star::uno::DeploymentException& )
         {
@@ -3390,7 +3423,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
 
     if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
     {
-        m_eState = END_REACHED;
+        m_eState = BUNDLED_EXTENSIONS;
     }
     else
     {
@@ -3410,6 +3443,59 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
                 delete m_pScriptSubPackageIterator;
                 m_pScriptSubPackageIterator = NULL;
                 m_iSharedPackage++;
+            }
+        }
+    }
+
+    return xScriptPackage;
+}
+
+Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScriptPackage
+    ( bool& rbPureDialogLib )
+{
+    Reference< deployment::XPackage > xScriptPackage;
+
+    if( !m_bBundledPackagesLoaded )
+    {
+        try
+        {
+            Reference< XExtensionManager > xManager =
+                ExtensionManager::get( m_xContext );
+            m_aBundledPackagesSeq = xManager->getDeployedExtensions
+                (rtl::OUString::createFromAscii("bundled"),
+                 Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        }
+        catch( com::sun::star::uno::DeploymentException& )
+        {
+            // Special Office installations may not contain deployment code
+            return xScriptPackage;
+        }
+
+        m_bBundledPackagesLoaded = true;
+    }
+
+    if( m_iBundledPackage == m_aBundledPackagesSeq.getLength() )
+    {
+        m_eState = END_REACHED;
+    }
+    else
+    {
+        if( m_pScriptSubPackageIterator == NULL )
+        {
+            const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
+            Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage ];
+            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextBundledScriptPackage(): Invalid package" );
+            m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
+        }
+
+        if( m_pScriptSubPackageIterator != NULL )
+        {
+            xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
+            if( !xScriptPackage.is() )
+            {
+                delete m_pScriptSubPackageIterator;
+                m_pScriptSubPackageIterator = NULL;
+                m_iBundledPackage++;
             }
         }
     }

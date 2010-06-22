@@ -328,6 +328,7 @@ namespace treeview {
     {
         USER_EXTENSIONS,
         SHARED_EXTENSIONS,
+        BUNDLED_EXTENSIONS,
         END_REACHED
     };
 
@@ -347,6 +348,9 @@ namespace treeview {
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
         com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedHelpPackage
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextBundledHelpPackage
+            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+
         void implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
@@ -365,8 +369,13 @@ namespace treeview {
             < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
         bool                                                                        m_bSharedPackagesLoaded;
 
+        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+            < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
+        bool                                                                        m_bBundledPackagesLoaded;
+
         int                                                                         m_iUserPackage;
         int                                                                         m_iSharedPackage;
+        int                                                                         m_iBundledPackage;
 
     }; // end class ExtensionIteratorBase
 

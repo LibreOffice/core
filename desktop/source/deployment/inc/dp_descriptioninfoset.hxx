@@ -62,6 +62,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC SimpleLicenseAttributes
     bool suppressIfRequired;
 };
 
+
 /**
    Access to the content of an XML <code>description</code> element.
 
@@ -216,6 +217,8 @@ public:
     */
     ::rtl::OUString getIconURL( sal_Bool bHighContrast ) const;
 
+    bool hasDescription() const;
+
 private:
     SAL_DLLPRIVATE ::boost::optional< ::rtl::OUString > getOptionalValue(
         ::rtl::OUString const & expression) const;
@@ -279,6 +282,18 @@ private:
         ::com::sun::star::xml::xpath::XXPathAPI > m_xpath;
 };
 
+inline  bool DescriptionInfoset::hasDescription() const
+{
+    return m_element.is();
+}
+
+/** creates a DescriptionInfoset object.
+
+    The argument sExtensionFolderURL is a file URL to extension folder containing
+    the description.xml.
+ */
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+DescriptionInfoset getDescriptionInfoset(::rtl::OUString const & sExtensionFolderURL);
 }
 
 #endif
