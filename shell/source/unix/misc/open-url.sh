@@ -46,38 +46,48 @@ run_browser() {
 
 # special handling for mailto: uris
 if echo $1 | grep '^mailto:' > /dev/null; then
+  # check for xdg-email
+  mailer=`which xdg-email`
+  if [ ! -z "$mailer" ]; then
+    $mailer "$1" &
+    exit 0
+  fi
   # check $MAILER variable
   if [ ! -z "$MAILER" ]; then
     $MAILER "$1" &
     exit 0
-  else
-    # mozilla derivates may need -remote semantics
-    for i in thunderbird mozilla netscape; do
-      mailer=`which $i`
-      if [ ! -z "$mailer" ]; then
-        run_mozilla "$mailer" "$1"
-        exit 0
-      fi
-    done
-    # handle all non mozilla mail clients below
-    # ..
   fi
+  # mozilla derivates may need -remote semantics
+  for i in thunderbird mozilla netscape; do
+    mailer=`which $i`
+    if [ ! -z "$mailer" ]; then
+      run_mozilla "$mailer" "$1"
+      exit 0
+    fi
+  done
+  # handle all non mozilla mail clients below
+  # ..
 else
+  # check for xdg-open
+  browser=`which xdg-open`
+  if [ ! -z "$browser" ]; then
+    $browser "$1" &
+    exit 0
+  fi
   # check $BROWSER variable
   if [ ! -z "$BROWSER" ]; then
     $BROWSER "$1" &
     exit 0
-  else
-    # mozilla derivates may need -remote semantics
-    for i in firefox mozilla netscape; do
-      browser=`which $i`
-      if [ ! -z "$browser" ]; then
-        run_mozilla "$browser" "$1"
-        exit 0
-      fi
-    done
-    # handle all non mozilla browers below
-    # ..
   fi
+  # mozilla derivates may need -remote semantics
+  for i in firefox mozilla netscape; do
+    browser=`which $i`
+    if [ ! -z "$browser" ]; then
+      run_mozilla "$browser" "$1"
+      exit 0
+    fi
+  done
+  # handle all non mozilla browers below
+  # ..
 fi
 exit 1
