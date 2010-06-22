@@ -177,7 +177,7 @@ namespace svt { namespace table
         virtual void        GetFocus();
         virtual void        LoseFocus();
         virtual void        KeyInput( const KeyEvent& rKEvt );
-    //virtual long      Notify(NotifyEvent& rNEvt);
+        virtual void        StateChanged( StateChangedType i_nStateChange );
 
     /** Creates and returns the accessible object of the whole GridControl. */
     SVT_DLLPRIVATE virtual XACC CreateAccessible();
@@ -221,6 +221,7 @@ namespace svt { namespace table
     ::com::sun::star::uno::Sequence< sal_Int32 >& getColumnsForTooltip();
     ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
     void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
+    void clearSelection();
     void selectionChanged(bool _bChanged);
 
     protected:
