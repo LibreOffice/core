@@ -47,11 +47,9 @@ all:
     @echo "Therefore the files provided here does not need to be built in addition."
 .ENDIF
 
-EXTERNAL_DIR=$(PRJ)$/..$/external/StAX
-
 .IF "$(BUILD_STAX)" != "YES"
 
-$(OUT)$/class$/jsr173_1.0_api.jar : $(EXTERNAL_DIR)$/jsr173_1.0_api.jar
+$(OUT)$/class$/jsr173_1.0_api.jar : $(PRJ)$/download$/jsr173_1.0_api.jar
     +$(COPY) $< $@
 
 .ELSE 			#  "$(BUILD_STAX)" != "YES"
