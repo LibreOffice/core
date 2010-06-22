@@ -1384,7 +1384,7 @@ if ($platform =~ m/linux|freebsd|netbsd/)
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
 }
-if ($platform =~ m/solaris/ && $CC !=~ "gcc")
+if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
 }
