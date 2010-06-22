@@ -1922,6 +1922,8 @@ ToFile( "SYSTEM_LIBC",       "@SYSTEM_LIBC@",      "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
+ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
+ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
