@@ -560,14 +560,28 @@ void SwSidebarWin::SetPosAndSize()
     {
         if (IsFollow() && !HasChildPathFocus())
         {
-            mpAnchor->SetAnchorState(AS_END);
+            // --> OD 2010-06-03 #i111964#
+            if ( mpAnchor )
+            {
+                mpAnchor->SetAnchorState(AS_END);
+            }
+            // <--
         }
         else
         {
-            mpAnchor->SetAnchorState(AS_ALL);
+            // --> OD 2010-06-03 #i111964#
+            if ( mpAnchor )
+            {
+                mpAnchor->SetAnchorState(AS_ALL);
+            }
+            // <--
             SwSidebarWin* pWin = GetTopReplyNote();
-            if (pWin)
+            // --> OD 2010-06-03 #i111964#
+            if ( pWin && pWin->Anchor() )
+            // <--
+            {
                 pWin->Anchor()->SetAnchorState(AS_END);
+            }
         }
     }
 }
@@ -1127,8 +1141,12 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
             {
                 mpAnchor->SetAnchorState(AS_ALL);
                 SwSidebarWin* pWin = GetTopReplyNote();
-                if (pWin)
+                // --> OD 2010-06-03 #i111964#
+                if ( pWin && pWin->Anchor() )
+                // <--
+                {
                     pWin->Anchor()->SetAnchorState(AS_END);
+                }
                 mpAnchor->setLineSolid(true);
             }
             if (mpShadow)
@@ -1156,17 +1174,24 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     SwSidebarWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
                                                   : 0;
-                    if (pTopWinSelf && (pTopWinSelf!=pTopWinActive))
+                    // --> OD 2010-06-03 #i111964#
+                    if ( pTopWinSelf && ( pTopWinSelf != pTopWinActive ) &&
+                         pTopWinSelf->Anchor() )
+                    // <--
                     {
-                        if (pTopWinSelf!=mrMgr.GetActiveSidebarWin())
+                        if ( pTopWinSelf != mrMgr.GetActiveSidebarWin() )
+                        {
                             pTopWinSelf->Anchor()->setLineSolid(false);
+                        }
                         pTopWinSelf->Anchor()->SetAnchorState(AS_ALL);
                     }
                 }
                 mpAnchor->setLineSolid(false);
             }
-            if (mpShadow)
+            if ( mpShadow )
+            {
                 mpShadow->SetShadowState(SS_NORMAL);
+            }
             break;
         }
     }
