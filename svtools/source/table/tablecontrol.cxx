@@ -76,6 +76,11 @@ namespace svt { namespace table
         aTableData->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
         aTableData->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
         m_pAccessTable.reset(new ::svt::table::AccessibleTableControl_Impl());
+
+        // by default, use the background as determined by the style settings
+        const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
+        SetBackground( Wallpaper( aWindowColor ) );
+        SetFillColor( aWindowColor );
     }
 
     //--------------------------------------------------------------------
@@ -120,6 +125,39 @@ namespace svt { namespace table
             }
         }
     }
+
+
+    //--------------------------------------------------------------------
+    void TableControl::StateChanged( StateChangedType i_nStateChange )
+    {
+        Control::StateChanged( i_nStateChange );
+
+        // forward certain settings to the data window
+        switch ( i_nStateChange )
+        {
+        case STATE_CHANGE_CONTROLBACKGROUND:
+            if ( IsControlBackground() )
+                getDataWindow()->SetControlBackground( GetControlBackground() );
+            else
+                getDataWindow()->SetControlBackground();
+            break;
+
+        case STATE_CHANGE_CONTROLFOREGROUND:
+            if ( IsControlForeground() )
+                getDataWindow()->SetControlForeground( GetControlForeground() );
+            else
+                getDataWindow()->SetControlForeground();
+            break;
+
+        case STATE_CHANGE_CONTROLFONT:
+            if ( IsControlFont() )
+                getDataWindow()->SetControlFont( GetControlFont() );
+            else
+                getDataWindow()->SetControlFont();
+            break;
+        }
+    }
+
     //--------------------------------------------------------------------
     void TableControl::Resize()
     {
@@ -173,6 +211,11 @@ namespace svt { namespace table
     sal_Bool TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
     {
         return m_pImpl->goTo( _nColPos, _nRowPos );
+    }
+    //--------------------------------------------------------------------
+    void TableControl::clearSelection()
+    {
+        m_pImpl->clearSelection();
     }
     //--------------------------------------------------------------------
     void TableControl::InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved)
@@ -401,7 +444,7 @@ void TableControl::FillAccessibleStateSet(
     }
 }
 
-Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }

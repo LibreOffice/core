@@ -68,6 +68,7 @@ SHL1LIBS=$(LIB1TARGET)
 SHL1STDLIBS= \
         $(I18NUTILLIB) \
         $(I18NISOLANGLIB) \
+        $(COMPHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
         $(SALLIB) \

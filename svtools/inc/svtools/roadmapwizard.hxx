@@ -80,6 +80,11 @@ namespace svt
             const ResId& _rRes,
             sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
         );
+        RoadmapWizard(
+            Window* _pParent,
+            const WinBits i_nStyle,
+            sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
+        );
         ~RoadmapWizard( );
 
         void            SetRoadmapBitmap( const BitmapEx& _rBitmap );
@@ -137,7 +142,7 @@ protected:
 
             You can only activate paths which share the first <code>k</code> states with the path
             which is previously active (if any), where <code>k</code> is the index of the
-            current state within the current page.
+            current state within the current path.
 
             <example>
             Say you have paths, <code>(0,1,2,5)</code> and <code>(0,1,4,5)</code>. This means that after
@@ -197,6 +202,10 @@ protected:
         */
         void    enableState( WizardState _nState, bool _bEnable = true );
 
+        /** returns true if and only if the given state is known in at least one declared path
+        */
+        bool    knowsState( WizardState _nState ) const;
+
         // OWizardMachine overriables
         virtual void            enterState( WizardState _nState );
 
@@ -230,13 +239,15 @@ protected:
     private:
         SVT_DLLPRIVATE void ResizeFixedLine();
 
-    private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, void* );
 
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)
         */
         SVT_DLLPRIVATE void implUpdateRoadmap( );
+
+    private:
+        SVT_DLLPRIVATE void impl_construct();
     };
 
 //........................................................................

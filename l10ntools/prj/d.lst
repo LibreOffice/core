@@ -29,6 +29,7 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\%__SRC%\bin\ulfconv %_DEST%\bin%_EXT%\ulfconv
 ..\%__SRC%\class\FCFGMerge.jar %_DEST%\bin%_EXT%\FCFGMerge.jar
 ..\%__SRC%\class\HelpIndexerTool.jar %_DEST%\bin%_EXT%\HelpIndexerTool.jar
+..\%__SRC%\class\jpropex\jpropex.jar %_DEST%\bin%_EXT%\jpropex.jar
 ..\%__SRC%\bin\HelpLinker %_DEST%\bin%_EXT%\HelpLinker
 ..\%__SRC%\bin\HelpCompiler %_DEST%\bin%_EXT%\HelpCompiler
 ..\%__SRC%\bin\HelpCompiler.exe %_DEST%\bin%_EXT%\HelpCompiler.exe
@@ -40,6 +41,7 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 
 ..\%__SRC%\class\receditor\receditor.jar %_DEST%\bin%_EXT%\receditor.jar
 
+..\java\jpropex\jpropex %_DEST%\bin%_EXT%\jpropex
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
 ..\scripts\localize_old.pl %_DEST%\bin%_EXT%\localize_old.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
@@ -50,6 +52,7 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\inc\l10ntools\directory.hxx %_DEST%\inc%_EXT%\l10ntools\directory.hxx
 ..\inc\l10ntools\file.hxx %_DEST%\inc%_EXT%\l10ntools\file.hxx
 ..\inc\l10ntools\vosapp.hxx %_DEST%\inc%_EXT%\l10ntools\vosapp.hxx
+..\source\filter\merge\FCFGMerge.cfg  %_DEST%\inc%_EXT%\l10ntools\FCFGMerge.cfg
 
 ..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\l10ntools\utf8conv.hxx
 ..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib

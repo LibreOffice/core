@@ -93,6 +93,7 @@ SLOFILES=   \
             $(SLO)$/comphelper_module.obj \
             $(SLO)$/comphelper_services.obj \
             $(SLO)$/componentbase.obj \
+            $(SLO)$/stillreadwriteinteraction.obj \
 
 # --- Targets ----------------------------------
 
