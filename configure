@@ -13263,23 +13263,23 @@ if test "x$ac_cv_file__usr_share_java_lucene_core_2_3_jar" = x""yes; then :
    LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar
 else
 
-              { $as_echo "$as_me:${as_lineno-$LINENO}: checking for /usr/share/java/lucene.jar" >&5
-$as_echo_n "checking for /usr/share/java/lucene.jar... " >&6; }
-if test "${ac_cv_file__usr_share_java_lucene_jar+set}" = set; then :
+              { $as_echo "$as_me:${as_lineno-$LINENO}: checking for /usr/share/java/lucene-core.jar" >&5
+$as_echo_n "checking for /usr/share/java/lucene-core.jar... " >&6; }
+if test "${ac_cv_file__usr_share_java_lucene_core_jar+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
   test "$cross_compiling" = yes &&
   as_fn_error "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "/usr/share/java/lucene.jar"; then
-  ac_cv_file__usr_share_java_lucene_jar=yes
+if test -r "/usr/share/java/lucene-core.jar"; then
+  ac_cv_file__usr_share_java_lucene_core_jar=yes
 else
-  ac_cv_file__usr_share_java_lucene_jar=no
+  ac_cv_file__usr_share_java_lucene_core_jar=no
 fi
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file__usr_share_java_lucene_jar" >&5
-$as_echo "$ac_cv_file__usr_share_java_lucene_jar" >&6; }
-if test "x$ac_cv_file__usr_share_java_lucene_jar" = x""yes; then :
-   LUCENE_CORE_JAR=/usr/share/java/lucene.jar
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file__usr_share_java_lucene_core_jar" >&5
+$as_echo "$ac_cv_file__usr_share_java_lucene_core_jar" >&6; }
+if test "x$ac_cv_file__usr_share_java_lucene_core_jar" = x""yes; then :
+   LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar
 else
    as_fn_error "lucene-core.jar replacement not found" "$LINENO" 5
 
@@ -13388,6 +13388,24 @@ else
 fi
 
         fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether lucene is version 2.x" >&5
+$as_echo_n "checking whether lucene is version 2.x... " >&6; }
+        export LUCENE_CORE_JAR
+        if $PERL -e 'use Archive::Zip;
+            my $file = "$ENV{'LUCENE_CORE_JAR'}";
+            my $zip = Archive::Zip->new( $file );
+            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
+            if ( $mf =~ m/Specification-Version: 2.*/ ) {
+		exit 0;
+            } else {
+                exit 1;
+            }'; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+         else
+            as_fn_error "no, you need lucene 2" "$LINENO" 5
+         fi
+
 else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: internal" >&5
 $as_echo "internal" >&6; }

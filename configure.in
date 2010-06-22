@@ -3828,8 +3828,8 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
           AC_CHECK_FILE(/usr/share/java/lucene-core-2.3.jar, 
             [ LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar ],
             [
-              AC_CHECK_FILE(/usr/share/java/lucene.jar, 
-                [ LUCENE_CORE_JAR=/usr/share/java/lucene.jar ],
+              AC_CHECK_FILE(/usr/share/java/lucene-core.jar, 
+                [ LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar ],
                 [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
               )
             ]
@@ -3853,6 +3853,22 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
           AC_CHECK_FILE($LUCENE_CORE_JAR, [],
                [ AC_MSG_ERROR(lucene-analyzers.jar not found.)], [])
         fi
+        AC_MSG_CHECKING([whether lucene is version 2.x])
+        export LUCENE_CORE_JAR
+        if $PERL -e 'use Archive::Zip;
+            my $file = "$ENV{'LUCENE_CORE_JAR'}";
+            my $zip = Archive::Zip->new( $file );
+            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
+            if ( $mf =~ m/Specification-Version: 2.*/ ) {
+		exit 0;
+            } else {
+                exit 1;
+            }'; then
+            AC_MSG_RESULT([yes])
+         else
+            AC_MSG_ERROR([no, you need lucene 2])
+         fi
+
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LUCENE=NO
