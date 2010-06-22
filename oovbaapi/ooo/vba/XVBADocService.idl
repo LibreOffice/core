@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XVBADocService.idl,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,41 +27,46 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __ooo_vba_excel_XHyperlink_idl__
-#define __ooo_vba_excel_XHyperlink_idl__
+#ifndef __ooo_vba_socservice_idl__
+#define __ooo_vba_appservice_idl__
 
-#include <ooo/vba/XHelperInterface.idl>
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_uno_XComponentContext_idl__
+#include <com/sun/star/uno/XComponentContext.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+
+#ifndef __com_sun_star_script_XLibraryContainer_idl__
+#include <com/sun/star/script/XLibraryContainer.idl>
+#endif
 
 //=============================================================================
 
-module ooo {  module vba {  module msforms {
-    interface XShape;
-}; }; };
-
-module ooo {  module vba {  module excel {
-
-interface XRange;
+module ooo {  module vba {
 
 //=============================================================================
 
-interface XHyperlink
+
+interface XHelperInterface;
+interface XComponentContext;
+interface XModel;
+
+interface XVBADocService
 {
-    interface ::ooo::vba::XHelperInterface;
+    interface ::com::sun::star::uno::XInterface;
 
-    [attribute] string Name;
-    [attribute] string Address;
-    [attribute] string SubAddress;
-    [attribute] string ScreenTip;
-    [attribute] string TextToDisplay;
-    [attribute, readonly] long Type;
-    [attribute, readonly] XRange Range;
-    [attribute, readonly] ooo::vba::msforms::XShape Shape;
+
+    any getVBProject([in] XHelperInterface xParent, [in] ::com::sun::star::uno::XComponentContext xContext, [in] ::com::sun::star::frame::XModel xModel, [in] ::com::sun::star::script::XLibraryContainer   xMacroLibraryContainer, [in] com::sun::star::script::XLibraryContainer  xDialogLibraryContainer);
+
+
 };
 
-//=============================================================================
-
-}; }; };
-
-//=============================================================================
+ }; };
 
 #endif

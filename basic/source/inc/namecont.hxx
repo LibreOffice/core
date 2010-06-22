@@ -284,14 +284,17 @@ protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
     virtual void SAL_CALL writeLibraryElement
     (
-        ::com::sun::star::uno::Any aElement,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
         const ::rtl::OUString& aElementName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutput
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
     )
         throw(::com::sun::star::uno::Exception) = 0;
 
     virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
-        ( const ::rtl::OUString& aFile,
+    (
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const ::rtl::OUString& aElementName,
+        const ::rtl::OUString& aFile,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream ) = 0;
     virtual void SAL_CALL importFromOldStorage( const ::rtl::OUString& aFile ) = 0;
 

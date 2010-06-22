@@ -407,7 +407,7 @@ class SbiRuntime
     void StepPRINTF(),  StepWRITE(),    StepRENAME(),   StepPROMPT();
     void StepRESTART(), StepEMPTY(),    StepLEAVE();
     void StepLSET(),    StepRSET(),     StepREDIMP_ERASE(),     StepERASE_CLEAR();
-    void StepARRAYACCESS();
+    void StepARRAYACCESS(), StepBYVAL();
     // Alle Opcodes mit einem Operanden
     void StepLOADNC( UINT32 ),  StepLOADSC( UINT32 ),   StepLOADI( UINT32 );
     void StepARGN( UINT32 ),    StepBASED( UINT32 ),    StepPAD( UINT32 );
@@ -416,7 +416,7 @@ class SbiRuntime
     void StepGOSUB( UINT32 ),   StepRETURN( UINT32 );
     void StepTESTFOR( UINT32 ), StepCASETO( UINT32 ),   StepERRHDL( UINT32 );
     void StepRESUME( UINT32 ),  StepSETCLASS( UINT32 ), StepVBASETCLASS( UINT32 ),  StepTESTCLASS( UINT32 ), StepLIB( UINT32 );
-    bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors );
+    bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors, bool bDefault = true );
     void StepCLOSE( UINT32 ),   StepPRCHAR( UINT32 ),   StepARGTYP( UINT32 );
     // Alle Opcodes mit zwei Operanden
     void StepRTL( UINT32, UINT32 ),     StepPUBLIC( UINT32, UINT32 ),   StepPUBLIC_P( UINT32, UINT32 );
@@ -434,6 +434,7 @@ class SbiRuntime
     void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
     void StepFIND_CM( UINT32, UINT32 );
     void StepFIND_STATIC( UINT32, UINT32 );
+    void implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 );
 public:
     void          SetVBAEnabled( bool bEnabled );
     USHORT      GetImageFlag( USHORT n ) const;

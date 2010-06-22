@@ -105,6 +105,9 @@ enum SbxDataType {
     SbxUSERn  = 2047    // last user defined data type
 };
 
+const UINT32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
+const UINT32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;   // same value as above as no conflict possible
+
 #endif
 
 #ifndef _SBX_OPERATOR
@@ -313,6 +316,7 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SBX_NO_BROADCAST 0x2000 // No broadcast on Get/Put
 #define SBX_REFERENCE 0x4000    // Parameter is Reference (DLL-call)
 #define SBX_NO_MODIFY 0x8000    // SetModified is suppressed
+#define SBX_WITH_EVENTS 0x0080  // Same value as unused SBX_HIDDEN
 
 // Broadcaster-IDs:
 #define SBX_HINT_DYING          SFX_HINT_DYING

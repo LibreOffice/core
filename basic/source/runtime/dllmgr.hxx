@@ -25,71 +25,36 @@
  *
  ************************************************************************/
 
-#ifndef _DLLMGR_HXX
-#define _DLLMGR_HXX
+#ifndef INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
+#define INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
 
-#define _SVSTDARR_BYTESTRINGSSORT
-#include <svl/svarray.hxx>
-#ifndef _SVSTDARR_HXX //autogen
-#include <svl/svstdarr.hxx>
-#endif
+#include "sal/config.h"
 
-// !!! nur zum debuggen fuer infoboxes !!!
-//#ifndef _SV_HXX
-//#include <sv.hxx>
-//#endif
+#include <memory>
 
-//#ifndef _TOOLS_HXX
-//#include <tools.hxx>
-//#endif
-#define _SVSTDARR_STRINGS
-//#ifndef _SVSTDARR_HXX
-//#include <svstdarr.hxx>
-//#endif
-#ifndef _SBERRORS_HXX
-#include <basic/sberrors.hxx>
-#endif
+#include "basic/sberrors.hxx"
+#include "boost/noncopyable.hpp"
 
+namespace rtl { class OUString; }
 class SbxArray;
 class SbxVariable;
 
-class ImplSbiDll;
-class ImplSbiProc;
-
-SV_DECL_PTRARR_SORT(ImplDllArr,ByteStringPtr,5,5)
-
-class SbiDllMgr
-{
-    ImplDllArr  aDllArr;
-
-    SbiDllMgr( const SbiDllMgr& );
-
-#ifdef _DLLMGR_CXX
-    ImplSbiDll*     GetDll( const ByteString& rDllName );
-    SbiDllProc      GetProc( ImplSbiDll*, const ByteString& rProcName );
-
-    SbiDllHandle    CreateDllHandle( const ByteString& rDllName );
-    void            FreeDllHandle( SbiDllHandle );
-    SbiDllProc      GetProcAddr( SbiDllHandle, const ByteString& pProcName );
-    SbError         CallProc( SbiDllProc pProc, SbxArray* pArgs,
-                              SbxVariable& rResult );
-    SbError         CallProcC( SbiDllProc pProc, SbxArray* pArgs,
-                              SbxVariable& rResult );
-    void*           CreateStack( SbxArray* pArgs, USHORT& rSize );
-    void            CheckDllName( ByteString& rName );
-#endif
-
+class SbiDllMgr: private boost::noncopyable {
 public:
-                    SbiDllMgr();
-                    ~SbiDllMgr();
+    SbiDllMgr();
 
-    SbError         Call( const char* pFunc, const char* pDll,
-                          SbxArray* pArgs, SbxVariable& rResult,
-                          BOOL bCDecl );
+    ~SbiDllMgr();
 
-    void            FreeDll( const ByteString& rDllName );
+    SbError Call(
+        rtl::OUString const & function, rtl::OUString const &  library,
+        SbxArray * arguments, SbxVariable & result, bool cdeclConvention);
+
+    void FreeDll(rtl::OUString const & library);
+
+private:
+    struct Impl;
+
+    std::auto_ptr< Impl > impl_;
 };
-
-
 
 #endif

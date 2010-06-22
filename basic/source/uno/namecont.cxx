@@ -1369,8 +1369,8 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
             OUString aStreamName = aElementName;
             aStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
 
-            Any aElement = pLib->getByName( aElementName );
-            if( !isLibraryElementValid( aElement ) )
+            /*Any aElement = pLib->getByName( aElementName );*/
+            if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
             {
             #if OSL_DEBUG_LEVEL > 0
                 ::rtl::OStringBuffer aMessage;
@@ -1406,7 +1406,8 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
 
                     Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
-                    writeLibraryElement( aElement, aElementName, xOutput );
+                    Reference< XNameContainer > xLib( pLib );
+                    writeLibraryElement( xLib, aElementName, xOutput );
                     // writeLibraryElement closes the stream
                     // xOutput->closeOutput();
                 }
@@ -1458,8 +1459,8 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 aElementInetObj.setExtension( maLibElementFileExtension );
                 String aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-                Any aElement = pLib->getByName( aElementName );
-                if( !isLibraryElementValid( aElement ) )
+                /*Any aElement = pLib->getByName( aElementName );*/
+                if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OStringBuffer aMessage;
@@ -1477,7 +1478,8 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     if( xSFI->exists( aElementPath ) )
                         xSFI->kill( aElementPath );
                     Reference< XOutputStream > xOutput = xSFI->openFileWrite( aElementPath );
-                    writeLibraryElement( aElement, aElementName, xOutput );
+                    Reference< XNameContainer > xLib( pLib );
+                    writeLibraryElement( xLib, aElementName, xOutput );
                     xOutput->closeOutput();
                 }
                 catch( Exception& )
@@ -2380,7 +2382,9 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 aFile = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
             }
 
-            Any aAny = importLibraryElement( aFile, xInStream );
+            Reference< XNameContainer > xLib( pImplLib );
+            Any aAny = importLibraryElement( xLib, aElementName,
+                                                aFile, xInStream );
             if( pImplLib->hasByName( aElementName ) )
             {
                 if( aAny.hasValue() )

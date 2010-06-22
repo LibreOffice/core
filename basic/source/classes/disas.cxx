@@ -89,7 +89,8 @@ static const char* pOp1[] = {
     "INITFOREACH",
     "VBASET",
     "ERASE_CLEAR",
-    "ARRAYACCESS"
+    "ARRAYACCESS",
+    "BYVAL"
 };
 
 static const char* pOp2[] = {

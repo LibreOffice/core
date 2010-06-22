@@ -300,12 +300,14 @@ SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
     bStatic  =
     bOpt     =
     bParamArray =
+    bWithEvents =
     bByVal   =
     bChained =
     bGlobal  = FALSE;
     pIn      =
     pPool    = NULL;
     nDefaultId = 0;
+    nFixedStringLength = -1;
 }
 
 SbiSymDef::~SbiSymDef()

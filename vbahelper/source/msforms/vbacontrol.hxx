@@ -48,6 +48,10 @@ class ScVbaControl : public ControlImpl_BASE
 private:
     com::sun::star::uno::Reference< com::sun::star::lang::XEventListener > m_xEventListener;
 protected:
+    // awt control has nothing similar to Tag property of Mso controls,
+    // whether it is necessary is another question
+    ::rtl::OUString m_aControlTag;
+
     std::auto_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
     css::uno::Reference< css::uno::XInterface > m_xControl;
@@ -75,6 +79,7 @@ public:
     virtual double SAL_CALL getTop() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL SetFocus(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Move( double Left, double Top, const ::com::sun::star::uno::Any& Width, const ::com::sun::star::uno::Any& Height ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException);
@@ -85,6 +90,8 @@ public:
     virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getControlTipText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setControlTipText( const rtl::OUString& ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTag() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setTag( const ::rtl::OUString& aTag ) throw (css::uno::RuntimeException);
     //remove resouce because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     virtual void removeResouce() throw( css::uno::RuntimeException );
     //XHelperInterface

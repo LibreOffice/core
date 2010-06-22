@@ -62,6 +62,7 @@ public:
 
 class SbUserFormModule : public SbObjModule
 {
+    com::sun::star::script::ModuleInfo m_mInfo;
     css::uno::Reference<css::lang::XEventListener> m_DialogListener;
     css::uno::Reference<css::awt::XDialog> m_xDialog;
     css::uno::Reference<css::frame::XModel> m_xModel;
@@ -70,7 +71,7 @@ class SbUserFormModule : public SbObjModule
     SbUserFormModule( const SbUserFormModule& );
     SbUserFormModule();
 
-protected:
+//protected:
     virtual void InitObject();
 public:
     TYPEINFO();
@@ -85,7 +86,22 @@ public:
     void triggerDeActivateEvent();
     void triggerInitializeEvent();
     void triggerTerminateEvent();
+
+    class SbUserFormModuleInstance* CreateInstance();
 };
+
+class SbUserFormModuleInstance : public SbUserFormModule
+{
+    SbUserFormModule* m_pParentModule;
+
+public:
+    SbUserFormModuleInstance( SbUserFormModule* pParentModule, const String& rName,
+        const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
+
+    virtual BOOL IsClass( const String& ) const;
+    virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
+};
+
 
 #ifndef __SB_SBOBJMODULEREF_HXX
 #define __SB_SBOBJMODULEREF_HXX

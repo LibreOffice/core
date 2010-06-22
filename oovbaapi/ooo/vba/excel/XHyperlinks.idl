@@ -24,32 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __ooo_vba_msforms_XControls_idl__
-#define __ooo_vba_msforms_XControls_idl__
 
-#ifndef __ooo_vba_XHelperInterface_idl__
-#include <ooo/vba/XHelperInterface.idl>
-#endif
-#ifndef  __ooo_vba_XCollection_idl__
+#ifndef __ooo_vba_excel_XHyperlinks_idl__
+#define __ooo_vba_excel_XHyperlinks_idl__
+
 #include <ooo/vba/XCollection.idl>
-#endif
-module ooo {  module vba { module msforms {
 
-interface XControl;
+//=============================================================================
 
-interface XControls
+module ooo {  module vba {  module excel {
+
+//=============================================================================
+
+interface XHyperlink;
+
+interface XHyperlinks
 {
-    interface ooo::vba::XCollection;
-    void Move( [in] double cx, [in] double cy );
+    // ------------------------------------------------------------------------
 
-    // the following two methods should be actually part of XCollection, but at least Add conflicts with
-    // methods in the derived from XCollection interfaces
-    // thus the methods are declared in the top-level interface
-    any  Add( [in] any Object, [in] any StringKey, [in] any Before, [in] any After );
-    void Remove( [in] any StringKeyOrIndex );
+    interface ::ooo::vba::XCollection;
+
+    // ------------------------------------------------------------------------
+
+    XHyperlink Add(
+        [in] any aAnchor,
+        [in] any aAddress,
+        [in] any aSubAddress,
+        [in] any aScreenTip,
+        [in] any aTextToDisplay );
+
+    // ------------------------------------------------------------------------
+
+    void Delete();
+
+    // ------------------------------------------------------------------------
 
 };
+
+//=============================================================================
+
 }; }; };
 
+//=============================================================================
 
 #endif
