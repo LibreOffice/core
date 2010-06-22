@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImageElementLayoutController.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,18 +26,18 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.ImageElement;
-import org.pentaho.reporting.libraries.formula.Formula;
-import org.pentaho.reporting.libraries.formula.lvalues.LValue;
-import org.pentaho.reporting.libraries.formula.parser.ParseException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.JFreeReportInfo;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
-import org.jfree.report.util.TextUtilities;
 import org.jfree.report.data.GlobalMasterRow;
 import org.jfree.report.data.ReportDataRow;
 import org.jfree.report.expressions.FormulaExpression;
@@ -49,11 +46,14 @@ import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
 import org.jfree.report.structure.Element;
-import org.jfree.report.structure.Section;
 import org.jfree.report.structure.Node;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.jfree.report.structure.Section;
+import org.jfree.report.util.TextUtilities;
+
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+import org.pentaho.reporting.libraries.formula.Formula;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+import org.pentaho.reporting.libraries.formula.parser.ParseException;
 
 /**
  * Produces an image. The image-structures itself (draw:frame and so on) are not generated here. This element produces a

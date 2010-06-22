@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StarReportDataFactory.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,14 +26,16 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import java.util.HashMap;
-
-import org.jfree.report.ReportDataFactory;
-import org.jfree.report.ReportData;
-import org.jfree.report.DataSet;
-import org.jfree.report.ReportDataFactoryException;
 import com.sun.star.report.DataSourceException;
 import com.sun.star.report.DataSourceFactory;
+
+import java.util.HashMap;
+
+import org.jfree.report.DataSet;
+import org.jfree.report.ReportData;
+import org.jfree.report.ReportDataFactory;
+import org.jfree.report.ReportDataFactoryException;
+
 
 public class StarReportDataFactory implements ReportDataFactory, Cloneable
 {

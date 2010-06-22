@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,6 +40,8 @@ TARGET=flute
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)-$(FLUTE_VERSION)
+TARFILE_MD5=f3e2febd267c8e4b13df00dac211dd6d
+# TARFILE_ROOTDIR=$(TARGET)
 TARFILE_IS_FLAT=true
 PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
 CONVERTFILES=common_build.xml

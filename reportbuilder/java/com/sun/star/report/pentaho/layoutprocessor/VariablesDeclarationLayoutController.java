@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VariablesDeclarationLayoutController.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,11 @@ package com.sun.star.report.pentaho.layoutprocessor;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.JFreeReportInfo;
@@ -42,10 +44,7 @@ import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.layoutprocessor.AbstractLayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
-import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
 import org.jfree.report.structure.Element;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 /**
  * Writes a full variables-declaration section.

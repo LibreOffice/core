@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: SOFormulaOpCodeMapper.java,v $
- *
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +27,12 @@
 package com.sun.star.report.pentaho;
 
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.sheet.FormulaLanguage;
 import com.sun.star.sheet.FormulaMapGroup;
 import com.sun.star.sheet.FormulaOpCodeMapEntry;
 import com.sun.star.sheet.FormulaToken;
+
 import java.util.ArrayList;
 import java.util.Map;
 

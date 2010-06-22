@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filterdet.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,7 +104,9 @@ bool checkDocChecksum( const rtl::OUString& rInPDFFileURL,
 
 bool getPassword( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler,
                   rtl::OUString&                                                                     o_rPwd,
-                  bool                                                                               bFirstTry );
+                  bool                                                                               bFirstTry,
+                  const rtl::OUString&                                                               i_rDocName
+                  );
 
 }
 

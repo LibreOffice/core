@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DefaultJobProperties.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,12 +26,13 @@
  ************************************************************************/
 package com.sun.star.report.util;
 
-import java.util.HashMap;
-
+import com.sun.star.report.JobDefinitionException;
 import com.sun.star.report.JobProperties;
 import com.sun.star.report.ReportEngineMetaData;
-import com.sun.star.report.JobDefinitionException;
+
+import java.util.HashMap;
 import java.util.Map;
+
 
 public class DefaultJobProperties implements JobProperties
 {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OleProducer.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,8 +37,11 @@ import com.sun.star.report.ReportJobDefinition;
 import com.sun.star.report.pentaho.DefaultNameGenerator;
 import com.sun.star.report.pentaho.PentahoReportEngine;
 import com.sun.star.report.pentaho.PentahoReportEngineMetaData;
+
 import java.io.IOException;
+
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

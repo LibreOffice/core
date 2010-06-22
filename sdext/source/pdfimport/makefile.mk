@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.2.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -94,7 +90,7 @@ SHL1STDLIBS=\
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1RPATH=OXT
 
 DEF1NAME=$(SHL1TARGET)
@@ -129,8 +125,8 @@ COMPONENT_LIBRARIES= \
     $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
 
 COMPONENT_IMAGES=\
-    $(EXTENSIONDIR)$/images$/pdfiext.png \
-    $(EXTENSIONDIR)$/images$/pdfiext_hc.png
+    $(EXTENSIONDIR)$/images$/extension_32.png \
+    $(EXTENSIONDIR)$/images$/extension_32_h.png
 
 EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) $(COMPONENT_IMAGES) makefile.mk
 
@@ -152,7 +148,7 @@ $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_IMAGES) : images$/$$(@:f)
+$(COMPONENT_IMAGES) :  $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 .ENDIF # L10N_framework

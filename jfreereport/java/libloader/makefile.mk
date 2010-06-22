@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +41,7 @@ TARGET=libloader
 
 TARFILE_NAME=$(TARGET)-$(LIBLOADER_VERSION)
 TARFILE_IS_FLAT=true
+TARFILE_MD5=a06a496d7a43cbdc35e69dbe678efadb
 PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
 CONVERTFILES=common_build.xml
 

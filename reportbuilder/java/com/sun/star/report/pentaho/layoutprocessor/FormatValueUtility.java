@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormatValueUtility.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,13 +26,16 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.pentaho.model.FormattedTextElement;
+
 import java.sql.Time;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
-import com.sun.star.report.pentaho.model.FormattedTextElement;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
 import org.jfree.report.DataSourceException;
@@ -43,8 +43,9 @@ import org.jfree.report.data.DefaultDataFlags;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
-import org.pentaho.reporting.libraries.formula.util.DateUtil;
+
 import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
+
 
 /**
  * Creation-Date: 06.06.2007, 17:03:30
@@ -57,7 +58,7 @@ public class FormatValueUtility
     private static final String BOOLEAN_VALUE = "boolean-value";
     private static final String STRING_VALUE = "string-value";
     public static final String VALUE_TYPE = "value-type";
-    private static final String VALUE = "value";
+    public static final String VALUE = "value";
     private static SimpleDateFormat dateFormat;
     private static SimpleDateFormat timeFormat;
 

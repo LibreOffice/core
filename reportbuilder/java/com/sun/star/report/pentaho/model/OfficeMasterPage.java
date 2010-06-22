@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OfficeMasterPage.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +26,9 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.model;
 
-import org.jfree.report.structure.Section;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+
+import org.jfree.report.structure.Section;
 
 /**
  * A master page. A master page can contain header and footer and is linked

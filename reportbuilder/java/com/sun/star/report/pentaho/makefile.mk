@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7.58.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,7 +38,7 @@ nodep=true
 #----- compile .java files -----------------------------------------
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(FLUTE_JAR)$(PATH_SEPERATOR)$(LIBBASE_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(LIBSERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)$(PATH_SEPERATOR)$(LIBREPOSITORY_JAR)
+EXTRAJARFILES += $(FLUTE_JAR) $(LIBBASE_JAR) $(LIBXML_JAR) $(JFREEREPORT_JAR) $(LIBLOADER_JAR) $(SAC_JAR) $(LIBLAYOUT_JAR) $(LIBSERIALIZER_JAR) $(LIBFONTS_JAR) $(LIBFORMULA_JAR) $(LIBREPOSITORY_JAR)
 .ELSE
 JARFILES += \
     flute-$(FLUTE_VERSION).jar				            \
@@ -59,7 +55,7 @@ JARFILES += \
 .ENDIF
 
 .IF "$(SYSTEM_APACHE_COMMONS)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(COMMONS_LOGGING_JAR)
+EXTRAJARFILES += $(COMMONS_LOGGING_JAR)
 .ELSE
 JARFILES += commons-logging-1.1.1.jar
 .ENDIF

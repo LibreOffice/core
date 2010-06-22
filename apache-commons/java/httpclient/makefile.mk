@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,6 +45,7 @@ TAR!:=$(GNUTAR)
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-httpclient-3.1-src
+TARFILE_MD5=2c9b0f83ed5890af02c0df1c1776f39b
 
 TARFILE_ROOTDIR=commons-httpclient-3.1
 

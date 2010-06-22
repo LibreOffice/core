@@ -1,0 +1,1 @@
+OpenOffice.org を MySQL サーバーと直接に接続させる

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SpreadsheetRawReportProcessor.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,19 +27,21 @@
 package com.sun.star.report.pentaho.output.spreadsheet;
 
 import com.sun.star.report.DataSourceFactory;
+import com.sun.star.report.ImageService;
+import com.sun.star.report.InputRepository;
+import com.sun.star.report.OutputRepository;
+import com.sun.star.report.pentaho.PentahoFormulaContext;
+
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
+import org.jfree.report.data.ReportContextImpl;
 import org.jfree.report.flow.AbstractReportProcessor;
+import org.jfree.report.flow.ReportContext;
 import org.jfree.report.flow.ReportJob;
 import org.jfree.report.flow.ReportStructureRoot;
 import org.jfree.report.flow.ReportTarget;
-import com.sun.star.report.OutputRepository;
-import com.sun.star.report.InputRepository;
-import com.sun.star.report.ImageService;
-import com.sun.star.report.pentaho.PentahoFormulaContext;
-import org.jfree.report.data.ReportContextImpl;
-import org.jfree.report.flow.ReportContext;
+
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 
 /**

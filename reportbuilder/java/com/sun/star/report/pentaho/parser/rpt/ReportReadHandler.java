@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportReadHandler.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,19 +26,23 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.rpt;
 
-import java.util.ArrayList;
-
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeReport;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.chart.ChartReadHandler;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import org.jfree.report.JFreeReportInfo;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
 
 public class ReportReadHandler extends ElementReadHandler
 {

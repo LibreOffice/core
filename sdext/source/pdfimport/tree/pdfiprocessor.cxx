@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfiprocessor.cxx,v $
- *
- * $Revision: 1.3.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +61,10 @@ using namespace com::sun::star;
 namespace pdfi
 {
 
- PDFIProcessor::PDFIProcessor( const uno::Reference< task::XStatusIndicator >& xStat ) :
+ PDFIProcessor::PDFIProcessor( const uno::Reference< task::XStatusIndicator >& xStat ,
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext) :
+
+    m_xContext(xContext),
     fYPrevTextPosition(-10000.0),
     fPrevTextHeight(0.0),
     fXPrevTextPosition(0.0),
@@ -846,7 +845,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
 
     m_pDocument->visitedBy( *finalizingVisitor, std::list<Element*>::iterator() );
 
-    EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator );
+    EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator, m_xContext );
     ElementTreeVisitorSharedPtr aEmittingVisitor(
         rVisitorFactory.createEmittingVisitor(aContext));
 

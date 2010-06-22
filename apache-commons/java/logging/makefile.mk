@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +43,7 @@ ANT_BUILDFILE=build.xml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-logging-1.1.1-src
+TARFILE_MD5=3c219630e4302863a9a83d0efde889db
 
 TARFILE_ROOTDIR=commons-logging-1.1.1-src
 

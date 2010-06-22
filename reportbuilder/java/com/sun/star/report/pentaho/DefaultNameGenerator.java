@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DefaultNameGenerator.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +26,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
+import com.sun.star.report.OutputRepository;
+
 import java.io.IOException;
 
-import com.sun.star.report.OutputRepository;
 
 public class DefaultNameGenerator
 {

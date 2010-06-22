@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImageProducer.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,39 +26,47 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.output;
 
-import java.awt.Image;
+import com.sun.star.report.ImageService;
+import com.sun.star.report.InputRepository;
+import com.sun.star.report.OutputRepository;
+import com.sun.star.report.ReportExecutionException;
+import com.sun.star.report.pentaho.DefaultNameGenerator;
+
 import java.awt.Dimension;
+import java.awt.Image;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Arrays;
 
-import com.sun.star.report.InputRepository;
-import com.sun.star.report.OutputRepository;
-import com.sun.star.report.ImageService;
-import com.sun.star.report.ReportExecutionException;
-import com.sun.star.report.pentaho.DefaultNameGenerator;
-import java.net.URI;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.jfree.layouting.input.style.values.CSSNumericType;
 import org.jfree.layouting.input.style.values.CSSNumericValue;
+
 import org.pentaho.reporting.libraries.base.util.IOUtils;
 import org.pentaho.reporting.libraries.base.util.PngEncoder;
 import org.pentaho.reporting.libraries.base.util.WaitingImageObserver;
+
 
 /**
  * This class manages the images embedded in a report.

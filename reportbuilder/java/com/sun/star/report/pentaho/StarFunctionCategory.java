@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: StarFunctionCategory.java,v $
- *
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,13 +26,15 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.Type;
 import com.sun.star.lib.uno.helper.PropertySetMixin;
+import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.report.meta.XFunctionDescription;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.XComponentContext;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
+
 import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
 import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;

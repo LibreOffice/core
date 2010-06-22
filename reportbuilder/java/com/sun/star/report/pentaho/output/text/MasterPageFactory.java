@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPageFactory.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,20 +26,22 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.output.text;
 
-import java.util.HashMap;
-
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeMasterPage;
 import com.sun.star.report.pentaho.model.OfficeMasterStyles;
-import com.sun.star.report.pentaho.model.RawText;
 import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.PageLayout;
+import com.sun.star.report.pentaho.model.RawText;
+
+import java.util.HashMap;
 import java.util.Map;
+
 import org.jfree.layouting.input.style.values.CSSNumericValue;
-import org.jfree.report.structure.Section;
-import org.jfree.report.structure.Element;
-import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.report.ReportProcessingException;
+import org.jfree.report.structure.Element;
+import org.jfree.report.structure.Section;
+import org.jfree.report.util.AttributeNameGenerator;
+
 
 /**
  * Todo: Document me!

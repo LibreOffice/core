@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +41,7 @@ TARGET=flow-engine
 .IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)-$(FLOW_ENGINE_VERSION)
 TARFILE_IS_FLAT=true
+TARFILE_MD5=d4c4d91ab3a8e52a2e69d48d34ef4df4
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 CONVERTFILES=build.xml
 

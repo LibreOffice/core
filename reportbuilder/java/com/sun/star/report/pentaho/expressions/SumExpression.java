@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SumExpression.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +26,8 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.expressions;
 
-import com.sun.star.report.ReportExpression;
 import com.sun.star.report.DataRow;
+import com.sun.star.report.ReportExpression;
 
 public class SumExpression implements ReportExpression
 {

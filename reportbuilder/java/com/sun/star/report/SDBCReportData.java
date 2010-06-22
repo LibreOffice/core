@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SDBCReportData.java,v $
- * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +33,6 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdb.XParametersSupplier;
-import java.sql.Timestamp;
-
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSetMetaData;
@@ -49,6 +44,9 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
+
+import java.sql.Timestamp;
+
 
 public class SDBCReportData implements DataSource
 {

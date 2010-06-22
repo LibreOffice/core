@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfiadaptor.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -246,7 +242,7 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
 {
     // container for metaformat
     boost::shared_ptr<PDFIProcessor> pSink(
-        new PDFIProcessor(xStatus));
+        new PDFIProcessor(xStatus, m_xContext));
 
     // TEMP! TEMP!
     if( m_bEnableToplevelText )
