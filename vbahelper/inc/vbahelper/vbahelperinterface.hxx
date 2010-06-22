@@ -28,6 +28,8 @@
 #define OOVBAAPI_VBA_HELPERINTERFACE_HXX
 
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -68,6 +70,7 @@ protected:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 public:
     InheritedHelperInterfaceImpl() {}
+    InheritedHelperInterfaceImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxContext( xContext ) {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
     virtual rtl::OUString& getServiceImplName() = 0;
     virtual css::uno::Sequence<rtl::OUString> getServiceNames() = 0;
@@ -86,7 +89,6 @@ public:
             return xNameAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Application" ) ) );
     }
 
-
     // XServiceInfo Methods
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) { return getServiceImplName(); }
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (css::uno::RuntimeException)
@@ -101,19 +103,39 @@ public:
     }
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException)
     {
-        css::uno::Sequence< rtl::OUString > aNames = getServiceNames();;
+        css::uno::Sequence< rtl::OUString > aNames = getServiceNames();
         return aNames;
     }
  };
 
 template< typename Ifc1 >
 class VBAHELPER_DLLPUBLIC InheritedHelperInterfaceImpl1 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > >
-
 {
-typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > > Base;
+    typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > > Base;
 public:
-    InheritedHelperInterfaceImpl1< Ifc1 > ( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+    InheritedHelperInterfaceImpl1< Ifc1 >() {}
+    InheritedHelperInterfaceImpl1< Ifc1 >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
+    InheritedHelperInterfaceImpl1< Ifc1 >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+};
 
+template< typename Ifc1, typename Ifc2 >
+class VBAHELPER_DLLPUBLIC InheritedHelperInterfaceImpl2 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > >
+{
+    typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > > Base;
+public:
+    InheritedHelperInterfaceImpl2< Ifc1, Ifc2 >() {}
+    InheritedHelperInterfaceImpl2< Ifc1, Ifc2 >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
+    InheritedHelperInterfaceImpl2< Ifc1, Ifc2 >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+};
+
+template< typename Ifc1, typename Ifc2, typename Ifc3 >
+class VBAHELPER_DLLPUBLIC InheritedHelperInterfaceImpl3 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > >
+{
+    typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > > Base;
+public:
+    InheritedHelperInterfaceImpl3< Ifc1, Ifc2, Ifc3 >() {}
+    InheritedHelperInterfaceImpl3< Ifc1, Ifc2, Ifc3 >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
+    InheritedHelperInterfaceImpl3< Ifc1, Ifc2, Ifc3 >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 };
 
 // ============================================================================
