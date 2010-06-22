@@ -262,9 +262,9 @@ endef
 gb_PrecompiledHeader_get_enableflags = -Yu$(patsubst %.pch,%,$(notdir $(1))) -Fp$(1)
 
 define gb_PrecompiledHeader__command
-$(call gb_Helper_announce,Compiling pch $(1) ...)
+$(call gb_Helper_announce,Compiling pch $(3) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
+    mkdir -p $(dir $(1)) $(dir $(subst PrecompiledHeader,Dep/PrecompiledHeader,$(1)).d) && \
     C="$(gb_CXX) \
         $(4) $(5) \
         -I$(dir $(3)) \
@@ -272,8 +272,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
     E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
-endef
-#$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
         -I$(dir $(3)) \
@@ -285,7 +284,8 @@ endef
         -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
-    > $(call gb_PrecompiledHeader_get_dep_target,$(1)))
+    > $(subst PrecompiledHeader,Dep/PrecompiledHeader,$(1)).d)
+endef
 
 # LinkTarget class
 

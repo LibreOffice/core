@@ -37,7 +37,8 @@ else
 gb_PrecompiledHeader_DEBUGDIR := nodebug
 endif
 
-$(call gb_PrecompiledHeader_get_target,%) :
+$(call gb_PrecompiledHeader_get_target,%) \
+$(call gb_PrecompiledHeader_get_noex_target,%) :
     $(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(PCH_EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 .PHONY : $(call gb_PrecompiledHeader_get_clean_target,%)
