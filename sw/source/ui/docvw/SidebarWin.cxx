@@ -334,12 +334,6 @@ void SwSidebarWin::InitControls()
     mpOutliner->SetUpdateMode( TRUE );
     Rescale();
 
-    OutputDevice* pDev = aShell->GetDoc()->getReferenceDevice(TRUE);
-    if ( pDev )
-    {
-        mpOutliner->SetRefDevice( pDev );
-    }
-
     mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTxtControl );
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutliner->InsertView(mpOutlinerView );
