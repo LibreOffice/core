@@ -6626,7 +6626,7 @@ done
         COMPATH=`echo $COMPATH | $SED "s@/[^/:]*\\\$@@"`;
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[Bb][Ii][Nn]\\\$@@"`;
-echo $COMPATH
+
 GCCVER=20995
 if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking the GNU gcc compiler version" >&5
@@ -19158,13 +19158,10 @@ $as_echo "found ($with_asm_home)" >&6; }
        with_asm_home="ASM_IN_PATH"
     fi
   fi
-else
-	with_asm_home="NO_ASM_HOME"
-fi
-ASM_HOME="$with_asm_home"
-if test -n "$ASM_HOME"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ASM_HOME" >&5
 $as_echo "$ASM_HOME" >&6; }
+else
+	with_asm_home="NO_ASM_HOME"
 fi
 
 

@@ -1424,7 +1424,7 @@ if test "$COMPATH" = "." ; then
     COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`;
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
-echo $COMPATH
+
 dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
@@ -5447,12 +5447,9 @@ if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
        with_asm_home="ASM_IN_PATH"
     fi
   fi
+  AC_MSG_RESULT([$ASM_HOME])
 else
 	with_asm_home="NO_ASM_HOME"
-fi
-ASM_HOME="$with_asm_home"
-if test -n "$ASM_HOME"; then
-  AC_MSG_RESULT([$ASM_HOME])
 fi
 AC_SUBST(ASM_HOME)
  
