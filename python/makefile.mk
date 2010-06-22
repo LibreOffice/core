@@ -66,10 +66,6 @@ CC+:=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .ENDIF			# "$(SYSBASE)"!=""
 
-.IF "$(OS)$(COM)"=="LINUXGCC"
-python_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 .IF "$(OS)$(CPU)"=="SOLARISU"
 CC+:=$(ARCH_FLAGS)
 python_LDFLAGS+=$(ARCH_FLAGS)
