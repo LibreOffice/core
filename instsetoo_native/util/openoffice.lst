@@ -66,7 +66,7 @@ OpenOffice
             PCPFILENAME openoffice.pcp
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -129,7 +129,7 @@ OpenOffice_wJRE
 			BASEPRODUCTVERSION 3.3
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -201,7 +201,7 @@ OpenOffice_Dev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -277,7 +277,7 @@ URE
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
             STARTCENTER_LAYOUT_STYLE 0
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
 			PACKAGEMAP package_names_ext.txt
         }
         active 1
@@ -405,7 +405,7 @@ BrOffice
 			NATIVEPROGRESS
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -474,7 +474,7 @@ BrOffice_wJRE
 			NATIVEPROGRESS
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -547,7 +547,7 @@ BrOffice_Dev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
 			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
