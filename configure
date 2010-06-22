@@ -834,6 +834,7 @@ SYSTEM_STDLIBS
 BUILD_UNOWINREG
 MINGWSTRIP
 MINGWCXX
+BUILD_STAX
 GPERF
 RPM
 PKGFORMAT
@@ -11573,6 +11574,19 @@ $as_echo "OK" >&6; }
 else
 	as_fn_error "too old, you need at least 3.0.0" "$LINENO" 5
 fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build the stax" >&5
+$as_echo_n "checking whether to build the stax... " >&6; }
+if test -f "../external/StAX/jsr173_1.0_api.jar"; then
+   BUILD_STAX=NO
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no, will use the prebuilt external/StAX/jsr173_1.0_api.jar" >&5
+$as_echo "no, will use the prebuilt external/StAX/jsr173_1.0_api.jar" >&6; }
+else
+   BUILD_STAX=YES
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build the ODK" >&5
 $as_echo_n "checking whether to build the ODK... " >&6; }

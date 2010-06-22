@@ -3422,6 +3422,19 @@ else
 fi
 
 dnl ===================================================================
+dnl Check for building stax
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build the stax])
+if test -f "../external/StAX/jsr173_1.0_api.jar"; then
+   BUILD_STAX=NO
+   AC_MSG_RESULT([no, will use the prebuilt external/StAX/jsr173_1.0_api.jar])
+else
+   BUILD_STAX=YES
+   AC_MSG_RESULT([yes])
+fi
+AC_SUBST(BUILD_STAX)
+
+dnl ===================================================================
 dnl Check for building ODK
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the ODK])
