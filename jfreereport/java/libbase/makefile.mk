@@ -39,7 +39,7 @@ TARGET=libbase
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(TARGET)-$(LIBBASE_VERSION)
-TARFILE_MD5=8ea307d71d11140574bfb9fcc2487e33
+TARFILE_MD5=eeb2c7ddf0d302fba4bfc6e97eac9624
 #TARFILE_ROOTDIR=$(TARGET)
 TARFILE_IS_FLAT=true
 

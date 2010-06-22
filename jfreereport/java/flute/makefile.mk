@@ -40,7 +40,7 @@ TARGET=flute
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)-$(FLUTE_VERSION)
-TARFILE_MD5=f3e2febd267c8e4b13df00dac211dd6d
+TARFILE_MD5=d8bd5eed178db6e2b18eeed243f85aa8
 # TARFILE_ROOTDIR=$(TARGET)
 TARFILE_IS_FLAT=true
 PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
