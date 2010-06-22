@@ -56,6 +56,7 @@
 #include "fillinfo.hxx"
 #include "bcaslot.hxx"
 #include "postit.hxx"
+#include "sheetevents.hxx"
 #include "globstr.hrc"
 
 #include <math.h>
@@ -94,6 +95,27 @@ void ScTable::StartOutlineTable()
 {
     if (!pOutlineTable)
         pOutlineTable = new ScOutlineTable;
+}
+
+
+void ScTable::SetSheetEvents( const ScSheetEvents* pNew )
+{
+    delete pSheetEvents;
+    if (pNew)
+        pSheetEvents = new ScSheetEvents(*pNew);
+    else
+        pSheetEvents = NULL;
+
+    SetCalcNotification( FALSE );       // discard notifications before the events were set
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
+}
+
+
+void ScTable::SetCalcNotification( BOOL bSet )
+{
+    bCalcNotification = bSet;
 }
 
 

@@ -190,6 +190,12 @@ Menu RID_POPUP_TAB
             HelpId = FID_TAB_RTL ;
             Text [ en-US ] = "S~heet Right-To-Left" ;
         };
+        MenuItem
+        {
+            Identifier = FID_TAB_EVENTS ;
+            HelpId = FID_TAB_EVENTS ;
+            Text [ en-US ] = "Sheet E~vents..." ;
+        };
         //------------------------------
         MenuItem { Separator = TRUE ; };
         //------------------------------

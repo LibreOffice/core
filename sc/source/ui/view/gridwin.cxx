@@ -2405,6 +2405,7 @@ void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseE
 
 long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
 {
+    bool bDone = false;
     USHORT nType = rNEvt.GetType();
     if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
     {
@@ -2425,16 +2426,31 @@ long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
                         if ( rNEvt.GetWindow() )
                             aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
                         if ( nType == EVENT_MOUSEBUTTONDOWN)
-                            pImp->MousePressed( aEvent );
+                            bDone = pImp->MousePressed( aEvent );
                         else
-                            pImp->MouseReleased( aEvent );
+                            bDone = pImp->MouseReleased( aEvent );
                     }
                 }
             }
         }
     }
+    if (bDone)      // event consumed by a listener
+    {
+        if ( nType == EVENT_MOUSEBUTTONDOWN )
+        {
+            const MouseEvent* pMouseEvent = rNEvt.GetMouseEvent();
+            if ( pMouseEvent->IsRight() && pMouseEvent->GetClicks() == 1 )
+            {
+                // If a listener returned true for a right-click call, also prevent opening the context menu
+                // (this works only if the context menu is opened on mouse-down)
+                nMouseStatus = SC_GM_IGNORE;
+            }
+        }
 
-    return Window::PreNotify( rNEvt );
+        return 1;
+    }
+    else
+        return Window::PreNotify( rNEvt );
 }
 
 void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
@@ -2678,6 +2694,10 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 
     if ( nCmd == COMMAND_CONTEXTMENU && !SC_MOD()->GetIsWaterCan() )
     {
+        BOOL bMouse = rCEvt.IsMouseEvent();
+        if ( bMouse && nMouseStatus == SC_GM_IGNORE )
+            return;
+
         if (pViewData->IsAnyFillMode())
         {
             pViewData->GetView()->StopRefMode();
@@ -2688,7 +2708,6 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 
         Point aPosPixel = rCEvt.GetMousePosPixel();
         Point aMenuPos = aPosPixel;
-        BOOL bMouse = rCEvt.IsMouseEvent();
 
         if ( bMouse )
         {

@@ -55,9 +55,6 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
 
-// nameExists defined in vbaworksheet.cxx
-bool nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, ::rtl::OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException );
-
 typedef  std::hash_map< rtl::OUString,
 SCTAB, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
@@ -213,17 +210,24 @@ ScVbaWindow::ScVbaWindow( uno::Sequence< uno::Any > const & args, uno::Reference
 {
     init();
 }
+
 void
 ScVbaWindow::init()
 {
+    /*  This method is called from the constructor, thus the own refcount is
+        still zero. The implementation of ActivePane() uses a UNO reference of
+        this (to set this window as parent of the pane obejct). This requires
+        the own refcount to be non-zero, otherwise this instance will be
+        desctructed immediately! */
+    osl_incrementInterlockedCount( &m_refCount );
     uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     m_xViewPane.set( xController, uno::UNO_QUERY_THROW );
     m_xViewFreezable.set( xController, uno::UNO_QUERY_THROW );
     m_xViewSplitable.set( xController, uno::UNO_QUERY_THROW );
     m_xPane.set( ActivePane(), uno::UNO_QUERY_THROW );
     m_xDevice.set( xController->getFrame()->getComponentWindow(), uno::UNO_QUERY_THROW );
+    osl_decrementInterlockedCount( &m_refCount );
 }
-
 
 void
 ScVbaWindow::Scroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft, bool bLargeScroll ) throw (uno::RuntimeException)
@@ -233,11 +237,13 @@ ScVbaWindow::Scroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& T
     else
         m_xPane->SmallScroll( Down, Up, ToRight, ToLeft );
 }
+
 void SAL_CALL
 ScVbaWindow::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
 {
     Scroll( Down, Up, ToRight, ToLeft );
 }
+
 void SAL_CALL
 ScVbaWindow::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
 {
@@ -450,7 +456,7 @@ ScVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& FileName, const
 uno::Reference< excel::XPane > SAL_CALL
 ScVbaWindow::ActivePane() throw (script::BasicErrorException, uno::RuntimeException)
 {
-    return new ScVbaPane( mxContext, m_xViewPane );
+    return new ScVbaPane( this, mxContext, m_xModel, m_xViewPane );
 }
 
 uno::Reference< excel::XRange > SAL_CALL
@@ -465,6 +471,14 @@ ScVbaWindow::Selection(  ) throw (script::BasicErrorException, uno::RuntimeExcep
 {
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     return xApplication->getSelection();
+}
+
+uno::Reference< excel::XRange > SAL_CALL
+ScVbaWindow::RangeSelection() throw (script::BasicErrorException, uno::RuntimeException)
+{
+    /*  TODO / FIXME: According to documentation, this method returns the range
+        selection even if shapes are selected. */
+    return uno::Reference< excel::XRange >( Selection(), uno::UNO_QUERY_THROW );
 }
 
 ::sal_Bool SAL_CALL
@@ -732,9 +746,7 @@ ScVbaWindow::setZoom( const uno::Any& _zoom ) throw (uno::RuntimeException)
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( m_xModel, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XWorksheet > xActiveSheet = ActiveSheet();
     SCTAB nTab = 0;
-    rtl::OUString sName = xActiveSheet->getName();
-    bool bSheetExists = nameExists (xSpreadDoc, sName, nTab);
-    if ( !bSheetExists )
+    if ( !ScVbaWorksheets::nameExists (xSpreadDoc, xActiveSheet->getName(), nTab) )
         throw uno::RuntimeException();
     std::vector< SCTAB > vTabs;
     vTabs.push_back( nTab );
@@ -776,6 +788,15 @@ ScVbaWindow::setView( const uno::Any& _view) throw (uno::RuntimeException)
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell )
         dispatchExecute( pViewShell, nSlot );
+}
+
+uno::Reference< excel::XRange > SAL_CALL
+ScVbaWindow::getVisibleRange() throw (uno::RuntimeException)
+{
+    uno::Reference< container::XIndexAccess > xPanesIA( m_xViewPane, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XViewPane > xTopLeftPane( xPanesIA->getByIndex( 0 ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XPane > xPane( new ScVbaPane( this, mxContext, m_xModel, xTopLeftPane ) );
+    return xPane->getVisibleRange();
 }
 
 sal_Int32 SAL_CALL

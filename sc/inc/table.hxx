@@ -63,6 +63,7 @@ class ScPrintSaverTab;
 class ScProgress;
 class ScProgress;
 class ScRangeList;
+class ScSheetEvents;
 class ScSortInfoArray;
 class ScStyleSheet;
 class ScTableLink;
@@ -118,6 +119,8 @@ private:
 
     ScOutlineTable* pOutlineTable;
 
+    ScSheetEvents*  pSheetEvents;
+
     SCCOL           nTableAreaX;
     SCROW           nTableAreaY;
     BOOL            bTableAreaValid;
@@ -126,6 +129,7 @@ private:
     BOOL            bVisible;
     BOOL            bStreamValid;
     BOOL            bPendingRowHeights;
+    BOOL            bCalcNotification;
 
     SCTAB           nTab;
     USHORT          nRecalcLvl;             // Rekursionslevel Size-Recalc
@@ -190,6 +194,9 @@ public:
     void        RemoveSubTotals( ScSubTotalParam& rParam );
     BOOL        DoSubTotals( ScSubTotalParam& rParam );
 
+    const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents; }
+    void        SetSheetEvents( const ScSheetEvents* pNew );
+
     BOOL        IsVisible() const                            { return bVisible; }
     void        SetVisible( BOOL bVis );
 
@@ -198,6 +205,9 @@ public:
 
     BOOL        IsPendingRowHeights() const                  { return bPendingRowHeights; }
     void        SetPendingRowHeights( BOOL bSet );
+
+    BOOL        GetCalcNotification() const                  { return bCalcNotification; }
+    void        SetCalcNotification( BOOL bSet );
 
     BOOL        IsLayoutRTL() const                          { return bLayoutRTL; }
     BOOL        IsLoadingRTL() const                         { return bLoadingRTL; }

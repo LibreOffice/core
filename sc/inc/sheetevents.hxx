@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sheetdata.hxx,v $
+ * $Revision: 1.16.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,30 +28,38 @@
  *
  ************************************************************************/
 
-#ifndef SC_VBAPALETTE_HXX
-#define SC_VBAPALETTE_HXX
+#ifndef SC_SHEETEVENTS_HXX
+#define SC_SHEETEVENTS_HXX
 
-#include <vbahelper/vbahelper.hxx>
+#include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace container { class XIndexAccess; }
-    namespace frame { class XModel; }
-} } }
+#define SC_SHEETEVENT_FOCUS         0
+#define SC_SHEETEVENT_UNFOCUS       1
+#define SC_SHEETEVENT_SELECT        2
+#define SC_SHEETEVENT_DOUBLECLICK   3
+#define SC_SHEETEVENT_RIGHTCLICK    4
+#define SC_SHEETEVENT_CHANGE        5
+#define SC_SHEETEVENT_CALCULATE     6
+#define SC_SHEETEVENT_COUNT         7
 
-class SfxObjectShell;
-
-class ScVbaPalette
+class ScSheetEvents
 {
-private:
-    SfxObjectShell* m_pShell;
+    rtl::OUString** mpScriptNames;
+
+    void        Clear();
+
 public:
-    ScVbaPalette( SfxObjectShell* pShell = 0 ) : m_pShell( pShell ) {}
-    ScVbaPalette( const css::uno::Reference< css::frame::XModel >& rxModel );
-    // if no palette available e.g. because the document doesn't have a
-    // palette defined then a default palette will be returned.
-    css::uno::Reference< css::container::XIndexAccess > getPalette() const;
-    static css::uno::Reference< css::container::XIndexAccess > getDefaultPalette();
+                ScSheetEvents();
+                ScSheetEvents(const ScSheetEvents& rOther);
+                ~ScSheetEvents();
+
+    const ScSheetEvents&    operator= (const ScSheetEvents& rOther);
+
+    const rtl::OUString*    GetScript(sal_Int32 nEvent) const;
+    void                    SetScript(sal_Int32 nEvent, const rtl::OUString* pNew);
+
+    static rtl::OUString    GetEventName(sal_Int32 nEvent);
 };
 
-#endif //SC_VBAPALETTE_HXX
+#endif
 

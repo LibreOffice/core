@@ -121,9 +121,9 @@ using namespace ::com::sun::star;
 #include "scresid.hxx" //add by CHINA001
 #include "scabstdlg.hxx" //CHINA001
 #include "externalrefmgr.hxx"
-
 #include "sharedocdlg.hxx"
 #include "conditio.hxx"
+#include "sheetevents.hxx"
 
 //------------------------------------------------------------------
 
@@ -1289,6 +1289,14 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
     if ( pSh )
         pSh->UpdateCharts(TRUE);
 
+    // set notification flags for "calculate" event (used in SFX_HINT_DATACHANGED broadcast)
+    // (might check for the presence of any formulas on each sheet)
+    SCTAB nTabCount = aDocument.GetTableCount();
+    SCTAB nTab;
+    if (aDocument.HasSheetEventScript( SC_SHEETEVENT_CALCULATE ))
+        for (nTab=0; nTab<nTabCount; nTab++)
+            aDocument.SetCalcNotification(nTab);
+
     // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
     // in addition to SFX_HINT_DATACHANGED.
     aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
@@ -1296,8 +1304,7 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
 
     // use hard recalc also to disable stream-copying of all sheets
     // (somewhat consistent with charts)
-    SCTAB nTabCount = aDocument.GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+    for (nTab=0; nTab<nTabCount; nTab++)
         if (aDocument.IsStreamValid(nTab))
             aDocument.SetStreamValid(nTab, FALSE);
 

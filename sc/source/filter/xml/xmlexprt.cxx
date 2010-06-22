@@ -80,6 +80,7 @@
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlcnitm.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <xmloff/XMLEventExport.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -133,6 +134,8 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+#include "XMLCodeNameProvider.hxx"
 
 #include <sfx2/objsh.hxx>
 
@@ -1745,6 +1748,16 @@ void ScXMLExport::_ExportContent()
                             AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
                         SvXMLElementExport aElemT(*this, sElemTab, sal_True, sal_True);
                         CheckAttrList();
+
+                        if ( pDoc && pDoc->GetSheetEvents( static_cast<SCTAB>(nTable) ) &&
+                             getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+                        {
+                            // store sheet events
+                            uno::Reference<document::XEventsSupplier> xSupplier(xTable, uno::UNO_QUERY);
+                            uno::Reference<container::XNameAccess> xEvents(xSupplier->getEvents(), uno::UNO_QUERY);
+                            GetEventExport().ExportExt( xEvents );
+                        }
+
                         WriteTableSource();
                         WriteScenario();
                         uno::Reference<drawing::XDrawPage> xDrawPage;
@@ -4265,6 +4278,9 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     GetChangeTrackViewSettings(rProps);
 }
 
+
+
+
 void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {
     if (GetModel().is())
@@ -4275,16 +4291,41 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
             uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.SpreadsheetSettings"))), uno::UNO_QUERY);
             if (xProperties.is())
                 SvXMLUnitConverter::convertPropertySet(rProps, xProperties);
+
+            sal_Int32 nPropsToAdd = 0;
+            rtl::OUStringBuffer aTrackedChangesKey;
             if (GetDocument() && GetDocument()->GetChangeTrack() && GetDocument()->GetChangeTrack()->IsProtected())
             {
-                rtl::OUStringBuffer aBuffer;
-                SvXMLUnitConverter::encodeBase64(aBuffer, GetDocument()->GetChangeTrack()->GetProtection());
-                if (aBuffer.getLength())
+                SvXMLUnitConverter::encodeBase64(aTrackedChangesKey, GetDocument()->GetChangeTrack()->GetProtection());
+                if (aTrackedChangesKey.getLength())
+                    ++nPropsToAdd;
+            }
+
+            uno::Reference <container::XNameAccess> xCodeNameAccess;
+            DBG_ASSERT( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
+            if( pDoc )
+            {
+                xCodeNameAccess = new XMLCodeNameProvider( pDoc );
+                if( xCodeNameAccess.is() && xCodeNameAccess->hasElements() )
+                    ++nPropsToAdd;
+                else
+                    xCodeNameAccess = 0;
+            }
+
+            if( nPropsToAdd > 0 )
+            {
+                sal_Int32 nCount(rProps.getLength());
+                rProps.realloc(nCount + nPropsToAdd);
+                if (aTrackedChangesKey.getLength())
                 {
-                    sal_Int32 nCount(rProps.getLength());
-                    rProps.realloc(nCount + 1);
                     rProps[nCount].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
-                    rProps[nCount].Value <<= aBuffer.makeStringAndClear();
+                    rProps[nCount].Value <<= aTrackedChangesKey.makeStringAndClear();
+                    ++nCount;
+                }
+                if( xCodeNameAccess.is() )
+                {
+                    rProps[nCount].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration"));
+                    rProps[nCount].Value <<= xCodeNameAccess;
                 }
             }
         }
@@ -4371,6 +4412,22 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 CollectUserDefinedNamespaces(&pDrawLayer->GetItemPool(), EE_PARA_XMLATTRIBS);
                 CollectUserDefinedNamespaces(&pDrawLayer->GetItemPool(), EE_CHAR_XMLATTRIBS);
                 CollectUserDefinedNamespaces(&pDrawLayer->GetItemPool(), SDRATTR_XMLATTRIBUTES);
+            }
+
+            // sheet events use officeooo namespace
+            if( (getExportFlags() & EXPORT_CONTENT) != 0 &&
+                getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+            {
+                bool bAnySheetEvents = false;
+                SCTAB nTabCount = pDoc->GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+                    if (pDoc->GetSheetEvents(nTab))
+                        bAnySheetEvents = true;
+                if (bAnySheetEvents)
+                    _GetNamespaceMap().Add(
+                        GetXMLToken( XML_NP_OFFICE_EXT ),
+                        GetXMLToken( XML_N_OFFICE_EXT ),
+                        XML_NAMESPACE_OFFICE_EXT );
             }
         }
     }

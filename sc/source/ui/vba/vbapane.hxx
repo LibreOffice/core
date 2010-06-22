@@ -27,34 +27,41 @@
 #ifndef SC_VBA_PANE_HXX
 #define SC_VBA_PANE_HXX
 
-#include<cppuhelper/implbase1.hxx>
-#include<com/sun/star/sheet/XViewPane.hpp>
-#include<ooo/vba/excel/XPane.hpp>
+#include <com/sun/star/sheet/XViewPane.hpp>
+#include <ooo/vba/excel/XPane.hpp>
+#include <vbahelper/vbahelperinterface.hxx>
+#include "excelvbahelper.hxx"
 
-#include"excelvbahelper.hxx"
+typedef InheritedHelperInterfaceImpl1< ov::excel::XPane > ScVbaPane_BASE;
 
-typedef cppu::WeakImplHelper1< ov::excel::XPane > PaneImpl_Base;
-
-class ScVbaPane : public PaneImpl_Base
+class ScVbaPane : public ScVbaPane_BASE
 {
-protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
 public:
-    ScVbaPane( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XViewPane > xViewPane ) : m_xContext( xContext ), m_xViewPane( xViewPane ) {}
+    ScVbaPane(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        const css::uno::Reference< css::sheet::XViewPane > xViewPane ) throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::sheet::XViewPane > getViewPane() { return m_xViewPane; }
 
-    //Attribute
+    // XPane attributes
     virtual sal_Int32 SAL_CALL getScrollColumn() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setScrollColumn( sal_Int32 _scrollcolumn ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getScrollRow() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setScrollRow( sal_Int32 _scrollrow ) throw (css::uno::RuntimeException);
+     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() throw (css::uno::RuntimeException);
 
-    //Method
+    // XPane methods
     virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException);
 
+    // XHelperInterface
+    VBAHELPER_DECL_XHELPERINTERFACE
+
+protected:
+    css::uno::Reference< css::frame::XModel > m_xModel;
+    css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
 };
 
-#endif//SC_VBA_PANE_HXX
+#endif //SC_VBA_PANE_HXX

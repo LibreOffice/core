@@ -734,6 +734,14 @@ public:
     BOOL            HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect );
     BOOL            HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect );
 
+    const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
+    void            SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
+    bool            HasSheetEventScript( sal_Int32 nEvent ) const;  // on any sheet
+
+    BOOL            HasCalcNotification( SCTAB nTab ) const;
+    void            SetCalcNotification( SCTAB nTab );
+    void            ResetCalcNotifications();
+
     SC_DLLPUBLIC ScOutlineTable*    GetOutlineTable( SCTAB nTab, BOOL bCreate = FALSE );
     BOOL            SetOutlineTable( SCTAB nTab, const ScOutlineTable* pNewOutline );
 

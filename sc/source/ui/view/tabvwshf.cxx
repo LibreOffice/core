@@ -28,18 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
+#include <boost/scoped_ptr.hpp>
 
 #include "scitems.hxx"
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
 #include <layout/layout.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <svx/svxdlg.hxx>
+#include <editeng/colritem.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -52,16 +53,15 @@
 //CHINA001 #include "strindlg.hxx"
 //CHINA001 #include "mvtabdlg.hxx"
 #include "docfunc.hxx"
+#include "eventuno.hxx"
 
 #include "scabstdlg.hxx" //CHINA001
 
 #include "tabbgcolor.hxx"
 #include "tabbgcolordlg.hxx"
-#include "editeng/colritem.hxx"
-
-#include <boost/scoped_ptr.hpp>
 
 using ::boost::scoped_ptr;
+using namespace com::sun::star;
 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
@@ -696,11 +696,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 if ( nSlot == FID_TAB_MENU_SET_TAB_BG_COLOR )
                     nSlot = FID_TAB_SET_TAB_BG_COLOR;
-
                 SCTAB nTabNr = pViewData->GetTabNo();
                 ScMarkData& rMark = pViewData->GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
-
                 if ( !pDoc->IsDocEditable() )
                     break;
 
@@ -802,6 +800,25 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
             }
             break;
+
+        case FID_TAB_EVENTS:
+            {
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( pDocSh, nCurrentTab ) );
+                uno::Reference<frame::XFrame> xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
+                SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
+                if (pDlgFactory)
+                {
+                    std::auto_ptr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
+                        GetDialogParent(), xFrame, false, xEvents, 0 ) );
+                    if ( pDialog.get() && pDialog->Execute() == RET_OK )
+                    {
+                        // the dialog modifies the settings directly
+                    }
+                }
+            }
+            break;
+
         default:
             DBG_ERROR("Unbekannte Message bei ViewShell");
             break;

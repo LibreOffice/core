@@ -53,6 +53,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/formsimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/XMLEventsImportContext.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -321,6 +322,14 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
             GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
             bStartFormPage = sal_True;
             pContext = GetScImport().GetFormImport()->createOfficeFormsContext( GetScImport(), nPrefix, rLName );
+        }
+        break;
+    case XML_TOK_TABLE_EVENT_LISTENERS:
+    case XML_TOK_TABLE_EVENT_LISTENERS_EXT:
+        {
+            // use XEventsSupplier interface of the sheet
+            uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
+            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
         }
         break;
     default:

@@ -112,6 +112,7 @@
 #include "hints.hxx"        // fuer Paint-Broadcast
 #include "prnsave.hxx"
 #include "tabprotection.hxx"
+#include "sheetevents.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -135,10 +136,12 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     pColFlags( NULL ),
     pRowFlags( NULL ),
     pOutlineTable( NULL ),
+    pSheetEvents( NULL ),
     bTableAreaValid( FALSE ),
     bVisible( TRUE ),
     bStreamValid( FALSE ),
     bPendingRowHeights( FALSE ),
+    bCalcNotification( FALSE ),
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
     pDocument( pDoc ),
@@ -214,6 +217,7 @@ ScTable::~ScTable()
     delete[] pColFlags;
     delete pRowHeight;
     delete pRowFlags;
+    delete pSheetEvents;
     delete pOutlineTable;
     delete pSearchParam;
     delete pSearchText;

@@ -34,6 +34,7 @@
 #include <sfx2/app.hxx>
 #include <svl/itemprop.hxx>
 
+#include "scitems.hxx"
 #include "funcuno.hxx"
 #include "miscuno.hxx"
 #include "cellsuno.hxx"
@@ -55,6 +56,7 @@
 #include "docpool.hxx"
 #include "attrib.hxx"
 #include "clipparam.hxx"
+#include "dociter.hxx"
 
 using namespace com::sun::star;
 
@@ -185,6 +187,32 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
         pClipDoc->ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
     }
 
+    // If the range contains formula cells with default number format,
+    // apply a number format for the formula result
+    ScCellIterator aIter( pClipDoc, rSrcRange );
+    ScBaseCell* pCell = aIter.GetFirst();
+    while (pCell)
+    {
+        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+        {
+            ScAddress aCellPos = aIter.GetPos();
+            sal_uInt32 nFormat = pClipDoc->GetNumberFormat(aCellPos);
+            if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+            {
+                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                USHORT nErrCode = pFCell->GetErrCode();
+                if ( nErrCode == 0 && pFCell->IsValue() )
+                {
+                    sal_uInt32 nNewFormat = pFCell->GetStandardFormat( *pClipDoc->GetFormatTable(), nFormat );
+                    if ( nNewFormat != nFormat )
+                        pClipDoc->ApplyAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(),
+                                             SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+                }
+            }
+        }
+        pCell = aIter.GetNext();
+    }
+
     ScMarkData aDestMark;
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );
@@ -199,7 +227,8 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
 ScFunctionAccess::ScFunctionAccess() :
     pOptions( NULL ),
     aPropertyMap( ScDocOptionsHelper::GetPropertyMap() ),
-    bInvalid( FALSE )
+    mbArray( true ),    // default according to behaviour of older Office versions
+    mbValid( true )
 {
     StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
 }
@@ -216,7 +245,7 @@ void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //  document must not be used anymore
         aDocCache.Clear();
-        bInvalid = TRUE;
+        mbValid = false;
     }
 }
 
@@ -288,14 +317,22 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 {
     ScUnoGuard aGuard;
 
-    if ( !pOptions )
-        pOptions = new ScDocOptions();
+    if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsArrayFunction" ) ) )
+    {
+        if( !(aValue >>= mbArray) )
+            throw lang::IllegalArgumentException();
+    }
+    else
+    {
+        if ( !pOptions )
+            pOptions = new ScDocOptions();
 
-    // options aren't initialized from configuration - always get the same default behaviour
+        // options aren't initialized from configuration - always get the same default behaviour
 
-    BOOL bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
-    if (!bDone)
-        throw beans::UnknownPropertyException();
+        BOOL bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
+        if (!bDone)
+            throw beans::UnknownPropertyException();
+    }
 }
 
 uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -303,6 +340,9 @@ uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const rtl::OUString& aProp
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+
+    if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsArrayFunction" ) ) )
+        return uno::Any( mbArray );
 
     if ( !pOptions )
         pOptions = new ScDocOptions();
@@ -497,7 +537,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
 {
     ScUnoGuard aGuard;
 
-    if (bInvalid)
+    if (!mbValid)
         throw uno::RuntimeException();
 
     // use cached document if not in use, temporary document otherwise
@@ -556,12 +596,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         uno::TypeClass eClass = rArg.getValueTypeClass();
         uno::Type aType = rArg.getValueType();
         if ( eClass == uno::TypeClass_BYTE ||
-                eClass == uno::TypeClass_SHORT ||
-                eClass == uno::TypeClass_UNSIGNED_SHORT ||
-                eClass == uno::TypeClass_LONG ||
-                eClass == uno::TypeClass_UNSIGNED_LONG ||
-                eClass == uno::TypeClass_FLOAT ||
-                eClass == uno::TypeClass_DOUBLE )
+             eClass == uno::TypeClass_BOOLEAN ||
+             eClass == uno::TypeClass_SHORT ||
+             eClass == uno::TypeClass_UNSIGNED_SHORT ||
+             eClass == uno::TypeClass_LONG ||
+             eClass == uno::TypeClass_UNSIGNED_LONG ||
+             eClass == uno::TypeClass_FLOAT ||
+             eClass == uno::TypeClass_DOUBLE )
         {
             //  #87871# accept integer types because Basic passes a floating point
             //  variable as byte, short or long if it's an integer number.
@@ -650,13 +691,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         // GRAM_PODF_A1 doesn't really matter for the token array but fits with
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
-                &aTokenArr,formula::FormulaGrammar::GRAM_PODF_A1, MM_FORMULA );
+                &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (BYTE)(mbArray ? MM_FORMULA : MM_NONE) );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
         //  if there is no matrix result
 
-        const ScMatrix* pMat = pFormula->GetMatrix();
+        const ScMatrix* pMat = mbArray ? pFormula->GetMatrix() : 0;
         USHORT nErrCode = pFormula->GetErrCode();
         if ( nErrCode == 0 )
         {
