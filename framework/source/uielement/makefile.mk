@@ -80,6 +80,8 @@ SLOFILES=           \
                     $(SLO)$/toolbarsmenucontroller.obj          \
                     $(SLO)$/toolbarwrapper.obj                  \
                     $(SLO)$/uicommanddescription.obj            \
+                    $(SLO)$/panelwrapper.obj					\
+                    $(SLO)$/panelwindow.obj
 
 # --- Targets ------------------------------------------------------
 
