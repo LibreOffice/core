@@ -20,8 +20,8 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 
 ..\%__SRC%\lib\libautorec*.* %_DEST%\lib%_EXT%\lib*.*
 
-..\%__SRC%\lib\libgcc_s.so.1 %_DEST%\lib%_EXT%\libgcc_s.so.1
-..\%__SRC%\lib\libstdc++.so.6 %_DEST%\lib%_EXT%\libstdc++.so.6
+..\%__SRC%\lib\libgcc_s.so.* %_DEST%\lib%_EXT%\libgcc_s.so.*
+..\%__SRC%\lib\libstdc++.so.* %_DEST%\lib%_EXT%\libstdc++.so.*
 
 ..\dbghelp\dbghelp.dll %_DEST%\bin%_EXT%\dbghelp.dll
 
