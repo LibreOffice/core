@@ -34,6 +34,8 @@ no_common_build_zip:=TRUE
 
 # --- Settings -----------------------------------------------------
 
+.IF "$(SOLAR_JAVA)" != ""
+
 .INCLUDE : settings.mk
 
 JARFILES = ridl.jar jurt.jar unoil.jar juh.jar
@@ -81,3 +83,8 @@ $(JAVACLASSFILES) .UPDATEALL: $(MISC)$/$(TARGET)$/TestExtension.rdb
 
 $(MISC)$/$(TARGET)$/$(JARTARGET) : $(JARTARGETN)
     $(COPY) $< $@
+
+.ELSE
+@all:
+    @echo "Java disabled. Nothing to do."
+.ENDIF
