@@ -95,7 +95,7 @@ public:
     const basegfx::B2DPolygon& getTriangle() const { return maTriangle; }
     const basegfx::B2DPolygon& getLine() const { return maLine; }
     const basegfx::B2DPolygon& getLineTop() const { return maLineTop; }
-    const AnchorState getAnchorState() const { return maAnchorState; }
+    AnchorState getAnchorState() const { return maAnchorState; }
     const basegfx::BColor& getColor() const { return maColor; }
     double getLogicLineWidth() const { return mfLogicLineWidth; }
     bool getShadow() const { return mbShadow; }
