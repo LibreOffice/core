@@ -1390,7 +1390,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Ureinstall
     Section = "Bootstrap";
     Order = 4;
     Key = "UREINSTALLLOCATION";
-    Value = "[UREINSTALLLOCATION]";
+    Value = "[INSTALLLOCATION]URE\\";
     Inifiletablekey = "UreInstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
@@ -1404,7 +1404,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Basisinstall
     Section = "Bootstrap";
     Order = 4;
     Key = "BASISINSTALLLOCATION";
-    Value = "[BASISINSTALLLOCATION]";
+    Value = "[INSTALLLOCATION]Basis\\";
     Inifiletablekey = "BasisInstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
@@ -1418,7 +1418,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Officeinstall
     Section = "Bootstrap";
     Order = 4;
     Key = "OFFICEINSTALLLOCATION";
-    Value = "[OFFICEINSTALLLOCATION]";
+    Value = "[INSTALLLOCATION]";
     Inifiletablekey = "OfficeInstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);

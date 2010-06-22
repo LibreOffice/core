@@ -111,7 +111,7 @@ sub get_shortcut_directory
 
     $directory = $onedir->{'uniquename'};
 
-    if ($directory eq "") { $directory = "OFFICEINSTALLLOCATION"; }     # Shortcuts in the root directory
+    if ($directory eq "") { $directory = "INSTALLLOCATION"; }       # Shortcuts in the root directory
 
     return $directory;
 }
@@ -343,7 +343,7 @@ sub get_folderitem_wkdir
 
         $directory = $onedir->{'uniquename'};
 
-        if ($directory eq "") { $directory = "OFFICEINSTALLLOCATION"; }
+        if ($directory eq "") { $directory = "INSTALLLOCATION"; }
     }
 
     return $directory;
