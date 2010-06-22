@@ -46,7 +46,7 @@ TARGETTYPE=CUI
 
 .INCLUDE :  settings.mk
 
-.IF "$(ALLOC)" == "SYS_ALLOC" || "$(ALLOC)" == "TCMALLOC"
+.IF "$(ALLOC)" == "SYS_ALLOC" || "$(ALLOC)" == "TCMALLOC" || "$(ALLOC)" == "JEMALLOC"
 CDEFS+= -DFORCE_SYSALLOC
 .ENDIF
 
