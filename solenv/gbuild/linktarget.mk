@@ -178,7 +178,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS = $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS := 
@@ -191,7 +191,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS = $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
@@ -217,7 +217,7 @@ $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $(2)
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
 endef
 
 define gb_LinkTarget_set_cflags
@@ -230,7 +230,7 @@ $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(CXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS = $$(CXXFLAGS)
 endef
 
 define gb_LinkTarget_set_objcxxflags
@@ -385,6 +385,11 @@ $(call gb_PrecompiledHeader_get_noex_target,$(3)) : PCH_EXCEPTIONFLAGS := $(gb_L
 $(call gb_PrecompiledHeader_get_target,$(3)) \
 $(call gb_PrecompiledHeader_get_noex_target,$(3)) : $(2).cxx $(2).hxx
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
 endef
 
 define gb_LinkTarget_add_precompiled_header
