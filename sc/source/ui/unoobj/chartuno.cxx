@@ -222,7 +222,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
         xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aTmp );
     if ( xObj.is() )
     {
-            String aObjName = aNameString;       // wirklich eingefuegter Name...
+            String aObjName = aTmp;       // wirklich eingefuegter Name...
 
             //  Rechteck anpassen
             //! Fehler/Exception, wenn leer/ungueltig ???
