@@ -123,6 +123,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         {
             OSL_ASSERT(pPV!=NULL);
             aLinePos = (pPV->GetHelpLines())[nHelpLine].GetPos();
+            pPV->LogicToPagePos(aLinePos);
             bLineExist = true;
         }
         aNewAttr.Put(SfxUInt32Item(ATTR_SNAPLINE_X, aLinePos.X()));

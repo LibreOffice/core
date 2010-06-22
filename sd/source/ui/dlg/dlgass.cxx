@@ -1928,21 +1928,6 @@ SfxObjectShellLock AssistentDlg::GetDocument()
     return mpImpl->GetDocument();
 }
 
-String AssistentDlg::GetTopic() const
-{
-    return mpImpl->mpPage4AskTopicEDT->GetText();
-}
-
-String AssistentDlg::GetUserName() const
-{
-    return mpImpl->mpPage4AskNameEDT->GetText();
-}
-
-String AssistentDlg::GetInformation() const
-{
-    return mpImpl->mpPage4AskInfoEDT->GetText();
-}
-
 OutputType AssistentDlg::GetOutputMedium() const
 {
     if(mpImpl->mpPage2Medium1RB->IsChecked())

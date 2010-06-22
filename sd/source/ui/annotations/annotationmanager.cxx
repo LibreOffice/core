@@ -971,7 +971,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
     return 0;
 }
-
+#if 0
 OUString AnnotationManagerImpl::GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
 {
     OUString sRet;
@@ -994,7 +994,7 @@ OUString AnnotationManagerImpl::GetHelpText( ::com::sun::star::uno::Reference< :
 
     return sRet;
 }
-
+#endif
 
 void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
 {

@@ -46,9 +46,6 @@ public:
     /** inserts the given ref into this container */
     void    insert( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef ) throw();
 
-    /** removes the given ref from this container */
-    void    remove( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef ) throw();
-
     /** searches the container for a ref that returns true on the given
         search function
     */

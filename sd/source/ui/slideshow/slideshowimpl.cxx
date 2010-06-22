@@ -3697,14 +3697,7 @@ Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow() throw (RuntimeExc
 // --------------------------------------------------------------------
 
 
-PresentationSettingsEx::PresentationSettingsEx()
-: mbRehearseTimings(sal_False)
-, mbPreview(sal_False)
-, mpParentWindow( 0 )
-{
-}
-
-PresentationSettingsEx::PresentationSettingsEx( PresentationSettingsEx& r )
+PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r )
 : PresentationSettings( r )
 , mbRehearseTimings(r.mbRehearseTimings)
 , mbPreview(r.mbPreview)

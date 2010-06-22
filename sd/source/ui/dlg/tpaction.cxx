@@ -86,15 +86,6 @@ using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-static USHORT pActionRanges[] =
-{
-    ATTR_ANIMATION_TRANSPCOLOR,
-    ATTR_ANIMATION_TRANSPCOLOR,
-    ATTR_ACTION_START,
-    ATTR_ACTION_END,
-    0
-};
-
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
 /*************************************************************************
@@ -419,13 +410,6 @@ SfxTabPage* SdTPAction::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTPAction( pWindow, rAttrs ) );
-}
-
-//------------------------------------------------------------------------
-
-USHORT* SdTPAction::GetRanges()
-{
-    return( pActionRanges );
 }
 
 //------------------------------------------------------------------------
@@ -847,35 +831,6 @@ void SdTPAction::SetEditText( String const & rStr )
         default:
             break;
     }
-}
-
-String SdTPAction::GetMacroName( const String& rMacroPath )
-{
-    String result = rMacroPath;
-
-    // try to get name by parsing the macro path
-    // using the new URI parsing services
-
-    Reference< XMultiServiceFactory > xSMgr =
-        ::comphelper::getProcessServiceFactory();
-
-    Reference< com::sun::star::uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance(
-            ::rtl::OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
-
-    if ( xFactory.is() )
-    {
-        Reference< com::sun::star::uri::XVndSunStarScriptUrl >
-            xUrl( xFactory->parse( rMacroPath ), UNO_QUERY );
-
-        if ( xUrl.is() )
-        {
-            result = xUrl->getName();
-        }
-    }
-
-    return result;
 }
 
 //------------------------------------------------------------------------

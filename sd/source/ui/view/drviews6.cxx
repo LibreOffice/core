@@ -192,32 +192,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 
 /*************************************************************************
 |*
-|* SfxRequests fuer Objektpalette bearbeiten
-|*
-\************************************************************************/
-
-void DrawViewShell::ExecObjPalette( SfxRequest& )
-{
-    // Diese Methode muss erhalten bleiben, bis
-    // der/die Slots entfernt wurden;
-    // ==> Voll-Update
-}
-
-/*************************************************************************
-|*
-|* Statuswerte fuer Objektpalette zurueckgeben
-|*
-\************************************************************************/
-
-void DrawViewShell::GetObjPaletteState(SfxItemSet& )
-{
-    // Diese Methode muss erhalten bleiben, bis
-    // der/die Slots entfernt wurden;
-    // ==> Voll-Update
-}
-
-/*************************************************************************
-|*
 |* SfxRequests fuer Animator bearbeiten
 |*
 \************************************************************************/

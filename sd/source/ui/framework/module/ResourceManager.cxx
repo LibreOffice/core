@@ -291,25 +291,4 @@ void SAL_CALL ResourceManager::disposing (
     }
 }
 
-
-
-
-void ResourceManager::Trace (void) const
-{
-    OSL_TRACE("main views with resource %s:",
-        ::rtl::OUStringToOString(
-            FrameworkHelper::ResourceIdToString(mxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-
-    MainViewContainer::const_iterator iDescriptor;
-    for (iDescriptor=mpActiveMainViewContainer->begin();
-         iDescriptor!=mpActiveMainViewContainer->end();
-         ++iDescriptor)
-    {
-        OSL_TRACE("    %s",
-            ::rtl::OUStringToOString(*iDescriptor, RTL_TEXTENCODING_UTF8).getStr());
-    }
-}
-
-
-
 } } // end of namespace sd::framework

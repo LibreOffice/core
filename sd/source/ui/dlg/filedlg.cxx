@@ -69,7 +69,6 @@ private:
     using sfx2::FileDialogHelper::Execute;
 #endif
 
-    friend class SdExportFileDialog;
     friend class SdOpenSoundFileDialog;
 
     css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
@@ -95,8 +94,6 @@ public:
 
     // overwritten from FileDialogHelper, to receive user feedback
     virtual void SAL_CALL       ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
-
-    sal_Bool                    SelectionBoxState() const;
 };
 
 // ------------------------------------------------------------------------
@@ -312,91 +309,6 @@ ErrCode SdFileDialog_Imp::Execute()
     CheckSelectionState();
     return FileDialogHelper::Execute();
 }
-
-// ------------------------------------------------------------------------
-sal_Bool SdFileDialog_Imp::SelectionBoxState() const
-{
-    if ( !mbUsableSelection || !mxControlAccess.is() )
-        return sal_False;
-
-    sal_Bool bState(0);
-    try
-    {
-        mxControlAccess->getValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 ) >>= bState;
-    }
-    catch( css::lang::IllegalArgumentException )
-    {
-#ifdef DBG_UTIL
-        DBG_ERROR( "Cannot access \"selection\" checkbox" );
-#endif
-    }
-
-    return bState;
-}
-
-
-// --------------------------------------------------------------------
-// -----------      SdExportFileDialog      ---------------------------
-// --------------------------------------------------------------------
-
-// these are simple forwarders
-SdExportFileDialog::SdExportFileDialog(BOOL bHaveCheckbox) :
-    mpImpl( new SdFileDialog_Imp( css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION,
-                                  bHaveCheckbox ) )
-{
-    // setup filter
-    const String    aHTMLFilter( SdResId( STR_EXPORT_HTML_NAME ) );
-    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
-    const USHORT    nFilterCount = pFilter->GetExportFormatCount();
-
-    // add HTML filter
-    mpImpl->AddFilter( aHTMLFilter, String( SdResId( STR_EXPORT_HTML_FILTER ) ) );
-
-    // add other graphic filters
-    for ( USHORT i = 0; i < nFilterCount; i++ )
-    {
-        mpImpl->AddFilter( pFilter->GetExportFormatName( i ),
-                           pFilter->GetExportWildcard( i ) );
-    }
-
-    // set dialog title
-    mpImpl->SetTitle( String( SdResId( STR_EXPORT_DIALOG_TITLE ) ) );
-}
-
-// ------------------------------------------------------------------------
-SdExportFileDialog::~SdExportFileDialog()
-{
-}
-
-// ------------------------------------------------------------------------
-ErrCode SdExportFileDialog::Execute()
-{
-    return mpImpl->Execute();
-}
-
-String SdExportFileDialog::GetPath() const
-{
-    return mpImpl->GetPath();
-}
-
-// ------------------------------------------------------------------------
-void SdExportFileDialog::SetPath( const String& rPath )
-{
-    mpImpl->SetDisplayDirectory( rPath );
-}
-
-// ------------------------------------------------------------------------
-String SdExportFileDialog::ReqCurrentFilter() const
-{
-    return mpImpl->GetCurrentFilter();
-}
-
-// ------------------------------------------------------------------------
-BOOL SdExportFileDialog::IsExportSelection() const
-{
-    return mpImpl->SelectionBoxState();
-}
-
 
 // --------------------------------------------------------------------
 // -----------      SdOpenSoundFileDialog       -----------------------

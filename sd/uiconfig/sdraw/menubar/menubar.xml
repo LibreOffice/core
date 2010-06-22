@@ -164,8 +164,6 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
           <menu:menuitem menu:id=".uno:InsertPlugin"/>
-          <menu:menuitem menu:id=".uno:InsertSound"/>
-          <menu:menuitem menu:id=".uno:InsertVideo"/>
           <menu:menuitem menu:id=".uno:InsertMath"/>
         </menu:menupopup>
       </menu:menu>
@@ -186,12 +184,15 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:TransliterateMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
-          <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
-          <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
-          <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
-          <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
-          <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
+            <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

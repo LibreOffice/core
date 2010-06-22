@@ -52,11 +52,6 @@ public:
     SFX_DECL_VIEWFACTORY(GraphicViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICVIEWSHELL)
 
-    GraphicViewShell (
-        SfxViewFrame* pFrame,
-        ::Window* pParentWindow,
-        const DrawViewShell& rShell);
-
     /** Create a new view shell for the Draw application.
         @param rViewShellBase
             The new object will be stacked on this view shell base.
