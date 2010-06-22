@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prj.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -290,6 +287,7 @@ private:
     SDepInfoList*   RemoveDepInfoList(SDepInfoList* pInfoList );
     PrjList*        pTempCommandDataList;
     BOOL            bTempCommandDataListPermanent;
+    BOOL            bError;
 public:
                     Prj();
                     Prj( ByteString aName );
@@ -331,6 +329,9 @@ public:
     BOOL            HasTempCommandDataList() {return pTempCommandDataList != NULL;}
     void            SetTempCommandDataListPermanent (BOOL bVar = TRUE) {bTempCommandDataListPermanent = bVar;}
     BOOL            IsTempCommandDataListPermanent() {return bTempCommandDataListPermanent;}
+
+    void            SetError (BOOL bVar = TRUE) {bError = bVar;}
+    BOOL            HasError () {return bError;}
 
     Prj&            operator<<  ( SvStream& rStream );
     Prj&            operator>>  ( SvStream& rStream );
@@ -399,6 +400,7 @@ protected:
     void            Expand_Impl();
     void            ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj );
     ULONG           SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
+    void            InsertTokenLine (const ByteString& rToken, Prj** ppPrj, const ByteString& rProjectName, const sal_Bool bExtendAlias = sal_True);
 
 public:
                     Star();
@@ -424,7 +426,7 @@ public:
     BOOL            RemovePrj ( Prj* pPrj );
     void            RemoveAllPrj ();
 
-    void            InsertToken( char *pChar );
+    StarFile*       ReadBuildlist (const String& rFilename, BOOL bReadComments = FALSE, BOOL bExtendAlias = TRUE);
     BOOL            NeedsUpdate();
     SolarFileList*  NeedsFilesForUpdate();
     void            ReplaceFileEntry( StarFileList *pStarFiles, StarFile* pFile );
@@ -475,7 +477,7 @@ public:
     USHORT          Write( String aFileName );
     USHORT          WriteMultiple( String rSourceRoot );
 
-    void            InsertTokenLine( ByteString& rString );
+    void            InsertTokenLine ( const ByteString& rTokenLine );
 };
 
 #endif

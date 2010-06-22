@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: tg_config.mk,v $
-#
-# $Revision: 1.21.72.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -124,10 +120,12 @@ $(PROCESSOUT)/registry/data/$(PACKAGEDIR)/%.xcu : %.xcu
     $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $(@:d))$*.val) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
+            --path $(DTDDIR)/registry \
                 $(SYSXSLDIR)data_val.xsl $<
     $(COMMAND_ECHO)$(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))/$(subst,$(PRJ), $@)) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
+            --path $(DTDDIR)/registry \
                 $(SYSXSLDIR)alllang.xsl $<
     @+-$(RM) $(@:d)$*.val > $(NULLDEV)
 
@@ -158,6 +156,7 @@ $(PROCESSOUT)/registry/res/{$(alllangiso)}/$(PACKAGEDIR)/%.xcu :| %.xcu
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 --stringparam locale {$(subst,/$(PACKAGEDIR)/$(@:f), $(subst,$(PROCESSOUT)/registry/res/, $@))} \
+                --path $(DTDDIR)/registry \
                 $(SYSXSLDIR)alllang.xsl $<
 
 # --- languagepack tag modules ---

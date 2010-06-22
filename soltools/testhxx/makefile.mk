@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,21 +38,13 @@ CAPTURE_OUTPUT = > $(MISC)$/testhxx.output && $(TOUCH) $(SLO)$/testhxx.obj
 
 SLOFILES = $(SLO)$/testhxx.obj
 
-.IF "$(USE_SHELL)" == "4nt"
-MY_SCRIPT_EXT := .btm
-MY_EXECUTABLE := @ echo
-.ELSE
-MY_SCRIPT_EXT :=
-MY_EXECUTABLE := chmod +x
-.ENDIF
-
 .INCLUDE: target.mk
 
-ALLTAR: $(BIN)$/$(TARGET)$(MY_SCRIPT_EXT)
+ALLTAR: $(BIN)$/$(TARGET)
 
-$(BIN)$/$(TARGET)$(MY_SCRIPT_EXT) .ERRREMOVE : $(MISC)$/testhxx.output create.pl
+$(BIN)$/$(TARGET) .ERRREMOVE : $(MISC)$/testhxx.output create.pl
     $(PERL) -w create.pl < $(MISC)$/testhxx.output > $@
-    $(MY_EXECUTABLE) $@
+    chmod +x $@
 
 $(MISC)$/testhxx.output: $(SLO)$/testhxx.obj
     $(TOUCH) $<

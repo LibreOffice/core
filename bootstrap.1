@@ -77,3 +77,8 @@ chmod +x "$SRC_ROOT/solenv/bin/build.pl"
 chmod +x "$SRC_ROOT/solenv/bin/build_client.pl"
 chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
 chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
+
+# fetch or update external tarballs
+if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
+	$SRC_ROOT/fetch_tarballs.sh $SRC_ROOT/ooo.lst
+fi

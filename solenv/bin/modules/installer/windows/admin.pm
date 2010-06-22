@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: admin.pm,v $
-#
-# $Revision: 1.1.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -422,6 +418,12 @@ sub create_directory_structure
     my @startparents = ("TARGETDIR", "INSTALLLOCATION");
 
     foreach $dir (@startparents) { create_directory_tree($dir, \%fullpathhash, $targetdir, $dirhash); }
+
+    # Also adding the pathes of the startparents
+    foreach $dir (@startparents)
+    {
+        if ( ! exists($fullpathhash{$dir}) ) { $fullpathhash{$dir} = $targetdir; }
+    }
 
     return \%fullpathhash;
 }

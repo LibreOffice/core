@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: systemactions.pm,v $
-#
-# $Revision: 1.38 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,7 +55,12 @@ sub create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -320,6 +321,13 @@ sub create_directories
     else
     {
         $path = $installer::globals::unpackpath . $installer::globals::separator;
+
+        # special handling, if LOCALINSTALLDIR is set
+        if (( $installer::globals::localinstalldirset ) && ( $newdirectory eq "install" ))
+        {
+            $installer::globals::localinstalldir =~ s/\Q$installer::globals::separator\E\s*$//;
+            $path = $installer::globals::localinstalldir . $installer::globals::separator;
+        }
     }
 
     $infoline = "create_directories: Using $path for $newdirectory !\n";
@@ -1401,7 +1409,11 @@ sub try_to_create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
             system($localcall);
         }
         else

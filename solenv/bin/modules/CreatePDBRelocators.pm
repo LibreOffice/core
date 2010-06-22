@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: CreatePDBRelocators.pm,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -110,8 +106,8 @@ sub create_pdb_relocators
     }
 
     # collect files
-    my @pdb_files;
     foreach my $repository (@{$self->{REPOSITORIES}}) {
+        my @pdb_files;
         my $o = $self->{SOLARVERSION} . "/$repository";
         $repository =~ s/(.*?)\.(.*)/$1/;
         $self->collect_files( $o, $inpath, \@pdb_files);
@@ -190,7 +186,7 @@ sub collect_files
         # collect all binary executables on o:
         my @bin = $self->find_binary_execs("$template/bin");
         my @bin_so = $self->find_binary_execs("$template/bin/so");
-        @$filesref = (@lib, @lib_so, @mac_lib, @mac_lib_so, @bin, @bin_so);
+        push(@$filesref, (@lib, @lib_so, @mac_lib, @mac_lib_so, @bin, @bin_so));
     }
     return 1;
 }

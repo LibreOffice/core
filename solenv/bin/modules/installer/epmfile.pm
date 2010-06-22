@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: epmfile.pm,v $
-#
-# $Revision: 1.87 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -430,6 +426,17 @@ sub create_epm_header
         }
     }
 
+    # Process for Linux packages, in which only a very basic license file is
+    # included into the package.
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        if ( $variableshashref->{'COPYRIGHT_INTO_LINUXPACKAGE'} )
+        {
+            $licensefilename = "linuxcopyrightfile";
+            $license_in_package_defined = 1;
+        }
+    }
     # searching for and readme file
 
     for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
@@ -451,7 +458,7 @@ sub create_epm_header
     {
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, "" , 0);
 
-        if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename!", "create_epm_header"); }
+        if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename (A)!", "create_epm_header"); }
 
         # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile. But not for all products
 
@@ -504,12 +511,12 @@ sub create_epm_header
 
     if (!($foundlicensefile))
     {
-        installer::exiter::exit_program("ERROR: Could not find license file $licensefilename", "create_epm_header");
+        installer::exiter::exit_program("ERROR: Could not find license file $licensefilename (B)", "create_epm_header");
     }
 
     if (!($foundreadmefile))
     {
-        installer::exiter::exit_program("ERROR: Could not find readme file $readmefilename", "create_epm_header");
+        installer::exiter::exit_program("ERROR: Could not find readme file $readmefilename (C)", "create_epm_header");
     }
 
     # including %replaces
@@ -1439,6 +1446,8 @@ sub set_autoprovreq_in_specfile
     {
         $autoreqprovline = "AutoReqProv\: no\n";
     }
+
+    $autoreqprovline .= "%define _binary_filedigest_algorithm 1\n%define _binary_payload w9.gzdio\n";
 
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {
@@ -2548,6 +2557,7 @@ sub create_packages_without_epm
             my $dir = getcwd;
             my $buildroot = $dir . "/" . $epmdir . "buildroot/";
             $buildrootstring = "--buildroot=$buildroot";
+            mkdir($buildroot = $dir . "/" . $epmdir . "BUILD/");
         }
 
         my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
@@ -2722,6 +2732,15 @@ sub remove_temporary_epm_files
         installer::logger::print_message( "... $systemcall ...\n" );
 
         my $returnvalue = system($systemcall);
+
+        $removedir = $epmdir . "BUILD";
+
+        $systemcall = "rm -rf $removedir";
+
+        installer::logger::print_message( "... $systemcall ...\n" );
+
+        $returnvalue = system($systemcall);
+
 
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);

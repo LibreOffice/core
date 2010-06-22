@@ -2,11 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: make_installer.pl,v $
 #
 # This file is part of OpenOffice.org.
 #
@@ -259,6 +257,10 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
 
+installer::ziplist::overwrite_ooovendor( $allvariableshashref );
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3c.log", $allvariableshashref); }
+
+
 ########################################################
 # Check if this is simple packaging mechanism
 ########################################################
@@ -396,8 +398,13 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::setupscript::add_forced_properties($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables5.log", $allvariableshashref); }
 
+# Replacing preset properties, not using the default mechanisms (for example for UNIXPRODUCTNAME)
+installer::setupscript::replace_preset_properties($allvariableshashref);
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables6.log", $allvariableshashref); }
+
 installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript3.log" ,$setupscriptref); }
+
 
 installer::logger::log_hashref($allvariableshashref);
 
@@ -1342,6 +1349,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::packagelist::resolve_packagevariables(\$packagename, $allvariableshashref, 0);
             }
 
+            # Debian allows no underline in package name
+            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
+
+            # Debian allows no underline in package name
+            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
+
             my $linkaddon = "";
             my $linkpackage = 0;
             $installer::globals::add_required_package = "";
@@ -1371,7 +1384,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # try it again later.
             ####################################################
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
+            if (( $installer::globals::patch ) ||
+                ( $installer::globals::languagepack ) ||
+                ( $installer::globals::packageformat eq "native" ) ||
+                ( $installer::globals::packageformat eq "portable" ) ||
+                ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
 
             if ( $allvariableshashref->{'POOLPRODUCT'} )
             {
@@ -1969,7 +1986,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17c.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::updatedatabase ) { installer::windows::file::check_file_sequences($allupdatefileorder, $allupdatecomponentorder); }
 
-        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname);
+        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname, $loggingdir);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles18.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt1.log", $directoriesforepmarrayref); }
 
@@ -2116,21 +2133,19 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # include the license text into the table Control.idt
 
-            # my $licensefilesource = installer::windows::idtglobal::get_licensefilesource($onelanguage, $filesinproductlanguageresolvedarrayref);
-            my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
-            my $licensefile = installer::files::read_file($licensefilesource);
-            installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
-            my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
-            my $controltable = installer::files::read_file($controltablename);
-            installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
-            installer::files::save_file($controltablename, $controltable);
+            if ( ! $allvariableshashref->{'HIDELICENSEDIALOG'} )
+            {
+                my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
+                my $licensefile = installer::files::read_file($licensefilesource);
+                installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
+                my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
+                my $controltable = installer::files::read_file($controltablename);
+                installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
+                installer::files::save_file($controltablename, $controltable);
 
-            $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
-            push(@installer::globals::logfileinfo, $infoline);
-
-            # include office directory in CustomAction table
-
-            installer::windows::idtglobal::add_officedir_to_database($languageidtdir, $allvariableshashref);
+                $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
 
             # include a component into environment table if required
 

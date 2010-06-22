@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: registry.pm,v $
-#
-# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -207,8 +203,9 @@ sub get_registry_value
     if ( $registry->{'Value'} ) { $value = $registry->{'Value'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-    $value =~ s/\<progpath\>/\[OFFICEINSTALLLOCATION\]/;
-    $value =~ s/\[OFFICEINSTALLLOCATION\]\\/\[OFFICEINSTALLLOCATION\]/; # removing "\" after "[OFFICEINSTALLLOCATION]"
+    $value =~ s/\\\\\s*$/\\/g;  # making "\\" at end of value to "\"
+    $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
+    $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
 
     if ( $value =~ /\%/ ) { $value = installer::worker::replace_variables_in_string($value, $allvariableshashref); }
 
@@ -228,8 +225,9 @@ sub get_registry_val64
     if ( $registry->{'Val64'} ) { $value = $registry->{'Val64'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-    $value =~ s/\<progpath\>/\[OFFICEINSTALLLOCATION\]/;
-    $value =~ s/\[OFFICEINSTALLLOCATION\]\\/\[OFFICEINSTALLLOCATION\]/; # removing "\" after "[OFFICEINSTALLLOCATION]"
+    $value =~ s/\\\\\s*$/\\/g;  # making "\\" at end of value to "\"
+    $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
+    $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
 
     if ( $value =~ /\%/ ) { $value = installer::worker::replace_variables_in_string($value, $allvariableshashref); }
 
@@ -391,7 +389,7 @@ sub create_registry_table
 
         $registrytablename = $basedir . $installer::globals::separator . "Reg64.idt" . "." . $onelanguage;
         installer::files::save_file($registrytablename ,\@reg64table );
-        my $infoline = "Created idt file: $registrytablename\n";
+        $infoline = "Created idt file: $registrytablename\n";
         push(@installer::globals::logfileinfo, $infoline);
     }
 }

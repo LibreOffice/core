@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: servicesfile.pm,v $
-#
-# $Revision: 1.33 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -137,12 +133,14 @@ sub register_unocomponents
     my $filestring = "";
     for ( my $i = 0; $i <= $#{$unocomponents}; ++$i )
     {
+        my $local_error1_occured = 0;
+        my $local_error2_occured = 0;
+
         my $sourcepath = make_file_url(${$unocomponents}[$i]->{'sourcepath'});
         my $urlprefix = ${$unocomponents}[$i]->{'NativeServicesURLPrefix'};
         if (defined($urlprefix))
         {
-            call_regcomp(
-                $regcompfileref, $servicesfile, $sourcepath, $urlprefix);
+            $local_error1_occured = call_regcomp($regcompfileref, $servicesfile, $sourcepath, $urlprefix);
         }
         else
         {
@@ -152,11 +150,11 @@ sub register_unocomponents
         if (length($filestring) > $installer::globals::unomaxservices ||
             ($i == $#{$unocomponents} && $filestring ne ""))
         {
-            call_regcomp(
-                $regcompfileref, $servicesfile, $filestring,
-                $nativeservicesurlprefix);
+            $local_error2_occured = call_regcomp($regcompfileref, $servicesfile, $filestring, $nativeservicesurlprefix);
             $filestring = "";
         }
+
+        if (( $local_error1_occured ) || ( $local_error2_occured )) { $error_occured = 1; }
     }
 
     return $error_occured;
@@ -166,6 +164,8 @@ sub call_regcomp
 {
     my ($regcompfileref, $servicesfile, $filestring, $urlprefix) = @_;
     my @regcompoutput = ();
+
+    my $error_occured = 0;
 
     my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
 
@@ -191,6 +191,8 @@ sub call_regcomp
         $infoline = "SUCCESS: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
+
+    return $error_occured;
 }
 
 ################################################################

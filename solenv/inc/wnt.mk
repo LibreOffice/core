@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: wnt.mk,v $
-#
-# $Revision: 1.84 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -73,9 +69,4 @@ JAVA_RUNTIME=javai_g.lib
 .ENDIF
 .ENDIF
 
-.IF "$(USE_SHELL)" == "bash"
-AUGMENT_LIBRARY_PATH *= : && \
-    PATH=$${{PATH}}:$(SOLARBINDIR:s/://:^"/cygdrive/")
-.ELSE
-AUGMENT_LIBRARY_PATH *= echos && PATH=%PATH%;$(SOLARBINDIR) &&
-.ENDIF
+OOO_LIBRARY_PATH_VAR = PATH

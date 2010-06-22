@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: parameter.pm,v $
-#
-# $Revision: 1.56 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -280,7 +276,6 @@ sub setglobalvariables
     if ( $installer::globals::compiler =~ /wnt(msc|gcc)i/ )
     {
         $installer::globals::iswindowsbuild = 1;
-        if ( $installer::globals::installertypedir eq "" ) { $installer::globals::installertypedir = "msi"; }
     }
 
     if ( $installer::globals::compiler =~ /unxso[lg][siux]/ )
@@ -294,8 +289,10 @@ sub setglobalvariables
         }
     }
 
-    if ( $installer::globals::compiler =~ /unxmacxi/ )
+    if (( $installer::globals::compiler =~ /unxmacxi/ ) || ( $installer::globals::compiler =~ /unxmacxp/ ))
     {
+        $installer::globals::ismacbuild = 1;
+
         if ( $installer::globals::packageformat eq "dmg" )
         {
             $installer::globals::ismacdmgbuild = 1;
@@ -304,6 +301,8 @@ sub setglobalvariables
 
     if ( $installer::globals::compiler =~ /unxfbsd/ )
     {
+        $installer::globals::isfreebsdbuild = 1;
+
         if ( $installer::globals::packageformat eq "bsd" )
         {
             $installer::globals::epmoutpath = "freebsd";

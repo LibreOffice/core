@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: libs.mk,v $
-#
-# $Revision: 1.134.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -170,10 +166,10 @@ LIBXML2LIB=-lxml2
 NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
 PLC4LIB=-lplc4
-NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
+NSSCRYPTOLIBS=$(XMLSECLIB-NSS) $(XMLSECLIB) $(LIBXML2LIB) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 XMLSECLIB-MS=-lxmlsec1-mscrypto
-MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) $(CRYPT32LIB) $(ADVAPI32LIB)
+MSCRYPTOLIBS=$(XMLSECLIB) $(XMLSECLIB-MS) $(LIBXML2LIB) $(CRYPT32LIB) $(ADVAPI32LIB)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 BROOKERLIB=-lbrooker$(DLLPOSTFIX)
 SIMPLECMLIB=-lsimplecm$(DLLPOSTFIX)
@@ -182,12 +178,13 @@ BTCOMMUNILIB=-lbtcommuni$(DLLPOSTFIX)
 AUTOMATIONLIB=-lsts$(DLLPOSTFIX)
 SVLLIB=-lsvl$(DLLPOSTFIX)
 TKTLIB=-ltkt$(DLLPOSTFIX)
-GOODIESLIB=-lgo$(DLLPOSTFIX)
 SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(DLLPOSTFIX)
 BASICLIB=-lsb$(DLLPOSTFIX)
+.IF "$(ENABLE_VBA)"=="YES"
 VBAHELPERLIB=-lvbahelper$(DLLPOSTFIX)
+.ENDIF
 DBTOOLSLIB=-ldbtools$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
@@ -210,7 +207,7 @@ ZLIB3RDLIB=-lzlib
 #i34482# Blackdown/Sun jdk is in the libsearch patch and has a libjpeg :-(
 .IF "$(OS)" == "FREEBSD"
 JPEG3RDLIB=/usr/local/lib/libjpeg.so
-.ELIF "$(CPUNAME)" == "X86_64"
+.ELIF "$(CPUNAME)" == "X86_64" || "$(CPUNAME)" == "S390X" || "$(CPUNAME)" == "POWERPC64"
 JPEG3RDLIB=/usr/lib64/libjpeg.so
 .ELSE
 JPEG3RDLIB=/usr/lib/libjpeg.so
@@ -245,6 +242,7 @@ FWILIB=-lfwi$(DLLPOSTFIX)
 SVXCORELIB=-lsvxcore$(DLLPOSTFIX)
 MSFILTERLIB=-lmsfilter$(DLLPOSTFIX)
 SVXLIB=-lsvx$(DLLPOSTFIX)
+EDITENGLIB=-lediteng$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
 SVXLLIB=-lsvxl
@@ -270,8 +268,15 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
-TESTSHL2LIB = -ltestshl2$(DLLPOSTFIX)
+.IF "$(OS)" == "WNT"
+CPPUNITLIB = -lcygcppunit-1-12-1
+.ELSE
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CPPUNITLIB = $(CPPUNIT_LIBS)
+.ELSE
+CPPUNITLIB = -lcppunit
+.ENDIF
+.ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
@@ -344,6 +349,7 @@ PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
+TESTLIB=-ltest
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -412,8 +418,8 @@ LIBXML2LIB=libxml2.lib
 NSS3LIB=nss3.lib
 NSPR4LIB=nspr4.lib
 PLC4LIB=plc4.lib
-NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
-MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) crypt32.lib advapi32.lib
+NSSCRYPTOLIBS=$(XMLSECLIB-NSS) $(XMLSECLIB) $(LIBXML2LIB) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
+MSCRYPTOLIBS=$(XMLSECLIB-MS) $(XMLSECLIB) $(LIBXML2LIB) crypt32.lib advapi32.lib
 BROOKERLIB=ibrooker.lib
 SIMPLECMLIB=isimplecm.lib
 COMMUNILIB=icommuni.lib
@@ -421,7 +427,6 @@ BTCOMMUNILIB=ibtcommuni.lib
 AUTOMATIONLIB=ists.lib
 SVLLIB=isvl.lib
 PLUGAPPLIB=plugapp.lib
-GOODIESLIB=igo.lib
 SAXLIB=isax.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
@@ -432,6 +437,7 @@ SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
 MSFILTERLIB=imsfilter.lib
 SVXLIB=isvx.lib
+EDITENGLIB=iediteng.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
 SVXLLIB=svxl.lib
@@ -478,8 +484,7 @@ FREETYPELIB=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
-CPPUNITLIB = cppunit.lib
-TESTSHL2LIB = testshl2.lib
+CPPUNITLIB = icppunit_dll.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
 .IF "$(GUI)"=="OS2"
 REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
@@ -525,5 +530,6 @@ PYUNOLIB=ipyuno.lib
 LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
+TESTLIB=itest.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.45.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -66,17 +62,21 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
+    TARFILE_MD5=18f577b374d60b3c760a3a3350407632
     PATCH_FILES=STLport-4.5.patch STLport-4.5-gcc43_warnings.patch
 .ELIF "$(GUI)"=="WNT"
     .IF "$(CCNUMVER)"<="001300000000"
         TARFILE_NAME=STLport-4.0
+        TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
         PATCH_FILES=STLport-4.0.patch
     .ELSE
         TARFILE_NAME=STLport-4.5-0119
+        TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
         PATCH_FILES=STLport-4.5-0119.patch
     .ENDIF
 .ELSE
     TARFILE_NAME=STLport-4.0
+    TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
     PATCH_FILES=STLport-4.0.patch STLport-4.0-sunstudio12u1.patch
         # To disable warnings from within STLport headers on unxsoli4 and
         # unxsols4, STLport-4.0.patch had to be extended mechanically by
@@ -101,10 +101,6 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
         # compilation unit, outside the scope of stl/_prolog.h and
         # stl/_epilog.h.)
 .ENDIF
-
-.IF "$(USE_SHELL)"=="4nt"
-TAR_EXCLUDES=*/SC5/*
-.ENDIF          # "$(USE_SHELL)"=="4nt"
 
 ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak \
     src$/gcc-3.0-os2.mak src$/gcc-3.0-os2.def src$/common_macros_os2.mak
@@ -233,21 +229,13 @@ avoid_win32_patches :
     force_dmake_to_error
 
 $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-.IF "$(USE_SHELL)"=="4nt"
     win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    win32_custom.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 
 .IF "$(USE_NEW_SDK)"!=""
 $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-.IF "$(USE_SHELL)"=="4nt"
     win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    win32_sdk.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF			# "$(USE_NEW_SDK)"!=""
