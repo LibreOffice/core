@@ -37,9 +37,10 @@ TARGET=gen
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES = $(SLO)$/poly.obj $(OBJ)$/poly.obj
+EXCEPTIONSFILES = $(SLO)$/poly.obj $(OBJ)$/poly.obj $(SLO)$/svlibrary.obj
 
 SLOFILES=       $(SLO)$/toolsin.obj     \
+            $(SLO)$/svlibrary.obj \
             $(SLO)$/b3dtrans.obj                \
             $(SLO)$/link.obj                \
             $(SLO)$/bigint.obj              \
