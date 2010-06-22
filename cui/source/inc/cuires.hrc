@@ -431,4 +431,12 @@
 #define RID_SVXSTR_EVENT_FIELDMERGE_FINISHED                (RID_SVX_START + 1188)
 #define RID_SVXSTR_EVENT_LAYOUT_FINISHED                    (RID_SVX_START + 1189)
 
+// For now, keep new IDs unique only within cui.
+// Later, cui should perhaps get an own range of IDs.
+#define RID_SVXSTR_EVENT_SELECTIONCHANGED                   (RID_SVX_START + 1190)
+#define RID_SVXSTR_EVENT_DOUBLECLICK                        (RID_SVX_START + 1191)
+#define RID_SVXSTR_EVENT_RIGHTCLICK                         (RID_SVX_START + 1192)
+#define RID_SVXSTR_EVENT_CALCULATE                          (RID_SVX_START + 1193)
+#define RID_SVXSTR_EVENT_CONTENTCHANGED                     (RID_SVX_START + 1194)
+
 #endif
