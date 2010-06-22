@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: RowsChangeEvent.idl,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,42 +27,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XThrobber_idl__
-#define __com_sun_star_awt_XThrobber_idl__
+#ifndef __com_sun_star_sdb_RowsChangeEvent_idl__
+#define __com_sun_star_sdb_RowsChangeEvent_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#include <com/sun/star/sdb/RowChangeEvent.idl>
 
-#ifndef com_sun_star_graphic_XGraphic_idl
-#include <com/sun/star/graphic/XGraphic.idl>
-#endif
+ module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
-/** Controls the animation control.
+/** indicates which rows have changed and the type of change action on the row set.
  */
-published interface XThrobber: com::sun::star::uno::XInterface
+struct RowsChangeEvent: com::sun::star::sdb::RowChangeEvent
 {
-    //-------------------------------------------------------------------------
 
-    /** starts the animation of the control.
-     */
-    void start();
-
-    //-------------------------------------------------------------------------
-
-    /** stops the animation of the control.
-     */
-    void stop();
+    sequence< any > Bookmarks;
 };
 
 //=============================================================================
 
 }; }; }; };
 
+/*===========================================================================
+===========================================================================*/
 #endif

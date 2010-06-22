@@ -31,6 +31,14 @@
 #include <com/sun/star/chart/XDiagram.idl>
 #endif
 
+#ifndef __com_sun_star_chart_XDiagramPositioning_idl__
+#include <com/sun/star/chart/XDiagramPositioning.idl>
+#endif
+
+#ifndef __com_sun_star_chart_XSecondAxisTitleSupplier_idl__
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.idl>
+#endif
+
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
@@ -63,6 +71,17 @@ published service Diagram
 {
 
     interface com::sun::star::chart::XDiagram;
+
+    /** Provides access to the titles of the secondary X axis and Y axis.
+
+        @since OOo 3.0
+     */
+    [optional] interface com::sun::star::chart::XSecondAxisTitleSupplier;
+
+    /**
+    @since OOo 3.3
+     */
+    [optional] interface com::sun::star::chart::XDiagramPositioning;
 
     //-------------------------------------------------------------------------
 
