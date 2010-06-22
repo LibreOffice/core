@@ -47,6 +47,15 @@ all:
     @echo "Therefore the files provided here does not need to be built in addition."
 .ENDIF
 
+EXTERNAL_DIR=$(PRJ)$/..$/external/StAX
+
+.IF "$(BUILD_STAX)" != "YES"
+
+$(OUT)$/class$/jsr173_1.0_api.jar : $(EXTERNAL_DIR)$/jsr173_1.0_api.jar
+    +$(COPY) $< $@
+
+.ELSE 			#  "$(BUILD_STAX)" != "YES"
+
 # --- Files --------------------------------------------------------
 TARFILE_NAME=stax-api-1.0-2-sources
 TARFILE_MD5=8294d6c42e3553229af9934c5c0ed997
@@ -68,3 +77,4 @@ nojava:
 .INCLUDE : tg_ext.mk
 .ENDIF
 
+.ENDIF			#  "$(BUILD_STAX)" != "YES"
