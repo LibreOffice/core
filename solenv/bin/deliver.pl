@@ -73,6 +73,7 @@ $is_debug           = 0;
 
 $error              = 0;
 $module             = 0;            # module name
+$repository         = 0;            # parent directory of this module
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
 $ilst_ext           = 'ilst';       # extension of image lists
@@ -446,7 +447,7 @@ sub parse_options
 sub init_globals
 {
     my $ext;
-    ($module, $base_dir, $dlst_file) =  get_base();
+    ($module, $repository, $base_dir, $dlst_file) =  get_base();
 
     # for CWS:
     $module =~ s/\.lnk$//;
@@ -543,7 +544,7 @@ sub get_base
 {
     # a module base dir contains a subdir 'prj'
     # which in turn contains a file 'd.lst'
-    my (@field, $base, $dlst);
+    my (@field, $repo, $base, $dlst);
     my $path = getcwd();
 
     @field = split(/\//, $path);
@@ -560,7 +561,12 @@ sub get_base
         exit(2);
     }
     else {
-        return ($field[-1], $base, $dlst);
+        if ( defined $field[-2] ) {
+            $repo = $field[-2];
+        } else {
+            print_error("Internal error: cannot determine module's parent directory");
+        }
+        return ($field[-1], $repo, $base, $dlst);
     }
 }
 
@@ -1152,8 +1158,8 @@ sub push_on_loglist
     if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "ADDINCPATH" )) {
         return 0 if ( ! -e $entry[1].$maybedot );
         # make 'from' relative to source root
-        $entry[1] = $module . "/prj/" . $entry[1];
-        $entry[1] =~ s/^$module\/prj\/\.\./$module/;
+        $entry[1] = $repository ."/" . $module . "/prj/" . $entry[1];
+        $entry[1] =~ s/$module\/prj\/\.\./$module/;
     }
     # platform or common tree?
     my $common;

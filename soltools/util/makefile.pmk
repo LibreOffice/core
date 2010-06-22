@@ -34,6 +34,10 @@ ADJUSTVISIBILITY=$(AUGMENT_LIBRARY_PATH) $(BIN)$/adjustvisibility
 # avoid STLPort
 NO_DEFAULT_STL=TRUE
 SOLARINC!:=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(SOLARINC))
+.IF "$(STLPORT4)" != ""
+SOLARINC!:=$(subst,$(STLPORT4)/include/stlport,dont_use_stl$(SPACECHAR) $(SOLARINC))
+SOLARINC!:=$(subst,$(STLPORT4)/stlport,dont_use_stl$(SPACECHAR) $(SOLARINC))
+.ENDIF
 
 .IF "$(OS)"=="SOLARIS"
 # hack due to #i53089#
