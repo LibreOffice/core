@@ -143,7 +143,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object))) > $(1))
 endef
 
-$(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%)
+$(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(call gb_LinkTarget_get_dep_target,%) $(gb_Helper_MISCDUMMY)
     $(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
     $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
 
@@ -165,7 +165,6 @@ $(call gb_LinkTarget_get_external_headers_target,%) :
 $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_headers_target,%)
     $(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $@) && touch $@)
-
 
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
@@ -314,8 +313,6 @@ $(call gb_ObjCxxObject_get_target,$(2)) : OBJCXXFLAGS += $(3)
 
 endef
 
-
-
 define gb_LinkTarget_add_noexception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS))
 endef
@@ -375,7 +372,6 @@ $(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_Sdi
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
 endef
 
-
 define gb_LinkTarget__add_precompiled_header_impl
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_target,$(3)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
@@ -391,6 +387,11 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADE
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
+ifeq ($(gb_FULLDEPS),$(true))
+include \
+    $(call gb_PrecompiledHeader_get_dep_target,$(3)) \
+    $(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
+endif
 endef
 
 define gb_LinkTarget_add_precompiled_header
