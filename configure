@@ -10678,7 +10678,7 @@ fi
 fi
 
 if test "$SOLAR_JAVA" != ""; then
-        if test "$JDK" == "gcj" -a -z "$JAVA_HOME"; then
+        if test "$JDK" = "gcj" -a -z "$JAVA_HOME"; then
       if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "40200"; then
         cat > findhome.java <<_ACEOF
 import java.io.File;
@@ -10775,7 +10775,7 @@ $as_echo "$as_me: WARNING: in case JAVA_HOME is incorrectly set, some projects w
          echo "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >> warn
          echo "attempted to find JAVA_HOME automatically, but apparently it failed" >> warn
          echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
-#         if test "$JDK" == "gcj"; then
+#         if test "$JDK" = "gcj"; then
 #             echo "e.g. install java-1.4.2-gcj-compat-devel and use --with-jdk-home=/usr/lib/jvm/java-1.4.2-gcj" >> warn
 #         fi
       fi
@@ -12523,7 +12523,7 @@ fi
 if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
    test "$with_system_libxslt" != "no"; then
     if test -z "$with_system_libxml" -a -z "$with_system_libs" || \
-      test "$with_system_libxml" == "no"; then
+      test "$with_system_libxml" = "no"; then
       # somehow AC_MSG_WARN won't work...
        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml"
        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml" >> warn
@@ -12533,7 +12533,7 @@ fi
 if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
    test "$with_system_libxml" != "no"; then
     if test -z "$with_system_libxslt" -a -z "$with_system_libs" || \
-      test "$with_system_libxslt" == "no"; then
+      test "$with_system_libxslt" = "no"; then
       # somehow AC_MSG_WARN won't work...
        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt"
        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt" >> warn
@@ -15110,7 +15110,7 @@ Please recompile $tmp with --enable-ldap or use --with-openldap." "$LINENO" 5
 
     #e.g. http://fedoraproject.org/wiki/Releases/FeatureXULRunnerAPIChanges
     #the plugin pkg-config etc. reverts to "mozilla-plugin" with libxul
-    if test "$MOZ_FLAVOUR" == "libxul"; then
+    if test "$MOZ_FLAVOUR" = "libxul"; then
         MOZ_FLAVOUR="mozilla"
     fi
 
@@ -16140,7 +16140,7 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable graphite support" >&5
 $as_echo_n "checking whether to enable graphite support... " >&6; }
-if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" == "z" -o "$enable_graphite" != "no" ; then
+if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" = "z" -o "$enable_graphite" != "no" ; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
     ENABLE_GRAPHITE="TRUE"
@@ -20468,7 +20468,7 @@ $as_echo "no" >&6; }
 fi
 
 
-if test "$ENABLE_MEDIAWIKI" == "YES"; then
+if test "$ENABLE_MEDIAWIKI" = "YES"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking which Servlet API Jar to use" >&5
 $as_echo_n "checking which Servlet API Jar to use... " >&6; }
   if test -n "$with_system_servlet_api"; then
@@ -20528,7 +20528,7 @@ $as_echo "OK" >&6; }
   fi
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking which jfreereport libs to use" >&5
 $as_echo_n "checking which jfreereport libs to use... " >&6; }
-  if test "$with_system_jfreereport" == "yes"; then
+  if test "$with_system_jfreereport" = "yes"; then
    	SYSTEM_JFREEREPORT=YES
   	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: external" >&5
 $as_echo "external" >&6; }
@@ -21812,7 +21812,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    kde_incdirs="/usr/include $x_includes"
    kde_libdirs="/usr/lib $x_libraries"
 
-   if test "$build_cpu" == "x86_64" ; then
+   if test "$build_cpu" = "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
    fi
@@ -22764,12 +22764,12 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking build verbosity" >&5
 $as_echo_n "checking build verbosity... " >&6; }
 if test -n "$enable_verbose"; then
-   if test "$enable_verbose" == "yes"; then
+   if test "$enable_verbose" = "yes"; then
       VERBOSE="TRUE"
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: high" >&5
 $as_echo "high" >&6; }
    fi
-   if test "$enable_verbose" == "no"; then
+   if test "$enable_verbose" = "no"; then
       VERBOSE="FALSE"
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: low" >&5
 $as_echo "low" >&6; }
