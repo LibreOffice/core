@@ -216,6 +216,7 @@ testcase tiEditClipboard
     
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep 1
     SetClipboard ""
     '/// Create rectangle ///'

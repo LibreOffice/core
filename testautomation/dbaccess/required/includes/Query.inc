@@ -156,7 +156,7 @@ testcase tSwitchDesign
             sTableName = TableName.GetSelText
             printlog "- Add 'biblio' table to query design"
             if sTableName <> "biblio" then
-                warnlog "It should be the 'biblio'-database table but it is the '" & SelEntry  & "' database table?!"
+                warnlog "It should be the 'biblio'-database table but it is the '" & sTableName  & "' database table?!"
                 goto endsub
             else
                 AddTable.Click
@@ -909,7 +909,10 @@ endcase
 '-------------------------------------------------------------------------
 function getMenuItemCount as Integer
 'use this function becasue this doesn't count the pick list
-    Dim i, j, Ende, nID as Integer
+    Dim i as Integer
+    Dim j as Integer
+    Dim Ende as Integer
+    Dim nID as Integer
     Sleep 2
     j=0
     for i=1 to MenuGetItemCount

@@ -45,7 +45,7 @@ import com.sun.star.chart.XDiagram;
 * </ul> <p>
 * The following predefined files needed to complete the test:
 * <ul>
-*  <li> <code>poliball.gif</code> :
+*  <li> <code>space-metal.jpg</code> :
 *  for test of property 'SymbolBitmapURL' </li>
 * <ul> <p>
 * This test needs the following object relations :
@@ -79,7 +79,7 @@ public class _ChartDataPointProperties extends MultiPropertyTest {
     protected PropertyTester URLTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
-            return utils.getFullTestURL("poliball.gif");
+            return utils.getFullTestURL("space-metal.jpg");
         }
     };
 
