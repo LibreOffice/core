@@ -360,10 +360,9 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 static ::rtl::OUString sClassOption( RTL_CONSTASCII_USTRINGPARAM( "Option ClassModule\n" ) );
                 if ( !bAsComment )
                 {
-                    modeTypeComment = modeTypeComment + sVBAOption;
+                    modeTypeComment += sVBAOption;
                     if ( mType == ModuleType::CLASS )
-                        modeTypeComment = modeTypeComment + sClassOption;
-
+                        modeTypeComment += sClassOption;
                 }
 
                 String sModule(sBasicModule); //#i52606# no need to split Macros in 64KB blocks any more!

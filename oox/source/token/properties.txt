@@ -103,6 +103,7 @@ D3DScenePerspective
 D3DSceneShadeMode
 DDELinks
 DatabaseRanges
+Decoration
 DefaultContext
 DefaultScrollValue
 DefaultSpinValue
@@ -262,6 +263,7 @@ MissingValueTreatment
 Model
 ModifyPasswordHash
 MultiLine
+MultiPageValue
 MultiSelection
 Name
 NamedRanges

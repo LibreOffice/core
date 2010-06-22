@@ -39,8 +39,6 @@ namespace oox { class StorageBase; }
 namespace oox {
 namespace ole {
 
-class VbaFormControl;
-
 // ============================================================================
 
 /** Common properties for all controls that are part of a VBA user form or of
@@ -62,6 +60,10 @@ public:
     inline const ::rtl::OUString& getName() const { return maName; }
     /** Returns the position of the control in its parent. */
     inline const AxPairData& getPosition() const { return maPos; }
+    /** Returns the unique identifier of this control. */
+    inline sal_Int32    getId() const { return mnId; }
+    /** Returns true, if the control is visible. */
+    bool                isVisible() const;
     /** Returns true, if this control is a container control. */
     bool                isContainer() const;
     /** Returns the length of the stream data for stream based controls. */
@@ -122,6 +124,8 @@ public:
 
     /** Returns the programmatical name of the control. */
     ::rtl::OUString     getControlName() const;
+    /** Returns the unique identifier of this control. */
+    sal_Int32           getControlId() const;
 
     /** Creates the UNO control model, inserts it into the passed container,
         and converts all control properties. */
