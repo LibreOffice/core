@@ -43,7 +43,6 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_C05_Faq,
             gid_Brand_Dir_Share_Config,
             gid_Brand_Dir_Share_Extension,
-            gid_Brand_Dir_Share_Extension_Install,
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Registry,
@@ -217,10 +216,179 @@ Directory gid_Brand_Dir_Share_Extension
     DosName = "extension";
 End
 
-Directory gid_Brand_Dir_Share_Extension_Install
+Directory gid_Brand_Dir_Share_Extensions
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "extensions";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Install
     ParentID = gid_Brand_Dir_Share_Extension;
     DosName = "install";
-    Styles = (CREATE);
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Af
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-af";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Ca
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-ca";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Cs
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-cs";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Da
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-da";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_De_At
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-de-AT";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_De_Ch
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-de-CH";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_De_De
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-de-DE";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_En
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-en";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Es
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-es";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Et
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-et";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Fr
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-fr";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Gl
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-gl";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_He
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-he";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Hu
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-hu";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_It
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-it";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-ku-TR";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Lt
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-lt";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Ne
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-ne";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Nl
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-nl";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_No
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-no";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Pl
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-pl";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Pt
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-pt";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Ro
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-ro";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Ru
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-ru";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Sk
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-sk";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Sl
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-sl";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Sr
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-sr";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Sv
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-sv";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Sw
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-sw";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Th
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-th";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Vi
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-vi";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Zu
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-zu";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Oooimprovement
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "OOoImprovement";
 End
 
 Directory gid_Brand_Dir_Share_Uno_Packages
@@ -1049,6 +1217,22 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ooo_Base_Dir
 #endif
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS_USER";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_USER}";
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
@@ -1057,12 +1241,28 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
     Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":UNO_SHARED_PACKAGES_CACHE}";
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Extensions_User
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "SHARED_EXTENSIONS_USER";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":SHARED_EXTENSIONS_USER}";
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_User_Packages_Cache
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "UNO_USER_PACKAGES_CACHE";
     Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":UNO_USER_PACKAGES_CACHE}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Tmp_Extensions
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "TMP_EXTENSIONS";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":TMP_EXTENSIONS}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Types
