@@ -25,41 +25,29 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
-#define INCLUDED_COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
+#ifndef __com_sun_star_task_OfficeRestartManager_idl__
+#define __com_sun_star_task_OfficeRestartManager_idl__
 
-#include "com/sun/star/uno/Exception.idl"
+//=============================================================================
 
-module com { module sun { module star { module deployment {
+module com { module sun { module star { module task {
 
-interface XPackage;
+interface XRestartManager;
 
-/**
-   describes version clashes of a deployment unit.
+//=============================================================================
 
-   <p>This exception is intended to be used with an
-   <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
+/** This singleton is intended to allow to restart the office asynchronously.
 
-   @since OOo 2.1
-*/
-exception VersionException: com::sun::star::uno::Exception {
-    /**
-       the version of the extension which is being installed.
-    */
-    string NewVersion;
-    /**
-       the display name of the extension which is being installed.
-    */
-    string NewDisplayName;
+    @since OOo 3.3
+ */
+singleton OfficeRestartManager : XRestartManager;
 
-    /**
-       represents the already installed version of the deployment unit.
-
-       <p>Must not be <NULL/>.</p>
-    */
-    XPackage Deployed;
-};
+//=============================================================================
 
 }; }; }; };
 
+//=============================================================================
+
+
 #endif
+
