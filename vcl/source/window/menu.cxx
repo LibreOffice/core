@@ -938,6 +938,14 @@ Menu::~Menu()
     if ( nEventId )
         Application::RemoveUserEvent( nEventId );
 
+    // Notify deletion of this menu
+    ImplMenuDelData* pDelData = mpFirstDel;
+    while ( pDelData )
+    {
+        pDelData->mpMenu = NULL;
+        pDelData = pDelData->mpNext;
+    }
+
     bKilled = TRUE;
 
     delete pItemList;
@@ -970,7 +978,7 @@ void Menu::ImplInit()
     bInCallback     = FALSE;
     bKilled         = FALSE;
     mpLayoutData    = NULL;
-
+    mpFirstDel      = NULL;         // Dtor notification list
     // Native-support: returns NULL if not supported
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar );
 }
@@ -1034,19 +1042,29 @@ void Menu::CreateAutoMnemonics()
 void Menu::Activate()
 {
     bInCallback = TRUE;
+
+    ImplMenuDelData aDelData( this );
+
     ImplCallEventListeners( VCLEVENT_MENU_ACTIVATE, ITEMPOS_INVALID );
-    if ( !aActivateHdl.Call( this ) )
+
+    if( !aDelData.isDeleted() )
     {
-        Menu* pStartMenu = ImplGetStartMenu();
-        if ( pStartMenu && ( pStartMenu != this ) )
+        if ( !aActivateHdl.Call( this ) )
         {
-            pStartMenu->bInCallback = TRUE;
-            // MT 11/01: Call EventListener here? I don't know...
-            pStartMenu->aActivateHdl.Call( this );
-            pStartMenu->bInCallback = FALSE;
+            if( !aDelData.isDeleted() )
+            {
+                Menu* pStartMenu = ImplGetStartMenu();
+                if ( pStartMenu && ( pStartMenu != this ) )
+                {
+                    pStartMenu->bInCallback = TRUE;
+                    // MT 11/01: Call EventListener here? I don't know...
+                    pStartMenu->aActivateHdl.Call( this );
+                    pStartMenu->bInCallback = FALSE;
+                }
+            }
         }
+        bInCallback = FALSE;
     }
-    bInCallback = FALSE;
 }
 
 void Menu::Deactivate()
@@ -1059,33 +1077,49 @@ void Menu::Deactivate()
     }
 
     bInCallback = TRUE;
+
+    ImplMenuDelData aDelData( this );
+
     Menu* pStartMenu = ImplGetStartMenu();
     ImplCallEventListeners( VCLEVENT_MENU_DEACTIVATE, ITEMPOS_INVALID );
-    if ( !aDeactivateHdl.Call( this ) )
+
+    if( !aDelData.isDeleted() )
     {
-        if ( pStartMenu && ( pStartMenu != this ) )
+        if ( !aDeactivateHdl.Call( this ) )
         {
-            pStartMenu->bInCallback = TRUE;
-            pStartMenu->aDeactivateHdl.Call( this );
-            pStartMenu->bInCallback = FALSE;
+            if( !aDelData.isDeleted() )
+            {
+                if ( pStartMenu && ( pStartMenu != this ) )
+                {
+                    pStartMenu->bInCallback = TRUE;
+                    pStartMenu->aDeactivateHdl.Call( this );
+                    pStartMenu->bInCallback = FALSE;
+                }
+            }
         }
     }
-    bInCallback = FALSE;
 
-    if ( this == pStartMenu )
-        GetpApp()->HideHelpStatusText();
+    if( !aDelData.isDeleted() )
+    {
+        bInCallback = FALSE;
+
+        if ( this == pStartMenu )
+            GetpApp()->HideHelpStatusText();
+    }
 }
 
 void Menu::Highlight()
 {
+    ImplMenuDelData aDelData( this );
+
     Menu* pStartMenu = ImplGetStartMenu();
-    if ( !aHighlightHdl.Call( this ) )
+    if ( !aHighlightHdl.Call( this ) && !aDelData.isDeleted() )
     {
         if ( pStartMenu && ( pStartMenu != this ) )
             pStartMenu->aHighlightHdl.Call( this );
     }
 
-    if ( GetCurItemId() )
+    if ( !aDelData.isDeleted() && GetCurItemId() )
         GetpApp()->ShowHelpStatusText( GetHelpText( GetCurItemId() ) );
 }
 
@@ -1112,14 +1146,19 @@ void Menu::ImplSelect()
 
 void Menu::Select()
 {
+    ImplMenuDelData aDelData( this );
+
     ImplCallEventListeners( VCLEVENT_MENU_SELECT, GetItemPos( GetCurItemId() ) );
-    if ( !aSelectHdl.Call( this ) )
+    if ( !aDelData.isDeleted() && !aSelectHdl.Call( this ) )
     {
-        Menu* pStartMenu = ImplGetStartMenu();
-        if ( pStartMenu && ( pStartMenu != this ) )
+        if( !aDelData.isDeleted() )
         {
-            pStartMenu->nSelectedId = nSelectedId;
-            pStartMenu->aSelectHdl.Call( this );
+            Menu* pStartMenu = ImplGetStartMenu();
+            if ( pStartMenu && ( pStartMenu != this ) )
+            {
+                pStartMenu->nSelectedId = nSelectedId;
+                pStartMenu->aSelectHdl.Call( this );
+            }
         }
     }
 }
@@ -1141,6 +1180,8 @@ void Menu::RequestHelp( const HelpEvent& )
 
 void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
 {
+    ImplMenuDelData aDelData( this );
+
     VclMenuEvent aEvent( this, nEvent, nPos );
 
     // This is needed by atk accessibility bridge
@@ -1149,16 +1190,22 @@ void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
         ImplGetSVData()->mpApp->ImplCallEventListeners( &aEvent );
     }
 
-    if ( !maEventListeners.empty() )
+    if ( !aDelData.isDeleted() && !maEventListeners.empty() )
         maEventListeners.Call( &aEvent );
 
-    Menu* pMenu = this;
-    while ( pMenu )
+    if( !aDelData.isDeleted() )
     {
-        if ( !maChildEventListeners.empty() )
-            maChildEventListeners.Call( &aEvent );
+        Menu* pMenu = this;
+        while ( pMenu )
+        {
+            if ( !maChildEventListeners.empty() )
+                maChildEventListeners.Call( &aEvent );
 
-        pMenu = ( pMenu->pStartedFrom != pMenu ) ? pMenu->pStartedFrom : NULL;
+            if( aDelData.isDeleted() )
+                break;
+
+            pMenu = ( pMenu->pStartedFrom != pMenu ) ? pMenu->pStartedFrom : NULL;
+        }
     }
 }
 
@@ -2261,6 +2308,42 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
     return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
 }
 
+// -----------------------------------------------------------------------
+
+void Menu::ImplAddDel( ImplMenuDelData& rDel )
+{
+    DBG_ASSERT( !rDel.mpMenu, "Menu::ImplAddDel(): cannot add ImplMenuDelData twice !" );
+    if( !rDel.mpMenu )
+    {
+        rDel.mpMenu = this;
+        rDel.mpNext = mpFirstDel;
+        mpFirstDel = &rDel;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
+{
+    rDel.mpMenu = NULL;
+    if ( mpFirstDel == &rDel )
+    {
+        mpFirstDel = rDel.mpNext;
+    }
+    else
+    {
+        ImplMenuDelData* pData = mpFirstDel;
+        while ( pData && (pData->mpNext != &rDel) )
+            pData = pData->mpNext;
+
+        DBG_ASSERT( pData, "Menu::ImplRemoveDel(): ImplMenuDelData not registered !" );
+        if( pData )
+            pData->mpNext = rDel.mpNext;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 Size Menu::ImplCalcSize( Window* pWin )
 {
     // | Checked| Image| Text| Accel/Popup|
@@ -2790,13 +2873,19 @@ Menu* Menu::ImplGetStartMenu()
 
 void Menu::ImplCallHighlight( USHORT nHighlightedItem )
 {
+    ImplMenuDelData aDelData( this );
+
     nSelectedId = 0;
     MenuItemData* pData = pItemList->GetDataFromPos( nHighlightedItem );
     if ( pData )
         nSelectedId = pData->nId;
     ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT, GetItemPos( GetCurItemId() ) );
-    Highlight();
-    nSelectedId = 0;
+
+    if( !aDelData.isDeleted() )
+    {
+        Highlight();
+        nSelectedId = 0;
+    }
 }
 
 IMPL_LINK( Menu, ImplCallSelect, Menu*, EMPTYARG )
@@ -3292,10 +3381,14 @@ BOOL MenuBar::HandleMenuActivateEvent( Menu *pMenu ) const
 {
     if( pMenu )
     {
+        ImplMenuDelData aDelData( this );
+
         pMenu->pStartedFrom = (Menu*)this;
         pMenu->bInCallback = TRUE;
         pMenu->Activate();
-        pMenu->bInCallback = FALSE;
+
+        if( !aDelData.isDeleted() )
+            pMenu->bInCallback = FALSE;
     }
     return TRUE;
 }
@@ -3304,10 +3397,13 @@ BOOL MenuBar::HandleMenuDeActivateEvent( Menu *pMenu ) const
 {
     if( pMenu )
     {
+        ImplMenuDelData aDelData( this );
+
         pMenu->pStartedFrom = (Menu*)this;
         pMenu->bInCallback = TRUE;
         pMenu->Deactivate();
-        pMenu->bInCallback = FALSE;
+        if( !aDelData.isDeleted() )
+            pMenu->bInCallback = FALSE;
     }
     return TRUE;
 }
@@ -3318,13 +3414,18 @@ BOOL MenuBar::HandleMenuHighlightEvent( Menu *pMenu, USHORT nHighlightEventId ) 
         pMenu = ((Menu*) this)->ImplFindMenu( nHighlightEventId );
     if( pMenu )
     {
+        ImplMenuDelData aDelData( pMenu );
+
         if( mnHighlightedItemPos != ITEMPOS_INVALID )
             pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, mnHighlightedItemPos );
 
-        pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nHighlightEventId );
-        pMenu->nSelectedId = nHighlightEventId;
-        pMenu->pStartedFrom = (Menu*)this;
-        pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
+        if( !aDelData.isDeleted() )
+        {
+            pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nHighlightEventId );
+            pMenu->nSelectedId = nHighlightEventId;
+            pMenu->pStartedFrom = (Menu*)this;
+            pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
+        }
         return TRUE;
     }
     else
@@ -5988,4 +6089,18 @@ bool MenuBarWindow::HandleMenuButtonEvent( USHORT i_nButtonId )
         return it->second.m_aSelectLink.Call( &aArg );
     }
     return FALSE;
+}
+
+ImplMenuDelData::ImplMenuDelData( const Menu* pMenu )
+: mpNext( 0 )
+, mpMenu( 0 )
+{
+    if( pMenu )
+        const_cast< Menu* >( pMenu )->ImplAddDel( *this );
+}
+
+ImplMenuDelData::~ImplMenuDelData()
+{
+    if( mpMenu )
+        const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }
