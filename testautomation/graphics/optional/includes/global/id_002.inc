@@ -393,40 +393,48 @@ endcase
 testcase tiEditHyperlink
     hNewDocument
     InsertHyperlink
-    WaitSlot (5000)
-    Kontext "Hyperlink"
-    Auswahl.MouseDown 50, 5
-    Auswahl.MouseUp 50, 5
-    Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
-    Auswahl.typekeys "<TAB>"
-    sleep 3
-    Kontext "TabHyperlinkInternet"
 
-    'Workaround to get rid of a Focusing-problem...
-    NameText.Typekeys "alal <RETURN>"
-    NameText.Typekeys "<MOD1 A><DELETE>"
-    TabHyperlinkInternet.Typekeys "<TAB>", 6
-    TabHyperlinkInternet.Typekeys "<LEFT>", 3
-    'End of workaround...
-
-    Internet.Check           'Just to make sure the radio-button is addressable.
-    ZielUrl.Settext "http://www.liegerad-fahrer.de"
-    Kontext "Hyperlink"
-    Uebernehmen.Click
-    Hyperlink.Close
-    hTypeKeys "<TAB><F2>"
-    EditSelectAll
-    try
-        EditHyperlinkDraw
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
         Kontext "Hyperlink"
-        if Hyperlink.Exists then
-            Hyperlink.Close
-        else
-            Warnlog "- Hyperlinkdialog not up"
-        end if
-    catch
-        Warnlog "- Not able to edit Hyperlink!"
-    endcatch
+        Auswahl.MouseDown 50, 5
+        Auswahl.MouseUp 50, 5
+        Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
+        Auswahl.typekeys "<TAB>"
+        sleep( 1 )
+        Kontext "TabHyperlinkInternet"
+
+        'Workaround to get rid of a Focusing-problem...
+        NameText.Typekeys "alal <RETURN>"
+        NameText.Typekeys "<MOD1 A><DELETE>"
+        TabHyperlinkInternet.Typekeys "<TAB>", 6
+        TabHyperlinkInternet.Typekeys "<LEFT>", 3
+        'End of workaround...
+
+        Internet.Check           'Just to make sure the radio-button is addressable.
+        ZielUrl.Settext "http://www.liegerad-fahrer.de"
+
+        Uebernehmen.Click()
+
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close()
+
+        hTypeKeys "<TAB><F2>"
+        EditSelectAll
+        try
+            EditHyperlinkDraw
+            Kontext "HyperlinkDialog"
+            if ( HyperlinkDialog.Exists( 1 ) ) then
+                HyperlinkDialog.Close()
+            else
+                Warnlog "- Hyperlinkdialog not up"
+            end if
+        catch
+            Warnlog "- Not able to edit Hyperlink!"
+        endcatch
+    else
+        warnlog( "Failed to open <HyperlinkDialog>" )
+    endif
 
     Call hCloseDocument
 endcase

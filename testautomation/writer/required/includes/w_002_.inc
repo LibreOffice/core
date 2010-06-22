@@ -931,12 +931,13 @@ testcase tEditHyperlink
     PrintLog "Insert / Hyperlink"
     InsertHyperlink
 
-    Kontext "Hyperlink"
-    if ( Hyperlink.exists( 2 ) ) then
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
 
+        PrintLog "Insert / Hyperlink"
         Call wEinfuegenHyperlink(1)
-        Kontext "TabHyperlinkInternet"
 
+        Kontext "TabHyperlinkInternet"
         printlog( "Check <Internet>" )
         Internet.Check()
 

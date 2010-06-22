@@ -515,27 +515,35 @@ testcase tiEditHyperlink
     Call sSelectEmptyLayout
     printlog " Insert->Hyperlink"
     InsertHyperlink
-    WaitSlot (5000)
-    Kontext "Hyperlink"
+
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
+
+        Kontext "Hyperlink"
         Auswahl.MouseDown 50, 5
         Auswahl.MouseUp 50, 5
         Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
         Auswahl.typekeys "<TAB>"
-        sleep 3
+        sleep 1
+
         Kontext "TabHyperlinkInternet"
+        printlog "Workaround to get rid of a Focusing-problem..."
+        NameText.Typekeys "alal <RETURN>"
+        NameText.Typekeys "<MOD1 A><DELETE>"
+        TabHyperlinkInternet.Typekeys "<TAB>", 6
+        TabHyperlinkInternet.Typekeys "<LEFT>", 3
+        printlog "End of workaround"
 
-            printlog "Workaround to get rid of a Focusing-problem..."
-            NameText.Typekeys "alal <RETURN>"
-            NameText.Typekeys "<MOD1 A><DELETE>"
-            TabHyperlinkInternet.Typekeys "<TAB>", 6
-            TabHyperlinkInternet.Typekeys "<LEFT>", 3
-            printlog "End of workaround"
+        Internet.Check  
+        ZielUrl.SetText( "http://www.liegerad-fahrer.de" )
 
-            Internet.Check           'Just to make sure the radio-button is addressable.
-            ZielUrl.Settext "http://www.liegerad-fahrer.de"
-    Kontext "Hyperlink"
-        Uebernehmen.Click
-        Hyperlink.Close
+        Uebernehmen.Click()
+
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close()
+    else
+        warnlog( "Failed to open <HyperlinkDialog>" )
+    endif
         printlog " presupposition to enable edit->hyperlink: <TAB><F2><STRG+a>"
         hTypeKeys "<TAB>"
         hTypeKeys "<F2>"
@@ -544,13 +552,14 @@ testcase tiEditHyperlink
     try
         printlog " Edit->Hyperlink "
         EditHyperlinkDraw
-        Kontext "Hyperlink"
-            if Hyperlink.Exists then
-                printlog " close dialog 'Hyperlink'"
-                Hyperlink.Close
-            else
-                Warnlog "- Hyperlinkdialog not up"
-            end if
+
+        Kontext "HyperlinkDialog"
+        if ( HyperlinkDialog.Exists( 2 ) ) then
+            printlog " close dialog 'Hyperlink'"
+            HyperlinkDialog.Close()
+        else
+            Warnlog "- Hyperlinkdialog not up"
+        end if
     catch
         Warnlog "- Not able to edit Hyperlink!"
     endcatch

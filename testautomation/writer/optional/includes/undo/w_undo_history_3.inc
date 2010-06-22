@@ -119,13 +119,19 @@ testcase tUndoHyperlink
     Call hNewDocument
     '/// Insert / Hyperlink as Text
     InsertHyperlink
-    Call wEinfuegenHyperlink(1)
-    ZielURL.Settext "www.sun.com"
-    Form.Select 1
-    Kontext "Hyperlink"
-    Uebernehmen.Click
-    Hyperlink.Close
     '///  string in Undo-list has to be: "Insert Hyperlink")
+      kontext "HyperlinkDialog"
+        if ( HyperlinkDialog.exists( 2 ) ) then
+            Call wEinfuegenHyperlink(1)
+            ZielURL.SetText "www.sun.com"
+            Form.Select 1
+            Uebernehmen.Click()
+
+            kontext "HyperlinkDialog"
+            HyperlinkDialog.Close()
+        else
+            warnlog( "Unable to open <HyperlinkDialog>" )
+        endif
     Call CheckUndoStringInUndoList ( 10, "InsertHyperlink" )
 
     Call wTypeKeys "<Return>"
@@ -133,12 +139,19 @@ testcase tUndoHyperlink
     '/// Insert / Hyperlink as Button
     printlog "- Insert hyperlink as Button"
     InsertHyperlink
-    Call wEinfuegenHyperlink(1)
-    ZielURL.Settext "www.sun.com"
-    Form.Select 2
-    Kontext "Hyperlink"
-    Uebernehmen.Click
-    Hyperlink.Close
+
+        kontext "HyperlinkDialog"
+        if ( HyperlinkDialog.exists( 2 ) ) then
+            Call wEinfuegenHyperlink(1)
+            ZielURL.Settext "www.sun.com"
+            Form.Select 2
+            Kontext "Hyperlink"
+            Uebernehmen.Click
+            kontext "HyperlinkDialog"
+            HyperlinkDialog.Close
+        else
+            warnlog( "Unable to open <HyperlinkDialog>" )
+        endif
 
     '///  string in Undo-list has to be: "insert URL Button")
     Call CheckUndoStringInUndoList ( 10, "InsertHyperlinkButton" )
