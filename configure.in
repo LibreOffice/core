@@ -807,7 +807,7 @@ AC_ARG_WITH(build-version,
 ],with_build_version=$withval)
 AC_ARG_WITH(alloc,
 [  --with-alloc            Define which allocator to build with
-			                 (choices are oo, system, tcmalloc)
+                           (choices are oo, system, tcmalloc, jemalloc)
 ],,)
 AC_ARG_ENABLE(verbose,
 [  --enable-verbose        Increase build verbosity.
@@ -2676,6 +2676,14 @@ if test "$with_alloc" = "tcmalloc"; then
     AC_CHECK_LIB(tcmalloc, malloc, [],
         [AC_MSG_ERROR(tcmalloc not found or functional. Install the Google Profiling Tools)], [])
     ALLOC="TCMALLOC";
+fi
+if test "$with_alloc" = "jemalloc"; then
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -pthread"
+    AC_CHECK_LIB(jemalloc, malloc, [],
+        [AC_MSG_ERROR(jemalloc not found or functional. Install the jemalloc allocator.)], [])
+    ALLOC="JEMALLOC";
+    CFLAGS=$save_CFLAGS
 fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
    AC_MSG_RESULT([internal])
