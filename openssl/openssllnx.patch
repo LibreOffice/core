@@ -10,6 +10,17 @@
  "nextstep",	"cc:-O -Wall:<libc.h>:(unknown):::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:::",
  "nextstep3.3",	"cc:-O3 -Wall:<libc.h>:(unknown):::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:::",
  
+--- misc/openssl-0.9.8l/Makefile.org	2009-03-03 23:40:29.000000000 +0100
++++ misc/build/openssl-0.9.8l/Makefile.org	2010-06-21 11:11:03.787119295 +0200
+@@ -198,7 +198,7 @@
+ 
+ BUILDENV=	PLATFORM='${PLATFORM}' PROCESSOR='${PROCESSOR}' \
+ 		CC='${CC}' CFLAG='${CFLAG}' 			\
+-		AS='${CC}' ASFLAG='${CFLAG} -c'			\
++		AS='${CC}' ASFLAG='${CFLAG} -c -Wa,--noexecstack'	\
+ 		AR='${AR}' PERL='${PERL}' RANLIB='${RANLIB}'	\
+ 		SDIRS='${SDIRS}' LIBRPATH='${INSTALLTOP}/lib'	\
+ 		INSTALL_PREFIX='${INSTALL_PREFIX}'		\
 --- misc/openssl-0.9.8l/test/Makefile	2009-03-25 11:59:22.000000000 +0100
 +++ misc/build/openssl-0.9.8l/test/Makefile	2009-03-30 12:51:00.210108929 +0200
 @@ -408,7 +408,7 @@
