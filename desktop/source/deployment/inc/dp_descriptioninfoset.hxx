@@ -217,16 +217,6 @@ public:
     */
     ::rtl::OUString getIconURL( sal_Bool bHighContrast ) const;
 
-    /**
-       Allow direct access to the XPath functionality.
-
-       @return
-       direct access to the XPath functionality; null iff this instance was
-       constructed with a null <code>element</code>
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::xpath::XXPathAPI >
-    getXpath() const;
-
     bool hasDescription() const;
 
 private:

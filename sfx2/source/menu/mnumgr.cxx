@@ -27,8 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #ifdef SOLARIS
 // HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
@@ -50,9 +52,14 @@
 #include <framework/addonmenu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/lingucfg.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
+#include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <osl/file.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/filter.hxx>
 
 #include <sfx2/mnumgr.hxx>
 
@@ -76,9 +83,14 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>
+#include "thessubmenu.hxx"
+
 
 static const USHORT nCompatVersion = 4;
 static const USHORT nVersion = 5;
+
+// static member initialization
+PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = NULL;
 
 using namespace com::sun::star;
 
@@ -165,6 +177,101 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
     }
 }
 
+
+//--------------------------------------------------------------------
+
+
+static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
+{
+    Image aRes;
+
+    ::rtl::OUString aTmp;
+    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+
+    Graphic aGraphic;
+    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    {
+        aRes = Image( aGraphic.GetBitmapEx() );
+    }
+    return aRes;
+}
+
+
+PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
+{
+    //
+    // build thesaurus sub menu if look-up string is available
+    //
+    PopupMenu* pThesSubMenu = 0;
+    SfxPoolItem *pItem = 0;
+    pBindings->QueryState( SID_THES, pItem );
+    String aThesLookUpStr;
+    SfxStringItem *pStrItem = dynamic_cast< SfxStringItem * >(pItem);
+    xub_StrLen nDelimPos = STRING_LEN;
+    if (pStrItem)
+    {
+        aThesLookUpStr = pStrItem->GetValue();
+        nDelimPos = aThesLookUpStr.SearchBackward( '#' );
+    }
+    if (aThesLookUpStr.Len() > 0 && nDelimPos != STRING_NOTFOUND)
+    {
+        // get synonym list for sub menu
+        std::vector< ::rtl::OUString > aSynonyms;
+        SfxThesSubMenuHelper aHelper;
+        ::rtl::OUString aText( aHelper.GetText( aThesLookUpStr, nDelimPos ) );
+        lang::Locale aLocale;
+        aHelper.GetLocale( aLocale, aThesLookUpStr, nDelimPos );
+        const bool bHasMoreSynonyms = aHelper.GetMeanings( aSynonyms, aText, aLocale, 7 /*max number of synonyms to retrieve*/ );
+        (void) bHasMoreSynonyms;
+
+        pThesSubMenu = new PopupMenu;
+        pThesSubMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+        const size_t nNumSynonyms = aSynonyms.size();
+        if (nNumSynonyms > 0)
+        {
+            SvtLinguConfig aCfg;
+            const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+
+            Image aImage;
+            String sThesImplName( aHelper.GetThesImplName( aLocale ) );
+            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName, bHC ) );
+            if (sThesImplName.Len() > 0 && aSynonymsImageUrl.getLength() > 0)
+                aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
+
+            for (USHORT i = 0; (size_t)i < nNumSynonyms; ++i)
+            {
+                //! item ids should start with values > 0, since 0 has special meaning
+                const USHORT nId = i + 1;
+
+                String aItemText( GetThesaurusReplaceText_Impl( aSynonyms[i] ) );
+                pThesSubMenu->InsertItem( nId, aItemText );
+                ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
+                aCmd += aItemText;
+                pThesSubMenu->SetItemCommand( nId, aCmd );
+
+                if (aSynonymsImageUrl.getLength() > 0)
+                    pThesSubMenu->SetItemImage( nId, aImage );
+            }
+        }
+        else // nNumSynonyms == 0
+        {
+            const String aItemText( SfxResId( STR_MENU_NO_SYNONYM_FOUND ) );
+            pThesSubMenu->InsertItem( 1, aItemText, MIB_NOSELECT );
+        }
+        pThesSubMenu->InsertSeparator();
+        const String sThesaurus( SfxResId( STR_MENU_THESAURUS ) );
+        pThesSubMenu->InsertItem( 100, sThesaurus );
+        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString::createFromAscii( ".uno:ThesaurusDialog" ) );
+
+        pSVMenu->InsertSeparator();
+        const String sSynonyms( SfxResId( STR_MENU_SYNONYMS ) );
+        pSVMenu->InsertItem( SID_THES, sSynonyms );
+        pSVMenu->SetPopupMenu( SID_THES, pThesSubMenu );
+    }
+
+    return pThesSubMenu;
+}
 
 
 //--------------------------------------------------------------------
@@ -305,7 +412,9 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 USHORT SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
 {
     DBG_MEMTEST();
-    return ( (PopupMenu*) GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
+    USHORT nVal = ( (PopupMenu*) GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
+    delete pStaticThesSubMenu;  pStaticThesSubMenu = NULL;
+    return nVal;
 }
 
 //--------------------------------------------------------------------
@@ -429,6 +538,10 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
             break;
     }
 
+    PopupMenu* pThesSubMenu = InsertThesaurusSubmenu_Impl( &pFrame->GetBindings(), pSVMenu );
+    // #i107205# (see comment in header file)
+    pStaticThesSubMenu = pThesSubMenu;
+
     if ( n == nCount )
     {
         PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
@@ -461,6 +574,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
         aMgr->RemoveDisabledEntries();
         return aMgr;
     }
+
     return 0;
 }
 
@@ -474,6 +588,8 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
             break;
     }
+
+    PopupMenu* pThesSubMenu = InsertThesaurusSubmenu_Impl( &pFrame->GetBindings(), pSVMenu );
 
     if ( n == nCount )
     {
@@ -507,6 +623,8 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         aPop.RemoveDisabledEntries();
         aPop.Execute( rPoint, pWindow );
     }
+
+    delete pThesSubMenu;
 }
 
 Menu* SfxPopupMenuManager::GetSVMenu()

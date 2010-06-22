@@ -93,6 +93,8 @@ namespace
         : public rtl::Static< String, Version > {};
     struct AboutBoxVersion
         : public rtl::Static< String, AboutBoxVersion > {};
+    struct OOOVendor
+        : public rtl::Static< String, OOOVendor > {};
     struct Extension
         : public rtl::Static< String, Extension > {};
 }
@@ -108,6 +110,7 @@ void ReplaceProductNameHookProc( String& rStr )
         String &rVersion = Version::get();
         String &rAboutBoxVersion = AboutBoxVersion::get();
         String &rExtension = Extension::get();
+        String &rOOOVendor = OOOVendor::get();
 
         if ( !rProductName.Len() )
         {
@@ -124,6 +127,10 @@ void ReplaceProductNameHookProc( String& rStr )
             aRet >>= aTmp;
             rAboutBoxVersion = aTmp;
 
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::OOOVENDOR );
+            aRet >>= aTmp;
+            rOOOVendor = aTmp;
+
             if ( !rExtension.Len() )
             {
                 aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
@@ -136,6 +143,7 @@ void ReplaceProductNameHookProc( String& rStr )
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rProductName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
         rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
+        rStr.SearchAndReplaceAllAscii( "%OOOVENDOR", rOOOVendor );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
     }
 }

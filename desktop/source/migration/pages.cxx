@@ -357,9 +357,9 @@ MigrationPage::MigrationPage(
     m_ftBody.SetText( aText );
 }
 
-sal_Bool MigrationPage::commitPage( CommitPageReason _eReason )
+sal_Bool MigrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason )
 {
-    if (_eReason == eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
+    if (_eReason == svt::WizardTypes::eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
     {
         GetParent()->EnterWait();
         FirstStartWizard* pWizard = dynamic_cast< FirstStartWizard* >( GetParent() );
@@ -433,7 +433,7 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     }
 }
 
-sal_Bool UserPage::commitPage( CommitPageReason )
+sal_Bool UserPage::commitPage( svt::WizardTypes::CommitPageReason )
 {
     SvtUserOptions aUserOpt;
     aUserOpt.SetFirstName(m_edFirst.GetText());
@@ -463,9 +463,9 @@ UpdateCheckPage::UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resi
     _setBold(m_ftHead);
 }
 
-sal_Bool UpdateCheckPage::commitPage( CommitPageReason _eReason )
+sal_Bool UpdateCheckPage::commitPage( svt::WizardTypes::CommitPageReason _eReason )
 {
-    if ( _eReason == eTravelForward )
+    if ( _eReason == svt::WizardTypes::eTravelForward )
     {
         try {
             Reference < XNameReplace > xUpdateAccess;
@@ -589,9 +589,9 @@ void RegistrationPage::updateButtonStates()
     m_rbNever.Show( m_bNeverVisible );
 }
 
-sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
+sal_Bool RegistrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason )
 {
-    if ( _eReason == eFinish )
+    if ( _eReason == svt::WizardTypes::eFinish )
     {
         ::utl::RegOptions aOptions;
         rtl::OUString aEvent;
@@ -665,7 +665,7 @@ void RegistrationPage::executeSingleMode()
     // the registration modes "Now" and "Later" are handled by the page
     RegistrationPage::RegistrationMode eMode = pPage->getRegistrationMode();
     if ( eMode == RegistrationPage::rmNow || eMode == RegistrationPage::rmLater )
-        pPage->commitPage( IWizardPage::eFinish );
+        pPage->commitPage( WizardTypes::eFinish );
     if ( eMode != RegistrationPage::rmLater )
         ::utl::RegOptions().removeReminder();
 }

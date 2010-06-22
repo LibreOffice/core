@@ -357,6 +357,7 @@ MenuManager::MenuManager(
     SetHdl();
 }
 
+#if 0
 // #110897#
 MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
@@ -413,6 +414,7 @@ MenuManager::MenuManager(
 
     SetHdl();
 }
+#endif
 
 void MenuManager::SetHdl()
 {

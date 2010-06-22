@@ -210,10 +210,11 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
             Reference< ::com::sun::star::container::XIndexContainer >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
             try
             {
-                Reference< ::com::sun::star::beans::XPropertySet >  xColumn;
-                ::cppu::extractInterface(xColumn, xColumns->getByIndex(nPos));
+                Reference< ::com::sun::star::beans::XPropertySet >  xColumn(xColumns->getByIndex(nPos),UNO_QUERY);
                 ::rtl::OUString aHelpText;
                 xColumn->getPropertyValue(FM_PROP_HELPTEXT) >>= aHelpText;
+                if ( !aHelpText.getLength() )
+                    xColumn->getPropertyValue(FM_PROP_DESCRIPTION) >>= aHelpText;
                 if ( aHelpText.getLength() )
                 {
                     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
@@ -1737,11 +1738,12 @@ void FmGridControl::InitColumnByField(
             _pColumn->SetObject( (sal_Int16)nFieldPos );
             return;
         }
-
+/*
         // handle readonly columns
         sal_Bool bReadOnly = sal_True;
         xField->getPropertyValue( FM_PROP_ISREADONLY ) >>= bReadOnly;
         _pColumn->SetReadOnly( bReadOnly );
+*/
     }
 
     // the control type is determined by the ColumnServiceName
@@ -1999,7 +2001,11 @@ namespace
             {
                 Reference<XPropertySet> xProp(GetPeer()->getColumns(),UNO_QUERY);
                 if ( xProp.is() )
+                {
                     xProp->getPropertyValue(FM_PROP_HELPTEXT) >>= sRetText;
+                    if ( !sRetText.getLength() )
+                        xProp->getPropertyValue(FM_PROP_DESCRIPTION) >>= sRetText;
+                }
             }
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
@@ -2008,6 +2014,13 @@ namespace
                 GetModelColumnPos(
                     sal::static_int_cast< sal_uInt16 >(_nPosition)),
                 FM_PROP_HELPTEXT);
+            if ( !sRetText.getLength() )
+                sRetText = getColumnPropertyFromPeer(
+                            GetPeer(),
+                            GetModelColumnPos(
+                                sal::static_int_cast< sal_uInt16 >(_nPosition)),
+                            FM_PROP_DESCRIPTION);
+
             break;
         default:
             sRetText = DbGridControl::GetAccessibleObjectDescription(_eObjType,_nPosition);
@@ -2029,7 +2042,7 @@ void FmGridControl::Select()
     // die HandleColumn wird nicht selektiert
     switch (nSelectedColumn)
     {
-        case -1 : break;    // no selection
+        case SAL_MAX_UINT16: break; // no selection
         case  0 : nSelectedColumn = SAL_MAX_UINT16; break;
                     // handle col can't be seledted
         default :

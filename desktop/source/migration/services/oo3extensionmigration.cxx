@@ -373,35 +373,6 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
     return false;
 }
 
-bool OO3ExtensionMigration::copy( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir )
-{
-    bool bRet = false;
-
-    INetURLObject aSourceObj( sSourceDir );
-    INetURLObject aDestObj( sTargetDir );
-    String aName = aDestObj.getName();
-    aDestObj.removeSegment();
-    aDestObj.setFinalSlash();
-
-    try
-    {
-        ::ucbhelper::Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        uno::Reference< ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        ::rtl::OUString aTransferName = ::rtl::OUString::createFromAscii( "transfer" );
-        if ( xInfo->hasCommandByName( aTransferName ) )
-        {
-            aDestPath.executeCommand( aTransferName, uno::makeAny(
-                ucb::TransferInfo( sal_False, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, ucb::NameClash::OVERWRITE ) ) );
-            bRet = true;
-        }
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    return bRet;
-}
-
 
 // -----------------------------------------------------------------------------
 // XServiceInfo
@@ -487,32 +458,6 @@ TStringVectorPtr getContent( const ::rtl::OUString& rBaseURL )
     return aResult;
 }
 
-// -----------------------------------------------------------------------------
-// XJob
-// -----------------------------------------------------------------------------
-
-void OO3ExtensionMigration::copyConfig( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir )
-{
-    ::rtl::OUString sEx1( m_sSourceDir );
-    sEx1 += sExcludeDir1;
-    ::rtl::OUString sEx2( m_sSourceDir );
-    sEx2 += sExcludeDir2;
-
-    TStringVectorPtr aList = getContent( sSourceDir );
-    TStringVector::const_iterator aI = aList->begin();
-    while ( aI != aList->end() )
-    {
-        ::rtl::OUString sSourceLocalName = aI->copy( sSourceDir.getLength() );
-        ::rtl::OUString aTemp = aI->copy( m_sSourceDir.getLength() );
-        if ( aTemp != sExcludeDir1 && aTemp != sExcludeDir2 )
-        {
-            ::rtl::OUString sTargetName = sTargetDir + sSourceLocalName;
-            copy( (*aI), sTargetName );
-        }
-        ++aI;
-    }
-}
-
 Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     throw (lang::IllegalArgumentException, Exception, RuntimeException)
 {
@@ -547,12 +492,6 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
 // -----------------------------------------------------------------------------
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
-{
-}
-
-TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
-    uno::Reference< task::XInteractionHandler> const & handler)
-    : m_forwardHandler(handler)
 {
 }
 

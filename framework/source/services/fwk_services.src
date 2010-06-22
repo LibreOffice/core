@@ -51,7 +51,7 @@ Window DLG_BACKING
     };
     String STR_BACKING_FILE
     {
-        Text [ en-US ] = "~Open a document...";
+        Text [ en-US ] = "~Open...";
     };
     String STR_BACKING_EXTHELP
     {
