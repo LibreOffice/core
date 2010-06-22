@@ -49,6 +49,7 @@ CDEFS+=-DBASICDEBUG
 
 EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
                 $(SLO)$/scriptdocument.obj  \
+                $(SLO)$/basicbox.obj	\
                 $(SLO)$/basidesh.obj	\
                 $(SLO)$/basides1.obj	\
                 $(SLO)$/basides2.obj	\
@@ -75,7 +76,6 @@ EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
                 $(SLO)$/documentenumeration.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
-            $(SLO)$/basicbox.obj	\
             $(SLO)$/baside2b.obj	\
             $(SLO)$/brkdlg.obj	\
             $(SLO)$/objdlg.obj	\

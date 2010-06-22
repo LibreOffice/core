@@ -174,6 +174,8 @@ namespace frm
         m_eListSourceType = ListSourceType_VALUELIST;
         m_aBoundColumn <<= (sal_Int16)1;
         initValueProperty( PROPERTY_SELECT_SEQ, PROPERTY_ID_SELECT_SEQ);
+
+        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
     //------------------------------------------------------------------
@@ -191,6 +193,8 @@ namespace frm
         ,m_nBoundColumnType( DataType::SQLNULL )
     {
         DBG_CTOR(OListBoxModel,NULL);
+
+        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
     //------------------------------------------------------------------
@@ -453,6 +457,22 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
+    void OListBoxModel::_propertyChanged( const PropertyChangeEvent& i_rEvent ) throw ( RuntimeException )
+    {
+        if ( i_rEvent.PropertyName == PROPERTY_STRINGITEMLIST )
+        {
+            ControlModelLock aLock( *this );
+            // SYNCHRONIZED ----->
+            // our aggregate internally changed its StringItemList property - reflect this in our "overridden"
+            // version of the property
+            setNewStringItemList( i_rEvent.NewValue, aLock );
+            // <----- SYNCHRONIZED
+            return;
+        }
+        OBoundControlModel::_propertyChanged( i_rEvent );
+    }
+
+    //------------------------------------------------------------------------------
     void OListBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
     {
         OBoundControlModel::describeAggregateProperties( _rAggregateProps );
@@ -700,25 +720,10 @@ namespace frm
                         else
                         {
                             // otherwise look for the alias
-                            Reference<XSQLQueryComposerFactory> xFactory(xConnection, UNO_QUERY);
-                            if (!xFactory.is())
-                                break;
-
-                            Reference<XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
-                            try
-                            {
-                                ::rtl::OUString aStatement;
-                                xFormProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= aStatement;
-                                xComposer->setQuery( aStatement );
-                            }
-                            catch(Exception&)
-                            {
-                                disposeComponent(xComposer);
-                                break;
-                            }
+                            Reference< XColumnsSupplier > xSupplyFields;
+                            xFormProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupplyFields;
 
                             // search the field
-                            Reference<XColumnsSupplier> xSupplyFields(xComposer, UNO_QUERY);
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
 
                             Reference<XNameAccess> xFieldNames = xSupplyFields->getColumns();
@@ -729,7 +734,6 @@ namespace frm
                                 if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                                     xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                             }
-                            disposeComponent(xComposer);
                         }
                     }
                     if (!aFieldName.getLength())

@@ -156,7 +156,7 @@ namespace dbp
             _rList.Clear();
         const ::rtl::OUString* pItems = _rItems.getConstArray();
         const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
-        WizardState nPos;
+        ::svt::WizardTypes::WizardState nPos;
         sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems, ++nIndex)
         {
@@ -172,7 +172,7 @@ namespace dbp
             _rList.Clear();
         const ::rtl::OUString* pItems = _rItems.getConstArray();
         const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
-        WizardState nPos;
+        ::svt::WizardTypes::WizardState nPos;
         sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems)
         {
@@ -254,7 +254,7 @@ namespace dbp
             m_pFormDatasource->SetText(sDataSource);
             m_pFormTable->SetText(sCommand);
 
-            WizardState nCommandTypeResourceId = 0;
+            ::svt::WizardTypes::WizardState nCommandTypeResourceId = 0;
             switch (nCommandType)
             {
                 case CommandType::TABLE:

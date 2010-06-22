@@ -79,7 +79,7 @@ namespace abp
         virtual ::svt::OWizardPage* createPage( WizardState _nState );
         virtual void                enterState( WizardState _nState );
         virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
-        virtual sal_Bool            onFinish( sal_Int32 _nResult );
+        virtual sal_Bool            onFinish();
 
         // RoadmapWizard
         virtual String              getStateDisplayName( WizardState _nState ) const;

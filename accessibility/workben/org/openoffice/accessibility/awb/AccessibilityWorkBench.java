@@ -588,28 +588,39 @@ public class AccessibilityWorkBench
             javax.swing.tree.TreePath aPath = aEvent.getPath();
             maTree.scrollPathToVisible (aPath);
             Object aObject = aPath.getLastPathComponent();
-            if (aObject instanceof XAccessible) {
-                XAccessible xAccessible = (XAccessible) aObject;
-                if (maObjectViewContainer != null) {
-                    ((AccessibilityModel) maTree.getModel()).addEventListener((TreeNode) aObject, maObjectViewContainer);
-                    maObjectViewContainer.SetObject (xAccessible.getAccessibleContext());
-                }
+            implSetCurrentObject( aObject );
+            if (aObject instanceof XAccessible)
+            {
+                if (maObjectViewContainer != null)
+                    maObjectViewContainer.SetObject( ((XAccessible)aObject).getAccessibleContext() );
             }
             if (maCanvas != null)
                 maCanvas.SelectObject ((TreeNode) aObject);
             setCursor (aCursor);
         } else {
-            if (maObjectViewContainer != null) {
-                ((AccessibilityModel) maTree.getModel()).removeEventListener((TreeNode) aEvent.getPath().getLastPathComponent(), maObjectViewContainer);
+            implSetCurrentObject( aEvent.getPath().getLastPathComponent() );
+            if (maObjectViewContainer != null)
                 maObjectViewContainer.SetObject (null);
-            }
             if (maCanvas != null)
                 maCanvas.SelectObject (null);
         }
     }
 
 
-
+    private void implSetCurrentObject( Object i_object )
+    {
+        if ( maObjectViewContainer == null )
+            return;
+        if ( maCurrentObject != null )
+        {
+            AccessibilityModel.removeEventListener( (TreeNode)maCurrentObject, maObjectViewContainer );
+        }
+        maCurrentObject = i_object;
+        if ( maCurrentObject != null )
+        {
+            AccessibilityModel.addEventListener( (TreeNode)maCurrentObject, maObjectViewContainer );
+        }
+    }
 
     // XEventListener
     public void disposing (EventObject aSourceObj)
@@ -687,4 +698,5 @@ public class AccessibilityWorkBench
         maShapesButton;
     private JMenuBar maMenuBar;
     private boolean mbInitialized;
+    private Object maCurrentObject = null;
 }
