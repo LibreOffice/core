@@ -6567,27 +6567,6 @@ else
     export ANT_HOME
   fi
 
-  ant_minver=1.6.0
-  # update for more extensions...
-  if test "$ENABLE_MEDIAWIKI" = "YES"; then
-    ant_minver=1.7.0
-  fi
-  ant_minminor1=`echo $ant_minver | cut -d"." -f2`
-
-  AC_MSG_CHECKING([whether ant is >= $ant_minver])
-  ant_version=`$ANT -version | $AWK '{ print $4; }'`
-  ant_version_major=`echo $ant_version | cut -d. -f1`
-  ant_version_minor=`echo $ant_version | cut -d. -f2`
-echo "configure: ant_version $ant_version " >&5
-echo "configure: ant_version_major $ant_version_major " >&5
-echo "configure: ant_version_minor $ant_version_minor " >&5
-  if test "$ant_version_major" -ge "2"; then
-  	AC_MSG_RESULT([yes, $ant_version])
-  elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
-  	AC_MSG_RESULT([yes, $ant_version])
-  else
-  	AC_MSG_ERROR([no, you need at least ant >= $ant_minver])
-  fi
   AC_MSG_CHECKING([if $ANT works])
 cat > conftest.java << EOF
     public class conftest {
@@ -6666,6 +6645,28 @@ if test "$ANT_HOME" != "NO_ANT_HOME"; then
    AC_MSG_RESULT([Ant lib directory found.])
 fi
 AC_SUBST(ANT_LIB)
+fi
+
+ant_minver=1.6.0
+# update for more extensions...
+if test "$ENABLE_MEDIAWIKI" = "YES"; then
+  ant_minver=1.7.0
+fi
+ant_minminor1=`echo $ant_minver | cut -d"." -f2`
+
+AC_MSG_CHECKING([whether ant is >= $ant_minver])
+ant_version=`$ANT -version | $AWK '{ print $4; }'`
+ant_version_major=`echo $ant_version | cut -d. -f1`
+ant_version_minor=`echo $ant_version | cut -d. -f2`
+echo "configure: ant_version $ant_version " >&5
+echo "configure: ant_version_major $ant_version_major " >&5
+echo "configure: ant_version_minor $ant_version_minor " >&5
+if test "$ant_version_major" -ge "2"; then
+	AC_MSG_RESULT([yes, $ant_version])
+elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
+  	AC_MSG_RESULT([yes, $ant_version])
+else
+  	AC_MSG_ERROR([no, you need at least ant >= $ant_minver])
 fi
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
