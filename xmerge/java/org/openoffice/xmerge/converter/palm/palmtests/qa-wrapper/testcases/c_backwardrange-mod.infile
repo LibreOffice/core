@@ -1,6 +1,0 @@
-# 
-# Test for backwardrange of spreadsheet - change a value in a set range
-# 
-TEST||MINICALC|c_backwardrange
-MINICALC_ENTER_CELL|1|1|=AVERAGE(2;5;5)\n
-SLEEP|5

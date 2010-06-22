@@ -1,4 +1,0 @@
-# simple01
-TEST|Simple 1|QUICKWORD|a_simple01
-ENTER_STRING_AT_LOCATION|LEFT|TOP|New text added to simple file.\n
-SLEEP|5
