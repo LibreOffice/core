@@ -5463,6 +5463,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
 else
 	with_asm_home="NO_ASM_HOME"
 fi
+ASM_HOME="$with_asm_home"
 AC_SUBST(ASM_HOME)
  
 dnl ===================================================================

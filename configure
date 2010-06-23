@@ -19277,6 +19277,7 @@ $as_echo "$ASM_HOME" >&6; }
 else
 	with_asm_home="NO_ASM_HOME"
 fi
+ASM_HOME="$with_asm_home"
 
 
 if test -z "$with_zip_home"; then
