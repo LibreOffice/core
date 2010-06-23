@@ -60,6 +60,9 @@ SOLARINC += $(JDKINCS)
 SRCDIR := $(SOLARSRC)
 OUTDIR := $(SOLARVERSION)/$(INPATH)
 WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
+ifeq ($(strip $(gb_REPOS)),)
+gb_REPOS := $(SRCDIR)
+endif
 
 # HACK
 ifeq ($(OS),WNT)

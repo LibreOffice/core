@@ -28,26 +28,35 @@
 
 # CObject class
 
-gb_CObject_get_source = $(SRCDIR)/$(1).c
+gb_CObject_REPOS := $(gb_REPOS)
+
+gb_CObject_get_source = $(1)$(2).c
 # defined by platform
 #  gb_CObject__command
 #  gb_CObject__command_dep
 
-$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,%)
-    $(call gb_CObject__command,$@,$*,$<,$(DEFS),$(CFLAGS),$(INCLUDE))
+define gb_CObject__rules
+$$(call gb_CObject_get_target,%) : $$(call gb_CObject_get_source,$(1),%)
+    $$(call gb_CObject__command,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
 
-$(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_source,%)
-    $(call gb_CObject__command_dep,$@,$*,$<,$(DEFS),$(CFLAGS),$(INCLUDE))
+$$(call gb_CObject_get_dep_target,%) : $$(call gb_CObject_get_source,$(1),%)
+    $$(call gb_CObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
+
+endef
+
+$(foreach repo,$(gb_CObject_REPOS),$(eval $(call gb_CObject__rules,$(repo))))
 
 $(call gb_CObject_get_dep_target,%) :
-    $(error unable to find plain C file $(call gb_CObject_get_source,$*))
+    $(error unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS))
 
 gb_CObject_CObject =
 
 
 # CxxObject class
 
-gb_CxxObject_get_source = $(SRCDIR)/$(1).cxx
+gb_CxxObject_REPOS := $(gb_REPOS)
+
+gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
 #  gb_CxxObject__command
 #  gb_CxxObject__command_dep
@@ -72,35 +81,47 @@ endif
 endif
 endef
 
-$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,%)
-    $(eval $(gb_CxxObject__set_pchflags))
-    $(call gb_CxxObject__command,$@,$*,$<,$(DEFS),$(CXXFLAGS) $(PCHFLAGS),$(INCLUDE_STL) $(INCLUDE))
+define gb_CxxObject__rules
+$$(call gb_CxxObject_get_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
+    $$(eval $$(gb_CxxObject__set_pchflags))
+    $$(call gb_CxxObject__command,$$@,$$*,$$<,$$(DEFS),$$(CXXFLAGS) $$(PCHFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
 
-$(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_source,%)
-    $(eval $(gb_CxxObject__set_pchflags))
-    $(call gb_CxxObject__command_dep,$@,$*,$<,$(DEFS),$(CXXFLAGS) $(PCHFLAGS),$(INCLUDE_STL) $(INCLUDE))
+$$(call gb_CxxObject_get_dep_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
+    $$(eval $$(gb_CxxObject__set_pchflags))
+    $$(call gb_CxxObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(CXXFLAGS) $$(PCHFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+
+endef
+
+$(foreach repo,$(gb_CxxObject_REPOS),$(eval $(call gb_CxxObject__rules,$(repo))))
 
 $(call gb_CxxObject_get_dep_target,%) :
-    $(error unable to find C++ file $(call gb_CxxObject_get_source,$*))
+    $(error unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS))
 
 gb_CxxObject_CxxObject =
 
 
 # ObjCxxObject class
+#
+gb_ObjCxxObject_REPOS := $(gb_REPOS)
 
-gb_ObjCxxObject_get_source = $(SRCDIR)/$(1).mm
+gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 #  gb_ObjCxxObject__command_dep
 
-$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,%)
-    $(call gb_ObjCxxObject__command,$@,$*,$<,$(DEFS),$(OBJCXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+define gb_ObjCxxObject__rules
+$$(call gb_ObjCxxObject_get_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
+    $$(call gb_ObjCxxObject__command,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
 
-$(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_source,%)
-    $(call gb_ObjCxxObject__command_dep,$@,$*,$<,$(DEFS),$(OBJCXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+$$(call gb_ObjCxxObject_get_dep_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
+    $$(call gb_ObjCxxObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+
+endef
+
+$(foreach repo,$(gb_ObjCxxObject_REPOS),$(eval $(call gb_ObjCxxObject__rules,$(repo))))
 
 $(call gb_ObjCxxObject_get_dep_target,%) :
-    $(error unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,$*))
+    $(error unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS))
 
 gb_ObjCxxObject_ObjCxxObject =
 
