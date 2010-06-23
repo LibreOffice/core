@@ -2384,7 +2384,7 @@ Optional Packages:
                           Usage: --with-build-version="Built by Jim"
 
   --with-alloc            Define which allocator to build with
-                           (choices are oo, system, tcmalloc, jemalloc)
+                          (choices are oo, system, tcmalloc, jemalloc)
 
 			  Note that on FreeBSD/NetBSD system==jemalloc
 

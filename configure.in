@@ -807,7 +807,7 @@ AC_ARG_WITH(build-version,
 ],with_build_version=$withval)
 AC_ARG_WITH(alloc,
 [  --with-alloc            Define which allocator to build with
-                           (choices are oo, system, tcmalloc, jemalloc)
+                          (choices are oo, system, tcmalloc, jemalloc)
 
 			  Note that on FreeBSD/NetBSD system==jemalloc
 ],,)
