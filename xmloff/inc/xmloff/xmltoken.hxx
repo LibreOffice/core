@@ -148,6 +148,9 @@ namespace xmloff { namespace token {
         XML_NP_TABLE_EXT,
         XML_N_TABLE_EXT,
 
+        XML_NP_DRAW_EXT,
+        XML_N_DRAW_EXT,
+
         // units
         XML_UNIT_MM,
         XML_UNIT_M,
@@ -2548,6 +2551,9 @@ namespace xmloff { namespace token {
         XML_DIMENSION,
         XML_VALIDATION_NAME,
 
+        XML_SCREEN,
+        XML_PRINTER,
+
         // XForms tokens
         // already defined: XML_ACTION, XML_VERSION, XML_ENCODING,
         //                  XML_REPLACE, XML_SEPARATOR, XML_TYPE, XML_ID
@@ -3094,6 +3100,11 @@ namespace xmloff { namespace token {
         XML_DOES_NOT_BEGIN_WITH,
         XML_ENDS_WITH,
         XML_DOES_NOT_END_WITH,
+
+        //chart
+        XML_NP_CHART_EXT,
+        XML_N_CHART_EXT,
+        XML_COORDINATE_REGION,
 
         XML_TOKEN_END
     };

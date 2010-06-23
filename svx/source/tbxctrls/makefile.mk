@@ -61,7 +61,8 @@ LIB2OBJFILES= \
         $(SLO)$/verttexttbxctrl.obj \
         $(SLO)$/subtoolboxcontrol.obj \
         $(SLO)$/tbxcolor.obj \
-        $(SLO)$/tbunocontroller.obj
+        $(SLO)$/tbunocontroller.obj \
+        $(SLO)$/tbunosearchcontrollers.obj
 
 SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 

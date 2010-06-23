@@ -757,6 +757,29 @@ void setBuildIDAtImportInfo( uno::Reference< frame::XModel > xModel, Reference< 
         SvXMLMetaDocumentContext::setBuildId( aGenerator, xImportInfo );
 }
 
+bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan3_0( xChartModel );
+    if( !bResult )
+    {
+        ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+        if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/3") ) ) != -1 )
+        {
+            if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/300m") ) ) != -1 )
+            {
+                sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
+                if( nBuilId>0 && nBuilId<9491 ) //9491 is build id of dev300m76
+                    bResult= true;
+            }
+            else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/310m") ) ) != -1 )
+                bResult= true;
+            else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/320m") ) ) != -1 )
+                bResult= true;
+        }
+    }
+    return bResult;
+}
+
 bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame::XModel >& xChartModel )
 {
     bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan2_3( xChartModel );

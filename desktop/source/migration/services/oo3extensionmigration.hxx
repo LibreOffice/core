@@ -97,16 +97,10 @@ namespace migration
         };
 
         ::osl::FileBase::RC     checkAndCreateDirectory( INetURLObject& rDirURL );
-        void                    copyConfig( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir );
-        bool                    copy( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir );
         ScanResult              scanExtensionFolder( const ::rtl::OUString& sExtFolder );
         void                    scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions );
         bool                    scanDescriptionXml( const ::rtl::OUString& sDescriptionXmlFilePath );
         bool                    migrateExtension( const ::rtl::OUString& sSourceDir );
-        /* fills m_scriptElements and  m_dialogElements
-        */
-        void registerConfigurationPackage(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > & xPkg);
 
     public:
         OO3ExtensionMigration(::com::sun::star::uno::Reference<
@@ -142,8 +136,6 @@ namespace migration
     public:
         virtual ~TmpRepositoryCommandEnv();
         TmpRepositoryCommandEnv();
-        TmpRepositoryCommandEnv(
-            ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler> const & handler);
 
         // XCommandEnvironment
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL

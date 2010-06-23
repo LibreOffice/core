@@ -93,6 +93,9 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     if ( pVCLPopupMenu )
         pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
 
+    if (!pPopupMenu)
+        return;
+
     // insert basic
     String aCommand = String::CreateFromAscii( ".uno:MacroDialog" );
     String aDisplayName = RetrieveLabelFromCommand( aCommand );

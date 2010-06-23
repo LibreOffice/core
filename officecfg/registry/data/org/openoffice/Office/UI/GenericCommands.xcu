@@ -1459,6 +1459,38 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:FindText" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Find Text</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DownSearch" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Find Next</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:UpSearch" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Find Previous</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name="vnd.sun.star.findbar:FocusToFindbar" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Focus to Findbar</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ExtendedHelp" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">What's ~This?</value>
@@ -2090,20 +2122,12 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:ChangeCaseToUpper" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Uppercase</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
+            <node oor:name=".uno:LanguageStatus" oor:op="replace">
+                    <prop oor:name="Label" oor:type="xs:string">
+                            <value xml:lang="en-US">Language Status</value>
+                    </prop>
             </node>
-                        <node oor:name=".uno:LanguageStatus" oor:op="replace">
-                                <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="en-US">Language Status</value>
-                                </prop>
-                        </node>
-                        <node oor:name=".uno:ChooseControls" oor:op="replace">
+            <node oor:name=".uno:ChooseControls" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Controls</value>
                 </prop>
@@ -2111,9 +2135,41 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ChangeCaseToSentenceCase" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Sentence case</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ChangeCaseToLower" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Lowercase</value>
+                    <value xml:lang="en-US">~lowercase</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ChangeCaseToUpper" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~UPPERCASE</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ChangeCaseToTitleCase" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Capitalize Every Word</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ChangeCaseToToggleCase" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~tOGGLE cASE</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2989,7 +3045,7 @@
                     <value xml:lang="en-US">New FrameSet</value>
                 </prop>
             </node>
-            <node oor:name=".uno:Thesaurus" oor:op="replace">
+            <node oor:name=".uno:ThesaurusDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Thesaurus...</value>
                 </prop>

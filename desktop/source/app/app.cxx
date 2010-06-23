@@ -359,6 +359,8 @@ namespace
         : public rtl::Static< String, Version > {};
     struct AboutBoxVersion
         : public rtl::Static< String, AboutBoxVersion > {};
+    struct OOOVendor
+        : public rtl::Static< String, OOOVendor > {};
     struct Extension
         : public rtl::Static< String, Extension > {};
     struct XMLFileFormatName
@@ -421,6 +423,21 @@ void ReplaceStringHookProc( UniString& rStr )
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATNAME", rXMLFileFormatName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", rXMLFileFormatVersion );
+    }
+    if ( rStr.SearchAscii( "%OOOVENDOR" ) != STRING_NOTFOUND )
+    {
+        String &rOOOVendor = OOOVendor::get();
+
+        if ( !rOOOVendor.Len() )
+        {
+            rtl::OUString aTmp;
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty(
+                    ::utl::ConfigManager::OOOVENDOR );
+            aRet >>= aTmp;
+            rOOOVendor = aTmp;
+
+        }
+        rStr.SearchAndReplaceAllAscii( "%OOOVENDOR" ,rOOOVendor );
     }
 
     if ( rStr.SearchAscii( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != STRING_NOTFOUND )
