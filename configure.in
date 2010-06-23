@@ -515,6 +515,9 @@ AC_ARG_WITH(system-curl,
 AC_ARG_WITH(system-boost,
 [  --with-system-boost     Use boost already on system
 ],,)
+AC_ARG_WITH(system-mdds,
+[  --with-system-mdds      Use mdds already on system
+],,)
 AC_ARG_WITH(system-vigra,
 [  --with-system-vigra     Use vigra already on system
 ],,)
@@ -4176,6 +4179,25 @@ fi
 AC_SUBST(SYSTEM_CURL)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
+
+dnl ===================================================================
+dnl Check for system mdds
+dnl ===================================================================
+AC_MSG_CHECKING([which mdds to use])
+if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
+	test "$with_system_mdds" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_MDDS=YES
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADER(mdds/flat_segment_tree.hpp, [],
+        [AC_MSG_ERROR(mdds/flat_segment_tree.hpp not found. install mdds)], [])
+    AC_LANG_POP([C++])
+else
+   AC_MSG_RESULT([internal])
+   BUILD_TYPE="$BUILD_TYPE MDDS"
+   SYSTEM_MDDS=NO
+fi
+AC_SUBST(SYSTEM_MDDS)
 
 dnl ===================================================================
 dnl Check for system boost

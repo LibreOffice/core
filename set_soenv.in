@@ -1897,6 +1897,7 @@ ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
 ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
 ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
 ToFile( "SYSTEM_BOOST",      "@SYSTEM_BOOST@",     "e" );
+ToFile( "SYSTEM_MDDS",       "@SYSTEM_MDDS@",      "e" );
 ToFile( "SYSTEM_VIGRA",      "@SYSTEM_VIGRA@",     "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
