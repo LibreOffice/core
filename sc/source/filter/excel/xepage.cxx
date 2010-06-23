@@ -45,9 +45,14 @@
 #include "xehelper.hxx"
 #include "xeescher.hxx"
 
+#include <set>
+#include <limits>
+
 #include <oox/core/tokens.hxx>
 
 using ::rtl::OString;
+using ::std::set;
+using ::std::numeric_limits;
 
 // Page settings records ======================================================
 
@@ -299,17 +304,23 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     // *** page breaks ***
 
-    ScCompressedArrayIterator< SCROW, BYTE> aIter( rDoc.GetRowFlagsArray( nScTab), 1, GetMaxPos().Row());
-    do
-    {
-        if (*aIter & CR_MANUALBREAK)
-            for (SCROW j=aIter.GetRangeStart(); j<=aIter.GetRangeEnd(); ++j)
-                maData.maHorPageBreaks.push_back( static_cast< sal_uInt16 >( j ) );
-    } while (aIter.NextRange());
+    set<SCROW> aRowBreaks;
+    rDoc.GetAllRowBreaks(aRowBreaks, nScTab, false, true);
 
-    for( SCCOL nScCol = 1, nScMaxCol = GetMaxPos().Col(); nScCol <= nScMaxCol; ++nScCol )
-        if( rDoc.GetColFlags( nScCol, nScTab ) & CR_MANUALBREAK )
-            maData.maVerPageBreaks.push_back( static_cast< sal_uInt16 >( nScCol ) );
+    SCROW nMaxRow = numeric_limits<sal_uInt16>::max();
+    for (set<SCROW>::const_iterator itr = aRowBreaks.begin(), itrEnd = aRowBreaks.end(); itr != itrEnd; ++itr)
+    {
+        SCROW nRow = *itr;
+        if (nRow > nMaxRow)
+            break;
+
+        maData.maHorPageBreaks.push_back(nRow);
+    }
+
+    set<SCCOL> aColBreaks;
+    rDoc.GetAllColBreaks(aColBreaks, nScTab, false, true);
+    for (set<SCCOL>::const_iterator itr = aColBreaks.begin(), itrEnd = aColBreaks.end(); itr != itrEnd; ++itr)
+        maData.maVerPageBreaks.push_back(*itr);
 }
 
 static void lcl_WriteHeaderFooter( XclExpXmlStream& rStrm )

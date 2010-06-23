@@ -153,7 +153,19 @@ extern USHORT nScFillModeMouseModifier;             // global.cxx
 
 #define SC_FILTERLISTBOX_LINES  12
 
-//==================================================================
+// ============================================================================
+
+ScGridWindow::VisibleRange::VisibleRange() :
+    mnCol1(0), mnCol2(MAXCOL), mnRow1(0), mnRow2(MAXROW)
+{
+}
+
+bool ScGridWindow::VisibleRange::isInside(SCCOL nCol, SCROW nRow) const
+{
+    return mnCol1 <= nCol && nCol <= mnCol2 && mnRow1 <= nRow && nRow <= mnRow2;
+}
+
+// ============================================================================
 
 class ScFilterListBox : public ListBox
 {
@@ -366,6 +378,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             mpOODragRect( NULL ),
             mpOOHeader( NULL ),
             mpOOShrink( NULL ),
+            mpAutoFillRect(static_cast<Rectangle*>(NULL)),
             pViewData( pData ),
             eWhich( eWhichPos ),
             pNoteMarker( NULL ),
@@ -1323,37 +1336,23 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
         ScDocument* pDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
         BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
 
         //  Auto-Fill
 
         ScRange aMarkRange;
         if (pViewData->GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE)
         {
-            if ( aMarkRange.aStart.Tab() == pViewData->GetTabNo() )
+            if (aMarkRange.aStart.Tab() == pViewData->GetTabNo() && mpAutoFillRect)
             {
-                //  Block-Ende wie in DrawAutoFillMark
-                SCCOL nX = aMarkRange.aEnd.Col();
-                SCROW nY = aMarkRange.aEnd.Row();
-
-                Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
-                long nSizeXPix;
-                long nSizeYPix;
-                pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-                aFillPos.X() += nSizeXPix * nLayoutSign;
-                aFillPos.Y() += nSizeYPix;
-                if ( bLayoutRTL )
-                    aFillPos.X() -= 1;
-
                 Point aMousePos = rMEvt.GetPosPixel();
-                //  Abfrage hier passend zu DrawAutoFillMark
-                //  (ein Pixel mehr als markiert)
-                if ( aMousePos.X() >= aFillPos.X()-3 && aMousePos.X() <= aFillPos.X()+4 &&
-                     aMousePos.Y() >= aFillPos.Y()-3 && aMousePos.Y() <= aFillPos.Y()+4 )
+                if (mpAutoFillRect->IsInside(aMousePos))
                 {
                     SetPointer( Pointer( POINTER_CROSS ) );     //! dickeres Kreuz ?
                     if (bAction)
                     {
+                        SCCOL nX = aMarkRange.aEnd.Col();
+                        SCROW nY = aMarkRange.aEnd.Row();
+
                         if ( lcl_IsEditableMatrix( pViewData->GetDocument(), aMarkRange ) )
                             pViewData->SetDragMode(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY, SC_FILL_MATRIX );
@@ -2953,7 +2952,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
         //  clicked on selected object -> don't change anything
         bHitSelected = TRUE;
     }
-    else if ( pViewData->GetMarkData().IsCellMarked( (USHORT) nCellX, (USHORT) nCellY ) )
+    else if ( pViewData->GetMarkData().IsCellMarked(nCellX, nCellY) )
     {
         //  clicked on selected cell -> don't change anything
         bHitSelected = TRUE;
@@ -2977,7 +2976,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
         if ( !bHitDraw )
         {
             pView->Unmark();
-            pView->SetCursor( (USHORT) nCellX, (USHORT) nCellY );
+            pView->SetCursor(nCellX, nCellY);
             if ( bWasDraw )
                 pViewData->GetViewShell()->SetDrawShell( FALSE );   // switch shells
         }
@@ -4552,18 +4551,17 @@ void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, USHORT nEdges
     SCROW nTmp;
 
     ScDocument* pDoc = pDocSh->GetDocument();
-    while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab1 ) & CR_HIDDEN ) )
+    while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab1) )
     {
         --nCol1;
         bHiddenEdge = TRUE;
     }
-    while ( nCol2 < MAXCOL && ( pDoc->GetColFlags( nCol2, nTab1 ) & CR_HIDDEN ) )
+    while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab1) )
     {
         ++nCol2;
         bHiddenEdge = TRUE;
     }
-    nTmp = pDoc->GetRowFlagsArray( nTab1).GetLastForCondition( 0, nRow1,
-            CR_HIDDEN, 0);
+    nTmp = pDoc->FirstVisibleRow(0, nRow1, nTab1);
     if (!ValidRow(nTmp))
         nTmp = 0;
     if (nTmp < nRow1)
@@ -4571,8 +4569,7 @@ void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, USHORT nEdges
         nRow1 = nTmp;
         bHiddenEdge = TRUE;
     }
-    nTmp = pDoc->GetRowFlagsArray( nTab1).GetFirstForCondition( nRow2, MAXROW,
-            CR_HIDDEN, 0);
+    nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab1);
     if (!ValidRow(nTmp))
         nTmp = MAXROW;
     if (nTmp > nRow2)
@@ -5142,6 +5139,9 @@ void ScGridWindow::UpdateCursorOverlay()
     SCCOL nX = pViewData->GetCurX();
     SCROW nY = pViewData->GetCurY();
 
+    if (!maVisibleRange.isInside(nX, nY))
+        return;
+
     //  don't show the cursor in overlapped cells
 
     ScDocument* pDoc = pViewData->GetDocument();
@@ -5317,6 +5317,7 @@ void ScGridWindow::UpdateSelectionOverlay()
 void ScGridWindow::DeleteAutoFillOverlay()
 {
     DELETEZ( mpOOAutoFill );
+    mpAutoFillRect.reset();
 }
 
 void ScGridWindow::UpdateAutoFillOverlay()
@@ -5337,6 +5338,11 @@ void ScGridWindow::UpdateAutoFillOverlay()
     {
         SCCOL nX = aAutoMarkPos.Col();
         SCROW nY = aAutoMarkPos.Row();
+
+        if (!maVisibleRange.isInside(nX, nY))
+            // Autofill mark is not visible.  Bail out.
+            return;
+
         SCTAB nTab = pViewData->GetTabNo();
         ScDocument* pDoc = pViewData->GetDocument();
         BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
@@ -5352,7 +5358,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
         aFillPos.Y() += nSizeYPix;
         aFillPos.Y() -= 2;
-        Rectangle aFillRect( aFillPos, Size(6,6) );
+        mpAutoFillRect.reset(new Rectangle(aFillPos, Size(6, 6)));
 
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
@@ -5362,7 +5368,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
             const Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
-            basegfx::B2DRange aRB(aFillRect.Left(), aFillRect.Top(), aFillRect.Right() + 1, aFillRect.Bottom() + 1);
+            basegfx::B2DRange aRB(mpAutoFillRect->Left(), mpAutoFillRect->Top(), mpAutoFillRect->Right() + 1, mpAutoFillRect->Bottom() + 1);
 
             aRB.transform(aTransform);
             aRanges.push_back(aRB);
@@ -5377,10 +5383,10 @@ void ScGridWindow::UpdateAutoFillOverlay()
             mpOOAutoFill = new ::sdr::overlay::OverlayObjectList;
             mpOOAutoFill->append(*pOverlay);
         }
-    }
 
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
+        if ( aOldMode != aDrawMode )
+            SetMapMode( aOldMode );
+    }
 }
 
 void ScGridWindow::DeleteDragRectOverlay()

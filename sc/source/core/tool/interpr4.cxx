@@ -537,9 +537,14 @@ BOOL ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateDoubleArr" );
-#if SC_ROWLIMIT_MORE_THAN_64K
-#error row limit 64k
+
+    // Old Add-Ins are hard limited to USHORT values.
+#if MAXCOLCOUNT_DEFINE > USHRT_MAX
+#error Add check for columns > USHRT_MAX!
 #endif
+    if (nRow1 > USHRT_MAX || nRow2 > USHRT_MAX)
+        return FALSE;
+
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
     *p++ = static_cast<USHORT>(nCol1);
@@ -618,9 +623,14 @@ BOOL ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     BYTE* pCellArr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateStringArr" );
-#if SC_ROWLIMIT_MORE_THAN_64K
-#error row limit 64k
+
+    // Old Add-Ins are hard limited to USHORT values.
+#if MAXCOLCOUNT_DEFINE > USHRT_MAX
+#error Add check for columns > USHRT_MAX!
 #endif
+    if (nRow1 > USHRT_MAX || nRow2 > USHRT_MAX)
+        return FALSE;
+
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
     *p++ = static_cast<USHORT>(nCol1);
@@ -713,9 +723,14 @@ BOOL ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   BYTE* pCellArr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateCellArr" );
-#if SC_ROWLIMIT_MORE_THAN_64K
-#error row limit 64k
+
+    // Old Add-Ins are hard limited to USHORT values.
+#if MAXCOLCOUNT_DEFINE > USHRT_MAX
+#error Add check for columns > USHRT_MAX!
 #endif
+    if (nRow1 > USHRT_MAX || nRow2 > USHRT_MAX)
+        return FALSE;
+
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
     *p++ = static_cast<USHORT>(nCol1);
@@ -2125,7 +2140,7 @@ void ScInterpreter::ScExternal()
     if (ScGlobal::GetFuncCollection()->SearchFunc(aFuncName, nIndex))
     {
         FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);
-        if (nParamCount == pFuncData->GetParamCount() - 1)
+        if (nParamCount <= MAXFUNCPARAM && nParamCount == pFuncData->GetParamCount() - 1)
         {
             ParamType   eParamType[MAXFUNCPARAM];
             void*       ppParam[MAXFUNCPARAM];

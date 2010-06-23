@@ -1489,12 +1489,12 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
         {
-            nBlkTwipsY += aDocument.FastGetRowHeight( pRepeatRow->aStart.Row(),
+            nBlkTwipsY += aDocument.GetRowHeight( pRepeatRow->aStart.Row(),
                     pRepeatRow->aEnd.Row(), nTab );
             if ( nStartRow <= pRepeatRow->aEnd.Row() )
                 nStartRow = pRepeatRow->aEnd.Row() + 1;
         }
-        nBlkTwipsY += aDocument.FastGetRowHeight( nStartRow, nEndRow, nTab );
+        nBlkTwipsY += aDocument.GetRowHeight( nStartRow, nEndRow, nTab );
 
         Size aPhysPage;
         long nHdr, nFtr;

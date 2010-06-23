@@ -2569,14 +2569,17 @@ void ScChart2DataSequence::BuildDataCache()
             if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr))
                 continue;
 
+            SCCOL nLastCol = -1;
+            SCROW nLastRow = -1;
             for (SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); ++nTab)
             {
                 for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
                 {
                     for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
                     {
-                        bool bColHidden = (m_pDocument->GetColFlags(nCol, nTab) & CR_HIDDEN);
-                        bool bRowHidden = (m_pDocument->GetRowFlags(nRow, nTab) & CR_HIDDEN);
+                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, nLastCol);
+                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, nLastRow);
+
                         if (bColHidden || bRowHidden)
                         {
                             // hidden cell

@@ -435,7 +435,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
             for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow++ )
             {
                 USHORT nHeight = (USHORT)(ULONG) mpRowHeights->Get( nRow );
-                if ( nHeight > mpDoc->FastGetRowHeight( nRow, nTab ) )
+                if ( nHeight > mpDoc->GetRowHeight( nRow, nTab ) )
                     mpDoc->SetRowHeight( nRow, nTab, nHeight );
             }
         }

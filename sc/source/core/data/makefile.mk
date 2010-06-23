@@ -99,6 +99,7 @@ SLOFILES =  \
     $(SLO)$/pivot2.obj \
     $(SLO)$/poolhelp.obj \
     $(SLO)$/sheetevents.obj \
+    $(SLO)$/segmenttree.obj \
     $(SLO)$/sortparam.obj \
     $(SLO)$/stlpool.obj \
     $(SLO)$/stlsheet.obj \
@@ -151,7 +152,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/dbdocutl.obj \
     $(SLO)$/dptabsrc.obj \
     $(SLO)$/drwlayer.obj \
-    $(SLO)$/globalx.obj
+    $(SLO)$/globalx.obj \
+    $(SLO)$/segmenttree.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
@@ -167,7 +169,8 @@ EXCEPTIONSNOOPTFILES= \
 .ELSE
 EXCEPTIONSFILES+= \
     $(SLO)$/cell.obj \
-    $(SLO)$/global.obj
+    $(SLO)$/global.obj \
+    $(SLO)$/table5.obj
 .ENDIF
 
 # --- Tagets -------------------------------------------------------

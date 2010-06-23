@@ -640,13 +640,13 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
     }
 
     long nBlockY = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            pDoc->GetRowFlagsArray( nTab), 0, nFixPosY-1, CR_HIDDEN, 0,
-            pDoc->GetRowHeightArray( nTab));
-    for ( ; aIter; ++aIter)
+    for (SCROW nRow = 0; nRow <= nFixPosY-1; ++nRow)
     {
+        if (pDoc->RowHidden(nRow, nTab))
+            continue;
+
         //  for frozen panes, add both parts
-        USHORT nRowTwips = *aIter;
+        USHORT nRowTwips = pDoc->GetRowHeight(nRow, nTab);
         if (nRowTwips)
         {
             nBlockY += (long)(nRowTwips * fScaleY);
@@ -654,10 +654,9 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
                 return FALSE;
         }
     }
-    aIter.NewLimits( nStartRow, nEndRow);
-    for ( ; aIter; ++aIter)
+    for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
-        USHORT nRowTwips = *aIter;
+        USHORT nRowTwips = pDoc->GetRowHeight(nRow, nTab);
         if (nRowTwips)
         {
             nBlockY += (long)(nRowTwips * fScaleY);

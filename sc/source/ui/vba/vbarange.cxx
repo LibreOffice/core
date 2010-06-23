@@ -3906,16 +3906,16 @@ ScVbaRange::getPageBreak() throw (uno::RuntimeException)
         {
             ScDocument* pDoc =  getDocumentFromRange( mxRange );
 
-            BYTE nFlag = 0;
+            ScBreakType nBreak = BREAK_NONE;
             if ( !bColumn )
-                nFlag = pDoc -> GetRowFlags(thisAddress.StartRow, thisAddress.Sheet);
+                nBreak = pDoc->HasRowBreak(thisAddress.StartRow, thisAddress.Sheet);
             else
-                nFlag = pDoc -> GetColFlags(static_cast<SCCOL>(thisAddress.StartColumn), thisAddress.Sheet);
+                nBreak = pDoc->HasColBreak(thisAddress.StartColumn, thisAddress.Sheet);
 
-            if ( nFlag & CR_PAGEBREAK)
+            if (nBreak & BREAK_PAGE)
                 nPageBreak = excel::XlPageBreak::xlPageBreakAutomatic;
 
-            if ( nFlag & CR_MANUALBREAK)
+            if (nBreak & BREAK_MANUAL)
                 nPageBreak = excel::XlPageBreak::xlPageBreakManual;
         }
     }

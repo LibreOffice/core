@@ -1648,8 +1648,8 @@ BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, B
 void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
 {
     ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow );
-    SCROW nTop;
-    SCROW nBottom;
+    SCROW nTop = -1;
+    SCROW nBottom = -1;
     SCSIZE nIndex;
     const ScPatternAttr* pPattern = aAttrIter.Next( nTop, nBottom );
     while (pPattern)

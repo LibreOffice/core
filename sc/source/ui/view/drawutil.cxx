@@ -66,14 +66,19 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
         nTwipsX += (long) nWidth;
         nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            pDoc->GetRowFlagsArray( nTab), nStartRow, nEndRow-1, CR_HIDDEN, 0,
-            pDoc->GetRowHeightArray( nTab));
-    for ( ; aIter; ++aIter )
+
+    for (SCROW nRow = nStartRow; nRow <= nEndRow-1; ++nRow)
     {
-        USHORT nHeight = *aIter;
-        nTwipsY += (long) nHeight;
-        nPixelY += ScViewData::ToPixel( nHeight, nPPTY );
+        SCROW nLastRow = nRow;
+        if (pDoc->RowHidden(nRow, nTab, NULL, &nLastRow))
+        {
+            nRow = nLastRow;
+            continue;
+        }
+
+        USHORT nHeight = pDoc->GetRowHeight(nRow, nTab);
+        nTwipsY += static_cast<long>(nHeight);
+        nPixelY += ScViewData::ToPixel(nHeight, nPPTY);
     }
 
     MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
@@ -100,10 +105,10 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     else
         rScaleY = Fraction( 1, 1 );
 
-    //  17 bits of accuracy are needed to always hit the right part of
-    //  cells in the last rows
-    rScaleX.ReduceInaccurate( 17 );
-    rScaleY.ReduceInaccurate( 17 );
+    //  25 bits of accuracy are needed to always hit the right part of
+    //  cells in the last rows (was 17 before 1M rows).
+    rScaleX.ReduceInaccurate( 25 );
+    rScaleY.ReduceInaccurate( 25 );
 }
 
 

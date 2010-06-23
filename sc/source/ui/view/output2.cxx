@@ -844,7 +844,7 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     while (bHOver)              // nY konstant
     {
         --rOverX;
-        bHidden = ( (pDoc->GetColFlags(rOverX,nTab) & CR_HIDDEN) != 0 );
+        bHidden = pDoc->ColHidden(rOverX, nTab);
         if ( !bDoMerge && !bHidden )
             return FALSE;
 
@@ -868,7 +868,7 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     while (bVOver)
     {
         --rOverY;
-        bHidden = ( (pDoc->GetRowFlags(rOverY,nTab) & CR_HIDDEN) != 0 );
+        bHidden = pDoc->RowHidden(rOverY, nTab);
         if ( !bDoMerge && !bHidden )
             return FALSE;
 
@@ -876,8 +876,8 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
             --nArrY;                        // lokale Kopie !
 
         if (rOverX >= nX1 && rOverY >= nY1 &&
-            (pDoc->GetColFlags(rOverX,nTab) & CR_HIDDEN) == 0 &&
-            (pDoc->GetRowFlags(rOverY,nTab) & CR_HIDDEN) == 0 &&
+            !pDoc->ColHidden(rOverX, nTab) &&
+            !pDoc->RowHidden(rOverY, nTab) &&
             pRowInfo[nArrY].nRowNo == rOverY)
         {
 //          rVirtPosY -= pRowInfo[nArrY].nHeight;
@@ -2176,7 +2176,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                     if (bDoCell)
                     {
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
-                             (pDoc->GetColFlags(nCellX,nTab) & CR_HIDDEN) == 0 )
+                             !pDoc->ColHidden(nCellX, nTab) )
                         {
                             CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
                             pPattern = rCellInfo.pPatternAttr;

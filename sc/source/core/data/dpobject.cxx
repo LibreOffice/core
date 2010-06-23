@@ -410,7 +410,7 @@ void ScDPObject::CreateOutput()
                 nNewRow = 0;
 
             ScAddress aStart( aOutRange.aStart );
-            aStart.SetRow( (USHORT) nNewRow );
+            aStart.SetRow(nNewRow);
             pOutput->SetPosition( aStart );
 
             //! modify aOutRange?

@@ -1908,21 +1908,19 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
-        if ( pDoc->IsLoadingDone() )
-        {
-            BOOL bLinks = pDoc->IdleCheckLinks();
-            BOOL bWidth = pDoc->IdleCalcTextWidth();
-            BOOL bSpell = pDoc->ContinueOnlineSpelling();
-            if ( bSpell )
-                aSpellTimer.Start();                    // da ist noch was
 
-            bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+        BOOL bLinks = pDoc->IdleCheckLinks();
+        BOOL bWidth = pDoc->IdleCalcTextWidth();
+        BOOL bSpell = pDoc->ContinueOnlineSpelling();
+        if ( bSpell )
+            aSpellTimer.Start();                    // da ist noch was
 
-            //  While calculating a Basic formula, a paint event may have occured,
-            //  so check the bNeedsRepaint flags for this document's views
-            if (bWidth)
-                lcl_CheckNeedsRepaint( pDocSh );
-        }
+        bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+
+        //  While calculating a Basic formula, a paint event may have occured,
+        //  so check the bNeedsRepaint flags for this document's views
+        if (bWidth)
+            lcl_CheckNeedsRepaint( pDocSh );
     }
 
     ULONG nOldTime = aIdleTimer.GetTimeout();

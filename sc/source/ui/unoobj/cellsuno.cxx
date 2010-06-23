@@ -3377,18 +3377,25 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
         ScMarkData aMarkData(*GetMarkData());
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
-            if (pDoc->GetColFlags(nCol,nTab) & CR_HIDDEN)
-                aMarkData.SetMultiMarkArea( ScRange( nCol,0,nTab, nCol,MAXROW,nTab ), FALSE );
-
-        //! nur bis zur letzten selektierten Zeile testen?
-        ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray( nTab), 0, MAXROW);
-        do
+        SCCOL nCol = 0, nLastCol;
+        while (nCol <= MAXCOL)
         {
-            if (*aIter & CR_HIDDEN)
-                aMarkData.SetMultiMarkArea( ScRange( 0, aIter.GetRangeStart(),
-                            nTab, MAXCOL, aIter.GetRangeEnd(), nTab ), FALSE );
-        } while (aIter.NextRange());
+            if (pDoc->ColHidden(nCol, nTab, nLastCol))
+                // hidden columns.  Unselect them.
+                aMarkData.SetMultiMarkArea(ScRange(nCol, 0, nTab, nLastCol, MAXROW, nTab), false);
+
+            nCol = nLastCol + 1;
+        }
+
+        SCROW nRow = 0, nLastRow;
+        while (nRow <= MAXROW)
+        {
+            if (pDoc->RowHidden(nRow, nTab, nLastRow))
+                // These rows are hidden.  Unselect them.
+                aMarkData.SetMultiMarkArea(ScRange(0, nRow, nTab, MAXCOL, nLastRow, nTab), false);
+
+            nRow = nLastRow + 1;
+        }
 
         ScRangeList aNewRanges;
         aMarkData.FillRangeListWithMarks( &aNewRanges, FALSE );
@@ -7054,7 +7061,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         SCCOL nCount = 0;
         SCCOL nCol;
         for (nCol=0; nCol<=MAXCOL; nCol++)
-            if (pDoc->GetColFlags( nCol, nTab ) & ( CR_PAGEBREAK | CR_MANUALBREAK ))
+            if (pDoc->HasColBreak(nCol, nTab))
                 ++nCount;
 
         sheet::TablePageBreakData aData;
@@ -7063,11 +7070,11 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         USHORT nPos = 0;
         for (nCol=0; nCol<=MAXCOL; nCol++)
         {
-            BYTE nFlags = pDoc->GetColFlags( nCol, nTab );
-            if (nFlags & ( CR_PAGEBREAK | CR_MANUALBREAK ))
+            ScBreakType nBreak = pDoc->HasColBreak(nCol, nTab);
+            if (nBreak)
             {
                 aData.Position    = nCol;
-                aData.ManualBreak = ( nFlags & CR_MANUALBREAK ) != 0;
+                aData.ManualBreak = (nBreak & BREAK_MANUAL);
                 pAry[nPos] = aData;
                 ++nPos;
             }
@@ -7096,33 +7103,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBre
             ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab );
             aPrintFunc.UpdatePages();
         }
-
-        SCROW nCount = pDoc->GetRowFlagsArray( nTab).CountForAnyBitCondition(
-                0, MAXROW, (CR_PAGEBREAK | CR_MANUALBREAK));
-
-        uno::Sequence<sheet::TablePageBreakData> aSeq(nCount);
-        if (nCount)
-        {
-            sheet::TablePageBreakData aData;
-            sheet::TablePageBreakData* pAry = aSeq.getArray();
-            size_t nPos = 0;
-            ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray( nTab), 0, MAXROW);
-            do
-            {
-                BYTE nFlags = *aIter;
-                if (nFlags & ( CR_PAGEBREAK | CR_MANUALBREAK ))
-                {
-                    for (SCROW nRow = aIter.GetRangeStart(); nRow <= aIter.GetRangeEnd(); ++nRow)
-                    {
-                        aData.Position    = nRow;
-                        aData.ManualBreak = ( nFlags & CR_MANUALBREAK ) != 0;
-                        pAry[nPos] = aData;
-                        ++nPos;
-                    }
-                }
-            } while (aIter.NextRange());
-        }
-        return aSeq;
+        return pDoc->GetRowBreakData(nTab);
     }
     return uno::Sequence<sheet::TablePageBreakData>(0);
 }
@@ -8922,8 +8903,9 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
-            BOOL bVis = !(pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bVis );
+            SCCOL nDummy;
+            bool bHidden = pDoc->ColHidden(nCol, nTab, nDummy);
+            ScUnoHelpFunctions::SetBoolInAny( rAny, !bHidden );
         }
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
         {
@@ -8933,13 +8915,13 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
-            BOOL bBreak = ( 0 != (pDoc->GetColFlags( nCol, nTab ) & (CR_PAGEBREAK|CR_MANUALBREAK)) );
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bBreak );
+            ScBreakType nBreak = pDoc->HasColBreak(nCol, nTab);
+            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak );
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
-            BOOL bBreak = ( 0 != (pDoc->GetColFlags( nCol, nTab ) & (CR_MANUALBREAK)) );
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bBreak );
+            ScBreakType nBreak = pDoc->HasColBreak(nCol, nTab);
+            ScUnoHelpFunctions::SetBoolInAny(rAny, (nBreak & BREAK_MANUAL));
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
@@ -9025,12 +9007,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
 //          ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
 //          aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, eMode, 0, TRUE, TRUE );
             //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
-            BYTE nFlags = pDoc->GetRowFlags(nRow, nTab);
-            if (bFil)
-                nFlags |= CR_FILTERED;
-            else
-                nFlags &= ~CR_FILTERED;
-            pDoc->SetRowFlags(nRow, nTab, nFlags);
+            pDoc->SetRowFiltered(nRow, nRow, nTab, bFil);
         }
         else if ( pEntry->nWID == SC_WID_UNO_OHEIGHT )
         {
@@ -9082,12 +9059,13 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
-            BOOL bVis = !(pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN);
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bVis );
+            SCROW nDummy;
+            bool bHidden = pDoc->RowHidden(nRow, nTab, nDummy);
+            ScUnoHelpFunctions::SetBoolInAny( rAny, !bHidden );
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLFILT )
         {
-            BOOL bVis = ((pDoc->GetRowFlags( nRow, nTab ) & CR_FILTERED) != 0);
+            bool bVis = pDoc->RowFiltered(nRow, nTab);
             ScUnoHelpFunctions::SetBoolInAny( rAny, bVis );
         }
         else if ( pEntry->nWID == SC_WID_UNO_OHEIGHT )
@@ -9097,13 +9075,13 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
-            BOOL bBreak = ( 0 != (pDoc->GetRowFlags( nRow, nTab ) & (CR_PAGEBREAK|CR_MANUALBREAK)) );
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bBreak );
+            ScBreakType nBreak = pDoc->HasRowBreak(nRow, nTab);
+            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak );
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
-            BOOL bBreak = ( 0 != (pDoc->GetRowFlags( nRow, nTab ) & (CR_MANUALBREAK)) );
-            ScUnoHelpFunctions::SetBoolInAny( rAny, bBreak );
+            ScBreakType nBreak = (pDoc->HasRowBreak(nRow, nTab) & BREAK_MANUAL);
+            ScUnoHelpFunctions::SetBoolInAny( rAny, nBreak );
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);

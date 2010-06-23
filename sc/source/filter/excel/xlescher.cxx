@@ -37,6 +37,7 @@
 #include "xestream.hxx"
 #include "xistream.hxx"
 #include "xltools.hxx"
+#include "xlroot.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -110,15 +111,15 @@ long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uIn
 /** Calculates an object column position from a drawing layer X position (in twips). */
 void lclGetColFromX(
         ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclCol,
-        sal_uInt16& rnOffset, sal_uInt16 nXclStartCol,
+        sal_uInt16& rnOffset, sal_uInt16 nXclStartCol, sal_uInt16 nXclMaxCol,
         long& rnStartW, long nX, double fScale )
 {
     // rnStartW in conjunction with nXclStartCol is used as buffer for previously calculated width
     long nTwipsX = static_cast< long >( nX / fScale + 0.5 );
     long nColW = 0;
-    for( rnXclCol = nXclStartCol; rnXclCol <= MAXCOL; ++rnXclCol )
+    for( rnXclCol = nXclStartCol; rnXclCol <= nXclMaxCol; ++rnXclCol )
     {
-        nColW = rDoc.GetColWidth( static_cast<SCCOL>(rnXclCol), nScTab );
+        nColW = rDoc.GetColWidth( static_cast< SCCOL >( rnXclCol ), nScTab );
         if( rnStartW + nColW > nTwipsX )
             break;
         rnStartW += nColW;
@@ -128,28 +129,27 @@ void lclGetColFromX(
 
 /** Calculates an object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, SCTAB nScTab,
-        sal_uInt16& rnXclRow, sal_uInt16& rnOffset, sal_uInt16 nXclStartRow,
+        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclRow,
+        sal_uInt16& rnOffset, sal_uInt16 nXclStartRow, sal_uInt16 nXclMaxRow,
         long& rnStartH, long nY, double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            rDoc.GetRowFlagsArray( nScTab), static_cast<SCROW>(nXclStartRow),
-            MAXROW, CR_HIDDEN, 0, rDoc.GetRowHeightArray( nScTab));
-    for ( ; aIter; ++aIter )
+    bool bFound = false;
+    for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); nRow <= nXclMaxRow; ++nRow )
     {
-        nRowH = *aIter;
+        nRowH = rDoc.GetRowHeight( nRow, nScTab );
         if( rnStartH + nRowH > nTwipsY )
         {
-            rnXclRow = static_cast< sal_uInt16 >( aIter.GetPos() );
+            rnXclRow = static_cast< sal_uInt16 >( nRow );
+            bFound = true;
             break;
         }
         rnStartH += nRowH;
     }
-    if (!aIter)
-        rnXclRow = static_cast< sal_uInt16 >( aIter.GetIterEnd() );  // down to the bottom..
+    if( !bFound )
+        rnXclRow = nXclMaxRow;
     rnOffset = static_cast< sal_uInt16 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
 }
 
@@ -178,8 +178,9 @@ XclObjAnchor::XclObjAnchor() :
 {
 }
 
-Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUnit ) const
+Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const
 {
+    ScDocument& rDoc = rRoot.GetDoc();
     double fScale = lclGetTwipsScale( eMapUnit );
     Rectangle aRect(
         lclGetXFromCol( rDoc, nScTab, maFirst.mnCol, mnLX, fScale ),
@@ -193,20 +194,24 @@ Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUni
     return aRect;
 }
 
-void XclObjAnchor::SetRect( ScDocument& rDoc, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
+void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
 {
-    Rectangle aRect( rRect );
+    ScDocument& rDoc = rRoot.GetDoc();
+    sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
+    sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
+
     // #106948# adjust coordinates in mirrored sheets
+    Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
 
     double fScale = lclGetTwipsScale( eMapUnit );
     long nDummy = 0;
-    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nDummy, aRect.Left(),   fScale );
-    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nDummy, aRect.Right(),  fScale );
+    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nXclMaxCol, nDummy, aRect.Left(),   fScale );
+    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nXclMaxCol, nDummy, aRect.Right(),  fScale );
     nDummy = 0;
-    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nDummy, aRect.Top(),    fScale );
-    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nDummy, aRect.Bottom(), fScale );
+    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nXclMaxRow, nDummy, aRect.Top(),    fScale );
+    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nXclMaxRow, nDummy, aRect.Bottom(), fScale );
 }
 
 void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,

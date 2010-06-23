@@ -52,7 +52,6 @@
 #include "conditio.hxx"
 #include "stlpool.hxx"
 
-
 // -----------------------------------------------------------------------
 
 const USHORT ROWINFO_MAX = 1024;
@@ -97,11 +96,13 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     rStartY = nY;
     BOOL bHOver = pInfo->bHOverlapped;
     BOOL bVOver = pInfo->bVOverlapped;
+    SCCOL nLastCol;
+    SCROW nLastRow;
 
     while (bHOver)              // nY konstant
     {
         --rStartX;
-        if (rStartX >= (SCsCOL) nX1 && (pDoc->GetColFlags(rStartX,nTab) & CR_HIDDEN) == 0)
+        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, nLastCol))
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -123,8 +124,8 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
             --nArrY;                        // lokale Kopie !
 
         if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-            (pDoc->GetColFlags(rStartX,nTab) & CR_HIDDEN) == 0 &&
-            (pDoc->GetRowFlags(rStartY,nTab) & CR_HIDDEN) == 0 &&
+            !pDoc->ColHidden(rStartX, nTab, nLastCol) &&
+            !pDoc->RowHidden(rStartY, nTab, nLastRow) &&
             (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
@@ -141,8 +142,8 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 
     const ScMergeAttr* pMerge;
     if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-        (pDoc->GetColFlags(rStartX,nTab) & CR_HIDDEN) == 0 &&
-        (pDoc->GetRowFlags(rStartY,nTab) & CR_HIDDEN) == 0 &&
+        !pDoc->ColHidden(rStartX, nTab, nLastCol) &&
+        !pDoc->RowHidden(rStartY, nTab, nLastRow) &&
         (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
     {
         pMerge = (const ScMergeAttr*) &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
@@ -154,12 +155,6 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     rEndX = rStartX + pMerge->GetColMerge() - 1;
     rEndY = rStartY + pMerge->GetRowMerge() - 1;
 }
-
-inline BOOL ScDocument::RowHidden( SCROW nRow, SCTAB nTab )
-{
-    return ( pTab[nTab]->pRowFlags->GetValue(nRow) & CR_HIDDEN ) != 0;
-}
-
 
 #define CELLINFO(x,y) pRowInfo[nArrY+y].pCellInfo[nArrX+x]
 
@@ -356,7 +351,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         nX = nArrX-1;
         if ( ValidCol(nX) )
         {
-            if ( (GetColFlags(nX,nTab) & CR_HIDDEN) == 0 )          // Spalte nicht versteckt
+            if (!ColHidden(nX, nTab))
             {
                 USHORT nThisWidth = (USHORT) (GetColWidth( nX, nTab ) * nScaleX);
                 if (!nThisWidth)
@@ -376,7 +371,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             // #i58049#, #i57939# Hidden columns must be skipped here, or their attributes
             // will disturb the output
 
-            if ( (GetColFlags(nX,nTab) & CR_HIDDEN) == 0 )          // column not hidden
+            // TODO: Optimize this loop.
+            if (!ColHidden(nX, nTab))
             {
                 USHORT nThisWidth = (USHORT) (GetColWidth( nX, nTab ) * nScaleX);
                 if (!nThisWidth)
@@ -481,7 +477,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                         do
                         {
-                            if ( nArrY==0 || !RowHidden( nCurRow,nTab ) )
+                            SCROW nLastHiddenRow = -1;
+                            bool bRowHidden = RowHidden(nCurRow, nTab, nLastHiddenRow);
+                            if ( nArrY==0 || !bRowHidden )
                             {
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                                 if (pBackground != pDefBackground)          // Spalten-HG == Standard ?
@@ -550,6 +548,12 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 }
 
                                 ++nArrY;
+                            }
+                            else if (bRowHidden && nLastHiddenRow >= 0)
+                            {
+                                nCurRow = nLastHiddenRow;
+                                if (nCurRow > nThisRow)
+                                    nCurRow = nThisRow;
                             }
                             ++nCurRow;
                         }

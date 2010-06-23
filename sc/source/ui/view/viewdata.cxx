@@ -1603,7 +1603,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 nScrPosY = 65535;
             else
             {
-                nTSize = pDoc->FastGetRowHeight( nY, nTabNo );
+                nTSize = pDoc->GetRowHeight( nY, nTabNo );
                 if (nTSize)
                 {
                     long nSizeYPix = ToPixel( nTSize, nPPTY );
@@ -1612,7 +1612,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 else if ( nY < MAXROW )
                 {
                     // skip multiple hidden rows (forward only for now)
-                    SCROW nNext = pDoc->FastGetFirstNonHiddenRow( nY + 1, nTabNo );
+                    SCROW nNext = pDoc->FirstVisibleRow(nY + 1, MAXROW, nTabNo);
                     if ( nNext > MAXROW )
                         nY = MAXROW;
                     else
@@ -1624,7 +1624,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         for (nY=nPosY; nY>nWhereY;)
         {
             --nY;
-            nTSize = pDoc->FastGetRowHeight( nY, nTabNo );
+            nTSize = pDoc->GetRowHeight( nY, nTabNo );
             if (nTSize)
             {
                 long nSizeYPix = ToPixel( nTSize, nPPTY );
@@ -1714,8 +1714,7 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, USHO
             bOut = TRUE;
         else
         {
-//          USHORT nTSize = pDoc->GetRowHeight( nRowNo, nTabNo );
-            USHORT nTSize = pDoc->FastGetRowHeight( nRowNo, nTabNo );
+            USHORT nTSize = pDoc->GetRowHeight( nRowNo, nTabNo );
             if (nTSize)
             {
                 long nSizeYPix = ToPixel( nTSize, nPPTY );
@@ -1724,7 +1723,7 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, USHO
             else if ( nDir == 1 && nRowNo < MAXROW )
             {
                 // skip multiple hidden rows (forward only for now)
-                SCROW nNext = pDoc->FastGetFirstNonHiddenRow( nRowNo + 1, nTabNo );
+                SCROW nNext = pDoc->FirstVisibleRow(nRowNo + 1, MAXROW, nTabNo);
                 if ( nNext > MAXROW )
                 {
                     // same behavior as without the optimization: set bOut with nY=MAXROW+1
@@ -1787,11 +1786,19 @@ BOOL ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
         for (SCCOL i=0; i<nCountX; i++)
             nOutWidth += ToPixel( pDoc->GetColWidth(nX+i,nTabNo), nPPTX );
         SCROW nCountY = pMerge->GetRowMerge();
-        ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-                pDoc->GetRowFlagsArray( nTabNo), nY, nY+nCountY-1, CR_HIDDEN,
-                0, pDoc->GetRowHeightArray( nTabNo));
-        for ( ; aIter; ++aIter )
-            nOutHeight += ToPixel( *aIter, nPPTY );
+
+        for (SCROW nRow = nY; nRow <= nY+nCountY-1; ++nRow)
+        {
+            SCROW nLastRow = nRow;
+            if (pDoc->RowHidden(nRow, nTabNo, NULL, &nLastRow))
+            {
+                nRow = nLastRow;
+                continue;
+            }
+
+            USHORT nHeight = pDoc->GetRowHeight(nRow, nTabNo);
+            nOutHeight += ToPixel(nHeight, nPPTY);
+        }
 
         rSizeXPix = nOutWidth;
         rSizeYPix = nOutHeight;
@@ -1851,7 +1858,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     {
         while ( rPosY<=MAXROW && nClickY >= nScrY )
         {
-            nScrY += ToPixel( pDoc->FastGetRowHeight( rPosY, nTabNo ), nPPTY );
+            nScrY += ToPixel( pDoc->GetRowHeight( rPosY, nTabNo ), nPPTY );
             ++rPosY;
         }
         --rPosY;
@@ -1861,7 +1868,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         while ( rPosY>0 && nClickY < nScrY )
         {
             --rPosY;
-            nScrY -= ToPixel( pDoc->FastGetRowHeight( rPosY, nTabNo ), nPPTY );
+            nScrY -= ToPixel( pDoc->GetRowHeight( rPosY, nTabNo ), nPPTY );
         }
     }
 
@@ -1981,14 +1988,14 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         if ( nNewPosY > nOldPosY )
             for ( i=nOldPosY; i<nNewPosY; i++ )
             {
-                long nThis = pDoc->FastGetRowHeight( i,nTabNo );
+                long nThis = pDoc->GetRowHeight( i,nTabNo );
                 nTPosY -= nThis;
                 nPixPosY -= ToPixel(sal::static_int_cast<USHORT>(nThis), nPPTY);
             }
         else
             for ( i=nNewPosY; i<nOldPosY; i++ )
             {
-                long nThis = pDoc->FastGetRowHeight( i,nTabNo );
+                long nThis = pDoc->GetRowHeight( i,nTabNo );
                 nTPosY += nThis;
                 nPixPosY += ToPixel(sal::static_int_cast<USHORT>(nThis), nPPTY);
             }
@@ -2018,7 +2025,7 @@ void ScViewData::RecalcPixPos()             // nach Zoom-Aenderungen
         long nPixPosY = 0;
         SCROW nPosY = pThisTab->nPosY[eWhich];
         for (SCROW j=0; j<nPosY; j++)
-            nPixPosY -= ToPixel(pDoc->FastGetRowHeight(j,nTabNo), nPPTY);
+            nPixPosY -= ToPixel(pDoc->GetRowHeight(j,nTabNo), nPPTY);
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
 }
@@ -2061,7 +2068,7 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 
     for (nRow=nRow1; nRow<=nRow2; nRow++)
     {
-        nTSize = pDoc->FastGetRowHeight( nRow, nTabNo );
+        nTSize = pDoc->GetRowHeight( nRow, nTabNo );
         if (nTSize)
         {
             nSizePix = ToPixel( nTSize, nPPTY );
@@ -2103,7 +2110,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     bEnd = FALSE;
     while (!bEnd)
     {
-        nAdd = (long) pDoc->FastGetRowHeight(nY1,nTabNo);
+        nAdd = (long) pDoc->GetRowHeight(nY1,nTabNo);
         if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
         {
             nSize += nAdd;
@@ -3055,7 +3062,7 @@ BOOL ScViewData::UpdateFixY( SCTAB nTab )               // TRUE = Wert geaendert
     long nNewPos = 0;
     for (SCROW nY=pTabData[nTab]->nPosY[SC_SPLIT_TOP]; nY<nFix; nY++)
     {
-        USHORT nTSize = pLocalDoc->FastGetRowHeight( nY, nTab );
+        USHORT nTSize = pLocalDoc->GetRowHeight( nY, nTab );
         if (nTSize)
         {
             long nPix = ToPixel( nTSize, nPPTY );

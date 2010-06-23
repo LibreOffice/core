@@ -75,16 +75,13 @@ BOOL ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
 BOOL ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
 {
-    while ( nStartCol <= nEndCol &&
-            pDoc->GetColFlags( nStartCol, nTab ) & CR_HIDDEN )
+    SCCOL nLastCol;
+    while ( nStartCol <= nEndCol && pDoc->ColHidden(nStartCol, nTab, nLastCol))
         ++nStartCol;
-    while ( nStartCol <= nEndCol &&
-            pDoc->GetColFlags( nEndCol, nTab ) & CR_HIDDEN )
+    while ( nStartCol <= nEndCol && pDoc->ColHidden(nEndCol, nTab, nLastCol))
         --nEndCol;
-    nStartRow = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition( nStartRow,
-            nEndRow, CR_HIDDEN, 0);
-    nEndRow = pDoc->GetRowFlagsArray( nTab).GetLastForCondition( nStartRow,
-            nEndRow, CR_HIDDEN, 0);
+    nStartRow = pDoc->FirstVisibleRow(nStartRow, nEndRow, nTab);
+    nEndRow = pDoc->LastVisibleRow(nStartRow, nEndRow, nTab);
     return nStartCol <= nEndCol && nStartRow <= nEndRow && nEndRow !=
         ::std::numeric_limits<SCROW>::max();
 }

@@ -275,12 +275,12 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
         ScDocument* pDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
         if ( bLeft && !bRightScroll )
-            do --nPosX; while ( nPosX>=0 && ( pDoc->GetColFlags( nPosX, nTab ) & CR_HIDDEN ) );
+            do --nPosX; while ( nPosX>=0 && pDoc->ColHidden( nPosX, nTab ) );
         if ( bTop && !bBottomScroll )
         {
             if (--nPosY >= 0)
             {
-                pDoc->GetRowFlagsArray( nTab).GetLastForCondition( 0, nPosY, CR_HIDDEN, 0);
+                nPosY = pDoc->LastVisibleRow(0, nPosY, nTab);
                 if (!ValidRow(nPosY))
                     nPosY = -1;
             }
@@ -476,7 +476,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             {
                 //  #94321# in SetCursorAtPoint hidden columns are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden column.
-                do ++nPosX; while ( nPosX<nStartX && ( pDoc->GetColFlags( nPosX, nTab ) & CR_HIDDEN ) );
+                do ++nPosX; while ( nPosX<nStartX && pDoc->ColHidden(nPosX, nTab) );
                 for (SCCOL i=nPosX; i<nStartX; i++)
                     nSizeX += pDoc->GetColWidth( i, nTab );
             }
@@ -491,8 +491,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                 //  They must be skipped here too, or the result will always be the first hidden row.
                 if (++nPosY < nStartY)
                 {
-                    nPosY = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition(
-                            nPosY, nStartY-1, CR_HIDDEN, 0);
+                    nPosY = pDoc->FirstVisibleRow(nPosY, nStartY-1, nTab);
                     if (!ValidRow(nPosY))
                         nPosY = nStartY;
                 }

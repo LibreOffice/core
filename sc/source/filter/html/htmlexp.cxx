@@ -718,7 +718,7 @@ void ScHTMLExport::WriteTables()
         SCCOL nCol;
         for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
         {
-            if ( !(pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) )
+            if ( !pDoc->ColHidden(nCol, nTab) )
                 ++nColCnt;
         }
         (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=') += ByteString::CreateFromInt32( nColCnt );
@@ -739,7 +739,7 @@ void ScHTMLExport::WriteTables()
         aByteStr += '=';
         for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
         {
-            if ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN )
+            if ( pDoc->ColHidden(nCol, nTab) )
                 continue;   // for
 
             aByteStrOut  = aByteStr;
@@ -754,14 +754,12 @@ void ScHTMLExport::WriteTables()
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
         bTableDataWidth = TRUE;     // widths in first row
-        bool bHasHiddenRows = pDoc->GetRowFlagsArray( nTab).HasCondition(
-                nStartRow, nEndRow, CR_HIDDEN, CR_HIDDEN);
+        bool bHasHiddenRows = pDoc->HasHiddenRows(nStartRow, nEndRow, nTab);
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
-            if ( bHasHiddenRows && (pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN) )
+            if ( bHasHiddenRows && pDoc->RowHidden(nRow, nTab) )
             {
-                nRow = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition(
-                        nRow+1, nEndRow, CR_HIDDEN, 0);
+                nRow = pDoc->FirstVisibleRow(nRow+1, nEndRow, nTab);
                 --nRow;
                 continue;   // for
             }
@@ -770,7 +768,7 @@ void ScHTMLExport::WriteTables()
             bTableDataHeight = TRUE;  // height at every first cell of each row
             for ( SCCOL nCol2=nStartCol; nCol2<=nEndCol; nCol2++ )
             {
-                if ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN )
+                if ( pDoc->ColHidden(nCol2, nTab) )
                     continue;   // for
 
                 if ( nCol2 == nEndCol )

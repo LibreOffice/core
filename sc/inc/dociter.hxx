@@ -36,6 +36,8 @@
 
 #include <memory>
 
+#include <set>
+
 class ScDocument;
 class ScBaseCell;
 class ScPatternAttr;
@@ -509,6 +511,23 @@ public:
     SCROW                   GetRow() const          { return nFoundRow; }
     const ScPatternAttr*    GetPattern() const      { return pFoundPattern; }
     const ScBaseCell*       GetCell() const         { return pFoundCell; }
+};
+
+// ============================================================================
+
+class ScRowBreakIterator
+{
+public:
+    static SCROW NOT_FOUND;
+
+    explicit ScRowBreakIterator(::std::set<SCROW>& rBreaks);
+    SCROW first();
+    SCROW next();
+
+private:
+    ::std::set<SCROW>& mrBreaks;
+    ::std::set<SCROW>::const_iterator maItr;
+    ::std::set<SCROW>::const_iterator maEnd;
 };
 
 #endif

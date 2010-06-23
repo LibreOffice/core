@@ -3197,7 +3197,9 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                     for (SCROW nRow=nStartNo; nRow<=nEndNo; nRow++)
                     {
                         BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
-                        if ( (nOld & CR_HIDDEN) == 0 && ( nOld & CR_MANUALSIZE ) )
+                        SCROW nLastRow = -1;
+                        bool bHidden = pDoc->RowHidden(nRow, nTab, nLastRow);
+                        if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                             pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
                     }
                 }
@@ -3232,8 +3234,8 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
         {
             for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
             {
-                if ( eMode != SC_SIZE_VISOPT ||
-                     (pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) == 0 )
+                SCCOL nLastCol = -1;
+                if ( eMode != SC_SIZE_VISOPT || !pDoc->ColHidden(nCol, nTab, nLastCol) )
                 {
                     USHORT nThisSize = nSizeTwips;
 
@@ -3303,20 +3305,22 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
     if (nPos == 0)
         return FALSE;                   // erste Spalte / Zeile
 
-    BYTE nFlags = bColumn ? pDoc->GetColFlags( static_cast<SCCOL>(nPos), nTab )
-        : pDoc->GetRowFlags( static_cast<SCROW>(nPos), nTab );
-    if (nFlags & CR_MANUALBREAK)
-        return TRUE;                    // Umbruch schon gesetzt
+    ScBreakType nBreak = bColumn ?
+        pDoc->HasColBreak(static_cast<SCCOL>(nPos), nTab) :
+        pDoc->HasRowBreak(static_cast<SCROW>(nPos), nTab);
+    if (nBreak & BREAK_MANUAL)
+        return true;
 
     if (bRecord)
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoPageBreak( &rDocShell, rPos.Col(), rPos.Row(), nTab, bColumn, TRUE ) );
 
-    nFlags |= CR_MANUALBREAK;
     if (bColumn)
-        pDoc->SetColFlags( static_cast<SCCOL>(nPos), nTab, nFlags );
+        pDoc->SetColBreak(static_cast<SCCOL>(nPos), nTab, false, true);
     else
-        pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
+        pDoc->SetRowBreak(static_cast<SCROW>(nPos), nTab, false, true);
+
+    pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
     if (pDoc->IsStreamValid(nTab))
@@ -3362,20 +3366,25 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 
     SCCOLROW nPos = bColumn ? static_cast<SCCOLROW>(rPos.Col()) :
         static_cast<SCCOLROW>(rPos.Row());
-    BYTE nFlags = bColumn ? pDoc->GetColFlags( static_cast<SCCOL>(nPos), nTab )
-        : pDoc->GetRowFlags( static_cast<SCROW>(nPos), nTab );
-    if ((nFlags & CR_MANUALBREAK)==0)
-        return FALSE;                           // kein Umbruch gesetzt
+
+    ScBreakType nBreak;
+    if (bColumn)
+        nBreak = pDoc->HasColBreak(static_cast<SCCOL>(nPos), nTab);
+    else
+        nBreak = pDoc->HasRowBreak(static_cast<SCROW>(nPos), nTab);
+    if ((nBreak & BREAK_MANUAL) == 0)
+        // There is no manual break.
+        return false;
 
     if (bRecord)
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoPageBreak( &rDocShell, rPos.Col(), rPos.Row(), nTab, bColumn, FALSE ) );
 
-    nFlags &= ~CR_MANUALBREAK;
     if (bColumn)
-        pDoc->SetColFlags( static_cast<SCCOL>(nPos), nTab, nFlags );
+        pDoc->RemoveColBreak(static_cast<SCCOL>(nPos), nTab, false, true);
     else
-        pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
+        pDoc->RemoveRowBreak(static_cast<SCROW>(nPos), nTab, false, true);
+
     pDoc->UpdatePageBreaks( nTab );
 
     if (pDoc->IsStreamValid(nTab))

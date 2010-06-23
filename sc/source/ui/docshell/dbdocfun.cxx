@@ -937,7 +937,10 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     }
 
     if (!bCopy)
+    {
+        pDoc->InvalidatePageBreaks(nTab);
         pDoc->UpdatePageBreaks( nTab );
+    }
 
     // #i23299# because of Subtotal functions, the whole rows must be set dirty
     ScRange aDirtyRange( 0 , aLocalParam.nRow1, nDestTab,
