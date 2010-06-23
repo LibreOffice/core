@@ -37,7 +37,7 @@
 
 
 // maximum timeout time in nanoseconds
-#define GST_MAX_TIMEOUT 500000000
+#define GST_MAX_TIMEOUT (2500 * GST_MSECOND)
 
 using namespace ::com::sun::star;
 
