@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
 <oor:component-data oor:name="CalcCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="UserInterface">
@@ -158,6 +158,14 @@
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
                     <value xml:lang="en-US">~Select...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TableEvents" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Sheet ~Events...</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="en-US">~Events...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DataPilotFilter" oor:op="replace">
