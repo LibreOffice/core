@@ -125,7 +125,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     SC_DLLPRIVATE void          InitItems();
     SC_DLLPRIVATE void          DoEnterHandler();
-    SC_DLLPRIVATE void          InitOptions();
+    SC_DLLPRIVATE void          InitOptions(bool bForLoading);
     SC_DLLPRIVATE void          ResetDrawObjectShell();
 
     // SUNWS needs a forward declared friend, otherwise types and members
