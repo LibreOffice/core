@@ -198,7 +198,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS = $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS := 
@@ -211,7 +211,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS = $$(gb_LinkTarget_DEFAULTDEFS)
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
@@ -237,7 +237,7 @@ $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $(2)
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
 endef
 
 define gb_LinkTarget_set_cflags
@@ -250,7 +250,7 @@ $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS = $$(CXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(CXXFLAGS)
 endef
 
 define gb_LinkTarget_set_objcxxflags
