@@ -2386,7 +2386,7 @@ Optional Packages:
   --with-alloc            Define which allocator to build with
                            (choices are oo, system, tcmalloc, jemalloc)
 
-			   Note that on FreeBSD/NetBSD system==jemalloc
+			  Note that on FreeBSD/NetBSD system==jemalloc
 
   --with-x                use the X Window System
 
@@ -11600,7 +11600,7 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build the stax" >&5
 $as_echo_n "checking whether to build the stax... " >&6; }
-if test -f "../external/StAX/jsr173_1.0_api.jar"; then
+if test -f "../stax/download/jsr173_1.0_api.jar"; then
    BUILD_STAX=NO
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no, will use the prebuilt external/StAX/jsr173_1.0_api.jar" >&5
 $as_echo "no, will use the prebuilt external/StAX/jsr173_1.0_api.jar" >&6; }

@@ -809,7 +809,7 @@ AC_ARG_WITH(alloc,
 [  --with-alloc            Define which allocator to build with
                            (choices are oo, system, tcmalloc, jemalloc)
 
-			   Note that on FreeBSD/NetBSD system==jemalloc
+			  Note that on FreeBSD/NetBSD system==jemalloc
 ],,)
 AC_ARG_ENABLE(verbose,
 [  --enable-verbose        Increase build verbosity.
@@ -3434,7 +3434,7 @@ dnl ===================================================================
 dnl Check for building stax
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the stax])
-if test -f "../external/StAX/jsr173_1.0_api.jar"; then
+if test -f "../stax/download/jsr173_1.0_api.jar"; then
    BUILD_STAX=NO
    AC_MSG_RESULT([no, will use the prebuilt external/StAX/jsr173_1.0_api.jar])
 else
