@@ -809,7 +809,7 @@ AC_ARG_WITH(alloc,
 [  --with-alloc            Define which allocator to build with
                           (choices are oo, system, tcmalloc, jemalloc)
 
-			  Note that on FreeBSD/NetBSD system==jemalloc
+                          Note that on FreeBSD/NetBSD system==jemalloc
 ],,)
 AC_ARG_ENABLE(verbose,
 [  --enable-verbose        Increase build verbosity.
@@ -3349,10 +3349,10 @@ msi - Windows .msi
        if test -z "$RPM" ; then
           AC_MSG_ERROR([not found])
        elif "$RPM" --usage 2>&1 | $EGREP -- -bb >/dev/null; then
-	  RPM_PATH=`which $RPM`
-	  AC_MSG_RESULT([$RPM_PATH])
+          RPM_PATH=`which $RPM`
+          AC_MSG_RESULT([$RPM_PATH])
        else
-	  AC_MSG_ERROR([cannot build packages. Try installing rpmbuild.])
+          AC_MSG_ERROR([cannot build packages. Try installing rpmbuild.])
        fi
    fi
    if echo "$PKGFORMAT" | $EGREP deb 2>&1 >/dev/null; then
@@ -3434,9 +3434,9 @@ dnl ===================================================================
 dnl Check for building stax
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the stax])
-if test -f "../stax/download/jsr173_1.0_api.jar"; then
+if test -f "./stax/download/jsr173_1.0_api.jar"; then
    BUILD_STAX=NO
-   AC_MSG_RESULT([no, will use the prebuilt external/StAX/jsr173_1.0_api.jar])
+   AC_MSG_RESULT([no, will use the prebuilt one - stax/download/jsr173_1.0_api.jar])
 else
    BUILD_STAX=YES
    AC_MSG_RESULT([yes])
@@ -3892,7 +3892,7 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
             my $zip = Archive::Zip->new( $file );
             my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
             if ( $mf =~ m/Specification-Version: 2.*/ ) {
-		exit 0;
+                exit 0;
             } else {
                 exit 1;
             }'; then
@@ -4044,22 +4044,22 @@ if test -n "$with_system_hsqldb" -o -n "$with_system_libs" && \
             my $file = "$ENV{'HSQLDB_JAR'}";
             my $zip = Archive::Zip->new( $file );
             my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
-	    if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
-	    	push @l, split(/\n/, $mf);
-	    	foreach my $line (@l) {
-		    if ($line =~ m/Specification-Version:/) {
-		        ($t, $version) = split (/:/,$line);
-		        $version =~ s/^\s//;
-		        ($a, $b, $c, $d) = split (/\./,$version);
-		        if ($c == "0" && $d > "8")  {
-		            exit 0;
-		        } else {
-		            exit 1;
-		        }
-		    }
-		}
-	    } else {
-	        exit 1;
+            if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
+               push @l, split(/\n/, $mf);
+               foreach my $line (@l) {
+                  if ($line =~ m/Specification-Version:/) {
+                      ($t, $version) = split (/:/,$line);
+                      $version =~ s/^\s//;
+                      ($a, $b, $c, $d) = split (/\./,$version);
+                      if ($c == "0" && $d > "8")  {
+                          exit 0;
+                      } else {
+                          exit 1;
+                      }
+                  }
+               }
+            } else {
+                exit 1;
             }'; then
             AC_MSG_RESULT([yes])
          else
@@ -5461,7 +5461,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
   fi
   AC_MSG_RESULT([$ASM_HOME])
 else
-	with_asm_home="NO_ASM_HOME"
+  with_asm_home="NO_ASM_HOME"
 fi
 ASM_HOME="$with_asm_home"
 AC_SUBST(ASM_HOME)
@@ -5911,8 +5911,8 @@ if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test 
   fi
   AC_MSG_CHECKING([which jfreereport libs to use])
   if test "$with_system_jfreereport" = "yes"; then
-   	SYSTEM_JFREEREPORT=YES
-  	   AC_MSG_RESULT([external])
+      SYSTEM_JFREEREPORT=YES
+      AC_MSG_RESULT([external])
       if test -z $SAC_JAR; then
              SAC_JAR=/usr/share/java/sac.jar
       fi
@@ -6711,11 +6711,11 @@ echo "configure: ant_version $ant_version " >&5
 echo "configure: ant_version_major $ant_version_major " >&5
 echo "configure: ant_version_minor $ant_version_minor " >&5
 if test "$ant_version_major" -ge "2"; then
-	AC_MSG_RESULT([yes, $ant_version])
+   AC_MSG_RESULT([yes, $ant_version])
 elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
-  	AC_MSG_RESULT([yes, $ant_version])
+   AC_MSG_RESULT([yes, $ant_version])
 else
-  	AC_MSG_ERROR([no, you need at least ant >= $ant_minver])
+   AC_MSG_ERROR([no, you need at least ant >= $ant_minver])
 fi
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
@@ -6724,18 +6724,18 @@ rm -rf confdir
 mkdir confdir
 cat > conftest.java << EOF
     public class conftest {
-	int testmethod(int a, int b) {
+        int testmethod(int a, int b) {
             return a + b;
-	}
+        }
     }
 EOF
 
 cat > conftest.xml << EOF
     <project name="conftest" default="conftest">
-	<target name="conftest" depends="copytest">
+        <target name="conftest" depends="copytest">
             <javac srcdir="." includes="conftest.java">
-	    </javac>
-	</target>
+            </javac>
+        </target>
         <target name="copytest">
              <copy todir="confdir">
                  <fileset dir="confdir" includes="**/*.abc" casesensitive="yes"/>
