@@ -2491,7 +2491,6 @@ void MSWordExportBase::WriteText()
 // This piece of code always breaks builds...
 #if 0
 #ifdef DEBUG
-#if 0
         if (aNodeSet.find(pNd) == aNodeSet.end())
         {
             aNodeSet.insert(pNd);
