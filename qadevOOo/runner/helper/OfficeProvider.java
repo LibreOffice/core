@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OfficeProvider.java,v $
- * $Revision: 1.22.2.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +88,7 @@ public class OfficeProvider implements AppProvider
             OfficeWatcherPing owp = new OfficeWatcherPing((OfficeWatcher) param.get(PropertyName.OFFICE_WATCHER));
             owp.start();
 
+            deleteFilesAndDirector (new File(copyLayer));
             FileTools.copyDirectory(new File(userLayer), new File(copyLayer), new String[]
                     {
                         "temp"
@@ -132,9 +130,7 @@ public class OfficeProvider implements AppProvider
 
             try
             {
-                desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                        msf.createInstance(
-                        "com.sun.star.frame.Desktop"));
+                desk = UnoRuntime.queryInterface(XDesktop.class, msf.createInstance("com.sun.star.frame.Desktop"));
             }
             catch (com.sun.star.uno.Exception ue)
             {
@@ -343,18 +339,15 @@ public class OfficeProvider implements AppProvider
     {
 
         // Get component context
-        final XComponentContext xcomponentcontext = com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-                null);
+        final XComponentContext xcomponentcontext = com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
 
         // initial serviceManager
         final XMultiComponentFactory xLocalServiceManager = xcomponentcontext.getServiceManager();
 
         // create a connector, so that it can contact the office
 //        XUnoUrlResolver urlResolver = UnoUrlResolver.create(xcomponentcontext);
-        final Object xUrlResolver = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext);
-        final XUnoUrlResolver urlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                XUnoUrlResolver.class, xUrlResolver);
+        final Object xUrlResolver = xLocalServiceManager.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", xcomponentcontext);
+        final XUnoUrlResolver urlResolver = UnoRuntime.queryInterface(XUnoUrlResolver.class, xUrlResolver);
 
         final Object rInitialObject = urlResolver.resolve(connectStr);
 
@@ -365,8 +358,7 @@ public class OfficeProvider implements AppProvider
             debug = true;
             dbg("resolved url");
 
-            xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, rInitialObject);
+            xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, rInitialObject);
         }
 
         return xMSF;
@@ -487,7 +479,7 @@ public class OfficeProvider implements AppProvider
             try
             {
                 Object quickStarter = msf.createInstance("com.sun.star.office.Quickstart");
-                XFastPropertySet fps = (XFastPropertySet) UnoRuntime.queryInterface(XFastPropertySet.class, quickStarter);
+                XFastPropertySet fps = UnoRuntime.queryInterface(XFastPropertySet.class, quickStarter);
                 fps.setFastPropertyValue(0, false);
             }
             catch (com.sun.star.uno.Exception ex)
@@ -497,9 +489,7 @@ public class OfficeProvider implements AppProvider
 
             try
             {
-                desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                        msf.createInstance(
-                        "com.sun.star.frame.Desktop"));
+                desk = UnoRuntime.queryInterface(XDesktop.class, msf.createInstance("com.sun.star.frame.Desktop"));
                 msf = null;
 
                 if (desk != null)
@@ -581,6 +571,7 @@ public class OfficeProvider implements AppProvider
                 final String copyLayer = (String) param.get("copyLayer");
                 if (userLayer != null && copyLayer != null)
                 {
+                    deleteFilesAndDirector(new File(userLayer));
                     final File copyFile = new File(copyLayer);
                     dbg("copy '" + copyFile + "' -> '" + userLayer + "'");
                     FileTools.copyDirectory(copyFile, new File(userLayer), new String[]
@@ -617,9 +608,7 @@ public class OfficeProvider implements AppProvider
         {
             while (compEnum.hasMoreElements())
             {
-                final XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                        XCloseable.class,
-                        compEnum.nextElement());
+                final XCloseable closer = UnoRuntime.queryInterface(XCloseable.class, compEnum.nextElement());
 
                 if (closer != null)
                 {
@@ -659,8 +648,7 @@ public class OfficeProvider implements AppProvider
 
         if (xPathSubst != null)
         {
-            return (XStringSubstitution) UnoRuntime.queryInterface(
-                    XStringSubstitution.class, xPathSubst);
+            return UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
         }
         else
         {
@@ -791,6 +779,7 @@ public class OfficeProvider implements AppProvider
             this.ow = ow;
         }
 
+        @Override
         public void run()
         {
             System.out.println(utils.getDateTime() + "OfficeProvider:Owp: start ");
@@ -823,4 +812,22 @@ public class OfficeProvider implements AppProvider
             }
         }
     }
+
+private void deleteFilesAndDirector(File file)
+        {
+            File f = file;
+            if(f.isDirectory())
+            {
+                File files[] = f.listFiles();
+                for(int i = 0; i < files.length; i++)
+                {
+                    deleteFilesAndDirector(files[i]);
+                }
+                f.delete();
+            }
+            else if (f.isFile())
+            {
+                f.delete();
+            }
+        }
 }

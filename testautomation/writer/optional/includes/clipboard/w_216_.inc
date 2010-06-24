@@ -1,33 +1,27 @@
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_216_.inc,v $
-'*
-'* $Revision: 1.3 $
-'*
-'* last change: $Author: rt $ $Date: 2008-09-04 09:18:55 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -59,6 +53,9 @@ testcase HTMLToWRITERText
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
     sleep (3)
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif        
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Shift Down><Shift End>"
@@ -112,7 +109,9 @@ testcase HTMLToWRITERText
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -125,6 +124,9 @@ testcase HTMLToWRITERField
     printlog "  Copy selected text "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",2
@@ -177,7 +179,9 @@ testcase HTMLToWRITERField
             goto endsub
         end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -190,6 +194,9 @@ testcase HTMLToWRITERTable
     printlog "  Copy selected table "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",5
@@ -242,7 +249,9 @@ testcase HTMLToWRITERTable
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -255,6 +264,9 @@ testcase HTMLToWRITERGraphicLinked
     printlog "  Copy selected Linked Graphic "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -296,7 +308,9 @@ testcase HTMLToWRITERGraphicLinked
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -309,6 +323,9 @@ testcase HTMLToWRITERControl
     printlog "  Copy selected Control "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -351,7 +368,9 @@ testcase HTMLToWRITERControl
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -364,6 +383,9 @@ testcase HTMLToWRITERFloatingFrame
     printlog "  Copy selected Floating Frame "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     Call sMakeReadOnlyDocumentEditable
+    if GetDocumentCount() = 2 then
+    	Warnlog "#i104365#read only document remains opened"
+    endif            
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -412,5 +434,7 @@ testcase HTMLToWRITERFloatingFrame
         goto endsub
     end if
     printlog "  Close saved document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+	    Call hCloseDocument
+    Loop    
 endcase

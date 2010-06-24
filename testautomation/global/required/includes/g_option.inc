@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_option.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-07-31 19:25:49 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
@@ -36,28 +30,18 @@
 '* short description : update and resouce test for all option pages (at tools/options)
 '*
 '\***********************************************************************
+
 global sErrMes as String
 global iSectionNumber as Integer
 
-'*******************************************************************************
-
 sub tToolsOptionsTest
-
-    dim sPreviousApplication as string
-
-    sPreviousApplication = gApplication
-    ' Document- and database related options are placed in the g_option2.inc library
-    use "global\required\includes\g_option2.inc"
-    ' subs and functions has been placed there
-    use "global/tools/includes/required/t_option2.inc"
-
     ' To prevent users from running just a subsection from this file, without THIS
     ' subroutine, in every subsection the value of 'iSectionNumber' is checked.
     ' The test will exit with warnlog, if iSectionNumber is 0
     sErrMes = ""
     select case uCase(gApplication)
-    case "WRITER","MASTERDOCUMENT","HTML"   : iSectionNumber = 8
-    case "IMPRESS","DRAW","MATH","CALC"     : iSectionNumber = 7
+       case "WRITER","MASTERDOCUMENT","HTML"   : iSectionNumber = 8
+       case "IMPRESS","DRAW","MATH","CALC"     : iSectionNumber = 7
     end select
     ' common testcases are placed in this library
     ' these tab-sets are always available:
@@ -68,35 +52,9 @@ sub tToolsOptionsTest
     Call tToolsOptionsChart
     Call tToolsOptionsInternet
     Call tToolsOptionsImprovementProgram
-
-    ' these tabpages only exist in the respective application
-    gApplication = "WRITER"
-    iSectionNumber = 8
-    Call tToolsOptionsTextdocument
-
-    gApplication = "HTML"
-    Call tToolsOptionsHTMLDocument
-
-    gApplication = "CALC"
-    iSectionNumber = 7
-    Call tToolsOptionsSpreadsheet
-
-    gApplication = "IMPRESS"
-    iSectionNumber = 7
-    Call tToolsOptionsPresentation
-
-    gApplication = "DRAW"
-    iSectionNumber = 7
-    Call tToolsOptionsDrawing
-
-    gApplication = "MATH"
-    iSectionNumber = 7
-    Call tToolsOptionsFormula
-
-    gApplication = sPreviousApplication
 end sub
 
-'*******************************************************************************
+'-------------------------------------------------------------------------
 
 testcase tToolsOptionsStarOffice
 
@@ -544,21 +502,21 @@ testcase tToolsOptionsLanguageSettings
                 Optionen.TypeKeys "<Down>", 6
                 WaitSlot() ' similar effect as a NOOP
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
                 Kontext "TabLinguistik"
                 Optionen.TypeKeys "<Down>"
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
                 Kontext "TabLinguistik"
                 Optionen.TypeKeys "<Down>"
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
             endif
         case 3,5 :
             try
@@ -650,11 +608,6 @@ testcase tToolsOptionsInternet
         gefunden = FALSE
         Kontext "OptionenDlg"
         Optionsliste.TypeKeys "<Down>"
-        Kontext "ProxyWarnung"
-        if ProxyWarnung.Exists(1) then
-            NichtMehrAnzeigen.Check
-            ProxyWarnung.OK
-        endif
 
         select case i
         case 1 :
@@ -735,43 +688,65 @@ testcase tToolsOptionsImprovementProgram
 
     printlog( "Update test for the tools/options dialog of the OOo Improvement Program" )
 
-    dim cLogFile as string
-    cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
-    cLogFile = convertpath( cLogFile )
-
-    if ( hDeleteFile( cLogFile ) ) then
-        printlog( "Test environment is clean, no logfile present (anymore)" )
+    if (gOOO AND NOT gOOoImprovementIsEnabled) then
+        'In StarOffice this test should always work - but on OOo contributet builds the function is not available - only on OOo builds provided by Sun Microsystems
+        qaErrorlog ("This build does not participate in the OOo Improvement Program - test exit")
+        goto endsub
     endif
 
-    ToolsOptions
-    hToolsOptions( "StarOffice", "Improvement" )
-    printlog( "Improvement Program tabpage" )
+    dim cLogFile as string
+        cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
+        cLogFile = convertpath( cLogFile )
+        
+    dim bImportDialogHasBeenDisplayed as boolean : bImportDialogHasBeenDisplayed = false
 
-    call DialogTest( TabOOoImprovement )
+    if ( hDeleteFile( cLogFile ) ) then
+    
+        printlog( "Test environment is clean, no logfile present (anymore)" )
 
-    ParticipateNo.check()
-    ParticipateYes.check()
+        ToolsOptions
+        hToolsOptions( "StarOffice", "Improvement" )
+        printlog( "Improvement Program tabpage" )
 
-    if ( ShowData.isEnabled() ) then
+        call DialogTest( TabOOoImprovement )
 
-        ShowData.click()
+        ParticipateNo.check()
+        ParticipateYes.check()
 
-        Kontext "TextImport"
-        if ( TextImport.exists( 1 ) ) then
-            printlog( "Text import dialog" )
+        if ( ShowData.isEnabled() ) then
 
-            call DialogTest( TextImport )
-            TextImport.cancel()
+            ShowData.click()
+
+            ' Two different IDs for practically the same dialog: FilterAuswahl and TextImport.
+            ' It depends on the application which one comes up. We just handle them both.
+            Kontext "FilterAuswahl"
+            if ( FilterAuswahl.exists( 1 ) ) then
+                printlog( "FilterAuswahl present" )
+                call DialogTest( FilterAuswahl )
+                FilterAuswahl.cancel()
+                bImportDialogHasBeenDisplayed = true
+            endif
+            
+            kontext "TextImport"
+            if ( TextImport.exists() ) then
+                printlog( "Text Import dialog present" )
+                call DialogTest( TextImport )
+                TextImport.cancel()
+                bImportDialogHasBeenDisplayed = true
+            endif
         else
-            qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            printlog( "Show data is disabled" )
         endif
 
+        ' Weird messages may appear in any order. We warn about anything
         Kontext "Active"
         if ( Active.exists( 1 ) ) then
             printlog( "Messagebox: " & Active.getText() )
             Active.ok()
         else
-            warnlog( "No warning for missing file: " & cLogFile )
+            if ( NOT bImportDialogHasBeenDisplayed ) then
+                qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            endif
         endif
 
         Kontext "Active"
@@ -779,13 +754,99 @@ testcase tToolsOptionsImprovementProgram
             warnlog( "#97342# Second message for missing " & cLogFile )
             Active.ok()
         endif
-    else
-        printlog( "Show data is disabled" )
-    endif
 
-    Kontext "OptionenDlg"
-    OptionenDlg.cancel()
+        Kontext "OptionenDlg"
+        OptionenDlg.cancel()
+        
+    else
+        ' hDeleteFile() returns FALSE if the file is still present for some weird reason
+        ' We should warn about this because the test breaks at a later point then.
+        warnlog( "Logfile present, it could not be deleted. Please check path and accessrights" )
+        printlog( "Path: " & cLogFile )
+    endif
 
 endcase
 
+'-------------------------------------------------------------------------
+
+testcase tToolsOptionsChart
+    Dim EchteAnzahl as Integer, i as Integer
+
+    PrintLog "- Tools/Options/Chart  ( Extras/Optionen/Diagramme )"
+    if (0 = iSectionNumber) then 
+        warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
+        goto endsub
+    endif    
+'/// Create a new document    
+    if gApplication <> "BACKGROUND" then 
+        Call hNewDocument
+    end if
+'/// <i>Tools</i> / <i>Options</i> / <i>Chart</i>    
+    ToolsOptions
+    ToPosInOptionlist ( iSectionNumber -1 )
+    EchteAnzahl = OptionTabPageZaehler ( 1, FALSE )
+    Kontext "OptionenDlg"
+    Optionsliste.TypeKeys "<Down>"
+'/// Default colors
+    printlog "  - Default Colors / Grundfarben"
+    Kontext "TabGrundfarben"
+    Call DialogTest ( TabGrundfarben )
+'/// Close the options dialog
+    Kontext "OptionenDlg"
+    OptionenDlg.Cancel
+    if gApplication <> "BACKGROUND" then
+'/// Close bthe document    
+        Call hCloseDocument
+    end if
+endcase
+
+'-------------------------------------------------------------------------
+
+testcase tToolsOptionsDataSources
+   qaerrorlog "#i104508# crashes on quit or reload if this is run."
+   goto endsub
+   
+   Dim EchteAnzahl as Integer, i as Integer
+
+   PrintLog "- Tools/Options/Data Sources  ( Extras/Optionen/Datenbank )"
+    if (0 = iSectionNumber) then 
+        warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
+        goto endsub
+    endif   
+    '/// Create a new document
+    if gApplication <> "BACKGROUND" then    
+        Call hNewDocument
+    end if
+    '/// <i>Tools</i> / <i>Options</i> / <i>Data source</i>
+    ToolsOptions
+    ToPosInOptionlist ( iSectionNumber -2)
+    EchteAnzahl = OptionTabPageZaehler ( 2 , FALSE )
+    Kontext "OptionenDlg"
+    Optionsliste.TypeKeys "<Down>"
+    printlog "  - Connections / Verbindungen"
+    Kontext "TabConnections"
+    '/// Connections
+    Call DialogTest ( TabConnections )
+    Kontext "OptionenDlg"
+    Optionsliste.TypeKeys "<Down>"
+    printlog "  - Databases / Datenbanken"   
+    Kontext "TabRegisteredDatabase"
+    '/// Databases
+    Call DialogTest ( TabRegisteredDatabase )
+    NewBtn.click
+    Kontext "CreateDatabaseLink"
+    call DialogTest( CreateDatabaseLink )
+    Browse.click
+    Kontext "OeffnenDlg"
+    OeffnenDlg.cancel
+    Kontext "CreateDatabaseLink"
+    CreateDatabaseLink.cancel
+    Kontext "OptionenDlg"
+    '/// Close the options dialog
+    OptionenDlg.Cancel
+    '/// Close the document
+    if gApplication <> "BACKGROUND" then 
+        Call hCloseDocument
+    end if
+endcase
 

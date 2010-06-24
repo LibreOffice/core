@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: id_002.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:43:00 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com 
@@ -238,7 +232,7 @@ testcase tiEditFields
 
     hTypeKeys "<ESCAPE>"
     printlog "With a Tab we catch always the Object"
-    hTypeKeys "<Tab>"                  
+    hTypeKeys "<Tab>",3
     printlog "Here we enter Edit-Mode and therefore also the right place"
     hTypeKeys "<F2>"
     printlog "Here we enter Edit-Mode and therefore also the right place"
@@ -412,7 +406,7 @@ testcase tiEditObjectProperties
     gMouseDoubleClick 1,1
 
     printlog " select frame "
-    hTypekeys "<tab>"
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Properties "
     kontext
@@ -454,7 +448,7 @@ testcase tiEditObjectEdit
     gMouseClick 20,1
 
     printlog " select object "
-    hTypekeys "<tab>"
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Edit "
     EditObjectEdit
@@ -470,7 +464,7 @@ testcase tiEditObjectEdit
     endcatch
 
     printlog " select object "
-    EditSelectAll
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Save Copy As "
     EditObjectSaveCopyAs
@@ -537,6 +531,7 @@ testcase tiEditHyperlink
 
     printlog " open application"
     hNewDocument
+    Call sSelectEmptyLayout
     printlog " Insert->Hyperlink"
     InsertHyperlink
     WaitSlot (5000)
@@ -561,7 +556,9 @@ testcase tiEditHyperlink
         Uebernehmen.Click
         Hyperlink.Close
         printlog " presupposition to enable edit->hyperlink: <TAB><F2><STRG+a>"
-        hTypeKeys "<TAB><F2>"
+        hTypeKeys "<TAB>"
+        hTypeKeys "<F2>"
+        hTypeKeys "<MOD1 SHIFT RIGHT>"
     EditSelectAll
     try
         printlog " Edit->Hyperlink "

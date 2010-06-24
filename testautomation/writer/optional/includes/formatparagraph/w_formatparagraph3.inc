@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_formatparagraph3.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:29:37 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -63,8 +57,6 @@
 '\***********************************************************************
 
 testcase tParagraphTabs1
-Warnlog "#i102752# - tParagraphTabs1 outcommented due to bug."
-goto endsub
 
   Dim sTestFile as String
   Dim sTabs      as String
@@ -111,8 +103,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphTabs2
-Warnlog "#i102752# - tParagraphTabs2 outcommented due to bug."
-goto endsub
 
   Dim sTestFile  as String
   Dim sTabs       as String
@@ -159,8 +149,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphTabs3
-Warnlog "#i102752# - tParagraphTabs3 outcommented due to bug."
-goto endsub
 
   Dim sTestFile    as String
   Dim sTabs        as String
@@ -207,9 +195,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphTabs4
-Warnlog "#i102752# - tParagraphTabs4 outcommented due to bug."
-goto endsub
-
 
   Dim sTestFile    as String
   Dim sTabs        as String
@@ -350,8 +335,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps1
-Warnlog "#i102752# - tParagraphDropCaps1 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -404,8 +387,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps2
-Warnlog "#i102752# - tParagraphDropCaps2 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -460,8 +441,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps3
-Warnlog "#i102752# - tParagraphDropCaps3 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -516,8 +495,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps4
-Warnlog "#i102752# - tParagraphDropCaps4 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sPositionX    as String
@@ -567,8 +544,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps5
-Warnlog "#i102752# - tParagraphDropCaps5 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sSpace        as String
@@ -657,8 +632,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphDropCaps7
-Warnlog "#i102752# - tParagraphDropCaps7 outcommented due to bug."
-goto endsub
 
   Dim sTestFile     as String
   Dim sTestText     as String

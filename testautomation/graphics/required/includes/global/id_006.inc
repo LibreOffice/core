@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: id_006.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:45:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -48,7 +42,21 @@
 ' #1 tiToolsOptions
 '\**********************************************************************************
 
-
+'------------------------------------------------------------------------------
+sub id_Tools
+    printLog "---------    id_006    ----------"
+    call tiToolsSpellchecking
+    call tiToolsSpellcheckingAutomatic
+    call tiToolsThesaurus
+    call tiToolsHyphenation
+    call tiToolsAutoCorrect
+    call tChineseTranslation
+    call tiToolsMacro
+    call tiToolsGallery
+    call tiToolsEyedropper    
+    call tToolsOptionsTest ' global one
+end sub
+'-------------------------------------------------------------------------------
 testcase tiToolsSpellchecking
 
     if not gOOO then ' Spellcheck doesn't work in OOo builds.
@@ -92,9 +100,7 @@ testcase tiToolsSpellchecking
     else goto endsub
     endif
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckingAutomatic
     '/// open application ///'
     Call hNewDocument
@@ -108,84 +114,116 @@ testcase tiToolsSpellcheckingAutomatic
     '/// close application ///'
     Call hCloseDocument
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 testcase tiToolsThesaurus
-    qaerrorlog "#i93133#: Thesaurus not active in loaded bugdoc"
-    goto endsub
-    if not gOOO then ' Thesaurus doesn't work in OOo builds.
 
-    dim sFileName as String
-    
-    '/// call subroutine 'hSetSpellHypLanguage' for setting the default language in the options, to enable it for languages, which don't provide a dictionary (usually asian ones) ///'
-    call hSetSpellHypLanguage
-    '/// open application-specific document which contains an American-formatted textframe with text. And select the text ///'
-    if (gApplication = "IMPRESS") then
-        sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odp"))
-    else
-        sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
-    end if
-    if hFileExists ( sFileName ) = FALSE then
-        warnlog "The language-file was not found or accessible! The test ends."
+    Dim sWord as string
+    Dim sExt as string
+
+    'for normal text, the thesaurus is enabled,
+    'if the format->character->language of the word has a thesaurus
+    'unfortunately in textboxes this doesn't work, you can give the word a langauge,
+    'but this is been ignored by our thesaurus
+    'so especially for asian languages you have to set a default language in the options,
+    'to be able to use the thesaurus there - fallback to englisch,
+    'because there is no thesaurus for cjk languages
+
+    'As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No spellchecking in OOo"
         goto endsub
-    end if
-    Call hFileOpen (sFileName)
-        
-        sleep (2)
-    
-        hTypeKeys "<TAB><RETURN>"
-        hTypeKeys "<END><SHIFT HOME>"
-    
-        '   Call hTextrahmenErstellen ("SimpleTest" + "<Mod1 Shift left>", 10, 10, 30, 40)
-        try
-            '/// Tools->Thesaurus ///'
-            ExtrasThesaurusDraw
-            Kontext "Thesaurus"
-                Call DialogTest ( Thesaurus )
-                '/// click button 'language' ///'
-                Sprache.Click
-                Kontext "SpracheAuswaehlen"
-                    Call DialogTest ( SpracheAuswaehlen )
-                    '/// cancel dialog 'select language' ///'
-                    SpracheAuswaehlen.cancel
-            Kontext "Thesaurus"
-                '/// click button 'search' ///'
-                Nachschlagen.Click
-                kontext
-                '/// if messagebox exist, say OK; (word not found) ///'
-                if Messagebox.exists (5) then
-                    printlog "Messagebox: word not in thesaurus: '"+Messagebox.gettext+"'"
-                    Messagebox.ok
-                end if
-                sleep 1
-                Kontext "Thesaurus"
-                    '/// cancel dialog 'Thesaurus' ///'
-                    Thesaurus.Cancel
-        catch
-            warnlog "Thesaurus didn't work :-("
-        endcatch
-        sleep 1
-        '/// close application ///'
-        Call hCloseDocument
-    else goto endsub
     endif
+
+    'First we make sure we test a language where Thesaurus
+    select case iSprache
+       case 01 : sWord = "Hello"
+       case 03 : sWord = "Alo"
+       case 07 : printlog "- No Thesaur for Russian available"
+                 goto endsub
+       case 30 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 31 : sWord = "Guiten"
+       case 33 : sWord = "Bonjour"
+       case 34 : sWord = "Hola"
+       case 35 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 36 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 37 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 39 : sWord = "Ciao"
+       case 42 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 45 : sWord = "Hej"
+       case 46 : sWord = "Välkommen"
+       case 47 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 48 : Printlog "- No Thesaurus in Polish!"
+                 goto endsub
+       case 49 : sWord = "Hallo"
+       case 50 : sWord = "Prosojnica"
+       case 51 : Printlog "- No Thesaurus available !"
+                 goto endsub
+       case 55 : Printlog "- No Thesaurus in Brazilian!"
+                 goto endsub
+       case 90 : Printlog "- No Thesaurus available !"
+                 goto endsub
+
+       case else : if bAsianLan then
+                     hSetSpellHypLanguage
+                     sWord = "Hello"
+                  else
+                     Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
+                     sWord = "Hello"
+                  endif
+    end select
+
+    PrintLog "Thesaurus with 1 word: " + sWord
+
+    if( Ucase(gApplication) = "DRAW" ) then
+        sExt = ".odg"
+    elseif( Ucase(gApplication) = "IMPRESS" ) then
+        sExt = ".odp"
+    endif
+
+    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
+    Call sMakeReadOnlyDocumentEditable()
+    Call hTextrahmenErstellen (sWord,20,20,50,30)
+    sleep 1
+
+    printlog "select the word"
+    hTypeKeys "<Home><SHIFT END>"
+
+    try
+        ExtrasThesaurusDraw
+    catch
+        warnlog "No Thesaurus available."
+        hCloseDocument()
+        goto endsub
+    endcatch
+
+    Kontext "Thesaurus"
+    if Thesaurus.Exists(3) then
+        Thesaurus.Cancel
+    else
+        warnlog "the thesaurus does not appear"
+    endif
+    Call hCloseDocument
+
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 testcase tiToolsHyphenation
     '/// open application ///'
     Call hNewDocument
     '/// Tools->Hyphenation ///'
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     WaitSlot (2000)    'sleep 2
     '/// Tools->Hyphenation ///'
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     '/// close application ///'
     Call hCloseDocument
 endcase
-
+'-------------------------------------------------------------------------------
 testcase tiToolsAutoCorrect
     dim iLanguage as integer ' for resetting the language
     '/// open application ///'
@@ -250,56 +288,54 @@ testcase tiToolsAutoCorrect
                 Call DialogTest ( TabOptionen )
                 Kontext
             '/// select tabpage 'Custom Quotes' ///'
-            Messagebox.SetPage TabTypografisch
-                Kontext "TabTypografisch"  ' 1a
+            Messagebox.SetPage TabLocalizedOptions
+                Kontext "TabLocalizedOptions"  ' 1a
                     '/// in the part of 'single quotes': ///'
                     '///+ check 'replace' ///'
                     '///+ click 'start quote' ///'
-                    EinfacheErsetzen.Check
-                    EinfachWortAnfang.Click
+                    SingleQuotesReplace.Check
+                    SingleQuotesStart.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 1 )
                         '///+  cancel dialog 'start quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 1b
+                Kontext "TabLocalizedOptions"  ' 1b
                     '///+ click 'end quote' ///'
-                    EinfachWortEnde.Click
+                    SingleQuotesEnd.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 2 )
                         '///+  cancel dialog 'end quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 1s
+                Kontext "TabLocalizedOptions"  ' 1s
                     '///+ click button 'default' ///'
-                    EinfachStandard.Click
+                    SingleQuotesDefault.Click
 
-                Kontext "TabTypografisch"  ' 2a
+                Kontext "TabLocalizedOptions"  ' 2a
                     '/// in the part of 'double quotes': ///'
                     '///+ click 'start quote' ///'
-                    DoppeltWortAnfang.Click
+                    DoubleQuotesStart.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 3 )
                         '///+  cancel dialog 'start quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 2b
+                Kontext "TabLocalizedOptions"  ' 2b
                     '///+ click 'end quote' ///'
-                    DoppeltWortEnde.Click
+                    DoubleQuotesEnd.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 4 )
                         '///+  cancel dialog 'end quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 2s
+                Kontext "TabLocalizedOptions"  ' 2s
                     '///+ click button 'default' ///'
-                    DoppeltStandard.Click
+                    DoubleQuotesDefault.Click
                     '///+ UNcheck 'replace' ///'
-                    EinfacheErsetzen.UnCheck
+                    SingleQuotesReplace.UnCheck
                     '/// cancel dialog 'AtorCorrect' ///'
-                    TabTypografisch.cancel
+                    TabLocalizedOptions.cancel
     '/// close application ///'
     Call hCloseDocument
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 testcase tChineseTranslation
 
     qaerrorlog( "#i89634# - Chinese Translation dialog does not close" )
@@ -371,9 +407,7 @@ testcase tChineseTranslation
     '/// Close application ///'
     Call hCloseDocument
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 testcase tiToolsMacro
     '/// open application ///'
     Call hNewDocument
@@ -425,9 +459,7 @@ testcase tiToolsMacro
     '/// close application ///'
     Call hCloseDocument
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 testcase tiToolsGallery
     '/// open application ///'
     Call hNewDocument
@@ -439,9 +471,7 @@ testcase tiToolsGallery
     '/// close application ///'
     Call hCloseDocument
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 testcase tiToolsEyedropper
     '/// open application ///'
     Call hNewDocument
@@ -455,20 +485,4 @@ testcase tiToolsEyedropper
     '/// close application ///'
     Call hCloseDocument
 endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-testcase tiToolsOptions
-    '/// open application ///'
-    Call hNewDocument
-    '/// Tools->Options ///'
-    ToolsOptions
-    WaitSlot (2000)    'sleep 1
-    kontext "OptionenDlg"
-        '/// close dialog 'Options' ///'
-        OptionenDlg.Close
-    '/// close application ///'
-    Call hCloseDocument
-endcase
-
-'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------

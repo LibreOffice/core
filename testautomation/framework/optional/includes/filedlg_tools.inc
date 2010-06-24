@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: filedlg_tools.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:14 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -295,7 +289,7 @@ function LoadDocumentReadOnly ( sDatei as String, TypeOfDocument as Integer, Rea
     endif
     
     Oeffnen.Click
-    IsItLoaded
+    hFileWait( FALSE )
     
     Kontext "Active"
     if Active.Exists( 2 ) then
@@ -396,7 +390,6 @@ sub hSetUNIXAttributes()
     ' If you are not the owner of the testtool snapshot, this is *not* going to
     ' work.
     
-    '///Make sure the file-attributes are correct for the next tests.
     
     dim cFullPath as string
     dim cParameter as string
@@ -450,57 +443,36 @@ end sub
 function hGetFirstNameFromFileList() as string
     
     
-    '///<h3>Retrieve the first valid ffilename from the filepickers filelist</h3><br>
-    
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
     
     
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>First valid filename from filelist (either first or second item)</li>
-    '///<ul>
-    '///+<li>Eliminates directory &quot;CVS&quot;</li>
-    '///</ul>
-    '///</ol>
+    
     
     const CFN = "hGetFirstNameFromFileList()::"
     dim brc as boolean 'a multi purpose boolean returnvalue
     dim cFileName as string
     
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Select the first item in the filelist of the File Open Dialog</li>
     
     Kontext "OeffnenDlg"
     Dateiauswahl.typeKeys( "<HOME>" )
     Dateiauswahl.typeKeys( "<SPACE>" )
     
-    '///+<li>Retrieve the current name (First entry, usually this is <CVS>)</li>
     cFileName =lcase( Dateiauswahl.GetSelText() )
     printlog( CFN & "File: " & cFileName )
     
-    '///+<li>Intercept blank filename (might be a timing issue)</li>
     if ( cFileName = "" ) then
         warnlog( CFN & "Filename is empty, probably a timing issue" )
     endif
     
-    '///+<li>Move one down if we are on the CVS directory</li>
     if ( cFileName = "cvs" ) then
         printlog( CFN & "Skipping CVS directory" )
         Dateiauswahl.TypeKeys( "<Down>" )
         
-        '///+<li>Retrieve the filename at pos. 2</li>
         cFileName = lcase ( Dateiauswahl.GetSelText() )
         printlog( CFN & "File: " & cFileName )
     endif
     
-    '///+<li>Return the filename</li>
     hGetFirstNameFromFileList() = cFileName
     
-    '///</ul>
     
 end function
 

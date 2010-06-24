@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,13 +38,14 @@ debug=true
 # ------------------------------------------------
 
 .INCLUDE : ant.mk
-
 TST:
     echo $(SOLAR_JAVA)
 
 .IF "$(SOLAR_JAVA)"=="TRUE"	
 .IF "$(ANT_HOME)"!="NO_ANT_HOME"
 ANT_FLAGS+=-Dbuild.source=1.5
+.IF "$(L10N_framework)"==""
 ALLTAR: ANTBUILD
 .ENDIF
 .ENDIF
+.ENDIF 

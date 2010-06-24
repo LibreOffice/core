@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibilityTools.java,v $
- * $Revision: 1.12.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,18 +51,7 @@ public class AccessibilityTools {
     }
 
     public static XAccessible getAccessibleObject(XInterface xObject) {
-        XAccessible xAccessible = null;
-
-        try {
-            xAccessible = (XAccessible) UnoRuntime.queryInterface(
-                XAccessible.class, xObject);
-        } catch (Exception e) {
-            System.out.println(
-                "caught exception while getting accessible object" + e);
-            e.printStackTrace();
-        }
-
-        return xAccessible;
+        return UnoRuntime.queryInterface(XAccessible.class, xObject);
     }
 
     public static XWindow getCurrentContainerWindow(XMultiServiceFactory msf,

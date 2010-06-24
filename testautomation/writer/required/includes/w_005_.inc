@@ -1,33 +1,27 @@
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_005_.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:41:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -238,14 +232,55 @@ testcase tFormatChangeCase
     printlog " Open new document"
     Call hNewDocument
     printlog " Insert some text in document and select text"
-    Call wTypeKeys ("Hello World!")
+    Call wTypeKeys ("call him now ! please")
     Call wTypeKeys ("<Shift Home>")
 
     printlog " Format / Case Characters / Upper"
     hUseAsyncSlot( "FormatChangeCaseUpper" )
+    EditCopy
+    if GetClipboardtext() <> "CALL HIM NOW ! PLEASE" then
+        Warnlog "Sentence not 'CALL HIM NOW ! PLEASE' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
 
     printlog " Format / Case Characters / Lower"
     hUseAsyncSlot( "FormatChangeCaseLower" )
+    EditCopy
+    if GetClipboardtext() <> "call him now ! please" then
+        Warnlog "Sentence not 'call him now ! please' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
+    printlog " Format / Case Characters / Sentence Case"
+    FormatChangeCaseToSentence
+    EditCopy
+    if GetClipboardtext() <> "Call him now ! Please" then
+        Warnlog "Sentence not 'Call him now ! Please' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
+    printlog " Format / Case Characters / Capitalize every word"
+    FormatChangeCaseCapitalizeEveryWord
+    EditCopy
+    if GetClipboardtext() <> "Call Him Now ! Please" then
+        Warnlog "Sentence not 'Call Him Now ! Please' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
+
+    printlog " Format / Case Characters / tOGGLE cASE"
+    FormatChangeCaseToggleCase
+    EditCopy
+    if GetClipboardtext() <> "cALL hIM nOW ! pLEASE" then
+        Warnlog "Sentence not 'cALL hIM nOW ! pLEASE' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
 
     if ( gAsianSup ) then
         try
@@ -760,13 +795,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchor
-Warnlog "#i102752# - tFormatAnchor outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Anchor"
-	
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
 	
     printlog " Open new document"
     Call hNewDocument
@@ -900,9 +930,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorArea
-
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
 
     PrintLog "- Format / Anchor drawing objects"
     if gApplication = "HTML" then

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: id_opt_2.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:43:01 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -45,35 +39,15 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
     dim iCount2 as integer
     dim sUnitOptions as string
     dim sUnitDialog as string
-    dim gApplicationTemp as string
-
-    gApplicationTemp = gApplication
-    gApplication = "WRITER"
-    printlog "Take Measurement Units from Writer "
-    hNewDocument
-    ToolsOptions
-    ' Take General Measurement units from writer, there are only 5!
-    hToolsOptions ("WRITER","General")
-
-    iCount2 = Masseinheit.GetItemCount
-    for i=1 to iCount2
-        Masseinheit.select i
-        printlog "(" + i + "/" + iCount2 + "): '" + Masseinheit.getSelText + "' - " + GetMeasUnit(Tabulatorenabstand.getText)
-    next i
-    Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
-    hCloseDocument()
-    gApplication = gApplicationTemp
-
-	sleep 1
+   
     hNewDocument
 	sleep 1
     ToolsOptions
     hToolsOptions (sApplication,"General")
+    iCount2 = Masseinheit.GetSelIndex
+    printlog "current measurement unit is: " & iCount2
     iCount = Masseinheit.GetItemCount
-    if (iCount <> iCount2) then
-        'warnlog "Inconsistence between Writer: '" + iCount2 + "' and " + sApplication + ": '" + iCount + "'"
-    endif
+   
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     printlog "----------------------"
@@ -149,6 +123,13 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
         TabEinzuegeUndAbstaende.cancel
 
     next i
+    
+    printlog "Setting back measurement to " & iCount2
+    ToolsOptions
+    hToolsOptions (sApplication,"General")
+    Masseinheit.Select(iCount2)
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
 
     hCloseDocument
 endcase 'tToolsOptionsMeasurementUnit 

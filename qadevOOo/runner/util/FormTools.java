@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormTools.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,7 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.container.XIndexContainer;
 import com.sun.star.form.XFormsSupplier;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
@@ -192,11 +190,20 @@ public class FormTools {
         return oControl;
     } // finish createControl
 
-    public static XNameContainer getForms ( XDrawPage oDP ) {
+    public static XNameContainer getForms ( XDrawPage oDP )
+    {
         XFormsSupplier oFS = (XFormsSupplier) UnoRuntime.queryInterface(
                                                     XFormsSupplier.class,oDP);
         return oFS.getForms();
     } //finish getForms
+
+    public static XIndexContainer getIndexedForms ( XDrawPage oDP )
+    {
+        XFormsSupplier oFS = (XFormsSupplier) UnoRuntime.queryInterface(
+                                                    XFormsSupplier.class,oDP);
+        return (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class,
+            oFS.getForms() );
+    } //finish getIndexedForms
 
     public static void insertForm ( XComponent aDoc, XNameContainer Forms,
                                                                 String aName ) {
@@ -222,7 +229,7 @@ public class FormTools {
         XLoadable formLoader = null;
 
         try {
-            Object aForm = FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName("Standard");
+            Object aForm = FormTools.getIndexedForms(WriterTools.getDrawPage(aDoc)).getByIndex(0);
             XForm the_form = null;
             try {
                 the_form = (XForm) AnyConverter.toObject(new Type(XForm.class), aForm);
@@ -257,7 +264,7 @@ public class FormTools {
         throws com.sun.star.uno.Exception {
 
         XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
-            FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName("Standard"));
+            FormTools.getIndexedForms(WriterTools.getDrawPage(aDoc)).getByIndex(0));
         XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
         formProps.setPropertyValue("Command",tableName);

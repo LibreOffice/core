@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_imagemap.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -41,108 +35,125 @@
 '\*************************************************************************************
 
 testcase tEditImageMap
-    Kontext "ImageMapEditor"
-    sleep 1
-    printlog "ImageMap editor exists"
-    DialogTest ( ImageMapEditor )
-    try
+   Call  hNewDocument               '/// new document ///'
+   EditImageMap                  '/// edit image map ///'
+   Kontext "ImageMapEditor"
+   sleep 1
+   if ImageMapEditor.Exists (2) then         '/// test dialog controls ///'
+   printlog "ImageMap editor exists"
+      DialogTest ( ImageMapEditor )
+      try
         ImageMapEditor.Close
         Printlog "ImageMap closed"
-    catch
+      catch
         EditImageMap
         Printlog "ImageMap closed using the edit-menu entry"
-    endcatch
-else
-    sleep 2
-    DialogTest ( ImageMapEditor )
-    try
+      endcatch
+   else
+      sleep 2
+      DialogTest ( ImageMapEditor )
+      try
         ImageMapEditor.Close
         Printlog "ImageMap closed"
-    catch
+      catch
         EditImageMap
         Printlog "ImageMap closed using the edit-menu entry"
-    endcatch
-end if
-endcase
-
+      endcatch
+   end if
+   Call  hCloseDocument             '/// close document ///'
+   
+endcase 'tEditImageMap
 '------------------------------------------------------------------------------------------------------------------------------------
-
 testcase tEditImageMapProperties
+
     qaerrorlog "test not yet ready."
     goto endsub
+    Call  hNewDocument                  '/// new document ///'
+    InsertGraphicsFromFile               '/// Insert a graphic and select it ///'
     sleep (1)
     Kontext "GrafikEinfuegenDlg"
-    sleep (2)
-    Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\SaveAsPicture\SaveAsPicture.pcx")
-    sleep (2)
-    Oeffnen.Click
-    sleep (2)
+        sleep (2)
+        Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\SaveAsPicture\SaveAsPicture.pcx")
+        sleep (2)
+        Oeffnen.Click
+        sleep (2)
+    EditImageMap                              '/// Open the image map dialog ///'
+        Kontext "ImageMapEditor"
+        sleep (1)
+        if ImageMapEditor.Exists (2) then         '/// test dialog controls ///'
+            printlog "ImageMap editor exists"
+        else
+            warnlog "Something is wrong, the Imagemap didn't show up."
+        end if
+
+        Ellipse.Click                                   '/// Insert an 'image map' object ///'
+        Dokument.MouseDown 50,50
+        Dokument.MouseMove 50,50,10,10
+        Dokument.MouseUp 10,10
+
+        Eigenschaften.Click                       '/// Click on the properties icon to open up the properties for the Object ///'
+        kontext "ImageMapHyperlink"
+        sleep (1)
+        if ImageMapHyperlink.Exists (2) then 
+            printlog "ImageMapHyperlink (properties) editor exists"
+        else
+            warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
+        end if
+
+        URL.SetText "http://www.cnn.com"          '/// Write some text in each field ///'
+        Frame.SetText "http://www.framed.com"
+        Objectname.SetText "This is a strange name: Huckillerry Bohaahw"
+        Alternativetext.SetText "Alternative, the only way to fly..."
+        Description.SetText "Just a Foney-text... or whatever it's called."
+        ImageMapHyperlink.Ok        '/// Close the Properties-Dialogue with "Ok" ///'
+    kontext "ImageMapEditor"
+    Zuweisen.Click
+    sleep (1)
+    ImageMapEditor.Close
+
+    if gApplication = "DRAW" then
+        kontext "DocumentDraw"
+    else
+        kontext "DocumentImpress"
+    end if
+
+    EditImageMap                                        '/// Check if what we wrote in the Properites-Dialogue still is visible."
     Kontext "ImageMapEditor"
     sleep (1)
-    printlog "ImageMap editor exists"
-else
-    warnlog "Something is wrong, the Imagemap didn't show up."
-end if
+    if ImageMapEditor.Exists (2) then   
+        printlog "ImageMap editor exists"
+    else
+        warnlog "Something is wrong, the ImageMap Editor didn't show up."
+    end if
 
-Dokument.MouseDown 50,50
-Dokument.MouseMove 50,50,10,10
-Dokument.MouseUp 10,10
+    Dokument.TypeKeys "<TAB>"
+    sleep (1)
 
-kontext "ImageMapHyperlink"
-sleep (1)
-if ImageMapHyperlink.Exists (2) then
-    printlog "ImageMapHyperlink (properties) editor exists"
-else
-    warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
-end if
+    Eigenschaften.Click                                 '/// Click on the properties icon to open up the properties for the Object ///'
+        kontext "ImageMapHyperlink"
+        sleep (1)
+        if ImageMapHyperlink.Exists (2) then   
+            printlog "ImageMapHyperlink (properties) editor exists"
+        else
+            warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
+        end if
 
-Frame.SetText "http://www.framed.com"
-Objectname.SetText "This is a strange name: Huckillerry Bohaahw"
-Alternativetext.SetText "Alternative, the only way to fly..."
-Description.SetText "Just a Foney-text... or whatever it's called."
-kontext "ImageMapEditor"
-Zuweisen.Click
-sleep (1)
-ImageMapEditor.Close
-
-if gApplication = "DRAW" then
-    kontext "DocumentDraw"
-else
-    kontext "DocumentImpress"
-end if
-
-Kontext "ImageMapEditor"
-sleep (1)
-if ImageMapEditor.Exists (2) then
-    printlog "ImageMap editor exists"
-else
-    warnlog "Something is wrong, the ImageMap Editor didn't show up."
-end if
-
-Dokument.TypeKeys "<TAB>"
-sleep (1)
-
-kontext "ImageMapHyperlink"
-sleep (1)
-if ImageMapHyperlink.Exists (2) then
-    printlog "ImageMapHyperlink (properties) editor exists"
-else
-    warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
-end if
-
-if URL.GetText <> "http://www.cnn.com/" then warnlog "URL should have been: http://www.cnn.com/ . But was " + URL.GetText
-    '        if Frame.GetSelText <> "http://www.framed.com" then warnlog "Frame should have been: http://www.framed.com. But was " + Frame.GetSelText
-    if Objectname.GetText <> "This is a strange name: Huckillerry Bohaahw"  then warnlog "Objectname. should have been: This is a strange name: Huckillerry Bohaahw. But was " + Objectname.GetText
+        '/// Check if the entries we set before has remained the same, with one exception: cnn.com should now have a slash after it.  ///'
+        if URL.GetText <> "http://www.cnn.com/" then warnlog "URL should have been: http://www.cnn.com/ . But was " + URL.GetText
+'        if Frame.GetSelText <> "http://www.framed.com" then warnlog "Frame should have been: http://www.framed.com. But was " + Frame.GetSelText
+        if Objectname.GetText <> "This is a strange name: Huckillerry Bohaahw"  then warnlog "Objectname. should have been: This is a strange name: Huckillerry Bohaahw. But was " + Objectname.GetText
         if Alternativetext.GetText <> "Alternative, the only way to fly..." then warnlog "Alternativetext should have been: . But was " + Alternativetext.GetText
-            if Description.GetText <> "Just a Foney-text... or whatever it's called." then warnlog "Description. should have been: . But was " + Description.GetText
-                sleep (1)
+        if Description.GetText <> "Just a Foney-text... or whatever it's called." then warnlog "Description. should have been: . But was " + Description.GetText
+        ImageMapHyperlink.Ok      '/// Close the Properties-Dialogue ///'
+        sleep (1)
 
-                kontext "ImageMapEditor"
-                Zuweisen.Click
-                sleep (1)
-                ImageMapEditor.Close
-                sleep (1)
+    kontext "ImageMapEditor"
+    Zuweisen.Click
+    sleep (1)
+    ImageMapEditor.Close
+    sleep (1)
 
+   Call  hCloseDocument             '/// close document ///'
+   
 endcase 'tEditImageMapProperties
-
 '------------------------------------------------------------------------------------------------------------------------------------

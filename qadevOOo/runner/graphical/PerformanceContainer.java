@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PerformanceContainer.java,v $
- * $Revision: 1.1.2.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@ public class PerformanceContainer /* extends *//* implements */ {
         {
             if (_nCurrentTimer == 0)
             {
-                GlobalLogWriter.get().println("Forgotten to initialise a start timer.");
+                GlobalLogWriter.println("Forgotten to initialise a start timer.");
                 return 0;
             }
             long nMeanTime = System.currentTimeMillis();
@@ -163,7 +160,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             catch (NumberFormatException e)
             {
-                GlobalLogWriter.get().println("Can't convert string to double " + _sStr);
+                GlobalLogWriter.println("Can't convert string to double " + _sStr);
             }
             return nValue;
         }
@@ -188,7 +185,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             File aFile = new File(sFilename);
             if (! aFile.exists())
             {
-                GlobalLogWriter.get().println("couldn't find file " + sFilename);
+                GlobalLogWriter.println("couldn't find file " + sFilename);
                 return;
             }
 
@@ -239,13 +236,13 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             catch (java.io.FileNotFoundException fne)
             {
-                GlobalLogWriter.get().println("couldn't open file " + sFilename);
-                GlobalLogWriter.get().println("Message: " + fne.getMessage());
+                GlobalLogWriter.println("couldn't open file " + sFilename);
+                GlobalLogWriter.println("Message: " + fne.getMessage());
             }
             catch (java.io.IOException ie)
             {
-                GlobalLogWriter.get().println("Exception while reading file " + sFilename);
-                GlobalLogWriter.get().println("Message: " + ie.getMessage());
+                GlobalLogWriter.println("Exception while reading file " + sFilename);
+                GlobalLogWriter.println("Message: " + ie.getMessage());
             }
             try
             {
@@ -253,8 +250,8 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             catch (java.io.IOException ie)
             {
-                GlobalLogWriter.get().println("Couldn't close file " + sFilename);
-                GlobalLogWriter.get().println("Message: " + ie.getMessage());
+                GlobalLogWriter.println("Couldn't close file " + sFilename);
+                GlobalLogWriter.println("Message: " + ie.getMessage());
             }
         }
 

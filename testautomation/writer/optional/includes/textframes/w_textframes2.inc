@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_textframes2.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:37:37 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -81,7 +75,7 @@ testcase tTextframes_17
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
-    Call gMouseClick(15,15)
+    Call gMouseClick(40,40)
     Wait 500
     
     '/// check if contents can be inserted into frame
@@ -125,7 +119,7 @@ testcase tTextframes_18
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
-    Call gMouseClick(15,15)
+    Call gMouseClick(40,40)
     Sleep 2
     
     '/// check if the frame is moved
@@ -872,15 +866,15 @@ testcase tTextframes_28
     
     Call hNewDocument
     
-    '/// Insert a frame
+    printlog "Insert a frame"
     Call fInsertFrame(30, 30, 60, 60)
     
-    '/// + Naming the frame
+    printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName1
     TabZusaetze.OK
     
-    '/// + Set the frame's wrap
+    printlog "Set the frame's wrap"
     Call fFormatFrame("TabUmlauf")
     Kein.Check
     Sleep 1
@@ -889,19 +883,15 @@ testcase tTextframes_28
     Call wTypeKeys "<ESCAPE>"
     Sleep 2
     
-    '/// Insert another frame
+    printlog "Insert another frame"
     Call fInsertFrame(50, 50, 80, 80)
     
-    printlog "Move second frame away from the first frame."
-    Call wTypeKeys "<RIGHT>", 10
-    Call wTypeKeys "<DOWN>", 7
-    
-    '/// + Naming the frame
+    printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName2
     TabZusaetze.OK
     
-    '/// + Set the frame's wrap
+    printlog "Set the frame's wrap"
     Call fFormatFrame("TabUmlauf")
     Sleep 1
     Durchlauf.Check
@@ -911,31 +901,32 @@ testcase tTextframes_28
     Call wTypeKeys "<ESCAPE>"
     Sleep 2
     
-    '/// Set focus to second frame
-    Call wTypeKeys ( "<Shift F4>" )
+    printlog "Set focus to second frame"
+    Call gMouseClick(60,60) ' Click into frame
+    wait 500
+    Call wTypeKeys "<ESCAPE>" ' Selects frame holding the cursor
     wait 500
     
-    '/// Check second frame's name
+    printlog "Check second frame's name"
     Call fFormatFrame("TabZusaetze")
     if ObjektName.GetText <> sFrameName2 then Warnlog "The 2nd frame's name is wrong ! Get " +ObjektName.GetText
     TabZusaetze.Cancel
     
-    '/// Check second frame's wrap status
+    printlog "Check second frame's wrap status"
     Call fFormatFrame("TabUmlauf")
     if Durchlauf.IsChecked <> TRUE then Warnlog "The 2nd frame's wrap status is wrong ! "
     TabUmlauf.Cancel
     
-    '/// Set focus to first frame
+    printlog "Set focus to first frame"
     Call wTypeKeys "<TAB>"
     Sleep 2
     
-    '/// Check the frame's name and warp status
-    'Check first frame's name
+    printlog "Check first frame's name"
     Call fFormatFrame("TabZusaetze")
     if ObjektName.GetText <> sFrameName1 then Warnlog "The 1st frame's name is wrong ! Get " +ObjektName.GetText
     TabZusaetze.Cancel
     
-    'Check first frame's wrap status
+    printlog "Check first frame's wrap status"
     Call fFormatFrame("TabUmlauf")
     if Kein.IsChecked <> TRUE then Warnlog "The 1st frame's wrap status is wrong ! "
     TabUmlauf.Cancel

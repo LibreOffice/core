@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: filedlg_passwords.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:14 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -38,8 +32,6 @@
 '\******************************************************************************
 
 testcase tFiledlgPasswords()
-
-    '///<h1>Test saving/loading passworded files in three different formats</h1>
     
     dim workfile as string
     dim workpath as string
@@ -64,17 +56,12 @@ testcase tFiledlgPasswords()
             case 2 : filetypeID = "current"
             end select
             
-            '///<ul>
-            '///+<li>open a new document</li>
             hCreateDocument()
             
-            '///+<li>Close the navigator - if present</li>
             hCloseNavigator()
 
-            '///+<li>enter some random text</li>
             call hChangeDoc()
 
-            '///+<li>Open file-save dialog</li>
             printlog( "Open file-save dialog" )
             if ( gApplication = "IMPRESS" ) then
                 printlog( "   IMPRESS is slower than other apps, delaying for 2 sec." )
@@ -86,7 +73,6 @@ testcase tFiledlgPasswords()
             Kontext "SpeichernDlg"
             if ( SpeichernDlg.exists( 2 ) ) then
 
-                '///+<li>Name the file and select filter</li>
                 filetype = hGetFilter( filetypeID )
                 hSelectUIFilter( filetype )
                 
@@ -96,7 +82,6 @@ testcase tFiledlgPasswords()
                 printlog( "Using fileformat: " & filetype )
                 printlog( "Using filename..: " & workfile )
 
-                '///+<li>Check password</li>
                 printlog( "Check password" )
                 if ( passwort.isEnabled() ) then
                     Passwort.check()
@@ -104,7 +89,6 @@ testcase tFiledlgPasswords()
                     warnlog( "#i36663# Password checkbox is disabled" )
                 endif
 
-                '///+<li>Save the file</li>
                 printlog( "Save the file" )
                 Speichern.click()
 
@@ -115,7 +99,6 @@ testcase tFiledlgPasswords()
                 endif
                 
 
-                '///+<li>Enter the filename as password and confirm</li>
                 Kontext "PasswordFileSave"
                 printlog( "Enter the name of the file as password and confirm" )
                 if ( passwordFileSave.exists() ) then
@@ -137,10 +120,8 @@ testcase tFiledlgPasswords()
                      endif         
                 endif    
 
-                '///+<li>Close the document</li>
                 hDestroyDocument()
 
-                '///+<li>Open the file via file-open</li>
                 printlog( "Open the file via file-open" )
                 FileOpen
 
@@ -151,7 +132,6 @@ testcase tFiledlgPasswords()
                     Oeffnen.click()
 
                     Kontext "PasswordFileOpen"
-                    '///+<li>Enter the filename as password</li>
                     printlog( "Enter the filename as password" )
                     if ( PasswordFileOpen.exists( 4 ) ) then
                         PasswortName.settext( workfile )
@@ -170,11 +150,9 @@ testcase tFiledlgPasswords()
                         endif
                     endif
 
-                    '///+<li>Verify that the document is loaded</li>
                     printlog( "Verify that the document is loaded" )
-                    call IsItLoaded()
+                    hFileWait( FALSE )
 
-                    '///+<li>Close the navigator if present</li>
                     Kontext "Navigator"
                     if ( Navigator.exists( 1 ) ) then
             	        qaerrorlog( "Navigator should not be visible - setting not saved?" )
@@ -186,23 +164,18 @@ testcase tFiledlgPasswords()
                 warnlog( "File Open dislog did not come up" )
             endif
 
-            '///+<li>Close navigator if present</li>
             hCloseNavigator()
 
-            '///+<li>Close the document</li>
             hDestroyDocument()
 
-            '///+<li>Delete the file</li>    
             hDeleteFile( workpath & workfile )
 
-            '///+<li>Close navigator if present</li>
             hCloseNavigator()
             
         next iCurrentFileFormat
         
     next iCurrentDocumentType
 
-    '///</ul>
 
 
 endcase

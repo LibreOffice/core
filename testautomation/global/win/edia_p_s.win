@@ -41,7 +41,7 @@ TransitionEffects filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTBOOKMARKS
 FormsFormat filter:ListBox:RID_PDF_TAB_GENER:LB_FORMSFORMAT
 ExportBlankPages filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES
 
-*PDFOptionsInitialView PDF1TBO
+*PDFOptionsInitialView HID_FILTER_PDF_INITIAL_VIEW
 PageOnly filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_PAGEONLY
 BookmarksAndPage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_OUTLINE
 ThumbnailsAndPage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_THUMBS
@@ -54,7 +54,7 @@ SinglePage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_SINGPG
 Continuous filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONT
 ContinuousFacing filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONTFAC
 
-*PDFOptionsUserInterface PDF2TBO
+*PDFOptionsUserInterface HID_FILTER_PDF_USER_INTERFACE
 ResizeWindow filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_RESINIT
 CenterWindow filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_CNTRWIN
 OpenInFullscreen filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_OPNFULL
@@ -64,12 +64,98 @@ HideToolbar filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVTOOLBAR
 HideWindowControls filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVWINCTRL
 
 *Posterize SID_GRFFILTER_POSTER
-PosterColors svx:NumericField:RID_SVX_GRFFILTER_DLG_POSTER:DLG_FILTERPOSTER_NUM_POSTER
+PosterColors cui:NumericField:RID_SVX_GRFFILTER_DLG_POSTER:DLG_FILTERPOSTER_NUM_POSTER
 
 *PortfolioCurrency HID_DLGDEPOT_DIALOG_HISTORY
 Currency HID_DLGDEPOT_LSTMARKETS
 OKButton HID_DLGDEPOT_0_CMDGOON_HISTORY
 CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
+
+*Printing .HelpId:vcl:PrintDialog:Dialog
+PreviewWindow .HelpId:vcl:PrintDialog:Preview
+PreviewPageNumber .HelpId:vcl:PrintDialog:PageEdit
+ScrollBackward .HelpId:vcl:PrintDialog:BackwardBtn
+ScrollForward .HelpId:vcl:PrintDialog:ForwardBtn
+Print .HelpId:vcl:PrintDialog:OK
+Cancel .HelpId:vcl:PrintDialog:Cancel
+   
+PrintingTabControl .HelpId:vcl:PrintDialog:TabPages
+TabPrintGeneral .HelpId:vcl:PrintDialog:JobPage
+TabApplication .HelpId:vcl:PrintDialog:TabPage:10
+TabLayout .HelpId:vcl:PrintDialog:NUpPage
+TabOptions .HelpId:vcl:PrintDialog:OptPage
+
+*TabPrintGeneral .HelpId:vcl:PrintDialog:JobPage
+PrinterList .HelpId:vcl:PrintDialog:JobPage:PrinterList
+NumberOfCopies .HelpId:vcl:PrintDialog:JobPage:Copies
+Collate .HelpId:vcl:PrintDialog:JobPage:Collate
+PrintNotes .HelpId:vcl:PrintDialog:PrintAnnotationMode:ListBox
+AllPages .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+AllSlides .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+AllSheets .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+Pages .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+Slides .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+SelectedSheets .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+PrintAllPages .HelpId:vcl:PrintDialog:PrintRange:RadioButton:0
+PrintPages .HelpId:vcl:PrintDialog:PrintRange:RadioButton:1                        
+PageRange .HelpId:vcl:PrintDialog:PageRange:Edit
+Selection .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
+SelectedCells .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
+Details .HelpId:vcl:PrintDialog:JobPage:DetailsBtn
+Properties .HelpId:vcl:PrintDialog:JobPage:Properties
+PageCount .HelpId:vcl:PrintDialog:NumPagesText
+PartsToPrint .HelpId:vcl:PrintDialog:PageContentType:ListBox
+SlidesPerPage .HelpId:vcl:PrintDialog:SlidesPerPage:ListBox
+ArrangeSlides .HelpId:vcl:PrintDialog:SlidesPerPageOrder:ListBox            
+
+*TabApplication .HelpId:vcl:PrintDialog:TabPage:10
+PrintPageBackground .HelpId:vcl:PrintDialog:PrintPageBackground:CheckBox
+PrintGraphicsAndDiagrams .HelpId:vcl:PrintDialog:PrintTablesGraphicsAndDiagrams:CheckBox
+PrintPicturesAndObjects .HelpId:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox
+PrintHiddenText .HelpId:vcl:PrintDialog:PrintHiddenText:CheckBox
+PrintTextPlaceholder .HelpId:vcl:PrintDialog:PrintTextPlaceholder:CheckBox
+PrintFormControls .HelpId:vcl:PrintDialog:PrintControls:CheckBox
+PrintTextInBlack .HelpId:vcl:PrintDialog:PrintBlackFonts:CheckBox
+PrintBlankPages .HelpId:vcl:PrintDialog:PrintEmptyPages:CheckBox
+IncludeEmptyPages .HelpId:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox
+SlideName .HelpId:vcl:PrintDialog:IsPrintName:CheckBox
+DateAndTime .HelpId:vcl:PrintDialog:IsPrintDateTime:CheckBox
+HiddenPages .HelpId:vcl:PrintDialog:IsPrintHidden:CheckBox
+TilePaper .HelpId:vcl:PrintDialog:PageOptions:RadioButton:3
+OriginalColors .HelpId:vcl:PrintDialog:Quality:RadioButton:0
+Grayscale .HelpId:vcl:PrintDialog:Quality:RadioButton:1
+BlackAndWhite .HelpId:vcl:PrintDialog:Quality:RadioButton:2
+MultiplePages .HelpId:vcl:PrintDialog:PageOptions:RadioButton:2
+TitleRow .HelpId:vcl:PrintDialog:TitleRow:CheckBox
+FormulaText .HelpId:vcl:PrintDialog:FormulaText:CheckBox
+Borders .HelpId:vcl:PrintDialog:Border:CheckBox
+OriginalSize .HelpId:vcl:PrintDialog:PageOptions:RadioButton:0
+OriginalSizeMath .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:0
+FitToPage .HelpId:vcl:PrintDialog:PageOptions:RadioButton:1
+FitToPageMath .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:1            
+Scaling .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:2
+ScalingFactor .HelpId:vcl:PrintDialog:PrintScale:NumericField
+
+*TabLayout .HelpId:vcl:PrintDialog:NUpPage
+PagesPerSheet .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheet
+NumberOfPages .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheetBox
+NumberOfColumns .HelpId:vcl:PrintDialog:NUpPage:ColumnsBox
+NumberOfRows .HelpId:vcl:PrintDialog:NUpPage:RowsBox
+BorderAroundPages .HelpId:vcl:PrintDialog:NUpPage:BorderBox
+Brochure .HelpId:vcl:PrintDialog:NUpPage:Brochure
+DistanceBetweenPages .HelpId:vcl:PrintDialog:NUpPage:PageMarginBox
+MarginToSheetBorder .HelpId:vcl:PrintDialog:NUpPage:SheetMarginBox
+PaperOrientation .HelpId:vcl:PrintDialog:NUpPage:OrientationBox
+PrintOrder .HelpId:vcl:PrintDialog:NUpPage:OrderBox
+IncludePages .HelpId:vcl:PrintDialog:PrintLeftRightPages:ListBox
+PrintBrochureRTL .HelpId:vcl:PrintDialog:PrintProspectRTL:ListBox
+BrochurePageSides .HelpId:vcl:PrintDialog:PrintProspectInclude:ListBox            
+
+*TabOptions .HelpId:vcl:PrintDialog:OptPage
+PrintToFile .HelpId:vcl:PrintDialog:OptPage:ToFile
+PrintAsSingleJobs .HelpId:vcl:PrintDialog:OptPage:SingleJobs
+PrintReverse .HelpId:vcl:PrintDialog:OptPage:Reverse
+PaperTrayFromPrefs .HelpId:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
 
 *PurchaseStarOffice HID_LICENSING_DIALOG
 TabPurchase HID_TP_PURCHASE
@@ -171,14 +257,17 @@ RightFieldCell   HID_RELATIONDIALOG_RIGHTFIELDCELL
 *Relief SID_GRFFILTER_EMBOSS
 LightSource HID_GRFFILTER_EMBOSS_LIGHT
 
+*RenameAutoFormat HID_SC_REN_AFMT_DLG
+RenameAutoFormatName HID_SC_REN_AFMT_NAME
+
 *RenameElement HID_MM_ADD_RENAME_ENTRY
 FieldTitle sw:Edit:DLG_MM_ADD_RENAME_ENTRY:ED_FIELDNAME
 
 *RenameMenu HID_SVX_CONFIG_RENAME_MENU
-NewName svx:Edit:RID_SVXDLG_NAME:EDT_STRING
+NewName cui:Edit:RID_SVXDLG_NAME:EDT_STRING
 
 *RenameToolbar HID_SVX_CONFIG_RENAME_TOOLBAR
-NewName svx:Edit:RID_SVXDLG_NAME:EDT_STRING
+NewName cui:Edit:RID_SVXDLG_NAME:EDT_STRING
 
 *Registration HID_REGISTRATION_DIALOG
 Now svtools:RadioButton:DLG_REGISTRATION_REQUEST:RB_NOW
@@ -257,14 +346,14 @@ Type sw:Edit:DLG_SAVE_LABEL:ED_TYPE
 
 *ScriptOrganizer HID_SCRIPTORG_DIALOG
 ScriptTreeList HID_SCRIPTSBOX
-PBRun svx:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_RUN
-PBCreate svx:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_CREATE
-PBEdit svx:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_EDIT
-PBRename svx:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_RENAME
-PBDelete svx:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_DEL
+PBRun cui:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_RUN
+PBCreate cui:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_CREATE
+PBEdit cui:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_EDIT
+PBRename cui:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_RENAME
+PBDelete cui:PushButton:RID_DLG_SCRIPTORGANIZER:SF_PB_DEL
 
-*ScriptNameDlg svx:ModalDialog:RID_DLG_NEWLIB
-EFObjectName svx:Edit:RID_DLG_NEWLIB:ED_LIBNAME
+*ScriptNameDlg cui:ModalDialog:RID_DLG_NEWLIB
+EFObjectName cui:Edit:RID_DLG_NEWLIB:ED_LIBNAME
 
 *ScriptSelector HID_SELECTOR_DIALOG
 LibraryTreeList HID_SELECTOR_CATEGORIES
@@ -345,8 +434,8 @@ Resolution chart2:MetricField:DLG_SPLINE_PROPERTIES:MF_SPLINE_RESOLUTION
 DataPointsOrder chart2:MetricField:DLG_SPLINE_PROPERTIES:MF_SPLINE_ORDER
 
 *Solarization SID_GRFFILTER_SOLARIZE
-Value svx:MetricField:RID_SVX_GRFFILTER_DLG_SOLARIZE:DLG_FILTERSOLARIZE_MTR_THRESHOLD
-Invert svx:CheckBox:RID_SVX_GRFFILTER_DLG_SOLARIZE:DLG_FILTERSOLARIZE_CBX_INVERT
+Value cui:MetricField:RID_SVX_GRFFILTER_DLG_SOLARIZE:DLG_FILTERSOLARIZE_MTR_THRESHOLD
+Invert cui:CheckBox:RID_SVX_GRFFILTER_DLG_SOLARIZE:DLG_FILTERSOLARIZE_CBX_INVERT
 
 *Solver   SID_OPENDLG_OPTSOLVER
 TargetCell sc:Edit:RID_SCDLG_OPTSOLVER:ED_OBJECTIVECELL
@@ -393,6 +482,10 @@ SolverSettingsEdit  sc:PushButton:RID_SCDLG_SOLVEROPTIONS:BTN_EDIT
 *SolverEditSetting   HID_SC_SOLVER_INTEGER
 SolverNumeric sc:NumericField:RID_SCDLG_SOLVER_INTEGER:NF_VALUE
 
+*SolvingResult HID_SC_SOLVER_SUCCESS
+
+*NoSolution HID_SC_SOLVER_NOSOLUTION
+
 *SortOrder HID_DLG_ORDERCRIT
 Fieldname1 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD1
 Order1 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE1
@@ -406,17 +499,17 @@ ExtendSelection   sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_EXTSORT
 CurrentSelection   sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_CURSORT
 
 *Spellcheck HID_SPELLCHECK
-NotInDictionary svx:MultiLineEdit:RID_SVXDLG_SPELLCHECK:ED_NEWWORD
-Suggestions svx:ListBox:RID_SVXDLG_SPELLCHECK:LB_SUGGESTION
-DictionaryLanguage svx:ListBox:RID_SVXDLG_SPELLCHECK:LB_LANGUAGE
+NotInDictionary cui:MultiLineEdit:RID_SVXDLG_SPELLCHECK:ED_NEWWORD
+Suggestions cui:ListBox:RID_SVXDLG_SPELLCHECK:LB_SUGGESTION
+DictionaryLanguage cui:ListBox:RID_SVXDLG_SPELLCHECK:LB_LANGUAGE
 IgnoreOnce HID_SPLDLG_BUTTON_IGNORE
 IgnoreAll HID_SPLDLG_BUTTON_IGNOREALL
-AddToDictionary svx:MenuButton:RID_SVXDLG_SPELLCHECK:MB_ADDTODICT
+AddToDictionary cui:MenuButton:RID_SVXDLG_SPELLCHECK:MB_ADDTODICT
 Change HID_SPLDLG_BUTTON_CHANGE
 ChangeAll HID_SPLDLG_BUTTON_CHANGEALL
-AutoCorrect svx:PushButton:RID_SVXDLG_SPELLCHECK:PB_AUTOCORR
-SpellcheckOptions svx:PushButton:RID_SVXDLG_SPELLCHECK:PB_OPTIONS
-SpellcheckUndo svx:PushButton:RID_SVXDLG_SPELLCHECK:PB_UNDO
+AutoCorrect cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_AUTOCORR
+SpellcheckOptions cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_OPTIONS
+SpellcheckUndo cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_UNDO
 SpellcheckClose HID_SPLDLG_BUTTON_CLOSE
 
 *SQLException dbaccess:ModalDialog:DLG_SQLEXCEPTIONCHAIN
@@ -461,6 +554,7 @@ PrintButton HID_HELP_TOOLBOXITEM_PRINT
 SetBookmarks HID_HELP_TOOLBOXITEM_BOOKMARKS
 
 *SaveScheme HID_OPTIONS_COLORCONFIG_SAVE_SCHEME
+
 SchemeName HID_OPTIONS_COLORCONFIG_NAME_SCHEME
 
 *SecurityWarning HID_XMLSECDLG_MACROWARN
@@ -527,7 +621,7 @@ Back HID_DLGHOLIDAYCAL_0_CMDOWNDATA
 Create  HID_DLGHOLIDAYCAL_0_CMDOK
 
 *StoredPasswordsDialog HID_DLG_WEBCONNECTION_INFO
-Remove svx:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVE
-RemoveAll svx:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVEALL
-changePassword svx:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_CHANGE
+Remove cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVE
+RemoveAll cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVEALL
+changePassword cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_CHANGE
 

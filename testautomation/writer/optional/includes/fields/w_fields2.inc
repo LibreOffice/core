@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_fields2.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:26:39 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -39,24 +33,24 @@
 
 sub w_fields2
 
-    Call tFieldsOther_0      'NON modal
-    Call tFieldsOther_1_1    'Insert/Fields/Other/Document / Author
-    Call tFieldsOther_1_2    'Insert/Fields/Other/Document / Author - Fixed
-    Call tFieldsOther_2      'Insert/Fields/Other/Document / Chapter
-    Call tFieldsOther_3      'Insert/Fields/Other/Document / Date
-    Call tFieldsOther_4      'Insert/Fields/Other/Document / File name
-    Call tFieldsOther_5      'Insert/Fields/Other/Document / Page
-    Call tFieldsOther_6_1    'Insert/Fields/Other/Document / Sender
-    Call tFieldsOther_6_2    'Insert/Fields/Other/Document / Sender - Fixed
-    Call tFieldsOther_7      'Insert/Fields/Other/Document / Statistics
-    Call tFieldsOther_8      'Insert/Fields/Other/Document / Template
-    Call tFieldsOther_9      'Insert/Fields/Other/Document / Time
+    Call tDialogNonModal
+    Call tDocumentAuthor
+    Call tDocumentAuthorFixed
+    Call tDocumentChapter
+    Call tDocumentDate
+    Call tDocumentFilename
+    Call tDocumentPage
+    Call tDocumentSender
+    Call tDocumentSenderFixed
+    Call tDocumentStatistics
+    Call tDocumentTemplate
+    Call tDocumentTime
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_0
+testcase tDialogNonModal
 
   Dim sTest as String
 
@@ -90,7 +84,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_1_1
+testcase tDocumentAuthor
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
@@ -196,7 +190,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_1_2
+testcase tDocumentAuthorFixed
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
@@ -304,7 +298,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_2
+testcase tDocumentChapter
 
   Dim sTestFile  as String
   Dim sChapter() as String
@@ -360,7 +354,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_3
+testcase tDocumentDate
 
     Dim sDate as String
     
@@ -391,68 +385,72 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_4
-    if bAsianLan = true then
-        QaErrorLog "No testing with Asian language. Aborting."
-        exit sub
-    end if
-
-  Dim  sTestFile     as String
-  Dim  sFilename(4)  as String
-  Dim  i             as Integer
-
-  sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
-
-  sFilename(0) = "pageTest.sxw"
-  sFilename(1) = "pageTest"
-  sFilename(2) = Convertpath (gTesttoolpath + "writer\optional\input\fields\")
-  sFilename(3) = sTestFile
-
-  printlog "Insert/Fields/Other/Document / File name"
- '/// <b> Insert/Fields/Other/Document / File name </b>
-
-  Call hNewDocument
-
-  '/// Open test file pageTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
-   Call wTypeKeys "<MOD1 Home>"
-   Call wTypeKeys "<End><Return>"
-
-  '/// Insert/Fields/Other/Document / File name
-  '/// Insert File name, File name without extension ,
-  '/// Path , Path/File name
-  '/// Check if the insertion is correct
-   Call fInsertFieldsOther("TabDokumentFeldbefehle")
-     Feldtyp.Select fGetType("File name")
-     for i = 0 to 3
-         Kontext "TabDokumentFeldbefehle"
-         Formatliste.Select i+1
-         Sleep 1
-         Einfuegen.Click
-         sleep 1
-         Call wTypeKeys "<F9>"
-         Sleep 2
-         Call wTypeKeys "<Shift LEFT>"  'HOME
-         Sleep 1
-         if fGetFieldContent() <> sFilename(i) then
-             Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
-         end if
-         Call wTypeKeys "<Delete>"
-     next i
-     Kontext "TabDokumentFeldbefehle"
-   TabDokumentFeldbefehle.Close
-
- Call hCloseDocument
+testcase tDocumentFilename
+	if bAsianLan = true then
+		QaErrorLog "No testing with Asian language. Aborting."
+		goto endsub
+	end if
+	
+	Dim  sOriginalFile as String
+	Dim  sTestFile     as String
+	Dim  sFilename(4)  as String
+	Dim  i             as Integer
+	
+	sTestFile    = Convertpath (gOfficepath + "user\work\pageTest.sxw")
+	sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
+	' document has to be copied to local file system to avoid opening a read-only file
+	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+	FileCopy (sOriginalFile, sTestFile)
+	if hFileExists ( sTestFile ) = false then
+		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+		goto endsub
+	end if
+	
+	sFilename(0) = "pageTest.sxw"
+	sFilename(1) = "pageTest"
+	sFilename(2) = Convertpath (gOfficepath + "user\work\")
+	sFilename(3) = sTestFile
+	
+	printlog "Insert/Fields/Other/Document / File name"
+	
+	Call hNewDocument
+	
+	'/// Open test file pageTest.sxw
+	Call hFileOpen(sTestFile)
+	
+	Call wTypeKeys "<MOD1 Home>"
+	Call wTypeKeys "<End><Return>"
+	
+	printlog "Insert/Fields/Other/Document / File name"
+	printlog "Insert File name, File name without extension , Path , Path/File name"
+	printlog "Check if the insertion is correct"
+	Call fInsertFieldsOther("TabDokumentFeldbefehle")
+	Feldtyp.Select fGetType("File name")
+	for i = 0 to 3
+		Kontext "TabDokumentFeldbefehle"
+		Formatliste.Select i+1
+		Sleep 1
+		Einfuegen.Click
+		sleep 1
+		Call wTypeKeys "<F9>"
+		Sleep 2
+		Call wTypeKeys "<Shift LEFT>"  'HOME
+		Sleep 1
+		if fGetFieldContent() <> sFilename(i) then
+			Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
+		end if
+		Call wTypeKeys "<Delete>"
+	next i
+	Kontext "TabDokumentFeldbefehle"
+	TabDokumentFeldbefehle.Close
+	
+	Call hCloseDocument
 
 endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_5
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
+testcase tDocumentPage
 
   Dim sTestFile as String
   Dim sPage()   as String
@@ -509,7 +507,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_6_1
+testcase tDocumentSender
     if iSprache <> 1 then
         QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
         exit sub
@@ -686,7 +684,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_6_2
+testcase tDocumentSenderFixed
     if iSprache <> 1 then
         QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
         exit sub
@@ -866,36 +864,33 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_7
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
+testcase tDocumentStatistics
 
   Dim sTestFile     as String
+  Dim sOriginalFile as string
   Dim sStatistics() as String
+  Dim sType as string
   Dim i             as Integer
 
-  sStatistics = Array( _
-                      "2"         , _
-                      "2"         , _
-                      "2"         , _
-                      "12"        , _
-                      "2"         , _
-                      "2"         , _
-                      "1"         , _
-                      )
+  sStatistics = Array( "2", "2", "3", "13", "2", "2", "1" )
 
-  sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\statisticsTest.sxw")
+    sTestFile    = Convertpath (gOfficepath + "user\work\statisticsTest.sxw")
+    sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\statisticsTest.sxw")
+    ' document has to be copied to local file system to avoid opening a read-only file
+    ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+    FileCopy (sOriginalFile, sTestFile)
+    if hFileExists ( sTestFile ) = false then
+        Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+        goto endsub
+    end if
 
   printlog "Insert/Fields/Other/Document / Statistics"
  '/// <b> Insert/Fields/Other/Document / Statistics </b>
-
-  Call hNewDocument
 
   '/// Open test file statisticsTest.sxw which includes
   '/// 2 tables , 2 pictures , 22 paragraph , 1 object ,
   '/// 2 words , 12 characters and 2 pages
    Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 Home><Down>"
 
@@ -904,6 +899,7 @@ goto endsub
   '/// Check if the insertion is correct
    Call fInsertFieldsOther("TabDokumentFeldbefehle")
      Feldtyp.Select fGetType("Statistics")
+     sType = Auswahl.GetSelText
      for i = 0 to UBound(sStatistics)
          Kontext "TabDokumentFeldbefehle"
          Auswahl.Select i+1
@@ -916,7 +912,7 @@ goto endsub
          Sleep 1
          EditCopy
          if GetClipboard <> sStatistics(i) then
-             Warnlog i &" - Should get " & sStatistics(i) & " but get " & GetClipboard
+             Warnlog "- " & sType & ": Should get " & sStatistics(i) & " but get " & GetClipboard
          end if
          Call wTypeKeys "<Delete>"
      next i
@@ -929,36 +925,40 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_8
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
+testcase tDocumentTemplate
 
-    Dim  sTestFile     as String
-    Dim  sDirectory    as String
-    Dim  oDirectory    as String
-    Dim  sLanguage     as String
-    Dim  sFormat()     as String
-    Dim  sResult(6)    as String
-    Dim  i             as Integer
+    Dim sTestFile     as String
+    Dim sOriginalFile as string
+    Dim sDirectory    as String
+    Dim oDirectory    as String
+    Dim sLanguage     as String
+    Dim sFormat()     as String
+    Dim sResult(6)    as String
+    Dim i             as Integer
     
     sLanguage    = fGetDirLanguage()
-    sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\diploma.ott")
+    sTestFile    = Convertpath (gOfficepath + "user\work\diploma.ott")
+    sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\diploma.ott")
+    ' document has to be copied to local file system to avoid opening a read-only file
+    ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+    FileCopy (sOriginalFile, sTestFile)
+    if hFileExists ( sTestFile ) = false then
+        Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+        goto endsub
+    end if
     
     sResult(0)   = fGetCateGory()
     sResult(1)   = "diploma.ott"
     sResult(2)   = "diploma"
-    sResult(3)   = Convertpath (gTesttoolpath + "writer\optional\input\fields\") 
+    sResult(3)   = Convertpath (gOfficepath + "user\work")
     sResult(4)   = sTestFile
     sResult(5)   = fGetStyle()
     
     printlog "Insert/Fields/Other/Document / Template"
     '/// <b> Insert/Fields/Other/Document / Template </b>
-    
-    Call hNewDocument
-    
+     
     '/// Open test file diploma.ott
     Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
     
     Call wTypeKeys "<MOD1 Home>"
     
@@ -999,7 +999,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_9
+testcase tDocumentTime
 
     Dim sTime1 as String
     Dim sTime2 as String

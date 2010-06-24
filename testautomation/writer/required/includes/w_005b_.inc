@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_005b_.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:41:25 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -218,8 +212,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignment
-Warnlog "#i102752# - tFormatAlignment outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Alignment"
 
@@ -416,8 +408,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorObject
-Warnlog "#i102752# - tFormatAnchorObject outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Anchor Frame"
 
@@ -887,9 +877,6 @@ endcase
 
 testcase tFormatAlignmentArea
 
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
-
     PrintLog "- Format / Alignment drawing objects"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
@@ -1098,13 +1085,12 @@ testcase tFormatPositionAndSizeLegend
     Kontext "NavigatorWriter"
     if NavigatorWriter.Exists then ViewNavigator
 
+	printlog " Insert a legend"
     Call wZeichenobjektEinfuegen ( "Legende", 45, 35, 50, 50 )
+	Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<SHIFT F4>"
 
-    printlog " Insert a legend"
-    sleep (1)
-    Call wObjektSelektieren(30, 30, 75, 75)
-
-    hUseAsyncSlot( "FormatPositionAndSize" )
+    Call hUseAsyncSlot( "FormatPositionAndSize" )
     kontext "active"
     if ( active.exists( 1 ) ) then
         printlog( "Dialog open. Good" )
@@ -1418,10 +1404,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocFormatAlignment
-Warnlog "#i102752# - tHtmlDocFormatAlignment outcommented due to bug."
-goto endsub
 
-    gApplication = "HTML"
+	gApplication = "HTML"
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"

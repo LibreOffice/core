@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_spellcheck.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:43:10 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -190,7 +184,7 @@ testcase tiToolsSpellcheckError
     ToolsOptions
     Kontext "ExtrasOptionenDlg"
     hToolsOptions("LANGUAGESETTINGS","Languages")
-    Westlich.Select 32
+    Westlich.Select 34
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     printlog "Create 1 textbox with 1 spelling error (test replace always)"
@@ -489,16 +483,6 @@ testcase tiToolsSpellcheckCheck
         goto endsub
     end if
     Kontext "Spellcheck"
-    printlog "Save the current Dictionary Language."
-    s = DictionaryLanguage.GetSelIndex
-    for i= 1 to DictionaryLanguage.GetItemCount
-        DictionaryLanguage.Select i
-        sleep 1
-        printlog "Dictionary language is: # "+i+": "+DictionaryLanguage.GetSelText
-    next i
-    iWord(1) = 1
-    iWord(2) = 2
-    DictionaryLanguage.Select s
     printlog "Close dialog 'Spellcheck'."
     Spellcheck.Close
     Kontext "Active"

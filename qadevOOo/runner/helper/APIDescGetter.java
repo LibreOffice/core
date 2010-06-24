@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: APIDescGetter.java,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -326,7 +323,6 @@ public class APIDescGetter extends DescGetter
                 // String meth_name = line.substring(line.lastIndexOf(";") + 2, line.length() - 1);
 
                 DescEntry methDesc = createDescEntry(meth_name, ifc_name, parent);
-                meth_names.add(methDesc);
 
                 if (!ifc_name.equals(old_ifc_name))
                 {
@@ -365,37 +361,13 @@ public class APIDescGetter extends DescGetter
                         ifc_name = ifc_name.substring(0, ifc_name.indexOf("#"));
                     }
 
-                    StringTokenizer st = new StringTokenizer(ifc_name, ":");
-                    String className = "";
-
-                    int count = 3;
-
-                    if (ifc_name.startsWith("drafts"))
-                    {
-                        count = 4;
-                    }
-
-                    for (int i = 0; st.hasMoreTokens(); i++)
-                    {
-                        String token = st.nextToken();
-
-                        // skipping (drafts.)com.sun.star
-                        if (i >= count)
-                        {
-                            if (!st.hasMoreTokens())
-                            {
-                                // inserting '_' before the last token
-                                token = "_" + token;
-                            }
-
-                            className += ("." + token);
-                        }
-                    }
+                    String className = createClassName(ifc_name);
 
                     ifcDesc.EntryType = entryType;
                     ifcDesc.entryName = "ifc" + className;
                     ifcDesc.longName = parent.entryName + "::" + ifc_name;
                 }
+                meth_names.add(methDesc);
 
             }
             catch (java.io.IOException ioe)
@@ -430,8 +402,39 @@ public class APIDescGetter extends DescGetter
 
         return getDescArray(makeArray(ifc_names));
     }
+    private static String createClassName(String _ifc_name)
+    {
+        StringTokenizer st = new StringTokenizer(_ifc_name, ":");
+        String className = "";
+
+        int count = 3;
+
+        if (_ifc_name.startsWith("drafts"))
+        {
+            count = 4;
+        }
+
+        for (int i = 0; st.hasMoreTokens(); i++)
+        {
+            String token = st.nextToken();
+
+            // skipping (drafts.)com.sun.star
+            if (i >= count)
+            {
+                if (!st.hasMoreTokens())
+                {
+                    // inserting '_' before the last token
+                    token = "_" + token;
+                }
+
+                className += ("." + token);
+            }
+        }
+        return className;
+    }
 
     private static String entryType;
+
     private static DescEntry createDescEntry(String meth_name, String ifc_name, DescEntry parent)
     {
         entryType = "service";
@@ -472,8 +475,8 @@ public class APIDescGetter extends DescGetter
 
     private static void createIfcName(String ifc_name, ArrayList meth_names, DescEntry ifcDesc)
     {
-
     }
+
     /**
      * This method ensures that XComponent will be the last in the list of interfaces
      */

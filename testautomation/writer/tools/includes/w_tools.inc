@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_tools.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:44:20 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -182,27 +176,28 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
 
     Objekt = UCase( Objekt )
     select case Objekt
-    case "RECHTECK" : Rechteck.Click
-    case "LINIE"     : Linie.Click
-    case "ELLIPSE"  : Ellipse.Click
-    case "TEXT"      : Textobjekt.Click
-    case "VTEXT"     :
-        try
-            VerticalText.Click
-        catch
-            if gAsianSup = True then
-                Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
-            end if
-        endcatch
-    case "LAUFTEXT" : Lauftext.Click
-    case "LEGENDE"  : Legende.Click
-    case "VLEGENDE" :
-        try
-            VerticalCallout.Click
-        catch
-            Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
-        endcatch
+    	case "RECHTECK" : Rechteck.Click
+		case "LINIE"     : Linie.Click
+		case "ELLIPSE"  : Ellipse.Click
+		case "TEXT"      : Textobjekt.Click
+		case "VTEXT"     :
+        	try
+            	VerticalText.Click
+			catch
+				if gAsianSup = True then
+                	Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
+				end if
+			endcatch
+		case "LAUFTEXT" : Lauftext.Click
+		case "LEGENDE"  : Legende.Click
+		case "VLEGENDE" :
+			try
+				VerticalCallout.Click
+			catch
+				Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
+			endcatch
     end select
+	Sleep (2)
 
     Select Case gApplication
     Case "WRITER"
@@ -219,7 +214,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentWriter"
-            Call gMouseClick (1, 1)
+            Call gMouseClick (10, 10)
             wait 100
         end if
 
@@ -237,10 +232,11 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentMasterDoc"
-            Call gMouseClick (1, 1)
+            Call gMouseClick (10, 10)
             wait 100
         end if
     end select
+	sleep (1)
 end sub
 
 ' -----------------------------------------------------------------------
@@ -915,7 +911,6 @@ sub wOptionsUndo ( sOption$ )
         WeichesScrollen.Uncheck
         ' Display
         GrafikenUndObjekte.Check
-        Tabellen.Check
         Zeichnungen.Check
         Feldname.Uncheck
         Notizen.Check
@@ -979,20 +974,17 @@ sub wOptionsUndo ( sOption$ )
         Call hToolsOptions("WRITER","Print")
         ' Contents
         Grafiken.Check
-        Tabellen.Check
-        Zeichnungen.Check
         Kontrollfelder.Check
         Hintergrund.Check
         SchwarzDrucken.Uncheck
         ' Pages
         LinkeSeiten.Check
         RechteSeiten.Check
-        Umgekehrt.Uncheck
         Prospekt.Uncheck
         ' Notes
         Keine.Check
         ' Other
-        EinzelneDruckauftraege.Uncheck
+        LeereSeitenDrucken.Check
         AusDruckereinstellung.Uncheck
         Fax.SetNoSelection
     end if
@@ -1060,7 +1052,10 @@ sub wOptionsUndo ( sOption$ )
         Call hToolsOptions("WRITER","Autocaption")
         for i = 1 to ObjectList.GetItemCount
             ObjectList.Select i
-            ObjectList.UnCheck
+            ' uncheck only if checked, else it might crash on macosx, see issue 111883 for further information
+            if ObjectList.getState (i) > 1 then
+                ObjectList.UnCheck
+            endif
         next i
     end if
 

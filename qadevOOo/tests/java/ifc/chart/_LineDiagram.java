@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _LineDiagram.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,7 @@ import com.sun.star.uno.UnoRuntime;
 * </ul> <p>
 * The following predefined files needed to complete the test:
 * <ul>
-*  <li> <code>poliball.gif</code> :
+*  <li> <code>space-metal.jpg</code> :
 *  for test of property 'SymbolBitmapURL' </li>
 * <li> <code>crazy-blue.jpg</code> :
 *  for test of property 'SymbolBitmapURL' </li>
@@ -100,9 +97,9 @@ public class _LineDiagram extends MultiPropertyTest {
     protected PropertyTester URLTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
-            if (oldValue.equals(util.utils.getFullTestURL("poliball.gif")))
+            if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
                 return util.utils.getFullTestURL("crazy-blue.jpg"); else
-                return util.utils.getFullTestURL("poliball.gif");
+                return util.utils.getFullTestURL("space-metal.jpg");
         }
     } ;
 

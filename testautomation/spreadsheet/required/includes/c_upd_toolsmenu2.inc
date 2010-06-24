@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: c_upd_toolsmenu2.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:06:07 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/***********************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -64,6 +58,10 @@ end sub
 
 testcase tToolsMacro
 '///<u><b>Tools - Macro</b></u>
+
+	Dim iWhichSecurityLevel as integer
+	printlog " Set SecurityLevel to low and remember starting value"
+	iWhichSecurityLevel = hSetMacroSecurity(0)
 
     '/// Open new Spreadsheet document
     printlog " Open new Spreadsheet document"
@@ -146,28 +144,17 @@ testcase tToolsMacro
     '/// Close ' BeanShell Macros' dialog by 'Close'
     printlog " Close ' BeanShell Macros' dialog by 'Close'"
     ScriptOrganizer.Close
-    '/// Use 'Tools – Macro – Signature'
+    Call hCloseDocument
+    printlog " Open testdocument 'gTesttoolPath + spreadsheet\required\input\DocwithMacro.ods'"
+    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\DocwithMacro.ods" ))
+    Kontext
+    if Active.exists then 
+        Active.ok
+    end if
+    Printlog " Save document as 'user/work/DocwithMacro.ods'"
+    Call hFileSaveAsKill convertpath(gOfficePath & "user/work/DocwithMacro.ods")
     printlog " Use 'Tools – Macro – Signature'"
     ToolsMacrosSignature
-    '/// Accept  saving messagebox with 'Yes'
-    printlog " Accept  saving messagebox with 'Yes'"
-    Kontext
-    if Active.exists then 
-        Active.yes
-    end if
-    Kontext "SpeichernDlg"
-    '/// Enter 'File name' 'MacroSignature_created_by_Testtool'
-    printlog " Enter 'File name' 'MacroSignature_created_by_Testtool'"
-    DateiName.SetText "MacroSignature_created_by_Testtool"
-    '/// Click 'Save' button
-    printlog " Click 'Save' button"
-    Speichern.Click
-    '/// If the file allready exists because of an earlier testrun, close messagebox by YES
-    printlog " If the file allready exists because of an earlier testrun, close messagebox by YES"
-    Kontext
-    if Active.exists then 
-        Active.yes
-    end if
     Kontext "DigitalSignature"
     Call DialogTest ( DigitalSignature )
     '/// On 'Digital Signatures' dialog press 'Add' button
@@ -209,6 +196,8 @@ testcase tToolsMacro
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    printlog " Reset SecurityLevel to starting value"
+    Call hSetMacroSecurity(iWhichSecurityLevel)
 
 endcase
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cli_cs_testobj.cs,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,6 +222,31 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         o_testDataElements = _testDataElements;
 
         return _testDataElements;
+    }
+
+    public SmallStruct echoSmallStruct(/*[in]*/SmallStruct arg)
+    {
+        return arg;
+    }
+
+    public MediumStruct echoMediumStruct(/*[in]*/MediumStruct arg)
+    {
+        return arg;
+    }
+
+    public BigStruct echoBigStruct(/*[in]*/BigStruct arg)
+    {
+        return arg;
+    }
+
+    public AllFloats echoAllFloats(/*[in]*/AllFloats arg)
+    {
+        return arg;
+    }
+
+    public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 )
+    {
+        return i2;
     }
 
     // Attributes

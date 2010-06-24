@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_eventbinding.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
@@ -54,16 +48,12 @@ testcase tAssignComponent
     hNewDocument()
     sleep (5)
     
-    '/// Call Tools - Macros - Organize Dialogs... ///'
     ToolsMacrosOrganizeDialogs
     Kontext "TabDialogs"
-    '/// Dialog 'OOo Basic Macro Organizer' is open ///'
     if TabDialogs.exists(5) then
-        '/// go to top in list 'Dialog' ///'
         ModuleList.typeKeys("<home>")
         sTemp = ModuleList.getSelText
         sTemp2 = ""
-        '/// go down in list with <cursor down>, until the button 'New...' is enabled ///'
         while (NOT newDialog.isEnabled) AND (sTemp <> sTemp2)
             ModuleList.typeKeys("<down>")
             sTemp2 = sTemp
@@ -74,31 +64,21 @@ testcase tAssignComponent
             goto endsub
         endif
         printlog ModuleList.getSelText
-        '/// click the button 'New...' ///'
         newDialog.click
         kontext "NeuerDialog"
-        '/// dialog 'New Dialog' is open ///'
         if NeuerDialog.exists(5) then
             ' save dialog name, for deleting it later
             sDialogName = Dialogname.getText
             printlog sDialogName
-            '/// remember suggested dialog name, for deleting it later ///'
-            '/// accept the name and close dialog by pressing button 'OK' ///'
             NeuerDialog.OK
-            '/// dialog 'New Dialog' is up again ///'
             Kontext "TabDialogs"
             if TabDialogs.exists(5) then
-                '/// New created dialog name is highlited in list 'Dialog' ///'
                 printlog ModuleList.getSelText
-                '/// click button 'Edit' ///'
                 edit.click
                 Kontext "BasicIDE"
-                '/// Basic IDE Dialog editor is up 'My Macros & Dialogs.Standard - OpenOffice.org Basic' ///'
                 if DialogWindow.exists(5) then ' you can't use exists on BasicIDE; check for a control
-                    '/// type key <Tab> to select the dialog in the editor ///'
                     DialogWindow.TypeKeys("tab")
                     DialogWindow.TypeKeys("tab",true)
-                    '/// open context menu and select entry 'Properties...' ///'
                     try
                         ContextProperties
                     catch
@@ -115,7 +95,6 @@ testcase tAssignComponent
                         endcatch
                     endcatch
                     kontext "ControlPropertiesDialog"
-                    '/// flyer is open 'Properties: Dialog' ///'
                     'printlog TabEventsControl.exists(5)
                     if NOT ControlPropertiesDialog.exists(5) then
                         qaErrorLog "#i70901# can't use exists on tabpage parent"
@@ -127,34 +106,25 @@ testcase tAssignComponent
                     if TabGeneralControl.exists(5) then
                         kontext "ControlPropertiesTabControl"
                         ControlPropertiesTabcontrol.setPage (TabEventsControl)
-                        '/// switch to tabpage 'Events' ///'
                         Kontext "TabEventsControl"
                         if TabEventsControl.exists(5) then
-                            '/// press button '...' beside 'Key pressed'///'
                             PBKeyTyped.click
                             Kontext "AssignMacro"
-                            '/// dialog comes up 'Assing Macro' ///'
                             if AssignMacro.exists(5) then
-                                '/// click button 'Component' ///'
                                 Component.click
                                 Kontext "AssingComponent"
-                                '/// dialog is open 'Assign component' ///'
                                 if AssingComponent.exists(5) then
                                     DialogTest(AssingComponent)
-                                    '/// set Component Method Name to 'compost' ///'
                                     ComponentMethodName.setText ("vnd.sun.star.script:Library1.Module1.TestDialogComponent?language=Basic&location=document")
-                                    '/// press button 'OK' to close dialog///'
                                     AssingComponent.OK
                                     Kontext "AssignMacro"
                                     if AssignMacro.exists(5) then
                                         ' doesn't work, because featureset is not implemted on component EditListBox... expected for xmas 2006
                                         'printlog eventListBox.getItemText
-                                        '/// close dialog 'Assign Macro' with button 'OK' ///'
                                         AssignMacro.OK
                                         Kontext "TabEventsControl"
                                         printlog evtKeyTyped.getText
                                         Kontext "ControlPropertiesDialog"
-                                        '/// close flyer 'Properties: Dialog' by openening context menu and selecting 'Properties'///'
                                         ContextProperties
                                     endif
                                 else
@@ -183,16 +153,12 @@ testcase tAssignComponent
     endif
     
     'delete dialog!
-    '/// Call Tools - Macros - Organize Dialogs... ///'
     ToolsMacrosOrganizeDialogs
     Kontext "TabDialogs"
-    '/// Dialog 'OOo Basic Macro Organizer' is open ///'
     if TabDialogs.exists(5) then
-        '/// go to top in list 'Dialog' ///'
         ModuleList.typeKeys("<home>")
         sTemp = ModuleList.getSelText
         sTemp2 = ""
-        '/// go down in list with <cursor down>, until the created dialog name is found ///'
         while (sTemp <> sDialogName) AND (sTemp <> sTemp2)
             ModuleList.typeKeys("<down>")
             sTemp2 = sTemp
@@ -203,13 +169,10 @@ testcase tAssignComponent
             goto endsub
         endif
         printlog ModuleList.getSelText
-        '/// click the button 'Delete...' ///'
         delete.click
         kontext
-        '/// active 'Do you want to delete...' is open ///'
         if active.exists(5) then
             printlog active.getText
-            '/// delete dialog by pressing button 'YES' ///'
             active.yes
         else
             warnlog "couldn't delete dialog '"+sDialogName+"'"
@@ -225,18 +188,21 @@ testcase tAssignComponent
 '	oActiveFrame = StarDesktop.getActiveFrame()
 '	oSimpleComponent.createDialog("vnd.sun.star.script:Standard.Dialog1?location=application", oActiveFrame )
 'End Sub
-    '/// close Basic IDE by calling File->Close///'
     hCloseDocument()
-    '/// close opened document///'
     hCloseDocument()
 endcase
 
 testcase tAssignComponentFunction
     dim x,i,a as integer
     dim sTemp as string
+    dim sPath as string
+        sPath = gTesttoolPath & "framework\optional\input/eventbinding/"
+    dim sExtension as string
+        sExtension = "DialogComponent.oxt"
     
     sExtensionCLI("list","")
-    sExtensionCLI("add","DialogComponent.oxt",convertPath(gTestToolPath + "framework\optional\input/eventbinding/") )
+    'sExtensionCLI("add","DialogComponent.oxt",convertPath(gTestToolPath + "framework\optional\input/eventbinding/") )
+    hExtensionAddGUI( sPath & sExtension, "" )
     hFileOpen(convertPath(gTestToolPath + "framework\optional\input/eventbinding/DialogComponent.odt"))
     kontext "SecurityWarning"
     if SecurityWarning.exists(5) then
@@ -259,7 +225,7 @@ testcase tAssignComponentFunction
         for i = 1 to x
             sTemp = LibraryTreeList.getItemText(i)
             'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-            if (("DialogComponent.odt"=sTemp) OR ("DIALOGCOMPONENT.ODT"=sTemp)) then
+            if (instr(stemp,"DialogComponent.odt") OR instr(stemp,"DIALOGCOMPONENT.ODT")) then
                 a = i
                 printlog "Found library ("+i+"/"+x+"): '" + sTemp + "'"
             endif
@@ -312,5 +278,6 @@ testcase tAssignComponentFunction
    ' vnd.sun.star.UNO:copyText
     
     sExtensionCLI("remove","DialogComponent.oxt" )
+    'hExtension RemoveGUI( sExtension )
     hCloseDocument()
 endcase

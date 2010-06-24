@@ -1,31 +1,28 @@
 /*
  * ************************************************************************
  *
- *  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: JPEGCreator.java,v $
- *  $Revision: 1.1.2.2 $
+ * This file is part of OpenOffice.org.
  *
- *  This file is part of OpenOffice.org.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *  OpenOffice.org is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 3
- *  only, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *  OpenOffice.org is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License version 3 for more details
- *  (a copy is included in the LICENSE file that accompanied this code).
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  version 3 along with OpenOffice.org.  If not, see
- *  <http://www.openoffice.org/license.html>
- *  for a copy of the LGPLv3 License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  * ***********************************************************************
  */
@@ -76,19 +73,165 @@ public class JPEGCreator extends EnhancedComplexTestCase
          int nPages = countPages(sJPEGNameSchema);
          if (nPages > 0)
          {
+             createSmallPictures(sJPEGNameSchema);
+
+             // read out tolerance file
+             String sFileDir = FileHelper.getPath(_sDocumentName);
+             String sBasename = FileHelper.getBasename(_sDocumentName);
+             int nTolerance = 0;
+             String sToleranceFile = FileHelper.appendPath(sFileDir, "tolerance.ini");
+             File aToleranceFile = new File(sToleranceFile);
+             if (aToleranceFile.exists())
+             {
+                 IniFile aIniFile = new IniFile(sToleranceFile);
+                 nTolerance = aIniFile.getIntValue(sBasename, "accept", 0); // default for all pages
+                 aIniFile.close();
+             }
+
              String sIndexFile = FileHelper.appendPath(_sResult, "index.ini");
              File aIndexFile = new File(sIndexFile);
              if (aIndexFile.exists())
              {
                  // store only if an index file exists
                  IniFile aIniFile = new IniFile(sIndexFile);
-                 String sBasename = FileHelper.getBasename(_sDocumentName);
                  aIniFile.insertValue(sBasename, "jpegschema", sJPEGNameSchema);
                  aIniFile.insertValue(sBasename, "pages", nPages);
+                 aIniFile.insertValue(sBasename, "tolerance", nTolerance);
                  aIniFile.close();
              }
          }
+         else
+         {
+             assure("There are no pages in document:'" + _sDocumentName + "', maybe document currupt?", false, true);
+         }
     }
+
+/**
+ * Create a lot of smaller and nicer Pictures of the big fat pages.
+ * Looks better
+ * @param _sJPEGSchema
+ */
+    public void createSmallPictures(String _sJPEGSchema)
+    {
+        ParameterHelper aParam = new ParameterHelper(param);
+        if (! aParam.createSmallPictures())
+        {
+            return;
+        }
+
+        int nPages = 0;
+        if (_sJPEGSchema.length() > 0)
+        {
+            // TODO: if there doesn't exists a '%04d' in the schema we will return 9999 which is a little bit wrong here.
+            for (int i=1;i<10000;i++)
+            {
+                String sJPEGFilename = getFilenameForJPEGSchema(_sJPEGSchema, i);
+                if (FileHelper.exists(sJPEGFilename))
+                {
+                    convertToNearSameFileWithWidth340(sJPEGFilename);
+                    // m_aFileList.add(sNewJPEGFilename); // as long as the files exist, fill the array
+                    nPages ++;
+                }
+                else
+                {
+                    break;                             // stop file check
+                }
+            }
+        }
+        // return nPages;
+    }
+
+/**
+ * convert a picture to a new picture with 340 pixel width.
+ * @param _sJPEGFilename
+ */
+public static void convertToNearSameFileWithWidth340(String _sJPEGFilename)
+{
+    ParameterHelper aParam = new ParameterHelper(param);
+    if (! aParam.createSmallPictures())
+    {
+        return;
+    }
+    String sJPEGFilename = _sJPEGFilename.replaceAll("\\\\", "/");
+//    if (OSHelper.isWindows())
+//    {
+//        sJPEGFilename = sJPEGFilename.replaceAll("/", "\\\\");
+//    }
+    String sNewJPEGFilename;
+    sNewJPEGFilename = util.utils.replaceAll13(sJPEGFilename, ".jpg", "_w340.jpg");
+    convertToWidth340(sJPEGFilename, sNewJPEGFilename);
+}
+
+    /**
+ * convert chart2_Regression.ods.ps_180DPI_0001.jpg -filter Catrom -resize
+340x chart2_Regression.ods.ps_180DPI_0001_w340.jpg
+
+Point wie bisher
+Cubic schlecht, weil unscharf
+...
+Triangle ganz brauchbar (default?)
+Catrom am besten
+
+ * @param _sFrom
+ * @param _To
+ */
+private static void convertToWidth340(String _sFrom, String _To)
+{
+            // int nResult = 0;
+
+            String sConvertEXE = "convert";
+            if (OSHelper.isLinuxIntel())
+            {
+                sConvertEXE = "convert";
+            }
+            if (OSHelper.isWindows())
+            {
+                // TODO!
+                // HACK Hard coded!
+                // sConvertEXE = "C:\\Programme\\ImageMagick-6.0.3-q8\\convert.exe";
+                sConvertEXE = "convert.exe";
+                String sConvertPath = (String)param.get("imagemagick.path");
+                if (sConvertPath != null)
+                {
+                    sConvertEXE = FileHelper.appendPath(sConvertPath, sConvertEXE);
+                }
+            }
+
+            String[] sCommandArray =
+                {
+                    sConvertEXE,
+                    _sFrom,
+                     "-filter", "Catrom",
+                    "-resize", "340x",
+                    _To
+                };
+            ProcessHandler aHandler = new ProcessHandler(sCommandArray);
+            boolean bBackValue = aHandler.executeSynchronously();
+            int nExitCode = aHandler.getExitCode();
+
+            String sBack = aHandler.getOutputText();
+            if (sBack.length() > 0)
+            {
+                GlobalLogWriter.println("'" + sBack + "'");
+            }
+            // try to interpret the result, which we get as a String
+//            try
+//            {
+//                int nIdx = sBack.indexOf("\n");
+//                if (nIdx > 0)
+//                {
+//                    sBack = sBack.substring(0, nIdx);
+//                }
+//
+//                nResult = Integer.valueOf(sBack).intValue();
+//            }
+//            catch(java.lang.NumberFormatException e)
+//            {
+//                GlobalLogWriter.get().println("Number format exception");
+//                nResult = 0;
+//            }
+            // return nResult;
+}
 
 /**
  * create out of a given Postscript/PDF _sFile a list of JPEGs, one for every page
@@ -114,7 +257,7 @@ public class JPEGCreator extends EnhancedComplexTestCase
             }
             else
             {
-                GlobalLogWriter.get().println("File: '" + _sFile + "' doesn't exist.");
+                GlobalLogWriter.println("File: '" + _sFile + "' doesn't exist.");
                 return "";
             }
             String sFileDir = FileHelper.getPath(_sFile);
@@ -182,6 +325,16 @@ public class JPEGCreator extends EnhancedComplexTestCase
             if (OSHelper.isWindows())
             {
                 sGhostscriptEXE = "gswin32c.exe";
+                String sGhostscriptEXE2 = (String)param.get("gs.exe");
+                if (sGhostscriptEXE2 != null)
+                {
+                    sGhostscriptEXE = sGhostscriptEXE2;
+                }
+                String sGhostscriptPath = (String)param.get("gs.path");
+                if (sGhostscriptPath != null)
+                {
+                    sGhostscriptEXE = FileHelper.appendPath(sGhostscriptPath, sGhostscriptEXE);
+                }
             }
 
 //            String sCommand = sGhostscriptEXE + " -dNOPROMPT -dBATCH -sDEVICE=jpeg -r" + String.valueOf(_nResolutionInDPI) + " -dNOPAUSE -sOutputFile=" + StringHelper.doubleQuoteIfNeed(sJPGFilename) + " " + StringHelper.doubleQuoteIfNeed(sOriginalFile);
@@ -224,6 +377,7 @@ public class JPEGCreator extends EnhancedComplexTestCase
                 {
                     // return only a valid schema name if there at least one page.
                     sJPEGNameSchema = "";
+                    assure("Document '" + sPostscriptOrPDFFile + "' doesn't create pages.", false, true);
                 }
             }
             else
@@ -276,14 +430,34 @@ public class JPEGCreator extends EnhancedComplexTestCase
         return nPages;
     }
 
-    public static void main(String [] _args)
-    {
-// DONE: give an index.ini file ok
+//    public static void main(String [] _args)
+//    {
+//// DONE: give an index.ini file ok
+////        String args[] = {
+////            "-TimeOut", "3600000",
+////            "-tb", "java_complex",
+////            "-o", "graphical.JPEGCreator",
+////            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
+////            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
+////            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
+////            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
+////            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
+//////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
+//////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
+//////            "-OFFICE_VIEWABLE", "false",
+////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
+////            "-NoOffice"
+////        };
+//
+//// Done: give a directory, where exist pdf/ps files ok.
+//// Done: inputpath (given file) doesn't exists, ok.
+//// Done: give a ps/pdf file. ok.
+//
 //        String args[] = {
 //            "-TimeOut", "3600000",
 //            "-tb", "java_complex",
 //            "-o", "graphical.JPEGCreator",
-//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
+//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\Names7.odt.pdf",
 //            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
 //            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
 //            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
@@ -294,28 +468,8 @@ public class JPEGCreator extends EnhancedComplexTestCase
 //            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
 //            "-NoOffice"
 //        };
-
-// Done: give a directory, where exist pdf/ps files ok.
-// Done: inputpath (given file) doesn't exists, ok.
-// Done: give a ps/pdf file. ok.
-
-        String args[] = {
-            "-TimeOut", "3600000",
-            "-tb", "java_complex",
-            "-o", "graphical.JPEGCreator",
-            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\Names7.odt.pdf",
-            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
-            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
-            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
-            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
-//            "-OFFICE_VIEWABLE", "false",
-            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
-            "-NoOffice"
-        };
-
-        org.openoffice.Runner.main(args);
-    }
+//
+//        org.openoffice.Runner.main(args);
+//    }
 
 }

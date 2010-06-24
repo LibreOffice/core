@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_locale_strings2.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:08 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/***********************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -53,6 +47,7 @@ function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as
     '///swedish     46 ///'
     '///polish      48 ///'
     '///german      49 ///'
+    '///slovenian      50 ///'
     '///german      55 ///'
 
     '///already covered languages in the test document: ///'
@@ -330,6 +325,32 @@ function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as
             ParagraphPreSet = "Absatz ist Deutsch (Deutschland)"
         end select
         '-----------------------------------------------------------------------
+    Case 50        'Case 50: slovenian
+       Select Case iLanguageCount
+       Case 1: WordPreSet      = "Jezik besede je angleški (ZDA)"
+           ParagraphPreSet = "Jezik odstavka je angleški (ZDA)"
+       Case 2: WordPreSet      = "Jezik besede je portugalski (Portugalska)"
+           ParagraphPreSet = "Jezik odstavka je portugalski (Portugalska)"
+       Case 3: WordPreSet      = "Jezik besede je ruski"
+           ParagraphPreSet = "Jezik odstavka je ruski"
+       Case 4: WordPreSet      = "Jezik besede je nizozemski (Nizozemska)"
+           ParagraphPreSet = "Jezik odstavka je nizozemski (Nizozemska)"
+       Case 5: WordPreSet      = "Jezik besede je francoski (Francija)"
+           ParagraphPreSet = "Jezik odstavka je francoski (Francija)"
+       Case 6: WordPreSet      = "Jezik besede je španski (Španija)"
+           ParagraphPreSet = "Jezik odstavka je španski (Španija)"
+       Case 7: WordPreSet      = "Jezik besede je madžarski"
+           ParagraphPreSet = "Jezik odstavka je madžarski"
+       Case 8: WordPreSet      = "Jezik besede je italijanski (Italija)"
+           ParagraphPreSet = "Jezik odstavka je italijanski (Italija)"
+       Case 9: WordPreSet      = "Jezik besede je švedski (Švedska)"
+           ParagraphPreSet = "Jezik odstavka je švedski (Švedska)"
+       Case 10:WordPreSet      = "Jezik besede je poljski"
+           ParagraphPreSet = "Jezik odstavka je poljski"
+       Case 11:WordPreSet      = "Jezik besede je nemški (Nemčija)"
+           ParagraphPreSet = "Jezik odstavka je nemški (Nemčija)"
+       end select
+       '-----------------------------------------------------------------------
     Case 55        'Case 55: Portuguese (Brazil)
         Select Case iLanguageCount
         Case 1: WordPreSet      = "a palavra é Inglês (EUA)"

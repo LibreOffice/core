@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RemoteServiceTest.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,12 +73,12 @@ public final class RemoteServiceTest extends TestBase {
                 = Bootstrap.createInitialComponentContext(null);
             XMultiComponentFactory serviceManager
                 = context.getServiceManager();
-            ((XSet) UnoRuntime.queryInterface(XSet.class, serviceManager)).
+            UnoRuntime.queryInterface(XSet.class, serviceManager).
                 insert(new TestService());
             final Object instance = serviceManager.createInstanceWithContext(
                 "testtools.servicetests.TestService2", context);
             XBridgeFactory bridgeFactory
-                = (XBridgeFactory) UnoRuntime.queryInterface(
+                = UnoRuntime.queryInterface(
                     XBridgeFactory.class,
                     serviceManager.createInstanceWithContext(
                         "com.sun.star.bridge.BridgeFactory", context));

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: security_macrosecurity.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:40:28 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -56,8 +50,7 @@ end sub
 
 testcase tMacroSecurityLevels( cFileFormat )
 
-    '///<H1>Macro execution in all security levels</H1>
-    '///<ul>
+    printlog( "Check macro execution behavior for all macro security levels" )
 
     dim cWorkFile as string
         cWorkFile = gTesttoolPath & "framework\optional\input\BasicDocs\"
@@ -82,28 +75,26 @@ testcase tMacroSecurityLevels( cFileFormat )
     '         |---------------------------------------------------------|
     ' *) Covered by test "f_sec_trusted_path.bas"
     
-    '///+<li>Cycle through all four security levels and load a document with macro</li>
-    '///<ul>
+    printlog( "Load a document with macro for each of the four security levels" )
     for iSecLevel = 0 to 3
 
-        '///+<li>Set the macro security level</li>
-        printlog( "" )
+        printlog( "Set macro security level to " & iSecLevel )
         hSetMacroSecurityAPI( iSecLevel )
-        FileOpen( "URL", cWorkFile, "FrameName", "_default" )
-        '///+<li>Load a file from ..\framework\optional\input\BasicDocs\</li>
-        '///<ul>
+        
+        printlog( "Load document..." )
+        hFileOpen( cWorkFile )
+        
+        printlog( "Check security level dependent behavior" )
         select case iSecLevel
-        '///+<li>For security level &eq; 0: Macro should be executed</li>
         case 0 : brc = hIdentifyExecutedMacro()
                  if ( not brc ) then
                      if ( gApplication = "MATH" ) then
                          qaerrorlog( "#i68291# Math document forgets eventbinding" )
                      else
-                         qaerrorlog( "#i53711# Macro was not found/executed" )
+                         warnlog( "#i53711# Macro was not found/executed" )
                      endif
                  endif   
                  
-        '///+<li>For security level &eq; 1: Macro should be executed after security warning</li>                               
         case 1 : brc = hAllowMacroExecution()
                  if ( not brc ) then
                      warnlog( "Macro execution warning missing, chek the file/security settings" )
@@ -113,12 +104,10 @@ testcase tMacroSecurityLevels( cFileFormat )
                      if ( gApplication = "MATH" ) then
                          qaerrorlog( "#i68291# Math document forgets eventbinding" )
                      else
-                         qaerrorlog( "#i53711# Macro was not found/executed" )
-                         'warnlog( "#i65885# - CWS Warnings01/Macro not executed on load" )
+                         warnlog( "#i53711# Macro was not found/executed" )
                      endif
                  endif
                  
-        '///+<li>For security level &eq; 2: Macro should *not* be executed (it is not in trusted path)</li>                 
         case 2 : brc = hHandleActivesOnLoad( 1 , 1 )
                  if ( not brc ) then
                      qaerrorlog( "#i53710# unexpected second messagebox" )
@@ -128,23 +117,20 @@ testcase tMacroSecurityLevels( cFileFormat )
                      warnlog( "Macro was executed" )
                  endif                 
                  
-        '///+<li>For security level &eq; 3: Macro should *never* be executed</li>                 
         case 3 : brc = hHandleActivesOnLoad( 1 , 0 )
                  brc = hIdentifyExecutedMacro()
                  if ( brc ) then
                      warnlog( "Macro was executed" )
                  endif
         end select
-        '///</ul>
 
+        printlog( "Close document" )
         brc = hDestroyDocument()
 
     next iSecLevel
-    '///</ul>
 
-    '///+<li>Reset macro security level to default (High)</li>
+    printlog( "Reset security level to default" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
-    '///</ul>
 
 endcase
 
@@ -152,10 +138,6 @@ endcase
 
 function hIdentifyExecutedMacro() as boolean
 
-    '///<h3>Function to identify the macro just being executed</h3>
-    '///This is a tiny helper function that compares the string from the message-
-    '///+box with a reference - TTMacro3 - and returns TRUE if the macro is the 
-    '///+ correct one. FALSE in any other case.
 
     dim cMessage as string
     const CFN = "hIdentifyExecutedMacro::"

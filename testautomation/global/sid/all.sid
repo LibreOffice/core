@@ -87,14 +87,12 @@ BearbeitenAllesAuswaehlen SID_SELECTALL
 BearbeitenSuchenErsetzen SID_SEARCH_DLG
 BearbeitenNavigator SID_NAVIGATOR
 BearbeitenAutoText FN_GLOSSARY_DLG
-BearbeitenRahmendokument SID_EDIT_FRAMESET
-BearbeitenFrameSet SID_EDIT_FRAMESET
 BearbeitenPlugIn SID_PLUGINS_ACTIVE
 BearbeitenImageMap SID_IMAP
 BearbeitenLiteraturdatenbank SID_COMP_BIBLIOGRAPHY
 
 ' **** Writer
-BearbeitenInhalteEinfuegenWriter FN_PASTESPECIAL
+BearbeitenInhalteEinfuegenWriter .uno:PasteSpecial
 BearbeitenAenderungenAufzeichnen FN_REDLINE_ON
 BearbeitenAenderungenAnzeigen FN_REDLINE_SHOW
 BearbeitenAenderungenAkzeptierenOderVerwerfen FN_REDLINE_ACCEPT
@@ -109,7 +107,7 @@ BearbeitenVerzeichniseintrag FN_EDIT_IDX_ENTRY_DLG
 BearbeitenHyperlink FN_EDIT_HYPERLINK
 
 ' **** Calc
-BearbeitenInhalteEinfuegenCalc FID_PASTE_CONTENTS
+BearbeitenInhalteEinfuegenCalc .uno:PasteSpecial
 BearbeitenAenderungenAufzeichnenCalc FID_CHG_RECORD
 BearbeitenAenderungenSchuetzen SID_CHG_PROTECT
 BearbeitenAenderungenKommentarCalc FID_CHG_COMMENT
@@ -133,7 +131,7 @@ BearbeitenManuellenUmbruchLoeschenSpaltenumbruch FID_DEL_COLBRK
 BearbeitenManuellenUmbruchLoeschenZeilenumbruch FID_DEL_ROWBRK
 
 ' **** Draw / Impress
-BearbeitenInhalteEinfuegenDraw SID_PASTE2
+BearbeitenInhalteEinfuegenDraw .uno:PasteSpecial
 BearbeitenVerknuepfungenDraw SID_MANAGE_LINKS
 BearbeitenDuplizieren SID_COPYOBJECTS
 BearbeitenUeberblenden SID_POLYGON_MORPHING
@@ -481,14 +479,12 @@ FormatAusrichtung SID_ALIGN
 ' ****
 ' **** Alle
 ExtrasRechtschreibungAutomatisch SID_AUTOSPELL_CHECK
-ExtrasSilbentrennung FN_HYPHENATE_OPT_DLG
 ExtrasAutoKorrektur SID_AUTO_CORRECT_DLG
 ExtrasMakro SID_BASICCHOOSER
 ExtrasAnpassen SID_CONFIG
 ExtrasOptionen SID_OPTIONS_TREEDIALOG
 
 ' **** Writer
-ExtrasThesaurusWriter FN_THESAURUS_DLG
 ExtrasKapitelnumerierung FN_NUMBERING_OUTLINE_DLG
 ExtrasZeilennumerierung FN_LINE_NUMBERING_DLG
 ExtrasSeitennummer FN_CHANGE_PAGENUM
@@ -507,7 +503,6 @@ ExtrasAktualisierenSeitenformatierung FN_REPAGINATE
 ExtrasSeitenformatierung FN_REPAGINATE
 
 ' **** Calc
-ExtrasThesaurusCalc SID_THESAURUS
 ExtrasDetektivAlleSpurenEntfernen SID_DETECTIVE_DEL_ALL
 ExtrasDetektivFuellModus SID_DETECTIVE_FILLMODE
 ExtrasDetektivSpurZumFehler SID_DETECTIVE_ADD_ERR
@@ -527,7 +522,6 @@ ExtrasAutoEingabe FID_AUTOCOMPLETE
 
 ' **** Draw / Impress
 ExtrasThesaurusDraw SID_THESAURUS
-ExtrasSilbentrennungDraw SID_HYPHENATION
 ExtrasPipette SID_BMPMASK
 ExtrasDiawechsel .uno:SlideChangeWindow
 ExtrasAnimation SID_ANIMATION_OBJECTS

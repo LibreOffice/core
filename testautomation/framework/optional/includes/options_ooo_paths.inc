@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: options_ooo_paths.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
@@ -54,14 +48,12 @@ testcase tOOoPaths
     dim i68646 as boolean
 
     i68646 = FALSE
-    '///check if all settings are saved in configuration ( StarOffice / Paths )
     sTTInputPath = ConvertPath ( gOfficePath + "user\work" )
     '                  Name;         which open dialog; Count of Paths
 '    call GetPathList ( lsPathOptions (), lsDialtype (), lsEntry () )
     ' which open dialog: 1: File Open; Else (2): Paths dialog
     'call DumpPathList( lsPathOptions (), lsDialtype (), lsEntry () )
 
-    '///open tools/options/staroffice/paths
     ToolsOptions
     hToolsOptions("StarOffice", "Paths")
 
@@ -82,7 +74,6 @@ testcase tOOoPaths
         Typ.TypeKeys( "<DOWN>" )
     next i
 
-    '///save all settings - not needed, since it was resetted to standard....
     printlog("save settings")
     for i = 1 to iTyp
         if i <> 1 then
@@ -205,17 +196,13 @@ testcase tOOoPaths
         printlog "Count of File Open Dialogs: " + iCountOfDialogs(2)
     endif
     
-    '///close the options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     Sleep (4)
-    '///exit and restart StarOffice
     printlog("Exit/restart StarOffice")
     ExitRestartTheOffice
-    '///check if all changes are saved
     printlog( "Check changes")
     ToolsOptions
-    '///open tools/options/staroffice/paths and compare all entries
     hToolsOptions ( "StarOffice", "Paths" )
 
     for i = 1 to iTyp
@@ -294,22 +281,17 @@ testcase tOOoPaths
         kontext "tabpfade"
     next i
     
-    '///set all changes to default
     printlog("Reset to default ( with default-button )")
-    '///select each entry and press 'Default'
     if gPlatgroup = "unx" then
         hToolsOptions ( "StarOffice", "General" )
     endif
     Sleep (4)
-    '///close the options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK()
     Sleep (4)
-    '///check the reset
     printlog("Check the reset")
     ToolsOptions
     hToolsOptions ( "StarOffice", "Paths" )
-    '///open tools/options/staroffice/paths and compare all entries with the saved default settings
     for i = 1 to iTyp
         if i <> 1 then
             Typ.TypeKeys "<Down>"
@@ -359,10 +341,8 @@ testcase tOOoPaths
         hToolsOptions ( "StarOffice", "General" )
     endif
     Sleep (4)
-    '///close the options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    '///exit and restart StarOffice IMPORTANT! to get the path's activated that have been changed!
     printlog("Exit/restart StarOffice")
     ExitRestartTheOffice
 endcase

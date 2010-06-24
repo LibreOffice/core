@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: id_007.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:43:00 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -366,6 +360,7 @@ testcase tdContextDistribution
     Call hNewDocument
     WaitSlot (3000)
     '/// create 3 rectangles ///'
+    Call sSelectEmptyLayout
     Call hRechteckErstellen (20,20,30,30)
     Call hRechteckErstellen (40,40,50,50)
     Call hRechteckErstellen (60,60,70,70)
@@ -436,7 +431,7 @@ testcase tdContextNameObject
     Call hRechteckErstellen ( 30, 40, 50, 60 )
     sleep 1
     '/// select both by spanning a selection with the mouse ///'
-    gMouseMove 1,1,95,95
+    gMouseMove 1,1,70,70
     sleep 1
     '/// Modify->Group ///'
     '///+ Modify->Group ///'
@@ -461,6 +456,7 @@ endcase
 testcase tdModifyConnectBreak
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep 1
     '/// create two rectangles ///'
     Call hRechteckErstellen (10,10,30,30)
@@ -489,6 +485,7 @@ endcase
 testcase tdModifyShapes
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep 1
     '/// create two rectangles ///'
     gMouseClick 50,50
@@ -557,6 +554,7 @@ endcase
 testcase tdModifyCombineSplit
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep 1
     '/// create two rectangles ///'
     Call hRechteckErstellen (30,30,50,50)

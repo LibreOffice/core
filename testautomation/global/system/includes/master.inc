@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: master.inc,v $
-'*
-'* $Revision: 1.5 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-19 12:49:51 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -106,35 +100,6 @@ sub GetUseFiles
 
     if (NOT gSamePC) then
         gTestToolPath = gRemotePath
-    end if
-    
-'/// Load private environment dependant settings
-'/// BaseDirectory is the setting from the TestTool application at Extra->Settings->Profile->Base directory
-'/// This path is available in the global variable: gTestToolPath
-'/// The private environment location directory is taken from the file BaseDirectory+errorlog/privateenvironment.txt
-'/// The default file is taken from cvs: qa/qatesttool/errorlog/privateenvironment.txt
-'/// The default content is: 
-'/// >[PrivateEnvironment]
-'/// >Current=global/private/
-'/// The path is defined relative to BaseDirectory and put into the global variable: gPrivateEnvironmentLocation
-'/// At the resulting path of BaseDirectory + gPrivateEnvironmentLocation + 'inc/' there has to exist the file: privateenvironment.inc
-'/// with at least the sub: getUseFilesPrivateEnvironment which will get executed
-
-    if (gPrivateEnvironmentLocation = "") then
-    sPrivateEnvironmentLocation = ConvertPath (gTestToolPath + "errorlog\privateenvironment.txt")
-    if fileExists(sPrivateEnvironmentLocation) then
-        gPrivateEnvironmentLocation = getIniValue(sPrivateEnvironmentLocation, "PrivateEnvironment", "Current")
-        ' TODO: remove trailing path character
-    else
-        gPrivateEnvironmentLocation = "global/private/"
-    end if
-    sTemp = ConvertPath (gTestToolPath + gPrivateEnvironmentLocation + "inc/privateenvironment.inc")
-    if fileExists(sTemp) then
-        use sTemp
-        call getUseFilesPrivateEnvironment
-    else
-        'qaErrorLog "Private Environment Control File Location specified in '" + sPrivateEnvironmentLocation + "', but the file doesn't exist: '" +sTemp+ "'"
-    end if
     end if
     
     ' Check if environment works with this OOo version
@@ -335,6 +300,13 @@ end sub
 sub FirstOfficeStart
 '/// First start-routine.
     Dim i as integer
+    ' To nail down a possible culprint on test runs, the availability of existing user settings is checked.
+    ' In some environments the deleting of the settings might fail before the test is started - this will log it:
+    if (fileExists(gOfficePath)) then
+        qaErrorLog ("QA_DEBUG: User settings directory was not deleted before test start!: '" + gOfficePath + "'")
+    else
+        printlog ("QA_DEBUG: User settings directory is unavailable before soffice is started - this is good. '" + gOfficePath + "'")
+    endif
     caselog ""                   '///+<ul><li>Stop the first default-output into the resultfile</li>
     Call hStartTheOffice         '///+<li>Start the office</li>
     ResetApplication             '///+<li>Make the first recovering without an error output.</li></ul>
@@ -917,26 +889,21 @@ sub mMakeGeneralOptionsAPI
                 ' At this point there is no needed to think about what to do, if it doesn't work.
             end if
             xViewRoot.dispose()
+            gAutoUpdate = TRUE
         catch
             qaErrorLog( sFileFunction & "This build does not support online update." )
+            gAutoUpdate = FALSE
         endcatch
 
-        '///+ OOo Improvement
-	    try
-            aPropertyValue(0).Value="/org.openoffice.Office.OOoImprovement.Settings/Participation"
-            xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-            xViewRoot.replaceByName( "ShowedInvitation", true )
-            xViewRoot.replaceByName( "InvitationAccepted", false )
-            xViewRoot.commitChanges()
-            if xViewRoot.hasPendingChanges() then
-	            qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
-            endif
-            xViewRoot.dispose()
-	        gOOoImprovementIsEnabled = TRUE
-	    catch
-	        QAErrorLog( "Failed to disable usage tracking feature. This might cause errors and warnings during test execution." )
-	        gOOoImprovementIsEnabled = FALSE
-	    endcatch
+        '///+ OOo Improvement - only if BUILD_SPECIAL is set we have this file created.
+        sTempPath = gOfficeBasisPath & "share/registry/oooimprovement.xcd"
+        sTempPath = ConvertPath( sTempPath )
+        
+        if ( FileExists( sTempPath ) ) then
+            gOOoImprovementIsEnabled = TRUE
+        else
+            gOOoImprovementIsEnabled = FALSE
+        endif
 	    
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")

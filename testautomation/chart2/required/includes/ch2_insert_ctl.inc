@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: ch2_insert_ctl.inc,v $
-'*
-'* $Revision: 1.1.2.2 $
-'*
-'* last change: $Author: jsi $ $Date: 2008/11/12 15:01:38 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -61,14 +55,14 @@ testcase tTitleTextDirection
     printlog "Select the first OLE object in the document."
     call fSelectFirstOLE
     printlog "Edit / Object / Edit"    
-    EditObjectEdit       
-    Kontext "DocumentChart"
-    printlog "Type in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>"
-    printlog "Format / Object properties"
-    FormatObjectProperties
+    EditObjectEdit
+	Kontext "DocumentChart"
+	printlog "Select the Main Title by using the ChartElememtSelectorListBox in the toolbar (4th entry)"
+    call fChartSelectElement (4)
+    printlog "Open the properties dialog by using the FormatSelection button in the toolbar"
+    FormatSelection.Click
     Kontext
-    printlog "Select the tab page alignment"    
+    printlog "Select the tab page Alignment"    
     Active.SetPage TabFormatChartTitleAlignment
     Kontext "TabFormatChartTitleAlignment"
     call DialogTest(TabFormatChartTitleAlignment)
@@ -172,13 +166,13 @@ testcase tDataSeriesTextDirection
     bCTLSupBefore = ActiveDeactivateCTLSupport(TRUE)
     call fSelectFirstOLE
     printlog "Select the first OLE object"
-    EditObjectEdit
     printlog "Edit / Object Edit"
-    Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>" , 3
-    printlog "Format / Object properties"
-    FormatObjectProperties
+    EditObjectEdit
+    printlog "Select DataSeries A by toolbar selectorbox"
+	call fChartSelectElement (8) 
+	printlog "Insert DataLabels"
+	Kontext "DocumentChart"
+	InsertDataLabels
     Kontext
     Active.Setpage TabDataSeriesLabels
     Kontext "TabDataSeriesLabels"    
@@ -299,29 +293,27 @@ testcase tEquationTextDirection
     call fSelectFirstOLE    
     printlog "Edit / Object Edit"
     EditObjectEdit    
-    Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>" , 3
-    printlog "Press F3-key to enter the data series."
-    DocumentChart.TypeKeys "<F3>"    
+    printlog "Select DataSeries A by toolbar selectorbox"
+	call fChartSelectElement (8) 
+	Kontext "DocumentChart"
     if fInvokeTrendLinesDialog() > 0 then
         warnlog "Something went wrong trying to invoke Trend Lines dialog -> Check this out!"
         Call hCloseDocument
         goto endsub
     endif   
-    Kontext "InsertTrendlinesDialog"
-    Call DialogTest(InsertTrendlinesDialog)
+    Kontext "TabTrendLineType"
+    Call DialogTest(TabTrendLineType)
     printlog "Select Linear radio-button"
     Linear.Check
     printlog "Check Show Equation check-box"
     ShowEquation.Check
     printlog "Leave the dialog with OK"
-    InsertTrendlinesDialog.OK
+    TabTrendLineType.OK
     Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB> to select the equation"
-    DocumentChart.TypeKeys "<TAB>" , 3
+    printlog "Select Equation by toolbar selectorbox"
+	call fChartSelectElement (10)
     printlog "Format / Object properties"
-    FormatObjectProperties
+    FormatSelection.Click
     Kontext 
     printlog "Count the numbers of tab pages. It should be 7 in CTL mode."
     if Active.GetPageCount <> 7 then
@@ -365,13 +357,13 @@ testcase tDataPointTextDirection
     printlog "Select the first OLE object"
     EditObjectEdit
     printlog "Edit / Object Edit"
-    Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>" , 3
+    printlog "Select DataSeries A by toolbar selectorbox"
+	call fChartSelectElement (8) 
+	Kontext "DocumentChart"
     printlog "Press F3-key to enter the data series."
     DocumentChart.TypeKeys "<F3>"
-    printlog "Format / Object properties"
-    FormatObjectProperties
+    printlog "Insert / DataLabels"
+    InsertDataLabels
     Kontext
     Active.Setpage TabDataPointLabels
     Kontext "TabDataPointLabels"    

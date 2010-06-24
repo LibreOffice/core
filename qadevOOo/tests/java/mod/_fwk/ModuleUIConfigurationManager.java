@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ModuleUIConfigurationManager.java,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,18 +70,21 @@ public class ModuleUIConfigurationManager extends TestCase {
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                                XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
+        if (xTextDoc != null) {
+            try {
+                XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                    XCloseable.class, xTextDoc);
+                closer.close(true);
+            } catch (com.sun.star.util.CloseVetoException e) {
+                log.println("couldn't close document");
+            } catch (com.sun.star.lang.DisposedException e) {
+                log.println("couldn't close document");
+            }
         }
         log.println("   disposing storage");
-        xStore.dispose();
+        if (xStore != null) {
+            xStore.dispose();
+        }
     }
 
     /**

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: c_arrayconstants.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:05:49 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/***********************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -98,17 +92,17 @@ testcase tArrayconstants01
     kontext "DocumentCalc"
     DocumentCalc.TypeKeys ("=" & sFunctionSIN & "({1;2;3}) <MOD1 SHIFT RETURN>")
     '///Check that the cellvalue  of A4 is "0.84"
-    printlog "Check that the cellvalue  of A4 is ""0.84"""
+    printlog "Check that the cellvalue  of A4 is ""0.8414709848"""
     call fCalcSelectRange ("A5")
     kontext "DocumentCalc"
     DocumentCalc.TypeKeys "=A4<TAB>=B4<TAB>=C4<RETURN>" 'because a part of a matrix is protected we need a helpcell with only the values
-    call fCalcCompareCellValue ("A5","0" & sDecimalseperator & "84")
+    call fCalcCompareCellValue ("A5","0" & sDecimalseperator & "8414709848")
     '///Check that the cell contents of B4 is "0.91"
-    printlog "Check that the cell contents of B4 is ""0.91"""
-    call fCalcCompareCellValue ("B5","0" & sDecimalseperator & "91")
+    printlog "Check that the cell contents of B4 is ""0.9092974268"""
+    call fCalcCompareCellValue ("B5","0" & sDecimalseperator & "9092974268")
     '///Check that the cell contents of C4 is "0.14"
-    printlog "Check that the cell contents of C4 is ""0.14"""
-    call fCalcCompareCellValue ("C5","0" & sDecimalseperator & "14")
+    printlog "Check that the cell contents of C4 is ""0.1411200081"""
+    call fCalcCompareCellValue ("C5","0" & sDecimalseperator & "1411200081")
 
     '///In cell A6 enter "={1;2|4;5;6}"
     printlog "In cell A6 enter ""={1;2|4;5;6}"""
@@ -141,6 +135,15 @@ testcase tArrayconstants01
     '///Check that the cellvalue is "Err:533"
     printlog "Check that the cellvalue is ""Err:533"""
     call fCalcCompareCellValue ("A8",sError533)
+    
+    '///In cell A9 enter "={-1;2;3}"
+    printlog "In cell A9 enter ""={-1;2;3}"""
+    call fCalcSelectRange ("A9")
+    kontext "DocumentCalc"
+    DocumentCalc.TypeKeys ("={-1;2;3} <RETURN>")
+    '///Check that the cellvalue is "-1"
+    printlog "Check that the cellvalue is ""-1"""
+    call fCalcCompareCellValue ("A9",-1)
 
     '///Save document 
     printlog "Save document"
@@ -192,6 +195,11 @@ testcase tArrayconstants01
     printlog "  Check that the editline shows ""={1;2;{3;4;5}}"" for cell A8"
     scellcontent = "={1;2;{3;4;5}}"
     call fCalcCompareCellFormular ("A8",scellcontent)
+    
+    '///+Check that the editline shows "={-1;2;3}" for cell A9
+    printlog "  Check that the editline shows ""={-1;2;3}"" for cell A9"
+    scellcontent = "={-1;2;3}"
+    call fCalcCompareCellFormular ("A9",scellcontent)
     
     '///Close Document
     printlog "Close Document"

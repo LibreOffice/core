@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: options_data.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
@@ -47,16 +41,12 @@ testcase tDatasourceConnections
 
    iCounter = 9          ' sorry only hard coded the number of entries, it gives no way to get the real count ( GetText crashes )
 qaerrorLog "GetTextCrasjhes??? TBO"
-'///check if all settings are saved in configuration ( Datasources / Connections )
 
-'///open a new document
-'///+open options 'Datasources' / 'Connections'
 
    hNewDocument
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
 
-'///+save raw data
  printlog " - save raw data"
    bSave = ConnectionPoolingEnabled.IsChecked
    ConnectionPoolingEnabled.Check
@@ -87,18 +77,14 @@ qaerrorLog "GetTextCrasjhes??? TBO"
    next i
    if bSave = TRUE then ConnectionPoolingEnabled.UnCheck
 
-'///+close options dialog with OK, close all documents and exit StarOffice
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
    hCloseDocument
 
-'///+wait until StarOffice is out of memory and restart it
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///+open options 'Datasources' / 'Connections'
-'///+check all changes
  printlog " - check all changes"
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
@@ -120,7 +106,6 @@ qaerrorLog "GetTextCrasjhes??? TBO"
       Sleep (1)
    next i
 
-'///+second changes
  printlog " - make second changes"
    DriverList.TypeKeys "<Up>", 20
    for i=1 to iCounter
@@ -139,13 +124,10 @@ qaerrorLog "GetTextCrasjhes??? TBO"
       Sleep (1)
    next i
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Datasources' / 'Connections'
-'///+check all changes
  printlog " - check all changes"
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
@@ -169,7 +151,6 @@ qaerrorLog "GetTextCrasjhes??? TBO"
       Sleep (1)
    next i
 
-'///+reset to raw data
  printlog " - reset all settings"
    DriverList.TypeKeys "<Up>", 20
    for i=1 to iCounter
@@ -180,13 +161,10 @@ qaerrorLog "GetTextCrasjhes??? TBO"
    next i
    if bSave = TRUE then ConnectionPoolingEnabled.Check else ConnectionPoolingEnabled.UnCheck
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Datasources' / 'Connections'
-'///+check the raw data
  printlog " - check the raw data"
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
@@ -203,7 +181,6 @@ qaerrorLog "GetTextCrasjhes??? TBO"
    next i
    ConnectionPoolingEnabled.unCheck
 
-'///+close options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)

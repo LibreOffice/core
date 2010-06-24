@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: filedlg_multiselection.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:14 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -56,6 +50,7 @@ testcase tFiledlgMultiselection1()
     dim lTime as long
     dim lWait as long
     dim lTimeSum as long
+    dim iCurrentTime as long
     
     
     dim iDocType as integer
@@ -71,7 +66,7 @@ testcase tFiledlgMultiselection1()
     dim brc as boolean
     
     const TESTFILE_COUNT = 60 ' the number of documents in cWorkPath
-    const TESTFILE_TIMEOUT = 120000
+    const TESTFILE_TIMEOUT = 480000
 
     ' Minimum cleanup
     while( getDocumentCount > 0 ) 
@@ -144,12 +139,21 @@ testcase tFiledlgMultiselection1()
             lTime = GetSystemTicks
             iOpenDocuments = 0   
             while ( iOpenDocuments < TESTFILE_COUNT )
-                iOpenDocuments = getDocumentCount
-                if ( (getSystemTicks - lTime) > TESTFILE_TIMEOUT ) then
-                    warnlog( "Loading files max wait time exceed (120 seconds), aborting" )
+                iOpenDocuments = getDocumentCount()
+                iCurrentTime = getSystemTicks - lTime
+                
+                ' exit the hard way
+                if ( iCurrentTime > TESTFILE_TIMEOUT ) then
+                    warnlog( "Loading files max wait time exceed (" & _
+                              TESTFILE_TIMEOUT/1000 & "), aborting" )
                     goto endsub
                 endif
             wend
+            
+            if ( iCurrentTime > 120000 ) then
+                'Closed issue: qaerrorlog( "#i105289# Slow loading of files, should be less than 120 seconds on all platforms" )
+                printlog( "Slow file loading (exceeds 120 seconds)" )
+            endif
             lWait = getSystemTicks - lTime ' time diff
 
             printlog( "All documents loaded in " & lWait & " ms" )

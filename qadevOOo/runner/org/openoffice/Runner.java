@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Runner.java,v $
- * $Revision: 1.5.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@ public class Runner
 
     private static long m_nStartTime;
 
-    private static long getStartTime()
+    public static long getRunnerStartTime()
     {
         return m_nStartTime;
     }
@@ -69,7 +66,7 @@ public class Runner
     /*
     return the time, which is done until last startTime()
      */
-    private static long meanTime(long _nCurrentTimer)
+    public static long meanTime(long _nCurrentTimer)
     {
         if (_nCurrentTimer == 0)
         {
@@ -109,6 +106,7 @@ public class Runner
         }
         return false;
     }
+
     private static boolean checkPathVariable(String _sPath, String delim)
     {
         String sPath = System.getProperty(_sPath);
@@ -117,7 +115,7 @@ public class Runner
             StringTokenizer aTokenEnum = new StringTokenizer(sPath, delim);
             while (aTokenEnum.hasMoreElements())
             {
-                String sToken = (String)aTokenEnum.nextElement();
+                String sToken = (String) aTokenEnum.nextElement();
                 if (checkVariableForCygwin(sToken))
                 {
                     System.err.println("ERROR: OOoRunner detect cygwin path in '" + _sPath + "'");
@@ -132,7 +130,7 @@ public class Runner
     {
         // ----- check all System.getProperty(key) variables -----
         String sOsName = System.getProperty("os.name");
-        if (! sOsName.toLowerCase().startsWith("windows"))
+        if (!sOsName.toLowerCase().startsWith("windows"))
         {
             // we need to check only on windows
             return;
@@ -145,7 +143,7 @@ public class Runner
 
         while (aEnum.hasMoreElements())
         {
-            String sKey = (String)aEnum.nextElement();
+            String sKey = (String) aEnum.nextElement();
             String sValue = System.getProperty(sKey);
 
             if (checkVariableForCygwin(sValue))
@@ -165,10 +163,10 @@ public class Runner
         aEnum = _aParams.keys();
         while (aEnum.hasMoreElements())
         {
-            String sKey = (String)aEnum.nextElement();
+            String sKey = (String) aEnum.nextElement();
             if (_aParams.get(sKey) instanceof String)
             {
-                String sValue = (String)_aParams.get(sKey);
+                String sValue = (String) _aParams.get(sKey);
 
                 if (checkVariableForCygwin(sValue))
                 {
@@ -184,9 +182,9 @@ public class Runner
         }
     }
 
-    public static void main(String[] args)
+    public static boolean run(String... args)
     {
-        System.out.println("OOoRunner Main()");
+        System.out.println("OOoRunner Main() version from 20100323 (yyyymmdd)");
 
         setStartTime(getTime());
 
@@ -240,7 +238,7 @@ public class Runner
         checkAllVariablesForCygwinPath(param);
 
         boolean worked = toExecute.executeTest(param);
-        long nTime = meanTime(getStartTime());
+        long nTime = meanTime(getRunnerStartTime());
         String sBeautifyTime = beautifyTime(nTime);
 
         System.out.println("Job run took: " + nTime + "ms " + " [" + sBeautifyTime + "]");
@@ -248,12 +246,16 @@ public class Runner
         if (!worked)
         {
             System.out.println("Job " + param.get("TestJob") + " failed");
-            System.exit(-1);
         }
         else
         {
             System.out.println("Job " + param.get("TestJob") + " done");
-            System.exit(0);
         }
+        return worked;
+    }
+
+    public static void main(String[] args)
+    {
+        System.exit(run(args) ? 0 : -1);
     }
 }

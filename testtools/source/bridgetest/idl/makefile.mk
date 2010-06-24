@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,7 +31,7 @@ TARGET := bridgetest_idl
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
-
+.IF "$(L10N_framework)"==""
 ALLTAR: $(MISC)$/$(TARGET).cppumaker.done $(MISC)$/$(TARGET).javamaker.done
 
 $(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/bridgetest.rdb
@@ -70,3 +66,5 @@ $(BIN)$/cli_types_bridgetest.dll: $(BIN)$/bridgetest.rdb
 
 .ENDIF
 .ENDIF # GUI, WNT
+.ENDIF # L10N_framework
+

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: fileoperations.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -62,8 +56,7 @@ function hSaveLoadDelSuccess( cFile as string ) as integer
     '///<ul>
     
     dim brc as boolean
-    dim cFileExt as string
-        cFileExt = cFile & hGetSuffix( "current" )
+    dim cFileExt as string : cFileExt = cFile & hGetSuffix( "current" )
     
     const CFN = "hSaveLoadDelSuccess::"
     
@@ -160,14 +153,13 @@ function hLoadFileExpectSuccess( fpath as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
     
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
         
     const CFN = "hLoadFileExpectSuccess::"
     printlog( CFN & "Enter with option: " & fpath )
 
     '///+<li>Click FileOpen (or use the menu)</li>
-    FileOpen    
+    hUseAsyncSlot( "FileOpen" )
 
     '///+<li>Enter the filename (with extension)</li>
     'printlog( " - Type the filepath/name into the entryfield" )
@@ -232,13 +224,12 @@ function hLoadFileExpectFailure( fpath as string ) as boolean
     
     const CFN = "hLoadFileExpectFailure::"
 
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
 
     printlog( CFN & "Enter with option: " & fpath )
 
     '///+<li>Click FileOpen</li>
-    FileOpen    
+    hUseAsyncSlot( "FileOpen" )
     Kontext "OeffnenDLG"
 
     '///+<li>Enter filepath</li>
@@ -277,7 +268,7 @@ function hLoadFileExpectFailure( fpath as string ) as boolean
     
     '///+<li>If the document is loaded, set errorcondition to false</li>
     if ( not brc ) then
-        IsItLoaded
+        hFileWait( FALSE )
         warnlog( CFN & "The file appears to have loaded correctly. Not good" )
     
         '///+<li>Click away possible messagebox to recover</li>
@@ -321,24 +312,21 @@ function hSaveFileExpectSuccess( fpath as string , bReplace as boolean ) as bool
     '///<ul>
 
     const CFN = "hSaveFileExpectSuccess::" 
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
         
     dim iDocumentCount as integer
     
     printlog( CFN & "Enter with options: " & fpath & ", " & bReplace )
 
     '///+<li>Make sure we start from the backing window</li>
-    do while ( getDocumentCount > 0 )
-        hCloseDocument()
-    loop
+    hFileCloseAll()
 
 
     '///+<li>Open a new document</li>
     hCreateDocument()
 
     '///+<li>Click &quot;Save As...&quot;</li>
-    FileSaveAs 
+    hUseAsyncSlot( "FileSaveAs" )
 
     Kontext "SpeichernDlg"
     if ( SpeichernDlg.exists( 1 ) ) then
@@ -429,8 +417,7 @@ function hSaveFileExpectFailure( fpath as string , errortype as integer ) as boo
     ' This sequence tries to save a document with an invalid name. The errormsg
     ' is closed, the filedialog cancelled and the file closed. 
     
-    dim brc as boolean
-        brc = false
+    dim brc as boolean : brc = false
         
     dim cMsg as string
         
@@ -442,7 +429,7 @@ function hSaveFileExpectFailure( fpath as string , errortype as integer ) as boo
     '///+<li>Click &quot;Save As;&quot;</li>
     printlog( "" )
     printlog( CFN & "Enter with options: " & fpath & ", " & errortype )
-    FileSaveAs
+    hUseAsyncSlot( "FileSaveAs" )
     
     '///+<li>Enter the filename</li>
     kontext "SpeichernDlg"
@@ -549,14 +536,13 @@ function hCreateDirectoryExpectSuccess( dirname as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
     
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
         
     const CFN = "hCreateDirectoryExpectSuccess::"
     printlog( CFN & "Enter with option: " & dirname )
 
     '///+<li>Click &quot;File Open&quot;</li>
-    FileOpen    
+    hUseAsyncSlot( "FileOpen" )
 
     '///+<li>Click on &quot;New folder&quot;</li>
     Kontext "OeffnenDlg"
@@ -646,7 +632,7 @@ function hDeleteFileViaFileOpen( cFile as String ) as boolean
     endif    
 
     '///+<li>Click &quot;File Open&quot;</li>
-    FileOpen
+    hUseAsyncSlot( "FileOpen" )
     
     '///+<li>Look for the requested file, get the position from the filelist</li>
     Kontext "OeffnenDLG"
@@ -725,14 +711,16 @@ function hGetFileCountViaFileOpen() as integer
     '///<ul>
     
     '///+<li>Click &quot;File open&quot;</li>
-    FileOpen
+    hUseAsyncSlot( "FileOpen" )
     
     '///+<li>Retrieve the number of items in the filepicker window</li>
     Kontext "OeffnenDLG"
-    hGetFileCountViaFileOpen() = DateiAuswahl.getItemCount()
-    
-    '///+<li>Close &quot;File Open&quot;</li>
-    OeffnenDLG.cancel()
+    if ( OeffnenDlg.exists( 2 ) ) then
+        hGetFileCountViaFileOpen() = DateiAuswahl.getItemCount()
+        OeffnenDLG.cancel()
+    else
+        hGetFileCountViaFileOpen() = -1
+    endif
     '///</ul>    
 
 end function
@@ -871,13 +859,14 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
     dim iCurrentObject as integer
     dim cCurrentName as string
     dim iFileOpenItemCount as integer
-    dim iPos as integer
-        iPos = 0
-    dim cPath as string
-        cPath = cName
+    
+    dim iPos as integer : iPos = 0
+    dim cPath as string : cPath = cName
 
     dim iPathItems as integer
     dim asPathList( 100 ) as string
+    
+    dim iWait as integer ' some increment variable
     
     printlog( CFN & "Enter with option (File): " & cName )
 
@@ -906,6 +895,21 @@ function hFindFileObjectViaFileOpen( cName as string ) as integer
         
     '///+<li>get the number of items in the filepicker</li>
     kontext "OeffnenDlg"
+    iWait = 0
+    while ( DateiAuswahl.getItemCount() = 0 )
+        wait( 100 )
+        iWait = iWait + 1
+        if ( iWait = 10 ) then
+            warnlog( "Filepicker is not populated within reasonable timeframe, aborting" )
+            kontext "OeffnenDlg"
+            OeffnenDlg.Close()
+            hFindFileObjectViaFileOpen() = 0
+            exit function
+        else
+            printlog( "Waiting for filepicker list to populate..." )
+        endif
+    wend
+    
     iFileOpenItemCount = DateiAuswahl.getItemCount()
     
     '///+<li>Jump to the first item in the filelist and select it with SPACE</li>

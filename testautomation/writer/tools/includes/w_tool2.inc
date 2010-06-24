@@ -1,33 +1,27 @@
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_tool2.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:43:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*                                                                **
 '* owner : helge.delfs@sun.com                                    **
@@ -64,7 +58,7 @@ sub OptionenAufrufen(Seite as string)
     case "TabErsetzung"   : active.SetPage TabErsetzung
     case "TabAusnahmen"   : active.SetPage TabAusnahmen
     case "TabOptionen"    : active.SetPage TabOptionen
-    case "TabTypografisch": active.SetPage TabTypografisch
+    case "TabLocalizedOptions": active.SetPage TabLocalizedOptions
     end select
     for i = 1 to 5
         Kontext "Active"
@@ -347,7 +341,12 @@ function wDeleteAutotext(vAutotextName as string) as boolean
     '/// returns true if Autotext could be deleted
     '/// Attention: Autotext-Dialog leaves open after deleting autotext
 
-    Dim j as integer, sAll as integer
+    Dim j as integer
+    Dim ik as integer
+    Dim bDeleted as boolean
+    Dim sAllGroups as integer
+    Dim sAllInGroups as integer
+    
     Kontext "Autotext"
     if Not Autotext.Exists then EditAutotext
 
@@ -367,30 +366,58 @@ function wDeleteAutotext(vAutotextName as string) as boolean
         wait 500
     next j
 
-    Liste.Select 1
-    Liste.TypeKeys "+"
-    sAll = Liste.GetItemCount
-    For j = 1 to sAll
-        Liste.TypeKeys "<Down>"
-        if Liste.Gettext = vAutotextName then
-            try
-                Menue.Click
-                wait 500
-                Call hMenuSelectNr ( 3 )
-                Kontext "Active"
-                if Active.Exists and Active.GetRT = 304 then
-                    Active.yes
-                    wDeleteAutotext = true
-                else
-                    Warnlog "No messages to confirm deleting the Autotext!"
-                end if
-                exit for
-            catch
-                Warnlog "Menu Autotext->'Delete' disabled ! Test failed !"
-            endcatch
-        end if
-        Liste.TypeKeys "+"
-        sAll = Liste.GetItemCount
-    next j
+    bDeleted = false
+    ' count all groups
+    sAllGroups = Liste.GetItemCount
+    ' travel through all groups
+    For ik = 1 to sAllGroups            
+    	Liste.Select ik
+    	Liste.TypeKeys "+"
+    
+    	sAllInGroups = Liste.GetItemCount - sAllGroups
+		For j = 1 to sAllInGroups
+			Liste.TypeKeys "<Down>"
+			if Liste.Gettext = vAutotextName then
+				try
+					Menue.Click
+					wait 500
+					Call hMenuSelectNr ( 3 )
+					Kontext "Active"
+					if Active.Exists and Active.GetRT = 304 then
+						Active.yes
+						wDeleteAutotext = true
+					else
+						Warnlog "No messages to confirm deleting the Autotext!"
+					end if
+					bDeleted = true
+					exit for
+				catch
+					Warnlog "Menu Autotext->'Delete' disabled ! Test failed !"
+				endcatch
+			end if
+		next j
+		if bDeleted = true then exit for
+		' close group
+        Liste.Select ik
+        Liste.TypeKeys "-"	
+    next ik
 
 end function
+
+
+sub wChangeDefaultView()
+
+    ' #i107038: This code forces the writer to display one page only which is
+    ' zoomed to pagewidth, filling the entire - previously maximized - window.
+    ' This is required because the VCL Testtool might eventually draw objects
+    ' outside the document window depending on display size
+
+    Call hNewDocument
+    ViewZoom
+    Kontext "Massstab"
+    Vergroesserung100.check
+    Singlepage.check
+    Massstab.Ok
+    Call hCloseDocument
+
+end sub

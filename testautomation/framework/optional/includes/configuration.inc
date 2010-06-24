@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: configuration.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: obo $ $Date: 2008-07-25 08:02:50 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : thorsten.bosbach@sun.com
@@ -76,7 +70,6 @@ sub sToolsCustomizeKeyboardFunction
 end sub
 
 testcase tToolsCustomizeKeyboardFunction(lList())
-    '/// idea from AS find .uno: in Keyboard Function list ///'
     dim sKeys(300,2) as string
     dim i,a,b,c,d as integer
     dim sTemp, sTemp2 as string
@@ -106,24 +99,21 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 	i87952 = ".uno:InsertApplet"
 	i92080 = ".uno:SaveGraphic"
 	i96322 = ".uno:ActivateStyleApply"
-	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage"
+	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage, .uno:ValidityReference"
     
-    '/// open application ///'
     Call hNewDocument
     sleep 2
-    '/// Tools->Configure ///'
     ToolsCustomize
     sleep 3
     Kontext
-    '/// switch to tabpage 'Keyboard' ///'
     Messagebox.SetPage TabTastatur         ' 2 ------------------
     Kontext "TabTastatur"
     for c = 1 to 2
         select case c
-        case 1: '/// Check Checkbox 'StarOffice' ///'
+        case 1:
             StarOffice.Check
             Printlog ("-------------------- Keylist for StarOpenOfficeSuite.org --------------------")
-        case 2: '/// Check Checkbox '$APPLICATION' ///'
+        case 2:
             Application.Check
             Printlog ("-------------------- Keylist for "+gApplication+" ------------------------")
         end select
@@ -141,52 +131,52 @@ testcase tToolsCustomizeKeyboardFunction(lList())
                         listAppend(lList(),sTemp2)
                         bErrorFound = false
                         if (inStr(i60617,sTemp2)>0) then
-                            qaErrorLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(sTemp2,i64346)>0) then
-                            qaErrorLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i43969,sTemp2)>0) then
-                            qaErrorLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i80850,sTemp2)>0) then
-                            qaErrorLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i84982,sTemp2)>0) then
-                            qaErrorLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i84983,sTemp2)>0) then
-                            qaErrorLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87950,sTemp2)>0) then
-                            qaErrorLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87951,sTemp2)>0) then
-                            qaErrorLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87952,sTemp2)>0) then
-                            qaErrorLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            warnLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i92080,sTemp2)>0) then
-                            qaErrorLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i96322,sTemp2)>0) then
-                            qaErrorLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         
                         if (inStr(i100037,sTemp2)>0) then
-                            qaErrorLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if ( not bErrorFound ) then
@@ -201,9 +191,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
         next a
     next c
     '    if (iBugCount(3) > 0) then WarnLog ""+iBugCount(3)+": Missing Name for funktion; is .uno:..."
-    '/// cancel dialog 'Customize' ///'
     TabTastatur.cancel
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
@@ -224,18 +212,14 @@ testcase tToolsOptionsAPIConfiguration
     
     try
         ToolsOptions
-        '///+<li>Tools / Language Settings / Languages
         call hToolsOptions ("Languagesettings", "Languages")
-        '///+ Check if Asian language support is enabled and verify <i>gAsianSup</i> variable.
         if (gAsianSup <> Aktivieren.IsChecked) then
             warnlog "gAsianSup differs from UI"
         endif
-        '///+ Check if CTL (=complex text layout) is enabled amd set <i>gCTLSup</i> variable TRUE or FALSE.
         if (gCTLSup <> ComplexScriptEnabled.IsChecked) then
             warnlog "gCTLSup differs from UI"
         endif
         
-        '///+<li>Check <i>gAccessibility</i> for Win32 (from Options UI)</li>
         call hToolsOptions ("STAROFFICE", "ACCESSIBILITY")
         try
             if (gPlatGroup <> "unx") then
@@ -249,7 +233,6 @@ testcase tToolsOptionsAPIConfiguration
             endif
         endcatch
         
-        '///+ <li>Check the switch to the <i>system</i> dialogs to &quot;internal&quot; dialogs.
         call hToolsOptions ("StarOffice", "General")
         if StarOfficeDialogeBenutzen.Exists then
             if (NOT StarOfficeDialogeBenutzen.isChecked) then
@@ -257,14 +240,12 @@ testcase tToolsOptionsAPIConfiguration
             endif
         end if
         
-        '///+<li>Checking the <i>bubble help</i>.
         call hToolsOptions ("StarOffice", "General")
         if (Tips.isChecked) then
             warnlog "Help Tip is checked"
         endif
         
         
-        '///+<li>Checking the <i>work</i> directory in Tools / Options,
         call hToolsOptions ("StarOffice", "Paths")
         select case iSprache
         case 01   : iJump =  6      ' English (USA)
@@ -272,8 +253,8 @@ testcase tToolsOptionsAPIConfiguration
         case 07   : iJump =  0      ' Russian
         case 30   : iJump =  0      ' Greek
         case 31   : iJump =  0      ' Netherlands
-        case 33   : iJump = 0      ' French
-        case 34   : iJump = 0      ' Spanish
+        case 33   : iJump = 0       ' French
+        case 34   : iJump = 0       ' Spanish
         case 35   : iJump =  0      ' Finnish
         case 36   : iJump =  0      ' Hungaria
         case 37   : iJump =  0      ' Catalan
@@ -282,20 +263,21 @@ testcase tToolsOptionsAPIConfiguration
         case 43   : iJump =  0      ' Slowak
         case 44   : iJump =  0      ' English (GB)
         case 45   : iJump =  0      ' Danish
-        case 46   : iJump =  0     ' Swedish
+        case 46   : iJump =  0      ' Swedish
         case 47   : iJump =  0      ' Norwegian
         case 48   : iJump =  0      ' Polish
         case 49   : iJump =  1      ' German
         case 51   : iJump =  0      ' Slowak
-        case 55   : iJump =  0     ' Portuguese (Brazil)
-        case 66   : iJump =  0     ' Thai
+        case 50   : iJump =  0      ' Slovenian
+        case 55   : iJump =  0      ' Portuguese (Brazil)
+        case 66   : iJump =  0      ' Thai
         case 81   : iJump =  0      ' Japanese ' disabled, because locale dependant!
         case 82   : iJump =  0      ' Korean   ' disabled, because locale dependant!
         case 86   : iJump =  0      ' Chinese (simplified)  ' disabled, because locale dependant!
         case 88   : iJump =  0      ' Chinese (traditional) ' disabled, because locale dependant!
         case 90   : iJump =  0      ' Turkish
         case 91   : iJump =  0      ' Hindi
-        case 96   : iJump =  0     ' Arab
+        case 96   : iJump =  0      ' Arab
         case 97   : iJump =  0      ' Hebrew
         case else : qaErrorlog "The work-dir can't changed to the internal office-work-dir! Please insert the language in this list!"
             iJump =  0
@@ -323,7 +305,6 @@ testcase tToolsOptionsAPIConfiguration
             endif
         end if
         
-        '///+<li>Checking the directory for temporary files (=temp-path).
         select case iSprache
         case 01   : iJump = 8      ' English (USA)
         case 03   : iJump =  3      ' Portuguese
@@ -386,7 +367,6 @@ testcase tToolsOptionsAPIConfiguration
     catch
         warnlog "Error during walking through optionsdialog"
     endcatch
-    '///+</ul>
 endcase
 
 

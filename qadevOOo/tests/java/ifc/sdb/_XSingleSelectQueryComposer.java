@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _XSingleSelectQueryComposer.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,13 @@ package ifc.sdb;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import lib.MultiMethodTest;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import lib.StatusException;
 import lib.Status;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.sdb.SQLFilterOperator;
 
 /**
 * Testing <code>com.sun.star.sdb.XSingleSelectQueryComposer</code>
@@ -80,7 +79,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
      * @see om.sun.star.sdb.XSingleSelectQueryAnalyzer
      * @see com.sun.star.beans.XPropertySet
      */
-    protected void before() {
+    protected void before() /* throws Exception*/ {
 
         xQueryAna = (XSingleSelectQueryAnalyzer)
                       UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
@@ -102,9 +101,14 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         }
 
-        colName = (String)
-                      UnoRuntime.queryInterface(String.class,
-                      tEnv.getObjRelation("colName"));
+        try
+        {
+            colName = AnyConverter.toString(tEnv.getObjRelation("colName"));
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            colName = null;
+        }
 
         if (colName == null) {
             throw new StatusException(Status.failed(
@@ -169,7 +173,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         boolean ok = true;
         try{
 
-            oObj.appendFilterByColumn(xProp, true);
+            oObj.appendFilterByColumn(xProp, true,SQLFilterOperator.EQUAL);
             log.println("appendFilterByColumn: " + xQueryAna.getFilter());
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
@@ -180,7 +184,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         try{
 
-            oObj.appendFilterByColumn(xProp, false);
+            oObj.appendFilterByColumn(xProp, false,SQLFilterOperator.EQUAL);
             log.println("appendFilterByColumn: " + xQueryAna.getFilter());
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
@@ -191,8 +195,8 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         try{
             XPropertySet dummy = null;
-            oObj.appendFilterByColumn(dummy, true);
-            log.println("unexpected Exception was not thorwn");
+            oObj.appendFilterByColumn(dummy, true,SQLFilterOperator.EQUAL);
+            log.println("expected Exception was not thrown");
             tRes.tested("appendFilterByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){
@@ -224,7 +228,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             XPropertySet dummy = null;
             oObj.appendGroupByColumn(dummy);
-            log.println("unexpected Exception was not thorwn");
+            log.println("expected Exception was not thrown");
             tRes.tested("appendGroupByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){
@@ -317,7 +321,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         boolean ok = true;
         try{
 
-            oObj.appendHavingClauseByColumn(xProp, true);
+            oObj.appendHavingClauseByColumn(xProp, true,SQLFilterOperator.EQUAL);
             log.println("appendHavingClauseByColumn: " + xQueryAna.getFilter());
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
@@ -327,8 +331,8 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         }
         try{
             XPropertySet dummy = null;
-            oObj.appendHavingClauseByColumn(dummy, true);
-            log.println("unexpected Exception was not thorwn");
+            oObj.appendHavingClauseByColumn(dummy, true,SQLFilterOperator.EQUAL);
+            log.println("expected Exception was not thrown");
             tRes.tested("appendHavingClauseByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){
@@ -360,7 +364,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             XPropertySet dummy = null;
             oObj.appendOrderByColumn(dummy, true);
-            log.println("unexpected Exception was not thorwn");
+            log.println("expected Exception was not thrown");
             tRes.tested("appendOrderByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){

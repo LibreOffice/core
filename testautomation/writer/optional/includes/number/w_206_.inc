@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_206_.inc,v $
-'*
-'* $Revision: 1.3 $
-'*
-'* last change: $Author: rt $ $Date: 2008-09-04 09:19:40 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -478,12 +472,12 @@ testcase tToolsNumbering7
                         end if
 					end if
 				Case 2
-					if sClipBrd(1) <> "1.My second number" then
-						Warnlog "#128041#First paragraph not '1.My second number' but: " & sClipBrd(1)
+					if sClipBrd(1) <> "1.1.My second number" then
+						Warnlog "#128041#First paragraph not '1.1.My second number' but: " & sClipBrd(1)
 					end if		
 				Case 3
-					if sClipBrd(2) <> "2.My third number" then
-						Warnlog "#128041#First paragraph not '2.My third number' but: " & sClipBrd(2)
+					if sClipBrd(2) <> "2.2.My third number" then
+						Warnlog "#128041#First paragraph not '2.2.My third number' but: " & sClipBrd(2)
 					end if
 			end select
 		next i	
@@ -713,16 +707,16 @@ testcase tToolsNumbering11
     For i = 1 to 3
         Select Case i
             Case 1
-                if sClipBrd(0) <> "1A new first paragraph" then
-                    Warnlog "First Heading not: '1A new first paragraph' but: " &  sClipBrd(0)
+                if sClipBrd(0) <> "11A new first paragraph" then
+                    Warnlog "First Heading not: '11A new first paragraph' but: " &  sClipBrd(0)
                 end if
             Case 2
-                if sClipBrd(1) <> "2" then
-                    Warnlog "First paragraph not empty but: " & sClipBrd(1)
+                if sClipBrd(1) <> "22" then
+                    Warnlog "First paragraph not '22' but: " & sClipBrd(1)
                 end if
             Case 3
-                if sClipBrd(2) <> "3A new third paragraph" then
-                    Warnlog "First paragraph not '3A new third paragraph' but: " & sClipBrd(2)
+                if sClipBrd(2) <> "33A new third paragraph" then
+                    Warnlog "First paragraph not '33A new third paragraph' but: " & sClipBrd(2)
                 end if
         end select
     next i

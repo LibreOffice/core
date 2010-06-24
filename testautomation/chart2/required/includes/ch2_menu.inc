@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: ch2_menu.inc,v $
-'*
-'* $Revision: 1.3 $
-'*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:38:53 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -49,6 +43,10 @@ testcase tMainMenu
 
     dim iHelpMenuItemCount as integer
         iHelpMenuItemCount = 5  : if ( gPlatform = "osx" ) then iHelpMenuItemCount = 4
+    
+    dim iToolsMenuItemCount as integer
+        iToolsMenuItemCount = 4  : if ( gPlatform = "osx" ) then iToolsMenuItemCount = 3
+        'Options entry is called Preferences and resides in application MacOS X menu
     
     printlog "Close all document windows (File / Close)"
     Do Until GetDocumentCount = 0
@@ -110,13 +108,13 @@ testcase tMainMenu
         end if
         call hMenuClose()
                
-        printlog "check if there are 4 items in the VIEW/TOOLBAR menu."        
+        printlog "check if there are 5 items in the VIEW/TOOLBAR menu."        
         DocumentCalc.UseMenu 
         hMenuSelectNr(3) ' VIEW        
         hMenuSelectNr(1) ' TOOLBAR
         iCount = hMenuItemGetCount()
-        if (iCount <> 4) then
-            warnlog "There should 4 items in the VIEW/TOOLBAR menu but there are " + iCount + " items."
+        if (iCount <> 5) then
+            warnlog "There should 5 items in the VIEW/TOOLBAR menu but there are " + iCount + " items."
         end if
         call hMenuClose()
         
@@ -149,7 +147,7 @@ testcase tMainMenu
         printlog "check if there are 6 items in the FORMAT/AXIS menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
-        hMenuSelectNr(5) ' AXIS        
+        hMenuSelectNr(6) ' AXIS        
         iCount = hMenuItemGetCount()        
         if (iCount <> 6) then
             warnlog "There should 6 items in the FORMAT/AXIS menu but there are " + iCount + " items."
@@ -158,7 +156,7 @@ testcase tMainMenu
         printlog "check if there are 7 items in the FORMAT/GRID menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
-        hMenuSelectNr(6) ' GRID        
+        hMenuSelectNr(7) ' GRID        
         iCount = hMenuItemGetCount()        
         if (iCount <> 7) then
             warnlog "There should 7 items in the FORMAT/GRID menu but there are " + iCount + " items."
@@ -173,12 +171,12 @@ testcase tMainMenu
             warnlog "There should 8 items in the FORMAT/Title menu but there are " + iCount + " items."
         end if
 
-        printlog "check if there are 13 items in the TOOLS menu."        
+        printlog "check if there are " + iToolsMenuItemCount + " items in the TOOLS menu."        
         DocumentCalc.UseMenu 
-        hMenuSelectNr(5)        
+        hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 13) then
-            warnlog "There should 13 items in the tools menu but there are " + iCount + " items."
+        if (iCount <> iToolsMenuItemCount) then
+            warnlog "There should " + iToolsMenuItemCount + " items in the tools menu but there are " + iCount + " items."
         end if
         call hMenuClose()
         

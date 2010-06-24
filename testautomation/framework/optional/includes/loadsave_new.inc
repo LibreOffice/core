@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: loadsave_new.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:14 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : tborsten.bosbach@sun.com
@@ -39,34 +33,18 @@
 
 testcase NewCloseDok
    PrintLog "    open and close all documenttypes"
-    '///open all applications and close the document
-    '///file/new/textdocument => file/close
    Call hNewCloseDocument ("WRITER")
-    '///file/new/spreadsheet => file/close
    Call hNewCloseDocument ("CALC")
-    '///file/new/presentation => file/close
    Call hNewCloseDocument ("IMPRESS")
-    '///file/new/drawing => file/close
    Call hNewCloseDocument ("DRAW")
-    '///file/new/formular => file/close
    Call hNewCloseDocument ("MATH")
-    '///file/new/HTML document => file/close
    Call hNewCloseDocument ("HTML")
-    '///file/new/master document => file/close
    Call hNewCloseDocument ("MASTERDOCUMENT")
 endcase
 
 testcase NewDok
   Dim i%
    PrintLog "   open all applications and close all one by one"
-    '///open all document types and close all one by one
-    '///create a new Writer-doc
-    '///+a new Calc-doc
-    '///+a new Impress-doc
-    '///+a new Draw-doc
-    '///+a new HTML-doc
-    '///+a new Master-doc
-    '///+a new Math-doc
    Call NewDocument ("WRITER")
    Call NewDocument ("CALC")
    Call NewDocument ("IMPRESS")
@@ -75,7 +53,6 @@ testcase NewDok
    Call NewDocument ("HTML")
    Call NewDocument ("MASTERDOCUMENT")
 
-    '///close one by one with file/close
    PrintLog "   Close all documents ( file/close )"
    for i%=1 to 7
       Kontext "Navigator"

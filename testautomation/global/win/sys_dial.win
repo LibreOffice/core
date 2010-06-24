@@ -1,21 +1,3 @@
-' **** general print-Dialog ( File/Print )
-' ****
-*DruckenDlg svtools:ModalDialog:DLG_SVT_PRNDLG_PRINTDLG
-Drucker svtools:ListBox:DLG_SVT_PRNDLG_PRINTDLG:LB_NAMES
-Eigenschaften svtools:PushButton:DLG_SVT_PRNDLG_PRINTDLG:BTN_PROPERTIES
-AusdruckInDatei svtools:CheckBox:DLG_SVT_PRNDLG_PRINTDLG:CBX_FILEPRINT
-Alles svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_ALL
-Seiten svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_PAGES
-SeitenText svtools:Edit:DLG_SVT_PRNDLG_PRINTDLG:EDT_PAGES
-Auswahl svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTION
-Exemplare svtools:NumericField:DLG_SVT_PRNDLG_PRINTDLG:NUM_COPIES
-Sortieren svtools:CheckBox:DLG_SVT_PRNDLG_PRINTDLG:CBX_COLLATE
-Zusaetze svtools:PushButton:DLG_SVT_PRNDLG_PRINTDLG:BTN_OPTIONS
-EditFaxNo svtools:Edit:DLG_SVT_PRNDLG_PRINTDLG:EDT_FAXNO
-AllSheets svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_ALL_SHEETS
-SelectedSheets svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTED_SHEETS
-SelectedCells svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTED_CELLS
-
 ' **** general Printersettings-Dialog ( File/Printer settings )
 ' ****
 *DruckerEinrichten svtools:ModalDialog:DLG_SVT_PRNDLG_PRNSETUPDLG

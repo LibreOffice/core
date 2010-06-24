@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_textframes4.inc,v $
-'*
-'* $Revision: 1.3 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:38:00 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -364,8 +358,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_57
-Warnlog "#i102752# - tTextframes_57 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -445,8 +437,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_58
-Warnlog "#i102752# - tTextframes_58 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -525,8 +515,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_59
-Warnlog "#i102752# - tTextframes_57 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim sPositionY1 as String
@@ -613,8 +601,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_60
-Warnlog "#i102752# - tTextframes_60 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim sPositionY1 as String
@@ -707,8 +693,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_61
-Warnlog "#i102752# - tTextframes_61 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -787,8 +771,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_62
-Warnlog "#i102752# - tTextframes_62 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -867,8 +849,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_63
-Warnlog "#i102752# - tTextframes_63 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -959,8 +939,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_64
-Warnlog "#i102752# - tTextframes_64 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1051,10 +1029,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_65
-Warnlog "#i102752# - tTextframes_65 outcommented due to bug."
-goto endsub
 
-    Dim sTestFile     as String
+	Dim sTestFile     as String
     Dim iHorizontal   as Integer
     Dim sHorizontalBy as String
     Dim sPositionX1   as String
@@ -1132,8 +1108,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_66
-Warnlog "#i102752# - tTextframes_66 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1213,8 +1187,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_67
-Warnlog "#i102752# - tTextframes_67 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1305,8 +1277,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_68
-Warnlog "#i102752# - tTextframes_68 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1397,8 +1367,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_69
-Warnlog "#i102752# - tTextframes_69 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1478,8 +1446,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_70
-Warnlog "#i102752# - tTextframes_70 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer

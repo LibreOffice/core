@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: options_int1.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
@@ -41,16 +35,12 @@ testcase tInternetProxy
    Dim iSave as Integer
    Dim lsSave ( 9 ) as String
 
-'///check if all settings are saved in configuration ( Internet / Proxy )
 
-'///open a new document
    hNewDocument
-'///open tools / options / internet / proxy
    ToolsOptions
    hToolsOptions ( "Internet", "Proxy" )
 
  printlog " - save settings"
-'///save all default settings
    iSave = ProxyServer.GetSelIndex
    ProxyServer.Select ( ProxyServer.GetItemCount )
    if ProxyServer.GetItemCount > 2 then Warnlog "More than 2 entries are available for ProxyServer-Setting => Bug 88387"
@@ -61,30 +51,23 @@ testcase tInternetProxy
    lsSave (4) = FTPPort.GetText
    lsSave (7) = NoProxy.GetText
 
-'///change settings
  printlog " - change settings"
-'///+change all settings to dummy server
    HTTPProxy.SetText  "staroffice-news.germany.sun.com.test"
    HTTPPort.SetText   "1508"
    FTPProxy.SetText   "staroffice-news.germany.sun.com.test"
    FTPPort.SetText    "1509"
    NoProxy.SetText  "staroffice;stardivision;starstarstar"
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+close the document
    hCloseDocument
 
-'///exit and restart StarOffice
   printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///check changes
  printlog " - check changes"
-'///+open tools / options / internet / proxy
    ToolsOptions
    hToolsOptions ( "Internet", "Proxy" )
 
@@ -114,7 +97,6 @@ testcase tInternetProxy
       if ProxyServer.GetSelIndex <> 2 then Warnlog "Proxy Server => changes not saved ( should be the 2nd entry )!"
    end if
 
-'///reset to default settings
  printlog " - reset settings"
    ProxyServer.Select(3) ' manual
    HTTPProxy.SetText lsSave (1)
@@ -124,14 +106,11 @@ testcase tInternetProxy
    NoProxy.SetText lsSave (7)
    ProxyServer.Select iSave
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check the reset
  printlog " - check default"
-'///+open tools / options / internet / proxy
    ToolsOptions
    hToolsOptions ( "Internet", "Proxy" )
    if ProxyServer.GetSelIndex <> iSave then Warnlog "Proxy Server => changes not saved!"
@@ -141,7 +120,6 @@ testcase tInternetProxy
    if FTPPort.GetText    <> lsSave (4) AND FTPPort.GetText   <> "0" then warnlog "FTP Port => changes not saved!"
    if HTTPPort.GetText   <> lsSave (2) AND HTTPPort.GetText  <> "0" then warnlog "HTTP Port => changes not saved!"
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
@@ -153,15 +131,11 @@ testcase tInternetSearch
    Dim lbSave ( 3, 10 ) as boolean
    Dim lsSave ( 6, 10 ) as String
 
-'///check if all settings are saved in configuration ( Internet / Search )
 
-'///open a new document
    hNewDocument
-'///open tools / options / internet / search
    ToolsOptions
    hToolsOptions ( "Internet", "Search" )
 
-'///save settings
  printlog " - save settings"
    iSave = SuchenIn.GetItemCount
    if iSave > 8 then
@@ -182,7 +156,6 @@ testcase tInternetSearch
       lbSave (3, i) = Exakt.IsChecked
    next i
 
-'///change settings and insert new entries
  printlog " - change/insert settings"
    if iSave > 0 then
       SuchenIn.Select 1
@@ -196,7 +169,6 @@ testcase tInternetSearch
       Aendern.Click
    end if
 
-'///+ insert an new entry named ( ZZZZ_TT_New_Name )
    Neu.Click
    Sleep (1)
    DienstName.SetText "ZZZZ_TT_New_Name"
@@ -207,21 +179,16 @@ testcase tInternetSearch
    Schreibstil.Select 2
    Hinzufuegen.Click
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+close the document
    hCloseDocument
 
-'///exit and restart StarOffice
   printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///check the changes
  printlog " - check changes"
-'///+open tools / options / internet / search
    ToolsOptions
    hToolsOptions ( "Internet", "Search" )
 
@@ -265,7 +232,6 @@ testcase tInternetSearch
          next i
       end if
 
-'///reset all settings
  printlog " - reset settings"
       SuchenIn.Select "AAAA_TT_Changes_Name"
       DienstName.SetText lsSave (1, 1)
@@ -285,14 +251,11 @@ testcase tInternetSearch
       Loeschen.Click
       Sleep (1)
 
-'///+close options dialog with OK
       Kontext "ExtrasOptionenDlg"
       ExtrasOptionenDlg.OK
       Sleep (3)
 
-'///check the reset
  printlog " - check the reset"
-'///+open tools / options / internet / search
       ToolsOptions
       hToolsOptions ( "Internet", "Search" )
 
@@ -314,7 +277,6 @@ testcase tInternetSearch
       end if
    end if
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)

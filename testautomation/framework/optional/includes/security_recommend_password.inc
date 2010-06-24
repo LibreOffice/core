@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: security_recommend_password.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -39,11 +33,6 @@
 
 testcase tRecommendPassword( filetypeID as string )
 
-    '///<H1>Recommend password protection when saving</H1>
-    '///<p>This test verifies that the global option to recommend password
-    '/// protection is transported to the file-save dialog. Before saving
-    '/// password protection will be unchecked in order to verify that the
-    '/// global option overrides the individual setting.</p>
 
     dim workfile as string
         workfile = "password" & hGetSuffix( filetypeID )
@@ -55,16 +44,12 @@ testcase tRecommendPassword( filetypeID as string )
 
     dim rc as integer
 
-    '///<ul>
-    '///<li>Open a new document</li>
     printlog( "Open a new document" )
     call hNewDocument()
 
-    '///<li>change the content (document modified status)</li>
     printlog( "Change the document" )
     call hChangeDoc()
 
-    '///<li>Open File-Save-dialog</li>
     printlog( "Open filesave" )
     FileSave
     kontext "SpeichernDlg"
@@ -75,7 +60,6 @@ testcase tRecommendPassword( filetypeID as string )
         goto endsub
     endif
 
-    '///<li>Verify that 'Save with password' is enabled</li>
     printlog( "Verify that the password-checkbox is enabled" )
     if ( passwort.isenabled() ) then
         printlog( " * Password checkbox is enabled. Good." )
@@ -97,31 +81,25 @@ testcase tRecommendPassword( filetypeID as string )
     if ( rc = 0 ) then
 
         if AutomatischeDateinamenserweiterung.Exists then
-            QAErrorLog "OBSOLETE: Check-box Automatic file extension in file dialog will be removed soon!"
             AutomatischeDateinamenserweiterung.Uncheck
         endif
 
                                                                                                                                
-        '///<li>name the file and select filter</li>
         printlog( "Name the file" )
         Dateiname.settext( workpath & workfile )
   
-        '///<li>uncheck password-protection</li>
         printlog( "Uncheck password-protection" )
         passwort.uncheck()
 
-        '///<li>save the file</li>
         printlog( "Save the file" )
         Speichern.click()
                        
-        '///<li>handle possoble overwrite-warning</li>                                                                                                        
         Kontext "active"
         if ( active.exists( 2 ) ) then
             printlog( " - handle overwrite warning (if any)" )
             active.yes()
         endif
   
-        '///<li>handle unexpected password-dialog</li>
         Kontext "passwordDlg"
         if ( passwordDlg.exists( 2 ) ) then
             warnlog( "Password dialog comes up, this is not expected at this " & _
@@ -133,15 +111,12 @@ testcase tRecommendPassword( filetypeID as string )
             printlog( " * No password dialog is displayed. Good." )
         endif
 
-        '///<li>Delete the workfile</li>
         hDeleteFile( workpath & workfile )
 
     endif
 
-    '///<li>close the document</li>
     printlog( "Close the current document" )
     call hCloseDocument()
     
-    '///</ul>
 
 endcase

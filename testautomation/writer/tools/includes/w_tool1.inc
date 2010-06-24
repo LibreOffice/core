@@ -1,33 +1,27 @@
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_tool1.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:43:01 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -343,17 +337,20 @@ sub sMenufunktionen(Fuer_Was as string)
 
     Kontext
     try
-        FormatControl
-        Sleep 1
+        FormatControl 
+        WaitSlot()
+        
         Kontext "ControlPropertiesDialog"
-        if ControlPropertiesDialog.Exists then
+        if ControlPropertiesDialog.Exists( 2 ) then
             ControlPropertiesDialog.Close
+            ControlPropertiesDialog.notExists( 2 )
         else
             FormatControl
             Wait 500
             Kontext "ControlPropertiesDialog"
-            if ControlPropertiesDialog.Exists then
+            if ControlPropertiesDialog.Exists( 2 ) then
                 ControlPropertiesDialog.Close
+                ControlPropertiesDialog.notExists( 2 )
             else
                 Warnlog "  - Controlfieldproperties "+ Fuer_Was +" from Menu not available!"
             end if
@@ -437,6 +434,8 @@ end sub
 '----------------------------------------------------------------
 
 sub sAutopilot_ListboxCombobox(WhichBox as String)
+    Dim iCount as integer
+    iCount = 1
     Kontext "AutoPilotListComboBox"
     if AutoPilotListComboBox.Exists then
         printlog "  -Autopilot-Listbox Page 1"
@@ -444,6 +443,18 @@ sub sAutopilot_ListboxCombobox(WhichBox as String)
         if TabListboxData.Exists then
             Call DialogTest( TabListBoxData )
             DataSource.Select 1
+            Do
+                if iCount >= 15 then exit do
+                try
+                    Table.Select 1
+                    exit do
+                catch
+                    wait 500
+                    printlog "  - attempt " & i & " to select table"
+                    iCount = iCount + 1
+                endcatch
+            Loop
+            
             if Table.GetItemCount > 0 then
                 Table.Select 1
             else

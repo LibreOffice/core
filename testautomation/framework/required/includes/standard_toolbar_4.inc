@@ -1,69 +1,55 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: standard_toolbar_4.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:03 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
 '*
-'*  short description : invisible items on the standardbar
+'*  short description : Invisible items on the standardbar
 '*
 '\******************************************************************************
 
 testcase tStandardBar_4
 
-    '///<h1>Update test to activate hidden items on StandardBar</h1>
+    printlog( "Invisible items on the standardbar" )
     
-    '///<ul>
     dim brc as boolean
    
-    '///+<li>reset the Standardbar to defaults. The toolbar should be docked</li>
     hResetStandardBar()
     
-    '///+<li>Check the number of items for the standarbar using the list in customize toolbars (30)</li>
     hInitSingleDoc()
     DocumentWriter.maximize() ' Needed to avoid toolbar clipping on resolutions < 1024x768 or small windows.
     hStandardbarItemGetCount()
     
-    '///+<li>Load URL: check absence, toggle it, check presence, remove it</li>
     hStandardbarLoadUrl()
     
-    '///+<li>New from Template: check absence, toggle it, use it, remove it</li>
     hStandardbarNewDialog()
     
-    '///+<li>Save As: check absence, toggle it, use it, remove it</li>
     hStandardbarSaveAs()
     
-    '///+<li>Close the document</li>
     brc = hInitBackingMode()
-    '///</ul>
 
         
 endcase

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: hhConversion2.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:30:03 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -94,7 +88,7 @@ testcase tHHConversion_1
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -141,7 +135,7 @@ testcase tHHConversion_2
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -190,7 +184,7 @@ testcase tHHConversion_3
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -239,7 +233,7 @@ testcase tHHConversion_4
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -288,7 +282,7 @@ testcase tHHConversion_5
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -338,7 +332,7 @@ testcase tHHConversion_6
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -384,7 +378,7 @@ testcase tHHConversion_7
    Kontext "HangulHanjaConversion"
      HanjaAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -441,7 +435,7 @@ testcase tHHConversion_8
    Kontext "HangulHanjaConversion"
      HanjaAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -498,7 +492,7 @@ testcase tHHConversion_9
    Kontext "HangulHanjaConversion"
      HanjaAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -555,7 +549,7 @@ testcase tHHConversion_10
    Kontext "HangulHanjaConversion"
      HanjaAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -612,7 +606,7 @@ testcase tHHConversion_11
    Kontext "HangulHanjaConversion"
      HangulAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -669,7 +663,7 @@ testcase tHHConversion_12
    Kontext "HangulHanjaConversion"
      HangulAsRubyAbove.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -726,7 +720,7 @@ testcase tHHConversion_13
    Kontext "HangulHanjaConversion"
      HangulAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -783,7 +777,7 @@ testcase tHHConversion_14
    Kontext "HangulHanjaConversion"
      HangulAsRubyBelow.Check
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -931,7 +925,7 @@ testcase tHHConversion_17
      if Word.GetText <> sWord then
          Warnlog "Hope get " & sWord & " in Word" & " but get " & Word.GetText
      end if
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -980,7 +974,7 @@ testcase tHHConversion_18
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1013,7 +1007,7 @@ testcase tHHConversion_18
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1127,7 +1121,7 @@ testcase tHHConversion_20
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1191,7 +1185,7 @@ testcase tHHConversion_21
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1226,7 +1220,7 @@ testcase tHHConversion_21
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1334,7 +1328,7 @@ testcase tHHConversion_23
     ToolsLanguageHangulHanjaConversion
     Kontext "HangulHanjaConversion"
 	for i = 1 to 2
-	    if Replace.IsEnabled then    
+	    if ReplaceBtn.IsEnabled then    
 		    try
  	  	 	    Suggestions.Select 1
 		    catch
@@ -1354,7 +1348,7 @@ testcase tHHConversion_23
         if NOT HangulHanjaConversion.Exists then
             Exit for
         end if
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
     next i
 
@@ -1404,7 +1398,7 @@ testcase tHHConversion_24
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1455,7 +1449,7 @@ testcase tHHConversion_25
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 
@@ -1519,7 +1513,7 @@ testcase tHHConversion_26
          if NOT HangulHanjaConversion.Exists then
              Exit for
          end if
-         Replace.Click
+         ReplaceBtn.Click
          Sleep 1
      next i
 

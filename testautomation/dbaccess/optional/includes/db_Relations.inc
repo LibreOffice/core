@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: db_Relations.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:42 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : marc.neumann@sun.com
@@ -38,8 +32,10 @@
 '\***********************************************************************
 function tRelation( sFileName, sPWD, sRelTable1, sRelTable2 )
 	'/// create an 1:1 and 1:n relation between two test tables
-    Dim i, j, ix as integer			    'counter
-	Dim iNoDS as integer                'number of data source in listbox
+    Dim i as integer			    'counter
+    Dim j as integer			    'counter
+    Dim ix as integer			    'counter
+    Dim iNoDS as integer                'number of data source in listbox
     Dim iNoTab as integer               'number of tables in grid
     Dim DSOK as boolean                 'datasource present check      
     
@@ -212,8 +208,10 @@ end function
 function tDoubleRelation( sFileName, sPWD, sRelTable1, sRelTable2, sRelTable3 )
 	'/// create an 1:1 relation, close and save relation dialog,
     '/// reopen the dialog and add an 1:n relation with third test table
-    Dim i, j, ix as integer			    'counter
-	Dim iNoDS as integer                'number of data source in listbox
+    Dim i as integer			    'counter
+    Dim j as integer			    'counter
+    Dim ix as integer			    'counter
+    Dim iNoDS as integer                'number of data source in listbox
     Dim iNoTab as integer               'number of tables in grid
     Dim DSOK as boolean                 'datasource present check      
     
@@ -357,7 +355,7 @@ function tDoubleRelation( sFileName, sPWD, sRelTable1, sRelTable2, sRelTable3 )
         
         if breltablefound <> 1 then     'needed table not found if variable <> 1
             warnlog "proper table: " + sRelTable3 + " not found - test abort"
-            call fCloseRealtionDesign
+            call fCloseRelationDesign
             call fCloseDatabase
             exit function
         else

@@ -1,31 +1,28 @@
 /*
  * ************************************************************************
  *
- *  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: EnhancedComplexTestCase.java,v $
- *  $Revision: 1.1.2.7 $
+ * This file is part of OpenOffice.org.
  *
- *  This file is part of OpenOffice.org.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *  OpenOffice.org is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 3
- *  only, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *  OpenOffice.org is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License version 3 for more details
- *  (a copy is included in the LICENSE file that accompanied this code).
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  version 3 along with OpenOffice.org.  If not, see
- *  <http://www.openoffice.org/license.html>
- *  for a copy of the LGPLv3 License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  * ***********************************************************************
  */
@@ -47,8 +44,8 @@ abstract public class EnhancedComplexTestCase extends ComplexTestCase implements
 
 private void callEntry(String _sEntry, ParameterHelper _aParam)
 {
-    log.println("- next file is: ------------------------------");
-    log.println(_sEntry);
+    // log.println("- next file is: ------------------------------");
+    log.println("File: " + _sEntry);
     // TODO: check if 'sEntry' is a guilty document.
     File aFile = new File(_aParam.getInputPath());
     String sPath = _aParam.getInputPath();
@@ -82,7 +79,8 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
     //                            sNewDiffPath = FileHelper.appendPath(sNewDiffPath, sNewSubDir);
     //                        }
     }
-    log.println("sEntry: " + _sEntry + " " /* + sNewReferencePath + " " */ + sNewOutputPath);
+    // log.println("sEntry: " + _sEntry + " " /* + sNewReferencePath + " " */ + sNewOutputPath);
+    log.println("Outputpath: " + sNewOutputPath);
 
 
     // call interface with parameters
@@ -190,12 +188,34 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 }
                 else
                 {
-                    String sPath = FileHelper.getPath(sInputPath);
-                    String sBasename = FileHelper.getBasename(sInputPath);
+                    String sInputPathWithPDF = sInputPath + ".pdf";
+                    File aInputPathWithPDF = new File(sInputPathWithPDF);
 
-                    // there exist an index file, therefore we assume the given
-                    // file is already converted to postscript or pdf
-                    runThroughEveryReportInIndex(sPath, sBasename, _aParam);
+                    if (aInputPathWithPDF.exists() &&
+                        _aParam.getReferenceType().toLowerCase().equals("pdf"))
+                    {
+                        // create PDF only if a pdf file exists and creatortype is set to PDF
+                        callEntry(sInputPathWithPDF, _aParam);
+                    }
+                    else
+                    {
+                        String sInputPathWithPS = sInputPath + ".ps";
+
+                        File aInputPathWithPS = new File(sInputPathWithPS);
+                        if (aInputPathWithPS.exists())
+                        {
+                            callEntry(sInputPathWithPS, _aParam);
+                        }
+                        else
+                        {
+                            String sPath = FileHelper.getPath(sInputPath);
+                            String sBasename = FileHelper.getBasename(sInputPath);
+
+                            // there exist an index file, therefore we assume the given
+                            // file is already converted to postscript or pdf
+                            runThroughEveryReportInIndex(sPath, sBasename, _aParam);
+                        }
+                    }
                 }
             }
         }
@@ -213,7 +233,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
             {
                 // special case for odb files
                 int nFileCount = aIniFile.getIntValue(_sBasename, "reportcount", 0);
-                ArrayList aList = new ArrayList();
+                ArrayList<String> aList = new ArrayList<String>();
                 for (int i=0;i<nFileCount;i++)
                 {
                     String sValue = aIniFile.getValue(_sBasename, "report" + i);
@@ -233,7 +253,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 // get the bad status and store it into the
                 for (int i=0;i<aList.size();i++)
                 {
-                    String sEntry = (String)aList.get(i);
+                    String sEntry = aList.get(i);
                     callEntry(sEntry, _aParam);
 
                     // we want to know the current status of the run through
@@ -268,7 +288,12 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 }
             }
         }
+        else
+        {
+             assure("File '" + sIndexFile + "' doesn't exists.", aIndexFile.exists(), true);
+        }
     }
+
     private String getPSorPDFNameFromIniFile(IniFile _aIniFile, String _sName)
     {
         boolean bHasPostscriptOrPDF = false;
@@ -422,7 +447,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                     {
                         // special case for odb files
                         int nFileCount = aIniFile.getIntValue(sBasename, "reportcount", 0);
-                        ArrayList aList = new ArrayList();
+                        ArrayList<String> aList = new ArrayList<String>();
                         for (int i=0;i<nFileCount;i++)
                         {
                             String sValue = aIniFile.getValue(sBasename, "report" + i);
@@ -442,7 +467,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
 
                             for (int i=0;i<aList.size();i++)
                             {
-                                String sPSFile = (String)aList.get(i);
+                                String sPSFile = aList.get(i);
 
                                 // TODO: this information has to come out of the ini files
                                 String sStatusRunThrough = "";

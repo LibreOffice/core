@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: options_loadsave_general.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : thorsten.bosbach@sun.com
@@ -43,12 +37,9 @@ testcase tLoadSaveGeneral
     Dim AppCount as Integer
     dim i as Integer
 
-    '///check if all settings are saved in configuration ( Load & Save / General )
 
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions("LoadSave","General")
-    '///save old settings
     printlog " - save old settings"
     lbSave(13) = BenutzerspezifischeEinstellungen.IsChecked
     lbSave(1)  = DokumenteigenschaftenBearbeiten.IsChecked
@@ -78,7 +69,6 @@ testcase tLoadSaveGeneral
         lsSave(2+AppCount+i) = Filter.GetSelText
     next i
 
-    '///+invert and change all settings
     printlog " - invert/change settings"
     if lbSave(13) then BenutzerspezifischeEinstellungen.UnCheck else BenutzerspezifischeEinstellungen.Check
     if lbSave(1) then DokumenteigenschaftenBearbeiten.Uncheck else DokumenteigenschaftenBearbeiten.Check
@@ -98,19 +88,15 @@ testcase tLoadSaveGeneral
         printlog( "Doctype: " & Dokumenttyp.getSelText() & " has filter: " & Filter.getSelText() )
     next i
 
-    '///+close options dialog with OK
     printlog " - close options-dlg with OK"
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     sleep(3)
 
-    '///exit and restart StarOffice
     printlog " - exit/restart StarOffice"
     ExitRestartTheOffice
 
-    '///check inverting and changes
     printlog " - check inverting/changes"
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions ( "LoadSave", "General" )
 
@@ -151,7 +137,6 @@ testcase tLoadSaveGeneral
         endif
     next i
 
-    '///make other changes
     printlog " - make other changes"
     BenutzerspezifischeEinstellungen.Uncheck
     DokumenteigenschaftenBearbeiten.Check
@@ -167,13 +152,11 @@ testcase tLoadSaveGeneral
     next i
 
     printlog " - close options-dlg with OK"
-    '///+close options dialog with OK
 
     kontext "extrasoptionendlg"
     ExtrasOptionenDlg.OK
     Sleep (1)
 
-    '///+you must get for all applications a filter-changes-warning ( perhaps not for all )
     printlog "    - react on messageboxes for loosing settings after changing default-filters"
     kontext "FilterWarning"
     for i=1 to AppCount
@@ -185,9 +168,7 @@ testcase tLoadSaveGeneral
     next i
     Sleep (3)
 
-    '///check second changes
     printlog " - check second changes"
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions ( "LoadSave", "General" )
 
@@ -222,7 +203,6 @@ testcase tLoadSaveGeneral
         endif
     next i
 
-    '///reset to default settings
     printlog " - reset to saved settings"
     if lbSave ( 13 ) = FALSE then
         BenutzerspezifischeEinstellungen.UnCheck else BenutzerspezifischeEinstellungen.Check
@@ -255,14 +235,11 @@ testcase tLoadSaveGeneral
         Filter.Select(lsSave(2+AppCount+i))
     next i
 
-    '///+close options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     Sleep (3)
 
-    '///check the reset
     printlog " - check settings"
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions ( "LoadSave", "General" )
 
@@ -302,7 +279,6 @@ testcase tLoadSaveGeneral
         endif
     next i
 
-    '///+close options dialog with OK
     kontext "extrasoptionendlg"
     ExtrasOptionenDlg.OK
 endcase

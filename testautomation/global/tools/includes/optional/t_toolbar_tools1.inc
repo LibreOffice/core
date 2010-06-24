@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_toolbar_tools1.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:09 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -99,6 +93,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "3D-Settings"
               case 46   : fGetToolbarName   = "3D-Settings"
               case 49   : fGetToolbarName   = "3D-Einstellungen"
+              case 50   : fGetToolbarName   = "Nastavitve 3D"
               case 55   : fGetToolbarName   = "3D-Settings"
               case 81   : fGetToolbarName   = "3D-Settings"
               case 82   : fGetToolbarName   = "3D-Settings"
@@ -116,6 +111,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Align"
               case 46   : fGetToolbarName   = "Align"
               case 49   : fGetToolbarName   = "Ausrichten"
+              case 50   : fGetToolbarName   = "Poravnava"
               case 55   : fGetToolbarName   = "Align"
               case 81   : fGetToolbarName   = "Align"
               case 82   : fGetToolbarName   = "Align"
@@ -133,6 +129,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Basic Shapes"
               case 46   : fGetToolbarName   = "Basic Shapes"
               case 49   : fGetToolbarName   = "Standardformen"
+              case 50   : fGetToolbarName   = "Osnovni liki"
               case 55   : fGetToolbarName   = "Basic Shapes"
               case 81   : fGetToolbarName   = "Basic Shapes"
               case 82   : fGetToolbarName   = "Basic Shapes"
@@ -150,6 +147,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Block Arrows"
               case 46   : fGetToolbarName   = "Block Arrows"
               case 49   : fGetToolbarName   = "Blockpfeile"
+              case 50   : fGetToolbarName   = "Votle puščice"
               case 55   : fGetToolbarName   = "Block Arrows"
               case 81   : fGetToolbarName   = "Block Arrows"
               case 82   : fGetToolbarName   = "Block Arrows"
@@ -167,6 +165,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Bullets and Numbering"
               case 46   : fGetToolbarName   = "Bullets and Numbering"
               case 49   : fGetToolbarName   = "Nummerierung und Aufzählungszeichen"
+              case 50   : fGetToolbarName   = "Oznake in oštevilčevanje"
               case 55   : fGetToolbarName   = "Bullets and Numbering"
               case 81   : fGetToolbarName   = "Bullets and Numbering"
               case 82   : fGetToolbarName   = "Bullets and Numbering"
@@ -184,6 +183,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Database Form Design"
               case 46   : fGetToolbarName   = "Database Form Design"
               case 49   : fGetToolbarName   = "Datenbank Formularentwurf"
+              case 50   : fGetToolbarName   = "Oblikovanje obrazca zbirke podatkov"
               case 55   : fGetToolbarName   = "Database Form Design"
               case 81   : fGetToolbarName   = "Database Form Design"
               case 82   : fGetToolbarName   = "Database Form Design"
@@ -201,6 +201,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Drawing"
               case 46   : fGetToolbarName   = "Drawing"
               case 49   : fGetToolbarName   = "Zeichnen"
+              case 50   : fGetToolbarName   = "Risba"
               case 55   : fGetToolbarName   = "Drawing"
               case 81   : fGetToolbarName   = "Drawing"
               case 82   : fGetToolbarName   = "Drawing"
@@ -218,6 +219,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Drawing Object Properties"
               case 46   : fGetToolbarName   = "Drawing Object Properties"
               case 49   : fGetToolbarName   = "Zeichnungsobjekt-Eigenschaften"
+              case 50   : fGetToolbarName   = "Lastnosti risanega predmeta"
               case 55   : fGetToolbarName   = "Drawing Object Properties"
               case 81   : fGetToolbarName   = "Drawing Object Properties"
               case 82   : fGetToolbarName   = "Drawing Object Properties"
@@ -235,6 +237,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Form Design"
               case 46   : fGetToolbarName   = "Form Design"
               case 49   : fGetToolbarName   = "Formular Entwurf"
+              case 50   : fGetToolbarName   = "Oblikovanje obrazca"
               case 55   : fGetToolbarName   = "Form Design"
               case 81   : fGetToolbarName   = "Form Design"
               case 82   : fGetToolbarName   = "Form Design"
@@ -252,6 +255,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Formatting"
               case 46   : fGetToolbarName   = "Formatting"
               case 49   : fGetToolbarName   = "Format"
+              case 50   : fGetToolbarName   = "Oblikovanje"
               case 55   : fGetToolbarName   = "Formatting"
               case 81   : fGetToolbarName   = "Formatting"
               case 82   : fGetToolbarName   = "Formatting"
@@ -269,6 +273,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Frame"
               case 46   : fGetToolbarName   = "Frame"
               case 49   : fGetToolbarName   = "Rahmen"
+              case 50   : fGetToolbarName   = "Okvir"
               case 55   : fGetToolbarName   = "Frame"
               case 81   : fGetToolbarName   = "Frame"
               case 82   : fGetToolbarName   = "Frame"
@@ -286,6 +291,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Insert"
               case 46   : fGetToolbarName   = "Insert"
               case 49   : fGetToolbarName   = "Einfügen"
+              case 50   : fGetToolbarName   = "Vstavi"
               case 55   : fGetToolbarName   = "Insert"
               case 81   : fGetToolbarName   = "Insert"
               case 82   : fGetToolbarName   = "Insert"
@@ -303,6 +309,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "OLE-Object"
               case 46   : fGetToolbarName   = "OLE-Object"
               case 49   : fGetToolbarName   = "OLE Objekt"
+              case 50   : fGetToolbarName   = "Predmet OLE"
               case 55   : fGetToolbarName   = "OLE-Object"
               case 81   : fGetToolbarName   = "OLE-Object"
               case 82   : fGetToolbarName   = "OLE-Object"
@@ -320,6 +327,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Standard"
               case 46   : fGetToolbarName   = "Standard"
               case 49   : fGetToolbarName   = "Standard"
+              case 50   : fGetToolbarName   = "Standardno"
               case 55   : fGetToolbarName   = "Standard"
               case 81   : fGetToolbarName   = "Standard"
               case 82   : fGetToolbarName   = "Standard"
@@ -337,6 +345,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Table"
               case 46   : fGetToolbarName   = "Table"
               case 49   : fGetToolbarName   = "Tabelle"
+              case 50   : fGetToolbarName   = "Tabela"
               case 55   : fGetToolbarName   = "Table"
               case 81   : fGetToolbarName   = "Table"
               case 82   : fGetToolbarName   = "Table"
@@ -354,6 +363,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "Text Object"
               case 46   : fGetToolbarName   = "Text Object"
               case 49   : fGetToolbarName   = "Textobjekt"
+              case 50   : fGetToolbarName   = "Besedilni predmet"
               case 55   : fGetToolbarName   = "Text Object"
               case 81   : fGetToolbarName   = "Text Object"
               case 82   : fGetToolbarName   = "Text Object"
@@ -371,6 +381,7 @@ function fGetToolbarName(sToolbar) as String
               case 39   : fGetToolbarName   = "XML Form Design"
               case 46   : fGetToolbarName   = "XML Form Design"
               case 49   : fGetToolbarName   = "XML Formularentwurf"
+              case 50   : fGetToolbarName   = "Oblikovanje obrazca XML"
               case 55   : fGetToolbarName   = "XML Form Design"
               case 81   : fGetToolbarName   = "XML Form Design"
               case 82   : fGetToolbarName   = "XML Form Design"

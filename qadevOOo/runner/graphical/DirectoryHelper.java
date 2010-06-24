@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DirectoryHelper.java,v $
- * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@ import java.util.ArrayList;
  */
 public class DirectoryHelper
 {
-    ArrayList m_aFileList = new ArrayList();
+    ArrayList<String> m_aFileList = new ArrayList<String>();
     boolean m_bRecursiveIsAllowed = true;
 
     void setRecursiveIsAllowed(boolean _bValue)
@@ -76,6 +73,10 @@ public class DirectoryHelper
      *     System.out.println(aEntry);
      * }
      *
+     * @param _sDirectory
+     * @param _aFileFilter
+     * @param _bRecursiveIsAllowed
+     * @return list of directories
      */
     public static Object[] traverse( String _sDirectory, FileFilter _aFileFilter, boolean _bRecursiveIsAllowed )
         {

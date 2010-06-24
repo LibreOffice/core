@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_filetools.inc,v $
-'*
-'* $Revision: 1.4 $
-'*
-'* last change: $Author: rt $ $Date: 2008-09-04 09:17:26 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -80,7 +74,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
     dim cMessage as string
     dim bSkip as boolean
 
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
 
     ' not good but apparently required - else hDestroyDocument will handle the
     ' dialogs and warn about them.
@@ -119,7 +113,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
                     printlog( CFN & "MSG (" & iActives & "): closed with Cancel" )
                     bSkip = true
                 catch
-                    printlog( CFN & "Missed - this dialog has no OK button (create new document)" )
+                    printlog( CFN & "Missed - this dialog has no Cancel button (create new document)" )
                     active.ok()
                 endcatch
 
@@ -129,7 +123,6 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
                             active.ok()
                             printlog( CFN & "MSG (" & iActives & "): closed with OK" )
                             bSkip = true
-                        else
                         endif
                     else
                     endif
@@ -147,6 +140,23 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
 
             endif
         catch
+            kontext "Active"
+            if ( Active.exists( 1 ) ) then
+                if ( Active.getButtonCount() = 2 ) then
+                    printlog( CFN & "<Update links dialog> or <File corruption warning>" )
+                    active.yes()
+                    hFileWait( FALSE )
+                    kontext "Active"
+                    if ( Active.exists( 2 ) ) then
+                        qaerrorlog( "#105670# - File corruption warning, the template is broken" )
+                        qaerrorlog( CFN & "Trying to recover." )
+                        Active.ok()
+                        hHandleActivesOnLoad() = FALSE
+                        exit function
+                    endif
+                endif
+            endif
+
             qaerrorlog( "Problem while trying to handle messageboxes" )
             hHandleActivesOnLoad() = false
         endcatch
@@ -159,7 +169,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
         printlog( CFN & "Exit: The test closed more dialogs than expected" )
         hHandleActivesOnLoad() = false
     else
-        printlog( CFN & "Exit" )
+        if ( VERBOSE ) then printlog( CFN & "Exit" )
     endif
        
 end function       
@@ -198,7 +208,7 @@ function hHandleInitialDialogs() as integer
     dim incident as integer
         incident = 0
         
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
     try
 
         '///+<li>Test for UseOfThisTemplate-dialog</li>
@@ -244,7 +254,7 @@ function hHandleInitialDialogs() as integer
     endcatch
          
     hHandleInitialDialogs() = incident
-    printlog( CFN & "Exit" )
+    if ( VERBOSE ) then printlog( CFN & "Exit" )
     
     '///</ul>
 
@@ -315,10 +325,12 @@ function hGetWorkPath() as string
     sPath = convertpath( sPath ) 
     
     '///+<li>Print info to the log and return the path</li>
-    if ( bPathIsFromAPI ) then
-    	printlog( CFN & "(From API): " & sPath )
-    else
-        qaerrorlog( CFN & "(Junked API-Path): " & sPath )
+    if ( VERBOSE ) then 
+        if ( bPathIsFromAPI ) then
+        	printlog( CFN & "(From API): " & sPath )
+        else
+            qaerrorlog( CFN & "(Junked API-Path): " & sPath )
+        endif
     endif
     hGetWorkPath() = sPath 
     '///</ul>

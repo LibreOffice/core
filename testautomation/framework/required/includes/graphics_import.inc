@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: graphics_import.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: obo $ $Date: 2008-07-25 08:03:02 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -39,6 +33,9 @@
 
 
 testcase tQuickInsertGraphNotAsLink
+
+    printlog( "Load files of all known graphics formats" )
+    
     dim iCurrentFile as integer
     dim GraphicFile as String
     dim Filtername as String
@@ -210,8 +207,7 @@ endcase
 
 testcase tInFilterCountCompare()
 
-    '///<h1>Verify presence of all known graphic filters</h1>
-    '///<i>Plain text description</i><br><br>
+    printlog( "Check filterlist (filterstring) for graphics files" )
     
     if ( gUseSysDlg ) then
         warnlog( "This test needs the OpenOffice.org filepicker to be set as default" )
@@ -244,88 +240,75 @@ testcase tInFilterCountCompare()
     dim iBegin as integer
     dim iEnd as integer
 
-    '///<u>Description:</u>
     printlog( "" )
     printlog( "Verify filternames listed on the Insert Graphics dialog" )
-    '///<ul>
 
-    '///+<li>Open a new document, change it</li>
     hCreateDocument()
     hChangeDoc()
     
-    '///+<li>Open the graphics import dialog</li>
     InsertGraphicsFromFile
     
-    '///+<li>Get the number of filters from the list</li>
     kontext "GrafikEinfuegenDlg"
-    iFilterCount = DateiTyp.getItemCount()
-    
-    'Make list compatible with listfunctions
-    caUIFilters( 0 ) = iFilterCount - 1
-    
-    '///+<li>Part 1: Retrieve the names of the filters, ignore the first entry (all formats)</li>
-    for iCurrentFilter = 2 to iFilterCount
-    
-        caUIFilters( iCurrentFilter - 1 ) = DateiTyp.getItemText( iCurrentFilter )
+    if ( GrafikEinfuegenDlg.exists( 1 ) ) then
+        iFilterCount = DateiTyp.getItemCount()
         
-    next iCurrentFilter
-    
-    '///+<li>Compare the list against the reference</li>
-    irc = hManageComparisionList( cReferencePath, cUIFiltersPath, caUIFilters() )
-    if ( irc <> 0 ) then
-        warnlog( "The list of graphic format filters has changed" )
+        'Make list compatible with listfunctions
+        caUIFilters( 0 ) = iFilterCount - 1
+        
+        for iCurrentFilter = 2 to iFilterCount
+        
+            caUIFilters( iCurrentFilter - 1 ) = DateiTyp.getItemText( iCurrentFilter )
+            
+        next iCurrentFilter
+        
+        irc = hManageComparisionList( cReferencePath, cUIFiltersPath, caUIFilters() )
+        if ( irc <> 0 ) then
+            warnlog( "The list of graphic format filters has changed" )
+        endif
+        
+        printlog( "" )
+        printlog( "Verify <All formats>-string" )
+        cAllFormats = DateiTyp.getItemText( 1 )
+        
+        iBegin = instr( cAllFormats, "<" )
+        if ( iBegin <> 1 ) then
+            warnlog( "The opening bracket < is missing in <All formats> string" )
+        endif
+        
+        iEnd = instr( cAllFormats, ">" )
+        if ( iEnd = 0 ) then
+            warnlog( "The closing bracket > is missing in <All formats> string" )
+        endif
+        
+        if ( ( iEnd - iBegin ) < 2 ) then
+            warnlog( "<All formats> string is shorter than expected, please check" )
+            printlog( "String is: " & cAllFormats & ", length (" & len( cAllFormats ) & ")" )
+        endif
+        
+        iBegin = instr( cAllFormats, "(" )
+        if ( iBegin <> iEnd + 2 ) then
+            warnlog( "The opening bracket ( is missing in <All formats> string" )
+        endif
+        
+        iEnd = instr( cAllFormats, ")" )
+        if ( iEnd < 10 ) then
+            warnlog( "The closing bracket ) is missing in <All formats> string" )
+        endif   
+        
+        irc = iEnd - iBegin
+        if ( irc <> SUFFIX_STRING_LENGTH ) then
+            warnlog( "The list of file suffixes has changed, please verify" )
+            printlog( "Found: " & irc & " chars, expected " & SUFFIX_STRING_LENGTH )
+        endif
+        
+        kontext "GrafikEinfuegenDlg"
+        GrafikEinfuegenDlg.cancel()
+    else
+        warnlog( "<Insert Graphics> dialog did not open" )
     endif
-    
-    '///+<li>Part 2: Verify the &lt;All formats&gt; string</li>
-    printlog( "" )
-    printlog( "Verify <All formats>-string" )
-    cAllFormats = DateiTyp.getItemText( 1 )
-    
-    '///+<li>Test opening bracket (&lt;) (this is first character in string)</li>
-    iBegin = instr( cAllFormats, "<" )
-    if ( iBegin <> 1 ) then
-        warnlog( "The opening bracket < is missing in <All formats> string" )
-    endif
-    
-    '///+<li>Test closing bracket (&gt;)</li>
-    iEnd = instr( cAllFormats, ">" )
-    if ( iEnd = 0 ) then
-        warnlog( "The closing bracket > is missing in <All formats> string" )
-    endif
-    
-    '///+<li>Verify that &lt;All formats&gt; string has sane length</li>
-    if ( ( iEnd - iBegin ) < 2 ) then
-        warnlog( "<All formats> string is shorter than expected, please check" )
-        printlog( "String is: " & cAllFormats & ", length (" & len( cAllFormats ) & ")" )
-    endif
-    
-    '///+<li>Test opening bracket (, it is separated by one blank from &gt;</li>
-    iBegin = instr( cAllFormats, "(" )
-    if ( iBegin <> iEnd + 2 ) then
-        warnlog( "The opening bracket ( is missing in <All formats> string" )
-    endif
-    
-    '///+<li>Test closing bracket )</li>
-    iEnd = instr( cAllFormats, ")" )
-    if ( iEnd < 10 ) then
-        warnlog( "The closing bracket ) is missing in <All formats> string" )
-    endif   
-    
-    '///+<li>Verify that the list of filter-suffixes has sane length</li>
-    irc = iEnd - iBegin
-    if ( irc <> SUFFIX_STRING_LENGTH ) then
-        warnlog( "The list of file suffixes has changed, please verify" )
-        printlog( "Found: " & irc & " chars, expected " & SUFFIX_STRING_LENGTH )
-    endif
-    
-    '///+<li>Close the dialog</li>
-    kontext "GrafikEinfuegenDlg"
-    GrafikEinfuegenDlg.cancel()
 
-    '///+<li>Close the document</li>
     hDestroyDocument()
     
-    '///</ul>
 
 
 endcase

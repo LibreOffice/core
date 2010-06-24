@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: sxw7_03.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-07-11 07:35:14 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -70,7 +64,7 @@ testcase thyperlinks
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\hyperlinks.sdw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\hyperlinks.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\hyperlinks.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\hyperlinks") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\hyperlinks\styles.xml")) = FALSE then
@@ -152,7 +146,7 @@ testcase tindexes_alpha
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\indexes_alpha.sdw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\indexes_alpha.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\indexes_alpha.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\indexes_alpha") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\indexes_alpha\styles.xml")) = FALSE then
@@ -181,7 +175,7 @@ testcase tindex_biblio
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\index_biblio.sdw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\index_biblio.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\index_biblio.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\index_biblio") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\index_biblio\styles.xml")) = FALSE then
@@ -210,7 +204,7 @@ testcase tindex_most
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\index_most.sdw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\index_most.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\index_most.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\index_most") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\index_most\styles.xml")) = FALSE then
@@ -239,7 +233,7 @@ testcase tpages
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\pages.sdw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\pages.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\pages.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\pages") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\pages\styles.xml")) = FALSE then
@@ -268,7 +262,7 @@ testcase tparagraph01
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\paragraph01.sdw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph01.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph01.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph01") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph01\styles.xml")) = FALSE then
@@ -297,7 +291,7 @@ testcase tparagraph02
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\paragraph02.sdw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph02.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph02.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph02") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\paragraph02\styles.xml")) = FALSE then
@@ -328,7 +322,7 @@ testcase tsection_main
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\section_main.sdw") , TRUE)
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\section_main.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\section_main.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\section_main") )
         if XMLWellFormed (gOfficePath & ConvertPath("user\work\xml\writer\level1\section_main\styles.xml")) = FALSE then
@@ -363,6 +357,13 @@ testcase tEventsToObjects
     Dim AttributeValue(50) as string
     Dim cWhereCalled as string    
     
+    dim sdw_file as string 
+        sdw_file = gTesttoolPath & "xml\optional\input\writer\events_to_objects.sdw"
+        sdw_file = convertpath( sdw_file )
+    dim sxw_file as string 
+        sxw_file = gOfficePath & "user\work\xml\writer\level1\events_to_objects.sxw"
+        sxw_file = convertpath( sxw_file )
+    
     printlog "+- events_to_objects.sdw"
 
     cWhereCalled = "xml::level1::inc::sxw7_03.inc::tEventsToObjects: "
@@ -383,18 +384,21 @@ testcase tEventsToObjects
     endcatch        
   
     '/// Load (binary) document under <i>...qa/qatesttool/xml/update/input/writer/events_to_objects.sdw</i>.
-    if hOpenFileAndIgnoreMacroWarning (gTesttoolPath & ConvertPath("xml\optional\input\writer\events_to_objects.sdw") , 1) = FALSE then
+    hFileOpen( sdw_file )
+    if ( NOT hAllowMacroExecution() ) then
         warnlog "#i80769# Macros not being loaded. Exiting test case."
         call hCloseDocument
         goto endsub
     end if    
     '/// Save as StarOffice XML fileformat (.sxw).  
-    if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\events_to_objects.sxw") , "StarOffice XML (Writer)") then    
+    if ( hFileSaveAsWithFilterKill ( sxw_file , "StarOffice XML (Writer)" ) ) then    
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
-        sleep(3)     
+        'call hCloseDocument()
+        hCloseDocument()
+        'sleep(3)     
         '/// Close window with the document.
-        UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\events_to_objects.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\events_to_objects") )
+        UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\events_to_objects.sxw") , _
+                       gOfficePath & ConvertPath("user\work\xml\writer\level1\events_to_objects") )
         '/// Uncompressing .sxw files in directory <pre>../user/work/events_to_objects/</pre>. 
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\events_to_objects\meta.xml")) = FALSE then
             warnlog "XML-file 'meta.xml' not well formed!"
@@ -407,8 +411,9 @@ testcase tEventsToObjects
             warnlog "XML-file 'content.xml' not well formed!"
             '/// If <i>well formness</i> is okay, load exported document.
         else
-            call hOpenFileAndIgnoreMacroWarning (gOfficePath & ConvertPath("user\work\xml\writer\level1\events_to_objects.sxw") , 1)
-            sleep(2)
+            hFileOpen( sdw_file )
+            hAllowMacroExecution()
+
             Kontext "DocumentWriter"
             DocumentWriter.TypeKeys "<SHIFT F4>" , TRUE
             '/// Select first graphic with &lt;SHIFT&gt;&lt;F4&gt;

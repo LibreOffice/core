@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _LineProperties.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,21 +80,7 @@ public class _LineProperties extends MultiPropertyTest {
         LineDash aLineDash2 = new LineDash();
         aLineDash.DashLen = 5;
         aLineDash2.DashLen = 1;
-        PropertyValue[] firstValue = new PropertyValue[2];
-        firstValue[0] = new PropertyValue();
-        firstValue[0].Name = "Name";
-        firstValue[0].Value = "Name1";
-        firstValue[1] = new PropertyValue();
-        firstValue[1].Name = "LineDash";
-        firstValue[1].Value = aLineDash;
-        PropertyValue[] secondValue = new PropertyValue[2];
-        secondValue[0] = new PropertyValue();
-        secondValue[0].Name = "Name";
-        secondValue[0].Value = "Name2";
-        secondValue[1] = new PropertyValue();
-        secondValue[1].Name = "LineDash";
-        secondValue[1].Value = aLineDash2;
-        testProperty("LineDash",firstValue,secondValue);
+        testProperty("LineDash",aLineDash,aLineDash2);
     }
 }
 

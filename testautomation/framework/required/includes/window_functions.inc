@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: window_functions.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-09-04 09:16:41 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -39,180 +33,114 @@
 
 testcase tWindowFunctions
 
+    printlog( "Update test for window functions" )
+
     if ( gtSysName = "Mac OS X" ) then
         printlog( "No testing for Mac as some Window attributes do not exist" )
         goto endsub
     endif
 
-    '///<h1>Update test for window functionality</h1>
-    '///<ul>
-    dim brc as boolean
     
-    '///+<li>Verify that we have one initial document open</li>
     printlog( "Create initial document" )
     gApplication = "WRITER"
     hInitSingleDoc()
     hInitWriteDocIdentifier( "F_updt_windowfuncs.bas" )
     
-    '///+<li>Create a new document</li>
     printlog( "New document" )
-    hCreateDocument()
+    hNewDocument()
     if ( getDocumentCount <> 2 ) then
         warnlog( "Two open documents were expected, found " & getDocumentCount )
     endif    
 
-    DocumentWriter.restore()
-
-    '///+<li>Use .close()-method to close document</li>
-    kontext "documentwriter"
+    kontext "DocumentWriter"
     printlog( "Close document" )
     DocumentWriter.close()
 
-    '///+<li>Verify that the document is closed</li>
     if ( getDocumentCount <> 1 ) then
         warnlog( "One open document was expected, found " & getDocumentCount )
     endif
 
-    '///+<li>Create a new document</li>
     printlog( "New document" )
-    hCreateDocument()
+    hNewDocument()
     if ( getDocumentCount <> 2) then
         warnlog( "Two open documents were expected, found " & getDocumentCount )
     endif    
 
-    '///+<li>Write some text into the second writer document</li>
-    '///+<li>Use .close()-method to close document</li>
     printlog( "Enter some text into the second writer document" )
-    kontext "documentwriter"
+    kontext "DocumentWriter"
     DocumentWriter.TypeKeys( "test" )
     DocumentWriter.close()
 
-    '///+<li>Close the message (Document changed)</li>
     kontext "active"
     if ( Active.exists() ) then
+        printlog( "Close messagebox with Cancel (leaves the document open)" )
         Active.Cancel()
-        printlog( "Close messagebox" )
     else
         warnlog( "No warning that data will be lost on close of this document" )
     endif
     
-    '///+<li>Verify that exactly two documents are open</li>
+    kontext "DocumentWriter"    
     if ( getDocumentCount = 2 ) then
-        printlog( "One document open. Good." )
+        printlog( "Two documents open. Good." )
     else
         warnlog( "Incorrect document count. Expected two, found " & getDocumentCount )
     endif
 
-    '///+<li>Close the document using FileClose</li>
-    hDestroyDocument() ' note tha hCloseDoc/hDestroyDocument use FileClose
+    kontext "DocumentWriter"
+    printlog( "Close the document" )
+    FileClose()
     
-    '///+<li>Verify that exactly one document is open</li>
+    kontext "Active"
+    if ( Active.exists() ) then  
+        printlog( "Do not save the document" )
+        Active.No()
+    else
+        warnlog( "Warning: No data loss warning" )
+    endif
+    
+    kontext "DocumentWriter"
     if ( getDocumentCount = 1 ) then
         printlog( "One document open. Good." )
     else
         warnlog( "Incorrect document count. Expected one, found " & getDocumentCount )
     endif    
 
-    '///+<li>Create a new document</li>
-    printlog( "New document" )
-    brc = hCreateDocument()
-    if ( not brc ) then
-        warnlog( "Two open documents were expected, found " & getDocumentCount() )
-    endif    
-
-
-    kontext "documentwriter"
-    '///+<li>Maximize Window</li>
-    '///<ul>
-    printlog( "Maximize window" )
-    DocumentWriter.Maximize()
-    sleep( 2 )
-    
-    '///+<li>Verify state: Maximized (true)</li>
-    if ( DocumentWriter.IsMax() ) then
-        printlog( " * Window is maximized" )
-    else
-        warnlog( " * Window not maximized" )
-    endif
-
-
-    '///+<li>Verify state: Minimized (false)</li>
-    if ( DocumentWriter.IsMin() ) then
-        warnlog( " * Window is minimized" )
-    else
-        printlog( " * Window not minimized" )
-    endif
-
-    '///+<li>Verify state: Restored (false)</li>
-    if ( DocumentWriter.IsRestore() ) then
-        warnlog( " * Window is Restored" )
-    else
-        printlog( " * Window not Restored" )
-    endif
-    '///</ul>
-
-    '///<li>Minimize Window</li>
-    '///<ul>
+    Kontext "DocumentWriter"
     printlog( "Minimize window" )
     DocumentWriter.Minimize()
-    sleep( 2 )
+    Wait( 2000 )
 
-    '///+<li>Verify state: Minimized (true)</li>
+    kontext "DocumentWriter"
     if ( DocumentWriter.IsMin() ) then
-        printlog( " * Window is minimized" )
+        printlog( "Window is minimized" )
     else
         qaerrorlog( "#i32672# Window not minimized" )
     endif
 
-    '///+<li>Verify state: Maximized (false)</li>
-    if ( DocumentWriter.IsMax() ) then
-        warnlog( " * Window is maximized" )
-    else
-        printlog( " * Window not maximized" )
-    endif
-
-    '///+<li>Verify state: Restored (false)</li>
-    if ( DocumentWriter.IsRestore() ) then
-        qaerrorlog( "#i32672# Window is Restored" )
-    else
-        printlog( " * Window not Restored" )
-    endif
-    '///</ul>
-
-    '///<li>Restore Window</li>
-    '///<ul>
+    kontext "DocumentWriter"
     printlog( "Restore window" )
     DocumentWriter.Restore()
-    sleep( 2 )
+    Wait( 2000 )
 
-    '///+<li>Verify state: Restored (true)</li>
     if ( DocumentWriter.IsRestore() ) then
-        printlog( " * Window is Restored" )
+        printlog( "Window is Restored" )
     else
         warnlog( " * Window not Restored" )
     endif
 
-    '///+<li>Verify state: Maximized (false)</li>
-    if ( DocumentWriter.IsMax() ) then
-        warnlog( " * Window is maximized" )
-    else
-        printlog( " * Window not maximized" )
-    endif
-
-    '///+<li>Verify state: Minimized (false)</li>
-    if ( DocumentWriter.IsMin() ) then
-        warnlog( " * Window is minimized" )
-    else
-        printlog( " * Window not minimized" )
-    endif
-
-    '///</ul>
+    kontext "DocumentWriter"
+    printlog( "Maximize window" )
+    DocumentWriter.Maximize()
+    Wait( 2000 )
     
-    '///+<li>Close the documents</li>
-    brc = hDestroyDocument()
-    brc = hDestroyDocument()
+    kontext "DocumentWriter"
+    if ( DocumentWriter.IsMax() ) then
+        printlog( "Window is maximized" )
+    else
+        warnlog( " * Window not maximized" )
+    endif
 
-    '///</ul>
+    hDestroyDocument()
 
 endcase
 
@@ -220,35 +148,33 @@ endcase
 
 sub sAllWindowTitle
 
-    '///<h3>Update test: Check the window titles for all applications</h3>
-    '///<ul>
+    printlog( "Window titles for the applications: " & gProductName )
     
-
-    '///+<li>writer</li>
+    printlog( "Writer" )
     gApplication = "WRITER"
     call tCheckWindowTitle("swriter","Writer")
 
-    '///+<li>MasterDoc</li>
+    printlog( "Master Document" )
     gApplication = "MASTERDOCUMENT"
     call tCheckWindowTitle("sglobal","Writer")
 
-    '///+<li>HTML document</li>
+    printlog( "HTML" )
     gApplication = "HTML"
     call tCheckWindowTitle("sweb","Writer/Web")
 
-    '///+<li>Calc</li>
+    printlog( "Spreadsheet" )
     gApplication = "CALC"
     call tCheckWindowTitle("scalc","Calc")
 
-    '///+<li>Impress</li>
+    printlog( "Presentation" )
     gApplication = "IMPRESS"
     call tCheckWindowTitle("simpress","Impress")
 
-    '///+<li>Draw</li>
+    printlog( "Drawing" )
     gApplication = "DRAW"
     call tCheckWindowTitle("sdraw","Draw")
 
-    '///+<li>Math</li>
+    printlog( "Formula" )
     gApplication = "MATH"
     call tCheckWindowTitle("smath","Math")
 
@@ -259,61 +185,61 @@ sub sAllWindowTitle
 
     'fileclose
     'call tCheckWindowTitle("soffice","")
-    '///</ul>
+
 end sub
 
 '*******************************************************************************
 
 testcase tCheckWindowTitle(sApplication as string, sReference as string)
 
-    '///<h1>Update test for the office window titles</h1>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Name of application (string), case sensitive. Valid options are:</li>
-    '///<ol>
-    '///+<li>&quot;swriter&quot;</li>
-    '///+<li>&quot;sglobal&quot;</li>
-    '///+<li>&quot;sweb&quot;</li>
-    '///+<li>&quot;scalc&quot;</li>
-    '///+<li>&quot;simpress&quot;</li>
-    '///+<li>&quot;sdraw&quot;</li>
-    '///+<li>&quot;smath&quot;</li>
-    '///+<li>&quot;insight&quot; * Currently disabled</li>
-    '///+<li>&quot;soffice&quot; * Currently disabled</li>
-    '///</ol>
-    '///+<li>Reference name (string), matches name of application</li>
-    '///<ol>
-    '///+<li>&quot;Writer&quot;</li>
-    '///+<li>&quot;Writer&quot;</li>
-    '///+<li>&quot;Writer/Web&quot;</li>
-    '///+<li>&quot;Calc&quot;</li>
-    '///+<li>&quot;Impress&quot;</li>
-    '///+<li>&quot;Draw&quot;</li>
-    '///+<li>&quot;Math&quot;</li>
-    '///+<li>&quot;Base&quot; * Currently disabled</li>
-    '///+<li>&quot;&quot; * Currently disabled</li>
-    '///</ol>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
+    printlog( "Update test for the office window titles" )
+    '<u>Input</u>:
+    '<ol>
+    '+<li>Name of application (string), case sensitive. Valid options are:</li>
+    '<ol>
+    '+<li>&quot;swriter&quot;</li>
+    '+<li>&quot;sglobal&quot;</li>
+    '+<li>&quot;sweb&quot;</li>
+    '+<li>&quot;scalc&quot;</li>
+    '+<li>&quot;simpress&quot;</li>
+    '+<li>&quot;sdraw&quot;</li>
+    '+<li>&quot;smath&quot;</li>
+    '+<li>&quot;insight&quot; * Currently disabled</li>
+    '+<li>&quot;soffice&quot; * Currently disabled</li>
+    '</ol>
+    '+<li>Reference name (string), matches name of application</li>
+    '<ol>
+    '+<li>&quot;Writer&quot;</li>
+    '+<li>&quot;Writer/Web&quot;</li>
+    '+<li>&quot;Calc&quot;</li>
+    '+<li>&quot;Impress&quot;</li>
+    '+<li>&quot;Draw&quot;</li>
+    '+<li>&quot;Math&quot;</li>
+    '+<li>&quot;Base&quot; * Currently disabled</li>
+    '+<li>&quot;&quot; * Currently disabled</li>
+    '</ol>
+    '</ol>
+    '<u>Returns</u>:
+    '<ol>
+    '+<li>Nothing</li>
+    '</ol>
+    '<u>Description</u>:
+    '<ul>
     
 
     dim sTemp as string
     dim saTemp() as string
     dim brc as boolean
-    gApplication = UCase (gApplication)
+    gApplication = gApplication
     printlog " - Application: " + sApplication + "; Title should be: " + sReference
-    '///+<li>Make sure exactly one document is open</li>
-    hInitSingleDoc()
     
-    '///+<li>Open a new document</li>
+    printlog( "Ensure that exactly one document is open" )
+    hInitSingleDoc()
+
+    printlog( "Open another document as specified by gApplication" )    
     hCreateDocument()
 
-    '///+<li>Ensure the correct window is open (e.g. goto Basic IDE)</li>
+    printlog( "Verify that the correct window is open" )
     select case sApplication
         case"swriter":
         case"sglobal":
@@ -324,75 +250,58 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
         case"smath":
         case"basic":
             ToolsMacroMacro
-
             kontext "makro"
-
             if Makro.exists(5) then
                 MakroAus.typeKeys "<end>"
-
                 if (Neu.isEnabled) then
                     Neu.click
-
                     kontext "basicide"
-
                     if BasicIDE.exists(5) then
-                        ' OK :-) here we want to stay
-                        printlog "OK :-)"
+                        printlog( "Basic IDE open. Good." )
                     else
-                        ' qaErrorlog "Unexpected 2"
+                        warnlog( "Basic IDE not open. This is unexpected" )
                     endif
-
                 else
-                    qaErrorlog "Unexpected 1"
+                    warnlog( "New-button is unexpectedly disabled." )
                 endif
-
-
                 try
-
                     kontext "neuesmodul"
-
                     if NeuesModul.exists(5) then
                         NeuesModul.OK
                     else
-                        qaErrorlog "Unexpected 3"
+                        warnlog( "New module naming dialog is not open" )
                     endif
-
                 catch
+                    warnlog( "Accessing <New module> dialog failed" )
                 endcatch
-
             else
-                qaErrorlog "Couldn't open Tools->Macros->Organize Macros...->StarOffice Basic..."
+                warnlog( "Couldn't open Tools->Macros->Organize Macros...->StarOffice Basic..." )
             endif
-
         case"chart":
         case"DATABASE":
         case"soffice":
             brc = hDestroyDocument()
     end select
 
-    '    sTemp = hWindowGetText("")   ' was a wOrkAround until the next line worked
-    '///+<li>Retrieve the caption</li>
+    printlog( "Retrieve the caption from the window" )
     sTemp = hGetWindowCaption(sApplication)
-    '    printlog sTemp
-    ' seperate each part of the title
+    printlog( "Caption is: " & sTemp )
     
-    '///+<li>Split up the string, we just need a s mall part of the string</li>
+    printlog( "Split up the string to isolate the desired part" )
     saTemp() = fSplitWindowTitle(sTemp)
-    printlog "Filename/Untitled: '" + saTemp(0) + "'"
+    printlog "Filename/Untitled: '" & saTemp(0) & "'"
 
-    '///+<li>Compare the string to the reference, warn on error</li>
+    printlog( "Compare the string to a reference" )
     if (ubound(saTemp()) > 0) then
-
         if (saTemp(1) <> sReference) then
-            warnlog "Applicationname not as expected. Sould be: '" + sReference + "', is: '" + saTemp(1) + "'"
+            warnlog "Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) & "'"
         endif
-
         printlog "Productname: '" + saTemp(2) + "'"
     else
-        warnlog "#i36173# - Applicationname not as expected. Should be: '" + sReference + "', is: '"+"'"
+        warnlog "#i36173# - Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) + "'"
     endif
 
-    '///+<li>Cleanup</li>
+    printlog( "Cleanup after test" )
     select case sApplication
         case"swriter":
         case"sglobal":
@@ -410,11 +319,7 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
             hCreateDocument()
     end select
 
-    '///+<li>Close the document</li>
-    while( getDocumentCount > 0 ) 
-        hDestroyDocument()
-    wend
-    '///</ul>
-    
+    printlog( "Close all open documents" )
+    hFileCloseAll()
 endcase
 

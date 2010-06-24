@@ -1,61 +1,55 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_fields5.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:27:14 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
 '*
-'* short description : Fields - Variabs
+'* short description : Fields - Variables
 '*
 '\***********************************************************************
 
 sub w_fields5
 
-    Call tVariables_1        'Set value to text
-    Call tVariables_2        'Set value to number
-    Call tVariables_3        'Set format as 'Additional formats...'
-    Call tVariables_4        'Show Variable - 1
-    Call tVariables_5        'Show Variable - 2
-    Call tVariables_6        'Insert formula
-    Call tVariables_7        'Number range
-    Call tVariables_8        'Input field
-    Call tVariables_9        'User field
-    Call tVariables_10       'DDE field - manual
-    Call tVariables_11       'DDE field - automatic
+    Call tVariablesSetValueToText
+    Call tVariablesSetValueToNumber
+    Call tVariablesSetFormats
+    Call tVariablesShowVariable1
+    Call tVariablesShowVariable2
+    Call tVariablesInsertFormula
+    Call tVariablesNumberRange	
+    Call tVariablesInputfield
+    Call tVariablesUserfield
+    Call tVariablesDDEFieldManual
+    Call tVariablesDDEFieldAutomatic
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tVariables_1
+testcase tVariablesSetValueToText
     if bAsianLan = true then
         QaErrorLog "No testing with Asian language. Aborting."
         exit sub
@@ -127,7 +121,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_2
+testcase tVariablesSetValueToNumber
     if bAsianLan = true then
         QaErrorLog "No testing with Asian language. Aborting."
         exit sub
@@ -199,8 +193,8 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_3
-    qaerrorlog "#i94596# - tVariables_3 outcommented due to bug."
+testcase tVariablesSetFormats
+    qaerrorlog "#i94596# - tVariablesSetFormats outcommented due to bug."
     goto endsub
 
   Dim sName     as String
@@ -270,7 +264,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_4
+testcase tVariablesShowVariable1
 
   Dim sName()   as String
   Dim sResult() as String
@@ -348,7 +342,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_5
+testcase tVariablesShowVariable2
 
   Dim sName     as String
   Dim sValue    as String
@@ -427,7 +421,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_6
+testcase tVariablesInsertFormula
 
   Dim sName()   as String
   Dim sValue()  as String
@@ -482,7 +476,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_7
+testcase tVariablesNumberRange
 
   Dim sResult() as String
   Dim i         as Integer
@@ -541,7 +535,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_8
+testcase tVariablesInputfield
 
   Dim sName         as String
   Dim sValue        as String
@@ -614,7 +608,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_9
+testcase tVariablesUserfield
 
   Dim sName()    as String
   Dim sValue()   as String
@@ -672,101 +666,103 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_10
-    qaerrorlog "#i93906# - tVariables_10 outcommented due to a problem with copying field-contents outside the office."
+testcase tVariablesDDEFieldManual
+    warnlog "#i112079#testcase must be reworked"
     goto endsub
 
-  Dim sDDEFile        as String
-  Dim sContent        as String
-  Dim sName           as String
-  Dim sDDEStatement   as String
-  Dim sSectionName    as String
+    Dim sDDEFile        as String
+    Dim sContent        as String
+    Dim sName           as String
+    Dim sDDEStatement   as String
+    Dim sSectionName    as String
 
-  sDDEFile = Convertpath ( gNetzOfficePath + "dde_test.oxt")
-  sContent = "DDE"
-  sName    = "myTest"
-  sSectionName  = "Section1"
-  sDDEStatement = "soffice " & sDDEFile & " " & sSectionName
+    sDDEFile = Convertpath ( gOfficePath + "\user\work\dde_test.odt")
+    sContent = "DDE"
+    sName    = "myTest"
+    sSectionName  = "Section1"
+    sDDEStatement = "soffice " & sDDEFile & " " & sSectionName
 
-  printlog "DDE field - manual"
- '/// <b> DDE field - manual </b>
+    printlog "DDE field - manual"
+    '/// <b> DDE field - manual </b>
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+    if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
-  Call hNewDocument
+    Call hNewDocument
 
-  '/// Input something , insert a section , then save it and close the file
-   Call wTypeKeys sContent
-   Call wTypeKeys "<Shift Home>"
-   Call fInsertSection("TabBereiche")
-     Bereichsliste.Settext sSectionName
-   TabBereiche.OK
-   Sleep 1
-   Call hFileSaveAsKill(sDDEFile)
-  Call hCloseDocument
+    '/// Input something , insert a section , then save it and close the file
+    Call wTypeKeys sContent
+    Call wTypeKeys "<Shift Home>"
+    Call fInsertSection("TabBereiche")
+    Bereichsliste.Settext sSectionName
+    TabBereiche.OK
+    Sleep 1
+    Call hFileSaveAsKill(sDDEFile)
+    Call hCloseDocument
 
-  '/// Opan a new document
-   Call hNewDocument
+    '/// Opan a new document
+    Call hNewDocument
+    '/// Insert/Fields/Other/Variables / Select "DDE Field"
+    '/// Set DDE name and DDE statement , select "DDE manual"
+    Call fInsertFieldsOther("TabVariablen")
+    Feldtyp.Select 3
+    Sleep 1
+    NameText.SetText sName
+    Wert.SetText sDDEStatement
+    Formatliste.Select 1
+    Einfuegen.Click
+    Sleep 2
+    TabVariablen.Close
+    Sleep 2
 
-  '/// Insert/Fields/Other/Variables / Select "DDE Field"
-  '/// Set DDE name and DDE statement , select "DDE manual"
-   Call fInsertFieldsOther("TabVariablen")
-     Feldtyp.Select 3
-     Sleep 1
-     NameText.SetText sName
-     Wert.SetText     sDDEStatement
-     Formatliste.Select 1
-     Einfuegen.Click
-     Sleep 2
-   TabVariablen.Close
-   Sleep 2
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
+    if fGetFieldContent() <> sContent then
+        Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
+    end if
 
-   Call wTypeKeys "<MOD1 Home>"
-   Call wTypeKeys "<Shift End>"
-   if fGetFieldContent() <> sContent then
-       Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
-   end if
-
-  '/// Open the test file which you just closed , add something ,
-  '/// Save the file
-   Call hFileOpen(sDDEFile)
+    '/// Open the test file which you just closed , add something ,
+    '/// Save the file
+    Call hFileOpen(sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave
-   Call hCloseDocument
+    Call hCloseDocument
 
-  '/// Check if the content is changed -- Should NOT
-   Sleep 2
-   Call wTypeKeys "<F9>"
-   Call wTypeKeys "<MOD1 Home><Shift End>"
-   if fGetFieldContent() <> sContent then
-       Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
-   end if
+    '/// Check if the content is changed -- Should NOT
+    Sleep 2
+    Call wTypeKeys "<F9>"
+    Call wTypeKeys "<MOD1 Home><Shift End>"
+    if fGetFieldContent() <> sContent then
+        Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
+    end if
 
-  '/// Edit/Fields , press update button
-   EditFields
-   Kontext "VerknuepfungenBearbeiten"
-     Aktualisieren.Click
-   VerknuepfungenBearbeiten.Close
+    '/// Edit/Fields , press update button
+    EditFields
+    Kontext "VerknuepfungenBearbeiten"
+    Aktualisieren.Click
+    VerknuepfungenBearbeiten.Close
 
-  '/// Check if the content is changed -- Should NOT
-   Sleep 1
-   Call wTypeKeys "<F9>"
-   Call wTypeKeys "<MOD1 Home><Shift End>"
-   if fGetFieldContent() <> ("XYZ" & sContent) then
-       Warnlog "Should get XYZ" & sContent & " but get " & fGetFieldContent()
-   end if
+    '/// Check if the content is changed -- Should NOT
+    Sleep 1
+    Call wTypeKeys "<F9>"
+    Call wTypeKeys "<MOD1 Home><Shift End>"
+    if fGetFieldContent() <> ("XYZ" & sContent) then
+        Warnlog "Should get XYZ" & sContent & " but get " & fGetFieldContent()
+    end if
 
-  Call hCloseDocument
+    Call hCloseDocument
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+    if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
 endcase
 
 '-----------------------------------------------------------------
 
-testcase tVariables_11
-    qaerrorlog "#i102792# - tVariables_11 outcommented. Fields not updated."
+testcase tVariablesDDEFieldAutomatic
+    warnlog "#i112079#testcase must be reworked"
+    goto endsub
+
+    qaerrorlog "#i102792# - tVariablesDDEFieldAutomatic outcommented. Fields not updated."
     goto endsub
 
   Dim sDDEFile      as String

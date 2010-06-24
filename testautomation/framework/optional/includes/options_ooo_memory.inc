@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: options_ooo_memory.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -45,15 +39,10 @@ testcase tOOoMemory
     
     dim bHasQuickstarter as boolean
     
-    '///short test if 'StarOffice / Momory' is saved in configuration
-    '///open a new document
-    '///open options 'StarOffice' / 'Memory'
     hNewDocument
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check platform dependences
-    '///- 'Load StarOffice at system-startup' has to exist
     printlog " - check platform dependences "
     
     if ( LoadQuickstarter.exists() and LoadQuickstarter.isVisible() and LoadQuickstarter.isEnabled() ) then
@@ -64,7 +53,6 @@ testcase tOOoMemory
         printlog( "Quickstarter is NOT available on this platform" )
     endif
     
-    '///save old data
     printlog " - save old data"
     lsSave(1) = UndoSteps.GetText
     lsSave(2) = StarOffice.GetText
@@ -75,7 +63,6 @@ testcase tOOoMemory
         lbSave = LoadQuickstarter.IsChecked
     endif
     
-    '///invert/change data
     printlog " - invert/change data"
     UndoSteps.SetText "80"
     StarOffice.SetText "50"
@@ -91,24 +78,22 @@ testcase tOOoMemory
         LoadQuickstarter.UnCheck
     endif
     
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
     
-    '///close document
     hCloseDocument
     
-    '///exit/restart StarOffice
     printlog " - exit/restart StarOffice"
     ExitRestartTheOffice
     
-    '///open options 'StarOffice' / 'Memory'
     printlog " - check data"
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check data
     if UndoSteps.GetText             <> "80" then
         Warnlog "Undo steps => changes not saved!"
     endif
@@ -132,7 +117,6 @@ testcase tOOoMemory
         end if
     endif
     
-    '///make 2. changes
     printlog " - 2. change data"
     UndoSteps.SetText "5"
     StarOffice.SetText "11"
@@ -148,16 +132,16 @@ testcase tOOoMemory
         LoadQuickstarter.Check
     endif
         
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
     
-    '///open options 'StarOffice' / 'Memory'
     printlog " - check data"
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check data
     if UndoSteps.GetText             <> "5" then
         Warnlog "Undo steps => changes not saved!"
     endif
@@ -179,7 +163,6 @@ testcase tOOoMemory
         end if
     endif
     
-    '///reset to saved data
     printlog " - reset to saved data"
     UndoSteps.SetText lsSave(1)
     StarOffice.SetText lsSave(2)
@@ -193,15 +176,15 @@ testcase tOOoMemory
         endif
     endif
     
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
     
-    '///open options 'StarOffice' / 'Memory'
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check data
     printlog " - check the reset data"
     if UndoSteps.GetText             <> lsSave(1) then
         Warnlog "Undo steps => changes not saved!"
@@ -224,9 +207,11 @@ testcase tOOoMemory
         endif
     endif
     
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
 endcase
 

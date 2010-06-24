@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.37.18.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +34,7 @@ ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 .INCLUDE: settings.mk
-
+.IF "$(L10N_framework)"==""
 DLLPRE = # no leading "lib" on .so files
 
 .IF "$(GUI)"=="WNT"
@@ -52,7 +48,6 @@ GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
 MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)$/$(CLASSDIR))))
 .ELSE
-BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 MY_LOCAL_CLASSDIR=file://$(PWD)$/$(CLASSDIR)
@@ -85,11 +80,7 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL1VERSIONMAP = component.gcc3.map
-.ELSE
-SHL1VERSIONMAP = component.map
-.ENDIF
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 # ---- test object ----
 
@@ -108,16 +99,12 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL2VERSIONMAP = component.gcc3.map
-.ELSE
-SHL2VERSIONMAP = component.map
-.ENDIF
+SHL2VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL3TARGET = constructors.uno
 SHL3OBJS = $(SLO)$/constructors.obj
 SHL3STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL3VERSIONMAP = component.map
+SHL3VERSIONMAP = $(SOLARENV)/src/component.map
 SHL3IMPLIB = i$(SHL3TARGET)
 DEF3NAME = $(SHL3TARGET)
 
@@ -129,57 +116,46 @@ JAVATARGETS=\
 .ENDIF
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :	target.mk
-
+.IF "$(L10N_framework)"==""
 ALLTAR: \
-        test \
+        runtest \
         $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/uno_services.rdb \
-        $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) \
         $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) \
         $(JAVATARGETS)
 
 #################################################################
 
-test: 
-    echo $(compcheck)
+runtest : $(DLLDEST)$/uno_types.rdb $(DLLDEST)$/uno_services.rdb makefile.mk
+.IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
+    @echo "Mac OSX PPC GCC fails this test!, likely broken UNO bridge. Fix me."
+.ELSE
+        cd $(DLLDEST) && $(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/uno \
+        -ro uno_services.rdb -ro uno_types.rdb \
+        -s com.sun.star.test.bridge.BridgeTest -- \
+        com.sun.star.test.bridge.CppTestObject
+.ENDIF
     
 $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DLLDEST)
     $(GNUCOPY) $? $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
-$(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
-        -s com.sun.star.test.bridge.BridgeTest -- \
-        com.sun.star.test.bridge.CppTestObject > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
-    $(GIVE_EXEC_RIGHTS) $@
-
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest -- \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.CppTestObject \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' --singleaccept \
         > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
 
@@ -199,14 +175,10 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
@@ -242,3 +214,5 @@ $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
         -c javavm.uno$(DLLPOST) -c stocservices.uno$(DLLPOST)
 .ENDIF
+.ENDIF # L10N_framework
+

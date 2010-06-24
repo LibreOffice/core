@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestComponent.java,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,11 +44,16 @@ import test.testtools.bridgetest.TestEnum;
 import test.testtools.bridgetest.TestPolyStruct;
 import test.testtools.bridgetest.TestPolyStruct2;
 import test.testtools.bridgetest.TestStruct;
+import test.testtools.bridgetest.SmallStruct;
+import test.testtools.bridgetest.MediumStruct;
+import test.testtools.bridgetest.BigStruct;
+import test.testtools.bridgetest.AllFloats;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
 import test.testtools.bridgetest.XCurrentContextChecker;
 import test.testtools.bridgetest.XMulti;
 import test.testtools.bridgetest.XRecursiveCall;
+
 
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -472,6 +474,26 @@ public class TestComponent {
             o_testDataElements[0] = _testDataElements;
 
             return _testDataElements;
+        }
+
+        public SmallStruct echoSmallStruct( SmallStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public MediumStruct echoMediumStruct( MediumStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public BigStruct echoBigStruct( BigStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public AllFloats echoAllFloats( AllFloats i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 ) throws com.sun.star.uno.RuntimeException {
+            return i2;
         }
 
         // Attributes

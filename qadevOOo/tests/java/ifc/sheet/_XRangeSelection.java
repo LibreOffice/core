@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _XRangeSelection.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -253,10 +250,6 @@ public class _XRangeSelection extends MultiMethodTest {
             throw new StatusException("Could not create 'com.sun.star.awt.Toolkit'.", e);
         }
         XExtendedToolkit xExtendedToolkit = (XExtendedToolkit)UnoRuntime.queryInterface(XExtendedToolkit.class, aToolkit);
-        AccessibilityTools accTools = new AccessibilityTools();
-        XWindow xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, xExtendedToolkit.getActiveTopWindow());
-        XAccessible xRoot = accTools.getAccessibleObject(xWindow);
-
         XTopWindow tw = null;
 
         XAccessibleComponent xAccessibleComponent = null;
@@ -289,7 +282,7 @@ public class _XRangeSelection extends MultiMethodTest {
             return null;
         }
 
-        xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, tw);
+        XWindow xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, tw);
         Rectangle posSize = xWindow.getPosSize();
 
         // compare the center point with the dimensions of the current top window

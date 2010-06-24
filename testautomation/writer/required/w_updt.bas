@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_updt.bas,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:16:45 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -58,8 +52,10 @@ sub main
     use "writer\required\includes\w_010_1.inc"
     use "writer\required\includes\w_011_.inc"
     use "writer\required\includes\w_020_.inc"
-
+    
     Printlog "******* Ressource-Test Writer Document *******"
+
+    Call wChangeDefaultView()
 
     Call hStatusIn ( "writer", "w_updt.bas" )
     Call w_001_              ' Menu File
@@ -87,7 +83,10 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\required\includes\g_001.inc"
     use "global\required\includes\g_option.inc"                	' global subroutines for Tools / Options
+    use "global\required\includes\g_printing.inc"
     use "global\tools\includes\optional\t_xml_filter1.inc"       ' global routines for XML-functionality
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_control_objects.inc"
 
     gApplication   = "WRITER"
     GetUseFiles ()

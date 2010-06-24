@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_tables.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************
 '*
 '* owner : wolfram.garten@sun.com
@@ -40,7 +34,7 @@
 ' #1 tiInsertTableUsingMenu
 ' #1 tiInsertTableUsingButton
 ' #1 tiTableObjectBar
-' #1 tiInsertTableUsingToolbarbutton
+' #1 tiInsertTableUsingToolbarbuttonView
 '*
 '\******************************************************************
 
@@ -55,9 +49,17 @@ testcase tiInsertTableUsingMenu
 
     printlog "Inserting table into doc using the menu."
     Call hNewDocument
-    DocumentImpress.UseMenu
-    hMenuSelectNr(4)
-    hMenuSelectNr(13)
+    printlog "Switching between Draw/Impress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        DocumentImpress.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(14)
+    else
+        DocumentDraw.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(11)
+    endif
+
 
     printlog "Checking if insert Table dialog comes up."
     Kontext "InsertTableImpress"
@@ -208,23 +210,32 @@ endcase 'tiInsertTableUsingToolbarbutton
 testcase tiTableObjectBar
 
     printlog "Testing TableObjectBar."
+    printlog "Inserting table into doc using the menu."
     Call hNewDocument
-    kontext "Standardbar"
-
-    printlog "Checking if button is available."
-    try
-        Table.Click
-    catch
-        warnlog "Table button in standardbar is not available!"
-    endcatch
+    printlog "Switching between Draw/Impress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        DocumentImpress.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(14)
+    else
+        DocumentDraw.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(11)
+    endif
 
     Kontext "InsertTableImpress"
     printlog "Inserting table."
     InsertTableImpress.OK
 
-    Kontext "DocumentImpress"
     printlog "Selecting table for geeting the TableObjectBar."
-    DocumentImpress.TypeKeys "<MOD1 A>"
+    printlog "Switching between Draw/Impress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        Kontext "DocumentImpress"
+        DocumentImpress.TypeKeys "<TAB>",3
+    else
+        Kontext "DocumentDraw"
+        DocumentDraw.TypeKeys "<MOD1 A>"
+    endif
 
     printlog " Checking Table button."
     Kontext "TableObjectBar"
@@ -247,7 +258,11 @@ testcase tiTableObjectBar
     Kontext "TableObjectBar"
 
     TableObjectBar.Close
-    Kontext "DocumentImpress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        Kontext "DocumentImpress"
+    else
+        Kontext "DocumentDraw"
+    endif
     Call hToolbarSelect ("Table", true)
     Kontext "TableObjectBar"
 
@@ -263,7 +278,11 @@ testcase tiTableObjectBar
     endif
     Kontext "TableObjectBar"
     TableObjectBar.Close
-    Kontext "DocumentImpress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        Kontext "DocumentImpress"
+    else
+        Kontext "DocumentDraw"
+    endif
     Call hToolbarSelect ("Table", true)
     Kontext "TableObjectBar"
 
@@ -276,36 +295,46 @@ testcase tiTableObjectBar
     else
         warnlog "BordersTB is not up!"
     endif
-    Kontext "DocumentImpress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        Kontext "DocumentImpress"
+    else
+        Kontext "DocumentDraw"
+    endif
 
     printlog "Checking merge cells."
     printlog "Inserting something into cell and select."
-    DocumentImpress.TypeKeys ("a")
-    DocumentImpress.TypeKeys "<SHIFT RIGHT>"
+    if (UCase(gApplication)) = "IMPRESS" then
+        DocumentImpress.TypeKeys ("a")
+        DocumentImpress.TypeKeys "<SHIFT RIGHT>"
+    else
+        DocumentDraw.TypeKeys ("a")
+        DocumentDraw.TypeKeys "<SHIFT RIGHT>"
+    endif
     Kontext "TableObjectBar"
+    if TableObjectBar.NotExists(2) then ViewToolbarsTable
     ZellenVerbinden.Click
     printlog "Cells merged."
 
     printlog "Checking split cells."
     ZelleTeilen.Click
     printlog "Cells split."
-    Kontext "SplitCells"
+    Kontext "ZellenTeilen"
     WaitSlot(1000)
     printlog "SplitCells dialog open."
-    SplitCellInto.ToMax
-    printlog "Maximum SplitCellCount is " & SplitCellInto.GetText & "."
-    SplitCellInto.ToMin
-    printlog "Minimum SplitCellCount is " & SplitCellInto.GetText & "."
-    if CellsHorizontally.IsChecked = TRUE then
+    Anzahl.ToMax
+    printlog "Maximum SplitCellCount is " & Anzahl.GetText & "."
+    Anzahl.ToMin
+    printlog "Minimum SplitCellCount is " & Anzahl.GetText & "."
+    if Horizontal.IsChecked = TRUE then
         printlog "Horizontally is clicked."
     else
         warnlog "Horizontally should be clicked by default!"
     endif
-    SplitEqual.Check
+    GleichmaessigTeilen.Check
     printlog "Split Equal checked."
-    CellsVertically.Check
+    Vertikal.Check
     printlog "Cells vertically checked."
-    SplitCells.OK
+    ZellenTeilen.OK
     printlog " Checking optimize button   'ToDo: button not working"
     'Kontext "TableObjectBar"
     'Optimieren.TearOff
@@ -333,14 +362,26 @@ testcase tiTableObjectBar
 
     printlog "Checking table design button 'ToDo:needs some further examination here!"
     tabledesign.Click
-    kontext "Tasks"
-    if (NOT Tasks.exists) then
-        warnlog "Tasks Panel not visible. Opening now."
-        ViewTaskPane
+    
+    printlog "Checking for Table Design in Impress TaskBar or for Dialog in Draw."
+    if (UCase(gApplication)) = "IMPRESS" then
+        kontext "Tasks"
+        if (NOT Tasks.exists) then
+            warnlog "Tasks Panel not visible. Opening now."
+            ViewTaskPane
+        else
+            printlog "Task Pane visible."
+        endif
     else
-        printlog "Task Pane visible."
-    endif
-
+         kontext "TableDesign"
+         if TableDesign.exists then
+            printlog "Table Design Dialog is up."
+            TableDesign.Close
+        else
+            warnlog "TableDesign Dialog for Draw is missing."
+        endif
+    endif  
+    
     printlog "Checking Properties button."
     Kontext "TableObjectBar"
     TableProperties.Click

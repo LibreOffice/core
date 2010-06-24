@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestParameters.java,v $
- * $Revision: 1.14.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +114,7 @@ public class TestParameters extends Hashtable {
      * The Path to the test documents that are loaded during the test <br>
      */
 
-    public String TestDocumentPath="unkown";
+    public String TestDocumentPath="unknown";
 
     /**
      * 'true' is a log should be written, 'false' elsewhere <br>
@@ -161,13 +158,13 @@ public class TestParameters extends Hashtable {
      * This parameter contains the timeout used<br>
      * by the watcher
      */
-    public Integer TimeOut = new Integer(30000);
+    public Integer TimeOut = new Integer(3000000);
 
     /*
      * This parameter contains the timeout used<br>
      * by the complex tests
      */
-    public Integer ThreadTimeOut = new Integer(30000);
+    public Integer ThreadTimeOut = new Integer(3000000);
 
     /*
      * This parameter contains the time which the office could use to close for

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_issuezilla_regression.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:34:41 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -46,6 +40,7 @@ sub w_issuezilla_regression
     Call i75027
     Call i76637
     Call i88656
+	Call i103265
 
 end sub
 
@@ -441,3 +436,80 @@ testcase i88656
 endcase
 
 '--------------------------------------------------------------------------
+
+testcase i103265
+
+	Dim i as integer
+
+	printlog "ODF Hyperlinks in TOCs"
+	Call hNewDocument
+    printlog "- Open test document"
+	Call hFileOpen ( gTesttoolPath + "writer\optional\input\regression\issuezilla\i103265.odt" )
+    Call sMakeReadOnlyDocumentEditable
+    printlog "- Update TOC"
+	ToolsUpdateAllIndexes
+	
+	printlog "Check that every hyperlink jumps correctly to its target"
+	For i = 1 to 3
+		' point cursor to beginning of document
+		Call wTypeKeys "<MOD1 HOME>"
+		' point cursor to index entry
+		Call wTypeKeys "<DOWN>", 4 + i
+		'execute Hyperlink
+		ContextOpenHyperlink
+		' check if it jumps to correct target
+		Call wTypeKeys "<SHIFT END>"
+		EditCopy
+		Select Case i
+			Case 1:
+				if GetClipboardText <> "# 1 Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1 Test' but " & GetClipboardtext
+				end if
+			Case 2:
+				if GetClipboardText <> "1. Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1. Test' but " & GetClipboardtext
+				end if
+			Case 3:
+				if GetClipboardText <> "Test " then
+					Warnlog "First hyperlink not correctly jumped to. Not 'Test' but " & GetClipboardtext
+				end if
+		end select
+	next i
+
+	printlog "- Save as HTML"
+	gApplication = "HTML"	
+	Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\ODFHyperlinksInTOCs.html", "HTML (StarWriter)" )
+    Call hCloseDocument
+	
+    printlog "- Reload"
+	Call hFileOpen ( gOfficePath + "user\work\ODFHyperlinksInTOCs.html" )		
+	printlog "Check that every hyperlink jumps correctly to its target"
+	For i = 1 to 3
+		' point cursor to beginning of document
+		Call wTypeKeys "<MOD1 HOME>"
+		' point cursor to index entry
+		Call wTypeKeys "<DOWN>", 5 + i
+		'execute Hyperlink
+		ContextOpenHyperlink
+		' check if it jumps to correct target
+		Call wTypeKeys "<SHIFT END>"
+		EditCopy
+		Select Case i
+			Case 1:
+				if GetClipboardText <> "# 1 Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1 Test' but " & GetClipboardtext
+				end if
+			Case 2:
+				if GetClipboardText <> "1. Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1. Test' but " & GetClipboardtext
+				end if
+			Case 3:
+				if GetClipboardText <> "1Test " then
+					Warnlog "First hyperlink not correctly jumped to. Not 'Test ' but " & GetClipboardtext
+				end if
+		end select
+	next i
+	
+	Call hCloseDocument
+
+endcase

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_files.inc,v $
-'*
-'* $Revision: 1.4 $
-'*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:59:04 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '* Owner : thorsten.bosbach@sun.com
@@ -37,8 +31,7 @@
 '*
 '\******************************************************************************
 
-private const C_INFO = TRUE ' Set this to TRUE to increase verbosity of some functions
-private const VERBOSE = true
+private const VERBOSE = FALSE ' set to TRUE for debugging
 
 function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// hGrafikEinfuegen hGraphicInsert
@@ -65,7 +58,7 @@ function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     if ( GrafikEinfuegenDlg.exists( 2 ) ) then
 
         Vorschau.Uncheck
-        if gApplication <> "HTML" AND gApplication <> "HTML" then
+        if gApplication <> "HTML" then
             Verknuepfen.UnCheck
         end if
 
@@ -88,13 +81,15 @@ function hGrafikEinfuegen  ( Grafik$ ) as Boolean
             Kontext "GrafikEinfuegenDlg"
             if GrafikEinfuegenDlg.Exists then
                 GrafikEinfuegenDlg.Cancel
+                GarfikEinfuegenDlg.notExists( 4 )
             endif
         else
             hGrafikEinfuegen = IsImageLoaded
         end if
     else
-        'GrafikEinfuegeDlg not open
+        warnlog( "Insert graphics dialog not open" )
     endif
+    
 end function
 '
 '-------------------------------------------------------------------------------
@@ -442,7 +437,7 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
             endif
             '/// click on the button 'Export...' ///'
             if (bExecute) then
-                Export.Click
+                speichern.Click
                 kontext "AlienWarning"
                 if AlienWarning.exists(5) then
                     warnlog "#i41983# Alien Warning on export not allowed."
@@ -567,8 +562,8 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
         end if
     end if
     ' only if the type is 1 OR 3 then the File Save dialog appear
+    kontext "ExportierenDLG"
     if (iTypeOfCall = 1 OR iTypeOfCall = 3) then
-        kontext "ExportierenDLG"
         if ExportierenDLG.exists(5) then
             try
                 Dateityp.Select sPDF
@@ -610,7 +605,11 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
                 wEnd
             endif
         else
+            try
             ExportierenDLG.Cancel
+            catch
+            printlog "export not there"
+            endcatch
         end if
 
         ' if file exists, there is a message...
@@ -637,43 +636,17 @@ end function
 function hDeleteFile( cFileOrig as string ) as boolean
 
     const CFN = "global::tools::includes::required::t_files.inc::hDeleteFile():"
-    dim cHome as string
-    cHome = gOfficePath & "user"
-    cHome = convertpath( cHome )
-    dim cFile as string
-    cFile = convertpath( cFileOrig )
+    dim cHome as string : cHome = convertpath( gOfficePath & "user" )
+    dim cFile as string : cFile = convertpath( cFileOrig )
 
-    '///<h3>Delete a file</h3>
-    '///<i>In many cases it is a good idea to use this function outside the testcase.<br>
-    '///+ You should always evaluate the returncode</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Filename (string)</li>
-    '///<ul>
-    '///+<li>The function converts the path to system specific syntax (convertpath)
-    '///+ but does <b>not</b> modify the input parameter</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: File was deleted/does not exist</li>
-    '///+<li>FALSE: File could not be deleted/any other error</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-
-    ' this function tries to delete a file and does some very basic error-
+    ' This function tries to delete a file and does some very basic error-
     ' handling. Returns 'true' on success, only error while deleting returns
     ' 'false', if the file does not exist, it is considered to be successfully
     ' deleted.
-    ' i introduced this function due to a number of cases where deleting files
+    ' I introduced this function due to a number of cases where deleting files
     ' actually failed because of weird code or situations where the user lacks
     ' accessrights to files are not handled at all.
 
-    '///+<li>We may never delete a file outside gOfficePath/user/work</li>
     if ( instr( cFile , cHome ) = 0 ) then
         qaerrorlog( CFN & "Trying to delete file outside (default)homedir -> forbidden" )
         qaerrorlog( CFN & "Home: " & cHome )
@@ -684,15 +657,10 @@ function hDeleteFile( cFileOrig as string ) as boolean
 
     cFile = convertpath( cFile )
 
-    '///+<li>Check that the file exists</li>
     if ( FileExists( cFile ) ) then
-
-        '///+<li>Use kill to delete</li>
         try
-
             kill( cFile )
 
-            '///+<li>Verify that the file does not exist anymore</li>
             if ( FileExists( cFile ) ) then
                 warnlog( CFN & "File was not deleted: " & cFile )
                 hDeleteFile() = false
@@ -700,24 +668,14 @@ function hDeleteFile( cFileOrig as string ) as boolean
                 if ( VERBOSE ) then printlog( CFN & "File successfully deleted: " & cFile )
                 hDeleteFile() = true
             endif
-
         catch
-
-            '///+<li>in very rare cases 'kill' fails and can be handled this way</li>
             qaerrorlog( CFN & "Deleting file failed: " & cFile )
             hDeleteFile() = false
-
         endcatch
-
     else
-
-        '///+<li>write some text to the log if the file does not exist</li>
         printlog( CFN & "Nothing to do." )
         hDeleteFile() = true
-
     endif
-
-    '///</ul>
 
 end function
 '
@@ -741,7 +699,7 @@ function hFileOpen( cFile as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     hFileOpen() = FALSE
     const CFN = "global::tools::inc::t_files.inc::hFileOpen():"
-    if ( C_INFO ) then printlog( CFN & "Load: " & sFile )
+    if ( VERBOSE ) then printlog( CFN & "Load: " & sFile )
     FileOpen( "URL", sFile, "FrameName", "_default" )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpen() = TRUE
 
@@ -759,7 +717,7 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial():"
     hFileOpenSpecial() = FALSE
-    if ( C_INFO ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
+    if ( VERBOSE ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
 
     select case( lcase( cFlag ) )
     case "readonly"
@@ -775,8 +733,6 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
 
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpenSpecial() = TRUE
 
-    '///</ul>
-
 end function
 '
 '-------------------------------------------------------------------------------
@@ -786,7 +742,7 @@ function hFileOpenWithFilter( cFile as string, cFilter as string )
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileOpenWithFilter():"
     hFileOpenWithFilter() = FALSE
-    if ( C_INFO ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
+    if ( VERBOSE ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
     FileOpen( "URL", sFile, "FrameName", "_default", "FilterName", cFilter )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpenWithFilter() = TRUE
 
@@ -798,7 +754,7 @@ function hFileSave() as boolean
 
     const CFN = "global::tools::inc::t_files.inc::hFileSave():"
     hFileSave() = FALSE
-    if ( C_INFO ) then printlog( CFN & "Save file." )
+    if ( VERBOSE ) then printlog( CFN & "Save file." )
     FileSave( "SynchronMode", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSave() = TRUE
 
@@ -811,7 +767,7 @@ function hFileSaveAs( cFile as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAs():"
     hFileSaveAs() = FALSE
-    if ( C_INFO ) then printlog( CFN & "Save: " & sFile )
+    if ( VERBOSE ) then printlog( CFN & "Save: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAs() = TRUE
 
@@ -824,7 +780,7 @@ function hFileSaveAsKill( cFile as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKill():"
     hFileSaveAsKill() = FALSE
-    if ( C_INFO ) then printlog( CFN & "Save, replacing: " & sFile )
+    if ( VERBOSE ) then printlog( CFN & "Save, replacing: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKill() = TRUE
 
@@ -837,7 +793,7 @@ function hFileSaveAsKillWithPassword( cFile as string, cPassword as string ) as 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKillWithPassword():"
     hFileSaveAsKillWithPassword() = FALSE
-    if ( C_INFO ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
+    if ( VERBOSE ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE, "Password", cPassword )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKillWithPassword() = TRUE
 
@@ -850,7 +806,7 @@ function hFileSaveAsWithFilter( cFile as string, cFilter as string ) as boolean
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilter():"
     hFileSaveAsWithFilter() = FALSE
-    if ( C_INFO ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
+    if ( VERBOSE ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilter() = TRUE
 
@@ -863,7 +819,7 @@ function hFileSaveAsWithFilterKill( cFile as string, cFilter as string ) as bool
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilterKill():"
     hFileSaveAsWithFilterKill() = FALSE
-    if ( C_INFO ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
+    if ( VERBOSE ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilterKill() = TRUE
 
@@ -875,7 +831,7 @@ function hFileWait( optional bWarn as boolean ) as integer
 
     ' Wait max 10 seconds for the FileOpen/FileSave slot to finish
     ' Returns the time it took the slot to finish
-    ' Negaitve returnvalues are given on timeout or any blocking dialog
+    ' Negative returnvalues are given on timeout or any blocking dialog
 
     const CFN = "global::tools::inc::t_files.inc::hFileWait():"
     const MAX_WAIT = 10
@@ -968,7 +924,7 @@ function hFileWait( optional bWarn as boolean ) as integer
 
     loop
 
-    if ( C_INFO ) then
+    if ( VERBOSE ) then
         select case iWait
         case -1   : printlog( CFN & "Timeout reached, rc = " & iWait )
         case -2   : printlog( CFN & "Macro security warning displayed, rc = " & iWait )

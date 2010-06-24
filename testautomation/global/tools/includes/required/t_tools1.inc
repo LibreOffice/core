@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_tools1.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:11 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -41,7 +35,7 @@ private SLEEP_TIME_REQUESTED as integer
 private SLEEP_CALLS_SUM as integer
 private SLEEP_TIME_USED as integer
 
-private const VERBOSE = true
+private const VERBOSE = FALSE
 
 function GetClipboardText as string
 
@@ -240,13 +234,22 @@ end function
 
 function Sleep( optional _iSeconds as integer ) as integer
 
+    const CFN = "global::tools::includes::required::Sleep(...): "
+    
+    const STATUS_NO_DELAY          = 0
+    const STATUS_TIMEOUT_EXCEEDED  = 1
+    const STATUS_WAITSLOT_CRASHED  = 2
+    const STATUS_CLASSIC_WAIT_USED = 3
+
+    ' This is the "classic" behavior of the sleep function. If you did not set 
+    ' GLOBAL_USE_NEW_SLEEP to TRUE in your .bas file, this will be used.
     if ( not GLOBAL_USE_NEW_SLEEP ) then
         if ( IsMissing( _iSeconds ) ) then
             wait( 1000 )
         else
             wait( _iSeconds * 1000 )
         endif
-        sleep() = 0
+        sleep() = STATUS_CLASSIC_WAIT_USED
         exit function
     endif
 
@@ -266,19 +269,17 @@ function Sleep( optional _iSeconds as integer ) as integer
     ' 2 = Wait() was used (classic method, fallback).
     ' 3 = Wait() was used (forced old behavior)
 
-    const CFN = "global::tools::includes::required::Sleep(...): "
-    
-    const STATUS_NO_DELAY          = 0
-    const STATUS_TIMEOUT_EXCEEDED  = 1
-    const STATUS_WAITSLOT_CRASHED  = 2
-    const STATUS_CLASSIC_WAIT_USED = 3
-
     dim iMilliseconds as integer
     dim iStatus as integer       : iStatus      = 0
     dim lBegin as long           : lBegin       = GetSystemTicks
     dim iSeconds as integer      : iSeconds     = 5
     dim iSystemDelay as integer  : iSystemDelay = 1000
     dim iTimeDiff as long        : iTimeDiff    = 0
+    
+    ' On Solaris we are a little slower, so we increase the system delay a little
+    if ( instr( lcase( gtSysName ) , "solaris" ) > 0 ) then
+        iSystemDelay = 1500
+    endif
 
     ' Override default wait time (5 seconds) if parameter is given
     if ( not IsMissing( _iSeconds ) ) then
@@ -314,7 +315,7 @@ function Sleep( optional _iSeconds as integer ) as integer
     ' Find out how long it took, warn if time was zero (sleep most likely not required)
     iTimeDiff = GetSystemTicks - lBegin
     if ( iTimeDiff = 0 ) then
-        QAErrorLog( CFN & "Zero time. Please consider removing Sleep() statement" )
+        printlog( CFN & "Zero time. Please consider removing Sleep() statement" )
     endif
     
     if ( VERBOSE ) then
@@ -333,11 +334,11 @@ function Sleep( optional _iSeconds as integer ) as integer
         & iTimeDiff & " ms, rc=" & iStatus )
         select case iStatus
         case STATUS_TIMEOUT_EXCEEDED : 
-            QAErrorLog( CFN & "Timeout exceeded. Please increase the delay" )
+            printlog( CFN & "Timeout exceeded." )
         case STATUS_WAITSLOT_CRASHED : 
-            QAErrorlog( CFN & "Used Wait(n). WaitSlot() failed." )
+            printlog( CFN & "Used Wait(n). WaitSlot() failed." )
         case STATUS_CLASSIC_WAIT_USED : 
-            QAErrorLog( CFN & "Used Wait(n). Classic behavior forced" )
+            printlog( CFN & "Used Wait(n). Classic behavior forced" )
         end select
     endif
     Sleep() = iStatus
@@ -1005,9 +1006,6 @@ sub sResetTheOffice as boolean
     Dim sDefaultLocaleCJK as string
     Dim sDefaultLocaleCTL as string
     Dim sfgetL10Nvalue as string
-    Dim SetupXML as String
-    Dim SetupXMLNet as string
-    Dim SetupXMLDefault as string
     Dim sLanOutIni as string
 
     sString = "qa:qatesttool:calc:options:inc:coption1.inc:: "
@@ -1016,25 +1014,11 @@ sub sResetTheOffice as boolean
     ' only run on UNIX platforms; there is a problem with the quickstarter on win32
     if ("unx" = gPlatgroup) then
         try
-            SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
-            ' function 'fgetL10Nvalue' is also in this library
-            sLanOutIni = fgetL10Nvalue(SetupXML)
+            sLanOutIni = fgetL10Nvalue()
         catch
-            try
-                ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
-                SetupXMLNet = gNetzOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-                sLanOutIni = fgetL10Nvalue(SetupXMLNet)
-            catch
-                try
-                    ' It is an English FAT version 645m9s2 or higher.
-                    SetupXMLDefault = gOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-                    sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
-                catch
-                    warnlog sString & SetupXML & " not found => can't get the correct Office-Language!."
-                    sResetTheOffice = FALSE
-                    Exit sub
-                endcatch
-            endcatch
+            warnlog sString & "can't get the correct Office-Language!."
+            sResetTheOffice = FALSE
+            Exit sub
         endcatch
 
         uno=hGetUnoService()
@@ -1215,6 +1199,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
             case "fileexport"                     : FileExport
             case "filereload"                     : FileReload( "SynchronMode", TRUE )
+            case "fileopen"                       : FileOpen
             
             case "editdoc"                        : EditDoc
             case "editcopy"                       : EditCopy
@@ -1224,6 +1209,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editchangescomment"             : EditChangesComment
 
             case "editpaste"                      : EditPaste
+            case "editcopy"                       : EditCopy
             case "editcut"                        : EditCut
             case "editselectall"                  : EditSelectAll
             case "editselectallmath"              : EditSelectAllMath
@@ -1243,6 +1229,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editobjectedit"                 : EditObjectEdit
             case "editobjectsavecopyas"           : EditObjectSaveCopyAs
             
+            case "formatcharttype"                : FormatChartType
             case "formatcontrol"                  : FormatControl
             case "formateditpoints"               : FormatEditPoints
             case "formatsections"                 : FormatSections
@@ -1269,6 +1256,10 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatpagewriter"               : FormatPageWriter
             
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
+            case "insertobjectchart"              : InsertObjectChart
+            case "inserttablewriter"              : InsertTableWriter
+            case "insertobjectformulawriter"      : InsertObjectFormulaWriter
+            case "insertfloatingframe"            : InsertFloatingFrame
             
             case "contextpositionandsize"         : ContextPositionAndSize
             
@@ -1277,6 +1268,9 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "toolsupdatefields"              : ToolsUpdateFields
             case "toolsupdatelinks"               : ToolsUpdateLinks
             case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
+            
+            ' This is the property browser in the BASIC IDE
+            case "contextproperties"              : ContextProperties
             
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select

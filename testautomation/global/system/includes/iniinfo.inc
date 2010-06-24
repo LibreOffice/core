@@ -1,63 +1,34 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: iniinfo.inc,v $
-'*
-'* $Revision: 1.3 $
-'*
-'* last change: $Author: rt $ $Date: 2008-07-10 15:39:45 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
 '*
 '* short description : get information for startup a test out of important ini-files
 '*
-'************************************************************************
-' **
-' #1 GetIniInformation          ' Set all important variables
-' #1 GetOfficeInformation       ' Generates the path to the StarOffice executable.
-' #1 ConvertPath                ' Path conversion
-' #1 GetLanguageInformation     ' Main routine to get the language information from Setup.xcu file.
-' #1 ConvertLanguage            ' Sets international language code for the whole language name.
-' #1 GetLanguageText            ' Sets the language name for the international language-code.
-' #1 ConvertLanguage2           ' Sets the international language code for the international language shortcut.
-' #1 ConvertCodeToLanguage      ' Converts the old language code to international language code
-' #1 GetTheInstallationType     ' The global variable 'gNetzInst' and 'gNetzOfficePath' will be set here.
-' #1 FileURLToNormalFile        ' Converts a file URL to a system specific URL.
-' #1 ReplaceCharacter           ' Replace a character with another
-' #1 fgetL10Nvalue              ' Search routine to get the language information from Setup.xcu file
-' #1 sGetCrashreporterValues    ' Reading the crashreporter relevant values from testtool control file.
-' #1 getSofficeNative           ' Reading the registry entries where the application is installed
-' #1 getSofficeTesttool         ' Trying to get value of [OOoProgramDir] section from testtool control file
-' #1 hGetPathSigne              ' Return the path signe for the given platform
-' #1 hPlatformToGroup           ' Return the operating system group for the given platform
-' #1 sGetScreenshotValue        ' Check if screenshots are requested
-' #1 fgetOOoStartupTimeOut      ' Set a value for OOo start up time out
-' #1 fgetOOoShutdownTimeOut     ' Set a value for OOo shut down time out
-' **
 '\***********************************************************************
 
 sub GetIniInformation
@@ -149,12 +120,14 @@ sub GetIniInformation
    gOOoStartupTimeOut = fgetOOoStartupTimeOut()
    gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
    call sCheckValgrindStatus()
+    ' set a global path for custom scripts, like basepath, but outside of current environment
    gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
-   sTemp = ConvertPath (gTestToolPath + gPrivateEnvironmentLocation + "inc/privateenvironment.inc")
-   if fileExists(sTemp) then
-       use sTemp
-       call getUseFilesPrivateEnvironment
-   else
+    if (gPrivateEnvironmentLocation <> "" AND gPrivateEnvironmentLocation <> ".") then
+        if NOT fileExists(gPrivateEnvironmentLocation) then
+            qaErrorLog "[PrivateEnvironment] defined in: '"+gTesttoolIni+"', but the path '"+gPrivateEnvironmentLocation+"'does not exist!"
+        else
+            gPrivateEnvironmentLocation = ""
+        end if
        gPrivateEnvironmentLocation = ""
    end if
 end sub
@@ -327,50 +300,11 @@ end function
 sub GetLanguageInformation
 '/// Extracts the language information from <i>Setup.xcu</i>.
 '/// <u>note</u>: It uses the <b>fgetL10Nvalue</b>.
-   Dim i as integer
-   Dim iTimeOut as integer
    Dim sLanOutIni as string
-   Dim SetupXML as String
-   Dim ChildsOfSetupNodes as integer
-   Dim ArtOfInst as string
-   Dim SetupXMLNet as string
-   Dim SetupXMLDefault as string
-   dim SetupXcuPath as string
-        
-    SetupXcuPath = ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-    SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
-    
-    if gNetzInst = TRUE then
-        SetupXMLNet = gNetzOfficePath & SetupXcuPath
-        ArtOfInst = "NET- / Workstation Inst."
-    else
-        SetupXMLDefault = gOfficePath & SetupXcuPath
-        ArtOfInst = "FAT Inst."
-    end if
-
-    ' Issue #i97875 (JSK) experimental delay
-    ' If we're too fast we might encounter that the Setup.xcu is not created yet.
-    ' So we retry a couple of times    
-    while( IsMissing( SetupXML ) ) 
-        iTimeOut = iTimeOut + 1
-        if ( iTimeOut = 10 ) then
-            warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
-            iSprache = 01
-            Exit sub
-        endif
-        wait( 100 )
-    wend
 
     ' function 'fgetL10Nvalue' is also in this library
-    sLanOutIni = fgetL10Nvalue(SetupXML)
+    sLanOutIni = fgetL10Nvalue()
     ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
-    if sLanOutIni = "" and gNetzInst = TRUE then
-        sLanOutIni = fgetL10Nvalue(SetupXMLNet)
-    end if
-    ' It is an English FAT version 645m9s2 or higher.
-    if sLanOutIni = "" and gNetzInst = FALSE then
-        sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
-    end if
 
     if sLanOutIni = "" then
         warnlog "=> default is now 01 = en_US"
@@ -402,6 +336,7 @@ sub GetLanguageInformation
          case "no_no", "no-no", "no" : iSprache = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : iSprache = 48        ' Polish
          case "de_de", "de-de", "de" : iSprache = 49        ' German
+         case "sl_si", "sl-si", "sl" : iSprache = 50        ' Slovenian
 		 case "sr_rs", "sr-rs", "sr" : iSprache = 51        ' Serbian (Cyrillic)
          case "sh_rs", "sh-rs", "sh" : iSprache = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : iSprache = 55        ' Portuguese (Brazil)
@@ -415,7 +350,6 @@ sub GetLanguageInformation
          case "hi_in", "hi-in", "hi" : iSprache = 91        ' Hindi
          case "ar_ar", "ar-ar", "ar" : iSprache = 96        ' Arabic
          case "he_he", "he-he", "he" : iSprache = 97        ' Hebrew
-         case "sl_si", "sl-si", "sl" : iSprache = 386       ' Slovenian
          case "zz_zz", "zz-zz", "zz" : iSprache = 01        ' unknown
                                        warnlog "iniinfo.inc::GetLanguageInformation()"
                                        warnlog "- sLanOutIni = " & sLanOutIni & " (unknown language)"
@@ -465,7 +399,8 @@ function ConvertLanguage ( Sprache as String ) as Integer
       case "daenisch", "danish"                             : ConvertLanguage = 45
       case "schwedisch", "swedish"                          : ConvertLanguage = 46
       case "norwegian", "norwegisch"                        : ConvertLanguage = 47
-      case "polnisch", "polish"                             : ConvertLanguage = 48      
+      case "polnisch", "polish"                             : ConvertLanguage = 48
+      case "slovenian", "slovenisch"                        : ConvertLanguage = 50
 	  case "serbisch kyrillisch", "serbian cyrillic"        : ConvertLanguage = 51
 	  case "serbisch latein", "serbian latin"               : ConvertLanguage = 52	  
       case "japanisch", "japanese"                          : ConvertLanguage = 81
@@ -476,7 +411,6 @@ function ConvertLanguage ( Sprache as String ) as Integer
       case "tuerkisch", "turkish"                           : ConvertLanguage = 90
       case "arabisch", "arab"                               : ConvertLanguage = 96
       case "catalan", "katalanisch"                         : ConvertLanguage = 99
-      case "slovenian", "slovenisch"                        : ConvertLanguage = 386
    end select
 end function
 
@@ -504,6 +438,7 @@ function GetLanguageText ( iLan ) as String
       case 47   : GetLanguageText = "Norwegian"
       case 48   : GetLanguageText = "Polnish"
       case 49   : GetLanguageText = "German"
+      case 50   : GetlanguageText = "Slovenian"
       case 51   : GetlanguageText = "Serbian (Cyrillic)"
       case 52   : GetlanguageText = "Serbian (Latin)"	  
       case 55   : GetLanguageText = "Portuguese (Brazil)"
@@ -518,7 +453,6 @@ function GetLanguageText ( iLan ) as String
       case 96   : GetLanguageText = "Arabic"
       case 97   : GetLanguageText = "Hebrew"
       case 99   : GetLanguageText = "Unknown"
-      case 386  : GetlanguageText = "Slovenian"
       case else : GetLanguageText = "detection failed"
    end select
 end function
@@ -548,6 +482,7 @@ function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
          case "no_no", "no-no", "no" : ConvertLanguage2 = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : ConvertLanguage2 = 48        ' Polish
          case "de_de", "de-de", "de" : ConvertLanguage2 = 49        ' German
+         case "sl_si", "sl-si", "sl" : ConvertLanguage2 = 50        ' Slovenian
          case "sr_rs", "sr_rs", "sr" : ConvertLanguage2 = 51        ' Serbian (Cyrillic)
          case "sh_rs", "sh_rs", "sh" : ConvertLanguage2 = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : ConvertLanguage2 = 55        ' Portuguese (Brazil)
@@ -561,7 +496,6 @@ function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
          case "hi_in", "hi-in", "hi" : ConvertLanguage2 = 91        ' Hindi
          case "ar_ar", "ar-ar", "ar" : ConvertLanguage2 = 96        ' Arabic
          case "he_he", "he-he", "he" : ConvertLanguage2 = 97        ' Hebrew
-         case "sl_si", "sl-si", "sl" : ConvertLanguage2 = 386
          case "zz_zz", "zz-zz", "zz" : ConvertLanguage2 = 01        ' unknown
          case else                   : if isMissing (bExact) then
                                          printlog "iniinfo.inc::ConvertLanguage2(): Unknown systemlanguage '" & sSprache & "'!"
@@ -603,6 +537,7 @@ function ConvertCodeToLanguage ( sSprache as String ) as Integer
          case "2047" : ConvertCodeToLanguage = 47        ' Norwegian
          case "1045" : ConvertCodeToLanguage = 48        ' Polish
          case "1031" : ConvertCodeToLanguage = 49        ' German
+         case "1060" : ConvertCodeToLanguage = 50        ' Slovenian
          case "    " : ConvertCodeToLanguage = 55        ' Portuguese (Brazil)
          case "3098" : ConvertCodeToLanguage = 51        ' Serbian (Cyriliic)
          case "2074" : ConvertCodeToLanguage = 52        ' Serbian (Latin)		 
@@ -616,7 +551,6 @@ function ConvertCodeToLanguage ( sSprache as String ) as Integer
 '         case "    " : ConvertCodeToLanguage = 91        ' Hindi
          case "1025" : ConvertCodeToLanguage = 96        ' Arabic
 '         case "    " : ConvertCodeToLanguage = 97        ' Hebrew
-         case "1060" : ConvertCodeToLanguage = 386        ' Slovenian
          case else   : printlog "iniinfo.inc::ConvertCodeToLanguage(): Num. Code could not be detect or is unknown and will be set to 01 (English (USA))!"
                        ConvertCodeToLanguage = 01
    end select
@@ -722,54 +656,15 @@ end function
 
 '-------------------------------------------------------------------------
 
-function fgetL10Nvalue ( setupxcu as string) as string
-'/// Gets the value of the child from
-'///+ <ul><li>node: oor:name=&quot;L10N&quot;<ul><li>node: oor:name = &quot;ooLocale&quot;</li><ul><li>element: value</li></ul></ul></li></ul>
-'///+ in a file (normaly <b>Setup.xcu</b> in network path or installation path).
-'/// <u>Note</u>: The structure is hard coded and specified. A change must be announced by feature mail!
-'/// <u><i>Description</i></u>:
-  Dim i as integer
-  Dim ChildsOfSetupNodes as integer
-
-  fgetL10Nvalue = ""
-
-'///<ul><li>Open the file given as parameter.</li>
-   SAXReadFile(setupxcu)
-'///+<li>Go to the DOM (Document Object Model) root.</li>
-   SAXSeekElement("/")
-'///+<li>Go <b>into</b> the first <b>node</b> of the tree.</li>
-   SAXSeekElement(1)
-'///+<li>Get the <b>count of children</b> (nodes/elements) in that node.</li>
-   ChildsOfSetupNodes = SAXGetChildCount
-      for i = 1 to ChildsOfSetupNodes
-'///+<li>Run in a for next loop of going <b>into</b> the next node and existing it until ...</li>
-       SAXSeekElement(i)
-'///+<li>...the <i>oor:name</i> attribute value is identical to &quot;L10N&quot;</li>
-       if SaxGetAttributeValue("oor:name") = "L10N" then
-'///+<li>Go <b>into</b> the next node (&quot;prop&quot;)</li>
-        SAXSeekElement("prop")
-'///+<li>If the attribute value of &quot;oor:name&quot; is identical to &quot;ooLocale&quot;...</li>
-         if SAXgetAttributeValue("oor:name") = "ooLocale" then
-'///+<li>go <b>into</b> that node and also into the next one, named &quot;value&quot;.</li>
-           SAXSeekElement("value")
-'///+<li>Go <b>into</b> the next node - a <i>node type</i> <b>character</b>...</li>
-           SAXSeekElement(1)
-            if SAXGetNodeType = NodeTypeCharacter then
-'///+<li>...and get the characters out in the string which will be returned from this function.</li>
-              fgetL10Nvalue = SAXGetChars
-'///+<li><i>Release()</i> the DOM.</li>
-              SAXRelease()
-'///+<li>Exit the function.</li></ul>
-              Exit function
-            end if
-          else
-            SAXRelease()
-'/// If the result is empty exit the function without warning.</ul>
-            Exit function
-           end if
-         end if
-         SAXSeekElement(0)
-      next i
+function fgetL10Nvalue() as string
+    dim args(0) as new com.sun.star.beans.NamedValue
+    args(0).Name = "nodepath"
+    args(0).Value = "/org.openoffice.Setup/L10N"
+    fgetL10Nvalue = hGetUNOService()._
+        createInstance("com.sun.star.configuration.DefaultProvider")._
+        createInstanceWithArguments(_
+            "com.sun.star.configuration.ConfigurationAccess", args())._
+        getByName("ooLocale")
 end function
 
 '-------------------------------------------------------------------------
@@ -1010,8 +905,10 @@ function getSofficeNative() as string
         iVendorEntries = 1
         sVendor(iVendorEntries) = "Sun Microsystems": inc (iVendorEntries)
         sVendor(iVendorEntries) = "OpenOffice.org"  : inc (iVendorEntries)
+        sVendor(iVendorEntries) = "Oracle"  : inc (iVendorEntries)
         
         iOfficeEntries = 1
+        sOffice(iOfficeEntries) = "Oracle Open Office"    : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "StarOffice"    : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "StarSuite"     : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "OpenOffice.org": inc (iOfficeEntries)
@@ -1019,6 +916,7 @@ function getSofficeNative() as string
         iVersionEntries = 1
         sVersion(iVersionEntries) = "9"      : inc (iVersionEntries)
         sVersion(iVersionEntries) = "8"      : inc (iVersionEntries)
+        sVersion(iVersionEntries) = "3"      : inc (iVersionEntries)
         iOOoVersionBorder = iVersionEntries
         sVersion(iVersionEntries) = "2.0.0"  : inc (iVersionEntries)
         sVersion(iVersionEntries) = "680"    : inc (iVersionEntries)
@@ -1247,33 +1145,46 @@ end function
 '-------------------------------------------------------------------------
 
 function getOfficeBasisPath as string
+
+    const CFN = "global::system::iniinfo.inc:getOfficeBasisPath: "
     'get the basis directory from the information of basis-link
     dim ltemp(5) as string
     dim sFile as string
     dim sTemp as string
+    dim sPath as string
 
     sTemp = gNetzOfficePath
-    sFile = gNetzOfficePath + "basis-link"
-
-    if fileExists(sFile) then
+    sFile = gNetzOfficePath & "basis-link"
+    
+    if FileExists( sFile ) then
         if ( lcase( gPlatform ) = "osx" ) then
             'MacOS X
-            sTemp = sFile + gPathSigne
+            sTemp = sFile
         else
-            if gPlatGroup = "unx" then
+            if ( gPlatGroup = "unx" ) then
                 'Unixes
-               sTemp = getLinkDestination(sFile)
-               sTemp = fRelativeToAbsolutePath(gNetzOfficePath + sTemp) + gPathSigne
+               sPath = getLinkDestination( sFile )
+               sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sPath )
+               if ( NOT FileExists( sTemp ) ) then
+                    sTemp = fRelativeToAbsolutePath( sPath )
+               endif
+               
             else
-                'Win32
-                ListRead(lTemp, sFile)
+                'all other platforms are Windows/DOS style
+                ListRead( lTemp, sFile )
                 if lTemp(1) <> "" then
                     stemp = lTemp(1)
-                    sTemp = fRelativeToAbsolutePath(gNetzOfficePath + sTemp) + gPathSigne
-                end if
-            end if
-        end if
-    end if
+                    sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sTemp )
+                endif
+            endif
+        endif
+    else
+        warnlog( CFN & "Basis-link could not be found" )
+    endif
+    
+    if ( NOT FileExists( sTemp ) ) then
+        warnlog( CFN & "Retrieved invalid path" )
+    endif
 
-    getOfficeBasisPath = sTemp
+    getOfficeBasisPath = sTemp & gPathSigne
 end function

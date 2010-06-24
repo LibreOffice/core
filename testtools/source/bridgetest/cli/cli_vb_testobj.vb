@@ -2,13 +2,9 @@
 '
 ' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 ' 
-' Copyright 2008 by Sun Microsystems, Inc.
+' Copyright 2000, 2010 Oracle and/or its affiliates.
 '
 ' OpenOffice.org - a multi-platform office productivity suite
-'
-' $RCSfile: cli_vb_testobj.vb,v $
-'
-' $Revision: 1.5 $
 '
 ' This file is part of OpenOffice.org.
 '
@@ -200,7 +196,7 @@ Public Class VBBridgeTestObject
         
         Return m_testDataElements
     End Function
-    
+
     ' Attributes ---------------------------------------------------------
     Public Overridable Property Bool As Boolean _
         Implements XBridgeTest2.Bool

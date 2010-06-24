@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: performance.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:06 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -37,33 +31,33 @@
 '*
 '\******************************************************************************
 
+private const VERBOSE = true
+
 function hWaitForObject( oControl as object, iTime as integer ) as integer
 
     const CFN = "hWaitForObject()::"
     dim iWait as integer
     
+    if ( VERBOSE ) then printlog( CFN & "Entering function for control: " & oControl.name() )
+    
+    WaitSlot( 2000 )
+    
     for iWait = 0 to iTime
         try
-            oControl.Exists()
-            printlog( CFN & "Control Name....: " & oControl.Name() )
-            printlog( CFN & "Control ID......: " & oControl.ID()   )
-            printlog( CFN & "Control ready in: " & iWait & " ms")
-            
             if ( oControl.isEnabled() ) then
-                printlog( CFN & "Control enabled.: Yes" )
-                hWaitForObject() = 0 
+                printlog( CFN & "Control is enabled: " & oControl.name() )
+                hWaitForObject() = 0
+                exit function
             else
-                printlog( CFN & "Control enabled.: No" )
-                hWaitForObject() = -1
+                if ( VERBOSE ) then printlog( "Waiting..." )
             endif
-            exit function            
         catch
             wait( 1 )            
         endcatch
     next iWait
     
-    hWaitForObject() = -2
-    printlog( CFN & "Control not found, timeout reached" )
+    printlog( CFN & "Control not found or not enabled, timeout reached" )
+    hWaitForObject() = -1
 
 end function
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ODatabaseForm.java,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,7 +247,7 @@ public class ODatabaseForm extends TestCase {
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools(((XMultiServiceFactory) tParam.getMSF()));
+        dbTools = new DBTools( (XMultiServiceFactory)tParam.getMSF(), log );
 
         // creating DataSource and registering it in DatabaseContext
         String dbURL = (String) tParam.get("test.db.url");
@@ -314,7 +311,7 @@ public class ODatabaseForm extends TestCase {
                 oldF = utils.getFullURL(origDB);
                 newF = utils.getOfficeTemp((XMultiServiceFactory) tParam.getMSF()) + tableName +
                        ".dbf";
-            } while (!utils.overwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) &&
+            } while (!utils.tryOverwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) &&
                      (uniqueSuffix++ < 50));
         }
     }

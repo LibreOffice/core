@@ -1,31 +1,28 @@
 /*
  * ************************************************************************
  *
- *  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: ParameterHelper.java,v $
- *  $Revision: 1.1.2.3 $
+ * This file is part of OpenOffice.org.
  *
- *  This file is part of OpenOffice.org.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *  OpenOffice.org is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 3
- *  only, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *  OpenOffice.org is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License version 3 for more details
- *  (a copy is included in the LICENSE file that accompanied this code).
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  version 3 along with OpenOffice.org.  If not, see
- *  <http://www.openoffice.org/license.html>
- *  for a copy of the LGPLv3 License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  * ***********************************************************************
  */
@@ -196,7 +193,7 @@ public class ParameterHelper
                 String sReferenceType = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_REFERENCE_TYPE );
                 if (sReferenceType == null || sReferenceType.length() == 0)
                 {
-                    m_sReferenceType = "OOo";
+                    m_sReferenceType = "ps";
                 }
                 else
                 {
@@ -244,6 +241,7 @@ public class ParameterHelper
     /**
      * Helper function to get the buildid of the current used OpenOffice.org
      * out of the AppExecutionCommand the build ID
+     * @return
      */
     public String getBuildID()
         {
@@ -268,11 +266,12 @@ public class ParameterHelper
 
             // check if MultiServiceFactory is given
             if (getReferenceType().toLowerCase().equals("pdf") ||
+                getReferenceType().toLowerCase().equals("ps") ||
                 getReferenceType().toLowerCase().equals("ooo"))
             {
                 if (xMSF == null)
                 {
-                    GlobalLogWriter.get().println("ERROR! MultiServiceFactory not given.");
+                    GlobalLogWriter.println("ERROR! MultiServiceFactory not given.");
                 }
             }
             return xMSF;
@@ -420,5 +419,15 @@ public class ParameterHelper
         return m_sHTMLPrefix;
     }
 
+    public boolean createSmallPictures()
+        {
+            // boolean bCreateSmallPictures = true;
+            boolean bNoSmallPictures = m_aCurrentParams.getBool( PropertyName.NO_SMALL_PICTURES);
+            if (bNoSmallPictures == true)
+            {
+                return false;
+            }
+            return true;
+        }
 
 }

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: sxw7_01.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-07-11 07:34:18 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -73,7 +67,7 @@ testcase tfiscus
     '/// Saving (and if already exiting overwriting) the document.
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus\meta.xml")) = FALSE then
@@ -304,7 +298,7 @@ testcase tfiscus2
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\fiscus2.sxw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus2.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus2.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus2") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\fiscus2\meta.xml")) = FALSE then
@@ -402,7 +396,7 @@ testcase tfeat476
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\feat476.sxw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\feat476.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\feat476.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\feat476") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\feat476\meta.xml")) = FALSE then
@@ -476,7 +470,7 @@ testcase tfeat1318
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\feat1318.sxw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\feat1318.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\feat1318.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\feat1318") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\feat1318\meta.xml")) = FALSE then
@@ -556,7 +550,7 @@ testcase tcharacters
     '/// Saving the document in OOo XML 1.0 file format.
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\characters.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)
         '/// Unpack the complete file (ZIP archieve) into a seperate directory.
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\characters.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\characters") )

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: f_CJK_GridLayout.bas,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:02:00 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner: thorsten.bosbach@sun.com
@@ -43,7 +37,7 @@ sub main
     PrintLog "---------------------------------------------------------------------"
     Printlog "-----                    Grid Layout for CJK  in Writer         -----"
     PrintLog "---------------------------------------------------------------------"
-
+    
     use "framework\optional\includes\w_grid_layout1.inc"
    
     sAsianLanguageFlag = CheckAsianLanguageSupport("Current")
@@ -60,17 +54,12 @@ sub main
 
        Call tGridDisplay_1            'Printgrid: The grid lines will be printed. (vice versa)
 
-       Call tUserDefineLayout_1       'Decrease characters per line will cause lines per page decrease accordingly
-
        Call tFontSizeChanges_1        'Change the font size to bigger enough will change the layout 
      
        Call tRubyText_1               'If Ruby Text is applied and longer than its Base Text it will stretch over more grid cells than the base text itself.
 
        Call tIndentsTest_1            'Indents should work and always indenting as close as possible to their measurements by snapping to the appropriate grid cell. Tabs therefore will be ignored.
 
-       'Excluded until errors resolved by HLI.
-       'Call tObjectsTest_1            'If objects are anchored to text they will "wander" with its surrounding text. If they are anchored as character they will snap to the appropriate grid cell (since they are a character).
-    
     Call hStatusOut
 
     if sAsianLanguageFlag = "Off" Then  
@@ -81,16 +70,13 @@ sub main
 end sub
 
 sub LoadIncludeFiles
-
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    
     use "global\tools\includes\required\t_doc1.inc"
     use "global\tools\includes\required\t_tools1.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
    
-    use "framework\tools\includes\CJK_tools.inc"    
-
+    use "framework\tools\includes\CJK_tools.inc"   
     gApplication   = "WRITER"
     Call GetUseFiles
-    
-End sub
+end sub

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_textframes3.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:37:48 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -48,10 +42,10 @@ sub w_textframes3
     Call tTextframes_39         'Test drag&drop with a linked frame - keyboard
     Call tTextframes_40         'Test Undo on drag&drop of frames (keyboard)
     Call tTextframes_41         'Test Undo on removing the link
-    Call tTextframes_42         'Link frame in header with frame in bodytext should be forbidded
-    Call tTextframes_43         'Link frame in footer with frame in bodytext should be forbidded
-    Call tTextframes_44         'Link frame when target frame is not empty  should be forbidded
-    Call tTextframes_45         'Recursed links should be forbidded
+    Call tTextframes_42         'Link frame in header with frame in bodytext should be forbidden
+    Call tTextframes_43         'Link frame in footer with frame in bodytext should be forbidden
+    Call tTextframes_44         'Link frame when target frame is not empty  should be forbidden
+    Call tTextframes_45         'Recursed links should be forbidden
     Call tTextframes_46         'Frames which couldn't be linked with the current one is part of another 'chain'
     Call tTextframes_47         'Frames couldn't be linked with the current one is in protected section
     Call tTextframes_48         'Frames could be linked with the current one is set to "editable in protected documents" even it is in protected section
@@ -92,7 +86,7 @@ testcase tTextframes_33
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,20)
+    Call gMouseClick(60,70)
     Wait 500
     
     '/// Format/Frame / Type ,
@@ -149,7 +143,7 @@ testcase tTextframes_34
     Wait 500
     
     '/// insert another frame , set frame name
-    Call fInsertFrame(50,50 , 70,70)
+    Call fInsertFrame(50,50 , 80,80)
     
     printlog "Move second frame away from the first frame."
     Call wTypeKeys "<RIGHT>", 12
@@ -172,7 +166,7 @@ testcase tTextframes_34
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,20)
+    Call gMouseClick(60,70)
     Wait 500
     
     Call wTypeKeys "<RETURN>"
@@ -234,7 +228,7 @@ testcase tTextframes_35
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,20)
+    Call gMouseClick(60,70)
     Wait 500
     
     '/// Check if the link is showed correctly (Format.Frame.Options)
@@ -661,7 +655,7 @@ testcase tTextframes_41
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,20)
+    Call gMouseClick(60,70)
     Wait 500
     
     '/// Remove link
@@ -694,8 +688,8 @@ testcase tTextframes_42
     
     iNoLink  =  1
     
-    printlog "- Link frame in header with frame in bodytext should be forbidded"
-    '/// Link frame in header with frame in bodytext should be forbidded
+    printlog "- Link frame in header with frame in bodytext should be forbidden"
+    '/// Link frame in header with frame in bodytext should be forbidden
     
     Call hNewDocument
     
@@ -742,8 +736,8 @@ testcase tTextframes_43
     
     iLink = 2
     
-    printlog "- Link frame in footer with frame in bodytext should be forbidded"
-    '/// Link frame in footer with frame in bodytext should be forbidded
+    printlog "- Link frame in footer with frame in bodytext should be forbidden"
+    '/// Link frame in footer with frame in bodytext should be forbidden
     
     Call hNewDocument
     
@@ -791,8 +785,8 @@ testcase tTextframes_44
     sText    =  "Test"
     iNoLink  =  1
     
-    printlog "- Link frame in footer with frame in bodytext should be forbidded"
-    '/// Link frame in footer with frame in bodytext should be forbidded
+    printlog "- Link frame in footer with frame in bodytext should be forbidden"
+    '/// Link frame in footer with frame in bodytext should be forbidden
     
     Call hNewDocument
     
@@ -836,8 +830,8 @@ testcase tTextframes_45
     
     iNoLink  =  1
     
-    printlog "- Recursed links should be forbidded"
-    '/// Recursed links should be forbidded
+    printlog "- Recursed links should be forbidden"
+    '/// Recursed links should be forbidden
     
     Call hNewDocument
     
@@ -851,8 +845,7 @@ testcase tTextframes_45
     Call fInsertFrame(50,50 , 70,70)
     
     printlog "Move the second frame away from the first one."
-    Call wTypeKeys "<RIGHT>",10
-'    Call wTypeKeys "<DOWN>",7
+    Call wTypeKeys "<RIGHT>",1
     
     '/// set focus to 1st frame
     Call wTypeKeys "<TAB>"
@@ -863,7 +856,7 @@ testcase tTextframes_45
     Sleep 2
     Verketten.Click
     Wait 500
-    Call gMouseClick(75,30)
+    Call gMouseClick(60,60)
     Wait 500
     
     '/// link two frames (1st frame is target frame)
@@ -876,7 +869,7 @@ testcase tTextframes_45
     Wait 500
     
     Call fFormatFrame("TabZusaetze")
-    if NextLink.GetSelIndex  <> iNoLink then Warnlog "There should be no link between 2 frames!"
+    if NextLink.GetItemCount <> iNoLink then Warnlog "There should be no link between 2 frames!" & NextLink.GetItemCount 
     TabZusaetze.Cancel
     Wait 500
     
@@ -991,6 +984,8 @@ testcase tTextframes_47
     sleep 1
     BereicheBearbeiten.OK
     
+    Call wTypeKeys "<DOWN>" , 10
+        
     '/// Insert another frame (B) out of the section
     Call fInsertFrame(30,70 , 60,90)
     
@@ -1020,11 +1015,10 @@ testcase tTextframes_48
     iLink = 2
     
     printlog "- Frames could be linked with the current one is set to 'editable in protected documents' even it is in protected section "
-    '/// Frames could be linked with the current one is set to "editable in protected documents" even it is in protected section
     
     Call hNewDocument
     
-    '/// Insert a section
+    printlog "Insert a section"
     InsertSection
     wait 500
     Kontext
@@ -1034,11 +1028,13 @@ testcase tTextframes_48
     TabBereiche.OK
     wait 500
     
-    Call wTypeKeys "<up>" , 1
+    Call wTypeKeys "<UP>" , 1
+    Call wTypeKeys "<RETURN>", 6
     
-    '/// Insert a frame (A) in the section , and check "editable in protected documents"
+    printlog "Insert a frame (A) in the section , and check 'editable in protected documents'"
     Call wInsertFrame
-    
+    Call wTypeKeys "<UP>" , 2          
+       
     Call fFormatFrame("TabZusaetze")
     Editierbar.Check
     wait 500
@@ -1046,17 +1042,18 @@ testcase tTextframes_48
     
     Call wTypeKeys "<ESCAPE>"
     
-    '/// Set the section to be protected
+    printlog "Set the section to be protected"
     FormatSections
     Kontext "BereicheBearbeiten"
     Geschuetzt.Check
     sleep 1
     BereicheBearbeiten.OK
     
-    '/// Insert another frame (B) out of the section
+    Call wTypeKeys "<DOWN>" , 10
+    printlog "nsert another frame (B) out of the section"
     Call fInsertFrame(50,50 , 60,60)
     
-    '/// Link B->A (A is target)
+    printlog "Link B->A (A is target)"
     Call fFormatFrame("TabZusaetze")
     try
         NextLink.Select iLink

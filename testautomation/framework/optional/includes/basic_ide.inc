@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_ide.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -47,103 +41,50 @@ testcase tBasic_IDE_Toolbar_Module
         cSourceFile = convertpath( cSourceFile )
 
 
-    '///<h1>Work with Toolbar on Basic-IDE part 1</h1>
 
-    '///<ul>
 
-    '///+<li>Open a new writer-doc</li>
     printlog "open a new writer-doc"
     gApplication = "WRITER"
     hCreateDocument()
 
-    '///+<li>Create a new module for the new document (named TTModule)</li>
     brc = hOpenBasicOrganizerFromDoc()
     brc = hCreateModuleForDoc()
 
-    '///+<li>Click &quot;Compile&quot; on Toolbar</li>
 
     kontext "macrobar"
     printlog "- compile"
-    Compile.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( Compile )
 
-    '///+<li>Click &quot;Run Basic&quot; on Toolbar</li>
     printlog "- Run Basic"
-    BasicRun.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( BasicRun )
 
-
-    '///+<li>Click &quot;Step Procedure&quot; on Toolbar</li>
     printlog "- Step Procedure"
-    ProcedureStep.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( ProcedureStep )
 
-
-    '///+<li>Click &quot;Stop Basic&quot; on Toolbar</li>
     printlog "- Stop Basic"
-    BasicStop.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( BasicStop )
 
-
-    '///+<li>Click &quot;Single Step&quot; on Toolbar</li>
     printlog "- Single Step"
-    SingleStep.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( SingleStep )
 
-
-    '///+<li>Click &quot;Step Back&quot; on Toolbar</li>
     printlog "- Step Back"
-    StepBack.Click()
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( StepBack )
 
-
-    '///+<li>Click &quot;Breakpoint&quot; on Toolbar</li>
     printlog "- Breakpoint => activate"
-    Breakpoint.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( Breakpoint )
 
 
-    '///+<li>Deactivate &quot;Breakpoint&quot; on Toolbar</li>
     printlog "- Breakpoint => deactivate"
-    Breakpoint.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( Breakpoint )
 
-
-    '///+<li>Click &quot;Add Watch&quot; on Toolbar</li>
     printlog "- Add Watch => deactivate"
-    AddWatch.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( AddWatch )
 
-
-    '///+<li>Click &quot;Find Paranthese&quot; on Toolbar</li>
     printlog "- Find Paranthese"
 
     kontext "macrobar"
-    FindParanthese.Click()
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
+    hClickToolbarButton( FindParanthese )
 
-
-    '///+<li>&quot;Controls&quot;</li>
     try
         Controls.TearOff()
         warnlog "Controls are active in a module window => bug!"
@@ -156,8 +97,6 @@ testcase tBasic_IDE_Toolbar_Module
 
     printlog( "- Insert Source Text (" & cSourceFile & ")" )
 
-    '///+<li>&quot;Insert Source Text&quot;<br>
-    '///+Insert external file &quot;ResetRegistration.txt&quot;</li>
 
     InsertSourceText.Click()
     kontext "oeffnendlg"
@@ -178,12 +117,7 @@ testcase tBasic_IDE_Toolbar_Module
     kontext "macrobar"
     printlog "- Save Source Test "
 
-    '///+<li>Click &quot;Save Source Test&quot; on Toolbar, save the file</li>
-    SaveSourceTest.Click
-    if ( WaitSlot <> WSFinished ) then
-        warnlog( "Slot not finished within 1 second" )
-    endif
-
+    hClickToolbarButton( SaveSourceTest )
 
     kontext "speicherndlg"
     if ( SpeichernDlg.exists( 1 ) ) then
@@ -195,10 +129,10 @@ testcase tBasic_IDE_Toolbar_Module
 
     kontext "active"
     if ( Active.Exists( 1 ) ) then
+        printlog( "Closing Messagebox with <Yes>")
         Active.Yes()
     endif
 
-    '///+<li>File/Close for Basic-IDE and Document</li></ul>
     hDestroyDocument()   ' for Basic-IDE
     hDestroyDocument()   ' the new writer-doc
 
@@ -220,20 +154,15 @@ testcase tBasic_IDE_Toolbar_Dialogs
     dim sBasFile2 as string
         sBasFile2 = convertpath( gOfficepath & "user\work\global_test.bas" )
 
-    '///<h1>Work with Toolbar on Basic-IDE part 2</h1>
-    '///<ul>
 
-    '///+<li>Open a new writer-doc</li>
     printlog "open a new writer-doc"
     gApplication = "WRITER"
     hCreateDocument()
 
-    '///+<li>Create a new module for the new document (named TTModule)</li>
     printlog "create a new module "
     brc = hOpenBasicOrganizerFromDoc()
     brc = hCreateModuleForDoc()
 
-    '///+<li>Create a new dialog in BasicIDE</li>
     kontext "basicide"
     Tabbar.OpenContextMenu
     hMenuSelectNr ( 1 )
@@ -244,9 +173,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
         warnlog "No dialog window is shown!"
     end if
     
-    '///+<li>Macro execution buttons should be disabled</li>
-    '///<ul>
-    '///+<li>Compile</li>
     try
         kontext "MacroBar"
         Compile.Click()
@@ -255,7 +181,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
         printlog( """Compile"" is disabled" )
     endcatch
 
-    '///+<li>Run Basic</li>
     try
         kontext "MacroBar"
         BasicRun.Click()
@@ -264,7 +189,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
         printlog( """Run Basic"" is disabled" )
     endcatch
 
-    '///+<li>Step Procedure</li>
     printlog "- Step Procedure (disabled)"
     try
         kontext "MacroBar"
@@ -274,7 +198,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
         printlog( """Step Procedure"" is disabled" )
     endcatch
 
-    '///+<li>Stop Basic</li>
     try
         kontext "MacroBar"
         BasicStop.Click()
@@ -283,7 +206,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
         printlog( """Stop Basic"" is disabled" )
     endcatch
 
-    '///+<li>Single Step</li>
     try
         kontext "MacroBar"
         SingleStep.Click()
@@ -292,7 +214,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
         printlog( """Single Step"" is enabled" )
     endcatch
 
-    '///+<li>Single Step Back</li>
     try
         kontext "MacroBar"
         StepBack.Click()
@@ -301,7 +222,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
         printlog( """Single Step Back"" is enabled" )
     endcatch
 
-    '///+<li>Breakpoint</li>
     try
         kontext "MacroBar"
         Breakpoint.Click()
@@ -311,7 +231,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
     endcatch
 
 
-    '///+<li>Add Watch</li>
     try
         kontext "MacroBar"
         AddWatch.Click()
@@ -321,7 +240,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
     endcatch
 
 
-    '///+<li>Find Paranthese</li>
     try
         kontext "MacroBar"
         FindParanthese.Click()
@@ -331,7 +249,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
     endcatch
 
 
-    '///+<li>Insert Source Text</li>
     try
         kontext "macrobar"
         InsertSourceText.Click()
@@ -351,8 +268,6 @@ testcase tBasic_IDE_Toolbar_Dialogs
     
     printlog "- Save Source Test  (disabled)"
 
-    '///+<li>Click &quot;Save Source Text&quot; (disabled)<br>
-    '///+Save it as bas-file</li>
     try
         kontext "macrobar"
         SaveSourceTest.Click()
@@ -374,19 +289,47 @@ testcase tBasic_IDE_Toolbar_Dialogs
         printlog( """Save Source Text"" is disabled" )
     endcatch
 
-    '///</ul>
     
-    '///+<li>Tear off controls</li>
     bIsOpen = hShowMacroControls()
     if ( bIsOpen ) then
         ToolsCollectionBar.Close()
     end if
 
-    '///+<li>File/Close on Basic-IDE and Document</li></ul>
     Call hDestroyDocument()   ' for Basic-IDE
     Call hDestroyDocument()   ' the new writer-doc
-    '///</ul>
 
 endcase
 
+'******************************************************************************'
 
+function hClickToolbarButton( oButton as object ) as boolean
+
+    const CFN = "hClickToolbarButton(): "
+
+    dim iTry as integer
+    dim brc as boolean : brc = false
+    
+    printlog( CFN & "Clicking button on toolbar: " & oButton.name() )
+    for iTry = 1 to 5
+    
+        try
+            oButton.click()
+            brc = true
+            exit for
+        catch
+            printlog( CFN & "Retrying..." )
+        endcatch
+        
+        if ( iTry = 5 ) then
+            exit for
+        endif
+        
+        wait( 500 )
+        
+    next iTry
+    
+    if ( WaitSlot( 2000 ) <> WSFinished ) then
+        warnlog( CFN & "Slot not finished within 1 second" )
+    endif
+
+end function

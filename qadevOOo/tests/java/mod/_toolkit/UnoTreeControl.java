@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UnoTreeControl.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,8 +220,6 @@ public class UnoTreeControl extends TestCase {
         });
         System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
-        //this.getAccessibleContext(xNode);
-
         return tEnv;
     } // finish method getTestEnvironment
 
@@ -290,26 +285,6 @@ public class UnoTreeControl extends TestCase {
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             ex.printStackTrace();
         }
-    }
-
-    private XAccessibleContext getAccessibleContext(XMutableTreeNode xNode ){
-
-        UITools oDocUITools = new UITools(this.mxMSF, this.xTextDoc);
-
-        XWindow xDialogWindow = null;
-        try {
-
-            xDialogWindow = oDocUITools.getActiveTopWindow();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        UITools oDialog = new UITools(mxMSF, xDialogWindow);
-
-        oDialog.printAccessibleTree(log, debug);
-
-        return null;
-
     }
 
     private class execurteDialog extends Thread{

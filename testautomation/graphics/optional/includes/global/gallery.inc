@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: gallery.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:41 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : wolfram.garten@sun.com
@@ -324,7 +318,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
     printlog "     - 'add all' for the rest of the files"
     DateiListe.Select 1
     HinzufuegenAlle.Click
-    sleep (1)
+    sleep (8)
     printlog "     - apply-dialog -> cancel"
     Kontext "ApplyGallery"
     for j=1 to 100
@@ -341,7 +335,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
         printlog "     - 'add all' for the rest of the files"
         DateiListe.Select 1
         HinzufuegenAlle.Click
-        sleep (2)
+        sleep (8)
         Kontext "ApplyGallery"
         for j=1 to 100
             If ApplyGallery.Exists then
@@ -475,6 +469,7 @@ testcase tGallery_GalleryView_Preview
         case 46     :   jpeg_bkg =  2    : iAnimation =  1   :   iSound = 17
         case 48     :   jpeg_bkg =  2    : iAnimation =  1   :   iSound = 17
         case 49     :   jpeg_bkg = 12   : iAnimation =  1   :   iSound = 16
+        case 50     :   jpeg_bkg = 12   : iAnimation =  1   :   iSound = 16
         case 55     :   jpeg_bkg = 21   : iAnimation =  1   :   iSound = 28
         case 81     :   jpeg_bkg = 21   : iAnimation =  1   :   iSound = 10  'FHA TODO: Find out the right numbers for Asian languages.
         case 82     :   jpeg_bkg =  1    : iAnimation = 17  :   iSound = 12
@@ -495,6 +490,7 @@ testcase tGallery_GalleryView_Preview
         case 46     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 48     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 49     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
+        case 50     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 55     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2
         case 81     :   jpeg_bkg =  2   :   iAnimation =  5     :   iSound =  2  'FHA TODO: Find out the right numbers for Asian languages.
         case 82     :   jpeg_bkg =  1   :   iAnimation =  5     :   iSound =  2
@@ -657,6 +653,7 @@ testcase tGallery_GalleryView_Insert
         case 46     :   jpeg_bkg = 1     :   iAnimation =  2
         case 48     :   jpeg_bkg = 3     :   iAnimation =  1
         case 49     :   jpeg_bkg = 1     :   iAnimation =  2
+        case 50     :   jpeg_bkg = 1     :   iAnimation =  2
         case 55     :   jpeg_bkg = 8     :   iAnimation =  1
         case 81     :   jpeg_bkg = 1     :   iAnimation =  3
         case 82     :   jpeg_bkg = 1     :   iAnimation = 17
@@ -677,6 +674,7 @@ testcase tGallery_GalleryView_Insert
         case 46   : jpeg_bkg =  1 : iAnimation =  2
         case 48   : jpeg_bkg =  3 : iAnimation =  1
         case 49   : jpeg_bkg =  1 : iAnimation =  2
+        case 50   : jpeg_bkg =  1 : iAnimation =  2
         case 55   : jpeg_bkg =  6 : iAnimation =  1
         case 81   : jpeg_bkg =  1 : iAnimation =  3
         case 82   : jpeg_bkg =  1 : iAnimation =  1
@@ -865,6 +863,7 @@ testcase tGallery_GalleryView_Delete
     case 39   : jpeg_bkg = 10  :   iAnimation = 1   :  iSound = 27
     case 46   : jpeg_bkg = 1    :   iAnimation = 2   :  iSound = 18
     case 49   : jpeg_bkg = 1    :   iAnimation = 2   :  iSound = 17
+    case 50   : jpeg_bkg = 1    :   iAnimation = 2   :  iSound = 17
     case 55   : jpeg_bkg = 8    :   iAnimation = 1   :  iSound = 30
     case 81   : jpeg_bkg = 1    :   iAnimation = 3   :  iSound = 10
     case 82   : jpeg_bkg = 1    :   iAnimation = 17 :  iSound = 12

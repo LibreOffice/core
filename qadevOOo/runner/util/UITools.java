@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UITools.java,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -676,26 +673,6 @@ public class UITools {
             throw new Exception("Could not get message from Basic-MessageBox: " + e.toString());
         }
      }
-
-
-    /**
-     * fetch the active window which is on the top of the X-desktop
-     * @return the active window
-     * @throws java.lang.Exception if something fail
-     */
-    public XWindow getActiveTopWindow() throws java.lang.Exception
-    {
-        XInterface xToolKit = null;
-        try {
-            xToolKit = (XInterface) mMSF.createInstance("com.sun.star.awt.Toolkit") ;
-        } catch (com.sun.star.uno.Exception e) {
-          throw new Exception("Could not toolkit: " + e.toString());
-        }
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, xToolKit);
-        Object atw = tk.getActiveTopWindow();
-        return (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
-    }
 
     /**
      * fetch the window which is equal to the given <CODE>WindowName</CODE>

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: customize_tools.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:05 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -114,9 +108,6 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
     '///+<li>Switch to one of the four available tabpages</li>
     '///<ol>
     kontext
-    active.setPage
-
-    kontext
     
     try
 
@@ -193,8 +184,7 @@ function hToolsCustomizeClose( iMode as integer  ) as boolean
     '///<ul>
     
     const CFN = "hToolsCustomizeClose::"
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
 
     kontext 
 
@@ -213,8 +203,11 @@ function hToolsCustomizeClose( iMode as integer  ) as boolean
     end select
     '///</ol>
     
+    
+    
     '///+<li>Verify that the dialog has indeed been closed</li>
     kontext "TabCustomizeEvents"
+    TabCustomizeEvents.notExists( 3 )
     if ( TabCustomizeEvents.exists() ) then
         brc = false
     endif
@@ -316,24 +309,29 @@ function hDeselectSeparator() as integer
     const CFN = "hDeselectSeparator::"
     
     kontext "ToolsCustomizeToolbars"
-    iCurrentItem = ToolbarContents.getSelIndex()
-    cString = ToolbarContents.getSelText()
+    if ( ToolbarContents.getItemCount > 0 ) then
     
-    '///+<li>Check whether the selected item contains a number of minus-chars (---)</li>
-    if ( instr( cString , "----" ) ) then
-    
-        '///+<li>If we are at the beginning of the list: Move up</li>
-        if ( iCurrentItem = 1 ) then
-            irc = 2
-            ToolbarContents.select( irc )
-            printlog( CFN & " Moved away from separator (up)" )
-        else
-        '///+<li>If we are somewhere else in the list, move down</li>
-            irc = iCurrentItem - 1
-            ToolbarContents.select( irc )
-            printlog( CFN & " Moved away from separator (down)" )
-        endif
+        iCurrentItem = ToolbarContents.getSelIndex()
+        cString = ToolbarContents.getSelText()
         
+        '///+<li>Check whether the selected item contains a number of minus-chars (---)</li>
+        if ( instr( cString , "----" ) ) then
+        
+            '///+<li>If we are at the beginning of the list: Move up</li>
+            if ( iCurrentItem = 1 ) then
+                irc = 2
+                ToolbarContents.select( irc )
+                printlog( CFN & " Moved away from separator (up)" )
+            else
+            '///+<li>If we are somewhere else in the list, move down</li>
+                irc = iCurrentItem - 1
+                ToolbarContents.select( irc )
+                printlog( CFN & " Moved away from separator (down)" )
+            endif
+            
+        endif
+    else
+        irc = 0
     endif
     
     hDeselectSeparator() = irc
@@ -341,85 +339,5 @@ function hDeselectSeparator() as integer
     
 end function
 
-
 '*******************************************************************************
 
-function hClickCommandButton( iItemToClick as integer ) as boolean
-
-
-    '///<h3>Click a given entry on the command button</h3><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-
-    '///+<li>Position of the item to click (Integer)</li>
-    '///<ul>
-    '///+<li>Only active items are selectable</li>
-    '///+<li>Position must be &gt; than 0 and &le; number of active items in menu</li>
-    '///+<li>Set context (kontext) before calling this function</li>
-    '///</ul>
-
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Success or failure (Boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on success</li>
-    '///+<li>FALSE on failure or unknown status</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "hClickCommandButton::"
-    printlog( CFN & "Enter" )
-    
-    dim brc as boolean 'a multi purpose boolean returnvalue
-    dim iMenuItems as integer
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Click the command button</li>
-    command.click()
-    
-    '///+<li>Verify that the menu is open</li>
-    try
-	    iMenuItems = hMenuItemGetCount()
-	catch
-		qaerrorlog( CFN & "Menu not open" )
-		hClickCommandButton() = false
-		exit function
-    endcatch
-    
-    '///+<li>Verify that the selected menuitem is valid</li>
-    printlog( CFN & "Found items: " & iMenuItems )
-    if ( iItemToClick > iMenuItems ) then
-    	warnlog( CFN & "#i90134# Selected item is not available: " & iItemToClick )
-		hClickCommandButton() = false
-		exit function
-    endif
-    
-    '///+<li>Now click on the requested item</li>
-    hMenuSelectNr( iItemToClick )
-    
-    '///+<li>Look for the Menu renaming dialog</li>
-    kontext "CustomizeMenuReName"
-    if ( CustomizeMenuReName.exists( 1 ) ) then
-    	printlog( CFN & "Opened dialog: Rename Menu" )
-    	hClickCommandButton() = true
-    	exit function
-    endif
-    
-    '///+<li>Look for the Toolbar renaming dialog</li>
-    kontext "CustomizeToolbarsRename"
-    if ( CustomizeToolbarsRename.exists() ) then
-    	printlog( CFN & "Opened dialog: Rename Toolbar" )
-    	hClickCommandButton() = true
-    	exit function
-    endif
-    '///</ul>
-
-    printlog( CFN & "Exit" )
-    hClickCommandButton() = true
-
-end function

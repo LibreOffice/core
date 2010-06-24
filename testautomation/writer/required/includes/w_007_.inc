@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_007_.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:41:47 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -161,9 +155,9 @@ testcase tToolsSpellcheck
         if OptionenBearbeiten.IsEnabled then
             OptionenBearbeiten.Click
             wait 500
-            Kontext "SilbentrennungOptionen"
-            DialogTest ( SilbentrennungOptionen )
-            SilbentrennungOptionen.Cancel
+            Kontext "HyphenationOptions"
+            DialogTest ( HyphenationOptions )
+            HyphenationOptions.Cancel
         end if
     next i
 
@@ -295,13 +289,6 @@ testcase tToolsThesaurus
 
     Kontext "Thesaurus"
     DialogTest ( Thesaurus )
-    printlog " In 'Thesaurus' dialog click 'Language'"
-    Sprache.Click
-    Kontext "SpracheAuswaehlen"
-    DialogTest ( SpracheAuswaehlen )
-    printlog " Close 'Language' dialog"
-    SpracheAuswaehlen.Cancel
-    Kontext "Thesaurus"
     printlog " Close 'Thesaurus' dialog"
     Thesaurus.Cancel
     PrintLog "Close active documents"
@@ -396,11 +383,11 @@ testcase tToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if Silbentrennung.Exists then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if Hyphenation.Exists then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"
@@ -488,8 +475,8 @@ testcase tToolsAutocorrectAutoformat
     Kontext "TabOptionenAutokorrektur"
     Call DialogTest ( TabOptionenAutokorrektur )
     printlog " Step through all options in list"
-    printlog " Tabpage Options: With entry 11 button 'Edit' should be enabled"
-    Einstellungen.TypeKeys "<Down>",11
+    printlog " Tabpage Options: With entry 10 button 'Edit' should be enabled"
+    Einstellungen.TypeKeys "<Down>",9
     Wait 500
     if Bearbeiten.IsEnabled then
         Bearbeiten.Click
@@ -497,11 +484,11 @@ testcase tToolsAutocorrectAutoformat
         DialogTest (Sonderzeichen)
         Sonderzeichen.Cancel
     else
-        Warnlog "- Button 'Edit' on Entry 11 disabled!"
+        Warnlog "- Button 'Edit' on Entry 10 disabled!"
     end if
 
     Kontext "TabOptionenAutokorrektur"
-    printlog " Tabpage Options: With entry 17 button 'Edit' should be enabled"
+    printlog " Tabpage Options: With entry 16 button 'Edit' should be enabled"
     Einstellungen.TypeKeys "<Down>",6
     Wait 500
     if Bearbeiten.IsEnabled then
@@ -514,8 +501,8 @@ testcase tToolsAutocorrectAutoformat
     end if
 
     Kontext "TabOptionenAutokorrektur"
-    printlog " Tabpage Options: With entry 19 button 'Edit' should be enabled"
-    Einstellungen.TypeKeys "<Down>",2
+    printlog " Tabpage Options: With entry 17 button 'Edit' should be enabled"
+    Einstellungen.TypeKeys "<Down>",1
     Wait 500
     if Bearbeiten.IsEnabled then
         Bearbeiten.Click
@@ -524,40 +511,40 @@ testcase tToolsAutocorrectAutoformat
         Zusammenfassen.Cancel
         Kontext "TabOptionenAutokorrektur"
     else
-        Warnlog "- Button 'Edit' on Entry 18 disabled!"
+        Warnlog "- Button 'Edit' on Entry 17 disabled!"
     end if
 
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
-    EinfachWortAnfang.Click
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
+    SingleQuotesStart.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 1 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    EinfachWortEnde.Click
+    Kontext "TabLocalizedOptions"
+    SingleQuotesEnd.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 2 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    EinfachStandard.Click
+    Kontext "TabLocalizedOptions"
+    SingleQuotesDefault.Click
 
-    Kontext "TabTypografisch"
-    DoppeltWortAnfang.Click
+    Kontext "TabLocalizedOptions"
+    DoubleQuotesStart.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 3 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    DoppeltWortEnde.Click
+    Kontext "TabLocalizedOptions"
+    DoubleQuotesEnd.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 4 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    DoppeltStandard.Click
+    Kontext "TabLocalizedOptions"
+    DoubleQuotesDefault.Click
 
     Kontext
     Active.Setpage TabWortergaenzung
@@ -1300,11 +1287,11 @@ testcase tMasterDocToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if ( Silbentrennung.Exists() ) then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if ( Hyphenation.Exists( 2 ) ) then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"

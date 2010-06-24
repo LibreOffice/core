@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_accessability.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:39 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -43,6 +37,7 @@
 
 testcase tEis1549
     call hNewDocument
+    call sSelectEmptyLayout
     call hTextrahmenErstellen ("Sun",20,20,70,20)
 
     hTypeKeys ("<escape><escape>")
@@ -122,10 +117,16 @@ testcase tEis1549
     endcatch
 
     call hCloseDocument
-endcase
+endcase 'tEis1549
 
 testcase tEis1523
     call hNewDocument
+
+    printlog "Switching between Draw/Impress"
+    if (UCase(gApplication)) = "IMPRESS" then
+        call sSelectEmptyLayout
+    
+    endif
     call hTextrahmenErstellen ("A",20,20,30,30)
     hTypeKeys ("<escape><escape>")
     call hTextrahmenErstellen ("B",10,10,15,15)
@@ -215,7 +216,7 @@ testcase tEis1523
     endif
 
     call hCloseDocument
-endcase
+endcase 'tEis1523
 
 testcase tEis1581
     dim i as integer
@@ -243,8 +244,11 @@ testcase tEis1581
         LayoutsPreview.TypeKeys "<Return>"
         sleep (1)
         hTypeKeys ("<tab><tab>")
-        sleep (1)
-        hTypeKeys ("<Return>")
+
+        DocumentImpress.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(13)
+        hMenuSelectNr(1)
         sleep (2)
         kontext "GeneralFileDialog"
         if GeneralFileDialog.exists then
@@ -261,7 +265,7 @@ testcase tEis1581
             Pagelayout_UndoDeleteWarning.ok
         endif
         sleep (1)
-        for i = 1 to 17
+        for i = 1 to 3
             kontext "Tasks"
             LayoutsPreview.TypeKeys "<RIGHT>"
             kontext "Pagelayout_UndoDeleteWarning"
@@ -273,9 +277,12 @@ testcase tEis1581
         kontext "Tasks"
         LayoutsPreview.TypeKeys "<Return>"
         sleep (1)
-        hTypeKeys ("<tab><tab><tab>")
+        hTypeKeys ("<tab><tab>")
         sleep (1)
-        hTypeKeys ("<Return>")
+        DocumentImpress.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(16)
+        hMenuSelectNr(1)
         try
             sleep 2
             '         InsertTitle *OLEObjektEinfuegen/OLEObjektInsert   SID_INSERT_OBJECT
@@ -287,4 +294,4 @@ testcase tEis1581
         endcatch
     endif
     call hCloseDocument
-endcase
+endcase 'tEis1581

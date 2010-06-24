@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChXChartDocument.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,10 +77,16 @@ public class ChXChartDocument extends TestCase {
     * Disposes Chart documents.
     */
     protected void cleanup(TestParameters Param, PrintWriter log) {
-        log.println( "    closing xChartDoc " );
-        util.DesktopTools.closeDoc(xChartDoc);
-        log.println( "    closing xChartDoc2 " );
-        util.DesktopTools.closeDoc(doc2);
+        if( xChartDoc!=null ) {
+            log.println( "    closing xChartDoc" );
+            util.DesktopTools.closeDoc(xChartDoc);
+            xChartDoc = null;
+        }
+        if( doc2!=null ) {
+            log.println( "    closing xChartDoc2" );
+            util.DesktopTools.closeDoc(doc2);
+            doc2 = null;
+        }
     }
 
     /**

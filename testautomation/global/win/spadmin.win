@@ -67,7 +67,6 @@ PBDefault padmin:PushButton:RID_PADIALOG:RID_PA_BTN_STD
 PBRemove padmin:PushButton:RID_PADIALOG:RID_PA_BTN_DEL
 PBTestpage padmin:PushButton:RID_PADIALOG:RID_PA_TESTPAGE
 PBNewPrinter padmin:PushButton:RID_PADIALOG:RID_PA_BTN_ADD
-PBFonts padmin:PushButton:RID_PADIALOG:RID_PA_BTN_FONTS
 
 *TabSPACommand padmin:TabPage:RID_RTS_COMMANDPAGE
 EFlpr padmin:ComboBox:RID_RTS_COMMANDPAGE:RID_RTS_CMD_CB_COMMANDS

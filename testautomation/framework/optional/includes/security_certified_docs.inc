@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: security_certified_docs.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.co
@@ -39,12 +33,6 @@
 
 testcase tLoadCertifiedFile( cBuildID as string )
 
-    '///<H1>Load certified documents and verify the certificate</H1>
-    '///This test loads a document which has been signed with a digital 
-    '///signature (dummy certificate) and verifies, that the certificate
-    '///remains with the document through looking at the "digital signatures"
-    '///dialog.
-    '///<ul>
 
     ' Build the path to the file we want to work with 
     dim cFile as string
@@ -70,7 +58,6 @@ testcase tLoadCertifiedFile( cBuildID as string )
     ' the number of certificates attached to the current document        
     dim iCertCount as integer
 
-    '///<li>Load a file that has been signed with a certificate</li> 
     printlog( "Load the file" )
     brc = hFileOpen( cFile )
     brc = hHandleActivesOnLoad( 0 , 2 )
@@ -109,22 +96,18 @@ testcase tLoadCertifiedFile( cBuildID as string )
         goto endsub
     endif
     
-    '///<li>Verify that exactly one certificate exists</li>
     ' If we have zero or more than one certificate, this is probably a bug
     ' introduced by the test maintainer. However, we warn but the test can
     ' continue
     Kontext "DigitalSignature"
     
-    '///+<li>Click on &quot;View Certificate&quot;</li>
     ViewCertificate.click()
    
-    '///+<li>Switch to the &quot;Certification Path&quot;</li>
     hSelectXMLSecTab( "PATH" )
 
     qaerrorlog( "Skipping EditBrowseBox: Not implemented in Testtool yet" )
     goto SkipEditBrowseBox
 
-    '///+<li>Read the name of the certificate from the treelist, verify</li>
     kontext "TabXMLSecCertPath"
     XMLSecViewSigTree.select( 1 )
     cSigName = XMLSecViewSigTree.getSelText()
@@ -134,13 +117,11 @@ testcase tLoadCertifiedFile( cBuildID as string )
         printlog( "Found correct certificate name: " & cSigName )
     endif
 
-    '///+<li>Switch to the second tabpage (Details)</li>
     hSelectXMLSecTab( "DETAILS" )
 
     kontext "TabXMLSecDetails"
     hGetListItems( XMLSecDetailsListBox, sCertData() ) 
 
-    '///+<li>Verify that the data in the listbox is correct (reference file)</li>
     brc = hManageComparisionList( sFileIn, sFileOut, sCertData() )
     if ( not brc ) then
         warnlog( "The data of the certificate appears to be incorrect" )
@@ -150,19 +131,15 @@ testcase tLoadCertifiedFile( cBuildID as string )
 
     SkipEditBrowseBox:
 
-    '///+<li>Switch to the first page (General)</li>
     hSelectXMLSecTab( "GENERAL" )
     kontext "TabXMLSecGeneral" 
     
-    '///+<li>Close the dialog with OK</li>
     TabXMLSecGeneral.ok()
     
-    '///<li>Close the certication dialog with OK</li>
     printlog( "Close the dialog with OK" )
     Kontext "DigitalSignature"
     DigitalSignature.OK()
     
-    '///<li>Close the document</li>
     printlog( "Close the document" )
     call hCloseDocument()
     

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_vba-compat_import_enabled.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -39,47 +33,57 @@
 
 testcase tBasicVBACompatImportEnabled()
 
-    warnlog( "#i92666# loading sample document crashes the office" )
-    goto endsub
-
     printlog( "Test VBA compatibility switch / executable Microsoft(R) Excel(R) Macros" )
     printlog( "Test case 3: Import macros and set them executable" )
     
     
     ' This test case is based on the use cases provided in issue #i88690
     ' Spec: http://specs.openoffice.org/appwide/options_settings/Option_Dialog.odt
+
+    ' Depending on the mode of macro import we have differtent basic libraries listed
+    const NODE_COUNT = 78
+
+    const DOCUMENT_POSITION_OFFSET = -7
+
+    const IMPORT_EXCEL_MACROS = TRUE
+    const EXEC_EXCEL_MACROS   = TRUE
+
+    const DOCUMENT_NAME = "vba-test.xls"
+    const MATCH_NONE    = 0
+    const MATCH_EXACT   = 1
+    const MATCH_PARTLY  = 2
     
     dim cTestFile as string
-        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/vba-test.xls"
+        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & DOCUMENT_NAME
         
     dim cNodeCount as integer
     
-    ' note that index 0 and 1 are ommitted intentionally
-    dim caNodeData( 3 ) as string
-        caNodeData( 2 ) = "Modul1"
-        caNodeData( 3 ) = "Modul2"
-        
-    dim caScripts( 3 ) as string
-        caScripts( 2 ) = "ConcatFct Ende"
-        caScripts( 3 ) = "WriteIt"
+    dim caNodeData( 7 ) as string
+        caNodeData( 0 ) = DOCUMENT_NAME ' The document, not used
+        caNodeData( 1 ) = "Standard"    ' The default library, not used
+        caNodeData( 2 ) = "DieseArbeitsmappe"
+        caNodeData( 3 ) = "Modul1"
+        caNodeData( 4 ) = "Modul2"
+        caNodeData( 5 ) = "Tabelle1"
+        caNodeData( 6 ) = "Tabelle2"
+        caNodeData( 7 ) = "Tabelle3"
+
+    ' These are the scripts belonging to each node above. If multiple scripts exist
+    ' they are separated by spaces. Example: "Modul1" has "ConcatFct" and "Ende" scripts.
+    dim caScripts( 7 ) as string
+        caScripts( 3 ) = "ConcatFct Ende"
+        caScripts( 4 ) = "WriteIt"
         
     dim iCurrentModule as integer  
     dim iCurrentScript as integer
     dim cCurrentModule as string
+    dim cTempString as string
     dim bFound as boolean  
     
-    ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT = 76 
- 
-    const DOCUMENT_POSITION_OFFSET = -3
-    
-    const IMPORT_EXCEL_MACROS = TRUE
-    const EXEC_EXCEL_MACROS   = TRUE
- 
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     
-    printlog( "Open Tools/Options" )
+    printlog( "Open Tools/Options and set the VBA macro execution mode" )
 
     hSetExcelBasicImportMode( IMPORT_EXCEL_MACROS, EXEC_EXCEL_MACROS )
     
@@ -92,18 +96,22 @@ testcase tBasicVBACompatImportEnabled()
     printlog( "Expand all nodes" )
     cNodeCount = hExpandAllNodes( MakroAus )
     
-    printlog( "Verify that we have the correct node count for the current mode" )
-    if ( cNodeCount <> NODE_COUNT ) then
-        warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    printlog( "Verify that we have the correct node count for the current mode." )
+    if ( gOOo ) then
+        if ( cNodeCount <> NODE_COUNT_OOO ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    else
+        if ( cNodeCount <> NODE_COUNT ) then warnlog( "The number of nodes is incorrect: " & cNodeCount )
     endif
     
-    printlog( "Verify position of the document node" )
+    printlog( "Verify position of the document node." )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
-    if ( MakroAus.getSelText() <> "vba-test" ) then
-        qaerrorlog( "The document node is not at the expected position" )
-    endif
+    select case( hCompareSubStrings( MakroAus.getSelText(), DOCUMENT_NAME  ) )
+    case MATCH_NONE   : warnlog ( "The document is not listed at the expected position" )
+    case MATCH_EXACT  : printlog( "The document is at the expected position and writable" )
+    case MATCH_PARTLY : printlog( "The document is at the expected position and write protected" )
+    end select
     
-    for iCurrentModule = 2 to 3
+    for iCurrentModule = 2 to 7
     
         printlog( "Look for: " & caNodeData( iCurrentModule ) )
         
@@ -120,7 +128,7 @@ testcase tBasicVBACompatImportEnabled()
                     warnlog( "Script for the current module not found" )
                     bFound = FALSE
                 else
-                    printlog( "Script(s) found." )
+                    printlog( "Script found at pos" & iCurrentScript )
                 endif
             next iCurrentScript
         endif

@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: fileopen.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:03:20 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -70,30 +64,32 @@ testcase tExtensionFileOpen
     
     printlog( "Reopen Extension Manager UI, click Add.. and check the directory" )
     ToolsPackageManager
+    
     kontext "PackageManager"
     if ( PackageManager.exists( 3 ) ) then
         Add.click()
+        
         Kontext "OeffnenDlg"
         if ( OeffnenDlg.exists( 2 ) ) then
-            if ( Dateiauswahl.getItemCount() <> 1 ) then
-                warnlog( "There should be exactly one item visible in the File Picker" )
+
+            printlog( "Select the last item in the list which should be the extension" )            
+            DateiAuswahl.select( Dateiauswahl.getItemCount() )
+            cString = DateiAuswahl.getSelText()
+            if ( cString <> EXTENSION_NAME ) then
+                warnlog( "Incorrect extension listed. Please check path and filename" )
+                printlog( "Expected: " & EXTENSION_NAME )
+                printlog( "Found...: " & cString )
+                printlog( "Issues: #i67122, #i92234" )
             else
-                DateiAuswahl.select( 1 )
-                cString = DateiAuswahl.getSelText()
-                if ( cString <> EXTENSION_NAME ) then
-                    warnlog( "Incorrect extension listed. Please check path and filename" )
-                    printlog( "Expected: " & EXTENSION_NAME )
-                    printlog( "Found...: " & cString )
-                    printlog( "Issues: #i67122, #i92234" )
-                else
-                    printlog( "Found correct extension, the dialog remembers the path" )
-                endif
+                printlog( "Found correct extension, the dialog remembers the path" )
             endif
+
             kontext "OeffnenDlg"
             OeffnenDlg.cancel()
         else
             warnlog( "Could not access Add Extensions Dialog" )
         endif
+        
         kontext "PackageManager"
         PackageManager.close()
     else

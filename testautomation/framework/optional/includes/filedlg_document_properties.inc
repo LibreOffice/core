@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: filedlg_document_properties.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:14 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -39,7 +33,6 @@
 
 testcase tFiledlgDocumentProperties()
 
-    '///<h3>Access document properties</h3>
 
     dim cFileName as string
         cFileName = "DigitalSignature" & hGetSuffix( "current" )
@@ -62,11 +55,9 @@ testcase tFiledlgDocumentProperties()
 
     dim brc as boolean
         
-    '///<ul>
     printlog( "Using filename: " & cFileName )
     printlog( "Using filepath: " & cFilePath )
     
-    '///+<li>Retrieve the size from the workfile using direct BASIC calls</li>
     if ( FileExists( cFileURL ) ) then
     	iFileSize = FileLen( cFileURL )
         printlog( "Testfile size is: " & iFileSize & " Bytes" )
@@ -75,13 +66,10 @@ testcase tFiledlgDocumentProperties()
     	goto endsub
     endif
     
-    '///+<li>Load the workfile (framework/security/input/DigitalSignature.???)</li>
     hFileOpen( cFileURL )
     
-    '///+<li>open the file properties dialog</li>
     FileProperties
     
-    '///+<li>Document-Tab: Verify that the filename is correct</li>
     brc = hDocumentInfoSelectTab( "General" )
     if ( not brc ) then
         warnlog( "Unable to switch to the requested tabpage, trying to recover" )
@@ -97,7 +85,6 @@ testcase tFiledlgDocumentProperties()
         warnlog( "The path string is incorrect: " & cTestExpression )
     endif
 
-    '///+<li>Verify the filesize info</li>
     kontext "TabDokument"
     cFileSize = hGetStringFromStaticTextField( FileSizeInfo )
     iFileSizeInfo =  hConvertStringToLong( cFileSize )
@@ -114,7 +101,6 @@ testcase tFiledlgDocumentProperties()
     
     hDestroyDocument()
     
-    '///</ul>
 
 endcase
 

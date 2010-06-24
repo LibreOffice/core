@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_fields7.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:27:37 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -39,15 +33,15 @@
 
 sub w_fields7
 
-    Call tL10N_1             'L10N test - above/below
-    Call tL10N_2             'L10N test - date
-    Call tL10N_3             'L10N test - time
+    Call tL10NtestAboveBelow
+    Call tL10NtestDate
+    Call tL10NtestTime
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tL10N_1
+testcase tL10NtestAboveBelow
 
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
@@ -181,13 +175,14 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tL10N_2
+testcase tL10NtestDate
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
     end if
     
     Dim sTestFile    as String
+    Dim sOriginalFile as string
     Dim sDate()      as String
     Dim iCountry()   as Integer
     Dim i , j        as Integer
@@ -199,6 +194,7 @@ testcase tL10N_2
     
     if iSprache <> 01 then
         QAErrorlog "This is a English-only testcase"
+        goto endsub
     end if
     
     Call hNewDocument
@@ -219,7 +215,16 @@ testcase tL10N_2
     ExtrasOptionenDlg.Cancel
     Call hCloseDocument
   
-    sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\Date.sxw")
+  	sTestFile   = Convertpath (gOfficepath + "user\work\Date.sxw")
+	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Date.sxw")
+	' document has to be copied to local file system to avoid opening a read-only file
+	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+	FileCopy (sOriginalFile, sTestFile)
+	if hFileExists ( sTestFile ) = false then
+		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+		goto endsub
+	end if
+    
     
     sDate  = Array( _
            "Tuesday, August 3, 2004"    , _
@@ -244,7 +249,6 @@ testcase tL10N_2
     
     '/// Open test file Date.sxw
     Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if Date is changed after language is changed
     j = UBound(iCountry)
@@ -293,13 +297,14 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tL10N_3
+testcase tL10NtestTime
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
-        exit sub
+        goto endsub
     end if
 
     Dim sTestFile as String
+    Dim sOriginalFile as string
     Dim sTime() as String
     Dim iCountry() as Integer
     Dim i as Integer
@@ -312,6 +317,7 @@ testcase tL10N_3
     
     if iSprache <> 01 then
         QAErrorlog "This is a English-only testcase"
+        goto endsub
     end if
     
     Call hNewDocument
@@ -332,7 +338,16 @@ testcase tL10N_3
     ExtrasOptionenDlg.Cancel
     Call hCloseDocument
   
-    sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\Time.sxw")
+  	sTestFile   = Convertpath (gOfficepath + "user\work\Time.sxw")
+	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Time.sxw")
+	' document has to be copied to local file system to avoid opening a read-only file
+	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+	FileCopy (sOriginalFile, sTestFile)
+	if hFileExists ( sTestFile ) = false then
+		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+		goto endsub
+	end if
+    
     
     sTime  = Array( _
                "04:46:08 PM"     , _
@@ -357,7 +372,6 @@ testcase tL10N_3
     
     '/// Open test file Time.sxw
     Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if time is changed after language is changed
     j = UBound(iCountry)

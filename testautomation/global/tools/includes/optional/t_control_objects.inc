@@ -1,127 +1,130 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_control_objects.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:57:33 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
 '*
 '*  short description : Functions to manipulate controls by accessing them as objects
 '*
-'*******************************************************************************
-'**
-' #0 checkRadioButtons ' check a group of RBs where the sel. RB is given by number
-' #0 checkRadioButton  ' check a singe RB where the state is specified directly
-' #0 checkCheckbox     ' check a single checkbox
-' #0 setCheckBox       ' sets checkbox to status provided in reference file
-' #0 checkComboBox     ' compares an index to one provided in a reference-file
-' #0 setComboBox       ' selects an index provided by a reference file
-' #0 checkListBox      ' compares an index to one provided in a reference-file
-' #0 setListBox        ' selects an index provided by a reference file
-' #0 checkListItem     ' check that a listitem is correct
-' #1 hSetControlValue  ' Change the value of a EntryField (failsafe)
-'**
 '\******************************************************************************
 
-function checkRadioButtons( _file as string  , sKey as string  , control1 as object  , control2 as object  , optional control3 as object  , optional control4 as object ) as integer
+private const MSG1 = "Incorrect default setting: "
+
+'*******************************************************************************
+
+function cb_test( oControl as object, def_state as string, issueid as string ) as boolean
+
+    ' Small helper that prints a warnlog if a checkbox does not have the correct
+    ' default setting (checked -> def_state = TRUE). You can supply an issue id
+    ' which will be printed to the log. no parameter is optional, issueid can
+    ' be an empty string.
     
-    '///<h3>EXPERIMENTAL: Get/Set function for some control types</h3>
-    '///<i>This is a function that allows to change the state/content of a
-    '///+ control via a configuration file. This function is experimental
-    '///+ and should not be used.<br>
-    '///+ This function checks if the correct radiobutton of a group is selected.
-    '///+ at least two radiobuttons must be provided, the third and fouth are optional.
-    '///+ The value for sKey in the reference file must be of type integer</i><br>
+    ' oControl: The checkbox itself
+    ' def_state: Default state (checked or unchecked)
+    ' issueid:  Issue id as string "#i123456#" for QUASTe
+
+    dim con_state as boolean : con_state = oControl.isChecked()
+    dim con_name  as string  : con_name  = oControl.name()
     
-    dim _sItem as string
-    dim _iItem as integer
+    printlog( con_name & " (Checkbox)" )
+    cb_test() = true
+
+    if ( def_state ) then
     
-    ' lowercase sKey for comparision
-    sKey = lcase( sKey )
-    
-    ' get the reference value for sKey as string
-    _sItem = hGetFileData( _file , sKey )
-    
-    ' cast it to int
-    _iItem = val( _sItem )
-    
-    ' check which one of the up to four radiobuttons is selected.
-    select case _iItem
-        
-    case 1 :
-        if ( control1.isChecked() = true ) then
-            checkRadioButtons() = true
-            printlog( "   * Radiobutton 1 selected: ok" )
-        else
-            warnlog( "The wrong radiobutton is selected" )
+        if ( NOT con_state ) then
+            warnlog( issueid & " " & MSG1 & con_name & " should be checked" )
+            cb_test() = false
         endif
         
-    case 2 :
-        if ( control2.isChecked() = true ) then
-            checkRadioButtons() = true
-            printlog( "   * Radiobutton 2 selected: ok" )
-        else
-            warnlog( "The wrong radiobutton is selected" )
+        oControl.unCheck()
+        oControl.check()
+        
+    else
+    
+        if ( con_state ) then
+            warnlog( issueid & " " & MSG1 & con_name & " should be unchecked" )
+            cb_test() = false
         endif
         
-    case 3 :
-        if ( isMissing( control3 ) = false ) then
-            if ( control3.isChecked() = true ) then
-                checkRadioButtons() = true
-                printlog( "   * Radiobutton 3 selected: ok" )
-            else
-                warnlog( "The wrong radiobutton is selected" )
+        oControl.check()
+        oControl.unCheck()
+        
+    endif
+    
+end function
+
+'*******************************************************************************
+
+function lb_test( oControl as object, items as integer, preset as integer, issueid as string ) as boolean
+
+    ' Do some basic testing on listboxes
+    ' - verify that the number of entries is correct
+    ' - verify that the default selection is correct
+    ' - select each item and restore default
+    
+    ' oControl: The Listbox as object
+    ' items:    Number of items in the list
+    ' preset:   Item which is selected by default (usually 1), skip with 0
+    ' issueid:  Issue id as string "#i123456#" for QUASTe
+
+    dim con_name as string    : con_name   = oControl.name()
+    dim con_items as integer  : con_items  = oControl.getItemCount()
+    dim con_preset as integer : con_preset = oControl.getSelIndex()
+    dim con_iterator as integer
+    
+    printlog( con_name & " (Listbox)" )
+    if ( oControl.isEnabled() ) then
+        lb_test() = true
+        
+        if ( con_items <> items ) then
+            warnlog( issueid & " Incorrect itemcount in listbox: " & con_name )
+            printlog( "Expected: " & items )
+            printlog( "Found...: " & con_items )
+            lb_test() = false
+        endif
+        
+        if ( preset > 0 ) then
+            if ( con_preset <> preset ) then
+                warnlog( issueid & " Incorrect default setting (index): " & con_name )
+                printlog( "Expected: " & preset )
+                printlog( "Found...: " & con_preset )
+                lb_test() = false
             endif
-        else
-            warnlog( "referencing to non-existing control." )
-            checkRadioButtons() = false
         endif
         
-    case 4 :
-        if ( isMissing( control4 ) = false ) then
-            if ( control4.isChecked() = true ) then
-                checkRadioButtons() = true
-                printlog( "   * Radiobutton 4 selected: ok" )
-            else
-                warnlog( "The wrong radiobutton is selected" )
-            endif
-        else
-            warnlog( "referencing to non-existing control." )
-            checkRadioButtons() = false
-        endif
+        for con_iterator = 1 to items
+            oControl.select( con_iterator )
+        next con_iterator
         
-    case else
-        warnlog( "Maximum of four connected radiobuttons allowed." )
-        checkRadioButtons() = false
-    end select
-    
+        if ( preset > 0 ) then oControl.select( preset )
+    else
+        printlog( "The control is disabled" & con_name )
+        lb_test() = false
+    endif
+
 end function
 
 '*******************************************************************************

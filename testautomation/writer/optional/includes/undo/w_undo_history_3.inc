@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_undo_history_3.inc,v $
-'*
-'* $Revision: 1.3 $
-'*
-'* last change: $Author: rt $ $Date: 2008-09-04 09:20:44 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -45,7 +39,7 @@ sub w_undo_history_3
 	Call tUndoCaption			' Insert Caption
 	Call tUndoAutoText			' Insert Autotext	
 	Call tUndoBookmark			' Bookmark (Insert/Rename/Delete)
-	Call tUndoNote			' Note (Insert/Delete)
+	Call tUndoComment			' Comment (Insert/Delete)
 	Call tUndoScript			' Script (Insert/Delete)
 	Call tUndoIndexes			' Index/Bibliography entrys (Insert/Delete)
 	Call tUndoFrames			' Frames (Insert/Rename/Delete)
@@ -293,26 +287,23 @@ goto endsub
 endcase
 
 
-testcase tUndoNote
+testcase tUndoComment
 
-	'/// <B>Note (Insert/Delete)</B>
-	printlog "- Insert Note"
-	'/// new document
+	printlog "New document"
 	Call hNewDocument
-	'/// Insert / Note
+	printlog "Insert / Comment"
 	InsertNoteWriter
-	'///  string in Undo-list has to be: "Insert note") 
-	Call CheckUndoStringInUndoList ( 10, "InsertNote" )
-    printlog "- Delete Note"
-    '/// Bring up the Navigator, find the entry "Notes", expand it, and select the expanded section.
+	printlog "String in Undo-list has to be: 'Insert Comment'" 
+	Call CheckUndoStringInUndoList ( 10, "InsertComment" )
+    printlog "- Delete Comment"
+    printlog "Bring up the Navigator, find the entry 'Comments', expand it, and select the expanded section."
     Call wNavigatorAuswahl( 11, 1 )
-	'/// Enter 'Delete'      'Backspace'
     kontext "Navigator"
     Navigator.TypeKeys "<DELETE>"
     '/// Close the Navigator
     ViewNavigator
-    '///  string in Undo-list has to be: "Delete: 'This is a note'") 
-	Call CheckUndoStringInUndoList ( 10, "DeleteNote" )
+    '///  string in Undo-list has to be: "Delete comment") 
+	Call CheckUndoStringInUndoList ( 10, "DeleteComment" )
 
 	'/// Close document
 	Call hCloseDocument

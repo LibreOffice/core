@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_library_export.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -56,6 +50,7 @@ testcase tBasicLibraryExport
     
     dim iCurrentLib as integer
 
+    printlog( "Delete potential leftovers from prior test run" )
     if ( dir( cFile ) <> "" ) then
         QAErrorLog( "Files from prior test run exist: " & cFile )
         hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "dialog.xlb"  )
@@ -64,24 +59,30 @@ testcase tBasicLibraryExport
         rmdir( hGetWorkPath() & LIBRARY_NAME ) : printlog( "Remove directory" )
     endif
     
+    printlog( "Open a new text document" )
     hInitSingleDoc()
     hChangeDoc()
     
+    printlog( "Open another text document" )
     gApplication = "WRITER"
     hCreateDocument()
     
+    printlog( "Open the BASIC organizer (Tools/Macros/BASIC)" )
     ToolsMacro_uno
     
     kontext "Makro"
+    printlog( "Select the document" )
     iNodeCount = hGetNodeCount( MakroAus )
     cDocumentName = hSelectNode( MakroAus, iNodeCount )
-    
+
+    printlog( "Click <Manage...>" )    
     Verwalten.click()
     
+    printlog( "Open the Libraries tabpage" )
     hSelectBasicObjectOrganizerTab( 3 )
     
-    printlog( "Select document Untitled2" )
     kontext "TabBibliotheken"
+    printlog( "Select document Untitled2" )
     Bibliothek.select( DOCUMENT_POSITION )
     
     ' verify that the correct document is selected
@@ -90,35 +91,46 @@ testcase tBasicLibraryExport
         goto endsub
     endif
     
+    printlog( "Click <New>" )
     Neu.click()
     
     kontext "NeueBibliothek"
+    printlog( "Name the library: " & LIBRARY_NAME )
     BibliotheksName.setText( LIBRARY_NAME )
     NeueBibliothek.ok()
     
     kontext "TabBibliotheken"
+    printlog( "Verify that the new library is selected in the libraries list" )
     cLibraryName = BibliotheksListe.getSelText()
     
+    printlog( "Click <Edit>" )
     Bearbeiten.click()
 
+    printlog( "Insert a macro" )
     hInsertMacroFromFile( LIBRARY_NAME )
     
+    printlog( "Close the BASIC IDE" )
     hCloseBasicIDE()
     
+    printlog( "Open the BASIC macro organizer" )
     ToolsMacro_uno
     
     kontext "Makro"
+    printlog( "Select the work document" )
     iNodeCount = hGetNodeCount( MakroAus )
     hSelectNode( MakroAus, iNodeCount )    
     
+    printlog( "Click <Manage...>" )
     Verwalten.click()
     
+    printlog( "Go to the libraries-tab" )
     hSelectBasicObjectOrganizerTab( 3 )
     
     kontext "TabBibliotheken"
+    printlog( "Select the document at pos. " & DOCUMENT_POSITION )
     Bibliothek.select( DOCUMENT_POSITION )
     
-    ' verify that the correct document is selected
+    printlog( "Verify that the correct document is selected" )
     if ( Bibliothek.getSelText() <> cDocumentName ) then
         warnlog( "Incorrect document selected on libraries tab, aborting" )
         goto endsub
@@ -136,42 +148,53 @@ testcase tBasicLibraryExport
     printlog( "Click export" )
     Export.click()
     
-    printlog( "Export as library" )
     kontext "ExportBasicLibraryDlg"
     if ( ExportBasicLibraryDlg.exists( 2 ) ) then
-    
+
+        printlog( "Export as library" )    
         ExportAsLibrary.check()
         ExportBasicLibraryDlg.ok()
+        
+        kontext "Active"
+        printlog( "Check for non existing directory warning" )
+        ' Note: Querying for an Active will also find the Libraries tabpage.
+        '       So we need to check which active we've got. RT = 373 is the tabcontrol.
+        if ( Active.exists( 1 ) ) then
+            if ( Active.getRT() <> 373 ) then
+                warnlog( "Unexpected messagebox: " & Active.getText() )
+                active.ok()
+            else
+                printlog( "Back on tab-control, good." )
+            endif
+        else
+            printlog( "No warning for non-existing directory, good." )
+        endif
 
-        printlog( "Use default path (=workdir)" )
         Kontext "OeffnenDlg"
-        if ( Oeffnendlg.exists( 2 ) ) then
+        if ( Oeffnendlg.exists( 1 ) ) then
             Oeffnen.click()
         else
-            kontext "active"
-            if ( active.exists() ) then
-                cMsg = active.getText()
-                cMsg = hRemoveLineBreaks( cMsg )
-                warnlog( "Unexpected messagebox: " & cMsg )
-                active.ok()
-            endif
+            warnlog( "File Open dialog not displayed" )
         endif
         
     else
         warnlog( "The ""Export Library"" dialog was not displayed" )
     endif
         
-    printlog( "Close the macro/libraries organizer" )
     kontext "TabBibliotheken"
-    TabBibliotheken.cancel()
-    
-    printlog( "Cancel macro organizer" )
-    kontext "Makro"
-    Makro.cancel()
-    
-    while( getDocumentCount > 0 ) 
-        hDestroyDocument()
-    wend
+    printlog( "Close the macro/libraries organizer" )
+    if ( TabBibliotheken.exists( 1 ) ) then
+        TabBibliotheken.cancel()
+        
+        kontext "Makro"
+        printlog( "Cancel macro organizer" )
+        Makro.cancel()
+        
+        hFileCloseAll()
+    else
+        warnlog( "Dialog <TabBibliotheken> could not be accessed" )
+        call exitRestartTheOffice()
+    endif
     
 endcase
 

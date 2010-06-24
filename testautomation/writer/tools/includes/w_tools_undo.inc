@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_tools_undo.inc,v $
-'*
-'* $Revision: 1.3 $
-'*
-'* last change: $Author: rt $ $Date: 2008-09-04 09:21:57 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -414,17 +408,17 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
-				Case "InsertNote"
+				Case "InsertComment"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Insert note" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Insert comment" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar nota" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 86: if UndoStringFromUndoList <> "插入 批注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
-				Case "DeleteNote"
+				Case "DeleteComment"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Delete note" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Delete comment" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Eliminar nota" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 86: if UndoStringFromUndoList <> "删除 批注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList

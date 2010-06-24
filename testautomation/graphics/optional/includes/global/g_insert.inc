@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_insert.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -36,23 +30,9 @@
 '* short description :
 '*
 '**************************************************************************************
-' #1 tInsertFloatingFrame
-' #1 tInsertFields
-' #1 tdInsertObjectOleObjects
-' #1 tdInsertSnapPoint_Line
-' #1 tInsertSpecialCharacter
-' #1 tInsertSpreadsheet
-' #1 tInsertGraphics
-' #1 tInsertObjectPlugIn
-' #1 tInsertObjectApplet
-' #1 tInsertObjectFormula
-' #1 tInsertChart
-' #1 tdInsertFile
-'\*************************************************************************************
 
 testcase tdInsertObjectOleObjects
-    QaErrorLog "#79794# - tdInsertObjectOleObjects outcommented due to bug."
-    goto endsub
+
     Dim Zaehler as Integer
     Dim i as integer
     Dim a as integer
@@ -744,48 +724,7 @@ testcase tInsertGraphics
 endcase 'tInsertGraphics
 
 '-------------------------------------------------------------------------------
-testcase tInsertObjectApplet
 
-    printlog " open application "
-    Call hNewDocument
-    printlog " Insert->Object->Applet "
-    sleep 1
-    InsertObjectApplet
-    Kontext "AppletEinfuegen"
-    printlog " press button 'Search' "
-    sleep 2
-    Suchen.Click
-    Kontext "OeffnenDlg"
-    printlog " set filename to 'global\\input\\java\\rocket.class' "
-    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\java\Clock.class")
-    printlog " close dialog 'Open' by pressing 'Open' "
-    sleep 2
-    Oeffnen.Click
-    Kontext "AppletEinfuegen"
-    printlog " close dialog 'Insert Applet' by pressing OK "
-    sleep 2
-    AppletEinfuegen.OK
-    sleep 3
-    printlog " deselect object by typing key [Escape] "
-    hTypeKeys ("<Escape>")
-    sleep 3
-    try
-        printlog " Edit->Select All "
-        EditSelectAll
-        printlog " delete object by typing key [Delete] "
-        sleep 3
-        hTypeKeys "<DELETE>"
-    catch
-        Warnlog "Delete did not work, maybe some error while creating the object before"
-    endcatch
-    sleep 1
-    '   gMouseclick 70,70
-    printlog " close application "
-    Call hCloseDocument
-
-endcase 'tInsertObjectApplet
-
-'-------------------------------------------------------------------------------
 testcase tInsertObjectFormula
 
     printlog " open application "
