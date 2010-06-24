@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gcach_xpeer.cxx,v $
- * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +119,7 @@ void X11GlyphPeer::InitAntialiasing()
     // enable XRENDER accelerated aliasing on screens that support it
     // unless it explicitly disabled by an environment variable
     if( (nEnvAntiAlias & 2) == 0 )
-        mnUsingXRender = XRenderPeer::GetInstance().InitRenderText( mnMaxScreens );
+        mnUsingXRender = XRenderPeer::GetInstance().InitRenderText();
 
     // else enable client side antialiasing for these screens
     // unless it is explicitly disabled by an environment variable

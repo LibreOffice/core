@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: diagnose_ex.h,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,12 +118,58 @@
                                           ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and
+    returns the given value afterwards.
+ */
+#define ENSURE_OR_RETURN(c, m, r) if( !(c) ) { \
+                                     OSL_ENSURE(c, m); \
+                                     return r; }
+
+/** This macro asserts the given condition (in debug mode), and
     returns false afterwards.
  */
-#define ENSURE_OR_RETURN(c, m) if( !(c) ) { \
-                                     OSL_ENSURE(c, m); \
-                                     return false; }
+#define ENSURE_OR_RETURN_FALSE(c, m) \
+    ENSURE_OR_RETURN(c, m, false)
+
+/** This macro asserts the given condition (in debug mode), and
+    returns afterwards, without return value "void".
+ */
+#define ENSURE_OR_RETURN_VOID( c, m ) \
+    if( !(c) )  \
+    { \
+        OSL_ENSURE( c, m ); \
+        return;   \
+    }
 
 
+
+/** This macro asserts the given condition (in debug mode), and
+    returns afterwards, without return value "void".
+ */
+#define ENSURE_OR_RETURN_VOID( c, m ) \
+    if( !(c) )  \
+    { \
+        OSL_ENSURE( c, m ); \
+        return;   \
+    }
+
+/** asserts a given condition (in debug mode), and continues the most-inner
+    loop if the condition is not met
+*/
+#define ENSURE_OR_CONTINUE( c, m ) \
+    if ( !(c) ) \
+    {   \
+        OSL_ENSURE( false, m ); \
+        continue;   \
+    }
+
+/** asserts a given condition (in debug mode), and continues the most-inner
+    loop if the condition is not met
+*/
+#define ENSURE_OR_BREAK( c, m ) \
+    if ( !(c) ) \
+    {   \
+        OSL_ENSURE( false, m ); \
+        break;  \
+    }
 
 #endif // TOOLS_DIAGNOSE_EX_H

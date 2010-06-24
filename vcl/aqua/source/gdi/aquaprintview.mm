@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aquaprintview.mm,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +30,15 @@
 
 #include "aquaprintview.h"
 #include "salprn.h"
-#include "vcl/impprn.hxx"
+#include "vcl/print.hxx"
 
 @implementation AquaPrintView
--(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
+-(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
 {
     NSRect aRect = { { 0, 0 }, [pInfoPrinter->getPrintInfo() paperSize] };
     if( (self = [super initWithFrame: aRect]) != nil )
     {
-        mpQPrinter = pPrinter;
+        mpController = pController;
         mpInfoPrinter = pInfoPrinter;
     }
     return self;
@@ -58,6 +55,9 @@
 {
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
     int nWidth = (int)aPaperSize.width;
+    // #i101108# sanity check
+    if( nWidth < 1 )
+        nWidth = 1;
     NSRect aRect = { { page % nWidth, page / nWidth }, aPaperSize };
     return aRect;
 }
@@ -71,11 +71,12 @@
 -(void)drawRect: (NSRect)rect
 {
     NSPoint aPoint = [self locationOfPrintRect: rect];
-    mpInfoPrinter->setStartPageOffset( rect.origin.x, rect.origin.y );
+    mpInfoPrinter->setStartPageOffset( static_cast<int>(rect.origin.x), static_cast<int>(rect.origin.y) );
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
     int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
     
     // page count is 1 based
-    mpQPrinter->PrintPage( nPage-1 + mpInfoPrinter->getCurPageRangeStart() );
+    if( nPage - 1 < (mpInfoPrinter->getCurPageRangeStart() + mpInfoPrinter->getCurPageRangeCount() ) )
+        mpController->printFilteredPage( nPage-1 );
 }
 @end

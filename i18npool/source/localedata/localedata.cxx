@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: localedata.cxx,v $
- * $Revision: 1.59.24.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +34,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "rtl/instance.hxx"
-
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -175,6 +165,10 @@ static const struct {
     { "fy_NL",  lcl_DATA_EURO },
     { "oc_FR",  lcl_DATA_EURO },
     { "mt_MT",  lcl_DATA_EURO },
+    { "sc_IT",  lcl_DATA_EURO },
+    { "ast_ES", lcl_DATA_EURO },
+    { "ltg_LV", lcl_DATA_EURO },
+    { "hsb_DE", lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
@@ -250,6 +244,10 @@ static const struct {
     { "my_MM",  lcl_DATA_OTHERS },
     { "shs_CA", lcl_DATA_OTHERS },
     { "tpi_PG", lcl_DATA_OTHERS },
+    { "ar_OM",  lcl_DATA_OTHERS },
+    { "ug_CN",  lcl_DATA_OTHERS },
+    { "om_ET",  lcl_DATA_OTHERS },
+    { "plt_MG", lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
@@ -1131,7 +1129,7 @@ LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(Ru
                              rVal.Value <<= (sal_Int16) sVal.toInt32();
                              break;
                         default:
-                             assert(0);
+                             OSL_ASSERT(0);
                         }
                    }
               }
@@ -1255,7 +1253,7 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
                         case 10: level[j].sTransliteration = tmp; break;
                         case 11: level[j].nNatNum    = tmp.toInt32();   break;
                         default:
-                            assert(0);
+                            OSL_ASSERT(0);
                     }
                 }
             }
@@ -1393,6 +1391,7 @@ OutlineNumbering::OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlnLevel
 
 OutlineNumbering::~OutlineNumbering()
 {
+        delete [] m_pOutlineLevels;
 }
 
 sal_Int32 OutlineNumbering::getCount(  ) throw(RuntimeException)

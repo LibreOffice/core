@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jobdata.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +59,28 @@ JobData& JobData::operator=(const JobData& rRight)
         rMgr.setupJobContextData( *this );
     }
     return *this;
+}
+
+void JobData::setCollate( bool bCollate )
+{
+    const PPDParser* pParser = m_aContext.getParser();
+    if( pParser )
+    {
+        const PPDKey* pKey = pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
+        if( pKey )
+        {
+            const PPDValue* pVal = NULL;
+            if( bCollate )
+                pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) );
+            else
+            {
+                pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "False" ) ) );
+                if( ! pVal )
+                    pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+            }
+            m_aContext.setValue( pKey, pVal );
+        }
+    }
 }
 
 bool JobData::getStreamBuffer( void*& pData, int& bytes )

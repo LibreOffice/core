@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datwin.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +142,6 @@ public:
     FASTBOOL        bAutoVScroll;   // autohide horizontaler Scrollbar
     FASTBOOL        bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
     FASTBOOL        bAutoSizeLastCol;// last column always fills up window
-    FASTBOOL        bHighlightAuto; // new auto-highlight by SetFont() etc.
     FASTBOOL        bResizeOnPaint; // outstanding resize-event
     FASTBOOL        bUpdateOnUnlock;    // Update() while locked
     FASTBOOL        bInUpdateScrollbars;    // Rekursionsschutz

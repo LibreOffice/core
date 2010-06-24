@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxtoolkit.cxx,v $
- * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -635,7 +632,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
         // spaeter mal ::com::sun::star::uno::Exception...
         sal_Bool bException = sal_True;
-        if ( ( nType == WINDOW_DIALOG ) || ( nType == WINDOW_MODALDIALOG ) || ( nType == WINDOW_MODELESSDIALOG ) )
+        if  (   ( nType == WINDOW_DIALOG )
+            ||  ( nType == WINDOW_MODALDIALOG )
+            ||  ( nType == WINDOW_MODELESSDIALOG )
+            ||  ( nType == WINDOW_MESSBOX )
+            ||  ( nType == WINDOW_INFOBOX )
+            ||  ( nType == WINDOW_WARNINGBOX )
+            ||  ( nType == WINDOW_ERRORBOX )
+            ||  ( nType == WINDOW_QUERYBOX )
+            )
             bException = sal_False;
         else if ( ( nType == WINDOW_WINDOW ) ||
                   ( nType == WINDOW_WORKWINDOW ) ||

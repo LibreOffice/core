@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dialogcontrolling.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,15 @@ namespace svt
     class SVT_DLLPUBLIC SAL_NO_VTABLE IWindowOperator
     {
     public:
-        virtual void operateOn( Window& _rOperateOn ) const = 0;
+        /** called when an event happened which should be reacted to
+
+            @param _rTrigger
+                the event which triggered the call. If the Id of the event is 0, then this is the initial
+                call which is made when ->_rOperateOn is added to the responsibility of the DialogController.
+            @param _rOperateOn
+                the window on which to operate
+        */
+        virtual void operateOn( const VclWindowEvent& _rTrigger, Window& _rOperateOn ) const = 0;
 
         virtual ~IWindowOperator();
     };
@@ -61,13 +66,13 @@ namespace svt
     //=====================================================================
     //= IWindowEventFilter
     //=====================================================================
-    /** an abstract interface for deciding whether a ->VclSimpleEvent
+    /** an abstract interface for deciding whether a ->VclWindowEvent
         is worth paying attention to
     */
     class SVT_DLLPUBLIC SAL_NO_VTABLE IWindowEventFilter
     {
     public:
-        virtual bool payAttentionTo( const VclSimpleEvent& _rEvent ) const = 0;
+        virtual bool payAttentionTo( const VclWindowEvent& _rEvent ) const = 0;
 
         virtual ~IWindowEventFilter();
     };
@@ -96,7 +101,7 @@ namespace svt
         ::std::auto_ptr< DialogController_Data >    m_pImpl;
 
     public:
-        DialogController( Window& _rInstigator, const PWindowEventFilter _pEventFilter, const PWindowOperator _pOperator );
+        DialogController( Window& _rInstigator, const PWindowEventFilter& _pEventFilter, const PWindowOperator& _pOperator );
         virtual ~DialogController();
 
         /** adds a window to the list of dependent windows
@@ -117,10 +122,10 @@ namespace svt
 
     private:
         void    impl_Init();
-        void    impl_updateAll();
-        void    impl_update( Window& _rWindow );
+        void    impl_updateAll( const VclWindowEvent& _rTriggerEvent );
+        void    impl_update( const VclWindowEvent& _rTriggerEvent, Window& _rWindow );
 
-        DECL_LINK( OnWindowEvent, const VclSimpleEvent* );
+        DECL_LINK( OnWindowEvent, const VclWindowEvent* );
 
     private:
         DialogController( const DialogController& );            // never implemented
@@ -184,10 +189,9 @@ namespace svt
         /** adds a non-standard controller whose functionality is not covered by the other methods
 
             @param _pController
-                the controller to add to the manager. Must not be <NULL/>. The manager takes ownership
-                of the controller.
+                the controller to add to the manager. Must not be <NULL/>.
         */
-        void    addController( DialogController* _pController );
+        void    addController( const PDialogController& _pController );
 
     private:
         ControlDependencyManager( const ControlDependencyManager& );            // never implemented
@@ -224,7 +228,7 @@ namespace svt
         {
         }
 
-        virtual void operateOn( Window& _rOperateOn ) const
+        virtual void operateOn( const VclWindowEvent& /*_rTrigger*/, Window& _rOperateOn ) const
         {
             _rOperateOn.Enable( m_rCheckable.IsChecked() );
         }
@@ -248,12 +252,11 @@ namespace svt
         {
         }
 
-        bool payAttentionTo( const VclSimpleEvent& _rEvent ) const
+        bool payAttentionTo( const VclWindowEvent& _rEvent ) const
         {
-            const VclWindowEvent& rWindowEvent = dynamic_cast< const VclWindowEvent& >( _rEvent );
-            if  (   ( rWindowEvent.GetWindow() == &m_rWindow )
-                &&  (   ( rWindowEvent.GetId() == VCLEVENT_RADIOBUTTON_TOGGLE )
-                    ||  ( rWindowEvent.GetId() == VCLEVENT_CHECKBOX_TOGGLE )
+            if  (   ( _rEvent.GetWindow() == &m_rWindow )
+                &&  (   ( _rEvent.GetId() == VCLEVENT_RADIOBUTTON_TOGGLE )
+                    ||  ( _rEvent.GetId() == VCLEVENT_CHECKBOX_TOGGLE )
                     )
                 )
                 return true;

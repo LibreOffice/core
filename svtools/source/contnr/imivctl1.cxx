@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imivctl1.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -540,7 +537,13 @@ void SvxIconChoiceCtrl_Impl::EntrySelected( SvxIconChoiceCtrlEntry* pEntry, BOOL
             ShowCursor( TRUE );
     } // if( bUpdateMode )
 
-    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+    // --> OD 2009-05-27 #i101012#
+    // emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
+    if ( bSelect )
+    {
+        CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+    }
+    // <--
 }
 
 void SvxIconChoiceCtrl_Impl::ResetVirtSize()

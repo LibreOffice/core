@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: registerucb.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucbhelper.hxx"
-#include <registerucb.hxx>
+#include <ucbhelper/registerucb.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
@@ -38,7 +35,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "osl/diagnose.h"
-#include <ucbhelper/configureucb.hxx>
 
 using namespace com::sun::star;
 
@@ -163,43 +159,6 @@ registerAtUcb(
         pInfo->m_aTemplate = rTemplate;
     }
     return bSuccess;
-}
-
-//============================================================================
-//
-//  deregisterFromUcb
-//
-//============================================================================
-
-void
-deregisterFromUcb(
-    uno::Reference< ucb::XContentProviderManager > const & rManager,
-    ContentProviderRegistrationInfo const & rInfo)
-    throw (uno::RuntimeException)
-{
-    uno::Reference< ucb::XContentProvider >
-        xProvider(rInfo.m_xProvider);
-    uno::Reference< ucb::XParameterizedContentProvider >
-        xParameterized(xProvider, uno::UNO_QUERY);
-    if (xParameterized.is())
-    {
-        uno::Reference< ucb::XContentProvider > xInstance;
-        try
-        {
-            xInstance
-                = xParameterized->deregisterInstance(rInfo.m_aTemplate,
-                                                     rInfo.m_aArguments);
-        }
-        catch (lang::IllegalArgumentException const &) {}
-
-        if (xInstance.is())
-            xProvider = xInstance;
-    }
-
-    if (rManager.is())
-        rManager->deregisterContentProvider(xProvider, rInfo.m_aTemplate);
-            //@@@ if this fails, a roll-back of deregisterInstance() is
-            // missing
 }
 
 }

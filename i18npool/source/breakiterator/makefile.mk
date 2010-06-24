@@ -2,13 +2,9 @@
 #*
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17.16.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -93,7 +89,7 @@ $(MISC)$/%_brk.c : $(MISC)$/%.brk
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
 # so the output (OpenOffice_icu_dat.c) is changed here to include a pragma to disable the warnings.
 # Output of gencmn is redirected to OpenOffice_icu_tmp.c with the -t switch.
-$(MISC)$/OpenOffice_%.c : 
+$(MISC)$/OpenOffice_%.c : $(MY_BRK_BRKFILES:s/.brk/_brk.c/)
     $(WRAPCMD) $(GENCMN) -n OpenOffice -t tmp -S -d $(MISC) O $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
     echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
     echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@

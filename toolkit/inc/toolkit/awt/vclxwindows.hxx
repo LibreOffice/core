@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxwindows.hxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #define _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 
 #include <toolkit/dllapi.h>
+
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -77,7 +75,7 @@
 #include <com/sun/star/awt/XFixedHyperlink.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XCurrencyField.hpp>
 #include <com/sun/star/awt/XPatternField.hpp>
@@ -85,11 +83,13 @@
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XImageConsumer.hpp>
+#include <com/sun/star/awt/XItemListListener.hpp>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxtopwindow.hxx>
+#include "toolkit/awt/vclxwindow.hxx"
+#include "toolkit/awt/vclxtopwindow.hxx"
 #include <cppuhelper/implbase1.hxx>
 
 #include <vcl/pointr.hxx>
@@ -390,7 +390,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXDialog
 //  ----------------------------------------------------
-class VCLXDialog :  public ::com::sun::star::awt::XDialog,
+class VCLXDialog :  public ::com::sun::star::awt::XDialog2,
                     public VCLXTopWindow
 {
 public:
@@ -405,6 +405,10 @@ public:
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XDialog2
+    virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( ::sal_Int32 Id ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
@@ -679,9 +683,12 @@ public:
 //  ----------------------------------------------------
 //  class VCLXListBox
 //  ----------------------------------------------------
-class VCLXListBox : public ::com::sun::star::awt::XListBox,
-                    public ::com::sun::star::awt::XTextLayoutConstrains,
-                    public VCLXWindow
+typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
+                                        ,   ::com::sun::star::awt::XListBox
+                                        ,   ::com::sun::star::awt::XTextLayoutConstrains
+                                        ,   ::com::sun::star::awt::XItemListListener
+                                        >   VCLXListBox_Base;
+class VCLXListBox  : public VCLXListBox_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -695,16 +702,6 @@ protected:
 
 public:
                         VCLXListBox();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -745,6 +742,16 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XItemListListener
+    virtual void SAL_CALL listItemInserted( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL listItemRemoved( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL listItemModified( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL allItemsRemoved( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL itemListChanged( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& i_rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }

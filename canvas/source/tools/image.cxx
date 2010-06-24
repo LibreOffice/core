@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: image.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1515,7 +1512,7 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
     typedef color_generator_adaptor<color_type> color_generator_type;
     unsigned int dwNumSteps = static_cast<unsigned int>(rBounds.getWidth());
     color_generator_type colors(color1,color2,dwNumSteps);
-    colors.set_linear(rValues.meType != ParametricPolyPolygon::GRADIENT_AXIAL);
+    colors.set_linear(true);
 
     // color = f(x,y)
     gradient_polymorphic_wrapper<agg::gradient_x> gf_x;

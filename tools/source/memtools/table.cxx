@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,26 +122,37 @@ BOOL Table::Insert( ULONG nKey, void* p )
         {
             USHORT n = 0;
             USHORT nTempCount = (USHORT)nCount * 2;
-            void** pNodes = Container::ImpGetOnlyNodes();
-            ULONG  nCompareKey = (ULONG)(*pNodes);
-            while ( nKey > nCompareKey )
+            //<!--Modified by PengYunQuan for resolving a NULL pointer access
+
+            if( void** pNodes = Container::ImpGetOnlyNodes() )
             {
-                n += 2;
-                pNodes += 2;
-                if ( n < nTempCount )
-                    nCompareKey = (ULONG)(*pNodes);
-                else
+                ULONG  nCompareKey = (ULONG)(*pNodes);
+                while ( nKey > nCompareKey )
                 {
-                    nCompareKey = 0;
-                    break;
+                    n += 2;
+                    pNodes += 2;
+                    if ( n < nTempCount )
+                        nCompareKey = (ULONG)(*pNodes);
+                    else
+                    {
+                        nCompareKey = 0;
+                        break;
+                    }
                 }
+
+                // Testen, ob sich der Key schon in der Tabelle befindet
+                if ( nKey == nCompareKey )
+                    return FALSE;
+
+                i = n;
             }
-
-            // Testen, ob sich der Key schon in der Tabelle befindet
-            if ( nKey == nCompareKey )
-                return FALSE;
-
-            i = n;
+            else
+            {
+                i = 0;
+                if ( ImplGetIndex( nKey, &i ) != TABLE_ENTRY_NOTFOUND )
+                    return FALSE;
+            }
+            //-->Modified by PengYunQuan for resolving a NULL pointer access
         }
         else
         {

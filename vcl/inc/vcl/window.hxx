@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: window.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,6 +124,8 @@ namespace dnd {
 
 namespace vcl { struct ControlLayoutData; }
 
+namespace svt { class PopupWindowControllerImpl; }
+
 // ---------------
 // - WindowTypes -
 // ---------------
@@ -165,6 +164,7 @@ namespace vcl { struct ControlLayoutData; }
 #define SHOW_NOPARENTUPDATE             ((USHORT)0x0001)
 #define SHOW_NOFOCUSCHANGE              ((USHORT)0x0002)
 #define SHOW_NOACTIVATE                 ((USHORT)0x0004)
+#define SHOW_FOREGROUNDTASK             ((USHORT)0x0008)
 
 // Flags for SetZOrder()
 #define WINDOW_ZORDER_BEFOR             ((USHORT)0x0001)
@@ -320,7 +320,6 @@ typedef USHORT StateChangedType;
 #define IMPL_MSGBOX_OFFSET_EXTRA_X      0
 #define IMPL_MSGBOX_OFFSET_EXTRA_Y      2
 #define IMPL_SEP_MSGBOX_IMAGE           8
-#define IMPL_SEP_BUTTON_IMAGE           4
 
 #define DLGWINDOW_PREV                  0
 #define DLGWINDOW_NEXT                  1
@@ -364,6 +363,8 @@ class VCL_DLLPUBLIC Window : public OutputDevice
     friend class ImplDockingWindowWrapper;
     friend class ImplPopupFloatWin;
     friend class MenuFloatingWindow;
+
+    friend class svt::PopupWindowControllerImpl;
 
 private:
     // NOTE: to remove many dependencies of other modules
@@ -551,20 +552,18 @@ public:
     SAL_DLLPRIVATE ::std::vector<Window *>& ImplGetOwnerDrawList();
     SAL_DLLPRIVATE Window*     ImplGetTopmostFrameWindow();
 
-    SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly );
+    SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly ) const;
     SAL_DLLPRIVATE void        ImplNotifyIconifiedState( BOOL bIconified );
     SAL_DLLPRIVATE bool        ImplStopDnd();
     SAL_DLLPRIVATE void        ImplStartDnd();
 
     SAL_DLLPRIVATE static void ImplInitAppFontData( Window* pWindow );
-    SAL_DLLPRIVATE void        ImplInitSalControlHandle();
     SAL_DLLPRIVATE void        ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
 
     SAL_DLLPRIVATE BOOL        ImplIsInTaskPaneList();
     SAL_DLLPRIVATE void        ImplIsInTaskPaneList( BOOL mbIsInTaskList );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
                                ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
-    SAL_DLLPRIVATE void        ImplMoveControlValue( ControlType, const ImplControlValue&, const Point& ) const;
 
 private:
     // Default construction is forbidden and not implemented.
@@ -582,7 +581,7 @@ protected:
 
             void        ImplCallEventListeners( ULONG nEvent, void* pData = NULL );
             void        CallEventListeners( ULONG nEvent, void* pData = NULL );
-
+            void        FireVclEvent( VclSimpleEvent* pEvent );
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
@@ -859,9 +858,9 @@ public:
     Point               AbsoluteScreenToOutputPixel( const Point& rPos ) const;
     Rectangle           GetDesktopRectPixel() const;
     //  window extents including border and decoratrion
-    Rectangle           GetWindowExtentsRelative( Window *pRelativeWindow );
+    Rectangle           GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     // window extents of the client window, coordinates to be used in SetPosPixel
-    Rectangle           GetClientWindowExtentsRelative( Window *pRelativeWindow );
+    Rectangle           GetClientWindowExtentsRelative( Window *pRelativeWindow ) const;
 
     virtual BOOL        IsScrollable() const;
     virtual void        Scroll( long nHorzScroll, long nVertScroll,
@@ -898,6 +897,13 @@ public:
     BOOL                HasActiveChildFrame();
     USHORT              GetGetFocusFlags() const;
     void                GrabFocusToDocument();
+
+    /**
+     * Set this when you need to act as if the window has focus even if it
+     * doesn't.  This is necessary for implementing tab stops inside floating
+     * windows, but floating windows don't get focus from the system.
+     */
+    void                SetFakeFocus( bool bFocus );
 
     BOOL                IsCompoundControl() const;
     BOOL                HasCompoundControlFocus() const;
@@ -1087,44 +1093,6 @@ public:
     // form controls must never use native widgets, this can be toggled here
     void    EnableNativeWidget( BOOL bEnable = TRUE );
     BOOL    IsNativeWidgetEnabled() const;
-
-    // These all just call through to the private mpWindowImpl->mpFrame functions of the same name.
-
-    // Query the platform layer for control support
-    BOOL                    IsNativeControlSupported( ControlType nType, ControlPart nPart );
-
-    // Query the native control to determine if it was acted upon
-    BOOL                HitTestNativeControl( ControlType nType,
-                                      ControlPart nPart,
-                                      const Region& rControlRegion,
-                                      const Point& aPos,
-                                      BOOL& rIsInside );
-
-    // Request rendering of a particular control and/or part
-    BOOL                DrawNativeControl(    ControlType nType,
-                                      ControlPart nPart,
-                                      const Region& rControlRegion,
-                                      ControlState nState,
-                                      const ImplControlValue& aValue,
-                                      rtl::OUString aCaption );
-
-     // Request rendering of a caption string for a control
-    BOOL                DrawNativeControlText(     ControlType nType,
-                                          ControlPart nPart,
-                                          const Region& rControlRegion,
-                                          ControlState nState,
-                                          const ImplControlValue& aValue,
-                                          rtl::OUString aCaption );
-
-    // Query the native control's actual drawing region (including adornment)
-    BOOL                GetNativeControlRegion(  ControlType nType,
-                                          ControlPart nPart,
-                                          const Region& rControlRegion,
-                                          ControlState nState,
-                                          const ImplControlValue& aValue,
-                                          rtl::OUString aCaption,
-                                          Region &rNativeBoundingRegion,
-                                          Region &rNativeContentRegion );
 
     // a helper method for a Control's Draw method
     void PaintToDevice( OutputDevice* pDevice, const Point& rPos, const Size& rSize );

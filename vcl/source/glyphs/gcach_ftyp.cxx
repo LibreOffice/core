@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gcach_ftyp.cxx,v $
- * $Revision: 1.151 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,11 +38,10 @@
 #include "vcl/svapp.hxx"
 #include "vcl/outfont.hxx"
 #include "vcl/impfont.hxx"
-#include "vcl/bitmap.hxx"
-#include "vcl/bmpacc.hxx"
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include "osl/file.hxx"
@@ -82,7 +78,7 @@ typedef FT_Vector* FT_Vector_CPtr;
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
     #if !defined(HPUX)
-        // PORTERS: dlfcn is used for code dependend on FT version
+        // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
         #include <dlfcn.h>
     #endif
     #include <unistd.h>
@@ -94,10 +90,6 @@ typedef FT_Vector* FT_Vector_CPtr;
     #include <io.h>
     #define strncasecmp strnicmp
 #endif
-
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
-#include "i18npool/lang.h"
 
 typedef const unsigned char* CPU8;
 inline sal_uInt16 NEXT_U16( CPU8& p ) { p+=2; return (p[-2]<<8)|p[-1]; }
@@ -138,7 +130,8 @@ static int nFTVERSION = 0;
 static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
 static FT_Error (*pFTActivateSize)(FT_Size);
 static FT_Error (*pFTDoneSize)(FT_Size);
-static FT_Error (*pFTEmbolden)(FT_GlyphSlot);
+FT_Error (*pFTEmbolden)(FT_GlyphSlot);
+FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
@@ -353,7 +346,7 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
             maFaceFT = NULL;
     }
 
-    return maFaceFT;
+   return maFaceFT;
 }
 
 // -----------------------------------------------------------------------
@@ -475,6 +468,7 @@ FreetypeManager::FreetypeManager()
     pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
     pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
     pFTEmbolden     = (FT_Error(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
+    pFTOblique      = (FT_Error(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Oblique" );
 
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
@@ -623,9 +617,6 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             aDFA.mbSubsettable= false;
             aDFA.mbEmbeddable = false;
 
-            aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-            aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
-
             FT_Done_Face( aFaceFT );
             AddFontFile( aCFileName, nFaceNum, ++mnNextFontId, aDFA, NULL );
             ++nCount;
@@ -705,6 +696,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 :   ServerFont( rFSD ),
     mnPrioEmbedded(nDefaultPrioEmbedded),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
+    mnPrioAutoHint(nDefaultPrioAutoHint),
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
@@ -838,46 +830,71 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 
     mbArtItalic = (rFSD.meItalic != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
     mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
-
-    //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
-    //static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
-    //static const int TT_CODEPAGE_RANGE_936  = (1L << 18); // Chinese: Simplified
-    //static const int TT_CODEPAGE_RANGE_949  = (1L << 19); // Korean Wansung
-    //static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
-    //static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
-    static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
-    const TT_OS2* pOs2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
-    if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
+    mbUseGamma = false;
+    if( mbArtBold )
+    {
+        //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
+        //static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
+        //static const int TT_CODEPAGE_RANGE_936  = (1L << 18); // Chinese: Simplified
+        //static const int TT_CODEPAGE_RANGE_949  = (1L << 19); // Korean Wansung
+        //static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
+        //static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
+        static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
+        const TT_OS2* pOs2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
+        if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
         && rFSD.mnHeight < 20)
         mbUseGamma = true;
-    else
-        mbUseGamma = false;
+    }
 
-    if (mbUseGamma)
+    if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
+        mnLoadFlags |= FT_LOAD_NO_BITMAP;
+}
+
+void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
+{
+    FontAutoHint eHint = rFontOptions.GetUseAutoHint();
+    if( eHint == AUTOHINT_DONTKNOW )
+        eHint = mbUseGamma ? AUTOHINT_TRUE : AUTOHINT_FALSE;
+
+    if( eHint == AUTOHINT_TRUE )
         mnLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
 
     if( (mnSin != 0) && (mnCos != 0) ) // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-    if (mpFontInfo->DontUseAntiAlias())
-        mnPrioAntiAlias = 0;
-    if (mpFontInfo->DontUseEmbeddedBitmaps())
-        mnPrioEmbedded = 0;
+    if( rFontOptions.DontUseAntiAlias() )
+      mnPrioAntiAlias = 0;
+    if( rFontOptions.DontUseEmbeddedBitmaps() )
+      mnPrioEmbedded = 0;
+    if( rFontOptions.DontUseHinting() )
+      mnPrioAutoHint = 0;
 
 #if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
-    if( nDefaultPrioAutoHint <= 0 )
+    if( mnPrioAutoHint <= 0 )
 #endif
         mnLoadFlags |= FT_LOAD_NO_HINTING;
 
-#ifdef FT_LOAD_TARGET_LIGHT
-    // enable "light hinting" if available
+#if defined(FT_LOAD_TARGET_LIGHT) && defined(FT_LOAD_TARGET_NORMAL)
     if( !(mnLoadFlags & FT_LOAD_NO_HINTING) && (nFTVERSION >= 2103))
-        mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
+    {
+       mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
+       switch( rFontOptions.GetHintStyle() )
+       {
+           case HINT_NONE:
+                mnLoadFlags |= FT_LOAD_NO_HINTING;
+                break;
+           case HINT_SLIGHT:
+                mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
+                break;
+           case HINT_MEDIUM:
+                break;
+           case HINT_FULL:
+           default:
+                break;
+       }
+    }
 #endif
-
-    if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
-        mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
 // -----------------------------------------------------------------------
@@ -1058,7 +1075,7 @@ static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyph
 // -----------------------------------------------------------------------
 
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
-    FT_GlyphRec_* pGlyphFT, bool bForBitmapProcessing ) const
+    FT_Glyph pGlyphFT, bool bForBitmapProcessing ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
     // shortcut most common case
@@ -1130,9 +1147,9 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
     else
     {
         // FT<=2005 ignores transforms for bitmaps, so do it manually
-        FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph&>(pGlyphFT);
-        rBmpGlyphFT->left += (aVector.x + 32) >> 6;
-        rBmpGlyphFT->top  += (aVector.y + 32) >> 6;
+        FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph>(pGlyphFT);
+        pBmpGlyphFT->left += (aVector.x + 32) >> 6;
+        pBmpGlyphFT->top  += (aVector.y + 32) >> 6;
     }
 
     return nAngle;
@@ -1231,13 +1248,15 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
         }
     }
 
-#if !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if 0
     // #95556# autohinting not yet optimized for non-western glyph styles
     if( !(mnLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_FORCE_AUTOHINT) )
     &&  ( (aChar >= 0x0600 && aChar < 0x1E00)   // south-east asian + arabic
         ||(aChar >= 0x2900 && aChar < 0xD800)   // CJKV
         ||(aChar >= 0xF800) ) )                 // presentation + symbols
+    {
         nGlyphFlags |= GF_UNHINTED;
+    }
 #endif
 
     if( nGlyphIndex != 0 )
@@ -1377,13 +1396,13 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
 #if (FTVERSION >= 2002)
-    // for 0/90/180/270 degree fonts enable autohinting even if not advisable
+    // for 0/90/180/270 degree fonts enable hinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
-    if( (mnCos==0 || mnSin==0) && (nDefaultPrioAutoHint > 0) )
+    if( (mnCos==0 || mnSin==0) && (mnPrioAutoHint > 0) )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
 
-    if( mnPrioEmbedded <= nDefaultPrioAutoHint )
+    if( mnPrioEmbedded <= mnPrioAutoHint )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
@@ -1425,6 +1444,20 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
+    // Check for zero area bounding boxes as this crashes some versions of FT.
+    // This also provides a handy short cut as much of the code following
+    //  becomes an expensive nop when a glyph covers no pixels.
+    FT_BBox cbox;
+    FT_Glyph_Get_CBox(pGlyphFT, ft_glyph_bbox_unscaled, &cbox);
+
+    if( (cbox.xMax - cbox.xMin) == 0 || (cbox.yMax - cbox.yMin == 0) )
+    {
+        nAngle = 0;
+        memset(&rRawBitmap, 0, sizeof rRawBitmap);
+        FT_Done_Glyph( pGlyphFT );
+        return true;
+    }
+
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
         if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
@@ -1440,12 +1473,12 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
+    const FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph>(pGlyphFT);
     // NOTE: autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
-    rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
-    rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+    rRawBitmap.mnXOffset        = +pBmpGlyphFT->left;
+    rRawBitmap.mnYOffset        = -pBmpGlyphFT->top;
 
-    const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
+    const FT_Bitmap& rBitmapFT  = pBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnBitCount       = 1;
     if( mbArtBold && !pFTEmbolden )
@@ -1534,7 +1567,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #else
-    if( (nGlyphFlags & GF_UNHINTED) || (nDefaultPrioAutoHint < mnPrioAntiAlias) )
+    if( (nGlyphFlags & GF_UNHINTED) || (mnPrioAutoHint < mnPrioAntiAlias) )
         nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
@@ -1595,11 +1628,11 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
-    rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
-    rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+    const FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph>(pGlyphFT);
+    rRawBitmap.mnXOffset        = +pBmpGlyphFT->left;
+    rRawBitmap.mnYOffset        = -pBmpGlyphFT->top;
 
-    const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
+    const FT_Bitmap& rBitmapFT  = pBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnWidth          = rBitmapFT.width;
     rRawBitmap.mnBitCount       = 8;
@@ -1698,60 +1731,55 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // -----------------------------------------------------------------------
 
 // TODO: replace with GetFontCharMap()
-ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
+bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
 {
-    CmapResult aResult;
-    aResult.mnPairCount = 0;
-    aResult.mpPairCodes = NULL;
-    aResult.mbSymbolic  = mpFontInfo->IsSymbolFont();
+    rResult.mbSymbolic = mpFontInfo->IsSymbolFont();
 
+    // TODO: is the full CmapResult needed on platforms calling this?
     if( FT_IS_SFNT( maFaceFT ) )
     {
         ULONG nLength = 0;
         const unsigned char* pCmap = mpFontInfo->GetTable( "cmap", &nLength );
-        if( pCmap && nLength && ParseCMAP( pCmap, nLength, aResult ) )
-        {
-            // copy the ranges into the provided array...
-            if( pCodes )
-                for( int i = 0; i < 2*aResult.mnPairCount; ++i )
-                    pCodes[ i ] = aResult.mpPairCodes[ i ];
-
-            delete[] aResult.mpPairCodes;
-        }
+        if( pCmap && (nLength > 0) )
+            if( ParseCMAP( pCmap, nLength, rResult ) )
+                return true;
     }
 
-    if( aResult.mnPairCount <= 0 )
+    typedef std::vector<sal_uInt32> U32Vector;
+    U32Vector aCodes;
+
+    // FT's coverage is available since FT>=2.1.0 (OOo-baseline>=2.1.4 => ok)
+    aCodes.reserve( 0x1000 );
+    FT_UInt nGlyphIndex;
+    for( sal_uInt32 cCode = FT_Get_First_Char( maFaceFT, &nGlyphIndex );; )
     {
-        if( aResult.mbSymbolic )
-        {
-            // we usually get here for Type1 symbol fonts
-            if( pCodes )
-            {
-                pCodes[ 0 ] = 0xF020;
-                pCodes[ 1 ] = 0xF100;
-            }
-            aResult.mnPairCount = 1;
-        }
-        else
-        {
-            // we have to use the brute force method...
-            for( sal_uInt32 cCode = 0x0020;; )
-            {
-                for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode ) ;
-                if( cCode >= 0xFFF0 )
-                    break;
-                ++aResult.mnPairCount;
-                if( pCodes )
-                    *(pCodes++) = cCode;
-                for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode ) ;
-                if( pCodes )
-                    *(pCodes++) = cCode;
-            }
-        }
+        if( !nGlyphIndex )
+            break;
+        aCodes.push_back( cCode );  // first code inside range
+        sal_uInt32 cNext = cCode;
+        do cNext = FT_Get_Next_Char( maFaceFT, cCode, &nGlyphIndex ); while( cNext == ++cCode );
+        aCodes.push_back( cCode );  // first code outside range
+        cCode = cNext;
     }
 
-    return aResult.mnPairCount;
+    const int nCount = aCodes.size();
+    if( !nCount) {
+        if( !rResult.mbSymbolic )
+            return false;
+
+        // we usually get here for Type1 symbol fonts
+        aCodes.push_back( 0xF020 );
+        aCodes.push_back( 0xF100 );
+    }
+
+    sal_uInt32* pCodes = new sal_uInt32[ nCount ];
+    for( int i = 0; i < nCount; ++i )
+        pCodes[i] = aCodes[i];
+    rResult.mpRangeCodes = pCodes;
+    rResult.mnRangeCount = nCount / 2;
+    return true;
 }
+
 // -----------------------------------------------------------------------
 // kerning stuff
 // -----------------------------------------------------------------------
@@ -2274,9 +2302,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     // convert to basegfx polypolygon
     // TODO: get rid of the intermediate tools polypolygon
     rB2DPolyPoly = aToolPolyPolygon.getB2DPolyPolygon();
-    ::basegfx::B2DHomMatrix aMatrix;
-    aMatrix.scale( +1.0/(1<<6), -1.0/(1<<6) );
-    rB2DPolyPoly.transform( aMatrix );
+    rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix( +1.0/(1<<6), -1.0/(1<<6) ));
 
     return true;
 }
@@ -2479,12 +2505,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                         pCoverage += 2;
                         for( int i = nCntRange; --i >= 0; )
                         {
-                            const USHORT nGlyph0 = GetUShort( pCoverage+0 );
-                            const USHORT nGlyph1 = GetUShort( pCoverage+2 );
+                            const UINT32 nGlyph0 = GetUShort( pCoverage+0 );
+                            const UINT32 nGlyph1 = GetUShort( pCoverage+2 );
                             const USHORT nCovIdx = GetUShort( pCoverage+4 );
                             pCoverage += 6;
-                            for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
-                                aSubstVector.push_back( GlyphSubst( j + nCovIdx, 0 ) );
+                            for( UINT32 j = nGlyph0; j <= nGlyph1; ++j )
+                                aSubstVector.push_back( GlyphSubst( static_cast<USHORT>(j + nCovIdx), 0 ) );
                         }
                     }
                     break;
@@ -2528,3 +2554,4 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 }
 
 // =======================================================================
+

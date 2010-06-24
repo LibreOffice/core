@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formattedcontrol.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,6 +157,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
         ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
         ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
+        ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
         ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
         ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
         ImplRegisterProperty( BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR );

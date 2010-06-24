@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: saldata.cxx,v $
- * $Revision: 1.58.98.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,6 +276,7 @@ X11SalData::X11SalData()
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
+    osl_getLocalHostname( &maLocalHostName.pData );
 }
 
 X11SalData::~X11SalData()
@@ -355,8 +353,9 @@ SalXLib::SalXLib()
         nFDs_ = m_pTimeoutFDS[0] + 1;
     }
 
-    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
     m_bHaveSystemChildFrames        = false;
+    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
 }
 
 SalXLib::~SalXLib()
@@ -366,6 +365,7 @@ SalXLib::~SalXLib()
     close (m_pTimeoutFDS[1]);
 
     PopXErrorLevel();
+    XSetIOErrorHandler (m_aOrigXIOErrorHandler);
 }
 
 void SalXLib::PushXErrorLevel( bool bIgnore )
@@ -460,8 +460,6 @@ void SalXLib::Init()
         std::fflush( stderr );
         exit(0);
     }
-
-    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
 
     SalDisplay *pSalDisplay = new SalX11Display( pDisp );
 

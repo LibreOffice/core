@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: msgbox.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -500,7 +497,7 @@ void InfoBox::ImplInitInfoBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
                 InfoBox::GetStandardImageHC() : InfoBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_INFO)+1;
 }
@@ -591,7 +588,7 @@ void ErrorBox::ImplInitErrorBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         ErrorBox::GetStandardImageHC() : ErrorBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_ERROR)+1;
 }
@@ -637,7 +634,7 @@ void QueryBox::ImplInitQueryBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetDialogColor().IsDark() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_QUERY)+1;
 }

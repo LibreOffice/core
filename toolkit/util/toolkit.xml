@@ -701,4 +701,50 @@
         <status value="beta" />
         <supported-service>com.sun.star.awt.tree.MutableTreeNode</supported-service>
     </component-description>
+  <component-description>
+    <author>Tobias Krause</author>
+    <name>stardiv.Toolkit.UnoGridModel</name>
+    <description>specifies the model of a grid control</description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta" />
+    <supported-service>com.sun.star.awt.grid.UnoControlGridModel</supported-service>
+  </component-description>
+  <component-description>
+    <author>Tobias Krause</author>
+    <name>stardiv.Toolkit.UnoGridControl</name>
+    <description>specifies a grid control</description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta" />
+    <supported-service>com.sun.star.awt.grid.UnoControlGrid</supported-service>
+  </component-description>
+  <component-description>
+    <author>Tobias Krause</author>
+    <name>stardiv.Toolkit.DefaultGridDataModel</name>
+    <description>specifies the grid control default data model</description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta" />
+    <supported-service>com.sun.star.awt.grid.DefaultGridDataModel</supported-service>
+  </component-description>
+  <component-description>
+    <author>Tobias Krause</author>
+    <name>stardiv.Toolkit.DefaultGridColumnModel</name>
+    <description>specifies the grid control default column model</description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta" />
+    <supported-service>com.sun.star.awt.grid.DefaultGridColumnModel</supported-service>
+  </component-description>
+  <component-description>
+    <author>Tobias Krause</author>
+    <name>stardiv.Toolkit.GridColumn</name>
+    <description>specifies the grid coloumn model</description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta" />
+    <supported-service>com.sun.star.awt.grid.GridColumn</supported-service>
+  </component-description>
+
 </module-description>

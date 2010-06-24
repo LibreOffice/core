@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editor.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +30,6 @@
 #undef NDEBUG
 
 /*
-#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 */
@@ -189,12 +184,12 @@ public:
         while ( xParent.is() && !uno::Reference< awt::XWindow >( xParent, uno::UNO_QUERY ).is() )
         {
             uno::Reference< awt::XLayoutContainer > xContainer( xParent, uno::UNO_QUERY );
-            assert( xContainer.is() );
+            OSL_ASSERT( xContainer.is() );
             xParent = uno::Reference< awt::XLayoutContainer >( xContainer->getParent(), uno::UNO_QUERY );
         }
 
         mxWidget = WidgetFactory::createWidget( xToolkit, xParent, unoName, nAttrbs );
-        assert( mxWidget.is() );
+        OSL_ASSERT( mxWidget.is() );
         mxContainer = uno::Reference< awt::XLayoutContainer >( mxWidget, uno::UNO_QUERY );
 
         mrLabel = mrUnoName = unoName;
@@ -340,7 +335,7 @@ public:
         else
             maChildren.push_back( pChild );
 
-        assert( pChild->mpParent == NULL );
+        OSL_ASSERT( pChild->mpParent == NULL );
         pChild->mpParent = this;
 
         // store container props
@@ -1733,7 +1728,7 @@ EditorImpl::EditorImpl( layout::Dialog *dialog,
         mxFactory->createInstance(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ) ),
         uno::UNO_QUERY );
-    assert( mxToolkit.is() );
+    OSL_ASSERT( mxToolkit.is() );
 
     // custom widgets
 #if DEBUG_PRINT
@@ -1890,7 +1885,7 @@ IMPL_LINK( EditorImpl, CreateWidgetHdl, layout::Button *, pBtn )
         if ( pBtn == *it )
             break;
     }
-    assert( i < WIDGETS_SPECS_LEN );
+    OSL_ASSERT( i < WIDGETS_SPECS_LEN );
     createWidget( WIDGETS_SPECS[i].pName );
     return 0;
 }

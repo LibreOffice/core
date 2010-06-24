@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxecode.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +82,7 @@
 #define ERRCODE_SFX_DOCUMENT_MACRO_DISABLED (ERRCODE_WARNING_MASK | ERRCODE_AREA_SFX | ERRCODE_CLASS_NONE | 52)
 #define ERRCODE_SFX_BROKENSIGNATURE         (ERRCODE_WARNING_MASK | ERRCODE_AREA_SFX | ERRCODE_CLASS_NONE | 53)
 #define ERRCODE_SFX_SHARED_NOPASSWORDCHANGE (ERRCODE_WARNING_MASK | ERRCODE_AREA_SFX | ERRCODE_CLASS_NONE | 54)
+#define ERRCODE_SFX_INCOMPLETE_ENCRYPTION    (ERRCODE_WARNING_MASK | ERRCODE_AREA_SFX | ERRCODE_CLASS_NONE | 55)
 
 
 

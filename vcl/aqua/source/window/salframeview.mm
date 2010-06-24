@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframeview.mm,v $
- * $Revision: 1.12.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,9 @@
 #include "vcl/window.hxx"
 
 #include "vcl/svapp.hxx"
- 
+
+#define WHEEL_EVENT_FACTOR 1.5
+
 static USHORT ImplGetModifierMask( unsigned int nMask )
 {
     USHORT nRet = 0;
@@ -184,6 +183,8 @@ static AquaSalFrame* getMouseContainerFrame()
         return YES;
     if( mpFrame->mbFullScreen )
         return YES;
+    if( (mpFrame->mnStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
+        return YES;
     return [super canBecomeKeyWindow];
 }
 
@@ -213,6 +214,7 @@ static AquaSalFrame* getMouseContainerFrame()
             AquaSalMenu::enableMainMenu( false );
         #endif
         mpFrame->CallCallback( SALEVENT_GETFOCUS, 0 );
+        mpFrame->SendPaintEvent(); // repaint controls as active
     }
 }
 
@@ -221,7 +223,10 @@ static AquaSalFrame* getMouseContainerFrame()
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+    {
         mpFrame->CallCallback(SALEVENT_LOSEFOCUS, 0);
+        mpFrame->SendPaintEvent(); // repaint controls as inactive
+    }
 }
 
 -(void)windowDidChangeScreen: (NSNotification*)pNotification
@@ -651,11 +656,12 @@ private:
         mpFrame->CocoaToVCL( aPt );
         
         SalWheelMouseEvent aEvent;
-        aEvent.mnTime   = mpFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
-        aEvent.mnCode   |= KEY_MOD1; // we want zooming, no scrolling
+        aEvent.mnTime           = mpFrame->mnLastEventTime;
+        aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
+        aEvent.mbDeltaIsPixel   = TRUE;
         
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
@@ -664,11 +670,11 @@ private:
         if( dZ != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dZ));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dZ < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dZ < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
+            aEvent.mnScrollLines = dZ > 0 ? dZ/WHEEL_EVENT_FACTOR : -dZ/WHEEL_EVENT_FACTOR;
             if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -709,10 +715,11 @@ private:
         mpFrame->CocoaToVCL( aPt );
         
         SalWheelMouseEvent aEvent;
-        aEvent.mnTime   = mpFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mnTime           = mpFrame->mnLastEventTime;
+        aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mbDeltaIsPixel   = TRUE;
         
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
@@ -721,9 +728,9 @@ private:
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dX < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dX < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -731,9 +738,9 @@ private:
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ))
         {
             aEvent.mnDelta = static_cast<long>(floor(dY));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dY < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dY < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -768,10 +775,11 @@ private:
         mpFrame->CocoaToVCL( aPt );
 
         SalWheelMouseEvent aEvent;
-        aEvent.mnTime   = mpFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mnTime         = mpFrame->mnLastEventTime;
+        aEvent.mnX            = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY            = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        aEvent.mbDeltaIsPixel = TRUE;
 
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
@@ -780,30 +788,27 @@ private:
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dX < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dX < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
-            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
+            aEvent.mnScrollLines = dY > 0 ? dX/WHEEL_EVENT_FACTOR : -dX/WHEEL_EVENT_FACTOR;
             if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
-            if( aEvent.mnScrollLines > 15 )
-                aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
         {
             aEvent.mnDelta = static_cast<long>(floor(dY));
-            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
-            if( aEvent.mnNotchDelta == 0 )
-                aEvent.mnNotchDelta = dY < 0.0 ? -1 : 1;
+            aEvent.mnNotchDelta = dY < 0 ? -1 : 1;
+            if( aEvent.mnDelta == 0 )
+                aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
-            if( aEvent.mnScrollLines == 0 )
+            aEvent.mnScrollLines = dY > 0 ? dY/WHEEL_EVENT_FACTOR : -dY/WHEEL_EVENT_FACTOR;
+            if( aEvent.mnScrollLines < 1 )
                 aEvent.mnScrollLines = 1;
-            if( aEvent.mnScrollLines > 15 )
-                aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
-            
+
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
         }
     }
@@ -841,6 +846,16 @@ private:
 
     if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
     {
+        /* #i103102# key events with command and alternate don't make it through
+           interpretKeyEvents (why ?). Try to dispatch them here first,
+           if not successful continue normally
+        */
+        if( (mpFrame->mnLastModifierFlags & (NSAlternateKeyMask | NSCommandKeyMask))
+                    == (NSAlternateKeyMask | NSCommandKeyMask) )
+        {
+            if( [self sendSingleCharacter: mpLastEvent] )
+                return YES;
+        }
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
         USHORT nKeyCode = ImplMapCharCode( keyChar );
         
@@ -1049,7 +1064,17 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToRightEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToRightEndOfLineAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
@@ -1059,7 +1084,17 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToLeftEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToBeginningOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToLeftEndOfLineAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
@@ -1109,6 +1144,12 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
+-(void)scrollToEndOfDocument: (id)aSender
+{
+    // this is not exactly what we should do, but it makes "End" and "Shift-End" behave consistent
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfDocumentAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
@@ -1116,6 +1157,12 @@ private:
 
 -(void)moveToBeginningOfDocument: (id)aSender
 {
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)scrollToBeginningOfDocument: (id)aSender
+{
+    // this is not exactly what we should do, but it makes "Home" and "Shift-Home" behave consistent
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
@@ -1316,11 +1363,32 @@ private:
     {
         mbNeedSpecialKeyHandle = true;
     }
+
+    // FIXME:
+    // #i106901#
+    // if we come here outside of mbInKeyInput, this is likely to be because
+    // of the keyboard viewer. For unknown reasons having no marked range
+    // in this case causes a crash. So we say we have a marked range anyway
+    // This is a hack, since it is not understood what a) causes that crash
+    // and b) why we should have a marked range at this point.
+    if( ! mbInKeyInput )
+        bHasMarkedText = YES;
+
     return bHasMarkedText;
 }
 
 - (NSRange)markedRange
 {
+    // FIXME:
+    // #i106901#
+    // if we come here outside of mbInKeyInput, this is likely to be because
+    // of the keyboard viewer. For unknown reasons having no marked range
+    // in this case causes a crash. So we say we have a marked range anyway
+    // This is a hack, since it is not understood what a) causes that crash
+    // and b) why we should have a marked range at this point.
+    if( ! mbInKeyInput )
+        return NSMakeRange( 0, 0 );
+    
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
 
@@ -1410,7 +1478,7 @@ private:
     return 0;
 }
 
-#ifdef MAC_OS_X_VERSION_10_5
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
 /* build target 10.5 or greater */
 - (NSInteger)conversationIdentifier
 #else
@@ -1425,6 +1493,9 @@ private:
 {
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
+        #if OSL_DEBUG_LEVEL > 1
+        // fprintf( stderr, "SalFrameView: doCommandBySelector %s\n", (char*)aSelector );
+        #endif
         if( (mpFrame->mnICOptions & SAL_INPUTCONTEXT_TEXT) != 0 &&
             aSelector != NULL && [self respondsToSelector: aSelector] )
         {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prnsetup.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +56,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
     }
 
     pBox->Enable( nCount != 0 );
-    pPropBtn->Enable( pPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
+    pPropBtn->Show( pPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
 }
 
 // -----------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basicrange.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +137,14 @@ namespace basegfx
                     return !((rRange.mnMaximum < mnMinimum) || (rRange.mnMinimum > mnMaximum));
                 }
             }
+        }
+
+        bool overlapsMore(const BasicRange& rRange) const
+        {
+            if(isEmpty() || rRange.isEmpty())
+                return false;
+            // returns true if the overlap is more than just a touching at the limits
+            return ((rRange.mnMaximum > mnMinimum) && (rRange.mnMinimum < mnMaximum));
         }
 
         bool operator==( const BasicRange& rRange ) const

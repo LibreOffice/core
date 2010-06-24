@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: servicenames.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,10 +92,14 @@ const sal_Char __FAR_DATA szServiceName_UnoSpinButtonModel[] = "com.sun.star.awt
 const sal_Char __FAR_DATA szServiceName_TreeControl[] = "com.sun.star.awt.tree.TreeControl";
 const sal_Char __FAR_DATA szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";
 const sal_Char __FAR_DATA szServiceName_MutableTreeDataModel[] = "com.sun.star.awt.tree.MutableTreeDataModel";
-const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel";
-const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl";
-const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel";
-const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl";
+const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel", szServiceName2_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoControlSimpleAnimationModel";
+const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl", szServiceName2_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoControlSimpleAnimation";
+const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel", szServiceName2_UnoThrobberControlModel[] = "com.sun.star.awt.UnoControlThrobberModel";
+const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl", szServiceName2_UnoThrobberControl[] = "com.sun.star.awt.UnoControlThrobber";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[] = "com.sun.star.awt.UnoControlFixedHyperlink";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlinkModel[] = "com.sun.star.awt.UnoControlFixedHyperlinkModel";
-
+const sal_Char __FAR_DATA szServiceName_GridControl[] = "com.sun.star.awt.grid.UnoControlGrid";
+const sal_Char __FAR_DATA szServiceName_GridControlModel[] = "com.sun.star.awt.grid.UnoControlGridModel";
+const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
+const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
+const sal_Char __FAR_DATA szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";

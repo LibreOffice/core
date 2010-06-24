@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: valueimp.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +111,7 @@ struct ValueSet_Impl
 {
     ::std::auto_ptr< ValueItemList >    mpItemList;
     bool                                mbIsTransientChildrenDisabled;
+    Link                                maHighlightHdl;
 
     ValueSet_Impl() :   mpItemList( ::std::auto_ptr< ValueItemList >( new ValueItemList() ) ),
                         mbIsTransientChildrenDisabled( false )
@@ -149,6 +147,17 @@ public:
     static ValueSetAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 
 public:
+
+    /** Called by the corresponding ValueSet when it gets the focus.
+        Stores the new focus state and broadcasts a state change event.
+    */
+    void GetFocus (void);
+
+    /** Called by the corresponding ValueSet when it loses the focus.
+        Stores the new focus state and broadcasts a state change event.
+    */
+    void LoseFocus (void);
+
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -201,6 +210,8 @@ private:
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
     ValueSet*                                                           mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
+    /// The current FOCUSED state.
+    bool mbIsFocused;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

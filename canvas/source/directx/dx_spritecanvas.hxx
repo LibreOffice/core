@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dx_spritecanvas.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,6 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
 #include <cppuhelper/compbase9.hxx>
 #include <comphelper/uno3.hxx>
@@ -61,14 +57,14 @@
 namespace dxcanvas
 {
     typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::rendering::XSpriteCanvas,
-                                                ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::rendering::XGraphicDevice,
-                                                ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
-                                                ::com::sun::star::rendering::XBufferController,
-                                                ::com::sun::star::awt::XWindowListener,
-                                                ::com::sun::star::util::XUpdatable,
-                                                ::com::sun::star::beans::XPropertySet,
-                                                ::com::sun::star::lang::XServiceName >  WindowGraphicDeviceBase_Base;
+                                              ::com::sun::star::rendering::XIntegerBitmap,
+                                              ::com::sun::star::rendering::XGraphicDevice,
+                                              ::com::sun::star::lang::XMultiServiceFactory,
+                                              ::com::sun::star::rendering::XBufferController,
+                                              ::com::sun::star::awt::XWindowListener,
+                                              ::com::sun::star::util::XUpdatable,
+                                              ::com::sun::star::beans::XPropertySet,
+                                              ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
                                                    SpriteDeviceHelper,
                                                    ::osl::MutexGuard,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: help.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,7 @@ class Window;
 #define QUICKHELP_BOTTOM    ((USHORT)0x0020)
 #define QUICKHELP_NOAUTOPOS (QUICKHELP_LEFT | QUICKHELP_CENTER | QUICKHELP_RIGHT | QUICKHELP_TOP | QUICKHELP_VCENTER | QUICKHELP_BOTTOM)
 #define QUICKHELP_CTRLTEXT  ((USHORT)0x0040)
+#define QUICKHELP_NOEVADEPOINTER ((USHORT)0x4000)
 #define QUICKHELP_BIDI_RTL  ((USHORT)0x8000)
 
 // By changes you must also change: rsc/vclrsc.hxx
@@ -75,6 +73,7 @@ public:
 
     virtual BOOL        Start( ULONG nHelpId, const Window* pWindow  );
     virtual BOOL        Start( const XubString& rKeyWord, const Window* pWindow );
+    virtual void        OpenHelpAgent( ULONG nHelpId );
     virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
     virtual XubString   GetHelpText( const String& aHelpURL, const Window* pWindow );
 

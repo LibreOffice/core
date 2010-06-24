@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salprn.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 class SalGraphics;
 class SalFrame;
 struct ImplJobSetup;
-class ImplQPrinter;
+namespace vcl { class PrinterController; }
 
 // -----------------------
 // - SalPrinterQueueInfo -
@@ -101,7 +98,6 @@ public:
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* pSetupData ) = 0;
 };
 
 // --------------
@@ -114,18 +110,21 @@ public:                     // public for Sal Implementation
     SalPrinter() {}
     virtual ~SalPrinter();
 
-    virtual BOOL                    StartJob( const XubString* pFileName,
-                                              const XubString& rJobName,
-                                              const XubString& rAppName,
-                                              ULONG nCopies, BOOL bCollate,
+    virtual BOOL                    StartJob( const String* pFileName,
+                                              const String& rJobName,
+                                              const String& rAppName,
+                                              ULONG nCopies,
+                                              bool bCollate,
+                                              bool bDirect,
                                               ImplJobSetup* pSetupData ) = 0;
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns FALSE
     virtual BOOL                    StartJob( const String* pFileName,
+                                              const String& rJobName,
                                               const String& rAppName,
                                               ImplJobSetup* pSetupData,
-                                              ImplQPrinter* pQPrinter );
+                                              vcl::PrinterController& rController );
 
     virtual BOOL                    EndJob() = 0;
     virtual BOOL                    AbortJob() = 0;

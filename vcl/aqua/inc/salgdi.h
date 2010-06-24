@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.h,v $
- * $Revision: 1.45.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,6 +172,9 @@ public:
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
+    void                UnsetState();
+    // InvalidateContext does an UnsetState and sets mrContext to 0
+    void                InvalidateContext();
 
     virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& );
@@ -230,15 +230,15 @@ public:
     CGPoint*                makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
     virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                              const Point& aPos, BOOL& rIsInside );
     virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
     virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption );
+                                               const rtl::OUString& aCaption );
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 
     // get device resolution
@@ -358,6 +358,8 @@ private:
 
     void ApplyXorContext();
     void Pattern50Fill();
+    UInt32 getState( ControlState nState );
+    UInt32 getTrackState( ControlState nState );
 };
 
 class XorEmulation

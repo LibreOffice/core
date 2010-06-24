@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfwriter.cxx,v $
- * $Revision: 1.24.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,7 +346,7 @@ void PDFWriter::SetClipRegion()
     ((PDFWriterImpl*)pImplementation)->clearClipRegion();
 }
 
-void PDFWriter::SetClipRegion( const Region& rRegion )
+void PDFWriter::SetClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
     ((PDFWriterImpl*)pImplementation)->setClipRegion( rRegion );
 }
@@ -359,7 +356,7 @@ void PDFWriter::MoveClipRegion( long nHorzMove, long nVertMove )
     ((PDFWriterImpl*)pImplementation)->moveClipRegion( nHorzMove, nVertMove );
 }
 
-void PDFWriter::IntersectClipRegion( const Region& rRegion )
+void PDFWriter::IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
     ((PDFWriterImpl*)pImplementation)->intersectClipRegion( rRegion );
 }

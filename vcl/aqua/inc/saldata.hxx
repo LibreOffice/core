@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: saldata.hxx,v $
- * $Revision: 1.22.64.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,8 @@
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
+
+#include "com/sun/star/uno/Reference.hxx"
 
 #include "vcl/sv.h"
 #include "vcl/svdata.hxx"
@@ -111,6 +110,9 @@ struct SalData
     NSObject*                                     mpDockIconClickHandler;
     long                                          mnDPIX;           // #i100617# read DPI only once per office life
     long                                          mnDPIY;           // #i100617# read DPI only once per office life
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+                                                  mxClipboard;
 
     SalData();
     ~SalData();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
   <LC_INFO>
     <Language>
       <LangID>gl</LangID>
@@ -30,8 +30,8 @@
       <DoubleQuotationStart>“</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>AM</TimeAM>
-    <TimePM>PM</TimePM>
+    <TimeAM>a. m.</TimeAM>
+    <TimePM>p. m.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$₧-456]">
@@ -184,37 +184,37 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>do.</DefaultAbbrvName>
+          <DefaultAbbrvName>dom.</DefaultAbbrvName>
           <DefaultFullName>domingo</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>lu.</DefaultAbbrvName>
+          <DefaultAbbrvName>lun.</DefaultAbbrvName>
           <DefaultFullName>luns</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>ma.</DefaultAbbrvName>
+          <DefaultAbbrvName>mar.</DefaultAbbrvName>
           <DefaultFullName>martes</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>me.</DefaultAbbrvName>
+          <DefaultAbbrvName>mér.</DefaultAbbrvName>
           <DefaultFullName>mércores</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>xo.</DefaultAbbrvName>
+          <DefaultAbbrvName>xov.</DefaultAbbrvName>
           <DefaultFullName>xoves</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>ve.</DefaultAbbrvName>
+          <DefaultAbbrvName>ven.</DefaultAbbrvName>
           <DefaultFullName>venres</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>sa.</DefaultAbbrvName>
+          <DefaultAbbrvName>sáb.</DefaultAbbrvName>
           <DefaultFullName>sábado</DefaultFullName>
         </Day>
       </DaysOfWeek>
@@ -231,7 +231,7 @@
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>mar</DefaultAbbrvName>
+          <DefaultAbbrvName>mar.</DefaultAbbrvName>
           <DefaultFullName>marzo</DefaultFullName>
         </Month>
         <Month>
@@ -241,13 +241,13 @@
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>mai</DefaultAbbrvName>
+          <DefaultAbbrvName>mai.</DefaultAbbrvName>
           <DefaultFullName>maio</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>xun</DefaultAbbrvName>
-          <DefaultFullName>xunio</DefaultFullName>
+          <DefaultAbbrvName>xuñ.</DefaultAbbrvName>
+          <DefaultFullName>xuño</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
@@ -283,13 +283,13 @@
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>A.C.</DefaultAbbrvName>
-          <DefaultFullName>A.C.</DefaultFullName>
+          <DefaultAbbrvName>a. C.</DefaultAbbrvName>
+          <DefaultFullName>antes de Cristo</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>D.C.</DefaultAbbrvName>
-          <DefaultFullName>D.C.</DefaultFullName>
+          <DefaultAbbrvName>d. C.</DefaultAbbrvName>
+          <DefaultFullName>despois de Cristo</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -326,16 +326,16 @@
     <ReservedWords>
       <trueWord>verdadeiro</trueWord>
       <falseWord>falso</falseWord>
-      <quarter1Word>1er trimestre</quarter1Word>
-      <quarter2Word>2on trimestre</quarter2Word>
-      <quarter3Word>3er trimestre</quarter3Word>
-      <quarter4Word>4rt trimestre</quarter4Word>
+      <quarter1Word>1.º trimestre</quarter1Word>
+      <quarter2Word>2.º trimestre</quarter2Word>
+      <quarter3Word>3.º trimestre</quarter3Word>
+      <quarter4Word>4.º trimestre</quarter4Word>
       <aboveWord>enriba</aboveWord>
       <belowWord>debaixo</belowWord>
-      <quarter1Abbreviation>T1</quarter1Abbreviation>
-      <quarter2Abbreviation>T2</quarter2Abbreviation>
-      <quarter3Abbreviation>T3</quarter3Abbreviation>
-      <quarter4Abbreviation>T4</quarter4Abbreviation>
+      <quarter1Abbreviation>1T</quarter1Abbreviation>
+      <quarter2Abbreviation>2T</quarter2Abbreviation>
+      <quarter3Abbreviation>3T</quarter3Abbreviation>
+      <quarter4Abbreviation>4T</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel ref="en_US"/>

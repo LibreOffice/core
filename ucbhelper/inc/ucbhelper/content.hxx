@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: content.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +57,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XContentIdentifier;
     class XDynamicResultSet;
     class XAnyCompareFactory;
+    struct ContentInfo;
     struct NumberedSortingInfo;
 } } } }
 
@@ -70,7 +68,7 @@ namespace ucbhelper
 
 /**
   * These are the possible values for the parameter eMode of method
-  * ucb::Content::createCursor.
+  * ucbhelper::Content::createCursor.
   */
 enum ResultSetInclude
 {
@@ -81,7 +79,7 @@ enum ResultSetInclude
 
 /**
   * These are the possible values for the parameter eOperation of method
-  * ucb::Content::insertNewContent.
+  * ucbhelper::Content::insertNewContent.
   */
 enum InsertOperation
 {
@@ -106,14 +104,14 @@ class UCBHELPER_DLLPUBLIC Content
 protected:
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
                                                 rtl::OUString >& rPropertyNames,
-                                                  ResultSetInclude eMode )
+                                                ResultSetInclude eMode )
             throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
                                                 sal_Int32 >& rPropertyHandles,
-                                                  ResultSetInclude eMode )
+                                                ResultSetInclude eMode )
             throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -148,7 +146,7 @@ public:
       *        errors.
       */
     Content( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContentIdentifier >& rId,
+                    ::com::sun::star::ucb::XContentIdentifier >& rId,
              const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
         throw ( ::com::sun::star::ucb::ContentCreationException,
@@ -163,7 +161,7 @@ public:
       *        errors.
       */
     Content( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContent >& rContent,
+                    ::com::sun::star::ucb::XContent >& rContent,
              const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
         throw ( ::com::sun::star::ucb::ContentCreationException,
@@ -221,7 +219,7 @@ public:
       */
     static sal_Bool
     create( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContentIdentifier >& rId,
+                    ::com::sun::star::ucb::XContentIdentifier >& rId,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
             Content& rContent );
@@ -241,7 +239,7 @@ public:
       */
     static sal_Bool
     create( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::ucb::XContent >& xContent,
+                    ::com::sun::star::ucb::XContent >& xContent,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
             Content& rContent );
@@ -501,7 +499,7 @@ public:
     setPropertyValues( const ::com::sun::star::uno::Sequence<
                                 rtl::OUString >& rPropertyNames,
                        const ::com::sun::star::uno::Sequence<
-                                   ::com::sun::star::uno::Any >& rValues )
+                                    ::com::sun::star::uno::Any >& rValues )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -539,7 +537,7 @@ public:
     setPropertyValues( const ::com::sun::star::uno::Sequence<
                                 sal_Int32 >& nPropertyHandles,
                        const ::com::sun::star::uno::Sequence<
-                                   ::com::sun::star::uno::Any >& rValues )
+                                    ::com::sun::star::uno::Any >& rValues )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -655,8 +653,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
     createDynamicCursor( const ::com::sun::star::uno::Sequence<
                          rtl::OUString >& rPropertyNames,
-                           ResultSetInclude eMode
-                             = INCLUDE_FOLDERS_AND_DOCUMENTS )
+                         ResultSetInclude eMode
+                            = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -678,8 +676,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
     createDynamicCursor( const ::com::sun::star::uno::Sequence<
                          sal_Int32 >& rPropertyHandles,
-                           ResultSetInclude eMode
-                             = INCLUDE_FOLDERS_AND_DOCUMENTS )
+                         ResultSetInclude eMode
+                            = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -821,16 +819,31 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
+
+    /**
+      * This method returns the different types of contents this content
+      * can create.
+      *
+      * @return the content types or an empty sequence if no contents can be
+      *         created by this content.
+      */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::ContentInfo >
+    queryCreatableContentsInfo()
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
     /**
       * This method creates, initializes and inserts ( commits ) a new content
       * (i.e. it could be used to create a new file system folder).
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).
@@ -846,9 +859,9 @@ public:
     sal_Bool
     insertNewContent( const ::rtl::OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
-                          rtl::OUString >& rPropertyNames,
+                        rtl::OUString >& rPropertyNames,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       Content& rNewContent )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -856,13 +869,14 @@ public:
     /**
       * This method creates, initializes and inserts ( commits ) a new content
       * (i.e. it could be used to create a new file system folder).
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param nPropertyHandes is a sequence of handles of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).
@@ -880,7 +894,7 @@ public:
                       const ::com::sun::star::uno::Sequence<
                         sal_Int32 >& nPropertyHandles,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       Content& rNewContent )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -888,14 +902,15 @@ public:
     /**
       * This method creates, initializes and inserts (commits) a new content
       * inside this (the target folder) content. For example, it can be used to
-      * create a new file system folder.
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * create a new file system file.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).
@@ -913,9 +928,9 @@ public:
     sal_Bool
     insertNewContent( const ::rtl::OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
-                          rtl::OUString >& rPropertyNames,
+                        rtl::OUString >& rPropertyNames,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::io::XInputStream >& rStream,
                       Content& rNewContent )
@@ -925,14 +940,15 @@ public:
     /**
       * This method creates, initializes and inserts (commits) a new content
       * inside this (the target folder) content. For example, it can be used to
-      * create a new file system folder.
-      * Internally this method does a XContentCreator::createNewContent(...)-
-      * XCommandProcessor::execute( "setPropertyValues", ... )-
-      * XCommandProcessor::execute( "insert", ... ) calling sequence.
+      * create a new file system file.
+      * Internally this method does a
+      * XCommandProcessor::execute( "createNewContent", ... );
+      * XCommandProcessor::execute( "setPropertyValues", ... );
+      * XCommandProcessor::execute( "insert", ... ); calling sequence.
       *
       * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its contnt
-      *        objects.
+      *        provider implementation may introduce own types for its content
+      *        objects (See queryCreatableContentsInfo()).
       * @param nPropertyHandes is a sequence of handles of properties for that
       *        values are to set at the new content before it will be inserted
       *        ( commited ).
@@ -952,7 +968,7 @@ public:
                       const ::com::sun::star::uno::Sequence<
                         sal_Int32 >& nPropertyHandles,
                       const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >& rPropertyValues,
+                        ::com::sun::star::uno::Any >& rPropertyValues,
                       const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::io::XInputStream >& rStream,
                       Content& rNewContent )

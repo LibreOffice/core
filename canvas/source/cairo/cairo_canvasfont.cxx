@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cairo_canvasfont.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include <vcl/metric.hxx>
+#include <i18npool/mslangid.hxx>
 
 #include "cairo_canvasfont.hxx"
 #include "cairo_textlayout.hxx"
@@ -85,6 +83,8 @@ namespace cairocanvas
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+
+        maFont->SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
         // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )

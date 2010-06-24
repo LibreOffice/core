@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pngread.cxx,v $
- * $Revision: 1.28.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -706,7 +703,7 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
         nBitDepth = 8;
 
     sal_uInt16  nPaletteEntryCount = 1 << nBitDepth;
-    sal_uInt32  nAdd = 256 / (nPaletteEntryCount - 1);
+    sal_uInt32  nAdd = nBitDepth ? 256 / (nPaletteEntryCount - 1) : 0;
 
     // no bitdepth==2 available
     // but bitdepth==4 with two unused bits is close enough

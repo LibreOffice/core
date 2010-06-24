@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: servicenames.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,8 +92,16 @@ extern const sal_Char __FAR_DATA szServiceName_TreeControl[];
 extern const sal_Char __FAR_DATA szServiceName_TreeControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_MutableTreeDataModel[];
 
-extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[], szServiceName_UnoSimpleAnimationControlModel[];
-extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceName_UnoThrobberControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_GridControl[];
+extern const sal_Char __FAR_DATA szServiceName_GridControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[];
+extern const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[];
+extern const sal_Char __FAR_DATA szServiceName_GridColumn[];
+
+extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[], szServiceName2_UnoSimpleAnimationControl[];
+extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[], szServiceName2_UnoSimpleAnimationControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceName2_UnoThrobberControl[];
+extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[], szServiceName2_UnoThrobberControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[], szServiceName_UnoControlFixedHyperlinkModel[];
 
 // ExtUnoWrapper:

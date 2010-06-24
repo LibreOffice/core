@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sndstyle.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,6 @@ typedef USHORT SoundType;
 #define SOUND_ERROR                     ((SoundType)3)
 #define SOUND_QUERY                     ((SoundType)4)
 
-#define SOUND_DISABLE                   (SOUND_DEFAULT)
+#define SOUND_DISABLE                   ((SoundType)5)
 
 #endif // _SV_SNDSTYLE_HXX

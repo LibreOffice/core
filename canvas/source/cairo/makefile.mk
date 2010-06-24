@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +45,7 @@ DLLPRE =
 # --- X11 Mac build currently doesn't work with cairo -----------
 .IF "$(OS)" == "MACOSX" && "$(GUIBASE)" == "unx"
 @all:   
-        @echo "Cannot build cairocanvas with X11..."
+    @echo "Cannot build cairocanvas with X11..."
 .ENDIF
 .ENDIF
 
@@ -65,7 +61,7 @@ CFLAGS+=-I$(SOLARINCDIR)/cairo
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/cairo_cachedbitmap.obj \
             $(SLO)$/cairo_cairo.obj \
             $(SLO)$/cairo_canvas.obj \
@@ -84,26 +80,25 @@ SLOFILES =	$(SLO)$/cairo_cachedbitmap.obj \
 
 SHL1TARGET=$(TARGET).uno
 
-SHL1STDLIBS= $(CPPULIB) $(TKLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB) $(TOOLSLIB)
+SHL1STDLIBS= $(CPPULIB) $(TKLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB) $(TOOLSLIB) $(I18NISOLANGLIB)
 
 .IF "$(GUI)"=="UNX" 
 
 .IF "$(SYSTEM_CAIRO)" == "YES"
 SHL1STDLIBS+= $(CAIRO_LIBS)
 .ELSE
-SHL1STDLIBS+= -lcairo
+SHL1STDLIBS+= -lcairo -lpixman-1
 .ENDIF
 
 .IF "$(GUIBASE)"=="aqua"
 # native Mac OS X (Quartz)
 SLOFILES+= $(SLO)$/cairo_quartz_cairo.obj
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ELSE    # "$(GUIBASE)"=="aqua"
 
 # Xlib
 SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj
-SHL1STDLIBS+= -lfontconfig -lX11 -lXrender -lpixman-1 $(FREETYPE_LIBS)
+SHL1STDLIBS+= -lfontconfig -lX11 -lXrender $(FREETYPE_LIBS)
 CFLAGS+=$(FREETYPE_CFLAGS)
 
 .ENDIF   # "$(GUIBASE)"=="aqua"
@@ -126,12 +121,12 @@ SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :	target.mk

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: configvaluecontainer.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -334,7 +331,7 @@ namespace utl
             m_pImpl->xORB,
             _rConfigLocation,
             _nLevels,
-            ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_PREFER_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
+            ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
             ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) ? sal_False : sal_True
         );
         #ifdef DBG_UTIL

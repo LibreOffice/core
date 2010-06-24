@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optionsdrawinglayer.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "svtools/svldllapi.h"
+#include "svtools/svtdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -68,7 +65,7 @@ class SvtOptionsDrawinglayer_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVL_DLLPUBLIC SvtOptionsDrawinglayer
+class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -190,6 +187,15 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
            void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
            void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 
+        // #i97672# selection settings
+        sal_Bool    IsTransparentSelection() const;
+        sal_uInt16  GetTransparentSelectionPercent() const;
+        sal_uInt16  GetSelectionMaximumLuminancePercent() const;
+
+        void        SetTransparentSelection( sal_Bool bState );
+        void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
+        void        SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent );
+
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -208,7 +214,7 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        SVL_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
+        SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member

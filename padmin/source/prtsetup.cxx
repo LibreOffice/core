@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prtsetup.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +41,9 @@ using namespace rtl;
 using namespace psp;
 using namespace padmin;
 
-void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDKey* pKey )
+void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, const PPDKey* pKey )
 {
-    if( ! pKey )
+    if( ! pKey || ! pParser )
         return;
 
     const PPDValue* pValue = NULL;
@@ -56,7 +53,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDKey* pKey )
     for( int i = 0; i < pKey->countValues(); i++ )
     {
         pValue = pKey->getValue( i );
-        aOptionText = pValue->m_aOptionTranslation.Len() ? pValue->m_aOptionTranslation : pValue->m_aOption;
+        aOptionText = pParser->translateOption( pKey->getKey(), pValue->m_aOption) ;
 
         if( m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
         {
@@ -282,7 +279,7 @@ void RTSPaperPage::update()
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) )) )
     {
-        m_pParent->insertAllPPDValues( m_aDuplexBox, pKey );
+        m_pParent->insertAllPPDValues( m_aDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
@@ -294,7 +291,7 @@ void RTSPaperPage::update()
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )) )
     {
-        m_pParent->insertAllPPDValues( m_aPaperBox, pKey );
+        m_pParent->insertAllPPDValues( m_aPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
@@ -306,7 +303,7 @@ void RTSPaperPage::update()
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( String::CreateFromAscii( "InputSlot" ) )) )
     {
-        m_pParent->insertAllPPDValues( m_aSlotBox, pKey );
+        m_pParent->insertAllPPDValues( m_aSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
@@ -411,8 +408,8 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
                 ! pKey->getKey().EqualsAscii( "Duplex" )
                 )
             {
-                USHORT nPos =
-                    m_aPPDKeyBox.InsertEntry( pKey->getUITranslation().Len() ? pKey->getUITranslation() : pKey->getKey() );
+                String aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
+                USHORT nPos = m_aPPDKeyBox.InsertEntry( aEntry );
                 m_aPPDKeyBox.SetEntryData( nPos, (void*)pKey );
             }
         }
@@ -466,10 +463,11 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     for( int i = 0; i < pKey->countValues(); i++ )
     {
         pValue = pKey->getValue( i );
-        if( m_pParent->m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
+        if( m_pParent->m_aJobData.m_aContext.checkConstraints( pKey, pValue ) &&
+            m_pParent->m_aJobData.m_pParser )
         {
-            USHORT nPos =
-                m_aPPDValueBox.InsertEntry( pValue->m_aOptionTranslation.Len() ? pValue->m_aOptionTranslation : pValue->m_aOption );
+            String aEntry( m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption ) );
+            USHORT nPos = m_aPPDValueBox.InsertEntry( aEntry );
             m_aPPDValueBox.SetEntryData( nPos, (void*)pValue );
         }
     }

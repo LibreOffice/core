@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.cxx,v $
- * $Revision: 1.157.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <comphelper/processfactory.hxx>
+#include <unotools/misccfg.hxx>
 
 #include <string.h>
 #include <limits.h>
@@ -355,11 +353,9 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         {
             OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
             oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-            void *pFunc = NULL;
+            oslGenericFunction pFunc = NULL;
             if( pLib )
-            {
                 pFunc = osl_getAsciiFunctionSymbol( pLib, "SetLayeredWindowAttributes" );
-            }
 
             lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T ) pFunc;
 
@@ -445,11 +441,11 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->mbFloatWin = TRUE;
 
-        if ( pEnvTransparentFloats && bLayeredAPI == 1 /*&& !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) */)
+        if ( (bLayeredAPI == 1) && (pEnvTransparentFloats /* does not work remote! || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) */ )  )
             nExSysStyle |= WS_EX_LAYERED;
 
     }
-    if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP )
+    if( (nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP) || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
         nExSysStyle |= WS_EX_TOPMOST;
 
     // init frame data
@@ -2162,7 +2158,17 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
         BringWindowToTop( hWnd );
 
     if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )
-        SetForegroundWindow( hWnd );
+    {
+        // This magic code is necessary to connect the input focus of the
+        // current window thread and the thread which owns the window that
+        // should be the new foreground window.
+        HWND   hCurrWnd     = GetForegroundWindow();
+        DWORD  myThreadID   = GetCurrentThreadId();
+        DWORD  currThreadID = GetWindowThreadProcessId(hCurrWnd,NULL);
+        AttachThreadInput(myThreadID, currThreadID,TRUE);
+        SetForegroundWindow(hWnd);
+        AttachThreadInput(myThreadID,currThreadID,FALSE);
+    }
 
     if ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
     {
@@ -2885,8 +2891,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
     // TODO: once those options vanish: just set bCompBorder to TRUE
     // to have the system colors read
-    aStyleSettings.SetScrollBarSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
-    aStyleSettings.SetSpinSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
+    aStyleSettings.SetScrollBarSize( GetSystemMetrics( SM_CXVSCROLL ) );
+    aStyleSettings.SetSpinSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
     if ( bCompBorder )
     {
@@ -2935,6 +2941,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetUseFlatBorders( FALSE );
         aStyleSettings.SetUseFlatMenues( FALSE );
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+        aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
         aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
         aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
@@ -2970,6 +2977,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         BYTE    nBlue   = (BYTE)(((USHORT)aColor1.GetBlue()  + (USHORT)aColor2.GetBlue())/2);
         aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
     }
+
+    // caret width
+    DWORD nCaretWidth = 2;
+    if( SystemParametersInfo( SPI_GETCARETWIDTH, 0, &nCaretWidth, 0 ) )
+        aStyleSettings.SetCursorSize( nCaretWidth );
 
     // High contrast
     HIGHCONTRAST hc;
@@ -3089,7 +3101,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
                 if ( (nValue > 1000) && (nValue < 10000) )
                 {
                     MiscSettings aMiscSettings = rSettings.GetMiscSettings();
-                    aMiscSettings.SetTwoDigitYearStart( (USHORT)(nValue-99) );
+                    utl::MiscCfg().SetYear2000( (sal_Int32)(nValue-99) );
                     rSettings.SetMiscSettings( aMiscSettings );
                 }
             }
@@ -3155,7 +3167,8 @@ void WinSalFrame::Beep( SoundType eSoundType )
         MB_ICONQUESTION                 // SOUND_QUERY
     };
 
-    MessageBeep( aImplSoundTab[eSoundType] );
+    if( eSoundType != SOUND_DISABLE ) // don't beep on disable
+        MessageBeep( aImplSoundTab[eSoundType] );
 }
 
 // -----------------------------------------------------------------------
@@ -5429,7 +5442,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
             aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
-            delete pTextBuf;
+            delete [] pTextBuf;
         }
 
         aEvt.mnCursorPos = aEvt.maText.Len();
@@ -5455,7 +5468,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
             aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
-            delete pTextBuf;
+            delete [] pTextBuf;
 
             WIN_BYTE*   pAttrBuf = NULL;
             LONG        nAttrLen = ImmGetCompositionStringW( hIMC, GCS_COMPATTR, 0, 0 );
@@ -5491,7 +5504,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                 }
 
                 aEvt.mpTextAttr = pSalAttrAry;
-                delete pAttrBuf;
+                delete [] pAttrBuf;
             }
         }
 
@@ -5528,7 +5541,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         }
 
         if ( pSalAttrAry )
-            delete pSalAttrAry;
+            delete [] pSalAttrAry;
     }
 
     return !bDef;

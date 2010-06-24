@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: graph.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -430,44 +427,16 @@ BOOL Graphic::IsAnimated() const
 
 // ------------------------------------------------------------------------
 
-Bitmap Graphic::GetBitmap() const
+Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
 {
-    return GetBitmap( NULL );
+    return mpImpGraphic->ImplGetBitmap(rParameters);
 }
 
 // ------------------------------------------------------------------------
 
-BitmapEx Graphic::GetBitmapEx() const
+BitmapEx Graphic::GetBitmapEx(const GraphicConversionParameters& rParameters) const
 {
-    return GetBitmapEx( NULL );
-}
-
-// ------------------------------------------------------------------------
-
-Bitmap Graphic::GetBitmap( const Size* pSizePixel ) const
-{
-    return mpImpGraphic->ImplGetBitmap( pSizePixel, FALSE );
-}
-
-// ------------------------------------------------------------------------
-
-BitmapEx Graphic::GetBitmapEx( const Size* pSizePixel ) const
-{
-    return mpImpGraphic->ImplGetBitmapEx( pSizePixel, FALSE );
-}
-
-// ------------------------------------------------------------------------
-
-Bitmap Graphic::GetUnlimitedBitmap( const Size* pSizePixel ) const
-{
-    return mpImpGraphic->ImplGetBitmap( pSizePixel, TRUE ) ;
-}
-
-// ------------------------------------------------------------------------
-
-BitmapEx Graphic::GetUnlimitedBitmapEx( const Size* pSizePixel ) const
-{
-    return mpImpGraphic->ImplGetBitmapEx( pSizePixel, TRUE ) ;
+    return mpImpGraphic->ImplGetBitmapEx(rParameters);
 }
 
 // ------------------------------------------------------------------------
@@ -553,7 +522,7 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
     Size aRet;
 
     if( GRAPHIC_BITMAP == mpImpGraphic->ImplGetType() )
-        aRet = mpImpGraphic->ImplGetBitmapEx( NULL, FALSE ).GetSizePixel();
+        aRet = mpImpGraphic->ImplGetBitmapEx(GraphicConversionParameters()).GetSizePixel();
     else
         aRet = ( pRefDevice ? pRefDevice : Application::GetDefaultDevice() )->LogicToPixel( GetPrefSize(), GetPrefMapMode() );
 
@@ -803,7 +772,7 @@ void Graphic::SetLink( const GfxLink& rGfxLink )
 
 // ------------------------------------------------------------------------
 
-GfxLink Graphic::GetLink()
+GfxLink Graphic::GetLink() const
 {
     return mpImpGraphic->ImplGetLink();
 }

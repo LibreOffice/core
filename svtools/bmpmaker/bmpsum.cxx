@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bmpsum.cxx,v $
- * $Revision: 1.13.150.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/pngread.hxx>
 
-#include "svtools/solar.hrc"
+#include "svl/solar.hrc"
 
 #define EXIT_NOERROR        0x00000000
 #define EXIT_INVALIDFILE    0x00000001

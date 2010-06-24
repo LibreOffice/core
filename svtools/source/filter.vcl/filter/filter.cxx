@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filter.cxx,v $
- * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,7 @@
 #include "jpeg.hxx"
 #include "xbmread.hxx"
 #include "xpmread.hxx"
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include "strings.hrc"
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
@@ -74,8 +71,8 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 
 #include "SvFilterOptionsDialog.hxx"
@@ -995,7 +992,8 @@ namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
 // -----------------
 
 GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
-    bUseConfig  ( bConfig )
+    bUseConfig        ( bConfig ),
+    nExpGraphHint     ( 0 )
 {
     ImplInit();
 }
@@ -1038,8 +1036,13 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-        SvtPathOptions aPathOpt;
-        aFilterPath = aPathOpt.GetModulePath();
+#if defined WNT
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
+#else
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program"));
+#endif
+        rtl::Bootstrap::expandMacros(url); //TODO: detect failure
+        utl::LocalFileHelper::ConvertURLToPhysicalName(url, aFilterPath);
     }
 
     pErrorEx = new FilterErrorEx;
@@ -1676,6 +1679,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     USHORT nFormatCount = GetExportFormatCount();
 
     ResetLastError();
+    nExpGraphHint = 0;
 
     if( nFormat == GRFILTER_FORMAT_DONTKNOW )
     {
@@ -1848,8 +1852,10 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
             {
-                if( !ExportJPEG( rOStm, aGraphic, pFilterData ) )
+                bool bExportedGrayJPEG = false;
+                if( !ExportJPEG( rOStm, aGraphic, pFilterData, &bExportedGrayJPEG ) )
                     nStatus = GRFILTER_FORMATERROR;
+                nExpGraphHint = bExportedGrayJPEG ? GRFILTER_OUTHINT_GREY : 0;
 
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
@@ -2124,3 +2130,42 @@ GraphicFilter* GraphicFilter::GetGraphicFilter()
     }
     return pGraphicFilter;
 }
+
+int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
+                 Graphic& rGraphic, GraphicFilter* pFilter,
+                 USHORT* pDeterminedFormat )
+{
+    if ( !pFilter )
+        pFilter = GetGraphicFilter();
+
+    const USHORT nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
+                    ? pFilter->GetImportFormatNumber( rFilterName )
+                    : GRFILTER_FORMAT_DONTKNOW;
+
+    SvStream* pStream = NULL;
+    INetURLObject aURL( rPath );
+
+    if ( aURL.HasError() || INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartURL( rPath );
+    }
+    else if ( INET_PROT_FILE != aURL.GetProtocol() )
+    {
+        pStream = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
+    }
+
+    int nRes = GRFILTER_OK;
+    if ( !pStream )
+        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter, pDeterminedFormat );
+    else
+        nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream, nFilter, pDeterminedFormat );
+
+#ifdef DBG_UTIL
+    if( nRes )
+        DBG_WARNING2( "GrafikFehler [%d] - [%s]", nRes, rPath.GetBuffer() );
+#endif
+
+    return nRes;
+}
+

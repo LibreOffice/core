@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.26.28.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -90,6 +86,10 @@ ENVCFLAGS+=-DUSE_CDE
 CFLAGS+=-DXRENDER_LINK
 .ENDIF
 
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CFLAGS+=-DENABLE_GRAPHITE
+.ENDIF
+
 .ENDIF	# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
@@ -103,8 +103,8 @@ ALLTAR : $(MACOSXRC)
 XSALSETLIBNAME=$(DLLPRE)spa$(DLLPOSTFIX)$(DLLPOST)
 
 $(INCCOM)$/rtsname.hxx:
-    rm -f $(INCCOM)$/rtsname.hxx ; \
-    echo "#define _XSALSET_LIBNAME "\"$(XSALSETLIBNAME)\" > $(INCCOM)$/rtsname.hxx
+    @rm -f $(INCCOM)$/rtsname.hxx ; \
+        echo "#define _XSALSET_LIBNAME "\"$(XSALSETLIBNAME)\" > $(INCCOM)$/rtsname.hxx
 
 $(SLO)$/salpimpl.obj : $(INCCOM)$/rtsname.hxx
 $(SLO)$/salprnpsp.obj : $(INCCOM)$/rtsname.hxx

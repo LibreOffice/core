@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: start.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +53,8 @@
 
 #endif // UNX
 #include <rsctools.hxx>
+#include <rscerror.h>
+#include <sal/main.h>
 #include <tools/fsys.hxx>
 
 /*************** C O D E ************************************************/
@@ -111,25 +110,38 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 
     if( !fRspFile )
         aNewCmdL.Append( rsc_strdup( rPrePro.GetBuffer() ) );
-    for( i = 1; i < int(pCmdLine->GetCount() -1); i++ ){
-        if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-u", 2 )
-          || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-i", 2 )
-          || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-d", 2 ) )
+
+    bool bVerbose = false;
+    for( i = 1; i < int(pCmdLine->GetCount() -1); i++ )
+    {
+        if ( 0 == rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-verbose" ) )
+        {
+            bVerbose = true;
+            continue;
+        }
+        if  (   !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-u", 2 )
+            ||  !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-i", 2 )
+            ||  !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-d", 2 )
+            )
         {
             aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
         }
-    };
+    }
+
     aNewCmdL.Append( rsc_strdup( rInput.GetBuffer() ) );
     aNewCmdL.Append( rsc_strdup( rOutput.GetBuffer() ) );
     aNewCmdL.Append( (void *)0 );
 
-    printf( "Preprocessor commandline: " );
-    for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
+    if ( bVerbose )
     {
-        printf( " " );
-        printf( "%s", (const char *)pCmdL->GetEntry( i ) );
+        printf( "Preprocessor commandline: " );
+        for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
+        {
+            printf( " " );
+            printf( "%s", (const char *)pCmdL->GetEntry( i ) );
+        }
+        printf( "\n" );
     }
-    printf( "\n" );
 
     if( fRspFile )
     {
@@ -150,19 +162,22 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         }
         fclose( fRspFile );
 
-        printf( "Preprocessor startline: " );
-        for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
+        if ( bVerbose )
         {
-            printf( " " );
-            printf( "%s", (const char *)pCmdL->GetEntry( i ) );
+            printf( "Preprocessor startline: " );
+            for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
+            {
+                printf( " " );
+                printf( "%s", (const char *)pCmdL->GetEntry( i ) );
+            }
+            printf( "\n" );
         }
-        printf( "\n" );
     }
 
 #if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
 #elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), char **) (const char**)pCmdL->GetBlock() );
+    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
 #elif defined WTC
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char* const*)pCmdL->GetBlock() );
 #elif defined MTW
@@ -194,7 +209,6 @@ static BOOL CallRsc2( ByteString aRsc2Name,
                       ByteString aSrsName,
                       RscPtrPtr * pCmdLine )
 {
-    RscPtrPtr       aNewCmdL;       // Kommandozeile
     int             i, nExit;
     ByteString*     pString;
     ByteString      aRspFileName;   // Response-Datei
@@ -203,21 +217,21 @@ static BOOL CallRsc2( ByteString aRsc2Name,
     aRspFileName = ::GetTmpFileName();
     fRspFile = fopen( aRspFileName.GetBuffer(), "w" );
 
-    printf( "Rsc2 commandline: " );
-    aNewCmdL.Append( rsc_strdup( aRsc2Name.GetBuffer() ) );
-    printf( "%s", (const char *)aNewCmdL.GetEntry( aNewCmdL.GetCount() -1 ) );
-    printf( " " );
-    ByteString aTmpStr( '@' );
-    aTmpStr += aRspFileName;
-    aNewCmdL.Append( rsc_strdup( aTmpStr.GetBuffer() ) );
-    printf( "%s", (const char *)aNewCmdL.GetEntry( aNewCmdL.GetCount() -1 ) );
-    aNewCmdL.Append( (void *)0 );
-    printf( "\n" );
-
+    RscVerbosity eVerbosity = RscVerbosityNormal;
     if( fRspFile )
     {
         for( i = 1; i < (int)(pCmdLine->GetCount() -1); i++ )
         {
+            if ( !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-verbose" ) )
+            {
+                eVerbosity = RscVerbosityVerbose;
+                continue;
+            }
+            if ( !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-quiet" ) )
+            {
+                eVerbosity = RscVerbositySilent;
+                continue;
+            }
             if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-pp=", 4 )
@@ -261,6 +275,22 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         fclose( fRspFile );
     };
 
+    RscPtrPtr       aNewCmdL;       // Kommandozeile
+    aNewCmdL.Append( rsc_strdup( aRsc2Name.GetBuffer() ) );
+    ByteString aTmpStr( '@' );
+    aTmpStr += aRspFileName;
+    aNewCmdL.Append( rsc_strdup( aTmpStr.GetBuffer() ) );
+    aNewCmdL.Append( (void *)0 );
+
+    if ( eVerbosity >= RscVerbosityVerbose )
+    {
+        printf( "Rsc2 commandline: " );
+        printf( "%s", (const char *)aNewCmdL.GetEntry( 0 ) );
+        printf( " " );
+        printf( "%s", (const char *)aNewCmdL.GetEntry( 1 ) );
+        printf( "\n" );
+    }
+
 #if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
 #elif defined CSET
@@ -293,14 +323,8 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 |*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
-#if defined UNX || (defined OS2 && (defined CSET || defined GCC )) || defined WTC || defined MTW || defined ICC || defined(__MINGW32__)
-int main ( int argc, char ** argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-#else
-int cdecl main ( int argc, char ** argv)
-{
-#endif
-
     BOOL            bPrePro  = TRUE;
     BOOL            bResFile = TRUE;
     BOOL            bHelp    = FALSE;
@@ -327,8 +351,6 @@ int cdecl main ( int argc, char ** argv)
     aRsc2Name = aSolarbin;
     aRsc2Name += aDelim;
     aRsc2Name += ByteString("rsc2");
-
-    printf( "VCL Resource Compiler 3.0\n" );
 
     pStr = ::ResponseFile( &aCmdLine, argv, argc );
     if( pStr )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prtsetup.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +82,7 @@ class RTSDialog : public TabDialog
     DECL_LINK( ClickButton, Button* );
 
     // helper functions
-    void insertAllPPDValues( ListBox&, const ::psp::PPDKey* );
+    void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
     RTSDialog( const ::psp::PrinterInfo& rJobData, const String& rPrinter, bool bAllPages, Window* pParent = NULL );
     ~RTSDialog();

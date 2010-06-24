@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rscicpx.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1449,6 +1446,9 @@ RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
     nId = aNmTb.Put( "Value", VARNAME );
     pClassNumeric->SetVariable( nId, &aIdLong, NULL,
                                 0, NUMERICFORMATTER_VALUE );
+    nId = aNmTb.Put( "NoThousandSep", VARNAME );
+    pClassNumeric->SetVariable( nId, &aBool, NULL,
+                                0, NUMERICFORMATTER_NOTHOUSANDSEP );
 
     return pClassNumeric;
 }
@@ -1633,7 +1633,6 @@ RscTop * RscTypCont::InitClassNumericField( RscTop * pSuper )
     nId = aNmTb.Put( "SpinSize", VARNAME );
     pClassNumericField->SetVariable( nId, &aIdLong, NULL,
                                                                         0, NUMERICFIELD_SPINSIZE  );
-
     return pClassNumericField;
 }
 
@@ -2279,6 +2278,7 @@ RscTop * RscTypCont::InitClassTabControl( RscTop * pSuper,
                                        RSC_TABCONTROL_ITEMLIST );
 
         INS_WINBIT( pClassTabControl, SingleLine );
+        INS_WINBIT( pClassTabControl, DropDown );
     }
 
     return pClassTabControl;

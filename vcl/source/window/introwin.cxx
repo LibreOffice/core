@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: introwin.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +74,15 @@ void IntroWindow::SetBackgroundBitmap( const Bitmap& rBitmap )
     if( ! rBitmap.IsEmpty() )
     {
         SalBitmap* pBmp = rBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
+        ImplGetFrame()->SetBackgroundBitmap( pBmp );
+    }
+}
+
+void IntroWindow::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
+{
+    if( ! rBitmapEx.IsEmpty() )
+    {
+        SalBitmap* pBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
         ImplGetFrame()->SetBackgroundBitmap( pBmp );
     }
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabctrl.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +28,16 @@
 #ifndef _SV_TABCTRL_HXX
 #define _SV_TABCTRL_HXX
 
-#include <vcl/sv.h>
-#include <vcl/dllapi.h>
-#include <vcl/ctrl.hxx>
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
+#include "vcl/ctrl.hxx"
 
 struct ImplTabItem;
 struct ImplTabCtrlData;
 class ImplTabItemList;
 class TabPage;
 class PushButton;
+class ListBox;
 
 // --------------------
 // - TabControl-Types -
@@ -72,12 +70,13 @@ private:
     BOOL                mbRestoreUnqId;
     BOOL                mbSingleLine;
     BOOL                mbScroll;
-    BOOL                mbColored;
+    BOOL                mbRestoreSmartId;
     BOOL                mbSmallInvalidate;
     BOOL                mbExtraSpace;
     Link                maActivateHdl;
     Link                maDeactivateHdl;
 
+    using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( USHORT nId ) const;
     SAL_DLLPRIVATE void         ImplScrollBtnsColor();
@@ -93,7 +92,12 @@ private:
     SAL_DLLPRIVATE void         ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout = false, bool bFirstInGroup = false, bool bLastInGroup = false, bool bIsCurrentItem = false );
     SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
+    SAL_DLLPRIVATE long         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
+
     DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
+    DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
+    DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
+
 
 protected:
     using Window::ImplInit;
@@ -101,6 +105,8 @@ protected:
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
     virtual void                FillLayoutData() const;
+    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
 
 public:
@@ -124,6 +130,9 @@ public:
 
     virtual void        ActivatePage();
     virtual long        DeactivatePage();
+
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
+    void                SetMinimumSizePixel( const Size& );
 
     void                SetTabPageSizePixel( const Size& rSize );
     Size                GetTabPageSizePixel() const;

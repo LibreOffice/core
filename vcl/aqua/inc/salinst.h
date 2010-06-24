@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salinst.h,v $
- * $Revision: 1.20.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include "vos/mutex.hxx"
 #include "vos/thread.hxx"
 #include "vcl/salinst.hxx"
+#include "osl/conditn.h"
 
 #include "aquavcltypes.h"
 
@@ -99,6 +97,7 @@ public:
     int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
     oslMutex                                maUserEventListMutex;
+    oslCondition                            maWaitingYieldCond;
 
     typedef std::list<const ApplicationEvent*> AppEventList;
     static AppEventList aAppEventList;
@@ -143,8 +142,15 @@ public:
     virtual void                DestroyMenuItem( SalMenuItem* );
     virtual SalSession*         CreateSalSession();
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
     virtual void            SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
     virtual void            SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
+
+    // dtrans implementation
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
 
     static void handleAppDefinedEvent( NSEvent* pEvent );
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: menu.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,6 +90,8 @@ typedef USHORT MenuItemBits;
 #define MIB_POPUPSELECT         ((MenuItemBits)0x0020)
 // not in rsc/vclsrc.hxx because only a prelimitary solution
 #define MIB_NOSELECT            ((MenuItemBits)0x0040)
+#define MIB_ICON            ((MenuItemBits)0x0080)
+#define MIB_TEXT            ((MenuItemBits)0x0100)
 
 #define MENU_FLAG_NOAUTOMNEMONICS       0x0001
 #define MENU_FLAG_HIDEDISABLEDENTRIES   0x0002

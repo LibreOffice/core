@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,6 +48,7 @@ USE_DEFFILE=TRUE
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/awt.lib \
             $(SLB)$/tree.lib \
+            $(SLB)$/grid.lib \
             $(SLB)$/controls.lib \
             $(SLB)$/helper.lib\
             $(SLB)$/layout-core.lib \
@@ -78,22 +75,6 @@ DEF1NAME	=$(SHL1TARGET)
 DEF1DEPN	=$(LIB1TARGET)
 DEF1DES		=TK
 DEFLIB1NAME	=tk
-
-.IF "$(OS)"=="MACOSX" 
-
-# [ed] 6/16/02 Add in X libraries if we're building X
-
-.IF "$(GUIBASE)"=="unx"
-SHL1STDLIBS +=\
-    -lX11 -lXt -lXmu
-.ENDIF
-
-.ELSE
-.IF "$(GUI)"=="UNX"
-SHL1STDLIBS +=\
-    -lX11
-.ENDIF
-.ENDIF
 
 RESLIB1IMAGES=$(PRJ)$/source$/awt
 RES1FILELIST=$(SRS)$/awt.srs

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,12 +36,16 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+.IF "$(L10N_framework)"==""
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 SHL1OBJS=  \
     $(SLO)$/cow_wrapper_clients.obj     \
     $(SLO)$/test-cow_wrapper.obj	    \
+    $(SLO)$/test-vector_pool.obj	\
     $(SLO)$/test-heap_ptr.obj           \
     $(SLO)$/test-range.obj
 
@@ -57,6 +57,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = export.map
+SHL1RPATH = NONE
 
 # END ------------------------------------------------------------------
 
@@ -65,16 +66,12 @@ SHL1VERSIONMAP = export.map
 SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk
 
 # --- Enable test execution in normal build ------------------------
+.IF "$(L10N_framework)"==""
+.INCLUDE : _cppunit.mk
+.ENDIF 		# L10N_framework
 
-unittest : $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        @echo - start unit test on library $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        $(TESTSHL2) -sf $(mktmp ) $(SHL1TARGETN)
-
-ALLTAR : unittest

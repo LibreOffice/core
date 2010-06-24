@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: nativenumbersupplier.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -737,9 +734,8 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes(
                 break;
             }
         }
-        NativeNumberXmlAttributes att(rLocale, OUString(&NumberChar[number][1], 1),
+        return NativeNumberXmlAttributes(rLocale, OUString(&NumberChar[number][1], 1),
                                             OUString::createFromAscii(attType[type]));
-        return att;
 }
 
 static sal_Bool natNumIn(sal_Int16 num, sal_Int16 natnum[], sal_Int16 len)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: breakiterator_ctl.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,11 +42,14 @@ namespace com { namespace sun { namespace star { namespace i18n {
 /**
  * Constructor.
  */
-BreakIterator_CTL::BreakIterator_CTL()
+BreakIterator_CTL::BreakIterator_CTL() :
+    cachedText(),
+    nextCellIndex( NULL ),
+    previousCellIndex( NULL ),
+    cellIndexSize( 512 )
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_CTL";
     // to improve performance, alloc big enough memory in construct.
-    cellIndexSize = 512;
     nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
     previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
     memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));

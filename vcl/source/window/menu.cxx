@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: menu.cxx,v $
- * $Revision: 1.165 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include "vcl/salinst.hxx"
 #include "tools/list.hxx"
 #include "tools/debug.hxx"
+#include "tools/diagnose_ex.h"
 #include "vcl/svdata.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/mnemonic.hxx"
@@ -557,7 +555,7 @@ public:
 
     void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void    SetImages( long nMaxHeight = 0 );
+    void    SetImages( long nMaxHeight = 0, bool bForce = false );
 
     void    calcMinSize();
     Size    getMinSize();
@@ -591,7 +589,7 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         calcMinSize();
         SetBackground();
-        SetImages();
+        SetImages( 0, true);
     }
 }
 
@@ -625,7 +623,7 @@ Size DecoToolBox::getMinSize()
     return maMinSize;
 }
 
-void DecoToolBox::SetImages( long nMaxHeight )
+void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 {
     long border = getMinSize().Height() - maImage.GetSizePixel().Height();
 
@@ -635,13 +633,13 @@ void DecoToolBox::SetImages( long nMaxHeight )
     if( nMaxHeight < getMinSize().Height() )
         nMaxHeight = getMinSize().Height();
 
-    if( lastSize != nMaxHeight - border )
+    if( (lastSize != nMaxHeight - border) || bForce )
     {
         lastSize = nMaxHeight - border;
 
         Color       aEraseColor( 255, 255, 255, 255 );
         BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
-        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ?
+        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetHighContrastMode() ?
                               maImageHC.GetBitmapEx() : aBmpExDst );
 
         aEraseColor.SetTransparency( 255 );
@@ -2731,7 +2729,14 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 if ( pThisItemOnly && bHighlighted )
-                    pWin->SetTextColor( rSettings.GetMenuTextColor() );
+                {
+                    // This restores the normal menu or menu bar text
+                    // color for when it is no longer highlighted.
+            if ( bIsMenuBar )
+                pWin->SetTextColor( rSettings.GetMenuBarTextColor() );
+            else
+                pWin->SetTextColor( rSettings.GetMenuTextColor() );
+         }
             }
             if( bLayout )
             {
@@ -3460,6 +3465,9 @@ USHORT PopupMenu::Execute( Window* pExecWindow, const Point& rPopupPos )
 
 USHORT PopupMenu::Execute( Window* pExecWindow, const Rectangle& rRect, USHORT nFlags )
 {
+    ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
+
+
     ULONG nPopupModeFlags = 0;
     if ( nFlags & POPUPMENU_EXECUTE_DOWN )
         nPopupModeFlags = FLOATWIN_POPUPMODE_DOWN;
@@ -3480,11 +3488,6 @@ USHORT PopupMenu::Execute( Window* pExecWindow, const Rectangle& rRect, USHORT n
 
 USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupModeFlags, Menu* pSFrom, BOOL bPreSelectFirst )
 {
-
-    // #59614# Mit TH abgesprochen dass die ASSERTION raus kommt,
-    // weil es evtl. legitim ist...
-//  DBG_ASSERT( !PopupMenu::IsInExecute() || pSFrom, "PopupMenu::Execute() called in PopupMenu::Execute()" );
-
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
         return 0;
 
@@ -3660,7 +3663,15 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     {
         pWin->ImplAddDel( &aDelData );
 
+        ImplDelData aModalWinDel;
+        pW->ImplAddDel( &aModalWinDel );
+        pW->ImplIncModalCount();
+
         pWin->Execute();
+
+        DBG_ASSERT( ! aModalWinDel.IsDead(), "window for popup died, modal count incorrect !" );
+        if( ! aModalWinDel.IsDead() )
+            pW->ImplDecModalCount();
 
         if ( !aDelData.IsDelete() )
             pWin->ImplRemoveDel( &aDelData );
@@ -3784,7 +3795,10 @@ static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
             pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
     }
 
-    pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
+    if ( bMenuBar )
+        pWin->SetTextColor( rStyleSettings.GetMenuBarTextColor() );
+    else
+        pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
     pWin->SetTextFillColor();
     pWin->SetLineColor();
 }
@@ -5053,7 +5067,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
         aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
         aCloser.InsertItem( IID_DOCUMENTCLOSE,
-        GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
+        GetSettings().GetStyleSettings().GetHighContrastMode() ? aCloser.maImageHC : aCloser.maImage, 0 );
         aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
         aCloser.AddEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
         aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr ) ) );
@@ -5123,15 +5137,23 @@ IMPL_LINK( MenuBarWindow, CloserHdl, PushButton*, EMPTYARG )
         return 0;
 
     if( aCloser.GetCurItemId() == IID_DOCUMENTCLOSE )
-        return ((MenuBar*)pMenu)->GetCloserHdl().Call( pMenu );
-    std::map<USHORT,AddButtonEntry>::iterator it = m_aAddButtons.find( aCloser.GetCurItemId() );
-    if( it != m_aAddButtons.end() )
     {
-        MenuBar::MenuBarButtonCallbackArg aArg;
-        aArg.nId = it->first;
-        aArg.bHighlight = (aCloser.GetHighlightItemId() == it->first);
-        aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
-        return it->second.m_aSelectLink.Call( &aArg );
+        // #i106052# call close hdl asynchronously to ease handler implementation
+        // this avoids still being in the handler while the DecoToolBox already
+        // gets destroyed
+        Application::PostUserEvent( ((MenuBar*)pMenu)->GetCloserHdl(), pMenu );
+    }
+    else
+    {
+        std::map<USHORT,AddButtonEntry>::iterator it = m_aAddButtons.find( aCloser.GetCurItemId() );
+        if( it != m_aAddButtons.end() )
+        {
+            MenuBar::MenuBarButtonCallbackArg aArg;
+            aArg.nId = it->first;
+            aArg.bHighlight = (aCloser.GetHighlightItemId() == it->first);
+            aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+            return it->second.m_aSelectLink.Call( &aArg );
+        }
     }
     return 0;
 }
@@ -5557,6 +5579,17 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                     n = pMenu->GetItemCount()-1;
             }
 
+            // handling gtk like (aka mbOpenMenuOnF10)
+            // do not highlight an item when opening a sub menu
+            // unless there already was a higlighted sub menu item
+            bool bWasHighlight = false;
+            if( pActivePopup )
+            {
+                MenuFloatingWindow* pSubWindow = dynamic_cast<MenuFloatingWindow*>(pActivePopup->ImplGetWindow());
+                if( pSubWindow )
+                    bWasHighlight = (pSubWindow->GetHighlightedItem() != ITEMPOS_INVALID);
+            }
+
             USHORT nLoop = n;
 
             if( nCode == KEY_HOME )
@@ -5583,7 +5616,10 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                 MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
                 if ( ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
                 {
-                    ChangeHighlightItem( n, TRUE );
+                    BOOL bDoSelect = TRUE;
+                    if( ImplGetSVData()->maNWFData.mbOpenMenuOnF10 )
+                        bDoSelect = bWasHighlight;
+                    ChangeHighlightItem( n, bDoSelect );
                     break;
                 }
             } while ( n != nLoop );
@@ -5694,7 +5730,7 @@ void MenuBarWindow::Paint( const Rectangle& )
 
     // in high contrast mode draw a separating line on the lower edge
     if( ! IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&
-        GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+        GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         Push( PUSH_LINECOLOR | PUSH_MAPMODE );
         SetLineColor( Color( COL_WHITE ) );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fileview.cxx,v $
- * $Revision: 1.73.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,8 +75,8 @@
 #include <vcl/sound.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/urlfilter.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/urlfilter.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -167,7 +164,7 @@ namespace
 
 static sal_Bool isHighContrast( const Window* _pView )
 {
-    return _pView->GetDisplayBackground().GetColor().IsDark();
+    return _pView->GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // -----------------------------------------------------------------------

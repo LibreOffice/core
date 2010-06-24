@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocontrol.cxx,v $
- * $Revision: 1.54.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1050,10 +1047,10 @@ void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
 
     if ( xDrawPeerView.is() )
     {
-    Reference< XVclWindowPeer > xWindowPeer;
-    xWindowPeer.set( xDrawPeer, UNO_QUERY );
-    if ( xWindowPeer.is() )
-        xWindowPeer->setDesignMode( mbDesignMode );
+        Reference< XVclWindowPeer > xWindowPeer;
+        xWindowPeer.set( xDrawPeer, UNO_QUERY );
+        if ( xWindowPeer.is() )
+            xWindowPeer->setDesignMode( mbDesignMode );
         xDrawPeerView->draw( x, y );
     }
 
@@ -1536,5 +1533,57 @@ void SAL_CALL UnoControl::addModeChangeApproveListener( const Reference< XModeCh
 void SAL_CALL UnoControl::removeModeChangeApproveListener( const Reference< XModeChangeApproveListener >&  ) throw (NoSupportException, RuntimeException)
 {
     throw NoSupportException( );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+awt::Point SAL_CALL UnoControl::convertPointToLogic( const awt::Point& i_Point, ::sal_Int16 i_TargetUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertPointToLogic( i_Point, i_TargetUnit );
+    return awt::Point( );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+awt::Point SAL_CALL UnoControl::convertPointToPixel( const awt::Point& i_Point, ::sal_Int16 i_SourceUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertPointToPixel( i_Point, i_SourceUnit );
+    return awt::Point( );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+awt::Size SAL_CALL UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sal_Int16 i_TargetUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertSizeToLogic( i_Size, i_TargetUnit );
+    return awt::Size( );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sal_Int16 i_SourceUnit ) throw (IllegalArgumentException, RuntimeException)
+{
+    Reference< XUnitConversion > xPeerConversion;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerConversion = xPeerConversion.query( getPeer() );
+    }
+    if ( xPeerConversion.is() )
+        return xPeerConversion->convertSizeToPixel( i_Size, i_SourceUnit );
+    return awt::Size( );
 }
 

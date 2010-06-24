@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: treecontrolpeer.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <toolkit/helper/property.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
 #include <treecontrolpeer.hxx>
@@ -211,7 +209,9 @@ void TreeControlPeer::removeEntry( UnoTreeListEntry* pEntry )
     {
         TreeNodeMap::iterator aIter( mpTreeNodeMap->find( pEntry->mxNode ) );
         if( aIter != mpTreeNodeMap->end() )
+        {
             mpTreeNodeMap->erase( aIter );
+        }
     }
 }
 
@@ -283,13 +283,13 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
         pEntry->AddItem( pUnoItem );
 
+        mpTreeImpl->insert( pEntry, pParent, nPos );
+
         if( msDefaultExpandedGraphicURL.getLength() )
             mpTreeImpl->SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
 
         if( msDefaultCollapsedGraphicURL.getLength() )
             mpTreeImpl->SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
-
-        mpTreeImpl->insert( pEntry, pParent, nPos );
 
         updateEntry( pEntry );
     }
@@ -914,6 +914,19 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_
         xNode = pEntry->mxNode;
 
     return xNode;
+}
+
+// -------------------------------------------------------------------
+
+awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode >& i_Node ) throw (IllegalArgumentException, RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
+    UnoTreeListEntry* pEntry = getEntry( i_Node, true );
+
+    ::Rectangle aEntryRect( rTree.GetFocusRect( pEntry, rTree.GetEntryPosition( pEntry ).Y() ) );
+    return VCLUnoHelper::ConvertToAWTRect( aEntryRect );
 }
 
 // -------------------------------------------------------------------

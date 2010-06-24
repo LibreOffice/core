@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lazydelete.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +81,9 @@ template<> bool LazyDeletor<Menu>::is_less( Menu* left, Menu* right )
 
 DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData && pSVData->mpDeinitDeleteList != NULL )
+        pSVData->mpDeinitDeleteList->remove( this );
 }
 
 void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )

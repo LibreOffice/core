@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.2.20.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,9 +31,6 @@ PRJNAME = comphelper
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
-
-
-.IF "$(BUILD_QADEVOOO)" == "YES"
 
 #----- compile .java files -----------------------------------------
 
@@ -67,8 +60,6 @@ RUNNER_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,
 
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex $(RUNNER_APPEXECCOMMAND)
 
-.END    # "$(BUILD_QADEVOOO)" == "YES"
-
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
@@ -82,7 +73,6 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
-.IF "$(BUILD_QADEVOOO)" == "YES"
 show_targets:
     +@java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s#.java##:s#./#complex.#))
 
@@ -91,11 +81,3 @@ run:
 
 run_%:
     +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
-
-.ELSE
-run: show_targets
-
-show_targets:
-    +@echo "Built without qadevOOo, no QA tests"
-
-.ENDIF

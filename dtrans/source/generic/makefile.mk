@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +36,7 @@ COMP1TYPELIST=dtrans
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 
 SLOFILES= \
@@ -50,7 +46,7 @@ SLOFILES= \
 
 SHL1TARGET= dtrans
 
-SHL1VERSIONMAP= exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1STDLIBS= \
         $(SALLIB)	\
@@ -66,5 +62,6 @@ DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :	target.mk

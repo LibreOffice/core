@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2172,6 +2169,7 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetDeactiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVEBORDER, 0 ) ) );
         aStyleSettings.SetMenuColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENU, 0 ) ) );
         aStyleSettings.SetMenuTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
+        aStyleSettings.SetMenuBarTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
     }
     aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetRadioCheckTextColor( aStyleSettings.GetButtonTextColor() );
@@ -3034,10 +3032,8 @@ static void ImplHandleMoveMsg( HWND hWnd)
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleSizeMsg( HWND hWnd, MPARAM nMP2 )
+static void ImplHandleSizeMsg( HWND hWnd, MPARAM nMP2 )
 {
-    long nRet;
-
         Os2SalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
@@ -3049,11 +3045,10 @@ static long ImplHandleSizeMsg( HWND hWnd, MPARAM nMP2 )
                 pFrame->mpGraphics->mnHeight = (int)SHORT2FROMMP(nMP2);
             // Status merken
             ImplSaveFrameState( pFrame );
-            nRet = pFrame->CallCallback( SALEVENT_RESIZE, 0 );
+            pFrame->CallCallback( SALEVENT_RESIZE, 0 );
             if ( WinIsWindowVisible( pFrame->mhWndFrame ) && !pFrame->mbInShow )
                 WinUpdateWindow( pFrame->mhWndClient );
         }
-    return nRet;
 }
 
 // -----------------------------------------------------------------------
@@ -3319,7 +3314,7 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                 if ( pBuf )
                 {
                     aEvt.maText = XubString( pBuf, (USHORT)nBufLen );
-                    delete pBuf;
+                    delete [] pBuf;
                     if ( pAttrBuf )
                     {
                         USHORT nTextLen = aEvt.maText.Len();
@@ -3345,7 +3340,7 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                             }
                             aEvt.mpTextAttr = pSalAttrAry;
                         }
-                        delete pAttrBuf;
+                        delete [] pAttrBuf;
                     }
                     if ( bLastCursor )
                         aEvt.mnCursorPos = aEvt.maText.Len();
@@ -3357,7 +3352,7 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                 // wieder zerstoeren
                 pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
                 if ( pSalAttrAry )
-                    delete pSalAttrAry;
+                    delete [] pSalAttrAry;
             }
             else
                 pIMEData->mpReleaseIME( hWnd, hIMI );

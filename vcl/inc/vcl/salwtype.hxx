@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salwtype.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,6 +180,11 @@ struct SalWheelMouseEvent
     ULONG           mnScrollLines;  // Aktuelle Anzahl zu scrollende Zeilen
     USHORT          mnCode;         // SV-ModifierCode (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)
     BOOL            mbHorz;         // Horizontal
+    BOOL            mbDeltaIsPixel; // delta value is a pixel value (on mac)
+
+    SalWheelMouseEvent()
+    : mnTime( 0 ), mnX( 0 ), mnY( 0 ), mnDelta( 0 ), mnNotchDelta( 0 ), mnScrollLines( 0 ), mnCode( 0 ), mbHorz( FALSE ), mbDeltaIsPixel( FALSE )
+    {}
 };
 
 // MOUSEACTIVATE

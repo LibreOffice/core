@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: propertycontainerhelper.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@ namespace comphelper
 //.........................................................................
 
 // infos about one single property
-struct COMPHELPER_DLLPRIVATE PropertyDescription
+struct COMPHELPER_DLLPUBLIC PropertyDescription
 {
     // the possibilities where a property holding object may be located
     enum LocationType

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclevent.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,29 @@
 #include "vcl/vclevent.hxx"
 #include "vcl/svdata.hxx"
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::accessibility::XAccessible;
+
 TYPEINIT0(VclSimpleEvent);
 TYPEINIT1(VclWindowEvent, VclSimpleEvent);
 TYPEINIT1(VclMenuEvent, VclSimpleEvent);
+
+VclAccessibleEvent::VclAccessibleEvent( ULONG n, const Reference<XAccessible>& rxAccessible ) :
+    VclSimpleEvent(n),
+    mxAccessible(rxAccessible)
+{
+}
+
+VclAccessibleEvent::~VclAccessibleEvent()
+{
+}
+
+Reference<XAccessible> VclAccessibleEvent::GetAccessible() const
+{
+    return mxAccessible;
+}
 
 void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
 {
@@ -80,3 +97,55 @@ BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
     }
     return bProcessed;
 }
+
+VclEventListeners2::VclEventListeners2()
+{
+}
+
+VclEventListeners2::~VclEventListeners2()
+{
+}
+
+void VclEventListeners2::addListener( const Link& i_rLink )
+{
+    // ensure uniqueness
+    for( std::list< Link >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    {
+        if( *it == i_rLink )
+            return;
+    }
+    m_aListeners.push_back( i_rLink );
+}
+
+void VclEventListeners2::removeListener( const Link& i_rLink )
+{
+    size_t n = m_aIterators.size();
+    for( size_t i = 0; i < n; i++ )
+    {
+        if( m_aIterators[i].m_aIt != m_aListeners.end() && *m_aIterators[i].m_aIt == i_rLink )
+        {
+            m_aIterators[i].m_bWasInvalidated = true;
+            ++m_aIterators[i].m_aIt;
+        }
+    }
+    m_aListeners.remove( i_rLink );
+}
+
+void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
+{
+    vcl::DeletionListener aDel( this );
+
+    m_aIterators.push_back(ListenerIt(m_aListeners.begin()));
+    size_t nIndex = m_aIterators.size() - 1;
+    while( ! aDel.isDeleted() && m_aIterators[ nIndex ].m_aIt != m_aListeners.end() )
+    {
+        m_aIterators[ nIndex ].m_aIt->Call( i_pEvent );
+        if( m_aIterators[ nIndex ].m_bWasInvalidated )
+            // check if the current element was removed and the iterator increased in the meantime
+            m_aIterators[ nIndex ].m_bWasInvalidated = false;
+        else
+            ++m_aIterators[ nIndex ].m_aIt;
+    }
+    m_aIterators.pop_back();
+}
+

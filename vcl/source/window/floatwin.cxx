@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: floatwin.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,6 +236,13 @@ FloatingWindow::~FloatingWindow()
         Application::RemoveUserEvent( mnPostId );
 
     delete mpImplData;
+}
+
+// -----------------------------------------------------------------------
+
+Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, ULONG nFlags, USHORT& rArrangeIndex )
+{
+    return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
 }
 
 // -----------------------------------------------------------------------
@@ -676,8 +680,6 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     // avoid close on focus change for decorated floating windows only
     if( mpWindowImpl->mbFrame && (GetStyle() & WB_MOVEABLE) )
         nFlags |= FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
-    else
-        nFlags &= ~FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // #102010# For debugging Accessibility
     static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
@@ -751,8 +753,9 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
 //        FLOATWIN_POPUPMODE_NOMOUSECLOSE       |
         FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |
 //        FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE   |   // #105968# floating toolboxes should close when clicked in (parent's) float rect
-        FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE   |
-        FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
+        FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE;
+//          |      FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
+
 /*
  *  FLOATWIN_POPUPMODE_NOKEYCLOSE       |
  *  don't set since it disables closing floaters with escape

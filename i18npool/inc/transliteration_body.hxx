@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transliteration_body.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +87,31 @@ class Transliteration_casemapping : public Transliteration_body
 public:
     Transliteration_casemapping();
     void SAL_CALL setMappingType(const sal_uInt8 rMappingType, const com::sun::star::lang::Locale& rLocale );
+};
+#endif
+
+
+#if defined( TRANSLITERATION_ALL )
+class Transliteration_togglecase : public Transliteration_body
+{
+public:
+    Transliteration_togglecase();
+};
+
+class Transliteration_titlecase : public Transliteration_body
+{
+public:
+    Transliteration_titlecase();
+
+    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
+};
+
+class Transliteration_sentencecase : public Transliteration_body
+{
+public:
+    Transliteration_sentencecase();
+
+    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
 };
 #endif
 

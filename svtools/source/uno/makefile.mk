@@ -1,14 +1,10 @@
-
+#*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,21 +38,23 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SRS1NAME=	uno
-SRC1FILES=  unoifac2.src
-
 SLOFILES= \
-            $(SLO)$/unoiface.obj \
-            $(SLO)$/unoevent.obj \
-            $(SLO)$/unoimap.obj \
-            $(SLO)$/toolboxcontroller.obj \
+            $(SLO)$/addrtempuno.obj \
+            $(SLO)$/contextmenuhelper.obj \
             $(SLO)$/framestatuslistener.obj \
-            $(SLO)$/statusbarcontroller.obj \
-            $(SLO)$/genericunodialog.obj \
             $(SLO)$/generictoolboxcontroller.obj \
+            $(SLO)$/genericunodialog.obj \
+            $(SLO)$/miscservices.obj\
+            $(SLO)$/statusbarcontroller.obj \
+            $(SLO)$/toolboxcontroller.obj \
             $(SLO)$/treecontrolpeer.obj \
-            $(SLO)$/registerservices.obj\
-            $(SLO)$/contextmenuhelper.obj
+            $(SLO)$/unocontroltablemodel.obj \
+            $(SLO)$/unoevent.obj \
+            $(SLO)$/unoiface.obj \
+            $(SLO)$/unoimap.obj \
+            $(SLO)$/svtxgridcontrol.obj \
+            $(SLO)$/popupwindowcontroller.obj \
+            $(SLO)$/popupmenucontrollerbase.obj
 
 # --- Targets ------------------------------------------------------
 

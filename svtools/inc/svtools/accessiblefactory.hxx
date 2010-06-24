@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessiblefactory.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #endif
 #include "AccessibleBrowseBoxObjType.hxx"
 #include "accessibletableprovider.hxx"
+#include "accessibletable.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace accessibility {
@@ -62,6 +60,10 @@ class TextView;
 namespace svt
 {
 //........................................................................
+
+    class ToolPanelDeck;
+    class IToolPanelDeck;
+    class PanelTabBar;
 
     /** a function which is able to create a factory for the standard Accessible/Context
         components needed for standard toolkit controls
@@ -88,6 +90,11 @@ namespace svt
             createAccessibleBrowseBox(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
                 IAccessibleTableProvider& _rBrowseBox
+            ) const = 0;
+        virtual table::IAccessibleTableControl*
+            createAccessibleTableControl(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+                table::IAccessibleTable& _rTable
             ) const = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -159,6 +166,18 @@ namespace svt
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos
             ) const = 0;
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleToolPanelDeck(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+                ::svt::ToolPanelDeck& i_rPanelDeck
+            ) = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleToolPanelTabBar(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+                ::svt::IToolPanelDeck& i_rPanelDeck,
+                ::svt::PanelTabBar& i_rTabBar
+            ) = 0;
     };
 
 //........................................................................

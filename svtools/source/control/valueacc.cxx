@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: valueacc.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/valueset.hxx>
 #include "valueimp.hxx"
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
@@ -92,7 +90,8 @@ void ValueSetItem::ClearAccessible()
 ValueSetAcc::ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled ) :
     ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent ),
-    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
+    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled ),
+    mbIsFocused(false)
 {
 }
 
@@ -164,6 +163,35 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
     {
         return NULL;
     }
+}
+
+
+// -----------------------------------------------------------------------------
+
+void ValueSetAcc::GetFocus (void)
+{
+    mbIsFocused = true;
+
+    // Boradcast the state change.
+    ::com::sun::star::uno::Any aOldState, aNewState;
+    aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    FireAccessibleEvent(
+        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        aOldState, aNewState);
+}
+
+// -----------------------------------------------------------------------------
+
+void ValueSetAcc::LoseFocus (void)
+{
+    mbIsFocused = false;
+
+    // Boradcast the state change.
+    ::com::sun::star::uno::Any aOldState, aNewState;
+    aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    FireAccessibleEvent(
+        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        aOldState, aNewState);
 }
 
 // -----------------------------------------------------------------------------
@@ -321,6 +349,9 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAc
     pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
     if ( !mbIsTransientChildrenDisabled )
         pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
+    pStateSet->AddState (accessibility::AccessibleStateType::FOCUSABLE);
+    if (mbIsFocused)
+        pStateSet->AddState (accessibility::AccessibleStateType::FOCUSED);
 
     return pStateSet;
 }
@@ -945,10 +976,7 @@ sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
 ::rtl::OUString SAL_CALL ValueItemAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
-    String              aRet( RTL_CONSTASCII_USTRINGPARAM( "ValueSet item" ) );
-
-    return aRet;
+    return ::rtl::OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -1208,7 +1236,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
     throw (uno::RuntimeException)
 {
     UINT32 nColor;
-    if (mpParent->meType == VALUESETITEM_COLOR)
+    if (mpParent && mpParent->meType == VALUESETITEM_COLOR)
         nColor = mpParent->maColor.GetColor();
     else
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();

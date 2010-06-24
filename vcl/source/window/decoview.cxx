@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: decoview.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1356,3 +1353,36 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, USHORT nStyle )
 
     return aRect;
 }
+
+// -----------------------------------------------------------------------
+
+void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical )
+{
+    Point aStart( rStart ), aStop( rStop );
+    const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
+
+    mpOutDev->Push( PUSH_LINECOLOR );
+    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+        mpOutDev->SetLineColor( Color( COL_BLACK ) );
+    else
+        mpOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
+
+    mpOutDev->DrawLine( aStart, aStop );
+    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    {
+        mpOutDev->SetLineColor( rStyleSettings.GetLightColor() );
+        if( bVertical )
+        {
+            aStart.X()++;
+            aStop.X()++;
+        }
+        else
+        {
+            aStart.Y()++;
+            aStop.Y()++;
+        }
+        mpOutDev->DrawLine( aStart, aStop );
+    }
+    mpOutDev->Pop();
+}
+

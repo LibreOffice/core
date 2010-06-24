@@ -1,8 +1,8 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -50,7 +50,9 @@
 #include "basegfx/polygon/b2dpolygonclipper.hxx"
 #include "basegfx/polygon/b2dlinegeometry.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+#include "basegfx/matrix/b2dhommatrixtools.hxx"
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
+#include "basegfx/polygon/b2dtrapezoid.hxx"
 
 #include <vector>
 #include <queue>
@@ -119,6 +121,12 @@ X11SalGraphics::X11SalGraphics()
     nTextPixel_         = 0;
     nTextColor_         = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
 
+#ifdef ENABLE_GRAPHITE
+    // check if graphite fonts have been disabled
+    static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
+    bDisableGraphite_       = pDisableGraphiteStr ? (pDisableGraphiteStr[0]!='0') : FALSE;
+#endif
+
     pBrushGC_           = NULL;
     nBrushPixel_            = 0;
     nBrushColor_        = MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ); // White
@@ -160,10 +168,10 @@ X11SalGraphics::~X11SalGraphics()
 void X11SalGraphics::freeResources()
 {
     Display *pDisplay = GetXDisplay();
-    
+
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
     if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
-    
+
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
     if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
@@ -510,7 +518,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     const SalDisplay *pDisplay = GetDisplay();
-    
+
     rDPIX = pDisplay->GetResolution().A();
     rDPIY = pDisplay->GetResolution().B();
     if( !pDisplay->GetExactResolution() && rDPIY < 96 )
@@ -523,12 +531,12 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         rDPIX = Divide( rDPIX * 200, rDPIY );
         rDPIY = 200;
     }
-    
+
     // #i12705# equalize x- and y-resolution if they are close enough
     if( rDPIX != rDPIY )
     {
         // different x- and y- resolutions are usually artifacts of
-        // a wrongly calculated screen size. 
+        // a wrongly calculated screen size.
         //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
         {
 #ifdef DEBUG
@@ -582,7 +590,7 @@ void X11SalGraphics::ResetClipRegion()
         bInvert50GC_    = FALSE;
         bStippleGC_     = FALSE;
         bTrackingGC_    = FALSE;
-        
+
         XDestroyRegion( pClipRegion_ );
         pClipRegion_    = NULL;
     }
@@ -607,9 +615,9 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
     aRect.y         = (short)nY;
     aRect.width     = (unsigned short)nDX;
     aRect.height    = (unsigned short)nDY;
-    
+
     XUnionRectWithRegion( &aRect, pClipRegion_, pClipRegion_ );
-    
+
     return TRUE;
 }
 
@@ -632,7 +640,7 @@ void X11SalGraphics::EndSetClipRegion()
     bInvert50GC_    = FALSE;
     bStippleGC_     = FALSE;
     bTrackingGC_    = FALSE;
-    
+
     if( XEmptyRegion( pClipRegion_ ) )
     {
         XDestroyRegion( pClipRegion_ );
@@ -771,7 +779,7 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     if( nSalColor != SALCOLOR_NONE )
     {
         Display *pDisplay = GetXDisplay();
-        
+
         if( (nPenColor_ == SALCOLOR_NONE) && !bPenGC_ )
         {
             SetLineColor( nSalColor );
@@ -782,12 +790,12 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
         else
         {
             GC pGC = SelectPen();
-            
+
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, GetPixel( nSalColor ) );
-            
+
             XDrawPoint( pDisplay, GetDrawable(), pGC, nX, nY );
-            
+
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, nPenPixel_ );
         }
@@ -842,7 +850,7 @@ void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry, bool b
     if( nPenColor_ != 0xFFFFFFFF )
     {
         SalPolyLine Points( nPoints, pPtAry );
-        
+
         DrawLines( nPoints, Points, SelectPen(), bClose );
     }
 }
@@ -852,7 +860,7 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
         return;
-    
+
     if( nPoints < 3 )
     {
         if( !bXORMode_ )
@@ -865,9 +873,9 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
         }
         return;
     }
-    
+
     SalPolyLine Points( nPoints, pPtAry );
-    
+
     nPoints++;
 
     /* WORKAROUND: some Xservers (Xorg, VIA chipset in this case)
@@ -901,15 +909,15 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
                 if( Points[i].x < 0 )
                     Points[i].x = 0;
         }
-    }       
-    
+    }
+
     if( nBrushColor_ != SALCOLOR_NONE )
         XFillPolygon( GetXDisplay(),
                       GetDrawable(),
                       SelectBrush(),
                       &Points[0], nPoints,
                       Complex, CoordModeOrigin );
-    
+
     if( nPenColor_ != 0xFFFFFFFF )
         DrawLines( nPoints, Points, SelectPen(), true );
 }
@@ -923,7 +931,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
     {
         ULONG       i, n;
         XLIB_Region pXRegA  = NULL;
-        
+
         for( i = 0; i < nPoly; i++ ) {
             n = pPoints[i];
             SalPolyLine Points( n, pPtAry[i] );
@@ -939,24 +947,24 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                 }
             }
         }
-        
+
         if( pXRegA )
         {
             XRectangle aXRect;
             XClipBox( pXRegA, &aXRect );
-            
+
             GC pGC = SelectBrush();
             SetClipRegion( pGC, pXRegA ); // ??? doppelt
             XDestroyRegion( pXRegA );
             bBrushGC_ = FALSE;
-            
+
             XFillRectangle( GetXDisplay(),
                             GetDrawable(),
                             pGC,
                             aXRect.x, aXRect.y, aXRect.width, aXRect.height );
         }
    }
-        
+
    if( nPenColor_ != SALCOLOR_NONE )
        for( ULONG i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i], true );
@@ -991,7 +999,7 @@ void X11SalGraphics::invert( ULONG nPoints,
                              SalInvert nFlags )
 {
     SalPolyLine Points ( nPoints, pPtAry );
-    
+
     GC pGC;
     if( SAL_INVERT_50 & nFlags )
         pGC = GetInvert50GC();
@@ -1000,7 +1008,7 @@ void X11SalGraphics::invert( ULONG nPoints,
             pGC = GetTrackingGC();
         else
             pGC = GetInvertGC();
-    
+
     if( SAL_INVERT_TRACKFRAME & nFlags )
         DrawLines ( nPoints, Points, pGC, true );
     else
@@ -1022,11 +1030,12 @@ BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,ULONG )
 
 XID X11SalGraphics::GetXRenderPicture()
 {
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+
     if( !m_aRenderPicture )
     {
         // check xrender support for matching visual
         // find a XRenderPictFormat compatible with the Drawable
-        XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
         XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
         if( !pVisualFormat )
         {
@@ -1047,7 +1056,15 @@ XID X11SalGraphics::GetXRenderPicture()
     // TODO: avoid clipping if already set correctly
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
         rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    else
 #endif
+    {
+        // reset clip region
+        // TODO: avoid clip reset if already done
+        XRenderPictureAttributes aAttr;
+        aAttr.clip_mask = None;
+        rRenderPeer.ChangePicture( m_aRenderPicture, CPClipMask, &aAttr );
+    }
 
     return m_aRenderPicture;
 }
@@ -1071,110 +1088,12 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-// B2DPolygon support methods
-
-namespace { // anonymous namespace to prevent export
-// the methods and structures here are used by the
-// B2DPolyPolygon->RenderTrapezoid conversion algorithm
-
-// compare two line segments
-// assumption: both segments point downward
-// assumption: they must have at least some y-overlap
-// assumption: rA.p1.y <= rB.p1.y
-bool IsLeftOf( const XLineFixed& rA, const XLineFixed& rB )
-{
-    bool bAbove = (rA.p1.y <= rB.p1.y);
-    const XLineFixed& rU = bAbove ? rA : rB;
-    const XLineFixed& rL = bAbove ? rB : rA;
-
-    const XFixed aXDiff = rU.p2.x - rU.p1.x;
-    const XFixed aYDiff = rU.p2.y - rU.p1.y;
-
-    if( (rU.p1.y != rL.p1.y) || (rU.p1.x != rL.p1.x) )
-    {
-        const sal_Int64 n1 = (sal_Int64)aXDiff * (rL.p1.y - rU.p1.y);
-        const sal_Int64 n2 = (sal_Int64)aYDiff * (rL.p1.x - rU.p1.x);
-        if( n1 != n2 )
-            return ((n1 < n2) == bAbove);
-    }
-
-    if( (rU.p2.y != rL.p2.y) || (rU.p2.x != rL.p2.x) )
-    {
-        const sal_Int64 n3 = (sal_Int64)aXDiff * (rL.p2.y - rU.p1.y);
-        const sal_Int64 n4 = (sal_Int64)aYDiff * (rL.p2.x - rU.p1.x);
-        if( n3 != n4 )
-            return ((n3 < n4) == bAbove);
-    }
-
-    // both segments overlap
-    return false;
-}
-
-struct HalfTrapezoid
-{
-    // assumptions:
-    //    maLine.p1.y <= mnY < maLine.p2.y
-    XLineFixed  maLine;
-    XFixed      mnY;
-};
-
-struct HalfTrapCompare
-{
-    bool operator()( const HalfTrapezoid& rA, const HalfTrapezoid& rB ) const
-    {
-        bool bIsTopLeft = false;
-        if( rA.mnY != rB.mnY )  // sort top-first if possible
-            bIsTopLeft = (rA.mnY < rB.mnY);
-        else                    // else sort left-first
-            bIsTopLeft = IsLeftOf( rA.maLine, rB.maLine );
-        // adjust to priority_queue sorting convention
-        return !bIsTopLeft;
-    }
-};
-
-typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueueBase;
-// we need a priority queue with a reserve() to prevent countless reallocations
-class HTQueue
-:   public HTQueueBase
-{
-public:
-    void    reserve( size_t n ) { c.reserve( n ); }
-    int     capacity() { return c.capacity(); }
-};
-
-typedef std::vector<XTrapezoid> TrapezoidVector;
-
-class TrapezoidXCompare
-{
-    const TrapezoidVector& mrVector;
-public:
-    TrapezoidXCompare( const TrapezoidVector& rVector )
-        : mrVector( rVector ) {}
-    bool operator()( int nA, int nB ) const
-        { return IsLeftOf( mrVector[nA].left, mrVector[nB].left ); }
-};
-
-typedef std::multiset< int, TrapezoidXCompare > ActiveTrapSet;
-
-class TrapezoidYCompare
-{
-    const TrapezoidVector& mrVector;
-public:
-    TrapezoidYCompare( const TrapezoidVector& rVector )
-        : mrVector( rVector ) {}
-    bool operator()( int nA, int nB ) const
-        { return (mrVector[nA].bottom < mrVector[nB].bottom); }
-};
-
-typedef std::multiset< int, TrapezoidYCompare > VerticalTrapSet;
-} // end of anonymous namespace
-
 // draw a poly-polygon
-bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency)
 {
     // nothing to do for empty polypolygons
-    const int nPolygonCount = rPolyPoly.count();
-    if( nPolygonCount <= 0 )
+    const int nOrigPolyCount = rOrigPolyPoly.count();
+    if( nOrigPolyCount <= 0 )
         return TRUE;
 
     // nothing to do if everything is transparent
@@ -1192,262 +1111,66 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     if( pRenderEnv )
         return FALSE;
 
-    // check xrender support for trapezoids
-    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-    if( !rRenderPeer.AreTrapezoidsSupported() )
-        return FALSE;
-    Picture aDstPic = GetXRenderPicture();
-    // check xrender support for this drawable
-    if( !aDstPic )
-        return FALSE;
+    // snap to raster if requested
+    basegfx::B2DPolyPolygon aPolyPoly = rOrigPolyPoly;
+    const bool bSnapToRaster = !getAntiAliasB2DDraw();
+    if( bSnapToRaster )
+        aPolyPoly = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges( aPolyPoly );
 
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
-    const bool bNeedViewClip = !aPolyRange.isInside( aViewRange );
-    if( !aPolyRange.overlaps( aViewRange ) )
+    aPolyPoly = basegfx::tools::clipPolyPolygonOnRange( aPolyPoly, aViewRange, true, false );
+    if( !aPolyPoly.count() )
         return true;
 
-    // convert the polypolygon to trapezoids
+    // tesselate the polypolygon into trapezoids
+    basegfx::B2DTrapezoidVector aB2DTrapVector;
+    basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aPolyPoly );
+    const int nTrapCount = aB2DTrapVector.size();
+    const bool bDrawn = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
+    return bDrawn;
+}
 
-    // first convert the B2DPolyPolygon to HalfTrapezoids
-    // #i100922# try to prevent priority-queue reallocations by reservering enough
-    int nHTQueueReserve = 0;
-    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTraps, int nTrapCount, double fTransparency )
+{
+    if( nTrapCount <= 0 )
+        return true;
+
+    Picture aDstPic = GetXRenderPicture();
+    // check xrender support for this drawable
+    if( !aDstPic )
+        return false;
+
+     // convert the B2DTrapezoids into XRender-Trapezoids
+    typedef std::vector<XTrapezoid> TrapezoidVector;
+    TrapezoidVector aTrapVector( nTrapCount );
+    const basegfx::B2DTrapezoid* pB2DTrap = pB2DTraps;
+    for( int i = 0; i < nTrapCount; ++pB2DTrap, ++i )
     {
-        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
-        const int nPointCount = aOuterPolygon.count();
-        nHTQueueReserve += aOuterPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
-    }
-    nHTQueueReserve = ((4*nHTQueueReserve) | 0x1FFF) + 1;
-    HTQueue aHTQueue;
-    aHTQueue.reserve( nHTQueueReserve );
-    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
-    {
-        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
+        XTrapezoid& rTrap = aTrapVector[ i ] ;
 
-        // render-trapezoids should be inside the view => clip polygon against view range
-        basegfx::B2DPolyPolygon aClippedPolygon( aOuterPolygon );
-        if( bNeedViewClip )
-        {
-            aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
-            DBG_ASSERT( aClippedPolygon.count(), "polygon confirmed to overlap with view should not get here" );
-            if( !aClippedPolygon.count() )
-                continue;
-        }
+         // set y-coordinates
+        const double fY1 = pB2DTrap->getTopY();
+        rTrap.left.p1.y = rTrap.right.p1.y = rTrap.top = XDoubleToFixed( fY1 );
+        const double fY2 = pB2DTrap->getBottomY();
+        rTrap.left.p2.y = rTrap.right.p2.y = rTrap.bottom = XDoubleToFixed( fY2 );
 
-        // render-trapezoids have linear edges => get rid of bezier segments
-        if( aClippedPolygon.areControlPointsUsed() )
-            aClippedPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aClippedPolygon, 0.125 );
-
-        // test and remove self intersections
-        // TODO: make code intersection save, then remove this test
-        basegfx::B2DPolyPolygon aInnerPolyPoly(basegfx::tools::solveCrossovers( aClippedPolygon));
-        const int nInnerPolyCount = aInnerPolyPoly.count();
-        for( int nInnerPolyIdx = 0; nInnerPolyIdx < nInnerPolyCount; ++nInnerPolyIdx )
-        {
-            ::basegfx::B2DPolygon aInnerPolygon = aInnerPolyPoly.getB2DPolygon( nInnerPolyIdx );
-            const int nPointCount = aInnerPolygon.count();
-            if( !nPointCount )
-                continue;
-
-            aHTQueue.reserve( aHTQueue.size() + 8 * nPointCount );
-
-            // convert polygon point pairs to HalfTrapezoids
-            // connect the polygon point with the first one if needed
-            XPointFixed aOldXPF = { 0, 0 };
-            XPointFixed aNewXPF;
-            for( int nPointIdx = 0; nPointIdx <= nPointCount; ++nPointIdx, aOldXPF = aNewXPF )
-            {
-                const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
-                const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
-                
-                // convert the B2DPoint into XRENDER units
-                if(getAntiAliasB2DDraw())
-                {
-                    aNewXPF.x = XDoubleToFixed( aPoint.getX() );
-                    aNewXPF.y = XDoubleToFixed( aPoint.getY() );
-                }
-                else
-                {
-                    aNewXPF.x = XDoubleToFixed( basegfx::fround( aPoint.getX() ) );
-                    aNewXPF.y = XDoubleToFixed( basegfx::fround( aPoint.getY() ) );
-                }
-
-                // check if enough data is available for a new HalfTrapezoid
-                if( nPointIdx == 0 )
-                    continue;
-                // ignore vertical segments
-                if( aNewXPF.y == aOldXPF.y )
-                    continue;
-
-                // construct HalfTrapezoid as topdown segment
-                HalfTrapezoid aHT;
-                if( aNewXPF.y < aOldXPF.y )
-                {
-                    aHT.maLine.p1 = aNewXPF;
-                    aHT.maLine.p2 = aOldXPF;
-                }
-                else
-                {
-                    aHT.maLine.p2 = aNewXPF;
-                    aHT.maLine.p1 = aOldXPF;
-                }
-
-                aHT.mnY = aHT.maLine.p1.y;
-
-#if 0 // ignore clipped HalfTrapezoids
-            if( aHT.mnY < 0 )
-                aHT.mnY = 0;
-            else if( aHT.mnY > 10000 )
-                continue;
-#endif
-
-                // queue up the HalfTrapezoid
-                aHTQueue.push( aHT );
-            }
-        }
+         // set x-coordinates
+        const double fXL1 = pB2DTrap->getTopXLeft();
+        rTrap.left.p1.x = XDoubleToFixed( fXL1 );
+        const double fXR1 = pB2DTrap->getTopXRight();
+        rTrap.right.p1.x = XDoubleToFixed( fXR1 );
+        const double fXL2 = pB2DTrap->getBottomXLeft();
+        rTrap.left.p2.x = XDoubleToFixed( fXL2 );
+        const double fXR2 = pB2DTrap->getBottomXRight();
+        rTrap.right.p2.x = XDoubleToFixed( fXR2 );
     }
 
-    if( aHTQueue.empty() )
-        return TRUE;
-
-    // then convert the HalfTrapezoids into full Trapezoids
-    TrapezoidVector aTrapVector;
-    aTrapVector.reserve( aHTQueue.size() * 2 ); // just a guess
-
-    TrapezoidXCompare aTrapXCompare( aTrapVector );
-    ActiveTrapSet aActiveTraps( aTrapXCompare );
-
-    TrapezoidYCompare aTrapYCompare( aTrapVector );
-    VerticalTrapSet aVerticalTraps( aTrapYCompare );
-
-    while( !aHTQueue.empty() )
-    {
-        XTrapezoid aTrapezoid;
-
-        // convert a HalfTrapezoid pair
-        const HalfTrapezoid& rLeft = aHTQueue.top();
-        aTrapezoid.top = rLeft.mnY;
-        aTrapezoid.bottom = rLeft.maLine.p2.y;
-        aTrapezoid.left = rLeft.maLine;
-
-#if 0
-        // ignore empty trapezoids
-        if( aTrapezoid.bottom <= aTrapezoid.top )
-            continue;
-#endif
-
-        aHTQueue.pop();
-        if( aHTQueue.empty() ) // TODO: assert
-            break;
-        const HalfTrapezoid& rRight = aHTQueue.top();
-        aTrapezoid.right = rRight.maLine;
-        aHTQueue.pop();
-
-        aTrapezoid.bottom = aTrapezoid.left.p2.y;
-        if( aTrapezoid.bottom > aTrapezoid.right.p2.y )
-            aTrapezoid.bottom = aTrapezoid.right.p2.y;
-
-        // keep the full Trapezoid candidate
-        aTrapVector.push_back( aTrapezoid );
-
-        // unless it splits an older trapezoid
-        bool bSplit = false;
-        for(;;)
-        {
-            // check if the new trapezoid overlaps with an old trapezoid
-            ActiveTrapSet::iterator aActiveTrapsIt
-                = aActiveTraps.upper_bound( aTrapVector.size()-1 );
-            if( aActiveTrapsIt == aActiveTraps.begin() )
-                break;
-            --aActiveTrapsIt;
-
-            XTrapezoid& rLeftTrap = aTrapVector[ *aActiveTrapsIt ];
-
-            // in the ActiveTrapSet there are still trapezoids where
-            // a vertical overlap with new trapezoids is no longer possible
-            // they could have been removed in the verticaltraps loop below
-            // but this would have been expensive and is not needed as we can
-            // simply ignore them now and remove them from the ActiveTrapSet
-            // so they won't bother us in the future
-            if( rLeftTrap.bottom <= aTrapezoid.top )
-            {
-                aActiveTraps.erase( aActiveTrapsIt );
-                continue;
-            }
-
-            // check if there is horizontal overlap
-            // aTrapezoid.left==rLeftTrap.right is allowed though
-            if( !IsLeftOf( aTrapezoid.left, rLeftTrap.right ) )
-                break;
-
-            // split the old trapezoid and keep its upper part
-            // find the old trapezoids entry in the VerticalTrapSet and remove it
-            typedef std::pair<VerticalTrapSet::iterator, VerticalTrapSet::iterator> VTSPair;
-            VTSPair aVTSPair = aVerticalTraps.equal_range( *aActiveTrapsIt );
-            VerticalTrapSet::iterator aVTSit = aVTSPair.first;
-            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit ) ;
-            if( aVTSit != aVTSPair.second )
-                aVerticalTraps.erase( aVTSit );
-            // then update the old trapezoid's bottom
-            rLeftTrap.bottom = aTrapezoid.top;
-            // enter the updated old trapzoid in VerticalTrapSet
-            aVerticalTraps.insert( aVerticalTraps.begin(), *aActiveTrapsIt );
-            // the old trapezoid is no longer active
-            aActiveTraps.erase( aActiveTrapsIt );
-
-            // the trapezoid causing the split has become obsolete
-            // so its both sides have to be re-queued
-            HalfTrapezoid aHT;
-            aHT.mnY = aTrapezoid.top;
-            aHT.maLine = aTrapezoid.left;
-            aHTQueue.push( aHT );
-            aHT.maLine = aTrapezoid.right;
-            aHTQueue.push( aHT );
-
-            bSplit = true;
-            break;
-        }
-
-        // keep or forget the resulting full Trapezoid
-        if( bSplit )
-            aTrapVector.pop_back();
-        else
-        {
-            aActiveTraps.insert( aTrapVector.size()-1 );
-            aVerticalTraps.insert( aTrapVector.size()-1 );
-        }
-
-        // mark trapezoids that can no longer be split as inactive
-        // and recycle their sides which were not fully resolved
-        static const XFixed nMaxTop = +0x7FFFFFFF;
-        XFixed nNewTop = aHTQueue.empty() ? nMaxTop : aHTQueue.top().mnY;
-        while( !aVerticalTraps.empty() )
-        {
-            const XTrapezoid& rOldTrap = aTrapVector[ *aVerticalTraps.begin() ];
-            if( nNewTop < rOldTrap.bottom )
-                break;
-            // the reference Trapezoid can no longer be split
-            aVerticalTraps.erase( aVerticalTraps.begin() );
-
-            // recycle its sides that were not fully resolved
-            HalfTrapezoid aHT;
-            aHT.mnY = rOldTrap.bottom;
-            if( rOldTrap.left.p2.y > rOldTrap.bottom )
-            {
-                aHT.maLine = rOldTrap.left;
-                aHTQueue.push( aHT );
-            }
-            if( rOldTrap.right.p2.y > rOldTrap.bottom )
-            {
-                aHT.maLine = rOldTrap.right;
-                aHTQueue.push( aHT );
-            }
-        }
-    }
-
-    // create xrender Picture for polygon foreground
+    // get xrender Picture for polygon foreground
+    // TODO: cache it like the target picture which uses GetXRenderPicture()
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
     SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ 32 ];
     if( !rEntry.m_aPicture )
     {
@@ -1475,49 +1198,71 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     rRenderPeer.CompositeTrapezoids( PictOpOver,
         rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, &aTrapVector[0], aTrapVector.size() );
 
-    return TRUE;
+    return true;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin)
 {
-    const XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-    if( !rRenderPeer.AreTrapezoidsSupported() )
+    const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
+
+    // #i101491#
+    if( !bIsHairline && (rPolygon.count() > 1000) )
+    {
+        // the used basegfx::tools::createAreaGeometry is simply too
+        // expensive with very big polygons; fallback to caller (who
+        // should use ImplLineConverter normally)
+        // AW: ImplLineConverter had to be removed since it does not even
+        // know LineJoins, so the fallback will now prepare the line geometry
+        // the same way.
         return false;
-
-    // get the area polygon for the line polygon
-    basegfx::B2DPolygon aPolygon = rPolygon;
-    if( (rLineWidth.getX() != rLineWidth.getY())
-    && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
-    {
-        // prepare for createAreaGeometry() with anisotropic linewidth
-        basegfx::B2DHomMatrix aAnisoMatrix;
-        aAnisoMatrix.scale( 1.0, rLineWidth.getX() / rLineWidth.getY() );
-        aPolygon.transform( aAnisoMatrix );
-    }
-
-    // AW: reSegment no longer needed; new createAreaGeometry will remove exteme positions
-    // and create bezier polygons
-    //if( aPolygon.areControlPointsUsed() )
-    //    aPolygon = basegfx::tools::reSegmentPolygonEdges( aPolygon, 8, true, false );
-    //const basegfx::B2DPolyPolygon aAreaPolyPoly = basegfx::tools::createAreaGeometryForSimplePolygon(
-    //    aPolygon, 0.5*rLineWidth.getX(), eLineJoin );
-    const basegfx::B2DPolyPolygon aAreaPolyPoly(basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin));
-    
-    if( (rLineWidth.getX() != rLineWidth.getY())
-    && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
-    {
-        // postprocess createAreaGeometry() for anisotropic linewidth
-        basegfx::B2DHomMatrix aAnisoMatrix;
-        aAnisoMatrix.scale( 1.0, rLineWidth.getY() / rLineWidth.getX() );
-        aPolygon.transform( aAnisoMatrix );
     }
 
     // temporarily adjust brush color to pen color
     // since the line is drawn as an area-polygon
     const SalColor aKeepBrushColor = nBrushColor_;
     nBrushColor_ = nPenColor_;
+
+    // #i11575#desc5#b adjust B2D tesselation result to raster positions
+    basegfx::B2DPolygon aPolygon = rPolygon;
+    const double fHalfWidth = 0.5 * rLineWidth.getX();
+    aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(+fHalfWidth,+fHalfWidth) );
+
+    // shortcut for hairline drawing to improve performance
+    if( bIsHairline )
+    {
+        // hairlines can benefit from a simplified tesselation
+        // e.g. for hairlines the linejoin style can be ignored
+        basegfx::B2DTrapezoidVector aB2DTrapVector;
+        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
+
+        // draw tesselation result
+        const int nTrapCount = aB2DTrapVector.size();
+        const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, 0.0 );
+
+        // restore the original brush GC
+        nBrushColor_ = aKeepBrushColor;
+        return bDrawOk;
+    }
+
+    // get the area polygon for the line polygon
+    if( (rLineWidth.getX() != rLineWidth.getY())
+    && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
+    {
+        // prepare for createAreaGeometry() with anisotropic linewidth
+        aPolygon.transform( basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
+    }
+
+    // create the area-polygon for the line
+    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin) );
+
+    if( (rLineWidth.getX() != rLineWidth.getY())
+    && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
+    {
+        // postprocess createAreaGeometry() for anisotropic linewidth
+        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
+    }
 
     // draw each area polypolygon component individually
     // to emulate the polypolygon winding rule "non-zero"
@@ -1526,7 +1271,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
-        bDrawOk = drawPolyPolygon( aOnePoly, 0.0);
+        bDrawOk = drawPolyPolygon( aOnePoly, 0.0 );
         if( !bDrawOk )
             break;
     }
@@ -1537,3 +1282,4 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+

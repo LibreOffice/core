@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.84.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +67,9 @@
 #ifdef ENABLE_DBUS
 #include <dbus/dbus-glib.h>
 
-#define GSS_DBUS_SERVICE        "org.gnome.ScreenSaver"
-#define GSS_DBUS_PATH           "/org/gnome/ScreenSaver"
-#define GSS_DBUS_INTERFACE      "org.gnome.ScreenSaver"
+#define GSM_DBUS_SERVICE        "org.gnome.SessionManager"
+#define GSM_DBUS_PATH           "/org/gnome/SessionManager"
+#define GSM_DBUS_INTERFACE      "org.gnome.SessionManager"
 #endif
 
 // make compile on gtk older than 2.10
@@ -565,10 +562,11 @@ void GtkSalFrame::InitCommon()
     m_pIMHandler        = NULL;
     m_hBackgroundPixmap = None;
     m_nSavedScreenSaverTimeout = 0;
-    m_nGSSCookie = 0;
+    m_nGSMCookie = 0;
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
     m_ePointerStyle     = 0xffff;
+    m_bSetFocusOnMap    = false;
 
     gtk_widget_set_app_paintable( m_pWindow, TRUE );
     gtk_widget_set_double_buffered( m_pWindow, FALSE );
@@ -693,7 +691,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         XFree( pHints );
 
         if (GetX11SalData()->GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz"))
-        return;
+            return;
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the
          *  right thing, but gtk handles it internally whereas we
@@ -772,7 +770,10 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     m_aForeignTopLevelWindow = None;
     m_nStyle = nStyle;
 
-    GtkWindowType eWinType = ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+    GtkWindowType eWinType = (  (nStyle & SAL_FRAME_STYLE_FLOAT) &&
+                              ! (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|
+                                           SAL_FRAME_STYLE_FLOAT_FOCUSABLE))
+                              )
         ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL;
 
     if( nStyle & SAL_FRAME_STYLE_SYSTEMCHILD )
@@ -801,13 +802,8 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     bool bDecoHandling =
         ! isChild() &&
         ( ! (nStyle & SAL_FRAME_STYLE_FLOAT) ||
-          (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) );
+          (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE) ) );
 
-    /* #i100116# metacity has a peculiar behavior regarding WM_HINT accept focus and _NET_WM_USER_TIME
-        at some point that may be fixed in metacity and we will have to revisit this
-    */
-    bool bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") &&
-                                   (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
     if( bDecoHandling )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
@@ -823,8 +819,6 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
             gtk_window_set_skip_taskbar_hint( GTK_WINDOW(m_pWindow), true );
-            if( bMetaCityToolWindowHack )
-                lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
         }
         else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
@@ -832,9 +826,15 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
             bNoDecor = true;
         }
-        if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
+        else if( (nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
         {
-            eType = GDK_WINDOW_TYPE_HINT_DOCK;
+            eType = GDK_WINDOW_TYPE_HINT_UTILITY;
+        }
+
+        if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN )
+            && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+        {
+            eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), true );
         }
 
@@ -869,7 +869,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     if( bDecoHandling )
     {
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? TRUE : FALSE );
-        if( ( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) || bMetaCityToolWindowHack )
+        if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, false );
     }
 
@@ -1123,7 +1123,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     USHORT nIndex;
 
     // Use high contrast icons where appropriate
-    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         nOffsets[0] = SV_ICON_LARGE_HC_START;
         nOffsets[1] = SV_ICON_SMALL_HC_START;
@@ -1292,7 +1292,8 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( m_pWindow )
     {
-        if( m_pParent && (m_pParent->m_nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN) )
+        if( m_pParent && (m_pParent->m_nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN)
+            && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), bVisible );
         if( bVisible )
         {
@@ -1307,7 +1308,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             setMinMaxSize();
 
             // #i45160# switch to desktop where a dialog with parent will appear
-            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea )
+            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea && GTK_WIDGET_MAPPED(m_pParent->m_pWindow) )
                 getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
 
             if( isFloatGrabWindow() &&
@@ -1352,22 +1353,20 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             //
             // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
             // awesome.
-            if( nUserTime == 0 &&
-               (
-                 getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
-                 (
-                    getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz") &&
-                    (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION))
-                 )
-               )
-              )
+            bool bHack =
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
+                ;
+            if( nUserTime == 0 && bHack )
             {
                 /* #i99360# ugly workaround an X11 library bug */
                 nUserTime= getDisplay()->GetLastUserEventTime( true );
                 //nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
             }
-
             lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
+
+            if( bHack && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
+                m_bSetFocusOnMap = true;
 
             gtk_widget_show( m_pWindow );
 
@@ -1453,6 +1452,12 @@ void GtkSalFrame::setMinMaxSize()
                 aHints |= GDK_HINT_MAX_SIZE;
             }
         }
+        if( m_bFullscreen )
+        {
+            aGeo.max_width = m_aMaxSize.Width();
+            aGeo.max_height = m_aMaxSize.Height();
+            aHints |= GDK_HINT_MAX_SIZE;
+        }
         if( aHints )
             gtk_window_set_geometry_hints( GTK_WINDOW(m_pWindow),
                                            NULL,
@@ -1506,7 +1511,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
         if( isChild( false, true ) )
             gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
-        else
+        else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
             gtk_window_resize( GTK_WINDOW(m_pWindow), nWidth, nHeight );
         setMinMaxSize();
     }
@@ -1608,6 +1613,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
 
     if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+        ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) &&
         (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
         (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
     {
@@ -1803,8 +1809,6 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             {
                 m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                                                Size( maGeometry.nWidth, maGeometry.nHeight ) );
-                // workaround different window managers have different opinions about
-                // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
                 bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
                 if( bVisible )
                     Show( FALSE );
@@ -1821,12 +1825,22 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
                 gtk_window_move( GTK_WINDOW(m_pWindow),
                                  maGeometry.nX = aNewPosSize.Left(),
                                  maGeometry.nY = aNewPosSize.Top() );
+                // #i110881# for the benefit of compiz set a max size here
+                // else setting to fullscreen fails for unknown reasons
+                m_aMaxSize.Width() = aNewPosSize.GetWidth()+100;
+                m_aMaxSize.Height() = aNewPosSize.GetHeight()+100;
+                // workaround different legacy version window managers have different opinions about
+                // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
+                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                    gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
                 if( bVisible )
                     Show( TRUE );
             }
             else
             {
                 bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
+                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                    gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
                 if( bVisible )
                     Show( FALSE );
                 m_nStyle &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
@@ -1849,8 +1863,11 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
         {
             if( bFullScreen )
             {
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                {
+                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+                }
                 gtk_window_fullscreen( GTK_WINDOW(m_pWindow) );
                 moveToScreen( nScreen );
                 Size aScreenSize = pDisp->GetScreenSize( m_nScreen );
@@ -1862,8 +1879,11 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             else
             {
                 gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
+                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                {
+                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
+                }
                 moveToScreen( nScreen );
             }
         }
@@ -1903,8 +1923,9 @@ void GtkSalFrame::setAutoLock( bool bLock )
 #ifdef ENABLE_DBUS
 /** cookie is returned as an unsigned integer */
 static guint
-dbus_inhibit_gss (const gchar *appname,
-                  const gchar *reason)
+dbus_inhibit_gsm (const gchar *appname,
+                  const gchar *reason,
+                  guint xid)
 {
         gboolean         res;
         guint            cookie;
@@ -1920,20 +1941,22 @@ dbus_inhibit_gss (const gchar *appname,
                 return -1;
         }
 
-        /* get the proxy with gnome-screensaver */
+        /* get the proxy with gnome-session-manager */
         proxy = dbus_g_proxy_new_for_name (session_connection,
-                                           GSS_DBUS_SERVICE,
-                                           GSS_DBUS_PATH,
-                                           GSS_DBUS_INTERFACE);
+                                           GSM_DBUS_SERVICE,
+                                           GSM_DBUS_PATH,
+                                           GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return -1;
         }
 
         res = dbus_g_proxy_call (proxy,
                                  "Inhibit", &error,
                                  G_TYPE_STRING, appname,
+                                 G_TYPE_UINT, xid,
                                  G_TYPE_STRING, reason,
+                                 G_TYPE_UINT, 8, //Inhibit the session being marked as idle
                                  G_TYPE_INVALID,
                                  G_TYPE_UINT, &cookie,
                                  G_TYPE_INVALID);
@@ -1956,15 +1979,14 @@ dbus_inhibit_gss (const gchar *appname,
 }
 
 static void
-dbus_uninhibit_gss (guint cookie)
+dbus_uninhibit_gsm (guint cookie)
 {
         gboolean         res;
         GError          *error = NULL;
         DBusGProxy      *proxy = NULL;
         DBusGConnection *session_connection = NULL;
 
-        /* cookies have to be positive as unsigned */
-        if (cookie < 0) {
+        if (cookie == guint(-1)) {
                 g_warning ("Invalid cookie");
                 return;
         }
@@ -1977,18 +1999,18 @@ dbus_uninhibit_gss (guint cookie)
                 return;
         }
 
-        /* get the proxy with gnome-screensaver */
+        /* get the proxy with gnome-session-manager */
         proxy = dbus_g_proxy_new_for_name (session_connection,
-                                           GSS_DBUS_SERVICE,
-                                           GSS_DBUS_PATH,
-                                           GSS_DBUS_INTERFACE);
+                                           GSM_DBUS_SERVICE,
+                                           GSM_DBUS_PATH,
+                                           GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return;
         }
 
         res = dbus_g_proxy_call (proxy,
-                                 "UnInhibit",
+                                 "Uninhibit",
                                  &error,
                                  G_TYPE_UINT, cookie,
                                  G_TYPE_INVALID,
@@ -1996,12 +2018,12 @@ dbus_uninhibit_gss (guint cookie)
 
         /* check the return value */
         if (! res) {
-                g_warning ("UnInhibit method failed");
+                g_warning ("Uninhibit method failed");
         }
 
         /* check the error value */
         if (error != NULL) {
-                g_warning ("Inhibit problem : %s", error->message);
+                g_warning ("Uninhibit problem : %s", error->message);
                 g_error_free (error);
                 cookie = -1;
         }
@@ -2029,7 +2051,8 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
                              bPreferBlanking, bAllowExposures );
         }
 #ifdef ENABLE_DBUS
-        m_nGSSCookie = dbus_inhibit_gss(g_get_application_name(), "presentation");
+        m_nGSMCookie = dbus_inhibit_gsm(g_get_application_name(), "presentation",
+                    GDK_WINDOW_XID(m_pWindow->window));
 #endif
     }
     else
@@ -2040,7 +2063,7 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
                              bAllowExposures );
         m_nSavedScreenSaverTimeout = 0;
 #ifdef ENABLE_DBUS
-        dbus_uninhibit_gss(m_nGSSCookie);
+        dbus_uninhibit_gsm(m_nGSMCookie);
 #endif
     }
 }
@@ -2071,8 +2094,15 @@ void GtkSalFrame::ToTop( USHORT nFlags )
              *  to our window - which it of course won't since our input hint
              *  is set to false.
              */
-            if( (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+            if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE)) )
+            {
+                // sad but true: this can cause an XError, we need to catch that
+                // to do this we need to synchronize with the XServer
+                getDisplay()->GetXLib()->PushXErrorLevel( true );
                 XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( m_pWindow->window ), RevertToParent, CurrentTime );
+                XSync( getDisplay()->GetDisplay(), False );
+                getDisplay()->GetXLib()->PopXErrorLevel();
+            }
         }
         else
         {
@@ -2364,6 +2394,11 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
             }
         }
     }
+
+    // free xrender resources
+    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+        if( m_aGraphics[i].bInUse )
+            m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
 
     // first deinit frame
     if( m_pIMHandler )
@@ -2820,6 +2855,8 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
 
     GTK_YIELD_GRAB();
 
+    bool bSetFocus = pThis->m_bSetFocusOnMap;
+    pThis->m_bSetFocusOnMap = false;
     if( ImplGetSVData()->mbIsTestTool )
     {
         /* #i76541# testtool needs the focus to be in a new document
@@ -2829,9 +2866,14 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
         *  so this is done when running in testtool only
         */
         if( ! pThis->m_pParent && (pThis->m_nStyle & SAL_FRAME_STYLE_MOVEABLE) != 0 )
-            XSetInputFocus( pThis->getDisplay()->GetDisplay(),
-                            GDK_WINDOW_XWINDOW( GTK_WIDGET(pThis->m_pWindow)->window),
-                            RevertToParent, CurrentTime );
+            bSetFocus = true;
+    }
+
+    if( bSetFocus )
+    {
+        XSetInputFocus( pThis->getDisplay()->GetDisplay(),
+                        GDK_WINDOW_XWINDOW( GTK_WIDGET(pThis->m_pWindow)->window),
+                        RevertToParent, CurrentTime );
     }
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
@@ -3110,10 +3152,13 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     // redraw itself to adjust to the new style
     // where there IS no new style resulting in tremendous unnecessary flickering
     if( pPrevious != NULL )
+    {
         // signalStyleSet does NOT usually have the gdk lock
         // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_SETTINGSCHANGED );
+        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_FONTCHANGED );
+    }
 
     /* #i64117# gtk sets a nice background pixmap
     *  but we actually don't really want that, so save
@@ -3153,6 +3198,15 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
     }
     pThis->m_nState = pEvent->window_state.new_window_state;
 
+    #if OSL_DEBUG_LEVEL > 1
+    if( (pEvent->window_state.changed_mask & GDK_WINDOW_STATE_FULLSCREEN) )
+    {
+        fprintf( stderr, "window %p %s full screen state\n",
+            pThis,
+            (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? "enters" : "leaves");
+    }
+    #endif
+
     return FALSE;
 }
 
@@ -3182,7 +3236,8 @@ GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
 : m_pFrame(pFrame),
   m_nPrevKeyPresses( 0 ),
   m_pIMContext( NULL ),
-  m_bFocused( true )
+  m_bFocused( true ),
+  m_bPreeditJustChanged( false )
 {
     m_aInputEvent.mpTextAttr = NULL;
     createIMContext();
@@ -3357,6 +3412,8 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
         if( aDel.isDeleted() )
             return true;
 
+        m_bPreeditJustChanged = false;
+
         if( bResult )
             return true;
         else
@@ -3385,6 +3442,8 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
 
         if( aDel.isDeleted() )
             return true;
+
+        m_bPreeditJustChanged = false;
 
         std::list<PreviousKeyPress>::iterator    iter     = m_aPrevKeyPresses.begin();
         std::list<PreviousKeyPress>::iterator    iter_end = m_aPrevKeyPresses.end();
@@ -3449,8 +3508,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
     {
         GTK_YIELD_GRAB();
 
-        bool bWasPreedit = (pThis->m_aInputEvent.mpTextAttr != 0);
-
         pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = 0;
         pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
@@ -3474,6 +3531,9 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
          *  or because there never was a preedit.
          */
         bool bSingleCommit = false;
+        bool bWasPreedit =
+            (pThis->m_aInputEvent.mpTextAttr != 0) ||
+            pThis->m_bPreeditJustChanged;
         if( ! bWasPreedit
             && pThis->m_aInputEvent.maText.Len() == 1
             && ! pThis->m_aPrevKeyPresses.empty()
@@ -3488,7 +3548,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
                 bSingleCommit = true;
             }
         }
-
         if( ! bSingleCommit )
         {
             pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
@@ -3535,6 +3594,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             return;
         }
     }
+
+    pThis->m_bPreeditJustChanged = true;
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != NULL;
     pThis->m_aInputEvent.mnTime             = 0;
@@ -3618,6 +3679,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
     GTK_YIELD_GRAB();
+
+    pThis->m_bPreeditJustChanged = true;
 
     vcl::DeletionListener aDel( pThis->m_pFrame );
     pThis->doCallEndExtTextInput();

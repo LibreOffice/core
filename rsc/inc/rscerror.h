@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rscerror.h,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,9 +117,17 @@ public:
 class RscId;
 class RscTop;
 
+enum RscVerbosity
+{
+    RscVerbositySilent = 0,
+    RscVerbosityNormal = 1,
+    RscVerbosityVerbose = 2
+};
+
 class RscError
 {
     FILE *  fListing;
+    RscVerbosity m_verbosity;
 
     void WriteError( const ERRTYPE& rError, const char * pMessage );
     void StdLstOut( const char * pStr );
@@ -131,9 +136,10 @@ class RscError
                       const RscId & aId );
 public:
     sal_uInt32  nErrors;// Anzahl der Fehler
-                    RscError(){
+                    RscError( RscVerbosity _verbosity ) {
                         fListing = NULL;
                         nErrors = 0;
+                        m_verbosity = _verbosity;
                     };
     void            SetListFile( FILE * fList ){
                         fListing = fList;
@@ -141,7 +147,8 @@ public:
     FILE *          GetListFile(){
                         return fListing;
                     };
-    virtual void    StdOut( const char * );
+    RscVerbosity    GetVerbosity() const { return m_verbosity; }
+    virtual void    StdOut( const char *, const RscVerbosity _verbosityLevel = RscVerbosityNormal );
     virtual void    StdErr( const char * );
     virtual void    LstOut( const char * );
     virtual void    Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,

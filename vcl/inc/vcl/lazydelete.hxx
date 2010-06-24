@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lazydelete.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,7 +222,7 @@ namespace vcl
 
     SomeWindow::Paint()
     {
-        static vcl::DeleteOnDeinitBase< BitmapEx > aBmp( new BitmapEx( ResId( 1000, myResMgr ) ) );
+        static vcl::DeleteOnDeinit< BitmapEx > aBmp( new BitmapEx( ResId( 1000, myResMgr ) ) );
 
         if( aBmp.get() ) // check whether DeInitVCL has been called already
             DrawBitmapEx( Point( 10, 10 ), *aBmp.get() );
@@ -244,7 +241,7 @@ namespace vcl
     };
 
     template < typename T >
-    class VCL_DLLPUBLIC DeleteOnDeinit : public DeleteOnDeinitBase
+    class DeleteOnDeinit : public DeleteOnDeinitBase
     {
         T* m_pT;
         virtual void doCleanup() { delete m_pT; m_pT = NULL; }

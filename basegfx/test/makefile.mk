@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,56 +36,45 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # --- Common ----------------------------------------------------------
 
 SHL1OBJS=  \
-    $(SLO)$/basegfx1d.obj \
-    $(SLO)$/basegfx2d.obj \
-    $(SLO)$/basegfx3d.obj \
+    $(SLO)$/basegfx1d.obj      \
+    $(SLO)$/basegfx2d.obj      \
+    $(SLO)$/basegfx3d.obj      \
+    $(SLO)$/boxclipper.obj     \
+    $(SLO)$/basegfxtools.obj   \
+    $(SLO)$/clipstate.obj      \
+    $(SLO)$/genericclipper.obj \
     $(SLO)$/testtools.obj	
-
-# linking statically against basegfx parts
-SHL1LIBS=\
-    $(SLB)$/curve.lib	\
-    $(SLB)$/matrix.lib	\
-    $(SLB)$/numeric.lib	\
-    $(SLB)$/point.lib	\
-    $(SLB)$/polygon.lib	\
-    $(SLB)$/range.lib	\
-    $(SLB)$/tuple.lib	\
-    $(SLB)$/tools.lib	\
-    $(SLB)$/vector.lib
 
 SHL1TARGET= basegfx_tests
 SHL1STDLIBS= \
+                $(BASEGFXLIB) \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
-                        $(CPPULIB)       \
+                $(CPPULIB)       \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map 
+SHL1VERSIONMAP = export.map
+SHL1RPATH = NONE
 
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS) 
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk 
+.INCLUDE : _cppunit.mk
 
-# --- Enable testshl2 execution in normal build ------------------------
-
-$(MISC)$/unittest_succeeded : $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        @echo - start unit test on library $(SHL1TARGETN)
-        @echo ----------------------------------------------------------
-        $(TESTSHL2) -sf $(mktmp ) -forward $(BIN)$/ $(SHL1TARGETN)
-        $(TOUCH) $@
-
-ALLTAR : $(MISC)$/unittest_succeeded
+.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
+CDEFS+= -DVERBOSE
+.ENDIF

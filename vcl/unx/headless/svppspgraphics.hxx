@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svppspgraphics.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,13 +69,6 @@ public:
     virtual ~PspGraphics();
 
     // helper methods for sharing with X11SalGraphics
-    static bool DoCreateFontSubset( const rtl::OUString& rToFile,
-                                    psp::fontID aFont,
-                                    sal_Int32* pGlyphIDs,
-                                    sal_uInt8* pEncoding,
-                                    sal_Int32* pWidths,
-                                    int nGlyphs,
-                                    FontSubsetInfo& rInfo );
     static const void* DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen );
     static void DoFreeEmbedFontData( const void* pData, long nLen );
     static const Ucs2SIntMap* DoGetFontEncodingVector( psp::fontID aFont, const Ucs2OStrMap** pNonEncoded );
@@ -200,3 +190,4 @@ public:
 };
 
 #endif // _SVP_PSPGRAPHICS_HXX
+

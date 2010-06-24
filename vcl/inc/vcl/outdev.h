@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outdev.h,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef _SV_OUTDEV_H
 #define _SV_OUTDEV_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/outfont.hxx>
 
 #include <vector>
@@ -44,13 +41,6 @@ class VirtualDevice;
 class ImplServerGraphics;
 class ImplGetDevFontList;
 class GetDevSizeList;
-namespace vcl {
-class FontSubstConfiguration;
-}
-
-// -----------------------------------------------------------------------
-
-void ImplGetEnglishSearchFontName( String& rName );
 
 // -----------------------
 // - ImplDevFontListData -
@@ -80,7 +70,7 @@ public:
     int                 GetMinQuality() const    { return mnMinQuality; }
 
     bool                AddFontFace( ImplFontData* );
-    void                InitMatchData( const vcl::FontSubstConfiguration&,
+    void                InitMatchData( const utl::FontSubstConfiguration&,
                             const String& rSearchName );
     ImplFontData*       FindBestFontFace( const ImplFontSelectData& rFSD ) const;
 
@@ -105,24 +95,6 @@ friend class ImplDevFontList; // TODO: remove soon
     int                 mnMinQuality;       // quality of the worst font face
 };
 
-
-// ---------------
-// - ImplCvtChar -
-// ---------------
-
-class ImplCvtChar
-{
-public:
-    const sal_Unicode*  mpCvtTab;
-    const char*         mpSubsFontName;
-    sal_Unicode         (*mpCvtFunc)( sal_Unicode );
-};
-
-sal_Unicode ImplRecodeChar( const ImplCvtChar* pCvtData, sal_Unicode c );
-void ImplRecodeString( const ImplCvtChar* pCvtData, String& rStr,
-                       xub_StrLen nIndex, xub_StrLen nLen );
-const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
-                                      const String& rMapFontName );
 
 // ----------------------
 // - ImplGetDevFontList -

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: breakiterator_unicode.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,12 +83,16 @@ protected:
     const sal_Char *cBreakIterator, *wordRule, *lineRule;
     Boundary result; // for word break iterator
 
-    struct {
+    struct BI_Data {
         UnicodeString aICUText;
         icu::BreakIterator *aBreakIterator;
+
+        BI_Data() : aICUText(), aBreakIterator(NULL) {}
     } character, word, sentence, line, *icuBI;
+
     com::sun::star::lang::Locale aLocale;
     sal_Int16 aBreakType, aWordType;
+
     void SAL_CALL loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const rtl::OUString& rText) throw(com::sun::star::uno::RuntimeException);
 };

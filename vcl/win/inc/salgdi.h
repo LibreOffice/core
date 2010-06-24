@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.h,v $
- * $Revision: 1.30.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +78,9 @@ public:
     bool                    SupportsArabic() const      { return mbHasArabicSupport; }
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
+#ifdef ENABLE_GRAPHITE
+    bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
+#endif
 
     ImplFontCharMap*        GetImplFontCharMap() const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
@@ -97,6 +97,9 @@ private:
     mutable bool                    mbDisableGlyphApi;
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
+#ifdef ENABLE_GRAPHITE
+    mutable bool                    mbHasGraphiteSupport;
+#endif
     mutable bool                    mbHasArabicSupport;
     mutable ImplFontCharMap*        mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
@@ -225,15 +228,15 @@ protected:
 
     // native widget rendering methods that require mirroring
     virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                              const Point& aPos, BOOL& rIsInside );
     virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
     virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption );
+                                               const rtl::OUString& aCaption );
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 
     virtual bool        drawAlphaBitmap( const SalTwoRect&,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ctrl.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <vcl/salnativewidgets.hxx>
 
 // forward
-namespace vcl { struct ControlLayoutData; }
+namespace vcl { struct ImplControlData; struct ControlLayoutData; }
 
 // -----------
 // - Control -
@@ -47,11 +44,12 @@ namespace vcl { struct ControlLayoutData; }
 class VCL_DLLPUBLIC Control : public Window
 {
 protected:
-    mutable vcl::ControlLayoutData* mpLayoutData;
+    ::vcl::ImplControlData* mpControlData;
+
 private:
-    BOOL                            mbHasFocus;
-    Link                            maGetFocusHdl;
-    Link                            maLoseFocusHdl;
+    BOOL                    mbHasFocus;
+    Link                    maGetFocusHdl;
+    Link                    maLoseFocusHdl;
 
     SAL_DLLPRIVATE void     ImplInitControlData();
 
@@ -65,6 +63,14 @@ protected:
 
     // helper method for composite controls
     void            AppendLayoutData( const Control& rSubControl ) const;
+
+    /// creates the mpData->mpLayoutData structure
+    void            CreateLayoutData() const;
+    /// determines whether we currently have layout data
+    bool            HasLayoutData() const;
+    /// returns the current layout data
+    ::vcl::ControlLayoutData*
+                    GetLayoutData() const;
 
     /** this calls both our event listeners, and a specified handler
 
@@ -83,6 +89,25 @@ protected:
     BOOL        ImplCallEventListenersAndHandler(
                     ULONG nEvent, const Link& rHandler, void* pCaller
                 );
+
+    /** draws the given text onto the given device
+
+        If no reference device is set, the draw request will simply be forwarded to OutputDevice::DrawText. Otherwise,
+        the text will be rendered according to the metrics at the reference device.
+
+        Note that the given rectangle might be modified, it will contain the result of a GetTextRect call (either
+        directly at the target device, or taking the reference device into account) when returning.
+    */
+    void        DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect,
+                                 const XubString& _rStr, USHORT _nStyle,
+                                 MetricVector* _pVector, String* _pDisplayText ) const;
+
+    virtual const Font&
+                GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
+
+    void ImplInitSettings( const BOOL _bFont, const BOOL _bForeground );
 
 //#if 0 // _SOLAR__PRIVATE
 public:
@@ -157,6 +182,20 @@ public:
     void            SetLayoutDataParent( const Control* pParent ) const;
 
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
+
+    /** sets a reference device used for rendering control text
+        @seealso DrawControlText
+    */
+    void            SetReferenceDevice( OutputDevice* _referenceDevice );
+    OutputDevice*   GetReferenceDevice() const;
+
+    Font            GetUnzoomedControlPointFont() const
+    {
+        Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
+        if ( IsControlFont() )
+            aFont.Merge( GetControlFont() );
+        return aFont;
+    }
 };
 
 #endif  // _SV_CTRL_HXX

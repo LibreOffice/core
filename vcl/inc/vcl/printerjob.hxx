@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printerjob.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,7 @@ private:            // private methods
 
     bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
     bool            writeSetup( osl::File* pFile, const JobData& );
-    bool            writePageSetup( osl::File* pFile, const JobData& );
+    bool            writePageSetup( osl::File* pFile, const JobData&, bool bWriteFeatures = true );
     void            writeJobPatch( osl::File* File, const JobData& );
     bool            writeProlog (osl::File* pFile, const JobData& );
 

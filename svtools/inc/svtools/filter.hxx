@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filter.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +49,7 @@ struct ImplDirEntryHelper
 };
 
 class Window;
+class Graphic;
 
 #define OPT_FILTERSECTION           "Graphic"
 
@@ -63,6 +61,8 @@ class Window;
 #define GRFILTER_FILTERERROR        5
 #define GRFILTER_ABORT              6
 #define GRFILTER_TOOBIG             7
+
+#define GRFILTER_OUTHINT_GREY       1
 
 #define GRFILTER_FORMAT_NOTFOUND    ((USHORT)0xFFFF)
 #define GRFILTER_FORMAT_DONTKNOW    ((USHORT)0xFFFF)
@@ -325,7 +325,7 @@ protected:
     sal_Bool            bDummy2;
     sal_Bool            bDummy3;
     sal_Bool            bDummy4;
-    long                nDummy1;
+    long                nExpGraphHint;
     long                nDummy2;
     void*               pDummy1;
     void*               pDummy2;
@@ -376,6 +376,7 @@ public:
     USHORT          ExportGraphic( const Graphic& rGraphic, const String& rPath,
                                     SvStream& rOStm, USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
                                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
+    long            GetExportGraphicHint() const { return nExpGraphHint; }
 
     USHORT          CanImportGraphic( const INetURLObject& rPath,
                                       USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
@@ -409,6 +410,10 @@ public:
 
     const Link      GetFilterCallback() const;
     static          GraphicFilter* GetGraphicFilter();
+    static int      LoadGraphic( const String& rPath, const String& rFilter,
+                     Graphic& rGraphic,
+                     GraphicFilter* pFilter = NULL,
+                     USHORT* pDeterminedFormat = NULL );
 };
 
 // ------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChainablePropertySetInfo.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +73,7 @@ void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
     {
         OUString aName( pMap->mpName, pMap->mnNameLen, RTL_TEXTENCODING_ASCII_US );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         PropertyInfoHash::iterator aIter = maMap.find( aName );
         if( aIter != maMap.end() )
             OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");

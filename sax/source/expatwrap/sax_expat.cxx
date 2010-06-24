@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sax_expat.cxx,v $
- * $Revision: 1.18.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +36,14 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include "expat/xmlparse.h"
-#endif
 
 using namespace ::rtl;
 using namespace ::std;
@@ -134,6 +128,11 @@ OUString XmlChar2OUString( const XML_Char *p )
                                             pThis->rDocumentLocator->getLineNumber(),\
                                             pThis->rDocumentLocator->getColumnNumber()\
                                      ) );\
+        }\
+        catch( com::sun::star::uno::RuntimeException &e ) {\
+            pThis->bExceptionWasThrown = sal_True; \
+            pThis->bRTExceptionWasThrown = sal_True; \
+            pImpl->rtexception = e; \
         }\
     }\
     ((void)0)
@@ -255,7 +254,9 @@ public: // module scope
     // Exception cannot be thrown through the C-XmlParser (possible resource leaks),
     // therefor the exception must be saved somewhere.
     SAXParseException   exception;
-    sal_Bool                bExceptionWasThrown;
+    RuntimeException    rtexception;
+    sal_Bool            bExceptionWasThrown;
+    sal_Bool            bRTExceptionWasThrown;
 
     Locale              locale;
 
@@ -374,7 +375,8 @@ extern "C"
 // LocatorImpl
 //---------------------------------------------
 class LocatorImpl :
-    public WeakImplHelper1< XLocator >
+    public WeakImplHelper2< XLocator, com::sun::star::io::XSeekable >
+    // should use a different interface for stream positions!
 {
 public:
     LocatorImpl( SaxExpatParser_Impl *p )
@@ -400,6 +402,20 @@ public: //XLocator
         return m_pParser->getEntity().structSource.sSystemId;
     }
 
+    // XSeekable (only for getPosition)
+
+    virtual void SAL_CALL seek( sal_Int64 ) throw()
+    {
+    }
+    virtual sal_Int64 SAL_CALL getPosition() throw()
+    {
+        return XML_GetCurrentByteIndex( m_pParser->getEntity().pParser );
+    }
+    virtual ::sal_Int64 SAL_CALL getLength() throw()
+    {
+        return 0;
+    }
+
 private:
 
     SaxExpatParser_Impl *m_pParser;
@@ -421,6 +437,7 @@ SaxExpatParser::SaxExpatParser(  )
     m_pImpl->rAttrList = Reference< XAttributeList > ( m_pImpl->pAttrList );
 
     m_pImpl->bExceptionWasThrown = sal_False;
+    m_pImpl->bRTExceptionWasThrown = sal_False;
 }
 
 SaxExpatParser::~SaxExpatParser()
@@ -720,6 +737,9 @@ void SaxExpatParser_Impl::parse( )
                                                 0 ) != 0 );
 
         if( ! bContinue || this->bExceptionWasThrown ) {
+
+            if ( this->bRTExceptionWasThrown )
+                throw rtexception;
 
             // Error during parsing !
             XML_Error xmlE = XML_GetErrorCode( getEntity().pParser );

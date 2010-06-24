@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclnsapp.h,v $
- * $Revision: 1.6.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,8 @@
 #include "Cocoa/Cocoa.h"
 #include "postmac.h"
 
+class AquaSalFrame;
+
 @interface CocoaThreadEnabler : NSObject
 {
 }
@@ -59,12 +58,13 @@
 -(void)scrollbarSettingsChanged: (NSNotification*) pNotification;
 -(void)addFallbackMenuItem: (NSMenuItem*)pNewItem;
 -(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
--(void)getSystemVersionMajor:(unsigned *)major minor:(unsigned *)minor bugFix:(unsigned *)bugFix;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
 -(void)applicationWillBecomeActive: (NSNotification *)pNotification;
 -(void)applicationWillResignActive: (NSNotification *)pNotification;
 -(MacOSBOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (MacOSBOOL)bWinVisible;
 -(void)setDockIconClickHandler: (NSObject*)pHandler;
+-(void)cycleFrameForward: (AquaSalFrame*)pCurFrame;
+-(void)cycleFrameBackward: (AquaSalFrame*)pCurFrame;
 @end
 
 #endif

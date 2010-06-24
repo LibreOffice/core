@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salinst.h,v $
- * $Revision: 1.17.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,6 +112,13 @@ public:
 
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     void                    FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
+
+    // dtrans implementation
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
+    virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 
 
     bool isPrinterInit() const

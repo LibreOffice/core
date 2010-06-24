@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontmanager.hxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,8 @@
 
 // forward declarations
 namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
+class FontSubsetInfo;
+class ImplFontOptions;
 
 namespace psp {
 class PPDParser; // see ppdparser.hxx
@@ -164,8 +163,8 @@ struct FastPrintFontInfo
     weight::type                        m_eWeight;
     pitch::type                         m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
-    fcstatus::type                      m_eEmbeddedbitmap;
-    fcstatus::type                      m_eAntialias;
+    bool                                m_bSubsettable;
+    bool                                m_bEmbeddable;
 
     FastPrintFontInfo() :
             m_nID( 0 ),
@@ -175,9 +174,7 @@ struct FastPrintFontInfo
             m_eWidth( width::Unknown ),
             m_eWeight( weight::Unknown ),
             m_ePitch( pitch::Unknown ),
-            m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
-            m_eEmbeddedbitmap( fcstatus::isunset ),
-            m_eAntialias( fcstatus::isunset )
+            m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
     {}
 };
 
@@ -294,9 +291,6 @@ class VCL_DLLPUBLIC PrintFontManager
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
         bool                                        m_bUserOverride;
 
-        fcstatus::type                              m_eEmbeddedbitmap;
-        fcstatus::type                              m_eAntialias;
-
         std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
         std::map< sal_Unicode, rtl::OString >       m_aNonEncoded;
 
@@ -328,9 +322,9 @@ class VCL_DLLPUBLIC PrintFontManager
         rtl::OString          m_aFontFile;        // relative to directory
         rtl::OString          m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
         int                     m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
-        unsigned int           m_nTypeFlags;        // from TrueType file; only known use is for copyright flags
+        unsigned int           m_nTypeFlags;        // copyright bits and PS-OpenType flag
 
-        TrueTypeFontFile() : PrintFont( fonttype::TrueType ), m_nDirectory( 0 ), m_nCollectionEntry(-1), m_nTypeFlags( 0x80000000 ) {}
+        TrueTypeFontFile();
         virtual ~TrueTypeFontFile();
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
@@ -443,7 +437,7 @@ class VCL_DLLPUBLIC PrintFontManager
     false else (e.g. no libfontconfig found)
     */
     bool initFontconfig();
-    int  countFontconfigFonts();
+    int  countFontconfigFonts( std::hash_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths );
     /* deinitialize fontconfig
      */
     void deinitFontconfig();
@@ -648,7 +642,9 @@ public:
     // nGlyphs: number of glyphs in arrays
     // pCapHeight:: capital height of the produced font
     // pXMin, pYMin, pXMax, pYMax: outgoing font bounding box
-    bool createFontSubset( fontID nFont,
+    // TODO: callers of this method should use its FontSubsetInfo counterpart directly
+    bool createFontSubset( FontSubsetInfo&,
+                           fontID nFont,
                            const rtl::OUString& rOutFile,
                            sal_Int32* pGlyphIDs,
                            sal_uInt8* pNewEncoding,
@@ -734,10 +730,11 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
+    bool getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*), ImplFontOptions& rResult ) const;
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, italic::type eItalic, weight::type eWeight,
-        width::type eWidth, pitch::type ePitch) const;
+        const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
+        width::type& rWidth, pitch::type& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );

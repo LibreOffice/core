@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atkwrapper.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +46,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleSelection;
     class XAccessibleTable;
     class XAccessibleText;
+    class XAccessibleTextMarkup;
     class XAccessibleTextAttributes;
     class XAccessibleValue;
 } } } }
@@ -69,6 +67,7 @@ struct _AtkObjectWrapper
     ::com::sun::star::accessibility::XAccessibleSelection      *mpSelection;
     ::com::sun::star::accessibility::XAccessibleTable          *mpTable;
     ::com::sun::star::accessibility::XAccessibleText           *mpText;
+    ::com::sun::star::accessibility::XAccessibleTextMarkup     *mpTextMarkup;
     ::com::sun::star::accessibility::XAccessibleTextAttributes *mpTextAttributes;
     ::com::sun::star::accessibility::XAccessibleValue          *mpValue;
 

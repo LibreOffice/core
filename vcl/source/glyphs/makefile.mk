@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,18 +38,40 @@ ENABLE_EXCEPTIONS=true
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 CFLAGS+= $(FREETYPE_CFLAGS)
-.IF "$(USE_FT_EMBOLDEN)" == "YES"
-CFLAGS+=-DUSE_FT_EMBOLDEN
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
 .IF "$(USE_BUILTIN_RASTERIZER)" != ""
+# GlyphCache + FreeType support (only on UNX platforms currently)
 SLOFILES=\
         $(SLO)$/glyphcache.obj		\
         $(SLO)$/gcach_rbmp.obj		\
         $(SLO)$/gcach_layout.obj	\
         $(SLO)$/gcach_ftyp.obj
+
+.IF "$(ENABLE_GRAPHITE)" != ""
+# Graphite support using the glyphcache infrastructure
+CFLAGS+=-DENABLE_GRAPHITE
+SLOFILES+=	$(SLO)$/graphite_adaptors.obj	\
+        $(SLO)$/graphite_features.obj	\
+        $(SLO)$/graphite_cache.obj	\
+        $(SLO)$/graphite_textsrc.obj	\
+        $(SLO)$/graphite_serverfont.obj	\
+        $(SLO)$/graphite_layout.obj
+.ENDIF
+
+.ELSE
+
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+# Graphite support on non-UNX platforms
+# make use of stlport headerfiles
+EXT_USE_STLPORT=TRUE
+SLOFILES=\
+        $(SLO)$/graphite_textsrc.obj	\
+        $(SLO)$/graphite_cache.obj	\
+        $(SLO)$/graphite_features.obj	\
+        $(SLO)$/graphite_layout.obj
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------

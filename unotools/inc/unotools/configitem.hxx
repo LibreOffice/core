@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: configitem.hxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include "unotools/unotoolsdllapi.h"
+#include "unotools/options.hxx"
 
 //-----------------------------------------------------------------------------
 namespace com{ namespace sun{ namespace star{
@@ -76,7 +74,7 @@ namespace utl
     class ConfigManager;
     struct ConfigItem_Impl;
 
-    class UNOTOOLS_DLLPUBLIC ConfigItem
+    class UNOTOOLS_DLLPUBLIC ConfigItem : public ConfigurationBroadcaster
     {
             friend class ConfigChangeListener_Impl;
             friend class ConfigManager;
@@ -185,7 +183,7 @@ namespace utl
 
             /** is called from the ConfigManager before application ends of from the
                 PropertyChangeListener if the sub tree broadcasts changes. */
-            virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+            virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)=0;
 
             /** is called from the ConfigManager if it is destroyed before the ConfigItem. */
             void                    ReleaseConfigMgr();
@@ -200,7 +198,7 @@ namespace utl
             sal_Bool                IsModified() const;
 
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
-            virtual void            Commit();
+            virtual void            Commit()=0;
 
             sal_Bool                IsInValueChange() const;
 

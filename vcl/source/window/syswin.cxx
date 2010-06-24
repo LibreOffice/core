@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: syswin.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +59,7 @@ public:
 
     TaskPaneList*   mpTaskPaneList;
     Size            maMaxOutSize;
+    rtl::OUString   maRepresentedURL;
 };
 
 SystemWindow::ImplData::ImplData()
@@ -273,6 +271,29 @@ void SystemWindow::SetZLevel( BYTE nLevel )
             pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow;
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
+{
+    bool bChanged = (i_rURL != mpImplData->maRepresentedURL);
+    mpImplData->maRepresentedURL = i_rURL;
+    if ( !mbSysChild && bChanged )
+    {
+        const Window* pWindow = this;
+        while ( pWindow->mpWindowImpl->mpBorderWindow )
+            pWindow = pWindow->mpWindowImpl->mpBorderWindow;
+
+        if ( pWindow->mpWindowImpl->mbFrame )
+            pWindow->mpWindowImpl->mpFrame->SetRepresentedURL( i_rURL );
+    }
+}
+// -----------------------------------------------------------------------
+
+const rtl::OUString& SystemWindow::GetRepresentedURL() const
+{
+    return mpImplData->maRepresentedURL;
 }
 
 // -----------------------------------------------------------------------
@@ -638,6 +659,63 @@ static void ImplWindowStateToStr( const WindowStateData& rData, ByteString& rStr
 
 // -----------------------------------------------------------------------
 
+void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin )
+{
+    Rectangle aScreenRect;
+    if( Application::IsMultiDisplay() )
+    {
+        aScreenRect = Application::GetScreenPosSizePixel( GetScreenNumber() );
+    }
+    else
+    {
+        aScreenRect = Application::GetScreenPosSizePixel( 0 );
+        for( unsigned int i = 1; i < Application::GetScreenCount(); i++ )
+            aScreenRect.Union( Application::GetScreenPosSizePixel( i ) );
+    }
+    // unfortunately most of the time width and height are not really known
+    if( i_nWidth < 1 )
+        i_nWidth = 50;
+    if( i_nHeight < 1 )
+        i_nHeight = 50;
+
+    // check left border
+    bool bMove = false;
+    if( io_rX + i_nWidth < aScreenRect.Left() )
+    {
+        bMove = true;
+        io_rX = aScreenRect.Left();
+    }
+    // check right border
+    if( io_rX > aScreenRect.Right() - i_nWidth )
+    {
+        bMove = true;
+        io_rX = aScreenRect.Right() - i_nWidth;
+    }
+    // check top border
+    if( io_rY + i_nHeight < aScreenRect.Top() )
+    {
+        bMove = true;
+        io_rY = aScreenRect.Top();
+    }
+    // check bottom border
+    if( io_rY > aScreenRect.Bottom() - i_nHeight )
+    {
+        bMove = true;
+        io_rY = aScreenRect.Bottom() - i_nHeight;
+    }
+    Window* pParent = i_pConfigureWin->GetParent();
+    if( bMove && pParent )
+    {
+        // calculate absolute screen pos here, since that is what is contained in WindowState
+        Point aParentAbsPos( pParent->OutputToAbsoluteScreenPixel( Point(0,0) ) );
+        Size aParentSizePixel( pParent->GetOutputSizePixel() );
+        Point aPos( (aParentSizePixel.Width() - i_nWidth) / 2,
+                    (aParentSizePixel.Height() - i_nHeight) / 2 );
+        io_rX = aParentAbsPos.X() + aPos.X();
+        io_rY = aParentAbsPos.Y() + aPos.Y();
+    }
+}
+
 void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 {
     ULONG nValidMask = rData.GetMask();
@@ -679,6 +757,10 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         // 91625 - ignore Minimize
         //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
+
+        // normalize window positions onto screen
+        ImplMoveToScreen( aState.mnX, aState.mnY, aState.mnWidth, aState.mnHeight, pWindow );
+        ImplMoveToScreen( aState.mnMaximizedX, aState.mnMaximizedY, aState.mnMaximizedWidth, aState.mnMaximizedHeight, pWindow );
 
         // #96568# avoid having multiple frames at the same screen location
         //  do the check only if not maximized

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hyperlabel.hxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,14 +72,10 @@ namespace svt
         void                SetIndex( sal_Int32 _Index );
         sal_Int32           GetIndex() const;
 
-        void                SetLabelAndSize( ::rtl::OUString _rText, const Size& rNewSize);
-        void                SetLabel( ::rtl::OUString _rText );
+        void                SetLabel( const ::rtl::OUString& _rText );
         sal_Int32           GetLogicWidth();
 
         ::rtl::OUString     GetLabel( );
-
-        void                SetHyperLabelPosition(sal_uInt16 XPos, sal_uInt16 YPos);
-        Point               GetLogicalPosition();
 
         void                ToggleBackgroundColor( const Color& _rGBColor );
         void                SetInteractive( sal_Bool _bInteractive );
@@ -90,11 +83,14 @@ namespace svt
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
         const Link&         GetClickHdl() const { return maClickHdl; }
 
+        Size                CalcMinimumSize( long nMaxWidth = 0 ) const;
+
     private:
 
         DECL_LINK(ImplClickHdl, HyperLabel*);
 
-        sal_Bool            ImplCalcMinimumSize(const Size& _rCompSize );
+    private:
+        using FixedText::CalcMinimumSize;
     };
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rsclex.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -317,7 +314,7 @@ int yylex()
 /****************** yyerror **********************************************/
 #ifdef RS6000
 extern "C" void yyerror( char* pMessage )
-#elif defined HP9000 || defined SCO || defined IRIX || defined SOLARIS
+#elif defined HP9000 || defined SCO || defined SOLARIS
 extern "C" void yyerror( const char* pMessage )
 #else
 void yyerror( char* pMessage )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: kdedata.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALDATA_CXX
-#include "kde_headers.h"
+#include <shell/kde_headers.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -185,9 +182,6 @@ void KDEXLib::Init()
 
     SalDisplay *pSalDisplay = new SalKDEDisplay( pDisp );
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
-
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );
@@ -235,6 +229,16 @@ void KDEData::Init()
 extern "C" {
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule )
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
         rtl::OString aVersion( qVersion() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "qt version string is \"%s\"\n", aVersion.getStr() );
@@ -248,7 +252,7 @@ extern "C" {
         if( nMajor != 3 || nMinor < 2 || (nMinor == 2 && nMicro < 2) )
         {
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "unsuitable qt version %"SAL_PRIdINT32".%"SAL_PRIdINT32".%"SAL_PRIdINT32"\n", nMajor, nMinor, nMicro );
+            fprintf( stderr, "unsuitable qt version %d.%d.%d\n", (int)nMajor, (int)nMinor, (int)nMicro );
 #endif
             return NULL;
         }

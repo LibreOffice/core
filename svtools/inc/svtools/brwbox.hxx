@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: brwbox.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +96,6 @@ typedef ULONG BrowserMode;
 
 #define BROWSER_HIGHLIGHT_NONE       0x0100 // == BROWSER_HIDESELECT
 #define BROWSER_HIGHLIGHT_TOGGLE 0x00000000 // old default => NULL, dont use!
-#define BROWSER_HIGHLIGHT_AUTO   0x00010000
-#define BROWSER_HIGHLIGHT_MANU   0x00020000
 
 #define BROWSER_HEADERBAR_NEW    0x00040000
 #define BROWSER_AUTOSIZE_LASTCOL 0x00080000
@@ -851,7 +846,7 @@ public:
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
     virtual String                  GetAccessibleCellText(long _nRow, USHORT _nColPos) const;
     virtual BOOL                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
-    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow );
+    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
     virtual XACC                    GetAccessible( BOOL bCreate = TRUE );
     virtual Window*                 GetAccessibleParentWindow() const;

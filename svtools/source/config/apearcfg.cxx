@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: apearcfg.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
 
 #include "apearcfg.hxx"
 #include "com/sun/star/uno/Any.hxx"
@@ -176,6 +168,11 @@ void  SvtTabAppearanceCfg::Commit()
     }
     PutProperties(rNames, aValues);
 }
+
+void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
 /*--------------------------------------------------------------------
      Beschreibung:
  --------------------------------------------------------------------*/

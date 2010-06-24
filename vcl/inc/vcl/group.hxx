@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: group.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@
 class VCL_DLLPUBLIC GroupBox : public Control
 {
 private:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
@@ -50,6 +48,10 @@ private:
                                       const Point& rPos, const Size& rSize, bool bLayout = false );
 
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
 public:
                     GroupBox( Window* pParent, WinBits nStyle = 0 );

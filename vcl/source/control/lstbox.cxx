@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lstbox.cxx,v $
- * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,21 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/event.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/subedit.hxx>
-#include <vcl/ilstbox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/controllayout.hxx>
-#include <tools/debug.hxx>
+#include "tools/rc.h"
+
+#include "vcl/svdata.hxx"
+#include "vcl/decoview.hxx"
+#include "vcl/event.hxx"
+#include "vcl/scrbar.hxx"
+#include "vcl/button.hxx"
+#include "vcl/edit.hxx"
+#include "vcl/subedit.hxx"
+#include "vcl/ilstbox.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/combobox.hxx"
+#include "vcl/controldata.hxx"
+
+#include "tools/debug.hxx"
 
 
 
@@ -108,6 +105,7 @@ void ListBox::ImplInitListBoxData()
     mnDDHeight      = 0;
     mbDDAutoSize    = TRUE;
     mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
+    mnLineCount     = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -127,9 +125,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
 
-        // FIXME: this is currently only on mac/aqua
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            IsNativeWidgetEnabled() &&
+        if( IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
                 ImplControlValue aControlValue;
@@ -305,6 +301,7 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
+        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
         mpImplWin->GrabFocus();
         mpBtn->SetPressed( TRUE );
         mpFloatWin->StartFloat( TRUE );
@@ -365,6 +362,7 @@ void ListBox::ToggleDropDown()
             mpFloatWin->EndPopupMode();
         else
         {
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpImplWin->GrabFocus();
             mpBtn->SetPressed( TRUE );
             mpFloatWin->StartFloat( TRUE );
@@ -650,6 +648,7 @@ void ListBox::Resize()
         long    nTop = 0;
         long    nBottom = aOutSz.Height();
 
+        // note: in case of no border, pBorder will actually be this
         Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
         Point aPoint;
@@ -678,6 +677,17 @@ void ListBox::Resize()
 
                 // use the themes drop down size
                 Rectangle aContentRect = aContent.GetBoundRect();
+                if( ! (GetStyle() & WB_BORDER) && ImplGetSVData()->maNWFData.mbNoFocusRects )
+                {
+                    // no border but focus ring behavior -> we have a problem; the
+                    // native rect relies on the border to draw the focus
+                    // let's do the best we can and center vertically, so it doesn't look
+                    // completely wrong.
+                    Size aSz( GetOutputSizePixel() );
+                    long nDiff = aContentRect.Top() - (aSz.Height() - aContentRect.GetHeight())/2;
+                    aContentRect.Top() -= nDiff;
+                    aContentRect.Bottom() -= nDiff;
+                }
                 mpImplWin->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
             }
             else
@@ -707,7 +717,7 @@ void ListBox::Resize()
 
 void ListBox::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const Control* pMainWin = mpImplLB->GetMainWindow();
     if( mpFloatWin )
     {
@@ -731,7 +741,7 @@ void ListBox::FillLayoutData() const
 
 long ListBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
 
     // check whether rPoint fits at all
@@ -875,6 +885,8 @@ void ListBox::StateChanged( StateChangedType nType )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? TRUE : FALSE );
+        BOOL bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? TRUE : FALSE;
+        mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
     }
     else if( nType == STATE_CHANGE_MIRRORING )
     {
@@ -909,6 +921,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                     if( mpFloatWin && !mpFloatWin->IsInPopupMode() &&
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
+                        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                         mpBtn->SetPressed( TRUE );
                         mpFloatWin->StartFloat( FALSE );
                         ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
@@ -1070,6 +1083,15 @@ void ListBox::RemoveEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
+Image ListBox::GetEntryImage( USHORT nPos ) const
+{
+    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+        return mpImplLB->GetEntryList()->GetEntryImage( nPos );
+    return Image();
+}
+
+// -----------------------------------------------------------------------
+
 USHORT ListBox::GetEntryPos( const XubString& rStr ) const
 {
     USHORT nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
@@ -1196,12 +1218,33 @@ void ListBox::SetTopEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
+void ListBox::ShowProminentEntry( USHORT nPos )
+{
+    mpImplLB->ShowProminentEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+}
+
+// -----------------------------------------------------------------------
+
 USHORT ListBox::GetTopEntry() const
 {
     USHORT nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
     if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
         nPos = 0;
     return nPos;
+}
+
+// -----------------------------------------------------------------------
+
+void ListBox::SetProminentEntryType( ProminentEntry eType )
+{
+    mpImplLB->SetProminentEntryType( eType );
+}
+
+// -----------------------------------------------------------------------
+
+ProminentEntry ListBox::GetProminentEntryType() const
+{
+    return mpImplLB->GetProminentEntryType();
 }
 
 // -----------------------------------------------------------------------
@@ -1273,11 +1316,47 @@ Size ListBox::CalcMinimumSize() const
     else
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
-        aSz.Width() = mpImplLB->GetMaxEntryWidth();
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.Height() += 4; // add a space between entry and border
+        // size to maxmimum entry width and add a little breathing space
+        aSz.Width() = mpImplLB->GetMaxEntryWidth() + 4;
+        // do not create ultrathin ListBoxes, it doesn't look good
+        if( aSz.Width() < GetSettings().GetStyleSettings().GetScrollBarSize() )
+            aSz.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
+
+        // try native borders; scrollbar size may not be a good indicator
+        // see how large the edit area inside is to estimate what is needed for the dropdown
+        ImplControlValue aControlValue;
+        Point aPoint;
+        Region aContent, aBound;
+        Size aTestSize( 100, 20 );
+        Region aArea( Rectangle( aPoint, aTestSize ) );
+        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
+                       CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            // use the themes drop down size
+            Rectangle aContentRect = aContent.GetBoundRect();
+            aSz.Width() += aTestSize.Width() - aContentRect.GetWidth();
+        }
+        else
+            aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     }
 
     aSz = CalcWindowSize( aSz );
+
+    if ( IsDropDownBox() ) // check minimum height of dropdown box
+    {
+        ImplControlValue aControlValue;
+        Rectangle aRect( Point( 0, 0 ), aSz );
+        Region aContent, aBound;
+        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
+                       CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            Rectangle aBoundRect( aBound.GetBoundRect() );
+            if( aBoundRect.GetHeight() > aSz.Height() )
+                aSz.Height() = aBoundRect.GetHeight();
+        }
+    }
+
     return aSz;
 }
 

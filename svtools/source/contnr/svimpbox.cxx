@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svimpbox.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3118,7 +3115,7 @@ void lcl_DeleteSubPopups(PopupMenu* pPopup)
     }
 }
 
-void SvImpLBox::Command( const CommandEvent& rCEvt )
+bool SvImpLBox::Command( const CommandEvent& rCEvt )
 {
     USHORT              nCommand = rCEvt.GetCommand();
 
@@ -3126,9 +3123,22 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
         aEditTimer.Stop();
 
     // Rollmaus-Event?
-    if( ( ( nCommand == COMMAND_WHEEL ) || ( nCommand == COMMAND_STARTAUTOSCROLL ) || ( nCommand == COMMAND_AUTOSCROLL ) )
-        && pView->HandleScrollCommand( rCEvt, &aHorSBar, &aVerSBar ) )
-            return;
+    if  (   (   ( nCommand == COMMAND_WHEEL )
+            ||  ( nCommand == COMMAND_STARTAUTOSCROLL )
+            ||  ( nCommand == COMMAND_AUTOSCROLL )
+            )
+        &&  pView->HandleScrollCommand( rCEvt, &aHorSBar, &aVerSBar )
+        )
+    {
+        return true;
+    }
+
+    if  (   ( nCommand == COMMAND_CONTEXTMENU )
+        &&  !bContextMenuHandling
+        )
+    {
+        return false;
+    }
 
     if( bContextMenuHandling && nCommand == COMMAND_CONTEXTMENU )
     {
@@ -3177,8 +3187,6 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
             {   // deselect all
                 pView->SelectAll( FALSE );
             }
-
-
         }
         else
         {   // key event (or at least no mouse event)
@@ -3238,15 +3246,18 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
                 aSelRestore.pop();
             }
         }
+        return true;
     }
-#ifndef NOCOMMAND
-    else
-    {
-        const Point& rPos = rCEvt.GetMousePosPixel();
-        if( rPos.X() < aOutputSize.Width() && rPos.Y() < aOutputSize.Height() )
-            aSelEng.Command( rCEvt );
-    }
-#endif
+
+    const Point& rPos = rCEvt.GetMousePosPixel();
+    if( rPos.X() < aOutputSize.Width() && rPos.Y() < aOutputSize.Height() )
+        aSelEng.Command( rCEvt );
+
+    // strictly, this is not correct. However, it leads to a behavior compatible to the one at the time
+    // when this method did have a void return value ...
+    // A proper solution would be to give the EditEngine::Command also a boolean return value, and forward
+    // this (or false) to our caller
+    return true;
 }
 
 void SvImpLBox::BeginScroll()

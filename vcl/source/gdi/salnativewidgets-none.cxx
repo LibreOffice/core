@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salnativewidgets-none.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,6 @@ BOOL SalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Region&,
                               const Point&,
-                              SalControlHandle&,
                               BOOL& )
 {
     return( FALSE );
@@ -77,7 +73,6 @@ BOOL SalGraphics::hitTestNativeControl( ControlType,
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:         An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the SalFrame implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL SalGraphics::drawNativeControl(    ControlType,
@@ -85,7 +80,6 @@ BOOL SalGraphics::drawNativeControl(    ControlType,
                             const Region&,
                             ControlState,
                             const ImplControlValue&,
-                            SalControlHandle&,
                             const OUString& )
 {
     return( FALSE );
@@ -100,7 +94,6 @@ BOOL SalGraphics::drawNativeControl(    ControlType,
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:         An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the SalFrame implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL SalGraphics::drawNativeControlText(    ControlType,
@@ -108,7 +101,6 @@ BOOL SalGraphics::drawNativeControlText(    ControlType,
                                 const Region&,
                                 ControlState,
                                 const ImplControlValue&,
-                                SalControlHandle&,
                                 const OUString& )
 {
     return( FALSE );
@@ -126,7 +118,6 @@ BOOL SalGraphics::drawNativeControlText(    ControlType,
  *
  *  rControlRegion: The bounding region of the control in VCL frame coordinates.
  *  aValue:     An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the SalFrame implementation.
  *  aCaption:       A caption or title string (like button text etc)
  */
 BOOL SalGraphics::getNativeControlRegion(  ControlType,
@@ -134,7 +125,6 @@ BOOL SalGraphics::getNativeControlRegion(  ControlType,
                                 const Region&,
                                 ControlState,
                                 const ImplControlValue&,
-                                SalControlHandle&,
                                 const OUString&,
                                 Region &,
                                 Region & )

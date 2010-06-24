@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wall.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -469,7 +466,7 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
     g.SetStyle( GRADIENT_LINEAR );
     g.SetStartColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     // no 'extreme' gradient when high contrast
-    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     else
         g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceGradientColor() );

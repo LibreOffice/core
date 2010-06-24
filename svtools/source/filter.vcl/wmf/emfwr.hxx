@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: emfwr.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,11 +39,15 @@
 // - EMFWriter -
 // -------------
 
+class LineInfo;
+namespace basegfx { class B2DPolygon; }
+
 class EMFWriter
 {
 private:
 
     VirtualDevice       maVDev;
+    MapMode             maDestMapMode;
     FilterConfigItem*   mpFilterConfigItem;
     SvStream*           mpStm;
     BOOL*               mpHandlesUsed;
@@ -86,6 +87,7 @@ private:
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, UINT32 nROP );
     void                ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
 
+    void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void                ImplWrite( const GDIMetaFile& rMtf );
 
 public:

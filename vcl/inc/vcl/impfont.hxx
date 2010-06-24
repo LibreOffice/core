@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impfont.hxx,v $
- * $Revision: 1.3.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,18 +133,55 @@ public:
     bool    operator==( const ImplFontMetric& ) const;
 };
 
+// ------------------
+// - ImplFontHints -
+// ------------------
+
+class ImplFontOptions
+{
+public:
+    FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
+    FontAntiAlias      meAntiAlias;      // whether the font should be antialiased
+    FontAutoHint       meAutoHint;       // whether the font should be autohinted
+    FontHinting        meHinting;        // whether the font should be hinted
+    FontHintStyle      meHintStyle;      // type of font hinting to be used
+public:
+    ImplFontOptions() :
+        meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
+        meAntiAlias(ANTIALIAS_DONTKNOW),
+        meAutoHint(AUTOHINT_DONTKNOW),
+        meHinting(HINTING_DONTKNOW),
+        meHintStyle(HINT_SLIGHT)
+    {}
+    ImplFontOptions( FontEmbeddedBitmap eEmbeddedBitmap, FontAntiAlias eAntiAlias,
+        FontAutoHint eAutoHint, FontHinting eHinting, FontHintStyle eHintStyle) :
+        meEmbeddedBitmap(eEmbeddedBitmap),
+        meAntiAlias(eAntiAlias),
+        meAutoHint(eAutoHint),
+        meHinting(eHinting),
+        meHintStyle(eHintStyle)
+    {}
+    FontAutoHint GetUseAutoHint() const { return meAutoHint; }
+    FontHintStyle GetHintStyle() const { return meHintStyle; }
+    bool DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
+    bool DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
+    bool DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
+};
+
 // -------------------
 // - ImplFontCharMap -
 // -------------------
 
+class CmapResult;
+
 class VCL_DLLPUBLIC ImplFontCharMap
 {
 public:
-                        ImplFontCharMap( int nRangePairs,
-                            const sal_uInt32* pRangeCodes,
-                            const int* pStartGlyphs = NULL );
+    explicit             ImplFontCharMap( const CmapResult& );
+    virtual              ~ImplFontCharMap();
 
-static ImplFontCharMap* GetDefaultMap();
+    static ImplFontCharMap* GetDefaultMap( bool bSymbols=false);
+
     bool                IsDefaultMap() const;
     bool                HasChar( sal_uInt32 ) const;
     int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
@@ -165,34 +199,45 @@ static ImplFontCharMap* GetDefaultMap();
     void                AddReference();
     void                DeReference();
 
-    int                 GetGlyphIndex( sal_uInt32 );
+    int                 GetGlyphIndex( sal_uInt32 ) const;
 
 private:
-                        ~ImplFontCharMap();
     int                 ImplFindRangeIndex( sal_uInt32 ) const;
 
     // prevent assignment and copy construction
-                        ImplFontCharMap( const ImplFontCharMap& );
+    explicit            ImplFontCharMap( const ImplFontCharMap& );
     void                operator=( const ImplFontCharMap& );
 
 private:
     const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
-    const int*          mpStartGlyphs;    // index of the first glyph of the ranges
+    const int*          mpStartGlyphs;    // range-specific mapper to glyphs
+    const USHORT*       mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
     int                 mnCharCount;
     int                 mnRefCount;
 };
 
 // CmapResult is a normalized version of the many CMAP formats
-struct CmapResult
+class
+#ifdef UNX
+    VCL_DLLPUBLIC // vcl-plugins need it
+#endif // UNX
+CmapResult
 {
-    sal_uInt32* mpPairCodes;
-    int*        mpStartGlyphs;
-    int         mnPairCount;
-    bool        mbRecoded;
-    bool        mbSymbolic;
+public:
+    explicit    CmapResult( bool bSymbolic = false,
+                    const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
+                    const int* pStartGlyphs = 0, const USHORT* pGlyphIds = NULL );
+
+    const sal_uInt32* mpRangeCodes;
+    const int*        mpStartGlyphs;
+    const USHORT*     mpGlyphIds;
+    int               mnRangeCount;
+    bool              mbSymbolic;
+    bool              mbRecoded;
 };
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
 #endif // _SV_IMPFONT_HXX
+

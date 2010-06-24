@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: brwbox2.cxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -343,10 +340,6 @@ void BrowseBox::ToggleSelection( BOOL bForce )
     if ( !bForce &&
          ( bNotToggleSel || !IsUpdateMode() || !bSelectionIsVisible ) )
         return;
-//MI, 28.01.98
-//  if ( !getDataWindow()->bHighlightToggle &&
-//       !getDataWindow()->bHighlightAuto )
-//      return;
 
     // only highlight painted areas!
     bNotToggleSel = TRUE;
@@ -987,11 +980,10 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
                 Size( _rRect.GetSize().Width(), nDataRowHeigt ) );
         PaintRow( _rOut, aRowRect );
 
-        BOOL bRowAutoHighlight  =   _bDrawSelections
-                                &&  !bHideSelect
-                                &&  ((BrowserDataWin&)GetDataWindow()).bHighlightAuto
-                                &&  IsRowSelected( nRow );
-        if ( bRowAutoHighlight )
+        BOOL bRowSelected   =   _bDrawSelections
+                            &&  !bHideSelect
+                            &&  IsRowSelected( nRow );
+        if ( bRowSelected )
         {
             _rOut.SetTextColor( rHighlightTextColor );
             _rOut.SetFillColor( rHighlightFillColor );
@@ -1085,7 +1077,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             bRetouching = TRUE;
 
         // reset auto-highlight
-        if ( bRowAutoHighlight )
+        if ( bRowSelected )
         {
             _rOut.SetTextColor( aOldTextColor );
             _rOut.SetFillColor( aOldFillColor );

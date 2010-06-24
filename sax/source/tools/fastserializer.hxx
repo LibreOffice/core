@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: serializer.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.2.4.1 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: dr $ $Date: 2008/02/15 12:56:11 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,6 +37,7 @@
 #include <stack>
 
 #include "sax/dllapi.h"
+#include "sax/fshelper.hxx"
 
 #define SERIALIZER_IMPLEMENTATION_NAME  "com.sun.star.comp.extensions.xml.sax.FastSerializer"
 #define SERIALIZER_SERVICE_NAME     "com.sun.star.xml.sax.FastSerializer"
@@ -112,23 +105,45 @@ public:
 
     /** Merge 2 topmost marks.
 
-        There are 2 possibilities - prepend the top before the second top-most
-        mark, or append it; prepending brings the possibility to switch parts
-        of the output.
+        There are 3 possibilities - prepend the top before the second top-most
+        mark, append it, or append it later; prepending brings the possibility
+        to switch parts of the output, appending later allows to write some
+        output in advance.
 
         Writes the result to the output stream if the mark stack becomes empty
         by the operation.
 
+        When the MERGE_MARKS_POSTPONE is specified, the merge happens just
+        before the next merge.
+
         @see mark()
      */
-    void mergeTopMarks( bool bPrepend = false );
+    void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
     typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
-    ::std::stack< Int8Sequence > maMarkStack;
+    class ForMerge
+    {
+        Int8Sequence maData;
+        Int8Sequence maPostponed;
+
+    public:
+        ForMerge() : maData(), maPostponed() {}
+
+        Int8Sequence& getData();
+
+        void prepend( const Int8Sequence &rWhat );
+        void append( const Int8Sequence &rWhat );
+        void postpone( const Int8Sequence &rWhat );
+
+    private:
+        static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
+    };
+
+    ::std::stack< ForMerge > maMarkStack;
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     void write( const ::rtl::OUString& s );
@@ -144,4 +159,3 @@ protected:
 } // namespace sax_fastparser
 
 #endif
-

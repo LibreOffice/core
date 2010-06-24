@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salnativewidgets-kde.cxx,v $
- * $Revision: 1.26.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
-#include "kde_headers.h"
+#include <shell/kde_headers.h>
 
 #include <salunx.h>
 #include <saldata.hxx>
@@ -1180,18 +1177,18 @@ class KDESalGraphics : public X11SalGraphics
     virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
     virtual BOOL hitTestNativeControl( ControlType nType, ControlPart nPart,
                                        const Region& rControlRegion, const Point& aPos,
-                                       SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                       BOOL& rIsInside );
     virtual BOOL drawNativeControl( ControlType nType, ControlPart nPart,
                                     const Region& rControlRegion, ControlState nState,
-                                    const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                    const ImplControlValue& aValue,
                                     const OUString& aCaption );
     virtual BOOL drawNativeControlText( ControlType nType, ControlPart nPart,
                                         const Region& rControlRegion, ControlState nState,
-                                        const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                        const ImplControlValue& aValue,
                                         const OUString& aCaption );
     virtual BOOL getNativeControlRegion( ControlType nType, ControlPart nPart,
                                          const Region& rControlRegion, ControlState nState,
-                                         const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                         const ImplControlValue& aValue,
                                          const OUString& aCaption,
                                          Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 };
@@ -1245,7 +1242,7 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 */
 BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Region& rControlRegion, const Point& rPos,
-                                           SalControlHandle&, BOOL& rIsInside )
+                                           BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
@@ -1347,15 +1344,12 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     @param aValue
     An optional value (tristate/numerical/string).
 
-    @param rControlHandle
-    Carries platform dependent data and is maintained by the SalFrame implementation.
-
     @param aCaption
     A caption or title string (like button text etc.)
 */
 BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
                                         const Region& rControlRegion, ControlState nState,
-                                        const ImplControlValue& aValue, SalControlHandle&,
+                                        const ImplControlValue& aValue,
                                         const OUString& )
 {
     BOOL bReturn = FALSE;
@@ -1492,15 +1486,12 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     @param aValue
     An optional value (tristate/numerical/string)
 
-    @param rControlHandle
-    Carries platform dependent data and is maintained by the SalFrame implementation.
-
     @param aCaption
     A caption or title string (like button text etc.)
 */
 BOOL KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
                                             const Region&, ControlState,
-                                            const ImplControlValue&, SalControlHandle&,
+                                            const ImplControlValue&,
                                             const OUString& )
 {
     return FALSE;
@@ -1520,15 +1511,12 @@ BOOL KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
     @param aValue
     An optional value (tristate/numerical/string)
 
-    @param rControlHandle
-    Carries platform dependent data and is maintained by the SalFrame implementation.
-
     @param aCaption
     A caption or title string (like button text etc.)
 */
 BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
                                              const Region& rControlRegion, ControlState nState,
-                                             const ImplControlValue&, SalControlHandle&,
+                                             const ImplControlValue&,
                                              const OUString&,
                                              Region &rNativeBoundingRegion, Region &rNativeContentRegion )
 {
@@ -1996,6 +1984,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         }
 
         aStyleSettings.SetMenuTextColor( aMenuFore );
+        aStyleSettings.SetMenuBarTextColor( aMenuFore );
         aStyleSettings.SetMenuColor( aMenuBack );
         aStyleSettings.SetMenuBarColor( aMenuBack );
 
@@ -2035,13 +2024,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // Scroll bar size
     aStyleSettings.SetScrollBarSize( kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
 
-    /* #i35482# do not override HC mode
-    // #i59364# high contrast mode
-    bool bHC = ( aStyleSettings.GetFaceColor().IsDark() ||
-                 aStyleSettings.GetWindowColor().IsDark() );
-    aStyleSettings.SetHighContrastMode( bHC );
-    */
-
     rSettings.SetStyleSettings( aStyleSettings );
 }
 
@@ -2079,12 +2061,13 @@ void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     }
 }
 
-void KDESalFrame::updateGraphics()
+void KDESalFrame::updateGraphics( bool bClear )
 {
+    Drawable aDrawable = bClear ? None : GetWindow();
     for( int i = 0; i < nMaxGraphics; i++ )
     {
         if( m_aGraphics[i].bInUse )
-            m_aGraphics[i].pGraphics->SetDrawable( GetWindow(), GetScreenNumber() );
+            m_aGraphics[i].pGraphics->SetDrawable( aDrawable, GetScreenNumber() );
     }
 }
 

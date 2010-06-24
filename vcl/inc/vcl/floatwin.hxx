@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: floatwin.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,6 +154,8 @@ public:
     const Link&     GetPopupModeEndHdl() const  { return maPopupModeEndHdl; }
 
     BOOL            GrabsFocus() const { return mbGrabFocus; }
+
+    static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, ULONG nFlags, USHORT& rArrangeIndex );
 };
 
 #endif // _SV_FLOATWIN_HXX

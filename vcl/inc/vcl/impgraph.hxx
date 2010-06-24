@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impgraph.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +52,7 @@ struct ImpSwapInfo
 class   OutputDevice;
 class   GfxLink;
 struct  ImpSwapFile;
+class GraphicConversionParameters;
 
 class ImpGraphic
 {
@@ -102,8 +100,8 @@ private:
     BOOL                ImplIsAlpha() const;
     BOOL                ImplIsAnimated() const;
 
-    Bitmap              ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) const;
-    BitmapEx            ImplGetBitmapEx( const Size* pSizePixel, BOOL bUnlimited ) const;
+    Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
+    BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
     Animation           ImplGetAnimation() const;
     const GDIMetaFile&  ImplGetGDIMetaFile() const;
 

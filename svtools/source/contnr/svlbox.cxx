@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svlbox.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 #include <rtl/instance.hxx>
 
 #define _SVSTDARR_ULONGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef _SVEDI_HXX
 #include <svtools/svmedit.hxx>
@@ -1203,6 +1200,12 @@ void SvLBox::ViewDataInitialized( SvLBoxEntry* )
     DBG_CHKTHIS(SvLBox,0);
 }
 
+void SvLBox::StateChanged( StateChangedType eType )
+{
+    if( eType == STATE_CHANGE_ENABLE )
+        Invalidate( INVALIDATE_CHILDREN );
+    Control::StateChanged( eType );
+}
 
 void SvLBox::ImplShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow)
 {
@@ -1512,9 +1515,10 @@ void SvLBox::MakeVisible( SvLBoxEntry* )
     DBG_CHKTHIS(SvLBox,0);
 }
 
-void SvLBox::Command( const CommandEvent& )
+void SvLBox::Command( const CommandEvent& i_rCommandEvent )
 {
     DBG_CHKTHIS(SvLBox,0);
+    Control::Command( i_rCommandEvent );
 }
 
 void SvLBox::KeyInput( const KeyEvent& rKEvt )
@@ -1771,10 +1775,14 @@ void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     DBG_CHKTHIS(SvLBox,0);
 
-    ReleaseMouse();
-    SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
     nOldDragMode = GetDragDropMode();
-    if( !pEntry || !nOldDragMode )
+    if ( !nOldDragMode )
+        return;
+
+    ReleaseMouse();
+
+    SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
+    if( !pEntry )
     {
         DragFinished( DND_ACTION_NONE );
         return;

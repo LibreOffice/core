@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfextoutdevdata.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vcl/pdfextoutdevdata.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/gfxlink.hxx>
+#include "vcl/pdfextoutdevdata.hxx"
+#include "vcl/graph.hxx"
+#include "vcl/outdev.hxx"
+#include "vcl/gfxlink.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
 
 
 #include <boost/shared_ptr.hpp>
@@ -283,8 +282,6 @@ struct PageSyncData
     std::deque< Graphic >                           mGraphics;
     std::deque< ::boost::shared_ptr< PDFWriter::AnyWidget > >
                                                     mControls;
-    std::set< ::rtl::OUString >                     mControlNames;
-
     GlobalSyncData*                                 mpGlobalData;
 
     sal_Bool                                        mbGroupIgnoreGDIMtfActions;
@@ -375,7 +372,6 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                 if ( pControl.get() )
                     rWriter.CreateControl( *pControl );
                 mControls.pop_front();
-                mControlNames.erase( pControl->Name );
             }
             break;
             case PDFExtOutDevDataSync::BeginGroup :
@@ -436,7 +432,10 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                         if ( bClippingNeeded )
                         {
                             rWriter.Push();
-                            rWriter.SetClipRegion( aVisibleOutputRect );
+                            basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
+                                basegfx::B2DRectangle( aVisibleOutputRect.Left(), aVisibleOutputRect.Top(),
+                                                       aVisibleOutputRect.Right(), aVisibleOutputRect.Bottom() ) ) );
+                            rWriter.SetClipRegion( aRect);
                         }
                         Bitmap aMask;
                         SvMemoryStream aTmp;
@@ -772,16 +771,6 @@ void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType, 
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::CreateControl );
 
     ::boost::shared_ptr< PDFWriter::AnyWidget > pClone( rControlType.Clone() );
-    // ensure a unique name
-    ::rtl::OUString sUniqueName( pClone->Name );
-    sal_Int32 nUniqueNumber( 0 );
-    while ( mpPageSyncData->mControlNames.find( sUniqueName ) != mpPageSyncData->mControlNames.end() )
-    {
-        sUniqueName = pClone->Name + ::rtl::OUString::valueOf( ++nUniqueNumber );
-    }
-    pClone->Name = sUniqueName;
-    mpPageSyncData->mControlNames.insert( pClone->Name );
-
     mpPageSyncData->mControls.push_back( pClone );
 }
 

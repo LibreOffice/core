@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: brwbox1.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -538,7 +535,7 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
                 aScrollArea = Rectangle(Point(aNextRect.Left(),0),
                                         Point(aToRect.Right(),aDataWinSize.Height()));
 
-            pDataWin->Scroll( nScroll, 0, aScrollArea, SCROLL_FLAGS );
+            pDataWin->Scroll( nScroll, 0, aScrollArea );
             aToRect.Top() = 0;
             aToRect.Bottom() = aScrollArea.Bottom();
             Invalidate( aToRect );
@@ -2449,8 +2446,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
             BROWSER_AUTO_HSCROLL |
             BROWSER_TRACKING_TIPS |
 //          BROWSER_HIGHLIGHT_NONE |
-            BROWSER_HIGHLIGHT_AUTO |
-//          BROWSER_HIGHLIGHT_MANU |
             BROWSER_HEADERBAR_NEW |
 //          BROWSER_AUTOSIZE_LASTCOL |
             0;
@@ -2520,9 +2515,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
     pVScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
     pVScroll->SetEndScrollHdl( LINK( this, BrowseBox, EndScrollHdl ) );
 
-    getDataWindow()->bHighlightAuto =
-            BROWSER_HIGHLIGHT_AUTO == ( nMode & BROWSER_HIGHLIGHT_AUTO ) ||
-            BROWSER_HIGHLIGHT_MANU != ( nMode & BROWSER_HIGHLIGHT_MANU );
     getDataWindow()->bAutoSizeLastCol =
             BROWSER_AUTOSIZE_LASTCOL == ( nMode & BROWSER_AUTOSIZE_LASTCOL );
     getDataWindow()->bOwnDataChangedHdl =

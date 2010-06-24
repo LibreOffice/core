@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: window.cxx,v $
- * $Revision: 1.285.38.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +65,7 @@
 #include "vcl/wall.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/toolbox.h"
-#include "vcl/fontcfg.hxx"
+#include "unotools/fontcfg.hxx"
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
 #include "vcl/button.hxx" // Button::GetStandardText
@@ -101,6 +98,7 @@
 #include "vcl/lazydelete.hxx"
 
 #include <set>
+#include <typeinfo>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -292,6 +290,13 @@ bool Window::ImplCheckUIFont( const Font& rFont )
 
 void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 {
+    // reset high contrast to false, so the system can either update it
+    // or AutoDetectSystemHC can kick in (see below)
+    StyleSettings aTmpSt( rSettings.GetStyleSettings() );
+    aTmpSt.SetHighContrastMode( FALSE );
+    rSettings.SetStyleSettings( aTmpSt );
+    ImplGetFrame()->UpdateSettings( rSettings );
+
     // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
     String aUserInterfaceFont;
     bool bUseSystemFont = rSettings.GetStyleSettings().GetUseSystemUIFonts();
@@ -303,7 +308,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     if ( !bUseSystemFont )
     {
         ImplInitFontList();
-        String aConfigFont = vcl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
+        String aConfigFont = utl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
         {
@@ -472,7 +477,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     rSettings.SetStyleSettings( aStyleSettings );
 
 
-    // #104427# auto detect HC mode ?
+    // auto detect HC mode; if the system already set it to "yes"
+    // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
@@ -495,6 +501,13 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
                 rSettings.SetStyleSettings( aStyleSettings );
             }
         }
+    }
+
+    static const char* pEnvHC = getenv( "SAL_FORCE_HC" );
+    if( pEnvHC && *pEnvHC )
+    {
+        aStyleSettings.SetHighContrastMode( TRUE );
+        rSettings.SetStyleSettings( aStyleSettings );
     }
 
 #ifdef DBG_UTIL
@@ -690,6 +703,8 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbCallHandlersDuringInputDisabled = FALSE; // TRUE: call event handlers even if input is disabled
     mpWindowImpl->mbDisableAccessibleLabelForRelation = FALSE; // TRUE: do not set LabelFor relation on accessible objects
     mpWindowImpl->mbDisableAccessibleLabeledByRelation = FALSE; // TRUE: do not set LabeledBy relation on accessible objects
+    mpWindowImpl->mbHelpTextDynamic = FALSE;          // TRUE: append help id in HELP_DEBUG case
+    mpWindowImpl->mbFakeFocusSet = FALSE; // TRUE: pretend as if the window has focus.
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -728,7 +743,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nBorderTypeStyle |= BORDERWINDOW_STYLE_FRAME;
             nStyle |= WB_BORDER;
         }
-        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL), nBorderTypeStyle );
+        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
         ((Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -783,6 +798,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nFrameStyle = SAL_FRAME_STYLE_FLOAT;
             if( nStyle & WB_OWNERDRAWDECORATION )
                 nFrameStyle |= (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_NOSHADOW);
+            if( nStyle & WB_NEEDSFOCUS )
+                nFrameStyle |= SAL_FRAME_STYLE_FLOAT_FOCUSABLE;
         }
         else if( mpWindowImpl->mbFloatWin )
             nFrameStyle |= SAL_FRAME_STYLE_TOOLWINDOW;
@@ -923,7 +940,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
              ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN))
              )
         {
-            mpWindowImpl->mpFrame->UpdateSettings( *pSVData->maAppData.mpSettings );
+            // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
             ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
             OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
             pSVData->maAppData.mbSettingsInit = TRUE;
@@ -1269,7 +1286,10 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_TEXT )
         SetText( ReadStringRes() );
     if ( nObjMask & WINDOW_HELPTEXT )
+    {
         SetHelpText( ReadStringRes() );
+        mpWindowImpl->mbHelpTextDynamic = TRUE;
+    }
     if ( nObjMask & WINDOW_QUICKTEXT )
         SetQuickHelpText( ReadStringRes() );
     if ( nObjMask & WINDOW_EXTRALONG )
@@ -1303,7 +1323,6 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnIsTopWindow  = (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = FALSE;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? FALSE : TRUE; // TRUE: try to draw this control with native theme API
-        mpWindowImpl->mpWinData->mpSalControlHandle  = NULL;
         mpWindowImpl->mpWinData->mpSmartHelpId    = NULL;
         mpWindowImpl->mpWinData->mpSmartUniqueId  = NULL;
    }
@@ -3901,6 +3920,20 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
     }
 }
 
+static bool IsWindowFocused(const WindowImpl& rWinImpl)
+{
+    if (rWinImpl.mpSysObj)
+        return true;
+
+    if (rWinImpl.mpFrameData->mbHasFocus)
+        return true;
+
+    if (rWinImpl.mbFakeFocusSet)
+        return true;
+
+    return false;
+}
+
 // -----------------------------------------------------------------------
 void Window::ImplGrabFocus( USHORT nFlags )
 {
@@ -3972,9 +4005,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
         pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
     }
 
-    BOOL bHasFocus = TRUE;
-        if ( !mpWindowImpl->mpSysObj && !mpWindowImpl->mpFrameData->mbHasFocus )
-            bHasFocus = FALSE;
+    bool bHasFocus = IsWindowFocused(*mpWindowImpl);
 
     BOOL bMustNotGrabFocus = FALSE;
     // #100242#, check parent hierarchy if some floater prohibits grab focus
@@ -4297,6 +4328,27 @@ Window::Window( Window* pParent, const ResId& rResId )
 }
 
 // -----------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 0
+namespace
+{
+    void lcl_appendWindowInfo( ByteString& io_rErrorString, const Window& i_rWindow )
+    {
+        // skip border windows, they don't carry information which helps diagnosing the problem
+        const Window* pWindow( &i_rWindow );
+        while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
+            pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        if ( !pWindow )
+            pWindow = &i_rWindow;
+
+        io_rErrorString += char(13);
+        io_rErrorString += typeid( *pWindow ).name();
+        io_rErrorString += " (window text: '";
+        io_rErrorString += ByteString( pWindow->GetText(), RTL_TEXTENCODING_UTF8 );
+        io_rErrorString += "')";
+    }
+}
+#endif
+// -----------------------------------------------------------------------
 
 Window::~Window()
 {
@@ -4429,9 +4481,7 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = TRUE;
-                if ( aErrorStr.Len() )
-                    aErrorStr += "; ";
-                aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aErrorStr, *pTempWin );
             }
             pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
         }
@@ -4452,9 +4502,7 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = TRUE;
-                if ( aErrorStr.Len() )
-                    aErrorStr += "; ";
-                aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aErrorStr, *pTempWin );
             }
             pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
         }
@@ -4476,10 +4524,8 @@ Window::~Window()
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
-                aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
-                if ( pTempWin )
-                    aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
@@ -4493,10 +4539,8 @@ Window::~Window()
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
-                aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
-                if ( pTempWin )
-                    aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
@@ -4691,10 +4735,6 @@ Window::~Window()
             delete mpWindowImpl->mpWinData->mpFocusRect;
         if ( mpWindowImpl->mpWinData->mpTrackRect )
             delete mpWindowImpl->mpWinData->mpTrackRect;
-        // Native widget support
-        delete mpWindowImpl->mpWinData->mpSalControlHandle;
-        mpWindowImpl->mpWinData->mpSalControlHandle = NULL;
-
         if ( mpWindowImpl->mpWinData->mpSmartHelpId )
             delete mpWindowImpl->mpWinData->mpSmartHelpId;
         if ( mpWindowImpl->mpWinData->mpSmartUniqueId )
@@ -4745,7 +4785,10 @@ void Window::doLazyDelete()
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(this);
     DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(this);
     if( pSysWin || ( pDockWin && pDockWin->IsFloatingMode() ) )
+    {
+        Show( FALSE );
         SetParent( ImplGetDefaultWindow() );
+    }
     vcl::LazyDeletor<Window>::Delete( this );
 }
 
@@ -5365,6 +5408,11 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
 
         pWindow = pWindow->GetParent();
     }
+}
+
+void Window::FireVclEvent( VclSimpleEvent* pEvent )
+{
+    ImplGetSVData()->mpApp->ImplCallEventListeners(pEvent);
 }
 
 // -----------------------------------------------------------------------
@@ -6221,6 +6269,15 @@ void Window::SetParent( Window* pNewParent )
             pSysWin->GetTaskPaneList()->RemoveWindow( this );
         }
     }
+    // remove ownerdraw decorated windows from list in the top-most frame window
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+    {
+        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( rList.begin(), rList.end(), this );
+        if( p != rList.end() )
+            rList.erase( p );
+    }
 
     ImplSetFrameParent( pNewParent );
 
@@ -6349,6 +6406,9 @@ void Window::SetParent( Window* pNewParent )
 
     if( bChangeTaskPaneList )
         pNewSysWin->GetTaskPaneList()->AddWindow( this );
+
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+        ImplGetOwnerDrawList().push_back( this );
 
     if ( bVisible )
         Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
@@ -6492,7 +6552,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             // nach vorne, wenn es gewuenscht ist
             if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
             {
-                ImplStartToTop( 0 );
+                ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
                 ImplFocusToTop( 0, FALSE );
             }
 
@@ -7393,13 +7453,13 @@ Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rR
 
 // -----------------------------------------------------------------------
 
-Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // with decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, FALSE );
 }
 
-Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // without decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, TRUE );
@@ -7407,12 +7467,12 @@ Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow )
 
 // -----------------------------------------------------------------------
 
-Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly )
+Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly ) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
     // otherwise we miss a few pixels
-    Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
+    const Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
 
     Point aPos( pWin->OutputToScreenPixel( Point(0,0) ) );
     aPos.X() += g.nX;
@@ -7728,6 +7788,11 @@ void Window::GrabFocusToDocument()
         }
         pWin = pWin->GetParent();
     }
+}
+
+void Window::SetFakeFocus( bool bFocus )
+{
+    ImplGetWindowImpl()->mbFakeFocusSet = bFocus;
 }
 
 // -----------------------------------------------------------------------
@@ -8087,8 +8152,25 @@ const XubString& Window::GetHelpText() const
                     ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
                 else
                     ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( nNumHelpId, this );
+                mpWindowImpl->mbHelpTextDynamic = FALSE;
             }
         }
+    }
+    else if( mpWindowImpl->mbHelpTextDynamic && (nNumHelpId || bStrHelpId) )
+    {
+        static const char* pEnv = getenv( "HELP_DEBUG" );
+        if( pEnv && *pEnv )
+        {
+            rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
+            aTxt.append( mpWindowImpl->maHelpText );
+            aTxt.appendAscii( "\n------------------\n" );
+            if( bStrHelpId )
+                aTxt.append( rtl::OUString( aStrHelpId ) );
+            else
+                aTxt.append( sal_Int32( nNumHelpId ) );
+            mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
+        }
+        mpWindowImpl->mbHelpTextDynamic = FALSE;
     }
 
     return mpWindowImpl->maHelpText;
@@ -9730,6 +9812,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     EnableOutput();
 
     DBG_ASSERT( GetMapMode().GetMapUnit() == MAP_PIXEL, "MapMode must be PIXEL based" );
+    if ( GetMapMode().GetMapUnit() != MAP_PIXEL )
+        return;
 
     // preserve graphicsstate
     Push();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xconnection.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,16 +27,38 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <svsys.h>
-#include <vcl/xconnection.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/salinst.hxx>
+
+#include "svsys.h"
+#include "vcl/xconnection.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/salinst.hxx"
+#include "vcl/svapp.hxx"
+
+namespace vcl
+{
+    class SolarMutexReleaser
+    {
+        ULONG mnReleased;
+    public:
+        SolarMutexReleaser()
+        {
+            mnReleased = Application::ReleaseSolarMutex();
+        }
+
+        ~SolarMutexReleaser()
+        {
+            if( mnReleased )
+                Application::AcquireSolarMutex( mnReleased );
+        }
+    };
+}
 
 using namespace rtl;
 using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
+
 
 DisplayConnection::DisplayConnection()
 {
@@ -108,6 +127,8 @@ Any SAL_CALL DisplayConnection::getIdentifier() throw()
 
 void DisplayConnection::dispatchDowningEvent()
 {
+    SolarMutexReleaser aRel;
+
     MutexGuard aGuard( m_aMutex );
     Any aEvent;
     std::list< Reference< XEventHandler > > aLocalList( m_aHandlers );
@@ -117,13 +138,19 @@ void DisplayConnection::dispatchDowningEvent()
 
 bool DisplayConnection::dispatchEvent( void* pThis, void* pData, int nBytes )
 {
+    SolarMutexReleaser aRel;
+
     DisplayConnection* This = (DisplayConnection*)pThis;
-    MutexGuard aGuard( This->m_aMutex );
 
     Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    for( ::std::list< Reference< XEventHandler > >::const_iterator it = This->m_aHandlers.begin(); it != This->m_aHandlers.end(); ++it )
+    ::std::list< Reference< XEventHandler > > handlers;
+    {
+        MutexGuard aGuard( This->m_aMutex );
+        handlers = This->m_aHandlers;
+    }
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
     return false;
@@ -131,13 +158,19 @@ bool DisplayConnection::dispatchEvent( void* pThis, void* pData, int nBytes )
 
 bool DisplayConnection::dispatchErrorEvent( void* pThis, void* pData, int nBytes )
 {
+    SolarMutexReleaser aRel;
+
     DisplayConnection* This = (DisplayConnection*)pThis;
-    MutexGuard aGuard( This->m_aMutex );
 
     Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    for( ::std::list< Reference< XEventHandler > >::const_iterator it = This->m_aErrorHandlers.begin(); it != This->m_aErrorHandlers.end(); ++it )
+    ::std::list< Reference< XEventHandler > > handlers;
+    {
+        MutexGuard aGuard( This->m_aMutex );
+        handlers = This->m_aErrorHandlers;
+    }
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
 

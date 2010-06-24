@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: glyphcache.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@ class ServerFontLayoutEngine;
 class ServerFontLayout;
 class ExtraKernInfo;
 struct ImplKernPairData;
+class ImplFontOptions;
 
 #include <tools/gen.hxx>
 #include <hash_map>
@@ -50,8 +48,10 @@ struct ImplKernPairData;
 namespace basegfx { class B2DPolyPolygon; }
 
 class RawBitmap;
+class CmapResult;
 
 #include <vcl/outfont.hxx>
+#include <vcl/impfont.hxx>
 
 class ServerFontLayout;
 #include <vcl/sallayout.hxx>
@@ -61,8 +61,8 @@ class ServerFontLayout;
 class VCL_DLLPUBLIC GlyphCache
 {
 public:
-                                GlyphCache( GlyphCachePeer& );
-                                ~GlyphCache();
+    explicit                    GlyphCache( GlyphCachePeer& );
+    /*virtual*/                 ~GlyphCache();
 
     static GlyphCache&      GetInstance();
     void                        LoadFonts();
@@ -76,6 +76,7 @@ public:
 
     ServerFont*                 CacheFont( const ImplFontSelectData& );
     void                        UncacheFont( ServerFont& );
+    void                        InvalidateAllGlyphs();
 
 protected:
     GlyphCachePeer&             mrPeer;
@@ -98,7 +99,6 @@ private:
     struct IFSD_Hash{ size_t operator()( const ImplFontSelectData& ) const; };
     typedef ::std::hash_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
-
     ULONG                       mnMaxSize;      // max overall cache size in bytes
     mutable ULONG               mnBytesUsed;
     mutable long                mnLruIndex;
@@ -181,6 +181,7 @@ public:
     virtual bool                TestFont() const            { return true; }
     virtual void*               GetFtFace() const { return 0; }
     virtual int                 GetLoadFlags() const { return 0; }
+    virtual void                SetFontOptions( const ImplFontOptions&) {}
     virtual bool                NeedsArtificialBold() const { return false; }
     virtual bool                NeedsArtificialItalic() const { return false; }
 
@@ -189,7 +190,7 @@ public:
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const = 0;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const      { return 0; }
     virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
-    virtual ULONG               GetFontCodeRanges( sal_uInt32* ) const { return 0; }
+    virtual bool                GetFontCodeRanges( CmapResult& ) const        { return false; }
     Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );
@@ -210,7 +211,7 @@ public:
 protected:
     friend class GlyphCache;
     friend class ServerFontLayout;
-                                ServerFont( const ImplFontSelectData& );
+    explicit                    ServerFont( const ImplFontSelectData& );
     virtual                     ~ServerFont();
 
     void                        AddRef() const      { ++mnRefCount; }
@@ -258,11 +259,15 @@ class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
 {
 private:
     ServerFont*    mpServerFont;
+    ImplFontOptions maFontOptions;
+    bool           mbGotFontOptions;
+    bool           mbValidFontOptions;
 
 public:
                    ImplServerFontEntry( ImplFontSelectData& );
     virtual        ~ImplServerFontEntry();
     void           SetServerFont( ServerFont* p) { mpServerFont = p; }
+    void           HandleFontOptions();
 };
 
 // =======================================================================

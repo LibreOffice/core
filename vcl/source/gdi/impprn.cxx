@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impprn.cxx,v $
- * $Revision: 1.18.86.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -478,10 +475,12 @@ void ImplQPrinter::EndQueuePrint()
         DBG_ASSERT( mpPrinter, "no SalPrinter in ImplQPrinter" );
         if( mpPrinter )
         {
+            #if 0
             mpPrinter->StartJob( mbPrintFile ? &maPrintFile : NULL,
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
                                  this );
+            #endif
             EndJob();
             mpParent->ImplEndPrint();
         }

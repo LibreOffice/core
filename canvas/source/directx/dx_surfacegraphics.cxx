@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dx_surfacegraphics.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,8 @@
 
 #include "dx_surfacegraphics.hxx"
 #include "dx_impltools.hxx"
+
+using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
@@ -75,11 +74,12 @@ namespace dxcanvas
                 tools::setupGraphics( *pGraphics );
                 pRet.reset(pGraphics,
                            GraphicsDeleter(rSurface, aHDC));
+                return pRet;
             }
             else
                 rSurface->ReleaseDC( aHDC );
         }
 
-        return pRet;
+        throw uno::RuntimeException();
     }
 }

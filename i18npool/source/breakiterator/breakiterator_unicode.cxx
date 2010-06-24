@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: breakiterator_unicode.cxx,v $
- * $Revision: 1.36.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,20 +48,23 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 #define ERROR ::com::sun::star::uno::RuntimeException()
 
-#define ImplementName "com.sun.star.i18n.BreakIterator_Unicode";
+//#define ImplementName "com.sun.star.i18n.BreakIterator_Unicode";
 
 
-BreakIterator_Unicode::BreakIterator_Unicode()
+BreakIterator_Unicode::BreakIterator_Unicode() :
+    cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" ),    // implementation name
+    wordRule( "word" ),
+    lineRule( "line" ),
+    result(),
+    character(),
+    word(),
+    sentence(),
+    line(),
+    icuBI( NULL ),
+    aLocale(),
+    aBreakType(),
+    aWordType()
 {
-        wordRule="word";
-        lineRule="line";
-        character.aBreakIterator=word.aBreakIterator=sentence.aBreakIterator=line.aBreakIterator=NULL;
-        character.aICUText=UnicodeString();
-        word.aICUText=UnicodeString();
-        sentence.aICUText=UnicodeString();
-        line.aICUText=UnicodeString();
-        cBreakIterator = ImplementName;
-        icuBI=NULL;
 }
 
 

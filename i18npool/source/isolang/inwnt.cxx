@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inwnt.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,11 +101,7 @@ LanguageType MsLangId::getPlatformSystemUILanguage()
 {
     // TODO: this could be distinguished, #if(WINVER >= 0x0500)
     // needs _run_ time differentiation though, not at compile time.
-#if 0
     getPlatformSystemLanguageImpl( nImplSystemUILanguage,
             &GetUserDefaultUILanguage, &GetSystemDefaultUILanguage);
-#endif
-    getPlatformSystemLanguageImpl( nImplSystemUILanguage,
-            &GetUserDefaultLangID, &GetSystemDefaultLangID);
     return nImplSystemUILanguage;
 }

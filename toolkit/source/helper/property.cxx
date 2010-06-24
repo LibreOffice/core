@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: property.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,11 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
+#include <com/sun/star/awt/grid/XGridDataModel.hpp>
+#include <com/sun/star/awt/grid/XGridColumnModel.hpp>
+#include <com/sun/star/awt/grid/ScrollBarMode.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -62,6 +63,7 @@
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::FontDescriptor;
 using ::com::sun::star::style::VerticalAlignment;
 
@@ -183,11 +185,13 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "HelpText",               HELPTEXT,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HelpURL",                HELPURL,            ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HideInactiveSelection",  HIDEINACTIVESELECTION, bool,            BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "HighContrastMode",       HIGHCONTRASTMODE,   bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HScroll",                HSCROLL,            bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HardLineBreaks",         HARDLINEBREAKS,     bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ImageAlign",             IMAGEALIGN,         sal_Int16,          BOUND, MAYBEDEFAULT),
             DECL_PROP_2     ( "ImagePosition",          IMAGEPOSITION,      sal_Int16,          BOUND, MAYBEDEFAULT),
             DECL_PROP_2     ( "ImageURL",               IMAGEURL,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "ItemSeparatorPos",       ITEM_SEPARATOR_POS, sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "Label",                  LABEL,              ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "LineColor",              LINECOLOR,          sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "LineCount",              LINECOUNT,          sal_Int16,          BOUND, MAYBEDEFAULT ),
@@ -200,6 +204,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_1     ( "MouseTransparent",       MOUSETRANSPARENT,   bool,               BOUND ),
             DECL_PROP_2     ( "MultiLine",              MULTILINE,          bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "MultiSelection",         MULTISELECTION,     bool,               BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "MultiSelectionSimpleMode",   MULTISELECTION_SIMPLEMODE,    bool, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "NativeWidgetLook",       NATIVE_WIDGET_LOOK, bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "NoLabel",                NOLABEL,            bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Orientation",            ORIENTATION,        sal_Int32,          BOUND, MAYBEDEFAULT ),
@@ -219,7 +224,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_DEP_PROP_3 ( "ScrollValue",            SCROLLVALUE,        sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "ScrollValueMax",         SCROLLVALUE_MAX,    sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ScrollValueMin",         SCROLLVALUE_MIN,    sal_Int32,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "SelectedItems",          SELECTEDITEMS,      Sequence<sal_Int16>, BOUND, MAYBEDEFAULT ),
+            DECL_DEP_PROP_2 ( "SelectedItems",          SELECTEDITEMS,      Sequence<sal_Int16>, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ShowThousandsSeparator", NUMSHOWTHOUSANDSEP,     bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Sizeable",               SIZEABLE,               bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Spin",                   SPIN,                   bool,           BOUND, MAYBEDEFAULT ),
@@ -252,7 +257,6 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "ValueStep",              VALUESTEP_DOUBLE,       double,         BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "VerticalAlign",          VERTICALALIGN,          VerticalAlignment, BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_DEP_PROP_3 ( "VisibleSize",            VISIBLESIZE,            sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
-
             DECL_PROP_2     ( "Activated",              ACTIVATED,              sal_Bool,       BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Complete",               COMPLETE,               sal_Bool,       BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "CurrentItemID",          CURRENTITEMID,          sal_Int16,      BOUND, MAYBEDEFAULT ),
@@ -273,8 +277,18 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "URL",                    URL,                    ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "WritingMode",            WRITING_MODE,           sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ContextWritingMode",     CONTEXT_WRITING_MODE,   sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT ),
-            DECL_PROP_2     ( "EnableVisible",          ENABLEVISIBLE,          sal_Bool,           BOUND, MAYBEDEFAULT )
-            };
+            DECL_PROP_2     ( "ShowRowHeader",          GRID_SHOWROWHEADER,     sal_Bool,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ShowColumnHeader",       GRID_SHOWCOLUMNHEADER,  sal_Bool,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "GridDataModel",          GRID_DATAMODEL,         Reference< ::com::sun::star::awt::grid::XGridDataModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "ColumnModel",            GRID_COLUMNMODEL,       Reference< ::com::sun::star::awt::grid::XGridColumnModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "SelectionModel",         GRID_SELECTIONMODE,     ::com::sun::star::view::SelectionType,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_2     ( "EnableVisible",          ENABLEVISIBLE,          sal_Bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "ReferenceDevice",        REFERENCE_DEVICE,       Reference< XDevice >,BOUND, MAYBEDEFAULT, TRANSIENT ),
+            DECL_PROP_3     ( "EvenRowBackgroundColor",  GRID_EVEN_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "HeaderBackgroundColor",   GRID_HEADER_BACKGROUND,       sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "LineColor",               GRID_LINE_COLOR,              sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "RowBackgroundColor",     GRID_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID )
+    };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
         }

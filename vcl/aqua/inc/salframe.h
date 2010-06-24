@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.h,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,8 @@
 #include <utility>
 #include <stdexcept>
 
+#include <boost/shared_ptr.hpp>
+
 class AquaSalGraphics;
 class AquaSalFrame;
 class AquaSalTimer;
@@ -60,47 +59,49 @@ typedef struct SalFrame::SalPointerState SalPointerState;
 class AquaSalFrame : public SalFrame
 {
 public:
-    NSWindow*               mpWindow;               // Cocoa window
-    NSView*                 mpView;                 // Cocoa view (actually a custom view, see below
-    NSMenuItem*             mpDockMenuEntry;        // entry in the dynamic dock menu
-    NSRect                  maScreenRect;           // for mirroring purposes
-    AquaSalGraphics*        mpGraphics;             // current frame graphics
-    AquaSalFrame*           mpParent;               // pointer to parent frame
-     SystemEnvData          maSysData;              // system data
-    int                     mnMinWidth;             // min. client width in pixels
-    int                     mnMinHeight;            // min. client height in pixels
-    int                     mnMaxWidth;             // max. client width in pixels
-    int                     mnMaxHeight;            // max. client height in pixels
-    NSRect                  maFullScreenRect;       // old window size when in FullScreen
-    bool                    mbGraphics:1;           // is Graphics used?
-    bool                    mbFullScreen:1;         // is Window in FullScreen?
-    bool                    mbShown:1;
-    bool                    mbInitShow:1;
-    bool                    mbPositioned:1;
-    bool                    mbSized:1;
-    bool                    mbPresentation:1;
+    NSWindow*                       mpWindow;               // Cocoa window
+    NSView*                         mpView;                 // Cocoa view (actually a custom view, see below
+    NSMenuItem*                     mpDockMenuEntry;        // entry in the dynamic dock menu
+    NSRect                          maScreenRect;           // for mirroring purposes
+    AquaSalGraphics*                mpGraphics;             // current frame graphics
+    AquaSalFrame*                   mpParent;               // pointer to parent frame
+     SystemEnvData                  maSysData;              // system data
+    int                             mnMinWidth;             // min. client width in pixels
+    int                             mnMinHeight;            // min. client height in pixels
+    int                             mnMaxWidth;             // max. client width in pixels
+    int                             mnMaxHeight;            // max. client height in pixels
+    NSRect                          maFullScreenRect;       // old window size when in FullScreen
+    bool                            mbGraphics:1;           // is Graphics used?
+    bool                            mbFullScreen:1;         // is Window in FullScreen?
+    bool                            mbShown:1;
+    bool                            mbInitShow:1;
+    bool                            mbPositioned:1;
+    bool                            mbSized:1;
+    bool                            mbPresentation:1;
 
-    ULONG                   mnStyle;
-    unsigned int            mnStyleMask;            // our style mask from NSWindow creation
+    ULONG                           mnStyle;
+    unsigned int                    mnStyleMask;            // our style mask from NSWindow creation
 
-    ULONG                   mnLastEventTime;
-    unsigned int            mnLastModifierFlags;
-    AquaSalMenu*            mpMenu;
+    ULONG                           mnLastEventTime;
+    unsigned int                    mnLastModifierFlags;
+    AquaSalMenu*                    mpMenu;
 
-    SalExtStyle             mnExtStyle;             // currently document frames are marked this way
+    SalExtStyle                     mnExtStyle;             // currently document frames are marked this way
 
-    PointerStyle            mePointerStyle;         // currently active pointer style
+    PointerStyle                    mePointerStyle;         // currently active pointer style
 
-    NSTrackingRectTag       mnTrackingRectTag;      // used to get enter/leave messages
+    NSTrackingRectTag               mnTrackingRectTag;      // used to get enter/leave messages
 
-    CGMutablePathRef        mrClippingPath;         // used for "shaping"
-    std::vector< CGRect >   maClippingRects;
+    CGMutablePathRef                mrClippingPath;         // used for "shaping"
+    std::vector< CGRect >           maClippingRects;
 
-    std::list<AquaBlinker*> maBlinkers;
+    std::list<AquaBlinker*>         maBlinkers;
 
-    Rectangle               maInvalidRect;
+    Rectangle                       maInvalidRect;
 
-    ULONG                   mnICOptions;
+    ULONG                           mnICOptions;
+
+    boost::shared_ptr< Timer >      mpActivityTimer; // Timer to prevent system sleep during presentation
 public:
     /** Constructor
 
@@ -117,6 +118,7 @@ public:
     virtual BOOL                PostEvent( void* pData );
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                SetMenu( SalMenu* pSalMenu );
     virtual void                DrawMenuBar();
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
@@ -136,7 +138,7 @@ public:
     virtual void                SetPointer( PointerStyle ePointerStyle );
     virtual void                CaptureMouse( BOOL bMouse );
     virtual void                SetPointerPos( long nX, long nY );
-    virtual void                Flush( void);
+    virtual void                Flush( void );
     virtual void                Flush( const Rectangle& );
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
@@ -181,6 +183,8 @@ public:
     NSWindow* getWindow() const { return mpWindow; }
     NSView* getView() const { return mpView; }
     unsigned int getStyleMask() const { return mnStyleMask; }
+
+    void getResolution( long& o_rDPIX, long& o_rDPIY );
 
     // actually the follwing methods do the same thing: flipping y coordinates
     // but having two of them makes clearer what the coordinate system

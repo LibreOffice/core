@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibilityoptions.cxx,v $
- * $Revision: 1.15.74.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
-
 #include <svtools/accessibilityoptions.hxx>
 #include "configitems/accessibilityoptions_const.hxx"
 
@@ -57,10 +49,10 @@
 #include <unotools/processfactory.hxx>
 #endif
 #ifndef _SVT_LOGHELPER_HXX_
-#include <loghelper.hxx>
+#include <unotools/loghelper.hxx>
 #endif
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -544,7 +536,7 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
 
 void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    Broadcast( rHint );
+    NotifyListeners(0);
     if ( rHint.IsA(TYPE(SfxSimpleHint)) )
     {
         if ( ((SfxSimpleHint&)rHint).GetId()  == SFX_HINT_ACCESSIBILITY_CHANGED )

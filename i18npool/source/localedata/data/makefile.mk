@@ -2,13 +2,9 @@
 #*
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.47.24.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -76,6 +72,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ar_LB.cxx  \
     $(MISC)$/localedata_ar_SA.cxx  \
     $(MISC)$/localedata_ar_TN.cxx  \
+    $(MISC)$/localedata_ast_ES.cxx  \
     $(MISC)$/localedata_az_AZ.cxx  \
     $(MISC)$/localedata_be_BY.cxx  \
     $(MISC)$/localedata_bg_BG.cxx  \
@@ -154,6 +151,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_hi_IN.cxx  \
     $(MISC)$/localedata_hil_PH.cxx  \
     $(MISC)$/localedata_hr_HR.cxx  \
+    $(MISC)$/localedata_hsb_DE.cxx  \
     $(MISC)$/localedata_hu_HU.cxx  \
     $(MISC)$/localedata_hy_AM.cxx  \
     $(MISC)$/localedata_ia.cxx     \
@@ -176,6 +174,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ln_CD.cxx  \
     $(MISC)$/localedata_lo_LA.cxx  \
     $(MISC)$/localedata_lt_LT.cxx  \
+    $(MISC)$/localedata_ltg_LV.cxx  \
     $(MISC)$/localedata_lv_LV.cxx  \
     $(MISC)$/localedata_mk_MK.cxx  \
     $(MISC)$/localedata_ml_IN.cxx  \
@@ -193,9 +192,11 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_nr_ZA.cxx  \
     $(MISC)$/localedata_nso_ZA.cxx \
     $(MISC)$/localedata_oc_FR.cxx  \
+    $(MISC)$/localedata_om_ET.cxx  \
     $(MISC)$/localedata_or_IN.cxx  \
     $(MISC)$/localedata_pa_IN.cxx  \
     $(MISC)$/localedata_pl_PL.cxx  \
+    $(MISC)$/localedata_plt_MG.cxx  \
     $(MISC)$/localedata_pt_BR.cxx  \
     $(MISC)$/localedata_pt_PT.cxx  \
     $(MISC)$/localedata_ro_RO.cxx  \
@@ -227,6 +228,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_tpi_PG.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
     $(MISC)$/localedata_ts_ZA.cxx  \
+    $(MISC)$/localedata_ug_CN.cxx  \
     $(MISC)$/localedata_uk_UA.cxx  \
     $(MISC)$/localedata_uz_UZ.cxx  \
     $(MISC)$/localedata_ve_ZA.cxx  \
@@ -323,6 +325,7 @@ DEF3NAME=$(SHL3TARGET)
 SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
 SHL3DEPN=$(SHL1TARGETN) $(SHL2TARGETN)
 SHL3OBJS=	\
+    $(SLO)$/localedata_ast_ES.obj	\
     $(SLO)$/localedata_be_BY.obj	\
     $(SLO)$/localedata_bg_BG.obj	\
     $(SLO)$/localedata_br_FR.obj	\
@@ -353,6 +356,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_ga_IE.obj	\
     $(SLO)$/localedata_gsc_FR.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
+    $(SLO)$/localedata_hsb_DE.obj	\
     $(SLO)$/localedata_is_IS.obj	\
     $(SLO)$/localedata_it_CH.obj	\
     $(SLO)$/localedata_it_IT.obj	\
@@ -361,6 +365,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_la_VA.obj	\
     $(SLO)$/localedata_lb_LU.obj	\
     $(SLO)$/localedata_lt_LT.obj	\
+    $(SLO)$/localedata_ltg_LV.obj	\
     $(SLO)$/localedata_lv_LV.obj	\
     $(SLO)$/localedata_mk_MK.obj	\
     $(SLO)$/localedata_mt_MT.obj	\
@@ -375,6 +380,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_pt_PT.obj	\
     $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_ro_RO.obj	\
+    $(SLO)$/localedata_sc_IT.obj	\
     $(SLO)$/localedata_sh_ME.obj	\
     $(SLO)$/localedata_sh_RS.obj	\
     $(SLO)$/localedata_sh_YU.obj	\
@@ -412,6 +418,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_am_ET.obj \
     $(SLO)$/localedata_ar_EG.obj \
     $(SLO)$/localedata_ar_LB.obj \
+    $(SLO)$/localedata_ar_OM.obj \
     $(SLO)$/localedata_ar_SA.obj \
     $(SLO)$/localedata_ar_TN.obj \
     $(SLO)$/localedata_az_AZ.obj \
@@ -450,8 +457,10 @@ SHL4OBJS= \
     $(SLO)$/localedata_ne_NP.obj \
     $(SLO)$/localedata_nr_ZA.obj \
     $(SLO)$/localedata_nso_ZA.obj \
+    $(SLO)$/localedata_om_ET.obj \
     $(SLO)$/localedata_or_IN.obj \
     $(SLO)$/localedata_pa_IN.obj \
+    $(SLO)$/localedata_plt_MG.obj \
     $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sg_CF.obj \
     $(SLO)$/localedata_shs_CA.obj \
@@ -468,6 +477,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_tn_ZA.obj \
     $(SLO)$/localedata_tpi_PG.obj \
     $(SLO)$/localedata_ts_ZA.obj \
+    $(SLO)$/localedata_ug_CN.obj \
     $(SLO)$/localedata_uz_UZ.obj \
     $(SLO)$/localedata_ve_ZA.obj \
     $(SLO)$/localedata_vi_VN.obj \

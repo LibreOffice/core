@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontmanager.cxx,v $
- * $Revision: 1.81.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,9 @@
 
 #include "vcl/fontmanager.hxx"
 #include "vcl/fontcache.hxx"
-#include "vcl/helper.hxx"
+#include "vcl/fontcache.hxx"
+#include "vcl/fontsubset.hxx"
+#include "vcl/impfont.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/ppdparser.hxx"
 #include "vcl/svdata.hxx"
@@ -355,9 +354,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nXMax( 0 ),
         m_nYMax( 0 ),
         m_bHaveVerticalSubstitutedGlyphs( false ),
-        m_bUserOverride( false ),
-        m_eEmbeddedbitmap( fcstatus::isunset ),
-        m_eAntialias( fcstatus::isunset )
+        m_bUserOverride( false )
 {
 }
 
@@ -374,6 +371,15 @@ PrintFontManager::PrintFont::~PrintFont()
 PrintFontManager::Type1FontFile::~Type1FontFile()
 {
 }
+
+// -------------------------------------------------------------------------
+
+PrintFontManager::TrueTypeFontFile::TrueTypeFontFile()
+:   PrintFont( fonttype::TrueType )
+,   m_nDirectory( 0 )
+,   m_nCollectionEntry(-1)
+,   m_nTypeFlags( TYPEFLAG_INVALID )
+{}
 
 // -------------------------------------------------------------------------
 
@@ -1353,7 +1359,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
     }
     else if( aExt.EqualsIgnoreCaseAscii( "ttf" )
          ||  aExt.EqualsIgnoreCaseAscii( "tte" )   // #i33947# for Gaiji support
-         ||  aExt.EqualsIgnoreCaseAscii( "otf" ) ) // #112957# allow GLYF-OTF
+         ||  aExt.EqualsIgnoreCaseAscii( "otf" ) ) // check for TTF- and PS-OpenType too
     {
         TrueTypeFontFile* pFont     = new TrueTypeFontFile();
         pFont->m_nDirectory         = nDirID;
@@ -2144,10 +2150,14 @@ void PrintFontManager::initialize()
         } while( nIndex >= 0 );
     }
 
+    // protect against duplicate paths
+    std::hash_map< OString, int, OStringHash > visited_dirs;
+
     // now that all global and local font dirs are known to fontconfig
     // check that there are fonts actually managed by fontconfig
+    // also don't search directories that fontconfig already did
     if( m_bFontconfigSuccess )
-        m_bFontconfigSuccess = (countFontconfigFonts() > 0);
+        m_bFontconfigSuccess = (countFontconfigFonts( visited_dirs ) > 0);
 
     // don't search through many directories fontconfig already told us about
     if( ! m_bFontconfigSuccess )
@@ -2158,8 +2168,6 @@ void PrintFontManager::initialize()
 
     // search for font files in each path
     std::list< OString >::iterator dir_it;
-    // protect against duplicate paths
-    std::hash_map< OString, int, OStringHash > visited_dirs;
     for( dir_it = m_aFontDirectories.begin(); dir_it != m_aFontDirectories.end(); ++dir_it )
     {
         OString aPath( *dir_it );
@@ -2623,8 +2631,10 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
     rInfo.m_eWeight         = pFont->m_eWeight;
     rInfo.m_ePitch          = pFont->m_ePitch;
     rInfo.m_aEncoding       = pFont->m_aEncoding;
-    rInfo.m_eEmbeddedbitmap = pFont->m_eEmbeddedbitmap;
-    rInfo.m_eAntialias      = pFont->m_eAntialias;
+
+    rInfo.m_bEmbeddable  = (pFont->m_eType == fonttype::Type1);
+    rInfo.m_bSubsettable = (pFont->m_eType == fonttype::TrueType); // TODO: rename to SfntType
+
     rInfo.m_aAliases.clear();
     for( ::std::list< int >::iterator it = pFont->m_aAliases.begin(); it != pFont->m_aAliases.end(); ++it )
         rInfo.m_aAliases.push_back( m_pAtoms->getString( ATOM_FAMILYNAME, *it ) );
@@ -3054,7 +3064,7 @@ bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
         if( pFont && pFont->m_eType == fonttype::TrueType )
         {
             TrueTypeFontFile* pTTFontFile = static_cast<TrueTypeFontFile*>(pFont);
-            if( pTTFontFile->m_nTypeFlags & 0x80000000 )
+            if( pTTFontFile->m_nTypeFlags & TYPEFLAG_INVALID )
             {
                 TrueTypeFont* pTTFont = NULL;
                 ByteString aFile = getFontFile( pFont );
@@ -3068,7 +3078,7 @@ bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
                 }
             }
 
-            unsigned int nCopyrightFlags = pTTFontFile->m_nTypeFlags & 0x0e;
+            unsigned int nCopyrightFlags = pTTFontFile->m_nTypeFlags & TYPEFLAG_COPYRIGHT_MASK;
 
             // font embedding is allowed if either
             //   no restriction at all (bit 1 clear)
@@ -3610,7 +3620,9 @@ bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUS
 
 // -------------------------------------------------------------------------
 
+// TODO: move most of this stuff into the central font-subsetting code
 bool PrintFontManager::createFontSubset(
+                                        FontSubsetInfo& rInfo,
                                         fontID nFont,
                                         const OUString& rOutFile,
                                         sal_Int32* pGlyphIDs,
@@ -3621,27 +3633,31 @@ bool PrintFontManager::createFontSubset(
                                         )
 {
     PrintFont* pFont = getFont( nFont );
-    if( !pFont || pFont->m_eType != fonttype::TrueType )
+    if( !pFont )
         return false;
 
-    OUString aSysPath;
-    if( osl_File_E_None != osl_getSystemPathFromFileURL( rOutFile.pData, &aSysPath.pData ) )
+    switch( pFont->m_eType )
+    {
+        case psp::fonttype::TrueType: rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF; break;
+        case psp::fonttype::Type1: rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1; break;
+        default:
+            return false;
+    }
+    // TODO: remove when Type1 subsetting gets implemented
+    if( pFont->m_eType != fonttype::TrueType )
         return false;
 
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    ByteString aFromFile = getFontFile( pFont );
-    ByteString aToFile( OUStringToOString( aSysPath, aEncoding ) );
-
+    // reshuffle array of requested glyphs to make sure glyph0==notdef
     sal_uInt8  pEnc[256];
     sal_uInt16 pGID[256];
     sal_uInt8  pOldIndex[256];
-
     memset( pEnc, 0, sizeof( pEnc ) );
     memset( pGID, 0, sizeof( pGID ) );
     memset( pOldIndex, 0, sizeof( pOldIndex ) );
+    if( nGlyphs > 256 )
+        return false;
     int nChar = 1;
-    int i;
-    for( i = 0; i < nGlyphs; i++ )
+    for( int i = 0; i < nGlyphs; i++ )
     {
         if( pNewEncoding[i] == 0 )
         {
@@ -3660,21 +3676,70 @@ bool PrintFontManager::createFontSubset(
     }
     nGlyphs = nChar; // either input value or increased by one
 
-    if( nGlyphs > 256 )
-        return false;
+    // prepare system name for read access for subset source file
+    // TODO: since this file is usually already mmapped there is no need to open it again
+    const ByteString aFromFile = getFontFile( pFont );
 
-    TrueTypeFont* pTTFont = NULL;
+    TrueTypeFont* pTTFont = NULL; // TODO: rename to SfntFont
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
     if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
 
+    // prepare system name for write access for subset file target
+    OUString aSysPath;
+    if( osl_File_E_None != osl_getSystemPathFromFileURL( rOutFile.pData, &aSysPath.pData ) )
+        return false;
+    const rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    const ByteString aToFile( OUStringToOString( aSysPath, aEncoding ) );
+
+    // do CFF subsetting if possible
+    int nCffLength = 0;
+    const sal_uInt8* pCffBytes = NULL;
+    if( GetSfntTable( pTTFont, O_CFF, &pCffBytes, &nCffLength ) )
+    {
+        rInfo.LoadFont( FontSubsetInfo::CFF_FONT, pCffBytes, nCffLength );
+#if 1 // TODO: remove 16bit->long conversion when related methods handle non-16bit glyphids
+        long aRequestedGlyphs[256];
+        for( int i = 0; i < nGlyphs; ++i )
+            aRequestedGlyphs[i] = pGID[i];
+#endif
+        // create subset file at requested path
+        FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
+        // create font subset
+        const char* pGlyphSetName = NULL; // TODO: better name?
+        const bool bOK = rInfo.CreateFontSubset(
+            FontSubsetInfo::TYPE1_PFB,
+            pOutFile, pGlyphSetName,
+            aRequestedGlyphs, pEnc, nGlyphs, pWidths );
+        fclose( pOutFile );
+        // cleanup before early return
+        CloseTTFont( pTTFont );
+        return bOK;
+    }
+
+    // do TTF->Type42 or Type3 subsetting
+    // fill in font info
+    psp::PrintFontInfo aFontInfo;
+    if( ! getFontInfo( nFont, aFontInfo ) )
+        return false;
+
+    rInfo.m_nAscent     = aFontInfo.m_nAscend;
+    rInfo.m_nDescent    = aFontInfo.m_nDescend;
+    rInfo.m_aPSName     = getPSName( nFont );
+
+    int xMin, yMin, xMax, yMax;
+    getFontBoundingBox( nFont, xMin, yMin, xMax, yMax );
+    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
+    rInfo.m_nCapHeight  = yMax; // Well ...
+
+    // fill in glyph advance widths
     TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
                                                               pGID,
                                                               nGlyphs,
                                                               bVertical ? 1 : 0 );
     if( pMetrics )
     {
-        for( i = 0; i < nGlyphs; i++ )
+        for( int i = 0; i < nGlyphs; i++ )
             pWidths[pOldIndex[i]] = pMetrics[i].adv;
         free( pMetrics );
     }
@@ -3730,6 +3795,35 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                     rWidths[i] = pMetrics[i].adv;
                 free( pMetrics );
                 rUnicodeEnc.clear();
+            }
+
+            // fill the unicode map
+            // TODO: isn't this map already available elsewhere in the fontmanager?
+            const sal_uInt8* pCmapData = NULL;
+            int nCmapSize = 0;
+            if( GetSfntTable( pTTFont, O_cmap, &pCmapData, &nCmapSize ) )
+            {
+                CmapResult aCmapResult;
+                if( ParseCMAP( pCmapData, nCmapSize, aCmapResult ) )
+                {
+                    const ImplFontCharMap aCharMap( aCmapResult );
+                    for( sal_uInt32 cOld = 0;;)
+                    {
+                        // get next unicode covered by font
+                        const sal_uInt32 c = aCharMap.GetNextChar( cOld );
+                        if( c == cOld )
+                            break;
+                        cOld = c;
+#if 1 // TODO: remove when sal_Unicode covers all of unicode
+                        if( c > (sal_Unicode)~0 )
+                            break;
+#endif
+                        // get the matching glyph index
+                        const sal_uInt32 nGlyphId = aCharMap.GetGlyphIndex( c );
+                        // update the requested map
+                        rUnicodeEnc[ (sal_Unicode)c ] = nGlyphId;
+                    }
+                }
             }
         }
         CloseTTFont( pTTFont );
@@ -3870,8 +3964,6 @@ bool PrintFontManager::readOverrideMetrics()
         BuiltinFont* pFont = new BuiltinFont();
         pFont->m_nDirectory = 0;
         pFont->m_bUserOverride = false;
-        pFont->m_eEmbeddedbitmap = fcstatus::isunset;
-        pFont->m_eAntialias = fcstatus::isunset;
         pFont->m_pMetrics = new PrintFontMetrics;
         memset( pFont->m_pMetrics->m_aPages, 0xff, sizeof( pFont->m_pMetrics->m_aPages ) );
         pFont->m_pMetrics->m_bKernPairsQueried = true;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rscdep.cxx,v $
- * $Revision: 1.25.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +36,7 @@
 #include <string.h>
 
 #include "bootstrp/prj.hxx"
+#include "sal/main.h"
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -81,12 +79,7 @@ static int  optopt = 0;
 static int  opterr = 0;
 #endif
 
-
-int
-#ifdef WNT
-_cdecl
-#endif
-main( int argc, char **argv )
+SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int c;
     char aBuf[255];

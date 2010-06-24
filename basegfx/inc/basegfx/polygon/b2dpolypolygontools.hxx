@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolypolygontools.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,6 +258,20 @@ namespace basegfx
         // comparators with tolerance for 2D PolyPolygons
         bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue);
         bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
+
+        /** snap some polygon coordinates to discrete coordinates
+
+            This method allows to snap some polygon points to discrete (integer) values
+            which equals e.g. a snap to discrete coordinates. It will snap points of
+            horizontal and vertical edges
+
+            @param rCandidate
+            The source polygon
+
+            @return
+            The modified version of the source polygon
+        */
+        B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate);
 
     } // end of namespace tools
 } // end of namespace basegfx

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dx_textlayout_drawhelper.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +49,7 @@
 #include <canvas/debug.hxx>
 #include "dx_impltools.hxx"
 #include <vcl/sysdata.hxx>
+#include <i18npool/mslangid.hxx>
 #include "dx_textlayout_drawhelper.hxx"
 #include "dx_bitmap.hxx"
 #include "dx_canvasfont.hxx"
@@ -134,6 +132,8 @@ namespace dxcanvas
             aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
             aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
             aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+
+            aFont.SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
             // setup font color
             aFont.SetColor( aColor );

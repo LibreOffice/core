@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,7 @@ class ImplFontCharMap;
 class SalLayout;
 class ImplLayoutArgs;
 class Rectangle;
-struct FontSubsetInfo;
+class FontSubsetInfo;
 class OutputDevice;
 class ServerFontLayout;
 struct SystemGraphicsData;
@@ -162,15 +159,15 @@ protected:
 
     // native widget rendering methods that require mirroring
     virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                              const Point& aPos, BOOL& rIsInside );
     virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
     virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption );
+                                               const rtl::OUString& aCaption );
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 
     /** Render bitmap with alpha channel
@@ -237,9 +234,10 @@ public:
     void                   ReleaseFonts() { SetFont( NULL, 0 ); }
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData* ) = 0;
+
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
-    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs ) = 0;
+    virtual ULONG           GetKernPairs( ULONG nMaxPairCount, ImplKernPairData* ) = 0;
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const = 0;
     // graphics must fill supplied font list
@@ -444,7 +442,6 @@ public:
                                       ControlPart nPart,
                                       const Region& rControlRegion,
                                       const Point& aPos,
-                                      SalControlHandle& rControlHandle,
                                       BOOL& rIsInside,
                                       const OutputDevice *pOutDev );
 
@@ -454,7 +451,6 @@ public:
                                     const Region& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
-                                    SalControlHandle& rControlHandle,
                                     const rtl::OUString& aCaption,
                                     const OutputDevice *pOutDev );
 
@@ -464,7 +460,6 @@ public:
                                         const Region& rControlRegion,
                                         ControlState nState,
                                         const ImplControlValue& aValue,
-                                        SalControlHandle& rControlHandle,
                                         const rtl::OUString& aCaption,
                                         const OutputDevice *pOutDev );
 
@@ -474,7 +469,6 @@ public:
                                          const Region& rControlRegion,
                                          ControlState nState,
                                          const ImplControlValue& aValue,
-                                         SalControlHandle& rControlHandle,
                                          const rtl::OUString& aCaption,
                                          Region &rNativeBoundingRegion,
                                          Region &rNativeContentRegion,

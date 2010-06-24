@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rscyacc.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +187,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
 
             ObjNode * pNode = new ObjNode( aName1, S.Top().pData,
                                            pFI->GetFileIndex() );
-            pTC->pEH->StdOut( "." );
+            pTC->pEH->StdOut( ".", RscVerbosityVerbose );
 
             if( !aName1.IsId() )
                 pTC->pEH->Error( ERR_IDEXPECTED, pHeader->pClass, aName1 );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imageresourceaccess.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +47,6 @@
 namespace svt
 {
 //........................................................................
-
-#define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
     using namespace ::utl;
     using namespace ::comphelper;
@@ -144,8 +139,14 @@ namespace svt
     //--------------------------------------------------------------------
     bool GraphicAccess::isSupportedURL( const ::rtl::OUString& _rURL )
     {
-        ::rtl::OUString sIndicator( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ) );
-        return ( ( _rURL.indexOf( sIndicator ) == 0 ) || ( _rURL.compareToAscii( GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( GRAPHOBJ_URLPREFIX ) ) == 0 ) );
+        if  (   ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/" ) ) == 0 )
+            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:graphicrepository/" ) ) == 0 )
+            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:standardimage/" ) ) == 0 )
+            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.GraphicObject:" ) ) == 0 )
+            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.extension://" ) ) == 0 )
+            )
+            return true;
+        return false;
     }
 
     //--------------------------------------------------------------------

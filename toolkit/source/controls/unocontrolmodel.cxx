@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocontrolmodel.cxx,v $
- * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
@@ -218,10 +216,6 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
     return mpData->Get( nPropId ) ? sal_True : sal_False;
 }
 
-void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
-{
-}
-
 ::com::sun::star::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     ::com::sun::star::uno::Any aDefault;
@@ -262,9 +256,14 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
         switch ( nPropId )
         {
             case BASEPROPERTY_GRAPHIC:
-                aDefault <<= makeAny( Reference< graphic::XGraphic >() );
+                aDefault <<= Reference< graphic::XGraphic >();
                 break;
 
+            case BASEPROPERTY_REFERENCE_DEVICE:
+                aDefault <<= Reference< awt::XDevice >();
+                break;
+
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
             case BASEPROPERTY_VERTICALALIGN:
             case BASEPROPERTY_BORDERCOLOR:
             case BASEPROPERTY_SYMBOL_COLOR:
@@ -340,6 +339,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_HARDLINEBREAKS:
             case BASEPROPERTY_NOLABEL:              aDefault <<= (sal_Bool) sal_False; break;
 
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
             case BASEPROPERTY_HIDEINACTIVESELECTION:
             case BASEPROPERTY_ENFORCE_FORMAT:
             case BASEPROPERTY_AUTOCOMPLETE:
@@ -1257,22 +1257,13 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
 void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     // Fehlt: Die gefakten Einzelproperties des FontDescriptors...
 
     ImplControlProperty* pProp = mpData->Get( nPropId );
-    if ( pProp )
-    {
-        DBG_ASSERT( ( rValue.getValueType().getTypeClass() != ::com::sun::star::uno::TypeClass_VOID ) || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & ::com::sun::star::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
-        ImplPropertyChanged( (sal_uInt16)nPropId );
-        pProp->SetValue( rValue );
-    }
-    else
-    {
-        // exception...
-        DBG_ERROR( "SetPropertyValues: Invalid Property!" );
-    }
+    ENSURE_OR_RETURN_VOID( pProp, "UnoControlModel::setFastPropertyValue_NoBroadcast: invalid property id!" );
+
+    DBG_ASSERT( ( rValue.getValueType().getTypeClass() != ::com::sun::star::uno::TypeClass_VOID ) || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & ::com::sun::star::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
+    pProp->SetValue( rValue );
 }
 
 void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nPropId ) const

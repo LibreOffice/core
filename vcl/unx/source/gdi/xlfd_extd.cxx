@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlfd_extd.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,9 +101,6 @@ ExtendedXlfd::ExtendedXlfd( bool bScalable )
     mbDevice       = false;
     mbSubsettable  = false;
     mbEmbeddable   = false;
-
-    meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-    meAntiAlias = ANTIALIAS_DONTKNOW;
 
     mnQuality      = -1;
 }

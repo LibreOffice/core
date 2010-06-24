@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdiutils.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +65,13 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     mnRealDPIX  = nDPIX;
     mnRealDPIY  = nDPIY;
 
+    // a previously set clip path is now invalid
+    if( mxClipPath )
+    {
+        CGPathRelease( mxClipPath );
+        mxClipPath = NULL;
+    }
+
     if( mrContext )
     {
         CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
@@ -102,8 +106,8 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     else
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
-        mnWidth = aSize.width;
-        mnHeight = aSize.height;
+        mnWidth = static_cast<int>(aSize.width);
+        mnHeight = static_cast<int>(aSize.height);
     }
 
     // prepare graphics for drawing
@@ -126,6 +130,28 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
 
 // ----------------------------------------------------------------------
 
+void AquaSalGraphics::InvalidateContext()
+{
+    UnsetState();
+    mrContext = 0;
+}
+
+// ----------------------------------------------------------------------
+
+void AquaSalGraphics::UnsetState()
+{
+    if( mrContext )
+    {
+        CGContextRestoreGState( mrContext );
+        mrContext = 0;
+    }
+    if( mxClipPath )
+    {
+        CGPathRelease( mxClipPath );
+        mxClipPath = NULL;
+    }
+}
+
 void AquaSalGraphics::SetState()
 {
     CGContextRestoreGState( mrContext );
@@ -134,9 +160,9 @@ void AquaSalGraphics::SetState()
     // setup clipping
     if( mxClipPath )
     {
-        CGContextBeginPath( mrContext );                // discard any existing path
+        CGContextBeginPath( mrContext );            // discard any existing path
         CGContextAddPath( mrContext, mxClipPath );  // set the current path to the clipping path
-        CGContextClip( mrContext );                     // use it for clipping
+        CGContextClip( mrContext );                 // use it for clipping
     }
 
     // set RGB colorspace and line and fill colors
@@ -205,7 +231,7 @@ bool AquaSalGraphics::CheckContext()
             CGContextRelease( rReleaseContext );
     }
 
-    DBG_ASSERT( mrContext, "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
+    DBG_ASSERT( mrContext || mbPrinter, "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
     return (mrContext != NULL);
 }
 
@@ -219,7 +245,10 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
     {
         // update a little more around the designated rectangle
         // this helps with antialiased rendering
-        const Rectangle aVclRect( Point( lX-1, lY-1 ), Size( lWidth+2, lHeight+2) );
+        const Rectangle aVclRect(Point(static_cast<long int>(lX-1),
+                    static_cast<long int>(lY-1) ),
+                 Size(  static_cast<long int>(lWidth+2),
+                    static_cast<long int>(lHeight+2) ) );
         mpFrame->maInvalidRect.Union( aVclRect );
     }
 }

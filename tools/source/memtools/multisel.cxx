@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: multisel.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,11 +38,15 @@
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 
+#include "rtl/ustrbuf.hxx"
+
 #ifdef MI_DEBUG
 #define DBG(x) x
 #else
 #define DBG(x)
 #endif
+
+using namespace rtl;
 
 //==================================================================
 
@@ -865,3 +866,297 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
     bCurValid = FALSE;
     nCurIndex = 0;
 }
+
+// -----------------------------------------------------------------------
+//
+// StringRangeEnumerator
+//
+// -----------------------------------------------------------------------
+StringRangeEnumerator::StringRangeEnumerator( const rtl::OUString& i_rInput,
+                                              sal_Int32 i_nMinNumber,
+                                              sal_Int32 i_nMaxNumber,
+                                              sal_Int32 i_nLogicalOffset
+                                              )
+    : mnCount( 0 )
+    , mnMin( i_nMinNumber )
+    , mnMax( i_nMaxNumber )
+    , mnOffset( i_nLogicalOffset )
+{
+    setRange( i_rInput );
+}
+
+bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
+{
+    if( mnMin >= 0 && i_nValue < mnMin )
+        return false;
+    if( mnMax >= 0 && i_nValue > mnMax )
+        return false;
+    if( i_nValue < 0 )
+        return false;
+    if( i_pPossibleValues && i_pPossibleValues->find( i_nValue ) == i_pPossibleValues->end() )
+        return false;
+    return true;
+}
+
+bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, bool bSequence, bool bMayAdjust )
+{
+    bool bSuccess = true;
+    if( bSequence )
+    {
+        if( i_nFirst == -1 )
+            i_nFirst = mnMin;
+        if( i_nLast == -1 )
+            i_nLast = mnMax;
+        if( bMayAdjust )
+        {
+            if( i_nFirst < mnMin )
+                i_nFirst = mnMin;
+            if( i_nFirst > mnMax )
+                i_nFirst = mnMax;
+            if( i_nLast < mnMin )
+                i_nLast = mnMin;
+            if( i_nLast > mnMax )
+                i_nLast = mnMax;
+        }
+        if( checkValue( i_nFirst ) && checkValue( i_nLast ) )
+        {
+            maSequence.push_back( Range( i_nFirst, i_nLast ) );
+            sal_Int32 nNumber = i_nLast - i_nFirst;
+            nNumber = nNumber < 0 ? -nNumber : nNumber;
+            mnCount += nNumber + 1;
+        }
+        else
+            bSuccess = false;
+    }
+    else
+    {
+        if( i_nFirst >= 0 )
+        {
+            if( checkValue( i_nFirst ) )
+            {
+                maSequence.push_back( Range( i_nFirst, i_nFirst ) );
+                mnCount++;
+            }
+            else
+                bSuccess = false;
+        }
+        if( i_nLast >= 0 )
+        {
+            if( checkValue( i_nLast ) )
+            {
+                maSequence.push_back( Range( i_nLast, i_nLast ) );
+                mnCount++;
+            }
+            else
+                bSuccess = false;
+        }
+    }
+
+    return bSuccess;
+}
+
+bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_bStrict )
+{
+    mnCount = 0;
+    maSequence.clear();
+
+    // we love special cases
+    if( i_rNewRange.getLength() == 0 )
+    {
+        if( mnMin >= 0 && mnMax >= 0 )
+        {
+            insertRange( mnMin, mnMax, mnMin != mnMax, ! i_bStrict );
+        }
+        return true;
+    }
+
+    const sal_Unicode* pInput = i_rNewRange.getStr();
+    rtl::OUStringBuffer aNumberBuf( 16 );
+    sal_Int32 nLastNumber = -1, nNumber = -1;
+    bool bSequence = false;
+    bool bSuccess = true;
+    while( *pInput )
+    {
+        while( *pInput >= sal_Unicode('0') && *pInput <= sal_Unicode('9') )
+            aNumberBuf.append( *pInput++ );
+        if( aNumberBuf.getLength() )
+        {
+            if( nNumber != -1 )
+            {
+                if( bSequence )
+                {
+                    if( ! insertRange( nLastNumber, nNumber, true, ! i_bStrict ) && i_bStrict )
+                    {
+                        bSuccess = false;
+                        break;
+                    }
+                    nLastNumber = -1;
+                }
+                else
+                {
+                    if( ! insertRange( nNumber, nNumber, false, ! i_bStrict ) && i_bStrict )
+                    {
+                        bSuccess = false;
+                        break;
+                    }
+                }
+            }
+            nNumber = aNumberBuf.makeStringAndClear().toInt32();
+            nNumber += mnOffset;
+        }
+        bool bInsertRange = false;
+        if( *pInput == sal_Unicode('-') )
+        {
+            nLastNumber = nNumber;
+            nNumber = -1;
+            bSequence = true;
+        }
+        else if( *pInput == ' ' )
+        {
+        }
+        else if( *pInput == sal_Unicode(',') || *pInput == sal_Unicode(';') )
+            bInsertRange = true;
+        else if( *pInput )
+        {
+
+            bSuccess = false;
+            break; // parse error
+        }
+
+        if( bInsertRange )
+        {
+            if( ! insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict ) && i_bStrict )
+            {
+                bSuccess = false;
+                break;
+            }
+            nNumber = nLastNumber = -1;
+            bSequence = false;
+        }
+        if( *pInput )
+            pInput++;
+    }
+    // insert last entries
+    insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict );
+
+    return bSuccess;
+}
+
+bool StringRangeEnumerator::hasValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
+{
+    if( i_pPossibleValues && i_pPossibleValues->find( i_nValue ) == i_pPossibleValues->end() )
+        return false;
+    size_t n = maSequence.size();
+    for( size_t i= 0; i < n; ++i )
+    {
+        const StringRangeEnumerator::Range rRange( maSequence[i] );
+        if( rRange.nFirst < rRange.nLast )
+        {
+            if( i_nValue >= rRange.nFirst && i_nValue <= rRange.nLast )
+                return true;
+        }
+        else
+        {
+            if( i_nValue >= rRange.nLast && i_nValue <= rRange.nFirst )
+                return true;
+        }
+    }
+    return false;
+}
+
+StringRangeEnumerator::Iterator& StringRangeEnumerator::Iterator::operator++()
+{
+    if( nRangeIndex >= 0 && nCurrent >= 0 && pEnumerator )
+    {
+        const StringRangeEnumerator::Range& rRange( pEnumerator->maSequence[nRangeIndex] );
+        bool bRangeChange = false;
+        if( rRange.nLast < rRange.nFirst )
+        {
+            // backward range
+            if( nCurrent > rRange.nLast )
+                nCurrent--;
+            else
+                bRangeChange = true;
+        }
+        else
+        {
+            // forward range
+            if( nCurrent < rRange.nLast )
+                nCurrent++;
+            else
+                bRangeChange = true;
+        }
+        if( bRangeChange )
+        {
+            nRangeIndex++;
+            if( size_t(nRangeIndex) == pEnumerator->maSequence.size() )
+            {
+                // reached the end
+                nRangeIndex = nCurrent = -1;
+            }
+            else
+                nCurrent = pEnumerator->maSequence[nRangeIndex].nFirst;
+        }
+        if( nRangeIndex != -1 && nCurrent != -1 )
+        {
+            if( ! pEnumerator->checkValue( nCurrent, pPossibleValues ) )
+                return ++(*this);
+        }
+    }
+    return *this;
+}
+
+sal_Int32 StringRangeEnumerator::Iterator::operator*() const
+{
+    return nCurrent;
+}
+
+bool StringRangeEnumerator::Iterator::operator==( const Iterator& i_rCompare ) const
+{
+    return i_rCompare.pEnumerator == pEnumerator && i_rCompare.nRangeIndex == nRangeIndex && i_rCompare.nCurrent == nCurrent;
+}
+
+StringRangeEnumerator::Iterator StringRangeEnumerator::begin( const std::set< sal_Int32 >* i_pPossibleValues ) const
+{
+    StringRangeEnumerator::Iterator it( this,
+                                        i_pPossibleValues,
+                                        maSequence.empty() ? -1 : 0,
+                                        maSequence.empty() ? -1 : maSequence[0].nFirst );
+    if( ! checkValue(*it, i_pPossibleValues ) )
+        ++it;
+    return it;
+}
+
+StringRangeEnumerator::Iterator StringRangeEnumerator::end( const std::set< sal_Int32 >* i_pPossibleValues ) const
+{
+    return StringRangeEnumerator::Iterator( this, i_pPossibleValues, -1, -1 );
+}
+
+bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
+                                                 std::vector< sal_Int32 >& o_rPageVector,
+                                                 sal_Int32 i_nMinNumber,
+                                                 sal_Int32 i_nMaxNumber,
+                                                 sal_Int32 i_nLogicalOffset,
+                                                 std::set< sal_Int32 >* i_pPossibleValues
+                                               )
+{
+    StringRangeEnumerator aEnum;
+    aEnum.setMin( i_nMinNumber );
+    aEnum.setMax( i_nMaxNumber );
+    aEnum.setLogicalOffset( i_nLogicalOffset );
+
+    bool bRes = aEnum.setRange( i_rPageRange );
+    if( bRes )
+    {
+        o_rPageVector.clear();
+        o_rPageVector.reserve( aEnum.size() );
+        for( StringRangeEnumerator::Iterator it = aEnum.begin( i_pPossibleValues );
+             it != aEnum.end( i_pPossibleValues ); ++it )
+        {
+            o_rPageVector.push_back( *it );
+        }
+    }
+
+    return bRes;
+}
+

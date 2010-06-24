@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: canvastools.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +60,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/instance.hxx>
@@ -679,9 +677,8 @@ namespace canvas
                                        i_transformation );
 
             // now move resulting left,top point of bounds to (0,0)
-            ::basegfx::B2DHomMatrix aCorrectedTransform;
-            aCorrectedTransform.translate( -aTransformedRect.getMinX(),
-                                           -aTransformedRect.getMinY() );
+            const basegfx::B2DHomMatrix aCorrectedTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                -aTransformedRect.getMinX(), -aTransformedRect.getMinY()));
 
             // prepend to original transformation
             o_transform = aCorrectedTransform * i_transformation;
@@ -745,9 +742,8 @@ namespace canvas
                                        transformation );
 
             // now move resulting left,top point of bounds to (0,0)
-            ::basegfx::B2DHomMatrix aCorrectedTransform;
-            aCorrectedTransform.translate( -aTransformedRect.getMinX(),
-                                           -aTransformedRect.getMinY() );
+            basegfx::B2DHomMatrix aCorrectedTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                -aTransformedRect.getMinX(), -aTransformedRect.getMinY()));
 
             // scale to match outRect
             const double xDenom( aTransformedRect.getWidth() );
@@ -993,6 +989,54 @@ namespace canvas
             aPolyPoly.append( aPoly );
 
             return aPolyPoly;
+        }
+
+        int calcGradientStepCount( ::basegfx::B2DHomMatrix&      rTotalTransform,
+                                   const rendering::ViewState&   viewState,
+                                   const rendering::RenderState& renderState,
+                                   const rendering::Texture&     texture,
+                                   int                           nColorSteps )
+        {
+            // calculate overall texture transformation (directly from
+            // texture to device space).
+            ::basegfx::B2DHomMatrix aMatrix;
+
+            rTotalTransform.identity();
+            ::basegfx::unotools::homMatrixFromAffineMatrix( rTotalTransform,
+                                                            texture.AffineTransform );
+            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+                                                         viewState,
+                                                         renderState);
+            rTotalTransform *= aMatrix; // prepend total view/render transformation
+
+            // determine size of gradient in device coordinate system
+            // (to e.g. determine sensible number of gradient steps)
+            ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
+            ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
+            ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
+            ::basegfx::B2DPoint aRightBottom( 1.0, 1.0 );
+
+            aLeftTop    *= rTotalTransform;
+            aLeftBottom *= rTotalTransform;
+            aRightTop   *= rTotalTransform;
+            aRightBottom*= rTotalTransform;
+
+            // longest line in gradient bound rect
+            const int nGradientSize(
+                static_cast<int>(
+                    ::std::max(
+                        ::basegfx::B2DVector(aRightBottom-aLeftTop).getLength(),
+                        ::basegfx::B2DVector(aRightTop-aLeftBottom).getLength() ) + 1.0 ) );
+
+            // typical number for pixel of the same color (strip size)
+            const int nStripSize( nGradientSize < 50 ? 2 : 4 );
+
+            // use at least three steps, and at utmost the number of color
+            // steps
+            return ::std::max( 3,
+                               ::std::min(
+                                   nGradientSize / nStripSize,
+                                   nColorSteps ) );
         }
 
     } // namespace tools

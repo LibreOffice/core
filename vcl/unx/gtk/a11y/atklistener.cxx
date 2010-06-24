@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atklistener.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -359,6 +356,32 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             }
             break;
         }
+
+        // --> OD 2009-05-26 #i92103#
+        case accessibility::AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
+        {
+            AtkObject *pChild = getObjFromAny( aEvent.NewValue );
+            if( pChild )
+            {
+                AtkStateType eExpandedState = ATK_STATE_EXPANDED;
+                atk_object_notify_state_change( pChild, eExpandedState, true );
+                g_object_unref( pChild );
+            }
+            break;
+        }
+
+        case accessibility::AccessibleEventId::LISTBOX_ENTRY_COLLAPSED:
+        {
+            AtkObject *pChild = getObjFromAny( aEvent.NewValue );
+            if( pChild )
+            {
+                AtkStateType eExpandedState = ATK_STATE_EXPANDED;
+                atk_object_notify_state_change( pChild, eExpandedState, false );
+                g_object_unref( pChild );
+            }
+            break;
+        }
+        // <--
 
         // AtkAction signals ...
         case accessibility::AccessibleEventId::ACTION_CHANGED:

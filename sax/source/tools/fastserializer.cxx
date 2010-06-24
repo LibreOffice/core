@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: contexthandler2.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.1.2.2 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: dr $ $Date: 2008/02/11 10:43:07 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -326,43 +318,29 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::mark()
     {
-        maMarkStack.push( Int8Sequence() );
+        maMarkStack.push( ForMerge() );
     }
 
-    void FastSaxSerializer::mergeTopMarks( bool bPrepend )
+    void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
     {
         if ( maMarkStack.empty() )
             return;
 
         if ( maMarkStack.size() == 1 )
         {
-            mxOutputStream->writeBytes( maMarkStack.top() );
+            mxOutputStream->writeBytes( maMarkStack.top().getData() );
             maMarkStack.pop();
+            return;
         }
-        else
+
+        const Int8Sequence aMerge( maMarkStack.top().getData() );
+        maMarkStack.pop();
+
+        switch ( eMergeType )
         {
-            const Int8Sequence aMerge( maMarkStack.top() );
-            maMarkStack.pop();
-
-            sal_Int32 nMergeLen = aMerge.getLength();
-            if ( nMergeLen > 0 )
-            {
-                Int8Sequence &rTop = maMarkStack.top();
-                sal_Int32 nTopLen = rTop.getLength();
-
-                rTop.realloc( nTopLen + nMergeLen );
-                if ( bPrepend )
-                {
-                    // prepend the aMerge to the rTop
-                    memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
-                    memcpy( rTop.getArray(), aMerge.getConstArray(), nMergeLen );
-                }
-                else
-                {
-                    // append the aMerge to the rTop
-                    memcpy( rTop.getArray() + nTopLen, aMerge.getConstArray(), nMergeLen );
-                }
-            }
+            case MERGE_MARKS_APPEND:   maMarkStack.top().append( aMerge );   break;
+            case MERGE_MARKS_PREPEND:  maMarkStack.top().prepend( aMerge );  break;
+            case MERGE_MARKS_POSTPONE: maMarkStack.top().postpone( aMerge ); break;
         }
     }
 
@@ -371,15 +349,50 @@ namespace sax_fastparser {
         if ( maMarkStack.empty() )
             mxOutputStream->writeBytes( aData );
         else
-        {
-            sal_Int32 nDataLen = aData.getLength();
-            if ( nDataLen > 0 )
-            {
-                Int8Sequence &rTop = maMarkStack.top();
-                sal_Int32 nTopLen = rTop.getLength();
+            maMarkStack.top().append( aData );
+    }
 
-                rTop.realloc( nTopLen + nDataLen );
-                memcpy( rTop.getArray() + nTopLen, aData.getConstArray(), nDataLen );
+    FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForMerge::getData()
+    {
+        merge( maData, maPostponed, true );
+        maPostponed.realloc( 0 );
+
+        return maData;
+    }
+
+    void FastSaxSerializer::ForMerge::prepend( const Int8Sequence &rWhat )
+    {
+        merge( maData, rWhat, false );
+    }
+
+    void FastSaxSerializer::ForMerge::append( const Int8Sequence &rWhat )
+    {
+        merge( maData, rWhat, true );
+    }
+
+    void FastSaxSerializer::ForMerge::postpone( const Int8Sequence &rWhat )
+    {
+        merge( maPostponed, rWhat, true );
+    }
+
+    void FastSaxSerializer::ForMerge::merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend )
+    {
+        sal_Int32 nMergeLen = rMerge.getLength();
+        if ( nMergeLen > 0 )
+        {
+            sal_Int32 nTopLen = rTop.getLength();
+
+            rTop.realloc( nTopLen + nMergeLen );
+            if ( bAppend )
+            {
+                // append the rMerge to the rTop
+                memcpy( rTop.getArray() + nTopLen, rMerge.getConstArray(), nMergeLen );
+            }
+            else
+            {
+                // prepend the rMerge to the rTop
+                memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
+                memcpy( rTop.getArray(), rMerge.getConstArray(), nMergeLen );
             }
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolypolygoncutter.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +100,15 @@ namespace basegfx
 
         // DIFF: Return all areas where CandidateA is not covered by CandidateB (cut B out of A)
         B2DPolyPolygon solvePolygonOperationDiff(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
+
+        /** merge all single PolyPolygons to a single, OR-ed PolyPolygon
+
+            @param rInput
+            The source PolyPolygons
+
+            @return A single PolyPolygon containing the Or-merged result
+        */
+        B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput);
 
     } // end of namespace tools
 } // end of namespace basegfx

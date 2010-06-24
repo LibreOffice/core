@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolypolygontools.cxx,v $
- * $Revision: 1.19.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -567,6 +564,18 @@ namespace basegfx
             const double fSmallValue(fTools::getSmallValue());
 
             return equal(rCandidateA, rCandidateB, fSmallValue);
+        }
+
+        B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate)
+        {
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            {
+                aRetval.append(snapPointsOfHorizontalOrVerticalEdges(rCandidate.getB2DPolygon(a)));
+            }
+
+            return aRetval;
         }
 
     } // end of namespace tools

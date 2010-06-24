@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salatsuifontutils.cxx,v $
- * $Revision: 1.13.138.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,16 +207,16 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     rDFA.meItalic     = ITALIC_NONE;
     rDFA.mbSymbolFlag = false;
 
-    // get the embeddable + subsettable status
-    // TODO: remove test after PS-OpenType subsetting is implemented
+    // ignore bitmap fonts
     ATSFontRef rATSFontRef = FMGetATSFontRefFromFont( nFontID );
-    ByteCount nGlyfLen  = 0;
-    OSStatus rc = ATSFontGetTable( rATSFontRef, 0x676c7966/*glyf*/, 0, 0, NULL, &nGlyfLen);
-    rDFA.mbSubsettable  = ((rc == noErr) && (nGlyfLen > 0));
+    ByteCount nHeadLen = 0;
+    OSStatus rc = ATSFontGetTable( rATSFontRef, 0x68656164/*head*/, 0, 0, NULL, &nHeadLen );
+    if( (rc != noErr) || (nHeadLen <= 0) )
+        return false;
+
+    // all scalable fonts on this platform are subsettable
+    rDFA.mbSubsettable  = true;
     rDFA.mbEmbeddable   = false;
-    // TODO: these members are needed only for our X11 platform targets
-    rDFA.meAntiAlias    = ANTIALIAS_DONTKNOW;
-    rDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
 
     // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;
@@ -269,7 +266,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             case 0x30A: nNameValue += 0;            // Win-UCS-4
                         eEncoding = RTL_TEXTENCODING_UCS4;
                         break;
-            case 0x100: nNameValue += 21;       // Mac Roman
+            case 0x100: nNameValue += 21;           // Mac Roman
                         eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
                         break;
             case 0x300: nNameValue =  0;            // Win Symbol encoded name!

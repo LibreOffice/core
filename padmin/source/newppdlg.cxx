@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: newppdlg.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,6 +169,7 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
         ::std::list< rtl::OUString > aToDirs;
         psp::getPrinterPathList( aToDirs, PRINTER_PPDDIR );
         ::std::list< rtl::OUString >::iterator writeDir = aToDirs.begin();
+        m_aImportedFiles.clear();
 
         for( int i = 0; i < m_aDriverLB.GetSelectEntryCount(); i++ )
         {
@@ -186,7 +184,10 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
                 aToFile.Append( aFile.GetName() );
                 OUString aToUni( aToFile.GetMainURL(INetURLObject::DECODE_TO_IURI) );
                 if( ! File::copy( aFromUni, aToUni ) )
+                {
+                    m_aImportedFiles.push_back( aToUni );
                     break;
+                }
                 ++writeDir;
             } while( writeDir != aToDirs.end() );
         }

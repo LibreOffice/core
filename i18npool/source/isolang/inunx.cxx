@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inunx.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,11 +57,11 @@ static const sal_Char* getLangFromEnvironment()
     const sal_Char *pLang = NULL;
 
     pLang = getenv ( "LC_ALL" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_CTYPE" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv( "LANG" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = pFallback;
 
     return pLang;
@@ -79,13 +76,13 @@ static const sal_Char* getUILangFromEnvironment()
     const sal_Char *pLang = NULL;
 
     pLang = getenv ( "LANGUAGE" );      // respect the GNU extension
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_ALL" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_MESSAGES" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = getenv( "LANG" );
-    if (! pLang)
+    if (! pLang || pLang[0] == 0)
         pLang = pFallback;
 
     return pLang;

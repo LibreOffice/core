@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: breakiterator_cjk.cxx,v $
- * $Revision: 1.17.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +43,9 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      class BreakIterator_CJK
 //      ----------------------------------------------------;
 
-BreakIterator_CJK::BreakIterator_CJK() : dict(NULL)
+BreakIterator_CJK::BreakIterator_CJK() :
+    dict( NULL ),
+    hangingCharacters()
 {
         cBreakIterator = "com.sun.star.i18n.BreakIterator_CJK";
 }
@@ -110,13 +109,13 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 
         if (bOptions.allowPunctuationOutsideMargin &&
                 hangingCharacters.indexOf(Text[nStartPos]) != -1 &&
-                ++nStartPos == Text.getLength()) {
+                (Text.iterateCodePoints( &nStartPos, 1), nStartPos == Text.getLength())) {
             ; // do nothing
         } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
             while (nStartPos > 0 &&
                     (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
                     bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos-1]) != -1))
-                nStartPos--;
+                Text.iterateCodePoints( &nStartPos, -1);
         }
 
         lbr.breakIndex = nStartPos;

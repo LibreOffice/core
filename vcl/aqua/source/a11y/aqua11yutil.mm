@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aqua11yutil.mm,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +47,7 @@ using namespace ::com::sun::star::awt;
 +(Point)nsPointToVclPoint:(NSValue *)nsPoint {
     // VCL coordinates are in upper-left-notation, Cocoa likes it the Cartesian way (lower-left)
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    return Point ( [ nsPoint pointValue ].x, screenRect.size.height - [ nsPoint pointValue ].y );
+    return Point ( static_cast<long>([ nsPoint pointValue ].x), static_cast<long>(screenRect.size.height - [ nsPoint pointValue ].y) );
 }
 
 @end

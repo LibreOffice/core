@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxwindow.hxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +51,7 @@
 
 #include <stdarg.h>
 #include <list>
+#include <boost/function.hpp>
 
 class Window;
 class VclSimpleEvent;
@@ -115,6 +113,23 @@ protected:
 
     ::cppu::OInterfaceContainerHelper&  GetContainerListeners();
     ::cppu::OInterfaceContainerHelper&  GetTopWindowListeners();
+
+public:
+    typedef ::boost::function0< void >  Callback;
+
+protected:
+    /** executes the given callback asynchronously
+
+        At the moment the callback is called, the Solar Mutex is not locked. In particular, this implies that
+        you cannot rely on |this| not being disposed. However, you *can* rely on |this| being still alive (i.e.
+        having a ref count > 0).
+
+        As a consequence, this can be used for doing listener notifications, using event multiplexers. Those multiplexers
+        care for the disposed state themself, and are alive as long as |this| is alive.
+    */
+    void    ImplExecuteAsyncWithoutSolarLock(
+                const Callback& i_callback
+            );
 
 public:
     VCLXWindow( bool bWithDefaultProps = false );

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.45 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,11 +42,9 @@ ENABLE_EXCEPTIONS := TRUE
 
 SRS1NAME=misc
 SRC1FILES=\
-    config.src	\
-    iniman.src 	\
     ehdl.src \
-    imagemgr.src      \
     helpagent.src \
+    imagemgr.src      \
     langtab.src 
 
 SRS2NAME=ehdl
@@ -59,33 +53,29 @@ SRC2FILES=\
 
 SLOFILES=\
     $(SLO)$/acceleratorexecute.obj  \
+    $(SLO)$/chartprettypainter.obj \
     $(SLO)$/cliplistener.obj        \
+    $(SLO)$/dialogclosedlistener.obj\
+    $(SLO)$/dialogcontrolling.obj   \
+    $(SLO)$/ehdl.obj                \
     $(SLO)$/embedhlp.obj            \
     $(SLO)$/embedtransfer.obj       \
+    $(SLO)$/helpagentwindow.obj     \
     $(SLO)$/imagemgr.obj            \
     $(SLO)$/imageresourceaccess.obj \
-    $(SLO)$/templatefoldercache.obj \
-    $(SLO)$/transfer.obj            \
-    $(SLO)$/transfer2.obj           \
-    $(SLO)$/stringtransfer.obj      \
-    $(SLO)$/urihelper.obj           \
-    $(SLO)$/svtaccessiblefactory.obj \
-    $(SLO)$/ehdl.obj                \
-    $(SLO)$/flbytes.obj             \
-    $(SLO)$/helpagentwindow.obj     \
     $(SLO)$/imap.obj                \
     $(SLO)$/imap2.obj               \
     $(SLO)$/imap3.obj               \
-    $(SLO)$/ownlist.obj             \
-    $(SLO)$/vcldata.obj             \
-    $(SLO)$/restrictedpaths.obj     \
-    $(SLO)$/dialogclosedlistener.obj\
-    $(SLO)$/dialogcontrolling.obj   \
-    $(SLO)$/chartprettypainter.obj \
-    $(SLO)$/lockfilecommon.obj     \
-    $(SLO)$/sharecontrolfile.obj   \
-    $(SLO)$/documentlockfile.obj   \
-    $(SLO)$/langtab.obj
+    $(SLO)$/itemdel.obj				\
+    $(SLO)$/langtab.obj				\
+    $(SLO)$/stringtransfer.obj      \
+    $(SLO)$/svtaccessiblefactory.obj \
+    $(SLO)$/svtdata.obj             \
+    $(SLO)$/templatefoldercache.obj \
+    $(SLO)$/transfer.obj            \
+    $(SLO)$/transfer2.obj           \
+    $(SLO)$/unitconv.obj           \
+    $(SLO)$/wallitem.obj
 
 # --- Targets -------------------------------------------------------
 

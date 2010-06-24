@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rc.h,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +99,7 @@ typedef short RSWND_STYLE;
 //#define NUMERICFORMATTER_I12          0x08    // erAck: got rid of class International (2005-06-17)
 #define NUMERICFORMATTER_DECIMALDIGITS  0x10
 #define NUMERICFORMATTER_VALUE          0x20
+#define NUMERICFORMATTER_NOTHOUSANDSEP  0x40
 
 #define METRICFORMATTER_UNIT            0x01
 #define METRICFORMATTER_CUSTOMUNITTEXT  0x02

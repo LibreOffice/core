@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salmenu.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -651,11 +648,9 @@ void AquaSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSMI, const Image& r
 
     NSImage* pImage = CreateNSImage( rImage );
 
+    [pSalMenuItem->mpMenuItem setImage: pImage];
     if( pImage )
-    {
-        [pSalMenuItem->mpMenuItem setImage: pImage];
         [pImage release];
-    }
 }
 
 void AquaSalMenu::SetItemText( unsigned i_nPos, SalMenuItem* i_pSalMenuItem, const XubString& i_rText )
@@ -894,7 +889,13 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_
     aRect.origin.x -= i_pReferenceFrame->maGeometry.nX;
     aRect.origin.y -= i_pReferenceFrame->maGeometry.nY + aRect.size.height;
 
-    return Rectangle( Point( aRect.origin.x, aRect.origin.y ), Size( aRect.size.width, aRect.size.height ) );
+    return Rectangle( Point(static_cast<long int>(aRect.origin.x),
+                static_cast<long int>(aRect.origin.y)
+                ),
+              Size( static_cast<long int>(aRect.size.width),
+                static_cast<long int>(aRect.size.height)
+              )
+            );
 }
 
 // =======================================================================

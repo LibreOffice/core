@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dockwin.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,7 +152,7 @@ public:
     void            Unlock();
     BOOL            IsLocked() const;
 
-    void            StartPopupMode( ToolBox* pParentToolBox );
+    void            StartPopupMode( ToolBox* pParentToolBox, ULONG nPopupModeFlags );
     BOOL            IsInPopupMode() const;
 
     void            TitleButtonClick( USHORT nButton );
@@ -237,7 +234,10 @@ public:
     BOOL IsLocked( const Window *pWin );
 
     void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin );
+    void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin, ULONG nPopupModeFlags );
+
     BOOL    IsInPopupMode( const Window *pWin );
+    void    EndPopupMode( const Window *pWin );
 
     // required because those methods are not virtual in Window (!!!) and must
     // be availbale from the toolkit

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mtftools.cxx,v $
- * $Revision: 1.14.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,8 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
-
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -45,16 +40,15 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <canvas/canvastools.hxx>
-
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <tools/poly.hxx>
-
 #include "mtftools.hxx"
 #include "outdevstate.hxx"
 #include "polypolyaction.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 
@@ -111,9 +105,9 @@ namespace cppcanvas
 
             const ::Size aSizePixel( rVDev.LogicToPixel( aSizeLogic ) );
 
-            o_rMatrix.identity();
-            o_rMatrix.scale( aSizePixel.Width() / (double)aSizeLogic.Width(),
-                             aSizePixel.Height() / (double)aSizeLogic.Height() );
+            o_rMatrix = basegfx::tools::createScaleB2DHomMatrix(
+                aSizePixel.Width() / (double)aSizeLogic.Width(),
+                aSizePixel.Height() / (double)aSizeLogic.Height() );
 
             return o_rMatrix;
         }

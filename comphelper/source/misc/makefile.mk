@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.48.16.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +53,10 @@ SLOFILES=   \
             $(SLO)$/componentcontext.obj \
             $(SLO)$/componentmodule.obj \
             $(SLO)$/configurationhelper.obj \
+            $(SLO)$/docpasswordhelper.obj \
+            $(SLO)$/docpasswordrequest.obj \
             $(SLO)$/documentinfo.obj \
+            $(SLO)$/evtmethodhelper.obj \
             $(SLO)$/documentiologring.obj \
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/ihwrapnofilter.obj \
@@ -81,6 +80,7 @@ SLOFILES=   \
             $(SLO)$/sequenceashashmap.obj \
             $(SLO)$/sequence.obj \
             $(SLO)$/servicedecl.obj \
+            $(SLO)$/serviceinfohelper.obj \
             $(SLO)$/sharedmutex.obj \
             $(SLO)$/synchronousdispatch.obj \
             $(SLO)$/storagehelper.obj \
@@ -92,6 +92,7 @@ SLOFILES=   \
             $(SLO)$/comphelper_module.obj \
             $(SLO)$/comphelper_services.obj \
             $(SLO)$/componentbase.obj \
+            $(SLO)$/stillreadwriteinteraction.obj \
 
 # --- Targets ----------------------------------
 

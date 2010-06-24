@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: addresstemplate.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +67,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include "localresaccess.hxx"
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include "filenotation.hxx"
+#include "svl/filenotation.hxx"
 #endif
 #include <tools/urlobj.hxx>
 
@@ -97,6 +94,22 @@ namespace svt
     DECLARE_STL_VECTOR( String, StringArray );
     DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringBag );
     DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, MapString2String );
+
+    namespace
+    {
+        String lcl_getSelectedDataSource( const ComboBox& _dataSourceCombo )
+        {
+            String selectedDataSource = _dataSourceCombo.GetText();
+            if ( _dataSourceCombo.GetEntryPos( selectedDataSource ) == LISTBOX_ENTRY_NOTFOUND )
+            {
+                // none of the pre-selected entries -> assume a path to a database document
+                OFileNotation aFileNotation( selectedDataSource, OFileNotation::N_SYSTEM );
+                selectedDataSource = aFileNotation.get( OFileNotation::N_URL );
+            }
+            return selectedDataSource;
+        }
+    }
+
     // ===================================================================
     // = IAssigmentData
     // ===================================================================
@@ -308,7 +321,19 @@ public:
 
         virtual void    setDatasourceName(const ::rtl::OUString& _rName);
         virtual void    setCommand(const ::rtl::OUString& _rCommand);
+
+        virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+        virtual void    Commit();
     };
+
+
+void AssignmentPersistentData::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{
+}
+
+void AssignmentPersistentData::Commit()
+{
+}
 
     // -------------------------------------------------------------------
     AssignmentPersistentData::AssignmentPersistentData()
@@ -829,7 +854,7 @@ public:
         m_aDatasource.SaveValue();
 
         // create an interaction handler (may be needed for connecting)
-        const String sInteractionHandlerServiceName = String::CreateFromAscii("com.sun.star.sdb.InteractionHandler");
+        const String sInteractionHandlerServiceName = String::CreateFromAscii("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xHandler;
         try
         {
@@ -857,9 +882,7 @@ public:
             Reference< XCompletedConnection > xDS;
             if ( m_pImpl->bWorkingPersistent )
             {
-                String sSelectedDS = m_aDatasource.GetText();
-                OFileNotation aFileNotation( sSelectedDS ,OFileNotation::N_SYSTEM);
-                sSelectedDS = aFileNotation.get(OFileNotation::N_URL);
+                String sSelectedDS = lcl_getSelectedDataSource(  m_aDatasource );
 
                 // get the data source the user has chosen and let it build a connection
                 INetURLObject aURL( sSelectedDS );
@@ -1179,9 +1202,7 @@ public:
     // -------------------------------------------------------------------
     IMPL_LINK(AddressBookSourceDialog, OnOkClicked, Button*, EMPTYARG)
     {
-        String sSelectedDS = m_aDatasource.GetText();
-        OFileNotation aFileNotation( sSelectedDS ,OFileNotation::N_SYSTEM);
-        sSelectedDS = aFileNotation.get(OFileNotation::N_URL);
+        String sSelectedDS = lcl_getSelectedDataSource(  m_aDatasource );
         if ( m_pImpl->bWorkingPersistent )
         {
             m_pImpl->pConfigData->setDatasourceName(sSelectedDS);
@@ -1231,7 +1252,6 @@ public:
                 Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
                 if ( xProp.is() )
                 {
-                    String sOldDS = m_aDatasource.GetText();
                     ::rtl::OUString sName;
                     xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sName;
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolypolygon.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,6 +125,12 @@ namespace basegfx
 
         // apply transformation given in matrix form to the polygon
         void transform(const basegfx::B2DHomMatrix& rMatrix);
+
+        // polygon iterators (same iterator validity conditions as for vector)
+        const B2DPolygon* begin() const;
+        const B2DPolygon* end() const;
+        B2DPolygon* begin();
+        B2DPolygon* end();
     };
 } // end of namespace basegfx
 

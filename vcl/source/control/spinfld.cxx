@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: spinfld.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include "vcl/decoview.hxx"
 #include "vcl/spin.h"
 #include "vcl/spinfld.hxx"
-#include "vcl/controllayout.hxx"
+#include "vcl/controldata.hxx"
 #include "vcl/svdata.hxx"
 
 // =======================================================================
@@ -637,7 +634,7 @@ void SpinField::FillLayoutData() const
 {
     if( mbSpin )
     {
-        mpLayoutData = new vcl::ControlLayoutData();
+        mpControlData->mpLayoutData = new vcl::ControlLayoutData();
         AppendLayoutData( *GetSubEdit() );
         GetSubEdit()->SetLayoutDataParent( this );
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rsclex.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +104,7 @@ class ObjectStack {
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( char * );
 extern "C" int  yylex( void );
-#elif defined( HP9000 ) || defined( SCO ) || defined ( IRIX ) || defined ( SOLARIS )
+#elif defined( HP9000 ) || defined( SCO ) || defined ( SOLARIS )
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex( void );

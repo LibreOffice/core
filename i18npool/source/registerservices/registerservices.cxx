@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: registerservices.cxx,v $
- * $Revision: 1.44.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,6 +170,9 @@ IMPL_CREATEINSTANCE_MSF( TextConversion_zh )
 
 IMPL_CREATEINSTANCE( Transliteration_u2l )
 IMPL_CREATEINSTANCE( Transliteration_l2u )
+IMPL_CREATEINSTANCE( Transliteration_sentencecase )
+IMPL_CREATEINSTANCE( Transliteration_titlecase )
+IMPL_CREATEINSTANCE( Transliteration_togglecase )
 IMPL_CREATEINSTANCE( Transliteration_caseignore )
 IMPL_CREATEINSTANCE( hiraganaToKatakana )
 IMPL_CREATEINSTANCE( katakanaToHiragana )
@@ -207,6 +207,7 @@ IMPL_CREATEINSTANCE( NumToCharLower_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
+IMPL_CREATEINSTANCE( NumToCharHalfwidth )
 IMPL_CREATEINSTANCE( NumToCharFullwidth )
 IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
 IMPL_CREATEINSTANCE( NumToCharKanjiTraditional_ja_JP )
@@ -423,6 +424,15 @@ static const struct InstancesArray {
         TRLT_IMPLNAME_PREFIX  "LOWERCASE_UPPERCASE",
         &Transliteration_l2u_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "SENTENCE_CASE",
+        &Transliteration_sentencecase_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "TITLE_CASE",
+        &Transliteration_titlecase_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "TOGGLE_CASE",
+        &Transliteration_togglecase_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "IGNORE_CASE",
         &Transliteration_caseignore_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
@@ -469,6 +479,7 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_CN),
     IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_TW),
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToCharHalfwidth),
     IMPL_TRANSLITERATION_ITEM (NumToCharFullwidth),
     IMPL_TRANSLITERATION_ITEM (NumToCharKanjiShort_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToCharKanjiTraditional_ja_JP),

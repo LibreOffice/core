@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aqua11ywrapper.mm,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +29,8 @@
 #include "precompiled_vcl.hxx"
 
 #include "salinst.h"
+#include "saldata.hxx"
+
 #include "aqua11ywrapper.h"
 #include "aqua11yactionwrapper.h"
 #include "aqua11ycomponentwrapper.h"
@@ -45,6 +43,7 @@
 #include "aqua11yfocuslistener.hxx"
 #include "aqua11yfocustracker.hxx"
 #include "aqua11yrolehelper.h"
+
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -109,7 +108,18 @@ static MacOSBOOL isPopupMenuOpen = NO;
         // XAccessibleMultiLineText
         mpReferenceWrapper -> rAccessibleMultiLineText = Reference < XAccessibleMultiLineText > ( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEventBroadcaster
-        if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) ) {
+        #if 0
+        /* #i102033# NSAccessibility does not seemt to know an equivalent for transient children.
+           That means we need to cache this, else e.g. tree list boxes are not accessible (moreover
+           it crashes by notifying dead objects - which would seemt o be another bug)
+           
+           FIXME:
+           Unfortunately this can increase memory consumption drastically until the non transient parent
+           is destroyed an finally all the transients are released.
+        */
+        if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) )
+        #endif
+        {
             Reference< XAccessibleEventBroadcaster > xBroadcaster(rxAccessibleContext, UNO_QUERY);
             if( xBroadcaster.is() ) {
                 /*
@@ -210,7 +220,8 @@ static MacOSBOOL isPopupMenuOpen = NO;
 -(id)roleAttribute {
     if ( mActsAsRadioGroup ) {
         return NSAccessibilityRadioGroupRole;
-    } else {
+    }
+    else {
         return [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ];
     }
 }
@@ -316,8 +327,10 @@ static MacOSBOOL isPopupMenuOpen = NO;
             }
         }
         return children;
-    } else if ( [ self accessibleTable ] != nil ) {
-        return [ AquaA11yTableWrapper childrenAttributeForElement: self ];
+    } else if ( [ self accessibleTable ] != nil )
+    {
+        AquaA11yTableWrapper* pTable = [self isKindOfClass: [AquaA11yTableWrapper class]] ? (AquaA11yTableWrapper*)self : nil;
+        return [ AquaA11yTableWrapper childrenAttributeForElement: pTable ];
     } else {
         try {
             NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
@@ -656,6 +669,7 @@ static MacOSBOOL isPopupMenuOpen = NO;
     if ( isPopupMenuOpen ) {
         return nil;
     }
+    
     id value = nil;
     // if we are no longer in the wrapper repository, we have been disposed
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ self accessibleContext ] createIfNotExists: NO ];
@@ -710,6 +724,7 @@ static MacOSBOOL isPopupMenuOpen = NO;
     NSString * nativeSubrole = nil;
     NSString * title = nil;
     NSMutableArray * attributeNames = nil;
+    sal_Int32 nAccessibleChildren = 0;
     try {
         // Default Attributes
         attributeNames = [ NSMutableArray arrayWithObjects: 
@@ -728,9 +743,16 @@ static MacOSBOOL isPopupMenuOpen = NO;
         if ( nativeSubrole != nil && ! [ nativeSubrole isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilitySubroleAttribute ];
         }
-        if ( [ self accessibleContext ] -> getAccessibleChildCount() > 0 ) {
-            [ attributeNames addObject: NSAccessibilityChildrenAttribute ];
+        try
+        {
+            nAccessibleChildren = [ self accessibleContext ] -> getAccessibleChildCount();
+            if (  nAccessibleChildren > 0 ) {
+                [ attributeNames addObject: NSAccessibilityChildrenAttribute ];
         }
+        }
+        catch( DisposedException& ) {}
+        catch( RuntimeException& ) {}
+        
         if ( title != nil && ! [ title isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilityTitleAttribute ];
         }
@@ -741,6 +763,9 @@ static MacOSBOOL isPopupMenuOpen = NO;
             [ attributeNames addObject: NSAccessibilityServesAsTitleForUIElementsAttribute ];
         }
         // Special Attributes depending on interface
+        if( [self accessibleContext ] -> getAccessibleRole() == AccessibleRole::TABLE )
+            [AquaA11yTableWrapper addAttributeNamesTo: attributeNames object: self];
+
         if ( [ self accessibleText ] != nil ) {
             [ AquaA11yTextWrapper addAttributeNamesTo: attributeNames ];
         }
@@ -940,14 +965,15 @@ static MacOSBOOL isPopupMenuOpen = NO;
     return hit;
 }
 
-Reference < XAccessibleContext > hitTestRunner ( Point point, Reference < XAccessibleContext > rxAccessibleContext ) {
+Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point point,
+                                                 Reference < XAccessibleContext > rxAccessibleContext ) {
     Reference < XAccessibleContext > hitChild;
     Reference < XAccessibleContext > emptyReference;
     try {
         Reference < XAccessibleComponent > rxAccessibleComponent ( rxAccessibleContext, UNO_QUERY );
         if ( rxAccessibleComponent.is() ) {
-            Point location = rxAccessibleComponent -> getLocationOnScreen();
-            Point hitPoint ( point.X - location.X , point.Y - location.Y); 
+            com::sun::star::awt::Point location = rxAccessibleComponent -> getLocationOnScreen();
+            com::sun::star::awt::Point hitPoint ( point.X - location.X , point.Y - location.Y); 
             Reference < XAccessible > rxAccessible = rxAccessibleComponent -> getAccessibleAtPoint ( hitPoint );
             if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
                 if ( rxAccessible -> getAccessibleContext() -> getAccessibleChildCount() > 0 ) {
@@ -986,7 +1012,7 @@ Reference < XAccessibleContext > hitTestRunner ( Point point, Reference < XAcces
     }
     Reference < XAccessibleContext > hitChild;
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    Point hitPoint ( point.x , screenRect.size.height - point.y ); 
+    com::sun::star::awt::Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) ); 
     // check child windows first
     NSWindow * window = (NSWindow *) [ self accessibilityAttributeValue: NSAccessibilityWindowAttribute ];
     NSArray * childWindows = [ window childWindows ];

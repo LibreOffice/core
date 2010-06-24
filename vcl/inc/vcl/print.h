@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: print.h,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,27 +28,18 @@
 #ifndef _SV_PRINT_H
 #define _SV_PRINT_H
 
-#include <tools/list.hxx>
-#include <vcl/sv.h>
-#include <vcl/dllapi.h>
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
 
 #include <vector>
 #include <hash_map>
 
 struct SalPrinterQueueInfo;
 class QueueInfo;
+class JobSetup;
 
-// ------------------------
-// - private printer data -
-// ------------------------
-struct ImplPrivatePrinterData
-{
-    bool        mbNextJobIsQuick;
-
-    ImplPrivatePrinterData() :
-        mbNextJobIsQuick( false )
-    {}
-};
+namespace vcl
+{ class PrinterListener; }
 
 // --------------------
 // - ImplPrnQueueData -
@@ -87,5 +75,7 @@ public:
 // --------------
 
 void ImplDeletePrnQueueList();
+void SAL_DLLPRIVATE ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
+
 
 #endif // _SV_PRINT_H

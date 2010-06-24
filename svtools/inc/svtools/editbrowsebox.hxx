@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editbrowsebox.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -675,6 +672,7 @@ namespace svt
     private:
         virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const;
+        using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
         SVT_DLLPRIVATE void DetermineFocus( const sal_uInt16 _nGetFocusFlags = 0);
         inline void HideAndDisable(CellControllerRef& rController);

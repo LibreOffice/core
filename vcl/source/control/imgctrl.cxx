@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imgctrl.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,14 +90,10 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     USHORT nStyle = 0;
     BitmapEx* pBitmap = &maBmp;
-    Color aCol;
-    if( !!maBmpHC && ImplGetCurrentBackgroundColor( aCol ) )
+    if( !!maBmpHC )
     {
-        if( aCol.IsDark() )
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
             pBitmap = &maBmpHC;
-        // #99902 no col transform required
-        //if( aCol.IsBright() )
-        //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
     if ( !*pBitmap )

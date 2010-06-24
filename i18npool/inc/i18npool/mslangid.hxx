@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mslangid.hxx,v $
- * $Revision: 1.5.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,6 +213,9 @@ public:
     static LanguageType getRealLanguageWithoutConfig( LanguageType nLang );
 
 
+    static LanguageType resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType );
+
+
     /** Whether locale has a Right-To-Left orientation. */
     static bool isRightToLeft( LanguageType nLang );
 
@@ -246,6 +246,9 @@ public:
         configuration! */
     static void setConfiguredSystemLanguage( LanguageType nLang );
     static void setConfiguredSystemUILanguage( LanguageType nLang );
+    static void setConfiguredWesternFallback( LanguageType nLang );
+    static void setConfiguredComplexFallback( LanguageType nLang );
+    static void setConfiguredAsianFallback( LanguageType nLang );
 
 // ---------------------------------------------------------------------------
 
@@ -273,6 +276,10 @@ private:
 
     static LanguageType         nConfiguredSystemLanguage;
     static LanguageType         nConfiguredSystemUILanguage;
+
+    static LanguageType         nConfiguredWesternFallback;
+    static LanguageType         nConfiguredAsianFallback;
+    static LanguageType         nConfiguredComplexFallback;
 
     static LanguageType getPlatformSystemLanguage();
     static LanguageType getPlatformSystemUILanguage();

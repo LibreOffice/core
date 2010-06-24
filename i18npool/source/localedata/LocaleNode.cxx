@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LocaleNode.cxx,v $
- * $Revision: 1.29.24.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -448,6 +445,11 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aListSep == aThoSep)
         fprintf( stderr, "Warning: %s\n",
                 "ListSeparator equals ThousandSeparator.");
+    if (aListSep.getLength() != 1 || aListSep.getStr()[0] != ';')
+    {
+        incError( "ListSeparator not ';' semicolon. Strongly recommended. Currently required.");
+        ++nSavErr;  // format codes not affected
+    }
     if (aTimeSep == aTime100Sep)
         ++nWarn, fprintf( stderr, "Warning: %s\n",
                 "Time100SecSeparator equals TimeSeparator, this is probably an error.");
@@ -652,7 +654,9 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         OUString aPar1( RTL_CONSTASCII_USTRINGPARAM( "0)" ));
                         OUString aPar2( RTL_CONSTASCII_USTRINGPARAM( "-)" ));
                         OUString aPar3( RTL_CONSTASCII_USTRINGPARAM( " )" ));
-                        if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 || aCode.indexOf( aPar3 ) > 0)
+                        OUString aPar4( RTL_CONSTASCII_USTRINGPARAM( "])" ));
+                        if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 ||
+                                aCode.indexOf( aPar3 ) > 0 || aCode.indexOf( aPar4 ) > 0)
                             fprintf( stderr, "Warning: FormatCode formatindex=\"%d\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\n", formatindex);
                     }
                     break;
@@ -1299,6 +1303,16 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     delete []nbOfEras;
 }
 
+bool isIso4217( const OUString& rStr )
+{
+    const sal_Unicode* p = rStr.getStr();
+    return rStr.getLength() == 3
+        && 'A' <= p[0] && p[0] <= 'Z'
+        && 'A' <= p[1] && p[1] <= 'Z'
+        && 'A' <= p[2] && p[2] <= 'Z'
+        ;
+}
+
 void LCCurrencyNode :: generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
@@ -1336,10 +1350,17 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
         }
         str = calNode -> findNode ("CurrencyID") -> getValue();
         of.writeParameter("currencyID", str, nbOfCurrencies);
+        // CurrencyID MUST be ISO 4217.
+        if (!bLegacy && !isIso4217(str))
+            incError( "CurrencyID is not ISO 4217");
         str = calNode -> findNode ("CurrencySymbol") -> getValue();
         of.writeParameter("currencySymbol", str, nbOfCurrencies);
         str = calNode -> findNode ("BankSymbol") -> getValue();
         of.writeParameter("bankSymbol", str, nbOfCurrencies);
+        // BankSymbol currently must be ISO 4217. May change later if
+        // application always uses CurrencyID instead of BankSymbol.
+        if (!bLegacy && !isIso4217(str))
+            incError( "BankSymbol is not ISO 4217");
         str = calNode -> findNode ("CurrencyName") -> getValue();
         of.writeParameter("currencyName", str, nbOfCurrencies);
         str = calNode -> findNode ("DecimalPlaces") -> getValue();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ivctrl.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,7 +198,7 @@ BOOL SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* )
 }
 void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rDev )
 {
-    rDev.DrawImage ( rPos, GetDisplayBackground().GetColor().IsDark() ? pEntry->GetImageHC() : pEntry->GetImage() );
+    rDev.DrawImage( rPos, GetSettings().GetStyleSettings().GetHighContrastMode() ? pEntry->GetImageHC() : pEntry->GetImage() );
 }
 String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, BOOL )
 {
@@ -579,8 +576,7 @@ Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) co
 
 void SvtIconChoiceCtrl::FillLayoutData() const
 {
-    DBG_ASSERT( !mpLayoutData, "SvtIconChoiceCtrl::FillLayoutData: shouldn't this be called with non-existent layout data only?" );
-    mpLayoutData = new ::vcl::ControlLayoutData();
+    CreateLayoutData();
 
     SvtIconChoiceCtrl* pNonConstMe = const_cast< SvtIconChoiceCtrl* >( this );
 
@@ -598,7 +594,7 @@ void SvtIconChoiceCtrl::FillLayoutData() const
         sal_Bool bLargeIconMode = WB_ICON == ( _pImp->GetStyle() & ( VIEWMODE_MASK ) );
         sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
-        _pImp->PaintItem( aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, pNonConstMe, &sEntryText, mpLayoutData );
+        _pImp->PaintItem( aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, pNonConstMe, &sEntryText, GetLayoutData() );
 
         ++nPos;
     }

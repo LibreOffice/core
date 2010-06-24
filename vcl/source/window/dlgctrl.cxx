@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctrl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/window.h>
 
@@ -46,10 +44,41 @@ using namespace ::com::sun::star;
 
 // =======================================================================
 
+static BOOL ImplHasIndirectTabParent( Window* pWindow )
+{
+    // The window has inderect tab parent if it is included in tab hierarchy
+    // of the indirect parent window
+
+    return ( pWindow && pWindow->GetParent()
+          && ( pWindow->GetParent()->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
+}
+
+// -----------------------------------------------------------------------
+
+static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
+{
+    // The method allows to find the most close parent containing all the
+    // window from the current tab-hierarchy
+    // The direct parent should be provided as a parameter here
+
+    Window* pResult = pParent;
+
+    if ( pResult )
+    {
+        while ( pResult->GetParent() && ( pResult->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) )
+            pResult = pResult->GetParent();
+    }
+
+    return pResult;
+}
+
+// -----------------------------------------------------------------------
+
 static Window* ImplGetSubChildWindow( Window* pParent, USHORT n, USHORT& nIndex )
 {
     Window*     pTabPage = NULL;
     Window*     pFoundWindow = NULL;
+
     Window*     pWindow = pParent->GetWindow( WINDOW_FIRSTCHILD );
     Window*     pNextWindow = pWindow;
     while ( pWindow )
@@ -96,7 +125,8 @@ static Window* ImplGetSubChildWindow( Window* pParent, USHORT n, USHORT& nIndex 
                         }
                     }
                 }
-                else if ( pWindow->GetStyle() & WB_DIALOGCONTROL )
+                else if ( ( pWindow->GetStyle() & WB_DIALOGCONTROL )
+                       || ( pWindow->GetStyle() & WB_CHILDDLGCTRL ) )
                     pFoundWindow = ImplGetSubChildWindow( pWindow, n, nIndex );
             }
 
@@ -122,6 +152,8 @@ static Window* ImplGetSubChildWindow( Window* pParent, USHORT n, USHORT& nIndex 
 
 static Window* ImplGetChildWindow( Window* pParent, USHORT n, USHORT& nIndex, BOOL bTestEnable )
 {
+    pParent = ImplGetTopParentOfTabHierarchy( pParent );
+
     nIndex = 0;
     Window* pWindow = ImplGetSubChildWindow( pParent, n, nIndex );
     if ( bTestEnable )
@@ -284,14 +316,16 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& 
     USHORT  nFormEnd;
 
     // Focus-Fenster in der Child-Liste suchen
-    pSWindow = ImplGetChildWindow( pParent, 0, i, FALSE );
+    Window* pFirstChildWindow = pSWindow = ImplGetChildWindow( pParent, 0, i, FALSE );
 
     if( pWindow == NULL )
         pWindow = pSWindow;
 
     while ( pSWindow )
     {
-        if ( pSWindow->ImplGetWindow()->IsDialogControlStart() )
+        // the DialogControlStart mark is only accepted for the direct children
+        if ( !ImplHasIndirectTabParent( pSWindow )
+          && pSWindow->ImplGetWindow()->IsDialogControlStart() )
             nFormStart = i;
 
         // SecondWindow wegen zusammengesetzten Controls wie
@@ -331,12 +365,33 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& 
     // Formularende suchen
     nFormEnd = nFormStart;
     pTempWindow = pSWindow;
+    sal_Int32 nIteration = 0;
     do
     {
         nFormEnd = i;
         pTempWindow = ImplGetNextWindow( pParent, i, i, FALSE );
-        if ( !i || (pTempWindow && pTempWindow->ImplGetWindow()->IsDialogControlStart()) )
+
+        // the DialogControlStart mark is only accepted for the direct children
+        if ( !i
+          || ( pTempWindow && !ImplHasIndirectTabParent( pTempWindow )
+               && pTempWindow->ImplGetWindow()->IsDialogControlStart() ) )
             break;
+
+        if ( pTempWindow && pTempWindow == pFirstChildWindow )
+        {
+            // It is possible to go through the begin of hierarchy once
+            // while looking for DialogControlStart mark.
+            // If it happens second time, it looks like an endless loop,
+            // that should be impossible, but just for the case...
+            nIteration++;
+            if ( nIteration >= 2 )
+            {
+                // this is an unexpected scenario
+                DBG_ASSERT( FALSE, "It seems to be an endless loop!" );
+                rFormStart = 0;
+                break;
+            }
+        }
     }
     while ( pTempWindow );
     rFormEnd = nFormEnd;
@@ -1024,10 +1079,15 @@ Window* Window::GetLabelFor() const
         return pWindow;
 
     sal_Unicode nAccel = getAccel( GetText() );
-    if( GetType() == WINDOW_FIXEDTEXT       ||
-        GetType() == WINDOW_FIXEDLINE       ||
-        GetType() == WINDOW_GROUPBOX )
+
+    WindowType nMyType = GetType();
+    if( nMyType == WINDOW_FIXEDTEXT     ||
+        nMyType == WINDOW_FIXEDLINE     ||
+        nMyType == WINDOW_GROUPBOX )
     {
+        // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
+        // See tools/options/print for example.
+        BOOL bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
         Window* pSWindow = NULL;
         // get index, form start and form end
         USHORT nIndex=0, nFormStart=0, nFormEnd=0;
@@ -1059,9 +1119,14 @@ Window* Window::GetLabelFor() const
                                                  FALSE );
                 if( pSWindow && pSWindow->IsVisible() && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
-                    if( pSWindow->GetType() != WINDOW_FIXEDTEXT     &&
-                        pSWindow->GetType() != WINDOW_FIXEDLINE     &&
-                        pSWindow->GetType() != WINDOW_GROUPBOX )
+                    WindowType nType = pSWindow->GetType();
+                    if( nType != WINDOW_FIXEDTEXT   &&
+                        nType != WINDOW_FIXEDLINE   &&
+                        nType != WINDOW_GROUPBOX )
+                    {
+                        pWindow = pSWindow;
+                    }
+                    else if( bThisIsAGroupControl && ( nType == WINDOW_FIXEDTEXT ) )
                     {
                         pWindow = pSWindow;
                     }
@@ -1094,9 +1159,13 @@ Window* Window::GetLabeledBy() const
     if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
         return NULL;
 
-    if( ! ( GetType() == WINDOW_FIXEDTEXT       ||
-            GetType() == WINDOW_FIXEDLINE       ||
-            GetType() == WINDOW_GROUPBOX ) )
+//    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
+//            GetType() == WINDOW_FIXEDLINE     ||
+//            GetType() == WINDOW_GROUPBOX ) )
+    // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
+    // See tools/options/print for example.
+    WindowType nMyType = GetType();
+    if ( (nMyType != WINDOW_GROUPBOX) && (nMyType != WINDOW_FIXEDLINE) )
     {
         // search for a control that labels this window
         // a label is considered the last fixed text, fixed line or group box
@@ -1127,14 +1196,18 @@ Window* Window::GetLabeledBy() const
                                                  nSearchIndex,
                                                  nFoundIndex,
                                                  FALSE );
-                if( pSWindow && pSWindow->IsVisible() &&
-                    ! (pSWindow->GetStyle() & WB_NOLABEL) &&
-                    ( pSWindow->GetType() == WINDOW_FIXEDTEXT   ||
-                      pSWindow->GetType() == WINDOW_FIXEDLINE   ||
-                      pSWindow->GetType() == WINDOW_GROUPBOX ) )
+                if( pSWindow && pSWindow->IsVisible() && !(pSWindow->GetStyle() & WB_NOLABEL) )
                 {
-                    pWindow = pSWindow;
-                    break;
+                    WindowType nType = pSWindow->GetType();
+                    if ( ( nType == WINDOW_FIXEDTEXT    ||
+                          nType == WINDOW_FIXEDLINE ||
+                          nType == WINDOW_GROUPBOX ) )
+                    {
+                        // a fixed text can't be labeld by a fixed text.
+                        if ( ( nMyType != WINDOW_FIXEDTEXT ) || ( nType != WINDOW_FIXEDTEXT ) )
+                            pWindow = pSWindow;
+                        break;
+                    }
                 }
                 if( nFoundIndex > nSearchIndex || nSearchIndex == 0 )
                     break;

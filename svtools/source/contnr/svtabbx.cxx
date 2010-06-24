@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svtabbx.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -989,7 +986,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
             m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
         }
 
-        nIndex = ( _nRow * GetColumnCount() ) + _nColumnPos + GetColumnCount();
+        nIndex = ( _nRow * nColumnCount ) + _nColumnPos + nColumnCount;
         xChild = m_aAccessibleChildren[ nIndex ];
     }
 
@@ -1084,15 +1081,10 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
     switch( _eType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
-            aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HeaderTabListBox" ) );
-            break;
-
         case ::svt::BBTYPE_TABLE:
-            aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HeaderTabListBoxTable" ) );
-            break;
-
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar of HeaderTabListBox" ) );
+            // should be empty now (see #i63983)
+            aRetText = ::rtl::OUString();
             break;
 
         case ::svt::BBTYPE_TABLECELL:
@@ -1240,7 +1232,7 @@ BOOL SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const String&
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
 // -----------------------------------------------------------------------
-Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }

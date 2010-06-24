@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocontrolmodel.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +74,6 @@ protected:
     void                                        ImplRegisterProperties( const std::list< sal_uInt16 > &rIds );
     void                                        ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault );
     ::com::sun::star::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
-    virtual void                                ImplPropertyChanged( sal_uInt16 nPropId );
     virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     sal_Bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
 

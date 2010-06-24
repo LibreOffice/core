@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: kdedata.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +72,7 @@ public:
 
     virtual SalGraphics* GetGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
-    virtual void updateGraphics();
+    virtual void updateGraphics( bool bClear );
     virtual void UpdateSettings( AllSettings& rSettings );
     virtual void Show( BOOL bVisible, BOOL bNoActivate );
 };

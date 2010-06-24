@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: valueset.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1421,7 +1418,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
 {
     USHORT nLastItem = (USHORT)mpImpl->mpItemList->Count();
     USHORT nItemPos = VALUESET_ITEM_NOTFOUND;
-    USHORT nCurPos;
+    USHORT nCurPos = VALUESET_ITEM_NONEITEM;
     USHORT nCalcPos;
 
     if ( !nLastItem || !ImplGetFirstItem() )
@@ -1434,8 +1431,6 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
 
     if ( mnSelItemId )
         nCurPos = GetItemPos( mnSelItemId );
-    else
-        nCurPos = VALUESET_ITEM_NONEITEM;
     nCalcPos = nCurPos;
 
     //switch off selection mode if key travelling is used
@@ -1531,30 +1526,20 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos - ( nLineCount * mnCols ));
                     else
                     {
-                        if( (KEY_UP == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
+                        if ( mpNoneItem )
                         {
-                            Window* pParent = GetParent();
-                            pParent->GrabFocus();
-                            pParent->KeyInput( rKEvt );
-                            break;
+                            mnCurCol  = nCalcPos%mnCols;
+                            nItemPos = VALUESET_ITEM_NONEITEM;
                         }
                         else
                         {
-                            if ( mpNoneItem )
-                            {
-                                mnCurCol  = nCalcPos%mnCols;
-                                nItemPos = VALUESET_ITEM_NONEITEM;
-                            }
+                            if ( nLastItem+1 <= mnCols )
+                                nItemPos = nCalcPos;
                             else
                             {
-                                if ( nLastItem+1 <= mnCols )
-                                    nItemPos = nCalcPos;
-                                else
-                                {
-                                    nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
-                                    if ( nItemPos+mnCols <= nLastItem )
-                                        nItemPos = nItemPos + mnCols;
-                                }
+                                nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
+                                if ( nItemPos+mnCols <= nLastItem )
+                                    nItemPos = nItemPos + mnCols;
                             }
                         }
                     }
@@ -1583,6 +1568,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos + ( nLineCount * mnCols ));
                     else
                     {
+#if 0
                         if( (KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
                         {
                             Window* pParent = GetParent();
@@ -1591,6 +1577,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             break;
                         }
                         else
+#endif
                         {
                             if ( mpNoneItem )
                             {
@@ -1623,7 +1610,6 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             bDefault = TRUE;
             break;
     }
-
     if(!bDefault)
         EndSelection();
     if ( nItemPos != VALUESET_ITEM_NOTFOUND )
@@ -1633,6 +1619,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             nItemId = GetItemId( nItemPos );
         else
             nItemId = 0;
+
         if ( nItemId != mnSelItemId )
         {
             SelectItem( nItemId );
@@ -1683,13 +1670,10 @@ void ValueSet::GetFocus()
     ImplDrawSelect();
     Control::GetFocus();
 
-    // Send accessibility event.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-    ImplFireAccessibleEvent (
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
-        aOldState, aNewState);
-
+    // Tell the accessible object that we got the focus.
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( FALSE ) );
+    if( pAcc )
+        pAcc->GetFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -1703,12 +1687,10 @@ void ValueSet::LoseFocus()
         HideFocus();
     Control::LoseFocus();
 
-    // Send accessibility event.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-    ImplFireAccessibleEvent (
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
-        aOldState, aNewState);
+    // Tell the accessible object that we lost the focus.
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( FALSE ) );
+    if( pAcc )
+        pAcc->LoseFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -2286,6 +2268,7 @@ void ValueSet::SelectItem( USHORT nItemId )
             ::com::sun::star::uno::Any aOldAny, aNewAny;
             ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
         }
+        mpImpl->maHighlightHdl.Call(this);
     }
 }
 
@@ -2756,4 +2739,20 @@ bool ValueSet::IsRTLActive (void)
 {
     return Application::GetSettings().GetLayoutRTL() && IsRTLEnabled();
 }
+
+// -----------------------------------------------------------------------
+
+void ValueSet::SetHighlightHdl( const Link& rLink )
+{
+    mpImpl->maHighlightHdl = rLink;
+}
+
+// -----------------------------------------------------------------------
+
+const Link& ValueSet::GetHighlightHdl() const
+{
+    return mpImpl->maHighlightHdl;
+}
+
+// -----------------------------------------------------------------------
 

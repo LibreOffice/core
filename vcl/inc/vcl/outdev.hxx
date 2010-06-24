@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outdev.hxx,v $
- * $Revision: 1.7.20.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +39,11 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <tools/poly.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <unotools/fontdefs.hxx>
 
 #include <vector>
 
@@ -79,6 +78,7 @@ class AlphaMask;
 class FontCharMap;
 class SalLayout;
 class ImplLayoutArgs;
+class ImplFontAttributes;
 class VirtualDevice;
 
 namespace com {
@@ -103,8 +103,12 @@ namespace awt {
 
 typedef std::vector< Rectangle > MetricVector;
 
-namespace vcl { class PDFWriterImpl; }
-namespace vcl { class ExtOutDevData; }
+namespace vcl
+{
+    class PDFWriterImpl;
+    class ExtOutDevData;
+    class ITextLayout;
+}
 
 #define OUTDEV_BUFFER_SIZE  128
 
@@ -260,31 +264,6 @@ struct KerningPair
 #define FONT_SUBSTITUTE_ALWAYS          ((USHORT)0x0001)
 #define FONT_SUBSTITUTE_SCREENONLY      ((USHORT)0x0002)
 
-// Default-Font
-#define DEFAULTFONT_SANS_UNICODE        ((USHORT)1)
-#define DEFAULTFONT_SANS                ((USHORT)2)
-#define DEFAULTFONT_SERIF               ((USHORT)3)
-#define DEFAULTFONT_FIXED               ((USHORT)4)
-#define DEFAULTFONT_SYMBOL              ((USHORT)5)
-#define DEFAULTFONT_UI_SANS             ((USHORT)1000)
-#define DEFAULTFONT_UI_FIXED            ((USHORT)1001)
-#define DEFAULTFONT_LATIN_TEXT          ((USHORT)2000)
-#define DEFAULTFONT_LATIN_PRESENTATION  ((USHORT)2001)
-#define DEFAULTFONT_LATIN_SPREADSHEET   ((USHORT)2002)
-#define DEFAULTFONT_LATIN_HEADING       ((USHORT)2003)
-#define DEFAULTFONT_LATIN_DISPLAY       ((USHORT)2004)
-#define DEFAULTFONT_LATIN_FIXED         ((USHORT)2005)
-#define DEFAULTFONT_CJK_TEXT            ((USHORT)3000)
-#define DEFAULTFONT_CJK_PRESENTATION    ((USHORT)3001)
-#define DEFAULTFONT_CJK_SPREADSHEET     ((USHORT)3002)
-#define DEFAULTFONT_CJK_HEADING         ((USHORT)3003)
-#define DEFAULTFONT_CJK_DISPLAY         ((USHORT)3004)
-#define DEFAULTFONT_CTL_TEXT            ((USHORT)4000)
-#define DEFAULTFONT_CTL_PRESENTATION    ((USHORT)4001)
-#define DEFAULTFONT_CTL_SPREADSHEET     ((USHORT)4002)
-#define DEFAULTFONT_CTL_HEADING         ((USHORT)4003)
-#define DEFAULTFONT_CTL_DISPLAY         ((USHORT)4004)
-
 #define DEFAULTFONT_FLAGS_ONLYONE       ((ULONG)0x00000001)
 
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
@@ -431,9 +410,13 @@ public:
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
 
     SAL_DLLPRIVATE long         ImplGetTextWidth( const SalLayout& ) const;
-    SAL_DLLPRIVATE void         ImplDrawText( const Rectangle& rRect,
+    static
+    SAL_DLLPRIVATE XubString    ImplGetEllipsisString( const OutputDevice& rTargetDevice, const XubString& rStr,
+                                                       long nMaxWidth, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
+    static
+    SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const String& rOrigStr, USHORT nStyle,
-                                              MetricVector* pVector, String* pDisplayText );
+                                              MetricVector* pVector, String* pDisplayText, ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, BOOL bWordLine, BOOL bUnderlineAbove );
     SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
@@ -456,7 +439,8 @@ public:
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle ) const;
+    static
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
@@ -559,9 +543,25 @@ public:
     SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
     SAL_DLLPRIVATE static BOOL ImplIsUnderlineAbove( const Font& );
 
-
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool ImplIsAntiparallel() const ;
+
+    // #i101491#
+    // Helper which holds the old line geometry creation and is extended to use AA when
+    // switched on. Advantage is that line geometry is only temporarily used for paint
+    SAL_DLLPRIVATE void ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
+
+    // #i101491#
+    // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
+    // without MetaFile processing
+    SAL_DLLPRIVATE void ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
+
+    // #i101491#
+    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
+    SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(const basegfx::B2DPolygon& rB2DPolygon, double fLineWidth, basegfx::B2DLineJoin eLineJoin);
+
+    // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
+    void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
 
 protected:
                         OutputDevice();
@@ -635,10 +635,12 @@ public:
                                             GDIMetaFile&     rMtf );
     void                DrawText( const Rectangle& rRect,
                                   const XubString& rStr, USHORT nStyle = 0,
-                                  MetricVector* pVector = NULL, String* pDisplayText = NULL );
+                                  MetricVector* pVector = NULL, String* pDisplayText = NULL,
+                                  ::vcl::ITextLayout* _pTextLayout = NULL );
     Rectangle           GetTextRect( const Rectangle& rRect,
                                      const XubString& rStr, USHORT nStyle = TEXT_DRAW_WORDBREAK,
-                                     TextRectInfo* pInfo = NULL ) const;
+                                     TextRectInfo* pInfo = NULL,
+                                     const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
     XubString           GetEllipsisString( const XubString& rStr, long nMaxWidth,
                                            USHORT nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const XubString& rStr,
@@ -655,20 +657,20 @@ public:
     void                GetKerningPairs( ULONG nPairs, KerningPair* pKernPairs ) const;
 
     BOOL                GetTextBoundRect( Rectangle& rRect,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
-                            xub_StrLen nLen = STRING_LEN ) const;
+                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutline( PolyPolygon&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( PolyPolyVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
 
@@ -930,6 +932,10 @@ public:
     basegfx::B2DHomMatrix GetViewTransformation() const;
     basegfx::B2DHomMatrix GetInverseViewTransformation() const;
 
+    basegfx::B2DHomMatrix GetViewTransformation( const MapMode& rMapMode ) const;
+    basegfx::B2DHomMatrix GetInverseViewTransformation( const MapMode& rMapMode ) const;
+
+
     /** Set an offset in pixel
 
         This method offsets every drawing operation that converts its
@@ -966,7 +972,9 @@ public:
     Size                LogicToPixel( const Size& rLogicSize ) const;
     Rectangle           LogicToPixel( const Rectangle& rLogicRect ) const;
     Polygon             LogicToPixel( const Polygon& rLogicPoly ) const;
+    basegfx::B2DPolygon LogicToPixel( const basegfx::B2DPolygon& rLogicPolyPoly ) const;
     PolyPolygon         LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const;
+    basegfx::B2DPolyPolygon LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
     Region              LogicToPixel( const Region& rLogicRegion )const;
     Point               LogicToPixel( const Point& rLogicPt,
                                       const MapMode& rMapMode ) const;
@@ -976,15 +984,21 @@ public:
                                       const MapMode& rMapMode ) const;
     Polygon             LogicToPixel( const Polygon& rLogicPoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
+                                          const MapMode& rMapMode ) const;
     PolyPolygon         LogicToPixel( const PolyPolygon& rLogicPolyPoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
+                                          const MapMode& rMapMode ) const;
     Region              LogicToPixel( const Region& rLogicRegion,
                                       const MapMode& rMapMode ) const;
     Point               PixelToLogic( const Point& rDevicePt ) const;
     Size                PixelToLogic( const Size& rDeviceSize ) const;
     Rectangle           PixelToLogic( const Rectangle& rDeviceRect ) const;
     Polygon             PixelToLogic( const Polygon& rDevicePoly ) const;
+    basegfx::B2DPolygon PixelToLogic( const basegfx::B2DPolygon& rDevicePoly ) const;
     PolyPolygon         PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
+    basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
     Region              PixelToLogic( const Region& rDeviceRegion ) const;
     Point               PixelToLogic( const Point& rDevicePt,
                                       const MapMode& rMapMode ) const;
@@ -994,8 +1008,12 @@ public:
                                       const MapMode& rMapMode ) const;
     Polygon             PixelToLogic( const Polygon& rDevicePoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
+                                      const MapMode& rMapMode ) const;
     PolyPolygon         PixelToLogic( const PolyPolygon& rDevicePolyPoly,
                                       const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
+                                          const MapMode& rMapMode ) const;
     Region              PixelToLogic( const Region& rDeviceRegion,
                                       const MapMode& rMapMode ) const;
 
@@ -1024,6 +1042,13 @@ public:
     static long         LogicToLogic( long              nLongSource,
                                       MapUnit           eUnitSource,
                                       MapUnit           eUnitDest );
+
+    static basegfx::B2DPolygon LogicToLogic( const basegfx::B2DPolygon& rPoly,
+                                             const MapMode&    rMapModeSource,
+                                             const MapMode&    rMapModeDest );
+    static basegfx::B2DPolyPolygon LogicToLogic( const basegfx::B2DPolyPolygon& rPolyPoly,
+                                                 const MapMode&    rMapModeSource,
+                                                 const MapMode&    rMapModeDest );
 
     Size                GetOutputSizePixel() const
                             { return Size( mnOutWidth, mnOutHeight ); }
@@ -1087,7 +1112,12 @@ public:
      */
     BOOL                HasAlpha();
 
-    void                DrawEPS( const Point& rPt, const Size& rSz,
+    /** Added return value to see if EPS could be painted directly.
+        Theoreticaly, handing over a matrix would be needed to handle
+        painting rotated EPS files (e.g. contained mín Metafiles). This
+        would then need to be supported for Mac and PS printers, but
+        that's too much for now, wrote #i107046# for this */
+    bool                DrawEPS( const Point& rPt, const Size& rSz,
                                  const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
 
     /// request XCanvas render interface for this OutputDevice
@@ -1122,12 +1152,15 @@ public:
         false: output metafile is unchanged input metafile
 
         @attention this is a member method, so current state can influence the result !
+        @attention the output metafile is prepared in pixel mode for the currentOutputDevice
+                   state. It can not be moved or rotated reliably anymore.
     */
     bool                RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                           long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                           bool bReduceTransparency,
                                                           bool bTransparencyAutoMode,
-                                                          bool bDownsampleBitmaps
+                                                          bool bDownsampleBitmaps,
+                                                          const Color& rBackground = Color( COL_TRANSPARENT )
                                                           );
     /** Retrieve downsampled and cropped bitmap
 
@@ -1145,6 +1178,49 @@ public:
     BitmapEx            GetDownsampledBitmapEx( const Size& rDstSz,
                                                 const Point& rSrcPt, const Size& rSrcSz,
                                                 const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY );
+
+    //-------------------------------------
+    //  Native Widget Rendering functions
+    //-------------------------------------
+
+    // These all just call through to the private mpGraphics functions of the same name.
+
+    // Query the platform layer for control support
+    BOOL                IsNativeControlSupported( ControlType nType, ControlPart nPart );
+
+    // Query the native control to determine if it was acted upon
+    BOOL                HitTestNativeControl(   ControlType nType,
+                                                ControlPart nPart,
+                                                const Region& rControlRegion,
+                                                const Point& aPos,
+                                                BOOL& rIsInside );
+
+    // Request rendering of a particular control and/or part
+    BOOL                DrawNativeControl(  ControlType nType,
+                                            ControlPart nPart,
+                                            const Region& rControlRegion,
+                                            ControlState nState,
+                                            const ImplControlValue& aValue,
+                                            ::rtl::OUString aCaption );
+
+     // Request rendering of a caption string for a control
+    BOOL                DrawNativeControlText(  ControlType nType,
+                                                ControlPart nPart,
+                                                const Region& rControlRegion,
+                                                ControlState nState,
+                                                const ImplControlValue& aValue,
+                                                ::rtl::OUString aCaption );
+
+    // Query the native control's actual drawing region (including adornment)
+    BOOL                GetNativeControlRegion( ControlType nType,
+                                                ControlPart nPart,
+                                                const Region& rControlRegion,
+                                                ControlState nState,
+                                                const ImplControlValue& aValue,
+                                                ::rtl::OUString aCaption,
+                                                Region &rNativeBoundingRegion,
+                                                Region &rNativeContentRegion );
+
 };
 
 #endif // _SV_OUTDEV_HXX

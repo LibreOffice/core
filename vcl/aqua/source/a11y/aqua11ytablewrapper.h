@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aqua11ytablewrapper.h,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +30,15 @@
 
 #include "aqua11ywrapper.h"
 
-@interface AquaA11yTableWrapper : NSObject
+#define MAXIMUM_ACCESSIBLE_TABLE_CELLS 1000
+
+@interface AquaA11yTableWrapper : AquaA11yWrapper
 {
 }
-+(id)childrenAttributeForElement:(AquaA11yWrapper *)wrapper;
++(id)childrenAttributeForElement:(AquaA11yTableWrapper *)wrapper;
++(void)addAttributeNamesTo: (NSMutableArray *)attributeNames object: (AquaA11yWrapper*)pObject;
+
+-(id)rowsAttribute;
+-(id)columnsAttribute;
 @end
 #endif // _SV_AQUA11TABLEWRAPPER_H

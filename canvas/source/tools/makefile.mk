@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +47,7 @@ CDEFS+= -DPROFILER
 #CFLAGS +:= /Ox /Ot					# THIS IS IMPORTANT
 
 
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	\
     $(SLO)$/cachedprimitivebase.obj \
     $(SLO)$/canvascustomspritehelper.obj \
@@ -95,7 +91,7 @@ DEFLIB1NAME	=$(TARGET)
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS += $(WINMMLIB) $(KERNEL32LIB)
 .ENDIF
-
+.ENDIF
 
 # ==========================================================================
 

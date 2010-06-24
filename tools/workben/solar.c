@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: solar.c,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -352,6 +349,8 @@ void Description_Print( struct Description* pThis, char* name )
   fprintf( f, "#define __SIZEOFDOUBLE\t%d\n", sizeof( double ) );
   fprintf( f, "#define __IEEEDOUBLE\n" );
   fprintf( f, "#define _SOLAR_NODESCRIPTION\n" );
+
+  fclose(f);
 }
 
 int

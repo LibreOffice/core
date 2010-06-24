@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolygon.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,38 +41,24 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-class CoordinateData2D
+struct CoordinateData2D : public basegfx::B2DPoint
 {
-    basegfx::B2DPoint                               maPoint;
-
 public:
-    CoordinateData2D()
-    :   maPoint()
-    {}
+    CoordinateData2D() {}
 
     explicit CoordinateData2D(const basegfx::B2DPoint& rData)
-    :   maPoint(rData)
+    :   B2DPoint(rData)
     {}
 
-    const basegfx::B2DPoint& getCoordinate() const
+    CoordinateData2D& operator=(const basegfx::B2DPoint& rData)
     {
-        return maPoint;
-    }
-
-    void setCoordinate(const basegfx::B2DPoint& rValue)
-    {
-        if(rValue != maPoint)
-            maPoint = rValue;
-    }
-
-    bool operator==(const CoordinateData2D& rData ) const
-    {
-        return (maPoint == rData.getCoordinate());
+        B2DPoint::operator=(rData);
+        return *this;
     }
 
     void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
-        maPoint *= rMatrix;
+        *this *= rMatrix;
     }
 };
 
@@ -115,12 +98,22 @@ public:
 
     const basegfx::B2DPoint& getCoordinate(sal_uInt32 nIndex) const
     {
-        return maVector[nIndex].getCoordinate();
+        return maVector[nIndex];
     }
 
     void setCoordinate(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue)
     {
-        maVector[nIndex].setCoordinate(rValue);
+        maVector[nIndex] = rValue;
+    }
+
+    void reserve(sal_uInt32 nCount)
+    {
+        maVector.reserve(nCount);
+    }
+
+    void append(const CoordinateData2D& rValue)
+    {
+        maVector.push_back(rValue);
     }
 
     void insert(sal_uInt32 nIndex, const CoordinateData2D& rValue, sal_uInt32 nCount)
@@ -220,6 +213,38 @@ public:
         {
             aStart->transform(rMatrix);
         }
+    }
+
+    const basegfx::B2DPoint* begin() const
+    {
+        if(maVector.empty())
+            return 0;
+        else
+            return &maVector.front();
+    }
+
+    const basegfx::B2DPoint* end() const
+    {
+        if(maVector.empty())
+            return 0;
+        else
+            return (&maVector.back())+1;
+    }
+
+    basegfx::B2DPoint* begin()
+    {
+        if(maVector.empty())
+            return 0;
+        else
+            return &maVector.front();
+    }
+
+    basegfx::B2DPoint* end()
+    {
+        if(maVector.empty())
+            return 0;
+        else
+            return (&maVector.back())+1;
     }
 };
 
@@ -378,6 +403,17 @@ public:
                 mnUsedVectors++;
             }
         }
+    }
+
+    void append(const ControlVectorPair2D& rValue)
+    {
+        maVector.push_back(rValue);
+
+        if(!rValue.getPrevVector().equalZero())
+            mnUsedVectors += 1;
+
+        if(!rValue.getNextVector().equalZero())
+            mnUsedVectors += 1;
     }
 
     void insert(sal_uInt32 nIndex, const ControlVectorPair2D& rValue, sal_uInt32 nCount)
@@ -739,6 +775,24 @@ public:
     {
         mpBufferedData.reset();
         maPoints.setCoordinate(nIndex, rValue);
+    }
+
+    void reserve(sal_uInt32 nCount)
+    {
+        maPoints.reserve(nCount);
+    }
+
+    void append(const basegfx::B2DPoint& rPoint)
+    {
+        mpBufferedData.reset(); // TODO: is this needed?
+        const CoordinateData2D aCoordinate(rPoint);
+        maPoints.append(aCoordinate);
+
+        if(mpControlVector)
+        {
+            const ControlVectorPair2D aVectorPair;
+            mpControlVector->append(aVectorPair);
+        }
     }
 
     void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount)
@@ -1113,6 +1167,28 @@ public:
             maPoints.transform(rMatrix);
         }
     }
+
+    const basegfx::B2DPoint* begin() const
+    {
+        return maPoints.begin();
+    }
+
+    const basegfx::B2DPoint* end() const
+    {
+        return maPoints.end();
+    }
+
+    basegfx::B2DPoint* begin()
+    {
+       mpBufferedData.reset();
+       return maPoints.begin();
+    }
+
+    basegfx::B2DPoint* end()
+    {
+        mpBufferedData.reset();
+        return maPoints.end();
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1190,6 +1266,11 @@ namespace basegfx
         }
     }
 
+    void B2DPolygon::reserve(sal_uInt32 nCount)
+    {
+        mpPolygon->reserve(nCount);
+    }
+
     void B2DPolygon::insert(sal_uInt32 nIndex, const B2DPoint& rPoint, sal_uInt32 nCount)
     {
         OSL_ENSURE(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
@@ -1206,6 +1287,11 @@ namespace basegfx
         {
             mpPolygon->insert(mpPolygon->count(), rPoint, nCount);
         }
+    }
+
+    void B2DPolygon::append(const B2DPoint& rPoint)
+    {
+        mpPolygon->append(rPoint);
     }
 
     B2DPoint B2DPolygon::getPrevControlPoint(sal_uInt32 nIndex) const
@@ -1539,6 +1625,26 @@ namespace basegfx
         {
             mpPolygon->transform(rMatrix);
         }
+    }
+
+    const B2DPoint* B2DPolygon::begin() const
+    {
+        return mpPolygon->begin();
+    }
+
+    const B2DPoint* B2DPolygon::end() const
+    {
+        return mpPolygon->end();
+    }
+
+    B2DPoint* B2DPolygon::begin()
+    {
+        return mpPolygon->begin();
+    }
+
+    B2DPoint* B2DPolygon::end()
+    {
+        return mpPolygon->end();
     }
 } // end of namespace basegfx
 

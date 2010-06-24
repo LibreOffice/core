@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transliterationwrapper.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,12 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
-#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
-#endif
+
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #define TRANSLIT_LIBRARYNAME "i18n"
 #define TRANSLIT_SERVICENAME "com.sun.star.i18n.Transliteration"
@@ -150,7 +148,10 @@ sal_Bool TransliterationWrapper::needLanguageForTheMode() const
 {
     return TransliterationModules_UPPERCASE_LOWERCASE == nType ||
            TransliterationModules_LOWERCASE_UPPERCASE == nType ||
-           TransliterationModules_IGNORE_CASE == nType;
+           TransliterationModules_IGNORE_CASE == nType ||
+           (sal_uInt32) TransliterationModulesExtra::SENTENCE_CASE == (sal_uInt32) nType ||
+           (sal_uInt32) TransliterationModulesExtra::TITLE_CASE    == (sal_uInt32) nType ||
+           (sal_uInt32) TransliterationModulesExtra::TOGGLE_CASE   == (sal_uInt32) nType;
 }
 
 
@@ -168,14 +169,32 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     sal_Bool bLoad = bFirstCall;
     bFirstCall = sal_False;
 
-    if( nLanguage != nLang )
+    if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::SENTENCE_CASE )
     {
-        setLanguageLocaleImpl( nLang );
-        if( !bLoad )
-            bLoad = needLanguageForTheMode();
+        if( bLoad )
+            loadModuleByImplName(String::CreateFromAscii("SENTENCE_CASE"), nLang);
     }
-    if( bLoad )
-        loadModuleImpl();
+    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TITLE_CASE )
+    {
+        if( bLoad )
+            loadModuleByImplName(String::CreateFromAscii("TITLE_CASE"), nLang);
+    }
+    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TOGGLE_CASE )
+    {
+        if( bLoad )
+            loadModuleByImplName(String::CreateFromAscii("TOGGLE_CASE"), nLang);
+    }
+    else
+    {
+        if( nLanguage != nLang )
+        {
+            setLanguageLocaleImpl( nLang );
+            if( !bLoad )
+                bLoad = needLanguageForTheMode();
+        }
+        if( bLoad )
+            loadModuleImpl();
+    }
 }
 
 
@@ -191,7 +210,7 @@ void TransliterationWrapper::loadModuleImpl() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "loadModuleImpl: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -218,7 +237,7 @@ void TransliterationWrapper::loadModuleByImplName(
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "loadModuleByImplName: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -244,7 +263,7 @@ sal_Bool TransliterationWrapper::equals(
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "equals: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -269,7 +288,7 @@ sal_Int32 TransliterationWrapper::compareSubstring(
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "compareSubstring: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -292,7 +311,7 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "compareString: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: implrenderer.cxx,v $
- * $Revision: 1.25.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,22 +31,16 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
-
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
 #include <rtl/logfile.hxx>
-
 #include <comphelper/sequence.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-
 #include <cppcanvas/canvas.hxx>
-
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
@@ -59,8 +50,8 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -73,7 +64,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/salbtype.hxx>
@@ -83,11 +73,10 @@
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <tools/poly.hxx>
-
+#include <i18npool/mslangid.hxx>
 #include <implrenderer.hxx>
 #include <tools.hxx>
 #include <outdevstate.hxx>
-
 #include <action.hxx>
 #include <bitmapaction.hxx>
 #include <lineaction.hxx>
@@ -95,15 +84,13 @@
 #include <polypolyaction.hxx>
 #include <textaction.hxx>
 #include <transparencygroupaction.hxx>
-
 #include <vector>
 #include <algorithm>
 #include <iterator>
-
 #include <boost/scoped_array.hpp>
-
 #include "mtftools.hxx"
 #include "outdevstate.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -285,10 +272,25 @@ namespace
             (getState( rParms.mrStates ).mapModeTransform * aWidth).getX();
 
         // setup reasonable defaults
-        o_rStrokeAttributes.MiterLimit   = 1.0;
+        o_rStrokeAttributes.MiterLimit   = 15.0; // 1.0 was no good default; GDI+'s limit is 10.0, our's is 15.0
         o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
         o_rStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
-        o_rStrokeAttributes.JoinType     = rendering::PathJoinType::MITER;
+
+        switch(rLineInfo.GetLineJoin())
+        {
+            default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::NONE;
+                break;
+            case basegfx::B2DLINEJOIN_BEVEL:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::BEVEL;
+                break;
+            case basegfx::B2DLINEJOIN_MITER:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::MITER;
+                break;
+            case basegfx::B2DLINEJOIN_ROUND:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
+                break;
+        }
 
         if( LINE_DASH == rLineInfo.GetStyle() )
         {
@@ -589,13 +591,12 @@ namespace cppcanvas
                 // discernible difference should be visible.
                 nSteps > 64 )
             {
-                uno::Reference< rendering::XParametricPolyPolygon2DFactory > xFactory(
+                uno::Reference< lang::XMultiServiceFactory> xFactory(
                     rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
 
                 if( xFactory.is() )
                 {
-                    ::basegfx::B2DHomMatrix aTextureTransformation;
-                    rendering::Texture      aTexture;
+                    rendering::Texture aTexture;
 
                     aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
                     aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
@@ -630,242 +631,118 @@ namespace cppcanvas
                     uno::Sequence< uno::Sequence < double > > aColors(2);
                     uno::Sequence< double > aStops(2);
 
-                    aStops[0] = 0.0;
-                    aStops[1] = 1.0;
+                    if( rGradient.GetStyle() == GRADIENT_AXIAL )
+                    {
+                        aStops.realloc(3);
+                        aColors.realloc(3);
 
-                    aColors[0] = aStartColor;
-                    aColors[1] = aEndColor;
+                        aStops[0] = 0.0;
+                        aStops[1] = 0.5;
+                        aStops[2] = 1.0;
 
+                        aColors[0] = aEndColor;
+                        aColors[1] = aStartColor;
+                        aColors[2] = aEndColor;
+                    }
+                    else
+                    {
+                        aStops[0] = 0.0;
+                        aStops[1] = 1.0;
 
-                    // Setup texture transformation
-                    // ----------------------------
+                        aColors[0] = aStartColor;
+                        aColors[1] = aEndColor;
+                    }
 
                     const ::basegfx::B2DRectangle aBounds(
                         ::basegfx::tools::getRange(aDevicePoly) );
+                    const ::basegfx::B2DVector aOffset(
+                        rGradient.GetOfsX() / 100.0,
+                        rGradient.GetOfsY() / 100.0);
+                    double fRotation( rGradient.GetAngle() * M_PI / 1800.0 );
+                    const double fBorder( rGradient.GetBorder() / 100.0 );
 
-                    // setup rotation angle. VCL rotates
-                    // counter-clockwise, while canvas transformation
-                    // rotates clockwise
-                    double nRotation( -rGradient.GetAngle() * M_PI / 1800.0 );
+                    basegfx::B2DHomMatrix aRot90;
+                    aRot90.rotate(M_PI_2);
 
+                    basegfx::ODFGradientInfo aGradInfo;
+                    rtl::OUString aGradientService;
                     switch( rGradient.GetStyle() )
                     {
                         case GRADIENT_LINEAR:
-                            // FALLTHROUGH intended
+                            basegfx::tools::createLinearODFGradientInfo(aGradInfo,
+                                                                        aBounds,
+                                                                        nSteps,
+                                                                        fBorder,
+                                                                        fRotation);
+                            // map odf to svg gradient orientation - x
+                            // instead of y direction
+                            aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
+                            aGradientService = rtl::OUString::createFromAscii("LinearGradient");
+                            break;
+
                         case GRADIENT_AXIAL:
                         {
-                            // standard orientation for VCL linear
-                            // gradient is vertical, thus, rotate 90
-                            // degrees
-                            nRotation += M_PI/2.0;
+                            basegfx::tools::createLinearODFGradientInfo(aGradInfo,
+                                                                        aBounds,
+                                                                        nSteps,
+                                                                        fBorder,
+                                                                        fRotation);
+                            // map odf to svg gradient orientation - x
+                            // instead of y direction
+                            aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
 
-                            const double nBorder(
-                                ::basegfx::pruneScaleValue(
-                                    (1.0 - rGradient.GetBorder() / 100.0) ) );
+                            // map odf axial gradient to 3-stop linear
+                            // gradient - shift left by 0.5
+                            basegfx::B2DHomMatrix aShift;
+                            aShift.translate(-0.5,0);
+                            aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aShift;
 
-                            // shrink texture, to account for border
-                            // (only in x direction, linear gradient
-                            // is constant in y direction, anyway)
-                            aTextureTransformation.scale( nBorder,
-                                                          1.0 );
-
-                            // linear gradients don't respect offsets
-                            // (they are implicitely assumed to be
-                            // 50%). linear gradients don't have
-                            // border on both sides, only on the
-                            // startColor side, axial gradients have
-                            // border on both sides. As both gradients
-                            // are invariant in y direction: leave y
-                            // offset alone.
-                            double nOffsetX( rGradient.GetBorder() / 200.0 );
-
-                            // determine type of gradient (and necessary
-                            // transformation matrix, should it be emulated by a
-                            // generic gradient)
-                            switch( rGradient.GetStyle() )
-                            {
-                                case GRADIENT_LINEAR:
-                                    nOffsetX = rGradient.GetBorder() / 100.0;
-                                    aTexture.Gradient = xFactory->createLinearHorizontalGradient( aColors,
-                                                                                                  aStops );
-                                    break;
-
-                                case GRADIENT_AXIAL:
-                                    // vcl considers center color as start color
-                                    ::std::swap(aColors[0],aColors[1]);
-                                    aTexture.Gradient = xFactory->createAxialHorizontalGradient( aColors,
-                                                                                                 aStops );
-                                    break;
-
-                                default: // other cases can't happen
-                                    break;
-                            }
-
-                            // apply border offset values
-                            aTextureTransformation.translate( nOffsetX,
-                                                              0.0 );
-
-                            // rotate texture according to gradient rotation
-                            aTextureTransformation.translate( -0.5, -0.5 );
-                            aTextureTransformation.rotate( nRotation );
-
-                            // to let the first strip of a rotated
-                            // gradient start at the _edge_ of the
-                            // bound rect (and not, due to rotation,
-                            // slightly inside), slightly enlarge the
-                            // gradient:
-                            //
-                            // y/2 sin(alpha) + x/2 cos(alpha)
-                            //
-                            // (values to change are not actual
-                            // gradient scales, but original bound
-                            // rect dimensions. Since we still want
-                            // the border setting to apply after that,
-                            // we multiply with that as above for
-                            // nScaleX)
-                            const double nScale(
-                                ::basegfx::pruneScaleValue(
-                                    fabs( aBounds.getHeight()*sin(nRotation) ) +
-                                    fabs( aBounds.getWidth()*cos(nRotation) )));
-
-                            aTextureTransformation.scale( nScale, nScale );
-
-                            // translate back origin to center of
-                            // primitive
-                            aTextureTransformation.translate( 0.5*aBounds.getWidth(),
-                                                              0.5*aBounds.getHeight() );
+                            aGradientService = rtl::OUString::createFromAscii("LinearGradient");
+                            break;
                         }
-                        break;
 
                         case GRADIENT_RADIAL:
-                            // FALLTHROUGH intended
+                            basegfx::tools::createRadialODFGradientInfo(aGradInfo,
+                                                                        aBounds,
+                                                                        aOffset,
+                                                                        nSteps,
+                                                                        fBorder);
+                            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
+                            break;
+
                         case GRADIENT_ELLIPTICAL:
-                            // FALLTHROUGH intended
+                            basegfx::tools::createEllipticalODFGradientInfo(aGradInfo,
+                                                                            aBounds,
+                                                                            aOffset,
+                                                                            nSteps,
+                                                                            fBorder,
+                                                                            fRotation);
+                            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
+                            break;
+
                         case GRADIENT_SQUARE:
-                            // FALLTHROUGH intended
+                            basegfx::tools::createSquareODFGradientInfo(aGradInfo,
+                                                                        aBounds,
+                                                                        aOffset,
+                                                                        nSteps,
+                                                                        fBorder,
+                                                                        fRotation);
+                            aGradientService = rtl::OUString::createFromAscii("RectangularGradient");
+                            break;
+
                         case GRADIENT_RECT:
-                        {
-                            // determine scale factors for the gradient (must
-                            // be scaled up from [0,1]x[0,1] rect to object
-                            // bounds). Will potentially changed in switch
-                            // statement below.
-                            // Respect border value, while doing so, the VCL
-                            // gradient's border will effectively shrink the
-                            // resulting gradient.
-                            double nScaleX( aBounds.getWidth() * (1.0 - rGradient.GetBorder() / 100.0) );
-                            double nScaleY( aBounds.getHeight()* (1.0 - rGradient.GetBorder() / 100.0) );
-
-                            // determine offset values. Since the border is
-                            // divided half-by-half to both sides of the
-                            // gradient, divide translation offset by an
-                            // additional 2. Also respect offset here, but
-                            // since VCL gradients have their center at [0,0]
-                            // for zero offset, but canvas gradients have
-                            // their top, left edge aligned with the
-                            // primitive, and offset of 50% effectively must
-                            // yield zero shift. Both values will potentially
-                            // be adapted in switch statement below.
-                            double nOffsetX( aBounds.getWidth() *
-                                             (2.0 * rGradient.GetOfsX() - 100.0 + rGradient.GetBorder()) / 200.0 );
-                            double nOffsetY( aBounds.getHeight() *
-                                             (2.0 * rGradient.GetOfsY() - 100.0 + rGradient.GetBorder()) / 200.0 );
-
-                            // determine type of gradient (and necessary
-                            // transformation matrix, should it be emulated by a
-                            // generic gradient)
-                            switch( rGradient.GetStyle() )
-                            {
-                                case GRADIENT_RADIAL:
-                                {
-                                    // create isotrophic scaling
-                                    if( nScaleX > nScaleY )
-                                    {
-                                        nOffsetY -= (nScaleX - nScaleY) * 0.5;
-                                        nScaleY = nScaleX;
-                                    }
-                                    else
-                                    {
-                                        nOffsetX -= (nScaleY - nScaleX) * 0.5;
-                                        nScaleX = nScaleY;
-                                    }
-
-                                    // enlarge gradient to match bound rect diagonal
-                                    aTextureTransformation.translate( -0.5, -0.5 );
-                                    const double nScale( hypot(aBounds.getWidth(), aBounds.getHeight()) / nScaleX );
-                                    aTextureTransformation.scale( nScale, nScale );
-                                    aTextureTransformation.translate( 0.5, 0.5 );
-
-                                    aTexture.Gradient = xFactory->createEllipticalGradient( aColors,
-                                                                                            aStops,
-                                                                                            geometry::RealRectangle2D(0.0,0.0,
-                                                                                                                    1.0,1.0) );
-                                }
-                                break;
-
-                                case GRADIENT_ELLIPTICAL:
-                                {
-                                    // enlarge gradient slightly
-                                    aTextureTransformation.translate( -0.5, -0.5 );
-                                    const double nSqrt2( sqrt(2.0) );
-                                    aTextureTransformation.scale( nSqrt2,nSqrt2 );
-                                    aTextureTransformation.translate( 0.5, 0.5 );
-
-                                    aTexture.Gradient = xFactory->createEllipticalGradient(
-                                        aColors,
-                                        aStops,
-                                        ::basegfx::unotools::rectangle2DFromB2DRectangle(
-                                            aBounds ));
-                                }
-                                break;
-
-                                case GRADIENT_SQUARE:
-                                    // create isotrophic scaling
-                                    if( nScaleX > nScaleY )
-                                    {
-                                        nOffsetY -= (nScaleX - nScaleY) * 0.5;
-                                        nScaleY = nScaleX;
-                                    }
-                                    else
-                                    {
-                                        nOffsetX -= (nScaleY - nScaleX) * 0.5;
-                                        nScaleX = nScaleY;
-                                    }
-
-                                    aTexture.Gradient = xFactory->createRectangularGradient( aColors,
-                                                                                             aStops,
-                                                                                             geometry::RealRectangle2D(0.0,0.0,
-                                                                                                                       1.0,1.0) );
-                                    break;
-
-                                case GRADIENT_RECT:
-                                    aTexture.Gradient = xFactory->createRectangularGradient(
-                                        aColors,
-                                        aStops,
-                                        ::basegfx::unotools::rectangle2DFromB2DRectangle(
-                                            aBounds ) );
-                                    break;
-
-                                default: // other cases can't happen
-                                    break;
-                            }
-
-                            nScaleX = ::basegfx::pruneScaleValue( nScaleX );
-                            nScaleY = ::basegfx::pruneScaleValue( nScaleY );
-
-                            aTextureTransformation.scale( nScaleX, nScaleY );
-
-                            // rotate texture according to gradient rotation
-                            aTextureTransformation.translate( -0.5*nScaleX, -0.5*nScaleY );
-                            aTextureTransformation.rotate( nRotation );
-                            aTextureTransformation.translate( 0.5*nScaleX, 0.5*nScaleY );
-
-                            aTextureTransformation.translate( nOffsetX, nOffsetY );
-                        }
-                        break;
+                            basegfx::tools::createRectangularODFGradientInfo(aGradInfo,
+                                                                             aBounds,
+                                                                             aOffset,
+                                                                             nSteps,
+                                                                             fBorder,
+                                                                             fRotation);
+                            aGradientService = rtl::OUString::createFromAscii("RectangularGradient");
+                            break;
 
                         default:
                             ENSURE_OR_THROW( false,
-                                              "ImplRenderer::createGradientAction(): Unexpected gradient type" );
+                                             "ImplRenderer::createGradientAction(): Unexpected gradient type" );
                             break;
                     }
 
@@ -876,31 +753,49 @@ namespace cppcanvas
                     // gradient will always display at the origin, and
                     // not within the polygon bound (which might be
                     // miles away from the origin).
-                    aTextureTransformation.translate( aBounds.getMinX(),
-                                                      aBounds.getMinY() );
-
+                    aGradInfo.maTextureTransform.translate( aBounds.getMinX(),
+                                                            aBounds.getMinY() );
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
-                                                                    aTextureTransformation );
+                                                                    aGradInfo.maTextureTransform );
 
-                    ActionSharedPtr pPolyAction(
-                        internal::PolyPolyActionFactory::createPolyPolyAction(
-                            aDevicePoly,
-                            rParms.mrCanvas,
-                            getState( rParms.mrStates ),
-                            aTexture ) );
+                    uno::Sequence<uno::Any> args(3);
+                    beans::PropertyValue aProp;
+                    aProp.Name = rtl::OUString::createFromAscii("Colors");
+                    aProp.Value <<= aColors;
+                    args[0] <<= aProp;
+                    aProp.Name = rtl::OUString::createFromAscii("Stops");
+                    aProp.Value <<= aStops;
+                    args[1] <<= aProp;
+                    aProp.Name = rtl::OUString::createFromAscii("AspectRatio");
+                    aProp.Value <<= aGradInfo.mfAspectRatio;
+                    args[2] <<= aProp;
 
-                    if( pPolyAction )
+                    aTexture.Gradient.set(
+                        xFactory->createInstanceWithArguments(aGradientService,
+                                                              args),
+                        uno::UNO_QUERY);
+                    if( aTexture.Gradient.is() )
                     {
-                        maActions.push_back(
-                            MtfAction(
-                                pPolyAction,
-                                rParms.mrCurrActionIndex ) );
+                        ActionSharedPtr pPolyAction(
+                            internal::PolyPolyActionFactory::createPolyPolyAction(
+                                aDevicePoly,
+                                rParms.mrCanvas,
+                                getState( rParms.mrStates ),
+                                aTexture ) );
 
-                        rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                        if( pPolyAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pPolyAction,
+                                    rParms.mrCurrActionIndex ) );
+
+                            rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                        }
+
+                        // done, using native gradients
+                        return;
                     }
-
-                    // done, using native gradients
-                    return;
                 }
             }
 
@@ -955,6 +850,9 @@ namespace cppcanvas
                 rParms.mrParms.maFontLetterForm.isValid() ?
                 rParms.mrParms.maFontLetterForm.getValue() :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
+
+            LanguageType aLang = rFont.GetLanguage();
+            aFontRequest.Locale = MsLangId::convertLanguageToLocale(aLang, false);
 
             // setup state-local text transformation,
             // if the font be rotated
@@ -1877,8 +1775,8 @@ namespace cppcanvas
                                     }
                                     else
                                     {
-                                        aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
-                                        aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
+                                        aTexture.RepeatModeX = rendering::TexturingMode::NONE;
+                                        aTexture.RepeatModeY = rendering::TexturingMode::NONE;
                                     }
 
                                     ::PolyPolygon aPath;
@@ -2871,7 +2769,7 @@ namespace cppcanvas
                     aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
                                                         nEndIndex - aRangeBegin->mnOrigIndex );
 
-                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeBegin, aSubset );
@@ -2887,7 +2785,7 @@ namespace cppcanvas
                                                         nStartIndex - aRangeBegin->mnOrigIndex );
                     aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
 
-                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeBegin, aSubset );
@@ -2916,7 +2814,7 @@ namespace cppcanvas
                     aSubset.mnSubsetBegin = 0;
                     aSubset.mnSubsetEnd   = nEndIndex - aRangeEnd->mnOrigIndex;
 
-                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeEnd, aSubset );
@@ -2931,10 +2829,10 @@ namespace cppcanvas
                                              ActionVector::const_iterator&  o_rRangeBegin,
                                              ActionVector::const_iterator&  o_rRangeEnd ) const
         {
-            ENSURE_OR_RETURN( io_rStartIndex<=io_rEndIndex,
+            ENSURE_OR_RETURN_FALSE( io_rStartIndex<=io_rEndIndex,
                               "ImplRenderer::getSubsetIndices(): invalid action range" );
 
-            ENSURE_OR_RETURN( !maActions.empty(),
+            ENSURE_OR_RETURN_FALSE( !maActions.empty(),
                               "ImplRenderer::getSubsetIndices(): no actions to render" );
 
             const sal_Int32 nMinActionIndex( maActions.front().mnOrigIndex );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: errcode.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -314,6 +311,7 @@ inline ULONG ERRCODE_TOERROR( ULONG x )
 #define PRINTER_ABORT                   ERRCODE_IO_ABORT
 #define PRINTER_OUTOFMEMORY             ERRCODE_IO_OUTOFMEMORY
 #define PRINTER_GENERALERROR            ERRCODE_IO_GENERAL
+#define PRINTER_ACCESSDENIED            ERRCODE_IO_ACCESSDENIED
 
 #define ERRCODE_INET_NAME_RESOLVE (ERRCODE_AREA_INET | ERRCODE_CLASS_READ | 1)
 #define ERRCODE_INET_CONNECT      (ERRCODE_AREA_INET | ERRCODE_CLASS_READ | 2)

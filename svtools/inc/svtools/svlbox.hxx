@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svlbox.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,7 @@
 #include <vcl/mnemonicengine.hxx>
 #include <tools/gen.hxx>
 #include <svtools/treelist.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svtools/transfer.hxx>
 
 class Application;
@@ -327,6 +324,9 @@ protected:
     virtual void WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
     // wird an der Target-View aufgerufen (im Drop-Handler)
     virtual void ReadDragServerInfo( const Point&,SvLBoxDDInfo* );
+
+    // invalidate children on enable/disable
+    virtual void StateChanged( StateChangedType );
 
     virtual ULONG Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,ULONG nPos=LIST_APPEND);
     virtual ULONG Insert( SvLBoxEntry* pEntry,ULONG nRootPos = LIST_APPEND );

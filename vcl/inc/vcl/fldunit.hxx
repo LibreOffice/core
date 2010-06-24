@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldunit.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +28,6 @@
 #ifndef _VCL_FLDUNIT_HXX
 #define _VCL_FLDUNIT_HXX
 
-// --------------
-// - FieldTypes -
-// --------------
-
-// By changes you must also change: rsc/vclrsc.hxx
-enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
-                 FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
-                 FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CUSTOM,
-                 FUNIT_PERCENT, FUNIT_100TH_MM };
+#include <tools/fldunit.hxx>
 
 #endif // _VCL_FLDUNIT_HXX

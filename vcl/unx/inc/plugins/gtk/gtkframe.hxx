@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gtkframe.hxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,6 +130,7 @@ class GtkSalFrame : public SalFrame
         int                             m_nPrevKeyPresses; // avoid using size()
         GtkIMContext*                   m_pIMContext;
         bool                            m_bFocused;
+        bool                            m_bPreeditJustChanged;
         SalExtTextInputEvent            m_aInputEvent;
         std::vector< USHORT >           m_aInputFlags;
 
@@ -180,7 +178,7 @@ class GtkSalFrame : public SalFrame
     GdkVisibilityState              m_nVisibility;
     PointerStyle                    m_ePointerStyle;
     int                             m_nSavedScreenSaverTimeout;
-    guint                           m_nGSSCookie;
+    guint                           m_nGSMCookie;
     int                             m_nWorkArea;
     bool                            m_bFullscreen;
     bool                            m_bSingleAltPress;
@@ -188,6 +186,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
+    bool                            m_bSetFocusOnMap;
     String                          m_aTitle;
 
     IMHandler*                      m_pIMHandler;
@@ -242,9 +241,10 @@ class GtkSalFrame : public SalFrame
     bool isFloatGrabWindow() const
     {
         return
-            (m_nStyle & SAL_FRAME_STYLE_FLOAT) &&       // only a float can be floatgrab
-            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP) &&    // tool tips are not
-            !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION); // toolbars are also not
+            (m_nStyle & SAL_FRAME_STYLE_FLOAT) &&                // only a float can be floatgrab
+            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP) &&             // tool tips are not
+            !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) && // toolbars are also not
+            !(m_nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE);       // focusable floats are not
     }
 
     bool isChild( bool bPlug = true, bool bSysChild = true )

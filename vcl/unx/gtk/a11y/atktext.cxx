@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atktext.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +30,15 @@
 
 #include "atkwrapper.hxx"
 #include "atktextattributes.hxx"
+#include <algorithm>
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 
 // #define ENABLE_TRACING
 
@@ -168,6 +168,35 @@ static accessibility::XAccessibleText*
         }
 
         return pWrap->mpText;
+    }
+
+    return NULL;
+}
+
+/*****************************************************************************/
+
+static accessibility::XAccessibleTextMarkup*
+    getTextMarkup( AtkText *pText ) throw (uno::RuntimeException)
+{
+    AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
+    if( pWrap )
+    {
+        if( !pWrap->mpTextMarkup && pWrap->mpContext )
+        {
+            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextMarkup::static_type(NULL) );
+            /* Since this not a dedicated interface in Atk and thus has not
+             * been queried during wrapper initialization, we need to check
+             * the return value here.
+             */
+            if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
+            {
+                pWrap->mpTextMarkup = reinterpret_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
+                if( pWrap->mpTextMarkup )
+                    pWrap->mpTextMarkup->acquire();
+            }
+        }
+
+        return pWrap->mpTextMarkup;
     }
 
     return NULL;
@@ -425,6 +454,84 @@ text_wrapper_set_caret_offset (AtkText *text,
     return FALSE;
 }
 
+// --> OD 2010-03-04 #i92232#
+AtkAttributeSet*
+handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pTextMarkup,
+                                     const gint nTextMarkupType,
+                                     const gint offset,
+                                     AtkAttributeSet* pSet,
+                                     gint *start_offset,
+                                     gint *end_offset )
+{
+    const gint nTextMarkupCount( pTextMarkup->getTextMarkupCount( nTextMarkupType ) );
+    if ( nTextMarkupCount > 0 )
+    {
+        for ( gint nTextMarkupIndex = 0;
+              nTextMarkupIndex < nTextMarkupCount;
+              ++nTextMarkupIndex )
+        {
+            accessibility::TextSegment aTextSegment =
+                pTextMarkup->getTextMarkup( nTextMarkupIndex, nTextMarkupType );
+            const gint nStartOffsetTextMarkup = aTextSegment.SegmentStart;
+            const gint nEndOffsetTextMarkup = aTextSegment.SegmentEnd;
+            if ( nStartOffsetTextMarkup <= offset )
+            {
+                if ( offset < nEndOffsetTextMarkup )
+                {
+                    // text markup at <offset>
+                    *start_offset = ::std::max( *start_offset,
+                                                nStartOffsetTextMarkup );
+                    *end_offset = ::std::min( *end_offset,
+                                              nEndOffsetTextMarkup );
+                    switch ( nTextMarkupType )
+                    {
+                        case com::sun::star::text::TextMarkupType::SPELLCHECK:
+                        {
+                            pSet = attribute_set_prepend_misspelled( pSet );
+                        }
+                        break;
+                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_INSERTION:
+                        {
+                            pSet = attribute_set_prepend_tracked_change_insertion( pSet );
+                        }
+                        break;
+                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_DELETION:
+                        {
+                            pSet = attribute_set_prepend_tracked_change_deletion( pSet );
+                        }
+                        break;
+                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE:
+                        {
+                            pSet = attribute_set_prepend_tracked_change_formatchange( pSet );
+                        }
+                        break;
+                        default:
+                        {
+                            OSL_ASSERT( false );
+                        }
+                    }
+                    break; // no further iteration needed.
+                }
+                else
+                {
+                    *start_offset = ::std::max( *start_offset,
+                                                nEndOffsetTextMarkup );
+                    // continue iteration.
+                }
+            }
+            else
+            {
+                *end_offset = ::std::min( *end_offset,
+                                          nStartOffsetTextMarkup );
+                break; // no further iteration.
+            }
+        } // eof iteration over text markups
+    }
+
+    return pSet;
+}
+// <--
+
 static AtkAttributeSet *
 text_wrapper_get_run_attributes( AtkText        *text,
                                  gint           offset,
@@ -434,6 +541,8 @@ text_wrapper_get_run_attributes( AtkText        *text,
     AtkAttributeSet *pSet = NULL;
 
     try {
+        bool bOffsetsAreValid = false;
+
         accessibility::XAccessibleText* pText = getText( text );
         accessibility::XAccessibleTextAttributes* pTextAttributes = getTextAttributes( text );
         if( pText && pTextAttributes )
@@ -442,17 +551,61 @@ text_wrapper_get_run_attributes( AtkText        *text,
                 pTextAttributes->getRunAttributes( offset, uno::Sequence< rtl::OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
-            if( pSet )
+            // --> OD 2009-06-22 #i100938#
+            // - always provide start_offset and end_offset
+//            if( pSet )
+            // <--
             {
                 accessibility::TextSegment aTextSegment =
                     pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
 
                 *start_offset = aTextSegment.SegmentStart;
-                *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
+                // --> OD 2009-06-22 #i100938#
+                // Do _not_ increment the end_offset provide by <accessibility::TextSegment> instance
+//                *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
+                *end_offset = aTextSegment.SegmentEnd;
+                // <--
+                bOffsetsAreValid = true;
             }
         }
+
+        // Special handling for misspelled text
+        // --> OD 2010-03-01 #i92232#
+        // - add special handling for tracked changes and refactor the
+        //   corresponding code for handling misspelled text.
+        accessibility::XAccessibleTextMarkup* pTextMarkup = getTextMarkup( text );
+        if( pTextMarkup )
+        {
+            // Get attribute run here if it hasn't been done before
+            if( !bOffsetsAreValid )
+            {
+                accessibility::TextSegment aAttributeTextSegment =
+                    pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+                *start_offset = aAttributeTextSegment.SegmentStart;
+                *end_offset = aAttributeTextSegment.SegmentEnd;
+            }
+            // handle misspelled text
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::SPELLCHECK,
+                    offset, pSet, start_offset, end_offset );
+            // handle tracked changes
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_INSERTION,
+                    offset, pSet, start_offset, end_offset );
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_DELETION,
+                    offset, pSet, start_offset, end_offset );
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE,
+                    offset, pSet, start_offset, end_offset );
+        }
+        // <--
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception& e){
 
         g_warning( "Exception in get_run_attributes()" );
 
