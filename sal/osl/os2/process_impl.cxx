@@ -282,6 +282,70 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
 }
 
 /***************************************
+ osl_setEnvironment().
+ **************************************/
+oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uString* pustrValue)
+{
+    oslProcessError  result   = osl_Process_E_Unknown;
+    rtl_TextEncoding encoding = osl_getThreadTextEncoding();
+    rtl_String* pstr_env_var  = 0;
+    rtl_String* pstr_val  = 0;
+
+    OSL_PRECOND(pustrEnvVar, "osl_setEnvironment(): Invalid parameter");
+    OSL_PRECOND(pustrValue, "osl_setEnvironment(): Invalid parameter");
+
+    rtl_uString2String(
+        &pstr_env_var,
+        rtl_uString_getStr(pustrEnvVar), rtl_uString_getLength(pustrEnvVar), encoding,
+        OUSTRING_TO_OSTRING_CVTFLAGS);
+
+    rtl_uString2String(
+        &pstr_val,
+        rtl_uString_getStr(pustrValue), rtl_uString_getLength(pustrValue), encoding,
+        OUSTRING_TO_OSTRING_CVTFLAGS);
+
+    if (pstr_env_var != 0 && pstr_val != 0)
+    {
+        if (setenv(rtl_string_getStr(pstr_env_var), rtl_string_getStr(pstr_val), 1) == 0)
+            result = osl_Process_E_None;
+    }
+
+    if (pstr_val != 0)
+        rtl_string_release(pstr_val);
+
+    if (pstr_env_var != 0)
+        rtl_string_release(pstr_env_var);
+
+    return (result);
+}
+
+/***************************************
+ osl_clearEnvironment().
+ **************************************/
+oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
+{
+    oslProcessError  result   = osl_Process_E_Unknown;
+    rtl_TextEncoding encoding = osl_getThreadTextEncoding();
+    rtl_String* pstr_env_var  = 0;
+
+    OSL_PRECOND(pustrEnvVar, "osl_setEnvironment(): Invalid parameter");
+
+    rtl_uString2String(
+        &pstr_env_var,
+        rtl_uString_getStr(pustrEnvVar), rtl_uString_getLength(pustrEnvVar), encoding,
+        OUSTRING_TO_OSTRING_CVTFLAGS);
+
+    if (pstr_env_var)
+    {
+        if (unsetenv(rtl_string_getStr(pstr_env_var)) == 0)
+            result = osl_Process_E_None;
+        rtl_string_release(pstr_env_var);
+    }
+
+    return (result);
+}
+
+/***************************************
  osl_getProcessWorkingDir().
  **************************************/
 oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir)
