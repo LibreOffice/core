@@ -36,8 +36,9 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-#include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +69,7 @@ namespace drawinglayer
                 double fRelativeTextureWidth(1.0);
                 basegfx::B2DHomMatrix aTexTransform;
 
-                if(getSdrLFSAttribute().getFill() && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
+                if(!getSdrLFSAttribute().getFill().isDefault() && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
                 {
                     const basegfx::B2DPolygon aFirstPolygon(maCorrectedPolyPolygon.getB2DPolygon(0L));
                     const double fFrontLength(basegfx::tools::getLength(aFirstPolygon));
@@ -98,7 +99,7 @@ namespace drawinglayer
                 const basegfx::B3DRange aRange(getRangeFrom3DGeometry(aFill));
 
                 // normal creation
-                if(getSdrLFSAttribute().getFill())
+                if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     if(::com::sun::star::drawing::NormalsKind_SPHERE == eNormalsKind)
                     {
@@ -116,7 +117,7 @@ namespace drawinglayer
                 }
 
                 // texture coordinates
-                if(getSdrLFSAttribute().getFill())
+                if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     applyTextureTo3DGeometry(
                         getSdr3DObjectAttribute().getTextureProjectionX(),
@@ -126,7 +127,7 @@ namespace drawinglayer
                         getTextureSize());
                 }
 
-                if(getSdrLFSAttribute().getFill())
+                if(!getSdrLFSAttribute().getFill().isDefault())
                 {
                     // add fill
                     aRetval = create3DPolyPolygonFillPrimitives(
@@ -134,29 +135,21 @@ namespace drawinglayer
                         getTransform(),
                         getTextureSize(),
                         getSdr3DObjectAttribute(),
-                        *getSdrLFSAttribute().getFill(),
+                        getSdrLFSAttribute().getFill(),
                         getSdrLFSAttribute().getFillFloatTransGradient());
                 }
                 else
                 {
                     // create simplified 3d hit test geometry
-                    const attribute::SdrFillAttribute aSimplifiedFillAttribute(0.0, basegfx::BColor(), 0, 0, 0);
-
-                    aRetval = create3DPolyPolygonFillPrimitives(
+                    aRetval = createHiddenGeometryPrimitives3D(
                         aFill,
                         getTransform(),
                         getTextureSize(),
-                        getSdr3DObjectAttribute(),
-                        aSimplifiedFillAttribute,
-                        0);
-
-                    // encapsulate in HitTestPrimitive3D and add
-                    const Primitive3DReference xRef(new HitTestPrimitive3D(aRetval));
-                    aRetval = Primitive3DSequence(&xRef, 1L);
+                        getSdr3DObjectAttribute());
                 }
 
                 // add line
-                if(getSdrLFSAttribute().getLine())
+                if(!getSdrLFSAttribute().getLine().isDefault())
                 {
                     if(getSdr3DObjectAttribute().getReducedLineGeometry())
                     {
@@ -341,7 +334,8 @@ namespace drawinglayer
 
                         if(aNewLineGeometry.count())
                         {
-                            const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aNewLineGeometry, getTransform(), *getSdrLFSAttribute().getLine()));
+                            const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(
+                                aNewLineGeometry, getTransform(), getSdrLFSAttribute().getLine()));
                             appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
                         }
                     }
@@ -352,19 +346,22 @@ namespace drawinglayer
                         const basegfx::B3DPolyPolygon aVerLine(extractVerticalLinesFromSlice(rSliceVector));
 
                         // add horizontal lines
-                        const Primitive3DSequence aHorLines(create3DPolyPolygonLinePrimitives(aHorLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        const Primitive3DSequence aHorLines(create3DPolyPolygonLinePrimitives(
+                            aHorLine, getTransform(), getSdrLFSAttribute().getLine()));
                         appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aHorLines);
 
                         // add vertical lines
-                        const Primitive3DSequence aVerLines(create3DPolyPolygonLinePrimitives(aVerLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        const Primitive3DSequence aVerLines(create3DPolyPolygonLinePrimitives(
+                            aVerLine, getTransform(), getSdrLFSAttribute().getLine()));
                         appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aVerLines);
                     }
                 }
 
                 // add shadow
-                if(getSdrLFSAttribute().getShadow() && aRetval.hasElements())
+                if(!getSdrLFSAttribute().getShadow().isDefault() && aRetval.hasElements())
                 {
-                    const Primitive3DSequence aShadow(createShadowPrimitive3D(aRetval, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
+                    const Primitive3DSequence aShadow(createShadowPrimitive3D(
+                        aRetval, getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
                     appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
                 }
             }
@@ -401,7 +398,7 @@ namespace drawinglayer
         SdrExtrudePrimitive3D::SdrExtrudePrimitive3D(
             const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
-            const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             double fDepth,

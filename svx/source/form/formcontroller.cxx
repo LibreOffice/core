@@ -4254,7 +4254,7 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler.set( m_aContext.createComponent( (::rtl::OUString)SRV_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+    m_xInteractionHandler.set( m_aContext.createComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), UNO_QUERY );
     OSL_ENSURE( m_xInteractionHandler.is(), "FormController::ensureInteractionHandler: could not create an interaction handler!" );
     return m_xInteractionHandler.is();
 }

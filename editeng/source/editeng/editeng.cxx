@@ -49,6 +49,7 @@
 #include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng.hrc>
+#include <editeng/acorrcfg.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/txtrange.hxx>
 #include <vcl/graph.hxx>
@@ -812,6 +813,14 @@ ESelection EditEngine::CursorRight( const ESelection& rSelection, USHORT nCharac
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
+ESelection EditEngine::SelectSentence( const ESelection& rCurSel ) const
+{
+    EditEngine* pE = (EditEngine*)this;
+    EditSelection aCurSel( pE->pImpEditEngine->CreateSel( rCurSel ) );
+    EditSelection aSentenceSel( pE->pImpEditEngine->SelectSentence( aCurSel ) );
+    return pE->pImpEditEngine->CreateESel( aSentenceSel );
+}
+
 sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -1144,8 +1153,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelection();
                     // Autokorrektur ?
+                    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
-                        SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) )
+                        ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
+                          pAutoCorrect->HasRunNext() ) )
                     {
                         aCurSel = pImpEditEngine->AutoCorrect( aCurSel, nCharCode, !pEditView->IsInsertMode() );
                     }
@@ -2195,7 +2206,7 @@ void EditEngine::EndSpelling()
 bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking  );
+    return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking );
 }
 /*-- 08.09.2008 11:38:32---------------------------------------------------
 
@@ -2208,10 +2219,10 @@ void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking )
+void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bIsGrammarChecking  );
+    pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck  );
 }
 
 sal_Bool EditEngine::HasConvertibleTextPortion( LanguageType nLang )

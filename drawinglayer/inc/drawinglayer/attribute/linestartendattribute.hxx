@@ -28,11 +28,18 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/numeric/ftools.hxx>
+#include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
+namespace basegfx {
+    class B2DPolyPolygon;
+}
+
+namespace drawinglayer { namespace attribute {
+    class ImpLineStartEndAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,35 +50,29 @@ namespace drawinglayer
         class LineStartEndAttribute
         {
         private:
-            double                                  mfWidth;                // absolute line StartEndGeometry base width
-            basegfx::B2DPolyPolygon                 maPolyPolygon;          // the StartEndGeometry PolyPolygon
-
-            // bitfield
-            unsigned                                mbCentered : 1;         // use centered to ineStart/End point?
+            ImpLineStartEndAttribute*               mpLineStartEndAttribute;
 
         public:
+            /// constructors/assignmentoperator/destructor
             LineStartEndAttribute(
                 double fWidth,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                bool bCentered)
-            :   mfWidth(fWidth),
-                maPolyPolygon(rPolyPolygon),
-                mbCentered(bCentered)
-            {
-            }
+                bool bCentered);
+            LineStartEndAttribute();
+            LineStartEndAttribute(const LineStartEndAttribute& rCandidate);
+            LineStartEndAttribute& operator=(const LineStartEndAttribute& rCandidate);
+            ~LineStartEndAttribute();
+
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             // compare operator
-            bool operator==(const LineStartEndAttribute& rCandidate) const
-            {
-                return (basegfx::fTools::equal(mfWidth, rCandidate.mfWidth)
-                    && maPolyPolygon == rCandidate.maPolyPolygon
-                    && mbCentered == rCandidate.mbCentered);
-            }
+            bool operator==(const LineStartEndAttribute& rCandidate) const;
 
-            // data access
-            double getWidth() const { return mfWidth; }
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            bool isCentered() const { return mbCentered; }
+            // data read access
+            double getWidth() const;
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const;
+            bool isCentered() const;
             bool isActive() const;
         };
     } // end of namespace attribute

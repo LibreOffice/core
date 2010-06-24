@@ -30,8 +30,7 @@
 
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/range/b2drange.hxx>
+#include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -39,37 +38,213 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        SdrFillBitmapAttribute::SdrFillBitmapAttribute(
-            const Bitmap& rBitmap, const basegfx::B2DVector& rSize, const basegfx::B2DVector& rOffset,
-            const basegfx::B2DVector& rOffsetPosition, const basegfx::B2DVector& rRectPoint,
-            bool bTiling, bool bStretch, bool bLogSize)
-        :   maBitmap(rBitmap),
-            maSize(rSize),
-            maOffset(rOffset),
-            maOffsetPosition(rOffsetPosition),
-            maRectPoint(rRectPoint),
-            mbTiling(bTiling),
-            mbStretch(bStretch),
-            mbLogSize(bLogSize)
+        class ImpSdrFillBitmapAttribute
         {
+        public:
+            // refcounter
+            sal_uInt32                              mnRefCount;
+
+            // data definitions
+            Bitmap                                  maBitmap;
+            basegfx::B2DVector                      maSize;
+            basegfx::B2DVector                      maOffset;
+            basegfx::B2DVector                      maOffsetPosition;
+            basegfx::B2DVector                      maRectPoint;
+
+            // bitfield
+            unsigned                                mbTiling : 1;
+            unsigned                                mbStretch : 1;
+            unsigned                                mbLogSize : 1;
+
+            ImpSdrFillBitmapAttribute(
+                const Bitmap& rBitmap,
+                const basegfx::B2DVector& rSize,
+                const basegfx::B2DVector& rOffset,
+                const basegfx::B2DVector& rOffsetPosition,
+                const basegfx::B2DVector& rRectPoint,
+                bool bTiling,
+                bool bStretch,
+                bool bLogSize)
+            :   mnRefCount(0),
+                maBitmap(rBitmap),
+                maSize(rSize),
+                maOffset(rOffset),
+                maOffsetPosition(rOffsetPosition),
+                maRectPoint(rRectPoint),
+                mbTiling(bTiling),
+                mbStretch(bStretch),
+                mbLogSize(bLogSize)
+            {
+            }
+
+            // data read access
+            const Bitmap& getBitmap() const { return maBitmap; }
+            const basegfx::B2DVector& getSize() const { return maSize; }
+            const basegfx::B2DVector& getOffset() const { return maOffset; }
+            const basegfx::B2DVector& getOffsetPosition() const { return maOffsetPosition; }
+            const basegfx::B2DVector& getRectPoint() const { return maRectPoint; }
+            bool getTiling() const { return mbTiling; }
+            bool getStretch() const { return mbStretch; }
+            bool getLogSize() const { return mbLogSize; }
+
+            bool operator==(const ImpSdrFillBitmapAttribute& rCandidate) const
+            {
+                return (getBitmap() == rCandidate.getBitmap()
+                    && getSize() == rCandidate.getSize()
+                    && getOffset() == rCandidate.getOffset()
+                    && getOffsetPosition() == rCandidate.getOffsetPosition()
+                    && getRectPoint() == rCandidate.getRectPoint()
+                    && getTiling() == rCandidate.getTiling()
+                    && getStretch() == rCandidate.getStretch()
+                    && getLogSize() == rCandidate.getLogSize());
+            }
+
+            static ImpSdrFillBitmapAttribute* get_global_default()
+            {
+                static ImpSdrFillBitmapAttribute* pDefault = 0;
+
+                if(!pDefault)
+                {
+                    pDefault = new ImpSdrFillBitmapAttribute(
+                        Bitmap(),
+                        basegfx::B2DVector(),
+                        basegfx::B2DVector(),
+                        basegfx::B2DVector(),
+                        basegfx::B2DVector(),
+                        false,
+                        false,
+                        false);
+
+                    // never delete; start with RefCount 1, not 0
+                    pDefault->mnRefCount++;
+                }
+
+                return pDefault;
+            }
+        };
+
+        SdrFillBitmapAttribute::SdrFillBitmapAttribute(
+            const Bitmap& rBitmap,
+            const basegfx::B2DVector& rSize,
+            const basegfx::B2DVector& rOffset,
+            const basegfx::B2DVector& rOffsetPosition,
+            const basegfx::B2DVector& rRectPoint,
+            bool bTiling,
+            bool bStretch,
+            bool bLogSize)
+        :   mpSdrFillBitmapAttribute(new ImpSdrFillBitmapAttribute(
+                rBitmap, rSize, rOffset, rOffsetPosition, rRectPoint, bTiling,  bStretch, bLogSize))
+        {
+        }
+
+        SdrFillBitmapAttribute::SdrFillBitmapAttribute()
+        :   mpSdrFillBitmapAttribute(ImpSdrFillBitmapAttribute::get_global_default())
+        {
+            mpSdrFillBitmapAttribute->mnRefCount++;
+        }
+
+        SdrFillBitmapAttribute::SdrFillBitmapAttribute(const SdrFillBitmapAttribute& rCandidate)
+        :   mpSdrFillBitmapAttribute(rCandidate.mpSdrFillBitmapAttribute)
+        {
+            mpSdrFillBitmapAttribute->mnRefCount++;
+        }
+
+        SdrFillBitmapAttribute::~SdrFillBitmapAttribute()
+        {
+            if(mpSdrFillBitmapAttribute->mnRefCount)
+            {
+                mpSdrFillBitmapAttribute->mnRefCount--;
+            }
+            else
+            {
+                delete mpSdrFillBitmapAttribute;
+            }
+        }
+
+        bool SdrFillBitmapAttribute::isDefault() const
+        {
+            return mpSdrFillBitmapAttribute == ImpSdrFillBitmapAttribute::get_global_default();
+        }
+
+        SdrFillBitmapAttribute& SdrFillBitmapAttribute::operator=(const SdrFillBitmapAttribute& rCandidate)
+        {
+            if(rCandidate.mpSdrFillBitmapAttribute != mpSdrFillBitmapAttribute)
+            {
+                if(mpSdrFillBitmapAttribute->mnRefCount)
+                {
+                    mpSdrFillBitmapAttribute->mnRefCount--;
+                }
+                else
+                {
+                    delete mpSdrFillBitmapAttribute;
+                }
+
+                mpSdrFillBitmapAttribute = rCandidate.mpSdrFillBitmapAttribute;
+                mpSdrFillBitmapAttribute->mnRefCount++;
+            }
+
+            return *this;
         }
 
         bool SdrFillBitmapAttribute::operator==(const SdrFillBitmapAttribute& rCandidate) const
         {
-            return (maBitmap == rCandidate.maBitmap
-                && maSize == rCandidate.maSize
-                && maOffset == rCandidate.maOffset
-                && maOffsetPosition == rCandidate.maOffsetPosition
-                && maRectPoint == rCandidate.maRectPoint
-                && mbTiling == rCandidate.mbTiling
-                && mbStretch == rCandidate.mbStretch
-                && mbLogSize == rCandidate.mbLogSize);
+            if(rCandidate.mpSdrFillBitmapAttribute == mpSdrFillBitmapAttribute)
+            {
+                return true;
+            }
+
+            if(rCandidate.isDefault() != isDefault())
+            {
+                return false;
+            }
+
+            return (*rCandidate.mpSdrFillBitmapAttribute == *mpSdrFillBitmapAttribute);
+        }
+
+        const Bitmap& SdrFillBitmapAttribute::getBitmap() const
+        {
+            return mpSdrFillBitmapAttribute->getBitmap();
+        }
+
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getSize() const
+        {
+            return mpSdrFillBitmapAttribute->getSize();
+        }
+
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getOffset() const
+        {
+            return mpSdrFillBitmapAttribute->getOffset();
+        }
+
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getOffsetPosition() const
+        {
+            return mpSdrFillBitmapAttribute->getOffsetPosition();
+        }
+
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getRectPoint() const
+        {
+            return mpSdrFillBitmapAttribute->getRectPoint();
+        }
+
+        bool SdrFillBitmapAttribute::getTiling() const
+        {
+            return mpSdrFillBitmapAttribute->getTiling();
+        }
+
+        bool SdrFillBitmapAttribute::getStretch() const
+        {
+            return mpSdrFillBitmapAttribute->getStretch();
+        }
+
+        bool SdrFillBitmapAttribute::getLogSize() const
+        {
+            return mpSdrFillBitmapAttribute->getLogSize();
         }
 
         FillBitmapAttribute SdrFillBitmapAttribute::getFillBitmapAttribute(const basegfx::B2DRange& rRange) const
         {
             // get logical size of bitmap (before expanding eventually)
-            Bitmap aBitmap(maBitmap);
+            Bitmap aBitmap(getBitmap());
             const basegfx::B2DVector aLogicalSize(aBitmap.GetPrefSize().getWidth(), aBitmap.GetPrefSize().getHeight());
 
             // get hor/ver shiftings and apply them eventually to the bitmap, but only
@@ -77,17 +252,17 @@ namespace drawinglayer
             bool bExpandWidth(false);
             bool bExpandHeight(false);
 
-            if(mbTiling)
+            if(getTiling())
             {
-                if(0.0 != maOffset.getX() || 0.0 != maOffset.getY())
+                if(0.0 != getOffset().getX() || 0.0 != getOffset().getY())
                 {
                     const sal_uInt32 nWidth(aBitmap.GetSizePixel().getWidth());
                     const sal_uInt32 nHeight(aBitmap.GetSizePixel().getHeight());
 
-                    if(0.0 != maOffset.getX())
+                    if(0.0 != getOffset().getX())
                     {
                         bExpandHeight = true;
-                        const sal_uInt32 nOffset(basegfx::fround(((double)nWidth * maOffset.getX()) / 100.0));
+                        const sal_uInt32 nOffset(basegfx::fround(((double)nWidth * getOffset().getX()) / 100.0));
                         aBitmap.Expand(0L, nHeight);
 
                         const Size aSizeA(nOffset, nHeight);
@@ -103,7 +278,7 @@ namespace drawinglayer
                     else
                     {
                         bExpandWidth = true;
-                        const sal_uInt32 nOffset(basegfx::fround(((double)nHeight * maOffset.getY()) / 100.0));
+                        const sal_uInt32 nOffset(basegfx::fround(((double)nHeight * getOffset().getY()) / 100.0));
                         aBitmap.Expand(nWidth, 0L);
 
                         const Size aSize(nWidth, nHeight);
@@ -129,7 +304,7 @@ namespace drawinglayer
             basegfx::B2DVector aBitmapTopLeft(0.0, 0.0);
 
             // are canges needed?
-            if(mbTiling || !mbStretch)
+            if(getTiling() || !getStretch())
             {
                 // init values with range sizes
                 const double fRangeWidth(0.0 != rRange.getWidth() ? rRange.getWidth() : 1.0);
@@ -137,15 +312,15 @@ namespace drawinglayer
                 aBitmapSize = basegfx::B2DPoint(fRangeWidth, fRangeHeight);
 
                 // size changes
-                if(0.0 != maSize.getX())
+                if(0.0 != getSize().getX())
                 {
-                    if(maSize.getX() < 0.0)
+                    if(getSize().getX() < 0.0)
                     {
-                        aBitmapSize.setX(aBitmapSize.getX() * (maSize.getX() * -0.01));
+                        aBitmapSize.setX(aBitmapSize.getX() * (getSize().getX() * -0.01));
                     }
                     else
                     {
-                        aBitmapSize.setX(maSize.getX());
+                        aBitmapSize.setX(getSize().getX());
                     }
                 }
                 else
@@ -153,15 +328,15 @@ namespace drawinglayer
                     aBitmapSize.setX(aLogicalSize.getX());
                 }
 
-                if(0.0 != maSize.getY())
+                if(0.0 != getSize().getY())
                 {
-                    if(maSize.getY() < 0.0)
+                    if(getSize().getY() < 0.0)
                     {
-                        aBitmapSize.setY(aBitmapSize.getY() * (maSize.getY() * -0.01));
+                        aBitmapSize.setY(aBitmapSize.getY() * (getSize().getY() * -0.01));
                     }
                     else
                     {
-                        aBitmapSize.setY(maSize.getY());
+                        aBitmapSize.setY(getSize().getY());
                     }
                 }
                 else
@@ -170,7 +345,7 @@ namespace drawinglayer
                 }
 
                 // get values, force to centered if necessary
-                const basegfx::B2DVector aRectPoint(mbTiling ? maRectPoint : basegfx::B2DVector(0.0, 0.0));
+                const basegfx::B2DVector aRectPoint(getTiling() ? getRectPoint() : basegfx::B2DVector(0.0, 0.0));
 
                 // position changes X
                 if(0.0 == aRectPoint.getX())
@@ -182,9 +357,9 @@ namespace drawinglayer
                     aBitmapTopLeft.setX(fRangeWidth - aBitmapSize.getX());
                 }
 
-                if(mbTiling && 0.0 != maOffsetPosition.getX())
+                if(getTiling() && 0.0 != getOffsetPosition().getX())
                 {
-                    aBitmapTopLeft.setX(aBitmapTopLeft.getX() + (aBitmapSize.getX() * (maOffsetPosition.getX() * 0.01)));
+                    aBitmapTopLeft.setX(aBitmapTopLeft.getX() + (aBitmapSize.getX() * (getOffsetPosition().getX() * 0.01)));
                 }
 
                 // position changes Y
@@ -197,9 +372,9 @@ namespace drawinglayer
                     aBitmapTopLeft.setY(fRangeHeight - aBitmapSize.getY());
                 }
 
-                if(mbTiling && 0.0 != maOffsetPosition.getY())
+                if(getTiling() && 0.0 != getOffsetPosition().getY())
                 {
-                    aBitmapTopLeft.setY(aBitmapTopLeft.getY() + (aBitmapSize.getY() * (maOffsetPosition.getY() * 0.01)));
+                    aBitmapTopLeft.setY(aBitmapTopLeft.getY() + (aBitmapSize.getY() * (getOffsetPosition().getY() * 0.01)));
                 }
 
                 // apply expand
@@ -220,7 +395,7 @@ namespace drawinglayer
                 aBitmapSize.setY(aBitmapSize.getY() / fRangeHeight);
             }
 
-            return FillBitmapAttribute(BitmapEx(aBitmap), aBitmapTopLeft, aBitmapSize, mbTiling);
+            return FillBitmapAttribute(BitmapEx(aBitmap), aBitmapTopLeft, aBitmapSize, getTiling());
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

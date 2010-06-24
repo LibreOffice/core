@@ -529,7 +529,7 @@
                     <value xml:lang="en-US">Select Chart Element</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
+                    <value>0</value>
                 </prop>
             </node>
 

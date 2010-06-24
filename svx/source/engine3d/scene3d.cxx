@@ -334,6 +334,22 @@ UINT16 E3dScene::GetObjIdentifier() const
     return E3D_SCENE_ID;
 }
 
+void E3dScene::SetBoundRectDirty()
+{
+    E3dScene* pScene = GetScene();
+
+    if(pScene == this)
+    {
+        // avoid resetting aOutRect which in case of a 3D scene used as 2d object
+        // is model data,not re-creatable view data
+    }
+    else
+    {
+        // if not the outmost scene it is used as group in 3d, call parent
+        E3dObject::SetBoundRectDirty();
+    }
+}
+
 /*************************************************************************
 |*
 |* SetSnapRect

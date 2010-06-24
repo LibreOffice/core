@@ -27,12 +27,10 @@
 
 #include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
@@ -51,6 +49,10 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -66,25 +68,25 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute* pFillGradient)
+            const attribute::FillGradientAttribute& rFillGradient)
         {
             // prepare fully scaled polygon
             basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
             aScaledPolyPolygon.transform(rObjectTransform);
             BasePrimitive2D* pNewFillPrimitive = 0;
 
-            if(rFill.isGradient())
+            if(!rFill.getGradient().isDefault())
             {
-                pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(aScaledPolyPolygon, *rFill.getGradient());
+                pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(aScaledPolyPolygon, rFill.getGradient());
             }
-            else if(rFill.isHatch())
+            else if(!rFill.getHatch().isDefault())
             {
-                pNewFillPrimitive = new PolyPolygonHatchPrimitive2D(aScaledPolyPolygon, rFill.getColor(), *rFill.getHatch());
+                pNewFillPrimitive = new PolyPolygonHatchPrimitive2D(aScaledPolyPolygon, rFill.getColor(), rFill.getHatch());
             }
-            else if(rFill.isBitmap())
+            else if(!rFill.getBitmap().isDefault())
             {
                 const basegfx::B2DRange aRange(basegfx::tools::getRange(aScaledPolyPolygon));
-                pNewFillPrimitive = new PolyPolygonBitmapPrimitive2D(aScaledPolyPolygon, rFill.getBitmap()->getFillBitmapAttribute(aRange));
+                pNewFillPrimitive = new PolyPolygonBitmapPrimitive2D(aScaledPolyPolygon, rFill.getBitmap().getFillBitmapAttribute(aRange));
             }
             else
             {
@@ -96,9 +98,9 @@ namespace drawinglayer
                 // create simpleTransparencePrimitive, add created fill primitive
                 const Primitive2DReference xRefA(pNewFillPrimitive);
                 const Primitive2DSequence aContent(&xRefA, 1L);
-                return Primitive2DReference(new UnifiedAlphaPrimitive2D(aContent, rFill.getTransparence()));
+                return Primitive2DReference(new UnifiedTransparencePrimitive2D(aContent, rFill.getTransparence()));
             }
-            else if(pFillGradient)
+            else if(!rFillGradient.isDefault())
             {
                 // create sequence with created fill primitive
                 const Primitive2DReference xRefA(pNewFillPrimitive);
@@ -107,11 +109,11 @@ namespace drawinglayer
                 // create FillGradientPrimitive2D for transparence and add to new sequence
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
                 const basegfx::B2DRange aRange(basegfx::tools::getRange(aScaledPolyPolygon));
-                const Primitive2DReference xRefB(new FillGradientPrimitive2D(aRange, *pFillGradient));
+                const Primitive2DReference xRefB(new FillGradientPrimitive2D(aRange, rFillGradient));
                 const Primitive2DSequence aAlpha(&xRefB, 1L);
 
-                // create AlphaPrimitive2D using alpha and content
-                return Primitive2DReference(new AlphaPrimitive2D(aContent, aAlpha));
+                // create TransparencePrimitive2D using alpha and content
+                return Primitive2DReference(new TransparencePrimitive2D(aContent, aAlpha));
             }
             else
             {
@@ -124,7 +126,7 @@ namespace drawinglayer
             const basegfx::B2DPolygon& rUnitPolygon,
             const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrLineAttribute& rLine,
-            const attribute::SdrLineStartEndAttribute* pStroke)
+            const attribute::SdrLineStartEndAttribute& rStroke)
         {
             // prepare fully scaled polygon
             basegfx::B2DPolygon aScaledPolygon(rUnitPolygon);
@@ -135,10 +137,10 @@ namespace drawinglayer
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
             BasePrimitive2D* pNewLinePrimitive = 0L;
 
-            if(!rUnitPolygon.isClosed() && pStroke)
+            if(!rUnitPolygon.isClosed() && !rStroke.isDefault())
             {
-                attribute::LineStartEndAttribute aStart(pStroke->getStartWidth(), pStroke->getStartPolyPolygon(), pStroke->isStartCentered());
-                attribute::LineStartEndAttribute aEnd(pStroke->getEndWidth(), pStroke->getEndPolyPolygon(), pStroke->isEndCentered());
+                attribute::LineStartEndAttribute aStart(rStroke.getStartWidth(), rStroke.getStartPolyPolygon(), rStroke.isStartCentered());
+                attribute::LineStartEndAttribute aEnd(rStroke.getEndWidth(), rStroke.getEndPolyPolygon(), rStroke.isEndCentered());
 
                 // create data
                 pNewLinePrimitive = new PolygonStrokeArrowPrimitive2D(aScaledPolygon, aLineAttribute, aStrokeAttribute, aStart, aEnd);
@@ -154,7 +156,7 @@ namespace drawinglayer
                 // create simpleTransparencePrimitive, add created fill primitive
                 const Primitive2DReference xRefA(pNewLinePrimitive);
                 const Primitive2DSequence aContent(&xRefA, 1L);
-                return Primitive2DReference(new UnifiedAlphaPrimitive2D(aContent, rLine.getTransparence()));
+                return Primitive2DReference(new UnifiedTransparencePrimitive2D(aContent, rLine.getTransparence()));
             }
             else
             {
@@ -167,7 +169,7 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrTextAttribute& rText,
-            const attribute::SdrLineAttribute* pStroke,
+            const attribute::SdrLineAttribute& rStroke,
             bool bCellText,
             bool bWordWrap,
             bool bClipOnBounds)
@@ -178,7 +180,7 @@ namespace drawinglayer
             if(rText.isContour())
             {
                 // contour text
-                if(pStroke && 0.0 != pStroke->getWidth())
+                if(!rStroke.isDefault() && 0.0 != rStroke.getWidth())
                 {
                     // take line width into account and shrink contour polygon accordingly
                     // decompose to get scale
@@ -193,7 +195,7 @@ namespace drawinglayer
                         fabs(aScale.getX()), fabs(aScale.getY())));
 
                     // grow the polygon. To shrink, use negative value (half width)
-                    aScaledUnitPolyPolygon = basegfx::tools::growInNormalDirection(aScaledUnitPolyPolygon, -(pStroke->getWidth() * 0.5));
+                    aScaledUnitPolyPolygon = basegfx::tools::growInNormalDirection(aScaledUnitPolyPolygon, -(rStroke.getWidth() * 0.5));
 
                     // scale back to unit polygon
                     aScaledUnitPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(
@@ -217,7 +219,7 @@ namespace drawinglayer
                         rObjectTransform);
                 }
             }
-            else if(rText.getSdrFormTextAttribute())
+            else if(!rText.getSdrFormTextAttribute().isDefault())
             {
                 // text on path, use scaled polygon
                 basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
@@ -226,7 +228,7 @@ namespace drawinglayer
                     &rText.getSdrText(),
                     rText.getOutlinerParaObject(),
                     aScaledPolyPolygon,
-                    *rText.getSdrFormTextAttribute());
+                    rText.getSdrFormTextAttribute());
             }
             else
             {
@@ -323,7 +325,7 @@ namespace drawinglayer
             if(rText.isScroll())
             {
                 // suppress scroll when FontWork
-                if(!rText.getSdrFormTextAttribute())
+                if(rText.getSdrFormTextAttribute().isDefault())
                 {
                     // get scroll direction
                     const SdrTextAniDirection eDirection(rText.getSdrText().GetObject().GetTextAniDirection());
@@ -464,7 +466,7 @@ namespace drawinglayer
                     const Primitive2DSequence aTempContent(&aRetval[0], 1);
 
                     aRetval[0] = Primitive2DReference(
-                        new UnifiedAlphaPrimitive2D(
+                        new UnifiedTransparencePrimitive2D(
                             aTempContent,
                             rShadow.getTransparence()));
                 }

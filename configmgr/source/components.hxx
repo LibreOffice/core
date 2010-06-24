@@ -58,6 +58,7 @@ namespace configmgr {
 class Broadcaster;
 class Modifications;
 class Node;
+class Partial;
 class RootAccess;
 
 class Components: private boost::noncopyable {
@@ -71,8 +72,9 @@ public:
     static bool allLocales(rtl::OUString const & locale);
 
     rtl::Reference< Node > resolvePathRepresentation(
-        rtl::OUString const & pathRepresentation, Path * path,
-        int * finalizedLayer) const;
+        rtl::OUString const & pathRepresentation,
+        rtl::OUString * canonicRepresenation, Path * path, int * finalizedLayer)
+        const;
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
@@ -96,10 +98,19 @@ public:
         bool shared, rtl::OUString const & fileUri,
         Modifications * modifications);
 
+    void insertModificationXcuFile(
+        rtl::OUString const & fileUri,
+        std::set< rtl::OUString > const & includedPaths,
+        std::set< rtl::OUString > const & excludedPaths,
+        Modifications * modifications);
+
     com::sun::star::beans::Optional< com::sun::star::uno::Any >
     getExternalValue(rtl::OUString const & descriptor);
 
 private:
+    typedef void FileParser(
+        rtl::OUString const &, int, Data &, Partial const *, Modifications *);
+
     Components(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);
@@ -107,14 +118,12 @@ private:
     ~Components();
 
     void parseFiles(
-        int layer, rtl::OUString const & extension,
-        void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
+        int layer, rtl::OUString const & extension, FileParser * parseFile,
         rtl::OUString const & url, bool recursive);
 
     void parseFileList(
-        int layer,
-        void (* parseFile)(rtl::OUString const &, int, Data *, Modifications *),
-        rtl::OUString const & urls, rtl::Bootstrap const & ini);
+        int layer, FileParser * parseFile, rtl::OUString const & urls,
+        rtl::Bootstrap const & ini);
 
     void parseXcdFiles(int layer, rtl::OUString const & url);
 

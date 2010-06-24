@@ -32,32 +32,27 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
 
-// #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORYHXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XIndexCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmlenums.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-XMLSettingsExportHelper::XMLSettingsExportHelper(SvXMLExport& rTempExport)
-: rExport(rTempExport)
+XMLSettingsExportHelper::XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext )
+: m_rContext( i_rContext )
 , msPrinterIndependentLayout( RTL_CONSTASCII_USTRINGPARAM( "PrinterIndependentLayout" ) )
 , msColorTableURL( RTL_CONSTASCII_USTRINGPARAM( "ColorTableURL" ) )
 , msLineEndTableURL( RTL_CONSTASCII_USTRINGPARAM( "LineEndTableURL" ) )
@@ -194,89 +189,97 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
 void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_BOOLEAN);
-    SvXMLElementExport aBoolElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_BOOLEAN );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUString sValue;
     if (bValue)
         sValue = GetXMLToken(XML_TRUE);
     else
         sValue = GetXMLToken(XML_FALSE);
-    rExport.GetDocHandler()->characters(sValue);
+    m_rContext.Characters( sValue );
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_BYTE);
-    SvXMLElementExport aShortElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_BYTE );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
-    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
+    m_rContext.Characters( sBuffer.makeStringAndClear() );
+    m_rContext.EndElement( sal_False );
 }
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_SHORT);
-    SvXMLElementExport aShortElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_SHORT );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
-    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
+    m_rContext.Characters( sBuffer.makeStringAndClear() );
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_INT);
-    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_INT );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, nValue);
-    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
+    m_rContext.Characters( sBuffer.makeStringAndClear() );
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_LONG);
-    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_LONG );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUString sValue(rtl::OUString::valueOf(nValue));
-    rExport.GetDocHandler()->characters(sValue);
+    m_rContext.Characters( sValue );
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_DOUBLE);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_DOUBLE );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertDouble(sBuffer, fValue);
-    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
+    m_rContext.Characters( sBuffer.makeStringAndClear() );
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_STRING);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_STRING );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     if (sValue.getLength())
-        rExport.GetDocHandler()->characters(sValue);
+        m_rContext.Characters( sValue );
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_DATETIME);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_DATETIME );
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertDateTime(sBuffer, aValue);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
-    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.Characters( sBuffer.makeStringAndClear() );
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportSequencePropertyValue(
@@ -287,10 +290,11 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
     sal_Int32 nLength(aProps.getLength());
     if(nLength)
     {
-        rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-        SvXMLElementExport aSequenceElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_SET, sal_True, sal_True);
+        m_rContext.AddAttribute( XML_NAME, rName );
+        m_rContext.StartElement( XML_CONFIG_ITEM_SET, sal_True );
         for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
+        m_rContext.EndElement( sal_True );
     }
 }
 void XMLSettingsExportHelper::exportSymbolDescriptors(
@@ -299,7 +303,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
 {
     // #110680#
     // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( rExport.getServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
 
     if( xServiceFactory.is() )
@@ -362,15 +366,16 @@ void XMLSettingsExportHelper::exportbase64Binary(
 {
     DBG_ASSERT(rName.getLength(), "no name");
     sal_Int32 nLength(aProps.getLength());
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_BASE64BINARY);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    m_rContext.AddAttribute( XML_NAME, rName );
+    m_rContext.AddAttribute( XML_TYPE, XML_BASE64BINARY );
+    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     if(nLength)
     {
         rtl::OUStringBuffer sBuffer;
         SvXMLUnitConverter::encodeBase64(sBuffer, aProps);
-        rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
+        m_rContext.Characters( sBuffer.makeStringAndClear() );
     }
+    m_rContext.EndElement( sal_False );
 }
 
 void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
@@ -384,10 +389,11 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
     if (nLength)
     {
         if (bNameAccess)
-            rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-        SvXMLElementExport aEntryElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_MAP_ENTRY, sal_True, sal_True);
+            m_rContext.AddAttribute( XML_NAME, rName );
+        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_ENTRY, sal_True );
         for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
+        m_rContext.EndElement( sal_True );
     }
 }
 
@@ -400,11 +406,12 @@ void XMLSettingsExportHelper::exportNameAccess(
                 "wrong NameAccess" );
     if(aNamed->hasElements())
     {
-        rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-        SvXMLElementExport aNamedElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_MAP_NAMED, sal_True, sal_True);
+        m_rContext.AddAttribute( XML_NAME, rName );
+        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED, sal_True );
         uno::Sequence< rtl::OUString > aNames(aNamed->getElementNames());
         for (sal_Int32 i = 0; i < aNames.getLength(); i++)
             exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], sal_True);
+        m_rContext.EndElement( sal_True );
     }
 }
 
@@ -414,17 +421,18 @@ void XMLSettingsExportHelper::exportIndexAccess(
 {
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
-                "wrong NameAccess" );
+                "wrong IndexAccess" );
     rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
     if(aIndexed->hasElements())
     {
-        rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
-        SvXMLElementExport aIndexedElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM_MAP_INDEXED, sal_True, sal_True);
+        m_rContext.AddAttribute( XML_NAME, rName );
+        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_INDEXED, sal_True );
         sal_Int32 nCount = aIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             exportMapEntry(aIndexed->getByIndex(i), sEmpty, sal_False);
         }
+        m_rContext.EndElement( sal_True );
     }
 }
 
@@ -445,7 +453,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 
     // #110680#
     // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( rExport.getServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
 
     if( xServiceFactory.is() )
@@ -496,14 +504,12 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
     }
 }
 
-void XMLSettingsExportHelper::exportSettings(
+void XMLSettingsExportHelper::exportAllSettings(
                     const uno::Sequence<beans::PropertyValue>& aProps,
                     const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    ::rtl::OUString aQName =
-        rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOO, rName );
-    exportSequencePropertyValue(aProps, aQName);
+    exportSequencePropertyValue(aProps, rName);
 }
 
 
@@ -531,15 +537,16 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
     {
         if( !mxStringSubsitution.is() )
         {
-            if( rExport.getServiceFactory().is() ) try
+            if( m_rContext.GetServiceFactory().is() ) try
             {
                 const_cast< XMLSettingsExportHelper* >(this)->mxStringSubsitution =
                     uno::Reference< util::XStringSubstitution >::query(
-                        rExport.getServiceFactory()->
+                        m_rContext.GetServiceFactory()->
                             createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ) ) ) );
             }
             catch( uno::Exception& )
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 

@@ -34,6 +34,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 class SdrObject;
+class SfxItemSet;
 
 namespace sdr
 {
@@ -49,16 +50,19 @@ namespace sdr
 {
     class MasterPageDescriptor : public sdr::PageUser
     {
+    private:
         SdrPage&                                        maOwnerPage;
         SdrPage&                                        maUsedPage;
         SetOfByte                                       maVisibleLayers;
 
         // ViewContact part
         sdr::contact::ViewContact*                      mpViewContact;
-        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
         // assignment operator defined, but not implemented
         void operator=(const MasterPageDescriptor& rCandidate);
+
+    protected:
+        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
     public:
         MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage);
@@ -85,9 +89,6 @@ namespace sdr
         // operators
         sal_Bool operator==(const MasterPageDescriptor& rCandidate) const;
         sal_Bool operator!=(const MasterPageDescriptor& rCandidate) const;
-
-        // #i42075# Get the correct BackgroundObject
-        SdrObject* GetBackgroundObject() const;
     };
 } // end of namespace sdr
 

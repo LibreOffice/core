@@ -87,6 +87,7 @@ namespace rtl
 //.........................................................................
 namespace dbtools
 {
+    class ISQLStatementHelper;
     typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
 
     enum EComposeRule
@@ -225,6 +226,15 @@ namespace dbtools
         const ::rtl::OUString& _rName
     );
 
+    /** returns the primary key columns of the table
+    */
+    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getPrimaryKeyColumns_throw(
+        const ::com::sun::star::uno::Any& i_aTable
+    );
+    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getPrimaryKeyColumns_throw(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_xTable
+    );
+
     /** get fields for a result set given by a "command descriptor"
 
         <p>A command descriptor here means:
@@ -349,6 +359,33 @@ namespace dbtools
     sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False);
+
+    /** retrieves a particular indirect data source setting
+
+        @param _rxDataSource
+            a data source component
+        @param _pAsciiSettingsName
+            the ASCII name of the setting to obtain
+        @param _rSettingsValue
+            the value of the setting, upon successfull return
+
+        @return
+            <FALSE/> if the setting is not present in the <member scope="com::sun::star::sdb">DataSource::Info</member>
+            member of the data source
+            <TRUE/> otherwise
+    */
+    OOO_DLLPUBLIC_DBTOOLS
+    bool    getDataSourceSetting(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
+        const sal_Char* _pAsciiSettingsName,
+        ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
+    );
+    OOO_DLLPUBLIC_DBTOOLS
+    bool    getDataSourceSetting(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
+        const ::rtl::OUString& _sSettingsName,
+        ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
+    );
 
     OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getDefaultReportEngineServiceName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
@@ -634,6 +671,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     ::rtl::OUString createStandardCreateStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                                    ISQLStatementHelper* _pHelper,
                                                     const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates the standard sql statement for the key part of a create table statement.
@@ -647,32 +685,39 @@ namespace dbtools
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
     /** creates the standard sql statement for the column part of a create table statement.
+        @param  _pHelper
+            Allow to add special SQL constructs.
         @param  descriptor
             The descriptor of the column.
         @param  _xConnection
             The connection.
-        @param  _bAddScale
-            The scale will also be added when the value is 0.
+        @param  _pHelper
+            Allow to add special SQL constructs.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                                                const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
+    ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+                                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                                                ,ISQLStatementHelper* _pHelper = NULL
+                                                ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SQL CREATE TABLE statement
+
         @param  descriptor
             The descriptor of the new table.
         @param  _xConnection
             The connection.
-        @param  _bAddScale
-            The scale will also be added when the value is 0.
+        @param  _pHelper
+            Allow to add special SQL constructs.
+        @param  _sCreatePattern
+
         @return
             The CREATE TABLE statement.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                                                    const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
+    ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                                                    ,ISQLStatementHelper* _pHelper = NULL
+                                                    ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SDBC column with the help of getColumns.
         @param  _xTable

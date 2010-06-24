@@ -161,9 +161,6 @@ void XMLSectionImportContext::StartElement(
                 // save PropertySet (for CreateChildContext)
                 xSectionPropertySet = xPropSet;
 
-                // xml:id for RDF metadata
-                GetImport().SetXmlId(xIfc, sXmlId);
-
                 // name
                 Reference<XNamed> xNamed(xPropSet, UNO_QUERY);
                 xNamed->setName(sName);
@@ -253,6 +250,9 @@ void XMLSectionImportContext::StartElement(
                 // finally, check for redlines that should start at
                 // the section start node
                 rHelper->RedlineAdjustStartNodeCursor(sal_True); // start ???
+
+                // xml:id for RDF metadata
+                GetImport().SetXmlId(xIfc, sXmlId);
             }
         }
     }

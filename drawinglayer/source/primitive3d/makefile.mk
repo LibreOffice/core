@@ -40,7 +40,7 @@ SLOFILES= \
         $(SLO)$/baseprimitive3d.obj				\
         $(SLO)$/groupprimitive3d.obj			\
         $(SLO)$/hatchtextureprimitive3d.obj		\
-        $(SLO)$/hittestprimitive3d.obj			\
+        $(SLO)$/hiddengeometryprimitive3d.obj	\
         $(SLO)$/modifiedcolorprimitive3d.obj	\
         $(SLO)$/polypolygonprimitive3d.obj		\
         $(SLO)$/polygonprimitive3d.obj			\

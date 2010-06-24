@@ -45,9 +45,10 @@
 namespace dp_gui {
 
 #define SMALL_ICON_SIZE     16
-#define TOP_OFFSET           3
+#define TOP_OFFSET           5
 #define ICON_HEIGHT         42
-#define ICON_OFFSET         50
+#define ICON_WIDTH          47
+#define ICON_OFFSET         72
 #define RIGHT_ICON_OFFSET    5
 #define SPACE_BETWEEN        3
 
@@ -134,6 +135,8 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long            m_nActiveHeight;
     long            m_nExtraHeight;
     Size            m_aOutputSize;
+    Image           m_aSharedImage;
+    Image           m_aSharedImageHC;
     Image           m_aLockedImage;
     Image           m_aLockedImageHC;
     Image           m_aWarningImage;

@@ -52,6 +52,7 @@
                     Bit 0 = Command has an image.
                     Bit 1 = Image must be mirrored  (CTL/vertical text).
                     Bit 2 = Image must be rotated (CTL/vertical text).
+                    Bit 3 = Command supports a toggle state (Accessibility).
                     </desc>
                 </info>
                 <value>0</value>

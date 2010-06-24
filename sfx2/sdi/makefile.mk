@@ -50,7 +50,6 @@ SVSDI1DEPEND= \
         appslots.sdi \
         sfxslots.sdi \
         docslots.sdi \
-        mdislots.sdi \
         viwslots.sdi \
                 frmslots.sdi
 

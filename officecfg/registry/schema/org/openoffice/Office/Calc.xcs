@@ -782,13 +782,13 @@
 							<desc>MAX</desc>
 						</info>
 					</enumeration>
-					<enumeration oor:value="5">
+					<enumeration oor:value="6">
 						<info>
 							<desc>IF</desc>
 						</info>
 					</enumeration>
 				</constraints>
-				<value>224 226 222 223 5</value>
+				<value>224 226 222 223 6</value>
 			</prop>
 			<prop oor:name="AutoInput" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
@@ -1016,6 +1016,97 @@
 				<value>NULL</value>
 			</prop>
 		</group>
+        <group oor:name="Dialogs">
+            <info>
+                <desc>Contains the dialogs settings.</desc>
+            </info>
+            <group oor:name="CSVImport">
+                <info>
+                    <desc>Contains setting for Text CSV Import</desc>
+                </info>
+                <prop oor:name="MergeDelimiters" oor:type="xs:boolean">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Merge Delimiter check box status</desc>
+                        <label>MergeDelimiters</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>If true, quoted field is always imported as text 
+                            with no exception.</desc>
+                        <label>QuotedFieldAsText</label>
+                    </info>
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
+                        <label>DetectSpecialNumbers</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Language" oor:type="xs:int">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
+                        <label>Language</label>
+                    </info>
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Separators" oor:type="xs:string">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>List of Separators - as a String</desc>
+                        <label>Separators</label>
+                    </info>
+                    <value>;    </value>
+                </prop>
+                <prop oor:name="TextSeparators" oor:type="xs:string">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Text Separators</desc>
+                        <label>TextSeparators</label>
+                    </info>
+                    <value>"</value>
+                </prop>
+                <prop oor:name="FixedWidth" oor:type="xs:boolean">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Fixed width</desc>
+                        <label>FixedWidth</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="FromRow" oor:type="xs:int">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>From Row</desc>
+                        <label>FromRow</label>
+                    </info>
+                    <value>1</value>
+                </prop>
+                <prop oor:name="CharSet" oor:type="xs:int">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Char Set</desc>
+                        <label>CharSet</label>
+                    </info>
+                    <value>-1</value>
+                </prop>
+                <prop oor:name="FixedWidthList" oor:type="xs:string">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Fixed Width List of separators</desc>
+                        <label>FixedWidthList</label>
+                    </info>
+                    <value></value>
+                </prop>
+            </group>
+        </group>
 		<group oor:name="Calculate">
 			<info>
 				<desc>Contains settings that affect cell calculation.</desc>
@@ -1115,7 +1206,7 @@
 						<desc>Specifies the number of decimals to be displayed for the Standard number format.</desc>
 						<label>Decimal places</label>
 					</info>
-					<value>2</value>
+					<value>-1</value>
 				</prop>
 				<prop oor:name="RegularExpressions" oor:type="xs:boolean">
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->

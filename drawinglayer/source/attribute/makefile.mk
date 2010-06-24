@@ -37,16 +37,23 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/fillattribute.obj			\
-        $(SLO)$/fillbitmapattribute.obj		\
-        $(SLO)$/fontattribute.obj			\
-        $(SLO)$/materialattribute3d.obj		\
-        $(SLO)$/sdrallattribute3d.obj		\
-        $(SLO)$/sdrattribute.obj			\
-        $(SLO)$/sdrattribute3d.obj			\
-        $(SLO)$/sdrfillbitmapattribute.obj	\
-        $(SLO)$/lineattribute.obj			\
-        $(SLO)$/linestartendattribute.obj	\
+        $(SLO)$/fillgradientattribute.obj		\
+        $(SLO)$/fillhatchattribute.obj			\
+        $(SLO)$/fillbitmapattribute.obj			\
+        $(SLO)$/fontattribute.obj				\
+        $(SLO)$/materialattribute3d.obj			\
+        $(SLO)$/sdrallattribute3d.obj			\
+        $(SLO)$/sdrlineattribute.obj			\
+        $(SLO)$/sdrlinestartendattribute.obj	\
+        $(SLO)$/sdrshadowattribute.obj			\
+        $(SLO)$/sdrfillattribute.obj			\
+        $(SLO)$/sdrobjectattribute3d.obj		\
+        $(SLO)$/sdrlightattribute3d.obj			\
+        $(SLO)$/sdrlightingattribute3d.obj		\
+        $(SLO)$/sdrsceneattribute3d.obj			\
+        $(SLO)$/sdrfillbitmapattribute.obj		\
+        $(SLO)$/lineattribute.obj				\
+        $(SLO)$/linestartendattribute.obj		\
         $(SLO)$/strokeattribute.obj
 
 # --- Targets ----------------------------------

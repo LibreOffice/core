@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <tools/datetime.hxx>
 
@@ -61,7 +62,6 @@ class SfxBasicManagerHolder;
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
-    SfxConfigManager*   pCfgMgr;
     SfxBasicManagerHolder*
                         pBasicManager;
     SfxObjectShell&     rDocShell;
@@ -79,10 +79,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_uInt16          nVisualDocumentNumber;
     sal_Int16           nDocumentSignatureState;
     sal_Int16           nScriptingSignatureState;
-    sal_Bool            bTemplateConfig:1,
-                        bInList:1,          // ob per First/Next erreichbar
+    sal_Bool            bInList:1,          // ob per First/Next erreichbar
                         bClosing:1,         // sal_True w"aehrend Close(), um Benachrichtigungs-Rekursionen zu verhindern
-                        bSetInPlaceObj:1,   // sal_True, falls bereits versucht wurde pInPlaceObject zu casten
                         bIsSaving:1,
                         bPasswd:1,
                         bIsTmp:1,
@@ -93,14 +91,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bInPrepareClose : 1,
                         bPreparedForClose : 1,
                         bWaitingForPicklist : 1,// Muss noch in die Pickliste
-                        bModuleSearched : 1,
-                        bIsHelpObjSh : 1,
-                        bForbidCaching : 1,
                         bForbidReload : 1,
-                        bSupportsEventMacros: 1,
-                        bLoadingWindows: 1,
                         bBasicInitialized :1,
-                        //bHidden :1, // indicates a hidden view shell
                         bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!
                         bOwnsStorage:1,
                         bNoBaseURL:1,
@@ -110,6 +102,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bPreserveVersions:1,
                         m_bMacroSignBroken:1, // whether the macro signature was explicitly broken
                         m_bNoBasicCapabilities:1,
+                        m_bDocRecoverySupport:1,
                         bQueryLoadTemplate:1,
                         bLoadReadonly:1,
                         bUseUserData:1,
@@ -117,36 +110,25 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         m_bSharedXMLFlag:1, // whether the flag should be stored in xml file
                         m_bAllowShareControlFileClean:1; // whether the flag should be stored in xml file
 
-    String              aNewName;  // Der Name, unter dem das Doc gespeichert
-                                   // werden soll
     IndexBitSet         aBitSet;
     sal_uInt32               lErr;
     sal_uInt16              nEventId;           // falls vor Activate noch ein
                                             // Open/Create gesendet werden mu/s
-    sal_Bool                bDoNotTouchDocInfo;
-
     AutoReloadTimer_Impl *pReloadTimer;
     MarkData_Impl*      pMarkData;
     sal_uInt16              nLoadedFlags;
     sal_uInt16              nFlagsInProgress;
-    String              aMark;
-    Size                aViewSize;          // wird leider vom Writer beim
-    sal_Bool                bInFrame;           // HTML-Import gebraucht
     sal_Bool                bModalMode;
     sal_Bool                bRunningMacro;
     sal_Bool                bReloadAvailable;
     sal_uInt16              nAutoLoadLocks;
     SfxModule*              pModule;
-    SfxFrame*               pFrame;
-    SfxToolBoxConfig*       pTbxConfig;
     SfxObjectShellFlags     eFlags;
-    svtools::AsynchronLink* pCloser;
-    String                  aBaseURL;
     sal_Bool                bReadOnlyUI;
     SvRefBaseRef            xHeaderAttributes;
     sal_Bool                bHiddenLockedByAPI;
-    sal_Bool                bInCloseEvent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel;
+    ::rtl::Reference< SfxBaseModel >
+                            pBaseModel;
     sal_uInt16              nStyleFilter;
     sal_Bool                bDisposing;
 
@@ -158,9 +140,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     sal_Bool                m_bCreateTempStor;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xDocStorage;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > m_xDocInfoListener;
 
     sal_Bool                m_bIsInit;
 

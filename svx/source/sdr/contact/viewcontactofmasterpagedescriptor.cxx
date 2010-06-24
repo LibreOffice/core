@@ -38,12 +38,14 @@
 #include <svx/svdview.hxx>
 #include <svx/sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontactofmasterpagedescriptor.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/svdpage.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -59,33 +61,49 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence() const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            const SdrObject* pBackgroundCandidate = GetMasterPageDescriptor().GetBackgroundObject();
+            drawinglayer::attribute::SdrFillAttribute aFill;
+            const SdrPage* pCorrectPage = &GetMasterPageDescriptor().GetOwnerPage();
+            const SdrPageProperties* pCorrectProperties = &pCorrectPage->getSdrPageProperties();
 
-            if(pBackgroundCandidate)
+            if(XFILL_NONE == ((const XFillStyleItem&)pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
             {
-                // build primitive from pBackgroundCandidate's attributes
-                const SfxItemSet& rFillProperties = pBackgroundCandidate->GetMergedItemSet();
-                drawinglayer::attribute::SdrFillAttribute* pFill = drawinglayer::primitive2d::createNewSdrFillAttribute(rFillProperties);
+                pCorrectPage = &GetMasterPageDescriptor().GetUsedPage();
+                pCorrectProperties = &pCorrectPage->getSdrPageProperties();
+            }
 
-                if(pFill)
-                {
-                    if(pFill->isVisible())
-                    {
-                        // direct model data is the page size, get and use it
-                        const SdrPage& rOwnerPage = GetMasterPageDescriptor().GetOwnerPage();
-                        const basegfx::B2DRange aInnerRange(
-                            rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(),
-                            rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(), rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
-                        const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
-                        const basegfx::B2DHomMatrix aEmptyTransform;
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                            basegfx::B2DPolyPolygon(aInnerPolgon), aEmptyTransform, *pFill));
+            if(pCorrectPage->IsMasterPage() && !pCorrectProperties->GetStyleSheet())
+            {
+                // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
+                // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
+                // MasterPages should have a StyleSheet excactly for this reason, but historically
+                // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
+                pCorrectProperties = 0;
+            }
 
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                    }
+            if(pCorrectProperties)
+            {
+                // create page fill attributes when correct properties were identified
+                aFill = drawinglayer::primitive2d::createNewSdrFillAttribute(pCorrectProperties->GetItemSet());
+            }
 
-                    delete pFill;
-                }
+            if(!aFill.isDefault())
+            {
+                // direct model data is the page size, get and use it
+                const SdrPage& rOwnerPage = GetMasterPageDescriptor().GetOwnerPage();
+                const basegfx::B2DRange aInnerRange(
+                    rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(),
+                    rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(),
+                    rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
+                const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
+                const basegfx::B2DHomMatrix aEmptyTransform;
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aInnerPolgon),
+                        aEmptyTransform,
+                        aFill,
+                        drawinglayer::attribute::FillGradientAttribute()));
+
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
 
             return xRetval;
@@ -105,23 +123,11 @@ namespace sdr
 
         sal_uInt32 ViewContactOfMasterPageDescriptor::GetObjectCount() const
         {
-            sal_uInt32 nRetval(GetMasterPageDescriptor().GetUsedPage().GetObjCount());
-
-            if(nRetval && GetMasterPageDescriptor().GetUsedPage().GetObj(0)->IsMasterPageBackgroundObject())
-            {
-                nRetval--;
-            }
-
-            return nRetval;
+            return GetMasterPageDescriptor().GetUsedPage().GetObjCount();
         }
 
         ViewContact& ViewContactOfMasterPageDescriptor::GetViewContact(sal_uInt32 nIndex) const
         {
-            if(GetMasterPageDescriptor().GetUsedPage().GetObjCount() && GetMasterPageDescriptor().GetUsedPage().GetObj(0)->IsMasterPageBackgroundObject())
-            {
-                nIndex++;
-            }
-
             return GetMasterPageDescriptor().GetUsedPage().GetObj(nIndex)->GetViewContact();
         }
 

@@ -46,11 +46,9 @@ class SVX_DLLPUBLIC SdrVirtObj : public SdrObject
 public:
     virtual sdr::properties::BaseProperties& GetProperties() const;
 
-private:
-    // AW, OD 2004-05-03 #i27224#
+protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-protected:
     SdrObject&                  rRefObj; // Referenziertes Zeichenobjekt
     Rectangle                   aSnapRect;
 

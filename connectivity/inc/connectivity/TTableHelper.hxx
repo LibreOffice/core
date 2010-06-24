@@ -33,6 +33,10 @@
 #include "connectivity/sdbcx/VKey.hxx"
 #include "connectivity/StdTypeDefs.hxx"
 #include <comphelper/stl_types.hxx>
+#include <com/sun/star/sdb/tools/XTableRename.hpp>
+#include <com/sun/star/sdb/tools/XTableAlteration.hpp>
+#include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
+#include <com/sun/star/sdb/tools/XIndexAlteration.hpp>
 
 namespace connectivity
 {
@@ -41,6 +45,7 @@ namespace connectivity
     {
         ::rtl::OUString sName;
         ::rtl::OUString aField6;
+        ::rtl::OUString sField12; // REMARKS
         ::rtl::OUString sField13;
         sal_Int32       nField5
                     ,   nField7
@@ -56,10 +61,12 @@ namespace connectivity
             , sal_Int32     _nField7
             , sal_Int32     _nField9
             , sal_Int32     _nField11
+            , const ::rtl::OUString& _sField12
             , const ::rtl::OUString& _sField13
             ,OrdinalPosition _nPosition )
             :sName( _rName )
             ,aField6(_aField6)
+            ,sField12(_sField12)
             ,sField13(_sField13)
             ,nField5(_nField5)
             ,nField7(_nField7)
@@ -155,6 +162,11 @@ namespace connectivity
         void addKey(const ::rtl::OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties);
 
         virtual ::rtl::OUString getTypeCreatePattern() const;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableRename>      getRenameService() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableAlteration>  getAlterService() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XKeyAlteration>    getKeyService() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  getIndexService() const;
     };
 }
 #endif // CONNECTIVITY_TABLEHELPER_HXX

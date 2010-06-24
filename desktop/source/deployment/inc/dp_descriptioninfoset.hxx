@@ -53,6 +53,15 @@ namespace rtl { class OUString; }
 
 namespace dp_misc {
 
+struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC SimpleLicenseAttributes
+{
+    ::rtl::OUString acceptBy;
+    //Attribute suppress-on-update. Default is false.
+    bool suppressOnUpdate;
+    //Attribute suppress-if-required. Default is false.
+    bool suppressIfRequired;
+};
+
 /**
    Access to the content of an XML <code>description</code> element.
 
@@ -132,6 +141,13 @@ public:
     */
     ::rtl::OUString getLocalizedLicenseURL() const;
 
+    /** returns the attributes of the simple-license element
+
+        As long as there is a simple-license element, the function will return
+        the structure. If it does not exist, then the optional object is uninitialized.
+    */
+    ::boost::optional<SimpleLicenseAttributes> getSimpleLicenseAttributes() const;
+
     /** returns the localized display name of the extensions.
 
         In case there is no localized display-name then an empty string is returned.
@@ -199,16 +215,6 @@ public:
         Returns the URL for the icon image.
     */
     ::rtl::OUString getIconURL( sal_Bool bHighContrast ) const;
-
-    /**
-       Allow direct access to the XPath functionality.
-
-       @return
-       direct access to the XPath functionality; null iff this instance was
-       constructed with a null <code>element</code>
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::xpath::XXPathAPI >
-    getXpath() const;
 
 private:
     SAL_DLLPRIVATE ::boost::optional< ::rtl::OUString > getOptionalValue(

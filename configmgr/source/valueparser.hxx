@@ -61,7 +61,7 @@ public:
     bool startElement(
         XmlReader & reader, XmlReader::Namespace ns, Span const & name);
 
-    bool endElement(XmlReader const & reader);
+    bool endElement();
 
     void characters(Span const & text);
 
@@ -75,8 +75,6 @@ public:
     rtl::OString separator_;
 
 private:
-    void checkEmptyPad(XmlReader const & reader) const;
-
     template< typename T > com::sun::star::uno::Any convertItems();
 
     enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };

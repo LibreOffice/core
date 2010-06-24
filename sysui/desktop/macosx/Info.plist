@@ -622,7 +622,7 @@
 			</dict>
 		</dict>
 
-		<!--- Microsoft Excel XML -->
+		<!-- Microsoft Excel XML -->
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -1384,7 +1384,7 @@
 	<key>CFBundleExecutable</key>
 	<string>%EXECUTABLE</string>
 	<key>CFBundleGetInfoString</key>
-	<string>${PRODUCTNAME} ${ABOUTBOXPRODUCTVERSION} %SOURCE</string>
+	<string>${PRODUCTNAME} ${ABOUTBOXPRODUCTVERSION} ${BUILDIDCWS}</string>
 	<key>CFBundleIconFile</key>
 	<string>main.icns</string>
 	<key>CFBundleShortVersionString</key>

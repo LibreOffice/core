@@ -54,7 +54,11 @@ namespace drawinglayer
 
         public:
             // constructors/destructor
-            MaterialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity);
+            MaterialAttribute3D(
+                const basegfx::BColor& rColor,
+                const basegfx::BColor& rSpecular,
+                const basegfx::BColor& rEmission,
+                sal_uInt16 nSpecularIntensity);
             MaterialAttribute3D(const basegfx::BColor& rColor);
             MaterialAttribute3D();
             MaterialAttribute3D(const MaterialAttribute3D& rCandidate);
@@ -63,11 +67,13 @@ namespace drawinglayer
             // assignment operator
             MaterialAttribute3D& operator=(const MaterialAttribute3D& rCandidate);
 
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
+
             // compare operator
             bool operator==(const MaterialAttribute3D& rCandidate) const;
-            bool operator!=(const MaterialAttribute3D& rCandidate) const { return !operator==(rCandidate); }
 
-            // data access
+            // data read access
             const basegfx::BColor& getColor() const;
             const basegfx::BColor& getSpecular() const;
             const basegfx::BColor& getEmission() const;

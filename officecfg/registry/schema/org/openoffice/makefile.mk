@@ -42,7 +42,8 @@ XCSFILES= \
     System.xcs \
     UserProfile.xcs \
     VCL.xcs \
-    FirstStartWizard.xcs
+    FirstStartWizard.xcs \
+    Interaction.xcs
 
 .INCLUDE :  target.mk
 

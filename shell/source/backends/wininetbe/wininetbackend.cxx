@@ -37,6 +37,7 @@
 #endif
 #include <windows.h>
 #include <wininet.h>
+#include <sal/alloca.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -138,11 +139,11 @@ WinInetBackend::WinInetBackend()
             // in a stack overflow exception, we assume
             // this never happens, because of the relatively
             // small amount of memory we need
-            // _alloca is nice because it is fast and we don't
+            // alloca is nice because it is fast and we don't
             // have to free the allocated memory, it will be
             // automatically done
             lpi = reinterpret_cast< LPINTERNET_PROXY_INFO >(
-                _alloca( dwLength ) );
+                alloca( dwLength ) );
 
             bRet = lpfnInternetQueryOption(
                 NULL,

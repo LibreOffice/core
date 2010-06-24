@@ -189,7 +189,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     if ( !m_xObjectStorage.is() )
                         throw io::IOException(); //TODO: access denied
 
-                    m_pDocHolder->SetComponent( LoadDocumentFromStorage_Impl( m_xObjectStorage ), m_bReadOnly );
+                    m_pDocHolder->SetComponent( LoadDocumentFromStorage_Impl(), m_bReadOnly );
                 }
                 else
                 {

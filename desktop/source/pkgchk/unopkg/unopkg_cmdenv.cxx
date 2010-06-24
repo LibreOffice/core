@@ -86,6 +86,7 @@ class CommandEnvironmentImpl
     bool m_option_force_overwrite;
     bool m_option_verbose;
     bool m_option_bundled;
+    bool m_option_suppressLicense;
     Reference< XComponentContext > m_xComponentContext;
     Reference< XProgressHandler > m_xLogFile;
 
@@ -99,7 +100,8 @@ public:
         OUString const & log_file,
         bool option_force_overwrite,
         bool option_verbose,
-        bool option_bundled);
+        bool option_bundled,
+        bool option_suppressLicense);
 
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
@@ -124,11 +126,13 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     OUString const & log_file,
     bool option_force_overwrite,
     bool option_verbose,
-    bool option_bundled)
+    bool option_bundled,
+    bool option_suppressLicense)
     : m_logLevel(0),
       m_option_force_overwrite( option_force_overwrite ),
       m_option_verbose( option_verbose ),
       m_option_bundled( option_bundled),
+      m_option_suppressLicense( option_suppressLicense),
       m_xComponentContext(xComponentContext)
 {
     if (log_file.getLength() > 0) {
@@ -279,15 +283,25 @@ void CommandEnvironmentImpl::handle(
     }
     else if (request >>= licAgreementExc)
     {
-        String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, *DeploymentResMgr::get() ) );
-        sResMsg.SearchAndReplaceAllAscii( "%NAME", licAgreementExc.ExtensionName );
-        dp_misc::writeConsole(OUSTR("\n") + sResMsg + OUSTR("\n\n"));
-        abort = true;
+        if (m_option_suppressLicense && licAgreementExc.SuppressIfRequired)
+        {
+            approve = true;
+        }
+        else
+        {
+            String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, *DeploymentResMgr::get() ) );
+            sResMsg.SearchAndReplaceAllAscii( "%NAME", licAgreementExc.ExtensionName );
+            dp_misc::writeConsole(OUSTR("\n") + sResMsg + OUSTR("\n\n"));
+            abort = true;
+        }
     }
     else if (request >>= licExc)
     {
         bLicenseException = true;
-        printLicense(licExc.Text, approve, abort);
+        if (m_option_suppressLicense && licExc.SuppressIfRequired)
+            approve = true;
+        else
+            printLicense(licExc.Text, approve, abort);
     }
        else if (request >>= instExc)
     {
@@ -432,10 +446,12 @@ Reference< XCommandEnvironment > createCmdEnv(
     OUString const & logFile,
     bool option_force_overwrite,
     bool option_verbose,
-    bool option_bundled)
+    bool option_bundled,
+    bool option_suppressLicense)
 {
     return new CommandEnvironmentImpl(
-        xContext, logFile, option_force_overwrite, option_verbose, option_bundled);
+        xContext, logFile, option_force_overwrite, option_verbose, option_bundled,
+        option_suppressLicense);
 }
 
 } // unopkg

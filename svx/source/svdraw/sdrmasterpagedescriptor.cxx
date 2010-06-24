@@ -33,6 +33,8 @@
 
 // #i42075#
 #include <svx/svdobj.hxx>
+#include <svx/xfillit0.hxx>
+#include <svl/itemset.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -73,7 +75,8 @@ namespace sdr
     {
         if(!mpViewContact)
         {
-            ((MasterPageDescriptor*)this)->mpViewContact = ((MasterPageDescriptor*)this)->CreateObjectSpecificViewContact();
+            const_cast< MasterPageDescriptor* >(this)->mpViewContact =
+                const_cast< MasterPageDescriptor* >(this)->CreateObjectSpecificViewContact();
         }
 
         return *mpViewContact;
@@ -93,14 +96,6 @@ namespace sdr
         {
             maVisibleLayers = rNew;
             GetViewContact().ActionChanged();
-
-            // #i42075# For AFs convenience, do a change notify at the MasterPageBackgroundObject, too
-            SdrObject* pObject = GetBackgroundObject();
-
-            if(pObject)
-            {
-                pObject->BroadcastObjectChange();
-            }
         }
     }
 
@@ -117,42 +112,6 @@ namespace sdr
         return (&maOwnerPage != &rCandidate.maOwnerPage
             || &maUsedPage != &rCandidate.maUsedPage
             || maVisibleLayers != rCandidate.maVisibleLayers);
-    }
-
-    // #i42075# Get the correct BackgroundObject
-    SdrObject* MasterPageDescriptor::GetBackgroundObject() const
-    {
-        SdrObject* pRetval = 0L;
-        const SdrPage& rMasterPage = GetUsedPage();
-
-        // Here i will rely on old knowledge about the 0'st element of a masterpage
-        // being the PageBackgroundObject. This will be removed again when that definition
-        // will be changed.
-#ifdef DBG_UTIL
-        const sal_uInt32 nMasterPageObjectCount(rMasterPage.GetObjCount());
-        DBG_ASSERT(1 <= nMasterPageObjectCount,
-            "MasterPageDescriptor::GetBackgroundObject(): MasterPageBackgroundObject missing (!)");
-#endif
-        pRetval = rMasterPage.GetObj(0L);
-
-        // Test if it's really what we need. There are known problems where
-        // the 0th object is not the MasterPageBackgroundObject at all.
-        if(pRetval && !pRetval->IsMasterPageBackgroundObject())
-        {
-            pRetval = 0L;
-        }
-
-        // Get the evtl. existing page background object from the using page and use it
-        // preferred to the MasterPageBackgroundObject
-        const SdrPage& rOwnerPage = GetOwnerPage();
-        SdrObject* pCandidate = rOwnerPage.GetBackgroundObj();
-
-        if(pCandidate)
-        {
-            pRetval = pCandidate;
-        }
-
-        return pRetval;
     }
 } // end of namespace sdr
 

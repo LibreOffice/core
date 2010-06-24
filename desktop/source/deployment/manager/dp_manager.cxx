@@ -542,11 +542,19 @@ OUString PackageManagerImpl::insertToActivationLayer(
     {
         // inflate content:
         ::rtl::OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
-        buf.append( ::rtl::Uri::encode( sourceContent.getURL(),
-                                        rtl_UriCharClassRegName,
-                                        rtl_UriEncodeIgnoreEscapes,
-                                        RTL_TEXTENCODING_UTF8 ) );
+        if (!sourceContent.isFolder())
+        {
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
+            buf.append( ::rtl::Uri::encode( sourceContent.getURL(),
+                                            rtl_UriCharClassRegName,
+                                            rtl_UriEncodeIgnoreEscapes,
+                                            RTL_TEXTENCODING_UTF8 ) );
+        }
+        else
+        {
+            //Folder. No need to unzip, just copy
+            buf.append(sourceContent.getURL());
+        }
         buf.append( static_cast<sal_Unicode>('/') );
         sourceContent = ::ucbhelper::Content(
             buf.makeStringAndClear(), xCmdEnv );

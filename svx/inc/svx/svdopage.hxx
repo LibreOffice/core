@@ -41,16 +41,13 @@ public:
     virtual void PageInDestruction(const SdrPage& rPage);
 
 private:
-    // BaseProperties section
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     // #111111#
     // To make things more safe, remember the page, not a number
     SdrPage*                                mpShownPage;
+
+protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
 public:
     TYPEINFO();

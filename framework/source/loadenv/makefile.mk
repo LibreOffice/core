@@ -38,7 +38,6 @@ ENABLE_EXCEPTIONS=	TRUE
 
 SLOFILES=           \
                     $(SLO)$/loadenv.obj              \
-                    $(SLO)$/loaddispatchlistener.obj \
                     $(SLO)$/targethelper.obj
 
 # --- Targets ------------------------------------------------------

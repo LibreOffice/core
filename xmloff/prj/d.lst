@@ -21,7 +21,6 @@ mkdir: %_DEST%\inc%_EXT%\xmloff
 ..\inc\xmloff\xmlement.hxx %_DEST%\inc%_EXT%\xmloff\xmlement.hxx
 ..\inc\xmloff\xmlictxt.hxx %_DEST%\inc%_EXT%\xmloff\xmlictxt.hxx
 ..\inc\xmloff\xmlimp.hxx %_DEST%\inc%_EXT%\xmloff\xmlimp.hxx
-..\inc\xmlkywd.hxx %_DEST%\inc%_EXT%\xmloff\xmlkywd.hxx
 ..\inc\xmloff\xmlmetae.hxx %_DEST%\inc%_EXT%\xmloff\xmlmetae.hxx
 ..\inc\xmloff\xmlmetai.hxx %_DEST%\inc%_EXT%\xmloff\xmlmetai.hxx
 ..\inc\xmloff\xmlscripti.hxx %_DEST%\inc%_EXT%\xmloff\xmlscripti.hxx
@@ -88,6 +87,7 @@ mkdir: %_DEST%\inc%_EXT%\xmloff
 ..\inc\HatchStyle.hxx %_DEST%\inc%_EXT%\xmloff\HatchStyle.hxx
 ..\inc\ImageStyle.hxx %_DEST%\inc%_EXT%\xmloff\ImageStyle.hxx
 ..\inc\xmloff\SettingsExportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SettingsExportHelper.hxx
+..\inc\xmloff\XMLSettingsExportContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLSettingsExportContext.hxx
 ..\inc\xmloff\DocumentSettingsContext.hxx %_DEST%\inc%_EXT%\xmloff\DocumentSettingsContext.hxx
 ..\inc\xmloff\XMLGraphicsDefaultStyle.hxx %_DEST%\inc%_EXT%\xmloff\XMLGraphicsDefaultStyle.hxx
 ..\inc\XMLEmbeddedObjectExportFilter.hxx %_DEST%\inc%_EXT%\xmloff\XMLEmbeddedObjectExportFilter.hxx

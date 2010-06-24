@@ -25,14 +25,26 @@
 #
 #***********************************************************************/
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ = ../..
 PRJNAME = configmgr
-TARGET = unoapi
+TARGET = qa_unoapi
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = org/openoffice/configmgr/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-ALLTAR: TEST
+ALLTAR : javatest
 
-TEST .PHONY:
-    $(SOLARENV)/bin/checkapi -sce module.sce
+.END

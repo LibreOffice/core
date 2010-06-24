@@ -167,9 +167,9 @@ SfxTemplateDialog* SfxApplication::GetTemplateDialog()
 SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) const
 {
     if ( pFrame )
-        return pFrame->GetFrame()->GetWorkWindow_Impl();
+        return pFrame->GetFrame().GetWorkWindow_Impl();
     else if ( pAppData_Impl->pViewFrame )
-        return pAppData_Impl->pViewFrame->GetFrame()->GetWorkWindow_Impl();
+        return pAppData_Impl->pViewFrame->GetFrame().GetWorkWindow_Impl();
     else
         return NULL;
 }

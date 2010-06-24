@@ -34,11 +34,6 @@ PACKAGE=ooo$/vba$/msforms
 # --- Settings -----------------------------------------------------
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ENDIF
-
 # ------------------------------------------------------------------------
 
 IDLFILES=\

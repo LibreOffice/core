@@ -55,6 +55,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/config.hxx>
 
@@ -62,6 +63,7 @@ using namespace rtl;
 using namespace osl;
 using namespace utl;
 using namespace svt;
+using namespace com::sun::star;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
@@ -305,12 +307,46 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // -------------------------------------------------------------------
 
-MigrationPage::MigrationPage( svt::OWizardMachine* parent, const ResId& resid)
+class MigrationThread : public ::osl::Thread
+{
+    public:
+        MigrationThread();
+
+        virtual void SAL_CALL run();
+        virtual void SAL_CALL onTerminated();
+};
+
+MigrationThread::MigrationThread()
+{
+}
+
+void MigrationThread::run()
+{
+    try
+    {
+        Migration::doMigration();
+    }
+    catch ( uno::Exception& )
+    {
+    }
+}
+
+void MigrationThread::onTerminated()
+{
+}
+
+// -------------------------------------------------------------------
+
+MigrationPage::MigrationPage(
+    svt::OWizardMachine* parent,
+    const ResId& resid,
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber)
     : OWizardPage(parent, resid)
     , m_ftHead(this, WizardResId(FT_MIGRATION_HEADER))
     , m_ftBody(this, WizardResId(FT_MIGRATION_BODY))
     , m_cbMigration(this, WizardResId(CB_MIGRATION))
     , m_bMigrationDone(sal_False)
+    , m_xThrobber(xThrobber)
 {
     FreeResource();
     _setBold(m_ftHead);
@@ -321,13 +357,32 @@ MigrationPage::MigrationPage( svt::OWizardMachine* parent, const ResId& resid)
     m_ftBody.SetText( aText );
 }
 
-sal_Bool MigrationPage::commitPage( CommitPageReason _eReason )
+sal_Bool MigrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason )
 {
-    if (_eReason == eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
+    if (_eReason == svt::WizardTypes::eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
     {
-        EnterWait();
-        Migration::doMigration();
-        LeaveWait();
+        GetParent()->EnterWait();
+        FirstStartWizard* pWizard = dynamic_cast< FirstStartWizard* >( GetParent() );
+        if ( pWizard )
+            pWizard->DisableButtonsWhileMigration();
+
+        uno::Reference< awt::XWindow > xWin( m_xThrobber, uno::UNO_QUERY );
+        xWin->setVisible( true );
+        m_xThrobber->start();
+        MigrationThread* pMigThread = new MigrationThread();
+        pMigThread->create();
+
+        while ( pMigThread->isRunning() )
+        {
+            Application::Reschedule();
+        }
+
+        m_xThrobber->stop();
+        GetParent()->LeaveWait();
+        // Next state will enable buttons - so no EnableButtons necessary!
+        xWin->setVisible( false );
+        pMigThread->join();
+        delete pMigThread;
         m_bMigrationDone = sal_True;
     }
     else
@@ -378,7 +433,7 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     }
 }
 
-sal_Bool UserPage::commitPage( CommitPageReason )
+sal_Bool UserPage::commitPage( svt::WizardTypes::CommitPageReason )
 {
     SvtUserOptions aUserOpt;
     aUserOpt.SetFirstName(m_edFirst.GetText());
@@ -408,9 +463,9 @@ UpdateCheckPage::UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resi
     _setBold(m_ftHead);
 }
 
-sal_Bool UpdateCheckPage::commitPage( CommitPageReason _eReason )
+sal_Bool UpdateCheckPage::commitPage( svt::WizardTypes::CommitPageReason _eReason )
 {
-    if ( _eReason == eTravelForward )
+    if ( _eReason == svt::WizardTypes::eTravelForward )
     {
         try {
             Reference < XNameReplace > xUpdateAccess;
@@ -534,9 +589,9 @@ void RegistrationPage::updateButtonStates()
     m_rbNever.Show( m_bNeverVisible );
 }
 
-sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
+sal_Bool RegistrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason )
 {
-    if ( _eReason == eFinish )
+    if ( _eReason == svt::WizardTypes::eFinish )
     {
         ::utl::RegOptions aOptions;
         rtl::OUString aEvent;
@@ -610,7 +665,7 @@ void RegistrationPage::executeSingleMode()
     // the registration modes "Now" and "Later" are handled by the page
     RegistrationPage::RegistrationMode eMode = pPage->getRegistrationMode();
     if ( eMode == RegistrationPage::rmNow || eMode == RegistrationPage::rmLater )
-        pPage->commitPage( IWizardPage::eFinish );
+        pPage->commitPage( WizardTypes::eFinish );
     if ( eMode != RegistrationPage::rmLater )
         ::utl::RegOptions().removeReminder();
 }

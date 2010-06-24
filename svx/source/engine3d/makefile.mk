@@ -64,17 +64,9 @@ LIB1OBJFILES= \
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \
-        $(SLO)$/volume3d.obj	\
-        $(SLO)$/viewpt3d.obj	\
         $(SLO)$/float3d.obj
 
 SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
-
-#disable optimizer for MSCompiler and ICC
-.IF "$(COM)"=="ICC" || "$(COM)"=="MSC"
-NOOPTFILES=\
-        $(SLO)$/viewpt3d.obj
-.ENDIF
 
 SRS1NAME=engine3d
 SRC1FILES=\

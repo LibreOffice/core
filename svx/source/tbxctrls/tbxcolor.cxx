@@ -62,7 +62,7 @@ namespace svx
         {
             try
             {
-                Reference< XFrame > xFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
+                Reference< XFrame > xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
                 Reference< XPropertySet > xFrameProps( xFrame, UNO_QUERY );
                 if ( xFrameProps.is() )
                     xFrameProps->getPropertyValue( PROPNAME_LAYOUTMANAGER ) >>= m_xLayouter;

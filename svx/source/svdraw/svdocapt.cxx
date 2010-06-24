@@ -843,7 +843,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
 }
 
 // geometry access
-::basegfx::B2DPolygon SdrCaptionObj::getTailPolygon() const
+basegfx::B2DPolygon SdrCaptionObj::getTailPolygon() const
 {
     return aTailPoly.getB2DPolygon();
 }

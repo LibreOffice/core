@@ -39,7 +39,6 @@
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
@@ -77,15 +76,6 @@ using ::rtl::OUStringBuffer;
 
 namespace
 {
-
-OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::data::XDataProvider >& xDataProvider )
-{
-    OUString aResult = rRange;
-    Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );
-    if( xConversion.is())
-        aResult = xConversion->convertRangeFromXML( rRange );
-    return aResult;
-}
 
 class SchXMLDomain2Context : public SvXMLImportContext
 {
@@ -232,7 +222,7 @@ void lcl_insertErrorBarLSequencesToMap(
 
 Reference< chart2::data::XLabeledDataSequence > lcl_createAndAddSequenceToSeries( const rtl::OUString& rRole
         , const rtl::OUString& rRange
-        , const Reference< chart2::data::XDataProvider >& xDataProvider
+        , const Reference< chart2::XChartDocument >& xChartDoc
         , const Reference< chart2::XDataSeries >& xSeries )
 {
     Reference< chart2::data::XLabeledDataSequence > xLabeledSeq;
@@ -240,27 +230,14 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createAndAddSequenceToSeries
     Reference< chart2::data::XDataSource > xSeriesSource( xSeries,uno::UNO_QUERY );
     Reference< chart2::data::XDataSink > xSeriesSink( xSeries, uno::UNO_QUERY );
 
-    if( !(rRange.getLength() && xDataProvider.is() && xSeriesSource.is() && xSeriesSink.is()) )
+    if( !(rRange.getLength() && xChartDoc.is() && xSeriesSource.is() && xSeriesSink.is()) )
         return xLabeledSeq;
 
     // create a new sequence
     xLabeledSeq = SchXMLTools::GetNewLabeledDataSequence();
 
     // set values at the new sequence
-    Reference< chart2::data::XDataSequence > xSeq;
-    try
-    {
-        xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
-        SchXMLTools::setXMLRangePropertyAtDataSequence( xSeq, rRange );
-    }
-    catch( const lang::IllegalArgumentException & ex )
-    {
-        (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, ::rtl::OUStringToOString(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
-    }
-
+    Reference< chart2::data::XDataSequence > xSeq = SchXMLTools::CreateDataSequence( rRange, xChartDoc );
     Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
     if( xSeqProp.is())
         xSeqProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( rRole));
@@ -336,10 +313,6 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     bool bHasRange = false;
     bool bHasLabelRange = false;
 
-    Reference< chart2::data::XRangeXMLConversion > xRangeConversion;
-    if( mxNewDoc.is())
-        xRangeConversion.set( mxNewDoc->getDataProvider(), uno::UNO_QUERY );
-
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -401,123 +374,93 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     try
     {
         OSL_ASSERT( mxNewDoc.is());
-        if( mxNewDoc.is())
+        if( m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && ! bHasRange )
+            m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
+
+        bool bIsCandleStick = maGlobalChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
+        if( maSeriesChartTypeName.getLength() )
         {
-            if( m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && ! bHasRange )
-                m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
-
-            Reference< chart2::data::XDataProvider > xDataProvider( mxNewDoc->getDataProvider() );
-            if( xDataProvider.is())
+            bIsCandleStick = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
+        }
+        else
+        {
+            if( bIsCandleStick
+                && m_bStockHasVolume
+                && mnSeriesIndex == 0 )
             {
-                bool bIsCandleStick = maGlobalChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
-                if( maSeriesChartTypeName.getLength() )
-                {
-                    bIsCandleStick = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
-                }
-                else
-                {
-                    if( bIsCandleStick
-                        && m_bStockHasVolume
-                        && mnSeriesIndex == 0 )
-                    {
-                        maSeriesChartTypeName = OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" );
-                        bIsCandleStick = false;
-                    }
-                    else
-                    {
-                        maSeriesChartTypeName = maGlobalChartTypeName;
-                    }
-                }
-                if( ! mrGlobalChartTypeUsedBySeries )
-                    mrGlobalChartTypeUsedBySeries = (maSeriesChartTypeName.equals( maGlobalChartTypeName ));
-                sal_Int32 nCoordinateSystemIndex = 0;//so far we can only import one coordinate system
-                m_xSeries.set(
-                    mrImportHelper.GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
-                Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-                    SchXMLTools::GetNewLabeledDataSequence());
-
-                if( bIsCandleStick )
-                {
-                    // set default color for range-line to black (before applying styles)
-                    Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
-                    if( xSeriesProp.is())
-                        xSeriesProp->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Color")),
-                                                       uno::makeAny( sal_Int32( 0x000000 ))); // black
-                }
-                else if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.PieChartType")))
-                {
-                    //@todo: this property should be saved
-                    Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
-                    if( xSeriesProp.is())
-                        xSeriesProp->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VaryColorsByPoint")),
-                                                       uno::makeAny( true ));
-                }
-
-                // values
-                Reference< chart2::data::XDataSequence > xSeq;
-                if( bHasRange )
-                    try
-                    {
-                        xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( m_aSeriesRange, xDataProvider )));
-                        SchXMLTools::setXMLRangePropertyAtDataSequence( xSeq, m_aSeriesRange );
-                    }
-                    catch( const lang::IllegalArgumentException & ex )
-                    {
-                        (void)ex; // avoid warning for pro build
-                        OSL_ENSURE( false, ::rtl::OUStringToOString(
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
-                                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
-                    }
-
-                Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
-                if( xSeqProp.is())
-                {
-                    OUString aMainRole( OUString::createFromAscii("values-y") );
-                    if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType") ) )
-                        aMainRole = OUString::createFromAscii("values-size");
-                    xSeqProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( aMainRole ));
-                }
-                xLabeledSeq->setValues( xSeq );
-
-                // register for setting local data if external data provider is not present
-                maPostponedSequences.insert(
-                    tSchXMLLSequencesPerIndex::value_type(
-                        tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
-
-                // label
-                if( bHasLabelRange )
-                {
-                    try
-                    {
-                        Reference< chart2::data::XDataSequence > xLabelSequence(
-                            xDataProvider->createDataSequenceByRangeRepresentation(
-                                lcl_ConvertRange( m_aSeriesLabelRange, xDataProvider )));
-                        xLabeledSeq->setLabel( xLabelSequence );
-                        SchXMLTools::setXMLRangePropertyAtDataSequence( xLabelSequence, m_aSeriesLabelRange );
-                    }
-                    catch( const lang::IllegalArgumentException & ex )
-                    {
-                        (void)ex; // avoid warning for pro build
-                        OSL_ENSURE( false, ::rtl::OUStringToOString(
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
-                                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
-                    }
-                }
-
-                // Note: Even if we have no label, we have to register the label
-                // for creation, because internal data always has labels. If
-                // they don't exist in the original, auto-generated labels are
-                // used for the internal data.
-                maPostponedSequences.insert(
-                    tSchXMLLSequencesPerIndex::value_type(
-                        tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq ));
-
-
-                Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( &xLabeledSeq, 1 );
-                Reference< chart2::data::XDataSink > xSink( m_xSeries, uno::UNO_QUERY_THROW );
-                xSink->setData( aSeq );
+                maSeriesChartTypeName = OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" );
+                bIsCandleStick = false;
+            }
+            else
+            {
+                maSeriesChartTypeName = maGlobalChartTypeName;
             }
         }
+        if( ! mrGlobalChartTypeUsedBySeries )
+            mrGlobalChartTypeUsedBySeries = (maSeriesChartTypeName.equals( maGlobalChartTypeName ));
+        sal_Int32 nCoordinateSystemIndex = 0;//so far we can only import one coordinate system
+        m_xSeries.set(
+            mrImportHelper.GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
+            SchXMLTools::GetNewLabeledDataSequence());
+
+        if( bIsCandleStick )
+        {
+            // set default color for range-line to black (before applying styles)
+            Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
+            if( xSeriesProp.is())
+                xSeriesProp->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Color")),
+                                               uno::makeAny( sal_Int32( 0x000000 ))); // black
+        }
+        else if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.PieChartType")))
+        {
+            //@todo: this property should be saved
+            Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
+            if( xSeriesProp.is())
+                xSeriesProp->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VaryColorsByPoint")),
+                                               uno::makeAny( true ));
+        }
+
+        // values
+        Reference< chart2::data::XDataSequence > xSeq;
+        if( bHasRange )
+            xSeq = SchXMLTools::CreateDataSequence( m_aSeriesRange, mxNewDoc );
+
+        Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
+        if( xSeqProp.is())
+        {
+            OUString aMainRole( OUString::createFromAscii("values-y") );
+            if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType") ) )
+                aMainRole = OUString::createFromAscii("values-size");
+            xSeqProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( aMainRole ));
+        }
+        xLabeledSeq->setValues( xSeq );
+
+        // register for setting local data if external data provider is not present
+        maPostponedSequences.insert(
+            tSchXMLLSequencesPerIndex::value_type(
+                tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
+
+        // label
+        if( bHasLabelRange )
+        {
+            Reference< chart2::data::XDataSequence > xLabelSequence =
+                SchXMLTools::CreateDataSequence( m_aSeriesLabelRange, mxNewDoc );
+            xLabeledSeq->setLabel( xLabelSequence );
+        }
+
+        // Note: Even if we have no label, we have to register the label
+        // for creation, because internal data always has labels. If
+        // they don't exist in the original, auto-generated labels are
+        // used for the internal data.
+        maPostponedSequences.insert(
+            tSchXMLLSequencesPerIndex::value_type(
+                tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq ));
+
+
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( &xLabeledSeq, 1 );
+        Reference< chart2::data::XDataSink > xSink( m_xSeries, uno::UNO_QUERY_THROW );
+        xSink->setData( aSeq );
     }
     catch( uno::Exception & ex )
     {
@@ -662,15 +605,11 @@ void SchXMLSeries2Context::EndElement()
         }
     }
 
-    Reference< chart2::data::XDataProvider > xDataProvider;
-    if ( mxNewDoc.is() ) {
-        xDataProvider = mxNewDoc->getDataProvider();
-    }
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
     {
         DomainInfo aDomainInfo( *aIt );
         Reference< chart2::data::XLabeledDataSequence > xLabeledSeq =
-            lcl_createAndAddSequenceToSeries( aDomainInfo.aRole, aDomainInfo.aRange, xDataProvider, m_xSeries );
+            lcl_createAndAddSequenceToSeries( aDomainInfo.aRole, aDomainInfo.aRange, mxNewDoc, m_xSeries );
         if( xLabeledSeq.is() )
         {
             // register for setting local data if external data provider is not present

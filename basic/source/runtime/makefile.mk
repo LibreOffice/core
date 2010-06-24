@@ -82,8 +82,5 @@ EXCEPTIONSFILES=$(SLO)$/step0.obj	\
 
 $(SLO)$/%.obj: %.s
 #kendy: Cut'n'paste from bridges/source/cpp_uno/mingw_intel/makefile.mk
-#cmc: Ideally --noexecstack would be in operations, but with #i51385# pyuno
-#remote bridgeing breaks
-#    $(CC) -Wa,--noexecstack -c -o $(SLO)$/$(@:b).o $<
     $(CC) -c -o $(SLO)$/$(@:b).obj $<
     touch $@

@@ -76,6 +76,7 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdr/attribute/sdrformtextattribute.hxx>
 
 using namespace sdr;
 
@@ -2741,13 +2742,10 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
 SdrObject* SdrPathObj::DoConvertToPolyObj(BOOL bBezier) const
 {
     // #i89784# check for FontWork with activated HideContour
-    bool bHideContour(false);
-
-    {
-        drawinglayer::attribute::SdrTextAttribute* pText = drawinglayer::primitive2d::createNewSdrTextAttribute(GetObjectItemSet(), *getText(0));
-        bHideContour = pText && pText->getSdrFormTextAttribute() && pText->isHideContour();
-        delete pText;
-    }
+    const drawinglayer::attribute::SdrTextAttribute aText(
+        drawinglayer::primitive2d::createNewSdrTextAttribute(GetObjectItemSet(), *getText(0)));
+    const bool bHideContour(
+        !aText.isDefault() && !aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour());
 
     SdrObject* pRet = bHideContour ?
         0 :

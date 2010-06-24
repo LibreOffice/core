@@ -34,6 +34,7 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 
 SHL1TARGET = $(TARGET)

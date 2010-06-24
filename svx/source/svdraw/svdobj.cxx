@@ -47,7 +47,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdovirt.hxx>  // Fuer Add/Del Ref
 #include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
-#include "svdscrol.hxx"
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 #include <svx/svdogrp.hxx>   // Factory
@@ -121,6 +120,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svdundo.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdrobjectfilter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -235,6 +235,7 @@ SdrObjGeoData::SdrObjGeoData():
     bSizProt(FALSE),
     bNoPrint(FALSE),
     bClosedObj(FALSE),
+    mbVisible(true),
     mnLayerID(0)
 {
     DBG_CTOR(SdrObjGeoData,NULL);
@@ -326,7 +327,8 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
     {
-        ((SdrObject*)this)->mpProperties = ((SdrObject*)this)->CreateObjectSpecificProperties();
+        const_cast< SdrObject* >(this)->mpProperties =
+            const_cast< SdrObject* >(this)->CreateObjectSpecificProperties();
     }
 
     return *mpProperties;
@@ -361,7 +363,8 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 {
     if(!mpViewContact)
     {
-        ((SdrObject*)this)->mpViewContact = ((SdrObject*)this)->CreateObjectSpecificViewContact();
+        const_cast< SdrObject* >(this)->mpViewContact =
+            const_cast< SdrObject* >(this)->CreateObjectSpecificViewContact();
     }
 
     return *mpViewContact;
@@ -370,51 +373,6 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 // DrawContact support: Methods for handling Object changes
 void SdrObject::ActionChanged() const
 {
-    // Forward change call to MasterPageDescriptor if BackgroundObject was changed
-    const SdrPage* pObjectsPage = GetPage();
-
-    if(pObjectsPage)
-    {
-        // do the necessary ActionChange() forwards when a MasterPageBackgroundObject
-        // gets changed. This can be removed as soon as the MasterPageBackgroundObject
-        // handling is replaced with the proper ItemSet handling at the SdrPages. The
-        // needed ActionChanged calls will then be triggered by changing those ItemSets.
-        if(pObjectsPage->IsMasterPage())
-        {
-            if(IsMasterPageBackgroundObject())
-            {
-                SdrModel* pObjectsModel = GetModel();
-
-                if(pObjectsModel)
-                {
-                    const sal_uInt16 nCount(pObjectsModel->GetPageCount());
-
-                    for(sal_uInt16 a(0); a < nCount; a++)
-                    {
-                        const SdrPage* pUserPage = pObjectsModel->GetPage(a);
-
-                        if(pUserPage && pUserPage->TRG_HasMasterPage())
-                        {
-                            SdrPage& rUsedMasterPage = pUserPage->TRG_GetMasterPage();
-
-                            if(&rUsedMasterPage == pObjectsPage)
-                            {
-                                pUserPage->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            if(pObjectsPage->TRG_HasMasterPage() && pObjectsPage->GetBackgroundObj() == this)
-            {
-                pObjectsPage->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
-            }
-        }
-    }
-
     // Do necessary ViewContact actions
     GetViewContact().ActionChanged();
 }
@@ -457,6 +415,7 @@ SdrObject::SdrObject()
     bEmptyPresObj    =FALSE;
     bNotVisibleAsMaster=FALSE;
     bClosedObj       =FALSE;
+    mbVisible        = true;
 
     // #i25616#
     mbLineIsOutsideGeometry = sal_False;
@@ -1092,6 +1051,7 @@ void SdrObject::operator=(const SdrObject& rObj)
     bSizProt=rObj.bSizProt;
     bMovProt=rObj.bMovProt;
     bNoPrint=rObj.bNoPrint;
+    mbVisible=rObj.mbVisible;
     bMarkProt=rObj.bMarkProt;
     //EmptyPresObj wird nicht kopiert: nun doch! (25-07-1995, Joe)
     bEmptyPresObj =rObj.bEmptyPresObj;
@@ -1730,6 +1690,11 @@ void SdrObject::NbcSetLogicRect(const Rectangle& rRect)
     NbcSetSnapRect(rRect);
 }
 
+void SdrObject::AdjustToMaxRect( const Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
+{
+    SetLogicRect( rMaxRect );
+}
+
 void SdrObject::SetSnapRect(const Rectangle& rRect)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
@@ -1958,6 +1923,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.bMovProt      =bMovProt      ;
     rGeo.bSizProt      =bSizProt      ;
     rGeo.bNoPrint      =bNoPrint      ;
+    rGeo.mbVisible     =mbVisible     ;
     rGeo.bClosedObj    =bClosedObj    ;
     rGeo.mnLayerID = mnLayerID;
 
@@ -1984,6 +1950,7 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
     bMovProt      =rGeo.bMovProt      ;
     bSizProt      =rGeo.bSizProt      ;
     bNoPrint      =rGeo.bNoPrint      ;
+    mbVisible     =rGeo.mbVisible     ;
     bClosedObj    =rGeo.bClosedObj    ;
     mnLayerID = rGeo.mnLayerID;
 
@@ -2191,6 +2158,11 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         SetPrintable(b);
     }
 
+    if (rAttr.GetItemState(SDRATTR_OBJVISIBLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+        bool b=((const SdrObjVisibleItem*)pPoolItem)->GetValue();
+        SetVisible(b);
+    }
+
     SdrLayerID nLayer=SDRLAYER_NOTFOUND;
     if (rAttr.GetItemState(SDRATTR_LAYERID,TRUE,&pPoolItem)==SFX_ITEM_SET) {
         nLayer=((const SdrLayerIdItem*)pPoolItem)->GetValue();
@@ -2252,6 +2224,7 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, FASTBOOL bMerge) const
     lcl_SetItem(rAttr,bMerge,SdrObjMoveProtectItem(IsMoveProtect()));
     lcl_SetItem(rAttr,bMerge,SdrObjSizeProtectItem(IsResizeProtect()));
     lcl_SetItem(rAttr,bMerge,SdrObjPrintableItem(IsPrintable()));
+    lcl_SetItem(rAttr,bMerge,SdrObjVisibleItem(IsVisible()));
     lcl_SetItem(rAttr,bMerge,SdrRotateAngleItem(GetRotateAngle()));
     lcl_SetItem(rAttr,bMerge,SdrShearAngleItem(GetShearAngle()));
     lcl_SetItem(rAttr,bMerge,SdrOneSizeWidthItem(rSnap.GetWidth()-1));
@@ -2730,11 +2703,29 @@ void SdrObject::SetResizeProtect(sal_Bool bProt)
 
 void SdrObject::SetPrintable(sal_Bool bPrn)
 {
-    bNoPrint=!bPrn;
-    SetChanged();
-    if (IsInserted() && pModel!=NULL) {
-        SdrHint aHint(*this);
-        pModel->Broadcast(aHint);
+    if( bPrn == bNoPrint )
+    {
+        bNoPrint=!bPrn;
+        SetChanged();
+        if (IsInserted() && pModel!=NULL)
+        {
+            SdrHint aHint(*this);
+            pModel->Broadcast(aHint);
+        }
+    }
+}
+
+void SdrObject::SetVisible(sal_Bool bVisible)
+{
+    if( bVisible != mbVisible )
+    {
+        mbVisible = bVisible;
+        SetChanged();
+        if (IsInserted() && pModel!=NULL)
+        {
+            SdrHint aHint(*this);
+            pModel->Broadcast(aHint);
+        }
     }
 }
 
@@ -3112,26 +3103,6 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     SetSnapRect(aBaseRect);
 }
 
-// #111111#
-// Needed again and again i will now add a test for finding out if
-// this object is the BackgroundObject of the page.
-sal_Bool SdrObject::IsMasterPageBackgroundObject() const
-{
-    if(pObjList
-        && pObjList == pPage
-        && pPage->IsMasterPage()
-        && pObjList->GetObj(0) == this
-        && 1L == (pPage->GetPageNum() % 2))
-    {
-        // 0'th object, directly on page, page is MasterPage,
-        // MasterPagePageNum is 1,3,5,...
-        // --> It's the background object (!)
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
 // #116168#
 // Give info if object is in destruction
 sal_Bool SdrObject::IsInDestruction() const
@@ -3327,6 +3298,13 @@ void SdrObjFactory::RemoveMakeUserDataHdl(const Link& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
     rLL.RemoveLink(rLink);
+}
+
+namespace svx
+{
+    ISdrObjectFilter::~ISdrObjectFilter()
+    {
+    }
 }
 
 // eof

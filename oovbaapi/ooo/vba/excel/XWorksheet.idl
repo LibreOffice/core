@@ -39,6 +39,9 @@
 #include <com/sun/star/script/XInvocation.idl>
 #endif
 
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
 //=============================================================================
 
 module ooo {  module vba {  module excel {
@@ -55,8 +58,8 @@ interface XWorksheet
 {
     interface ::ooo::vba::XHelperInterface;
     interface ::com::sun::star::script::XInvocation;
+    interface ::com::sun::star::container::XNamed;
 
-        [attribute] string Name;
     [attribute] boolean Visible;
     [attribute, readonly] long StandardHeight;
     [attribute, readonly] long StandardWidth;

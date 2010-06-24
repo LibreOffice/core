@@ -81,41 +81,7 @@ APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
 APP1RPATH=BRAND
 APP1OBJS=$(OBJ)$/copyright_ascii_sun.obj $(OBJ)$/main.obj
-APP1STDLIBS =  \
-    $(SALLIB) \
-    $(SOFFICELIB) \
-    $(COMPHELPERLIB)  \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(I18NISOLANGLIB) \
-    $(SALLIB) \
-    $(SFXLIB) \
-    $(SVLLIB) \
-    $(SVTOOLLIB) \
-    $(TKLIB) \
-    $(TOOLSLIB) \
-    $(UCBHELPERLIB) \
-    $(UNOTOOLSLIB) \
-    $(VCLLIB) \
-    $(FWELIB) \
-    $(BASICLIB) \
-    $(XMLSCRIPTLIB) \
-    $(SALHELPERLIB) \
-    $(SOTLIB) \
-    $(SAXLIB) \
-    $(FWILIB) \
-    $(ICUUCLIB) \
-    $(I18NUTILLIB) \
-    $(ICULIB) \
-    $(JVMFWKLIB) \
-    $(BASEGFXLIB) \
-    $(ICUDATALIB) \
-    $(ICULELIB) \
-    $(JVMACCESSLIB) \
-    $(SALHELPERLIB) \
-    $(VOSLIB)
-
-
+APP1STDLIBS = $(SALLIB) $(SOFFICELIB)
 APP1DEPN= $(APP1RES) verinfo.rc
 
 .IF "$(GUI)" == "WNT"
@@ -140,40 +106,7 @@ APP5TARGET=soffice
 APP5NOSAL=TRUE
 APP5RPATH=BRAND
 APP5OBJS=$(OBJ)$/copyright_ascii_ooo.obj $(OBJ)$/main.obj
-APP5STDLIBS = \
-    $(SALLIB) \
-    $(SOFFICELIB) \
-    $(COMPHELPERLIB)  \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(I18NISOLANGLIB) \
-    $(SALLIB) \
-    $(SFXLIB) \
-    $(SVLLIB) \
-    $(SVTOOLLIB) \
-    $(TKLIB) \
-    $(TOOLSLIB) \
-    $(UCBHELPERLIB) \
-    $(UNOTOOLSLIB) \
-    $(VCLLIB) \
-    $(FWELIB) \
-    $(BASICLIB) \
-    $(XMLSCRIPTLIB) \
-    $(SALHELPERLIB) \
-    $(SOTLIB) \
-    $(SAXLIB) \
-    $(FWILIB) \
-    $(ICUUCLIB) \
-    $(I18NUTILLIB) \
-    $(ICULIB) \
-    $(JVMFWKLIB) \
-    $(BASEGFXLIB) \
-    $(ICUDATALIB) \
-    $(ICULELIB) \
-    $(JVMACCESSLIB) \
-    $(SALHELPERLIB) \
-    $(VOSLIB)
-
+APP5STDLIBS = $(SALLIB) $(SOFFICELIB)
 .IF "$(OS)" == "LINUX"
 APP5STDLIBS+= -lXext
 #APP5STDLIBS+= -lXext -lSM -lICE

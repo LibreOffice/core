@@ -45,10 +45,10 @@
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <vcl/salbtype.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <vcl/svapp.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -94,8 +94,10 @@ namespace
         basegfx::BColor         maTextLineColor;
         basegfx::BColor         maOverlineColor;
 
-        /// clipping, font, etc.
-        Region                  maRegion;
+        /// clipping
+        basegfx::B2DPolyPolygon maClipPolyPoygon;
+
+        /// font, etc.
         Font                    maFont;
         RasterOp                maRasterOp;
         sal_uInt32              mnLayoutMode;
@@ -110,7 +112,7 @@ namespace
         bool                    mbTextFillColor : 1;
         bool                    mbTextLineColor : 1;
         bool                    mbOverlineColor : 1;
-        bool                    mbRegion : 1;
+        bool                    mbClipPolyPolygonActive : 1;
 
     public:
         PropertyHolder()
@@ -122,7 +124,7 @@ namespace
             maTextFillColor(),
             maTextLineColor(),
             maOverlineColor(),
-            maRegion(),
+            maClipPolyPoygon(),
             maFont(),
             maRasterOp(ROP_OVERPAINT),
             mnLayoutMode(0),
@@ -134,7 +136,7 @@ namespace
             mbTextFillColor(false),
             mbTextLineColor(false),
             mbOverlineColor(false),
-            mbRegion(false)
+            mbClipPolyPolygonActive(false)
         {
         }
 
@@ -179,10 +181,10 @@ namespace
         bool getOverlineColorActive() const { return mbOverlineColor; }
         void setOverlineColorActive(bool bNew) { if(bNew != mbOverlineColor) mbOverlineColor = bNew; }
 
-        const Region& getRegion() const { return maRegion; }
-        void setRegion(const Region& rRegion) { if(rRegion != maRegion) maRegion = rRegion; }
-        bool getRegionActive() const { return mbRegion; }
-        void setRegionActive(bool bNew) { if(bNew != mbRegion) mbRegion = bNew; }
+        const basegfx::B2DPolyPolygon& getClipPolyPolygon() const { return maClipPolyPoygon; }
+        void setClipPolyPolygon(const basegfx::B2DPolyPolygon& rNew) { if(rNew != maClipPolyPoygon) maClipPolyPoygon = rNew; }
+        bool getClipPolyPolygonActive() const { return mbClipPolyPolygonActive; }
+        void setClipPolyPolygonActive(bool bNew) { if(bNew != mbClipPolyPolygonActive) mbClipPolyPolygonActive = bNew; }
 
         const Font& getFont() const { return maFont; }
         void setFont(const Font& rFont) { if(rFont != maFont) maFont = rFont; }
@@ -233,6 +235,12 @@ namespace
         sal_uInt32 size()
         {
             return maPropertyHolders.size();
+        }
+
+        void PushDefault()
+        {
+            PropertyHolder* pNew = new PropertyHolder();
+            maPropertyHolders.push_back(pNew);
         }
 
         void Push(sal_uInt16 nPushFlags)
@@ -291,8 +299,8 @@ namespace
                             }
                             if(!(nPushFlags & PUSH_CLIPREGION     ))
                             {
-                                pLast->setRegion(pTip->getRegion());
-                                pLast->setRegionActive(pTip->getRegionActive());
+                                pLast->setClipPolyPolygon(pTip->getClipPolyPolygon());
+                                pLast->setClipPolyPolygonActive(pTip->getClipPolyPolygonActive());
                             }
                             if(!(nPushFlags & PUSH_RASTEROP       ))
                             {
@@ -336,11 +344,11 @@ namespace
                             }
                         }
                     }
-
-                    // execute the pop
-                    delete maPropertyHolders.back();
-                    maPropertyHolders.pop_back();
                 }
+
+                // execute the pop
+                delete maPropertyHolders.back();
+                maPropertyHolders.pop_back();
             }
         }
 
@@ -465,25 +473,18 @@ namespace
             // the buffer to not delete them in the destructor.
             aTargets.clear();
 
-            if(xRetval.hasElements() && rPropertyHolder.getRegionActive())
+            if(xRetval.hasElements() && rPropertyHolder.getClipPolyPolygonActive())
             {
-                const Region& rRegion = rPropertyHolder.getRegion();
+                const basegfx::B2DPolyPolygon& rClipPolyPolygon = rPropertyHolder.getClipPolyPolygon();
 
-                if(!rRegion.IsEmpty())
+                if(rClipPolyPolygon.count())
                 {
-                    basegfx::B2DPolyPolygon aClipPolyPolygon(getB2DPolyPolygonFromRegion(rRegion));
+                    const drawinglayer::primitive2d::Primitive2DReference xMask(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            rClipPolyPolygon,
+                            xRetval));
 
-                    if(aClipPolyPolygon.count())
-                    {
-                        aClipPolyPolygon.transform(rPropertyHolder.getTransformation());
-
-                        const drawinglayer::primitive2d::Primitive2DReference xMask(
-                            new drawinglayer::primitive2d::MaskPrimitive2D(
-                                aClipPolyPolygon,
-                                xRetval));
-
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
-                    }
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
                 }
             }
 
@@ -581,7 +582,14 @@ namespace drawinglayer
         Primitive2DSequence NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
             const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return createFill(false);
+            if(!getFillGradient().isDefault())
+            {
+                return createFill(false);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -833,7 +841,7 @@ namespace
     }
 
     /** helper to create a regular BotmapEx from a MaskAction (definitions
-        which use a bitmap without alpha but define one of the colors as
+        which use a bitmap without transparence but define one of the colors as
         transparent)
      */
     BitmapEx createMaskBmpEx(const Bitmap& rBitmap, const Color& rMaskColor)
@@ -936,14 +944,17 @@ namespace
             default : // case HATCH_SINGLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
+                break;
             }
             case HATCH_DOUBLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
+                break;
             }
             case HATCH_TRIPLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE;
+                break;
             }
         }
 
@@ -962,18 +973,56 @@ namespace
         a new target for embracing new geometry to the current region
      */
     void HandleNewClipRegion(
-        const Region* pRegion,
+        const basegfx::B2DPolyPolygon& rClipPolyPolygon,
         TargetHolders& rTargetHolders,
         PropertyHolders& rPropertyHolders)
     {
-        // process evtl. created primitives which belong to the current region settings
-        if(rPropertyHolders.Current().getRegionActive() && rTargetHolders.size() > 1)
+        const bool bNewActive(rClipPolyPolygon.count());
+
+        // #i108636# The handlig of new ClipPolyPolygons was not done as good as possible
+        // in the first version of this interpreter; e.g. when a ClipPolyPolygon was set
+        // initially and then using a lot of push/pop actions, the pop always leads
+        // to setting a 'new' ClipPolyPolygon which indeed is the return to the ClipPolyPolygon
+        // of the properties next on the stack.
+        //
+        // This ClipPolyPolygon is identical to the current one, so there is no need to
+        // create a MaskPrimitive2D containing the up-to-now created primitives, but
+        // this was done before. While this does not lead to wrong primitive
+        // representations of the metafile data, it creates unneccesarily expensive
+        // representations. Just detecting when no really 'new' ClipPolyPolygon gets set
+        // solves the problem.
+
+        if(!rPropertyHolders.Current().getClipPolyPolygonActive() && !bNewActive)
+        {
+            // no active ClipPolyPolygon exchanged by no new one, done
+            return;
+        }
+
+        if(rPropertyHolders.Current().getClipPolyPolygonActive() && bNewActive)
+        {
+            // active ClipPolyPolygon and new active ClipPolyPolygon
+            if(rPropertyHolders.Current().getClipPolyPolygon() == rClipPolyPolygon)
+            {
+                // new is the same as old, done
+                return;
+            }
+        }
+
+        // Here the old and the new are definitively different, maybe
+        // old one and/or new one is not active.
+
+        // Handle deletion of old ClipPolyPolygon. The process evtl. created primitives which
+        // belong to this active ClipPolyPolygon. These need to be embedded to a
+        // MaskPrimitive2D accordingly.
+        if(rPropertyHolders.Current().getClipPolyPolygonActive() && rTargetHolders.size() > 1)
         {
             drawinglayer::primitive2d::Primitive2DSequence aSubContent;
 
-            if(!rPropertyHolders.Current().getRegion().IsEmpty() && rTargetHolders.Current().size())
+            if(rPropertyHolders.Current().getClipPolyPolygon().count()
+                && rTargetHolders.Current().size())
             {
-                aSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                aSubContent = rTargetHolders.Current().getPrimitive2DSequence(
+                    rPropertyHolders.Current());
             }
 
             rTargetHolders.Pop();
@@ -986,13 +1035,13 @@ namespace
             }
         }
 
-        // apply new settings
-        const bool bNewActive(pRegion && !pRegion->IsEmpty());
-        rPropertyHolders.Current().setRegionActive(bNewActive);
+        // apply new settings to current properties by setting
+        // the new region now
+        rPropertyHolders.Current().setClipPolyPolygonActive(bNewActive);
 
         if(bNewActive)
         {
-            rPropertyHolders.Current().setRegion(*pRegion);
+            rPropertyHolders.Current().setClipPolyPolygon(rClipPolyPolygon);
 
             // prepare new content holder for new active region
             rTargetHolders.Push();
@@ -1244,13 +1293,12 @@ namespace
         const XubString& rText,
         sal_uInt16 nTextStart,
         sal_uInt16 nTextLength,
-        sal_Int32* pDXArray,
+        const ::std::vector< double >& rDXArray,
         TargetHolder& rTarget,
         PropertyHolder& rProperty)
     {
         drawinglayer::primitive2d::BasePrimitive2D* pResult = 0;
         const Font& rFont = rProperty.getFont();
-        std::vector< double > aDXArray;
         basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
 
         if(nTextLength)
@@ -1267,17 +1315,6 @@ namespace
 
             // add TextStartPosition
             aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
-
-            // preapare DXArray (if used)
-            if(pDXArray && nTextLength)
-            {
-                aDXArray.reserve(nTextLength);
-
-                for(xub_StrLen a(0); a < nTextLength; a++)
-                {
-                    aDXArray.push_back((double)(*(pDXArray + a)));
-                }
-            }
 
             // prepare FontColor and Locale
             const basegfx::BColor aFontColor(rProperty.getTextColor());
@@ -1338,7 +1375,7 @@ namespace
                     rText,
                     nTextStart,
                     nTextLength,
-                    aDXArray,
+                    rDXArray,
                     aFontAttribute,
                     aLocale,
                     aFontColor,
@@ -1365,7 +1402,7 @@ namespace
                     rText,
                     nTextStart,
                     nTextLength,
-                    aDXArray,
+                    rDXArray,
                     aFontAttribute,
                     aLocale,
                     aFontColor);
@@ -1381,13 +1418,13 @@ namespace
             // get text width
             double fTextWidth(0.0);
 
-            if(aDXArray.empty())
+            if(rDXArray.empty())
             {
                 fTextWidth = aTextLayouterDevice.getTextWidth(rText, nTextStart, nTextLength);
             }
             else
             {
-                fTextWidth = aDXArray.back();
+                fTextWidth = rDXArray.back();
             }
 
             if(basegfx::fTools::more(fTextWidth, 0.0))
@@ -1942,15 +1979,24 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTextAction* pA = (const MetaTextAction*)pAction;
+                    sal_uInt32 nTextLength(pA->GetLen());
+                    const sal_uInt32 nTextIndex(pA->GetIndex());
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
 
-                    if(pA->GetLen() && rPropertyHolders.Current().getTextColorActive())
+                    if(nTextLength + nTextIndex > nStringLength)
                     {
+                        nTextLength = nStringLength - nTextIndex;
+                    }
+
+                    if(nTextLength && rPropertyHolders.Current().getTextColorActive())
+                    {
+                        const std::vector< double > aDXArray;
                         proccessMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
-                            pA->GetIndex(),
-                            pA->GetLen(),
-                            0,
+                            nTextIndex,
+                            nTextLength,
+                            aDXArray,
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1961,15 +2007,37 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*)pAction;
+                    sal_uInt32 nTextLength(pA->GetLen());
+                    const sal_uInt32 nTextIndex(pA->GetIndex());
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
 
-                    if(pA->GetLen() && rPropertyHolders.Current().getTextColorActive())
+                    if(nTextLength + nTextIndex > nStringLength)
                     {
+                        nTextLength = nStringLength - nTextIndex;
+                    }
+
+                    if(nTextLength && rPropertyHolders.Current().getTextColorActive())
+                    {
+                        // preapare DXArray (if used)
+                        std::vector< double > aDXArray;
+                        sal_Int32* pDXArray = pA->GetDXArray();
+
+                        if(pDXArray)
+                        {
+                            aDXArray.reserve(nTextLength);
+
+                            for(sal_uInt32 a(0); a < nTextLength; a++)
+                            {
+                                aDXArray.push_back((double)(*(pDXArray + a)));
+                            }
+                        }
+
                         proccessMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
-                            pA->GetIndex(),
-                            pA->GetLen(),
-                            pA->GetDXArray(),
+                            nTextIndex,
+                            nTextLength,
+                            aDXArray,
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1978,10 +2046,65 @@ namespace
                 }
                 case META_STRETCHTEXT_ACTION :
                 {
-                    /** NEEDS IMPLEMENTATION */
-                    OSL_ENSURE(false, "META_STRETCHTEXT_ACTION requested (!)");
-                    // use OutputDevice::GetTextArray() to map the...
-                    // const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
+                    // #i108440# StarMath uses MetaStretchTextAction, thus support is needed.
+                    // It looks as if it pretty never really uses a width different from
+                    // the default text-layout width, but it's not possible to be sure.
+                    // Implemented getting the DXArray and checking for scale at all. If
+                    // scale is more than 3.5% different, scale the DXArray before usage.
+                    // New status:
+
+                    /** CHECKED, WORKS WELL */
+                    const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
+                    sal_uInt32 nTextLength(pA->GetLen());
+                    const sal_uInt32 nTextIndex(pA->GetIndex());
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
+
+                    if(nTextLength + nTextIndex > nStringLength)
+                    {
+                        nTextLength = nStringLength - nTextIndex;
+                    }
+
+                    if(nTextLength && rPropertyHolders.Current().getTextColorActive())
+                    {
+                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                        aTextLayouterDevice.setFont(rPropertyHolders.Current().getFont());
+
+                        ::std::vector< double > aTextArray(
+                            aTextLayouterDevice.getTextArray(
+                                pA->GetText(),
+                                nTextIndex,
+                                nTextLength));
+
+                        if(!aTextArray.empty())
+                        {
+                            const double fTextLength(aTextArray.back());
+
+                            if(0.0 != fTextLength && pA->GetWidth())
+                            {
+                                const double fRelative(pA->GetWidth() / fTextLength);
+
+                                if(fabs(fRelative - 1.0) >= 0.035)
+                                {
+                                    // when derivation is more than 3,5% from default text size,
+                                    // scale the DXArray
+                                    for(sal_uInt32 a(0); a < aTextArray.size(); a++)
+                                    {
+                                        aTextArray[a] *= fRelative;
+                                    }
+                                }
+                            }
+                        }
+
+                        proccessMetaTextAction(
+                            pA->GetPoint(),
+                            pA->GetText(),
+                            nTextIndex,
+                            nTextLength,
+                            aTextArray,
+                            rTargetHolders.Current(),
+                            rPropertyHolders.Current());
+                    }
+
                     break;
                 }
                 case META_TEXTRECT_ACTION :
@@ -1990,8 +2113,9 @@ namespace
                     // OSL_ENSURE(false, "META_TEXTRECT_ACTION requested (!)");
                     const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
                     const Rectangle& rRectangle = pA->GetRect();
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
 
-                    if(!rRectangle.IsEmpty() && 0 != pA->GetText().Len())
+                    if(!rRectangle.IsEmpty() && 0 != nStringLength)
                     {
                         // The problem with this action is that it describes unlayouted text
                         // and the layout capabilities are in EditEngine/Outliner in SVX. The
@@ -2017,8 +2141,11 @@ namespace
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
+                                // #i# for sub-Mteafile contents, do start with new, default render state
+                                rPropertyHolders.PushDefault();
                                 interpretMetafile(aGDIMetaFile, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                                rPropertyHolders.Pop();
                                 rTargetHolders.Pop();
                             }
 
@@ -2294,13 +2421,18 @@ namespace
 
                     if(pA->IsClipping())
                     {
-                        // new clipping
-                        HandleNewClipRegion(&pA->GetRegion(), rTargetHolders, rPropertyHolders);
+                        // new clipping. Get PolyPolygon and transform with current transformation
+                        basegfx::B2DPolyPolygon aNewClipPolyPolygon(getB2DPolyPolygonFromRegion(pA->GetRegion()));
+
+                        aNewClipPolyPolygon.transform(rPropertyHolders.Current().getTransformation());
+                        HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
                     {
                         // end clipping
-                        HandleNewClipRegion(0, rTargetHolders, rPropertyHolders);
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
 
                     break;
@@ -2314,49 +2446,60 @@ namespace
                     if(rRectangle.IsEmpty())
                     {
                         // intersect with empty rectangle will always give empty
-                        // region; start new clipping with empty region
-                        const Region aNewRegion;
-                        HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                        // ClipPolyPolygon; start new clipping with empty PolyPolygon
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
                     {
-                        if(rPropertyHolders.Current().getRegionActive())
+                        // create transformed ClipRange
+                        basegfx::B2DRange aClipRange(
+                            rRectangle.Left(), rRectangle.Top(),
+                            rRectangle.Right(), rRectangle.Bottom());
+
+                        aClipRange.transform(rPropertyHolders.Current().getTransformation());
+
+                        if(rPropertyHolders.Current().getClipPolyPolygonActive())
                         {
-                            if(rPropertyHolders.Current().getRegion().IsEmpty())
+                            if(0 == rPropertyHolders.Current().getClipPolyPolygon().count())
                             {
-                                // nothing to do, empty active clip region will stay
+                                // nothing to do, empty active clipPolyPolygon will stay
                                 // empty when intersecting
                             }
                             else
                             {
-                                // AND existing region and new rectangle
+                                // AND existing region and new ClipRange
                                 const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
-                                    getB2DPolyPolygonFromRegion(rPropertyHolders.Current().getRegion()));
+                                    rPropertyHolders.Current().getClipPolyPolygon());
                                 basegfx::B2DPolyPolygon aClippedPolyPolygon;
 
                                 if(aOriginalPolyPolygon.count())
                                 {
-                                    const basegfx::B2DRange aIntersectRange(
-                                        rRectangle.Left(), rRectangle.Top(),
-                                        rRectangle.Right(), rRectangle.Bottom());
-
                                     aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(
-                                        aOriginalPolyPolygon, aIntersectRange, true, false);
+                                        aOriginalPolyPolygon,
+                                        aClipRange,
+                                        true,
+                                        false);
                                 }
 
                                 if(aClippedPolyPolygon != aOriginalPolyPolygon)
                                 {
                                     // start new clipping with intersected region
-                                    const Region aNewRegion(aClippedPolyPolygon);
-                                    HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                                    HandleNewClipRegion(
+                                        aClippedPolyPolygon,
+                                        rTargetHolders,
+                                        rPropertyHolders);
                                 }
                             }
                         }
                         else
                         {
-                            // start new clipping with rectangle
-                            const Region aNewRegion(rRectangle);
-                            HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                            // start new clipping with ClipRange
+                            const basegfx::B2DPolyPolygon aNewClipPolyPolygon(
+                                basegfx::tools::createPolygonFromRect(aClipRange));
+
+                            HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                         }
                     }
 
@@ -2371,50 +2514,48 @@ namespace
                     if(rNewRegion.IsEmpty())
                     {
                         // intersect with empty region will always give empty
-                        // region; start new clipping with empty region
-                        const Region aNewRegion;
-                        HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                        // region; start new clipping with empty PolyPolygon
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
                     else
                     {
-                        if(rPropertyHolders.Current().getRegionActive())
+                        // get new ClipPolyPolygon, transform it with current transformation
+                        basegfx::B2DPolyPolygon aNewClipPolyPolygon(getB2DPolyPolygonFromRegion(rNewRegion));
+                        aNewClipPolyPolygon.transform(rPropertyHolders.Current().getTransformation());
+
+                        if(rPropertyHolders.Current().getClipPolyPolygonActive())
                         {
-                            if(rPropertyHolders.Current().getRegion().IsEmpty())
+                            if(0 == rPropertyHolders.Current().getClipPolyPolygon().count())
                             {
-                                // nothing to do, empty active clip region will stay empty
+                                // nothing to do, empty active clipPolyPolygon will stay empty
                                 // when intersecting with any region
                             }
                             else
                             {
                                 // AND existing and new region
                                 const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
-                                    getB2DPolyPolygonFromRegion(rPropertyHolders.Current().getRegion()));
+                                    rPropertyHolders.Current().getClipPolyPolygon());
                                 basegfx::B2DPolyPolygon aClippedPolyPolygon;
 
                                 if(aOriginalPolyPolygon.count())
                                 {
-                                    const basegfx::B2DPolyPolygon aClipPolyPolygon(
-                                        getB2DPolyPolygonFromRegion(rNewRegion));
-
-                                    if(aClipPolyPolygon.count())
-                                    {
-                                        aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
-                                            aOriginalPolyPolygon, aClipPolyPolygon, true, false);
-                                    }
+                                    aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                        aOriginalPolyPolygon, aNewClipPolyPolygon, true, false);
                                 }
 
                                 if(aClippedPolyPolygon != aOriginalPolyPolygon)
                                 {
-                                    // start new clipping with intersected region
-                                    const Region aNewRegion(aClippedPolyPolygon);
-                                    HandleNewClipRegion(&aNewRegion, rTargetHolders, rPropertyHolders);
+                                    // start new clipping with intersected ClipPolyPolygon
+                                    HandleNewClipRegion(aClippedPolyPolygon, rTargetHolders, rPropertyHolders);
                                 }
                             }
                         }
                         else
                         {
-                            // start new clipping with new region
-                            HandleNewClipRegion(&rNewRegion, rTargetHolders, rPropertyHolders);
+                            // start new clipping with new ClipPolyPolygon
+                            HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                         }
                     }
 
@@ -2425,24 +2566,31 @@ namespace
                     /** CHECKED, WORKS WELL */
                     const MetaMoveClipRegionAction* pA = (const MetaMoveClipRegionAction*)pAction;
 
-                    if(rPropertyHolders.Current().getRegionActive())
+                    if(rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
-                        if(rPropertyHolders.Current().getRegion().IsEmpty())
+                        if(0 == rPropertyHolders.Current().getClipPolyPolygon().count())
                         {
                             // nothing to do
                         }
                         else
                         {
-                            // move using old interface
-                            Region aRegion(rPropertyHolders.Current().getRegion());
-
                             const sal_Int32 nHor(pA->GetHorzMove());
                             const sal_Int32 nVer(pA->GetVertMove());
 
                             if(0 != nHor || 0 != nVer)
                             {
-                                aRegion.Move(nHor, nVer);
-                                HandleNewClipRegion(&aRegion, rTargetHolders, rPropertyHolders);
+                                // prepare translation, add current transformation
+                                basegfx::B2DVector aVector(pA->GetHorzMove(), pA->GetVertMove());
+                                aVector *= rPropertyHolders.Current().getTransformation();
+                                basegfx::B2DHomMatrix aTransform(
+                                    basegfx::tools::createTranslateB2DHomMatrix(aVector));
+
+                                // transform existing region
+                                basegfx::B2DPolyPolygon aClipPolyPolygon(
+                                    rPropertyHolders.Current().getClipPolyPolygon());
+
+                                aClipPolyPolygon.transform(aTransform);
+                                HandleNewClipRegion(aClipPolyPolygon, rTargetHolders, rPropertyHolders);
                             }
                         }
                     }
@@ -2647,10 +2795,12 @@ namespace
                     const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_CLIPREGION);
                     const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_RASTEROP);
 
-                    if(bRegionMayChange && rPropertyHolders.Current().getRegionActive())
+                    if(bRegionMayChange && rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
                         // end evtl. clipping
-                        HandleNewClipRegion(0, rTargetHolders, rPropertyHolders);
+                        const basegfx::B2DPolyPolygon aEmptyPolyPolygon;
+
+                        HandleNewClipRegion(aEmptyPolyPolygon, rTargetHolders, rPropertyHolders);
                     }
 
                     if(bRasterOpMayChange && rPropertyHolders.Current().isRasterOpActive())
@@ -2667,10 +2817,11 @@ namespace
                         HandleNewRasterOp(rPropertyHolders.Current().getRasterOp(), rTargetHolders, rPropertyHolders);
                     }
 
-                    if(bRegionMayChange && rPropertyHolders.Current().getRegionActive())
+                    if(bRegionMayChange && rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
                         // start evtl. clipping
-                        HandleNewClipRegion(&rPropertyHolders.Current().getRegion(), rTargetHolders, rPropertyHolders);
+                        HandleNewClipRegion(
+                            rPropertyHolders.Current().getClipPolyPolygon(), rTargetHolders, rPropertyHolders);
                     }
 
                     break;
@@ -2720,7 +2871,7 @@ namespace
                             if(aSubContent.hasElements())
                             {
                                 rTargetHolders.Current().append(
-                                    new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                         aSubContent,
                                         nTransparence * 0.01));
                             }
@@ -2818,8 +2969,11 @@ namespace
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
+                                // #i# for sub-Mteafile contents, do start with new, default render state
+                                rPropertyHolders.PushDefault();
                                 interpretMetafile(rContent, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
+                                rPropertyHolders.Pop();
                                 rTargetHolders.Pop();
                             }
 
@@ -2831,9 +2985,9 @@ namespace
 
                                 if(aAttribute.getStartColor() == aAttribute.getEndColor())
                                 {
-                                    // not really a gradient; create UnifiedAlphaPrimitive2D
+                                    // not really a gradient; create UnifiedTransparencePrimitive2D
                                     rTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                             xSubContent,
                                             aAttribute.getStartColor().luminance()));
                                 }
@@ -2845,17 +2999,17 @@ namespace
                                         aTargetRectangle.Right(), aTargetRectangle.Bottom());
                                     aRange.transform(rPropertyHolders.Current().getTransformation());
 
-                                    // prepare gradient for alpha content
-                                    const drawinglayer::primitive2d::Primitive2DReference xAlpha(
+                                    // prepare gradient for transparent content
+                                    const drawinglayer::primitive2d::Primitive2DReference xTransparence(
                                         new drawinglayer::primitive2d::FillGradientPrimitive2D(
                                             aRange,
                                             aAttribute));
 
-                                    // create alpha primitive
+                                    // create transparence primitive
                                     rTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::AlphaPrimitive2D(
+                                        new drawinglayer::primitive2d::TransparencePrimitive2D(
                                             xSubContent,
-                                            drawinglayer::primitive2d::Primitive2DSequence(&xAlpha, 1)));
+                                            drawinglayer::primitive2d::Primitive2DSequence(&xTransparence, 1)));
                                 }
                             }
                         }

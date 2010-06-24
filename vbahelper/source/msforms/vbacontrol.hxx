@@ -98,7 +98,6 @@ class ScVbaControlFactory
 public:
     ScVbaControlFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel );
-    ScVbaControl* createControl()  throw ( css::uno::RuntimeException );
     ScVbaControl* createControl( const css::uno::Reference< css::uno::XInterface >& xParent )  throw ( css::uno::RuntimeException );
 private:
     ScVbaControl* createControl( const css::uno::Reference< css::awt::XControl >&, const css::uno::Reference< css::uno::XInterface >&  )  throw ( css::uno::RuntimeException );

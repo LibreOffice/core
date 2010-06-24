@@ -1434,7 +1434,7 @@
       </node>
       <node oor:name="arialnarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrowmt;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
+          <value>arialnarrowmt;liberationsansnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1838,12 +1838,29 @@
         </prop>
         <prop oor:name="FontType"><value>Normal,SansSerif</value></prop>
       </node>
+      <node oor:name="candara" oor:op="replace">
+        <prop oor:name="FontType"><value>Normal,SansSerif</value></prop>
+      </node>
 
       <node oor:name="cambria" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>applelisung</value>
         </prop>
         <prop oor:name="FontType"><value>Normal,Serif</value></prop>
+      </node>
+
+      <node oor:name="consolas" oor:op="replace">
+        <prop oor:name="FontType"><value>Normal,SansSerif,Fixed</value></prop>
+    <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
+      </node>
+      <node oor:name="constantia" oor:op="replace">
+        <prop oor:name="FontType"><value>Normal,Serif</value></prop>
+      </node>
+      <node oor:name="corbel" oor:op="replace">
+        <prop oor:name="FontType"><value>Normal,SansSerif</value></prop>
+      </node>
+      <node oor:name="cordia" oor:op="replace">
+        <prop oor:name="FontType"><value>Normal,SansSerif</value></prop>
       </node>
 
       <node oor:name="calisto" oor:op="replace">
@@ -2522,7 +2539,7 @@
       </node>
       <node oor:name="dejavusanscondensed" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow</value>
+          <value>arialnarrow;liberationsansnarrow</value>
         </prop>
         <prop oor:name="FontWeight"><value>Normal</value></prop>
         <prop oor:name="FontWidth"><value>Condensed</value></prop>
@@ -3578,7 +3595,7 @@
       </node>
       <node oor:name="helveticanarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
+          <value>arialnarrow;liberationsansnarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -6521,7 +6538,7 @@
       </node>
       <node oor:name="sanscondensed" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
+          <value>arialnarrow;liberationsansnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -6567,7 +6584,7 @@
       </node>
       <node oor:name="sanslcondensed" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;dejavusanscondensed</value>
+          <value>arialnarrow;liberationsansnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;dejavusanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -7142,7 +7159,7 @@
       </node>
       <node oor:name="swissnarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>dejavuserifcondensed;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed</value>
+          <value>dejavuserifcondensed;arialnarrow;liberationsansnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>

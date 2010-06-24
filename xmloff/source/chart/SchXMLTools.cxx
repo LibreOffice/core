@@ -133,20 +133,25 @@ sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
     return nBuildId;
 }
 
+OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::data::XDataProvider >& xDataProvider )
+{
+    OUString aResult = rRange;
+    Reference< chart2::data::XRangeXMLConversion > xRangeConversion( xDataProvider, uno::UNO_QUERY );
+    if( xRangeConversion.is())
+        aResult = xRangeConversion->convertRangeFromXML( rRange );
+    return aResult;
+}
+
 Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange( const Reference< chart2::data::XDataSequence >& xSeq, const Reference< chart2::data::XDataProvider >& xDataProvider )
 {
     Reference< chart2::data::XDataSequence > xRet;
     OUString aRange;
-    Reference< chart2::data::XRangeXMLConversion > xRangeConversion( xDataProvider, uno::UNO_QUERY );
-    if( xRangeConversion.is() )
+    if( xSeq.is() && SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) )
     {
-        if( xSeq.is() && SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) )
-        {
-            xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
-                xRangeConversion->convertRangeFromXML( aRange )) );
-            SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
-                Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
-        }
+        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
+            lcl_ConvertRange( aRange, xDataProvider )) );
+        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+            Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
     }
     return xRet;
 }
@@ -383,6 +388,53 @@ Reference< chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence()
                 OUString::createFromAscii("com.sun.star.chart2.data.LabeledDataSequence"),
                 xContext ), uno::UNO_QUERY_THROW );
     return xResult;
+}
+
+Reference< chart2::data::XDataSequence > CreateDataSequence(
+        const OUString & rRange,
+        const Reference< chart2::XChartDocument >& xChartDoc )
+{
+    Reference< chart2::data::XDataSequence > xRet;
+
+    if( !xChartDoc.is() )
+    {
+        DBG_ERROR( "need a chart document" );
+        return xRet;
+    }
+
+    Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
+    if( !xDataProvider.is() )
+    {
+        DBG_ERROR( "need a data provider" );
+        return xRet;
+    }
+
+    try
+    {
+        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
+        SchXMLTools::setXMLRangePropertyAtDataSequence( xRet, rRange );
+    }
+    catch( const lang::IllegalArgumentException & )
+    {
+        DBG_ERROR( "could not create data sequence" );
+    }
+
+    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() )
+    {
+        //#i103911# switch to internal data in case the parent cannot provide the requested data
+        xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
+        xDataProvider = xChartDoc->getDataProvider();
+        try
+        {
+            xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
+            SchXMLTools::setXMLRangePropertyAtDataSequence( xRet, rRange );
+        }
+        catch( const lang::IllegalArgumentException & )
+        {
+            DBG_ERROR( "could not create data sequence" );
+        }
+    }
+    return xRet;
 }
 
 void CreateCategories(
@@ -703,6 +755,29 @@ void setBuildIDAtImportInfo( uno::Reference< frame::XModel > xModel, Reference< 
     ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xModel) );
     if( aGenerator.getLength() )
         SvXMLMetaDocumentContext::setBuildId( aGenerator, xImportInfo );
+}
+
+bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan3_0( xChartModel );
+    if( !bResult )
+    {
+        ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+        if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/3") ) ) != -1 )
+        {
+            if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/300m") ) ) != -1 )
+            {
+                sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
+                if( nBuilId>0 && nBuilId<9491 ) //9491 is build id of dev300m76
+                    bResult= true;
+            }
+            else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/310m") ) ) != -1 )
+                bResult= true;
+            else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/320m") ) ) != -1 )
+                bResult= true;
+        }
+    }
+    return bResult;
 }
 
 bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame::XModel >& xChartModel )

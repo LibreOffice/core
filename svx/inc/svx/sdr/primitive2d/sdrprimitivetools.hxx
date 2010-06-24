@@ -36,7 +36,6 @@
 
 namespace basegfx {
     class BColor;
-    class B2DHomMatrix;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -51,10 +50,6 @@ namespace drawinglayer
 
         // create a 7x7 gluepoint symbol in given colors as BitmapEx
         BitmapEx createDefaultGluepoint_7x7(const basegfx::BColor& rBColorA, const basegfx::BColor& rBColorB);
-
-        // #i99123#
-        Primitive2DReference createFallbackHitTestPrimitive(const basegfx::B2DHomMatrix& rMatrix);
-
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

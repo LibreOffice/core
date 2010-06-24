@@ -35,7 +35,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XControllerBorder.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -43,7 +43,8 @@
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
@@ -67,33 +68,24 @@
 #define ANY                     ::com::sun::star::uno::Any
 #define SEQUENCE                ::com::sun::star::uno::Sequence
 #define XDISPATCH               ::com::sun::star::frame::XDispatch
-#define XDISPATCHPROVIDER       ::com::sun::star::frame::XDispatchProvider
 #define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
 #define XMODEL                  ::com::sun::star::frame::XModel
 #define XFRAME                  ::com::sun::star::frame::XFrame
-#define XCONTROLLER             ::com::sun::star::frame::XController
-#define XCONTROLLERBORDER       ::com::sun::star::frame::XControllerBorder
 #define XEVENTLISTENER          ::com::sun::star::lang::XEventListener
 #define MUTEX                   ::osl::Mutex
 #define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
 #define UNOTYPE                 ::com::sun::star::uno::Type
-#define OWEAKOBJECT             ::cppu::OWeakObject
-#define XTYPEPROVIDER           ::com::sun::star::lang::XTypeProvider
 #define UNOURL                  ::com::sun::star::util::URL
 #define OUSTRING                ::rtl::OUString
-#define XSTATUSINDICATORSUPPLIER ::com::sun::star::task::XStatusIndicatorSupplier
-#define XCONTEXTMENUINTERCEPTION ::com::sun::star::ui::XContextMenuInterception
 #define XCONTEXTMENUINTERCEPTOR ::com::sun::star::ui::XContextMenuInterceptor
-#define XUSERINPUTINTERCEPTION  ::com::sun::star::awt::XUserInputInterception
-#define XDISPATCHINFORMATIONPROVIDER ::com::sun::star::frame::XDispatchInformationProvider
-#define XTITLE                  ::com::sun::star::frame::XTitle
-#define XTITLECHANGEBROADCASTER ::com::sun::star::frame::XTitleChangeBroadcaster
 
 //________________________________________________________________________________________________________
 //  forwards
 //________________________________________________________________________________________________________
 
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
+
+class SfxViewFrame;
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID );
 sal_Bool SupportsCommandGroup( sal_Int16 nCommandGroup );
@@ -103,36 +95,19 @@ sal_Int16 MapCommandGroupToGroupID( sal_Int16 nCommandGroup );
 //  class declarations
 //________________________________________________________________________________________________________
 
-struct IMPL_SfxBaseController_MutexContainer
-{
-    MUTEX m_aMutex ;
-} ;
+typedef ::cppu::WeakImplHelper9 <   ::com::sun::star::frame::XController2
+                                ,   ::com::sun::star::frame::XControllerBorder
+                                ,   ::com::sun::star::frame::XDispatchProvider
+                                ,   ::com::sun::star::task::XStatusIndicatorSupplier
+                                ,   ::com::sun::star::ui::XContextMenuInterception
+                                ,   ::com::sun::star::awt::XUserInputInterception
+                                ,   ::com::sun::star::frame::XDispatchInformationProvider
+                                ,   ::com::sun::star::frame::XTitle
+                                ,   ::com::sun::star::frame::XTitleChangeBroadcaster
+                                >   SfxBaseController_Base;
 
-/**_______________________________________________________________________________________________________
-    @short      -
-
-    @descr      -
-
-    @implements -
-
-    @base       -
-*/
-
-// Forward to impl-baseclass!
-//class IMPL_SfxBaseController ;
-
-class SFX2_DLLPUBLIC SfxBaseController  :   public XTYPEPROVIDER
-                        ,   public XCONTROLLER
-                        ,   public XCONTROLLERBORDER
-                        ,   public XDISPATCHPROVIDER
-                        ,   public XSTATUSINDICATORSUPPLIER
-                        ,   public XCONTEXTMENUINTERCEPTION
-                        ,   public XUSERINPUTINTERCEPTION
-                        ,   public XDISPATCHINFORMATIONPROVIDER
-                        ,   public XTITLE
-                        ,   public XTITLECHANGEBROADCASTER
-                        ,   public IMPL_SfxBaseController_MutexContainer
-                        ,   public OWEAKOBJECT
+class SFX2_DLLPUBLIC SfxBaseController  :public SfxBaseController_Base
+                                        ,public ::cppu::BaseMutex
 {
 //________________________________________________________________________________________________________
 //  public methods
@@ -177,93 +152,14 @@ public:
     SAL_DLLPRIVATE void ReleaseShell_Impl();
     SAL_DLLPRIVATE void BorderWidthsChanged_Impl();
 
-    //____________________________________________________________________________________________________
-    //  XInterface
-    //____________________________________________________________________________________________________
-
-    /**___________________________________________________________________________________________________
-        @short      give answer, if interface is supported
-        @descr      The interfaces are searched by type.
-
-        @seealso    XInterface
-
-        @param      "rType" is the type of searched interface.
-
-        @return     Any     information about found interface
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual ANY SAL_CALL queryInterface( const UNOTYPE& rType ) throw( RUNTIMEEXCEPTION ) ;
-
-    /**___________________________________________________________________________________________________
-        @short      increment refcount
-        @descr      -
-
-        @seealso    XInterface
-        @seealso    release()
-
-        @param      -
-
-        @return     -
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL acquire() throw() ;
-
-    /**___________________________________________________________________________________________________
-        @short      decrement refcount
-        @descr      -
-
-        @seealso    XInterface
-        @seealso    acquire()
-
-        @param      -
-
-        @return     -
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL release() throw() ;
-
-    //____________________________________________________________________________________________________
-    //  XTypeProvider
-    //____________________________________________________________________________________________________
-
-    /**___________________________________________________________________________________________________
-        @short      get information about supported interfaces
-        @descr      -
-
-        @seealso    XTypeProvider
-
-        @param      -
-
-        @return     Sequence of types of all supported interfaces
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual SEQUENCE< UNOTYPE > SAL_CALL getTypes() throw( RUNTIMEEXCEPTION ) ;
-
-    /**___________________________________________________________________________________________________
-        @short      get implementation id
-        @descr      This ID is neccessary for UNO-caching. If there no ID, cache is disabled.
-                    Another way, cache is enabled.
-
-        @seealso    XTypeProvider
-
-        @param      -
-
-        @return     ID as Sequence of byte
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual SEQUENCE< sal_Int8 > SAL_CALL getImplementationId() throw( RUNTIMEEXCEPTION ) ;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    //____________________________________________________________________________________________________
+    //  XController2
+    //____________________________________________________________________________________________________
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCreationArguments() throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XController
@@ -496,22 +392,22 @@ public:
     SAL_DLLPRIVATE BOOL HandleEvent_Impl( NotifyEvent& rEvent );
     SAL_DLLPRIVATE BOOL HasKeyListeners_Impl();
     SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();
+    SAL_DLLPRIVATE void SetCreationArguments_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
 //#endif
+private:
+    enum ConnectSfxFrame
+    {
+        E_CONNECT,
+        E_DISCONNECT,
+        E_RECONNECT
+    };
+    SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect );
+    SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
 
 //________________________________________________________________________________________________________
 //  private variables
 //________________________________________________________________________________________________________
-
-    /** With this method you can set the flag that controlls whether the
-        frame is released together with a controller when the later one is
-        disposed.
-        @param bFlag
-            When passing <true/>, the default value of this flag, then
-            disposing the controller results in releasing the frame.
-            Passing <false/> leaves the frame unaffected.
-    */
-    void FrameIsReleasedWithController (sal_Bool bFlag);
 
 private:
 

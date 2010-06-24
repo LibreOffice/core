@@ -291,8 +291,6 @@ BOOL SvFileObject::LoadFile_Impl()
         aStreamToLoadFrom.m_xInputStreamToLoadFrom,
         aStreamToLoadFrom.m_bIsReadOnly);
     // setStreamToLoadFrom(0,0);
-    // Keinen Eintrag im Roter Button Menu
-    xMed->SetDontCreateCancellable();
     if( sReferer.Len() )
         xMed->SetReferer( sReferer );
 
@@ -682,9 +680,6 @@ BOOL SvFileObject::IsDataComplete() const
 
 void SvFileObject::CancelTransfers()
 {
-    if( xMed.Is() )
-        xMed->CancelTransfers();
-
     // und aus dem Cache austragen, wenn man mitten im Laden ist
     if( !bDataReady )
     {
@@ -693,11 +688,6 @@ void SvFileObject::CancelTransfers()
         bDataReady = bLoadError = bWaitForData = TRUE;
         SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_ABORT );
     }
-}
-
-
-void SvFileObject::SetTransferPriority( USHORT )
-{
 }
 
 

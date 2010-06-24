@@ -120,6 +120,15 @@ void XMLTextNumRuleInfo::Set(
     }
     // <--
 
+    // --> OD 2010-01-13 #b6912256#
+    if ( mnListLevel < 0 )
+    {
+        DBG_ASSERT( false,
+                    "<XMLTextNumRuleInfo::Set(..)> - unexpected numbering level" );
+        Reset();
+        return;
+    }
+
     // --> OD 2006-09-27 #i69627#
     bool bSuppressListStyle( false );
     if ( mxNumRules.is() )

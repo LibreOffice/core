@@ -222,7 +222,11 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
 
     if ( !m_pCache )
     {
+#ifdef __MINGW32__
+        if ( FAILED( PSCreateMemoryPropertyStore( IID_IPropertyStoreCache, reinterpret_cast<void**>(&m_pCache) ) ) )
+#else
         if ( FAILED( PSCreateMemoryPropertyStore( IID_PPV_ARGS( &m_pCache ) ) ) )
+#endif
             OutputDebugStringFormat( "CPropertyHdl::Initialize: PSCreateMemoryPropertyStore failed" );
 
         zlib_filefunc_def z_filefunc;

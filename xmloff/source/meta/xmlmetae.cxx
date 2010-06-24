@@ -475,7 +475,9 @@ SvXMLMetaExport::startElement(const ::rtl::OUString & i_rName,
     }
 
     // finally, start the element
-    mrExport.StartElement(i_rName, sal_True); //FIXME:whitespace?
+    // #i107240# no whitespace here, because the DOM may already contain
+    // whitespace, which is not cleared when loading and thus accumulates.
+    mrExport.StartElement(i_rName, (m_level > 1) ? sal_False : sal_True);
     ++m_level;
 }
 

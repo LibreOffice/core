@@ -39,7 +39,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/cancel.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
@@ -300,104 +299,5 @@ void SfxURLToolBoxControl_Impl::StateChanged
                 pURLBox->SetText( aURL.GetURLNoPass() );
         }
     }
-}
-
-//***************************************************************************
-// SfxCancelToolBoxControl_Impl
-//***************************************************************************
-
-SFX_IMPL_TOOLBOX_CONTROL(SfxCancelToolBoxControl_Impl,SfxBoolItem)
-
-//***************************************************************************
-
-SfxCancelToolBoxControl_Impl::SfxCancelToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox ) :
-    SfxToolBoxControl( nSlotId, nId, rBox )
-{
-}
-
-//***************************************************************************
-
-SfxPopupWindowType SfxCancelToolBoxControl_Impl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONTIMEOUT;
-}
-
-//***************************************************************************
-
-SfxPopupWindow* SfxCancelToolBoxControl_Impl::CreatePopupWindow()
-{
-    PopupMenu aMenu;
-    BOOL bExecute = FALSE, bSeparator = FALSE;
-    USHORT nIndex = 1;
-    for ( SfxCancelManager *pCancelMgr = SfxViewFrame::Current()->GetTopViewFrame()->GetCancelManager();
-          pCancelMgr;
-          pCancelMgr = pCancelMgr->GetParent() )
-    {
-        for ( USHORT n=0; n<pCancelMgr->GetCancellableCount(); ++n )
-        {
-            if ( !n && bSeparator )
-            {
-                aMenu.InsertSeparator();
-                bSeparator = FALSE;
-            }
-            String aItemText = pCancelMgr->GetCancellable(n)->GetTitle();
-            if ( aItemText.Len() > 50 )
-            {
-                aItemText.Erase( 48 );
-                aItemText += DEFINE_CONST_UNICODE("...");
-            }
-            aMenu.InsertItem( nIndex++, aItemText );
-            bExecute = TRUE;
-            bSeparator = TRUE;
-        }
-    }
-
-    ToolBox& rToolBox = GetToolBox();
-    USHORT nId = bExecute ? aMenu.Execute( &rToolBox, rToolBox.GetPointerPosPixel() ) : 0;
-    GetToolBox().EndSelection();
-//  ClearCache();
-//  UpdateSlot();
-    if ( nId )
-    {
-        String aSearchText = aMenu.GetItemText(nId);
-        for ( SfxCancelManager *pCancelMgr = SfxViewFrame::Current()->GetTopViewFrame()->GetCancelManager();
-              pCancelMgr;
-              pCancelMgr = pCancelMgr->GetParent() )
-        {
-            for ( USHORT n = 0; n < pCancelMgr->GetCancellableCount(); ++n )
-            {
-                SfxCancellable *pCancel = pCancelMgr->GetCancellable(n);
-                String aItemText = pCancel->GetTitle();
-                if ( aItemText.Len() > 50 )
-                {
-                    aItemText.Erase( 48 );
-                    aItemText += DEFINE_CONST_UNICODE("...");
-                }
-
-                if ( aItemText == aSearchText )
-                {
-                    pCancel->Cancel();
-                    return 0;
-                }
-            }
-        }
-
-    }
-
-    return 0;
-}
-
-//***************************************************************************
-
-void SfxCancelToolBoxControl_Impl::StateChanged
-(
-    USHORT              nSID,
-    SfxItemState        eState,
-    const SfxPoolItem*  pState
-)
-{
-    SfxVoidItem aVoidItem( nSID );
-    //SfxToolBoxControl::StateChanged( nSID, eState, pState ? &aVoidItem : 0 );
-    SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
 

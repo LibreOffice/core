@@ -98,7 +98,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pTopFrames( new SfxFrameArr_Impl ),
         pInitLinkList(0),
         pMatcher( 0 ),
-        pCancelMgr( 0 ),
         pLabelResMgr( 0 ),
         pAppDispatch(NULL),
         pTemplates( 0 ),
@@ -148,7 +147,6 @@ SfxAppData_Impl::~SfxAppData_Impl()
 {
     DeInitDDE();
     delete pTopFrames;
-    delete pCancelMgr;
     delete pSecureURLs;
     delete pBasicManager;
 

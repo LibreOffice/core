@@ -70,7 +70,7 @@
 #include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
-
+#include "boost/optional.hpp"
 #include <vector>
 #include <stdio.h>
 
@@ -287,7 +287,7 @@ BackendImpl::BackendImpl(
                                    m_xBundleTypeInfo->getShortDescription(),
                                    RID_IMG_DEF_PACKAGE_BUNDLE,
                                    RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
-      m_typeInfos( 2 )
+    m_typeInfos(2)
 {
     m_typeInfos[ 0 ] = m_xBundleTypeInfo;
     m_typeInfos[ 1 ] = m_xLegacyBundleTypeInfo;
@@ -342,17 +342,32 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
-            const OUString title( ucbContent.getPropertyValue(
-                                      StrTitle::get() ).get<OUString>() );
-            if (title.endsWithIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(".oxt") ) ||
-                title.endsWithIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
-                mediaType = OUSTR("application/vnd.sun.star.package-bundle");
-            else if (title.endsWithIgnoreAsciiCaseAsciiL(
-                         RTL_CONSTASCII_STRINGPARAM(".zip") ))
-                mediaType =
-                    OUSTR("application/vnd.sun.star.legacy-package-bundle");
+            if (ucbContent.isFolder())
+            {
+                //Every .oxt, uno.pkg file must contain a META-INF folder
+                ::ucbhelper::Content metaInfContent;
+                if (create_ucb_content(
+                    &metaInfContent, makeURL( url, OUSTR("META-INF/manifest.xml") ),
+                    xCmdEnv, false /* no throw */ ))
+                {
+                     mediaType = OUSTR("application/vnd.sun.star.package-bundle");
+                }
+                //No support of legacy bundles, because every folder could be one.
+            }
+            else
+            {
+                const OUString title( ucbContent.getPropertyValue(
+                                          StrTitle::get() ).get<OUString>() );
+                if (title.endsWithIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM(".oxt") ) ||
+                    title.endsWithIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
+                    mediaType = OUSTR("application/vnd.sun.star.package-bundle");
+                else if (title.endsWithIgnoreAsciiCaseAsciiL(
+                             RTL_CONSTASCII_STRINGPARAM(".zip") ))
+                    mediaType =
+                        OUSTR("application/vnd.sun.star.legacy-package-bundle");
+            }
         }
         if (mediaType.getLength() == 0)
             throw lang::IllegalArgumentException(
@@ -583,21 +598,12 @@ bool BackendImpl::PackageImpl::checkDependencies(
 {
     try
     {
-        css::uno::Reference<css::xml::dom::XNode> xRoot = desc.getRootElement();
-        css::uno::Reference<css::xml::xpath::XXPathAPI> xPath =
-            getDescriptionInfoset().getXpath();
-
-        css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic;
-        try {
-            nodeSimpleLic = xPath->selectSingleNode(xRoot,
-            OUSTR("/desc:description/desc:registration/desc:simple-license"));
-        } catch (css::xml::xpath::XPathException &) {
-            // ignore
-        }
-
-        if (!nodeSimpleLic.is())
+        DescriptionInfoset info = getDescriptionInfoset();
+        ::boost::optional<SimpleLicenseAttributes> simplLicAttr
+            = info.getSimpleLicenseAttributes();
+       if (! simplLicAttr)
             return true;
-        OUString sLic = getDescriptionInfoset().getLocalizedLicenseURL();
+        OUString sLic = info.getLocalizedLicenseURL();
         //If we do not get a localized licence then there is an error in the description.xml
         //This should be handled by using a validating parser. Therefore we assume that no
         //license is available.
@@ -606,23 +612,20 @@ bool BackendImpl::PackageImpl::checkDependencies(
                 OUSTR("Could not obtain path to license. Possible error in description.xml"), 0, Any());
         OUString sHref = desc.getExtensionRootUrl() + OUSTR("/") + sLic;
            OUString sLicense = getTextFromURL(xCmdEnv, sHref);
-        //determine who has to agree to the license
-        css::uno::Reference<css::xml::xpath::XXPathObject> nodeAttribWho3 =
-            xPath->eval(nodeSimpleLic,
-            OUSTR("@accept-by"));
-        OUString sAccept = nodeAttribWho3->getString().trim();
+        ////determine who has to agree to the license
         //check correct value for attribute
-        if ( ! (sAccept.equals(OUSTR("user")) || sAccept.equals(OUSTR("admin"))))
+        if ( ! (simplLicAttr->acceptBy.equals(OUSTR("user")) || simplLicAttr->acceptBy.equals(OUSTR("admin"))))
             throw css::deployment::DeploymentException(
                 OUSTR("Could not obtain attribute simple-lincense@accept-by or it has no valid value"), 0, Any());
 
         //If if @accept-by="user" then every user needs to accept the license before it can be installed.
-        //Therefore we must prevent the installation as shared extension.
+        //Therefore we must prevent the installation as shared extension unless suppress-if-required="true"
         OSL_ASSERT(aContextName.getLength());
-        if (sAccept.equals(OUSTR("user")) && aContextName.equals(OUSTR("shared")))
+        if (simplLicAttr->acceptBy.equals(OUSTR("user")) && aContextName.equals(OUSTR("shared")))
         {
-        css::deployment::LicenseIndividualAgreementException exc =
-            css::deployment::LicenseIndividualAgreementException(OUString(), 0, m_name);
+            css::deployment::LicenseIndividualAgreementException
+                exc = css::deployment::LicenseIndividualAgreementException(
+                OUString(), 0, m_name, simplLicAttr->suppressIfRequired);
 
             bool approve = false;
             bool abort = false;
@@ -632,32 +635,24 @@ bool BackendImpl::PackageImpl::checkDependencies(
                     OUSTR("Could not interact with user."), 0, Any());
                if (abort == true)
                 return false;
-            //We should always prevent installation
-            OSL_ASSERT(0);
-        }
 
-        //determine optional attribute simple-license@suppressOnUpdate
-        css::uno::Reference<css::xml::dom::XElement> elemSimpleLic(nodeSimpleLic, css::uno::UNO_QUERY_THROW);
-        sal_Bool bSuppress = sal_False;
-        if (elemSimpleLic->hasAttribute(OUSTR("suppress-on-update")))
-        {
-            if (elemSimpleLic->getAttribute(OUSTR("suppress-on-update")).equals(OUSTR("true")))
-                bSuppress = sal_True;
+            //If the unopkg --suppress-license was used and simplLicAttr->suppressIfRequired == true,
+            //then the user implicitely accepts the license
         }
 
         //Only use interaction if there is no version of this extension already installed
         //and the suppress-on-update flag is not set for the new extension
-        // bInstalled | bSuppress | show license
+        // bInstalled | bSuppressOnUpdate | show license
         //----------------------------------------
-        //      0     |      0    |     1
-        //      0     |      1    |     1
-        //      1     |      0    |     1
-        //      1     |      1    |     0
+        //      0     |      0            |     1
+        //      0     |      1            |     1
+        //      1     |      0            |     1
+        //      1     |      1            |     0
 
-        if ( !(bInstalled && bSuppress))
+        if ( !(bInstalled && simplLicAttr->suppressOnUpdate))
         {
-            css::deployment::LicenseException licExc =
-                css::deployment::LicenseException(OUString(), 0, m_name, sLicense);
+            css::deployment::LicenseException licExc(
+                OUString(), 0, m_name, sLicense, simplLicAttr->suppressIfRequired);
             bool approve = false;
             bool abort = false;
             if (! interactContinuation(
@@ -1323,7 +1318,7 @@ void BackendImpl::PackageImpl::scanBundle(
     {
         OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
         return;
-}
+    }
 
 
     const lang::Locale officeLocale = getOfficeLocale();

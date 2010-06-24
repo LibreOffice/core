@@ -42,8 +42,9 @@
 #include "inettbc.hxx"
 #include "stbitem.hxx"
 #include <sfx2/navigat.hxx>
+#include <sfx2/taskpane.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "partwnd.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "recfloat.hxx"
@@ -59,7 +60,6 @@ void SfxApplication::Registrations_Impl()
     SfxApplication::RegisterInterface();
     SfxModule::RegisterInterface();
     SfxViewFrame::RegisterInterface();
-    SfxTopViewFrame::RegisterInterface();
     SfxObjectShell::RegisterInterface();
     SfxViewShell::RegisterInterface();
 
@@ -73,7 +73,6 @@ void SfxApplication::Registrations_Impl()
     // Controller
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
-    SfxCancelToolBoxControl_Impl::RegisterControl(SID_BROWSE_STOP);
     SfxAppToolBoxControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
     SfxAppToolBoxControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
 };

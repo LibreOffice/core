@@ -34,7 +34,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include "vbacommandbars.hxx"
-#include <vbahelper/msvbahelper.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 
 // start basic includes
 #include <basic/sbx.hxx>

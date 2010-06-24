@@ -61,10 +61,6 @@ interface XApplication : com::sun::star::uno::XInterface
     [attribute, readonly] XWorksheet ActiveSheet;
     [attribute, readonly] ooo::vba::XAssistant Assistant;
     [attribute] long Calculation;
-    //#TODO #FIXME this is more of a placeholder, will return
-    // the value of activeworkbook, in xl 'ThisWorkbook' should return the
-    // workbook in which the 'calling' macro is running. Should be possible
-    // to determine this
     [attribute, readonly] XWorkbook ThisWorkbook;
     [attribute, readonly] string Name;
     [attribute] boolean DisplayAlerts;

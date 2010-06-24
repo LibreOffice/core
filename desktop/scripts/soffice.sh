@@ -114,10 +114,6 @@ if [ -f /etc/adabasrc ]; then
   . /etc/adabasrc
 fi
 
-# Set PATH so that crash_report is found:
-PATH=$sd_prog${PATH+:$PATH}
-export PATH
-
 # execute soffice binary
 "$sd_prog/$sd_binary" "$@" &
 trap 'kill -9 $!' TERM

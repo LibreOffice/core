@@ -31,6 +31,7 @@
 #include "rtl/ustring.hxx"
 
 #include "vcl/button.hxx"
+#include "vcl/menubtn.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
@@ -77,6 +78,12 @@ namespace framework
 
     class BackingWindow : public Window
     {
+        struct LoadRecentFile
+        {
+            rtl::OUString                                                             aTargetURL;
+            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >     aArgSeq;
+        };
+
         com::sun::star::uno::Reference<com::sun::star::frame::XDesktop>                  mxDesktop;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
         com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
@@ -86,24 +93,14 @@ namespace framework
         Size                            maWelcomeSize;
         FixedText                       maProduct;
         Size                            maProductSize;
-        FixedText                       maCreateText;
-        Size                            maCreateSize;
-        FixedText                       maWriterText;
         ImageButton                     maWriterButton;
-        FixedText                       maCalcText;
         ImageButton                     maCalcButton;
-        FixedText                       maImpressText;
         ImageButton                     maImpressButton;
-        FixedText                       maDrawText;
+        MenuButton                      maOpenButton;
         ImageButton                     maDrawButton;
-        FixedText                       maDBText;
         ImageButton                     maDBButton;
-        FixedText                       maMathText;
         ImageButton                     maMathButton;
-        FixedText                       maTemplateText;
         ImageButton                     maTemplateButton;
-        FixedText                       maOpenText;
-        ImageButton                     maOpenButton;
 
         DecoToolBox                     maToolbox;
 
@@ -121,16 +118,21 @@ namespace framework
         Rectangle                       maControlRect;
 
         long                            mnColumnWidth[2];
+        long                            mnTextColumnWidth[2];
         Color                           maLabelTextColor;
         Color                           maWelcomeTextColor;
 
         Size                            maButtonImageSize;
 
         bool                            mbInitControls;
+        sal_Int32                       mnLayoutStyle;
         svt::AcceleratorExecute*        mpAccExec;
+        long                            mnBtnPos;
+        long                            mnBtnTop;
 
+        PopupMenu*                      mpRecentMenu;
+        std::vector< LoadRecentFile >   maRecentFiles;
 
-        static const long nBtnPos = 240;
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;
         static const int nItemId_Info = 3;
@@ -140,14 +142,14 @@ namespace framework
         static const int nShadowRight = 45;
         static const int nShadowBottom = 50;
 
-        void loadImage( const ResId& i_rId, ImageButton& i_rButton );
+        void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
-        void layoutButtonAndText( const char* i_pURL, int nColumn, const std::set<rtl::OUString>& i_rURLS,
-                                  SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
-                                  ImageButton& i_rBtn, FixedText& i_rText,
-                                  MnemonicGenerator& i_rMnemonicGen,
-                                  const String& i_rStr = String()
-                                  );
+        void layoutButton( const char* i_pURL, int nColumn, const std::set<rtl::OUString>& i_rURLS,
+                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
+                           PushButton& i_rBtn,
+                           MnemonicGenerator& i_rMnemonicGen,
+                           const String& i_rStr = String()
+                           );
 
         void dispatchURL( const rtl::OUString& i_rURL,
                           const rtl::OUString& i_rTarget = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
@@ -156,10 +158,12 @@ namespace framework
                           );
 
         DECL_LINK( ClickHdl, Button* );
+        DECL_LINK( SelectHdl, Button* );
         DECL_LINK( ToolboxHdl, void* );
 
         void initControls();
         void initBackground();
+        void prepareRecentFileMenu();
         public:
         BackingWindow( Window* pParent );
         ~BackingWindow();
@@ -168,9 +172,7 @@ namespace framework
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-        virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
-        virtual Window*     GetParentLabeledBy( const Window* pLabeled ) const;
-    virtual void        GetFocus();
+        virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };

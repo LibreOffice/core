@@ -18,6 +18,7 @@
     item String     SfxFrameItem;           //! Dummy
     item String     SfxObjectShellItem      //! Dummy
     item String     SfxUsrAnyItem           //! Dummy
+    item String     SfxUnoFrameItem         //! Dummy
 
     struct Point
     {

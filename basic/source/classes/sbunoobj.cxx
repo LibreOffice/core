@@ -112,9 +112,9 @@ typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 
 
 // Identifier fuer die dbg_-Properies als Strings anlegen
-static String ID_DBG_SUPPORTEDINTERFACES( RTL_CONSTASCII_USTRINGPARAM("Dbg_SupportedInterfaces") );
-static String ID_DBG_PROPERTIES( RTL_CONSTASCII_USTRINGPARAM("Dbg_Properties") );
-static String ID_DBG_METHODS( RTL_CONSTASCII_USTRINGPARAM("Dbg_Methods") );
+static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
+static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
+static char const ID_DBG_METHODS[] = "Dbg_Methods";
 
 static ::rtl::OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
 static ::rtl::OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("ooo.vba") );
@@ -139,16 +139,19 @@ bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, String& sDfltProp )
 SbxVariable* getDefaultProp( SbxVariable* pRef )
 {
     SbxVariable* pDefaultProp = NULL;
-    SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pRef);
-    if ( !pObj )
+    if ( pRef->GetType() == SbxOBJECT )
     {
-        SbxBase* pObjVarObj = pRef->GetObject();
-        pObj = PTR_CAST(SbxObject,pObjVarObj);
-    }
-    if ( pObj && pObj->ISA(SbUnoObject) )
-    {
-        SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj);
-        pDefaultProp = pUnoObj->GetDfltProperty();
+          SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pRef);
+        if ( !pObj )
+        {
+            SbxBase* pObjVarObj = pRef->GetObject();
+            pObj = PTR_CAST(SbxObject,pObjVarObj);
+        }
+        if ( pObj && pObj->ISA(SbUnoObject) )
+        {
+            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj);
+            pDefaultProp = pUnoObj->GetDfltProperty();
+        }
     }
     return pDefaultProp;
 }
@@ -564,7 +567,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     }
     return eRetType;
 }
-void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
+
 static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, sal_Bool bIsZeroIndex, Type* pType = NULL )
 {
     Type aType = aValue.getValueType();
@@ -1601,6 +1604,23 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
                 break;
             }
             ::rtl::OUString sClassName = xClass->getName();
+            if ( sClassName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.XAutomationObject" ) ) ) )
+            {
+                // there is a hack in the extensions/source/ole/oleobj.cxx  to return the typename of the automation object, lets check if it
+                // matches
+                Reference< XInvocation > xInv( aToInspectObj, UNO_QUERY );
+                if ( xInv.is() )
+                {
+                    rtl::OUString sTypeName;
+                    xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sTypeName;
+                    if ( sTypeName.getLength() == 0 || sTypeName.equals(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") ) ) )
+                        // can't check type, leave it pass
+                        result = true;
+                    else
+                        result = sTypeName.equals( aClass );
+                }
+                break; // finished checking automation object
+            }
             OSL_TRACE("Checking if object implements %s",
                 OUStringToOString( defaultNameSpace + aClass,
                     RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1630,7 +1650,7 @@ String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
     String aRet;
     if( eType != TypeClass_INTERFACE )
     {
-        aRet += ID_DBG_SUPPORTEDINTERFACES;
+        aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM(ID_DBG_SUPPORTEDINTERFACES) );
         aRet.AppendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
@@ -2653,15 +2673,15 @@ void SbUnoObject::implCreateDbgProperties( void )
     Property aProp;
 
     // Id == -1: Implementierte Interfaces gemaess ClassProvider anzeigen
-    SbxVariableRef xVarRef = new SbUnoProperty( ID_DBG_SUPPORTEDINTERFACES, SbxSTRING, aProp, -1, false );
+    SbxVariableRef xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_SUPPORTEDINTERFACES)), SbxSTRING, aProp, -1, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -2: Properties ausgeben
-    xVarRef = new SbUnoProperty( ID_DBG_PROPERTIES, SbxSTRING, aProp, -2, false );
+    xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_PROPERTIES)), SbxSTRING, aProp, -2, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -3: Methoden ausgeben
-    xVarRef = new SbUnoProperty( ID_DBG_METHODS, SbxSTRING, aProp, -3, false );
+    xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_METHODS)), SbxSTRING, aProp, -3, false );
     QuickInsert( (SbxVariable*)xVarRef );
 }
 

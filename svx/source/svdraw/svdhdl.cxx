@@ -281,13 +281,13 @@ SdrHdlBitmapSet& getSimpleSet()
 
 SdrHdlBitmapSet& getModernSet()
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS));
     return *aModernSet.get();
 }
 
 SdrHdlBitmapSet& getHighContrastSet()
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS));
     return *aHighContrastSet.get();
 }
 
@@ -306,7 +306,8 @@ SdrHdl::SdrHdl():
     bSelect(FALSE),
     b1PixMore(FALSE),
     bPlusHdl(FALSE),
-    mbMoveOutside(false)
+    mbMoveOutside(false),
+    mbMouseOver(false)
 {
 }
 
@@ -324,7 +325,8 @@ SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
     bSelect(FALSE),
     b1PixMore(FALSE),
     bPlusHdl(FALSE),
-    mbMoveOutside(false)
+    mbMoveOutside(false),
+    mbMouseOver(false)
 {
 }
 
@@ -944,6 +946,19 @@ BOOL SdrHdl::IsFocusHdl() const
             return FALSE;
         }
     }
+}
+
+void SdrHdl::onMouseEnter(const MouseEvent& /*rMEvt*/)
+{
+}
+
+void SdrHdl::onMouseLeave()
+{
+}
+
+bool SdrHdl::isMouseOver() const
+{
+    return mbMouseOver;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

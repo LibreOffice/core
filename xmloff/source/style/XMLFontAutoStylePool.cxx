@@ -27,17 +27,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <tools/debug.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <tools/fontenum.hxx>
+
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
-#endif
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

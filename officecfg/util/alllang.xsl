@@ -100,7 +100,7 @@
 		<xsl:if test="@xml:lang=$locale and not(@install:module)">
 			<xsl:copy>
 				<xsl:apply-templates select = "@*" mode="locale"/>
-				<xsl:value-of select="."/>
+				<xsl:copy-of select="node()"/>
 			</xsl:copy>
 		</xsl:if>
 	</xsl:template>
@@ -275,7 +275,7 @@
             <xsl:otherwise>
                 <xsl:copy>
                     <xsl:apply-templates select = "@*"/>
-                    <xsl:value-of select="."/>
+                    <xsl:copy-of select="node()"/>
                 </xsl:copy>
             </xsl:otherwise>
 		</xsl:choose>
@@ -285,7 +285,7 @@
 		<xsl:if test="@xml:lang=$fallback-locale and not(@install:module)">
             <xsl:copy>
                 <xsl:apply-templates select = "@*"/>
-                <xsl:value-of select="."/>
+                <xsl:copy-of select="node()"/>
             </xsl:copy>
 		</xsl:if>
 	</xsl:template>

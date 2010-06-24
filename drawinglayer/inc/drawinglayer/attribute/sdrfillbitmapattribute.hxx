@@ -28,20 +28,22 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 
-#include <vcl/bitmap.hxx>
-#include <basegfx/vector/b2dvector.hxx>
+#include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
-class SfxItemSet;
 
-namespace drawinglayer { namespace attribute {
-    class FillBitmapAttribute;
-}}
+class Bitmap;
 
 namespace basegfx {
     class B2DRange;
+    class B2DVector;
 }
+
+namespace drawinglayer { namespace attribute {
+    class FillBitmapAttribute;
+    class ImpSdrFillBitmapAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -51,27 +53,42 @@ namespace drawinglayer
     {
         class SdrFillBitmapAttribute
         {
-            Bitmap                                      maBitmap;
-            basegfx::B2DVector                      maSize;
-            basegfx::B2DVector                      maOffset;
-            basegfx::B2DVector                      maOffsetPosition;
-            basegfx::B2DVector                      maRectPoint;
-
-            // bitfield
-            unsigned                                    mbTiling : 1;
-            unsigned                                    mbStretch : 1;
-            unsigned                                    mbLogSize : 1;
+        private:
+            ImpSdrFillBitmapAttribute*          mpSdrFillBitmapAttribute;
 
         public:
+            /// constructors/assignmentoperator/destructor
             SdrFillBitmapAttribute(
-                const Bitmap& rBitmap, const basegfx::B2DVector& rSize, const basegfx::B2DVector& rOffset,
-                const basegfx::B2DVector& rOffsetPosition, const basegfx::B2DVector& rRectPoint,
-                bool bTiling, bool bStretch, bool bLogSize);
+                const Bitmap& rBitmap,
+                const basegfx::B2DVector& rSize,
+                const basegfx::B2DVector& rOffset,
+                const basegfx::B2DVector& rOffsetPosition,
+                const basegfx::B2DVector& rRectPoint,
+                bool bTiling,
+                bool bStretch,
+                bool bLogSize);
+            SdrFillBitmapAttribute();
+            SdrFillBitmapAttribute(const SdrFillBitmapAttribute& rCandidate);
+            SdrFillBitmapAttribute& operator=(const SdrFillBitmapAttribute& rCandidate);
+            ~SdrFillBitmapAttribute();
+
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
+
+            // compare operator
             bool operator==(const SdrFillBitmapAttribute& rCandidate) const;
 
-            // data access
-            const Bitmap& getBitmap() const { return maBitmap; }
-            bool getTiling() const { return mbTiling; }
+            // data read access
+            const Bitmap& getBitmap() const;
+            const basegfx::B2DVector& getSize() const;
+            const basegfx::B2DVector& getOffset() const;
+            const basegfx::B2DVector& getOffsetPosition() const;
+            const basegfx::B2DVector& getRectPoint() const;
+            bool getTiling() const;
+            bool getStretch() const;
+            bool getLogSize() const;
+
+            // FillBitmapAttribute generator
             FillBitmapAttribute getFillBitmapAttribute(const basegfx::B2DRange& rRange) const;
         };
     } // end of namespace attribute

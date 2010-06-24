@@ -700,7 +700,10 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
         for ( i = 0; i < nCount; i++ )
         {
             if ( seqAdjustmentValues[ i ].State != com::sun::star::beans::PropertyState_DIRECT_VALUE )
+            {
                 seqAdjustmentValues[ i ].Value <<= pDefData[ i ];
+                seqAdjustmentValues[ i ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+            }
         }
     }
     aPropVal.Name = sAdjustmentValues;
@@ -2075,7 +2078,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     sal_Int32 nXDiff = aBoundRect.Left() - aRect.Left();
                     sal_Int32 nYDiff = aBoundRect.Top() - aRect.Top();
 
-                    if (nShearWink&&(bMirroredX&&!bMirroredY)||(bMirroredY&&!bMirroredX))
+                    if (nShearWink&&((bMirroredX&&!bMirroredY)||(bMirroredY&&!bMirroredX)))
                     {
                         nShearWink = -nShearWink;
                         fTan = -fTan;

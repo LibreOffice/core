@@ -453,7 +453,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
 
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
     ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
-    Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+    Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
     pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? BOOKMARK_NEWMENU : BOOKMARK_WIZARDMENU );
     if( pMenu )
     {

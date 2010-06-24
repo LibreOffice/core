@@ -116,7 +116,7 @@ APP7DEPN=verinfo.rc
 APP7VERINFO=verinfo.rc
 APP7NOSAL=TRUE
 APP7LINKRES=$(MISC)$/$(TARGET)7.res
-APP7ICON=$(SOLARRESDIR)$/icons/ooo3_html_doc.ico
+APP7ICON=$(SOLARRESDIR)$/icons/ooo3_writer_app.ico
 APP7OBJS = \
         $(OBJ)$/launcher.obj\
        $(OBJ)$/sweb.obj

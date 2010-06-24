@@ -171,6 +171,11 @@ XubString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, US
     return rEditEngine.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
+void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos )
+{
+    rEditEngine.FieldClicked( rField, nPara, nPos );
+}
+
 USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich )
 {
     EECharAttribArray aAttribs;

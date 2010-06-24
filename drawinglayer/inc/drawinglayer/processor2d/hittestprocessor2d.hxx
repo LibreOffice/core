@@ -43,29 +43,36 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        /** HitTestProcessor2D class
+
+            This processor implements a HitTest with the feeded primitives,
+            given tolerance and extras
+         */
         class HitTestProcessor2D : public BaseProcessor2D
         {
         private:
-            // discrete HitTest position
+            /// discrete HitTest position
             basegfx::B2DPoint           maDiscreteHitPosition;
 
-            // discrete HitTolerance
+            /// discrete HitTolerance
             double                      mfDiscreteHitTolerance;
 
-            // bitfield
+            /// bitfield
             unsigned                    mbHit : 1;
             unsigned                    mbHitToleranceUsed : 1;
 
-            // this flag decides if primitives of type HitTestPrimitive2D
-            // will be taken into account for HitTesting or not. Those primitives
-            // are created for objects which are else completely invisible and normally
-            // their content exists of hairline primitives describing the object's contour
-            unsigned                    mbUseHitTestPrimitiveContent : 1;
+            /*  this flag decides if primitives which are embedded to an
+                UnifiedTransparencePrimitive2D and are invisible will be taken into account for
+                HitTesting or not. Those primitives are created for objects which are else
+                completely invisible and normally their content exists of hairline
+                primitives describing the object's contour
+             */
+            unsigned                    mbUseInvisiblePrimitiveContent : 1;
 
-            // flag to concentraze on text hits only
+            /// flag to concentraze on text hits only
             unsigned                    mbHitTextOnly : 1;
 
-            // tooling methods
+            /// tooling methods
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
             bool checkHairlineHitWithTolerance(
                 const basegfx::B2DPolygon& rPolygon,
@@ -83,18 +90,18 @@ namespace drawinglayer
                 bool bHitTextOnly);
             virtual ~HitTestProcessor2D();
 
-            // data write access
-            void setUseHitTestPrimitiveContent(bool bNew)
+            /// data write access
+            void setUseInvisiblePrimitiveContent(bool bNew)
             {
-                if((bool)mbUseHitTestPrimitiveContent != bNew) mbUseHitTestPrimitiveContent = bNew;
+                if((bool)mbUseInvisiblePrimitiveContent != bNew) mbUseInvisiblePrimitiveContent = bNew;
             }
 
-            // data read access
+            /// data read access
             const basegfx::B2DPoint& getDiscreteHitPosition() const { return maDiscreteHitPosition; }
             double getDiscreteHitTolerance() const { return mfDiscreteHitTolerance; }
             bool getHit() const { return mbHit; }
             bool getHitToleranceUsed() const { return mbHitToleranceUsed; }
-            bool getUseHitTestPrimitiveContent() const { return mbUseHitTestPrimitiveContent;}
+            bool getUseInvisiblePrimitiveContent() const { return mbUseInvisiblePrimitiveContent;}
             bool getHitTextOnly() const { return mbHitTextOnly; }
         };
     } // end of namespace processor2d

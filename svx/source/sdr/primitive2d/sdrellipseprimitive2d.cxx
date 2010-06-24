@@ -32,10 +32,9 @@
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -55,52 +54,73 @@ namespace drawinglayer
             // Do use createPolygonFromUnitCircle, but let create from first quadrant to mimic old geometry creation.
             // This is needed to have the same look when stroke is used since the polygon start point defines the
             // stroke start, too.
-            ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromUnitCircle(1));
+            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromUnitCircle(1));
 
             // scale and move UnitEllipse to UnitObject (-1,-1 1,1) -> (0,0 1,1)
-            const basegfx::B2DHomMatrix aUnitCorrectionMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
+            const basegfx::B2DHomMatrix aUnitCorrectionMatrix(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
 
             // apply to the geometry
             aUnitOutline.transform(aUnitCorrectionMatrix);
 
             // add fill
-            if(getSdrLFSTAttribute().getFill())
+            if(!getSdrLFSTAttribute().getFill().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getFill(),
+                        getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
-            if(getSdrLFSTAttribute().getLine())
+            if(getSdrLFSTAttribute().getLine().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                // create invisible line for HitTest/BoundRect
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform()));
             }
             else
             {
-                // if initially no line is defined, create one for HitTest and BoundRect
-                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
-                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
-                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
-
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolygonLinePrimitive(
+                        aUnitOutline,
+                        getTransform(),
+                        getSdrLFSTAttribute().getLine(),
+                        attribute::SdrLineStartEndAttribute()));
             }
 
             // add text
-            if(getSdrLFSTAttribute().getText())
+            if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getText(),
+                        getSdrLFSTAttribute().getLine(),
+                        false,
+                        false,
+                        false));
             }
 
             // add shadow
-            if(getSdrLFSTAttribute().getShadow())
+            if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
+                aRetval = createEmbeddedShadowPrimitive(
+                    aRetval,
+                    getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;
         }
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
-            const ::basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
         :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
@@ -138,7 +158,7 @@ namespace drawinglayer
             Primitive2DSequence aRetval;
 
             // create unit outline polygon
-            ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromUnitEllipseSegment(mfStartAngle, mfEndAngle));
+            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromUnitEllipseSegment(mfStartAngle, mfEndAngle));
 
             if(mbCloseSegment)
             {
@@ -146,57 +166,77 @@ namespace drawinglayer
                 {
                     // for compatibility, insert the center point at polygon start to get the same
                     // line stroking pattern as the old painting mechanisms.
-                    aUnitOutline.insert(0L, ::basegfx::B2DPoint(0.0, 0.0));
+                    aUnitOutline.insert(0L, basegfx::B2DPoint(0.0, 0.0));
                 }
 
                 aUnitOutline.setClosed(true);
             }
 
             // move and scale UnitEllipse to UnitObject (-1,-1 1,1) -> (0,0 1,1)
-            basegfx::B2DHomMatrix aUnitCorrectionMatrix(basegfx::tools::createTranslateB2DHomMatrix(1.0, 1.0));
-            aUnitCorrectionMatrix.scale(0.5, 0.5);
+            const basegfx::B2DHomMatrix aUnitCorrectionMatrix(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
 
             // apply to the geometry
             aUnitOutline.transform(aUnitCorrectionMatrix);
 
             // add fill
-            if(getSdrLFSTAttribute().getFill() && aUnitOutline.isClosed())
+            if(!getSdrLFSTAttribute().getFill().isDefault() && aUnitOutline.isClosed())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getFill(),
+                        getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
-            if(getSdrLFSTAttribute().getLine())
+            if(getSdrLFSTAttribute().getLine().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine(), getSdrLFSTAttribute().getLineStartEnd()));
+                // create invisible line for HitTest/BoundRect
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createHiddenGeometryPrimitives2D(
+                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform()));
             }
             else
             {
-                // if initially no line is defined, create one for HitTest and BoundRect
-                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
-                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
-                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
-
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createPolygonLinePrimitive(
+                        aUnitOutline,
+                        getTransform(),
+                        getSdrLFSTAttribute().getLine(),
+                        getSdrLFSTAttribute().getLineStartEnd()));
             }
 
             // add text
-            if(getSdrLFSTAttribute().getText())
+            if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                    createTextPrimitive(
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getText(),
+                        getSdrLFSTAttribute().getLine(),
+                        false,
+                        false,
+                        false));
             }
 
             // add shadow
-            if(getSdrLFSTAttribute().getShadow())
+            if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
+                aRetval = createEmbeddedShadowPrimitive(
+                    aRetval,
+                    getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;
         }
 
         SdrEllipseSegmentPrimitive2D::SdrEllipseSegmentPrimitive2D(
-            const ::basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             double fStartAngle,
             double fEndAngle,

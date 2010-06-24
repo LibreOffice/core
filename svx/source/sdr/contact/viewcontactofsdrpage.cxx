@@ -42,9 +42,9 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -98,7 +98,8 @@ namespace sdr
             const svtools::ColorConfig aColorConfig;
             const Color aInitColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
             const basegfx::BColor aRGBColor(aInitColor.getBColor());
-            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor));
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
@@ -202,38 +203,35 @@ namespace sdr
                 }
                 else
                 {
-                    OSL_ENSURE(0 != rPage.GetObjCount(), "MasterPage without MPBGO detected (!)");
+                    drawinglayer::attribute::SdrFillAttribute aFill;
 
-                    if(rPage.GetObjCount())
+                    // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
+                    // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
+                    // MasterPages should have a StyleSheet excactly for this reason, but historically
+                    // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
+                    if(rPage.getSdrPageProperties().GetStyleSheet())
                     {
-                        SdrObject* pObject = rPage.GetObj(0);
-                        OSL_ENSURE(pObject && pObject->IsMasterPageBackgroundObject(), "MasterPage with wrong MPBGO detected (!)");
+                        // create page fill attributes with correct properties
+                        aFill = drawinglayer::primitive2d::createNewSdrFillAttribute(
+                            rPage.getSdrPageProperties().GetItemSet());
+                    }
 
-                        if(pObject && pObject->IsMasterPageBackgroundObject())
-                        {
-                            // build primitive from pObject's attributes
-                            const SfxItemSet& rFillProperties = pObject->GetMergedItemSet();
-                            drawinglayer::attribute::SdrFillAttribute* pFill = drawinglayer::primitive2d::createNewSdrFillAttribute(rFillProperties);
+                    if(!aFill.isDefault())
+                    {
+                        // direct model data is the page size, get and use it
+                        const basegfx::B2DRange aInnerRange(
+                            rPage.GetLftBorder(), rPage.GetUppBorder(),
+                            rPage.GetWdt() - rPage.GetRgtBorder(), rPage.GetHgt() - rPage.GetLwrBorder());
+                        const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
+                        const basegfx::B2DHomMatrix aEmptyTransform;
+                        const drawinglayer::primitive2d::Primitive2DReference xReference(
+                            drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
+                                basegfx::B2DPolyPolygon(aInnerPolgon),
+                                aEmptyTransform,
+                                aFill,
+                                drawinglayer::attribute::FillGradientAttribute()));
 
-                            if(pFill)
-                            {
-                                if(pFill->isVisible())
-                                {
-                                    // direct model data is the page size, get and use it
-                                    const basegfx::B2DRange aInnerRange(
-                                        rPage.GetLftBorder(), rPage.GetUppBorder(),
-                                        rPage.GetWdt() - rPage.GetRgtBorder(), rPage.GetHgt() - rPage.GetLwrBorder());
-                                    const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
-                                    const basegfx::B2DHomMatrix aEmptyTransform;
-                                    const drawinglayer::primitive2d::Primitive2DReference xReference(drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                                        basegfx::B2DPolyPolygon(aInnerPolgon), aEmptyTransform, *pFill));
-
-                                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                                }
-
-                                delete pFill;
-                            }
-                        }
+                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                     }
                 }
             }
@@ -455,23 +453,11 @@ namespace sdr
 
         sal_uInt32 ViewContactOfPageHierarchy::GetObjectCount() const
         {
-            sal_uInt32 nSubObjectCount(getPage().GetObjCount());
-
-            if(nSubObjectCount && getPage().GetObj(0L)->IsMasterPageBackgroundObject())
-            {
-                nSubObjectCount--;
-            }
-
-            return nSubObjectCount;
+            return getPage().GetObjCount();
         }
 
         ViewContact& ViewContactOfPageHierarchy::GetViewContact(sal_uInt32 nIndex) const
         {
-            if(getPage().GetObjCount() && getPage().GetObj(0L)->IsMasterPageBackgroundObject())
-            {
-                nIndex++;
-            }
-
             SdrObject* pObj = getPage().GetObj(nIndex);
             DBG_ASSERT(pObj, "ViewContactOfPageHierarchy::GetViewContact: Corrupt SdrObjList (!)");
             return pObj->GetViewContact();

@@ -98,8 +98,8 @@ public:
         const bool i_bCopyPrecedesSource = false);
 
     /** create an Undo Metadatable, which remembers this' reference */
-    ::boost::shared_ptr<MetadatableUndo> CreateUndo(
-        const bool i_isDelete = false);
+    ::boost::shared_ptr<MetadatableUndo> CreateUndo() const;
+    ::boost::shared_ptr<MetadatableUndo> CreateUndoForDelete();
 
     /** restore this from Undo Metadatable */
     void RestoreMetadata(::boost::shared_ptr<MetadatableUndo> const& i_pUndo);

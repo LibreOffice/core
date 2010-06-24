@@ -866,7 +866,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
 
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
-        (pView ? pView : SfxViewFrame::Current())->GetFrame()->GetFrameInterface(),
+        (pView ? pView : SfxViewFrame::Current())->GetFrame().GetFrameInterface(),
         com::sun::star::uno::UNO_QUERY);
 
     if(xSet.is())

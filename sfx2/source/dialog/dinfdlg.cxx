@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
@@ -118,6 +119,8 @@ const USHORT HI_NAME = 1;
 const USHORT HI_TYPE = 2;
 const USHORT HI_VALUE = 3;
 const USHORT HI_ACTION = 4;
+
+static const char DOCUMENT_SIGNATURE_MENU_CMD[]      = "Signature";
 
 //------------------------------------------------------------------------
 String CreateSizeText( ULONG nSize, BOOL bExtraBytes = TRUE, BOOL bSmartExtraBytes = FALSE );
@@ -858,6 +861,13 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
         aNewSize.Width() -= nDelta;
         aUseUserDataCB.SetSizePixel( aNewSize );
     }
+    // See i96288
+    // Check if the document signature command is enabled
+    // on the main list enable/disable the pushbutton accordingly
+    SvtCommandOptions aCmdOptions;
+    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
+                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( DOCUMENT_SIGNATURE_MENU_CMD ) ) ) )
+        aSignatureBtn.Disable();
 }
 
 //------------------------------------------------------------------------
@@ -1600,8 +1610,8 @@ class DurationDialog_Impl : public ModalDialog
     NumericField    aMinuteNF;
     FixedText       aSecondFT;
     NumericField    aSecondNF;
-    FixedText       aHSecondFT;
-    NumericField    aHSecondNF;
+    FixedText       aMSecondFT;
+    NumericField    aMSecondNF;
 
 public:
 
@@ -1613,8 +1623,9 @@ public:
 /*-- 20.11.2009 15:40:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-DurationDialog_Impl::DurationDialog_Impl( Window* pParent, const util::Duration& rDuration ) :
-            ModalDialog( pParent, SfxResId( RID_EDIT_DURATIONS ) ),
+DurationDialog_Impl::DurationDialog_Impl(
+    Window* pParent, const util::Duration& rDuration)
+        :   ModalDialog( pParent, SfxResId( RID_EDIT_DURATIONS ) ),
             aDurationFL(this, SfxResId( FL_DURATION       )),
             aOKPB(      this, SfxResId( PB_OK       )),
             aCancelPB(  this, SfxResId( PB_CANCEL   )),
@@ -1632,8 +1643,8 @@ DurationDialog_Impl::DurationDialog_Impl( Window* pParent, const util::Duration&
             aMinuteNF(  this, SfxResId( ED_MINUTE       )),
             aSecondFT(  this, SfxResId( FT_SECOND       )),
             aSecondNF(  this, SfxResId( ED_SECOND       )),
-            aHSecondFT( this, SfxResId( FT_HSECOND      )),
-            aHSecondNF( this, SfxResId( ED_HSECOND      ))
+            aMSecondFT( this, SfxResId( FT_MSECOND      )),
+            aMSecondNF( this, SfxResId( ED_MSECOND      ))
 {
     FreeResource();
     aNegativeCB.Check(rDuration.Negative);
@@ -1643,7 +1654,7 @@ DurationDialog_Impl::DurationDialog_Impl( Window* pParent, const util::Duration&
     aHourNF.SetValue(rDuration.Hours  );
     aMinuteNF.SetValue(rDuration.Minutes);
     aSecondNF.SetValue(rDuration.Seconds);
-    aHSecondNF.SetValue(rDuration.HundredthSeconds);
+    aMSecondNF.SetValue(rDuration.MilliSeconds);
 }
 /*-- 20.11.2009 16:08:55---------------------------------------------------
 
@@ -1664,7 +1675,7 @@ util::Duration  DurationDialog_Impl::GetDuration() const
     aRet.Hours  = aHourNF.GetValue( );
     aRet.Minutes = aMinuteNF.GetValue();
     aRet.Seconds = aSecondNF.GetValue();
-    aRet.HundredthSeconds = aHSecondNF.GetValue();
+    aRet.MilliSeconds = aMSecondNF.GetValue();
     return aRet;
 }
 

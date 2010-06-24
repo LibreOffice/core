@@ -28,7 +28,7 @@
 #ifndef __FRAMEWORK_UIELEMENT_MACROSMENUCONTROLLER_HXX_
 #define __FRAMEWORK_UIELEMENT_MACROSMENUCONTROLLER_HXX_
 
-#include <helper/popupmenucontrollerbase.hxx>
+#include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>
@@ -47,8 +48,10 @@
 
 namespace framework
 {
-    class MacrosMenuController :  public PopupMenuControllerBase
+    class MacrosMenuController :  public svt::PopupMenuControllerBase
     {
+        using svt::PopupMenuControllerBase::disposing;
+
         struct ExecuteInfo
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;

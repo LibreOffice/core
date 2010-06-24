@@ -97,7 +97,7 @@ namespace connectivity
             sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             ::rtl::OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            SWORD                               impl_getColumnType_nothrow(sal_Int32 column);
+            SWORD                               impl_getColumnType_nothrow(sal_Int32 columnIndex);
 
             sal_Int32 mapColumn (sal_Int32  column);
 

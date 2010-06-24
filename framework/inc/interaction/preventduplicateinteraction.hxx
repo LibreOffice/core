@@ -37,7 +37,7 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -83,7 +83,7 @@ struct ThreadHelpBase2
 };
 
 class PreventDuplicateInteraction : private ThreadHelpBase2
-                                    ,public ::cppu::WeakImplHelper1< css::task::XInteractionHandler >
+                                    ,public ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >
 {
     //_____________________________________
     // structs, types etcp.
@@ -155,6 +155,30 @@ class PreventDuplicateInteraction : private ThreadHelpBase2
         virtual void SAL_CALL handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
             throw(css::uno::RuntimeException);
 
+        //_________________________________
+        /**
+            @interface  XInteractionHandler2
+            @short      called from outside to handle a problem
+            @descr      We filter the incoming interactions. some of them
+                        will be forwarded to the generic UI interaction handler.
+                        So we must not implement it twice. Some other ones
+                        will be aborted only.
+
+            @threadsafe yes
+        */
+        virtual ::sal_Bool SAL_CALL handleInteractionRequest( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest )
+            throw (::com::sun::star::uno::RuntimeException);
+
+        //_________________________________
+        /**
+            @interface  XInterface
+            @short      called to query another interface of the component
+            @descr      Will allow to query for XInteractionHandler2 if and only if m_xHandler supports this interface, too.
+
+            @threadsafe yes
+        */
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+            throw (::com::sun::star::uno::RuntimeException);
     //_____________________________________
     // c++ interface
     public:

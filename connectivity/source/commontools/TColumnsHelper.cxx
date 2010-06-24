@@ -121,29 +121,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     if ( pColDesc )
     {
         Reference<XPropertySet> xPr = m_pTable;
-        Reference<XKeysSupplier> xKeysSup(xPr,UNO_QUERY);
-        Reference<XNameAccess> xPrimaryKeyColumns;
-        if ( xKeysSup.is() )
-        {
-            const Reference<XIndexAccess> xKeys = xKeysSup->getKeys();
-            if ( xKeys.is() )
-            {
-                ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-                const sal_Int32 nKeyCount = xKeys->getCount();
-                for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++nKeyIter)
-                {
-                    const Reference<XPropertySet> xKey(xKeys->getByIndex(nKeyIter),UNO_QUERY_THROW);
-                    sal_Int32 nType = 0;
-                    xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))   >>= nType;
-                    if ( nType == KeyType::PRIMARY )
-                    {
-                        const Reference<XColumnsSupplier> xColS(xKey,UNO_QUERY_THROW);
-                        xPrimaryKeyColumns = xColS->getColumns();
-                        break;
-                    }
-                } // for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++)
-            }
-        }
+        const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xPr);
         sal_Int32 nField11 = pColDesc->nField11;
         if ( nField11 != ColumnValue::NO_NULLS && xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(_rName) )
         {
@@ -152,6 +130,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
         connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
                                                 pColDesc->aField6,
                                                 pColDesc->sField13,
+                                                pColDesc->sField12,
                                                 nField11,
                                                 pColDesc->nField7,
                                                 pColDesc->nField9,
@@ -207,7 +186,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
     aSql += ::rtl::OUString::createFromAscii(" ADD ");
-    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),m_pTable->getTypeCreatePattern());
+    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
     if ( xStmt.is() )

@@ -46,7 +46,7 @@ namespace formula
 // =============================================================================
     using namespace ::com::sun::star;
 
-    static const sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
+    static const sal_Char* pInternal[ 1 ] = { "TTT" };
 
 // =============================================================================
 namespace

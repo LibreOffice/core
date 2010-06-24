@@ -40,7 +40,7 @@
 #include <svx/svdpage.hxx>
 #include <unoapi.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -292,28 +292,19 @@ namespace sdr
             else if(bCreateGrayFrame)
             {
                 // #i105146# no content, but frame display. To make hitting the page preview objects
-                // on the handout page more simple, add a HitTest fill primitive
-                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-                basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aUnitRange));
-                aOutline.transform(aPageObjectTransform);
-
-                const drawinglayer::primitive2d::Primitive2DReference xHitFill(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(aOutline),
-                        basegfx::BColor(0.0, 0.0, 0.0)));
-
-                const drawinglayer::primitive2d::Primitive2DReference xHit(
-                    new drawinglayer::primitive2d::HitTestPrimitive2D(
-                        drawinglayer::primitive2d::Primitive2DSequence(&xHitFill, 1)));
-
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xHit, 1);
+                // on the handout page more simple, add hidden fill geometry
+                const drawinglayer::primitive2d::Primitive2DReference xFrameHit(
+                    drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                        false,
+                        aPageObjectTransform));
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xFrameHit, 1);
             }
 
             // add a gray outline frame, except not when printing
             if(bCreateGrayFrame)
             {
                 const Color aFrameColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES).nColor);
-                basegfx::B2DPolygon aOwnOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                basegfx::B2DPolygon aOwnOutline(basegfx::tools::createUnitPolygon());
                 aOwnOutline.transform(aPageObjectTransform);
 
                 const drawinglayer::primitive2d::Primitive2DReference xGrayFrame(

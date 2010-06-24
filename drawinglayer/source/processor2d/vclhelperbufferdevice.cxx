@@ -115,7 +115,7 @@ namespace drawinglayer
 
             if(bDoSaveForVisualControl)
             {
-                SvFileStream aNew((const String&)String(ByteString( "c:\\alpha.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                SvFileStream aNew((const String&)String(ByteString( "c:\\transparence.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
                 aNew << aAlphaMask.GetBitmap();
             }
 
@@ -162,7 +162,7 @@ namespace drawinglayer
         return *mpMask;
     }
 
-    VirtualDevice& impBufferDevice::getAlpha()
+    VirtualDevice& impBufferDevice::getTransparence()
     {
         if(!mpAlpha)
         {

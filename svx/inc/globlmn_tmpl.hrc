@@ -468,12 +468,6 @@
     HelpID = SID_LOGOUT ; \
     Text [ en-US ] = "Logout" ; \
 
-#define ITEM_FILE_BACKTOWEBTOP \
-    Identifier = SID_BACKTOWEBTOP ; \
-    Command = ".uno:BackToWebtop" ; \
-    HelpID = SID_BACKTOWEBTOP ; \
-    Text [ en-US ] = "Back to Webtop";  \
-
 #define ITEM_EDIT_UNDO \
     Identifier = SID_UNDO ; \
     Command = ".uno:UndoAction" ; \
@@ -1338,17 +1332,38 @@
             {\
                 MenuItem\
                 {\
-                    Identifier = SID_TRANSLITERATE_UPPER ; \
-                    Command = ".uno:ChangeCaseToUpper" ; \
-                    HelpID = SID_TRANSLITERATE_UPPER ; \
-                    Text [ en-US ] = "~Uppercase";\
+                    Identifier = SID_TRANSLITERATE_SENTENCE_CASE; \
+                    Command = ".uno:ChangeCaseToSentenceCase" ; \
+                    HelpID = SID_TRANSLITERATE_SENTENCE_CASE; \
+                    Text [ en-US ] = "~Sentence case";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_LOWER; \
                     Command = ".uno:ChangeCaseToLower" ; \
                     HelpID = SID_TRANSLITERATE_LOWER; \
-                    Text [ en-US ] = "~Lowercase";\
+                    Text [ en-US ] = "~lowercase";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_TRANSLITERATE_UPPER ; \
+                    Command = ".uno:ChangeCaseToUpper" ; \
+                    HelpID = SID_TRANSLITERATE_UPPER ; \
+                    Text [ en-US ] = "~UPPERCASE";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_TRANSLITERATE_TITLE_CASE; \
+                    Command = ".uno:ChangeCaseToTitleCase" ; \
+                    HelpID = SID_TRANSLITERATE_TITLE_CASE; \
+                    Text [ en-US ] = "~Capitalize Every Word";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_TRANSLITERATE_TOGGLE_CASE; \
+                    Command = ".uno:ChangeCaseToToggleCase" ; \
+                    HelpID = SID_TRANSLITERATE_TOGGLE_CASE; \
+                    Text [ en-US ] = "~tOGGLE cASE";\
                 };\
                 MenuItem\
                 {\

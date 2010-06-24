@@ -53,7 +53,7 @@ namespace xmloff
             case CCA_NAME:              return "name";
             case CCA_SERVICE_NAME:      return "control-implementation";
             case CCA_BUTTON_TYPE:       return "button-type";
-            case CCA_CONTROL_ID:        return "id";
+// disabled(AddAttributeIdLegacy)   case CCA_CONTROL_ID:        return "id";
             case CCA_CURRENT_SELECTED:  return "current-selected";
             case CCA_CURRENT_VALUE:     return "current-value";
             case CCA_DISABLED:          return "disabled";

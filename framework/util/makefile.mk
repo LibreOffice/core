@@ -56,7 +56,6 @@ LIB1OBJFILES=   \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
                 $(SLO)$/jobconst.obj                            \
-                $(SLO)$/popupmenucontrollerbase.obj             \
                 $(SLO)$/mischelper.obj                          \
                 $(SLO)$/propertysethelper.obj
 
@@ -79,7 +78,6 @@ LIB2OBJFILES=   \
                 $(SLO)$/statusbardocumenthandler.obj            \
                 $(SLO)$/toolboxconfiguration.obj                \
                 $(SLO)$/toolboxdocumenthandler.obj              \
-                $(SLO)$/toolboxlayoutdocumenthandler.obj        \
                 $(SLO)$/imagesconfiguration.obj                 \
                 $(SLO)$/imagesdocumenthandler.obj               \
                 $(SLO)$/xmlnamespaces.obj                       \
@@ -115,6 +113,9 @@ SHL1STDLIBS=    \
                 $(UNOTOOLSLIB)      \
                 $(CPPUHELPERLIB)    \
                 $(TOOLSLIB)         \
+                $(SVTOOLLIB)        \
+                $(SVLLIB)        	\
+                $(I18NISOLANGLIB)   \
                 $(VOSLIB)           \
                 $(VCLLIB)           \
                 $(TKLIB)            \
@@ -196,7 +197,8 @@ SHL3OBJS=       $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/dispatchrecorder.obj        \
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchhelper.obj          \
-                $(SLO)$/popupmenudispatcher.obj           \
+                $(SLO)$/popupmenudispatcher.obj     \
+                $(SLO)$/popupmenucontroller.obj
 
 SHL3STDLIBS=    \
                 $(FWILIB)                           \
@@ -206,7 +208,6 @@ SHL3STDLIBS=    \
                 $(SVTOOLLIB)                        \
                 $(UNOTOOLSLIB)                      \
                 $(TOOLSLIB)                         \
-                $(I18NISOLANGLIB)                   \
                 $(COMPHELPERLIB)                    \
                 $(CPPUHELPERLIB)                    \
                 $(COMPHELPERLIB)                    \
@@ -219,7 +220,7 @@ SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2TARGETN)
 
 DEF3NAME=       $(SHL3TARGET)
 
-SHL3VERSIONMAP= exports.map
+SHL3VERSIONMAP= $(SOLARENV)/src/component.map
 
 # --- services library ----------------------------------------------------
 
@@ -278,7 +279,6 @@ SHL4OBJS=       \
                 $(SLO)$/langselectionstatusbarcontroller.obj \
                 $(SLO)$/layoutmanager.obj           \
                 $(SLO)$/loaddispatcher.obj          \
-                $(SLO)$/loaddispatchlistener.obj    \
                 $(SLO)$/loadenv.obj                 \
                 $(SLO)$/menubarfactory.obj          \
                 $(SLO)$/menubarmanager.obj          \
@@ -367,7 +367,7 @@ SHL4DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 
 DEF4NAME=       $(SHL4TARGET)
 
-SHL4VERSIONMAP= exports.map
+SHL4VERSIONMAP= $(SOLARENV)/src/component.map
 
 # --- services library ----------------------------------------------------
 
@@ -398,7 +398,7 @@ SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF5NAME=       $(SHL5TARGET)
 
-SHL5VERSIONMAP= exports.map
+SHL5VERSIONMAP= $(SOLARENV)/src/component.map
 
 RESLIB1NAME=        fwe
 RESLIB1IMAGES=      $(PRJ)$/res

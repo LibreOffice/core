@@ -259,6 +259,8 @@ namespace sdr
 
         void AttributeProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
         {
+            OSL_ASSERT(pNewModel!=NULL);
+
             if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
             {
                 if(mpItemSet)
@@ -281,7 +283,35 @@ namespace sdr
                     // set stylesheet (if used)
                     if(pStySheet)
                     {
-                        ImpAddStyleSheet(pStySheet, sal_True);
+                        // #i109515#
+                        SfxItemPool* pStyleSheetPool = &pStySheet->GetPool().GetPool();
+
+                        if(pStyleSheetPool == pDestPool)
+                        {
+                            // just re-set stylesheet
+                            ImpAddStyleSheet(pStySheet, sal_True);
+                        }
+                        else
+                        {
+                            // StyleSheet is NOT from the correct pool.
+                            // Look one up in the right pool with the same
+                            // name or use the default.
+
+                            // Look up the style in the new document.
+                            OSL_ASSERT(pNewModel->GetStyleSheetPool() != NULL);
+                            SfxStyleSheet* pNewStyleSheet = dynamic_cast<SfxStyleSheet*>(
+                                pNewModel->GetStyleSheetPool()->Find(
+                                    pStySheet->GetName(),
+                                    SFX_STYLE_FAMILY_ALL));
+                            if (pNewStyleSheet == NULL
+                                || &pNewStyleSheet->GetPool().GetPool() != pDestPool)
+                            {
+                                // There is no copy of the style in the new
+                                // document.  Use the default as a fallback.
+                                pNewStyleSheet = pNewModel->GetDefaultStyleSheet();
+                            }
+                            ImpAddStyleSheet(pNewStyleSheet, sal_True);
+                        }
                     }
 
                     delete pOldSet;
@@ -582,22 +612,6 @@ namespace sdr
                 rObj.SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
 
                 bHintUsed = sal_True;
-            }
-
-            // #111111#
-            // When it's the BackgroundObject, set the MasterPage to changed to
-            // get a refresh for the evtl. changed BackgroundStyle
-
-            // #114265#
-            // To only invalidate the page when the StyleSheet change happens,
-            // some more rigid testing is necessary.
-            const SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-
-            if(pSimpleHint
-                && pSimpleHint->GetId() == SFX_HINT_DATACHANGED
-                && GetSdrObject().IsMasterPageBackgroundObject())
-            {
-                GetSdrObject().GetPage()->ActionChanged();
             }
 
             if(!bHintUsed)

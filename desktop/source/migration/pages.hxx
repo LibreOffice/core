@@ -38,6 +38,8 @@
 #include <svl/lstner.hxx>
 #include <svtools/xtextedt.hxx>
 
+#include <com/sun/star/awt/XThrobber.hpp>
+
 namespace desktop
 {
 class WelcomePage : public svt::OWizardPage
@@ -120,9 +122,10 @@ private:
     FixedText m_ftBody;
     CheckBox m_cbMigration;
     sal_Bool m_bMigrationDone;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > m_xThrobber;
 public:
-    MigrationPage( svt::OWizardMachine* parent, const ResId& resid);
-    virtual sal_Bool commitPage( CommitPageReason _eReason );
+    MigrationPage( svt::OWizardMachine* parent, const ResId& resid, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber );
+    virtual sal_Bool commitPage( svt::WizardTypes::CommitPageReason _eReason );
 
 protected:
     virtual void ActivatePage();
@@ -145,7 +148,7 @@ private:
 
 public:
     UserPage( svt::OWizardMachine* parent, const ResId& resid);
-    virtual sal_Bool commitPage( CommitPageReason _eReason );
+    virtual sal_Bool commitPage( svt::WizardTypes::CommitPageReason _eReason );
 protected:
     virtual void ActivatePage();
 };
@@ -158,7 +161,7 @@ private:
     CheckBox m_cbUpdateCheck;
 public:
     UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resid);
-    virtual sal_Bool commitPage( CommitPageReason _eReason );
+    virtual sal_Bool commitPage( svt::WizardTypes::CommitPageReason _eReason );
 
 protected:
     virtual void ActivatePage();
@@ -185,7 +188,7 @@ protected:
     virtual bool canAdvance() const;
     virtual void ActivatePage();
 
-    virtual sal_Bool commitPage( CommitPageReason _eReason );
+    virtual sal_Bool commitPage( svt::WizardTypes::CommitPageReason _eReason );
 
 public:
     RegistrationPage( Window* parent, const ResId& resid);

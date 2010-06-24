@@ -38,7 +38,6 @@
 #include "com/sun/star/util/XModifiable.hpp"
 #include "com/sun/star/xml/sax/XSAXSerializable.hpp"
 
-#include "com/sun/star/lang/NullPointerException.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
@@ -248,25 +247,21 @@ public:
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
                css::io::WrongFormatException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
     virtual void SAL_CALL loadFromMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException,
                css::io::WrongFormatException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
     virtual void SAL_CALL storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
     virtual void SAL_CALL storeToMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException,
-               css::lang::WrappedTargetException, css::io::IOException,
-               css::uno::Exception);
+               css::lang::WrappedTargetException, css::io::IOException);
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(
@@ -585,7 +580,9 @@ sal_Int32 textToDuration(::rtl::OUString const& i_rText) throw ()
 {
     css::util::Duration d;
     if (textToDuration(d, i_rText)) {
-        return (d.Days * (24*3600))
+        // #i107372#: approximate years/months
+        const sal_Int32 days( (d.Years * 365) + (d.Months * 30) + d.Days );
+        return  (days * (24*3600))
                 + (d.Hours * 3600) + (d.Minutes * 60) + d.Seconds;
     } else {
         return 0; // default
@@ -608,7 +605,7 @@ sal_Int32 textToDuration(::rtl::OUString const& i_rText) throw ()
     ud.Hours   = static_cast<sal_Int16>((i_value % (24 * 3600)) / 3600);
     ud.Minutes = static_cast<sal_Int16>((i_value % 3600) / 60);
     ud.Seconds = static_cast<sal_Int16>(i_value % 60);
-    ud.HundredthSeconds = 0;
+    ud.MilliSeconds = 0;
     return durationToText(ud);
 }
 
@@ -925,8 +922,13 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             values.push_back(s);
 // #i90847# OOo 2.x does stupid things if value-type="string";
 // fortunately string is default anyway, so we can just omit it
-//            as.push_back(std::make_pair(vt,
-//                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"))));
+// #i107502#: however, OOo 2.x only reads 4 user-defined without @value-type
+// => best backward compatibility: first 4 without @value-type, rest with
+            if (4 <= i)
+            {
+                as.push_back(std::make_pair(vt,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"))));
+            }
         } else if (type == ::cppu::UnoType<css::util::DateTime>::get()) {
             css::util::DateTime dt;
             any >>= dt;
@@ -948,7 +950,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             ud.Hours   = ut.Hours;
             ud.Minutes = ut.Minutes;
             ud.Seconds = ut.Seconds;
-            ud.HundredthSeconds = ut.HundredthSeconds;
+            ud.MilliSeconds = 10 * ut.HundredthSeconds;
             values.push_back(durationToText(ud));
             as.push_back(std::make_pair(vt,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("time"))));
@@ -1862,8 +1864,7 @@ SfxDocumentMetaData::loadFromStorage(
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
            css::io::WrongFormatException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     if (!xStorage.is()) throw css::lang::IllegalArgumentException(
         ::rtl::OUString::createFromAscii("SfxDocumentMetaData::loadFromStorage:"
@@ -1875,10 +1876,10 @@ SfxDocumentMetaData::loadFromStorage(
         xStorage->openStreamElement(
             ::rtl::OUString::createFromAscii(s_metaXml),
             css::embed::ElementModes::READ) );
-    if (!xStream.is()) throw css::lang::NullPointerException();
+    if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::io::XInputStream> xInStream =
         xStream->getInputStream();
-    if (!xInStream.is()) throw css::lang::NullPointerException();
+    if (!xInStream.is()) throw css::uno::RuntimeException();
 
     // create DOM parser service
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
@@ -1942,8 +1943,7 @@ SfxDocumentMetaData::storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     if (!xStorage.is()) throw css::lang::IllegalArgumentException(
         ::rtl::OUString::createFromAscii("SfxDocumentMetaData::storeToStorage:"
@@ -1959,7 +1959,7 @@ SfxDocumentMetaData::storeToStorage(
         xStorage->openStreamElement(::rtl::OUString::createFromAscii(s_metaXml),
             css::embed::ElementModes::WRITE
             | css::embed::ElementModes::TRUNCATE);
-    if (!xStream.is()) throw css::lang::NullPointerException();
+    if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference< css::beans::XPropertySet > xStreamProps(xStream,
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
@@ -1973,7 +1973,7 @@ SfxDocumentMetaData::storeToStorage(
         css::uno::makeAny(static_cast<sal_Bool> (sal_False)));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();
-    if (!xOutStream.is()) throw css::lang::NullPointerException();
+    if (!xOutStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
         m_xContext->getServiceManager());
     css::uno::Reference<css::io::XActiveDataSource> xSaxWriter(
@@ -2021,8 +2021,7 @@ void SAL_CALL
 SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::io::WrongFormatException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     css::uno::Reference<css::io::XInputStream> xIn;
     ::comphelper::MediaDescriptor md(Medium);
@@ -2056,7 +2055,7 @@ SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
                 css::uno::makeAny(e));
     }
     if (!xStorage.is()) {
-        throw css::lang::NullPointerException(::rtl::OUString::createFromAscii(
+        throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
                 "SfxDocumentMetaData::loadFromMedium: cannot get Storage"),
                 *this);
     }
@@ -2067,8 +2066,7 @@ void SAL_CALL
 SfxDocumentMetaData::storeToMedium(const ::rtl::OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException,
-           css::lang::WrappedTargetException, css::io::IOException,
-           css::uno::Exception)
+           css::lang::WrappedTargetException, css::io::IOException)
 {
     ::comphelper::MediaDescriptor md(Medium);
     if (!URL.equalsAscii("")) {
@@ -2080,7 +2078,7 @@ SfxDocumentMetaData::storeToMedium(const ::rtl::OUString & URL,
 
 
     if (!xStorage.is()) {
-        throw css::lang::NullPointerException(::rtl::OUString::createFromAscii(
+        throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
                 "SfxDocumentMetaData::storeToMedium: cannot get Storage"),
                 *this);
     }

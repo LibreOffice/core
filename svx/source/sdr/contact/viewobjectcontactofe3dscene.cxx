@@ -121,17 +121,6 @@ namespace sdr
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
             }
-            else
-            {
-                // do neither print nor PDF export the fallback visualisation
-                if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
-                {
-                    // empty group, fallback to parent method which will create the default
-                    // grayed frame for empty 3d scenes by using model data and
-                    // createViewIndependentPrimitive2DSequence::ViewContactOfE3dScene
-                    xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
-                }
-            }
 
             if(bIsActiveVC)
             {

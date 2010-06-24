@@ -50,6 +50,7 @@ private:
     static com::sun::star::uno::Sequence< rtl::OUString > getInstalledLanguages();
     static sal_Bool isInstalledLanguage(rtl::OUString& usLocale, sal_Bool bExact=sal_False);
     static rtl::OUString getFirstInstalledLanguage();
+    static rtl::OUString getUserUILanguage();
     static rtl::OUString getUserLanguage();
     static rtl::OUString getSystemLanguage();
     static void resetUserLanguage();

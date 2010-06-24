@@ -51,7 +51,7 @@ namespace drawinglayer
             - TexturePrimitive3D (with the following variations)
                 - GradientTexturePrimitive3D (for 3D gradient fill)
                 - BitmapTexturePrimitive3D (for 3D Bitmap fill)
-                - AlphaTexturePrimitive3D (for 3D transparence)
+                - TransparenceTexturePrimitive3D (for 3D transparence)
                 - HatchTexturePrimitive3D (for 3D hatch fill)
             - TransformPrimitive3D (for a transformation stack)
          */

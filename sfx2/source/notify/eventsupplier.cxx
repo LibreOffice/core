@@ -266,7 +266,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 {
                     xProv = ::com::sun::star::uno::Reference
                         < ::com::sun::star::frame::XDispatchProvider > (
-                            pView->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                            pView->GetFrame().GetFrameInterface(), UNO_QUERY );
                 }
                 else
                 {

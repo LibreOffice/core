@@ -181,6 +181,7 @@ OUString normalizeMediaType( OUString const & mediaType )
 }
 
 //______________________________________________________________________________
+
 void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )
 {
@@ -201,7 +202,8 @@ void PackageRegistryImpl::insertBackend(
         ::std::pair<t_string2registry::iterator, bool> mb_insertion(
             m_mediaType2backend.insert( t_string2registry::value_type(
                                             mediaType, xBackend ) ) );
-        if (mb_insertion.second) {
+        if (mb_insertion.second)
+        {
             // add parameterless media-type, too:
             sal_Int32 semi = mediaType.indexOf( ';' );
             if (semi >= 0) {
@@ -210,9 +212,13 @@ void PackageRegistryImpl::insertBackend(
                         mediaType.copy( 0, semi ), xBackend ) );
             }
             const OUString fileFilter( xPackageType->getFileFilter() );
+            //The package backend shall also be called to determine the mediatype
+            //(XPackageRegistry.bindPackage) when the URL points to a directory.
+            const bool bExtension = mediaType.equals(OUSTR("application/vnd.sun.star.package-bundle"));
             if (fileFilter.getLength() == 0 ||
                 fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*.*") ) ||
-                fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ))
+                fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ) ||
+                bExtension)
             {
                 m_ambiguousBackends.insert( xBackend );
             }
@@ -351,7 +357,10 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         }
     }
 
-    // insert bundle be:
+    // Insert bundle back-end.
+    // Always register as last, because we want to add extensions also as folders
+    // and as a default we accept every folder, which was not recognized by the other
+    // backends.
     that->insertBackend(
         ::dp_registry::backend::bundle::create(
             that, context, cachePath, readOnly, xComponentContext ) );
@@ -445,7 +454,8 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     {
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content(
-                &ucbContent, url, xCmdEnv, false /* no throw */ ))
+                &ucbContent, url, xCmdEnv, false /* no throw */ )
+                && !ucbContent.isFolder())
         {
             OUString title( ucbContent.getPropertyValue(
                                 StrTitle::get() ).get<OUString>() );
