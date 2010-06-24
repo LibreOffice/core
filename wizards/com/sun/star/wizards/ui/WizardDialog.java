@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WizardDialog.java,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,14 +229,29 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         {
             int iDialogHeight = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, "Height")).intValue();
 
+            // the roadmap control has got no real TabIndex ever
+            // that is not correct, but changing this would need time, so it is used
+            // without TabIndex as before
             oRoadmap = insertControlModel("com.sun.star.awt.UnoControlRoadmapModel", "rdmNavi",
                     new String[]
                     {
-                        "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        "Height",
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Tabstop",
+                        "Width"
                     },
                     new Object[]
                     {
-                        new Integer(iDialogHeight - 26), new Integer(0), new Integer(0), new Integer(0), new Short((short) 0), new Integer(85)
+                        new Integer(iDialogHeight - 26),
+                        new Integer(0),
+                        new Integer(0),
+                        new Integer(0),
+                        new Short((short)0),
+                        Boolean.TRUE,
+                        new Integer(85)
                     });
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
             xPSet.setPropertyValue("Name", "rdmNavi");
@@ -670,7 +682,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public abstract void finishWizard();
+    public abstract boolean finishWizard();
 
     /**
      * This function will call if the finish button is pressed on the UI.
@@ -678,8 +690,18 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void finishWizard_1()
     {
         enableFinishButton(false);
-        finishWizard();
-        removeTerminateListener();
+        boolean success = false;
+        try
+        {
+            success = finishWizard();
+        }
+        finally
+        {
+            if ( !success )
+                enableFinishButton( true );
+        }
+        if ( success )
+            removeTerminateListener();
     }
 
     public int getMaximalStep()

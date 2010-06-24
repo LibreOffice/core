@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lingutil.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,17 +46,20 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <linguistic/misc.hxx>
 
 #include <set>
 #include <vector>
+#include <string.h>
 
 #include <lingutil.hxx>
 #include <dictmgr.hxx>
+
+
 
 
 using ::com::sun::star::lang::Locale;

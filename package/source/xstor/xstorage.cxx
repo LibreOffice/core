@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xstorage.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -75,7 +73,7 @@ struct StorInternalData_Impl
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
     sal_Bool m_bIsRoot;
-    sal_Int16 m_nStorageType; // the mode in wich the storage is used
+    sal_Int32 m_nStorageType; // the mode in wich the storage is used
     sal_Bool m_bReadOnlyWrap;
 
     OChildDispListener_Impl* m_pSubElDispListener;
@@ -85,12 +83,12 @@ struct StorInternalData_Impl
     ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
 
     // the mutex reference MUST NOT be empty
-    StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Bool bRoot, sal_Int16 nStorType, sal_Bool bReadOnlyWrap )
+    StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Bool bRoot, sal_Int32 nStorageType, sal_Bool bReadOnlyWrap )
     : m_rSharedMutexRef( rMutexRef )
     , m_aListenersContainer( rMutexRef->GetMutex() )
     , m_pTypeCollection( NULL )
     , m_bIsRoot( bRoot )
-    , m_nStorageType( nStorType )
+    , m_nStorageType( nStorageType )
     , m_bReadOnlyWrap( bReadOnlyWrap )
     , m_pSubElDispListener( NULL )
     {}
@@ -105,7 +103,7 @@ struct StorInternalData_Impl
 void OStorage_Impl::completeStorageStreamCopy_Impl(
                             const uno::Reference< io::XStream >& xSource,
                             const uno::Reference< io::XStream >& xDest,
-                            sal_Int16 nStorageType,
+                            sal_Int32 nStorageType,
                             const uno::Sequence< uno::Sequence< beans::StringPair > >& aRelInfo )
 {
         uno::Reference< beans::XPropertySet > xSourceProps( xSource, uno::UNO_QUERY );
@@ -127,13 +125,13 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         uno::Sequence< ::rtl::OUString > aPropNames( 1 );
         aPropNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
 
-        if ( nStorageType == PACKAGE_STORAGE )
+        if ( nStorageType == embed::StorageFormats::PACKAGE )
         {
             aPropNames.realloc( 3 );
             aPropNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
             aPropNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
         }
-        else if ( nStorageType == OFOPXML_STORAGE )
+        else if ( nStorageType == embed::StorageFormats::OFOPXML )
         {
             // TODO/LATER: in future it might make sence to provide the stream if there is one
             uno::Reference< embed::XRelationshipAccess > xRelAccess( xDest, uno::UNO_QUERY_THROW );
@@ -198,7 +196,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
-                                sal_Int16 nStorageType )
+                                sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
@@ -238,7 +236,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
-                                sal_Int16 nStorageType )
+                                sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
@@ -281,7 +279,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
                                 uno::Reference< container::XNameContainer > xPackageFolder,
                                 uno::Reference< lang::XSingleServiceFactory > xPackage,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
-                                sal_Int16 nStorageType )
+                                sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
@@ -359,7 +357,7 @@ OStorage_Impl::~OStorage_Impl()
 
     m_aDeletedList.clear();
 
-    if ( m_nStorageType == OFOPXML_STORAGE && m_pRelStorElement )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && m_pRelStorElement )
     {
         delete m_pRelStorElement;
         m_pRelStorElement = NULL;
@@ -503,7 +501,7 @@ void OStorage_Impl::OpenOwnPackage()
                 }
             }
 
-            if ( m_nStorageType == ZIP_STORAGE )
+            if ( m_nStorageType == embed::StorageFormats::ZIP )
             {
                 // let the package support only plain zip format
                 beans::NamedValue aNamedValue;
@@ -512,7 +510,7 @@ void OStorage_Impl::OpenOwnPackage()
                 aArguments.realloc( ++nArgNum );
                 aArguments[nArgNum-1] <<= aNamedValue;
             }
-            else if ( m_nStorageType == OFOPXML_STORAGE )
+            else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
             {
                 // let the package support OFOPXML media type handling
                 beans::NamedValue aNamedValue;
@@ -565,7 +563,7 @@ SotElementList_Impl& OStorage_Impl::GetChildrenList()
 //-----------------------------------------------
 void OStorage_Impl::GetStorageProperties()
 {
-    if ( m_nStorageType == PACKAGE_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY_THROW );
 
@@ -591,7 +589,7 @@ void OStorage_Impl::GetStorageProperties()
 //-----------------------------------------------
 void OStorage_Impl::ReadRelInfoIfNecessary()
 {
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         return;
 
     if ( m_nRelInfoStatus == RELINFO_NO_INIT )
@@ -665,7 +663,7 @@ void OStorage_Impl::ReadContents()
             uno::Reference< container::XNameContainer > xNameContainer( xNamed, uno::UNO_QUERY );
 
             SotElement_Impl* pNewElement = new SotElement_Impl( aName, xNameContainer.is(), sal_False );
-            if ( m_nStorageType == OFOPXML_STORAGE && aName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
+            if ( m_nStorageType == embed::StorageFormats::OFOPXML && aName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
             {
                 if ( !pNewElement->m_bIsStorage )
                     throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // TODO: Unexpected format
@@ -733,7 +731,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     }
 
     // move storage properties to the destination one ( means changeable properties )
-    if ( m_nStorageType == PACKAGE_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         ::rtl::OUString aMediaTypeString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
         ::rtl::OUString aVersionString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
@@ -741,7 +739,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         xPropSet->setPropertyValue( aVersionString, uno::makeAny( m_aVersion ) );
     }
 
-    if ( m_nStorageType == PACKAGE_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         // if this is a root storage, the common key from current one should be moved there
         sal_Bool bIsRoot = sal_False;
@@ -762,7 +760,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
             }
         }
     }
-    else if ( m_nStorageType == OFOPXML_STORAGE )
+    else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
 
         // TODO/LATER: currently the optimization is not active
@@ -853,13 +851,13 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                     }
                 }
 
-                if ( m_nStorageType == PACKAGE_STORAGE )
+                if ( m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
                     aStrProps.realloc( ++nNum );
                     aStrProps[nNum-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
                     aStrProps[nNum-1].Value <<= (sal_Bool)( pElement->m_pStream->UsesCommonPass_Impl() );
                 }
-                else if ( m_nStorageType == OFOPXML_STORAGE )
+                else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
                     // TODO/LATER: currently the optimization is not active
                     // uno::Reference< io::XInputStream > xInStream = GetRelInfoStreamForName( ::rtl::OUString() ); // own rels stream
@@ -910,7 +908,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 pElement->m_pStream->CopyInternallyTo_Impl( xSubStr );
             }
         }
-        else if ( m_nStorageType != PACKAGE_STORAGE )
+        else if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         {
             OSL_ENSURE( sal_False, "Encryption is only supported in package storage!\n" );
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -997,7 +995,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 //-----------------------------------------------
 uno::Sequence< uno::Sequence< beans::StringPair > > OStorage_Impl::GetAllRelationshipsIfAny()
 {
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         return uno::Sequence< uno::Sequence< beans::StringPair > >();
 
     ReadRelInfoIfNecessary();
@@ -1091,7 +1089,7 @@ void OStorage_Impl::Commit()
           pDeletedIter++ )
     {
 
-        if ( m_nStorageType == OFOPXML_STORAGE && !(*pDeletedIter)->m_bIsStorage )
+        if ( m_nStorageType == embed::StorageFormats::OFOPXML && !(*pDeletedIter)->m_bIsStorage )
             RemoveStreamRelInfo( (*pDeletedIter)->m_aOriginalName );
 
         // the removed elements are not in new temporary storage
@@ -1111,7 +1109,7 @@ void OStorage_Impl::Commit()
 
         if ( (*pElementIter)->m_bIsRemoved )
         {
-            if ( m_nStorageType == OFOPXML_STORAGE && !(*pElementIter)->m_bIsStorage )
+            if ( m_nStorageType == embed::StorageFormats::OFOPXML && !(*pElementIter)->m_bIsStorage )
                 RemoveStreamRelInfo( (*pElementIter)->m_aOriginalName );
 
             // the removed elements are not in new temporary storage
@@ -1161,7 +1159,7 @@ void OStorage_Impl::Commit()
             }
             else if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream && (*pElementIter)->m_pStream->m_bFlushed )
             {
-                if ( m_nStorageType == OFOPXML_STORAGE )
+                if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                     CommitStreamRelInfo( *pElementIter );
 
                 // the renamed elements are not in new temporary storage
@@ -1187,7 +1185,7 @@ void OStorage_Impl::Commit()
                 xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
                 xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
 
-                if ( m_nStorageType == OFOPXML_STORAGE && !(*pElementIter)->m_bIsStorage )
+                if ( m_nStorageType == embed::StorageFormats::OFOPXML && !(*pElementIter)->m_bIsStorage )
                 {
                     if ( !(*pElementIter)->m_pStream )
                     {
@@ -1236,7 +1234,7 @@ void OStorage_Impl::Commit()
 
                 if ( (*pElementIter)->m_pStream->m_bFlushed )
                 {
-                    if ( m_nStorageType == OFOPXML_STORAGE )
+                    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                         CommitStreamRelInfo( *pElementIter );
 
                     (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
@@ -1247,7 +1245,7 @@ void OStorage_Impl::Commit()
         }
     }
 
-    if ( m_nStorageType == PACKAGE_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         // move properties to the destination package folder
         uno::Reference< beans::XPropertySet > xProps( xNewPackageFolder, uno::UNO_QUERY );
@@ -1258,7 +1256,7 @@ void OStorage_Impl::Commit()
         xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), uno::makeAny( m_aVersion ) );
     }
 
-    if ( m_nStorageType == OFOPXML_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
         CommitRelInfo( xNewPackageFolder ); // store own relations and commit complete relations storage
 
     if ( m_bIsRoot )
@@ -1352,7 +1350,7 @@ void OStorage_Impl::Revert()
 
     GetStorageProperties();
 
-    if ( m_nStorageType == OFOPXML_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         // currently the relations storage is changed only on commit
         m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
@@ -1367,7 +1365,7 @@ void OStorage_Impl::Revert()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    if ( m_nStorageType != PACKAGE_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( m_bIsRoot )
@@ -1425,8 +1423,8 @@ SotElement_Impl* OStorage_Impl::InsertStream( ::rtl::OUString aName, sal_Bool bE
     if ( !xPackageSubStream.is() )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    OSL_ENSURE( m_nStorageType == PACKAGE_STORAGE || !bEncr, "Only package storage supports encryption!\n" );
-    if ( m_nStorageType != PACKAGE_STORAGE && bEncr )
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE || !bEncr, "Only package storage supports encryption!\n" );
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE && bEncr )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     // the mode is not needed for storage stream internal implementation
@@ -1448,7 +1446,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    if ( m_nStorageType != PACKAGE_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
@@ -1729,7 +1727,7 @@ void OStorage_Impl::RemoveStreamRelInfo( const ::rtl::OUString& aOriginalName )
     // this method should be used only in OStorage_Impl::Commit() method
     // the aOriginalName can be empty, in this case the storage relation info should be removed
 
-    if ( m_nStorageType == OFOPXML_STORAGE && m_xRelStorage.is() )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && m_xRelStorage.is() )
     {
         ::rtl::OUString aRelStreamName = aOriginalName;
         aRelStreamName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".rels" ) );
@@ -1742,7 +1740,7 @@ void OStorage_Impl::RemoveStreamRelInfo( const ::rtl::OUString& aOriginalName )
 //-----------------------------------------------
 void OStorage_Impl::CreateRelStorage()
 {
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         return;
 
     if ( !m_xRelStorage.is() )
@@ -1775,7 +1773,7 @@ void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl* pStreamElement )
     if ( !pStreamElement )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    if ( m_nStorageType == OFOPXML_STORAGE && pStreamElement->m_pStream )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && pStreamElement->m_pStream )
     {
         OSL_ENSURE( pStreamElement->m_aName.getLength(), "The name must not be empty!\n" );
 
@@ -1792,7 +1790,7 @@ void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl* pStreamElement )
 //-----------------------------------------------
 uno::Reference< io::XInputStream > OStorage_Impl::GetRelInfoStreamForName( const ::rtl::OUString& aName )
 {
-    if ( m_nStorageType == OFOPXML_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         ReadContents();
         if ( m_xRelStorage.is() )
@@ -1820,7 +1818,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
     if ( !xNewPackageFolder.is() )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    if ( m_nStorageType == OFOPXML_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -1926,7 +1924,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
                     uno::Reference< lang::XMultiServiceFactory > xFactory,
-                    sal_Int16 nStorageType )
+                    sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xFactory, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
@@ -1938,7 +1936,7 @@ OStorage::OStorage( uno::Reference< io::XStream > xStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
                     uno::Reference< lang::XMultiServiceFactory > xFactory,
-                    sal_Int16 nStorageType )
+                    sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xFactory, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
@@ -2262,7 +2260,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
 
-    if ( m_pData->m_nStorageType == PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         if ( m_pData->m_bIsRoot )
         {
@@ -2278,7 +2276,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                         ,   static_cast<embed::XStorageRawAccess*> ( this ) );
         }
     }
-    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aReturn <<= ::cppu::queryInterface
                     (   rType
@@ -2317,7 +2315,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
 
         if ( m_pData->m_pTypeCollection == NULL )
         {
-            if ( m_pData->m_nStorageType == PACKAGE_STORAGE )
+            if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
             {
                 if ( m_pData->m_bIsRoot )
                 {
@@ -2343,7 +2341,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
             }
-            else if ( m_pData->m_nStorageType == OFOPXML_STORAGE )
+            else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
             {
                 m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                 (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2485,7 +2483,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     if ( !aStreamName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aStreamName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable element name
 
@@ -2586,7 +2584,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         packages::NoEncryptionException();
 
     if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
@@ -2696,7 +2694,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
     if ( !aStorName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aStorName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
@@ -2851,7 +2849,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const ::rtl
     if ( !aStreamName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aStreamName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
@@ -2933,7 +2931,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         packages::NoEncryptionException();
 
     if ( !aPass.getLength() )
@@ -3090,7 +3088,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
     if ( !aStorName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aStorName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
@@ -3184,7 +3182,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const ::rtl::OUString& aElementName
     if ( !aElementName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable name
 
@@ -3224,7 +3222,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const ::rtl::OUString& aElementName
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a stream!" ) ),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a stream!" ) ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -3253,7 +3251,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const ::rtl::OUString& aElementNam
     if ( !aElementName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 
@@ -3293,7 +3291,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const ::rtl::OUString& aElementNam
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't detect whether it is a storage" ) ),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "can't detect whether it is a storage" ) ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -3326,7 +3324,7 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
     if ( !aElementName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // TODO: unacceptable name
 
@@ -3421,7 +3419,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
       || !aNewName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && ( aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) )
         || aNewName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 ); // TODO: unacceptable element name
@@ -3532,7 +3530,7 @@ void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
         // || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && ( aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) )
         || aNewName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 ); // unacceptable element name
@@ -3636,7 +3634,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
     if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && ( aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) )
         || aNewName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 ); // unacceptable element name
@@ -3746,7 +3744,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface is not supported and must not be accessible
 
     if ( !sStreamName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, sal_False ) )
@@ -3856,7 +3854,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !sStreamName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, sal_False ) )
@@ -3976,7 +3974,7 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const ::rtl::OUString& aStre
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !aStreamName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
@@ -4337,7 +4335,7 @@ uno::Any SAL_CALL OStorage::getByName( const ::rtl::OUString& aName )
     if ( !aName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable element name
 
@@ -4442,7 +4440,7 @@ sal_Bool SAL_CALL OStorage::hasByName( const ::rtl::OUString& aName )
     if ( !aName.getLength() )
         return sal_False;
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         return sal_False;
 
@@ -4619,7 +4617,7 @@ void SAL_CALL OStorage::setEncryptionPassword( const ::rtl::OUString& aPass )
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
 
     OSL_ENSURE( m_pData->m_bIsRoot, "setEncryptionPassword() method is not available for nonroot storages!\n" );
@@ -4685,7 +4683,7 @@ void SAL_CALL OStorage::removeEncryption()
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
 
     OSL_ENSURE( m_pData->m_bIsRoot, "removeEncryption() method is not available for nonroot storages!\n" );
@@ -4780,12 +4778,15 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
     //TODO: think about interaction handler
 
-    if ( m_pData->m_bReadOnlyWrap )
+    // WORKAROUND:
+    // The old document might have no version in the manifest.xml, so we have to allow to set the version
+    // even for readonly storages, so that the version from content.xml can be used.
+    if ( m_pData->m_bReadOnlyWrap && !aPropertyName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // TODO: Access denied
 
-    if ( m_pData->m_nStorageType == ZIP_STORAGE )
+    if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
         throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-    else if ( m_pData->m_nStorageType == PACKAGE_STORAGE )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         if ( aPropertyName.equalsAscii( "MediaType" ) )
         {
@@ -4800,19 +4801,25 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aValue >>= m_pImpl->m_aVersion;
             m_pImpl->m_bControlVersion = sal_True;
 
-            m_pImpl->m_bBroadcastModified = sal_True;
-            m_pImpl->m_bIsModified = sal_True;
+            // this property can be set even for readonly storage
+            if ( !m_pData->m_bReadOnlyWrap )
+            {
+                m_pImpl->m_bBroadcastModified = sal_True;
+                m_pImpl->m_bIsModified = sal_True;
+            }
         }
-        else if ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+                                    || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
+                                    || aPropertyName.equalsAscii( "IsInconsistent" )
                                     || aPropertyName.equalsAscii( "URL" )
-                                    || aPropertyName.equalsAscii( "RepairPackage" ) )
+                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
            || aPropertyName.equalsAscii( "IsRoot" )
            || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
-    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         if ( aPropertyName.equalsAscii( "RelationsInfoStream" ) )
         {
@@ -4849,8 +4856,8 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "URL" )
-                                    || aPropertyName.equalsAscii( "RepairPackage" ) )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "URL" )
+                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
            || aPropertyName.equalsAscii( "IsRoot" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
@@ -4879,7 +4886,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType == PACKAGE_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
       && ( aPropertyName.equalsAscii( "MediaType" )
         || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" )
         || aPropertyName.equalsAscii( "Version" ) ) )
@@ -4937,7 +4944,10 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
 
             return uno::makeAny( sal_False ); // RepairPackage
         }
-        else if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "HasEncryptedEntries" ) )
+        else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
+          && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+            || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
+            || aPropertyName.equalsAscii( "IsInconsistent" ) ) )
         {
             try {
                 m_pImpl->ReadContents();
@@ -5069,7 +5079,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     try
@@ -5100,7 +5110,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -5125,7 +5135,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -5150,7 +5160,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     // TODO/LATER: in future the unification of the ID could be checked
@@ -5180,7 +5190,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
@@ -5216,7 +5226,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     return m_pImpl->GetAllRelationshipsIfAny();
@@ -5236,7 +5246,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const ::rtl::OUString& sID, con
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     ::rtl::OUString aIDTag( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
@@ -5301,7 +5311,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const ::rtl::OUString& sID  )
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -5343,7 +5353,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     ::rtl::OUString aIDTag( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
@@ -5425,7 +5435,7 @@ void SAL_CALL OStorage::clearRelationships()
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     m_pImpl->m_aRelInfo.realloc( 0 );
@@ -5478,7 +5488,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
     if ( !aStreamName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aStreamName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
@@ -5575,7 +5585,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
     if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && ( aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) )
         || aNewName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 ); // unacceptable name
@@ -5831,7 +5841,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
     if ( !aElementName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aElementName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // TODO: unacceptable name
 
@@ -5842,7 +5852,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
             throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         // TODO/LATER: Currently it is only implemented for MediaType property of substorages, might be changed in future
-        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != PACKAGE_STORAGE || !aPropertyName.equalsAscii( "MediaType" ) )
+        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || !aPropertyName.equalsAscii( "MediaType" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         if ( !pElement->m_pStorage )
@@ -5934,7 +5944,7 @@ void SAL_CALL OStorage::copyStreamElementData( const ::rtl::OUString& aStreamNam
     if ( !aStreamName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
       && aStreamName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable name
 
@@ -6081,7 +6091,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
         throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    if ( m_pData->m_nStorageType != PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !aStreamPath.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, sal_True ) )

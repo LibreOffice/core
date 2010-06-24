@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,7 +32,7 @@ PACKAGE = com$/sun$/star$/comp$/beans
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(OS)"=="MACOSX"
 
 dummy:
@@ -44,7 +40,7 @@ dummy:
 
 .ELSE		# "$(OS)"=="MACOSX"
 
-JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
 
 # --- Sources --------------------------------------------------------
 
@@ -74,5 +70,6 @@ JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 .ENDIF
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :  target.mk

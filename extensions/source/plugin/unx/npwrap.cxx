@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: npwrap.cxx,v $
- * $Revision: 1.16.90.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -485,7 +482,9 @@ int main( int argc, char **argv)
 
     medDebug( 1, "left plugin app main loop\n" );
 
+    #ifdef ENABLE_GTK
     g_source_remove(xt_polling_timer_id);
+    #endif
 
     pNP_Shutdown();
     medDebug( 1, "NP_Shutdown done\n" );

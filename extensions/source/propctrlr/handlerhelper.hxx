@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: handlerhelper.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,14 +102,6 @@ namespace pcr
             @return
                 the newly created control
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
-            createListBoxControl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl,
-                sal_Bool _bSorted
-            );
-
         static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
             createListBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,

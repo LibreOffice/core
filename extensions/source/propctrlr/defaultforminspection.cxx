@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: defaultforminspection.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +38,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
 #endif
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "formhelpid.hrc"
-#endif
+#include "propctrlr.hrc"
 #include "formmetadata.hxx"
 
 /** === begin UNO includes === **/

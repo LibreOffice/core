@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: securityenvironment_nssimpl.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,7 +112,13 @@ private :
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 
-        virtual ::sal_Int32 SAL_CALL verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+        virtual ::sal_Int32 SAL_CALL verifyCertificate(
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XCertificate >& xCert,
+            const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > &
+            intermediateCerts)
+            throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 

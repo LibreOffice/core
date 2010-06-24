@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: abpfinalpage.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #include <sfx2/docfilt.hxx>
 #include <vcl/msgbox.hxx>
@@ -144,12 +141,12 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool FinalPage::commitPage( CommitPageReason _eReason )
+    sal_Bool FinalPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;
 
-        if  (   ( eTravelBackward != _eReason )
+        if  (   ( ::svt::WizardTypes::eTravelBackward != _eReason )
             &&  ( !m_aLocationController.prepareCommit() )
             )
             return sal_False;

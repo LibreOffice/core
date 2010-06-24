@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ZipPackageFolder.cxx,v $
- * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include <PackageConstants.hxx>
 #include <ZipPackageFolderEnumeration.hxx>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <vos/diagnose.hxx>
 #include <osl/time.h>
 #include <rtl/digest.h>
@@ -64,7 +62,7 @@ using vos::ORef;
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
-                                     sal_Int16 nFormat,
+                                     sal_Int32 nFormat,
                                      sal_Bool bAllowRemoveOnInsert )
 : m_xFactory( xFactory )
 , m_nFormat( nFormat )
@@ -93,6 +91,60 @@ ZipPackageFolder::~ZipPackageFolder()
 {
 }
 
+sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString& aPath )
+{
+    sal_Bool bHasUnexpected = sal_False;
+
+    for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
+          !bHasUnexpected && aCI != aEnd;
+          aCI++)
+    {
+        const OUString &rShortName = (*aCI).first;
+        const ContentInfo &rInfo = *(*aCI).second;
+
+        if ( rInfo.bFolder )
+        {
+            if ( aPath.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF/" ) ) ) )
+            {
+                // META-INF is not allowed to contain subfolders
+                bHasUnexpected = sal_True;
+            }
+            else
+            {
+                OUString sOwnPath = aPath + rShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+                bHasUnexpected = rInfo.pFolder->LookForUnexpectedODF12Streams( sOwnPath );
+            }
+        }
+        else
+        {
+            if ( aPath.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF/" ) ) ) )
+            {
+                if ( !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "manifest.xml" ) ) )
+                  && rShortName.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "signatures" ) ) ) == -1 )
+                {
+                    // a stream from META-INF with unexpected name
+                    bHasUnexpected = sal_True;
+                }
+
+                // streams from META-INF with expected names are allowed not to be registered in manifest.xml
+            }
+            else if ( !rInfo.pStream->IsFromManifest() )
+            {
+                // the stream is not in META-INF and ist notregistered in manifest.xml,
+                // check whether it is an internal part of the package format
+                if ( aPath.getLength()
+                  || !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mimetype" ) ) ) )
+                {
+                    // if it is not "mimetype" from the root it is not a part of the package
+                    bHasUnexpected = sal_True;
+                }
+            }
+        }
+    }
+
+    return bHasUnexpected;
+}
+
 void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& aPair )
 {
     ::rtl::OUString aExt;
@@ -112,9 +164,9 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
             rInfo.pFolder->setChildStreamsTypeByExtension( aPair );
         else
         {
-            sal_Int32 nNameLength = rShortName.getLength();
+            sal_Int32 nPathLength = rShortName.getLength();
             sal_Int32 nExtLength = aExt.getLength();
-            if ( nNameLength >= nExtLength && rShortName.match( aExt, nNameLength - nExtLength ) )
+            if ( nPathLength >= nExtLength && rShortName.match( aExt, nPathLength - nExtLength ) )
                 rInfo.pStream->SetMediaType( aPair.Second );
         }
     }
@@ -130,8 +182,8 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.nCompressedSize   = rSource.nCompressedSize;
     rDest.nSize             = rSource.nSize;
     rDest.nOffset           = rSource.nOffset;
-    rDest.sName             = rSource.sName;
-    rDest.nNameLen          = rSource.nNameLen;
+    rDest.sPath             = rSource.sPath;
+    rDest.nPathLen          = rSource.nPathLen;
     rDest.nExtraLen         = rSource.nExtraLen;
 }
 
@@ -266,14 +318,14 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
-    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != OFOPXML_FORMAT )
+    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
         ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
-        pTempEntry->nNameLen = (sal_Int16)( ::rtl::OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
+        pTempEntry->nPathLen = (sal_Int16)( ::rtl::OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
         pTempEntry->nExtraLen = -1;
-        pTempEntry->sName = rPath;
+        pTempEntry->sPath = rPath;
 
         try
         {
@@ -332,8 +384,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             // store the ZipEntry data in pTempEntry
 
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pStream->aEntry );
-            pTempEntry->sName = rPath + rShortName;
-            pTempEntry->nNameLen = (sal_Int16)( ::rtl::OUStringToOString( pTempEntry->sName, RTL_TEXTENCODING_UTF8 ).getLength() );
+            pTempEntry->sPath = rPath + rShortName;
+            pTempEntry->nPathLen = (sal_Int16)( ::rtl::OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
 
             sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && (bHaveEncryptionKey || pStream->HasOwnKey());
             sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : pStream->IsToBeCompressed();
@@ -343,7 +395,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             pValue[PKG_MNFST_VERSION].Name = sVersionProperty;
             pValue[PKG_MNFST_VERSION].Value <<= ::rtl::OUString(); // no version is stored for streams currently
             pValue[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
-            pValue[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sName;
+            pValue[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
 
 
             OSL_ENSURE( pStream->GetStreamMode() != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
@@ -488,11 +540,11 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if ( !bUseNonSeekableAccess &&
-                ( bRawStream || bTransportOwnEncrStreamAsRaw ||
-                    ( pStream->IsPackageMember()          && !bToBeEncrypted &&
-                        ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
-                        ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) ) )
+            if ( !bUseNonSeekableAccess
+              && ( bRawStream || bTransportOwnEncrStreamAsRaw
+                || ( pStream->IsPackageMember() && !bToBeEncrypted
+                  && ( ( pStream->aEntry.nMethod == DEFLATED && bToBeCompressed )
+                    || ( pStream->aEntry.nMethod == STORED && !bToBeCompressed ) ) ) ) )
             {
                 // If it's a PackageMember, then it's an unbuffered stream and we need
                 // to get a new version of it as we can't seek backwards.
@@ -633,13 +685,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 if ( pStream->IsEncrypted() )
                     pStream->setSize( nOwnStreamOrigSize );
 
-                pStream->aEntry.sName = rShortName;
                 pStream->aEntry.nOffset *= -1;
             }
         }
 
         // folder can have a mediatype only in package format
-        if ( m_nFormat == PACKAGE_FORMAT || ( m_nFormat == OFOPXML_FORMAT && !rInfo.bFolder ) )
+        if ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) )
             rManList.push_back( aPropSet );
     }
 
@@ -691,7 +742,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
         // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != PACKAGE_FORMAT )
+        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         aValue >>= sMediaType;
@@ -709,7 +760,7 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
     {
         // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != PACKAGE_FORMAT )
+        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         return makeAny ( sMediaType );
@@ -725,11 +776,18 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    if ( pEntry->IsFolder() )
-        maContents[pEntry->aEntry.sName] = new ContentInfo ( static_cast < ZipPackageFolder *> ( pEntry ) );
-    else
-        maContents[pEntry->aEntry.sName] = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
-
+    try
+    {
+        if ( pEntry->IsFolder() )
+            maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageFolder *> ( pEntry ) );
+        else
+            maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
+    }
+    catch(const uno::Exception& rEx)
+    {
+        (void)rEx;
+        throw;
+    }
     if ( bSetParent )
         pEntry->setParent ( *this );
 }

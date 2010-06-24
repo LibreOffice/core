@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: updatecheck.hxx,v $
- * $Revision: 1.6.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +111,8 @@ public:
     virtual void downloadProgressAt(sal_Int8 nProcent);
     virtual void downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize);
     virtual void downloadFinished(const rtl::OUString& rLocalFileName);
+    // checks if the download target already exists and asks user what to do next
+    virtual bool checkDownloadDestination( const rtl::OUString& rFile );
 
     // Cancels the download action (and resumes checking if enabled)
     void cancelDownload();

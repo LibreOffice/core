@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportFinalizer.java,v $
- *
- * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,8 +240,9 @@ public class ReportFinalizer
 
     public void changeReportTitle()
     {
-        String TitleName = xTitleTextBox.getText();
+        final String TitleName = xTitleTextBox.getText();
         CurReportDocument.liveupdate_updateReportTitle(TitleName);
+        CurUnoDialog.enableFinishButton(!"".equals(TitleName));
     }
 
     public int getReportOpenMode()
@@ -272,18 +269,25 @@ public class ReportFinalizer
     public boolean finish()
     {
         StoreName = getStoreName();
-        if (CurReportDocument.getRecordParser().getReportDocuments().hasByHierarchicalName(StoreName))
+        if (!CurReportDocument.getRecordParser().getReportDocuments().hasByHierarchicalName(StoreName))
         {
-            String sMsgReportDocumentNameDuplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 76);
-            String sShowMsgReportNameisDuplicate = JavaTools.replaceSubString(sMsgReportDocumentNameDuplicate, StoreName, "%REPORTNAME");
-            /* int iMsg = */ CurUnoDialog.showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sShowMsgReportNameisDuplicate);
-            return false;
+            try
+            {
+                CurReportDocument.store(StoreName, getReportOpenMode());
+                ReportWizard.bCloseDocument = false;
+                return true;
+            }
+            catch(Exception e)
+            {
+                CurUnoDialog.showMessageBox("ErrorBox", VclWindowPeerAttribute.OK,e.getLocalizedMessage() );
+                CurUnoDialog.enableFinishButton(false);
+                return false;
+            }
         }
-        else
-        {
-            CurReportDocument.store(StoreName, getReportOpenMode());
-            ReportWizard.bCloseDocument = false;
-            return true;
-        }
+        String sMsgReportDocumentNameDuplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 76);
+        String sShowMsgReportNameisDuplicate = JavaTools.replaceSubString(sMsgReportDocumentNameDuplicate, StoreName, "%REPORTNAME");
+        /* int iMsg = */ CurUnoDialog.showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sShowMsgReportNameisDuplicate);
+        CurUnoDialog.enableFinishButton(false);
+        return false;
     }
 }

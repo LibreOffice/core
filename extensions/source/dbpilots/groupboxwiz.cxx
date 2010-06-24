@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: groupboxwiz.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include "optiongrouplayouter.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 
 
 //#define GBW_STATE_DATASELECTION       0
@@ -84,7 +79,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    OWizardPage* OGroupBoxWizard::createPage(WizardState _nState)
+    OWizardPage* OGroupBoxWizard::createPage(::svt::WizardTypes::WizardState _nState)
     {
         switch (_nState)
         {
@@ -111,7 +106,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    WizardTypes::WizardState OGroupBoxWizard::determineNextState( WizardState _nCurrentState ) const
+    WizardTypes::WizardState OGroupBoxWizard::determineNextState( ::svt::WizardTypes::WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
         {
@@ -138,7 +133,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OGroupBoxWizard::enterState(WizardState _nState)
+    void OGroupBoxWizard::enterState(::svt::WizardTypes::WizardState _nState)
     {
         // some stuff to do before calling the base class (modifying our settings)
         switch (_nState)
@@ -192,18 +187,15 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGroupBoxWizard::onFinish(sal_Int32 _nResult)
+    sal_Bool OGroupBoxWizard::onFinish()
     {
-        if (RET_OK != _nResult)
-            return OControlWizard::onFinish(_nResult);
-
         // commit the basic control setttings
         commitControlSettings(&m_aSettings);
 
         // create the radio buttons
         createRadios();
 
-        return OControlWizard::onFinish(_nResult);
+        return OControlWizard::onFinish();
     }
 
     //=====================================================================
@@ -270,7 +262,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORadioSelectionPage::commitPage( CommitPageReason _eReason )
+    sal_Bool ORadioSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
@@ -282,7 +274,7 @@ namespace dbp
         rSettings.aValues.clear();
         rSettings.aLabels.reserve(m_aExistingRadios.GetEntryCount());
         rSettings.aValues.reserve(m_aExistingRadios.GetEntryCount());
-        for (WizardState i=0; i<m_aExistingRadios.GetEntryCount(); ++i)
+        for (::svt::WizardTypes::WizardState i=0; i<m_aExistingRadios.GetEntryCount(); ++i)
         {
             rSettings.aLabels.push_back(m_aExistingRadios.GetEntry(i));
             rSettings.aValues.push_back(String::CreateFromInt32((sal_Int32)(i + 1)));
@@ -398,7 +390,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ODefaultFieldSelectionPage::commitPage( CommitPageReason _eReason )
+    sal_Bool ODefaultFieldSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
             return sal_False;
@@ -421,7 +413,7 @@ namespace dbp
         ,m_aValue               (this, ModuleRes(ET_OPTIONVALUE))
         ,m_aOptionsLabel        (this, ModuleRes(FT_RADIOBUTTONS))
         ,m_aOptions             (this, ModuleRes(LB_RADIOBUTTONS))
-        ,m_nLastSelection((WizardState)-1)
+        ,m_nLastSelection((::svt::WizardTypes::WizardState)-1)
     {
         FreeResource();
 
@@ -445,7 +437,7 @@ namespace dbp
     //---------------------------------------------------------------------
     void OOptionValuesPage::implTraveledOptions()
     {
-        if ((WizardState)-1 != m_nLastSelection)
+        if ((::svt::WizardTypes::WizardState)-1 != m_nLastSelection)
         {
             // save the value for the last option
             DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
@@ -485,7 +477,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OOptionValuesPage::commitPage( CommitPageReason _eReason )
+    sal_Bool OOptionValuesPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
@@ -553,7 +545,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFinalizeGBWPage::commitPage( CommitPageReason _eReason )
+    sal_Bool OFinalizeGBWPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;

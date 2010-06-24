@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.2.20.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,8 +32,6 @@ PRJNAME = forms
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-
-.IF "$(BUILD_QADEVOOO)" == "YES"
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
@@ -58,7 +52,6 @@ JARCOMPRESS 	= TRUE
 # classpath and argument list
 RUNNER_CLASSPATH = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar"
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
-.END
 
 # --- Targets ------------------------------------------------------
 
@@ -73,20 +66,14 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
-.IF "$(BUILD_QADEVOOO)" == "YES"
+test:
+    echo $(SOLARBINDIR)
+
 show_targets:
-    +@java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
+    +@$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
 
 run:
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
 
 run_%:
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
-
-.ELSE
-run: show_targets
-
-show_targets:
-    +@echo "Built without qadevOOo, no QA tests"
-
-.ENDIF
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)

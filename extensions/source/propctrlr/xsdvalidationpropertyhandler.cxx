@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xsdvalidationpropertyhandler.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,18 +31,10 @@
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
 #include "xsddatatypes.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
 #include "formlocalid.hrc"
-#endif
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "propctrlr.hrc"
 #include "newdatatype.hxx"
 #include "xsdvalidationhelper.hxx"
 #include "pcrcommon.hxx"

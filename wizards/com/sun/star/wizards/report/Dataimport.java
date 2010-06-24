@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Dataimport.java,v $
- * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@ package com.sun.star.wizards.report;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.text.XTextDocument;
 
 import com.sun.star.wizards.ui.*;
@@ -214,11 +212,10 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.getRecordParser().dispose();
     }
 
-    public void createReport(final XMultiServiceFactory xMSF, XTextDocument _textDocument, PropertyValue[] properties)
+    public void createReport( XMultiServiceFactory xMSF, XDatabaseDocumentUI i_documentUI, XTextDocument _textDocument,
+        PropertyValue[] properties)
     {
-        // CurReportDocument = new ReportTextDocument(xMSF, _textDocument,m_oResource);
-        CurReportDocument = ReportTextImplementation.create(xMSF, _textDocument, m_oResource);
-//            CurProperties = properties;
+        CurReportDocument = ReportTextImplementation.create( xMSF, i_documentUI, _textDocument, m_oResource );
         showProgressDisplay(xMSF, true);
         importReportData(xMSF, this, CurReportDocument, properties);
     }

@@ -1,0 +1,2 @@
+V	341114161332Z		1002	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=User 1 Sub CA 2 Root 8
+R	341114161602Z	091120161700Z,superseded	1003	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=User 2 Sub CA 2 Root 8

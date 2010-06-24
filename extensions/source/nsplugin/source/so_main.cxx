@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: so_main.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,7 +126,7 @@ int find_free_node()
     return -1;
 }
 
-int find_cur_node(sal_Int32 cur_id)
+int find_cur_node(long cur_id)
 {
     for(int i=0; i<MAX_NODE_NUM; i++)
     {
@@ -149,16 +146,6 @@ sal_Bool dump_plugin_message(PLUGIN_MSG* pMsg)
         pMsg->msg_id, pMsg->instance_id, pMsg->wnd_id,
         pMsg->wnd_x, pMsg->wnd_y, pMsg->wnd_w, pMsg->wnd_h, pMsg->url);
     return sal_True;
-}
-
-int prepareEnviron()
-{
-    // if child process inherit the chdir() property from parent process, if yes, no getNewLibraryPath() needed
-    const char* pNewLibraryPath = getNewLibraryPath();
-    putenv( (char*) pNewLibraryPath );
-    SoPluginInstance::SetSODir((char *)findProgramDir());
-
-    return 0;
 }
 
 int Set_Window(PLUGIN_MSG* pMsg)

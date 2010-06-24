@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxaccessibletoolbox.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -444,6 +441,26 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
         }
     }
 }
+
+// -----------------------------------------------------------------------------
+
+void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen )
+{
+    ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
+    if( pWindow && pToolBox )
+    {
+        Reference< XAccessible > xChild( pWindow->GetAccessible() );
+        if( xChild.is() )
+        {
+            Reference< XAccessible > xChildItem( getAccessibleChild( static_cast< sal_Int32 >( pToolBox->GetItemPos( pToolBox->GetDownItemId() ) ) ) );
+            VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xChildItem.get() );
+
+            pItem->SetChild( xChild );
+            pItem->NotifyChildEvent( xChild, bOpen );
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 void VCLXAccessibleToolBox::UpdateItemName_Impl( sal_Int32 _nPos )
 {
@@ -582,6 +599,13 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         case VCLEVENT_TOOLBOX_ITEMDISABLED :
         {
             UpdateItemEnabled_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
+            break;
+        }
+
+        case VCLEVENT_DROPDOWN_OPEN:
+        case VCLEVENT_DROPDOWN_CLOSE:
+        {
+            UpdateCustomPopupItemp_Impl( static_cast< Window* >( rVclWindowEvent.GetData() ), rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN );
             break;
         }
 

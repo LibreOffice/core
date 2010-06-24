@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DatabaseControl.java,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@ package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.sdbc.DataType;
@@ -95,6 +93,11 @@ public class DatabaseControl extends Control
             xPropColumn.setPropertyValue("DataField", sFieldName);
             xPropColumn.setPropertyValue("Label", _columntitle);
             xPropColumn.setPropertyValue("Width", new Integer(0));  // Width of column is adjusted to Columname
+
+            XPropertySetInfo xPSI = xPropColumn.getPropertySetInfo();
+            if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )
+                xPropColumn.setPropertyValue( "MouseWheelBehavior", new Short( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
+
             setNumericLimits();
             _oGridControl.xNameContainer.insertByName(sFieldName, xPropColumn);
         }

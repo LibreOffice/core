@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: oleobjw.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,10 @@
 #define __OLEOBJW_HXX
 #include "ole2uno.hxx"
 
+#ifdef _MSC_VER
 #pragma warning (push,1)
 #pragma warning (disable:4548)
+#endif
 
 #include <tools/presys.h>
 #define _WIN32_WINNT 0x0400
@@ -46,7 +45,9 @@
 #include <hash_map>
 #include <tools/postsys.h>
 
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 
@@ -88,7 +89,7 @@ public:
     ~IUnknownWrapper_Impl();
 
     //XInterface
-    Any SAL_CALL IUnknownWrapper_Impl::queryInterface(const Type& t)
+    Any SAL_CALL queryInterface(const Type& t)
         throw (RuntimeException);
 
     // XInvokation
@@ -233,6 +234,7 @@ protected:
     Sequence<Type> m_seqTypes;
     CComPtr<IUnknown> m_spUnknown;
     CComPtr<IDispatch> m_spDispatch;
+        rtl::OUString m_sTypeName; // is "" ( not initialised ), "IDispatch" ( we have no idea ) or "SomeLibrary.SomeTypeName" if we managed to get a type
     /** This value is set dureing XInitialization::initialize. It indicates that the COM interface
     was transported as VT_DISPATCH in a VARIANT rather then a VT_UNKNOWN
     */

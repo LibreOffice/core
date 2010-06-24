@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XUnbufferedStream.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,8 @@
 #include <algorithm>
 #include <string.h>
 
+#include <osl/mutex.hxx>
+
 #if 0
 // for debugging purposes here
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -55,14 +54,16 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::packages::zip::ZipIOException;
 using ::rtl::OUString;
 
-XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
+XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
+                          ZipEntry & rEntry,
                            Reference < XInputStream > xNewZipStream,
                            const vos::ORef < EncryptionData > &rData,
                            sal_Int8 nStreamMode,
                            sal_Bool bIsEncrypted,
                           const ::rtl::OUString& aMediaType,
                           sal_Bool bRecoveryMode )
-: mxZipStream ( xNewZipStream )
+: maMutexHolder( aMutexHolder.Is() ? aMutexHolder : SotMutexHolderRef( new SotMutexHolder ) )
+, mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
 , maEntry ( rEntry )
 , mxData ( rData )
@@ -115,7 +116,8 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStream,
                     const vos::ORef < EncryptionData > &rData )
-: mxZipStream ( xRawStream )
+: maMutexHolder( new SotMutexHolder )
+, mxZipStream ( xRawStream )
 , mxZipSeek ( xRawStream, UNO_QUERY )
 , mxData ( rData )
 , maCipher ( NULL )
@@ -159,6 +161,8 @@ XUnbufferedStream::~XUnbufferedStream()
 sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( maMutexHolder->GetMutex() );
+
     sal_Int32 nRequestedBytes = nBytesToRead;
     OSL_ENSURE( !mnHeaderToRead || mbWrappedRaw, "Only encrypted raw stream can be provided with header!" );
     if ( mnMyCurrent + nRequestedBytes > mnZipSize + maHeader.getLength() )
@@ -230,7 +234,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Should not be possible to read more then requested!" ) ),
                         Reference< XInterface >() );
 
-                if ( maInflater.finished() )
+                if ( maInflater.finished() || maInflater.getLastInflateError() )
                     throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
                                         Reference< XInterface >() );
 
@@ -244,6 +248,10 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     mxZipSeek->seek ( mnZipCurrent );
                     sal_Int32 nToRead = std::min ( nDiff, std::max ( nRequestedBytes, static_cast< sal_Int32 >( 8192 ) ) );
                     sal_Int32 nZipRead = mxZipStream->readBytes ( maCompBuffer, nToRead );
+                    if ( nZipRead < nToRead )
+                        throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "No expected data!" ) ),
+                                            Reference< XInterface >() );
+
                     mnZipCurrent += nZipRead;
                     // maCompBuffer now has the data, check if we need to decrypt
                     // before passing to the Inflater

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: composeduiupdate.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,26 +116,6 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >
             getUIForPropertyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxHandler );
 
-        /** fires the collected UI changes to our delegator UI
-
-            All operations for any elements are forwarded:
-            <ul><li>If an element has been hidden at least once, it's also hidden at the delegator UI.</li>
-                <li>If an element has been shown at least once, and never been hidden, it's also
-                    shown at the delegator UI.</li>
-                <li>If an element has never been shown or hidden, it's also not touched at the delegator UI.</li>
-                <li>The same holds if you replace "hidden" in the last three items with "disabled",
-                    and "shown" with "enabled".</li>
-                <li>If an element should have been rebuilt (->XObjectInspectorUI::rebuiltPropertyUI)
-                    at least once, it's rebuilt at the delegator UI, too.<br/>
-                    After that, the request to rebuild the UI for this property is cleared, so subsequent
-                    calls to ->fire will not trigger an new rebuilt request.
-            </ul>
-
-            @throws ::com::sun::star::lang::DisposedException
-                if ->dispose has been called previously
-        */
-        void SAL_CALL fire();
-
         /** Suspends automatic firing of UI changes
 
             normally, as soon as any of the property handlers does a request for an
@@ -182,7 +159,21 @@ namespace pcr
         /// throws an exception if the component is already disposed
                 void impl_checkDisposed() const;
 
-        /** fires all accumulated changes
+        /** fires the collected UI changes to our delegator UI
+
+            All operations for any elements are forwarded:
+            <ul><li>If an element has been hidden at least once, it's also hidden at the delegator UI.</li>
+                <li>If an element has been shown at least once, and never been hidden, it's also
+                    shown at the delegator UI.</li>
+                <li>If an element has never been shown or hidden, it's also not touched at the delegator UI.</li>
+                <li>The same holds if you replace "hidden" in the last three items with "disabled",
+                    and "shown" with "enabled".</li>
+                <li>If an element should have been rebuilt (->XObjectInspectorUI::rebuiltPropertyUI)
+                    at least once, it's rebuilt at the delegator UI, too.<br/>
+                    After that, the request to rebuild the UI for this property is cleared, so subsequent
+                    calls to ->fire will not trigger an new rebuilt request.
+            </ul>
+
             @precond
                 instance is not disposed
         */

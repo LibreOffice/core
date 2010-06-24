@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FTPDialog.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -636,7 +633,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      */
     public static void main(String args[])
     {
-        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
         try
         {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);

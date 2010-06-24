@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: composeduiupdate.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -777,13 +774,6 @@ namespace pcr
             &CachedInspectorUI::getEnabledSecondaryButtons,
             &CachedInspectorUI::getDisabledSecondaryButtons
         );
-    }
-
-    //----------------------------------------------------------------
-    void SAL_CALL ComposedPropertyUIUpdate::fire()
-    {
-        impl_checkDisposed();
-        impl_fireAll_throw();
     }
 
     //--------------------------------------------------------------------

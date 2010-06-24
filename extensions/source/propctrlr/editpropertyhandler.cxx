@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editpropertyhandler.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,6 +295,7 @@ namespace pcr
             _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
             _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
             _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_VERTICAL_ALIGN,  nTextType == TEXTTYPE_SINGLELINE );
 
             _rxInspectorUI->showCategory( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) ), nTextType != TEXTTYPE_RICHTEXT );
         }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: registerextensions.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -320,7 +317,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
 extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 {
-    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("OFFICEINSTALLLOCATION") );
+    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
     std::_tstring sUnoPkgFile = sInstDir + TEXT("program\\unopkg.exe");
     std::_tstring sShareInstallDir = sInstDir + TEXT("share\\extension\\install\\");
     std::_tstring sPattern = sShareInstallDir + TEXT("*.oxt");
@@ -354,7 +351,7 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
             {
                 const std::_tstring sTempFolder(createTempFolder());
                 std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
-                std::_tstring sCommandPart1 = sUnoPkgFile + " add --shared --bundled " + "\"" + sOxtFile + "\"";
+                std::_tstring sCommandPart1 = sUnoPkgFile + " add --shared --suppress-license --bundled " + "\"" + sOxtFile + "\"";
                 std::_tstring sCommand = sCommandPart1
                     + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
                     + TEXT(" -env:UserInstallation=") + sTempFolder;
@@ -418,7 +415,7 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -426,7 +423,7 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -536,7 +533,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -544,7 +541,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }

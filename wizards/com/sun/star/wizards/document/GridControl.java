@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: GridControl.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,15 +60,15 @@ public class GridControl extends Shape
         {
             fieldcolumns = _fieldcolumns;
             Object oGridModel = oFormHandler.xMSFDoc.createInstance(oFormHandler.sModelServices[FormHandler.SOGRIDCONTROL]);
-            xNameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oGridModel);
-            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oGridModel);
+            xNameContainer = UnoRuntime.queryInterface( XNameContainer.class, oGridModel );
+            xNameAccess = UnoRuntime.queryInterface( XNameAccess.class, oGridModel );
             _xFormName.insertByName(_sname, oGridModel);
-            xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oGridModel);
+            xControlModel = UnoRuntime.queryInterface( XControlModel.class, oGridModel );
             xControlShape.setControl(xControlModel);
-            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oGridModel);
+            xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, oGridModel );
             oFormHandler.xDrawPage.add(xShape);
-            xGridColumnFactory = (XGridColumnFactory) UnoRuntime.queryInterface(XGridColumnFactory.class, oGridModel);
-            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oGridModel);
+            xGridColumnFactory = UnoRuntime.queryInterface( XGridColumnFactory.class, oGridModel );
+            xComponent = UnoRuntime.queryInterface( XComponent.class, oGridModel );
 
 //      Helper.setUnoPropertyValue(oGridModel, "Name", _sname);
             for (int i = 0; i < fieldcolumns.length; i++)

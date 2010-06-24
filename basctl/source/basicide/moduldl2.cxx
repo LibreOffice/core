@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: moduldl2.cxx,v $
- * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/util/VetoException.hpp>
@@ -232,14 +229,6 @@ SvLBoxEntry* BasicCheckBox::DoInsertEntry( const String& rStr, ULONG nPos )
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::RemoveEntry( ULONG nPos )
-{
-    if ( nPos < GetEntryCount() )
-        SvTreeListBox::GetModel()->Remove( GetEntry( nPos ) );
-}
-
-//----------------------------------------------------------------------------
-
 SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
 {
     ULONG nCount = GetEntryCount();
@@ -251,29 +240,6 @@ SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
             return pEntry;
     }
     return 0;
-}
-
-//----------------------------------------------------------------------------
-
-ULONG BasicCheckBox::GetSelectEntryPos() const
-{
-    return GetModel()->GetAbsPos( FirstSelected() );
-}
-
-//----------------------------------------------------------------------------
-
-ULONG BasicCheckBox::GetCheckedEntryCount() const
-{
-    ULONG   nCheckCount = 0;
-    ULONG   nCount      = GetEntryCount();
-
-    for (ULONG i=0; i<nCount; i++ )
-    {
-        if ( IsChecked( i ) )
-            nCheckCount++;
-    }
-
-    return nCheckCount;
 }
 
 //----------------------------------------------------------------------------

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15.90.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -77,7 +73,7 @@ APP1STDLIBS=\
     $(VOSLIB)					\
     $(SALLIB)
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO" || "$(OS)"=="HPUX"
-APP1STDLIBS+=-lXm -lXt -lXext -lX11 -ldl
+APP1STDLIBS+=-lXm -lXt $(X11LINK_DYNAMIC) -ldl
 .ELSE
 .IF "$(DISABLE_XAW)" != "TRUE"
 APP1STDLIBS+=-lXaw 
@@ -85,7 +81,7 @@ APP1STDLIBS+=-lXaw
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
 APP1STDLIBS+= -lXt -lXext -lX11
 .ELSE
-APP1STDLIBS+= -lXt -lXext -lX11 -ldl
+APP1STDLIBS+= -lXt $(X11LINK_DYNAMIC) -ldl
 .ENDIF
 .ENDIF
 

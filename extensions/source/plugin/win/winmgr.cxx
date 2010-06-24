@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: winmgr.cxx,v $
- * $Revision: 1.16.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,7 +322,7 @@ static void add_SO_Plugins( PluginLocationMap & rPlugins )
 }
 
 //__________________________________________________________________________________________________
-Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) throw()
+Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(void) throw()
 {
     Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
     static Sequence<PluginDescription > s_aDescriptions( 0 );

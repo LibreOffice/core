@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormComponent.cxx,v $
- * $Revision: 1.62.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1977,7 +1974,6 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setFastPropertyValue_NoBroadcast" );
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
@@ -2151,9 +2147,9 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 
         try
         {
+            sal_Int32 nFieldType = DataType::OTHER;
             if ( xFieldCandidate.is() )
             {
-                sal_Int32 nFieldType = 0;
                 xFieldCandidate->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
                 if ( approveDbColumnType( nFieldType ) )
                     impl_setField_noNotify( xFieldCandidate );
@@ -2165,6 +2161,8 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             {
                 if( m_xField->getPropertySetInfo()->hasPropertyByName( PROPERTY_VALUE ) )
                 {
+                    m_nFieldType = nFieldType;
+
                     // an wertaenderungen horchen
                     m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
                     m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
@@ -2215,7 +2213,7 @@ sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
         || (_nColumnType == DataType::LONGVARBINARY) || (_nColumnType == DataType::OTHER)
         || (_nColumnType == DataType::OBJECT) || (_nColumnType == DataType::DISTINCT)
         || (_nColumnType == DataType::STRUCT) || (_nColumnType == DataType::ARRAY)
-        || (_nColumnType == DataType::BLOB) || (_nColumnType == DataType::CLOB)
+        || (_nColumnType == DataType::BLOB) /*|| (_nColumnType == DataType::CLOB)*/
         || (_nColumnType == DataType::REF) || (_nColumnType == DataType::SQLNULL))
         return sal_False;
 
@@ -2550,10 +2548,11 @@ void OBoundControlModel::reset() throw (RuntimeException)
                 || ( nFieldType == DataType::VARBINARY     )
                 || ( nFieldType == DataType::LONGVARBINARY )
                 || ( nFieldType == DataType::OBJECT        )
-                || ( nFieldType == DataType::BLOB          )
-                || ( nFieldType == DataType::CLOB          )
+                /*|| ( nFieldType == DataType::CLOB          )*/
                 )
                 m_xColumn->getBinaryStream();
+            else if ( nFieldType == DataType::BLOB          )
+                m_xColumn->getBlob();
             else
                 m_xColumn->getString();
 
@@ -2802,7 +2801,14 @@ void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw (
 //--------------------------------------------------------------------
 void OBoundControlModel::transferDbValueToControl( )
 {
-    setControlValue( translateDbColumnToControlValue(), eDbColumnBinding );
+    try
+    {
+        setControlValue( translateDbColumnToControlValue(), eDbColumnBinding );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------------------

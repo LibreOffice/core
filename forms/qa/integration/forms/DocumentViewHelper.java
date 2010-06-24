@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DocumentViewHelper.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.form.FormComponentType;
 import com.sun.star.form.XForm;
-import com.sun.star.form.XFormController;
+import com.sun.star.form.runtime.XFormController;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -190,10 +187,9 @@ public class DocumentViewHelper
     /* ------------------------------------------------------------------ */
     /** retrieves the form controller for a given logical form
      */
-    public XFormController getFormController( XPropertySet _form )
+    public XFormController getFormController( Object _form )
     {
-        XFormLayerAccess formLayerAccess = (XFormLayerAccess)query( XFormLayerAccess.class );
-        return formLayerAccess.getFormController( (XForm)UnoRuntime.queryInterface( XForm.class, _form ) );
+        return getFormController( UnoRuntime.queryInterface( XForm.class, _form ));
     }
 
     /* ------------------------------------------------------------------ */

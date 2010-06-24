@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: handlerhelper.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,14 +157,6 @@ namespace pcr
                 xListControl->appendListEntry( *loop );
             return xListControl.get();
         }
-    }
-
-    //--------------------------------------------------------------------
-    Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const Sequence< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
-    {
-        ::std::vector< ::rtl::OUString > aAsVector( _rInitialListEntries.getConstArray(), _rInitialListEntries.getConstArray() + _rInitialListEntries.getLength() );
-        return lcl_implCreateListLikeControl( _rxControlFactory, aAsVector, _bReadOnlyControl, _bSorted, sal_True );
     }
 
     //--------------------------------------------------------------------

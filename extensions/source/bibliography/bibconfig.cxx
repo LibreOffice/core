@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bibconfig.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_extensions.hxx"
 
 #include <bibconfig.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -244,6 +241,10 @@ void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
     SetModified();
 };
 //---------------------------------------------------------------------------
+void BibConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{
+}
+
 void    BibConfig::Commit()
 {
     const Sequence<OUString> aPropertyNames = GetPropertyNames();

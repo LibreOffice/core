@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ZipPackageStream.hxx,v $
- * $Revision: 1.23.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,11 +67,11 @@ protected:
     sal_uInt32  m_nMagicalHackPos;
     sal_uInt32  m_nMagicalHackSize;
 
-    SotMutexHolderRef m_aSharedMutexRef;
-
     sal_Bool m_bHasSeekable;
 
     sal_Bool m_bCompressedIsSetFromOutside;
+
+    sal_Bool m_bFromManifest;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& GetOwnSeekStream();
 
@@ -84,6 +81,10 @@ public:
     sal_Bool IsToBeEncrypted () const { return bToBeEncrypted;}
     sal_Bool IsEncrypted () const    { return bIsEncrypted;}
     sal_Bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
+
+    sal_Bool IsFromManifest() const { return m_bFromManifest; }
+    void SetFromManifest( sal_Bool bValue ) { m_bFromManifest = bValue; }
+
     vos::ORef < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
     const com::sun::star::uno::Sequence < sal_Int8 >& getKey () const

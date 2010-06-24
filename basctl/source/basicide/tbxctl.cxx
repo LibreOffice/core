@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tbxctl.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <tbxctl.hrc>
 #include <idetemp.hxx>
 #include <sfx2/imagemgr.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -186,7 +183,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages(),
-                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
                 ToolBox& rBox = GetToolBox();
                 rBox.SetItemImage(GetId(), aImage);
                 nLastSlot = nLastEnum;

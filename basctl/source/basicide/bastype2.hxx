@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bastype2.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +34,12 @@
 
 #define _SVICNVW_HXX
 #include <svtools/svtreebx.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <basic/sbstar.hxx>
 #include <sbxitem.hxx>
 #include "basobj.hxx"
 
-enum BasicEntryType { OBJ_TYPE_UNKNOWN, OBJ_TYPE_DOCUMENT, OBJ_TYPE_LIBRARY, OBJ_TYPE_MODULE, OBJ_TYPE_DIALOG, OBJ_TYPE_METHOD };
+enum BasicEntryType { OBJ_TYPE_UNKNOWN, OBJ_TYPE_DOCUMENT, OBJ_TYPE_LIBRARY, OBJ_TYPE_MODULE, OBJ_TYPE_DIALOG, OBJ_TYPE_METHOD, OBJ_TYPE_DOCUMENT_OBJECTS, OBJ_TYPE_USERFORMS, OBJ_TYPE_NORMAL_MODULES, OBJ_TYPE_CLASS_MODULES };
 
 #define BROWSEMODE_MODULES      0x01
 #define BROWSEMODE_SUBS         0x02
@@ -101,14 +98,15 @@ class BasicEntryDescriptor
     ScriptDocument          m_aDocument;
     LibraryLocation         m_eLocation;
     String                  m_aLibName;
+    String                  m_aLibSubName;  // for vba entry:  Document Objects, Class Modules, Forms and Normal Modules
     String                  m_aName;
     String                  m_aMethodName;
     BasicEntryType          m_eType;
 
 public:
                             BasicEntryDescriptor();
-                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rName, BasicEntryType eType );
-                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rName, const String& rMethodName, BasicEntryType eType );
+                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rLibSubName, const String& rName, BasicEntryType eType );
+                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rLibSubName, const String& rName, const String& rMethodName, BasicEntryType eType );
     virtual                 ~BasicEntryDescriptor();
 
                             BasicEntryDescriptor( const BasicEntryDescriptor& rDesc );
@@ -124,6 +122,9 @@ public:
 
     const String&           GetLibName() const { return m_aLibName; }
     void                    SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
+
+    const String&           GetLibSubName() const { return m_aLibSubName; }
+    void                    SetLibSubName( const String& aLibSubName ) { m_aLibSubName = aLibSubName; }
 
     const String&           GetName() const { return m_aName; }
     void                    SetName( const String& aName ) { m_aName = aName; }
@@ -164,6 +165,9 @@ protected:
 
     void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
+    void                    ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
+    void                    ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const String& rLibName );
+    SvLBoxEntry*            ImpFindEntry( SvLBoxEntry* pParent, const String& rText );
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument );

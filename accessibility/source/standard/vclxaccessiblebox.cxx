@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxaccessiblebox.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,7 +152,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // combobox, however, we have to help the list with providing
             // the text of the currently selected item.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if (pList != NULL)
+            if (pList != NULL && m_xText.is())
             {
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )

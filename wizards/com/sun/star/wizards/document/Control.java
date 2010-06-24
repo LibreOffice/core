@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Control.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XLayoutConstrains;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
@@ -100,8 +98,13 @@ public class Control extends Shape
             icontroltype = _icontroltype;
             sServiceName = oFormHandler.sModelServices[getControlType()];
             Object oControlModel = oFormHandler.xMSFDoc.createInstance(sServiceName);
-            xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oControlModel);
-            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oControlModel);
+            xControlModel = UnoRuntime.queryInterface( XControlModel.class, oControlModel );
+            xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, oControlModel );
+
+            XPropertySetInfo xPSI = xPropertySet.getPropertySetInfo();
+            if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )
+                xPropertySet.setPropertyValue( "MouseWheelBehavior", new Short( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
+
             insertControlInContainer(_FieldName);
             xControlShape.setControl(xControlModel);
             if (_xGroupShapes == null)
@@ -113,7 +116,7 @@ public class Control extends Shape
                 _xGroupShapes.add(xShape);
             }
             xControl = oFormHandler.xControlAccess.getControl(xControlModel);
-            xControlPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl);
+            xControlPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xControl );
             xWindowPeer = xControl.getPeer();
         }
         catch (Exception e)

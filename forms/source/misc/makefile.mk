@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Types -------------------------------------
 
 INCPRE+=$(SOLARINCDIR)$/offuh
+INCPRE*=$(INCCOM)$/$(TARGET)
 
 # --- Files -------------------------------------
 
@@ -61,4 +58,13 @@ SLOFILES=	$(SLO)$/limitedformats.obj \
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+ALLTAR : \
+        $(MISC)$/$(TARGET).don \
+
+$(SLOFILES) : $(MISC)$/$(TARGET).don
+
+$(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
+        +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
+        echo $@
 

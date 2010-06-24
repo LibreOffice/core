@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: InterfaceContainer.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 #include "frm_resource.hrc"
 #include "frm_resource.hxx"
 #include "InterfaceContainer.hxx"
+#include "componenttools.hxx"
 #include "property.hrc"
 #include "services.hxx"
 
@@ -43,6 +41,7 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/form/XForm.hpp>
 
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -60,13 +59,20 @@
 #include <memory>
 
 //.........................................................................
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <ooo/vba/XVBAToOOEventDescGen.hpp>
+#include <comphelper/processfactory.hxx>
+
 namespace frm
 {
 //.........................................................................
 
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::io;
@@ -82,6 +88,88 @@ namespace
     }
 }
 
+bool
+lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
+{
+    const ScriptEventDescriptor* pDesc = sEvents.getConstArray();
+    const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
+    for ( ; pDesc != pEnd; ++pDesc )
+    {
+        if ( pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+            return true;
+    }
+    return false;
+}
+
+Sequence< ScriptEventDescriptor >
+lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
+{
+    Sequence< ScriptEventDescriptor > sStripped( sEvents.getLength() );
+
+    const ScriptEventDescriptor* pDesc = sEvents.getConstArray();
+    const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
+    sal_Int32 nCopied = 0;
+    for ( ; pDesc != pEnd; ++pDesc )
+    {
+        if ( !pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+        {
+            sStripped[ nCopied++ ] = *pDesc;
+        }
+    }
+    if ( nCopied )
+        sStripped.realloc( nCopied );
+    return sStripped;
+}
+
+void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIndex )
+{
+    // we are dealing with form controls
+    try
+    {
+        do
+        {
+            Reference< XModel > xDoc( getXModel( static_cast< XContainer *> ( this ) ) );
+            if ( !xDoc.is() )
+                break;
+
+            Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBACodeNameProvider" ) ), UNO_QUERY );
+            if ( !xNameQuery.is() )
+                break;
+
+            ::osl::MutexGuard aGuard( m_rMutex );
+            bool hasVBABindings = lcl_hasVbaEvents( m_xEventAttacher->getScriptEvents( i_nIndex ) );
+            if ( hasVBABindings )
+                break;
+
+            Reference< XInterface > xElement( getByIndex( i_nIndex ) , UNO_QUERY_THROW );
+            Reference< XForm > xElementAsForm( xElement, UNO_QUERY );
+            if ( xElementAsForm.is() )
+                break;
+
+            ::rtl::OUString sCodeName( xNameQuery->getCodeNameForObject( xElement ) );
+
+            Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
+            ::rtl::OUString sServiceName;
+            xProps->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl" ) ) >>= sServiceName;
+
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBAToOOEventDesc" ) ), UNO_QUERY_THROW );
+            Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( m_xServiceFactory->createInstance( sServiceName ), sCodeName );
+            // register the vba script events
+            m_xEventAttacher->registerScriptEvents( i_nIndex, vbaEvents );
+        }
+        while ( false );
+    }
+    catch ( const ServiceNotRegisteredException& )
+    {
+        // silence this, not all document types support the ooo.vba.VBACodeNameProvider service
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+}
 //==================================================================
 //= ElementDescription
 //==================================================================
@@ -739,8 +827,9 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
 void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XPropertySet >& _rxElement,
     sal_Bool _bEvents, ElementDescription* _pApprovalResult, sal_Bool _bFire ) throw( IllegalArgumentException )
 {
-    RTL_LOGFILE_CONTEXT( aLogger, "forms::OInterfaceContainer::implInsert" );
+    const bool bHandleEvents = _bEvents && m_xEventAttacher.is();
 
+    // SYNCHRONIZED ----->
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
 
     ::std::auto_ptr< ElementDescription > aAutoDeleteMetaData;
@@ -778,13 +867,10 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     m_aMap.insert( ::std::pair< const ::rtl::OUString, InterfaceRef >( sName, pElementMetaData->xInterface ) );
 
     // announce ourself as parent to the new element
-    {
-        RTL_LOGFILE_CONTEXT( aLogger, "forms::OInterfaceContainer::implInsert::settingParent" );
-        pElementMetaData->xChild->setParent(static_cast<XContainer*>(this));
-    }
+    pElementMetaData->xChild->setParent(static_cast<XContainer*>(this));
 
     // handle the events
-    if ( _bEvents && m_xEventAttacher.is() )
+    if ( bHandleEvents )
     {
         m_xEventAttacher->insertEntry(_nIndex);
         m_xEventAttacher->attach( _nIndex, pElementMetaData->xInterface, makeAny( _rxElement ) );
@@ -792,6 +878,30 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
 
     // notify derived classes
     implInserted( pElementMetaData );
+
+    aGuard.clear();
+    // <----- SYNCHRONIZED
+
+    // insert faked VBA events?
+    if ( bHandleEvents )
+    {
+        Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
+        if ( xMgr.is() )
+        {
+            OInterfaceContainer* pIfcMgr = dynamic_cast< OInterfaceContainer* >( xMgr.get() );
+            sal_Int32 nLen = pIfcMgr->getCount();
+            for ( sal_Int32 i = 0; (i < nLen) && pIfcMgr ; ++i )
+            {
+                // add fake events to the control at index i
+                pIfcMgr->impl_addVbEvents_nolck_nothrow( i );
+            }
+        }
+        else
+        {
+            // add fake events to the control at index i
+            impl_addVbEvents_nolck_nothrow( _nIndex );
+        }
+    }
 
     // fire the notification about the change
     if ( _bFire )
@@ -1082,15 +1192,25 @@ void SAL_CALL OInterfaceContainer::removeByName(const ::rtl::OUString& Name) thr
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent ) throw(IllegalArgumentException, RuntimeException)
 {
+    ::osl::ClearableMutexGuard aGuard( m_rMutex );
     if ( m_xEventAttacher.is() )
+    {
         m_xEventAttacher->registerScriptEvent( nIndex, aScriptEvent );
+        aGuard.clear();
+        impl_addVbEvents_nolck_nothrow( nIndex ); // add fake vba events
+    }
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents ) throw(IllegalArgumentException, RuntimeException)
 {
+    ::osl::ClearableMutexGuard aGuard( m_rMutex );
     if ( m_xEventAttacher.is() )
+    {
         m_xEventAttacher->registerScriptEvents( nIndex, aScriptEvents );
+        aGuard.clear();
+        impl_addVbEvents_nolck_nothrow( nIndex ); // add fake vba events
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1126,7 +1246,13 @@ Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents(
 {
     Sequence< ScriptEventDescriptor > aReturn;
     if ( m_xEventAttacher.is() )
+    {
         aReturn = m_xEventAttacher->getScriptEvents( nIndex );
+            if ( lcl_hasVbaEvents( aReturn ) )
+            {
+                aReturn = lcl_stripVbaEvents( aReturn );
+            }
+    }
     return aReturn;
 }
 

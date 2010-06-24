@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sta_list.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +53,7 @@
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
 #include <svtools/extensionlistbox.hxx>
+#include <svtools/table/tablecontrol.hxx>
 
 #define WINDOW_ANYTYPE WINDOW_BASE
 
@@ -1002,6 +1000,8 @@ String StatementList::ClientTree(Window *pBase, int Indent)
             WRITEc("/RoadMap")
         else if ( dynamic_cast< svt::IExtensionListBox* >(pBase) )
             WRITEc("/ExtensionListBox")
+        else if ( dynamic_cast< svt::table::TableControl* >(pBase) )
+            WRITEc("/TableControl")
         else
             WRITEc("/Unknown")
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormControlTest.java,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@ import com.sun.star.awt.XImageProducer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.form.XFormController;
+import com.sun.star.form.runtime.XFormController;
 import com.sun.star.form.XImageProducerSupplier;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.lang.EventObject;
@@ -52,6 +49,7 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XURLTransformer;
 import connectivity.tools.HsqlDatabase;
+import connectivity.tools.sdb.Connection;
 import java.io.FileOutputStream;
 
 
@@ -609,8 +607,8 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     private boolean ensureTables() throws com.sun.star.uno.Exception,  java.lang.Exception
     {
-        XConnection xConn = m_dataSource.getConnection( "", "" );
-        assure( "could not connect to the data source", xConn != null );
+        Connection connection = new Connection( m_dataSource.getConnection( "", "" ) );
+        assure( "could not connect to the data source", connection != null );
 
         // drop the table, if it already exists
         if  (  !implExecuteStatement( "DROP TABLE \"" + s_tableName + "\" IF EXISTS" )
@@ -630,10 +628,10 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
                 return false;
             }
 
-        m_databaseDocument.getDataSource().refreshTables( xConn );
+        connection.refreshTables();
 
         // do not need the connection anymore
-        dbfTools.disposeComponent( xConn );
+        connection.close();
 
         return true;
     }

@@ -1,13 +1,9 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: config.hxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,6 +21,7 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
+ *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -53,7 +50,9 @@ namespace oooimprovement
             ::rtl::OUString getSoapId() const;
             ::rtl::OUString getSoapUrl() const;
             sal_Int32 getReportCount() const;
+#ifdef FUTURE
             sal_Int32 getFailedAttempts() const;
+#endif
             sal_Int32 getOfficeStartCounterdown() const;
             sal_Int32 incrementEventCount(sal_Int32 by);
             sal_Int32 incrementReportCount(sal_Int32 by);

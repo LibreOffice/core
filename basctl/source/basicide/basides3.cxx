@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basides3.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,7 @@
 #define _SOLAR__PRIVATE 1
 
 #include <basidesh.hxx>
+#include <baside2.hxx>
 #include <baside3.hxx>
 #include <basobj.hxx>
 #include <localizationmgr.hxx>
@@ -170,9 +168,10 @@ SdrView* BasicIDEShell::GetCurDlgView() const
 // Nur wenn Dialogfenster oben:
 void __EXPORT BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
-    if ( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
-        return;
-
-    pCurWin->ExecuteCommand( rReq );
+    if ( pCurWin && ( pCurWin->IsA( TYPE( DialogWindow) ) ||
+        (rReq.GetSlot() == SID_IMPORT_DIALOG &&pCurWin->IsA( TYPE( ModulWindow) ) ) ) )
+    {
+        pCurWin->ExecuteCommand( rReq );
+    }
 }
 

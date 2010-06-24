@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: acc_factory.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,18 +29,12 @@
 #include "precompiled_accessibility.hxx"
 #include <accessibility/helper/acc_factory.hxx>
 
-#ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX
 #include <toolkit/awt/vclxwindows.hxx>
-#endif
 #include <accessibility/standard/vclxaccessiblebutton.hxx>
 #include <accessibility/standard/vclxaccessiblecheckbox.hxx>
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEDROPDOWCOMBOBOX_HXX
 #include <accessibility/standard/vclxaccessibledropdowncombobox.hxx>
-#endif
 #include <accessibility/standard/vclxaccessiblecombobox.hxx>
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEDROPDOWLISTBOX_HXX
 #include <accessibility/standard/vclxaccessibledropdownlistbox.hxx>
-#endif
 #include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <accessibility/standard/vclxaccessiblefixedhyperlink.hxx>
 #include <accessibility/standard/vclxaccessiblefixedtext.hxx>
@@ -70,10 +61,17 @@
 #include <accessibility/extended/AccessibleBrowseBoxHeaderCell.hxx>
 #include <accessibility/extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
+#include <accessibility/extended/AccessibleToolPanelDeck.hxx>
+#include <accessibility/extended/AccessibleToolPanelDeckTabBar.hxx>
+#include <accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <accessibility/extended/AccessibleGridControl.hxx>
+#include <svtools/accessibletable.hxx>
+#include <vcl/popupmenuwindow.hxx>
+#include <cppuhelper/implbase1.hxx>
 
-#include <floatingwindowaccessible.hxx>
+#include "floatingwindowaccessible.hxx"
 
 //........................................................................
 namespace accessibility
@@ -94,6 +92,7 @@ inline bool hasFloatingChild(Window *pWindow)
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::accessibility;
     using namespace ::svt;
+    using namespace ::svt::table;
 
     //================================================================
     //= IAccessibleFactory
@@ -148,6 +147,12 @@ inline bool hasFloatingChild(Window *pWindow)
             createAccessibleBrowseBox(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
                 IAccessibleTableProvider& _rBrowseBox
+            ) const;
+
+        virtual IAccessibleTableControl*
+            createAccessibleTableControl(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+                IAccessibleTable& _rTable
             ) const;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -219,6 +224,18 @@ inline bool hasFloatingChild(Window *pWindow)
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos
             ) const;
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleToolPanelDeck(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+                ::svt::ToolPanelDeck& i_rPanelDeck
+            );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleToolPanelTabBar(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+                ::svt::IToolPanelDeck& i_rPanelDeck,
+                ::svt::PanelTabBar& i_rTabBar
+            );
 
     protected:
         virtual ~AccessibleFactory();
@@ -376,9 +393,19 @@ inline bool hasFloatingChild(Window *pWindow)
             }
             else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
             {
-                xContext = new FloatingWindowAccessible( _pXWindow );
+                PopupMenuFloatingWindow* pChild = dynamic_cast<PopupMenuFloatingWindow*>(
+                    pWindow->GetAccessibleChildWindow(0));
+                if ( pChild && pChild->IsPopupMenu() )
+                {
+                    // Get the accessible context from the child window.
+                    Reference<XAccessible> xAccessible = pChild->CreateAccessible();
+                    if (xAccessible.is())
+                        xContext = xAccessible->getAccessibleContext();
+                }
+                else
+                    xContext = new FloatingWindowAccessible( _pXWindow );
             }
-            else if ( nType == WINDOW_HELPTEXTWINDOW )
+            else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
             {
                xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );
             }
@@ -409,6 +436,13 @@ inline bool hasFloatingChild(Window *pWindow)
         const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox ) const
     {
         return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
+    }
+
+    //--------------------------------------------------------------------
+    IAccessibleTableControl* AccessibleFactory::createAccessibleTableControl(
+        const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
+    {
+        return new AccessibleGridControlAccess( _rxParent, _rTable );
     }
 
     //--------------------------------------------------------------------
@@ -482,6 +516,20 @@ inline bool hasFloatingChild(Window *pWindow)
     {
         return new EditBrowseBoxTableCellAccess( _rxParent, _rxControlAccessible,
             _rxFocusWindow, _rBrowseBox, _nRowPos, _nColPos );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelDeck(
+            const Reference< XAccessible >& i_rAccessibleParent, ::svt::ToolPanelDeck& i_rPanelDeck )
+    {
+        return new AccessibleToolPanelDeck( i_rAccessibleParent, i_rPanelDeck );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelTabBar(
+        const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
+    {
+        return new AccessibleToolPanelTabBar( i_rAccessibleParent, i_rPanelDeck, i_rTabBar );
     }
 
 //........................................................................

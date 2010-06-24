@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: owriteablestream.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -48,6 +46,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 
+#include "selfterminatefilestream.hxx"
 #include "owriteablestream.hxx"
 #include "oseekinstream.hxx"
 #include "mutexholder.hxx"
@@ -246,7 +245,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< lang::XSingleServiceFactory >& xPackage,
                                       const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                       sal_Bool bForceEncrypted,
-                                      sal_Int16 nStorageType,
+                                      sal_Int32 nStorageType,
                                       sal_Bool bDefaultCompress,
                                       const uno::Reference< io::XInputStream >& xRelInfoStream )
 : m_pAntiImpl( NULL )
@@ -256,7 +255,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_xFactory( xFactory )
 , m_pParent( pParent )
 , m_bForceEncrypted( bForceEncrypted )
-, m_bUseCommonPass( !bForceEncrypted && nStorageType == PACKAGE_STORAGE )
+, m_bUseCommonPass( !bForceEncrypted && nStorageType == embed::StorageFormats::PACKAGE )
 , m_bHasCachedPassword( sal_False )
 , m_bCompressedSetExplicit( !bDefaultCompress )
 , m_xPackage( xPackage )
@@ -271,7 +270,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
     OSL_ENSURE( xPackage.is(), "No package component is provided!\n" );
     OSL_ENSURE( m_xFactory.is(), "No package stream is provided!\n" );
     OSL_ENSURE( pParent, "No parent storage is provided!\n" );
-    OSL_ENSURE( m_nStorageType == OFOPXML_STORAGE || !m_xOrigRelInfoStream.is(), "The Relations info makes sence only for OFOPXML format!\n" );
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML || !m_xOrigRelInfoStream.is(), "The Relations info makes sence only for OFOPXML format!\n" );
 }
 
 //-----------------------------------------------
@@ -361,7 +360,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
 //-----------------------------------------------
 sal_Bool OWriteStream_Impl::IsEncrypted()
 {
-    if ( m_nStorageType != PACKAGE_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         return sal_False;
 
     if ( m_bForceEncrypted || m_bHasCachedPassword )
@@ -421,8 +420,8 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
 //-----------------------------------------------
 void OWriteStream_Impl::SetDecrypted()
 {
-    OSL_ENSURE( m_nStorageType == PACKAGE_STORAGE, "The encryption is supported only for package storages!\n" );
-    if ( m_nStorageType != PACKAGE_STORAGE )
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE, "The encryption is supported only for package storages!\n" );
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException();
 
     GetStreamProperties();
@@ -446,8 +445,8 @@ void OWriteStream_Impl::SetDecrypted()
 //-----------------------------------------------
 void OWriteStream_Impl::SetEncryptedWithPass( const ::rtl::OUString& aPass )
 {
-    OSL_ENSURE( m_nStorageType == PACKAGE_STORAGE, "The encryption is supported only for package storages!\n" );
-    if ( m_nStorageType != PACKAGE_STORAGE )
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE, "The encryption is supported only for package storages!\n" );
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException();
 
     GetStreamProperties();
@@ -592,18 +591,21 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
             if ( aData.getLength() > nRead )
                 aData.realloc( nRead );
 
-            if ( nRead && nRead <= MAX_STORCACHE_SIZE )
+            if ( nRead <= MAX_STORCACHE_SIZE )
             {
                 uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
                 OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
 
-                uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
-                xOutStream->writeBytes( aData );
+                if ( nRead )
+                {
+                    uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
+                    xOutStream->writeBytes( aData );
+                }
                 m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
                 m_xCacheStream = xCacheStream;
                 m_xCacheSeek->seek( 0 );
             }
-            else if ( nRead && !m_aTempURL.getLength() )
+            else if ( !m_aTempURL.getLength() )
             {
                 m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
@@ -743,65 +745,6 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
     return xInputStream;
 }
 
-//-----------------------------------------------
-void OWriteStream_Impl::CopyTempFileToOutput( uno::Reference< io::XOutputStream > xOutStream )
-{
-    OSL_ENSURE( xOutStream.is(), "The stream must be specified!\n" );
-    OSL_ENSURE( m_aTempURL.getLength() || m_xCacheStream.is(), "The temporary must exist!\n" );
-
-    uno::Reference< io::XInputStream > xTempInStream;
-
-    if ( m_xCacheStream.is() )
-    {
-        if ( !m_xCacheSeek.is() )
-            throw uno::RuntimeException();
-        sal_Int64 nPos = m_xCacheSeek->getPosition();
-
-        try
-        {
-            m_xCacheSeek->seek( 0 );
-            uno::Reference< io::XInputStream > xTempInp = m_xCacheStream->getInputStream();
-            if ( xTempInp.is() )
-                ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
-        }
-        catch( uno::Exception& aException )
-        {
-            AddLog( aException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
-
-            m_xCacheSeek->seek( nPos );
-            throw io::IOException(); //TODO:
-        }
-
-        m_xCacheSeek->seek( nPos );
-    }
-    else if ( m_aTempURL.getLength() )
-    {
-        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                        GetServiceFactory()->createInstance (
-                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                        uno::UNO_QUERY );
-
-        if ( !xTempAccess.is() )
-            throw uno::RuntimeException(); // TODO:
-
-        try
-        {
-            xTempInStream = xTempAccess->openFileRead( m_aTempURL );
-        }
-        catch( uno::Exception& aException )
-        {
-            AddLog( aException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
-        }
-
-        if ( !xTempInStream.is() )
-            throw io::IOException(); //TODO:
-
-        ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
-    }
-}
-
 // =================================================================================================
 
 //-----------------------------------------------
@@ -847,12 +790,12 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
             bCompressedIsSet = sal_True;
             aProps[nInd].Value >>= bCompressed;
         }
-        else if ( ( m_nStorageType == OFOPXML_STORAGE || m_nStorageType == PACKAGE_STORAGE )
+        else if ( ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
                && aProps[nInd].Name.equals( aMedTypePropName ) )
         {
             xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
         }
-        else if ( m_nStorageType == PACKAGE_STORAGE && aProps[nInd].Name.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
+        else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
             aProps[nInd].Value >>= m_bUseCommonPass;
         else
             throw lang::IllegalArgumentException();
@@ -874,7 +817,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
     if ( m_bUseCommonPass )
     {
-        if ( m_nStorageType != PACKAGE_STORAGE )
+        if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
@@ -906,6 +849,9 @@ void OWriteStream_Impl::Commit()
 
     if ( m_xCacheStream.is() )
     {
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
+
         uno::Reference< io::XInputStream > xInStream( m_xCacheStream->getInputStream(), uno::UNO_SET_THROW );
 
         xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
@@ -917,23 +863,16 @@ void OWriteStream_Impl::Commit()
         m_xCacheStream = uno::Reference< io::XStream >();
         m_xCacheSeek = uno::Reference< io::XSeekable >();
 
-        if ( m_pAntiImpl )
-            m_pAntiImpl->DeInit();
     }
     else if ( m_aTempURL.getLength() )
     {
-        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                        GetServiceFactory()->createInstance (
-                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                        uno::UNO_QUERY );
-
-        if ( !xTempAccess.is() )
-            throw uno::RuntimeException(); // TODO:
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
 
         uno::Reference< io::XInputStream > xInStream;
         try
         {
-            xInStream = xTempAccess->openFileRead( m_aTempURL );
+            xInStream.set( static_cast< io::XInputStream* >( new OSelfTerminateFileStream( GetServiceFactory(), m_aTempURL ) ), uno::UNO_QUERY );
         }
         catch( uno::Exception& )
         {
@@ -949,9 +888,6 @@ void OWriteStream_Impl::Commit()
         // TODO/NEW: Let the temporary file be removed after commit
         xNewPackageStream->setDataStream( xInStream );
         m_aTempURL = ::rtl::OUString();
-
-        if ( m_pAntiImpl )
-            m_pAntiImpl->DeInit();
     }
     else // if ( m_bHasInsertedStreamOptimization )
     {
@@ -980,7 +916,7 @@ void OWriteStream_Impl::Commit()
 
     if ( m_bUseCommonPass )
     {
-        if ( m_nStorageType != PACKAGE_STORAGE )
+        if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
@@ -991,7 +927,7 @@ void OWriteStream_Impl::Commit()
     }
     else if ( m_bHasCachedPassword )
     {
-        if ( m_nStorageType != PACKAGE_STORAGE )
+        if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
         xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ),
@@ -1037,7 +973,7 @@ void OWriteStream_Impl::Revert()
     m_bHasCachedPassword = sal_False;
     m_aPass = ::rtl::OUString();
 
-    if ( m_nStorageType == OFOPXML_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         // currently the relations storage is changed only on commit
         m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
@@ -1076,7 +1012,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
     uno::Sequence< beans::PropertyValue > aResult( aProps );
     sal_Int32 nLen = aResult.getLength();
 
-    if ( m_nStorageType == PACKAGE_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
             if ( aResult[nInd].Name.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
@@ -1089,7 +1025,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
         aResult[nLen - 1].Name = ::rtl::OUString::createFromAscii( "UseCommonStoragePasswordEncryption" );
         aResult[nLen - 1].Value <<= bUseCommonPass;
     }
-    else if ( m_nStorageType == OFOPXML_STORAGE )
+    else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         ReadRelInfoIfNecessary();
 
@@ -1126,7 +1062,7 @@ sal_Bool OWriteStream_Impl::IsTransacted()
 
 void OWriteStream_Impl::ReadRelInfoIfNecessary()
 {
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         return;
 
     if ( m_nRelInfoStatus == RELINFO_NO_INIT )
@@ -1179,24 +1115,24 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
 uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProperties()
 {
     sal_Int32 nPropNum = 0;
-    if ( m_nStorageType == ZIP_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::ZIP )
         nPropNum = 2;
-    else if ( m_nStorageType == OFOPXML_STORAGE )
+    else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
         nPropNum = 3;
-    else if ( m_nStorageType == PACKAGE_STORAGE )
+    else if ( m_nStorageType == embed::StorageFormats::PACKAGE )
         nPropNum = 4;
     uno::Sequence< beans::PropertyValue > aResult( nPropNum );
 
     // The "Compressed" property must be set after "MediaType" property,
     // since the setting of the last one can change the value of the first one
 
-    if ( m_nStorageType == OFOPXML_STORAGE || m_nStorageType == PACKAGE_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         aResult[0].Name = ::rtl::OUString::createFromAscii("MediaType");
         aResult[1].Name = ::rtl::OUString::createFromAscii("Compressed");
         aResult[2].Name = ::rtl::OUString::createFromAscii("Size");
 
-        if ( m_nStorageType == PACKAGE_STORAGE )
+        if ( m_nStorageType == embed::StorageFormats::PACKAGE )
             aResult[3].Name = ::rtl::OUString::createFromAscii("Encrypted");
     }
     else
@@ -1242,7 +1178,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
 
     OSL_ENSURE( !m_bUseCommonPass, "The stream can not be encrypted!" );
 
-    if ( m_nStorageType != PACKAGE_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException();
 
     if ( m_pAntiImpl )
@@ -1266,7 +1202,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
 //-----------------------------------------------
 uno::Sequence< uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRelationshipsIfAny()
 {
-    if ( m_nStorageType != OFOPXML_STORAGE )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         return uno::Sequence< uno::Sequence< beans::StringPair > >();
 
     ReadRelInfoIfNecessary();
@@ -1581,7 +1517,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    if ( m_nStorageType != PACKAGE_STORAGE || !m_pParent )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE || !m_pParent )
         throw packages::NoEncryptionException();
 
     return m_pParent->GetCommonRootPass();
@@ -1767,9 +1703,9 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, const ::rtl::OUString& aOrigStreamName, const ::rtl::OUString& aNewStreamName )
 {
     // at this point of time the old stream must be already cleaned
-    OSL_ENSURE( m_nStorageType == OFOPXML_STORAGE, "The method should be used only with OFOPXML format!\n" );
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML, "The method should be used only with OFOPXML format!\n" );
 
-    if ( m_nStorageType == OFOPXML_STORAGE )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         OSL_ENSURE( aOrigStreamName.getLength() && aNewStreamName.getLength() && xRelStorage.is(),
                     "Wrong relation persistence information is provided!\n" );
@@ -2037,12 +1973,12 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     // the order of the properties setting is not important for StorageStream API
     ::rtl::OUString aPropName = ::rtl::OUString::createFromAscii( "Compressed" );
     xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
-    if ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aPropName = ::rtl::OUString::createFromAscii( "MediaType" );
         xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
 
-        if ( m_pData->m_nStorageType == PACKAGE_STORAGE )
+        if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
         {
             aPropName = ::rtl::OUString::createFromAscii( "UseCommonStoragePasswordEncryption" );
             xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
@@ -2088,13 +2024,13 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
 
-    if ( m_pData->m_nStorageType == PACKAGE_STORAGE )
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         aReturn <<= ::cppu::queryInterface
                     (   rType
                         ,   static_cast<embed::XEncryptionProtectedSource*> ( this ) );
     }
-    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aReturn <<= ::cppu::queryInterface
                     (   rType
@@ -2142,7 +2078,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
         {
             if ( m_bTransacted )
             {
-                if ( m_pData->m_nStorageType == PACKAGE_STORAGE )
+                if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2158,7 +2094,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
-                else if ( m_pData->m_nStorageType == OFOPXML_STORAGE )
+                else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2174,7 +2110,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
-                else // if ( m_pData->m_nStorageType == ZIP_STORAGE )
+                else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2192,7 +2128,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
             }
             else
             {
-                if ( m_pData->m_nStorageType == PACKAGE_STORAGE )
+                if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2205,7 +2141,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
-                else if ( m_pData->m_nStorageType == OFOPXML_STORAGE )
+                else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2218,7 +2154,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
-                else // if ( m_pData->m_nStorageType == ZIP_STORAGE )
+                else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
@@ -2683,6 +2619,8 @@ void SAL_CALL OWriteStream::dispose()
             m_xInStream = uno::Reference< io::XInputStream >();
         }
 
+        m_xSeekable = uno::Reference< io::XSeekable >();
+
         m_pImpl->m_pAntiImpl = NULL;
 
         if ( !m_bInitOnDemand )
@@ -2815,7 +2753,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     try
@@ -2846,7 +2784,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -2871,7 +2809,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -2896,7 +2834,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
@@ -2926,7 +2864,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
@@ -2961,7 +2899,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAl
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     return m_pImpl->GetAllRelationshipsIfAny();
@@ -2981,7 +2919,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const ::rtl::OUString& sID,
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     ::rtl::OUString aIDTag( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
@@ -3046,7 +2984,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const ::rtl::OUString& sID 
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -3088,7 +3026,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     ::rtl::OUString aIDTag( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
@@ -3170,7 +3108,7 @@ void SAL_CALL OWriteStream::clearRelationships()
         throw lang::DisposedException();
     }
 
-    if ( m_pData->m_nStorageType != OFOPXML_STORAGE )
+    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
     m_pImpl->m_aNewRelInfo.realloc( 0 );
@@ -3207,7 +3145,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
     m_pImpl->GetStreamProperties();
     ::rtl::OUString aCompressedString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
     ::rtl::OUString aMediaTypeString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
-    if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equals( aMediaTypeString ) )
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equals( aMediaTypeString ) )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         sal_Bool bCompressedValueFromType = sal_True;
@@ -3230,7 +3168,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                 m_pImpl->m_aProps[nInd].Value <<= bCompressedValueFromType;
         }
     }
-    else if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "Compressed" ) )
+    else if ( aPropertyName.equals( aCompressedString ) )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         m_pImpl->m_bCompressedSetExplicit = sal_True;
@@ -3240,7 +3178,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                 m_pImpl->m_aProps[nInd].Value = aValue;
         }
     }
-    else if ( m_pData->m_nStorageType == PACKAGE_STORAGE
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
     {
         sal_Bool bUseCommonPass = sal_False;
@@ -3265,8 +3203,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); //TODO
     }
-    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE
-          && ( aPropertyName.equalsAscii( "MediaType" ) || aPropertyName.equalsAscii( "Compressed" ) ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equals( aMediaTypeString ) )
     {
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
@@ -3274,7 +3211,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                 m_pImpl->m_aProps[nInd].Value = aValue;
         }
     }
-    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE && aPropertyName.equalsAscii( "RelationsInfoStream" ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAscii( "RelationsInfoStream" ) )
     {
         uno::Reference< io::XInputStream > xInRelStream;
         if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
@@ -3295,7 +3232,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); // TODO
     }
-    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE && aPropertyName.equalsAscii( "RelationsInfo" ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAscii( "RelationsInfo" ) )
     {
         if ( aValue >>= m_pImpl->m_aNewRelInfo )
         {
@@ -3305,7 +3242,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
     }
     else if ( aPropertyName.equalsAscii( "Size" ) )
         throw beans::PropertyVetoException(); // TODO
-    else if ( m_pData->m_nStorageType == PACKAGE_STORAGE
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
            && ( aPropertyName.equalsAscii( "IsEncrypted" ) || aPropertyName.equalsAscii( "Encrypted" ) ) )
         throw beans::PropertyVetoException(); // TODO
     else
@@ -3341,9 +3278,9 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
     else
         aPropertyName = aProp;
 
-    if ( ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
-            && aPropertyName.equalsAscii( "MediaType" )
-      || m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "Encrypted" )
+    if ( ( ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
+            && aPropertyName.equalsAscii( "MediaType" ) )
+      || ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equalsAscii( "Encrypted" ) )
       || aPropertyName.equalsAscii( "Compressed" ) )
     {
         m_pImpl->GetStreamProperties();
@@ -3354,7 +3291,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
                 return m_pImpl->m_aProps[nInd].Value;
         }
     }
-    else if ( m_pData->m_nStorageType == PACKAGE_STORAGE
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
         return uno::makeAny( m_pImpl->m_bUseCommonPass );
     else if ( aPropertyName.equalsAscii( "Size" ) )

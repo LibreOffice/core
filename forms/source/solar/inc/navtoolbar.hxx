@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: navtoolbar.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,19 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 //.........................................................................
 namespace frm
 {
 //.........................................................................
 
     class IFeatureDispatcher;
+    class ICommandImageProvider;
+    class ICommandDescriptionProvider;
 
     class ImplNavToolBar;
+
     //=====================================================================
     //= NavigationToolBar
     //=====================================================================
@@ -63,13 +65,22 @@ namespace frm
         };
 
     private:
-        const IFeatureDispatcher*   m_pDispatcher;
-        ImageSize                   m_eImageSize;
-        ImplNavToolBar*             m_pToolbar;
-        ::std::vector< Window* >    m_aChildWins;
+        const IFeatureDispatcher*       m_pDispatcher;
+        const ::boost::shared_ptr< const ICommandImageProvider >
+                                        m_pImageProvider;
+        const ::boost::shared_ptr< const ICommandDescriptionProvider >
+                                        m_pDescriptionProvider;
+        ImageSize                       m_eImageSize;
+        ImplNavToolBar*                 m_pToolbar;
+        ::std::vector< Window* >        m_aChildWins;
 
     public:
-        NavigationToolBar( Window* _pParent, WinBits _nStyle );
+        NavigationToolBar(
+            Window* _pParent,
+            WinBits _nStyle,
+            const ::boost::shared_ptr< const ICommandImageProvider >& _pImageProvider,
+            const ::boost::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
+        );
         ~NavigationToolBar( );
 
         /** sets the dispatcher which is to be used for the features
@@ -82,19 +93,16 @@ namespace frm
                 ensuring the life time of the object does exceed the life time
                 of the tool bar instance.
         */
-        void                        setDispatcher( const IFeatureDispatcher* _pDispatcher );
+        void    setDispatcher( const IFeatureDispatcher* _pDispatcher );
 
-        /** enables or disables a given feature
-        */
-        void                        enableFeature( sal_Int32 _nFeatureId, bool _bEnabled );
+        /// enables or disables a given feature
+        void    enableFeature( sal_Int16 _nFeatureId, bool _bEnabled );
 
-        /** checks or unchecks a given feature
-        */
-        void                        checkFeature( sal_Int32 _nFeatureId, bool _bEnabled );
+        /// checks or unchecks a given feature
+        void    checkFeature( sal_Int16 _nFeatureId, bool _bEnabled );
 
-        /** sets the text of a given feature
-        */
-        void                        setFeatureText( sal_Int32 _nFeatureId, const ::rtl::OUString& _rText );
+        /// sets the text of a given feature
+        void    setFeatureText( sal_Int16 _nFeatureId, const ::rtl::OUString& _rText );
 
         /** retrieves the current image size
         */
@@ -127,7 +135,10 @@ namespace frm
         void implInit( );
 
         /// impl version of SetImageSize
-        void    implSetImageSize( ImageSize _eSize, bool _bForce = false );
+        void    implSetImageSize( ImageSize _eSize );
+
+        /// updates the images of our items
+        void    implUpdateImages();
 
         /// enables or disables an item, plus possible dependent items
         void implEnableItem( USHORT _nItemId, bool _bEnabled );

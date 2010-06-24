@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessiblelistbox.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,6 +129,32 @@ namespace accessibility
                         }
                     }
                     break;
+
+                // --> OD 2009-04-01 #i92103#
+                case VCLEVENT_ITEM_EXPANDED :
+                case VCLEVENT_ITEM_COLLAPSED :
+                {
+                    SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
+                    if ( pEntry )
+                    {
+                        AccessibleListBoxEntry* pAccListBoxEntry =
+                            new AccessibleListBoxEntry( *getListBox(), pEntry, this );
+                        Reference< XAccessible > xChild = pAccListBoxEntry;
+                        const short nAccEvent =
+                                ( rVclWindowEvent.GetId() == VCLEVENT_ITEM_EXPANDED )
+                                ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
+                                : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
+                        uno::Any aListBoxEntry;
+                        aListBoxEntry <<= xChild;
+                        NotifyAccessibleEvent( nAccEvent, Any(), aListBoxEntry );
+                        if ( getListBox() && getListBox()->HasFocus() )
+                        {
+                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), aListBoxEntry );
+                        }
+                    }
+                    break;
+                }
+                // <--
                 }
                 default:
                     VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);

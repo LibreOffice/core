@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: x509certificate_mscryptimpl.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +40,7 @@
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
+#include <utility>
 
 //CP : end
 
@@ -53,36 +51,130 @@ using ::rtl::OUString ;
 using ::com::sun::star::security::XCertificate ;
 using ::com::sun::star::util::DateTime ;
 
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
+/*Resturns the index withing rRawString where sTypeName starts and where it ends.
+    The starting index is pair.first. The ending index in pair.second points
+    one char after the last character of the type.
+    sTypeName can be
+    "S" or "CN" (without ""). Do not use spaces at the beginning of the type name.
+    If the type name is not found then pair.first and pair.second are -1.
+*/
+std::pair< sal_Int32, sal_Int32 >
+findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
+{
+    std::pair< sal_Int32, sal_Int32 > retVal;
+    bool bInEscape = false;
+    bool bInValue = false;
+    bool bFound = false;
+    sal_Int32 nTypeNameStart = 0;
+    sal_Int32 length = rRawString.getLength();
+
+    for (sal_Int32 i = 0; i < length; i++)
+    {
+        sal_Unicode c = rRawString[i];
+
+        if (c == '=')
+        {
+            if (! bInValue)
+            {
+                OUString sType = rRawString.copy(nTypeNameStart, i - nTypeNameStart);
+                sType = sType.trim();
+                if (sType.equalsIgnoreAsciiCase(sTypeName))
+                {
+                    bFound = true;
+                    break;
+                }
+            }
+        }
+        else if (c == '"')
+        {
+            if (!bInEscape)
+            {
+                //If this is the quote is the first of the couple which enclose the
+                //whole value, because the value contains special characters
+                //then we just drop it. That is, this character must be followed by
+                //a character which is not '"'.
+                if ( i + 1 < length && rRawString[i+1] == '"')
+                    bInEscape = true;
+                else
+                    bInValue = !bInValue; //value is enclosed in " "
+            }
+            else
+            {
+                //This quote is escaped by a preceding quote and therefore is
+                //part of the value
+                bInEscape = false;
+            }
+        }
+        else if (c == ',')
+        {
+            //The comma separate the attribute value pairs.
+            //If the comma is not part of a value (the value would then be enclosed in '"'),
+            //then we have reached the end of the value
+            if (!bInValue)
+            {
+                //The next char is the start of the new type
+                nTypeNameStart = i + 1;
+            }
+        }
+    }
+
+    //Found the Type Name, but there can still be spaces after the last comma
+    //and the beginning of the type.
+    if (bFound)
+    {
+        while (true)
+        {
+            sal_Unicode c = rRawString[nTypeNameStart];
+            if (c != ' ' && c != '\t')
+                //found
+                break;
+            nTypeNameStart ++;
+        }
+        // search end (one after last letter)
+        sal_Int32 nTypeNameEnd = nTypeNameStart;
+        nTypeNameEnd++;
+        while (true)
+        {
+             sal_Unicode c = rRawString[nTypeNameEnd];
+             if (c == ' ' || c == '\t' || c == '=')
+                 break;
+             nTypeNameEnd++;
+        }
+        retVal = std::make_pair(nTypeNameStart, nTypeNameEnd);
+    }
+    else
+    {
+        retVal = std::make_pair(-1, -1);
+    }
+    return retVal;
+}
+
+
 /*
- * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
- *      it, so the 'S' tag should be changed to 'ST' tag
- *
+  MS Crypto uses the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
+  it, so the 'S' tag should be changed to 'ST' tag. However I am not sure if this is necessary
+  anymore, because we provide always the signers certificate when signing. So libmlsec can find
+  the private key based on the provided certificate (X509Certificate element) and does not need
+  the issuer name (X509IssuerName element). The issuer name in the xml signature has also no
+  effect for the signature nor the certificate validation.
+  In many RFCs, for example 4519, on speaks of 'ST'. However, the certificate does not contain
+  strings for type names. Instead it uses OIDs.
  */
+
 OUString replaceTagSWithTagST(OUString oldDN)
 {
+    std::pair<sal_Int32, sal_Int32 > pairIndex = findTypeInDN(oldDN, OUSTR("S"));
 
-    sal_Int32 nIndex = 0;
-    OUString newDN;
-    do
+    if (pairIndex.first != -1)
     {
-        OUString aToken = oldDN.getToken( 0, ',', nIndex ).trim();
-        if (aToken.compareToAscii("S=",2) == 0)
-        {
-            newDN+=OUString::createFromAscii("ST=");
-            newDN+=aToken.copy(2);
-        }
-        else
-        {
-            newDN+=aToken;
-        }
-
-        if (nIndex >= 0)
-        {
-            newDN+=OUString::createFromAscii(",");
-        }
-    } while ( nIndex >= 0 );
-
-    return newDN;
+        OUString newDN = oldDN.copy(0, pairIndex.first);
+        newDN += OUSTR("ST");
+        newDN += oldDN.copy(pairIndex.second);
+        return newDN;
+    }
+    return oldDN;
 }
 /* end */
 
@@ -144,7 +236,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             ) ;
 
             if( cbIssuer <= 0 ) {
-                delete issuer ;
+                delete [] issuer ;
                 throw RuntimeException() ;
             }
 
@@ -157,9 +249,9 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
             if(issuer[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
             OUString xIssuer(issuer , cbIssuer ,encoding ) ; //By CP
-            delete issuer ;
+            delete [] issuer ;
 
-            return replaceTagSWithTagST(xIssuer) ;
+            return replaceTagSWithTagST(xIssuer);
         } else {
             return OUString() ;
         }
@@ -168,24 +260,27 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException) {
-    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
-        char* subject ;
+::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
+    {
+        wchar_t* subject ;
         DWORD cbSubject ;
 
-        cbSubject = CertNameToStr(
+        cbSubject = CertNameToStrW(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
             &( m_pCertContext->pCertInfo->Subject ),
             CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
             NULL, 0
         ) ;
 
-        if( cbSubject != 0 ) {
-            subject = new char[ cbSubject ] ;
+        if( cbSubject != 0 )
+        {
+            subject = new wchar_t[ cbSubject ] ;
             if( subject == NULL )
                 throw RuntimeException() ;
 
-            cbSubject = CertNameToStr(
+            cbSubject = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
                 &( m_pCertContext->pCertInfo->Subject ),
                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
@@ -193,26 +288,21 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             ) ;
 
             if( cbSubject <= 0 ) {
-                delete subject ;
+                delete [] subject ;
                 throw RuntimeException() ;
             }
 
-            // By CP , for correct encoding
-            sal_uInt16 encoding ;
-            rtl_Locale *pLocale = NULL ;
-            osl_getProcessLocale( &pLocale ) ;
-            encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-            // CP end
+            OUString xSubject(reinterpret_cast<const sal_Unicode*>(subject));
+            delete [] subject ;
 
-            if(subject[cbSubject-1] == 0) cbSubject--; //delimit the last 0x00;
-            OUString xSubject(subject , cbSubject ,encoding ) ; //By CP
-            delete subject ;
-
-            return replaceTagSWithTagST(xSubject) ;
-        } else {
+            return replaceTagSWithTagST(xSubject);
+        } else
+        {
             return OUString() ;
         }
-    } else {
+    }
+    else
+    {
         return OUString() ;
     }
 }

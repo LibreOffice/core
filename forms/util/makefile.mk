@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,6 +54,7 @@ LIB1FILES=\
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+        $(EDITENGLIB) \
         $(SALLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB) \
@@ -73,7 +70,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB) \
         $(DBTOOLSLIB) \
         $(TKLIB) \
-        $(SVXLIB) \
+        $(SVXCORELIB) \
         $(UCBHELPERLIB) \
         $(LIBXML2LIB) \
         $(ICUUCLIB) \
@@ -84,7 +81,7 @@ SHL1DEPN=$(LIB1TARGET)	\
         makefile.mk
 
 
-SHL1VERSIONMAP=$(TARGET).map 
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
@@ -95,22 +92,6 @@ RES1FILELIST=\
 
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
-
-.IF "$(GUI)"=="UNX"
-
-# [ed] 6/19/02 Only add in libraries for X11 OS X builds
-
-.IF "$(OS)"=="MACOSX"
-.IF "$(GUIBASE)"=="unx"
-SHL1STDLIBS +=\
-        -lX11 -lXt -lXmu
-.ENDIF
-.ELSE
-SHL1STDLIBS +=\
-    -lX11
-.ENDIF # OS == MACOSX
-
-.ENDIF
 
 .IF "$(GUI)"=="OS2"
 SHL1STDLIBS += pthread.lib libz.lib

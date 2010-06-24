@@ -1,13 +1,9 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: invite_job.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,6 +21,7 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
+ *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -67,12 +64,12 @@ namespace
 
 namespace oooimprovement
 {
-    InviteJob::InviteJob(const Reference<XComponentContext>& context)
-        : m_ServiceFactory(Reference<XMultiServiceFactory>(
-            context->getServiceManager()->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.lang.XMultiServiceFactory"), context),
-            UNO_QUERY))
-    { }
+//    InviteJob::InviteJob(const Reference<XComponentContext>& context)
+//        : m_ServiceFactory(Reference<XMultiServiceFactory>(
+//            context->getServiceManager()->createInstanceWithContext(
+//                OUString::createFromAscii("com.sun.star.lang.XMultiServiceFactory"), context),
+//            UNO_QUERY))
+//    { }
 
     InviteJob::InviteJob(const Reference<XMultiServiceFactory>& sf)
         : m_ServiceFactory(sf)
@@ -128,8 +125,8 @@ namespace oooimprovement
         return aServiceNames;
     }
 
-    Reference<XInterface> InviteJob::Create(const Reference<XComponentContext>& context)
-    { return *(new InviteJob(context)); }
+//    Reference<XInterface> InviteJob::Create(const Reference<XComponentContext>& context)
+//    { return *(new InviteJob(context)); }
 
     Reference<XInterface> InviteJob::Create(const Reference<XMultiServiceFactory>& sm)
     { return *(new InviteJob(sm)); }

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +51,11 @@ INCPRE+=.\Include
 SLOFILES =	$(SLO)$/regpatchactivex.obj
 
 .IF "$(COM)"=="GCC"
-SHL1STDLIBS=	-lmingw32 -lstdc++ -lgcc -lmsvcrt
+SHL1STDLIBS += -lstdc++
+.IF "$(MINGW_GCCLIB_EH)"=="YES"
+SHL1STDLIBS += -lgcc_eh
+.ENDIF
+SHL1STDLIBS += -lgcc -lmingw32 -lmoldname -lmsvcrt
 .ELSE
 SHL1STDLIBS=
 .ENDIF

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.18.112.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,7 +33,7 @@ TARGET=install
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 
 UNIXTEXT= \
@@ -54,14 +50,16 @@ UNIXTEXT= \
 UNIXTEXT+= $(BIN)$/stclient_wrapper.sh
 .ENDIF
 
-FAKEDB=$(BIN)$/noarch/fake-db-1.0-0.noarch.rpm
+NOARCH=$(BIN)$/noarch
+FAKEDB=$(NOARCH)/fake-db-1.0-0.noarch.rpm
 FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root
 
 # --- Targets ------------------------------------------------------
 
+.ENDIF # L10N_framework
 .INCLUDE :	target.mk
-
-.IF "$(OS)" == "SOLARIS" || "$(OS)" == "LINUX"
+.IF "$(L10N_framework)"==""
+.IF "$(OS)" == "SOLARIS" || ( "$(OS)" == "LINUX" && "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)" )
 
 ALLTAR: $(BIN)$/install $(BIN)$/uninstall
 
@@ -72,18 +70,21 @@ $(BIN)$/install: install_$(OS:l).sh
 .ENDIF
 
 .IF "$(OS)" == "LINUX"
+.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 $(FAKEDB) : fake-db.spec 
     $(MKDIRHIER) $(FAKEDBROOT)
     $(RPM) --define "_builddir $(shell @cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(shell @cd $(BIN) && pwd)" -bb $<
+    chmod g+w $(NOARCH)
 
 $(BIN)$/install: $(FAKEDB)
+.ENDIF          # "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 $(BIN)$/uninstall: uninstall_linux.sh
     $(TYPE) $< | tr -d "\015" > $@
     -chmod 775 $@
 
-.ENDIF
+.ENDIF          # "$(OS)" == "LINUX"
 
 .IF "$(OS)" == "SOLARIS"
 
@@ -99,3 +100,4 @@ $(LB)$/getuid.so.stripped: $(LB)$/getuid.so
 
 .ENDIF
 
+.ENDIF # L10N_framework

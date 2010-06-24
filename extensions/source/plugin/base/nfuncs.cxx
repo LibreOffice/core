@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: nfuncs.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,8 +99,13 @@ NPNetscapeFuncs aNPNFuncs =
     NPN_MemFree,
     NPN_MemFlush,
     NPN_ReloadPlugins,
+#ifdef OJI
     NPN_GetJavaEnv,
     NPN_GetJavaPeer,
+#else
+    0,
+    0,
+#endif
     NPN_GetURLNotify,
     NPN_PostURLNotify,
     NPN_GetValue,

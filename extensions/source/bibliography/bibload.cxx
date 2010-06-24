@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bibload.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,9 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/weak.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <uno/environment.h>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -370,7 +367,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     BibBookContainer *pMyWindow = new BibBookContainer( pParent, m_pDatMan );
     pMyWindow->Show();
 
-    ::bib::BibView* pView = new ::bib::BibView( pMyWindow, m_pDatMan, WB_SECTION_STYLE | WB_3DLOOK );
+    ::bib::BibView* pView = new ::bib::BibView( pMyWindow, m_pDatMan, WB_VSCROLL | WB_HSCROLL | WB_3DLOOK );
     pView->Show();
     m_pDatMan->SetView( pView );
 

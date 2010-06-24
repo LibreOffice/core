@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventhandler.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_extensions.hxx"
 
 #include "eventhandler.hxx"
-#include "extensio.hrc"
+#include "propctrlr.hrc"
 #include "formbrowsertools.hxx"
 #include "formresid.hrc"
 #include "formstrings.hxx"
@@ -53,8 +50,9 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
@@ -65,13 +63,14 @@
 /** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
@@ -117,7 +116,7 @@ namespace pcr
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::awt::XTabControllerModel;
     using ::com::sun::star::form::XForm;
-    using ::com::sun::star::form::XFormController;
+    using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::beans::UnknownPropertyException;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::container::NoSuchElementException;
@@ -146,6 +145,7 @@ namespace pcr
     /** === end UNO using === **/
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
+    namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
     //====================================================================
     //= EventDescription
@@ -171,36 +171,6 @@ namespace pcr
     //========================================================================
     namespace
     {
-        //....................................................................
-        Sequence< ::rtl::OUString > lcl_getListenerMethodsForType( const Type& type )
-        {
-            typelib_InterfaceTypeDescription *pType=0;
-            type.getDescription( (typelib_TypeDescription**)&pType);
-
-            if ( !pType )
-                return Sequence< ::rtl::OUString>();
-
-            Sequence< ::rtl::OUString > aNames( pType->nMembers );
-            ::rtl::OUString* pNames = aNames.getArray();
-            for ( sal_Int32 i = 0; i < pType->nMembers; ++i, ++pNames)
-            {
-                // the decription reference
-                typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
-                // the description for the reference
-                typelib_TypeDescription* pMemberDescription = NULL;
-                typelib_typedescriptionreference_getDescription( &pMemberDescription, pMemberDescriptionReference );
-                if ( pMemberDescription )
-                {
-                    typelib_InterfaceMemberTypeDescription* pRealMemberDescription =
-                        reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
-                    *pNames = pRealMemberDescription->pMemberName;
-                }
-            }
-
-            typelib_typedescription_release( (typelib_TypeDescription*)pType );
-            return aNames;
-        }
-
         //....................................................................
         #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
             s_aKnownEvents.insert( EventMap::value_type( \
@@ -538,6 +508,7 @@ namespace pcr
         ,m_aPropertyListeners( m_aMutex )
         ,m_bEventsMapInitialized( false )
         ,m_bIsDialogElement( false )
+        ,m_nGridColumnType( -1 )
     {
         DBG_CTOR( EventHandler, NULL );
     }
@@ -602,6 +573,7 @@ namespace pcr
         m_aEvents.swap( aEmpty );
 
         m_bIsDialogElement = false;
+        m_nGridColumnType = -1;
         try
         {
             Reference< XPropertySetInfo > xPSI( m_xComponent->getPropertySetInfo() );
@@ -610,10 +582,19 @@ namespace pcr
                               && xPSI->hasPropertyByName( PROPERTY_HEIGHT )
                               && xPSI->hasPropertyByName( PROPERTY_POSITIONX )
                               && xPSI->hasPropertyByName( PROPERTY_POSITIONY );
+
+            Reference< XChild > xAsChild( _rxIntrospectee, UNO_QUERY );
+            if ( xAsChild.is() && !Reference< XForm >( _rxIntrospectee, UNO_QUERY ).is() )
+            {
+                if ( FormComponentType::GRIDCONTROL == classifyComponent( xAsChild->getParent() ) )
+                {
+                    m_nGridColumnType = classifyComponent( _rxIntrospectee );
+                }
+            }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::EventHandler: caught an exception while classifying the component!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -822,15 +803,18 @@ namespace pcr
                         continue;
 
                     // loop through all methods
-                    Sequence< ::rtl::OUString > aMethods( lcl_getListenerMethodsForType( *pListeners ) );
+                    Sequence< ::rtl::OUString > aMethods( comphelper::getEventMethodsForType( *pListeners ) );
 
                     const ::rtl::OUString* pMethods = aMethods.getConstArray();
                     sal_uInt32 methodCount = aMethods.getLength();
 
-                    for (sal_uInt32 method = 0 ; method < methodCount ; method++,++pMethods )
+                    for (sal_uInt32 method = 0 ; method < methodCount ; ++method, ++pMethods )
                     {
                         EventDescription aEvent;
                         if ( !lcl_getEventDescriptionForMethod( *pMethods, aEvent ) )
+                            continue;
+
+                        if ( !impl_filterMethod_nothrow( aEvent ) )
                             continue;
 
                         const_cast< EventHandler* >( this )->m_aEvents.insert( EventMap::value_type(
@@ -841,7 +825,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "EventHandler::getSupportedProperties: caught an exception !" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -1064,7 +1048,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_getFormComponentScriptEvents_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1096,7 +1080,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_getCopmonentListenerTypes_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1121,7 +1105,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_getDialogElementScriptEvents_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1136,10 +1120,10 @@ namespace pcr
         {
             Reference< XTabControllerModel > xComponentAsTCModel( m_xComponent, UNO_QUERY_THROW );
             Reference< XFormController > xController(
-                m_aContext.createComponent( (const rtl::OUString&)SERVICE_FORMCONTROLLER ), UNO_QUERY_THROW );
+                m_aContext.createComponent( "com.sun.star.form.runtime.FormController" ), UNO_QUERY_THROW );
             xController->setModel( xComponentAsTCModel );
 
-            xReturn = xController.get();
+            xReturn = xController;
         }
         else
         {
@@ -1228,7 +1212,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_setFormComponentScriptEvent_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1270,6 +1254,29 @@ namespace pcr
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+    }
+
+    //--------------------------------------------------------------------
+    bool EventHandler::impl_filterMethod_nothrow( const EventDescription& _rEvent ) const
+    {
+        // some (control-triggered) events do not make sense for certain grid control columns. However,
+        // our mechnism to retrieve control-triggered events does not know about this, so we do some
+        // late filtering here.
+        switch ( m_nGridColumnType )
+        {
+        case FormComponentType::COMBOBOX:
+            if ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+                return false;
+            break;
+        case FormComponentType::LISTBOX:
+            if  (   ( UID_BRWEVT_CHANGED == _rEvent.nUniqueBrowseId )
+                ||  ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+                )
+                return false;
+            break;
+        }
+
+        return true;
     }
 
 //........................................................................

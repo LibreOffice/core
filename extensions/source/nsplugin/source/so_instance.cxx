@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: so_instance.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -366,14 +363,6 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         debug_fprintf(NSP_LOG_APPEND, "error: %s \n", o.pData->buffer );
         return sal_False;
     }
-    return sal_True;
-}
-
-sal_Bool SoPluginInstance::SetSODir(char * sDir)
-{
-    if(strlen(sDir) >= NPP_PATH_MAX) return sal_False;
-
-    strcpy(sSO_Dir, sDir);
     return sal_True;
 }
 

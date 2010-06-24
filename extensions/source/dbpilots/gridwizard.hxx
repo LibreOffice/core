@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwizard.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,8 +68,7 @@ namespace dbp
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
         virtual void                enterState( WizardState _nState );
         virtual sal_Bool            leaveState( WizardState _nState );
-
-        virtual sal_Bool onFinish(sal_Int32 _nResult);
+        virtual sal_Bool            onFinish();
 
         virtual sal_Bool approveControl(sal_Int16 _nClassId);
 
@@ -117,7 +113,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     protected:

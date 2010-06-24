@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RecordParser.java,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +81,7 @@ public class RecordParser extends QueryMetaData
             xRowSetColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
             xRowSetComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xRowSet);
             xExecute = (com.sun.star.sdb.XCompletedExecution) UnoRuntime.queryInterface(com.sun.star.sdb.XCompletedExecution.class, xRowSet);
-            XInterface oInteraction = (XInterface) xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
+            XInterface oInteraction = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
             xInteraction = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, oInteraction);
         }
         catch (Exception exception)

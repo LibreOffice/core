@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -398,7 +398,7 @@ UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName, sal_I
         if( m_xContainer->hasByName(aNameList[i]) )
             m_xContainer->replaceByName(aNameList[i], aValueList[i]);
         else
-            m_xContainer->insertByName(aNameList[i],aValueList[i]);
+            m_xContainer->insertByName(aNameList[i], aValueList[i]);
     }
 
     commitChanges();

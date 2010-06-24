@@ -1,13 +1,9 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: corecontroller.cxx,v $
- *
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,6 +21,7 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
+ *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -33,7 +30,6 @@
 #include "corecontroller.hxx"
 #include "config.hxx"
 
-
 using ::rtl::OUString;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -41,14 +37,6 @@ using namespace ::com::sun::star::uno;
 
 namespace oooimprovement
 {
-
-    CoreController::CoreController(const Reference<XComponentContext>& context)
-        : m_ServiceFactory(Reference<XMultiServiceFactory>(
-            context->getServiceManager()->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.lang.XMultiServiceFactory"), context),
-            UNO_QUERY))
-    { }
-
     CoreController::CoreController(const Reference<XMultiServiceFactory>& sf)
         : m_ServiceFactory(sf)
     { }
@@ -95,9 +83,6 @@ namespace oooimprovement
         aServiceNames[0] = OUString::createFromAscii("com.sun.star.oooimprovement.CoreController");
         return aServiceNames;
     }
-
-    Reference<XInterface> SAL_CALL CoreController::Create(const Reference<XComponentContext>& context)
-    { return *(new CoreController(context)); }
 
     Reference<XInterface> SAL_CALL CoreController::Create(const Reference<XMultiServiceFactory>& sm)
     { return *(new CoreController(sm)); }

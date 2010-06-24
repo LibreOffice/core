@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bastype3.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,6 +131,14 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
         }
     }
+    else if ( eType == OBJ_TYPE_DOCUMENT_OBJECTS
+            || eType == OBJ_TYPE_USERFORMS
+            || eType == OBJ_TYPE_NORMAL_MODULES
+            || eType == OBJ_TYPE_CLASS_MODULES )
+    {
+        String aLibName( aDesc.GetLibName() );
+        ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
+    }
     else {
         DBG_ERROR( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
     }
@@ -204,6 +209,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
     }
 
     SbxVariable* pVar = 0;
+    bool bDocumentObjects = false;
     if ( aEntries.Count() )
     {
         for ( USHORT n = 0; n < aEntries.Count(); n++ )
@@ -226,6 +232,12 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 case OBJ_TYPE_MODULE:
                 {
                     DBG_ASSERT( pVar && pVar->IsA( TYPE(StarBASIC) ), "FindVariable: Ungueltiges Basic" );
+                    // extract the module name from the string like "Sheet1 (Example1)"
+                    if( bDocumentObjects )
+                    {
+                        sal_uInt16 nIndex = 0;
+                        aName = aName.GetToken( 0, ' ', nIndex );
+                    }
                     pVar = ((StarBASIC*)pVar)->FindModule( aName );
                 }
                 break;
@@ -240,6 +252,15 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                     // sbx dialogs removed
                 }
                 break;
+                case OBJ_TYPE_DOCUMENT_OBJECTS:
+                    bDocumentObjects = true;
+                case OBJ_TYPE_USERFORMS:
+                case OBJ_TYPE_NORMAL_MODULES:
+                case OBJ_TYPE_CLASS_MODULES:
+                {
+                    // skip, to find the child entry.
+                    continue;
+                }
                 default:
                 {
                     DBG_ERROR( "FindVariable: Unbekannter Typ!" );
@@ -260,12 +281,13 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
     String aLibName;
+    String aLibSubName;
     String aName;
     String aMethodName;
     BasicEntryType eType = OBJ_TYPE_UNKNOWN;
 
     if ( !pEntry )
-        return BasicEntryDescriptor( aDocument, eLocation, aLibName, aName, aMethodName, eType );
+        return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 
     EntryArray aEntries;
 
@@ -332,6 +354,15 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
                     eType = pBE->GetType();
                 }
                 break;
+                case OBJ_TYPE_DOCUMENT_OBJECTS:
+                case OBJ_TYPE_USERFORMS:
+                case OBJ_TYPE_NORMAL_MODULES:
+                case OBJ_TYPE_CLASS_MODULES:
+                {
+                    aLibSubName = GetEntryText( pLE );
+                    eType = pBE->GetType();
+                }
+                break;
                 default:
                 {
                     DBG_ERROR( "GetEntryDescriptor: Unbekannter Typ!" );
@@ -345,7 +376,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         }
     }
 
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aName, aMethodName, eType );
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 }
 
 USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
@@ -425,6 +456,14 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
         case OBJ_TYPE_METHOD:
         {
             bIsValid = BasicIDE::HasMethod( aDocument, aLibName, aName, aMethodName );
+        }
+        break;
+        case OBJ_TYPE_DOCUMENT_OBJECTS:
+        case OBJ_TYPE_USERFORMS:
+        case OBJ_TYPE_NORMAL_MODULES:
+        case OBJ_TYPE_CLASS_MODULES:
+        {
+            bIsValid = true;
         }
         break;
         default: ;

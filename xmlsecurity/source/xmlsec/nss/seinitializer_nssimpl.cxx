@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: seinitializer_nssimpl.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,77 +51,279 @@
 
 
 #include <sal/types.h>
-
+#include "rtl/instance.hxx"
+#include "rtl/bootstrap.hxx"
+#include "rtl/string.hxx"
+#include "rtl/strbuf.hxx"
+#include "osl/file.hxx"
+#include "osl/thread.h"
 #include <tools/debug.hxx>
 #include <rtl/logfile.hxx>
 
 #include "seinitializer_nssimpl.hxx"
+#include "../diagnose.hxx"
 
 #include "securityenvironment_nssimpl.hxx"
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 
 #include "nspr.h"
-#include "prtypes.h"
-#include "pk11func.h"
-#ifdef SYSTEM_MOZILLA
-#include "nssrenam.h"
-#include "secmod.h"
-#endif
 #include "cert.h"
-#include "cryptohi.h"
-#include "certdb.h"
 #include "nss.h"
-#include "prerror.h"
-
+#include "secmod.h"
+#include "nssckbi.h"
 
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 
+using namespace xmlsecurity;
 using namespace com::sun::star;
+using ::rtl::OUString;
+using ::rtl::OString;
 
 #define SERVICE_NAME "com.sun.star.xml.crypto.SEInitializer"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl"
 #define SECURITY_ENVIRONMENT "com.sun.star.xml.crypto.SecurityEnvironment"
 #define SECURITY_CONTEXT "com.sun.star.xml.crypto.XMLSecurityContext"
 
-bool nsscrypto_initialize( const char* token ) {
-    static char initialized = 0 ;
 
-    //PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
-    if( !initialized ) {
-        PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
+#define ROOT_CERTS "Root Certs for OpenOffice.org"
 
-                if( NSS_InitReadWrite( token ) != SECSuccess )
-                {
-                    char * error = NULL;
 
-                    PR_GetErrorText(error);
-                    if (error)
-                        printf("%s",error);
-                    return false ;
-                }
+extern "C" void nsscrypto_finalize();
 
-#ifdef SYSTEM_MOZILLA
-        if (!SECMOD_HasRootCerts())
+
+namespace
+{
+
+bool nsscrypto_initialize( const char * sProfile, bool & out_nss_init);
+
+struct InitNSSInitialize
+{
+    //path to the database folder
+    const OString m_sProfile;
+    InitNSSInitialize(const OString & sProfile): m_sProfile(sProfile) {};
+    bool * operator()()
         {
-            SECMOD_AddNewModule("Root Certs", "libnssckbi" SAL_DLLEXTENSION,
-                0, 0);
+            static bool bInitialized = false;
+            bool bNSSInit = false;
+            bInitialized = nsscrypto_initialize(m_sProfile.getStr(), bNSSInit);
+            if (bNSSInit)
+                atexit(nsscrypto_finalize );
+             return & bInitialized;
+
         }
-#endif
+};
 
-        initialized = 1 ;
-    }
-
-    return true ;
+bool * initNSS(const OString & sProfile)
+{
+    return rtl_Instance< bool, InitNSSInitialize,
+        ::osl::MutexGuard, ::osl::GetGlobalMutex >::create(
+            InitNSSInitialize(sProfile), ::osl::GetGlobalMutex());
 }
 
+void deleteRootsModule()
+{
+    SECMODModule *RootsModule = 0;
+    SECMODModuleList *list = SECMOD_GetDefaultModuleList();
+    SECMODListLock *lock = SECMOD_GetDefaultModuleListLock();
+    SECMOD_GetReadLock(lock);
+
+    while (!RootsModule && list)
+    {
+        SECMODModule *module = list->module;
+
+        for (int i=0; i < module->slotCount; i++)
+        {
+            PK11SlotInfo *slot = module->slots[i];
+            if (PK11_IsPresent(slot))
+            {
+                if (PK11_HasRootCerts(slot))
+                {
+                    xmlsec_trace("The root certifificates module \"%s"
+                              "\" is already loaded: \n%s",
+                              module->commonName,  module->dllName);
+
+                    RootsModule = SECMOD_ReferenceModule(module);
+                    break;
+                }
+            }
+        }
+        list = list->next;
+    }
+    SECMOD_ReleaseReadLock(lock);
+
+    if (RootsModule)
+    {
+        PRInt32 modType;
+        if (SECSuccess == SECMOD_DeleteModule(RootsModule->commonName, &modType))
+        {
+            xmlsec_trace("Deleted module \"%s\".", RootsModule->commonName);
+        }
+        else
+        {
+            xmlsec_trace("Failed to delete \"%s\" : \n%s",
+                      RootsModule->commonName, RootsModule->dllName);
+        }
+        SECMOD_DestroyModule(RootsModule);
+        RootsModule = 0;
+    }
+}
+
+//Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
+//the roots certificate module (libnssckbi.so), which they use, into the
+//profile. This module will then already be loaded during NSS_Init (and the
+//other init functions). This fails in two cases. First, FF3 was used to create
+//the profile, or possibly used that profile before, and second the profile was
+//used on a different platform.
+//
+//Then one needs to add the roots module oneself. This should be done with
+//SECMOD_LoadUserModule rather then SECMOD_AddNewModule. The latter would write
+//the location of the roots module to the profile, which makes FF2 and TB2 use
+//it instead of there own module.
+//
+//When using SYSTEM_MOZILLA then the libnss3.so lib is typically found in
+///usr/lib. This folder may, however, NOT contain the roots certificate
+//module. That is, just providing the library name in SECMOD_LoadUserModule or
+//SECMOD_AddNewModule will FAIL to load the mozilla unless the LD_LIBRARY_PATH
+//contains an FF or TB installation.
+//ATTENTION: DO NOT call this function directly instead use initNSS
+//return true - whole initialization was successful
+//param out_nss_init = true: at least the NSS initialization (NSS_InitReadWrite
+//was successful and therefor NSS_Shutdown should be called when terminating.
+bool nsscrypto_initialize( const char* token, bool & out_nss_init )
+{
+    bool return_value = true;
+
+    xmlsec_trace("Using profile: %s", token);
+
+    PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
+
+    //token may be an empty string
+    if (token != NULL && strlen(token) > 0)
+    {
+        if( NSS_InitReadWrite( token ) != SECSuccess )
+        {
+            xmlsec_trace("Initializing NSS with profile failed.");
+            char * error = NULL;
+
+            PR_GetErrorText(error);
+            if (error)
+                xmlsec_trace("%s",error);
+            return false ;
+        }
+    }
+    else
+    {
+        xmlsec_trace("Initializing NSS without profile.");
+        if ( NSS_NoDB_Init(NULL) != SECSuccess )
+        {
+            xmlsec_trace("Initializing NSS without profile failed.");
+            char * error = NULL;
+            PR_GetErrorText(error);
+            if (error)
+                xmlsec_trace("%s",error);
+            return false ;
+        }
+    }
+    out_nss_init = true;
+
+#if defined SYSTEM_MOZILLA
+    if (!SECMOD_HasRootCerts())
+    {
+#endif
+        deleteRootsModule();
+
+#if defined SYSTEM_MOZILLA
+        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi"SAL_DLLEXTENSION));
+#else
+        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${OOO_BASE_DIR}/program/libnssckbi"SAL_DLLEXTENSION));
+#endif
+        ::rtl::Bootstrap::expandMacros(rootModule);
+
+        OUString rootModulePath;
+        if (::osl::File::E_None == ::osl::File::getSystemPathFromFileURL(rootModule, rootModulePath))
+        {
+            ::rtl::OString ospath = ::rtl::OUStringToOString(rootModulePath, osl_getThreadTextEncoding());
+            ::rtl::OStringBuffer pkcs11moduleSpec;
+            pkcs11moduleSpec.append("name=\"");
+            pkcs11moduleSpec.append(ROOT_CERTS);
+            pkcs11moduleSpec.append("\" library=\"");
+            pkcs11moduleSpec.append(ospath.getStr());
+            pkcs11moduleSpec.append("\"");
+
+            SECMODModule * RootsModule =
+                SECMOD_LoadUserModule(
+                    const_cast<char*>(pkcs11moduleSpec.makeStringAndClear().getStr()),
+                    0, // no parent
+                    PR_FALSE); // do not recurse
+
+            if (RootsModule)
+            {
+
+                bool found = RootsModule->loaded;
+
+                SECMOD_DestroyModule(RootsModule);
+                RootsModule = 0;
+                if (found)
+                    xmlsec_trace("Added new root certificate module "
+                              "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
+                else
+                {
+                    xmlsec_trace("FAILED to load the new root certificate module "
+                              "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
+                    return_value = false;
+                }
+            }
+            else
+            {
+                xmlsec_trace("FAILED to add new root certifice module: "
+                          "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
+                return_value = false;
+
+            }
+        }
+        else
+        {
+            xmlsec_trace("Adding new root certificate module failed.");
+            return_value = false;
+        }
+#if SYSTEM_MOZILLA
+    }
+#endif
+
+    return return_value;
+}
+
+
 // must be extern "C" because we pass the function pointer to atexit
-extern "C" void nsscrypto_finalize() {
+extern "C" void nsscrypto_finalize()
+{
+    SECMODModule *RootsModule = SECMOD_FindModule(ROOT_CERTS);
+
+    if (RootsModule)
+    {
+
+        if (SECSuccess == SECMOD_UnloadUserModule(RootsModule))
+        {
+            xmlsec_trace("Unloaded module \""ROOT_CERTS"\".");
+        }
+        else
+        {
+            xmlsec_trace("Failed unloadeding module \""ROOT_CERTS"\".");
+        }
+        SECMOD_DestroyModule(RootsModule);
+    }
+    else
+    {
+        xmlsec_trace("Unloading module \""ROOT_CERTS
+                  "\" failed because it was not found.");
+    }
     PK11_LogoutAll();
     NSS_Shutdown();
 }
+
 
 bool getMozillaCurrentProfile(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF,
@@ -133,16 +332,15 @@ bool getMozillaCurrentProfile(
     /*
      * first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
      */
-        char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
-        if (env)
-        {
-            profilePath = rtl::OUString::createFromAscii( env );
-            RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            return true;
-        }
-        else
-        {
-            RTL_LOGFILE_TRACE( "getMozillaCurrentProfile: Using MozillaBootstrap..." );
+    char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
+    if (env)
+    {
+        profilePath = rtl::OUString::createFromAscii( env );
+        RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        return true;
+    }
+    else
+    {
         mozilla::MozillaProductType productTypes[4] = {
             mozilla::MozillaProductType_Thunderbird,
             mozilla::MozillaProductType_Mozilla,
@@ -164,8 +362,6 @@ bool getMozillaCurrentProfile(
             {
                 ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 
-                RTL_LOGFILE_TRACE2( "getMozillaCurrentProfile: getDefaultProfile [%i] returns %s", i, rtl::OUStringToOString( profile, RTL_TEXTENCODING_ASCII_US ).getStr() );
-
                 if (profile != NULL && profile.getLength()>0)
                 {
                     profilePath = xMozillaBootstrap->getProfilePath(productTypes[i],profile);
@@ -179,6 +375,8 @@ bool getMozillaCurrentProfile(
         return false;
     }
 }
+
+} // namespace
 
 SEInitializer_NssImpl::SEInitializer_NssImpl(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF)
@@ -220,39 +418,10 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     }
 
-    if( !sCertDir.getLength() )
+    if( ! *initNSS( sCertDir.getStr() ) )
     {
-        RTL_LOGFILE_TRACE( "XMLSEC: Error - No certificate directory!" );
-        // return NULL;
-    }
-
-
-    /* Initialize NSPR and NSS */
-    /* Replaced with new methods by AF. ----
-    //PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
-    PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
-
-    if (NSS_Init(sCertDir.getStr()) != SECSuccess )
-    {
-        PK11_LogoutAll();
         return NULL;
     }
-    ----*/
-    if( !nsscrypto_initialize( sCertDir.getStr() ) )
-    {
-        RTL_LOGFILE_TRACE( "XMLSEC: Error - nsscrypto_initialize() failed." );
-        if ( NSS_NoDB_Init(NULL) != SECSuccess )
-        {
-            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init also failed, NSS Security not available!" );
-            return NULL;
-        }
-        else
-        {
-            RTL_LOGFILE_TRACE( "XMLSEC: NSS_NoDB_Init works, enough for verifying signatures..." );
-        }
-    }
-    else
-        atexit(nsscrypto_finalize );
 
     pCertHandle = CERT_GetDefaultCertDB() ;
 

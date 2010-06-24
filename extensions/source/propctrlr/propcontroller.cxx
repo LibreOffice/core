@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: propcontroller.cxx,v $
- * $Revision: 1.41.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +111,7 @@ namespace pcr
             ,m_bContainerFocusListening( false )
             ,m_bSuspendingPropertyHandlers( false )
             ,m_bConstructed( false )
+            ,m_bBindingIntrospectee( false )
     {
         DBG_CTOR(OPropertyBrowserController,NULL);
     }
@@ -300,7 +298,13 @@ namespace pcr
             // it in order to inspect another object.
             throw VetoException();
         }
+        if ( m_bBindingIntrospectee )
+            throw VetoException();
+
+        m_bBindingIntrospectee = true;
         impl_rebindToInspectee_nothrow( InterfaceArray( _rObjects.getConstArray(), _rObjects.getConstArray() + _rObjects.getLength() ) );
+        m_bBindingIntrospectee = false;
+
     }
 
     //--------------------------------------------------------------------

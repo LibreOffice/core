@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,31 +80,29 @@ $(INCCOM)$/r_cmds.hxx :   ..$/inc$/rcontrol.hxx \
                           $(MISC)$/xfilter.pl
     $(PERL) $(MISC)$/xfilter.pl ..$/inc  rcontrol.hxx  $(INCCOM)$/r_cmds  RC_
 
-$(INCCOM)$/res_type.hxx : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/vcl$/wintypes.hxx \
+$(INCCOM)$/res_type.hxx : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/tools$/wintypes.hxx \
                           $(MISC)$/xfilter.pl
-    $(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  vcl$/wintypes.hxx  $(INCCOM)$/res_type  WINDOW_
+    $(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  tools$/wintypes.hxx  $(INCCOM)$/res_type  WINDOW_
 
 
 
 $(MISC)$/xfilter.pl : filter.pl
-.IF "$(GUI)" == "UNX" || "$(USE_SHELL)"!="4nt"
        tr  -d "\015" < filter.pl > $(MISC)$/xfilter.pl
        chmod 664 $(MISC)$/xfilter.pl
-.ELSE
-       $(COPY) filter.pl $(MISC)$/xfilter.pl
-       attrib  -r $(MISC)$/xfilter.pl
-.ENDIF
 
 
 
 .IF "$(GUI)"=="UNX"
 INIFILESUFFIX=rc
+BRANDPATH=none
 .ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 INIFILESUFFIX=.ini
+BRANDPATH=..
 .END
 
 $(BIN)$/testtool$(INIFILESUFFIX): testtool.ini
-        $(SED) -e s/$(EMQ)!INIFILESUFFIX$(EMQ)!/$(INIFILESUFFIX)/ < $< > $@
+        $(SED) -e s/$(EMQ)!INIFILESUFFIX$(EMQ)!/$(INIFILESUFFIX)/ \
+            -e s/$(EMQ)!BRANDPATH$(EMQ)!/$(BRANDPATH)/ < $< > $@
 
 ALLTAR: \
         $(BIN)$/testtool$(INIFILESUFFIX)

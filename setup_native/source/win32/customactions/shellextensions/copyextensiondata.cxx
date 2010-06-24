@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: copyeditiondata.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +93,7 @@ extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
         bool fSuccess = true;
         bool bFailIfExist = true;
 
-        std::_tstring sDestDir = GetMsiProperty( handle, TEXT("OFFICEINSTALLLOCATION") );
+        std::_tstring sDestDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
         std::_tstring sShareInstallDir = sDestDir + TEXT("share\\extension\\install\\");
 
         // creating directories

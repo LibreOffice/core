@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Edit.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -672,6 +669,13 @@ sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
         return sal_False;
 
     return OEditBaseModel::approveDbColumnType( _nColumnType );
+}
+
+//------------------------------------------------------------------------------
+void OEditModel::resetNoBroadcast()
+{
+    OEditBaseModel::resetNoBroadcast();
+    m_aLastKnownValue.clear();
 }
 
 //------------------------------------------------------------------------------

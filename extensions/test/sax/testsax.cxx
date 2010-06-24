@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: testsax.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,11 +39,6 @@
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
 #include <vos/conditn.hxx>
-
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 
 #include <smart/com/sun/star/io/XOutputStream.hxx>
 #include <smart/com/sun/star/xml/sax/SAXParseException.hxx>
@@ -309,12 +301,12 @@ Sequence< UString > OSaxParserTest::getWarnings(void)                       THRO
 XInputStreamRef createStreamFromSequence( const Sequence<BYTE> seqBytes , XMultiServiceFactoryRef &xSMgr )
 {
     XInterfaceRef xOutStreamService = xSMgr->createInstance( L"com.sun.star.io.Pipe" );
-    assert( xOutStreamService.is() );
+    OSL_ASSERT( xOutStreamService.is() );
     XOutputStreamRef rOutStream( xOutStreamService , USR_QUERY );
-    assert( rOutStream.is() );
+    OSL_ASSERT( rOutStream.is() );
 
     XInputStreamRef rInStream( xOutStreamService , USR_QUERY );
-    assert( rInStream.is() );
+    OSL_ASSERT( rInStream.is() );
 
     rOutStream->writeBytes( seqBytes );
     rOutStream->flush();
@@ -442,7 +434,7 @@ public: // ExtendedDocumentHandler
     }
     virtual void endElement(const UString& aName) THROWS( (SAXException,UsrSystemException) )
     {
-        assert( m_iLevel );
+        OSL_ASSERT( m_iLevel );
         m_iLevel --;
         if( m_bPrint ) {
             int i;

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,6 +36,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
+.IF "$(L10N_framework)"==""
 #CFLAGS+=/Ob0 /Od
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
@@ -54,6 +51,8 @@ SLOFILES= \
         $(SLO)$/ZipFile.obj			\
         $(SLO)$/ZipOutputStream.obj	\
         $(SLO)$/XUnbufferedStream.obj
+
+.ENDIF # L10N_framework
 
 # --- Targets ------------------------------------------------------
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: macrodlg.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -385,7 +382,15 @@ SbMethod* MacroChooser::CreateMacro()
         SbModule* pModule = 0;
         String aModName( aDesc.GetName() );
         if ( aModName.Len() )
+        {
+            // extract the module name from the string like "Sheet1 (Example1)"
+            if( aDesc.GetLibSubName().Equals( String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) )
+            {
+                sal_uInt16 nIndex = 0;
+                aModName = aModName.GetToken( 0, ' ', nIndex );
+            }
             pModule = pBasic->FindModule( aModName );
+        }
         else if ( pBasic->GetModules()->Count() )
             pModule = (SbModule*)pBasic->GetModules()->Get( 0 );
 
@@ -713,6 +718,12 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         BasicManager* pBasMgr = aDocument.getBasicManager();
         String aLib( aDesc.GetLibName() );
         String aMod( aDesc.GetName() );
+        // extract the module name from the string like "Sheet1 (Example1)"
+        if( aDesc.GetLibSubName().Equals( String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) )
+        {
+            sal_uInt16 nIndex = 0;
+            aMod = aMod.GetToken( 0, ' ', nIndex );
+        }
         String aSub( aDesc.GetMethodName() );
         SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, String() );
         if ( pButton == &aEditButton )

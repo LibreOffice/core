@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bastypes.hxx,v $
- * $Revision: 1.10.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,8 +95,6 @@ struct BreakPoint
 
 class BasicDockingWindow : public DockingWindow
 {
-    friend class BasicToolBox;
-
     Rectangle       aFloatingPosAndSize;
 
 protected:
@@ -111,14 +106,6 @@ protected:
 
 public:
     BasicDockingWindow( Window* pParent );
-};
-
-class BasicToolBox : public ToolBox
-{
-public:
-                    BasicToolBox( Window* pParent, IDEResId nRes );
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 };
 
 DECLARE_LIST( BreakPL, BreakPoint* )
@@ -215,8 +202,12 @@ public:
 
     virtual void    StoreData();
     virtual void    UpdateData();
-    virtual void    PrintData( Printer* pPrinter );
     virtual BOOL    CanClose();
+
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter ) = 0;
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter ) = 0;
 
     virtual String  GetTitle();
     String          CreateQualifiedName();
@@ -264,7 +255,6 @@ private:
     String              m_aLibName;
 
 public:
-    LibInfoKey();
     LibInfoKey( const ScriptDocument& rDocument, const String& rLibName );
     ~LibInfoKey();
 
@@ -287,7 +277,6 @@ private:
     USHORT              m_nCurrentType;
 
 public:
-    LibInfoItem();
     LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, USHORT nCurrentType );
     ~LibInfoItem();
 
@@ -339,5 +328,13 @@ BOOL            QueryDelModule( const String& rName, Window* pParent = 0 );
 BOOL            QueryDelLib( const String& rName, BOOL bRef = FALSE, Window* pParent = 0 );
 BOOL            QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, BOOL bRepeat = FALSE, BOOL bNewTitle = FALSE );
 
-
+class ModuleInfoHelper
+{
+ModuleInfoHelper();
+ModuleInfoHelper(const ModuleInfoHelper&);
+ModuleInfoHelper& operator = (const ModuleInfoHelper&);
+public:
+    static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const String& rModName, String& rObjName );
+    static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const String& rModName );
+};
 #endif  // _BASTYPES_HXX

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datasourcehandling.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,17 +125,6 @@ namespace abp
         // ----------------------------------------------------------------
         // - ctor/dtor/assignment
         // ----------------------------------------------------------------
-        /** ctor
-            @param _rxORB
-                the service factory to use to access the UNO objects
-            @param _rName
-                the name of the data source the object should represent
-        */
-        ODataSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::rtl::OUString& _rName
-        );
-
         /// constructs an object which is initially invalid
         ODataSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgedobj.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,16 +77,6 @@ DBG_NAME(DlgEdObj);
 
 DlgEdObj::DlgEdObj()
           :SdrUnoObj(String(), sal_False)
-          ,bIsListening(sal_False)
-          ,pDlgEdForm( NULL )
-{
-    DBG_CTOR(DlgEdObj, NULL);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName)
-          :SdrUnoObj(rModelName, sal_False)
           ,bIsListening(sal_False)
           ,pDlgEdForm( NULL )
 {
@@ -1379,23 +1366,6 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
 
 TYPEINIT1(DlgEdForm, DlgEdObj);
 DBG_NAME(DlgEdForm);
-
-//----------------------------------------------------------------------------
-
-DlgEdForm::DlgEdForm(const ::rtl::OUString& rModelName)
-          :DlgEdObj(rModelName)
-{
-    DBG_CTOR(DlgEdForm, NULL);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdForm::DlgEdForm(const ::rtl::OUString& rModelName,
-                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
-          :DlgEdObj(rModelName, rxSFac)
-{
-    DBG_CTOR(DlgEdForm, NULL);
-}
 
 //----------------------------------------------------------------------------
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: componenttools.hxx,v $
- * $Revision: 1.5.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,7 @@ namespace frm
         typedef ::com::sun::star::uno::Type             Type;
 
     public:
-        bool operator()( const Type& _rLHS, const Type& _rRHS )
+        bool operator()( const Type& _rLHS, const Type& _rRHS ) const
         {
             return _rLHS.getTypeName() < _rRHS.getTypeName();
         }
@@ -88,7 +85,9 @@ namespace frm
             const TypeSequence& _rTypes3
         );
 
-        void addTypes( const TypeSequence& _rTypes );
+        void    addType( const Type& i_rType );
+        void    addTypes( const TypeSequence& _rTypes );
+        void    removeType( const Type& i_rType );
 
         /** returns the types represented by this bag
         */

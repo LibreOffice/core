@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dotnetcheck.cxx,v $
- * $Revision: 1.2.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,18 +160,6 @@ extern "C" UINT __stdcall ShowProperties(MSIHANDLE handle)
     string property = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
     string myText = TEXT("INSTALLLOCATION: ") + property;
     MessageBox(NULL, myText.c_str(), "INSTALLLOCATION", MB_OK);
-
-    property = GetMsiProperty(handle, TEXT("UREINSTALLLOCATION"));
-    myText = TEXT("UREINSTALLLOCATION: ") + property;
-    MessageBox(NULL, myText.c_str(), "UREINSTALLLOCATION", MB_OK);
-
-    property = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
-    myText = TEXT("BASISINSTALLLOCATION: ") + property;
-    MessageBox(NULL, myText.c_str(), "BASISINSTALLLOCATION", MB_OK);
-
-    property = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
-    myText = TEXT("OFFICEINSTALLLOCATION: ") + property;
-    MessageBox(NULL, myText.c_str(), "OFFICEINSTALLLOCATION", MB_OK);
 
     property = GetMsiProperty(handle, TEXT("Installed"));
     myText = TEXT("Installed: ") + property;

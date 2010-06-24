@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objtest.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,7 +136,7 @@ DBG_DTOR(ControlItem,0);
 SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
 
 #define MK_SON_ACCESS( ClassName )\
-    BOOL SonInsert( const ClassName *pNewEntry ) { return pSons->C40_PTR_INSERT( ControlItem, (ControlItem*&)pNewEntry ); }\
+    BOOL SonInsert( const ClassName *pNewEntry ) { const ControlItem *pItem = pNewEntry; return pSons->Insert( pItem ); }\
     BOOL SonSeek_Entry( const ClassName *pSearchEntry, USHORT *nRes = NULL) { return pSons->Seek_Entry( pSearchEntry, nRes ); }\
     ClassName* SonGetObject( USHORT nNr ) { return (ClassName*)pSons->GetObject( nNr ); }
 

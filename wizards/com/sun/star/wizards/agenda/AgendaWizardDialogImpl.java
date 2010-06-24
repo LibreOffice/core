@@ -2,12 +2,9 @@
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AgendaWizardDialogImpl.java,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -287,9 +284,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     /** used in developement to start the wizard */
     public static void main(String args[])
     {
-        String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost
-                                                                                                                               // ;Lo-1.Germany.sun.com;
-                                                                                                                               // 10.16.65.155
+        String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
         try {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             AgendaWizardDialogImpl wizard = new AgendaWizardDialogImpl(xLocMSF);
@@ -461,7 +456,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         running = false;
     }
 
-    public void finishWizard() {
+    public boolean finishWizard() {
         boolean bSaveSuccess = false; // pesimistic :(
         XTextDocument xTextDocument;
 
@@ -482,7 +477,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
                     int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resFileExists);
                     if (answer == 3) // user said: no, do not overwrite....
-                        return;
+                        return false;
                 }
 
             agendaTemplate.xTextDocument.lockControllers();
@@ -552,10 +547,11 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             }
         } else {
             agendaTemplate.xTextDocument.unlockControllers();
-            return;
+            return false;
         }
         xDialog.endExecute();
         running = false;
+        return true;
     }
 
     private void closeDocument() {

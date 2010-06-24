@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: myconfigurationhelper.cxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,33 +144,6 @@ namespace oooimprovement
                 noSuchElement(sRelPath),
                 Reference<XInterface>());
         xProps->setPropertyValue(sKey, aValue);
-    }
-
-    Reference<XInterface> MyConfigurationHelper::makeSureSetNodeExists(
-        const Reference<XInterface> xCFG,
-        const OUString& sRelPathToSet,
-        const OUString& sSetNode)
-    {
-        Reference<css::container::XHierarchicalNameAccess> xAccess(xCFG, UNO_QUERY_THROW);
-        Reference<css::container::XNameAccess> xSet;
-        xAccess->getByHierarchicalName(sRelPathToSet) >>= xSet;
-        if (!xSet.is())
-            throw css::container::NoSuchElementException(
-                noSuchElement(sRelPathToSet),
-                Reference<XInterface>());
-
-        Reference<XInterface> xNode;
-        if (xSet->hasByName(sSetNode))
-            xSet->getByName(sSetNode) >>= xNode;
-        else
-        {
-            Reference<XSingleServiceFactory> xNodeFactory(xSet, UNO_QUERY_THROW);
-            xNode = xNodeFactory->createInstance();
-            Reference<css::container::XNameContainer> xSetReplace(xSet, UNO_QUERY_THROW);
-            xSetReplace->insertByName(sSetNode, makeAny(xNode));
-        }
-
-        return xNode;
     }
 
     Any MyConfigurationHelper::readDirectKey(

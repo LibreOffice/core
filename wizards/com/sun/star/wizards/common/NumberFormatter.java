@@ -2,12 +2,9 @@
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NumberFormatter.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,6 +201,7 @@ public class NumberFormatter
             Locale oLocale = (Locale) Helper.getUnoPropertyValue(xNumberFormat, "Locale");
             int NewFormatKey = defineNumberFormat(FormatString, oLocale);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xFormatObject);
+            xPSet.setPropertyValue("FormatsSupplier", _oNumberFormatter.xNumberFormatter.getNumberFormatsSupplier());
             if (xPSet.getPropertySetInfo().hasPropertyByName("NumberFormat"))
             {
                 xPSet.setPropertyValue("NumberFormat", new Integer(NewFormatKey));

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eformspropertyhandler.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,7 @@
 #include "eformspropertyhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "propctrlr.hrc"
 #include "formbrowsertools.hxx"
 #include "eformshelper.hxx"
 #include "handlerhelper.hxx"
@@ -409,6 +404,18 @@ namespace pcr
         aInterestedInActuations[ 0 ] = PROPERTY_XML_DATA_MODEL;
         aInterestedInActuations[ 1 ] = PROPERTY_BINDING_NAME;
         return Sequence< ::rtl::OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL EFormsPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !m_pHelper.get() )
+            return Sequence< ::rtl::OUString >();
+
+        Sequence< ::rtl::OUString > aReturn( 1 );
+        aReturn[ 0 ] = PROPERTY_INPUT_REQUIRED;
+        return aReturn;
     }
 
     //--------------------------------------------------------------------

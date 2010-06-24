@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: plugcon.hxx,v $
- * $Revision: 1.13.90.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +64,9 @@ extern "C" {
 #  endif
 #endif
 #include <X11/Xatom.h>
-#define XP_UNIX
+#ifndef XP_UNIX
+#    define XP_UNIX
+#endif
 #define MOZ_X11
 #include <stdio.h>
 #ifdef SYSTEM_MOZILLA
@@ -102,7 +101,7 @@ extern "C" {
 extern "C" {
 #include <npsdk/npupp.h>
 }
-#include <npapi.h>
+#include <npsdk/npapi.h>
 
 #if NP_VERSION_MINOR < 17
 // compatibility hack: compile with older NPN api header, but define

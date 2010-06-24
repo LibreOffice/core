@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ZipPackageFolder.hxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,18 +58,20 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 protected:
     ContentHash maContents;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-    sal_Int16 m_nFormat;
+    sal_Int32 m_nFormat;
     ::rtl::OUString m_sVersion;
 
 public:
 
     ZipPackageFolder( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                      sal_Int16 nFormat,
+                      sal_Int32 nFormat,
                       sal_Bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
 
     ::rtl::OUString& GetVersion() { return m_sVersion; }
     void SetVersion( const ::rtl::OUString& aVersion ) { m_sVersion = aVersion; }
+
+    sal_Bool LookForUnexpectedODF12Streams( const ::rtl::OUString& aPath );
 
     void setChildStreamsTypeByExtension( const ::com::sun::star::beans::StringPair& aPair );
 
@@ -88,7 +87,7 @@ public:
         return aImplementationId;
     }
 
-    void setPackageFormat_Impl( sal_Int16 nFormat ) { m_nFormat = nFormat; }
+    void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
 
     // Recursive functions

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basides2.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +35,7 @@
 
 #include <ide_pch.hxx>
 #include <basic/sbx.hxx>
-
-#define _SOLAR__PRIVATE 1
+#include "basicrenderable.hxx"
 
 #include <com/sun/star/frame/XTitle.hpp>
 
@@ -55,6 +51,10 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/signaturestate.hxx>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -85,6 +85,12 @@ IMPL_LINK( BasicIDEShell, ObjectDialogInsertHdl, ObjectCatalog *, pObjCat )
 }
 */
 
+Reference< view::XRenderable > BasicIDEShell::GetRenderable()
+{
+    return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
+}
+
+#if 0
 USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog )
 {
     if ( pCurWin )
@@ -98,6 +104,7 @@ USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, Print
     }
     return 0;
 }
+#endif
 
 BOOL BasicIDEShell::HasSelection( BOOL /* bText */ ) const
 {
@@ -232,7 +239,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     if ( !aLibName.Len() )
         aLibName = String::CreateFromAscii( "Standard" );
 
-    rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+    uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
     if ( !aModName.Len() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
@@ -251,9 +258,15 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
 
         if ( bSuccess )
         {
-            // new module window
-            pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
-            nKey = InsertWindowInTable( pWin );
+            pWin = FindBasWin( rDocument, aLibName, aModName, FALSE, TRUE );
+            if( !pWin )
+            {
+                // new module window
+                pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
+                nKey = InsertWindowInTable( pWin );
+            }
+            else // we've gotten called recursively ( via listener from createModule above ), get outta here
+                return pWin;
         }
     }
     else
@@ -267,6 +280,17 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
             pTmp = aIDEWindowTable.Next();
         }
         DBG_ASSERT( nKey, "CreateBasWin: Kein Key- Fenster nicht gefunden!" );
+    }
+    if( nKey && xLib.is() && rDocument.isInVBAMode() )
+    {
+        // display a nice friendly name in the ObjectModule tab,
+        // combining the objectname and module name, e.g. Sheet1 ( Financials )
+        String sObjName;
+        ModuleInfoHelper::getObjectName( xLib, rModName, sObjName );
+        if( sObjName.Len() )
+        {
+            aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
+        }
     }
     pTabBar->InsertPage( (USHORT)nKey, aModName );
     pTabBar->Sort();

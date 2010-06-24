@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: QueryMetaData.java,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +36,7 @@ import com.sun.star.wizards.common.*;
 public class QueryMetaData extends CommandMetaData
 {
 
+    private SQLQueryComposer oSQLQueryComposer = null;
     FieldColumn CurFieldColumn;
     public String Command;
     // Vector CommandNamesV;
@@ -292,5 +290,11 @@ public class QueryMetaData extends CommandMetaData
             iAggregate = JavaTools.FieldInTable(AggregateFieldNames, _DisplayFieldName);
         }
         return iAggregate;
+    }
+    public SQLQueryComposer getSQLQueryComposer()
+    {
+        if ( oSQLQueryComposer == null )
+            oSQLQueryComposer = new SQLQueryComposer(this);
+        return oSQLQueryComposer;
     }
 }

@@ -3,13 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WebWizard.java,v $
- *
- * $Revision: 1.6.192.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,15 +55,10 @@ public class WebWizard extends WWD_Events
     {
 
         String ConnectStr =
-                "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
-        //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+                "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.ServiceManager";
         try
         {
             XMultiServiceFactory xmsf = Desktop.connect(ConnectStr);
-            //File dir = new File("D:\\CWS\\extras6");//("C:\\Documents and Settings\\rpiterman\\My Documents");
-            //getFiles(dir,xLocMSF);
-
-            //read Configuration
             WebWizard ww = new WebWizard(xmsf);
             ww.show();
             ww.cleanup();

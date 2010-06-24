@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -67,7 +63,7 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp

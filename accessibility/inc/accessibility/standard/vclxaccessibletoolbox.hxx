@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxaccessibletoolbox.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +57,7 @@ private:
     void                        UpdateAllItems_Impl();
     void                        UpdateItemName_Impl( sal_Int32 _nPos );
     void                        UpdateItemEnabled_Impl( sal_Int32 _nPos );
+    void                        UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen );
     void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow );
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
 

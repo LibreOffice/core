@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: testcomponent.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,11 +49,6 @@
 #include <tools/string.hxx>
 #include <vos/conditn.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
-
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 
 using namespace rtl;
@@ -84,7 +76,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
     // create service manager
 //  XMultiServiceFactoryRef xSMgr = getProcessServiceManager();
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();
-    assert( xSMgr.is() );
+    OSL_ASSERT( xSMgr.is() );
     registerUsrServices( xSMgr );
     setProcessServiceManager( xSMgr );
 
@@ -98,9 +90,9 @@ int __LOADONCALLAPI main (int argc, char **argv)
         x->queryInterface( XImplementationRegistration::getSmartUik() , xReg );
 
 /*      x = xSMgr->createInstance( L"stardiv.uno.repos.SimpleRegistry" );
-        assert( x.is() );
+        OSL_ASSERT( x.is() );
         x->queryInterface( XSimpleRegistry::getSmartUik() , xSimpleReg );
-        assert( xSimpleReg.is() );
+        OSL_ASSERT( xSimpleReg.is() );
         xSimpleReg->open( L"testcomp.rdb" , FALSE , TRUE );
 */  }
     catch( Exception& e ) {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontdialog.cxx,v $
- * $Revision: 1.19.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,24 +51,24 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include "formstrings.hxx"
 #include "fontitemids.hxx"
-#include <svx/charreliefitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
+#include <editeng/emphitem.hxx>
 #endif
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertyState.hpp>

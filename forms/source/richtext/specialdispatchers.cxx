@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: specialdispatchers.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "specialdispatchers.hxx"
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
 #define ITEMID_SCRIPTSPACE          SID_ATTR_PARA_SCRIPTSPACE
-#include <svx/scriptspaceitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
 
 //........................................................................
 namespace frm

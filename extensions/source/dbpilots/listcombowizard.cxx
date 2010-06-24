@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: listcombowizard.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,7 @@
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbtools.hxx>
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 #include <comphelper/extract.hxx>
 
 //.........................................................................
@@ -223,9 +218,6 @@ namespace dbp
 
             // the bound field
             getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
-
-            // by default, create a drop down control
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("Dropdown"), ::cppu::bool2any(sal_True));
         }
         catch(Exception&)
         {
@@ -234,13 +226,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OListComboWizard::onFinish(sal_Int32 _nResult)
+    sal_Bool OListComboWizard::onFinish()
     {
-        if (!OControlWizard::onFinish(_nResult))
+        if ( !OControlWizard::onFinish() )
             return sal_False;
-
-        if (RET_OK != _nResult)
-            return sal_True;
 
         implApplySettings();
         return sal_True;
@@ -370,14 +359,14 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentTableSelection::commitPage( CommitPageReason _eReason )
+    sal_Bool OContentTableSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
 
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
-        if (!rSettings.sListContentTable.Len() && (eTravelBackward != _eReason))
+        if (!rSettings.sListContentTable.Len() && (::svt::WizardTypes::eTravelBackward != _eReason))
             // need to select a table
             return sal_False;
 
@@ -448,7 +437,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentFieldSelection::commitPage( CommitPageReason _eReason )
+    sal_Bool OContentFieldSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
@@ -526,7 +515,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OLinkFieldsPage::commitPage( CommitPageReason _eReason )
+    sal_Bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;

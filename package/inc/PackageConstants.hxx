@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PackageConstants.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,6 @@
 const sal_Int32 n_ConstBufferSize = 32768;
 const sal_Int32 n_ConstMaxMemoryStreamSize = 20480;
 const sal_Int32 n_ConstDigestLength = 1024;
-
-#define PACKAGE_FORMAT  1
-#define ZIP_FORMAT      2
-#define OFOPXML_FORMAT  3
 
 // the constants related to the manifest.xml entries
 #define PKG_MNFST_MEDIATYPE 0

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documentdigitalsignatures.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,21 +28,35 @@
 #ifndef _XMLSECURITY_DOCUMENTDIGITALSIGNATURES_HXX
 #define _XMLSECURITY_DOCUMENTDIGITALSIGNATURES_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
+#include "com/sun/star/lang/XInitialization.hpp"
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <xmlsecurity/documentsignaturehelper.hxx>
 
+namespace com { namespace  sun { namespace star {
 
-class DocumentDigitalSignatures : public cppu::WeakImplHelper1
+    namespace uno {
+        class XComponentContext;
+    }
+}}}
+
+class DocumentDigitalSignatures : public cppu::WeakImplHelper2
 <
-    com::sun::star::security::XDocumentDigitalSignatures
+    com::sun::star::security::XDocumentDigitalSignatures,
+    com::sun::star::lang::XInitialization
 >
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxCtx;
+    // will be set by XInitialization. If not we assume true. false means an earlier version.
+    ::rtl::OUString m_sODFVersion;
+    //The number of arguments which were passed in XInitialization::initialize
+    int m_nArgumentsCount;
+    //Indicates if the document already contains a document signature
+    bool m_bHasDocumentSignature;
 
     sal_Bool ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (::com::sun::star::uno::RuntimeException);
@@ -57,6 +68,10 @@ public:
     // for service registration...
     static ::rtl::OUString GetImplementationName() throw (com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence < ::rtl::OUString > GetSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+
+    //XInitialization
+    void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XDocumentDigitalSignatures
     ::sal_Bool SAL_CALL signDocumentContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream ) throw (::com::sun::star::uno::RuntimeException);

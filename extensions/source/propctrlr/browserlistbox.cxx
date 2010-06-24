@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: browserlistbox.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -685,16 +682,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Any OBrowserListBox::GetPropertyValue( const ::rtl::OUString& _rEntryName ) const
-    {
-        Any aValue;
-        ListBoxLines::const_iterator line = m_aLines.find( _rEntryName );
-        if ( line != m_aLines.end() )
-            aValue = impl_getControlAsPropertyValue( line->second );
-        return aValue;
-    }
-
-    //------------------------------------------------------------------------
     sal_uInt16 OBrowserListBox::GetPropertyPos( const ::rtl::OUString& _rEntryName ) const
     {
         sal_uInt16 nRet = LISTBOX_ENTRY_NOTFOUND;
@@ -722,15 +709,6 @@ namespace pcr
         else
             _out_rpLine.reset();
         return ( NULL != _out_rpLine.get() );
-    }
-
-    //------------------------------------------------------------------------
-    sal_Bool OBrowserListBox::IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const
-    {
-        BrowserLinePointer pLine;
-        if ( impl_getBrowserLineForName( _rEntryName, pLine ) )
-            return pLine->IsPropertyInputEnabled();
-        return sal_False;
     }
 
     //------------------------------------------------------------------------
@@ -1244,14 +1222,74 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    long OBrowserListBox::PreNotify( NotifyEvent& _rNEvt )
+    {
+        switch ( _rNEvt.GetType() )
+        {
+        case EVENT_KEYINPUT:
+        {
+            const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
+            if  (   ( pKeyEvent->GetKeyCode().GetModifier() != 0 )
+                ||  (   ( pKeyEvent->GetKeyCode().GetCode() != KEY_PAGEUP )
+                    &&  ( pKeyEvent->GetKeyCode().GetCode() != KEY_PAGEDOWN )
+                    )
+                )
+                break;
+
+            long nScrollOffset = 0;
+            if ( m_aVScroll.IsVisible() )
+            {
+                if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEUP )
+                    nScrollOffset = -m_aVScroll.GetPageSize();
+                else if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEDOWN )
+                    nScrollOffset = m_aVScroll.GetPageSize();
+            }
+
+            if ( nScrollOffset )
+            {
+                long nNewThumbPos = m_aVScroll.GetThumbPos() + nScrollOffset;
+                nNewThumbPos = ::std::max( nNewThumbPos, m_aVScroll.GetRangeMin() );
+                nNewThumbPos = ::std::min( nNewThumbPos, m_aVScroll.GetRangeMax() );
+                m_aVScroll.DoScroll( nNewThumbPos );
+                nNewThumbPos = m_aVScroll.GetThumbPos();
+
+                sal_uInt16 nFocusControlPos = 0;
+                sal_uInt16 nActiveControlPos = impl_getControlPos( m_xActiveControl );
+                if ( nActiveControlPos < nNewThumbPos )
+                    nFocusControlPos = (sal_uInt16)nNewThumbPos;
+                else if ( nActiveControlPos >= nNewThumbPos + CalcVisibleLines() )
+                    nFocusControlPos = (sal_uInt16)nNewThumbPos + CalcVisibleLines() - 1;
+                if ( nFocusControlPos )
+                {
+                    if ( nFocusControlPos < m_aOrderedLines.size() )
+                    {
+                        m_aOrderedLines[ nFocusControlPos ]->second.pLine->GrabFocus();
+                    }
+                    else
+                        OSL_ENSURE( false, "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
+                }
+            }
+
+            return 1L;
+            // handled this. In particular, we also consume PageUp/Down events if we do not use them for scrolling,
+            // otherwise they would be used to scroll the document view, which does not sound like it is desired by
+            // the user.
+        }
+        }
+        return Control::PreNotify( _rNEvt );
+    }
+
+    //------------------------------------------------------------------
     long OBrowserListBox::Notify( NotifyEvent& _rNEvt )
     {
-        if ( EVENT_COMMAND == _rNEvt.GetType() )
+        switch ( _rNEvt.GetType() )
+        {
+        case EVENT_COMMAND:
         {
             const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
             if  (   ( COMMAND_WHEEL == pCommand->GetCommand() )
-                    ||  ( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
-                    ||  ( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
+                ||  ( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
+                ||  ( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
                 )
             {
                 // interested in scroll events if we have a scrollbar
@@ -1261,6 +1299,9 @@ namespace pcr
                 }
             }
         }
+        break;
+        }
+
         return Control::Notify( _rNEvt );
     }
 

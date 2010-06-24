@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ScenarioSelector.java,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,19 +165,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         initializeCategory(BUSINESS);
     }
 
-    public int getCategory()
-    {
-        if (optBusiness.getState())
-        {
-            curcategory = BUSINESS;
-        }
-        else
-        {
-            curcategory = PRIVATE;
-        }
-        return curcategory;
-    }
-
     public void selectCategory()
     {
         if (optBusiness.getState())
@@ -197,7 +181,8 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     {
         try
         {
-            oCGCategory.initialize(_iCategory);
+            oCGCategory.initialize(
+                _iCategory == PRIVATE ? "private" : "business");
             xTableListBox.removeItems((short) 0, xTableListBox.getItemCount());
             xTableListBox.addItems(oCGCategory.getTableNames(), (short) _iCategory);
             initializeTable(0);

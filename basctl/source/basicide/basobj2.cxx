@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basobj2.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <vector>
 #include <algorithm>
 #include <basic/sbx.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <basobj.hxx>
@@ -78,31 +75,6 @@ extern "C" {
 
 namespace BasicIDE
 {
-//----------------------------------------------------------------------------
-
-SfxMacro* CreateMacro()
-{
-    DBG_ERROR( "BasicIDE::CreateMacro() - war eigentlich nur fuer Macro-Recording!" );
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
-    SFX_APP()->EnterBasicCall();
-    Window* pParent = Application::GetDefDialogParent();
-    SfxMacro* pMacro = 0;
-    MacroChooser* pChooser = new MacroChooser( pParent, TRUE );
-    Window* pOldModalDialogParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( pChooser );
-    //pChooser->SetMode( MACROCHOOSER_RECORDING );
-    short nRetValue = pChooser->Execute();
-    (void)nRetValue;
-
-    Application::SetDefDialogParent( pOldModalDialogParent );
-    delete pChooser;
-
-    SFX_APP()->LeaveBasicCall();
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = FALSE;
-
-    return pMacro;
-}
-
 //----------------------------------------------------------------------------
 
 void Organize( INT16 tabId )
@@ -219,7 +191,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if ( pIDEShell )
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_MODULE, FALSE );
+        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, TRUE );
         if ( pWin )
         {
             // set new name in window

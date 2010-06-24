@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibletablistbox.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +104,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
         throw ( uno::RuntimeException )
     {
-        return 1; // no header, only table
+        return 2; // header and table
     }
 
     // -----------------------------------------------------------------------------
@@ -125,11 +122,17 @@ namespace accessibility
         ::osl::MutexGuard aGuard( getOslMutex() );
         ensureIsAlive();
 
-        if ( nChildIndex != 0 )
-            // only one child
+        if ( nChildIndex < 0 || nChildIndex > 1 )
             throw IndexOutOfBoundsException();
 
-        Reference< XAccessible > xRet = implGetFixedChild( ::svt::BBINDEX_TABLE );
+        Reference< XAccessible > xRet;
+        if (nChildIndex == 0)
+        {
+            //! so far the actual implementation object only supports column headers
+            xRet = implGetFixedChild( ::svt::BBINDEX_COLUMNHEADERBAR );
+        }
+        else if (nChildIndex == 1)
+            xRet = implGetFixedChild( ::svt::BBINDEX_TABLE );
 
         if ( !xRet.is() )
             throw RuntimeException();

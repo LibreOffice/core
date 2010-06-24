@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ocompinstream.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,17 +60,17 @@ protected:
 
     sal_Bool m_bDisposed;
 
-    sal_Int16 m_nStorageType;
+    sal_Int32 m_nStorageType;
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                      sal_Int16 nStorageType );
+                      sal_Int32 nStorageType );
 
     OInputCompStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                      sal_Int16 nStorageType );
+                      sal_Int32 nStorageType );
 
     virtual ~OInputCompStream();
 

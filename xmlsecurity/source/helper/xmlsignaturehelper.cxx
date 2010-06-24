@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlsignaturehelper.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +61,7 @@
 #define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentContext >& rxCtx)
     : mxCtx(rxCtx), mbODFPre1_2(false)
@@ -110,12 +108,14 @@ com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > XMLSi
     return mxUriBinding;
 }
 
-void XMLSignatureHelper::SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage )
+void XMLSignatureHelper::SetStorage(
+    const Reference < css::embed::XStorage >& rxStorage,
+    ::rtl::OUString sODFVersion)
 {
     DBG_ASSERT( !mxUriBinding.is(), "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage );
     DBG_ASSERT(rxStorage.is(), "SetStorage - empty storage!");
-    mbODFPre1_2 = DocumentSignatureHelper::isODFPre_1_2(rxStorage);
+    mbODFPre1_2 = DocumentSignatureHelper::isODFPre_1_2(sODFVersion);
 }
 
 
@@ -193,6 +193,7 @@ void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const rtl::OUStri
 {
     mpXSecController->signAStream( nSecurityId, uri, objectURL, bBinary );
 }
+
 
 uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHandlerWithHeader(
     const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )

@@ -1,13 +1,9 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: corecontroller.hxx,v $
- *
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,6 +21,7 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
+ *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -54,8 +51,8 @@ namespace oooimprovement
             // css::lang::XServiceInfo - static version
             static ::rtl::OUString SAL_CALL getImplementationName_static();
             static css::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames_static();
-            static css::uno::Reference< css::uno::XInterface> SAL_CALL Create(
-                const css::uno::Reference<css::uno::XComponentContext>& context);
+            //static css::uno::Reference< css::uno::XInterface> SAL_CALL Create(
+            //    const css::uno::Reference<css::uno::XComponentContext>& context);
 
             static css::uno::Reference< css::uno::XInterface> SAL_CALL Create(
                 const css::uno::Reference< css::lang::XMultiServiceFactory>& sm);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: model_ui.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -539,18 +536,21 @@ Model::XModel_t Model::newModel( const Reference<com::sun::star::frame::XModel>&
                                  const OUString& sName )
     throw( RuntimeException )
 {
-    Model* pModel = NULL;
+    Model::XModel_t xModel;
     Reference<XNameContainer> xModels = lcl_getModels( xCmp );
     if( xModels.is()
         && ! xModels->hasByName( sName ) )
     {
-        pModel = new Model();
+        Model* pModel = new Model();
+        xModel.set( pModel );
+
         pModel->setID( sName );
         pModel->newInstance( OUString(), OUString(), sal_False );
-        xModels->insertByName( sName, makeAny( Reference<XModel>( pModel ) ) );
+        pModel->initialize();
+        xModels->insertByName( sName, makeAny( xModel ) );
     }
 
-    return pModel;
+    return xModel;
 }
 
 void Model::renameModel( const Reference<com::sun::star::frame::XModel>& xCmp,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formoperations.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,8 @@
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/sdb/RowChangeEvent.hpp>
 #include <com/sun/star/sdb/RowChangeAction.hpp>
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -92,11 +91,12 @@ namespace frm
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::sdbc::XResultSetUpdate;
-    using ::com::sun::star::form::XFormController;
+    using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::form::runtime::XFeatureInvalidation;
     using ::com::sun::star::form::runtime::FeatureState;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::sdbc::SQLException;
+    using namespace ::com::sun::star::sdbc;
     using ::com::sun::star::form::XForm;
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::util::XModifyBroadcaster;
@@ -115,6 +115,7 @@ namespace frm
     using ::com::sun::star::sdbcx::XRowLocate;
     using ::com::sun::star::form::XConfirmDeleteListener;
     using ::com::sun::star::sdb::RowChangeEvent;
+    using namespace ::com::sun::star::sdb;
     using ::com::sun::star::form::XReset;
     using ::com::sun::star::beans::XMultiPropertySet;
     using ::com::sun::star::uno::makeAny;
@@ -1687,7 +1688,23 @@ namespace frm
     void FormOperations::impl_appendFilterByColumn_throw( const void* _pActionParam ) const
     {
         const param_appendFilterByColumn* pParam = static_cast< const param_appendFilterByColumn* >( _pActionParam );
-        m_xParser->appendFilterByColumn( pParam->xField, sal_True );
+        sal_Int32 nOp = SQLFilterOperator::EQUAL;
+        if ( pParam->xField.is() )
+        {
+            sal_Int32 nType = 0;
+            pParam->xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nType;
+            switch(nType)
+            {
+                case DataType::VARCHAR:
+                case DataType::CHAR:
+                case DataType::LONGVARCHAR:
+                    nOp = SQLFilterOperator::LIKE;
+                    break;
+                default:
+                    nOp = SQLFilterOperator::EQUAL;
+            }
+        }
+        m_xParser->appendFilterByColumn( pParam->xField, sal_True,nOp );
     }
 
     //------------------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwizard.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,11 @@
 #include <comphelper/stl_types.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/debug.hxx>
 #include "dbptools.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
+#include "dbpilots.hrc"
 
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1
@@ -57,6 +53,7 @@ namespace dbp
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::awt;
     using namespace ::svt;
 
     //=====================================================================
@@ -116,6 +113,7 @@ namespace dbp
         static const ::rtl::OUString s_sDataFieldProperty   = ::rtl::OUString::createFromAscii("DataField");
         static const ::rtl::OUString s_sLabelProperty       = ::rtl::OUString::createFromAscii("Label");
         static const ::rtl::OUString s_sWidthProperty       = ::rtl::OUString::createFromAscii("Width");
+        static const ::rtl::OUString s_sMouseWheelBehavior  = ::rtl::OUString::createFromAscii("MouseWheelBehavior");
         static const ::rtl::OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
@@ -207,23 +205,24 @@ namespace dbp
                 // create a (grid)column for the (resultset)column
                 try
                 {
-                    Reference< XPropertySet > xColumn = xColumnFactory->createColumn(*pColumnServiceName);
+                    Reference< XPropertySet > xColumn( xColumnFactory->createColumn(*pColumnServiceName), UNO_SET_THROW );
+                    Reference< XPropertySetInfo > xColumnPSI( xColumn->getPropertySetInfo(), UNO_SET_THROW );
 
                     ::rtl::OUString sColumnName(*pColumnServiceName);
                     disambiguateName(xExistenceChecker, sColumnName);
 
-                    if (xColumn.is())
-                    {
-                        // the data field the column should be bound to
-                        xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
-                        // the label
-                        xColumn->setPropertyValue(s_sLabelProperty, makeAny(::rtl::OUString(*pFormFieldName) += *pColumnLabelPostfix));
-                        // the width (<void/> => column will be auto-sized)
-                        xColumn->setPropertyValue(s_sWidthProperty, Any());
+                    // the data field the column should be bound to
+                    xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
+                    // the label
+                    xColumn->setPropertyValue(s_sLabelProperty, makeAny(::rtl::OUString(*pFormFieldName) += *pColumnLabelPostfix));
+                    // the width (<void/> => column will be auto-sized)
+                    xColumn->setPropertyValue(s_sWidthProperty, Any());
 
-                        // insert the column
-                        xColumnContainer->insertByName(sColumnName, makeAny(xColumn));
-                    }
+                    if ( xColumnPSI->hasPropertyByName( s_sMouseWheelBehavior ) )
+                        xColumn->setPropertyValue( s_sMouseWheelBehavior, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
+
+                    // insert the column
+                    xColumnContainer->insertByName(sColumnName, makeAny(xColumn));
                 }
                 catch(Exception&)
                 {
@@ -290,9 +289,9 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGridWizard::onFinish(sal_Int32 _nResult)
+    sal_Bool OGridWizard::onFinish()
     {
-        if (!OControlWizard::onFinish(_nResult))
+        if ( !OControlWizard::onFinish() )
             return sal_False;
 
         implApplySettings();
@@ -367,7 +366,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGridFieldsSelection::commitPage( CommitPageReason _eReason )
+    sal_Bool OGridFieldsSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGridPage::commitPage(_eReason))
             return sal_False;

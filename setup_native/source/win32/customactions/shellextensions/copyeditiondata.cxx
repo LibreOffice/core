@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: copyeditiondata.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,7 +100,7 @@ extern "C" UINT __stdcall copyEditionData(MSIHANDLE install) {
     wchar_t * end;
     boost::scoped_array<wchar_t> to(
         getProperty(
-            install, L"OFFICEINSTALLLOCATION",
+            install, L"INSTALLLOCATION",
             LCL_STRING0(L"program\\edition\0"), &end));
     if (!to) {
         return ERROR_INSTALL_FAILURE;

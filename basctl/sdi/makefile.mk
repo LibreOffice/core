@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,17 +34,21 @@ TARGET=basslots
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 SDI1NAME=$(TARGET)
 SDI1EXPORT=basctl
 
 # --- Files --------------------------------------------------------
 
 SVSDI1DEPEND= \
-    $(SOLARINCXDIR)$/svxslots.ilb \
+        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
+        $(SOLARINCXDIR)$/svx/svx.sdi \
+        $(SOLARINCXDIR)$/svx/svxitems.sdi \
+        $(SOLARINCXDIR)$/svx/xoitems.sdi \
     baside.sdi
 
 # --- Targets -------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk
 

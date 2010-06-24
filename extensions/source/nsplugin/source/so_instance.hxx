@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: so_instance.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +103,6 @@ public:
     virtual sal_Bool Print(void) ;
 
     static sal_Bool ShutDown(void);
-    static sal_Bool SetSODir(char * sDir);
     static char* GetSODir(void) {return sSO_Dir;};
     long GetParent(void) {return m_pParent;};
 };

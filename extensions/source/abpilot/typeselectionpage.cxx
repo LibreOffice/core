@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: typeselectionpage.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,6 +113,7 @@ namespace abp
 
         bool bFirstVisible = true;
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
+        const Size aSpacing( LogicToPixel( Size( 0, 3 ), MAP_APPFONT ) );
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
@@ -125,7 +123,7 @@ namespace abp
             else
             {
                 aItem.m_pItem->SetPosPixel( aTopLeft );
-                aTopLeft.Y() += aItemSize.Height();
+                aTopLeft.Y() += aItemSize.Height() + aSpacing.Height();
                 aItem.m_pItem->SetClickHdl( aTypeSelectionHandler );
                 aItem.m_pItem->Show();
 
@@ -209,18 +207,15 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TypeSelectionPage::commitPage( CommitPageReason _eReason )
+    sal_Bool TypeSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;
 
         if (AST_INVALID == getSelectedType( ))
         {
-            if ( _eReason != eValidateNoUI )
-            {
-                ErrorBox aError(this, ModuleRes(RID_ERR_NEEDTYPESELECTION));
-                aError.Execute();
-            }
+            ErrorBox aError(this, ModuleRes(RID_ERR_NEEDTYPESELECTION));
+            aError.Execute();
             return sal_False;
         }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ZipEntry.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,8 @@ struct ZipEntry
     sal_Int32 nCompressedSize;
     sal_Int32 nSize;
     sal_Int32 nOffset;
-    sal_Int16 nNameLen;
+    sal_Int16 nPathLen;
     sal_Int16 nExtraLen;
-    ::rtl::OUString sName;
+    ::rtl::OUString sPath;
 };
 #endif

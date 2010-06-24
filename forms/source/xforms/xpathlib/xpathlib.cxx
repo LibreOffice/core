@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xpathlib.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,7 +290,7 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     */
     DateTime aDateTime;
     ::rtl::OString aDateTimeString = makeDateTimeString(aDateTime);
-    xmlChar *pString = (xmlChar*)rtl_allocateMemory(aDateTimeString.getLength()+1);
+    xmlChar *pString = static_cast<xmlChar*>(xmlMalloc(aDateTimeString.getLength()+1));
     strncpy((char*)pString, (char*)aDateTimeString.getStr(), aDateTimeString.getLength());
     pString[aDateTimeString.getLength()] = 0;
     xmlXPathReturnString(ctxt, pString);

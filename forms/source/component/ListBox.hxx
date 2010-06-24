@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ListBox.hxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/asyncnotification.hxx>
@@ -85,7 +83,7 @@ class OListBoxModel :public OBoundControlModel
     // </properties>
 
     sal_Int16                                   m_nNULLPos;             // position of the NULL value in our list
-    sal_Bool                                    m_bBoundComponent : 1;
+    sal_Int32                                   m_nBoundColumnType;
 
 private:
     ::connectivity::ORowSetValue getFirstSelectedValue() const;
@@ -136,6 +134,9 @@ protected:
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
+    // OPropertyChangeListener
+    virtual void    _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvt ) throw ( ::com::sun::star::uno::RuntimeException );
+
     // prevent method hiding
     using OBoundControlModel::getFastPropertyValue;
     using OBoundControlModel::setPropertyValues;
@@ -157,6 +158,7 @@ protected:
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
+    virtual void            resetNoBroadcast();
 
     virtual ::com::sun::star::uno::Any
                             getCurrentFormComponentValue() const;
@@ -179,6 +181,8 @@ private:
     void        impl_refreshDbEntryList( bool _bForce );
 
     ValueList   impl_getValues() const;
+
+    bool        impl_hasBoundComponent() const { return m_nBoundColumnType != ::com::sun::star::sdbc::DataType::SQLNULL; }
 };
 
 //==================================================================

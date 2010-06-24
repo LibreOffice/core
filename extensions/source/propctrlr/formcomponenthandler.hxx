@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formcomponenthandler.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,6 +234,15 @@ namespace pcr
                 m_xRowSetConnection is not <NULL/>
         */
         void impl_fillQueryNames_throw( ::std::vector< ::rtl::OUString >& _out_rNames ) const;
+
+        /** describes the UI for selecting a query name
+
+            @precond
+                m_xRowSetConnection is not <NULL/>
+        */
+        void impl_fillQueryNames_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xQueryNames
+                    ,::std::vector< ::rtl::OUString >& _out_rNames
+                    ,const ::rtl::OUString& _sName = ::rtl::OUString() ) const;
 
         /** describes the UI for selecting a ListSource (for list-like form controls)
             @precond

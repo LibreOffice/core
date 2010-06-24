@@ -20,6 +20,7 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\bin\nsplugin %_DEST%\bin%_EXT%\nsplugin
 ..\%__SRC%\bin\npsoplugin.dll %_DEST%\bin%_EXT%\npsoplugin.dll
 ..\%__SRC%\bin\npsoplugin_so.dll %_DEST%\bin%_EXT%\so\npsoplugin.dll
+..\%__SRC%\bin\x64\so_activex.dll %_DEST%\bin%_EXT%\so_activex_x64.dll
 ..\%__SRC%\bin\mdibundle.zip %_DEST%\bin%_EXT%\mdibundle.zip
 
 ..\source\bibliography\uiconfig\sbibliography\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar\*.xml

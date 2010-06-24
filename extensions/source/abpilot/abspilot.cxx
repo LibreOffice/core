@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: abspilot.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "abspilot.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
-#ifndef EXTENSIONS_ABPRESID_HRC
+#include "abpilot.hrc"
 #include "abpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>
@@ -220,13 +213,10 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAddessBookSourcePilot::onFinish(sal_Int32 _nResult)
+    sal_Bool OAddessBookSourcePilot::onFinish()
     {
-        if (!OAddessBookSourcePilot_Base::onFinish(_nResult))
+        if ( !OAddessBookSourcePilot_Base::onFinish() )
             return sal_False;
-
-        if (RET_OK != _nResult)
-            return sal_True;
 
         implCommitAll();
 
@@ -290,9 +280,7 @@ namespace abp
 
             if ( aTables.empty() )
             {
-                if  (   ( _eReason == eValidateNoUI )
-                    ||  ( RET_YES != QueryBox( this, ModuleRes( RID_QRY_NOTABLES ) ).Execute() )
-                    )
+                if ( RET_YES != QueryBox( this, ModuleRes( RID_QRY_NOTABLES ) ).Execute() )
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
                     bAllow = sal_False;

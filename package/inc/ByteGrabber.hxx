@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ByteGrabber.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,12 +35,16 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <osl/mutex.hxx>
+
 namespace com { namespace sun { namespace star {
     namespace io { class XSeekable; class XInputStream; }
 } } }
 class ByteGrabber
 {
 protected:
+    ::osl::Mutex m_aMutex;
+
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
     com::sun::star::uno::Sequence < sal_Int8 > aSequence;

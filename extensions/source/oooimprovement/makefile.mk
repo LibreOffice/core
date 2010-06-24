@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,10 +66,14 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB) \
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+.IF "$(GUI)"=="OS2"
+SHL1TARGET= oooimp$(DLLPOSTFIX)
+.ENDIF
+
 SHL1LIBS= $(SLB)$/$(TARGET).lib
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 DEF1NAME= $(SHL1TARGET)
-SHL1VERSIONMAP= oooimprovement.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 PACKAGEDIR=$(subst,.,$/ $(PACKAGE))
 SPOOLDIR=$(MISC)$/registry$/spool

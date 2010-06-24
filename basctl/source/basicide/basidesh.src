@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basidesh.src,v $
- * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -195,7 +192,7 @@ String RID_STR_APPENDLIBS
 String RID_STR_QUERYDELMACRO
 {
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Makro XX löschen ? : M÷chten Sie das Makro XX l÷schen ? */
-    Text [ en-US ] = "Do you want to delete the macro XX ?" ;
+    Text [ en-US ] = "Do you want to delete the macro XX?" ;
 };
 String RID_STR_QUERYDELDIALOG
 {
@@ -639,6 +636,64 @@ String RID_STR_TRANSLATION_DEFAULT
 {
     Text [ en-US ] = "[Default Language]" ;
 };
+String RID_STR_DOCUMENT_OBJECTS
+{
+    Text [ en-US ] = "Document Objects" ;
+};
+String RID_STR_USERFORMS
+{
+    Text [ en-US ] = "Forms" ;
+};
+String RID_STR_NORMAL_MODULES
+{
+    Text [ en-US ] = "Modules" ;
+};
+String RID_STR_CLASS_MODULES
+{
+    Text [ en-US ] = "Class Modules" ;
+};
+
+
+String RID_STR_DLGIMP_CLASH_RENAME
+{
+    Text [ en-US ] = "Rename" ;
+};
+
+String RID_STR_DLGIMP_CLASH_REPLACE
+{
+    Text [ en-US ] = "Replace" ;
+};
+
+String RID_STR_DLGIMP_CLASH_TITLE
+{
+    Text [ en-US ] = "Dialog Import - Name already used" ;
+};
+
+String RID_STR_DLGIMP_CLASH_TEXT
+{
+    Text [ en-US ] = "The library already contains a dialog with the name:\n\n$(ARG1)\n\nRename dialog to keep current dialog or replace existing dialog.\n " ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_ADD
+{
+    Text [ en-US ] = "Add" ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_OMIT
+{
+    Text [ en-US ] = "Omit" ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_TITLE
+{
+    Text [ en-US ] = "Dialog Import - Language Mismatch" ;
+};
+
+String RID_STR_DLGIMP_MISMATCH_TEXT
+{
+    Text [ en-US ] = "The dialog to be imported supports other languages than the target library.\n\nAdd these languages to the library to keep additional language resources provided by the dialog or omit them to stay with the current library languages.\n\nNote: For languages not supported by the dialog the resources of the dialog's default language will be used.\n " ;
+};
+
 
 #define MN_EDIT       20
 #define MN_VIEW 21

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scriptdocument.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,6 +212,7 @@ namespace basctl
         */
         bool        isAlive() const;
 
+        bool        isInVBAMode() const;
         /// returns the BasicManager associated with this instance
         BasicManager*
                     getBasicManager() const;

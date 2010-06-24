@@ -5,3 +5,4 @@
 -o integration.forms.ListSelection
 -o integration.forms.MasterDetailForms
 -o integration.forms.XMLFormSettings
+-o integration.forms.ListBox

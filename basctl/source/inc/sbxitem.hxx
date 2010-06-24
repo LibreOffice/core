@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbxitem.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _SBXITEM_HXX
 
 #include "scriptdocument.hxx"
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 const USHORT BASICIDE_TYPE_UNKNOWN  =   0;
 const USHORT BASICIDE_TYPE_SHELL    =   1;

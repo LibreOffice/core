@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: propcontroller.hxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,6 +165,7 @@ namespace pcr
         bool        m_bContainerFocusListening;
         bool        m_bSuspendingPropertyHandlers;
         bool        m_bConstructed;
+        bool        m_bBindingIntrospectee;
 
     protected:
         DECLARE_XINTERFACE()

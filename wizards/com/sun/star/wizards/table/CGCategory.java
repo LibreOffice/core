@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CGCategory.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,12 +56,14 @@ public class CGCategory
         xMSF = _xMSF;
     }
 
-    public void initialize(int _index)
+    public void initialize(String category)
     {
         try
         {
             oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
-            xNameAccessCurBusinessNode = Configuration.getChildNodebyIndex(oconfigView, _index);
+            xNameAccessCurBusinessNode = Configuration.getChildNodebyName(
+                UnoRuntime.queryInterface(XNameAccess.class, oconfigView),
+                category);
         }
         catch (Exception e)
         {

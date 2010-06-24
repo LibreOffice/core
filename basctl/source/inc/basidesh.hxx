@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basidesh.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +46,7 @@
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #endif
 
+#include <com/sun/star/container/XContainerListener.hpp>
 
 //----------------------------------------------------------------------------
 
@@ -86,6 +84,7 @@ class BasicIDEShell :public SfxViewShell
 {
 friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
+friend BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
 friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
     ObjectCatalog*      pObjectCatalog;
@@ -107,6 +106,8 @@ friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const Strin
     BOOL                m_bAppBasicModified;
     ::basctl::DocumentEventNotifier
                         m_aNotifier;
+friend class ContainerListenerImpl;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
 #if _SOLAR__PRIVATE
     void                Init();
@@ -147,7 +148,6 @@ protected:
     DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
     ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -199,7 +199,9 @@ public:
 
     SfxUndoManager*     GetUndoManager();
 
-    virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
+    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+
+    // virtual USHORT           Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( BOOL bCreate );
     virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual String          GetSelectionText( BOOL bCompleteWords );
@@ -219,6 +221,7 @@ public:
     ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
 
     IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), USHORT nType = BASICIDE_TYPE_UNKNOWN, BOOL bFindSuspended = FALSE );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
     IDEBaseWindow*      FindApplicationWindow();
     BOOL                NextPage( BOOL bPrev = FALSE );
 
