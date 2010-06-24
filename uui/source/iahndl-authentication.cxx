@@ -742,7 +742,8 @@ UUIInteractionHelper::handlePasswordRequest(
                                aPasswordRequest.Mode,
                                rRequest->getContinuations(),
                                rtl::OUString(),
-                               false /* bool bMSCryptoMode */);
+                               false /* bool bMSCryptoMode */,
+                               false /* bool bIsPasswordToModify */);
         return true;
     }
 
