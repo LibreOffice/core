@@ -234,18 +234,6 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             }
             break;
         }
-        case BASEPROPERTY_BACKGROUNDCOLOR:
-        {
-            sal_Int32 color = 0xFFFFFF;
-            Color color1 = pTable->GetSettings().GetStyleSettings().GetFieldColor();
-            if( aValue >>= color )
-            {
-                color1 = color;
-                pTable->getDataWindow()->SetBackground( color1 );
-                pTable->getDataWindow()->SetControlBackground( color1 );
-            }
-            break;
-        }
         case BASEPROPERTY_VERTICALALIGN:
         {
             com::sun::star::style::VerticalAlignment vAlign(com::sun::star::style::VerticalAlignment(0));
