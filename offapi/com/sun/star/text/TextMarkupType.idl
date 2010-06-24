@@ -58,6 +58,12 @@ constants TextMarkupType
     /// An inivisible markup used to identify sentence boundaries.
     /// @since OOo 3.0.1
     const long SENTENCE = 4;
+
+    /// Markups originates from change tracking.
+        /// @since OOo 3.3
+    const long TRACK_CHANGE_INSERTION = 5;
+    const long TRACK_CHANGE_DELETION = 6;
+    const long TRACK_CHANGE_FORMATCHANGE = 7;
 };
 
 }; }; }; };

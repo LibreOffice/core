@@ -50,7 +50,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-SHL1VERSIONMAP = introspection.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1RPATH=URELIB
 
 SHL1DEPN=

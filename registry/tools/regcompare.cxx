@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -2273,8 +2274,8 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
         {
             nError += compareKeys(subKey1, subKey2);
         }
-        subKey1.closeKey();
-        subKey2.closeKey();
+        subKey1.releaseKey();
+        subKey2.releaseKey();
         ++iter;
     }
 
@@ -2377,8 +2378,8 @@ int _cdecl main( int argc, char * argv[] )
         }
     }
 
-    key1.closeKey();
-    key2.closeKey();
+    key1.releaseKey();
+    key2.releaseKey();
     if ( reg1.close() )
     {
         fprintf(stdout, "%s: closing registry \"%s\" failed\n",

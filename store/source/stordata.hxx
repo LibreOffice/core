@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORDATA_HXX_
-#define _STORE_STORDATA_HXX_ "$Revision: 1.6.8.2 $"
+#define _STORE_STORDATA_HXX_
 
 #include "sal/types.h"
 #include "sal/macros.h"

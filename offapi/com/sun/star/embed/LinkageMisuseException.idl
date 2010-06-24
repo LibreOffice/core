@@ -44,7 +44,7 @@
     Or if embedded object is misused as a linked object.
     </p>
  */
-exception LinkageMisuseException: com::sun::star::uno::Exception
+published exception LinkageMisuseException: com::sun::star::uno::Exception
 {
 };
 

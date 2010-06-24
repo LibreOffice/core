@@ -77,6 +77,10 @@ service Diagram
      */
     [property] ::com::sun::star::layout::RelativeSize RelativeSize;
 
+    /** The attributes RelativePosition and RelativeSize should be used for the inner coordinate region without axis labels and without data labels.
+     */
+    [optional, property] boolean                    PosSizeExcludeLabels;
+
     /** Sort data points by x values for rendering
      */
     [optional, property] boolean                    SortByXValues;

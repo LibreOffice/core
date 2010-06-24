@@ -67,7 +67,7 @@
     representation.
     </p>
  */
-interface XEmbedPersist: XCommonEmbedPersist
+published interface XEmbedPersist: XCommonEmbedPersist
 {
     //------------------------------------------------------------------------
     /** provides object with a parent storage and a name for object's entry.

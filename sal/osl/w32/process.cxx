@@ -227,7 +227,7 @@ extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
     DWORD buflen = 0;
 
-    if ((buflen = GetModuleFileNameW (0, aBuffer, aBuffer.getBufSizeInSymbols())) > 0)
+    if ((buflen = GetModuleFileNameW (0, ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
     {
         rtl_uString * pAbsPath = 0;
         rtl_uString_newFromStr_WithLength (&(pAbsPath), aBuffer, buflen);
@@ -279,7 +279,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
         for (i = 0; i < nArgs; i++)
         {
             /* Convert to unicode */
-            rtl_uString_newFromStr( &(ppArgs[i]), wargv[i] );
+            rtl_uString_newFromStr( &(ppArgs[i]), reinterpret_cast<const sal_Unicode*>(wargv[i]) );
         }
         if (ppArgs[0] != 0)
         {
@@ -288,7 +288,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
             DWORD dwResult = 0;
 
             dwResult = SearchPath (
-                0, ppArgs[0]->buffer, L".exe", aBuffer.getBufSizeInSymbols(), aBuffer, 0);
+                0, reinterpret_cast<LPCWSTR>(ppArgs[0]->buffer), L".exe", aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), 0);
             if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
             {
                 /* Replace argv[0] with it's absolute path */
@@ -322,6 +322,7 @@ oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
     oslProcessError result = osl_Process_E_NotFound;
 
     osl_acquireMutex (*osl_getGlobalMutex());
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > 0)
     {
         /* CommandArgs set. Obtain arv[0]. */
@@ -340,6 +341,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount(void)
     sal_uInt32 result = 0;
 
     osl_acquireMutex (*osl_getGlobalMutex());
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > 0)
     {
         /* We're not counting argv[0] here. */
@@ -357,6 +359,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
     oslProcessError result = osl_Process_E_NotFound;
 
     osl_acquireMutex (*osl_getGlobalMutex());
+    OSL_ASSERT(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
         /* We're not counting argv[0] here. */
@@ -372,6 +375,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
 
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
+    OSL_ASSERT(argc > 0);
     osl_acquireMutex (*osl_getGlobalMutex());
     if (g_command_args.m_nCount == 0)
     {
@@ -401,9 +405,9 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 {
     WCHAR buff[ENV_BUFFER_SIZE];
 
-    if (GetEnvironmentVariableW(ustrVar->buffer, buff, ENV_BUFFER_SIZE) > 0)
+    if (GetEnvironmentVariableW(reinterpret_cast<LPCWSTR>(ustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
     {
-        rtl_uString_newFromStr(ustrValue, buff);
+        rtl_uString_newFromStr(ustrValue, reinterpret_cast<const sal_Unicode*>(buff));
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
@@ -422,7 +426,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
 
     osl_acquireMutex( g_CurrentDirectoryMutex );
-    dwLen = GetCurrentDirectory( aBuffer.getBufSizeInSymbols(), aBuffer );
+    dwLen = GetCurrentDirectory( aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer) );
     osl_releaseMutex( g_CurrentDirectoryMutex );
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )

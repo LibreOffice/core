@@ -37,7 +37,7 @@ module com { module sun { module star { module embed {
 
     @see XEmbeddedObject
 */
-constants EmbedUpdateModes
+published constants EmbedUpdateModes
 {
     // -----------------------------------------------------------------------
     /** An object representation should be updated as often as possible.

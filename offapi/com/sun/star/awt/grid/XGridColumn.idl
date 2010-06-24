@@ -30,6 +30,9 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
+#include <com/sun/star/style/HorizontalAlignment.idl>
+#include <com/sun/star/awt/grid/XGridColumnListener.idl>
+
 
 //=============================================================================
 
@@ -38,28 +41,67 @@ module com {  module sun {  module star {  module awt {  module grid {
 //=============================================================================
 
 /** The <type>XGridColumn</types> defines the properties and behavior of a column in a grid control
+    @since OOo 3.3.0
  */
-interface XGridColumn: com::sun::star::uno::XInterface
+interface XGridColumn
 {
     /** Specifies the an idendifier of the colomn.**/
     [attribute] any Identifier;
 
     /** Specifies the default column witdth. **/
     [attribute] long ColumnWidth;
-    /*
+
+    /** Specifies the preferred column witdth. **/
     [attribute] long PreferredWidth;
 
+    /** Specifies the min column witdth. **/
     [attribute] long MinWidth;
 
+    /** Specifies the max column witdth. **/
     [attribute] long MaxWidth;
 
-    [attribute] boolean Resizable;
-    */
+    /** Specifies whether column has fixed size or not. **/
+    [attribute] boolean Resizeable;
+
+    /** Specifies the horizontal alignment of the content in the control.
+
+        <pre>
+            LEFT
+            CENTER
+            RIGHT
+        </pre>
+     */
+    [attribute] ::com::sun::star::style::HorizontalAlignment HorizontalAlign;
 
     /** A title is displayed in the colum header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
     [attribute] string Title;
 
+    /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
+        @param Listener
+            the listener to add.
+    */
+    [oneway] void addColumnListener( [in] XGridColumnListener  listener);
 
+    //-------------------------------------------------------------------------
+
+    /** Removes a listener previously added with <method>addColumnListener()</method>.
+        @param Listener
+            the listener to remove.
+    */
+    [oneway] void removeColumnListener( [in] XGridColumnListener listener);
+
+    /**Updates changed column widths, when column widths are being resized.
+        @param name
+            can be PrefWidth or ColWidth, depending on which was changed
+        @param width
+            the new column width
+    */
+    void updateColumn( [in] string name, [in] long width);
+    /**Sets column index
+        @param index
+            index, which is the index of the column in the column array of the column model
+    */
+    void setIndex( [in] long index );
 };
 
 //=============================================================================

@@ -58,6 +58,7 @@ IDLFILES=\
     DatabaseContext.idl \
     DatabaseDocument.idl \
     DatabaseEnvironment.idl \
+    DatabaseInteractionHandler.idl \
     DatabaseRegistrationEvent.idl \
     DataColumn.idl \
     DataSettings.idl \
@@ -89,6 +90,7 @@ IDLFILES=\
     ResultSet.idl \
     RowChangeAction.idl \
     RowChangeEvent.idl \
+    RowsChangeEvent.idl \
     RowSet.idl \
     RowSetVetoException.idl \
     SingleSelectQueryAnalyzer.idl \
@@ -127,6 +129,8 @@ IDLFILES=\
     XRowSetApproveListener.idl \
     XRowSetChangeBroadcaster.idl \
     XRowSetChangeListener.idl \
+    XRowsChangeBroadcaster.idl \
+    XRowsChangeListener.idl \
     XRowSetSupplier.idl \
     XSingleSelectQueryAnalyzer.idl \
     XSingleSelectQueryComposer.idl \

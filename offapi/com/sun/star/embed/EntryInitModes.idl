@@ -38,7 +38,7 @@ module com { module sun { module star { module embed {
 
     @see XEmbedPersist
 */
-constants EntryInitModes
+published constants EntryInitModes
 {
     // -----------------------------------------------------------------------
     /** In case object persistance is created based on existing entry,

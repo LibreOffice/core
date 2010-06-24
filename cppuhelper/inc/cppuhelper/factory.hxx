@@ -149,6 +149,23 @@ SAL_CALL createSingleComponentFactory(
     rtl_ModuleCount * pModCount = 0 )
     SAL_THROW( () );
 
+/** Creates a single service factory which holds the instance created only once.
+
+    @param fptr function pointer for instanciating the object
+    @param rImplementationName implementation name of service
+    @param rServiceNames supported services
+    @param pModCount for future extension (library unloading concept).
+
+    @see createSingleComponentFactory
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > SAL_CALL
+createOneInstanceComponentFactory(
+    ComponentFactoryFunc fptr,
+    ::rtl::OUString const & rImplementationName,
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+    rtl_ModuleCount * pModCount = 0 )
+    SAL_THROW( () );
+
 /** Deprecated.  The type of the instanciate function used as argument of the create*Fcatory functions.
 
     @see createSingleFactory

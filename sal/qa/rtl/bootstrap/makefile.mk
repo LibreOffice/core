@@ -50,6 +50,8 @@ MY_SCRIPTCAT=tr -d "\015" <
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl
 SHL1OBJS=  \

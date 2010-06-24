@@ -1,4 +1,4 @@
-UDK_3.1 {
+UDK_3_0_0 {
     global:
     Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo;
     Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory;

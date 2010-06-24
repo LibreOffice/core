@@ -173,6 +173,7 @@ IDLFILES=\
       TextPortionEnumeration.idl\
       TextRange.idl\
       TextRanges.idl\
+      TextRangeContentProperties.idl\
       TextSection.idl\
       TextSections.idl\
       TextSortable.idl\

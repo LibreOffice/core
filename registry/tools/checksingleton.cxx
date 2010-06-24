@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -452,10 +453,10 @@ int _cdecl main( int argc, char * argv[] )
 
     sal_Bool bSingletonsExist = checkSingletons(singletonKey, typeKey);
 
-    indexRoot.closeKey();
-    typeRoot.closeKey();
-    typeKey.closeKey();
-    singletonKey.closeKey();
+    indexRoot.releaseKey();
+    typeRoot.releaseKey();
+    typeKey.releaseKey();
+    singletonKey.releaseKey();
     if ( indexReg.close() )
     {
         fprintf(stderr, "%s: closing registry \"%s\" failed\n",

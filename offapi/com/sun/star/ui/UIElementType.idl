@@ -76,6 +76,11 @@ constants UIElementType
     const short PROGRESSBAR     = 6;
 
     //-------------------------------------------------------------------------
+    /** specifies a tool panel
+    */
+    const short TOOLPANEL       = 7;
+
+    //-------------------------------------------------------------------------
     /** specifies a window that can be docked.
     */
     const short DOCKINGWINDOW   = 7;

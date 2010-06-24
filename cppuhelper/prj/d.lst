@@ -35,7 +35,6 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\shlib.hxx %_DEST%\inc%_EXT%\cppuhelper\shlib.hxx
 ..\inc\cppuhelper\basemutex.hxx %_DEST%\inc%_EXT%\cppuhelper\basemutex.hxx
 ..\inc\cppuhelper\bootstrap.hxx %_DEST%\inc%_EXT%\cppuhelper\bootstrap.hxx
-..\inc\cppuhelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 ..\inc\cppuhelper\exc_hlp.hxx %_DEST%\inc%_EXT%\cppuhelper\exc_hlp.hxx
 ..\inc\cppuhelper\typeprovider.hxx %_DEST%\inc%_EXT%\cppuhelper\typeprovider.hxx
 ..\inc\cppuhelper\factory.hxx %_DEST%\inc%_EXT%\cppuhelper\factory.hxx
@@ -53,7 +52,6 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\queryinterface.hxx %_DEST%\inc%_EXT%\cppuhelper\queryinterface.hxx
 ..\inc\cppuhelper\weakref.hxx %_DEST%\inc%_EXT%\cppuhelper\weakref.hxx
 ..\inc\cppuhelper\servicefactory.hxx %_DEST%\inc%_EXT%\cppuhelper\servicefactory.hxx
-..\inc\cppuhelper\smartservices.hxx %_DEST%\inc%_EXT%\cppuhelper\smartservices.hxx
 ..\inc\cppuhelper\implementationentry.hxx %_DEST%\inc%_EXT%\cppuhelper\implementationentry.hxx
 ..\inc\cppuhelper\access_control.hxx %_DEST%\inc%_EXT%\cppuhelper\access_control.hxx
 ..\inc\cppuhelper\unourl.hxx %_DEST%\inc%_EXT%\cppuhelper\unourl.hxx

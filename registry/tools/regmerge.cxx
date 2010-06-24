@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "registry/registry.h"
+#include "registry/registry.hxx"
 #include    <rtl/ustring.hxx>
 #include    <rtl/alloc.h>
 #include <osl/process.h>
@@ -204,9 +204,7 @@ int main( int argc, char * argv[] )
 int _cdecl main( int argc, char * argv[] )
 #endif
 {
-    RegHandle       hReg;
-    RegKeyHandle    hRootKey;
-    bool            bVerbose = checkCommandArgs(argc, argv);
+    bool bVerbose = checkCommandArgs(argc, argv);
 
     if (realargc < 4)
     {
@@ -216,9 +214,11 @@ int _cdecl main( int argc, char * argv[] )
     }
 
     ::rtl::OUString regName( convertToFileUrl(realargv[1]) );
-    if (reg_openRegistry(regName.pData, &hReg, REG_READWRITE))
+
+    Registry reg;
+    if (reg.open(regName, REG_READWRITE) != REG_NO_ERROR)
     {
-        if (reg_createRegistry(regName.pData, &hReg))
+        if (reg.create(regName) != REG_NO_ERROR)
         {
             if (bVerbose)
                 fprintf(stderr, "open registry \"%s\" failed\n", realargv[1]);
@@ -227,17 +227,16 @@ int _cdecl main( int argc, char * argv[] )
         }
     }
 
-    if (!reg_openRootKey(hReg, &hRootKey))
+    RegistryKey rootKey;
+    if (reg.openRootKey(rootKey) == REG_NO_ERROR)
     {
         ::rtl::OUString mergeKeyName( ::rtl::OUString::createFromAscii(realargv[2]) );
         ::rtl::OUString targetRegName;
         for (int i = 3; i < realargc; i++)
         {
             targetRegName = convertToFileUrl(realargv[i]);
-            RegError _ret = reg_mergeKey(
-                hRootKey, mergeKeyName.pData, targetRegName.pData, sal_False,
-                bVerbose);
-            if (_ret)
+            RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, sal_False, bVerbose);
+            if (_ret != REG_NO_ERROR)
             {
                 if (_ret == REG_MERGE_CONFLICT)
                 {
@@ -259,13 +258,7 @@ int _cdecl main( int argc, char * argv[] )
             }
         }
 
-        if (reg_closeKey(hRootKey))
-        {
-            if (bVerbose)
-                fprintf(stderr, "closing root key of registry \"%s\" failed\n",
-                        realargv[1]);
-            exit(-3);
-        }
+        rootKey.releaseKey();
     } else
     {
         if (bVerbose)
@@ -274,7 +267,7 @@ int _cdecl main( int argc, char * argv[] )
         exit(-4);
     }
 
-    if (reg_closeRegistry(hReg))
+    if (reg.close() != REG_NO_ERROR)
     {
         if (bVerbose)
             fprintf(stderr, "closing registry \"%s\" failed\n", realargv[1]);

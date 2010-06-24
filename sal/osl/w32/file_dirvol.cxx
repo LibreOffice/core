@@ -529,7 +529,7 @@ static oslFileError osl_openLocalRoot(
             rtl_uString* pBackSlash = 0;
 
             rtl_uString_assign( &pCurDir, pDirImpl->m_pDirectoryPath );
-            rtl_uString_newFromStr( &pBackSlash, L"\\" );
+            rtl_uString_newFromAscii( &pBackSlash, "\\" );
             rtl_uString_newConcat( &pDirImpl->m_pDirectoryPath, pCurDir, pBackSlash );
             rtl_uString_release( pBackSlash );
             rtl_uString_release( pCurDir );
@@ -594,7 +594,7 @@ static oslFileError SAL_CALL osl_openFileDirectory(
         rtl_uString* pBackSlash = 0;
 
         rtl_uString_assign( &pCurDir, pDirImpl->m_pDirectoryPath );
-        rtl_uString_newFromStr( &pBackSlash, L"\\" );
+        rtl_uString_newFromAscii( &pBackSlash, "\\" );
         rtl_uString_newConcat( &pDirImpl->m_pDirectoryPath, pCurDir, pBackSlash );
         rtl_uString_release( pBackSlash );
         rtl_uString_release( pCurDir );
@@ -964,7 +964,7 @@ static oslFileError SAL_CALL osl_getNextFileItem(
         pItemImpl->nRefCount = 1;
 
         rtl_uString* pTmpFileName = 0;
-        rtl_uString_newFromStr( &pTmpFileName,  pItemImpl->FindData.cFileName );
+        rtl_uString_newFromStr( &pTmpFileName,  reinterpret_cast<const sal_Unicode *>(pItemImpl->FindData.cFileName) );
         rtl_uString_newConcat( &pItemImpl->m_pFullPath, pDirImpl->m_pDirectoryPath, pTmpFileName );
         rtl_uString_release( pTmpFileName );
 
@@ -1754,7 +1754,7 @@ oslFileError SAL_CALL osl_getFileStatus(
             sal_uInt32 nLen = rtl_uString_getLength( pItemImpl->m_pFullPath );
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
             sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
-                                                      aBuffer,
+                                                      ::osl::mingw_reinterpret_cast<LPTSTR>( aBuffer ),
                                                       aBuffer.getBufSizeInSymbols(),
                                                       sal_True );
 

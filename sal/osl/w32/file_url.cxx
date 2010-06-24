@@ -252,13 +252,13 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
 
         DWORD   dwCandidatPathType = PATHTYPE_ERROR;
 
-        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX_UNC, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
+        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, reinterpret_cast<const sal_Unicode *>(WSTR_LONG_PATH_PREFIX_UNC), ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
         {
             /* This is long path in UNC notation */
             lpComponent = lpszPath + ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1;
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC | PATHTYPE_IS_LONGPATH;
         }
-        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1 ) )
+        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, reinterpret_cast<const sal_Unicode *>(WSTR_LONG_PATH_PREFIX), ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1 ) )
         {
             /* This is long path */
             lpComponent = lpszPath + ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1;
@@ -465,7 +465,7 @@ static DWORD GetCaseCorrectPathNameEx(
     DWORD   nSkipLevels,
     BOOL bCheckExistence )
 {
-        ::osl::LongPathBuffer< sal_Unicode > szFile( MAX_PATH + 1 );
+        ::osl::LongPathBuffer< WCHAR > szFile( MAX_PATH + 1 );
         sal_Int32 nRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
         sal_Int32 nLastStepRemoved = nRemoved;
         while ( nLastStepRemoved && szFile[0] == 0 )
@@ -505,7 +505,7 @@ static DWORD GetCaseCorrectPathNameEx(
             {
                 if ( bCheckExistence )
                 {
-                    ::osl::LongPathBuffer< sal_Unicode > aShortPath( MAX_LONG_PATH );
+                    ::osl::LongPathBuffer< WCHAR > aShortPath( MAX_LONG_PATH );
                     _tcscpy( aShortPath, lpszPath );
                     _tcscat( aShortPath, szFile );
 
@@ -777,14 +777,14 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                 else
                 {
                     ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-                    sal_uInt32 nNewLen = GetCaseCorrectPathName( pDecodedURL + nSkip,
-                                                                 aBuf,
+                    sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>(pDecodedURL + nSkip),
+                                                                 ::osl::mingw_reinterpret_cast<LPTSTR>(aBuf),
                                                                  aBuf.getBufSizeInSymbols(),
                                                                  sal_False );
 
                     if ( nNewLen <= MAX_PATH - 12
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, WSTR_SYSTEM_ROOT_PATH, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 )
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, WSTR_LONG_PATH_PREFIX, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1 ) )
+                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, reinterpret_cast<const sal_Unicode*>(WSTR_SYSTEM_ROOT_PATH), ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 )
+                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX), ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1 ) )
                     {
                         rtl_uString_newFromStr_WithLength( &strTempPath, aBuf, nNewLen );
                     }
@@ -793,7 +793,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                         /* it should be an UNC path, use the according prefix */
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX_UNC, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
+                        rtl_uString_newFromStr_WithLength( &strPrefix, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX_UNC), ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
                         rtl_uString_newFromStr_WithLength( &strSuffix, aBuf + 2, nNewLen - 2 );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
@@ -805,7 +805,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                     {
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) - 1 );
+                        rtl_uString_newFromStr_WithLength( &strPrefix, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX), ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) - 1 );
                         rtl_uString_newFromStr_WithLength( &strSuffix, aBuf, nNewLen );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
@@ -1093,15 +1093,15 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
         {
             osl_acquireMutex( g_CurrentDirectoryMutex );
 
-            GetCurrentDirectoryW( aCurrentDir.getBufSizeInSymbols(), aCurrentDir );
-            SetCurrentDirectoryW( reinterpret_cast<LPCTSTR>(ustrBaseSysPath->buffer) );
+            GetCurrentDirectoryW( aCurrentDir.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aCurrentDir) );
+            SetCurrentDirectoryW( reinterpret_cast<LPCWSTR>(ustrBaseSysPath->buffer) );
         }
 
-        dwResult = GetFullPathNameW( reinterpret_cast<LPCTSTR>(ustrRelSysPath->buffer), aBuffer.getBufSizeInSymbols(), aBuffer, &lpFilePart );
+        dwResult = GetFullPathNameW( reinterpret_cast<LPCWSTR>(ustrRelSysPath->buffer), aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), &lpFilePart );
 
         if ( ustrBaseSysPath )
         {
-            SetCurrentDirectoryW( aCurrentDir );
+            SetCurrentDirectoryW( ::osl::mingw_reinterpret_cast<LPCWSTR>(aCurrentDir) );
 
             osl_releaseMutex( g_CurrentDirectoryMutex );
         }
