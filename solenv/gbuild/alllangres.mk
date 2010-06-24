@@ -31,20 +31,25 @@ gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target,transex3)
 gb_SrsPartMergeTarget_TRANSEXAUXDEPS := $(call gb_Library_get_target,tl) $(call gb_Library_get_target,sal)
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib $(gb_SrsPartMergeTarget_TRANSEXTARGET)
 gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/l10n/$(INPATH)/misc/sdf/
+gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
+define gb_SrsPartMergeTarget__command
+$(info gb_SrsPartMergeTarget $(2))
+$(call gb_Helper_abbreviate_dirs_native,\
+    mkdir -p $(dir $(1)) && \
+    $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
+        -p $(firstword $(subst /, ,$(2))) \
+        -r $(patsubst %$(2),%,$(3))$(firstword $(subst /, ,$(2))) \
+        -i $(3) \
+        -o $(1) \
+        -m $(4) \
+        -l all \
+        -qq)
+
+endef
 
 $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartMergeTarget_TRANSEXTARGET) $(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
-    $(info gb_SrsPartMergeTarget $*)
-    $(call gb_Helper_abbreviate_dirs_native,\
-        mkdir -p $(dir $@) && \
-        $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
-            -p $(firstword $(subst /, ,$*)) \
-            -r $(patsubst %$*,%,$<)/$(firstword $(subst /, ,$*)) \
-            -i $< \
-            -o $@ \
-            -m $(SDF) \
-            -l all \
-            -qq)
+    $(call gb_SrsPartMergeTarget__command,$@,$*,$<,$(SDF))
 
 # SrsPartTarget class
 
@@ -53,19 +58,24 @@ $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) 
 #  gb_SrsPartTarget_RSCCOMMAND
 #  gb_SrsPartTarget__command_dep
 
+define gb_SrsPartTarget__command
+$(call gb_Helper_abbreviate_dirs_native,\
+    mkdir -p $(dir $(1)) && \
+    RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
+    echo "-s \
+        $(4) \
+        -I$(dir $(3)) \
+        $(5) \
+        -fp=$(1) \
+        $(6)" > $${RESPONSEFILE} && \
+    $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
+    rm -rf $${RESPONSEFILE})
+
+endef
+
 $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
-    $(call gb_SrsPartTarget__command_dep,$*,$(SRCDIR)/$*,$(INCLUDE),$(DEFS))
-    $(call gb_Helper_abbreviate_dirs_native,\
-        mkdir -p $(dir $@) && \
-        RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
-        echo "-s \
-            $(INCLUDE) \
-            -I$(dir $<) \
-            $(DEFS) \
-            -fp=$@ \
-            $(MERGEDFILE)" > $${RESPONSEFILE} && \
-        $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
-        rm -rf $${RESPONSEFILE})
+    $(call gb_SrsPartTarget__command_dep,$*,$<,$(INCLUDE),$(DEFS))
+    $(call gb_SrsPartTarget__command,$@,$*,$<,$(INCLUDE),$(DEFS),$(MERGEDFILE))
 
 $(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)
     $(call gb_Helper_abbreviate_dirs,\
