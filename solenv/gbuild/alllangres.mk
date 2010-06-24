@@ -165,6 +165,7 @@ endef
 
 gb_ResTarget_RSCTARGET := $(gb_SrsPartTarget_RSCTARGET)
 gb_ResTarget_RSCCOMMAND := $(gb_SrsPartTarget_RSCCOMMAND)
+gb_ResTarget_DEFIMAGESLOCALTION := $(SRCDIR)/default_images/
 
 $(call gb_ResTarget_get_clean_target,%) :
     $(call gb_Helper_announce,Cleaning up resource $* ...)
@@ -180,15 +181,15 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
         echo "-r -p \
             -lg$(LANGUAGE) \
             -fs=$(OUTDIR)/bin/$(LIBRARY)$(LANGUAGE).res \
-            -lip=$(SRCDIR)/default_images/$(RESLOCATION)/imglst/$(LANGUAGE) \
-            -lip=$(SRCDIR)/default_images/$(RESLOCATION)/imglst \
-            -lip=$(SRCDIR)/default_images/$(RESLOCATION)/res/$(LANGUAGE) \
-            -lip=$(SRCDIR)/default_images/$(RESLOCATION)/res \
-            -lip=$(SRCDIR)/default_images/$(RESLOCATION) \
-            -lip=$(SRCDIR)/default_images/res/$(LANGUAGE) \
-            -lip=$(SRCDIR)/default_images/res \
-            -subMODULE=$(SRCDIR)/default_images \
-            -subGLOBALRES=$(SRCDIR)/default_images/res \
+            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE) \
+            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst \
+            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE) \
+            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res \
+            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION) \
+            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
+            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
+            -subMODULE=$(gb_ResTarget_DEFIMAGESLOCATION) \
+            -subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
             -oil=$(dir $(call gb_ResTarget_get_imagelist_target,$(1))) \
             -ft=$@ \
             $(filter-out $(gb_Helper_MISCDUMMY),$^)" > $${RESPONSEFILE} && \
